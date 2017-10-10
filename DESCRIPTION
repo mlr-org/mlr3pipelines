@@ -1,0 +1,48 @@
+Package: mlrCPO2
+Title: Composable Preprocessing Operators and Pipelines with mlr
+Description: Toolset that enriches mlr with a diverse set of preprocessing
+    operators. Composable Preprocessing Operators ("CPO"s) are first-class
+    R objects that can be applied to data.frames and mlr "Task"s to modify
+    data, can be attached to mlr "Learner"s to add preprocessing to machine
+    learning algorithms, and can be composed to form preprocessing pipelines.
+Authors@R: c(
+    person("Martin", "Binder", email = "martin.binder@mail.com", role = c("aut", "cre")),
+    person("Bernd", "Bischl", email = "bernd_bischl@gmx.net", role = "ctb"),
+    person("Michel", "Lang", email = "michellang@gmail.com", role = "ctb"),
+    person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"))
+URL: https://github.com/mlr-org/mlrCPO
+BugReports: https://github.com/mlr-org/mlrCPO/issues
+License: BSD_2_clause + file LICENSE
+Encoding: UTF-8
+Roxygen: list(wrap = FALSE)
+Depends:
+    R (>= 3.0.2)
+Imports:
+    BBmisc (>= 1.11),
+    stringi,
+    checkmate (>= 1.8.2),
+    methods,
+    stats,
+    utils,
+    backports (>= 1.1.0),
+    R6
+Suggests:
+    party,
+    rpart,
+    mlbench,
+    knitr,
+    rmarkdown,
+    testthat,
+    mRMRe,
+    care,
+    randomForestSRC,
+    randomForest,
+    Rfast,
+    FSelector,
+    e1071,
+    DiscriMiner
+LazyData: yes
+ByteCompile: yes
+Version: 0.1
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr

@@ -1,0 +1,22 @@
+use dict to reg cpos
+
+what is cpoApplyfun?
+
+affect.col is ziemlich nice
+  function schreiben, auf den typen und namen? oder dem ganzen task?
+  und helper für: nur numeric, etc....
+
+cpoLearner bauen
+
+pipe operator rein tun
+
+check that param names do not clash for pipes
+ a) check for clash
+ b) concat id to param names
+
+
+properties definieren
+
+write printers
+
+compoundCPO besser definieren, auch seine id. oder brauchen wir das nicht?
