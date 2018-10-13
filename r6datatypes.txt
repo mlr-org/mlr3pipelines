@@ -1,0 +1,26 @@
+indexablecontainer
+- [[]] muss gehen
+- length
+- map
+-- keine ahnung was man hier machen muss? und was kommt da zurück? eine Rlist? oder 
+  der indexable container? vermutlich das erste, aber manchmal wir man vielleicht auch den container 
+  selber wieder haben?
+
+
+R6 interface
+- check des interfaces muss gehen
+- downcast?
+
+OrderedDisctionary
+- besserer name?
+- merge aus mlr3 und dem was ich gerade hab
+
+
+
+
+
+
+
+
+
+

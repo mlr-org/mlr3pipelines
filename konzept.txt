@@ -1,0 +1,108 @@
+
+
+
+1) klasse PipeOp
+
+members:
+- id         : char       : Name
+- parset     : ParamSet   : Hyperpar raum
+- parvals    : list       : hyperpar settings
+- params     : list       : gelernte params  
+
+methods
+- train(input)     --> outlist    : fittet params und returned transformierte daten
+- predict(input)   --> outlist    : nutzt gefittete params um neue daten zu transformieren
+- is_learned()      --> bool
+
+2) konstruktion: 
+- man kann einen OP[unlearned] bauen: op = Scaler$new()
+- der konstruktor hat so gut wie keine args, wir lassen änderungen dafür später zu (mal gucken)
+
+
+3) state änderungen:
+- id, parvals können später gesetzt werden per AB
+- vermutlich darf man einiges zu setzen wenn der OP [unlearned] ist,
+  sonst ist das gefährlich? aber das ist user schutz und kommt später
+
+
+4) training  
+
+D1 ---> OP[unlearned] --> D2
+
+- daten gehen rein, kommen transformiert raus
+- OP lernt params, speichert die, er hat gewechselt zu OP[learned]
+- OP$params gibt die gelernten params (wenn er OP[learned] ist, sonst NULL)
+
+5) application  / predict
+
+ND1 ---> OP[learned] --> ND2
+- transformiert newdata halt, mit gelernten params
+
+6)
+man kann OPs concatten. 
+
+pipe = concat(OP1, OP2, OP3)
+
+ist das auch ein OP? vermutlich ja?
+
+- der hat dann als params gelernt OPs
+- man kann immer mehr hinten dran joinen (auch wenn schon gelernt?, wie dann?)
+- wie kann man bäume kontruieren?
+
+
+7) wichtige erweiterungen
+multiplex: das ist schon wichtig als konzept um A oder B machen zu können
+vermutlich wollen wir erstmal nur das martin feature-only-CPOS nennt oder?
+
+
+
+-------------------------------------------------
+Pseudo Code
+-------------------------------------------------
+
+op = Scaler$new()
+op$parvals = list(center = T, scale = F)
+
+data2 = op$train(data) 
+newdata2 = op2$apply(newdata) 
+op$params
+
+
+op1 = Imputer$new()
+op2 = Scaler$new()
+op3 = PCA$new()
+
+pipe = concat(op1, op2)
+pipe$add(op3)
+
+# trainiert alle ops in der pipe
+data2 = pipe$train(data)
+
+# gibt ein element, den ersten OP zurück
+# hier ginge auch ein überladener index OP: pipe[[1]], pipe[["scale"]]
+pipe$get(1) 
+pipe$get("impute")
+
+# predict geht wie immer
+nd2 = pipe$predict(data)
+
+# frage wie kommt an azwischenergebnisse ran?
+# gibt es ein großes parvals/parset objekt? --> wäre gut für tuning...!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

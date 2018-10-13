@@ -1,14 +1,12 @@
 use dict to reg cpos
 
-what is cpoApplyfun?
-
 affect.col is ziemlich nice
   function schreiben, auf den typen und namen? oder dem ganzen task?
   und helper für: nur numeric, etc....
 
-cpoLearner bauen
 
-pipe operator rein tun
+magrittr artige operatoren definieren
+
 
 check that param names do not clash for pipes
  a) check for clash
@@ -17,6 +15,97 @@ check that param names do not clash for pipes
 
 properties definieren
 
-write printers
+man muss ops nur auf einzelne spalten anwenden können
+vermutlich will man in der PipeOp superclass son "getdata" haben?
+das muss leider mit michels kram verbunden werden?
 
-compoundCPO besser definieren, auch seine id. oder brauchen wir das nicht?
+vielleicht sollte man PipeOP train und predict in learn und apply umbennen?
+sonst zu viel nameclashes mit mlr? 
+
+
+PipeLine::train(task)
+braucht
+ - pipe$packages -> charvec
+ - pipe$id --> id 
+ - pipe$parvals --> liste
+ - train(task, par.vals) --> rmodel 
+ - predict(task, model, learner) 
+
+ ich muss schnell gucken dass resampling mit ng geht
+
+
+inpzt objekt sollte wohl immer ein task sein
+
+
+will man tasks oder dataframes oder andere formate durch die pipes schieben?
+
+
+will man definieren was die pipe scchritte können und brauchen? wohl ja --> cpo
+
+bei PipeOpLearner müssen wir sicherstellen dass wir nur auf dem train-subset arbeiten
+
+ist die PipeLine auch ein PipeOp? weil das gesamte interface sieht gleich aus...?
+
+schwierige ops zum angucken
+-- multplex
+-- bagging
+-- copydata in n tasks (für bagging)
+-- conditional multiplex
+-- threshold tuning
+-- nested resampling
+-- feature unnion
+-- stacking
+
+op1 = oplrn("rpart")
+op2 = oplrn("lda")
+fanout(2) + in_parallel(op1, op2)
+
+was sind die stateless cpos? brauchen wir auch sowas, als spezialfall?
+
+pipeop: vermutlich alle slots private haben, auch wegen konsistenz und overwrite später
+
+options um intermediate results zu speichern
+
+macht so ein TuneNode sinn? man will doch immer einer ganze pipeline tunen?
+das muss dann die pipeline param-frei machen
+vielleicht muss der tunenode eine gebene pipeline kopieren, dann tunen? 
+aber konzept des "param-frei machen" nochmal überdenken
+
+
+train:      task --> tuneop --> pars
+predict:    task --> tuneop --> task
+
+
+irgendwie scheint es doch natürlicher, ops an ops zu kleben, und nicht
+noch so ein Pipeline element extra zu haben? irgendwie doppelt das alles?
+
+
+pca + scaler + learn
+
+wie genau werden die trainierten pipelines bei resample gespeichert? 
+cloning usw. ich will ja die ergebnisse davon vielleicht sehen?
+
+
+name                            train                                 predict
+FeatureTrafo         task1 -(learn parms)-> task2          task1 -(apply params)-> task2  
+
+Multiplex                ? -(selected op)-> ?                  ? -(selected op)-> ?  
+
+pipeline sollte von mlr3::Learner erben oder?
+
+
+R6 Data types
+- named list
+- dict (ist das gleiche oder? wenn man nur unique labels will?)
+- bei der list sollte man auch sortieren können, nach belibeiger compare function
+- graph
+- michels datatable / r6 mischung?
+- interfaces
+
+
+es ist jetzt etwas komisch mit dem fanout. bagging und feature union case mal seperate tesetn.
+und clonen wir bei dem acquire_input immer die ergebnisse? kann sehr inieffizient werden aber
+wir dürfen ja auch nicht sachen von anderen ops einfach per ref ändern?
+
+
+
