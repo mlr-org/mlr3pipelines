@@ -1,8 +1,7 @@
 
 PipeOp = R6Class("PipeOp", 
   public = list(
-    
-
+  
     inputs = NULL,
     next_ops = NULL,
     prev_ops = NULL,

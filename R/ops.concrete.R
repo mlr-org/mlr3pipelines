@@ -43,6 +43,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
 
     predict2 = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
+      # FIXME: Make sure dimensions fit (if input did not have full rank)
       as.data.frame(as.matrix(input) %*% self$params)
     }
   )
@@ -89,6 +90,37 @@ PipeOpScaler = R6Class("PipeOpScaler",
   )
 )
 
+# simple feature transform, no hyperpars
+PipeOpDownsample = R6Class("PipeOpDownsample", 
+ 
+  inherit = PipeOp,
+  
+  public = list(
+    initialize = function()
+      ps = ParamSet$new(params = list(
+        ParamNum$new("perc", default = 0.7, lower = 0, upper = 1),
+        ParamLogical$new("stratify", default = FALSE)
+      ))
+      super$initialize("downsample", ps)
+    },
+
+    train2 = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      # FIXME: this is really bad code how i change the data of the task
+      # ich muss hier das backend austauschen
+      task = self$inputs[[1L]]
+      fn = task$feature_names
+      # FIXME: Discuss whether we want to use the current mlr implementation
+      TaskClassif$new(id = task$id, data = d, target = task$target_names)
+    },
+
+    predict2 = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      # FIXME: Make sure dimensions fit (if input did not have full rank)
+      as.data.frame(as.matrix(input) %*% self$params)
+    }
+  )
+)
 
 # cpoNull = PipeOp$new(
 #   id = "null",
