@@ -4,17 +4,21 @@
 This package aims to fill the gap between loading the data and fitting models.
 
 **This entails not only:**
+
 - Preprocessing
 - Splitting / Combining Features
 - Imputation
 - Down/Upsampling
+
 **but also:**
+
 - Bagging
 - Tuning over preprocessing pipelines
 - Stacking
 - Ensembling
 
-A predecessor to this package is the original [mlrCPO-package]().
+
+A predecessor to this package is the [mlrCPO-package](https://github.com/mlr-org/mlrCPO).
 We intend to replicate most of its functionality, i.e.
 
 - simple feature transform, with hyperpars
