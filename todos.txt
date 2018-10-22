@@ -1,3 +1,38 @@
+Open ToDo's; English / German Mixed
+------------------------------------------------------------------------------------------
+ein paar unit tests mit mlr3 schreiben
+
+pipelines mit resampling hinkriegen
+
+aus mlrng meine lokalen files aufräumen
+
+mlr normales repo meine todofiles aufräumen
+
+r6interface wieder beleben
+
+
+------------------------------------------------------------------------------------------
+R6 data types
+indexablecontainer
+- [[]] muss gehen
+- length
+- map
+-- keine ahnung was man hier machen muss? und was kommt da zurück? eine Rlist? oder
+  der indexable container? vermutlich das erste, aber manchmal wir man vielleicht auch den container
+  selber wieder haben?
+
+
+R6 interface
+- check des interfaces muss gehen
+- downcast?
+
+OrderedDisctionary
+- besserer name?
+- merge aus mlr3 und dem was ich gerade hab
+
+
+
+------------------------------------------------------------------------------------------
 use dict to reg cpos
 
 affect.col is ziemlich nice
@@ -20,16 +55,16 @@ vermutlich will man in der PipeOp superclass son "getdata" haben?
 das muss leider mit michels kram verbunden werden?
 
 vielleicht sollte man PipeOP train und predict in learn und apply umbennen?
-sonst zu viel nameclashes mit mlr? 
+sonst zu viel nameclashes mit mlr?
 
 
 PipeLine::train(task)
 braucht
  - pipe$packages -> charvec
- - pipe$id --> id 
+ - pipe$id --> id
  - pipe$parvals --> liste
- - train(task, par.vals) --> rmodel 
- - predict(task, model, learner) 
+ - train(task, par.vals) --> rmodel
+ - predict(task, model, learner)
 
  ich muss schnell gucken dass resampling mit ng geht
 
@@ -68,7 +103,7 @@ options um intermediate results zu speichern
 
 macht so ein TuneNode sinn? man will doch immer einer ganze pipeline tunen?
 das muss dann die pipeline param-frei machen
-vielleicht muss der tunenode eine gebene pipeline kopieren, dann tunen? 
+vielleicht muss der tunenode eine gebene pipeline kopieren, dann tunen?
 aber konzept des "param-frei machen" nochmal überdenken
 
 
@@ -82,14 +117,14 @@ noch so ein Pipeline element extra zu haben? irgendwie doppelt das alles?
 
 pca + scaler + learn
 
-wie genau werden die trainierten pipelines bei resample gespeichert? 
+wie genau werden die trainierten pipelines bei resample gespeichert?
 cloning usw. ich will ja die ergebnisse davon vielleicht sehen?
 
 
 name                            train                                 predict
-FeatureTrafo         task1 -(learn parms)-> task2          task1 -(apply params)-> task2  
+FeatureTrafo         task1 -(learn parms)-> task2          task1 -(apply params)-> task2
 
-Multiplex                ? -(selected op)-> ?                  ? -(selected op)-> ?  
+Multiplex                ? -(selected op)-> ?                  ? -(selected op)-> ?
 
 pipeline sollte von mlr3::Learner erben oder?
 
