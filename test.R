@@ -1,5 +1,5 @@
-load_all("~/cos/phng")
-load_all("~/cos/mlr3")
+load_all("../paradox")
+load_all("../mlr3")
 load_all()
 
 task = mlr.tasks$get("iris")

@@ -1,8 +1,8 @@
 # simple feature transform, no hyperpars
-PipeOpNULL = R6Class("PipeOpNULL", 
- 
+PipeOpNULL = R6Class("PipeOpNULL",
+
   inherit = PipeOp,
-  
+
   public = list(
     initialize = function() {
       super$initialize("OpNULL")
@@ -19,10 +19,10 @@ PipeOpNULL = R6Class("PipeOpNULL",
 )
 
 # simple feature transform, no hyperpars
-PipeOpPCA = R6Class("PipeOpPCA", 
- 
+PipeOpPCA = R6Class("PipeOpPCA",
+
   inherit = PipeOp,
-  
+
   public = list(
     initialize = function() {
       super$initialize("pca")
@@ -50,13 +50,13 @@ PipeOpPCA = R6Class("PipeOpPCA",
 )
 
 # simple feature transform, but hyperpars
-PipeOpScaler = R6Class("PipeOpScaler", 
- 
+PipeOpScaler = R6Class("PipeOpScaler",
+
   inherit = PipeOp,
-  
+
   public = list(
     initialize = function() {
-    
+
       ps = ParamSet$new(params = list(
         ParamFlag$new("center", default = TRUE),
         ParamFlag$new("scale", default = TRUE)
@@ -70,11 +70,11 @@ PipeOpScaler = R6Class("PipeOpScaler",
       # FIXME: this is really bad code how i change the data of the task
       fn = task$feature_names
       d = task$data()
-      sc = scale(as.matrix(d[, ..fn]), 
+      sc = scale(as.matrix(d[, ..fn]),
         center = self$par_vals$center, scale = self$par_vals$scale)
-      
+
       private$.params = list(
-        center = attr(sc, "scaled:center") %??% FALSE, 
+        center = attr(sc, "scaled:center") %??% FALSE,
         scale = attr(sc, "scaled:scale") %??% FALSE
       )
       d[, fn] = as.data.table(sc)
@@ -84,19 +84,19 @@ PipeOpScaler = R6Class("PipeOpScaler",
     predict2 = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       task = self$inputs[[1L]]
-      as.data.frame(scale(as.matrix(input), 
+      as.data.frame(scale(as.matrix(input),
         center = self$params$center, scale = self$params$scale))
     }
   )
 )
 
 # simple feature transform, no hyperpars
-PipeOpDownsample = R6Class("PipeOpDownsample", 
- 
+PipeOpDownsample = R6Class("PipeOpDownsample",
+
   inherit = PipeOp,
-  
+
   public = list(
-    initialize = function()
+    initialize = function() {
       ps = ParamSet$new(params = list(
         ParamNum$new("perc", default = 0.7, lower = 0, upper = 1),
         ParamLogical$new("stratify", default = FALSE)
@@ -146,11 +146,11 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #   id = "dropconst",
 #   in.format = "data-target",
 #   out.format = "data",
-  
+
 #   train = function(inlist, par_vals) {
 
 #   # perc = 0, na.ignore = FALSE, tol = .Machine$double.eps^.5
-    
+
 #     #FIXME: where to put these asserts?
 #     # can phng handle this now automatically?
 
@@ -194,7 +194,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #   predict = function(inlist, control) {
 #     data[control$dropped.cols]
 #   },
-  
+
 #   par_set = ParamSet$new(params = list(
 #     ParamReal$new("perc", default = 0.005, lower = 0, upper = 1),
 #     ParamReal$new("tol", default = .Machine$double.eps^.5, lower = 0, upper = 1),
