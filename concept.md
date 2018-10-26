@@ -332,6 +332,7 @@ g5 = GraphNode$new(op5)
 g6 = GraphNode$new(op6)
 PipeLine$new(op1, list(op2, op3), list(op4a, op4b), op5, op6)
 ```
+
 ------------------------------------------------------------------------------------------
 ### Use-case: Get out-of-bag Learner Predictions
 
