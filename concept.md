@@ -59,6 +59,9 @@ questions:
   Alternative: Have all PipeOp's inherit from GraphNode
 - Should Ensemble pipeOp's return [preds] or [dt]?
   We should probably write converters anyway.
+- do we want 2 functions train and predict? or just on "apply" function?
+  which acts dependiong on the is_learned state?
+
 
 - training
   D1 ---> OP[unlearned] --> D2
@@ -81,8 +84,8 @@ They are then passed to the PipeOp, the PipeOp is trained / predicted, and the r
 
 members:
 - pipeop    : PipeOp      : operator in that node
-- next      : list        : previous nodes
-- prev      : list        : next nodes
+- next      : list        : next nodes
+- prev      : list        : previous nodes
 - inputs    : list        : list of results from previous nodes
 - result    : untyped     : result of current operator
 
@@ -228,7 +231,6 @@ oder machen wir den multiplexer über die graphstruktur?
 ------------------------------------------------------------------------------------------
 ### Use case: Concat original data and transformed data, Feature Union
 ------------------------------------------------------------------------------------------
-
 
 op1 = PipeOpScaler$new()
 op2a = PipeOpPCA$new()     # was machen wir hier mit den targets?
