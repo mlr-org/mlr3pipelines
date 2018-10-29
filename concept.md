@@ -52,6 +52,9 @@ questions:
   Alternative: Have all PipeOp's inherit from GraphNode
 - Should Ensemble pipeOp's return [preds] or [dt]?
   We should probably write converters anyway.
+- do we want 2 functions train and predict? or just on "apply" function?
+  which acts dependiong on the is_learned state?
+
 
 - training
   D1 ---> OP[unlearned] --> D2
@@ -74,8 +77,8 @@ They are then passed to the PipeOp, the PipeOp is trained / predicted, and the r
 
 members:
 - pipeop    : PipeOp      : operator in that node
-- next      : list        : previous nodes
-- prev      : list        : next nodes
+- next      : list        : next nodes
+- prev      : list        : previous nodes
 - inputs    : list        : list of results from previous nodes
 - result    : untyped     : result of current operator
 
@@ -531,8 +534,7 @@ D1 ---> OP[unlearned] --> D2
 ND1 ---> OP[learned] --> ND2
 - transformiert newdata halt, mit gelernten params
 
-6)
-man kann OPs concatten.
+6) we can concatenate OP's
 
 pipe = concat(OP1, OP2, OP3)
 
@@ -551,7 +553,6 @@ vermutlich wollen wir erstmal nur das martin feature-only-CPOS nennt oder?
 
 -------------------------------------------------
 Pseudo Code
--------------------------------------------------
 
 op = Scaler$new()
 op$parvals = list(center = T, scale = F)
