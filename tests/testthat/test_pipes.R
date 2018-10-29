@@ -1,7 +1,7 @@
 context("PipeOp")
 
 library(BBmisc)
-ad_all("../paradox")
+load_all("../paradox")
 load_all("../mlr3")
 load_all()
 
@@ -11,6 +11,7 @@ test_that("PipeOp", {
   nd = iris[, -5]
 
   op = PipeOpScaler$new()
+  op$set_prev(list(task))
   dd2 = op$train()
   print(op)
   nd2 = op$predict(nd)

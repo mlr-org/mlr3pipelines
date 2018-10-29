@@ -1,10 +1,10 @@
-# FIXME: add a payload typ and always check it?
-ListNamedEls = R6Class("ListNamedEls", 
+# FIXME: add a payload type and always check it?
+ListNamedEls = R6Class("ListNamedEls",
   public = list(
     xs = list(),
     get_key = NULL,
     payload_type = NULL,
-    
+
     initialize = function(xs = list(), payload_type, get_key) {
       assert_string(payload_type)
       assert_function(get_key)
@@ -14,7 +14,7 @@ ListNamedEls = R6Class("ListNamedEls",
       self$xs = xs
       self$get_key = get_key
     },
-    
+
     add = function(x) {
       assert_class(x, self$payload_type)
       k = self$get_key(x)
@@ -26,13 +26,13 @@ ListNamedEls = R6Class("ListNamedEls",
       keep = setdiff(self$keys, keys)
       self$xs = self$xs[keep]
     },
-    
+
     join = function(other) {
       assert_r6(other, "ListNamedEls")
       assert_true(length(intersect(self$keys, other$keys)) == 0L)
       self$xs = c(self$xs, other$xs)
     },
-    
+
     join_new = function(other) {
       assert_r6(other, "ListNamedEls")
       new_keys = setdiff(other$keys, self$keys)
@@ -48,7 +48,7 @@ ListNamedEls = R6Class("ListNamedEls",
     # FIXME: wie geht das hier dass man den dollar op callt?
     # mapm = function(m) lapply(self$xs, function(x) `$`(x, m))
   ),
-  
+
   active = list(
     is_empty = function() length(self$xs) == 0L,
     keys = function() names(self$xs),
@@ -68,11 +68,11 @@ length.ListNamedEls = function(x) length(x$xs)
   }
 }
 
-OpList = R6Class("OpList", 
+OpList = R6Class("OpList",
   inherit = ListNamedEls,
 
   public = list(
-    
+
     initialize = function(xs = list()) {
       super$initialize(xs, "PipeOp", get_key = function(x) x$id)
     }
@@ -80,7 +80,7 @@ OpList = R6Class("OpList",
 )
 
 
-ElFooBar = R6Class("ElFooBar", 
+ElFooBar = R6Class("ElFooBar",
   public = list(
     id = NULL,
     initialize = function(id) {
