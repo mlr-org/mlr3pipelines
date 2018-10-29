@@ -12,13 +12,6 @@ create and tune over arbitrarily complex pipelines.
 In order to allow for more advanced Pipelines like *stacking* or *ensembling*, we require
 more complicated building blocks, which is why some building blocks seem overly complex.
 
-
-------------------------------------------------------------------------------------------
-# Pipes
-class  PipeOperator
-members:
-
-
 ------------------------------------------------------------------------------------------
 ## class PipeOp
 
@@ -166,16 +159,19 @@ questions
 
 ------------------------------------------------------------------------------------------
 ### Use case: a linear pipeline (train, predict, resample, tuning)
-------------------------------------------------------------------------------------------
 
+
+```
 op1 = PipeOpScaler$new()
 op$par_vals = list(center = TRUE, scale = FALSE)
 
 op2 = PipeOpPCA$new()
 
 op3 = PipeOpLearner$new("classif.rpart")
+```
 
-# option a)
+#### option a)
+```
 g1 = GraphNode$new(op1)
 g2 = GraphNode$new(op1)
 g3 = GraphNode$new(op1)
@@ -184,11 +180,15 @@ g1$set_next(g2)
 g2$set_next(g3)
 
 gg = Graph$new(g1)
+```
 
-# option b)
+#### option b)
+```
 gg = PipeLine(op1, op2, op3)
+```
 
-# Train all OP's in the pipe
+#### Train all OP's in the pipe
+```
 gg$train(task)
 gg[["pca"]]$pipeop$params
 gg[["pca"]]$result
@@ -204,13 +204,13 @@ ps = ParSet$new(
   ParamNum$new("rpart:cp", lower = 0, upper = 1)
 )
 tune(gg, task, ps)
-
+```
 
 ------------------------------------------------------------------------------------------
 ### Use case: Fork pipeOP's (at a place we use either OP A or B), eg: PCA or ICA, or PCA and no-PCA
-------------------------------------------------------------------------------------------
 
 
+```
 op1 = PipeOpPCA$new()
 op2 = PipeOpICA$new()
 op3 = PipeOpNULL$new()
@@ -218,20 +218,20 @@ op3 = PipeOpNULL$new()
 op = Multiplexer$new(op1, op2, op3)
 
 op$parvals = list(selected = "ica")
+```
 
-# fragen:
+#### Questions:
 was machen $parvals, $parset, ?
 oder machen wir den multiplexer über die graphstruktur?
 
 ------------------------------------------------------------------------------------------
 ### Use case: AutoTuning of pipeop, for nested resampling
-------------------------------------------------------------------------------------------
-...
+... FIXME ...
 
 ------------------------------------------------------------------------------------------
 ### Use case: Concat original data and transformed data, Feature Union
-------------------------------------------------------------------------------------------
 
+```
 op1 = PipeOpScaler$new()
 op2a = PipeOpPCA$new()     # was machen wir hier mit den targets?
 op2b = PipeOpNULL$new()
@@ -247,11 +247,11 @@ g4 = GraphNode$new(op4)
 g1$set_next(list(g2a, g2b))
 g3$set_prev(list(g2a, g2b))
 g43$set_next(list(g3))
+```
 
 ------------------------------------------------------------------------------------------
-###Use case: Bagging
-------------------------------------------------------------------------------------------
-
+### Use case: Bagging
+```
 k = 100
 op1 = PipeOpNULL$new()
 op2 = PipeOpDownSample$new(rate = 0.6)
@@ -268,44 +268,54 @@ g1$set_next(gs2)
 for (i in 1:k)
   gs2[[i]]$set_next(gs3[[i]])
 g4$set_prev(gs3)
+```
 
+#### can we write the above in a shorter, better way?
 
-# can we write the above in a shorter, better way?
-
+```
 op1 = PipeOpNULL$new()
 op2 = PipeOpDownSample$new(rate = 0.6)
 op3 = PipeOpLearner$new("classif.rpart")
 op4 = PipeOpEnsembleAverage$new()
-
+```
+or
+```
 Pipeline$new(list(op1, rep(k, op2), rep(k, op3), op4))
-# wie wird denn hier genau verknüpft?
-# 1-many: klar
-# many-1: klar, muss halt RHS eine "zusammenführung" erlauben als OP
-# k-k: paralleles verküpfen
+```
 
-# we need "connectors" as short, simple operations
+#### How do we connect?
+- 1-many: klar
+- many-1: klar, muss halt RHS eine "zusammenführung" erlauben als OP
+-  k-k: paralleles verküpfen
+-> we need "connectors" as short, simple operations
 
-
+```
 gg = op1 %>>% rep(k, op2) %>>% rep(k, op3) %>>% op4
+```
+#### How do we access results?
 
-# wie kommt man an sachen ran?
-
+```
 gg$train(task)
-# frage: welche daten hat der 3. baum gesehen, und eas ist sein modell?
+```
 
+#### frage: welche daten hat der 3. baum gesehen, und eas ist sein modell?
+
+```
 gg[["rpart:3]]$result
 gg[["rpart:3]]$pipeop$params
 gg[["rpart"]][[3]] # das wäre cool? würde gehen wenn ops keien eindeutige id hgaben müssen?
+```
 
-# frage: gib mir alle rpart modelle
-# wollen wir das konzept von "group of nodes"? würde über doppelpunkte gehen. achtung. es gibt jetzt rpart:3:cp. wollen wir das?
+- frage: gib mir alle rpart modelle
+- wollen wir das konzept von "group of nodes"? würde über doppelpunkte gehen. achtung. es gibt jetzt rpart:3:cp. wollen wir das?
+```
 gg$get_group("rpart")[[3]]
-
+```
 
 ------------------------------------------------------------------------------------------
 ### Use case: Stacking
-------------------------------------------------------------------------------------------
 
+```
 op1 = PipeOpNULL$new()
 op2 = PipeOpLearner$new("regr.rpart") # das hier müsste dann model UND daten im training ausgeben
 op3 = PipeOpLearner$new("regr.svm") # Train: data -> list(model, data) # Predict: data -> prediction
@@ -313,7 +323,9 @@ op4a = PipeOpGetTrainPreds$new()    # Train: predict(model, data)      # Predict
 op4b = PipeOpGetTrainPreds$new()
 op5 = PipeOpFeatureUnion$new()
 op6 = PipeOpLearner$new("regr.lm")
+```
 
+```
 g1 = GraphNode$new(op1)
 g2 = GraphNode$new(op2)
 g3 = GraphNode$new(op3)
@@ -321,32 +333,32 @@ g4a = GraphNode$new(op4a)
 g4b = GraphNode$new(op4b)
 g5 = GraphNode$new(op5)
 g6 = GraphNode$new(op6)
-
 PipeLine$new(op1, list(op2, op3), list(op4a, op4b), op5, op6)
+```
 
 ------------------------------------------------------------------------------------------
 ### Use-case: Get out-of-bag Learner Predictions
+
+PipeOPCrossvalLearner("rpart"):
+- Train: Input: data Output: oob.preds
+  ```
+  op1 = pipeOpLearner$new("rpart")    # Train step learner
+  res = resample(Pipeline(op1), data)
+  oob.preds = getOOBPreds(res)        # Get Out-Of-Bag Predictions from res
+  op2 = pipeOpLearner$new("rpart")    # Predict step learner
+  op1$train(data)                     # Train and store model for predict step
+  params = op1
+
+  # Predict: Input: newdata Output: preds
+  params$predict(newdata)
+  ```
+- Predict: Input: data Output: oob.preds
+
+
+
+
 ------------------------------------------------------------------------------------------
-PipeOPCrossvalLearner("rpart")
-  Train: Input: data Output: oob.preds
-
-    op1 = pipeOpLearner$new("rpart")    # Train step learner
-    res = resample(Pipeline(op1), data)
-    oob.preds = getOOBPreds(res)        # Get Out-Of-Bag Predictions from res
-    op2 = pipeOpLearner$new("rpart")    # Predict step learner
-    op1$train(data)                     # Train and store model for predict step
-    params = op1
-
-  Predict: Input: newdata Output: preds
-    params$predict(newdata)
-
-
-
-
-
-------------------------------------------------------------------------------------------
-# PipeOp Defintions Template
-------------------------------------------------------------------------------------------
+## PipeOp Defintions Template
 
 PipeOpNULL
 paramset  : <none>
@@ -420,6 +432,8 @@ predict   : [dt] --> [preds]
 
 
 ------------------------------------------------------------------------------------------
+## Comparison to mlrCPO
+
 List of features from CPO we cover already:
 
 List of features from CPO we are missing and might want:
@@ -520,8 +534,7 @@ D1 ---> OP[unlearned] --> D2
 ND1 ---> OP[learned] --> ND2
 - transformiert newdata halt, mit gelernten params
 
-6)
-man kann OPs concatten.
+6) we can concatenate OP's
 
 pipe = concat(OP1, OP2, OP3)
 
@@ -540,7 +553,6 @@ vermutlich wollen wir erstmal nur das martin feature-only-CPOS nennt oder?
 
 -------------------------------------------------
 Pseudo Code
--------------------------------------------------
 
 op = Scaler$new()
 op$parvals = list(center = T, scale = F)
