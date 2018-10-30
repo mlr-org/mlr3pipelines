@@ -456,48 +456,46 @@ List of features from CPO we do not want:
 
 
 
-
+------------------------------------------------------------------------------------------
 Use case: Train on part of features only
--------------------------------------------------
 
 E.g. Multi-Output: Train on Output1 while keeping Output2 out; Then train on Output2 using predicted Output1
 
 
 ## How do I append another step to the pipeline
+```
 # example: we add imputation
 op1_1 = Imputer$new()
 g1_1 = GraphNode$new(op1_1)
 g1$set_next(g1_1)
 g1_1$set_next(g2)
+```
 
 
-
-
+```
 # how do we ensure that resample works for a graph, Graph has to implement interface of mlr3 Learner class
 # should PipeOp and GraphNode be merged
 # should params actaully be an input of PipeOp$train? and only the graphnode has a trained state? and stores params?
 # graph: gibt es ein großes parvals/parset objekt? --> wäre gut für tuning...!
 # params: How do we separate graph and pipeOp name and param? pipeOpId:paramId?
 # we probably want a few helper functions in paradox for joining paramsets and the ":" usage
+```
 
-
-
+```
 gg = Graph$new()
 
-a)
+# a)
 ids = gg$ids()
 for (i in ids) {
   f(gg[[i]])
 }
 
-b)
+# b)
 gg$apply2nodes(function(nn) nn$result)
-
-c)
-
+```
 
 
-1) klasse PipeOp
+1) Class PipeOp
 
 members:
 - id         : char       : Name
@@ -506,54 +504,53 @@ members:
 - params     : list       : gelernte params
 
 methods
-- train(input)     --> outlist    : fittet params und returned transformierte daten
-- predict(input)   --> outlist    : nutzt gefittete params um neue daten zu transformieren
+- train(input)     --> outlist    : fits params and returns transformed data
+- predict(input)   --> outlist    : uses fitted params in order to transform new data
 - is_learned()      --> bool
 
-2) konstruktion:
-- man kann einen OP[unlearned] bauen: op = Scaler$new()
-- der konstruktor hat so gut wie keine args, wir lassen änderungen dafür später zu (mal gucken)
+2) Construction:
+- We can create an OP[unlearned]: `op = Scaler$new()`
+- The constructor does not have args, this could change in the future
 
 
-3) state änderungen:
-- id, parvals können später gesetzt werden per AB
-- vermutlich darf man einiges zu setzen wenn der OP [unlearned] ist,
-  sonst ist das gefährlich? aber das ist user schutz und kommt später
-
+3) Change OP state:
+- id, parvals can be set later per AB
+- some things can be set while state is [unlearned]
+- otherwise it might be dangerous, discuss later.
 
 4) training
 
 D1 ---> OP[unlearned] --> D2
 
-- daten gehen rein, kommen transformiert raus
-- OP lernt params, speichert die, er hat gewechselt zu OP[learned]
-- OP$params gibt die gelernten params (wenn er OP[learned] ist, sonst NULL)
+- Data enters. transformed data is returned.
+- OP learns params, switches state to [learned].
+- OP$params are learned params. (if OP is [learned], else NULL)
 
 5) application  / predict
 
 ND1 ---> OP[learned] --> ND2
-- transformiert newdata halt, mit gelernten params
+- transforms newdata with learned
 
 6) we can concatenate OP's
 
-pipe = concat(OP1, OP2, OP3)
+`pipe = concat(OP1, OP2, OP3)`
 
-ist das auch ein OP? vermutlich ja?
+is that an OP as well?
 
-- der hat dann als params gelernt OPs
-- man kann immer mehr hinten dran joinen (auch wenn schon gelernt?, wie dann?)
-- wie kann man bäume kontruieren?
+- it's params are learned OP's
+- We can always add new OP's to the end (does this also work if they are already learned?)
+- Can we construct tree's?
 
 
-7) wichtige erweiterungen
-multiplex: das ist schon wichtig als konzept um A oder B machen zu können
-vermutlich wollen wir erstmal nur das martin feature-only-CPOS nennt oder?
+7) Important enhancements
+Multiplex: Important, to be able to specify things such as do A or B
+Feature-Only CPO's: This should be a first step.
 
 
 
 -------------------------------------------------
 Pseudo Code
-
+```
 op = Scaler$new()
 op$parvals = list(center = T, scale = F)
 
@@ -569,16 +566,17 @@ op3 = PCA$new()
 pipe = concat(op1, op2)
 pipe$add(op3)
 
-# trainiert alle ops in der pipe
+# Train all OP's in the pipe
 data2 = pipe$train(data)
 
-# gibt ein element, den ersten OP zurück
-# hier ginge auch ein überladener index OP: pipe[[1]], pipe[["scale"]]
+# Return the first OP
+# We could also overload the index Operator: pipe[[1]], pipe[["scale"]]
 pipe$get(1)
 pipe$get("impute")
 
-# predict geht wie immer
+# Predict works as usual
 nd2 = pipe$predict(data)
 
-# frage wie kommt an azwischenergebnisse ran?
-# gibt es ein großes parvals/parset objekt? --> wäre gut für tuning...!
+# How do we access intermediate results
+# Do we have a large parvals/parset object? --> Would be good for tuning!
+```

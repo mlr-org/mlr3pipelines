@@ -1,14 +1,12 @@
 Open ToDo's; English / German Mixed
 ------------------------------------------------------------------------------------------
-ein paar unit tests mit mlr3 schreiben
+Write unittests in combination with mlr3
 
-pipelines mit resampling hinkriegen
+Combine pipelines and resampling
 
-aus mlrng meine lokalen files aufräumen
-
-mlr normales repo meine todofiles aufräumen
-
-r6interface wieder beleben
+Clean up local files from mlrng
+Clean up todo files from normal mlr
+Clean up R6 Interface
 
 
 ------------------------------------------------------------------------------------------
