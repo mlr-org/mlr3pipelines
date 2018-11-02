@@ -16,7 +16,7 @@ PipeOp = R6Class("PipeOp",
 
     train = function() {
       self$acquire_inputs()
-      messagef("Train op='%s'", self$id)
+      BBmisc::messagef("Train op='%s'", self$id)
       result = self$train2() 
       private$.result = result
       return(result)
@@ -24,7 +24,7 @@ PipeOp = R6Class("PipeOp",
     
     predict = function() {
       self$acquire_input()
-      messagef("Predict op='%s'", self$id)
+      BBmisc::messagef("Predict op='%s'", self$id)
       result = self$predict2() 
       private$.result = result
       return(result)

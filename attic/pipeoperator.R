@@ -23,7 +23,7 @@
 
 #' @export
 `%>>%.PipeNode` = function(cpo1, cpo2) {
-  messagef("join %s >> %s", cpo1$id, cpo2$id)
+  BBmisc::messagef("join %s >> %s", cpo1$id, cpo2$id)
   #FIXME: add assert for cpo2
   if (inherits(cpo2, "PipeNode")) {
     compound2Ops(cpo1, cpo2)

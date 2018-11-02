@@ -8,7 +8,7 @@ predictPipe = function(task, model) {
   repeat {
     curcpo = curnode$cpo
     curctrl = curnode$control
-    messagef("predict pipe el: id=%s; control=[%s]", curcpo$id, collapse(names(curctrl), ","))
+    BBmisc::messagef("predict pipe el: id=%s; control=[%s]", curcpo$id, collapse(names(curctrl), ","))
     input2 = formatInlist(input, dformat = curcpo$in.format)
     output = curcpo$predict(input2, curctrl)
     output2 = formatOutlist(output, dformat = curcpo$out.format, task = task)
@@ -21,7 +21,7 @@ predictPipe = function(task, model) {
       result.last$children[[1L]] = rn
     }
     ch = curnode$children
-    messagef("predict done. #children=%i", length(ch))
+    BBmisc::messagef("predict done. #children=%i", length(ch))
     if (length(ch) == 0L)
       break
     curnode = ch[[1]]

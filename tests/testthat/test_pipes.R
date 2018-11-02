@@ -1,15 +1,25 @@
 context("PipeOp")
 
-library(BBmisc)
-load_all("../paradox")
-load_all("../mlr3")
-load_all()
-
-test_that("PipeOp", {
+test_that("PipeOp1", {
+  
   task = mlr_tasks$get("iris")
   dd = iris[, -5]
   nd = iris[, -5]
+  
+  op1 = PipeOpScaler$new()
+  op2 = PipeOpPCA$new()
+  lrn = mlr_learners$get("classif.rpart")
+  op3 = PipeOpLearner$new(learner = lrn)
+  
+  op1$set_next(list(op2))
+  op2$set_next(list(op3))  
 
+  trainGraph(op1, task)  
+
+})
+
+test_that("PipeOp", {
+  
   op = PipeOpScaler$new()
   op$set_prev(list(task))
   dd2 = op$train()
