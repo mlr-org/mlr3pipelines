@@ -1,5 +1,19 @@
 context("PipeOp")
 
+test_that("Gather parameters", {
+  
+  op1 = PipeOpScaler$new("myscaler")
+  op2 = PipeOpPCA$new()
+  op1$set_next(list(op2))
+  
+  lrn = mlr_learners$get("classif.rpart")
+  op3 = PipeOpLearner$new(learner = lrn)
+  op2$set_next(list(op3))
+  
+  pipeline_gather_params(op1)
+  
+})
+
 test_that("PipeOp1", {
   
   task = mlr_tasks$get("iris")
