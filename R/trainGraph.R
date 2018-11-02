@@ -15,12 +15,9 @@ trainGraph = function(root, task) {
       if (op$can_fire) {
         op$train()
         
-        if(is.null(op$next_ops)) {
-          # there's no next operations
-          # so the loop can be stopped
-          break
+        if(!is.null(op$next_ops)) {
+          new_front$join_new(op$next_ops)
         }
-        new_front$join_new(op$next_ops)
       } else {
         new_front$add(op) 
       }
