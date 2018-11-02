@@ -40,7 +40,7 @@ ListNamedEls = R6Class("ListNamedEls",
     },
 
 
-    print = function(...) catf(self$print_str),
+    print = function(...) BBmisc::catf(self$print_str),
 
     #FIXME this is bad, but in need this now
     map = function(f) lapply(self$xs, f),

@@ -3,7 +3,7 @@ trainPipe = function(task, pipe) {
   input = list(task = task)
   result = NULL
   repeat {
-    messagef("train pipe el: id=%s, par.vals=[%s]", current.node$id, listToShortString(current.node$par.vals))
+    messagef("train pipe el: id=%s, par.vals=[%s]", current.node$id, BBmisc::listToShortString(current.node$par.vals))
     input2 = formatInlist(input, dformat = current.node$in.format)
     input2$par.vals = current.node$par.vals
     output = current.node$train(input2)

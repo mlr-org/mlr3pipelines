@@ -10,7 +10,7 @@ PipeOp = R6Class("PipeOp",
       private$.id = id
       private$.par_set = par_set
       #FIXME: we really need a funtion in ph2 now to get defaults
-      private$.par_vals = extractSubList(par_set$params, "default", simplify = FALSE)
+      private$.par_vals = BBmisc::extractSubList(par_set$params, "default", simplify = FALSE)
     },
 
 
@@ -50,13 +50,13 @@ PipeOp = R6Class("PipeOp",
 
 
     print = function(...) {
-      catf("PipeOp: <%s>", self$id)
-      catf("parvals: <%s>", listToShortString(self$par_vals))
-      catf("is_learnt=%s", self$is_learnt)
-      catf("Input: %s", listToShortString(self$inputs))
-      catf("Result: %s", listToShortString(self$result))
-      catf("Prev ops: %s", self$prev_ops$print_str)
-      catf("Next ops: %s", self$next_ops$print_str)
+      BBmisc::catf("PipeOp: <%s>", self$id)
+      BBmisc::catf("parvals: <%s>", BBmisc::listToShortString(self$par_vals))
+      BBmisc::catf("is_learnt=%s", self$is_learnt)
+      BBmisc::catf("Input: %s", BBmisc::listToShortString(self$inputs))
+      BBmisc::catf("Result: %s", BBmisc::listToShortString(self$result))
+      BBmisc::catf("Prev ops: %s", self$prev_ops$print_str)
+      BBmisc::catf("Next ops: %s", self$next_ops$print_str)
     },
     
     #FIXME: AB machen
