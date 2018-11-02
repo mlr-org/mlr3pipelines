@@ -4,8 +4,8 @@ PipeOpNULL = R6Class("PipeOpNULL",
   inherit = PipeOp,
 
   public = list(
-    initialize = function() {
-      super$initialize("OpNULL")
+    initialize = function(id = "OpNULL") {
+      super$initialize(id)
     },
 
     train2 = function(inputs) {
@@ -24,8 +24,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
   inherit = PipeOp,
 
   public = list(
-    initialize = function() {
-      super$initialize("pca")
+    initialize = function(id = "pca") {
+      super$initialize(id)
     },
 
     train2 = function() {
@@ -57,13 +57,13 @@ PipeOpScaler = R6Class("PipeOpScaler",
   inherit = PipeOp,
 
   public = list(
-    initialize = function() {
+    initialize = function(id = "scaler") {
 
       ps = ParamSet$new(params = list(
         ParamFlag$new("center", default = TRUE),
         ParamFlag$new("scale", default = TRUE)
       ))
-      super$initialize("scaler", ps)
+      super$initialize(id, ps)
     },
 
     train2 = function() {
@@ -100,12 +100,12 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
   inherit = PipeOp,
 
   public = list(
-    initialize = function() {
+    initialize = function(id = "downsample") {
       ps = ParamSet$new(params = list(
         ParamNum$new("perc", default = 0.7, lower = 0, upper = 1),
         ParamLogical$new("stratify", default = FALSE)
       ))
-      super$initialize("downsample", ps)
+      super$initialize(id, ps)
     },
 
     train2 = function() {
