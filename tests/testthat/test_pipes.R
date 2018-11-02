@@ -9,13 +9,17 @@ test_that("PipeOp1", {
   op1 = PipeOpScaler$new()
   op2 = PipeOpPCA$new()
   lrn = mlr_learners$get("classif.rpart")
+  lrn$predict_type <- "prob"
+  
   op3 = PipeOpLearner$new(learner = lrn)
   
   op1$set_next(list(op2))
   op2$set_next(list(op3))  
 
-  trainGraph(op1, task)  
+  trainGraph(op1, task)
 
+  op3$params$prediction
+  
 })
 
 test_that("PipeOp", {
