@@ -14,11 +14,9 @@ test_that("Gather parameters", {
   
 })
 
-test_that("PipeOp1", {
+test_that("PipeOp - simple pipe", {
   
   task = mlr_tasks$get("iris")
-  dd = iris[, -5]
-  nd = iris[, -5]
   
   op1 = PipeOpScaler$new()
   op2 = PipeOpPCA$new()
@@ -34,6 +32,30 @@ test_that("PipeOp1", {
 
   op3$params$prediction
   
+})
+
+test_that("PipeOp", {
+  
+  set.seed(123)
+  
+  task = mlr_tasks$get("iris")
+  
+  op1 = PipeOpPCA$new()
+  lrn1 <- mlr3:::LearnerClassifRpart$new(id = "l1")
+  lrn2 <- mlr3:::LearnerClassifRpart$new(id = "l2")
+  
+  lrn2$par_vals <- list("maxdepth" = 1)
+
+  op2a <- PipeOpLearner$new(lrn1)
+  op2b <- PipeOpLearner$new(lrn2)
+  
+  op1$set_next(list(op2a, op2b))
+  
+  trainGraph(op1, task)
+  
+  expect_true(!is.null(op2a$params$model))
+  expect_true(op2b$params$model)
+    
 })
 
 test_that("PipeOp", {
