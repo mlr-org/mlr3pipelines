@@ -8,8 +8,9 @@ PipeOpNULL = R6Class("PipeOpNULL",
       super$initialize(id)
     },
 
-    train2 = function(inputs) {
-      return(inputs)
+    train2 = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      self$inputs[[1L]]
     },
 
     predict2 = function(inputs) {
