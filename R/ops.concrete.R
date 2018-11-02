@@ -37,8 +37,10 @@ PipeOpPCA = R6Class("PipeOpPCA",
       d = task$data()
       pcr = prcomp(as.matrix(d[, ..fn]), center = FALSE, scale. = FALSE)
       private$.params = pcr$rotation
-      d[, fn] = as.data.table(sc)
-      TaskClassif$new(id = task$id, data = d, target = task$target_names)
+      d[, fn] = as.data.table(pcr$x)
+      
+      db <- DataBackendDataTable$new(d)
+      TaskClassif$new(id = task$id, backend = db, target = task$target_names)
     },
 
     predict2 = function() {
@@ -78,7 +80,9 @@ PipeOpScaler = R6Class("PipeOpScaler",
         scale = attr(sc, "scaled:scale") %??% FALSE
       )
       d[, fn] = as.data.table(sc)
-      TaskClassif$new(id = task$id, data = d, target = task$target_names)
+      
+      db <- DataBackendDataTable$new(d)
+      TaskClassif$new(id = task$id, backend = db, target = task$target_names)
     },
 
     predict2 = function() {
