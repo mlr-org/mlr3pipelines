@@ -66,9 +66,19 @@ PipeOp = R6Class("PipeOp",
     },
     
     set_next = function(ops) {
+      
+      if(inherits(ops, "PipeOp")) {
+        # allows to call x$set_next(op1) rather than x$set_next(list(op1))
+        ops <- list(ops)
+      }
+      
       self$next_ops = OpList$new(ops)
       for (op in ops) {
-        op$prev_ops = OpList$new(list(self))
+        if(length(op$prev_ops) > 0) {
+          op$prev_ops$join_new(OpList$new(list(self)))
+        } else {
+          op$prev_ops = OpList$new(list(self))
+        }
       }
     },
 
