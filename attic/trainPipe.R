@@ -3,7 +3,7 @@ trainPipe = function(task, pipe) {
   input = list(task = task)
   result = NULL
   repeat {
-    messagef("train pipe el: id=%s, par.vals=[%s]", current.node$id, listToShortString(current.node$par.vals))
+    BBmisc::messagef("train pipe el: id=%s, par.vals=[%s]", current.node$id, BBmisc::listToShortString(current.node$par.vals))
     input2 = formatInlist(input, dformat = current.node$in.format)
     input2$par.vals = current.node$par.vals
     output = current.node$train(input2)
@@ -16,7 +16,7 @@ trainPipe = function(task, pipe) {
       result.last$children[[1L]] = rn
     }
     ch = current.node$children
-    messagef("train done. #children=%i", length(ch))
+    BBmisc::messagef("train done. #children=%i", length(ch))
     if (length(ch) == 0L)
       break
     current.node = ch[[1]]

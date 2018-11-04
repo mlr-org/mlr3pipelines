@@ -15,7 +15,7 @@ Pipeline = R6Class("Pipeline",
     # kopieren wir ops hier? ansontsen ändert sich der zustand beim training auch außen
     initialize = function(ops) {
       self$ops = ops
-      names(self$ops) = extractSubList(ops, "id")
+      names(self$ops) = BBmisc::extractSubList(ops, "id")
     },
 
     train = function(task) {
@@ -42,9 +42,9 @@ Pipeline = R6Class("Pipeline",
     },
 
     print = function(...) {
-      s = extractSubList(self$ops, "id")
+      s = BBmisc::extractSubList(self$ops, "id")
       s = BBmisc::collapse(s, "->")
-      catf("Pipeline: %s", s)
+      BBmisc::catf("Pipeline: %s", s)
     }
   )
 )

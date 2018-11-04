@@ -15,10 +15,19 @@ PipeOpLearner = R6Class("PipeOpLearner",
 
 
     train2 = function() {
-      assert_list(inputs, len = 1L, type = "Task")
-      task = inputs[[1L]]
-      private$.params = train(task, self$learner)
-      return(self$params)
+      assert_list(self$inputs, len = 1L, type = "Task")
+      task = self$inputs[[1L]]
+      
+      experiment <- Experiment$new(task = task, learner = self$learner)
+      experiment$train()
+      private$.params = experiment
+      
+      experiment$predict()
+      d <- experiment$prediction[,-1]
+      colnames(d)[seq_along(task$target_names)] <- task$target_names
+      
+      db <- DataBackendDataTable$new(d)
+      TaskClassif$new(id = task$id, backend = db, target = task$target_names)
     },
 
     predict2 = function() {

@@ -10,13 +10,13 @@ PipeOp = R6Class("PipeOp",
       private$.id = id
       private$.par_set = par_set
       #FIXME: we really need a funtion in ph2 now to get defaults
-      private$.par_vals = extractSubList(par_set$params, "default", simplify = FALSE)
+      private$.par_vals = BBmisc::extractSubList(par_set$params, "default", simplify = FALSE)
     },
 
 
     train = function() {
       self$acquire_inputs()
-      messagef("Train op='%s'", self$id)
+      BBmisc::messagef("Train op='%s'", self$id)
       result = self$train2() 
       private$.result = result
       return(result)
@@ -24,7 +24,7 @@ PipeOp = R6Class("PipeOp",
     
     predict = function() {
       self$acquire_input()
-      messagef("Predict op='%s'", self$id)
+      BBmisc::messagef("Predict op='%s'", self$id)
       result = self$predict2() 
       private$.result = result
       return(result)
@@ -50,13 +50,13 @@ PipeOp = R6Class("PipeOp",
 
 
     print = function(...) {
-      catf("PipeOp: <%s>", self$id)
-      catf("parvals: <%s>", listToShortString(self$par_vals))
-      catf("is_learnt=%s", self$is_learnt)
-      catf("Input: %s", listToShortString(self$inputs))
-      catf("Result: %s", listToShortString(self$result))
-      catf("Prev ops: %s", self$prev_ops$print_str)
-      catf("Next ops: %s", self$next_ops$print_str)
+      BBmisc::catf("PipeOp: <%s>", self$id)
+      BBmisc::catf("parvals: <%s>", BBmisc::listToShortString(self$par_vals))
+      BBmisc::catf("is_learnt=%s", self$is_learnt)
+      BBmisc::catf("Input: %s", BBmisc::listToShortString(self$inputs))
+      BBmisc::catf("Result: %s", BBmisc::listToShortString(self$result))
+      BBmisc::catf("Prev ops: %s", self$prev_ops$print_str)
+      BBmisc::catf("Next ops: %s", self$next_ops$print_str)
     },
     
     #FIXME: AB machen
@@ -66,9 +66,19 @@ PipeOp = R6Class("PipeOp",
     },
     
     set_next = function(ops) {
+      
+      if(inherits(ops, "PipeOp")) {
+        # allows to call x$set_next(op1) rather than x$set_next(list(op1))
+        ops <- list(ops)
+      }
+      
       self$next_ops = OpList$new(ops)
       for (op in ops) {
-        op$prev_ops = OpList$new(list(self))
+        if(length(op$prev_ops) > 0) {
+          op$prev_ops$join_new(OpList$new(list(self)))
+        } else {
+          op$prev_ops = OpList$new(list(self))
+        }
       }
     },
 
