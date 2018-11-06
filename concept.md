@@ -15,6 +15,7 @@ more complicated building blocks, which is why some building blocks seem overly 
 ------------------------------------------------------------------------------------------
 ## class PipeOp
 
+```
 concept:
 A PipeOp is a single tranformation of inputs into outputs.
 During training it takes inputs, tranforms them, while doing that learns and stores its
@@ -66,10 +67,12 @@ questions:
 - application  / predict
   ND1 ---> OP[learned] --> ND2
   - Transforms newdata using learned params
-
+```
 
 -----------------------------------------------------------------------------------------
 ## class GraphNode
+
+```
 concept:
 A GraphNode is a (doubly connected) DAG, where each node carries as payload a single PipeOp.
 A node can be traversed / executed, when results from all predecessors are available.
@@ -98,26 +101,30 @@ active bindings:
 
 question:
 - set_next + set_prev should be ABs?
-
+```
 
 ------------------------------------------------------------------------------------------
 ## class Graph
-members:
-  source_node
 
-methods
-- index operator [[id]]  --> points to GraphNode
-
-active bindings:
-- parset [ParamSet]. returns flat ParamSet, names are pipeOpid:parid, it is computed on the fly
-- parvals(list). set param vals, name scheme as above, passed them down to pipeOps via id
-- ids
-
-questions:
-- does index op also work with ints?
-- do we want the fourth layer of topological sorting?
-- how do we loops over all nodes? how do we apply something to all nodes?
-
+```
+# members:
+#   source_node
+# 
+# methods
+# - index operator [[id]]  --> points to GraphNode 
+#   FIXME: Should this point to the GraphNode or to the PipeOp
+# 
+# active bindings:
+#   - is_learnt [logical].  Are all underlying operators trained?
+#   - parset [ParamSet]. Returns flat ParamSet, names are pipeOpid:parid, it is computed on the fly.
+#   - parvals [list]. Set param vals, name scheme as above, passed them down to pipeOps via id.
+#   - ids [character]. Id's of PipeOp's in the graph.
+# 
+# questions:
+#   - does index op also work with ints?
+#   - do we want the fourth layer of topological sorting?
+#   - how do we loops over all nodes? how do we apply something to all nodes?
+```
 
 
 ------------------------------------------------------------------------------------------
