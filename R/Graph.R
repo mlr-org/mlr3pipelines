@@ -50,6 +50,10 @@ Graph = R6Class("Graph",
       BBmisc::catf("Graph: %s", s)
     },
     
+    reset = function() {
+      # FIXME: This should reset all PipeOp's in the graph
+    },
+    
     find_by_id = function(id) {
       # FIXME: We might want a version of traverseGraph that does this more efficiently.
       assert_choice(id, self$ids)
@@ -96,7 +100,7 @@ length.Graph = function(x) {
   if (is.character(i)) {
     x$find_by_id(i)
   } else if (is.integer(i)) {
-    # FIXME: This will break for parallel Operators.
+    # FIXME: This will break for parallel operators.
     x$find_by_id(x$ids[i])
   }
 }

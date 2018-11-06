@@ -107,29 +107,35 @@ question:
 ## class Graph
 
 ```
-# members:
-#   source_node
-# 
-# methods
-# - index operator [[id]]  --> points to GraphNode 
-#   FIXME: Should this point to the GraphNode or to the PipeOp
-# 
-# active bindings:
-#   - is_learnt [logical].  Are all underlying operators trained?
-#   - parset [ParamSet]. Returns flat ParamSet, names are pipeOpid:parid, it is computed on the fly.
-#   - parvals [list]. Set param vals, name scheme as above, passed them down to pipeOps via id.
-#   - ids [character]. Id's of PipeOp's in the graph.
-# 
-# questions:
-#   - does index op also work with ints?
-#   - do we want the fourth layer of topological sorting?
-#   - how do we loops over all nodes? how do we apply something to all nodes?
+members:
+  source_node
+
+methods
+- index operator [[id]]  --> points to GraphNode|PipeOp
+  FIXME: Should this point to the GraphNode or to the PipeOp
+- train(input) : [any] --> [any] : fits params and transforms input data
+- predict(input) : [any] --> [any] : uses fitted params to transform input data
+- reset() : [void] --> [void] : Resets params to NULL
+- print()
+
+active bindings:
+  - is_learnt [logical].  Are all underlying operators trained?
+  - parset [ParamSet]. Returns flat ParamSet, names are pipeOpid:parid, it is computed on the fly.
+  - parvals [list]. Set param vals, name scheme as above, passed them down to pipeOps via id.
+  - ids [character]. Id's of PipeOp's in the graph.
+
+questions:
+  - does index op also work with ints?
+  - do we want the fourth layer of topological sorting?
+  - how do we loops over all nodes? how do we apply something to all nodes?
 ```
 
 
 ------------------------------------------------------------------------------------------
-FIXME: This class is new and needs to be discussed.
 ## class Multiplexer
+
+```
+# FIXME: This class is new and needs to be discussed.
 concept:
 A Multiplexer contains multiple GraphNodes.
 It extends the corresponding paramset to allow for selection of ONE of the contained Nodes.
@@ -143,12 +149,12 @@ members:
 
 methods:
 - extend_parset
-
+```
 
 ------------------------------------------------------------------------------------------
 FIXME: This function needs to be discussed.
-
 you can concatenate PipeOP's
+
 
 either using
 `pipe = concat(OP1, OP2, OP3)`
