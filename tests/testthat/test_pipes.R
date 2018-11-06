@@ -1,20 +1,24 @@
 context("PipeOp")
 
-test_that("Gather parameters", {
+
+test_that("PipeOp - simple pipe", {
   
-  op1 = PipeOpScaler$new("myscaler")
-  op2 = PipeOpPCA$new()
-  op1$set_next(list(op2))
+  task = mlr_tasks$get("iris")
   
-  lrn = mlr_learners$get("classif.rpart")
-  op3 = PipeOpLearner$new(learner = lrn)
-  op2$set_next(list(op3))
+  op1 = PipeOpScaler$new()
+  expect_class(op1, "PipeOpScaler")
+  expect_false(op1$is_learnt)
+  expect_false(op1$can_fire)
   
-  pipeline_gather_params(op1)
+  trainGraph(op1, task)
+  expect_class(op1, "PipeOpScaler")
+  expect_true(op1$is_learnt)
+  expect_true(op1$can_fire)
+  expect_class(op1$result, "Task")
   
 })
 
-test_that("PipeOp - simple pipe", {
+test_that("PipeOp - learner pipe", {
   
   task = mlr_tasks$get("iris")
   
@@ -27,11 +31,32 @@ test_that("PipeOp - simple pipe", {
   
   op1$set_next(list(op2))
   op2$set_next(list(op3))  
-
-  trainGraph(op1, task)
-
-  op3$params$prediction
   
+  trainGraph(op1, task)
+  expect_class(op1$result, "Task")
+  expect_class(op2$result, "Task")
+  expect_class(op3$result, "Task")
+  
+  op3$params$prediction
+})
+
+
+test_that("Gather parameters", {
+  
+  op1 = PipeOpScaler$new("myscaler")
+  op2 = PipeOpPCA$new()
+  op1$set_next(list(op2))
+  
+  lrn = mlr_learners$get("classif.rpart")
+  op3 = PipeOpLearner$new(learner = lrn)
+  op2$set_next(list(op3))
+  
+  ps = pipeline_gather_params(op1)
+  
+  expect_class(ps, "ParamSet")
+  expect_subset(stri_paste(op1$id, ":", op1$par_set$ids), ps$ids)
+  expect_subset(stri_paste(op2$id, ":", op2$par_set$ids), ps$ids)
+  expect_subset(stri_paste(lrn$id, ":", lrn$par_set$ids), ps$ids)
 })
 
 test_that("PipeOp", {
@@ -60,12 +85,12 @@ test_that("PipeOp", {
 
 test_that("PipeOp", {
   
-  op = PipeOpScaler$new()
-  op$set_prev(list(task))
-  dd2 = op$train()
-  print(op)
-  nd2 = op$predict(nd)
-  print(op)
+  # op = PipeOpScaler$new()
+  # op$set_prev(list(task))
+  # dd2 = op$train()
+  # print(op)
+  # nd2 = op$predict(nd)
+  # print(op)
 })
 
 

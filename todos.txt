@@ -1,12 +1,11 @@
 Open ToDo's; English / German Mixed
 ------------------------------------------------------------------------------------------
-Write unittests in combination with mlr3
 
-Combine pipelines and resampling
 
-Clean up local files from mlrng
-Clean up todo files from normal mlr
-Clean up R6 Interface
+- [ ] Combine pipelines and resampling
+- [ ] Clean up local files from mlrng
+- [ ] Clean up todo files from normal mlr
+- [ ] Clean up R6 Interface
 
 
 ------------------------------------------------------------------------------------------

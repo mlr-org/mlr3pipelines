@@ -32,7 +32,7 @@ pipeline_gather_params <- function(graph) {
     lapply(params_list, function(x) {
       
       x <- x$clone(deep = TRUE)
-      x$id <- paste(id,x$id, sep =":")
+      x$id <- paste(id, x$id, sep =":")
       x
     })
     
