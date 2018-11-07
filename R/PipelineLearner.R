@@ -1,18 +1,17 @@
 #' Traverse graphs and apply the function `fnc`
 traverseGraph <- function(root, fnc) {
   #FIXME: check visited nodes
-  
-  front = OpList$new(list(root))
+  front = GraphNodesList$new(list(root))
   result_list <- list()
   
   while(length(front) > 0L) {
-    new_front = OpList$new()
+    new_front = GraphNodesList$new()
     for (i in seq_along(front)) {
       op = front[[i]]
       result_list[[op$id]] <- fnc(op)
       
-      if(is.null(op$next_ops)) break
-      new_front$join_new(op$next_ops)
+      if(is.null(op$next_nodes)) break
+      new_front$join_new(op$next_nodes)
     }
     front = new_front
   }

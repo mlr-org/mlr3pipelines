@@ -9,10 +9,9 @@ test_that("Graph", {
   op3 = PipeOpLearner$new(learner = lrn)
   
   root <- GraphNode$new(op1)
-  root$set_next(op2)$next_node()$set_next(op3)$root_node
+  root$set_next(op2)$next_node()$set_next(op3)
   
-  # Graph construction
-  g = Graph$new(op1)
+  g = Graph$new(root)
   expect_class(g, "Graph")
   expect_output(print(g), regexp = "Graph: scaler->pca->classif.rpart")
   expect_false(g$is_learnt)
