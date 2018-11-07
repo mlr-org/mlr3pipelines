@@ -2,10 +2,6 @@
 PipeOp = R6Class("PipeOp", 
   public = list(
   
-    inputs = NULL,
-    next_ops = NULL,
-    prev_ops = NULL,
-
     initialize = function(id, par_set = ParamSet$new()) {
       private$.id = id
       private$.par_set = par_set
@@ -37,18 +33,6 @@ PipeOp = R6Class("PipeOp",
       invisible(self)
     },
 
-
-    acquire_inputs = function() {
-      if (!self$has_no_prevs)
-        self$inputs = self$prev_ops$map(function(x) x$result) 
-    },
-
-    # trainRecursive = function(input) {
-      # input = train(input)
-      # lapply(trainRecursive())
-    # }
-
-
     print = function(...) {
       BBmisc::catf("PipeOp: <%s>", self$id)
       BBmisc::catf("parvals: <%s>", BBmisc::listToShortString(self$par_vals))
@@ -65,22 +49,7 @@ PipeOp = R6Class("PipeOp",
       invisible(self)
     },
     
-    set_next = function(ops) {
-      
-      if(inherits(ops, "PipeOp")) {
-        # allows to call x$set_next(op1) rather than x$set_next(list(op1))
-        ops <- list(ops)
-      }
-      
-      self$next_ops = OpList$new(ops)
-      for (op in ops) {
-        if(length(op$prev_ops) > 0) {
-          op$prev_ops$join_new(OpList$new(list(self)))
-        } else {
-          op$prev_ops = OpList$new(list(self))
-        }
-      }
-    },
+    
 
     set_prev = function(ops) {
       self$prev_ops = OpList$new(ops)
@@ -99,15 +68,7 @@ PipeOp = R6Class("PipeOp",
     params = function() private$.params,
     result = function() private$.result,
     is_learnt = function() !is.null(self$params),
-    has_result = function() !is.null(self$result),
-    has_no_prevs = function() length(self$prev_ops) == 0L,
-    
-    can_fire = function() {
-      if (self$has_no_prevs)
-        !is.null(self$inputs)
-      else
-        all(self$prev_ops$map_s(function(x) x$has_result))
-    }
+    has_result = function() !is.null(self$result)
   ),
 
   private = list(

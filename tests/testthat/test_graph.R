@@ -7,8 +7,9 @@ test_that("Graph", {
   lrn$predict_type <- "prob"
   
   op3 = PipeOpLearner$new(learner = lrn)
-  op1$set_next(list(op2))
-  op2$set_next(list(op3))  
+  
+  root <- GraphNode$new(op1)
+  root$set_next(op2)$next_node()$set_next(op3)$root_node
   
   # Graph construction
   g = Graph$new(op1)
