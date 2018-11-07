@@ -1,3 +1,13 @@
+#' ListNamedEls for GraphNodes.
+#'
+#' @description 
+#' It is used mainly inside the GraphNode class 
+#' to store the next and previous nodes.
+#' 
+#' It's not exported.
+#'
+#' @noRd
+#' 
 GraphNodesList = R6Class("GraphNodesList",
    inherit = ListNamedEls,
    
@@ -46,6 +56,20 @@ graph_node_add_prev <- function(nodes) {
 
 
 #### Class definition ####
+
+#' GraphNode
+#'
+#' @description 
+#' 
+#' The \code{GraphNode} class implements behaviors required to define the
+#' connections between the \code{PipeOps}. The set of interconnected 
+#' GraphNodes creates the pipeline graph.
+#' 
+#' @usage GraphNode$new(pipeop)
+#' 
+#' @importFrom R6 R6Class
+#' 
+#' 
 GraphNode = R6::R6Class(
   "GraphNode", 
   public = list(

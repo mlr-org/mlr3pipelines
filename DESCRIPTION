@@ -44,5 +44,5 @@ Suggests:
 LazyData: yes
 ByteCompile: yes
 Version: 0.1
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr
