@@ -16,6 +16,7 @@ GraphNodesList = R6Class("GraphNodesList",
        super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
      },
      set_next = function(nodes) {
+       nodes <- wrap_nodes(nodes)
        self$map(function(x) x$set_next(nodes))
        nodes
      }
@@ -25,33 +26,38 @@ GraphNodesList = R6Class("GraphNodesList",
 ##### Methods definitions #####
 # set_next
 graph_node_set_next <- function(nodes) {
+  
+  nodes <- wrap_nodes(nodes)
   self$next_nodes = GraphNodesList$new(nodes)
   for(nn in nodes) {
     nn$add_prev(self)
   }
   
-  self
+  nodes
 }
 
 # set_prev
 graph_node_set_prev <- function(nodes) {
-  self$prev_nodes = GraphNodesList$new(nodes)
   
+  nodes <- wrap_nodes(nodes)
+  self$prev_nodes = GraphNodesList$new(nodes)
   for(nn in nodes) {
     nn$add_next(self)
   }
-  self
+  nodes
 }
 
 
 graph_node_add_next <- function(nodes) {
+  nodes <- wrap_nodes(nodes)
   self$next_nodes$join_new(GraphNodesList$new(nodes))
-  self
+  nodes
 }
 
 graph_node_add_prev <- function(nodes) {
+  nodes <- wrap_nodes(nodes)
   self$prev_nodes$join_new(GraphNodesList$new(nodes))
-  self
+  nodes
 }
 
 
@@ -121,6 +127,21 @@ GraphNode = R6::R6Class(
     }
   )
 )
+
+wrap_nodes <- function(nodes) {
+  
+  check_node <- function(y) {
+    checkmate::assert_class(y, "GraphNode")
+    y
+  }
+  
+  if(inherits(x, "GraphNode")) {
+    x <- list(check_node(x))
+  } else if(is.list(x)) {
+    x <- lapply(x, check_node)
+  }
+  x
+}
 
 #' Automatically transform PipeOp or a list of PipeOps into a list of GraphNodes
 #'
