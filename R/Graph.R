@@ -170,3 +170,24 @@ length.Graph = function(x) {
     x$find_by_id(x$ids[i])
   }
 }
+
+graph_to_edge_list <- function(root) {
+  
+  edges <- traverseGraph(root, function(x) {
+    res <- cbind(
+      x$id,
+      x$next_nodes$map(function(y) y$id)
+    )
+    if(ncol(res) > 1) res
+  })
+  edges <- do.call(rbind, edges)
+  mode(edges) <- "character"
+  rownames(edges) <- NULL
+  edges
+  
+}
+
+graph_plot <- function(root) {
+  edges <- graph_to_edge_list(root)
+  plot(igraph::graph_from_edgelist(edges))
+}
