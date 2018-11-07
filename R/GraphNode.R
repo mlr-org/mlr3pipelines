@@ -16,7 +16,6 @@ GraphNodesList = R6Class("GraphNodesList",
        super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
      },
      set_next = function(nodes) {
-       nodes <- wrap_pipeops(nodes)
        self$map(function(x) x$set_next(nodes))
        nodes
      }
@@ -26,7 +25,6 @@ GraphNodesList = R6Class("GraphNodesList",
 ##### Methods definitions #####
 # set_next
 graph_node_set_next <- function(nodes) {
-  nodes <- wrap_pipeops(nodes)
   self$next_nodes = GraphNodesList$new(nodes)
   for(nn in nodes) {
     nn$add_prev(self)
@@ -37,7 +35,6 @@ graph_node_set_next <- function(nodes) {
 
 # set_prev
 graph_node_set_prev <- function(nodes) {
-  nodes <- wrap_pipeops(nodes)
   self$prev_nodes = GraphNodesList$new(nodes)
   
   for(nn in nodes) {
@@ -48,13 +45,11 @@ graph_node_set_prev <- function(nodes) {
 
 
 graph_node_add_next <- function(nodes) {
-  nodes <- wrap_pipeops(nodes)
   self$next_nodes$join_new(GraphNodesList$new(nodes))
   self
 }
 
 graph_node_add_prev <- function(nodes) {
-  nodes <- wrap_pipeops(nodes)
   self$prev_nodes$join_new(GraphNodesList$new(nodes))
   self
 }
