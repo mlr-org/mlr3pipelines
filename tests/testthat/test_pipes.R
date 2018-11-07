@@ -8,12 +8,15 @@ test_that("PipeOp - simple pipe", {
   op1 = PipeOpScaler$new()
   expect_class(op1, "PipeOpScaler")
   expect_false(op1$is_learnt)
-  expect_false(op1$can_fire)
   
-  trainGraph(op1, task)
+  n1 <- GraphNode$new(op1)
+  expect_false(n1$can_fire)
+  
+  trainGraph(n1, task)
+  expect_true(n1$can_fire)
+  
   expect_class(op1, "PipeOpScaler")
   expect_true(op1$is_learnt)
-  expect_true(op1$can_fire)
   expect_class(op1$result, "Task")
   
 })
@@ -22,17 +25,18 @@ test_that("PipeOp - learner pipe", {
   
   task = mlr_tasks$get("iris")
   
-  op1 = PipeOpScaler$new()
-  op2 = PipeOpPCA$new()
   lrn = mlr_learners$get("classif.rpart")
   lrn$predict_type <- "prob"
   
+  op1 = PipeOpScaler$new()
+  op2 = PipeOpPCA$new()
   op3 = PipeOpLearner$new(learner = lrn)
   
-  op1$set_next(list(op2))
-  op2$set_next(list(op3))  
+  root <- GraphNode$new(op1)
+  n2 <- root$set_next(op2)$next_node()
+  n3 <- n2$set_next(op3)$next_node()
   
-  trainGraph(op1, task)
+  trainGraph(root, task)
   expect_class(op1$result, "Task")
   expect_class(op2$result, "Task")
   expect_class(op3$result, "Task")
@@ -45,6 +49,7 @@ test_that("Gather parameters", {
   
   op1 = PipeOpScaler$new("myscaler")
   op2 = PipeOpPCA$new()
+  
   op1$set_next(list(op2))
   
   lrn = mlr_learners$get("classif.rpart")
@@ -65,7 +70,9 @@ test_that("PipeOp", {
   
   task = mlr_tasks$get("iris")
   
-  op1 = PipeOpPCA$new()
+  op1 <- PipeOpPCA$new()
+  n1 <- GraphNode$new(op1)
+  
   lrn1 <- mlr3:::LearnerClassifRpart$new(id = "l1")
   lrn2 <- mlr3:::LearnerClassifRpart$new(id = "l2")
   
@@ -74,12 +81,12 @@ test_that("PipeOp", {
   op2a <- PipeOpLearner$new(lrn1)
   op2b <- PipeOpLearner$new(lrn2)
   
-  op1$set_next(list(op2a, op2b))
+  n1$set_next(list(op2a, op2b))
   
-  trainGraph(op1, task)
+  trainGraph(n1, task)
   
   expect_true(!is.null(op2a$params$model))
-  expect_true(op2b$params$model)
+  expect_true(!is.null(op2b$params$model))
     
 })
 
