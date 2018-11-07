@@ -14,6 +14,11 @@ GraphNodesList = R6Class("GraphNodesList",
    public = list(
      initialize = function(xs = list()) {
        super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
+     },
+     set_next = function(nodes) {
+       nodes <- wrap_pipeops(nodes)
+       self$map(function(x) x$set_next(nodes))
+       nodes
      }
    )
 )
