@@ -16,14 +16,23 @@ test_that("featureunion - basic", {
   lrn = mlr_learners$get("classif.rpart")
   op4 = PipeOpLearner$new(learner = lrn)
   
-  op1$set_next(list(op2a, op2b))
+  root <- GraphNode$new(op1)
+  root$set_next(list(op2a, op2b))
   
-  op2a$set_next(list(op3))
-  op2b$set_next(list(op3))
+  n3 <- GraphNode$new(op3)
   
-  op3$set_next(list(op4))
+  n2a <- root$next_node(1)$set_next(n3)
+  n2b <- root$next_node(2)$set_next(n3)
   
-  trainGraph(op1, task)
+  # # warning!
+  # n2a <- root$next_node(1)$set_next(op3)
+  # n2b <- root$next_node(2)$set_next(op3)
+  
+  n3$set_next(op4)
+  n4 <- n3$next_node()
+  
+  graph <- Graph$new(root)
+  graph$train(task)
   
   model <- op4$params$model
   
@@ -35,4 +44,3 @@ test_that("featureunion - basic", {
   expect_equal(names(model$variable.importance), paramNamesFeatureUnion)
   
 })
-

@@ -88,7 +88,7 @@ GraphNode = R6::R6Class(
     
     has_no_prevs = function() length(self$prev_nodes) == 0L,
     can_fire = function() {
-      if (self$has_no_prevs) !is.null(self$inputs)
+      if (self$has_no_prevs) length(self$inputs) > 0
       else all(self$prev_nodes$map_s(function(x) x$has_result))
     },
     root_node = function() {
