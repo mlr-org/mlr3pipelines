@@ -9,23 +9,6 @@ PipeOp = R6Class("PipeOp",
       private$.par_vals = BBmisc::extractSubList(par_set$params, "default", simplify = FALSE)
     },
 
-
-    train = function() {
-      self$acquire_inputs()
-      BBmisc::messagef("Train op='%s'", self$id)
-      result = self$train2() 
-      private$.result = result
-      return(result)
-    }, 
-    
-    predict = function() {
-      self$acquire_input()
-      BBmisc::messagef("Predict op='%s'", self$id)
-      result = self$predict2() 
-      private$.result = result
-      return(result)
-    }, 
-
     reset = function() {
       self$params = NULL
       self$result.train = NULL
