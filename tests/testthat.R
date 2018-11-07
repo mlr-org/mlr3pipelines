@@ -1,4 +1,6 @@
 library(testthat)
+library(mlr3)
+library(paradox)
 library(mlrPipelines)
 
 load_github <- function(pkg, githubPath) {

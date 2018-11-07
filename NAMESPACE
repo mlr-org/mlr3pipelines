@@ -3,6 +3,7 @@
 import(checkmate)
 import(data.table)
 import(mlr3)
+import(paradox)
 import(stringi)
 importFrom(BBmisc,isFALSE)
 importFrom(BBmisc,seq_col)
