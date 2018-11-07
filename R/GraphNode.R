@@ -18,7 +18,7 @@ GraphNodesList = R6Class("GraphNodesList",
      set_next = function(nodes) {
        nodes <- wrap_nodes(nodes)
        self$map(function(x) x$set_next(nodes))
-       nodes
+       GraphNodesList$new(nodes)
      }
    )
 )
@@ -33,7 +33,7 @@ graph_node_set_next <- function(nodes) {
     nn$add_prev(self)
   }
   
-  nodes
+  self$next_nodes
 }
 
 # set_prev
@@ -44,20 +44,20 @@ graph_node_set_prev <- function(nodes) {
   for(nn in nodes) {
     nn$add_next(self)
   }
-  nodes
+  self$prev_nodes
 }
 
 
 graph_node_add_next <- function(nodes) {
   nodes <- wrap_nodes(nodes)
   self$next_nodes$join_new(GraphNodesList$new(nodes))
-  nodes
+  self
 }
 
 graph_node_add_prev <- function(nodes) {
   nodes <- wrap_nodes(nodes)
   self$prev_nodes$join_new(GraphNodesList$new(nodes))
-  nodes
+  self
 }
 
 
@@ -128,7 +128,7 @@ GraphNode = R6::R6Class(
   )
 )
 
-wrap_nodes <- function(nodes) {
+wrap_nodes <- function(x) {
   
   check_node <- function(y) {
     checkmate::assert_class(y, "GraphNode")

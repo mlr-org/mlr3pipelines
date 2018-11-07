@@ -17,30 +17,21 @@ test_that("featureunion - basic", {
   op4 = PipeOpLearner$new(learner = lrn)
   
   root <- GraphNode$new(op1)
-  root$set_next(list(op2a, op2b))
-  
-  n3 <- GraphNode$new(op3)
-  
-  n2a <- root$next_node(1)$set_next(n3)
-  n2b <- root$next_node(2)$set_next(n3)
-  
-  # # warning!
-  # n2a <- root$next_node(1)$set_next(op3)
-  # n2b <- root$next_node(2)$set_next(op3)
-  
-  n3$set_next(op4)
-  n4 <- n3$next_node()
+  root$
+    set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))$
+    set_next(GraphNode$new(op3))$
+    set_next(GraphNode$new(op4))
   
   graph <- Graph$new(root)
   graph$train(task)
   
   model <- op4$params$model
   
-  paramNamesFeatureUnion <- c(
+  param_names_union <- c(
     "OpNULL.Petal.Width", "OpNULL.Petal.Length", "pca.Sepal.Length", 
     "OpNULL.Sepal.Length", "pca.Sepal.Width", "OpNULL.Sepal.Width", 
     "pca.Petal.Length")
   
-  expect_equal(names(model$variable.importance), paramNamesFeatureUnion)
+  expect_equal(names(model$variable.importance), param_names_union)
   
 })
