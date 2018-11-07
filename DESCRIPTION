@@ -22,6 +22,7 @@ Imports:
     stringi,
     checkmate (>= 1.8.2),
     methods,
+    mlr3,
     stats,
     utils,
     backports (>= 1.1.0),
@@ -44,5 +45,7 @@ Suggests:
 LazyData: yes
 ByteCompile: yes
 Version: 0.1
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr
+Remotes:
+    mlr-org/mlr3

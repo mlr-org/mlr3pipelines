@@ -1,6 +1,7 @@
 #' @import checkmate
 #' @import data.table
 #' @import stringi
+#' @import mlr3
 #' @importFrom stats setNames predict
 #' @importFrom utils data
 #' @importFrom BBmisc vlapply viapply vcapply vnapply seq_row seq_col isFALSE
