@@ -18,6 +18,28 @@ traverseGraph <- function(root, fnc) {
   result_list
 }
 
+graph_gather_params <- function(graph) {
+  
+  all_params <- traverseGraph(
+    graph,
+    function(x) x$pipeop$par_set$clone(deep = TRUE)$params
+  )
+  
+  all_params_named <- mapply(function(params_list, id) {
+    
+    lapply(params_list, function(x) {
+      
+      x <- x$clone(deep = TRUE)
+      x$id <- paste(id, x$id, sep =":")
+      x
+    })
+    
+  }, all_params, names(all_params), SIMPLIFY = FALSE)
+  
+  paradox::ParamSet$new(params = unlist(all_params_named))
+}
+
+
 trainGraph = function(root, task) {
   root$inputs = list(task)
   front = GraphNodesList$new(list(root))
@@ -119,7 +141,7 @@ Graph = R6Class("Graph",
         FALSE)
     },
     par_set = function(value) {
-      if (missing(value)) pipeline_gather_params(self$source_node)
+      if (missing(value)) graph_gather_params(self$source_node)
       },
     par_vals = function(value) {
       if (missing(value)) list()

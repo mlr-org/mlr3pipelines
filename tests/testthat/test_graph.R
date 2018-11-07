@@ -24,10 +24,10 @@ test_that("Graph", {
   # Test active bindings
   expect_equal(names(g$ids), c(op1$id, op2$id, op3$id))
   expect_equal(g$par_vals, list())
-  expect_equal(g$par_set, pipeline_gather_params(op1))
+  expect_equal(g$par_set, graph_gather_params(root))
   
   # Test `[[` operator
-  expect_class(g[["scaler"]], "PipeOp")
+  expect_class(g[["scaler"]], "GraphNode")
   expect_equal(g[["scaler"]]$id, "scaler")
   expect_error(g[["foo"]], "Assertion on 'id' failed:")
   

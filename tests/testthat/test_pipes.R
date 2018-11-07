@@ -51,7 +51,7 @@ test_that("Gather parameters", {
   op3 = PipeOpLearner$new(learner = lrn)
   op2$set_next(list(op3))
   
-  ps = pipeline_gather_params(op1)
+  ps = graph_gather_params(op1)
   
   expect_class(ps, "ParamSet")
   expect_subset(stri_paste(op1$id, ":", op1$par_set$ids), ps$ids)
