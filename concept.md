@@ -87,10 +87,9 @@ members:
 
 
 methods:
-- acquire_inputs     --> outlist    : fits params and transforms input data
+- train     --> outlist    : fits params and transforms input data (ZZ: I renamed `acquire_inputs` to `train`, because it not only acquire the data from previous nodes but also fit the params for the pipeop)
 - set_next(ops)
 - set_prev(ops)
-
 
 active bindings:
 - result

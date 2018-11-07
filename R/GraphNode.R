@@ -65,7 +65,9 @@ GraphNode = R6::R6Class(
     add_next = graph_node_add_next,
     add_prev = graph_node_add_prev,
     train = function() {
-      private$acquire_inputs()
+      if (!self$has_no_prevs) {
+        self$inputs = self$prev_nodes$map(function(x) x$result)
+      }
       BBmisc::messagef("Train op='%s'", self$id)
       self$pipeop$train(self$inputs)
     },
@@ -75,12 +77,7 @@ GraphNode = R6::R6Class(
       BBmisc::catf("GraphNode: <%s>", self$id)
     }
   ),
-  private = list(
-    acquire_inputs = function() {
-      if (!self$has_no_prevs)
-        self$inputs = self$prev_nodes$map(function(x) x$result)
-    }
-  ),
+  private = list(),
   active = list(
     
     # forwarded
