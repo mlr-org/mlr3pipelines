@@ -54,8 +54,8 @@ GraphNode = R6::R6Class(
       self$next_nodes <- GraphNodesList$new()
       self$prev_nodes <- GraphNodesList$new()
     },
-    browser = function() browser(),
     pipeop = NULL,
+    inputs = list(),
     
     # next, prev
     next_nodes = NULL,
@@ -64,7 +64,11 @@ GraphNode = R6::R6Class(
     set_prev = graph_node_set_prev,
     add_next = graph_node_add_next,
     add_prev = graph_node_add_prev,
-    train = function(task) {},
+    train = function() {
+      private$acquire_inputs()
+      BBmisc::messagef("Train op='%s'", self$id)
+      self$pipeop$train(self$inputs)
+    },
     next_node = function(id = 1) self$next_nodes[[id]],
     
     print = function(...) {
@@ -72,16 +76,19 @@ GraphNode = R6::R6Class(
     }
   ),
   private = list(
-    inputs = list(),
     acquire_inputs = function() {
       if (!self$has_no_prevs)
         self$inputs = self$prev_nodes$map(function(x) x$result)
     }
   ),
   active = list(
+    
+    # forwarded
     id = function() self$pipeop$id,
     result = function() self$pipeop$result,
     has_result = function() !is.null(self$pipeop$result),
+    is_learnt  = function() self$pipeop$is_learnt,
+    
     has_no_prevs = function() length(self$prev_nodes) == 0L,
     can_fire = function() {
       if (self$has_no_prevs) !is.null(self$inputs)

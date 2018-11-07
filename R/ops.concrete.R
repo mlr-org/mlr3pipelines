@@ -29,11 +29,11 @@ PipeOpPCA = R6Class("PipeOpPCA",
       super$initialize(id)
     },
 
-    train2 = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
+    train = function(inputs) {
+      assert_list(inputs, len = 1L, type = "Task")
       # FIXME: this is really bad code how i change the data of the task
       # ich muss hier das backend austauschen
-      task = self$inputs[[1L]]
+      task = inputs[[1L]]
       fn = task$feature_names
       d = task$data()
       pcr = prcomp(as.matrix(d[, ..fn]), center = FALSE, scale. = FALSE)
@@ -41,7 +41,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
       d[, fn] = as.data.table(pcr$x)
       
       db <- DataBackendDataTable$new(d)
-      TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      private$.result
     },
 
     predict2 = function() {
@@ -67,9 +68,9 @@ PipeOpScaler = R6Class("PipeOpScaler",
       super$initialize(id, ps)
     },
 
-    train2 = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
-      task = self$inputs[[1L]]
+    train = function(inputs) {
+      assert_list(inputs, len = 1L, type = "Task")
+      task = inputs[[1L]]
       # FIXME: this is really bad code how i change the data of the task
       fn = task$feature_names
       d = task$data()
@@ -83,7 +84,8 @@ PipeOpScaler = R6Class("PipeOpScaler",
       d[, fn] = as.data.table(sc)
       
       db <- DataBackendDataTable$new(d)
-      TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      private$.result
     },
 
     predict2 = function() {
