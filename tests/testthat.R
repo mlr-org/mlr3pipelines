@@ -1,7 +1,7 @@
 library(testthat)
 library(mlr3)
 library(paradox)
-library(mlrPipelines)
+library(mlr3pipelines)
 
 load_github <- function(pkg, githubPath) {
   # FIXME: it should be removed when 
@@ -18,4 +18,4 @@ load_github("mlr3", "mlr-org/mlr3")
 library(paradox)
 library(mlr3)
 
-test_check("mlrPipelines")
+test_check("mlr3pipelines")

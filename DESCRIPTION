@@ -1,4 +1,4 @@
-Package: mlrPipelines
+Package: mlr3pipelines
 Title: Composable Preprocessing Operators and Pipelines with mlr
 Description: Toolset that enriches mlr with a diverse set of preprocessing
     operators. Composable Preprocessing Operators ("CPO"s) are first-class
