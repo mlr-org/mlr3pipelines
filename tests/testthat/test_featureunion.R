@@ -1,37 +1,37 @@
 test_that("featureunion - basic", {
-  
+
   set.seed(123)
-  
+
   task = mlr_tasks$get("iris")
   dd = iris[, -5]
   nd = iris[, -5]
-  
+
   op1 = PipeOpScaler$new()
-  
+
   op2a = PipeOpPCA$new()
   op2b = PipeOpNULL$new()
-  
+
   op3 = PipeOpFeatureUnion$new()
-  
+
   lrn = mlr_learners$get("classif.rpart")
   op4 = PipeOpLearner$new(learner = lrn)
-  
+
   root <- GraphNode$new(op1)
   root$
     set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))$
     set_next(GraphNode$new(op3))$
     set_next(GraphNode$new(op4))
-  
+
   graph <- Graph$new(root)
   graph$train(task)
-  
+
   model <- op4$params$model
-  
+
   param_names_union <- c(
-    "OpNULL.Petal.Width", "OpNULL.Petal.Length", "pca.Sepal.Length", 
-    "OpNULL.Sepal.Length", "pca.Sepal.Width", "OpNULL.Sepal.Width", 
+    "OpNULL.Petal.Width", "OpNULL.Petal.Length", "pca.Sepal.Length",
+    "OpNULL.Sepal.Length", "pca.Sepal.Width", "OpNULL.Sepal.Width",
     "pca.Petal.Length")
-  
+
   expect_equal(names(model$variable.importance), param_names_union)
-  
+
 })
