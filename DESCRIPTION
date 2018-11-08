@@ -8,9 +8,8 @@ Authors@R: c(
     person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"))
 URL: https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
-License: BSD_2_clause + file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
-Roxygen: list(wrap = FALSE)
 Depends:
     R (>= 3.0.2)
 Imports:
