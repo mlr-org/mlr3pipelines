@@ -7,11 +7,11 @@ test_that("Graph", {
   lrn$predict_type <- "prob"
   
   op3 = PipeOpLearner$new(learner = lrn)
-  op1$set_next(list(op2))
-  op2$set_next(list(op3))  
   
-  # Graph construction
-  g = Graph$new(op1)
+  root <- GraphNode$new(op1)
+  root$set_next(GraphNode$new(op2))$set_next(GraphNode$new(op3))
+  
+  g = Graph$new(root)
   expect_class(g, "Graph")
   expect_output(print(g), regexp = "Graph: scaler->pca->classif.rpart")
   expect_false(g$is_learnt)
@@ -24,10 +24,10 @@ test_that("Graph", {
   # Test active bindings
   expect_equal(names(g$ids), c(op1$id, op2$id, op3$id))
   expect_equal(g$par_vals, list())
-  expect_equal(g$par_set, pipeline_gather_params(op1))
+  expect_equal(g$par_set, graph_gather_params(root))
   
   # Test `[[` operator
-  expect_class(g[["scaler"]], "PipeOp")
+  expect_class(g[["scaler"]], "GraphNode")
   expect_equal(g[["scaler"]]$id, "scaler")
   expect_error(g[["foo"]], "Assertion on 'id' failed:")
   

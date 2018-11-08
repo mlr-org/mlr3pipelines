@@ -80,21 +80,21 @@ They are then passed to the PipeOp, the PipeOp is trained / predicted, and the r
 
 members:
 - pipeop    : PipeOp      : operator in that node
-- next      : list        : next nodes
-- prev      : list        : previous nodes
+- next_nodes      : list        : next nodes
+- prev_nodes      : list        : previous nodes
+- next_node : returns the node from next_nodes by id (useful for dynamic programming `root$set_next(op2)$next_node()$set_next(op3)`)
 - inputs    : list        : list of results from previous nodes
 - result    : untyped     : result of current operator
-
+- root_node : returns the root for this node (first predecessor without predecessors).
 
 methods:
-- acquire_inputs     --> outlist    : fits params and transforms input data
+- train     --> outlist    : fits params and transforms input data (ZZ: I renamed `acquire_inputs` to `train`, because it not only acquire the data from previous nodes but also fit the params for the pipeop)
 - set_next(ops)
 - set_prev(ops)
 
-
 active bindings:
-- result
-- has_result
+- result : forwards to pipeop$result
+- has_result : forwards to pipeop$has_result
 - has_no_prevs [logical(1)] : are no prev nodes connected?
 - can_fire [logical(1)] : are all input results available?
 

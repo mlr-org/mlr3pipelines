@@ -8,25 +8,25 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
     },
       
 
-    train2 = function() {
+    train = function(inputs) {
       
       ## check if all target_names are equal
       is_target_equal <- length(unique(vapply(
-        self$inputs,
+        inputs,
         function(x) digest::digest(x$target_names),
         FUN.VALUE = ""
       ))) == 1
       
-      all_data <- lapply(self$inputs, function(x) {
+      all_data <- lapply(inputs, function(x) {
         x$data(cols = x$feature_names)
       })
       
-      input1 <- self$inputs[[1]]
+      input1 <- inputs[[1]]
       targets <- input1$data(cols = task$target_names)
       
       data <- do.call(cbind, c(all_data, list(targets)))
       db <- DataBackendDataTable$new(data)
-      TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
     },
 
     predict2 = function(input) {

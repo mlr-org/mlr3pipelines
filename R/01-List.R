@@ -18,7 +18,7 @@ ListNamedEls = R6Class("ListNamedEls",
     add = function(x) {
       assert_class(x, self$payload_type)
       k = self$get_key(x)
-      assert_true(k %nin% self$keys)
+      assert_true(BBmisc::`%nin%`(k, self$keys))
       self$xs[[k]] = x
     },
 

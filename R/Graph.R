@@ -1,3 +1,69 @@
+#' Traverse graphs and apply the function `fnc`
+traverseGraph <- function(root, fnc) {
+  #FIXME: check visited nodes
+  front = GraphNodesList$new(list(root))
+  result_list <- list()
+  
+  while(length(front) > 0L) {
+    new_front = GraphNodesList$new()
+    for (i in seq_along(front)) {
+      op = front[[i]]
+      result_list[[op$id]] <- fnc(op)
+      
+      if(is.null(op$next_nodes)) break
+      new_front$join_new(op$next_nodes)
+    }
+    front = new_front
+  }
+  result_list
+}
+
+graph_gather_params <- function(graph) {
+  
+  all_params <- traverseGraph(
+    graph,
+    function(x) x$pipeop$par_set$clone(deep = TRUE)$params
+  )
+  
+  all_params_named <- mapply(function(params_list, id) {
+    
+    lapply(params_list, function(x) {
+      
+      x <- x$clone(deep = TRUE)
+      x$id <- paste(id, x$id, sep =":")
+      x
+    })
+    
+  }, all_params, names(all_params), SIMPLIFY = FALSE)
+  
+  paradox::ParamSet$new(params = unlist(all_params_named))
+}
+
+
+trainGraph = function(root, task) {
+  root$inputs = list(task)
+  front = GraphNodesList$new(list(root))
+  
+  while(length(front) > 0L) {
+    BBmisc::messagef("front step, front=%s", front$print_str)
+    new_front = GraphNodesList$new()
+    to_remove = integer(0L)
+    for (i in seq_along(front)) {
+      op = front[[i]]
+      BBmisc::messagef("checking front node %s, can_fire=%s", op$id, op$can_fire)
+      if (op$can_fire) {
+        op$train()
+        new_front$join_new(op$next_nodes)
+      } else {
+        new_front$add(op) 
+      }
+    }
+    front = new_front
+    BBmisc::messagef("front step done, front=%s", front$print_str)
+  }
+}
+
+
 # class Graph
 # members:
 #   source_node
@@ -75,7 +141,7 @@ Graph = R6Class("Graph",
         FALSE)
     },
     par_set = function(value) {
-      if (missing(value)) pipeline_gather_params(self$source_node)
+      if (missing(value)) graph_gather_params(self$source_node)
       },
     par_vals = function(value) {
       if (missing(value)) list()
@@ -103,4 +169,25 @@ length.Graph = function(x) {
     # FIXME: This will break for parallel operators.
     x$find_by_id(x$ids[i])
   }
+}
+
+graph_to_edge_list <- function(root) {
+  
+  edges <- traverseGraph(root, function(x) {
+    res <- cbind(
+      x$id,
+      x$next_nodes$map(function(y) y$id)
+    )
+    if(ncol(res) > 1) res
+  })
+  edges <- do.call(rbind, edges)
+  mode(edges) <- "character"
+  rownames(edges) <- NULL
+  edges
+  
+}
+
+graph_plot <- function(root) {
+  edges <- graph_to_edge_list(root)
+  plot(igraph::graph_from_edgelist(edges))
 }

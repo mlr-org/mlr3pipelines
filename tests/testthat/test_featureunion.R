@@ -16,23 +16,22 @@ test_that("featureunion - basic", {
   lrn = mlr_learners$get("classif.rpart")
   op4 = PipeOpLearner$new(learner = lrn)
   
-  op1$set_next(list(op2a, op2b))
+  root <- GraphNode$new(op1)
+  root$
+    set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))$
+    set_next(GraphNode$new(op3))$
+    set_next(GraphNode$new(op4))
   
-  op2a$set_next(list(op3))
-  op2b$set_next(list(op3))
-  
-  op3$set_next(list(op4))
-  
-  trainGraph(op1, task)
+  graph <- Graph$new(root)
+  graph$train(task)
   
   model <- op4$params$model
   
-  paramNamesFeatureUnion <- c(
+  param_names_union <- c(
     "OpNULL.Petal.Width", "OpNULL.Petal.Length", "pca.Sepal.Length", 
     "OpNULL.Sepal.Length", "pca.Sepal.Width", "OpNULL.Sepal.Width", 
     "pca.Petal.Length")
   
-  expect_equal(names(model$variable.importance), paramNamesFeatureUnion)
+  expect_equal(names(model$variable.importance), param_names_union)
   
 })
-
