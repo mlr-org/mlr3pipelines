@@ -15,19 +15,19 @@ Depends:
     R (>= 3.0.2)
 Imports:
     BBmisc (>= 1.11),
-    stringi,
+    R6,
+    backports (>= 1.1.0),
     checkmate (>= 1.8.2),
     methods,
     mlr3,
-    stats,
-    backports (>= 1.1.0),
-    R6
+    stats
 Suggests:
-    rpart,
-    mlbench,
+    igraph,
     knitr,
+    mlbench,
     rmarkdown,
-    testthat,
+    rpart,
+    testthat
 LazyData: yes
 ByteCompile: yes
 Version: 0.1
