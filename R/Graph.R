@@ -70,7 +70,6 @@ trainGraph = function(root, task) {
 #
 # methods
 # - index operator [[id]]  --> points to GraphNode
-#   FIXME: Should this point to the GraphNode or to the PipeOp
 #
 # active bindings:
 #   - is_learnt [logical].  Are all underlying operators trained?
@@ -111,7 +110,6 @@ Graph = R6Class("Graph",
     },
 
     print = function(...) {
-      browser()
       s = self$ids
       s = BBmisc::collapse(s, "->")
       BBmisc::catf("Graph: %s", s)
@@ -187,7 +185,7 @@ graph_to_edge_list = function(root) {
   mode(edges) = "character"
   rownames(edges) = NULL
   edges
-
+}
 
 graph_plot = function(root) {
   if (!requireNamespace("igraph", quietly = TRUE)) {
