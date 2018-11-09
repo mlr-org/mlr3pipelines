@@ -44,6 +44,9 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
 
       # Call train_dt function on features
       dt = self$train_dt(d[, ..fn])
+      assert_data_table(dt)
+      assert_true(nrow(dt) == nrow(d))
+
       # Drop old features, add new features
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
