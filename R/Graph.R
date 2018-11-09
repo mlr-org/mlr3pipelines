@@ -1,4 +1,4 @@
-#' Traverse graphs and apply the function `fnc`
+sub#' Traverse graphs and apply the function `fnc`
 traverseGraph <- function(root, fnc) {
   #FIXME: check visited nodes
   front = GraphNodesList$new(list(root))
@@ -159,10 +159,12 @@ Graph = R6Class("Graph",
   )
 )
 
+#' @export
 length.Graph = function(x) {
   length(x$ids)
 }
 
+#' @export
 `[[.Graph` = function(x, i, j, ...) {
   if (is.character(i)) {
     x$find_by_id(i)
@@ -172,23 +174,29 @@ length.Graph = function(x) {
   }
 }
 
-graph_to_edge_list <- function(root) {
+graph_to_edge_list = function(root) {
+  edges = traverseGraph(root, function(x) {
+    res = cbind(
 
-  edges <- traverseGraph(root, function(x) {
-    res <- cbind(
       x$id,
       x$next_nodes$map(function(y) y$id)
     )
     if(ncol(res) > 1) res
   })
-  edges <- do.call(rbind, edges)
-  mode(edges) <- "character"
-  rownames(edges) <- NULL
+  edges = do.call(rbind, edges)
+  mode(edges) = "character"
+  rownames(edges) = NULL
   edges
 
-}
 
-graph_plot <- function(root) {
-  edges <- graph_to_edge_list(root)
-  plot(igraph::graph_from_edgelist(edges))
+graph_plot = function(root) {
+  if (!requireNamespace("igraph", quietly = TRUE)) {
+    stop("Please install package 'igraph'")
+  }
+
+  edges = graph_to_edge_list(root)
+  g = igraph::graph_from_edgelist(edges)
+  layout =  igraph::layout_with_sugiyama(g)
+
+  plot(g, layout = layout$layout)
 }

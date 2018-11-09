@@ -8,26 +8,25 @@ Authors@R: c(
     person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"))
 URL: https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
-License: BSD_2_clause + file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
-Roxygen: list(wrap = FALSE)
 Depends:
     R (>= 3.0.2)
 Imports:
     BBmisc (>= 1.11),
-    stringi,
+    R6,
+    backports (>= 1.1.0),
     checkmate (>= 1.8.2),
     methods,
     mlr3,
-    stats,
-    backports (>= 1.1.0),
-    R6
+    stats
 Suggests:
-    rpart,
-    mlbench,
+    igraph,
     knitr,
+    mlbench,
     rmarkdown,
-    testthat,
+    rpart,
+    testthat
 LazyData: yes
 ByteCompile: yes
 Version: 0.1
