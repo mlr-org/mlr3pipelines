@@ -1,4 +1,4 @@
-sub#' Traverse graphs and apply the function `fnc`
+#' Traverse graphs and apply the function `fnc`
 traverseGraph <- function(root, fnc) {
   #FIXME: check visited nodes
   front = GraphNodesList$new(list(root))
