@@ -19,39 +19,107 @@ PipeOpNULL = R6Class("PipeOpNULL",
   )
 )
 
-# simple feature transform, no hyperpars
-PipeOpPCA = R6Class("PipeOpPCA",
+# This let's us work with a dt instead of a Task
+# [dt] -> [dt]
+PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
 
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "pca") {
+
+    initialize = function(id = "PipeOpFeatureTransform") {
       super$initialize(id)
     },
 
+    train_dt = function(dt) {dt},
+
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
-      # FIXME: this is really bad code how i change the data of the task
-      # ich muss hier das backend austauschen
+      assert_function(self$train_dt)
+
+      # Get feature dt from task
       task = inputs[[1L]]
       fn = task$feature_names
       d = task$data()
-      pcr = prcomp(as.matrix(d[, ..fn]), center = FALSE, scale. = FALSE)
-      private$.params = pcr$rotation
-      d[, fn] = as.data.table(pcr$x)
-      
-      db <- DataBackendDataTable$new(d)
-      private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+
+      # Call train_dt function on features
+      dt = self$train_dt(d[, ..fn])
+      assert_data_table(dt)
+      assert_true(nrow(dt) == nrow(d))
+
+      # Drop old features, add new features
+      d[, (fn) := NULL]
+      d[, (colnames(dt)) := dt]
+
+      private$.result = TaskClassif$new(id = task$id, backend = DataBackendDataTable$new(d), target = task$target_names)
       private$.result
     },
 
     predict2 = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       # FIXME: Make sure dimensions fit (if input did not have full rank)
-      as.data.frame(as.matrix(input) %*% self$params)
     }
   )
 )
+
+PipeOpPCA = R6Class("PipeOpPCA",
+
+  inherit = PipeOpFeatureTransform,
+
+  public = list(
+    initialize = function(id = "pca") {
+      super$initialize(id)
+    },
+
+    train_dt = function(dt) {
+      pcr = prcomp(as.matrix(dt), center = FALSE, scale = FALSE)
+      private$.params = pcr$rotation
+      as.data.table(pcr$x)
+    },
+
+    predict2 = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      # FIXME: Make sure dimensions fit (if input did not have full rank)
+    }
+  )
+)
+
+
+
+
+# # simple feature transform, no hyperpars
+# PipeOpPCA = R6Class("PipeOpPCA",
+
+#   inherit = PipeOp,
+
+#   public = list(
+#     initialize = function(id = "pca") {
+#       super$initialize(id)
+#     },
+
+#     train = function(inputs) {
+#       assert_list(inputs, len = 1L, type = "Task")
+#       # FIXME: this is really bad code how i change the data of the task
+#       # ich muss hier das backend austauschen
+#       task = inputs[[1L]]
+#       fn = task$feature_names
+#       d = task$data()
+#       pcr = prcomp(as.matrix(d[, ..fn]), center = FALSE, scale. = FALSE)
+#       private$.params = pcr$rotation
+#       d[, fn] = as.data.table(pcr$x)
+
+#       db <- DataBackendDataTable$new(d)
+#       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+#       private$.result
+#     },
+
+#     predict2 = function() {
+#       assert_list(self$inputs, len = 1L, type = "Task")
+#       # FIXME: Make sure dimensions fit (if input did not have full rank)
+#       as.data.frame(as.matrix(input) %*% self$params)
+#     }
+#   )
+# )
 
 # simple feature transform, but hyperpars
 PipeOpScaler = R6Class("PipeOpScaler",
@@ -82,7 +150,7 @@ PipeOpScaler = R6Class("PipeOpScaler",
         scale = attr(sc, "scaled:scale") %??% FALSE
       )
       d[, fn] = as.data.table(sc)
-      
+
       db <- DataBackendDataTable$new(d)
       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
       private$.result

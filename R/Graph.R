@@ -70,7 +70,6 @@ trainGraph = function(root, task) {
 #
 # methods
 # - index operator [[id]]  --> points to GraphNode
-#   FIXME: Should this point to the GraphNode or to the PipeOp
 #
 # active bindings:
 #   - is_learnt [logical].  Are all underlying operators trained?
@@ -176,6 +175,7 @@ length.Graph = function(x) {
 graph_to_edge_list = function(root) {
   edges = traverseGraph(root, function(x) {
     res = cbind(
+
       x$id,
       x$next_nodes$map(function(y) y$id)
     )

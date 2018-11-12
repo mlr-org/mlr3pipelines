@@ -1,7 +1,5 @@
 test_that("featureunion - basic", {
 
-  set.seed(123)
-
   task = mlr_tasks$get("iris")
   dd = iris[, -5]
   nd = iris[, -5]
@@ -16,7 +14,7 @@ test_that("featureunion - basic", {
   lrn = mlr_learners$get("classif.rpart")
   op4 = PipeOpLearner$new(learner = lrn)
 
-  root <- GraphNode$new(op1)
+  root = GraphNode$new(op1)
   root$
     set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))$
     set_next(GraphNode$new(op3))$
