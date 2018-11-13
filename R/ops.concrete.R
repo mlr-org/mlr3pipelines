@@ -143,7 +143,7 @@ PipeOpScaler = R6Class("PipeOpScaler",
       fn = task$feature_names
       d = task$data()
       sc = scale(as.matrix(d[, ..fn]),
-        center = self$par_vals$center, scale = self$par_vals$scale)
+        center = self$param_vals$center, scale = self$param_vals$scale)
 
       private$.params = list(
         center = attr(sc, "scaled:center") %??% FALSE,
@@ -201,7 +201,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #   id = "null",
 #   in.format = "task",
 #   out.format = "task",
-#   train = function(inlist, par_vals) {
+#   train = function(inlist, param_vals) {
 #     list(
 #       control = list(),
 #       task = task
@@ -214,7 +214,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #     )
 #   },
 
-#   par_set = ParamSet$new()
+#   param_set = ParamSet$new()
 # )
 
 # cpoDropConst = PipeOp$new(
@@ -222,7 +222,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #   in.format = "data-target",
 #   out.format = "data",
 
-#   train = function(inlist, par_vals) {
+#   train = function(inlist, param_vals) {
 
 #   # perc = 0, na.ignore = FALSE, tol = .Machine$double.eps^.5
 
@@ -247,8 +247,8 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #         return(0)
 #       if (is.double(x))
 #         x = round(x, digits = digits)
-#       m = computeMode(x, na.rm = par_vals$na.ignore, ties.method = "first")
-#       if (par_vals$na.ignore) {
+#       m = computeMode(x, na.rm = param_vals$na.ignore, ties.method = "first")
+#       if (param_vals$na.ignore) {
 #         mean(m != x, na.rm = TRUE)
 #       } else {
 #         mean(!isEqual(x, m))
@@ -270,7 +270,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #     data[control$dropped.cols]
 #   },
 
-#   par_set = ParamSet$new(params = list(
+#   param_set = ParamSet$new(params = list(
 #     ParamReal$new("perc", default = 0.005, lower = 0, upper = 1),
 #     ParamReal$new("tol", default = .Machine$double.eps^.5, lower = 0, upper = 1),
 #     ParamFlag$new("na.ignore", default = FALSE)

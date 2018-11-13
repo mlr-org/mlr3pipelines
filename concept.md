@@ -37,8 +37,8 @@ methods:
 
 active bindings:
 - id
-- par_set
-- par_vals
+- param_set
+- param_vals
 - params
 - is_learned [logical(1)] : is PipeOp trained? checks if params is NULL
 
@@ -176,7 +176,7 @@ questions
 
 ```
 op1 = PipeOpScaler$new()
-op$par_vals = list(center = TRUE, scale = FALSE)
+op$param_vals = list(center = TRUE, scale = FALSE)
 
 op2 = PipeOpPCA$new()
 

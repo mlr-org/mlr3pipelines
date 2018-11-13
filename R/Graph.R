@@ -22,7 +22,7 @@ graph_gather_params <- function(graph) {
 
   all_params <- traverseGraph(
     graph,
-    function(x) x$pipeop$par_set$clone(deep = TRUE)$params
+    function(x) x$pipeop$param_set$clone(deep = TRUE)$params
   )
 
   all_params_named <- mapply(function(params_list, id) {
@@ -139,10 +139,10 @@ Graph = R6Class("Graph",
         TRUE,
         FALSE)
     },
-    par_set = function(value) {
+    param_set = function(value) {
       if (missing(value)) graph_gather_params(self$source_node)
       },
-    par_vals = function(value) {
+    param_vals = function(value) {
       if (missing(value)) list()
       # FIXME: Allow setting Params for the Operators here
     },

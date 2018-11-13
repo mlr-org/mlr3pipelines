@@ -61,9 +61,9 @@ test_that("Gather parameters", {
   ps = graph_gather_params(root)
 
   expect_class(ps, "ParamSet")
-  expect_subset(sprintf("%s:%s", op1$id, op1$par_set$ids), ps$ids)
-  expect_subset(sprintf("%s:%s", op2$id, op2$par_set$ids), ps$ids)
-  expect_subset(sprintf("%s:%s", lrn$id, lrn$par_set$ids), ps$ids)
+  expect_subset(sprintf("%s:%s", op1$id, op1$param_set$ids), ps$ids)
+  expect_subset(sprintf("%s:%s", op2$id, op2$param_set$ids), ps$ids)
+  expect_subset(sprintf("%s:%s", lrn$id, lrn$param_set$ids), ps$ids)
 })
 
 test_that("PipeOp", {
@@ -78,7 +78,7 @@ test_that("PipeOp", {
   lrn1 <- mlr3:::LearnerClassifRpart$new(id = "l1")
   lrn2 <- mlr3:::LearnerClassifRpart$new(id = "l2")
 
-  lrn2$par_vals <- list("maxdepth" = 1)
+  lrn2$param_vals <- list("maxdepth" = 1)
 
   op2a <- PipeOpLearner$new(lrn1)
   op2b <- PipeOpLearner$new(lrn2)
@@ -121,12 +121,12 @@ test_that("PipeOp", {
 # opmm = PipeOpMultiplexer$new(list(op1, op2))
 # task = opmm$train(dd)
 # opmm$reset()
-# opmm$set_par_vals(list(selected = "pca"))
+# opmm$set_param_vals(list(selected = "pca"))
 # task = opmm$train(dd)
 
 # ps = ParamSetFlat$new(params = list(
 #   ParamReal$new(id = "minsplit", lower = 0, upper = 1)
 # ))
-# op = PipeOpTune$new(NULL, NULL, NULL, NULL, par_set = ps)
+# op = PipeOpTune$new(NULL, NULL, NULL, NULL, param_set = ps)
 # dd2 = op$train(dd)
 # nd2 = op$predict(nd)

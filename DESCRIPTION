@@ -30,7 +30,7 @@ Suggests:
 LazyData: yes
 ByteCompile: yes
 Version: 0.1
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Remotes:
     mlr-org/mlr3,
