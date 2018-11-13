@@ -26,7 +26,7 @@ PipeOpLearner = R6Class("PipeOpLearner",
       d <- experiment$prediction[,-1]
       colnames(d)[seq_along(task$target_names)] <- task$target_names
 
-      db <- DataBackendDataTable$new(d)
+      db <- as_data_backend(d)
       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
       private$.result
     },

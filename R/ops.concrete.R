@@ -51,7 +51,7 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
 
-      private$.result = TaskClassif$new(id = task$id, backend = DataBackendDataTable$new(d), target = task$target_names)
+      private$.result = TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names)
       private$.result
     },
 
@@ -108,7 +108,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
 #       private$.params = pcr$rotation
 #       d[, fn] = as.data.table(pcr$x)
 
-#       db <- DataBackendDataTable$new(d)
+#       db <- as_data_backend(d)
 #       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
 #       private$.result
 #     },
@@ -151,7 +151,7 @@ PipeOpScaler = R6Class("PipeOpScaler",
       )
       d[, fn] = as.data.table(sc)
 
-      db <- DataBackendDataTable$new(d)
+      db <- as_data_backend(d)
       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
       private$.result
     },
