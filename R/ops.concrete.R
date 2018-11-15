@@ -10,7 +10,7 @@ PipeOpNULL = R6Class("PipeOpNULL",
 
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
-      private$.result <- inputs[[1L]]
+      private$.result = inputs[[1L]]
     },
 
     predict = function(inputs) {
@@ -27,11 +27,9 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
 
   public = list(
 
-    initialize = function(id = "PipeOpFeatureTransform") {
-      super$initialize(id)
+    initialize = function(id = "PipeOpFeatureTransform", ps = ParamSet$new()) {
+      super$initialize(id, ps)
     },
-
-    train_dt = function(dt) {dt},
 
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
@@ -52,12 +50,26 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       d[, (colnames(dt)) := dt]
 
       private$.result = TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names)
-      private$.result
+      return(private$.result)
     },
 
     predict2 = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
-      # FIXME: Make sure dimensions fit (if input did not have full rank)
+      task = self$inputs[[1L]]
+      fn = task$feature_names
+      d = task$data()
+
+      # Call train_dt function on features
+      dt = self$predict_dt(d[, ..fn])
+      assert_data_table(dt)
+      assert_true(nrow(dt) == nrow(d))
+
+      # Drop old features, add new features
+      d[, (fn) := NULL]
+      d[, (colnames(dt)) := dt]
+
+      private$.result = TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names)
+      return(private$.result)
     }
   )
 )
@@ -68,58 +80,87 @@ PipeOpPCA = R6Class("PipeOpPCA",
 
   public = list(
     initialize = function(id = "pca") {
-      super$initialize(id)
+      ps = ParamSet$new(params = list(
+        ParamFlag$new("center", default = TRUE),
+        ParamFlag$new("scale", default = TRUE),
+        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf)
+      ))
+      super$initialize(id, ps)
     },
 
     train_dt = function(dt) {
-      pcr = prcomp(as.matrix(dt), center = FALSE, scale = FALSE)
-      private$.params = pcr$rotation
+      pcr = prcomp(as.matrix(dt), center = private$param_vals$center, scale = private$param_vals$scale,
+        rank. = private$param_vals$.rank)
+      private$.params = pcr
       as.data.table(pcr$x)
     },
 
-    predict2 = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
-      # FIXME: Make sure dimensions fit (if input did not have full rank)
+    predict_dt = function() {
+      rotated = predict(private$.params, as.matrix(newdata))
+      return(as.data.table(rotated))
     }
   )
 )
 
+# [sparseMatrix] -> [dt]
+PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
 
+  inherit = PipeOp,
 
+  public = list(
+    packages = "irlba",
 
-# # simple feature transform, no hyperpars
-# PipeOpPCA = R6Class("PipeOpPCA",
+    initialize = function(id = "sparsePca") {
+      ps = ParamSet$new(params = list(
+        ParamFlag$new("center", default = TRUE),
+        ParamFlag$new("scale", default = TRUE),
+        ParamInt$new("n", default = 3L, lower = 1, upper = Inf)
+      ))
+      super$initialize(id, ps)
+    },
 
-#   inherit = PipeOp,
+    train = function(inputs) {
+      assert_list(inputs, len = 1L, type = "Task")
+      task = inputs[[1L]]
+      fn = task$feature_names
 
-#   public = list(
-#     initialize = function(id = "pca") {
-#       super$initialize(id)
-#     },
+      # Get sparse matrix
+      d = task$data()
+      spmat = task$backend$data(paste0("row_", seq_len(nrow(d))), task$feature_names, format = "sparse")
+      sc = irlba::prcomp_irlba(spmat, center = self$param_vals$center, scale = self$param_vals$scale, n = self$param_vals$n)
 
-#     train = function(inputs) {
-#       assert_list(inputs, len = 1L, type = "Task")
-#       # FIXME: this is really bad code how i change the data of the task
-#       # ich muss hier das backend austauschen
-#       task = inputs[[1L]]
-#       fn = task$feature_names
-#       d = task$data()
-#       pcr = prcomp(as.matrix(d[, ..fn]), center = FALSE, scale. = FALSE)
-#       private$.params = pcr$rotation
-#       d[, fn] = as.data.table(pcr$x)
+      private$.params = sc
 
-#       db <- as_data_backend(d)
-#       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
-#       private$.result
-#     },
+      d[, fn] = NULL
+      d[, colnames(sc$x)] = as.data.table(sc$x)
+      d[, task$backend$primary_key] = task$backend$data(paste0("row_", seq_len(nrow(d))), task$backend$primary_key)
 
-#     predict2 = function() {
-#       assert_list(self$inputs, len = 1L, type = "Task")
-#       # FIXME: Make sure dimensions fit (if input did not have full rank)
-#       as.data.frame(as.matrix(input) %*% self$params)
-#     }
-#   )
-# )
+      db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
+      tn = task$target_names
+      private$.result = TaskRegr$new(id = task$id, backend = db, target = tn)
+      return(private$.result)
+    },
+
+    predict2 = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      task = self$inputs[[1L]]
+      fn = task$feature_names
+
+      # Get sparse matrix
+      d = task$data()
+      spmat = task$backend$data(paste0("row_", seq_len(nrow(d))), task$feature_names, format = "sparse")
+      dt = as.data.table(predict(private$.params, spmat))
+      assert_true(nrow(dt) == nrow(d))
+
+      # Drop old features, add new features
+      d[, (fn) := NULL]
+      d[, (colnames(dt)) := dt]
+
+      private$.result = TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names)
+      return(private$.result)
+    }
+  )
+)
 
 # simple feature transform, but hyperpars
 PipeOpScaler = R6Class("PipeOpScaler",
@@ -151,8 +192,8 @@ PipeOpScaler = R6Class("PipeOpScaler",
       )
       d[, fn] = as.data.table(sc)
 
-      db <- as_data_backend(d)
-      private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      db = as_data_backend(d)
+      private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
       private$.result
     },
 

@@ -26,6 +26,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
       data <- do.call(cbind, c(all_data, list(targets)))
       db <- as_data_backend(data)
+
       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
     },
 
