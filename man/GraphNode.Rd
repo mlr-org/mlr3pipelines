@@ -10,7 +10,7 @@ GraphNode$new(pipeop)
 }
 \description{
 The \code{GraphNode} class implements behaviors required to define the
-connections between the \code{PipeOps}. The set of interconnected 
+connections between the \code{PipeOps}. The set of interconnected
 GraphNodes creates the pipeline graph.
 }
 \keyword{datasets}

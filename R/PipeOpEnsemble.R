@@ -1,13 +1,13 @@
 # Basic Ensemble Constructor
 # Can other ensembles inherit from that?
-PipeOpEnsemble = R6Class("PipeOpEnsemble", 
+PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id, par_set = ParamSet$new()) {
-      super$initialize(id, par_set)
+    initialize = function(id, param_set = ParamSet$new()) {
+      super$initialize(id, param_set)
     },
-      
+
     train2 = function() {
       apply_fun_to_rows()
     },
@@ -28,28 +28,28 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       avg = dd[, ..fn][, private$fun(), by = ..I]
       return(avg)
     }
-  )   
+  )
 )
 
-PipeOpEnsembleAverage = R6Class("PipeOpEnsembleAverage", 
+PipeOpEnsembleAverage = R6Class("PipeOpEnsembleAverage",
   inherit = PipeOpEnsemble,
 
   public = list(
     initialize = function() {
       super$initialize("PipeOpEnsembleAverage")
       private$fun = function(x) mean(x, na.rm = TRUE)
-    }  
+    }
   )
 )
 
-PipeOpEnsembleMajorityVote = R6Class("PipeOpEnsembleMajorityVote", 
+PipeOpEnsembleMajorityVote = R6Class("PipeOpEnsembleMajorityVote",
   inherit = PipeOpEnsemble,
 
   public = list(
     initialize = function() {
       super$initialize("PipeOpEnsembleMajorityVote")
       private$fun = function(x) mean(x, na.rm = TRUE)
-    }  
+    }
   ),
 
   private = list(

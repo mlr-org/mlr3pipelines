@@ -17,16 +17,16 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
         FUN.VALUE = ""
       ))) == 1
 
-      all_data = lapply(inputs, function(x) {
+      all_data <- lapply(inputs, function(x) {
         x$data(cols = x$feature_names)
       })
 
-      targets = inputs[[1]]$data(cols = task$target_names)
-      browser()
-      Reduce(mlr3:::DataBackendCbind$new(), BBmisc::extractSubList(inputs, "backend"))
+      input1 <- inputs[[1]]
+      targets <- input1$data(cols = task$target_names)
 
-      data = do.call(cbind, c(all_data, list(targets)))
-      db <- DataBackendDataTable$new(data)
+      data <- do.call(cbind, c(all_data, list(targets)))
+      db <- as_data_backend(data)
+
       private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
     },
 
