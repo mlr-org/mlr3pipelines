@@ -27,11 +27,9 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
 
   public = list(
 
-    initialize = function(id = "PipeOpFeatureTransform") {
-      super$initialize(id)
+    initialize = function(id = "PipeOpFeatureTransform", ps = ParamSet$new()) {
+      super$initialize(id, ps)
     },
-
-    train_dt = function(dt) {dt},
 
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
@@ -68,22 +66,73 @@ PipeOpPCA = R6Class("PipeOpPCA",
 
   public = list(
     initialize = function(id = "pca") {
-      super$initialize(id)
+      ps = ParamSet$new(params = list(
+        ParamFlag$new("center", default = TRUE),
+        ParamFlag$new("scale", default = TRUE),
+        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf)
+      ))
+      super$initialize(id, ps)
     },
 
     train_dt = function(dt) {
-      pcr = prcomp(as.matrix(dt), center = FALSE, scale = FALSE)
-      private$.params = pcr$rotation
+      pcr = prcomp(as.matrix(dt), center = private$.params$center, scale = private$.params$scale,
+        rank. = private$.params$.rank)
+      private$.params = pcr
       as.data.table(pcr$x)
     },
 
     predict2 = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
-      # FIXME: Make sure dimensions fit (if input did not have full rank)
+      # assert_list(self$inputs, len = 1L, type = "Task")
+      # predict(private$.params, newdata)
     }
   )
 )
 
+
+PipeOpScaler = R6Class("PipeOpSparsePCA",
+
+  inherit = PipeOp,
+
+  public = list(
+    initialize = function(id = "pca") {
+
+      ps = ParamSet$new(params = list(
+        ParamFlag$new("center", default = TRUE),
+        ParamFlag$new("scale", default = TRUE),
+        ParamInt$new("K", lower = 1, upper = Inf)
+      ))
+      super$initialize(id, ps)
+    },
+
+    train = function(inputs) {
+      assert_list(inputs, len = 1L, type = "Task")
+      task = inputs[[1L]]
+      fn = task$feature_names
+      d = task$data()
+      spmat = task$backend$data(paste0("row_", seq_len(nrow(d))), task$feature_names, format = "sparse")
+
+      sc = irlba::prcomp_irlba(spmat, center = self$param_vals$center, scale = self$param_vals$scale, n = self$.params$n)
+
+
+      private$.params = list(
+        center = attr(sc, "scaled:center") %??% FALSE,
+        scale = attr(sc, "scaled:scale") %??% FALSE
+      )
+      d[, fn] = as.data.table(sc)
+
+      db <- DataBackendDataTable$new(d)
+      private$.result <- TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      private$.result
+    },
+
+    predict2 = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      task = self$inputs[[1L]]
+      as.data.frame(scale(as.matrix(input),
+        center = self$params$center, scale = self$params$scale))
+    }
+  )
+)
 
 
 
