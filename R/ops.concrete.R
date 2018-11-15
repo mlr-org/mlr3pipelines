@@ -108,11 +108,13 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "pca") {
+    packages = "irlba",
+
+    initialize = function(id = "sparsePca") {
       ps = ParamSet$new(params = list(
         ParamFlag$new("center", default = TRUE),
         ParamFlag$new("scale", default = TRUE),
-        ParamInt$new("n", lower = 1, upper = Inf)
+        ParamInt$new("n", default = 3L, lower = 1, upper = Inf)
       ))
       super$initialize(id, ps)
     },
@@ -131,8 +133,11 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
 
       d[, fn] = NULL
       d[, colnames(sc$x)] = as.data.table(sc$x)
-      db = DataBackendDataTable$new(d)
-      private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      d[, task$backend$primary_key] = task$backend$data(paste0("row_", seq_len(nrow(d))), task$backend$primary_key)
+
+      db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
+      tn = task$target_names
+      private$.result = TaskRegr$new(id = task$id, backend = db, target = tn)
       return(private$.result)
     },
 
