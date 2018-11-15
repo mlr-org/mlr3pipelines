@@ -35,5 +35,3 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
     }
   )
 )
-
-mlr3:::DataBackendCbind$new(z[[1]], z[[2]])

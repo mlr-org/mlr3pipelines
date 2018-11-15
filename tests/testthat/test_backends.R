@@ -10,7 +10,7 @@ test_that("PipeOp - simple pipe", {
   task = TaskRegr$new(id = "spmat", b, target = "target")
 
   op1 = PipeOpScaler$new()
-  expect_class(op1, "PipeOpScaler")
+  expect_class(op1, "PipeOpSparsePCA")
   expect_false(op1$is_learnt)
 
   n1 <- GraphNode$new(op1)
