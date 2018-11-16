@@ -1,6 +1,7 @@
 
 PipeOp = R6Class("PipeOp",
   public = list(
+    packages = character(0),
 
     initialize = function(id, param_set = ParamSet$new()) {
       private$.id = id

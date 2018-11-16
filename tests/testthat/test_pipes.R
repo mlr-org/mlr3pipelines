@@ -49,7 +49,7 @@ test_that("Gather parameters", {
   op1 = PipeOpScaler$new("myscaler")
   op2 = PipeOpPCA$new()
 
-  root <- GraphNode$new(op1)
+  root = GraphNode$new(op1)
   root$set_next(GraphNode$new(op2))
 
   lrn = mlr_learners$get("classif.rpart")
@@ -67,21 +67,19 @@ test_that("Gather parameters", {
 })
 
 test_that("PipeOp", {
-
-  set.seed(123)
-
+  
   task = mlr_tasks$get("iris")
 
-  op1 <- PipeOpPCA$new()
-  n1 <- GraphNode$new(op1)
+  op1 = PipeOpPCA$new()
+  n1 = GraphNode$new(op1)
 
-  lrn1 <- mlr3:::LearnerClassifRpart$new(id = "l1")
-  lrn2 <- mlr3:::LearnerClassifRpart$new(id = "l2")
+  lrn1 = mlr3:::LearnerClassifRpart$new(id = "l1")
+  lrn2 = mlr3:::LearnerClassifRpart$new(id = "l2")
 
-  lrn2$param_vals <- list("maxdepth" = 1)
+  lrn2$param_vals = list("maxdepth" = 1)
 
-  op2a <- PipeOpLearner$new(lrn1)
-  op2b <- PipeOpLearner$new(lrn2)
+  op2a = PipeOpLearner$new(lrn1)
+  op2b = PipeOpLearner$new(lrn2)
 
   n1$set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))
 

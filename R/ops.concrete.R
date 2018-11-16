@@ -26,7 +26,6 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
   inherit = PipeOp,
 
   public = list(
-
     initialize = function(id = "PipeOpFeatureTransform", ps = ParamSet$new()) {
       super$initialize(id, ps)
     },
@@ -68,7 +67,7 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
 
-      private$.result = TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names)
+      private$.result = task$overwrite(d)
       return(private$.result)
     }
   )
@@ -82,15 +81,17 @@ PipeOpPCA = R6Class("PipeOpPCA",
     initialize = function(id = "pca") {
       ps = ParamSet$new(params = list(
         ParamFlag$new("center", default = TRUE),
-        ParamFlag$new("scale", default = TRUE),
+        ParamFlag$new("scale.", default = FALSE),
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf)
       ))
       super$initialize(id, ps)
     },
 
     train_dt = function(dt) {
-      pcr = prcomp(as.matrix(dt), center = private$param_vals$center, scale = private$param_vals$scale,
-        rank. = private$param_vals$.rank)
+      pcr = prcomp(as.matrix(dt),
+        center = self$param_vals$center,
+        scale. = self$param_vals$scale.,
+        rank.  = self$param_vals$rank.)
       private$.params = pcr
       as.data.table(pcr$x)
     },
@@ -108,8 +109,6 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
   inherit = PipeOp,
 
   public = list(
-    packages = "irlba",
-
     initialize = function(id = "sparsePca") {
       ps = ParamSet$new(params = list(
         ParamFlag$new("center", default = TRUE),
@@ -117,6 +116,7 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
         ParamInt$new("n", default = 3L, lower = 1, upper = Inf)
       ))
       super$initialize(id, ps)
+      self$packages = "irlba"
     },
 
     train = function(inputs) {
