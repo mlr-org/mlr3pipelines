@@ -27,10 +27,14 @@ We intend to replicate most of its functionality, i.e.
 - `cpoCbind cpoMultiplex cpoWrap`
 
 
-## Design Document
+## Design Documents
 
 A rough draft of the design document, and some first usecases
 can be found in **concept.txt**.
+
+Specification of syntax to construct graphs quickly
+https://docs.google.com/document/d/1JbzulUkLrMS0Xyk38NF5SyhpAfr2FIFsh9FJ8yiDtbE/edit?usp=sharing
+
 
 
 ## Todo's
