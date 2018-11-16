@@ -132,6 +132,12 @@ Graph = R6Class("Graph",
       } else {
         # FIXME: Should we allow overwriting id's here?
       }
+    },
+    lhs = function() {self$source_node},
+    rhs = function() {
+      traverseGraph(self$source_node, function(x) {
+        if(x$next_nodes$is_empty) return(x)
+      })
     }
   )
 )
