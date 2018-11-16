@@ -51,7 +51,8 @@ n1$is_learnt
 This graph can now be trained: 
 
 ```{r}
-  trainGraph(n1, task)
+  g = Graph$new(n1)
+  trainGraph(g$source_node, task)
 ```
 
 This has the following side effects: 
@@ -63,6 +64,25 @@ This has the following side effects:
 ```{r}
 n1$is_learnt
 head(n1$result$data())
+```
+
+## A more complex example: Scale -> PCA -> Learner:
+
+In this example, we first `scale` the data, apply `PCA` and then train a 
+**Decision Tree** on the transformed learner.
+
+```{r}
+  # Create the PipeOp's:
+  op1 = PipeOpScaler$new()
+  op2 = PipeOpPCA$new()
+  op3 = PipeOpLearner$new(learner = mlr_learners$get("classif.rpart"))
+  # Connect the operators
+  root = GraphNode$new(op1)
+  root$
+    set_next(GraphNode$new(op2))$
+    set_next(GraphNode$new(op3))
+  # And instantiate tthe graph
+  g = Graph$new(root)
 ```
 
 ## Creating a PipeOp
@@ -122,11 +142,23 @@ In the next step we will define the `train` function:
 And the `predict()` function: 
 
 ```{r}
-    predict2 = function() {
+    predict = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       task = self$inputs[[1L]]
-      as.data.frame(scale(as.matrix(input),
-        center = self$params$center, scale = self$params$scale))
+      fn = task$feature_names
+      d = task$data()
+
+      # Call train_dt function on features
+      rotated = predict(private$.params, as.matrix(d[, ..fn]))
+      dt = as.data.table(rotated)
+
+      # Drop old features, add new features
+      d[, (fn) := NULL]
+      d[, (colnames(dt)) := dt]
+
+      # See "train()" 
+      private$.result = task$overwrite(d)
+      return(private$.result)
     }
 
 ```
@@ -151,7 +183,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
       super$initialize(id, ps)
     },
     train = train,
-    predict2 = predict2
+    predict2 = predict
   )
 )
 
