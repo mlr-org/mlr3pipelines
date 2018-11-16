@@ -52,7 +52,7 @@ This graph can now be trained:
 
 ```{r}
   g = Graph$new(n1)
-  trainGraph(g$source_node, task)
+  g$train(task)
 ```
 
 This has the following side effects: 
