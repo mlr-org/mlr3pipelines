@@ -67,7 +67,7 @@ test_that("Gather parameters", {
 })
 
 test_that("PipeOp", {
-  
+
   task = mlr_tasks$get("iris")
 
   op1 = PipeOpPCA$new()
@@ -89,6 +89,7 @@ test_that("PipeOp", {
   expect_true(!is.null(op2b$params$model))
 
 })
+
 
 # test_that("PipeOp", {
 #   task = mlr_tasks$get("iris")

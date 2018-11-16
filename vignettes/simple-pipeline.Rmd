@@ -81,7 +81,7 @@ In this example, we first `scale` the data, apply `PCA` and then train a
   root$
     set_next(GraphNode$new(op2))$
     set_next(GraphNode$new(op3))
-  # And instantiate tthe graph
+  # And instantiate the graph
   g = Graph$new(root)
 ```
 

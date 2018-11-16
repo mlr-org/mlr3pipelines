@@ -1,3 +1,4 @@
+context("featureunion")
 test_that("featureunion - basic", {
 
   task = mlr_tasks$get("iris")
@@ -26,9 +27,9 @@ test_that("featureunion - basic", {
   model <- op4$params$model
 
   param_names_union <- c(
-    "OpNULL.Petal.Width", "OpNULL.Petal.Length", "pca.Sepal.Length",
-    "OpNULL.Sepal.Length", "pca.Sepal.Width", "OpNULL.Sepal.Width",
-    "pca.Petal.Length")
+    "OpNULL.Petal.Width", "OpNULL.Petal.Length",
+    "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2", 
+    "OpNULL.Sepal.Width", "pca.PC3")
 
   expect_equal(names(model$variable.importance), param_names_union)
 

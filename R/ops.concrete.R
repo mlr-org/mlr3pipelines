@@ -11,6 +11,7 @@ PipeOpNULL = R6Class("PipeOpNULL",
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
       private$.result = inputs[[1L]]
+      private$.params = list()
     },
 
     predict = function(inputs) {
@@ -47,8 +48,15 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       # Drop old features, add new features
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
+      d[, "..row_id" := seq_len(nrow(d))]
       
-      private$.result = task$overwrite(d)
+      db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
+      tn = task$target_names
+
+      # Should be:
+      # private$.result = task$overwrite(d)
+      private$.result = TaskClassif$new(id = task$id, backend = db, target = tn)
+      
       return(private$.result)
     },
 
@@ -67,6 +75,7 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       # Drop old features, add new features
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
+      d[, "..row_id" := seq_len(nrow(d))]
 
       private$.result = task$overwrite(d)
       return(private$.result)
