@@ -1,0 +1,160 @@
+---
+title: "Showcase: Simple Pipelines"
+author: "Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This vignette showcases the general syntax and semantic behind `mlr3pipelines`.
+
+## Simple preprocessing
+
+We first create an mlr task that, which we want to transform with the pipeline. 
+
+```{r}
+  task = mlr_tasks$get("iris")
+```
+
+
+An often-applied preprocessing step is to simply **center** and **scale** the data to mean $0$ and standard deviation $1$. In order to do this we create a new `PipeOp`: **PipeOpScaler**.
+
+```{r}
+  op1 = PipeOpScaler$new()
+```
+
+In order to not leak data from the test set into the training set it is imperative to treat train and test data correctly. For this we require a function `train` that learns the appropriate transformations from the training set and a function `test` that applies the transformation on future data.
+This is already handled in `PipeOpScaler`.
+
+The **PipeOp** does not work stand-alone, as we expect thatt it is wrapped in a `GraphNode`. This handles all connectivity to the previous and following nodes of the graph. 
+
+```{r}
+  n1 = GraphNode$new(op1)
+```
+
+When we initialize the Node it is untrained:
+```{r}
+n1$is_learnt
+```
+
+This graph can now be trained: 
+
+```{r}
+  trainGraph(n1, task)
+```
+
+This has the following side effects: 
+- The **train** function of `op1` is called. 
+- The data transformation is learned and stored in the `.params` slot.
+- The graph is now *learnt*.
+- The transformed task is saved in the `result` slot.
+
+```{r}
+n1$is_learnt
+head(n1$result$data())
+```
+
+## Creating a PipeOp
+
+Creating a `PipeOp` requires the following objects: 
+- An `id` for the new PipeOp
+- A `train()` function that stores values required for the transformation and 
+  saves the transformed data.
+- A `predict()` function that uses the values obtained in `train()`to 
+  transform new data.
+- Optionally, a `ParamSet` that contains hyperparameter ranges.
+
+
+In this example we will create a `PipeOp` that allows us to transform our data using **PCA**.
+
+As an `id` we will use `PipeOpPCA`.
+
+In the next step we will define the `train` function: 
+
+
+```{r}
+    train = function(inputs) {
+      # We require our inputs to be a (list of) Task(s)
+      assert_list(inputs, len = 1L, type = "Task")
+      task = inputs[[1L]]
+
+      # We obtain data and the feature names from the task
+      fn = task$feature_names
+      dt = task$data()
+
+      # And then extract principal components.
+      # We will focus on the self$param_vals further down.
+      pcr = prcomp(as.matrix(dt),
+        center = self$param_vals$center,
+        scale. = self$param_vals$scale.,
+        rank.  = self$param_vals$rank.)
+      # Then we save the "pca-model" in the .params slot.
+      private$.params = pcr
+      # And convert the transformed data to a data.table
+      x = as.data.table(pcr$x)
+
+      # Now we drop the old features from the data.table
+      dt[, (fn) := NULL]
+      # And add the rotated features
+      dt[, (colnames(x)) := x]
+
+      # Now we overwrite the data.table in the task 
+      # with our new data, save it to the 
+      # "-result" slot
+      private$.result = task$overwrite(dt)
+      # and return the new task
+      private$.result
+    }
+
+```
+
+And the `predict()` function: 
+
+```{r}
+    predict2 = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      task = self$inputs[[1L]]
+      as.data.frame(scale(as.matrix(input),
+        center = self$params$center, scale = self$params$scale))
+    }
+
+```
+
+And the `ParamSet`: 
+
+```{r}
+      ps = ParamSet$new(params = list(
+        ParamFlag$new("center", default = TRUE),
+        ParamFlag$new("scale", default = TRUE)
+      ))
+```
+
+Afterwards we can put everything together and create a new **R6** Object:
+
+
+```{r}
+PipeOpPCA = R6Class("PipeOpPCA",
+  inherit = PipeOp,
+  public = list(
+    initialize = function(id = "pca") {
+      super$initialize(id, ps)
+    },
+    train = train,
+    predict2 = predict2
+  )
+)
+
+```
+
+

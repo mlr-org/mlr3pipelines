@@ -32,7 +32,7 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
 
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
-      assert_function(self$train_dt)
+      assert_function(self$train_dt, args = "dt")
 
       # Get feature dt from task
       task = inputs[[1L]]
@@ -47,13 +47,14 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       # Drop old features, add new features
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
-
-      private$.result = TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names)
+      
+      private$.result = task$overwrite(d)
       return(private$.result)
     },
 
     predict2 = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
+      assert_function(self$predict_dt, args = "newdt")
       task = self$inputs[[1L]]
       fn = task$feature_names
       d = task$data()
@@ -96,8 +97,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
       as.data.table(pcr$x)
     },
 
-    predict_dt = function() {
-      rotated = predict(private$.params, as.matrix(newdata))
+    predict_dt = function(newdt) {
+      rotated = predict(private$.params, as.matrix(newdt))
       return(as.data.table(rotated))
     }
   )
@@ -180,11 +181,13 @@ PipeOpScaler = R6Class("PipeOpScaler",
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
       task = inputs[[1L]]
-      # FIXME: this is really bad code how i change the data of the task
+      
       fn = task$feature_names
       d = task$data()
+      
       sc = scale(as.matrix(d[, ..fn]),
-        center = self$param_vals$center, scale = self$param_vals$scale)
+        center = self$param_vals$center,
+        scale = self$param_vals$scale)
 
       private$.params = list(
         center = attr(sc, "scaled:center") %??% FALSE,
