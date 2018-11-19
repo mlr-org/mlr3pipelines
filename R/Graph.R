@@ -215,6 +215,24 @@ graph_plot = function(root) {
   plot(g, layout = layout$layout)
 }
 
+#' graph_map_topo
+#'
+#' @param root root node of the graph.
+#' @param fnc function to apply
+#' @param simplify should the result be simplified using simplify2array.
+#' Default TRUE.
+#'
+#' @return
+#'
+#' List (possibly simplified to vector) with the output
+#' of function `fnc`  applied to all the nodes of the graph
+#' in topological order. Note that only the output is in
+#' topological order. The function `fnc` is not applied in that order,
+#' contrary, the algorithm uses a `depth-first search`,
+#' so it starts applying the function from the last element.
+#'
+#' @noRd
+#'
 graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE) {
 
   state = new.env()
