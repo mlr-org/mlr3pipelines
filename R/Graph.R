@@ -77,9 +77,27 @@ Graph = R6Class("Graph",
     },
 
     print = function(...) {
-      s = self$ids
-      s = BBmisc::collapse(s, "->")
-      BBmisc::catf("Graph: %s", s)
+      res = graph_map_topo(self$source_node, add_layer = TRUE)
+      res_string = tapply(
+        res,
+        attr(res, "layer"),
+        FUN = function(x) paste(x, collapse = ",")
+      )
+
+      res_size = tapply(
+        res,
+        attr(res, "layer"),
+        FUN = function(x) length(x)
+      )
+
+      output_string = paste(
+        sprintf("[(%s), %s]", res_string, res_size),
+        collapse = " >> "
+      )
+      output_string = base::strwrap(output_string, getOption("width") * 0.6)
+      output_string = paste(paste(" ", output_string), collapse = "\n")
+      cat("Pipeline Graph:\n")
+      cat(output_string, "\n")
     },
 
     reset = function() {
@@ -203,6 +221,7 @@ graph_plot = function(root) {
 #' @param fnc function to apply
 #' @param simplify should the result be simplified using simplify2array.
 #' Default TRUE.
+#' @param add_layer if true add information about the layer as a attribute.
 #'
 #' @return
 #'
@@ -215,7 +234,7 @@ graph_plot = function(root) {
 #'
 #' @noRd
 #'
-graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE) {
+graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
 
   state = new.env()
   state$permanent = c()
@@ -252,6 +271,9 @@ graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE) {
 
   state$depth = state$depth[names(state$list)]
   result      = state$list[order(state$depth)]
+  state$depth = sort(state$depth)
 
-  if(simplify) simplify2array(result) else result
+  result = if(simplify) simplify2array(result) else result
+  if(add_layer) attr(result, "layer") = state$depth
+  result
 }
