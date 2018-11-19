@@ -22,12 +22,16 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       })
 
       input1 = inputs[[1]]
-      targets = input1$data(cols = task$target_names)
+      targets = input1$data(cols = input1$target_names)
 
       data = do.call(cbind, c(all_data, list(targets)))
       db = as_data_backend(data)
 
-      private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      private$.result = TaskClassif$new(
+        id = input1$id,
+        backend = db,
+        target = input1$target_names
+      )
     },
 
     predict2 = function(input) {
