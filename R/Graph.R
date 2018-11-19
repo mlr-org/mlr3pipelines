@@ -60,9 +60,11 @@ Graph = R6Class("Graph",
     # This should basically call trainGraph
     train = function(task) {
       trainGraph(self$source_node, task)
+      invisible(self)
     },
     plot = function() {
       graph_plot(self$source_node)
+      invisible(self)
     },
 
     # FIXME: the "state" of the coded pipeline is now in self and model. that seems weird?
@@ -70,8 +72,8 @@ Graph = R6Class("Graph",
     predict = function(task) {
       # FIXME: This should basically call the predict function on the GraphNodes
       nodes = self$map(function(x) x, simplify = FALSE) # get the nodes in topo order
-      lapply(nodes, function(x) x$predict())
-      invisible()
+      lapply(nodes, function(x) x$predict(task))
+      invisible(self)
     },
 
     print = function(...) {
@@ -81,7 +83,8 @@ Graph = R6Class("Graph",
     },
 
     reset = function() {
-      # FIXME: This should reset all PipeOp's in the graph
+      self$map(function(x) x$pipeop$reset(), simplify = FALSE)
+      invisible(self)
     },
 
     map = function(fnc, simplify = TRUE) {
