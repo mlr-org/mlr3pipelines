@@ -61,6 +61,9 @@ Graph = R6Class("Graph",
     train = function(task) {
       trainGraph(self$source_node, task)
     },
+    plot = function() {
+      graph_plot(self$source_node)
+    },
 
     # FIXME: the "state" of the coded pipeline is now in self and model. that seems weird?
     # can we remove "ops" from pipeline
