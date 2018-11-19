@@ -69,6 +69,9 @@ Graph = R6Class("Graph",
     # can we remove "ops" from pipeline
     predict = function(task) {
       # FIXME: This should basically call the predict function on the GraphNodes
+      nodes = self$map(function(x) x, simplify = FALSE) # get the nodes in topo order
+      lapply(nodes, function(x) x$predict())
+      invisible()
     },
 
     print = function(...) {
