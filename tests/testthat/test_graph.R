@@ -87,3 +87,38 @@ test_that("Graph packages", {
   g    = Graph$new(node)
   expect_equal(g$packages, "irlba")
 })
+
+test_that("graph_map_topo - map function and return the output in topological order", {
+
+  n1 = GraphNode$new(PipeOpNULL$new("1"))
+  n2 = GraphNode$new(PipeOpNULL$new("2"))
+  n3 = GraphNode$new(PipeOpNULL$new("3"))
+  n4 = GraphNode$new(PipeOpNULL$new("4"))
+  n5 = GraphNode$new(PipeOpNULL$new("5"))
+  n6 = GraphNode$new(PipeOpNULL$new("6"))
+  n7 = GraphNode$new(PipeOpNULL$new("7"))
+  n8 = GraphNode$new(PipeOpNULL$new("8"))
+  n9 = GraphNode$new(PipeOpNULL$new("9"))
+  n10 = GraphNode$new(PipeOpNULL$new("10"))
+  n11 = GraphNode$new(PipeOpNULL$new("11"))
+
+  n1$set_next(list(n2, n5, n9))
+
+  n2$set_next(list(n3, n4))
+  n3$set_next(list(n4))
+
+  n5$set_next(list(n6, n7, n8))
+
+  n9$set_next(list(n10))
+  n10$set_next(list(n8))
+
+  n4$set_next(list(n11))
+  n8$set_next(list(n11))
+
+  # Vis the graph: graph_plot(n1)
+
+  expect_equivalent(
+    graph_map_topo(n1, function(x) x$id),
+    c("1", "2", "5", "9", "3", "6", "7", "10", "4", "8", "11")
+  )
+})

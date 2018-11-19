@@ -214,3 +214,37 @@ graph_plot = function(root) {
 
   plot(g, layout = layout$layout)
 }
+
+graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE) {
+
+  state = new.env()
+  state$permanent = c()
+  state$temporary = c()
+  state$list = list()
+  state$depth = numeric()
+
+  visit = function(node, state, depth = 1) {
+    if(node$id %in% state$permanent) {
+      state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
+      return()
+    }
+    if(node$id %in% state$temporary) stop("Not a DAG")
+    state$temporary = c(node$id, state$temporary) # mark temporarily
+
+    if(length(node$next_nodes) > 0) {
+      res = lapply(node$next_nodes$xs, visit, state = state, depth = depth + 1)
+    } else {
+      res = NULL
+    }
+    state$permanent = c(node$id, state$permanent) # mark permanent
+    state$temporary = state$temporary[node$id != state$temporary]
+
+    state$list[[node$id]] = fnc(node)
+    state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
+  }
+
+  visit(root, state)
+  result = state$list[order(state$depth)]
+
+  if(simplify) simplify2array(result) else result
+}
