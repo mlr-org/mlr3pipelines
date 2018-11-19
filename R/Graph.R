@@ -1,29 +1,9 @@
-#' Traverse graphs and apply the function `fnc`
-#' @noRd
-graph_traverse = function(root, fnc) {
-  #FIXME: check visited nodes
-  front = GraphNodesList$new(list(root))
-  result_list = list()
+graph_gather_params = function(root) {
 
-  while(length(front) > 0L) {
-    new_front = GraphNodesList$new()
-    for (i in seq_along(front)) {
-      op = front[[i]]
-      result_list[[op$id]] = fnc(op)
-
-      if(is.null(op$next_nodes)) break
-      new_front$join_new(op$next_nodes)
-    }
-    front = new_front
-  }
-  result_list
-}
-
-graph_gather_params = function(graph) {
-
-  all_params = graph_traverse(
-    graph,
-    function(x) x$pipeop$param_set$clone(deep = TRUE)$params
+  all_params = graph_map_topo(
+    root,
+    function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
+    simplify = FALSE
   )
 
   all_params_named = mapply(function(params_list, id) {
@@ -98,25 +78,22 @@ Graph = R6Class("Graph",
       # FIXME: This should reset all PipeOp's in the graph
     },
 
+    map = function(fnc, simplify = TRUE) {
+      graph_map_topo(self$source_node, fnc, simplify = simplify)
+    },
+
     find_by_id = function(id) {
       # FIXME: We might want a version of traverseGraph that does this more efficiently.
       assert_choice(id, self$ids)
-      nodes = graph_traverse(self$source_node, function(x) {
-        if(x$id == id) {
-          return(x)
-        } else {
-          return(NULL)
-        }
+      nodes = self$map(function(x) {
+        if(x$id == id) return(x)
       })
       nodes[[1]]
     }
   ),
   active = list(
     is_learnt = function(value) {
-      ifelse(
-        all(unlist(graph_traverse(self$source_node, function(x) x$is_learnt))),
-        TRUE,
-        FALSE)
+        all(self$map(function(x) x$is_learnt))
     },
     param_set = function(value) {
       if (missing(value)) graph_gather_params(self$source_node)
@@ -128,22 +105,18 @@ Graph = R6Class("Graph",
     ids = function(value) {
       # FIXME: How are parallel Op's treated here?
       if (missing(value)) {
-        unlist(graph_traverse(self$source_node, function(x) x$id))
+        self$map(function(x) x$id)
       } else {
         # FIXME: Should we allow overwriting id's here?
       }
     },
     packages = function() {
-      pkgs = unlist(
-        graph_traverse(
-          self$source_node,
-          fnc = function(x) x$pipeop$packages)
-        )
+      pkgs = self$map(function(x) x$pipeop$packages)
       unique(pkgs)
     },
-    lhs = function() {self$source_node},
+    lhs = function() { self$source_node },
     rhs = function() {
-      graph_traverse(self$source_node, function(x) {
+      self$map(function(x) {
         if(x$next_nodes$is_empty) return(x)
       })
     }
@@ -189,7 +162,7 @@ length.Graph = function(x) {
 }
 
 graph_to_edge_list = function(root) {
-  edges = graph_traverse(root, function(x) {
+  edges = graph_map_topo(root, simplify = FALSE, function(x) {
     res = cbind(
 
       x$id,
@@ -250,7 +223,12 @@ graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE) {
     state$temporary = c(node$id, state$temporary) # mark temporarily
 
     if(length(node$next_nodes) > 0) {
-      res = lapply(node$next_nodes$xs, visit, state = state, depth = depth + 1)
+      res = lapply(
+        node$next_nodes$xs,
+        visit,
+        state = state,
+        depth = depth + 1
+      )
     } else {
       res = NULL
     }
@@ -262,7 +240,9 @@ graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE) {
   }
 
   visit(root, state)
-  result = state$list[order(state$depth)]
+
+  state$depth = state$depth[names(state$list)]
+  result      = state$list[order(state$depth)]
 
   if(simplify) simplify2array(result) else result
 }
