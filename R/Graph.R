@@ -1,5 +1,6 @@
 #' Traverse graphs and apply the function `fnc`
-traverseGraph <- function(root, fnc) {
+#' @noRd
+graph_traverse = function(root, fnc) {
   #FIXME: check visited nodes
   front = GraphNodesList$new(list(root))
   result_list <- list()
@@ -20,7 +21,7 @@ traverseGraph <- function(root, fnc) {
 
 graph_gather_params <- function(graph) {
 
-  all_params <- traverseGraph(
+  all_params <- graph_traverse(
     graph,
     function(x) x$pipeop$param_set$clone(deep = TRUE)$params
   )
@@ -101,7 +102,7 @@ Graph = R6Class("Graph",
     find_by_id = function(id) {
       # FIXME: We might want a version of traverseGraph that does this more efficiently.
       assert_choice(id, self$ids)
-      nodes = traverseGraph(self$source_node, function(x) {
+      nodes = graph_traverse(self$source_node, function(x) {
         if(x$id == id) {
           return(x)
         } else {
@@ -114,7 +115,7 @@ Graph = R6Class("Graph",
   active = list(
     is_learnt = function(value) {
       ifelse(
-        all(unlist(traverseGraph(self$source_node, function(x) x$is_learnt))),
+        all(unlist(graph_traverse(self$source_node, function(x) x$is_learnt))),
         TRUE,
         FALSE)
     },
@@ -128,14 +129,14 @@ Graph = R6Class("Graph",
     ids = function(value) {
       # FIXME: How are parallel Op's treated here?
       if (missing(value)) {
-        unlist(traverseGraph(self$source_node, function(x) x$id))
+        unlist(graph_traverse(self$source_node, function(x) x$id))
       } else {
         # FIXME: Should we allow overwriting id's here?
       }
     },
     lhs = function() {self$source_node},
     rhs = function() {
-      traverseGraph(self$source_node, function(x) {
+      graph_traverse(self$source_node, function(x) {
         if(x$next_nodes$is_empty) return(x)
       })
     }
@@ -181,7 +182,7 @@ length.Graph = function(x) {
 }
 
 graph_to_edge_list = function(root) {
-  edges = traverseGraph(root, function(x) {
+  edges = graph_traverse(root, function(x) {
     res = cbind(
 
       x$id,
