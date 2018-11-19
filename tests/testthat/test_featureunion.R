@@ -21,14 +21,14 @@ test_that("featureunion - basic", {
     set_next(GraphNode$new(op3))$
     set_next(GraphNode$new(op4))
 
-  graph <- Graph$new(root)
+  graph = Graph$new(root)
   graph$train(task)
 
-  model <- op4$params$model
+  model = op4$params$model
 
-  param_names_union <- c(
+  param_names_union = c(
     "OpNULL.Petal.Width", "OpNULL.Petal.Length",
-    "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2", 
+    "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2",
     "OpNULL.Sepal.Width", "pca.PC3")
 
   expect_equal(names(model$variable.importance), param_names_union)

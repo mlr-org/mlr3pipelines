@@ -6,7 +6,7 @@ test_that("Graph", {
   op1 = PipeOpScaler$new()
   op2 = PipeOpPCA$new()
   lrn = mlr_learners$get("classif.rpart")
-  lrn$predict_type <- "prob"
+  lrn$predict_type = "prob"
 
   op3 = PipeOpLearner$new(learner = lrn)
 
@@ -46,7 +46,7 @@ test_that("Parallel graph", {
   op2a = PipeOpScaler$new()
   op2b = PipeOpPCA$new()
   lrn = mlr_learners$get("classif.rpart")
-  lrn$predict_type <- "prob"
+  lrn$predict_type = "prob"
   op3 = PipeOpFeatureUnion$new()
   op4 = PipeOpLearner$new(learner = lrn)
 

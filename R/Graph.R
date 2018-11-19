@@ -3,13 +3,13 @@
 graph_traverse = function(root, fnc) {
   #FIXME: check visited nodes
   front = GraphNodesList$new(list(root))
-  result_list <- list()
+  result_list = list()
 
   while(length(front) > 0L) {
     new_front = GraphNodesList$new()
     for (i in seq_along(front)) {
       op = front[[i]]
-      result_list[[op$id]] <- fnc(op)
+      result_list[[op$id]] = fnc(op)
 
       if(is.null(op$next_nodes)) break
       new_front$join_new(op$next_nodes)
@@ -19,19 +19,19 @@ graph_traverse = function(root, fnc) {
   result_list
 }
 
-graph_gather_params <- function(graph) {
+graph_gather_params = function(graph) {
 
-  all_params <- graph_traverse(
+  all_params = graph_traverse(
     graph,
     function(x) x$pipeop$param_set$clone(deep = TRUE)$params
   )
 
-  all_params_named <- mapply(function(params_list, id) {
+  all_params_named = mapply(function(params_list, id) {
 
     lapply(params_list, function(x) {
 
-      x <- x$clone(deep = TRUE)
-      x$id <- paste(id, x$id, sep =":")
+      x = x$clone(deep = TRUE)
+      x$id = paste(id, x$id, sep =":")
       x
     })
 
