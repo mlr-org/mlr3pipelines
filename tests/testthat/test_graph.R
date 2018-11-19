@@ -53,7 +53,7 @@ test_that("Parallel graph", {
   root = GraphNode$new(op1)
   root$
     set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))$
-    set_next(GraphNode$new(op3))$    
+    set_next(GraphNode$new(op3))$
     set_next(GraphNode$new(op4))
 
   g = Graph$new(root)
@@ -79,4 +79,11 @@ test_that("Parallel graph", {
   expect_error(g[["foo"]], "Assertion on 'id' failed:")
 
   expect_equal(length(g), 5L)
+})
+
+test_that("Graph packages", {
+  op   = PipeOpSparsePCA$new()
+  node = GraphNode$new(op)
+  g    = Graph$new(node)
+  expect_equal(g$packages, "irlba")
 })

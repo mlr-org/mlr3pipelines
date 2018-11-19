@@ -66,7 +66,6 @@ Graph = R6Class("Graph",
   public = list(
 
     source_node = list(),
-    packages = character(0L),
 
     # FIXME: Do we need task_type and id?
     task_type = "classif",
@@ -133,6 +132,14 @@ Graph = R6Class("Graph",
       } else {
         # FIXME: Should we allow overwriting id's here?
       }
+    },
+    packages = function() {
+      pkgs = unlist(
+        graph_traverse(
+          self$source_node,
+          fnc = function(x) x$pipeop$packages)
+        )
+      unique(pkgs)
     },
     lhs = function() {self$source_node},
     rhs = function() {
