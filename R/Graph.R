@@ -250,7 +250,7 @@ graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_lay
     if(node$id %in% state$temporary) stop("Not a DAG")
     state$temporary = c(node$id, state$temporary) # mark temporarily
 
-    if(length(node$next_nodes) > 0) {
+    if(node$has_next) {
       res = lapply(
         node$next_nodes$xs,
         visit,
