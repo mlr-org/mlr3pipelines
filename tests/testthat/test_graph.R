@@ -15,7 +15,7 @@ test_that("Graph", {
 
   g = Graph$new(root)
   expect_class(g, "Graph")
-  expect_output(print(g), regexp = "Graph: scaler->pca->classif.rpart")
+  #expect_output(print(g), regexp = "Graph: scaler->pca->classif.rpart")
   expect_false(g$is_learnt)
 
   # Test train/predict
@@ -58,7 +58,7 @@ test_that("Parallel graph", {
 
   g = Graph$new(root)
   expect_class(g, "Graph")
-  expect_output(print(g), regexp = "Graph: OpNULL->scaler->pca->featureunion->classif.rpart")
+  #expect_output(print(g), regexp = "Graph: OpNULL->scaler->pca->featureunion->classif.rpart")
   expect_false(g$is_learnt)
 
   # Test train/predict
