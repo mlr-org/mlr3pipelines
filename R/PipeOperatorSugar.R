@@ -1,3 +1,5 @@
+########## Basic operator %>>% for 1-to-1, 1-to-n, n-to-1 ##########
+
 #' @export
 `%>>%` = function(lhs, rhs) {
   UseMethod("%>>%")
@@ -12,8 +14,6 @@
 `%>>%.GraphNode` = function(lhs, rhs) {
   `%>>%`(Graph$new(lhs), rhs)
 }
-
-
 
 #' @export
 `%>>%.Graph` = function(lhs, rhs) {
@@ -32,6 +32,65 @@
 
   lhs
 }
+
+########## %>=>% n-to-n operator ##########
+#' @export
+`%>=>%` = function(lhs, rhs) {
+  UseMethod("%>=>%")
+}
+
+#' @export
+`%>=>%.PipeOp` = function(lhs, rhs) {
+  `%>=>%`(GraphNode$new(lhs), rhs)
+}
+
+#' @export
+`%>=>%.GraphNode` = function(lhs, rhs) {
+  `%>=>%`(Graph$new(lhs), rhs)
+}
+
+#' @export
+`%>=>%.Graph` = function(lhs, rhs) {
+
+  # convert the rhs to list of Graphs
+  rhs = sugar_rhs_wrap(rhs)
+  rhs_list = lapply(rhs, function(x) x$source_node)
+
+  if(length(lhs$rhs) == length(rhs_list)) {
+    # n-to-n
+    mapply(function(x, y) x$set_next(y), lhs$rhs, rhs_list)
+  } else {
+    # FIXME - better error message
+    stop("n-to-m not supported. %>=>% works only for n-to-n")
+  }
+  lhs
+}
+
+########## %>x>% n-to-m outer product ##########
+#' @export
+`%>x>%` = function(lhs, rhs) {
+  UseMethod("%>x>%")
+}
+
+#' @export
+`%>x>%.PipeOp` = function(lhs, rhs) {
+  `%>x>%`(GraphNode$new(lhs), rhs)
+}
+
+#' @export
+`%>x>%.GraphNode` = function(lhs, rhs) {
+  `%>x>%`(Graph$new(lhs), rhs)
+}
+
+#' @export
+`%>x>%.Graph` = function(lhs, rhs) {
+  # convert the rhs to list of Graphs
+  rhs = sugar_rhs_wrap(rhs)
+  rhs_list = lapply(rhs, function(x) x$source_node)
+  lapply(lhs$rhs, function(x) x$set_next(rhs_list))
+  lhs
+}
+
 
 #' Automatically transform PipeOp, list of PipeOps, GraphNode, Graph to list of Graphs.
 #'
