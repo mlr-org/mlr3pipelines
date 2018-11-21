@@ -21,7 +21,7 @@ This vignette showcases the general syntax and semantic behind `mlr3pipelines`.
 
 ## Simple preprocessing
 
-We first create an mlr task that, which we want to transform with the pipeline. 
+We first create an mlr task that, which we want to transform with the pipeline.
 
 ```{r}
   task = mlr_tasks$get("iris")
@@ -37,7 +37,7 @@ An often-applied preprocessing step is to simply **center** and **scale** the da
 In order to not leak data from the test set into the training set it is imperative to treat train and test data correctly. For this we require a function `train` that learns the appropriate transformations from the training set and a function `test` that applies the transformation on future data.
 This is already handled in `PipeOpScaler`.
 
-The **PipeOp** does not work stand-alone, as we expect thatt it is wrapped in a `GraphNode`. This handles all connectivity to the previous and following nodes of the graph. 
+The **PipeOp** does not work stand-alone, as we expect that it is wrapped in a `GraphNode`. This handles all connectivity to the previous and following nodes of the graph.
 
 ```{r}
   n1 = GraphNode$new(op1)
@@ -48,27 +48,28 @@ When we initialize the Node it is untrained:
 n1$is_learnt
 ```
 
-This graph can now be trained: 
+This graph can now be trained:
 
 ```{r}
   g = Graph$new(n1)
   g$train(task)
 ```
 
-This has the following side effects: 
-- The **train** function of `op1` is called. 
-- The data transformation is learned and stored in the `.params` slot.
+This has the following side effects:
+- The **train** function of `op1` is called.
 - The graph is now *learnt*.
-- The transformed task is saved in the `result` slot.
+- The data transformation is learned and stored in the `params` slot of `op1`.
+- The transformed task is saved in the `result` slot of `op1`.
 
 ```{r}
 n1$is_learnt
-head(n1$result$data())
+scaled_task = n1$result
+head(scaled_task$data())
 ```
 
 ## A more complex example: Scale -> PCA -> Learner:
 
-In this example, we first `scale` the data, apply `PCA` and then train a 
+In this example, we first `scale` the data, apply `PCA` and then train a
 **Decision Tree** on the transformed learner.
 
 ```{r}
@@ -83,15 +84,16 @@ In this example, we first `scale` the data, apply `PCA` and then train a
     set_next(GraphNode$new(op3))
   # And instantiate the graph
   g = Graph$new(root)
+  print(g)
 ```
 
-## Creating a PipeOp
+## Creating a custom PipeOp
 
-Creating a `PipeOp` requires the following objects: 
-- An `id` for the new PipeOp
-- A `train()` function that stores values required for the transformation and 
+Creating a `PipeOp` requires the following objects:
+- An `id` for the new `PipeOp`
+- A `train()` function that stores values required for the transformation and
   saves the transformed data.
-- A `predict()` function that uses the values obtained in `train()`to 
+- A `predict()` function that uses the values obtained in `train()`to
   transform new data.
 - Optionally, a `ParamSet` that contains hyperparameter ranges.
 
@@ -100,7 +102,7 @@ In this example we will create a `PipeOp` that allows us to transform our data u
 
 As an `id` we will use `PipeOpPCA`.
 
-In the next step we will define the `train` function: 
+In the next step we will define the `train` function:
 
 
 ```{r}
@@ -129,17 +131,16 @@ In the next step we will define the `train` function:
       # And add the rotated features
       dt[, (colnames(x)) := x]
 
-      # Now we overwrite the data.table in the task 
-      # with our new data, save it to the 
+      # Now we overwrite the data.table in the task
+      # with our new data, save it to the
       # "-result" slot
       private$.result = task$overwrite(dt)
       # and return the new task
       private$.result
     }
-
 ```
 
-And the `predict()` function: 
+And the `predict()` function:
 
 ```{r}
     predict = function() {
@@ -156,14 +157,13 @@ And the `predict()` function:
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
 
-      # See "train()" 
+      # See "train()"
       private$.result = task$overwrite(d)
       return(private$.result)
     }
-
 ```
 
-And the `ParamSet`: 
+And the `ParamSet`:
 
 ```{r}
       ps = ParamSet$new(params = list(
@@ -186,7 +186,4 @@ PipeOpPCA = R6Class("PipeOpPCA",
     predict2 = predict
   )
 )
-
 ```
-
-
