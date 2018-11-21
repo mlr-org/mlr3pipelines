@@ -9,7 +9,7 @@ test_that("PipeOp - simple pipe", {
   expect_class(op1, "PipeOpScaler")
   expect_false(op1$is_learnt)
 
-  n1 <- GraphNode$new(op1)
+  n1 = GraphNode$new(op1)
   expect_false(n1$can_fire)
 
   trainGraph(n1, task)
@@ -26,13 +26,13 @@ test_that("PipeOp - learner pipe", {
   task = mlr_tasks$get("iris")
 
   lrn = mlr_learners$get("classif.rpart")
-  lrn$predict_type <- "prob"
+  lrn$predict_type = "prob"
 
   op1 = PipeOpScaler$new()
   op2 = PipeOpPCA$new()
   op3 = PipeOpLearner$new(learner = lrn)
 
-  root <- GraphNode$new(op1)
+  root = GraphNode$new(op1)
   root$set_next(GraphNode$new(op2))$set_next(GraphNode$new(op3))
 
   trainGraph(root, task)

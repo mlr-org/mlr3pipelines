@@ -16,7 +16,7 @@ GraphNodesList = R6Class("GraphNodesList",
        super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
      },
      set_next = function(nodes) {
-       nodes <- wrap_nodes(nodes)
+       nodes = wrap_nodes(nodes)
        self$map(function(x) x$set_next(nodes))
        GraphNodesList$new(nodes)
      }
@@ -25,9 +25,9 @@ GraphNodesList = R6Class("GraphNodesList",
 
 ##### Methods definitions #####
 # set_next
-graph_node_set_next <- function(nodes) {
+graph_node_set_next = function(nodes) {
 
-  nodes <- wrap_nodes(nodes)
+  nodes = wrap_nodes(nodes)
   self$next_nodes = GraphNodesList$new(nodes)
   for(nn in nodes) {
     nn$add_prev(self)
@@ -37,9 +37,9 @@ graph_node_set_next <- function(nodes) {
 }
 
 # set_prev
-graph_node_set_prev <- function(nodes) {
+graph_node_set_prev = function(nodes) {
 
-  nodes <- wrap_nodes(nodes)
+  nodes = wrap_nodes(nodes)
   self$prev_nodes = GraphNodesList$new(nodes)
   for(nn in nodes) {
     nn$add_next(self)
@@ -48,14 +48,14 @@ graph_node_set_prev <- function(nodes) {
 }
 
 
-graph_node_add_next <- function(nodes) {
-  nodes <- wrap_nodes(nodes)
+graph_node_add_next = function(nodes) {
+  nodes = wrap_nodes(nodes)
   self$next_nodes$join_new(GraphNodesList$new(nodes))
   self
 }
 
-graph_node_add_prev <- function(nodes) {
-  nodes <- wrap_nodes(nodes)
+graph_node_add_prev = function(nodes) {
+  nodes = wrap_nodes(nodes)
   self$prev_nodes$join_new(GraphNodesList$new(nodes))
   self
 }
@@ -80,9 +80,9 @@ GraphNode = R6::R6Class(
   "GraphNode",
   public = list(
     initialize = function(pipeop) {
-      self$pipeop <- pipeop
-      self$next_nodes <- GraphNodesList$new()
-      self$prev_nodes <- GraphNodesList$new()
+      self$pipeop = pipeop
+      self$next_nodes = GraphNodesList$new()
+      self$prev_nodes = GraphNodesList$new()
     },
     pipeop = NULL,
     inputs = list(),
@@ -117,6 +117,7 @@ GraphNode = R6::R6Class(
     is_learnt  = function() self$pipeop$is_learnt,
 
     has_no_prevs = function() length(self$prev_nodes) == 0L,
+    has_next = function() length(self$next_nodes) > 0L,
     can_fire = function() {
       if (self$has_no_prevs) length(self$inputs) > 0
       else all(self$prev_nodes$map_s(function(x) x$has_result))
@@ -128,17 +129,17 @@ GraphNode = R6::R6Class(
   )
 )
 
-wrap_nodes <- function(x) {
+wrap_nodes = function(x) {
 
-  check_node <- function(y) {
+  check_node = function(y) {
     checkmate::assert_class(y, "GraphNode")
     y
   }
 
   if(inherits(x, "GraphNode")) {
-    x <- list(check_node(x))
+    x = list(check_node(x))
   } else if(is.list(x)) {
-    x <- lapply(x, check_node)
+    x = lapply(x, check_node)
   }
   x
 }
@@ -153,20 +154,20 @@ wrap_nodes <- function(x) {
 #'
 #' @noRd
 #'
-wrap_pipeops <- function(x) {
+wrap_pipeops = function(x) {
 
-  wrap_pipeop <- function(y) {
+  wrap_pipeop = function(y) {
     checkmate::assert_multi_class(y, c("PipeOp", "GraphNode"))
     if(inherits(y, "PipeOp")) {
-      y <- GraphNode$new(y)
+      y = GraphNode$new(y)
     }
     y
   }
 
   if(inherits(x, "PipeOp") || inherits(x, "GraphNode")) {
-    x <- list(wrap_pipeop(x))
+    x = list(wrap_pipeop(x))
   } else if(is.list(x)) {
-    x <- lapply(x, wrap_pipeop)
+    x = lapply(x, wrap_pipeop)
   }
 
   x

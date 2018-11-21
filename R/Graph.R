@@ -1,36 +1,17 @@
-#' Traverse graphs and apply the function `fnc`
-traverseGraph <- function(root, fnc) {
-  #FIXME: check visited nodes
-  front = GraphNodesList$new(list(root))
-  result_list <- list()
+graph_gather_params = function(root) {
 
-  while(length(front) > 0L) {
-    new_front = GraphNodesList$new()
-    for (i in seq_along(front)) {
-      op = front[[i]]
-      result_list[[op$id]] <- fnc(op)
-
-      if(is.null(op$next_nodes)) break
-      new_front$join_new(op$next_nodes)
-    }
-    front = new_front
-  }
-  result_list
-}
-
-graph_gather_params <- function(graph) {
-
-  all_params <- traverseGraph(
-    graph,
-    function(x) x$pipeop$param_set$clone(deep = TRUE)$params
+  all_params = graph_map_topo(
+    root,
+    function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
+    simplify = FALSE
   )
 
-  all_params_named <- mapply(function(params_list, id) {
+  all_params_named = mapply(function(params_list, id) {
 
     lapply(params_list, function(x) {
 
-      x <- x$clone(deep = TRUE)
-      x$id <- paste(id, x$id, sep =":")
+      x = x$clone(deep = TRUE)
+      x$id = paste(id, x$id, sep =":")
       x
     })
 
@@ -65,7 +46,6 @@ Graph = R6Class("Graph",
   public = list(
 
     source_node = list(),
-    packages = character(0L),
 
     # FIXME: Do we need task_type and id?
     task_type = "classif",
@@ -80,43 +60,67 @@ Graph = R6Class("Graph",
     # This should basically call trainGraph
     train = function(task) {
       trainGraph(self$source_node, task)
+      invisible(self)
+    },
+    plot = function() {
+      graph_plot(self$source_node)
+      invisible(self)
     },
 
     # FIXME: the "state" of the coded pipeline is now in self and model. that seems weird?
     # can we remove "ops" from pipeline
     predict = function(task) {
       # FIXME: This should basically call the predict function on the GraphNodes
+      nodes = self$map(function(x) x, simplify = FALSE) # get the nodes in topo order
+      lapply(nodes, function(x) x$predict(task))
+      invisible(self)
     },
 
     print = function(...) {
-      s = self$ids
-      s = BBmisc::collapse(s, "->")
-      BBmisc::catf("Graph: %s", s)
+      res = graph_map_topo(self$source_node, add_layer = TRUE)
+      res_string = tapply(
+        res,
+        attr(res, "layer"),
+        FUN = function(x) paste(x, collapse = ",")
+      )
+
+      res_size = tapply(
+        res,
+        attr(res, "layer"),
+        FUN = function(x) length(x)
+      )
+
+      output_string = paste(
+        sprintf("[(%s), %s]", res_string, res_size),
+        collapse = " >> "
+      )
+      output_string = base::strwrap(output_string, getOption("width") * 0.6)
+      output_string = paste(paste(" ", output_string), collapse = "\n")
+      cat("Pipeline Graph:\n")
+      cat(output_string, "\n")
     },
 
     reset = function() {
-      # FIXME: This should reset all PipeOp's in the graph
+      self$map(function(x) x$pipeop$reset(), simplify = FALSE)
+      invisible(self)
+    },
+
+    map = function(fnc, simplify = TRUE) {
+      graph_map_topo(self$source_node, fnc, simplify = simplify)
     },
 
     find_by_id = function(id) {
       # FIXME: We might want a version of traverseGraph that does this more efficiently.
       assert_choice(id, self$ids)
-      nodes = traverseGraph(self$source_node, function(x) {
-        if(x$id == id) {
-          return(x)
-        } else {
-          return(NULL)
-        }
+      nodes = self$map(function(x) {
+        if(x$id == id) return(x)
       })
       nodes[[1]]
     }
   ),
   active = list(
     is_learnt = function(value) {
-      ifelse(
-        all(unlist(traverseGraph(self$source_node, function(x) x$is_learnt))),
-        TRUE,
-        FALSE)
+        all(self$map(function(x) x$is_learnt))
     },
     param_set = function(value) {
       if (missing(value)) graph_gather_params(self$source_node)
@@ -128,14 +132,18 @@ Graph = R6Class("Graph",
     ids = function(value) {
       # FIXME: How are parallel Op's treated here?
       if (missing(value)) {
-        unlist(traverseGraph(self$source_node, function(x) x$id))
+        self$map(function(x) x$id)
       } else {
         # FIXME: Should we allow overwriting id's here?
       }
     },
-    lhs = function() {self$source_node},
+    packages = function() {
+      pkgs = self$map(function(x) x$pipeop$packages)
+      unique(pkgs)
+    },
+    lhs = function() { self$source_node },
     rhs = function() {
-      traverseGraph(self$source_node, function(x) {
+      self$map(function(x) {
         if(x$next_nodes$is_empty) return(x)
       })
     }
@@ -181,7 +189,7 @@ length.Graph = function(x) {
 }
 
 graph_to_edge_list = function(root) {
-  edges = traverseGraph(root, function(x) {
+  edges = graph_map_topo(root, simplify = FALSE, function(x) {
     res = cbind(
 
       x$id,
@@ -205,4 +213,67 @@ graph_plot = function(root) {
   layout =  igraph::layout_with_sugiyama(g)
 
   plot(g, layout = layout$layout)
+}
+
+#' graph_map_topo
+#'
+#' @param root root node of the graph.
+#' @param fnc function to apply
+#' @param simplify should the result be simplified using simplify2array.
+#' Default TRUE.
+#' @param add_layer if true add information about the layer as a attribute.
+#'
+#' @return
+#'
+#' List (possibly simplified to vector) with the output
+#' of function `fnc`  applied to all the nodes of the graph
+#' in topological order. Note that only the output is in
+#' topological order. The function `fnc` is not applied in that order,
+#' contrary, the algorithm uses a `depth-first search`,
+#' so it starts applying the function from the last element.
+#'
+#' @noRd
+#'
+graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
+
+  state = new.env()
+  state$permanent = c()
+  state$temporary = c()
+  state$list = list()
+  state$depth = numeric()
+
+  visit = function(node, state, depth = 1) {
+    if(node$id %in% state$permanent) {
+      state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
+      return()
+    }
+    if(node$id %in% state$temporary) stop("Not a DAG")
+    state$temporary = c(node$id, state$temporary) # mark temporarily
+
+    if(node$has_next) {
+      res = lapply(
+        node$next_nodes$xs,
+        visit,
+        state = state,
+        depth = depth + 1
+      )
+    } else {
+      res = NULL
+    }
+    state$permanent = c(node$id, state$permanent) # mark permanent
+    state$temporary = state$temporary[node$id != state$temporary]
+
+    state$list[[node$id]] = fnc(node)
+    state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
+  }
+
+  visit(root, state)
+
+  state$depth = state$depth[names(state$list)]
+  result      = state$list[order(state$depth)]
+  state$depth = sort(state$depth)
+
+  result = if(simplify) simplify2array(result) else result
+  if(add_layer) attr(result, "layer") = state$depth
+  result
 }
