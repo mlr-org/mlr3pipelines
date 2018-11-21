@@ -144,32 +144,3 @@ wrap_nodes = function(x) {
   }
   x
 }
-
-#' Automatically transform PipeOp or a list of PipeOps into a list of GraphNodes
-#'
-#' @param x
-#'
-#' @return
-#'
-#' If \code{x} is a GraphNode the function returns the list(x).
-#'
-#' @noRd
-#'
-wrap_pipeops = function(x) {
-
-  wrap_pipeop = function(y) {
-    checkmate::assert_multi_class(y, c("PipeOp", "GraphNode"))
-    if(inherits(y, "PipeOp")) {
-      y = GraphNode$new(y)
-    }
-    y
-  }
-
-  if(inherits(x, "PipeOp") || inherits(x, "GraphNode")) {
-    x = list(wrap_pipeop(x))
-  } else if(is.list(x)) {
-    x = lapply(x, wrap_pipeop)
-  }
-
-  x
-}
