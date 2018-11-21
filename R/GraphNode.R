@@ -117,6 +117,7 @@ GraphNode = R6::R6Class(
     is_learnt  = function() self$pipeop$is_learnt,
 
     has_no_prevs = function() length(self$prev_nodes) == 0L,
+    has_no_nexts = function() length(self$next_nodes) == 0L,
     has_next = function() length(self$next_nodes) > 0L,
     can_fire = function() {
       if (self$has_no_prevs) length(self$inputs) > 0
