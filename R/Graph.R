@@ -53,12 +53,13 @@ Graph = R6Class("Graph",
 
     # Do we clone/copy here? Otherwise state of OP's trained outside will change
     initialize = function(source_nodes) {
-
       # handles only GraphNode or list of the graph nodes
       if(inherits(source_nodes, "GraphNode")) {
         source_nodes = list(source_nodes)
       } else if(is.list(source_nodes)) {
-        all(vapply(source_nodes, TRUE, FUN = inherits, what = "GraphNode"))
+        if(!all(vapply(source_nodes, TRUE, FUN = inherits, what = "GraphNode"))) {
+          stop("Graph can only be initialized using GraphNode or a list of GraphNodes")
+        }
       } else {
         stop("Only GraphNode or list of GraphNodes is supported.")
       }

@@ -16,6 +16,11 @@
 }
 
 #' @export
+`%>>%.list` = function(lhs, rhs) {
+  `%>>%`(Graph$new(to_nodes_list(lhs)), rhs)
+}
+
+#' @export
 `%>>%.Graph` = function(lhs, rhs) {
 
   # convert the rhs to list of Graphs
@@ -47,6 +52,11 @@
 #' @export
 `%>=>%.GraphNode` = function(lhs, rhs) {
   `%>=>%`(Graph$new(lhs), rhs)
+}
+
+#' @export
+`%>=>%.list` = function(lhs, rhs) {
+  `%>=>%`(Graph$new(to_nodes_list(lhs)), rhs)
 }
 
 #' @export
@@ -83,7 +93,13 @@
 }
 
 #' @export
+`%>x>%.list` = function(lhs, rhs) {
+  `%>x>%`(Graph$new(to_nodes_list(lhs)), rhs)
+}
+
+#' @export
 `%>x>%.Graph` = function(lhs, rhs) {
+
   # convert the rhs to list of Graphs
   rhs = sugar_rhs_wrap(rhs)
   rhs_list = extract_nodes_list(rhs)
@@ -96,6 +112,17 @@ extract_nodes_list = function(rhs) {
   unlist(lapply(rhs, function(x) x$source_nodes), recursive = FALSE)
 }
 
+
+to_nodes_list = function(x) {
+
+  wrap = function(y) {
+    checkmate::assert_multi_class(y, c("PipeOp", "GraphNode"))
+    if(inherits(y, "PipeOp")) y = GraphNode$new(y)
+    y
+  }
+
+  lapply(x, wrap)
+}
 
 #' Automatically transform PipeOp, list of PipeOps, GraphNode, Graph to list of Graphs.
 #'

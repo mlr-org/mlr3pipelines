@@ -99,4 +99,14 @@ test_that("%>x>% - n-to-m", {
   expect_equal(g$rhs$p6$prev_nodes[[3]]$pipeop, p4)
   expect_equal(g$rhs$p7$prev_nodes[[3]]$pipeop, p4)
 
+  g = list(p1, p2) %>x>% list(p3, p4, p5) %>x>% list(p6, p7)
+
+  expect_false(g[["p1"]]$has_lhs)
+  expect_false(g[["p2"]]$has_lhs)
+  expect_equal(length(g[["p3"]]$prev_nodes), 2)
+  expect_equal(length(g[["p4"]]$prev_nodes), 2)
+  expect_equal(length(g[["p5"]]$prev_nodes), 2)
+  expect_equal(length(g[["p6"]]$prev_nodes), 3)
+  expect_equal(length(g[["p7"]]$prev_nodes), 3)
+
 })
