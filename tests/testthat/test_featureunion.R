@@ -34,3 +34,4 @@ test_that("featureunion - basic", {
   expect_equal(names(model$variable.importance), param_names_union)
 
 })
+

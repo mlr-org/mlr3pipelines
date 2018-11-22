@@ -70,11 +70,11 @@ Graph = R6Class("Graph",
 
     # This should basically call trainGraph
     train = function(task) {
-      trainGraph(self$source_node, task)
+      trainGraph(self$source_nodes, task)
       invisible(self)
     },
     plot = function() {
-      graph_plot(self$source_node)
+      graph_plot(self$source_nodes)
       invisible(self)
     },
 
@@ -88,7 +88,7 @@ Graph = R6Class("Graph",
     },
 
     print = function(...) {
-      res = graph_map_topo(self$source_node, add_layer = TRUE)
+      res = graph_map_topo(self$source_nodes, add_layer = TRUE)
       res_string = tapply(
         res,
         attr(res, "layer"),
@@ -117,7 +117,7 @@ Graph = R6Class("Graph",
     },
 
     map = function(fnc, simplify = TRUE) {
-      graph_map_topo(self$source_node, fnc, simplify = simplify)
+      graph_map_topo(self$source_nodes, fnc, simplify = simplify)
     },
 
     find_by_id = function(id) {
@@ -134,7 +134,7 @@ Graph = R6Class("Graph",
         all(self$map(function(x) x$is_learnt))
     },
     param_set = function(value) {
-      if (missing(value)) graph_gather_params(self$source_node)
+      if (missing(value)) graph_gather_params(self$source_nodes)
       },
     param_vals = function(value) {
       if (missing(value)) list()
@@ -161,9 +161,10 @@ Graph = R6Class("Graph",
   )
 )
 
-trainGraph = function(root, task) {
-  root$inputs = list(task)
-  front = GraphNodesList$new(list(root))
+trainGraph = function(roots, task) {
+
+  lapply(roots, function(x) x$inputs = list(task))
+  front = GraphNodesList$new(roots)
 
   while(length(front) > 0L) {
     BBmisc::messagef("front step, front=%s", front$print_str)
@@ -245,7 +246,7 @@ graph_plot = function(root) {
 #'
 #' @noRd
 #'
-graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
+graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
 
   state = new.env()
   state$permanent = c()
@@ -278,7 +279,7 @@ graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_lay
     state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
   }
 
-  visit(root, state)
+  lapply(roots, visit, state = state)
 
   state$depth = state$depth[names(state$list)]
   result      = state$list[order(state$depth)]

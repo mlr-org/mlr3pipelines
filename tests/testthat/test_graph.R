@@ -26,8 +26,8 @@ test_that("Graph", {
   # Test active bindings
   expect_equal(names(g$ids), c(op1$id, op2$id, op3$id))
   expect_equal(g$param_vals, list())
-  expect_equal(g$param_set, graph_gather_params(root))
-  expect_equal(g$lhs$id, "scaler")
+  expect_equal(g$param_set, graph_gather_params(list(root)))
+  expect_equal(g$lhs[[1]]$id, "scaler")
   expect_equal(g$rhs$classif.rpart$id, "classif.rpart")
 
   # Test `[[` operator
@@ -69,8 +69,8 @@ test_that("Parallel graph", {
   # Test active bindings
   expect_equal(names(g$ids), c(op1$id, op2a$id, op2b$id, op3$id, op4$id))
   expect_equal(g$param_vals, list())
-  expect_equal(g$param_set, graph_gather_params(root))
-  expect_equal(g$lhs$id, "OpNULL")
+  expect_equal(g$param_set, graph_gather_params(list(root)))
+  expect_equal(g$lhs[[1]]$id, "OpNULL")
   expect_equal(g$rhs$classif.rpart$id, "classif.rpart")
 
   # Test `[[` operator
@@ -118,7 +118,7 @@ test_that("graph_map_topo - map function and return the output in topological or
   # Vis the graph: graph_plot(n1)
 
   expect_equivalent(
-    graph_map_topo(n1, function(x) x$id),
+    graph_map_topo(list(n1), function(x) x$id),
     c("1", "2", "5", "9", "3", "6", "7", "10", "4", "8", "11")
   )
 })

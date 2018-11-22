@@ -16,7 +16,7 @@ test_that("PipeOp - SparsePCA", {
   n1 = GraphNode$new(op1)
   expect_false(n1$can_fire)
 
-  trainGraph(n1, task)
+  trainGraph(list(n1), task)
   expect_true(n1$can_fire)
 
   expect_class(op1, "PipeOpSparsePCA")
@@ -24,4 +24,3 @@ test_that("PipeOp - SparsePCA", {
   expect_class(op1$result, "Task")
 
 })
-

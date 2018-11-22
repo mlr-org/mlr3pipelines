@@ -109,7 +109,7 @@ question:
 
 ```
 members:
-  source_node
+  source_nodes
 
 methods
 - index operator [[id]]  --> points to GraphNode|PipeOp

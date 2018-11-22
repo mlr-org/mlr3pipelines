@@ -20,7 +20,7 @@
 
   # convert the rhs to list of Graphs
   rhs = sugar_rhs_wrap(rhs)
-  rhs_list = lapply(rhs, function(x) x$source_node)
+  rhs_list = extract_nodes_list(rhs)
 
   if(length(lhs$rhs) == 1 || length(rhs_list) == 1) {
     # 1-to-1, n-to-1 1-to-n
@@ -54,7 +54,7 @@
 
   # convert the rhs to list of Graphs
   rhs = sugar_rhs_wrap(rhs)
-  rhs_list = lapply(rhs, function(x) x$source_node)
+  rhs_list = extract_nodes_list(rhs)
 
   if(length(lhs$rhs) == length(rhs_list)) {
     # n-to-n
@@ -86,9 +86,14 @@
 `%>x>%.Graph` = function(lhs, rhs) {
   # convert the rhs to list of Graphs
   rhs = sugar_rhs_wrap(rhs)
-  rhs_list = lapply(rhs, function(x) x$source_node)
+  rhs_list = extract_nodes_list(rhs)
   lapply(lhs$rhs, function(x) x$set_next(rhs_list))
   lhs
+}
+
+####### Helper functions ######
+extract_nodes_list = function(rhs) {
+  unlist(lapply(rhs, function(x) x$source_nodes), recursive = FALSE)
 }
 
 
