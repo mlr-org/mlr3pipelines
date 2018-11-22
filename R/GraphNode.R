@@ -95,7 +95,7 @@ GraphNode = R6::R6Class(
     add_next = graph_node_add_next,
     add_prev = graph_node_add_prev,
     train = function() {
-      if (!self$has_no_prevs) {
+      if (self$has_lhs) {
         self$inputs = self$prev_nodes$map(function(x) x$result)
       }
       BBmisc::messagef("Train op='%s'", self$id)
@@ -116,11 +116,10 @@ GraphNode = R6::R6Class(
     has_result = function() !is.null(self$pipeop$result),
     is_learnt  = function() self$pipeop$is_learnt,
 
-    has_no_prevs = function() length(self$prev_nodes) == 0L,
-    has_no_nexts = function() length(self$next_nodes) == 0L,
-    has_next = function() length(self$next_nodes) > 0L,
+    has_lhs = function() length(self$prev_nodes) > 0L,
+    has_rhs = function() length(self$next_nodes) > 0L,
     can_fire = function() {
-      if (self$has_no_prevs) length(self$inputs) > 0
+      if (!self$has_lhs) length(self$inputs) > 0
       else all(self$prev_nodes$map_s(function(x) x$has_result))
     },
     root_node = function() {
@@ -142,34 +141,5 @@ wrap_nodes = function(x) {
   } else if(is.list(x)) {
     x = lapply(x, check_node)
   }
-  x
-}
-
-#' Automatically transform PipeOp or a list of PipeOps into a list of GraphNodes
-#'
-#' @param x
-#'
-#' @return
-#'
-#' If \code{x} is a GraphNode the function returns the list(x).
-#'
-#' @noRd
-#'
-wrap_pipeops = function(x) {
-
-  wrap_pipeop = function(y) {
-    checkmate::assert_multi_class(y, c("PipeOp", "GraphNode"))
-    if(inherits(y, "PipeOp")) {
-      y = GraphNode$new(y)
-    }
-    y
-  }
-
-  if(inherits(x, "PipeOp") || inherits(x, "GraphNode")) {
-    x = list(wrap_pipeop(x))
-  } else if(is.list(x)) {
-    x = lapply(x, wrap_pipeop)
-  }
-
   x
 }

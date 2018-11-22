@@ -12,7 +12,7 @@ test_that("PipeOp - simple pipe", {
   n1 = GraphNode$new(op1)
   expect_false(n1$can_fire)
 
-  trainGraph(n1, task)
+  trainGraph(list(n1), task)
   expect_true(n1$can_fire)
 
   expect_class(op1, "PipeOpScaler")
@@ -35,7 +35,7 @@ test_that("PipeOp - learner pipe", {
   root = GraphNode$new(op1)
   root$set_next(GraphNode$new(op2))$set_next(GraphNode$new(op3))
 
-  trainGraph(root, task)
+  trainGraph(list(root), task)
   expect_class(op1$result, "Task")
   expect_class(op2$result, "Task")
   expect_class(op3$result, "Task")
@@ -58,7 +58,7 @@ test_that("Gather parameters", {
     set_next(GraphNode$new(op2))$
     set_next(GraphNode$new(op3))
 
-  ps = graph_gather_params(root)
+  ps = graph_gather_params(list(root))
 
   expect_class(ps, "ParamSet")
   expect_subset(sprintf("%s:%s", op1$id, op1$param_set$ids), ps$ids)
@@ -83,7 +83,7 @@ test_that("PipeOp", {
 
   n1$set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))
 
-  trainGraph(n1, task)
+  trainGraph(list(n1), task)
 
   expect_true(!is.null(op2a$params$model))
   expect_true(!is.null(op2b$params$model))

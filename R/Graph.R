@@ -45,25 +45,37 @@ Graph = R6Class("Graph",
 
   public = list(
 
-    source_node = list(),
+    source_nodes = list(),
 
     # FIXME: Do we need task_type and id?
     task_type = "classif",
     id = "foobar",
 
     # Do we clone/copy here? Otherwise state of OP's trained outside will change
-    initialize = function(source_node) {
+    initialize = function(source_nodes) {
+      # handles only GraphNode or list of the graph nodes
+      if(inherits(source_nodes, "GraphNode")) {
+        source_nodes = list(source_nodes)
+      } else if(is.list(source_nodes)) {
+        if(!all(vapply(source_nodes, TRUE, FUN = inherits, what = "GraphNode"))) {
+          stop("Graph can only be initialized using GraphNode or a list of GraphNodes")
+        }
+      } else {
+        stop("Only GraphNode or list of GraphNodes is supported.")
+      }
+
       # Fixme: Should we do consitency checks (unique Id's etc here?)
-      self$source_node = source_node
+      self$source_nodes = source_nodes
+      self
     },
 
     # This should basically call trainGraph
     train = function(task) {
-      trainGraph(self$source_node, task)
+      trainGraph(self$source_nodes, task)
       invisible(self)
     },
     plot = function() {
-      graph_plot(self$source_node)
+      graph_plot(self$source_nodes)
       invisible(self)
     },
 
@@ -77,7 +89,7 @@ Graph = R6Class("Graph",
     },
 
     print = function(...) {
-      res = graph_map_topo(self$source_node, add_layer = TRUE)
+      res = graph_map_topo(self$source_nodes, add_layer = TRUE)
       res_string = tapply(
         res,
         attr(res, "layer"),
@@ -106,7 +118,7 @@ Graph = R6Class("Graph",
     },
 
     map = function(fnc, simplify = TRUE) {
-      graph_map_topo(self$source_node, fnc, simplify = simplify)
+      graph_map_topo(self$source_nodes, fnc, simplify = simplify)
     },
 
     find_by_id = function(id) {
@@ -123,7 +135,7 @@ Graph = R6Class("Graph",
         all(self$map(function(x) x$is_learnt))
     },
     param_set = function(value) {
-      if (missing(value)) graph_gather_params(self$source_node)
+      if (missing(value)) graph_gather_params(self$source_nodes)
       },
     param_vals = function(value) {
       if (missing(value)) list()
@@ -141,7 +153,7 @@ Graph = R6Class("Graph",
       pkgs = self$map(function(x) x$pipeop$packages)
       unique(pkgs)
     },
-    lhs = function() { self$source_node },
+    lhs = function() { self$source_nodes },
     rhs = function() {
       self$map(function(x) {
         if(x$next_nodes$is_empty) return(x)
@@ -150,9 +162,10 @@ Graph = R6Class("Graph",
   )
 )
 
-trainGraph = function(root, task) {
-  root$inputs = list(task)
-  front = GraphNodesList$new(list(root))
+trainGraph = function(roots, task) {
+
+  lapply(roots, function(x) x$inputs = list(task))
+  front = GraphNodesList$new(roots)
 
   while(length(front) > 0L) {
     BBmisc::messagef("front step, front=%s", front$print_str)
@@ -234,7 +247,7 @@ graph_plot = function(root) {
 #'
 #' @noRd
 #'
-graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
+graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
 
   state = new.env()
   state$permanent = c()
@@ -250,7 +263,7 @@ graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_lay
     if(node$id %in% state$temporary) stop("Not a DAG")
     state$temporary = c(node$id, state$temporary) # mark temporarily
 
-    if(node$has_next) {
+    if(node$has_rhs) {
       res = lapply(
         node$next_nodes$xs,
         visit,
@@ -267,7 +280,7 @@ graph_map_topo = function(root, fnc = function(x) x$id, simplify = TRUE, add_lay
     state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
   }
 
-  visit(root, state)
+  lapply(roots, visit, state = state)
 
   state$depth = state$depth[names(state$list)]
   result      = state$list[order(state$depth)]
