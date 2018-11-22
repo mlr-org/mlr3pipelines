@@ -45,16 +45,27 @@ Graph = R6Class("Graph",
 
   public = list(
 
-    source_node = list(),
+    source_nodes = list(),
 
     # FIXME: Do we need task_type and id?
     task_type = "classif",
     id = "foobar",
 
     # Do we clone/copy here? Otherwise state of OP's trained outside will change
-    initialize = function(source_node) {
+    initialize = function(source_nodes) {
+
+      # handles only GraphNode or list of the graph nodes
+      if(inherits(source_nodes, "GraphNode")) {
+        source_nodes = list(source_nodes)
+      } else if(is.list(source_nodes)) {
+        all(vapply(source_nodes, TRUE, FUN = inherits, what = "GraphNode"))
+      } else {
+        stop("Only GraphNode or list of GraphNodes is supported.")
+      }
+
       # Fixme: Should we do consitency checks (unique Id's etc here?)
-      self$source_node = source_node
+      self$source_nodes = source_nodes
+      self
     },
 
     # This should basically call trainGraph
@@ -141,7 +152,7 @@ Graph = R6Class("Graph",
       pkgs = self$map(function(x) x$pipeop$packages)
       unique(pkgs)
     },
-    lhs = function() { self$source_node },
+    lhs = function() { self$source_nodes },
     rhs = function() {
       self$map(function(x) {
         if(x$next_nodes$is_empty) return(x)
