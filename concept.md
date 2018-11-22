@@ -95,7 +95,8 @@ methods:
 active bindings:
 - result : forwards to pipeop$result
 - has_result : forwards to pipeop$has_result
-- has_no_prevs [logical(1)] : are no prev nodes connected?
+- has_lhs [logical(1)] : are prev nodes connected?
+- has_rhs [logical(1)] : are next nodes connected?
 - can_fire [logical(1)] : are all input results available?
 
 
