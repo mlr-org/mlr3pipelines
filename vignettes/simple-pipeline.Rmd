@@ -24,6 +24,7 @@ This vignette showcases the general syntax and semantic behind `mlr3pipelines`.
 We first create an mlr task that, which we want to transform with the pipeline.
 
 ```{r}
+  library(mlr3)
   task = mlr_tasks$get("iris")
 ```
 
