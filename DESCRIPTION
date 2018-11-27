@@ -13,12 +13,12 @@ Encoding: UTF-8
 Depends:
     R (>= 3.0.2)
 Imports:
-    BBmisc (>= 1.11),
     R6,
     backports (>= 1.1.0),
     checkmate (>= 1.8.2),
     methods,
     mlr3,
+    mlr3misc,
     stats
 Suggests:
     igraph,
@@ -34,4 +34,5 @@ RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Remotes:
     mlr-org/mlr3,
+    mlr-org/mlr3misc,
     mlr-org/paradox

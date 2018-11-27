@@ -8,7 +8,7 @@ ListNamedEls = R6Class("ListNamedEls",
     initialize = function(xs = list(), payload_type, get_key) {
       assert_string(payload_type)
       assert_function(get_key)
-      names(xs) = vcapply(xs, get_key)
+      names(xs) = map_chr(xs, get_key)
       assert_list(xs, names = "unique", type = payload_type)
       self$payload_type = payload_type
       self$xs = xs

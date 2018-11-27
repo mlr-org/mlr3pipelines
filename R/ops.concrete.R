@@ -49,14 +49,14 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
       d[, "..row_id" := seq_len(nrow(d))]
-      
+
       db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
       tn = task$target_names
 
       # Should be:
       # private$.result = task$overwrite(d)
       private$.result = TaskClassif$new(id = task$id, backend = db, target = tn)
-      
+
       return(private$.result)
     },
 
@@ -190,10 +190,10 @@ PipeOpScaler = R6Class("PipeOpScaler",
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
       task = inputs[[1L]]
-      
+
       fn = task$feature_names
       d = task$data()
-      
+
       sc = scale(as.matrix(d[, ..fn]),
         center = self$param_vals$center,
         scale = self$param_vals$scale)
@@ -295,7 +295,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #     # sorting the vector first is probably a good idea. then iterate in C
 #     digits = ceiling(log10(1 / tol))
 #     cns = setdiff(colnames(data), dont.rm)
-#     ratio = vnapply(data[cns], function(x) {
+#     ratio = map_dbl(data[cns], function(x) {
 #       if (allMissing(x))
 #         return(0)
 #       if (is.double(x))
