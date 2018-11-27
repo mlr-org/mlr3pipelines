@@ -1,5 +1,7 @@
 # mlr3pipelines
 
+[![Travis build status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
+
 ## Target
 This package aims to fill the gap between loading the data and fitting models.
 
