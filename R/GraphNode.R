@@ -3,8 +3,8 @@ GraphElement = R6::R6Class("GraphElement",
   active = list(
       intype = function() stop("abstract"),  # list of character
       outtype = function() stop("abstract"),  # list of character
-      inputs = function() stop("abstract"),  # list of GraphEdge
-      outputs = function() stop("abstract")  # list of GraphEdge
+      in_edges = function() stop("abstract"),  # list of GraphEdge
+      out_edges = function() stop("abstract")  # list of GraphEdge
   )
 )
 
@@ -38,16 +38,18 @@ GraphNode = R6::R6Class("GraphNode",
   inherits = GraphElement,
 
   public = list(
-    pipeop = NULL,
+
     next_nodes = NULL,
     prev_nodes = NULL,
     initialize = function(pipeop, graph) {
-      self$pipeop = pipeop
+      private$.pipeop = pipeop
       self$graph = graph
       self$.next_nodes = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
       self$.prev_nodes = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
       self$.in_edges = sapply(names(pipeop$intype), GraphEdge$new, element = self, simplify = FALSE)
       self$.out_edges = sapply(names(pipeop$outtype), GraphEdge$new, element = self, simplify = FALSE)
+      graph$add_node(self)
+      self
     },
 
     print = function(...) {
@@ -60,10 +62,12 @@ GraphNode = R6::R6Class("GraphNode",
       .editlock = FALSE,
       .in_edges = NULL,
       .out_edges = NULL,
-      .graph = NULL
+      .graph = NULL,
+      .pipeop = NULL
   ),
   active = list(
-      graph = function() private$.graph
+      graph = function() private$.graph,
+      pipeop = function() private$.pipeop,
       prev_nodes = function(prev) {
         if (!missing(prev)) {
           connectgn(prev, ".prev_nodes", private)
@@ -78,7 +82,8 @@ GraphNode = R6::R6Class("GraphNode",
       },
       in_edges = function() private$.in_edges,
       out_edges = function() private$.out_edges,
-
+      intype = function() self$pipeop$intype,
+      outtype = function() self$pipeop$outtype,
     input_complete = function() !any(sapply(self$prev_nodes, is.null)),
     output_complete = function() !any(sapply(self$next_nodes, is.null))
   )
@@ -99,7 +104,7 @@ connectgn = function(newnodes, oldnodename, private) {
     }
     oldnode = private[[oldnodename]][[idx]]
     edgename = names(newnodes)[[idx]]
-    if (edgename == "") edgename = idx
+    if (is.null(edgename) || edgename == "") edgename = idx
     #TODO: assert class prev[[idx]]: NULL or GraphEdge
     if (identical(newnodes[[idx]], oldnode)) {
       next
@@ -110,7 +115,7 @@ connectgn = function(newnodes, oldnodename, private) {
   private[[oldnodename]] = newnodes
   private$.editlock = FALSE
   on.exit()
-  # TODO: update graph in / out nodes
+  self$graph$update_connections()
   # TODO: check types
 }
 

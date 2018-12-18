@@ -13,6 +13,7 @@ PipeOp = R6::R6Class("PipeOp",
       for (n in names(addnl_params)) {
         private$.param_vals[[n]] = addnl_params[[n]]
       }
+      self
     },
     print = function(...) {
       BBmisc::catf("PipeOp: <%s>", self$id)
@@ -27,7 +28,15 @@ PipeOp = R6::R6Class("PipeOp",
   ),
 
   active = list(
-    id = function() private$.id,
+      id = function(id) {
+        if (missing(private$.id)) {
+          id
+        } else {
+          private$.id = id
+
+          # TODO: maybe notify the graph about changed ID?
+        }
+      }
     param_set = function() private$.param_set,
     param_vals = function(vals) {
       if (missing(vals)) {

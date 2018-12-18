@@ -17,24 +17,34 @@
 #   - do we want the fourth layer of topological sorting?
 #   - how do we loops over all nodes? how do we apply something to all nodes?
 Graph = R6Class("Graph",
-
+  inherits = GraphElement,
   public = list(
-    source_nodes = list(),
 
     initialize = function() {
-      if(inherits(source_nodes, "GraphNode")) {
-        source_nodes = list(source_nodes)
-      } else if(is.list(source_nodes)) {
-        if(!all(vapply(source_nodes, TRUE, FUN = inherits, what = "GraphNode"))) {
-          stop("Graph can only be initialized using GraphNode or a list of GraphNodes")
-        }
-      } else {
-        stop("Only GraphNode or list of GraphNodes is supported.")
-      }
-
-      # Fixme: Should we do consitency checks (unique Id's etc here?)
-      self$source_nodes = source_nodes
+      update_connections()
       self
+    },
+
+    update_connections = function() {  # update intype, outtype, inputs, outputs
+      private$.in_edges = list()
+      private$.out_edges = list()
+      private$.intype = list()
+      private$.outtype = list()
+      for (node in self$node_list) {
+        assigncon(node$in_edges, node$intype, node$in_edges, ".in_edges", "intype", private)
+        assigncon(node$out_edges, node$outtype, node$out_edges, ".out_edges", "outtype", private)
+      }
+    },
+
+    add_node = function(node) {
+      if (!inherits(node, "GraphNode")) {
+        # TODO: assert node inherits PipeOp
+        node = GraphNode(node, self)
+      }
+      assert_identical(node$graph, self)
+      assert_null(private$.node_list[[node$pipeop$id]])
+      private$.node_list[[node$pipeop$id]] = node
+      update_connections()
     },
 
     # This should basically call trainGraph
@@ -80,25 +90,37 @@ Graph = R6Class("Graph",
       cat(output_string, "\n")
     },
 
-    reset = function() {
-      self$map(function(x) x$pipeop$reset(), simplify = FALSE)
-      invisible(self)
-    },
-
     map = function(fnc, simplify = TRUE) {
-      graph_map_topo(self$source_nodes, fnc, simplify = simplify)
-    },
-
-    find_by_id = function(id) {
-      # FIXME: We might want a version of traverseGraph that does this more efficiently.
-      assert_choice(id, self$ids)
-      nodes = self$map(function(x) {
-        if(x$id == id) return(x)
-      })
-      nodes[[1]]
+      sapply(self$sorted_node_list, fnc, simplify = simplify)
     }
   ),
   active = list(
+      node_list = function() private$.node_list,
+      sorted_node_list = function() {
+        queue = names(self$source_nodes)
+        out = queue
+        while (length(queue)) {
+          current = queue[1]
+          nexts = sapply(self$node_list[[current]]$out_edges, function(e) e$element$pipeop$id)
+          nexts = setdiff(nexts, out)
+          queue = c(queue[-1], nexts)
+          out = c(out, nexts)
+        }
+        private$.node_list[[out]]
+      },
+      intype = function() private$.intype,
+      outtype = function() private$.outtype,
+      in_edges = function() private$.in_edges,
+      out_edges = function() private$.out_edges,
+
+      source_nodes = function() {
+        source_ids = unique(sapply(self$in_edges, function(edge) edge$element$pipeop$id))
+        self$node_list[source_ids]
+      },
+
+
+
+
     is_learnt = function(value) {
         all(self$map(function(x) x$is_learnt))
     },
@@ -107,15 +129,6 @@ Graph = R6Class("Graph",
       },
     param_vals = function(value) {
       if (missing(value)) list()
-      # FIXME: Allow setting Params for the Operators here
-    },
-    ids = function(value) {
-      # FIXME: How are parallel Op's treated here?
-      if (missing(value)) {
-        self$map(function(x) x$id)
-      } else {
-        # FIXME: Should we allow overwriting id's here?
-      }
     },
     packages = function() {
       pkgs = self$map(function(x) x$pipeop$packages)
@@ -127,8 +140,30 @@ Graph = R6Class("Graph",
         if(x$next_nodes$is_empty) return(x)
       })
     }
-  )
+  ),
+  private = list(
+      .node_list = list(),
+      .intype = NULL,
+      .outtype = NULL,
+      .in_edges = NULL,
+      .out_edges = NULL
+  }
 )
+
+assigncon = function(edges, types, nodes, edgetarget, typetarget, private) {
+  for (conidx in seq_along(edges)) {
+    if (is.null(nodes[[conidx]])) {
+      edgename = names(edges)[[conidx]]
+      if (is.null(edgename) || edgename == "") {
+        edgename = length(private[[edgetarget]]) + 1
+      }
+      private$[[edgetarget]][[edgename]] = edges[[conidx]]
+      private$[[typetarget]][[edgename]] = types[[conidx]]
+    }
+  }
+}
+
+
 
 trainGraph = function(roots, task) {
 
