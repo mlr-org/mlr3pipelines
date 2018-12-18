@@ -7,7 +7,7 @@ PipeOp = R6Class("PipeOp",
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
-      private$.param_vals = BBmisc::extractSubList(param_set$params, "default", simplify = FALSE)
+      private$.param_vals = param_set$data$default
     },
 
     reset = function() {
