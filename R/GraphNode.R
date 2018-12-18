@@ -12,17 +12,27 @@ GraphEdge = R6::R6Class("GraphEdge",
   public = list(
       name = NULL,
       element = NULL,
-      initialize = function(name, element) {
+      direction = NULL,
+      initialize = function(name, element, direction) {
+        assert_choice(direction, c("in", "out"))
         self$name = name
         self$element = element
+        self$direction = direction
+      },
+      print = function() {
+        catf("%s-Edge name %s into GraphNode %s", self$direction, self$name, self$element$pipeop$id)
       }
   )
 )
 
-numbername = function(li) lapply(seq_along(li), function(x) {
-  ret = names2(li)[x]
-  if (is.na(ret)) x else ret
-})
+numbername = function(li) {
+  res = lapply(seq_along(li), function(x) {
+    ret = names2(li)[x]
+    if (is.na(ret)) x else ret
+  })
+  names(res) = names(li)
+  res
+}
 
 #### Class definition ####
 
@@ -47,12 +57,10 @@ GraphNode = R6::R6Class("GraphNode",
     initialize = function(pipeop, graph) {
       private$.pipeop = pipeop
       private$.graph = graph
-      private$.next_nodes = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
-      private$.prev_nodes = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
-      private$.in_edges = lapply(numbername(pipeop$intype), GraphEdge$new, element = self)
-      names(private$.in_edges) = names(pipeop$intype)
-      private$.out_edges = lapply(numbername(pipeop$outtype), GraphEdge$new, element = self)
-      names(private$.out_edges) = names(pipeop$outtype)
+      private$.next_node_edges = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
+      private$.prev_node_edges = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
+      private$.in_edges = sapply(numbername(pipeop$intype), GraphEdge$new, element = self, simplify = FALSE, direction = "in")
+      private$.out_edges = sapply(numbername(pipeop$outtype), GraphEdge$new, element = self, simplify = FALSE, direction = "out")
       graph$add_node(self)
       self
     },
@@ -62,8 +70,8 @@ GraphNode = R6::R6Class("GraphNode",
     }
   ),
   private = list(
-      .next_nodes = NULL,
-      .prev_nodes = NULL,
+      .next_node_edges = NULL,
+      .prev_node_edges = NULL,
       .editlock = FALSE,
       .in_edges = NULL,
       .out_edges = NULL,
@@ -73,18 +81,20 @@ GraphNode = R6::R6Class("GraphNode",
   active = list(
       graph = function() private$.graph,
       pipeop = function() private$.pipeop,
-      prev_nodes = function(prev) {
+      prev_node_edges = function(prev) {
         if (!missing(prev)) {
-          connectgn(prev, ".prev_nodes", self, private)
+          connectgn(prev, ".prev_node_edges", "next_node_edges", "in", self, private)
         }
-        private$.prev_nodes
+        private$.prev_node_edges
       },
-      next_nodes = function(nxt) {
+      next_node_edges = function(nxt) {
         if (!missing(nxt)) {
-          connectgn(nxt, ".next_nodes", self, private)
+          connectgn(nxt, ".next_node_edges", "prev_node_edges", "out", self, private)
         }
-        private$.next_nodes
+        private$.next_node_edges
       },
+      next_nodes = function() map(self$next_node_edges, "element"),
+      prev_nodes = function() map(self$prev_node_edges, "element"),
       in_edges = function() private$.in_edges,
       out_edges = function() private$.out_edges,
       intype = function() self$pipeop$intype,
@@ -94,32 +104,32 @@ GraphNode = R6::R6Class("GraphNode",
   )
 )
 
-connectgn = function(newnodes, oldnodename, self, private) {
+connectgn = function(newedges, oldedgename, inverseedgename, direction, self, private) {
   # TODO: assert prev is a list
-  if (!identical(names(newnodes), names(private[[oldnodename]]))) {
+  if (!identical(names(newedges), names(private[[oldedgename]]))) {
     stop("Can't change names of nodes")
   }
   if (private$.editlock) return(NULL)
-  backup = private[[oldnodename]]
-  on.exit({private$.editlock = FALSE ; private[[oldnodename]] = backup})
+  on.exit({private$.editlock = FALSE})
   private$.editlock = TRUE
-  for (idx in seq_along(newnodes)) {
-    if (!identical(newnodes[[idx]]$graph, private$.graph)) {
+  for (edge in newedges) {
+    # todo: assert edge is a GraphEdge
+    # TODO: check types
+    if (!identical(edge$element$graph, private$.graph)) {
       stop("Can't connect nodes that are not in the same graph")
     }
-    oldnode = private[[oldnodename]][[idx]]
-    edgename = names(newnodes)[[idx]]
-    if (is.null(edgename) || edgename == "") edgename = idx
-    #TODO: assert class prev[[idx]]: NULL or GraphEdge
-    if (identical(newnodes[[idx]], oldnode)) {
+  }
+  for (idx in seq_along(newedges)) {
+    oldedge = private[[oldedgename]][[idx]]
+    if (identical(newedges[[idx]], oldedge)) {
       next
     }
-    oldnode$element$next_nodes[[oldnode$name]] = NULL
-    newnodes[[idx]]$next_nodes[[newnodes[[idx]]$name]] = GraphEdge$new(edgename, self)
+
+    edgename = names2(newedges)[[idx]]
+    if (is.na(edgename)) edgename = idx
+    oldedge$element$next_nodes[[oldedge$name]] = NULL
+    newedges[[idx]]$element[[inverseedgename]][[newedges[[idx]]$name]] = GraphEdge$new(edgename, self, direction)
   }
-  private[[oldnodename]] = newnodes
-  private$.editlock = FALSE
-  on.exit()
+  private[[oldedgename]] = newedges
   self$graph$update_connections()
-  # TODO: check types
 }
