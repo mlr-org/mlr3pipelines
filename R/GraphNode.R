@@ -21,72 +21,6 @@ GraphEdge = R6::R6Class("GraphEdge",
 
 
 
-
-
-
-#' ListNamedEls for GraphNodes.
-#'
-#' @description
-#' It is used mainly inside the GraphNode class
-#' to store the next and previous nodes.
-#'
-#' It's not exported.
-#'
-#' @noRd
-#'
-GraphNodesList = R6Class("GraphNodesList",
-   inherit = ListNamedEls,
-
-   public = list(
-     initialize = function(xs = list()) {
-       super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
-     },
-     set_next = function(nodes) {
-       nodes = wrap_nodes(nodes)
-       self$map(function(x) x$set_next(nodes))
-       GraphNodesList$new(nodes)
-     }
-   )
-)
-
-##### Methods definitions #####
-# set_next
-graph_node_set_next = function(nodes) {
-
-  nodes = wrap_nodes(nodes)
-  self$next_nodes = GraphNodesList$new(nodes)
-  for(nn in nodes) {
-    nn$add_prev(self)
-  }
-
-  self$next_nodes
-}
-
-# set_prev
-graph_node_set_prev = function(nodes) {
-
-  nodes = wrap_nodes(nodes)
-  self$prev_nodes = GraphNodesList$new(nodes)
-  for(nn in nodes) {
-    nn$add_next(self)
-  }
-  self$prev_nodes
-}
-
-
-graph_node_add_next = function(nodes) {
-  nodes = wrap_nodes(nodes)
-  self$next_nodes$join_new(GraphNodesList$new(nodes))
-  self
-}
-
-graph_node_add_prev = function(nodes) {
-  nodes = wrap_nodes(nodes)
-  self$prev_nodes$join_new(GraphNodesList$new(nodes))
-  self
-}
-
-
 #### Class definition ####
 
 #' GraphNode
@@ -169,3 +103,71 @@ wrap_nodes = function(x) {
   }
   x
 }
+
+
+
+
+
+
+#' ListNamedEls for GraphNodes.
+#'
+#' @description
+#' It is used mainly inside the GraphNode class
+#' to store the next and previous nodes.
+#'
+#' It's not exported.
+#'
+#' @noRd
+#'
+GraphNodesList = R6Class("GraphNodesList",
+   inherit = ListNamedEls,
+
+   public = list(
+     initialize = function(xs = list()) {
+       super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
+     },
+     set_next = function(nodes) {
+       nodes = wrap_nodes(nodes)
+       self$map(function(x) x$set_next(nodes))
+       GraphNodesList$new(nodes)
+     }
+   )
+)
+
+##### Methods definitions #####
+# set_next
+graph_node_set_next = function(nodes) {
+
+  nodes = wrap_nodes(nodes)
+  self$next_nodes = GraphNodesList$new(nodes)
+  for(nn in nodes) {
+    nn$add_prev(self)
+  }
+
+  self$next_nodes
+}
+
+# set_prev
+graph_node_set_prev = function(nodes) {
+
+  nodes = wrap_nodes(nodes)
+  self$prev_nodes = GraphNodesList$new(nodes)
+  for(nn in nodes) {
+    nn$add_next(self)
+  }
+  self$prev_nodes
+}
+
+
+graph_node_add_next = function(nodes) {
+  nodes = wrap_nodes(nodes)
+  self$next_nodes$join_new(GraphNodesList$new(nodes))
+  self
+}
+
+graph_node_add_prev = function(nodes) {
+  nodes = wrap_nodes(nodes)
+  self$prev_nodes$join_new(GraphNodesList$new(nodes))
+  self
+}
+
