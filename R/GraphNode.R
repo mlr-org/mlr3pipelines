@@ -65,18 +65,16 @@ GraphNode = R6::R6Class("GraphNode",
   active = list(
       graph = function() private$.graph
       prev_nodes = function(prev) {
-        if (missing(prev)) {
-          private$.prev_nodes
-        } else {rev
+        if (!missing(prev)) {
           connectgn(prev, ".prev_nodes", private)
         }
+        private$.prev_nodes
       },
       next_nodes = function(nxt) {
-        if (missing(nxt)) {
-          private$.next_nodes
-        } else {
+        if (!missing(nxt)) {
           connectgn(nxt, ".next_nodes", private)
         }
+        private$.next_nodes
       },
       in_edges = function() private$.in_edges,
       out_edges = function() private$.out_edges,
@@ -113,27 +111,8 @@ connectgn = function(newnodes, oldnodename, private) {
   private$.editlock = FALSE
   on.exit()
   # TODO: update graph in / out nodes
+  # TODO: check types
 }
-
-wrap_nodes = function(x) {
-
-  check_node = function(y) {
-    checkmate::assert_class(y, "GraphNode")
-    y
-  }
-
-  if(inherits(x, "GraphNode")) {
-    x = list(check_node(x))
-  } else if(is.list(x)) {
-    x = lapply(x, check_node)
-  }
-  x
-}
-
-
-
-
-
 
 #' ListNamedEls for GraphNodes.
 #'
@@ -159,41 +138,4 @@ GraphNodesList = R6Class("GraphNodesList",
      }
    )
 )
-
-##### Methods definitions #####
-# set_next
-graph_node_set_next = function(nodes) {
-
-  nodes = wrap_nodes(nodes)
-  self$next_nodes = GraphNodesList$new(nodes)
-  for(nn in nodes) {
-    nn$add_prev(self)
-  }
-
-  self$next_nodes
-}
-
-# set_prev
-graph_node_set_prev = function(nodes) {
-
-  nodes = wrap_nodes(nodes)
-  self$prev_nodes = GraphNodesList$new(nodes)
-  for(nn in nodes) {
-    nn$add_next(self)
-  }
-  self$prev_nodes
-}
-
-
-graph_node_add_next = function(nodes) {
-  nodes = wrap_nodes(nodes)
-  self$next_nodes$join_new(GraphNodesList$new(nodes))
-  self
-}
-
-graph_node_add_prev = function(nodes) {
-  nodes = wrap_nodes(nodes)
-  self$prev_nodes$join_new(GraphNodesList$new(nodes))
-  self
-}
 
