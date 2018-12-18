@@ -525,21 +525,3 @@ g = PipeOpSetTarget("out1") %>>%
 	PipeOpsetTarget("final_out") %>>%
 	PipeOpLearner("rpart", id = "r3") 
 ```
-
-
-
-
-preproc operation: daten %>>% po --> preprozessierte Daten
-trainierte preproc op auf neue daten: neuedaten %>>% (daten %>>% po) --> neuedaten insofern veraendert wie (daten%>>%po) es voreinstellt
-training eines Modells: daten %>>% lrnpo --> modell trainiert auf daten
-prediction: neuedaten %>>% (daten %>>% lrnpo) --> neuedaten predicted auf dem trainierten modell
-splitOp: aufteilen in training und prediction data.
-beide stroeme in einen knoten, und der macht dann beides?
-trainierter knoten wird ausgespuckt und der predict-stream wird verwendet?
-resampling mit  splitOp(k) %>>% rep(lrnpo, k) gibt direkt performances zurueck?
-Alternativ splitOp(k) %>>% rep({lrnpo on training data, trained_learner on predicted data} %>>% measure performance, k)?
-vll eher durch metagraphen
-tuning: tunenode(<graph>), graph kriegt daten rein und gibt eine performance measure raus, und evtl auch ein predicted measure?
-problem hier ist: die performance will man vll auf eine art messen (e.g. cv), die tatsaechliche Anwendung dann auf den ganzen Datensatz, aber ein grossteil der operation ist schon der gleiche.
-zeilennummern will man schon irgendwie behalten
-send parameter confs through the graph
