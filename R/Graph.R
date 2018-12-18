@@ -168,12 +168,12 @@ trainGraph = function(roots, task) {
   front = GraphNodesList$new(roots)
 
   while(length(front) > 0L) {
-    BBmisc::messagef("front step, front=%s", front$print_str)
+    messagef("front step, front=%s", front$print_str)
     new_front = GraphNodesList$new()
     to_remove = integer(0L)
     for (i in seq_along(front)) {
       op = front[[i]]
-      BBmisc::messagef("checking front node %s, can_fire=%s", op$id, op$can_fire)
+      messagef("checking front node %s, can_fire=%s", op$id, op$can_fire)
       if (op$can_fire) {
         op$train()
         new_front$join_new(op$next_nodes)
@@ -182,7 +182,7 @@ trainGraph = function(roots, task) {
       }
     }
     front = new_front
-    BBmisc::messagef("front step done, front=%s", front$print_str)
+    messagef("front step done, front=%s", front$print_str)
   }
 }
 

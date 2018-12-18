@@ -18,13 +18,13 @@ PipeOp = R6Class("PipeOp",
     },
 
     print = function(...) {
-      BBmisc::catf("PipeOp: <%s>", self$id)
-      BBmisc::catf("parvals: <%s>", BBmisc::listToShortString(self$param_vals))
-      BBmisc::catf("is_learnt=%s", self$is_learnt)
-      BBmisc::catf("Input: %s", BBmisc::listToShortString(self$inputs))
-      BBmisc::catf("Result: %s", BBmisc::listToShortString(self$result))
-      BBmisc::catf("Prev ops: %s", self$prev_ops$print_str)
-      BBmisc::catf("Next ops: %s", self$next_ops$print_str)
+      catf("PipeOp: <%s>", self$id)
+      catf("parvals: <%s>", as_short_string(self$param_vals))
+      catf("is_learnt=%s", self$is_learnt)
+      catf("Input: %s", as_short_string(self$inputs))
+      catf("Result: %s", as_short_string(self$result))
+      catf("Prev ops: %s", self$prev_ops$print_str)
+      catf("Next ops: %s", self$next_ops$print_str)
     },
 
     #FIXME: AB machen
