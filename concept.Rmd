@@ -2,25 +2,21 @@
 
 ## Executive summary
 
-This design document describes some classes that represent the current API for mlr3piplines.
+This design document describes some classes that represent the current API for mlr3pipelines.
 In short, a **Pipeline** is a doubly connected graph, that contains several **GraphNode**s.
 Each **GraphNode** contains a **PipeOP**, that contains the logic used to manipulate the inputs, i.e.
-functions that transform a pipe's inputs to it's outputs.
-This repository's aim is to expose a set of building blocks that can be used by users to
-create and tune over arbitrarily complex pipelines.
-
-In order to allow for more advanced Pipelines like *stacking* or *ensembling*, we require
-more complicated building blocks, which is why some building blocks seem overly complex.
+functions that transform a pipe's inputs to its outputs.
 
 ------------------------------------------------------------------------------------------
 ## class PipeOp
 
-concept:
+Description:
 A PipeOp is a single tranformation of inputs into outputs.
 During training it takes inputs, tranforms them, while doing that learns and stores its
 parameters and then returns the output.
+During prediction it applies the learned params to the input and transforms the input to an output.
 
-members:
+Usage:
 - new(id, params) [character(1), ParamSet] -> [PipeOp]
 - id  [character(1)]
 - param_set [ParamSet]
@@ -30,7 +26,7 @@ members:
 - train(input) : [any] -> [any]
 - predict(input) : [any] -> [any]
 
-detail:
+Details:
   id: AB that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
   param_set: The set of all exposed parameters of the PipeOp.
   par_vals: A named list of parameter settings where all setting must come from `param_set`.
@@ -50,13 +46,12 @@ detail:
 
 ## class GraphNode
 
-concept:
+Description:
 A GraphNode is a node of a (doubly connected) DAG, where each node carries as payload a single PipeOp.
-Computational results in that graph only flow forward, but we store connection to predecessors of a node for
+Computational results in that graph only flow forward, but we store connections to predecessors of a node for
 convenience.
 The operation of a node can be executed when results from all predecessors are available.
-They are then passed to the PipeOp, the PipeOp is trained / predicted, and the result is stored in the node.
-# FIXME: results in pipeop or in graphnode
+They are then passed to the PipeOp, the PipeOp is trained / predicted, and the result is stored in the PipeOp.
 
 Usage:
 - pipeop  [PipeOp]      : operator in that node
@@ -80,13 +75,17 @@ can_fire: Can this node compute its results - because all inputs / results of pr
 
 ## class Graph
 
+Description:
+The graph is a container class for the complete computational graph. It is made up of a list of
+(connected) GraphNodes, it can be trained and predicted.
+
 Usage:
 - nodes [list of GraphNode]
-- get_node [character(1)] -> [GraphNode]
-- get_pipeop [character(1)] -> [PipeOp]
 - ids [character]
 - lhs [list of GraphNode]
 - rhs [list of GraphNode]
+- get_node(id) [character(1)] -> [GraphNode]
+- get_pipeop(id) [character(1)] -> [PipeOp]
 
 Details:
 - get_node: Return GraphNode by id of the enclosed PipeOp.
@@ -98,14 +97,17 @@ Details:
 
 ## Operation G >> H
 
-Connection operator, connects 2 partial graphs.
+Connection operator, connects 2 partial graphs G and H.
 
 [Graph], [Graph] -> [Graph]
 If G or H are PipeOps, they the will leveled up to a Graph, containing a single node.
 
 We check that the ids(G) and ids(H) are disjoint (or throw an error), then
 we connect the rhs(G) to the lhs(H) as outlined below.
-Case 1-1: If length(rhs(G)) == 1 and length(lhs(H)), so G has a single sink and H has a single source, we directly connect them.
+Case 1-1: If length(rhs(G)) == 1 and length(lhs(H)) == 1, so G has a single sink and H has a single source, we directly connect them.
+Case n-1: If length(rhs(G)) == n and length(lhs(H)) == 1, so G has multiple sinks, and H a single source, we connect all nodes in rhs(G) withe the node lhs(H).
+Case 1-n: If length(rhs(G)) == 1 and length(lhs(H)) == n, we require that the PipeOp in rhs(G) is a so-called broadcaster, see below. We connect
+this broadcaster with all elements in lhs(H).
 All other cases: Error.
 
 Operator `>>` will always deep-clone its arguments on call.
@@ -124,20 +126,20 @@ PipeOps can have the property "aggregate" or "broadcast".
 
 An aggregating PipeOp will only take an input which is a list. This list is made up of the results
 of all of its predecessors, when the PipeOp is used in a graph.
-Its specific aggregtaion functionality handles this list (typically
-by somehow combinining the elements to a larger object, or selecting from the input elelemnts).
+Its specific aggregation functionality handles this list (typically
+by somehow combinining the elements to a larger object, or selecting something from the input elements).
 Examples of aggregators are PipeOpModelAvg, PipeOpFeatureUnion, PipeOpUnbranch.
 
-An broadcasting PipeOp always returns a list. If the PipeOp is used in a graph,
+A broadcasting PipeOp always returns a list. If the PipeOp is used in a graph,
 then its result-list is split up into single elements and these elements are propagated one-per-edge
 on the outgoing edges. Note that this implies that the PipeOp always has to return a list of the same
-length as its encapsulating GraphNode has successors.
-Examples of broadcasters are PipeOpCopy, PipeOpBranch.
+length as its encapsulating GraphNode has number of successors.
+Examples of broadcasters are PipeOpCopy, PipeOpBranch, PipeOpChunk
 
-# Topological sorting and layer of a Graph
+# Topological sorting and layers of a Graph
 A DAG is made up of layers of nodes, depending on how "late" in the DAG a node appears, i.e., many how previous
-computational steps need to be processed until we can finally compute that node. To make this more
-explicit: We call the set of all nodes with no incoming endges the set of "sources" of a graph, or the
+computational steps are needed to be processed until we can finally compute that node. To make this more
+explicit: We call the set of all nodes with no incoming edges the set of "sources" of a graph, or the
 LHS of a graph. This is layer 0.
 Layer 1 is made up of all nodes, whose direct predecessors are only in layer 0.
 Layer 2 is made up of all nodes, whose direct predecessors are only in layer 1 or 0.
@@ -147,11 +149,11 @@ The last layer, which is the set of all nodes without outgoing edges, we call th
 
 
 # Training and predicting on a computational graph
-When we train computational graph, we proceed in topological layers. We initialize by
+When we train a computational graph, we proceed in topological layers. We initialize by
 feeding the input object (a task) into each node in layer 0. We then compute all results
-in layer 0, store the respectice results on each node. Then we train layer 1. This is possible,
-as all nodes in layer only require results from layer 0. Then we train layer 2. This is possible
-as all nodes in layer 2 only require results from layer 1 or 2. And so on.
+in layer 0, store the respective results on each node. Then we train layer 1. This is possible,
+as all nodes in layer 1 only require results from layer 0. Then we train layer 2. This is possible
+as all nodes in layer 2 only require results from layer 1 or 0. And so on.
 Computing the results of one layer can be done in parallel.
 After a finite amount of steps, the RHS of the graph will have been processed. This list
 of results of the RHS is the result of the graph computation.
