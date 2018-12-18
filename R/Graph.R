@@ -194,6 +194,13 @@ length.Graph = function(x) {
   x$node_list[[i]]
 }
 
+#' @export
+`[[<-.Graph` = function(x, i, j, value) {
+  if (!identical(x$node_list[[i]], value)) {
+    stop("Cannot re-assign graph nodes")
+  }
+}
+
 graph_to_edge_list = function(root) {
   edges = root$map(simplify = FALSE, function(x) {
     res = cbind(
