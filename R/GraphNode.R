@@ -20,17 +20,7 @@ GraphNodesList = R6Class("GraphNodesList",
        self$map(function(x) x$set_next(nodes))
        GraphNodesList$new(nodes)
      }
-   ),
-   private = list(
-    deep_clones = function(name, value){
-      if (name == "xs") {
-        print("foooo")
-        map_if(value, function(x) inherits(x, "R6"), function(x) x$clone(deep = TRUE))
-      } else {
-        value
-      }
-    }
-  )
+   )
 )
 
 ##### Methods definitions #####

@@ -163,7 +163,6 @@ Graph = R6Class("Graph",
   private = list(
     deep_clone = function(name, value) {
       if (name == "source_nodes") {
-        print(value)
         map(value, function(x) x$clone(deep = TRUE))
       } else {
         value

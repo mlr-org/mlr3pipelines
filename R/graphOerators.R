@@ -36,7 +36,7 @@ if (FALSE) {
 # returns a Graph
 #' @export
 greplicate = function(graph, n) {
-  useMethod("greplicate")
+  UseMethod("greplicate")
 }
 
 #' @export
@@ -51,16 +51,25 @@ greplicate.GraphNode = function(graph, n) {
 
 #' @export
 greplicate.Graph = function(graph, n) {
-  #FIXME: This needs to deep copy the graph and increment the id of each pipeop
-  graphs = replicate(n, expr = graph$clone(deep = TRUE), simplify = FALSE)
+  graphs = map(seq_len(n), function(i) {
+    g_new = graph$clone(deep = TRUE)
+    #FIXME: This would be nicer with a purrr modify
+    for (id in graph$ids) {
+      node = g_new$find_by_id(id)
+      node$pipeop$id = paste(id, i, sep = "_")
+    }
+    return(g_new)
+  })
   do.call(gunion, graphs)
 }
 
 
 
 if (FALSE) {
-  g1 = PipeOpPCA$new() %>>% PipeOpScaler$new()
-  greplicate(g1, 5) #Does not work yet
+  load_all()
+  graph = PipeOpPCA$new() %>>% PipeOpScaler$new()
+  g2 = greplicate(graph, 1) #Does not work yet
+  g2$plot()
   greplicate(PipeOpPCA$new(), 5)
   greplicate(GraphNode$new(PipeOpPCA$new()), 5)
 }
