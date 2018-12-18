@@ -17,11 +17,11 @@
 #   - do we want the fourth layer of topological sorting?
 #   - how do we loops over all nodes? how do we apply something to all nodes?
 Graph = R6Class("Graph",
-  inherits = GraphElement,
+  inherit = GraphElement,
   public = list(
 
     initialize = function() {
-      update_connections()
+      self$update_connections()
       self
     },
 
@@ -31,8 +31,8 @@ Graph = R6Class("Graph",
       private$.intype = list()
       private$.outtype = list()
       for (node in self$node_list) {
-        assigncon(node$in_edges, node$intype, node$in_edges, ".in_edges", "intype", private)
-        assigncon(node$out_edges, node$outtype, node$out_edges, ".out_edges", "outtype", private)
+        assigncon(node$in_edges, node$intype, node$next_nodes, ".in_edges", ".intype", private)
+        assigncon(node$out_edges, node$outtype, node$prev_nodes, ".out_edges", ".outtype", private)
       }
     },
 
@@ -41,10 +41,10 @@ Graph = R6Class("Graph",
         # TODO: assert node inherits PipeOp
         node = GraphNode(node, self)
       }
-      assert_identical(node$graph, self)
+      assert(identical(node$graph, self))
       assert_null(private$.node_list[[node$pipeop$id]])
       private$.node_list[[node$pipeop$id]] = node
-      update_connections()
+      self$update_connections()
     },
 
     # This should basically call trainGraph
@@ -106,7 +106,7 @@ Graph = R6Class("Graph",
           queue = c(queue[-1], nexts)
           out = c(out, nexts)
         }
-        private$.node_list[[out]]
+        private$.node_list[out]
       },
       intype = function() private$.intype,
       outtype = function() private$.outtype,
@@ -114,13 +114,13 @@ Graph = R6Class("Graph",
       out_edges = function() private$.out_edges,
 
       source_nodes = function() {
-        source_ids = unique(sapply(self$in_edges, function(edge) edge$element$pipeop$id))
+        source_ids = unique(map_chr(self$in_edges, function(edge) edge$element$pipeop$id))
         self$node_list[source_ids]
       },
       sink_nodes = function() {
-        sink_ids = unique(sapply(self$out_edges, function(edge) edge$element$pipeop$id))
+        sink_ids = unique(map_chr(self$out_edges, function(edge) edge$element$pipeop$id))
         self$node_list[sink_ids]
-      }
+      },
     is_learnt = function(value) {
         all(self$map(function(x) x$is_learnt))
     },
@@ -142,7 +142,7 @@ Graph = R6Class("Graph",
       .outtype = NULL,
       .in_edges = NULL,
       .out_edges = NULL
-  }
+  )
 )
 
 assigncon = function(edges, types, nodes, edgetarget, typetarget, private) {
@@ -152,8 +152,8 @@ assigncon = function(edges, types, nodes, edgetarget, typetarget, private) {
       if (is.null(edgename) || edgename == "") {
         edgename = length(private[[edgetarget]]) + 1
       }
-      private$[[edgetarget]][[edgename]] = edges[[conidx]]
-      private$[[typetarget]][[edgename]] = types[[conidx]]
+      private[[edgetarget]][[edgename]] = edges[[conidx]]
+      private[[typetarget]][[edgename]] = types[[conidx]]
     }
   }
 }
@@ -249,16 +249,16 @@ graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_la
   state$depth = numeric()
 
   visit = function(node, state, depth = 1) {
-    if(node$id %in% state$permanent) {
-      state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
+    if(node$pipeop$id %in% state$permanent) {
+      state$depth[node$pipeop$id] = pmax(depth, state$depth[node$pipeop$id], na.rm = TRUE)
       return()
     }
-    if(node$id %in% state$temporary) stop("Not a DAG")
-    state$temporary = c(node$id, state$temporary) # mark temporarily
+    if(node$pipeop$id %in% state$temporary) stop("Not a DAG")
+    state$temporary = c(node$pipeop$id, state$temporary) # mark temporarily
 
-    if(node$has_rhs) {
+    if(!all(map_lgl(node$next_nodes, is.null))) {
       res = lapply(
-        node$next_nodes$xs,
+        Filter(Negate(is.null), node$next_nodes),
         visit,
         state = state,
         depth = depth + 1
@@ -266,11 +266,11 @@ graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_la
     } else {
       res = NULL
     }
-    state$permanent = c(node$id, state$permanent) # mark permanent
-    state$temporary = state$temporary[node$id != state$temporary]
+    state$permanent = c(node$pipeop$id, state$permanent) # mark permanent
+    state$temporary = state$temporary[node$pipeop$id != state$temporary]
 
-    state$list[[node$id]] = fnc(node)
-    state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
+    state$list[[node$pipeop$id]] = fnc(node)
+    state$depth[node$pipeop$id] = pmax(depth, state$depth[node$pipeop$id], na.rm = TRUE)
   }
 
   lapply(roots, visit, state = state)
@@ -279,7 +279,9 @@ graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_la
   result      = state$list[order(state$depth)]
   state$depth = sort(state$depth)
 
-  result = if(simplify) simplify2array(result) else result
+  result = if (simplify) {
+             if (length(result)) simplify2array(result) else logical(0)
+           } else result
   if(add_layer) attr(result, "layer") = state$depth
   result
 }

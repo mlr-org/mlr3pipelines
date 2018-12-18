@@ -7,7 +7,7 @@ PipeOp = R6::R6Class("PipeOp",
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
-      private$.param_vals = BBmisc::extractSubList(param_set$params, "default", simplify = FALSE)
+      private$.param_vals = map(param_set$params, "default")
       addnl_params = c(list(...), param_vals)
       checkmate::assert_list(addnl_params, names = "unique")
       for (n in names(addnl_params)) {
@@ -21,7 +21,7 @@ PipeOp = R6::R6Class("PipeOp",
       BBmisc::catf("is_learnt=%s", self$is_learnt)
       BBmisc::catf("Input: %s", BBmisc::listToShortString(self$inputs))
       BBmisc::catf("Result: %s", BBmisc::listToShortString(self$result))
-    }
+    },
 
     train = function(...) stop("no train function given"),  # TODO: some better way to make smth abstract?
     predict = function(...) stop("no predict function given")
@@ -29,14 +29,14 @@ PipeOp = R6::R6Class("PipeOp",
 
   active = list(
       id = function(id) {
-        if (missing(private$.id)) {
-          id
+        if (missing(id)) {
+          private$.id
         } else {
           private$.id = id
 
           # TODO: maybe notify the graph about changed ID?
         }
-      }
+      },
     param_set = function() private$.param_set,
     param_vals = function(vals) {
       if (missing(vals)) {
@@ -45,7 +45,7 @@ PipeOp = R6::R6Class("PipeOp",
         # TODO: param check
         private$.param_vals = vals
       }
-    }
+    },
     state = function() private$.state,
     result = function() private$.result,
     is_learnt = function() !is.null(self$state),

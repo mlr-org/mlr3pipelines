@@ -19,6 +19,11 @@ GraphEdge = R6::R6Class("GraphEdge",
   )
 )
 
+numbername = function(li) lapply(seq_along(li), function(x) {
+  ret = names2(li)[x]
+  if (is.na(ret)) x else ret
+})
+
 #### Class definition ####
 
 #' GraphNode
@@ -35,19 +40,19 @@ GraphEdge = R6::R6Class("GraphEdge",
 #'
 #'
 GraphNode = R6::R6Class("GraphNode",
-  inherits = GraphElement,
+  inherit = GraphElement,
 
   public = list(
 
-    next_nodes = NULL,
-    prev_nodes = NULL,
     initialize = function(pipeop, graph) {
       private$.pipeop = pipeop
-      self$graph = graph
-      self$.next_nodes = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
-      self$.prev_nodes = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
-      self$.in_edges = sapply(names(pipeop$intype), GraphEdge$new, element = self, simplify = FALSE)
-      self$.out_edges = sapply(names(pipeop$outtype), GraphEdge$new, element = self, simplify = FALSE)
+      private$.graph = graph
+      private$.next_nodes = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
+      private$.prev_nodes = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
+      private$.in_edges = lapply(numbername(pipeop$intype), GraphEdge$new, element = self)
+      names(private$.in_edges) = names(pipeop$intype)
+      private$.out_edges = lapply(numbername(pipeop$outtype), GraphEdge$new, element = self)
+      names(private$.out_edges) = names(pipeop$outtype)
       graph$add_node(self)
       self
     },
@@ -70,13 +75,13 @@ GraphNode = R6::R6Class("GraphNode",
       pipeop = function() private$.pipeop,
       prev_nodes = function(prev) {
         if (!missing(prev)) {
-          connectgn(prev, ".prev_nodes", private)
+          connectgn(prev, ".prev_nodes", self, private)
         }
         private$.prev_nodes
       },
       next_nodes = function(nxt) {
         if (!missing(nxt)) {
-          connectgn(nxt, ".next_nodes", private)
+          connectgn(nxt, ".next_nodes", self, private)
         }
         private$.next_nodes
       },
@@ -89,7 +94,7 @@ GraphNode = R6::R6Class("GraphNode",
   )
 )
 
-connectgn = function(newnodes, oldnodename, private) {
+connectgn = function(newnodes, oldnodename, self, private) {
   # TODO: assert prev is a list
   if (!identical(names(newnodes), names(private[[oldnodename]]))) {
     stop("Can't change names of nodes")
@@ -99,7 +104,7 @@ connectgn = function(newnodes, oldnodename, private) {
   on.exit({private$.editlock = FALSE ; private[[oldnodename]] = backup})
   private$.editlock = TRUE
   for (idx in seq_along(newnodes)) {
-    if (!identical(newnodes[[idx]]$element$graph, private$.graph)) {
+    if (!identical(newnodes[[idx]]$graph, private$.graph)) {
       stop("Can't connect nodes that are not in the same graph")
     }
     oldnode = private[[oldnodename]][[idx]]
@@ -110,7 +115,7 @@ connectgn = function(newnodes, oldnodename, private) {
       next
     }
     oldnode$element$next_nodes[[oldnode$name]] = NULL
-    newnodes[[idx]]$element$next_nodes[[newnodes[[idx]]$name]] = GraphEdge(edgename, self)
+    newnodes[[idx]]$next_nodes[[newnodes[[idx]]$name]] = GraphEdge$new(edgename, self)
   }
   private[[oldnodename]] = newnodes
   private$.editlock = FALSE
@@ -118,29 +123,3 @@ connectgn = function(newnodes, oldnodename, private) {
   self$graph$update_connections()
   # TODO: check types
 }
-
-#' ListNamedEls for GraphNodes.
-#'
-#' @description
-#' It is used mainly inside the GraphNode class
-#' to store the next and previous nodes.
-#'
-#' It's not exported.
-#'
-#' @noRd
-#'
-GraphNodesList = R6Class("GraphNodesList",
-   inherit = ListNamedEls,
-
-   public = list(
-     initialize = function(xs = list()) {
-       super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
-     },
-     set_next = function(nodes) {
-       nodes = wrap_nodes(nodes)
-       self$map(function(x) x$set_next(nodes))
-       GraphNodesList$new(nodes)
-     }
-   )
-)
-
