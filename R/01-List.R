@@ -18,7 +18,7 @@ ListNamedEls = R6Class("ListNamedEls",
     add = function(x) {
       assert_class(x, self$payload_type)
       k = self$get_key(x)
-      assert_true(BBmisc::`%nin%`(k, self$keys))
+      assert_true(k %nin% self$keys)
       self$xs[[k]] = x
     },
 
@@ -40,7 +40,7 @@ ListNamedEls = R6Class("ListNamedEls",
     },
 
 
-    print = function(...) BBmisc::catf(self$print_str),
+    print = function(...) catf(self$print_str),
 
     #FIXME this is bad, but in need this now
     map = function(f) lapply(self$xs, f),

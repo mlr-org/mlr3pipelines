@@ -98,13 +98,13 @@ GraphNode = R6::R6Class(
       if (self$has_lhs) {
         self$inputs = self$prev_nodes$map(function(x) x$result)
       }
-      BBmisc::messagef("Train op='%s'", self$id)
+      messagef("Train op='%s'", self$id)
       self$pipeop$train(self$inputs)
     },
     next_node = function(id = 1) self$next_nodes[[id]],
 
     print = function(...) {
-      BBmisc::catf("GraphNode: <%s>", self$id)
+      catf("GraphNode: <%s>", self$id)
     }
   ),
   private = list(),
