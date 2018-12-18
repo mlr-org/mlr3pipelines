@@ -65,7 +65,7 @@ Graph = R6Class("Graph",
       invisible(self)
     },
     plot = function() {
-      graph_plot(self$source_nodes)
+      graph_plot(self$node_list)
       invisible(self)
     },
 
@@ -195,12 +195,11 @@ length.Graph = function(x) {
   x
 }
 
-graph_to_edge_list = function(root) {
-  edges = root$map(simplify = FALSE, function(x) {
+graph_to_edge_list = function(nodes) {
+  edges = map(sort_nodes(nodes), function(x) {
     res = cbind(
-
-      x$id,
-      x$next_nodes$map(function(y) y$id)
+      x$pipeop$id,
+      map_chr(Filter(Negate(is.null), x$next_nodes), function(y) y$pipeop$id)
     )
     if(ncol(res) > 1) res
   })
@@ -210,15 +209,21 @@ graph_to_edge_list = function(root) {
   edges
 }
 
-graph_plot = function(root) {
+graph_plot = function(nodes) {
   if (!requireNamespace("igraph", quietly = TRUE)) {
     stop("Please install package 'igraph'")
   }
 
-  edges = graph_to_edge_list(root)
-  g = igraph::graph_from_edgelist(edges)
-  layout =  igraph::layout_with_sugiyama(g)
+  edges = graph_to_edge_list(nodes)
+  if (length(edges)) {
+    g = igraph::graph_from_edgelist(edges, directed = TRUE)
+  } else {
+    g = igraph::make_empty_graph()
+  }
 
+  forgotten = setdiff(names(nodes), edges)
+  g = igraph::add_vertices(g, length(forgotten), name = forgotten)
+  layout = igraph::layout_with_sugiyama(g)
   plot(g, layout = layout$layout)
 }
 
