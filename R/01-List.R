@@ -98,3 +98,29 @@ ElFooBar = R6Class("ElFooBar",
 
 
 
+
+#' ListNamedEls for GraphNodes.
+#'
+#' @description
+#' It is used mainly inside the GraphNode class
+#' to store the next and previous nodes.
+#'
+#' It's not exported.
+#'
+#' @noRd
+#'
+GraphNodesList = R6Class("GraphNodesList",
+   inherit = ListNamedEls,
+
+   public = list(
+     initialize = function(xs = list()) {
+       super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
+     },
+     set_next = function(nodes) {
+       nodes = wrap_nodes(nodes)
+       self$map(function(x) x$set_next(nodes))
+       GraphNodesList$new(nodes)
+     }
+   )
+)
+

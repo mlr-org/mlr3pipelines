@@ -117,10 +117,10 @@ Graph = R6Class("Graph",
         source_ids = unique(sapply(self$in_edges, function(edge) edge$element$pipeop$id))
         self$node_list[source_ids]
       },
-
-
-
-
+      sink_nodes = function() {
+        sink_ids = unique(sapply(self$out_edges, function(edge) edge$element$pipeop$id))
+        self$node_list[sink_ids]
+      }
     is_learnt = function(value) {
         all(self$map(function(x) x$is_learnt))
     },
@@ -131,15 +131,10 @@ Graph = R6Class("Graph",
       if (missing(value)) list()
     },
     packages = function() {
-      pkgs = self$map(function(x) x$pipeop$packages)
-      unique(pkgs)
+      unique(self$map(function(x) x$pipeop$packages))
     },
-    lhs = function() { self$source_nodes },
-    rhs = function() {
-      self$map(function(x) {
-        if(x$next_nodes$is_empty) return(x)
-      })
-    }
+    lhs = function() self$source_nodes,
+    rhs = function() self$sink_nodes
   ),
   private = list(
       .node_list = list(),
@@ -191,21 +186,16 @@ trainGraph = function(roots, task) {
 
 #' @export
 length.Graph = function(x) {
-  length(x$ids)
+  length(x$node_list)
 }
 
 #' @export
 `[[.Graph` = function(x, i, j, ...) {
-  if (is.character(i)) {
-    x$find_by_id(i)
-  } else if (is.integer(i)) {
-    # FIXME: This will break for parallel operators.
-    x$find_by_id(x$ids[i])
-  }
+  x$node_list[[i]]
 }
 
 graph_to_edge_list = function(root) {
-  edges = graph_map_topo(root, simplify = FALSE, function(x) {
+  edges = root$map(simplify = FALSE, function(x) {
     res = cbind(
 
       x$id,
@@ -296,8 +286,7 @@ graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_la
 
 graph_gather_params = function(root) {
 
-  all_params = graph_map_topo(
-    root,
+  all_params = root$map(
     function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
     simplify = FALSE
   )
