@@ -71,7 +71,7 @@ graph_node_add_prev = function(nodes) {
 #' connections between the \code{PipeOps}. The set of interconnected
 #' GraphNodes creates the pipeline graph.
 #'
-#' @usage GraphNode$new(pipeop)
+#' @usage GraphNode
 #'
 #' @importFrom R6 R6Class
 #'
