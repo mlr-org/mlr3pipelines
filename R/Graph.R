@@ -31,8 +31,20 @@ Graph = R6Class("Graph",
       private$.intype = list()
       private$.outtype = list()
       for (node in self$node_list) {
-        assigncon(node$in_edges, node$intype, node$next_nodes, ".in_edges", ".intype", private)
-        assigncon(node$out_edges, node$outtype, node$prev_nodes, ".out_edges", ".outtype", private)
+        assigncon = function(edges, types, nodes, edgetarget, typetarget) {
+          for (conidx in seq_along(edges)) {
+            if (is.null(nodes[[conidx]])) {
+              edgename = names2(edges)[[conidx]]
+              if (is.na(edgename)) {
+                edgename = length(private[[edgetarget]]) + 1
+              }
+              private[[edgetarget]][[edgename]] = edges[[conidx]]
+              private[[typetarget]][[edgename]] = types[[conidx]]
+            }
+          }
+        }
+        assigncon(node$in_edges, node$intype, node$next_nodes, ".in_edges", ".intype")
+        assigncon(node$out_edges, node$outtype, node$prev_nodes, ".out_edges", ".outtype")
       }
     },
 
@@ -67,19 +79,21 @@ Graph = R6Class("Graph",
     },
 
     print = function(...) {
-      res = graph_map_topo(self$source_nodes, add_layer = TRUE)
+      if (!length(self$node_list)) return(cat("Empty Graph.\n"))
+
+      layers = sort_nodes(self$node_list, TRUE)
       res_string = tapply(
-        res,
-        attr(res, "layer"),
-        FUN = function(x) paste(x, collapse = ",")
+        names(layers),
+        layers,
+        FUN = paste,
+        collapse = ","
       )
 
       res_size = tapply(
-        res,
-        attr(res, "layer"),
-        FUN = function(x) length(x)
+        names(layers),
+        layers,
+        FUN = length
       )
-
       output_string = paste(
         sprintf("[(%s), %s]", res_string, res_size),
         collapse = " >> "
@@ -97,16 +111,7 @@ Graph = R6Class("Graph",
   active = list(
       node_list = function() private$.node_list,
       sorted_node_list = function() {
-        queue = names(self$source_nodes)
-        out = queue
-        while (length(queue)) {
-          current = queue[1]
-          nexts = sapply(self$node_list[[current]]$out_edges, function(e) e$element$pipeop$id)
-          nexts = setdiff(nexts, out)
-          queue = c(queue[-1], nexts)
-          out = c(out, nexts)
-        }
-        private$.node_list[out]
+        sort_nodes(self$node_list)
       },
       intype = function() private$.intype,
       outtype = function() private$.outtype,
@@ -145,18 +150,6 @@ Graph = R6Class("Graph",
   )
 )
 
-assigncon = function(edges, types, nodes, edgetarget, typetarget, private) {
-  for (conidx in seq_along(edges)) {
-    if (is.null(nodes[[conidx]])) {
-      edgename = names(edges)[[conidx]]
-      if (is.null(edgename) || edgename == "") {
-        edgename = length(private[[edgetarget]]) + 1
-      }
-      private[[edgetarget]][[edgename]] = edges[[conidx]]
-      private[[typetarget]][[edgename]] = types[[conidx]]
-    }
-  }
-}
 
 
 
@@ -199,6 +192,7 @@ length.Graph = function(x) {
   if (!identical(x$node_list[[i]], value)) {
     stop("Cannot re-assign graph nodes")
   }
+  x
 }
 
 graph_to_edge_list = function(root) {
@@ -228,69 +222,32 @@ graph_plot = function(root) {
   plot(g, layout = layout$layout)
 }
 
-#' graph_map_topo
-#'
-#' @param root root node of the graph.
-#' @param fnc function to apply
-#' @param simplify should the result be simplified using simplify2array.
-#' Default TRUE.
-#' @param add_layer if true add information about the layer as a attribute.
-#'
-#' @return
-#'
-#' List (possibly simplified to vector) with the output
-#' of function `fnc`  applied to all the nodes of the graph
-#' in topological order. Note that only the output is in
-#' topological order. The function `fnc` is not applied in that order,
-#' contrary, the algorithm uses a `depth-first search`,
-#' so it starts applying the function from the last element.
-#'
-#' @noRd
-#'
-graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
 
-  state = new.env()
-  state$permanent = c()
-  state$temporary = c()
-  state$list = list()
-  state$depth = numeric()
-
-  visit = function(node, state, depth = 1) {
-    if(node$pipeop$id %in% state$permanent) {
-      state$depth[node$pipeop$id] = pmax(depth, state$depth[node$pipeop$id], na.rm = TRUE)
-      return()
-    }
-    if(node$pipeop$id %in% state$temporary) stop("Not a DAG")
-    state$temporary = c(node$pipeop$id, state$temporary) # mark temporarily
-
-    if(!all(map_lgl(node$next_nodes, is.null))) {
-      res = lapply(
-        Filter(Negate(is.null), node$next_nodes),
-        visit,
-        state = state,
-        depth = depth + 1
-      )
-    } else {
-      res = NULL
-    }
-    state$permanent = c(node$pipeop$id, state$permanent) # mark permanent
-    state$temporary = state$temporary[node$pipeop$id != state$temporary]
-
-    state$list[[node$pipeop$id]] = fnc(node)
-    state$depth[node$pipeop$id] = pmax(depth, state$depth[node$pipeop$id], na.rm = TRUE)
+sort_nodes = function(node_list, layerinfo = FALSE) {
+  pending = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
+  cache = map_dbl(node_list, pending)
+  queue = names(cache)[cache == 0]
+  layers = sapply(queue, function(.) 0, simplify = FALSE)
+  cache = cache[cache != 0]
+  queueidx = 1
+  while (queueidx <= length(queue)) {
+    current = queue[queueidx]
+    nexts = table(map_chr(Filter(Negate(is.null), node_list[[current]]$next_nodes), function(n) n$pipeop$id))
+    if (any(nexts %in% queue)) stop("Cycles in graph!")
+    cache[names(nexts)] = cache[names(nexts)] - nexts
+    for (n in names(nexts)) layers[[n]] = min(layers[[n]], layers[[current]] + 1)
+    queue = c(queue, names(cache)[cache == 0])
+    cache = cache[cache != 0]
+    queueidx = queueidx + 1
   }
-
-  lapply(roots, visit, state = state)
-
-  state$depth = state$depth[names(state$list)]
-  result      = state$list[order(state$depth)]
-  state$depth = sort(state$depth)
-
-  result = if (simplify) {
-             if (length(result)) simplify2array(result) else logical(0)
-           } else result
-  if(add_layer) attr(result, "layer") = state$depth
-  result
+  if (length(cache)) {
+    stop("Unconnected nodes found")
+  }
+  if (layerinfo) {
+    sort(map_dbl(layers, identity))
+  } else {
+    node_list[queue]
+  }
 }
 
 graph_gather_params = function(root) {
@@ -313,3 +270,4 @@ graph_gather_params = function(root) {
 
   paradox::ParamSet$new(params = unlist(all_params_named))
 }
+
