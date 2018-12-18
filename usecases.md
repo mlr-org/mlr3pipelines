@@ -6,31 +6,33 @@ This document contains a list of use-cases we want to contain.
 **Shortnames:**
 	[PO]: PipeOperator
 	[GN]: GraphNode
-	[G]:  Graph
+	[G] : Graph
 	[GL]: GraphLearner
 
 ------
 ## Pipe Operators:
 
 - **Organize:**
-	- `pipeOpBranch`
-	- `pipeOpUnbranch`
-	- `PipeOpFeatureUnion`
-	- `PipeOpNULL`
+	- `pipeOpBranch`, `pipeOpSpread`         	| spread
+	- `pipeOpChunk`								| spread
+	- `pipeOpUnbranch` , `pipeOpGather`			| gather
+	- `pipeOpFeatureUnion`						| gather
+	- `pipeOpNULL`								| linear
 
 - **Learner:**
-	- `pipeOpLearner`
-	- `PipeOpLearnerCV`
-	- `pipeOpModelAverage`
+	- `pipeOpLearner`							|			| task -> pred
+	- `PipeOpLearnerCV`							|			| task -> pred
+	- `pipeOpModelAverage`						|			| task -> pred
 
 - **Preprocessing:**
-	- `PipeOpPCA`
-	- `PipeOpScale`
-	- `PipeOpDownsample`
+	- `PipeOpPCA`								|			| task -> task
+	- `PipeOpScale`								|			| task -> task
+	- `PipeOpDownsample`						|			| task -> task
 
 - **Target Operators:**
-	- `PipeOpThreshold`
-	- `PipeOpTrafoY`
+	- `PipeOpThreshold`							|			| task -> task
+	- `PipeOpTrafoY`							|			| task -> task
+	- `PipeOpMultiClass2Binary`					|			| task -> task
 
 
 ## Helper functions:
@@ -43,13 +45,18 @@ This document contains a list of use-cases we want to contain.
   Takes a graph and copies it $k$ times and puts them in a list in
   the same way as `gunion(...)`.
 
+- `>>%`
+
+- `>=>%`
+
+
 ## Getter functions:
 
 - `PO$id` Get the id of a PipeOp.
 
-Fragen: wie setzt man (schnell) die id von einem PipeOp?
-wie bekommt man params vom pipeop unique. vermutlich id.param? auch doof. 
-welche hyperpars exportiert ein pipeop?
+
+# FIXME: Unique PipeOp Params: Do this via **id.param**? 
+# FIXME: Which hyperpars are exported by a pipeop?
 
 
 ## Use Cases 
@@ -82,11 +89,12 @@ g$predict(task)
 	- **train**: 
 		- input: Task
 		- does: Computes and stores rotation matrix into **.params** slot.
-		- returns: Task.
+		- returns: Task
+	- **params:**: rotation matrix
 	- **predict**: 
 		- input: Task
 		- does: rotates input data using **.params** slot.
-		- returns: Task.
+		- returns: Task
 
 ##### [[pipeOpLearner]]
 
@@ -94,6 +102,7 @@ g$predict(task)
 		- input: Task
 		- does: Calls the learner's`train()` method on it. Stores the model in **.params**.
 		- returns: NULL
+	- **params:**: trained model
 	- **predict**:
 		- input: Task
 		- does: Calls the `predict()` method of the stored model.
@@ -171,6 +180,7 @@ op1 >> gunion(op2a, op2b) >> op3 >> op4
 		- input: Task
 		- does: Scales Task to mean 0 and sd 1. Stores mean and sd into **.params**
 		- returns: Task
+	- **params:**: mean, sd of all training data features.
 	- **predict**: 
 		- input: Task
 		- does: scales input task using **.params** slot.
@@ -182,6 +192,7 @@ op1 >> gunion(op2a, op2b) >> op3 >> op4
 		- input: Anything
 		- does: Nothing
 		- returns: Input (Anything)
+		- **params:**: Nothing
 	- **predict**:
 		- input: Anything
 		- does: Nothing
@@ -195,6 +206,7 @@ op1 >> gunion(op2a, op2b) >> op3 >> op4
 				(constraint: target cols and row ids all need to be the same,
 			 	and same order).
 		- returns: Task
+	- **params:**: Nothing
 	- **predict**:
 		- input: List of Task's
 		- does:  same as train (without targets, here we have to  do nothing).
@@ -225,6 +237,7 @@ rep(op1 %>>% op2, 30) %>>% op3
 		- input: Task
 		- does: Downsamples (samples rows with replacement) the input for a fraction of the original n.
 		- returns: Task
+	- **params:**: Nothing
 	- **predict**: 
 		- input: Task
 		- does: Nothing
@@ -236,11 +249,18 @@ rep(op1 %>>% op2, 30) %>>% op3
 		- input: Nothing
 		- does: Nothing
 		- returns: Nothing
+	- **params:**: Nothing
 	- **predict**: 
 		- input: List of Predictions
 		- does: Averages Predictions
 		- returns: Prediction
 
+# FIXME:
+	Info: If our predictions are numeric, we simply average.
+		  If our predictions are binary, we majority vote (?)
+		  If our predictions are probabilities, we average (?)
+		  If our predictions are multiclass, we (?).
+		  Are there any other situations ? 
 
 ### Usecase: Stacking 
 
@@ -262,6 +282,7 @@ gunion(op1, op2) %>>% PipeOpModelAverage$new()
 
 
 Instead of using `PipeOpModelAverage`, we combine predictions to a `PipeOpLearner`.
+Instead of a `pipeOpLearner` we use a `pipeOpCV`, in order to avoid overfitting.
 
 ```r
 # Superlearner: We instead use PipeOpCV 
@@ -277,6 +298,7 @@ gunion(op1, op2) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.lm")
 		- does: 1. Trains models an different folds of data. Predicts on holdout splits.
 				2. Trains a model on full data, saves model to **.params**.
 		- returns: Prediction
+	- **params:**: trained model
 	- **predict**: 
 		- input: Task
 		- does: Predict with model from .params
@@ -290,91 +312,128 @@ By adding a `pipeOpNull`, we add the original features to the SuperLearner.
 gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.lm")
 ```
 
-
-
 ### Usecase: Multiclass with Binary
+
+*Scenario:* 
+*We have a multiclass target, and want to predict each class in a binarized manner.*
+*This occurs, for example if our model can only do binary classification.*
+
+We use `PipeOpMultiClass2Binary` in order to split our task up into multiple binary tasks. 
+Afterwards, we replicate our learner $k$ (where $k$ = number of classes - 1) times.
+In order to aggregate the predictions for different classes, we use the `PipeOpModelAverage`.
 
 ```r
 op1 = PipeOpMultiClass2Binary(codebook)
 op2 = PipeOpLearner("classif.svm")
-op1 >> rep(op2, k) >> PipeOpModelAvg$new()
+
+op1 %>>% rep(op2, k) %>>% PipeOpModelAverage$new()
+# or:
+op1 %>=>% rep(op2, k) %>>% PipeOpModelAverage$new()
+```
+
+##### [[PipeOpMultiClass2Binary]]
+
+	- **train**: 
+		- input: Task
+		- does: Produces multiple tasks, where y is the binarized version of original y.
+		- returns: List of Tasks
+	- **params:**: Nothing
+	- **predict**: 
+		- input: Task
+		- does: Copy Task k-times
+		- returns: List of Tasks
+
+
+### Usecase: Multiplexing of different Ops
+
+*Scenario:* 
+*We want our pipeline to branch out, either in one direction or the other.*
+*This is usefull, for example when tuning over multiple learners.*
+
+####  Usecase: Multiplexing different learners
+
+We use the `pipeOpBranch` in order to have our data flow only to one of the following operators. 
+Afterwards we collect the two streams using `PipeOpGather`.
+We can now treat the pipeline like a linear pipeline.
+
+
+```r
+op1 = PipeOpLearner$new("regr.rpart")
+op2 = PipeOpLearner$new("regr.svm")
+g = pipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpGather(aggrFun = NULL)
 ```
 
 
-op1 >=> rep(op2, k) >> PipeOpModelAvg$new()
+##### [[PipeOpBranch]]
 
-PipeOpMultiClass2Binary:
-	train: takes task, produces list of tasks, task-y is binarized version of orig y 
-	predict: copies data k-times
-
-
-Usecase: Multiplexing of different Ops (here: Learners)
-
-op1 = PipeOpLearner$new(“regr.rpart”)
-op2 = PipeOpLearner$new(“regr.svm")
-g = pipeOpBranch$new(selected = 1) >> gunion(op1, op2) >> PipeOpGather(aggrFun =
+	- **train**: 
+		- input: Anything
+		- does: Creates list [NULL, NULL, X, NULL]; where X is at position **selected**.
+		- returns: List of Task / NULLs
+	- **params:**: Nothing
+	- **predict**: Same as train.
 
 
- NULL)
 
+####  Usecase: Multiplexing preprocessing steps
 
-op1 = PipeOpLearner$new(“regr.rpart”)
-op2 = PipeOpLearner$new(“regr.svm")
-g = PipeOpBranch$new() >> gunion(op1, op2)
-
-PipeOpBranch
-	train: takes "any" object X, returns list of [NOP, NOP, X, NOP], 
-where position of X is "selected"
-predict: same as train
-
-
-# more complex usecase, multiplex, then something else
+```r
 op1 = PipeOpLearnerPCA$new()
 op2 = PipeOpNULL$new()
 op3 = PipeOpLearner$new("classif.rpart")
 
-g = PipeOpBranch$new() >> gunion(op1, op2) >> pipeOpUnbranch() >> op3
+g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpGather(aggrFun = NULL) %>>% op3
+```
+
+**FIXME:** Does every PipeOp have a default method when NULL is passed?
 
 
+### Usecase: Chunk data into k parts, train on each, then model average
+
+*Scenario:* 
+*We want our pipeline to branch out, either in one direction or the other.*
+*This is usefull, for example when tuning over multiple learners.*
 
 
+We use the `pipeOpChunk` operator to partition the task into $k$ smaller tasks. 
+Afterwards we train $k$ learners on each subtask.
+Afterwards the predictions are averaged in order to get a single prediction.
+
+```r
+pipeOpChunk(k) %>=>% rep(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg()
+```
 
 
+### Usecase: Thresholding
 
-----
+*Scenario:* 
+*We want to obtain an optimal threshold in order to decide whether something is of class x or y.*
 
+We use `PipeOpCV` to obtain cross-validated predictions. Afterwards we use `PipeOpThreshold()` to compute an
+optimal threshold.
 
-pipeOpBranch does nothing during train/predict. The “branched” (following) nodes then either obtain data (if selected == op$id), or NULL. We also have to specify what happens if 
-a pipeOp obtains NULL as an input.
-
-pipeOpGather collects from multiple parents and aggregates them by aggrFun. If NULL it is assumed only one parent returns something which is not NULL/PipeOpNull
-
-
-Questions:
-Is this not something more general like PipeOpBranch? 
-Does every PipeOp have a default method when NULL is passed?
-
-
-
-
-
-Usecase: Chunk data into k parts, train on each, then model average
-chunk(10) >=> rep(PipeOpLearner("classif.rpart"), 10) >> PipeOpModelAvg()
-
-
-Usecase: Thresholding
-
+```r
 op1 = PipeOpCV$new(“”classif.rpart”)
-op2 = PipeOpThresholding$new(method, measure, ...)
+op2 = PipeOpThreshold$new(method, measure, ...)
+g = op1 %>>% op2 
+```
 
-g = op1 >> op2 
+##### [[PipeOpThreshold]]
 
-PipeOpThreshold takes a prediction object (of a classification task) at train time and optimizes the threshold for a given perf. Metric.
-At predict time it takes a prediction object and sets the threshold. 
+	- **train**: 
+		- input: Prediction
+		- does: Optimizes the threshold for a given performance metric.
+		- returns: Binarized Prediction
+	- **params:**: Optimal threshold
+	- **predict**: 
+		- input: Prediction
+		- does: Binarizes the prediction using **.params**
+		- returns: Binarized Prediction
 
 
-
------------------------------------- Unknown territory, Here Be Dragons
+------------------------------------ 
+Unknown territory, Here Be Dragons
+------------------------------------ 
 
 Trafo y (logarithm of y)
 
