@@ -68,6 +68,7 @@ GraphNode = R6::R6Class("GraphNode",
     print = function(...) {
       BBmisc::catf("GraphNode: <%s>", self$pipeop$id)
     }
+
   ),
   private = list(
       .next_node_edges = NULL,
@@ -105,6 +106,7 @@ GraphNode = R6::R6Class("GraphNode",
 )
 
 connectgn = function(newedges, oldedgename, inverseedgename, direction, self, private) {
+  catf("connectgn into %s, other side %s, direction %s. lock %s", oldedgename, inverseedgename, direction, private$.editlock)
   # TODO: assert prev is a list
   if (!identical(names(newedges), names(private[[oldedgename]]))) {
     stop("Can't change names of nodes")
