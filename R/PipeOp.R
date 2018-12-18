@@ -14,57 +14,42 @@ PipeOp = R6Class("PipeOp",
         private$.param_vals[[n]] = addnl_params[[n]]
       }
     },
-
-    reset = function() {
-      self$params = NULL
-      self$result.train = NULL
-      self$result.predict = NULL
-      invisible(self)
-    },
-
     print = function(...) {
       BBmisc::catf("PipeOp: <%s>", self$id)
       BBmisc::catf("parvals: <%s>", BBmisc::listToShortString(self$param_vals))
       BBmisc::catf("is_learnt=%s", self$is_learnt)
       BBmisc::catf("Input: %s", BBmisc::listToShortString(self$inputs))
       BBmisc::catf("Result: %s", BBmisc::listToShortString(self$result))
-      BBmisc::catf("Prev ops: %s", self$prev_ops$print_str)
-      BBmisc::catf("Next ops: %s", self$next_ops$print_str)
-    },
-
-    #FIXME: AB machen
-    set_param_vals = function(vals) {
-      private$.param_vals = insert(private$.param_vals, vals)
-      invisible(self)
-    },
-
-
-
-    set_prev = function(ops) {
-      self$prev_ops = OpList$new(ops)
-      for (op in ops) {
-        op$next_ops = OpList$new(list(self))
-      }
     }
 
-
+    train = function(...) stop("no train function given"),  # TODO: some better way to make smth abstract?
+    predict = function(...) stop("no predict function given")
   ),
 
   active = list(
     id = function() private$.id,
     param_set = function() private$.param_set,
-    param_vals = function() private$.param_vals,
-    params = function() private$.params,
+    param_vals = function(vals) {
+      if (missing(vals)) {
+        private$.param_vals
+      } else {
+        # TODO: param check
+        private$.param_vals = vals
+      }
+    }
+    state = function() private$.state,
     result = function() private$.result,
-    is_learnt = function() !is.null(self$params),
-    has_result = function() !is.null(self$result)
+    is_learnt = function() !is.null(self$state),
+    intype = function() private$.intype,
+    outtype = function() private$.outtype
   ),
 
   private = list(
-    .id = NULL,
+    .id = NULL,  # id, name within a graph, must be unique within that graph
     .param_set = NULL,
     .param_vals = NULL,
-    .params = NULL,
-    .result = NULL
+    .state = NULL,
+    .intype = NULL,  # list of character vectors, identifying the input classes
+    .outtype = NULL  # list of character vectors, identifying output classes
   )
 )
