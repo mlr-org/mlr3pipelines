@@ -2,34 +2,33 @@
 
 This document contains a list of use-cases we want to contain.
 
-------
 **Shortnames:**
 	[PO]: PipeOperator
 	[GN]: GraphNode
 	[G] : Graph
 	[GL]: GraphLearner
 
-------
+
 ## Pipe Operators:
 
 - **Structure:**
 	- `pipeOpBranch`, `pipeOpSpread`         	| spread
-	- `pipeOpChunk`								| spread
-	- `pipeOpUnbranch` , `pipeOpGather`			| gather
-	- `pipeOpFeatureUnion`						| gather
-	- `pipeOpNULL`								| linear
+	- `pipeOpChunk`														| spread
+	- `pipeOpUnbranch` , `pipeOpGather`				| gather
+	- `pipeOpFeatureUnion`										| gather
+	- `pipeOpNULL`														| linear
 
-- **Learner:**
-	- `pipeOpLearner`							|			| task -> pred
-	- `PipeOpLearnerCV`							|			| task -> pred
-	- `pipeOpModelAverage`						|			| task -> pred
+- **Learner:**															| task -> pred
+	- `pipeOpLearner`
+	- `PipeOpLearnerCV`
+	- `pipeOpModelAverage`
 
-- **Preprocessing:**										| task -> task
+- **Preprocessing:**												| task -> task
 	- `PipeOpPCA`
 	- `PipeOpScale`
 	- `PipeOpDownsample`
 
-- **Target Operators:**										| task -> task
+- **Target Operators:**											| task -> task
 	- `PipeOpThreshold`	
 	- `PipeOpTrafoY`
 	- `PipeOpMultiClass2Binary`
@@ -47,22 +46,22 @@ This document contains a list of use-cases we want to contain.
   the same way as `gunion(...)`.
 
 - `>>%`
+  ...
 
 - `>=>%`
-
+  ...
 
 ## Getter functions:
 
 - `PO$id` Get the id of a PipeOp.
 
 
-# FIXME: Unique PipeOp Params: Do this via **id.param**? 
-# FIXME: Which hyperpars are exported by a pipeop?
+FIXME: Unique PipeOp Params: Do this via **id.param**? 
+FIXME: Which hyperpars are exported by a pipeop?
 
 
 ## Use Cases 
 
-------
 ### Usecase: Linear Pipeline
 
 #### Usecase a): Linear Pipeline
@@ -88,24 +87,24 @@ g$predict(task)
 ##### [[pipeOpPCA]]
 
 	- **train**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Computes and stores rotation matrix into **.params** slot.
-		- returns: Task
+		- returns: [[Task]]
 	- **params:**: rotation matrix
 	- **predict**: 
-		- input: Task
+		- input: [[Task]]
 		- does: rotates input data using **.params** slot.
-		- returns: Task
+		- returns: [[Task]]
 
 ##### [[pipeOpLearner]]
 
 	- **train**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Calls the learner's`train()` method on it. Stores the model in **.params**.
 		- returns: NULL
 	- **params:**: trained model
 	- **predict**:
-		- input: Task
+		- input: [[Task]]
 		- does: Calls the `predict()` method of the stored model.
 		- returns: Prediction
 
@@ -121,7 +120,7 @@ We create a `GraphLearner` from the Graph and use **mlr3's** resampling.
 lrn_g = GraphLearner$new(graph = g)
 lrn$parvals = list(pca.center = TRUE, rpart.cp = 0.1) 
 resampling = mlr_resamplings$get("holdout")
-rr = resample(task, lrn_g, resampling)
+rr = resample([[Task]], lrn_g, resampling)
 ```
 
 Access results: 
@@ -134,11 +133,11 @@ rr[1, "models"]$learner.model[["pca"]]$params
 
 	Wraps a Graph and allows it to be used like a learner.
 	- **train**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Calls the graph's `train()` method on it.
 		- returns: NULL
 	- **predict**:
-		- input: Task
+		- input: [[Task]]
 		- does: Calls the `predict()` method on the Graph.
 		- returns: NULL
 
@@ -156,13 +155,12 @@ param_set = paradox::ParamSet$new(
    ParamLgl$new("pca.center"),
    ParamDbl$new("rpart.cp", lower = 0.001, upper = 0.1)
 )
-ff = FitnessFunction$new(task, lrn_g, resampling, measures, param_set)
+ff = FitnessFunction$new([[Task]], lrn_g, resampling, measures, param_set)
 terminator = TerminatorEvaluations$new(10)
 rs = TunerRandomSearch$new(ff, terminator)
 tr = rs$tune()$tune_result()
 ```
 
-------
 ### Usecase: Feature union
 
 ```r
@@ -178,14 +176,14 @@ op1 >> gunion(op2a, op2b) >> op3 >> op4
 ##### [[pipeOpScale]]
 
 	- **train**: 
-		- input: Task
-		- does: Scales Task to mean 0 and sd 1. Stores mean and sd into **.params**
-		- returns: Task
+		- input: [[Task]]
+		- does: Scales [[Task]] to mean 0 and sd 1. Stores mean and sd into **.params**
+		- returns: [[Task]]
 	- **params:**: mean, sd of all training data features.
 	- **predict**: 
-		- input: Task
-		- does: scales input task using **.params** slot.
-		- returns: Task
+		- input: [[Task]]
+		- does: scales input [[Task]] using **.params** slot.
+		- returns: [[Task]]
 
 ##### [[pipeOpNull]]
 
@@ -202,16 +200,16 @@ op1 >> gunion(op2a, op2b) >> op3 >> op4
 ##### [[pipeOpFeatureUnion]]
 
 	- **train**: 
-		- input: List of Task's
-		- does: Cbinds features from all tasks and one target col.
+		- input: List of [[Task]]'s
+		- does: Cbinds features from all [[Task]]s and one target col.
 				(constraint: target cols and row ids all need to be the same,
 			 	and same order).
-		- returns: Task
+		- returns: [[Task]]
 	- **params:**: Nothing
 	- **predict**:
-		- input: List of Task's
+		- input: List of [[Task]]'s
 		- does:  same as train (without targets, here we have to  do nothing).
-		- returns: Task
+		- returns: [[Task]]
 
 
 
@@ -235,14 +233,14 @@ greplicate(op1 %>>% op2, 30) %>>% op3
 ##### [[PipeOpDownsample]]
 
 	- **train**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Downsamples (samples rows with replacement) the input for a fraction of the original n.
-		- returns: Task
+		- returns: [[Task]]
 	- **params:**: Nothing
 	- **predict**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Nothing
-		- returns: Task
+		- returns: [[Task]]
 
 ##### [[PipeOpModelAverage]]
 
@@ -295,13 +293,13 @@ gunion(op1, op2) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.lm")
 ##### [[PipeOpLearnerCV]]
 
 	- **train**: 
-		- input: Task
+		- input: [[Task]]
 		- does: 1. Trains models an different folds of data. Predicts on holdout splits.
 				2. Trains a model on full data, saves model to **.params**.
 		- returns: Prediction
 	- **params:**: trained model
 	- **predict**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Predict with model from .params
 		- returns: Prediction
 
@@ -319,7 +317,7 @@ gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.
 *We have a multiclass target, and want to predict each class in a binarized manner.*
 *This occurs, for example if our model can only do binary classification.*
 
-We use `PipeOpMultiClass2Binary` in order to split our task up into multiple binary tasks. 
+We use `PipeOpMultiClass2Binary` in order to split our [[Task]] up into multiple binary [[Task]]s. 
 Afterwards, we replicate our learner $k$ (where $k$ = number of classes - 1) times.
 In order to aggregate the predictions for different classes, we use the `PipeOpModelAverage`.
 
@@ -335,14 +333,14 @@ op1 %>=>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 ##### [[PipeOpMultiClass2Binary]]
 
 	- **train**: 
-		- input: Task
-		- does: Produces multiple tasks, where y is the binarized version of original y.
-		- returns: List of Tasks
+		- input: [[Task]]
+		- does: Produces multiple [[Task]]s, where y is the binarized version of original y.
+		- returns: List of [[Task]]s
 	- **params:**: Nothing
 	- **predict**: 
-		- input: Task
-		- does: Copy Task k-times
-		- returns: List of Tasks
+		- input: [[Task]]
+		- does: Copy [[Task]] k-times
+		- returns: List of [[Task]]s
 
 
 ### Usecase: Multiplexing of different Ops
@@ -370,7 +368,7 @@ g = pipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpGather(aggrF
 	- **train**: 
 		- input: Anything
 		- does: Creates list [NULL, NULL, X, NULL]; where X is at position **selected**.
-		- returns: List of Task / NULLs
+		- returns: List of [[Task]] / NULLs
 	- **params:**: Nothing
 	- **predict**: Same as train.
 
@@ -396,8 +394,8 @@ g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpGather(aggrF
 *This is usefull, for example when tuning over multiple learners.*
 
 
-We use the `pipeOpChunk` operator to partition the task into $k$ smaller tasks. 
-Afterwards we train $k$ learners on each subtask.
+We use the `pipeOpChunk` operator to partition the [[Task]] into $k$ smaller [[Task]]s. 
+Afterwards we train $k$ learners on each sub[[Task]].
 Afterwards the predictions are averaged in order to get a single prediction.
 
 ```r
@@ -454,16 +452,16 @@ g = top %>>% PipeOpLearner("classif.svm") %>>% retop
 
 What happens: 
 ```
-	- g$train(task) [[trafoY(log)) >>  train("classif.svm", task) %>>% identity]]
-	- g$predict(task) [[identity >> predict(model, task) >> trafoPreds(exp)]]
+	- g$train([[Task]]) [[trafoY(log)) >>  train("classif.svm", [[Task]]) %>>% identity]]
+	- g$predict([[Task]]) [[identity >> predict(model, [[Task]]) >> trafoPreds(exp)]]
 ```
  
 ##### [[PipeOpTrafoY]]
 
 	- **train**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Transforms target by fun.
-		- returns: Task
+		- returns: [[Task]]
 	- **params:**:
 	- **predict**: 
 		- input: Prediction
@@ -476,7 +474,7 @@ FIXME:
 	- We can not tune over **par.vals** of TrafoY, as we have a hard time storing them.
 	- User needs to ensure that trafos are correct
 
-### Usecase: MultiOutput (1 Task, 3 Outputs, NoCV)
+### Usecase: MultiOutput (1 [[Task]], 3 Outputs, NoCV)
 
 
 ####  Usecase a): MultiOutput Parallel
@@ -498,14 +496,14 @@ g = gunion(
 ##### [[PipeOpSetTarget]]
 
 	- **train**: 
-		- input: Task
+		- input: [[Task]]
 		- does: Set previous target col to hidden. Set new target variable.
-		- returns: Task
+		- returns: [[Task]]
 	- **params:**:
 	- **predict**:
-		- input: Task
+		- input: [[Task]]
 		- does: Nothing
-		- returns: Task
+		- returns: [™Task]]
 
 ####  Usecase b): MultiOutput Chained
 
@@ -545,21 +543,3 @@ tuning: tunenode(<graph>), graph kriegt daten rein und gibt eine performance mea
 problem hier ist: die performance will man vll auf eine art messen (e.g. cv), die tatsaechliche Anwendung dann auf den ganzen Datensatz, aber ein grossteil der operation ist schon der gleiche.
 zeilennummern will man schon irgendwie behalten
 send parameter confs through the graph
-
-
-
-
-# graph definition:
-# op1, op2, pma exist and are supposed to be connected by
-# op1 
-#          > pma
-# op2 
-GraphDef({
-	op1 %>>% pma
-	op2 %>>% pma
-	# all that have no output automatically output to SINK
-	# all that have no input automatically input from SOURCE
-	# but SOURCE and SINK can be given explicitly
-	SOURCE %>>% pma
-})
-
