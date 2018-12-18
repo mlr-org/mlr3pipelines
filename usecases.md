@@ -12,7 +12,7 @@ This document contains a list of use-cases we want to contain.
 ------
 ## Pipe Operators:
 
-- **Organize:**
+- **Structure:**
 	- `pipeOpBranch`, `pipeOpSpread`         	| spread
 	- `pipeOpChunk`								| spread
 	- `pipeOpUnbranch` , `pipeOpGather`			| gather
@@ -24,15 +24,16 @@ This document contains a list of use-cases we want to contain.
 	- `PipeOpLearnerCV`							|			| task -> pred
 	- `pipeOpModelAverage`						|			| task -> pred
 
-- **Preprocessing:**
-	- `PipeOpPCA`								|			| task -> task
-	- `PipeOpScale`								|			| task -> task
-	- `PipeOpDownsample`						|			| task -> task
+- **Preprocessing:**										| task -> task
+	- `PipeOpPCA`
+	- `PipeOpScale`
+	- `PipeOpDownsample`
 
-- **Target Operators:**
-	- `PipeOpThreshold`							|			| task -> task
-	- `PipeOpTrafoY`							|			| task -> task
-	- `PipeOpMultiClass2Binary`					|			| task -> task
+- **Target Operators:**										| task -> task
+	- `PipeOpThreshold`	
+	- `PipeOpTrafoY`
+	- `PipeOpMultiClass2Binary`
+	- `PipeOpsetTarget`
 
 
 ## Helper functions:
@@ -41,7 +42,7 @@ This document contains a list of use-cases we want to contain.
   Takes multiple graphs and puts them in one level (parallel to each other).
   Same as the output of a GraphOp that produces multiple outputs
 
-- `rep(graph, k)`
+- `greplicate(graph, k)`
   Takes a graph and copies it $k$ times and puts them in a list in
   the same way as `gunion(...)`.
 
@@ -125,8 +126,8 @@ rr = resample(task, lrn_g, resampling)
 
 Access results: 
 ```r
-rr[1, “models”]$learner.model[["rpart"]]$learner.model
-rr[1, “models”]$learner.model[["pca"]]$params
+rr[1, "models"]$learner.model[["rpart"]]$learner.model
+rr[1, "models"]$learner.model[["pca"]]$params
 ```
 
 ##### [[GraphLearner]]
@@ -220,7 +221,7 @@ op1 >> gunion(op2a, op2b) >> op3 >> op4
 *We want to do bagging (Train several models on subsamples of the data and 
 average predictions.*
 
-We use the `PipeOpDownSample` operator in conjunction with a `PipeOpLearner` to train a model. `rep()` let's us do the same operation multiple times.
+We use the `PipeOpDownSample` operator in conjunction with a `PipeOpLearner` to train a model. `greplicate()` let's us do the same operation multiple times.
 Afterwards we average all predictions using `PipeOpModelAverage`
 
 ```r
@@ -228,7 +229,7 @@ op1 = PipeOpDownSample$new(rate = 0.6)
 op2 = PipeOpLearner$new("classif.rpart")
 op3 = PipeOpModelAverage$new()
 
-rep(op1 %>>% op2, 30) %>>% op3
+greplicate(op1 %>>% op2, 30) %>>% op3
 ```
 
 ##### [[PipeOpDownsample]]
@@ -282,16 +283,16 @@ gunion(op1, op2) %>>% PipeOpModelAverage$new()
 
 
 Instead of using `PipeOpModelAverage`, we combine predictions to a `PipeOpLearner`.
-Instead of a `pipeOpLearner` we use a `pipeOpCV`, in order to avoid overfitting.
+Instead of a `pipeOpLearner` we use a `PipeOpLearnerCV`, in order to avoid overfitting.
 
 ```r
-# Superlearner: We instead use PipeOpCV 
-op1 = PipeOpCV("regr.rpart")
-op2 = PipeOpCV("regr.svm")
+# Superlearner: We instead use PipeOpLearnerCV 
+op1 = PipeOpLearnerCV("regr.rpart")
+op2 = PipeOpLearnerCV("regr.svm")
 gunion(op1, op2) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.lm")
 ```
 
-##### [[PipeOpCV]]
+##### [[PipeOpLearnerCV]]
 
 	- **train**: 
 		- input: Task
@@ -326,9 +327,9 @@ In order to aggregate the predictions for different classes, we use the `PipeOpM
 op1 = PipeOpMultiClass2Binary(codebook)
 op2 = PipeOpLearner("classif.svm")
 
-op1 %>>% rep(op2, k) %>>% PipeOpModelAverage$new()
+op1 %>>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 # or:
-op1 %>=>% rep(op2, k) %>>% PipeOpModelAverage$new()
+op1 %>=>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 ```
 
 ##### [[PipeOpMultiClass2Binary]]
@@ -400,7 +401,7 @@ Afterwards we train $k$ learners on each subtask.
 Afterwards the predictions are averaged in order to get a single prediction.
 
 ```r
-pipeOpChunk(k) %>=>% rep(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg()
+pipeOpChunk(k) %>>% greplicate(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg()
 ```
 
 
@@ -409,11 +410,11 @@ pipeOpChunk(k) %>=>% rep(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg
 *Scenario:* 
 *We want to obtain an optimal threshold in order to decide whether something is of class x or y.*
 
-We use `PipeOpCV` to obtain cross-validated predictions. Afterwards we use `PipeOpThreshold()` to compute an
+We use `PipeOpLearnerCV` to obtain cross-validated predictions. Afterwards we use `PipeOpThreshold()` to compute an
 optimal threshold.
 
 ```r
-op1 = PipeOpCV$new(“”classif.rpart”)
+op1 = PipeOpLearnerCV$new(""classif.rpart")
 op2 = PipeOpThreshold$new(method, measure, ...)
 g = op1 %>>% op2 
 ```
@@ -423,69 +424,111 @@ g = op1 %>>% op2
 	- **train**: 
 		- input: Prediction
 		- does: Optimizes the threshold for a given performance metric.
-		- returns: Binarized Prediction
+		- returns: Prediction
 	- **params:**: Optimal threshold
 	- **predict**: 
 		- input: Prediction
 		- does: Binarizes the prediction using **.params**
-		- returns: Binarized Prediction
+		- returns: Prediction
 
 
 ------------------------------------ 
-Unknown territory, Here Be Dragons
+## Unknown territory, Here Be Dragons
 ------------------------------------ 
 
-Trafo y (logarithm of y)
 
-g = PipeOpTrafoY(fun = log) >> PipeOpLearner(“classif.svm”) >> PipeOpTrafoY(fun = exp)
-g$train(task) [[trafoY(log)) >>  train(“classif.svm”, task) >> identity]]
-g$predict(task) [[identity >> predict(model, task) >> trafoPreds(exp)]]
+### Usecase: ThresholdingTrafo y (logarithm of y)
 
-Pot = PipeOpTrafoY(traintrafo = log, predicttrafo = exp)
+*Scenario:* 
+*We want to transform our target variable, for example using a log-transform.*
 
-G = pot >> PipeOpLearner() >> pot.clone(deep = TRUE)
+We use the `PipeOpTrafoY` in order to log-transform the data.
+We use another `PipeOpTrafoY` after the learner in order to re-transform our data onto the original scale. 
 
+```r
+top = PipeOpTrafoY(train = log, predict = identity)
+retop = PipeOpTrafoY(train = identity, predict = exp)
+
+g = top %>>% PipeOpLearner("classif.svm") %>>% retop
+```
+
+What happens: 
+```
+	- g$train(task) [[trafoY(log)) >>  train("classif.svm", task) %>>% identity]]
+	- g$predict(task) [[identity >> predict(model, task) >> trafoPreds(exp)]]
+```
  
-PipeOpTrafoY
-	in train: takes task, returns task, transform y by fun
-	in predict: takes Prediction, returns Prediction, transform yhat by fun
+##### [[PipeOpTrafoY]]
+
+	- **train**: 
+		- input: Task
+		- does: Transforms target by fun.
+		- returns: Task
+	- **params:**:
+	- **predict**: 
+		- input: Prediction
+		- does: Transform prediction by fun
+		- returns: Prediction
 
 
-By Input type
-Dataset (with y column) can be training or prediction, but transform in both cases, with 'traintrafo'
-learner model: nop
-prediction: transform y-hat with 'predicttraf'
+FIXME:
+	- Using the same operator twice would violate the acyclic property.
+	- We can not tune over **par.vals** of TrafoY, as we have a hard time storing them.
+	- User needs to ensure that trafos are correct
 
-Restrictions:
-We can not tune over these transformations
-User needs to ensure that trafos are correct
+### Usecase: MultiOutput (1 Task, 3 Outputs, NoCV)
 
 
+####  Usecase a): MultiOutput Parallel
 
-MultiLabel / MultiOutput (1 Task, 3 Outputs, NoCV)
+*Scenario:* 
+*We have three possible output variables we want to predict in parallel.*
 
-Chained:
-PipeOpSetTarget(“out1”) >> PipeOpLearner(“rpart”, id = “r1”) >> PipeOpCbindLearnerPrediction() >> PipeOpSetTarget(“out2”, id = “r2”) >> PipeOpLearner(“rpart”) >> PipeOpCbindLearnerPrediction() >>
-PipeOpsetTarget(“final_out”) >> PipeOpLearner(“rpart”, id = “r3”) 
-Parallel:
-list(
-PipeOpSetTarget(“out1”)       >> PipeOpLearner(“rpart”, id = “r1”),
-PipeOpSetTarget(“out2”)       >> PipeOpLearner(“rpart”, id = “r2”),
-PipeOpsetTarget(“final_out”) >> PipeOpLearner(“rpart”, id = “r3”)
-) >> PipeOpCollectLearners()
+We set different targets before training each learner using `PipeOpSetTarget`. 
+Afterwards the different learners are collected with `PipeOpModelAverage`.
+
+```r
+g = gunion(
+	PipeOpSetTarget("out1") %>>% PipeOpLearner("rpart", id = "r1"),
+	PipeOpSetTarget("out2") %>>% PipeOpLearner("rpart", id = "r2"),
+	PipeOpsetTarget("final_out") %>>% PipeOpLearner("rpart", id = "r3")
+	) %>>% PipeOpModelAverage()
+```
+
+##### [[PipeOpSetTarget]]
+
+	- **train**: 
+		- input: Task
+		- does: Set previous target col to hidden. Set new target variable.
+		- returns: Task
+	- **params:**:
+	- **predict**:
+		- input: Task
+		- does: Nothing
+		- returns: Task
+
+####  Usecase b): MultiOutput Chained
+
+*Scenario:* 
+*We have three possible output variables available during training, but they will not be availalbe during test time.*
+*We want to leverage info from out1 and out2 to improve prediction on final_out*
+
+We obtain cross-validated predictions using `PipeOpLearnerCV` sequentially for each target and use them to train the sequential models.
+
+```r
+pnop = pipeOpNull()
+
+g = PipeOpSetTarget("out1") %>>%
+	gunion(PipeOpLearnerCV("rpart", id = "r1"), pnop) %>>%
+	PipeOpFeatureUnion() %>>%
+	PipeOpSetTarget("out2", id = "r2") %>>%
+	gunion(PipeOpLearnerCV("rpart"), pnop) %>>%
+	PipeOpLearnerCV() %>>%
+	PipeOpsetTarget("final_out") %>>%
+	PipeOpLearner("rpart", id = "r3") 
+```
 
 
-PipeOpSetTarget:
-Train:  Unset previous target (Keep hidden)
-		Set new target
-Predict: <No action>
-Args: Should this have a hide_previous_target param?
-PipeOpCbindLearnerPreds:
-Train:  Get preds from previous node
-	Cbind to DataBackend
-Predict: Get newdata preds, cbind to data.
-
-
 
 
 preproc operation: daten %>>% po --> preprozessierte Daten
@@ -519,11 +562,4 @@ GraphDef({
 	# but SOURCE and SINK can be given explicitly
 	SOURCE %>>% pma
 })
-
-
-Fun: RotationForest
-# Single Split (Takes 1 Data input, Outputs 2 Datasets)
-splitter = pipeOpDownSample() >> pipeOpFeatureSubSample() >> pipeOpPCA >> PipeOpLearner(“rpart”, max.depth = 1) >> splitDataFromRpart()
-
-splitter >> rep(2, splitter)
 
