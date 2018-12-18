@@ -3,11 +3,16 @@ PipeOp = R6Class("PipeOp",
   public = list(
     packages = character(0),
 
-    initialize = function(id, param_set = ParamSet$new()) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = NULL, ...) {
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
       private$.param_vals = BBmisc::extractSubList(param_set$params, "default", simplify = FALSE)
+      addnl_params = c(list(...), param_vals)
+      checkmate::assert_list(addnl_params, names = "unique")
+      for (n in names(addnl_params)) {
+        private$.param_vals[[n]] = addnl_params[[n]]
+      }
     },
 
     reset = function() {
