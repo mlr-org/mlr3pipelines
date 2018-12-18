@@ -44,14 +44,8 @@ graph_gather_params = function(root) {
 Graph = R6Class("Graph",
 
   public = list(
-
     source_nodes = list(),
 
-    # FIXME: Do we need task_type and id?
-    task_type = "classif",
-    id = "foobar",
-
-    # Do we clone/copy here? Otherwise state of OP's trained outside will change
     initialize = function(source_nodes) {
       # handles only GraphNode or list of the graph nodes
       if(inherits(source_nodes, "GraphNode")) {
