@@ -1,28 +1,3 @@
-graph_gather_params = function(root) {
-
-  all_params = graph_map_topo(
-    root,
-    function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
-    simplify = FALSE
-  )
-
-  all_params_named = mapply(function(params_list, id) {
-
-    lapply(params_list, function(x) {
-
-      x = x$clone(deep = TRUE)
-      x$id = paste(id, x$id, sep =":")
-      x
-    })
-
-  }, all_params, names(all_params), SIMPLIFY = FALSE)
-
-  paradox::ParamSet$new(params = unlist(all_params_named))
-}
-
-
-
-
 
 # class Graph
 # members:
@@ -46,8 +21,7 @@ Graph = R6Class("Graph",
   public = list(
     source_nodes = list(),
 
-    initialize = function(source_nodes) {
-      # handles only GraphNode or list of the graph nodes
+    initialize = function() {
       if(inherits(source_nodes, "GraphNode")) {
         source_nodes = list(source_nodes)
       } else if(is.list(source_nodes)) {
@@ -283,4 +257,26 @@ graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_la
   result = if(simplify) simplify2array(result) else result
   if(add_layer) attr(result, "layer") = state$depth
   result
+}
+
+graph_gather_params = function(root) {
+
+  all_params = graph_map_topo(
+    root,
+    function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
+    simplify = FALSE
+  )
+
+  all_params_named = mapply(function(params_list, id) {
+
+    lapply(params_list, function(x) {
+
+      x = x$clone(deep = TRUE)
+      x$id = paste(id, x$id, sep =":")
+      x
+    })
+
+  }, all_params, names(all_params), SIMPLIFY = FALSE)
+
+  paradox::ParamSet$new(params = unlist(all_params_named))
 }
