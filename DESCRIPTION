@@ -9,16 +9,17 @@ Authors@R: c(
 URL: https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 License: MIT + file LICENSE
-Encoding: UTF-8
 Depends:
     R (>= 3.0.2)
 Imports:
     R6,
     backports (>= 1.1.0),
     checkmate (>= 1.8.2),
+    data.table,
     methods,
     mlr3,
     mlr3misc,
+    paradox,
     stats
 Suggests:
     igraph,
@@ -27,8 +28,11 @@ Suggests:
     rmarkdown,
     rpart,
     testthat
-LazyData: yes
-ByteCompile: yes
+Encoding: UTF-8
+NeedsCompilation: no
+Roxygen: list(markdown = TRUE)
+LazyData: true
+ByteCompile: true
 Version: 0.1
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
