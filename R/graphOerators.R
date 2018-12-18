@@ -64,4 +64,3 @@ if (FALSE) {
   greplicate(PipeOpPCA$new(), 5)
   greplicate(GraphNode$new(PipeOpPCA$new()), 5)
 }
-

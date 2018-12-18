@@ -2,9 +2,9 @@
 PipeOp = R6Class("PipeOp",
   public = list(
     packages = character(0),
-
+    id = NULL,
     initialize = function(id, param_set = ParamSet$new()) {
-      private$.id = id
+      self$id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
       private$.param_vals = param_set$data$default
@@ -46,7 +46,6 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
-    id = function() private$.id,
     param_set = function() private$.param_set,
     param_vals = function() private$.param_vals,
     params = function() private$.params,
@@ -56,7 +55,6 @@ PipeOp = R6Class("PipeOp",
   ),
 
   private = list(
-    .id = NULL,
     .param_set = NULL,
     .param_vals = NULL,
     .params = NULL,

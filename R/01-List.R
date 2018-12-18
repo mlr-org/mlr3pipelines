@@ -53,6 +53,15 @@ ListNamedEls = R6Class("ListNamedEls",
     is_empty = function() length(self$xs) == 0L,
     keys = function() names(self$xs),
     print_str = function() ifelse(self$is_empty, "()", paste0("(", collapse(self$keys), ")"))
+  ),
+  private = list(
+    deep_clones = function(name, value){
+      if (name == "xs") {
+        map_if(value, function(x) inherits(x, "R6"), function(x) x$clone(deep = TRUE))
+      } else {
+        value
+      }
+    }
   )
 )
 
