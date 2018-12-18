@@ -6,7 +6,7 @@
 \title{GraphNode}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-GraphNode$new(pipeop)
+GraphNode
 }
 \description{
 The \code{GraphNode} class implements behaviors required to define the
