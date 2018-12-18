@@ -90,8 +90,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
   public = list(
     initialize = function(id = "pca") {
       ps = ParamSet$new(params = list(
-        ParamFlag$new("center", default = TRUE),
-        ParamFlag$new("scale.", default = FALSE),
+        ParamLgl$new("center", default = TRUE),
+        ParamLgl$new("scale.", default = FALSE),
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf)
       ))
       super$initialize(id, ps)
@@ -121,8 +121,8 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
   public = list(
     initialize = function(id = "sparsePca") {
       ps = ParamSet$new(params = list(
-        ParamFlag$new("center", default = TRUE),
-        ParamFlag$new("scale", default = TRUE),
+        ParamLgl$new("center", default = TRUE),
+        ParamLgl$new("scale", default = TRUE),
         ParamInt$new("n", default = 3L, lower = 1, upper = Inf)
       ))
       super$initialize(id, ps)
@@ -181,8 +181,8 @@ PipeOpScaler = R6Class("PipeOpScaler",
     initialize = function(id = "scaler") {
 
       ps = ParamSet$new(params = list(
-        ParamFlag$new("center", default = TRUE),
-        ParamFlag$new("scale", default = TRUE)
+        ParamLgl$new("center", default = TRUE),
+        ParamLgl$new("scale", default = TRUE)
       ))
       super$initialize(id, ps)
     },
@@ -227,7 +227,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
     initialize = function(id = "downsample") {
       ps = ParamSet$new(params = list(
         ParamNum$new("perc", default = 0.7, lower = 0, upper = 1),
-        ParamLogical$new("stratify", default = FALSE)
+        ParamLgl$new("stratify", default = FALSE)
       ))
       super$initialize(id, ps)
     },
@@ -324,9 +324,9 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 #   },
 
 #   param_set = ParamSet$new(params = list(
-#     ParamReal$new("perc", default = 0.005, lower = 0, upper = 1),
-#     ParamReal$new("tol", default = .Machine$double.eps^.5, lower = 0, upper = 1),
-#     ParamFlag$new("na.ignore", default = FALSE)
+#     ParamDbl$new("perc", default = 0.005, lower = 0, upper = 1),
+#     ParamDbl$new("tol", default = .Machine$double.eps^.5, lower = 0, upper = 1),
+#     ParamLgl$new("na.ignore", default = FALSE)
 #   ))
 # )
 
