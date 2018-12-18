@@ -1,3 +1,29 @@
+
+GraphElement = R6::R6Class("GraphElement",
+  active = list(
+      intype = function() stop("abstract"),
+      outtype = function() stop("abstract"),
+      inputs = function() stop("abstract"),
+      outputs = function() stop("abstract")
+  )
+)
+
+GraphEdge = R6::R6Class("GraphEdge",
+  public = list(
+      name = NULL,
+      element = NULL,
+      initialize = function(name, element) {
+        self$name = name
+        self$element = element
+      }
+  )
+)
+
+
+
+
+
+
 #' ListNamedEls for GraphNodes.
 #'
 #' @description

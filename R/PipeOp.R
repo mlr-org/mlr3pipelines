@@ -1,5 +1,5 @@
 
-PipeOp = R6Class("PipeOp",
+PipeOp = R6::R6Class("PipeOp",
   public = list(
     packages = character(0),
 
