@@ -224,14 +224,10 @@ This internally does the following:
 ```r
 task = mlr_tasks$get("iris")
 lrn_rp = mlr_learners$get("classif.rpart")
-g = PipeOpPCA() %>>% PipeOpLearner(lrn_rp)
+g = pipeOpScale() %>>% PipeOpPCA() %>>% PipeOpLearner(lrn_rp)
 g$train(task)
 g$predict(task)
 ```
-
-#FIXME: add scaling, so we have 3 steps
-
-
 
 #### Usecase b): Resample Linear Pipeline
 
@@ -277,7 +273,7 @@ tr = rs$tune()$tune_result()
 ### Usecase: Feature union
 
 ```r
-op1 = PipeOpScaler$new()
+op1 = PipeOpScale$new()
 op2a = PipeOpPCA$new()
 op2b = PipeOpNULL$new()
 op3 = PipeOpFeatureUnion$new()
@@ -292,7 +288,7 @@ op1 %>>% gunion(op2a, op2b) %>>% op3 %>>% op4
 
 *Scenario:*
 *We want to do bagging (Train several models on subsamples of the data and
-average predictions.*
+average predictions).*
 
 We use the `PipeOpDownSample` operator in conjunction with a `PipeOpLearner` to train a model. `greplicate()` let's us do the same operation multiple times.
 Afterwards we average all predictions using `PipeOpModelAverage`
@@ -306,7 +302,7 @@ greplicate(op1 %>>% op2, 30) %>>% op3
 ```
 
 
-# FIXME:
+#FIXME:
   Info: If our predictions are numeric, we simply average.
       If our predictions are binary, we majority vote (?)
       If our predictions are probabilities, we average (?)
@@ -391,14 +387,14 @@ op1 %>=>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 ####  Usecase: Multiplexing different learners
 
 We use the `pipeOpBranch` in order to have our data flow only to one of the following operators.
-Afterwards we collect the two streams using `PipeOpGather`.
+Afterwards we collect the two streams using `pipeOpUnbranch`.
 We can now treat the pipeline like a linear pipeline.
 
 
 ```r
 op1 = PipeOpLearner$new("regr.rpart")
 op2 = PipeOpLearner$new("regr.svm")
-g = pipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpGather(aggrFun = NULL)
+g = pipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% pipeOpUnbranch(aggrFun = NULL)
 ```
 
 
@@ -409,7 +405,7 @@ op1 = PipeOpLearnerPCA$new()
 op2 = PipeOpNULL$new()
 op3 = PipeOpLearner$new("classif.rpart")
 
-g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpGather(aggrFun = NULL) %>>% op3
+g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% pipeOpUnbranch(aggrFun = NULL) %>>% op3
 ```
 
 **FIXME:** Does every PipeOp have a default method when NULL is passed?
@@ -485,7 +481,7 @@ FIXME:
 *We have three possible output variables we want to predict in parallel.*
 
 We set different targets before training each learner using `PipeOpSetTarget`.
-Afterwards the different learners are collected with `PipeOpModelAverage`.
+Afterwards the different predictions are collected with `PipeOpModelAverage`.
 
 ```r
 g = gunion(
@@ -520,7 +516,7 @@ g = PipeOpSetTarget("out1") %>>%
 
 *Scenario:*
 *We have a zero-inflated numeric target variable (e.g. amount unpaid bills).*
-*We want to leverage this info.*
+*We want to leverage the info that most are $0$ in our model.*
 
 We obtain cross-validated predictions for whether the target variable is 0.
 We the use the prediction for this intermediate target for the final prediction.
