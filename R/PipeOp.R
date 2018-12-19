@@ -50,7 +50,7 @@ PipeOp = R6::R6Class("PipeOp",
     result = function() private$.result,
     is_learnt = function() !is.null(self$state),
     intype = function() private$.intype,
-    outtype = function() private$.outtype
+    outtype = function() private$.outtype,
     takeslist = function() {
       tl = private$.takeslist
       assert(!tl || length(self$intype) == 1)
