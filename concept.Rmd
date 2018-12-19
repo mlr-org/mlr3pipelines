@@ -162,7 +162,7 @@ Prediction on a graph works exactly the same. We feed the input object to the LH
 `predict` on each node, layer by layer, until we have done that also on the RHS.
 
 
-
+#FIXME: we need to specifiy the concept of brnaching / multiplexing
 
 
 
