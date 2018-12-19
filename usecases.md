@@ -380,8 +380,7 @@ op1 %>>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 # or:
 op1 %>=>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 ```
-
-
+	
 
 ### Usecase: Multiplexing of different Ops
 
@@ -445,8 +444,6 @@ op1 = PipeOpLearnerCV$new(""classif.rpart")
 op2 = PipeOpThreshold$new(method, measure, ...)
 g = op1 %>>% op2
 ```
-
-
 
 ------------------------------------
 ## Unknown territory, Here Be Dragons

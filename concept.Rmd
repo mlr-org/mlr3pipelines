@@ -25,6 +25,7 @@ Usage:
 - result [any]
 - train(input) : [any] -> [any]
 - predict(input) : [any] -> [any]
+- package [character(k)]
 
 Details:
   id: AB that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
@@ -113,13 +114,14 @@ All other cases: Error.
 Operator `>>` will always deep-clone its arguments on call.
 
 ## greplicate(G, k): Replicate a graph. Results in a graph
+
 [Graph], integer(1) -> [Graph]
 If G is a PipeOp it will be leveled up to a Graph, containing a single node.
 
 Copy the structure of G k-times, make all PipeOP-ids unique by post-fixing them all with
 "_rep_1" (for the first copy), "_rep_2" (for the second copy) and so on.
-
 greplicate will always deep-clone its arguments on call.
+
 
 ## Aggregation and Broadcasting PipeOps
 PipeOps can have the property "aggregate" or "broadcast".
