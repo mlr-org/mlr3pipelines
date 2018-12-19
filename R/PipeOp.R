@@ -48,7 +48,6 @@ PipeOp = R6::R6Class("PipeOp",
       }
     },
     state = function() private$.state,
-    result = function() private$.result,
     intype = function() private$.intype,
     outtype = function() private$.outtype,
     takeslist = function() {
@@ -77,7 +76,6 @@ PipeOp = R6::R6Class("PipeOp",
     .returnslist = TRUE,  # may be FALSE, but only if length(outtype) is 1
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
-    .result = NULL,
     .params = NULL
   )
 )
