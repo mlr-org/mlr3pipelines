@@ -184,7 +184,7 @@ This document contains a list of use-cases we want to contain.
   - **train**:
     - input: [[Task]]
     - does: 1. Trains models an different folds of data. Predicts on holdout splits.
-        2. Trains a model on full data, saves model to **.params**.
+        		2. Trains a model on full data, saves model to **.params**.
     - returns: Prediction
   - **params:**: trained model
   - **predict**:
@@ -350,6 +350,17 @@ By adding a `pipeOpNull`, we add the original features to the SuperLearner.
 ```r
 gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.lm")
 ```
+
+#### Usecase d): Multilevel Stacking
+
+We can do the same on multiple levels by just adding the same `PipeOpLearnerCV()` again after the feature union.
+
+```r
+g = gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>% 
+	gunion(op1, op2) %>>% PipeOpFeatureUnion() %>>% 
+	PipeOpLearner("regr.lm")
+```
+
 
 ### Usecase: Multiclass with Binary
 
