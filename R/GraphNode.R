@@ -11,7 +11,7 @@ NodeChannel = R6::R6Class("NodeChannel",
         self$direction = direction
       },
       print = function() {
-        catf("%s-Edge name %s into GraphNode %s", self$direction, self$name, self$node$pipeop$id)
+        catf("Channel name %s %s GraphNode %s", self$name, if (self$direction == "in") "into" else "out of", self$node$pipeop$id)
       }
   )
 )
