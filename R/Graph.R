@@ -80,6 +80,7 @@ reduceGraph = function(input, fncall, cache_result = FALSE) {
 #   - do we want the fourth layer of topological sorting?
 #   - how do we loops over all nodes? how do we apply something to all nodes?
 Graph = R6Class("Graph",
+  cloneable = FALSE,
   public = list(
 
     initialize = function() {
@@ -108,6 +109,9 @@ Graph = R6Class("Graph",
         assigncon(node$in_channels, node$intype, node$next_nodes, ".in_channels", ".intype")
         assigncon(node$out_channels, node$outtype, node$prev_nodes, ".out_channels", ".outtype")
       }
+    },
+    update_ids = function() {
+      names(private$.node_list) = map_chr(private$.node_list, function(x) x$pipeop$id)
     },
 
     add_node = function(node) {
