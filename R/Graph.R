@@ -83,8 +83,11 @@ Graph = R6Class("Graph",
   cloneable = FALSE,
   public = list(
 
-    initialize = function() {
+    initialize = function(copy = NULL) {
       self$update_connections()
+      if (!is.null(copy)) {
+        self$extend(copy)
+      }
       self
     },
 
@@ -124,6 +127,7 @@ Graph = R6Class("Graph",
         private$.node_list[[node$pipeop$id]] = node
         self$update_connections()
       }
+      self
     },
 
     # This should basically call trainGraph
@@ -155,6 +159,7 @@ Graph = R6Class("Graph",
           newnode$next_node_channels[[idx]] = newchannel
         }
       }
+      self
     },
 
     print = function(...) {
