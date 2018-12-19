@@ -17,7 +17,6 @@
 #   - do we want the fourth layer of topological sorting?
 #   - how do we loops over all nodes? how do we apply something to all nodes?
 Graph = R6Class("Graph",
-  inherit = GraphNode,
   public = list(
 
     initialize = function() {

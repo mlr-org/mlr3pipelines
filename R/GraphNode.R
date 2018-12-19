@@ -1,13 +1,4 @@
 
-GraphNode = R6::R6Class("GraphNode",
-  active = list(
-      intype = function() stop("abstract"),  # list of character
-      outtype = function() stop("abstract"),  # list of character
-      in_channels = function() stop("abstract"),  # list of NodeChannel
-      out_channels = function() stop("abstract")  # list of NodeChannel
-  )
-)
-
 NodeChannel = R6::R6Class("NodeChannel",
   public = list(
       name = NULL,
@@ -50,8 +41,6 @@ numbername = function(li) {
 #'
 #'
 GraphNode = R6::R6Class("GraphNode",
-  inherit = GraphNode,
-
   public = list(
 
     initialize = function(pipeop, graph) {
