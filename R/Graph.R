@@ -60,20 +60,13 @@ Graph = R6Class("Graph",
 
     # This should basically call trainGraph
     train = function(task) {
-      trainGraph(self$source_nodes, task)
-      invisible(self)
+      private$.reduceGraph(task, "train", TRUE)
+    },
+    predict = function(task) {
+      private$.reduceGraph(task, "predict", TRUE)
     },
     plot = function() {
       graph_plot(self$node_list)
-      invisible(self)
-    },
-
-    # FIXME: the "state" of the coded pipeline is now in self and model. that seems weird?
-    # can we remove "ops" from pipeline
-    predict = function(task) {
-      # FIXME: This should basically call the predict function on the GraphNodes
-      nodes = self$map(function(x) x, simplify = FALSE) # get the nodes in topo order
-      lapply(nodes, function(x) x$predict(task))
       invisible(self)
     },
 
@@ -145,7 +138,8 @@ Graph = R6Class("Graph",
       .intype = NULL,
       .outtype = NULL,
       .in_channels = NULL,
-      .out_channels = NULL
+      .out_channels = NULL,
+      .reduceGraph = reduceGraph
   )
 )
 
