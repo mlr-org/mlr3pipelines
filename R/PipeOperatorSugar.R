@@ -24,7 +24,7 @@
 
 #' @export
 `%>>%.Graph` = function(lhs, rhs) {
-  if (class(rhs) == "list") {
+  if (inherits(rhs, "list")) {
     rhs = Reduce(`%>>%`, rhs)
   }
   if (inherits(rhs, "GraphNode")) {
@@ -32,7 +32,7 @@
   }
   if (inherits(rhs, "PipeOp")) {
     graph = Graph$new()
-    graph$add_node(lhs$clone(deep = TRUE))
+    graph$add_node(rhs$clone(deep = TRUE))
     rhs = graph
   }
   if (!inherits(rhs, "Graph")) {

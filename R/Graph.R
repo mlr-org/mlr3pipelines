@@ -94,20 +94,20 @@ Graph = R6Class("Graph",
       private$.intype = list()
       private$.outtype = list()
       for (node in self$node_list) {
-        assigncon = function(edges, types, nodes, edgetarget, typetarget) {
-          for (conidx in seq_along(edges)) {
-            if (is.null(nodes[[conidx]])) {
-              edgename = names2(edges)[[conidx]]
+        assigncon = function(channels, types, otherchan, edgetarget, typetarget) {
+          for (conidx in seq_along(channels)) {
+            if (is.null(otherchan[[conidx]])) {
+              edgename = names2(channels)[[conidx]]
               if (is.na(edgename)) {
                 edgename = length(private[[edgetarget]]) + 1
               }
-              private[[edgetarget]][[edgename]] = edges[[conidx]]
+              private[[edgetarget]][[edgename]] = channels[[conidx]]
               private[[typetarget]][[edgename]] = types[[conidx]]
             }
           }
         }
-        assigncon(node$in_channels, node$intype, node$next_nodes, ".in_channels", ".intype")
-        assigncon(node$out_channels, node$outtype, node$prev_nodes, ".out_channels", ".outtype")
+        assigncon(node$in_channels, node$intype, node$prev_node_channels, ".in_channels", ".intype")
+        assigncon(node$out_channels, node$outtype, node$next_node_channels, ".out_channels", ".outtype")
       }
     },
     update_ids = function() {
@@ -117,12 +117,13 @@ Graph = R6Class("Graph",
     add_node = function(node) {
       if (!inherits(node, "GraphNode")) {
         # TODO: assert node inherits PipeOp
-        node = GraphNode(node, self)
+        GraphNode$new(node, self)
+      } else {
+        assert(identical(node$graph, self))
+        assert_null(private$.node_list[[node$pipeop$id]])
+        private$.node_list[[node$pipeop$id]] = node
+        self$update_connections()
       }
-      assert(identical(node$graph, self))
-      assert_null(private$.node_list[[node$pipeop$id]])
-      private$.node_list[[node$pipeop$id]] = node
-      self$update_connections()
     },
 
     # This should basically call trainGraph
@@ -149,6 +150,7 @@ Graph = R6Class("Graph",
         newnode = self$node_list[[nodename]]
         for (idx in seq_along(newnode$outtype)) {
           oldchannel = oldnode$next_node_channels[[idx]]
+          if (is.null(oldchannel)) next
           newchannel = self$node_list[[oldchannel$node$pipeop$id]]$in_channels[[oldchannel$name]]
           newnode$next_node_channels[[idx]] = newchannel
         }

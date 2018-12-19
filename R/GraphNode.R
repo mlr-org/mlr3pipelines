@@ -90,7 +90,7 @@ GraphNode = R6::R6Class("GraphNode",
 
           edgename = names2(newedges)[[idx]]
           if (is.na(edgename)) edgename = idx
-          oldedge$node$next_nodes[[oldedge$name]] = NULL
+          oldedge$node[[inverseedgename]][[oldedge$name]] = NULL
           newedges[[idx]]$node[[inverseedgename]][[newedges[[idx]]$name]] = NodeChannel$new(edgename, self, direction)
         }
         private[[oldedgename]] = newedges
