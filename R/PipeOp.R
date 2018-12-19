@@ -2,7 +2,7 @@
 PipeOp = R6::R6Class("PipeOp",
   public = list(
     packages = character(0),
-    cached_output = NULL,
+    result = NULL,
     initialize = function(id, param_set = ParamSet$new(), param_vals = NULL, ...) {
       private$.id = id
       private$.param_set = param_set
@@ -63,7 +63,7 @@ PipeOp = R6::R6Class("PipeOp",
     },
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
-    is_learnt = function() !is.null(self$state)
+    is_trained = function() !is.null(self$state)
   ),
 
   private = list(
@@ -77,6 +77,7 @@ PipeOp = R6::R6Class("PipeOp",
     .returnslist = TRUE,  # may be FALSE, but only if length(outtype) is 1
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
-    .result = NULL
+    .result = NULL,
+    .params = NULL
   )
 )

@@ -39,7 +39,7 @@ reduceGraph = function(input, fncall, cache_result = FALSE) {
       curin = curin[[1]]
     }
     curout = node$pipeop[[fncall]](curin)
-    if (cache_result) node$pipeop$cached_output = curout
+    if (cache_result) node$pipeop$result = curout
     if (!node$pipeop$returnslist) {
       assert(length(node$outtype) == 1)
       curout = list(curout)

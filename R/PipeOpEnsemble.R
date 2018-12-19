@@ -6,6 +6,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   public = list(
     initialize = function(id, param_set = ParamSet$new()) {
       super$initialize(id, param_set)
+      private$.intype = list("any")
+      private$.outtype = list("any")
+
     },
 
     train2 = function() {
