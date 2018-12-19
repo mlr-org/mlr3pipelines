@@ -403,8 +403,6 @@ g = pipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpGather(aggrF
 ```
 
 
-
-
 ####  Usecase: Multiplexing preprocessing steps
 
 ```r
@@ -476,14 +474,12 @@ What happens:
   - g$predict([[Task]]) [[identity >> predict(model, [[Task]]) >> trafoPreds(exp)]]
 ```
 
-
-
 FIXME:
   - Using the same operator twice would violate the acyclic property.
   - We can not tune over **par.vals** of TrafoY, as we have a hard time storing them.
   - User needs to ensure that trafos are correct
 
-### Usecase: MultiOutput (1 [[Task]], 3 Outputs, NoCV)
+### Usecase: MultiOutput / Multiple Targets (1 [[Task]], 3 Outputs, NoCV)
 
 
 ####  Usecase a): MultiOutput Parallel
@@ -520,5 +516,26 @@ g = PipeOpSetTarget("out1") %>>%
   gunion(PipeOpLearnerCV("rpart"), pnop) %>>%
   PipeOpLearnerCV() %>>%
   PipeOpsetTarget("final_out") %>>%
+  PipeOpLearner("rpart", id = "r3")
+```
+
+####  Usecase c): Hurdle Models
+
+*Scenario:*
+*We have a zero-inflated numeric target variable (e.g. amount unpaid bills).*
+*We want to leverage this info.*
+
+We obtain cross-validated predictions for whether the target variable is 0.
+We the use the prediction for this intermediate target for the final prediction.
+
+
+```r
+pnop = pipeOpNull()
+# data is our dt with a numeric "target"
+data$target_is_null = data$target > 0
+g = PipeOpSetTarget("target_is_null") %>>%
+  gunion(PipeOpLearnerCV("rpart", id = "r1"), pnop) %>>%
+  PipeOpFeatureUnion() %>>%
+  PipeOpSetTarget("target") %>>%
   PipeOpLearner("rpart", id = "r3")
 ```
