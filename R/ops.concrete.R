@@ -6,12 +6,15 @@ PipeOpNULL = R6Class("PipeOpNULL",
   public = list(
     initialize = function(id = "OpNULL") {
       super$initialize(id)
+      private$.intype = list("any")
+      private$.outtype = list("any")
     },
 
     train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
+#      assert_list(inputs, len = 1L, type = "Task")
       private$.result = inputs[[1L]]
       private$.params = list()
+      inputs
     },
 
     predict = function(inputs) {

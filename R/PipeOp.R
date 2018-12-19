@@ -49,7 +49,6 @@ PipeOp = R6::R6Class("PipeOp",
     },
     state = function() private$.state,
     result = function() private$.result,
-    is_learnt = function() !is.null(self$state),
     intype = function() private$.intype,
     outtype = function() private$.outtype,
     takeslist = function() {
@@ -61,8 +60,10 @@ PipeOp = R6::R6Class("PipeOp",
       rl = private$.returnslist
       assert(!rl || length(self$outtype) == 1)
       rl
-    }
+    },
 
+    # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
+    is_learnt = function() !is.null(self$state)
   ),
 
   private = list(
@@ -73,6 +74,9 @@ PipeOp = R6::R6Class("PipeOp",
     .intype = NULL,  # list of character vectors, identifying the input classes
     .outtype = NULL,  # list of character vectors, identifying output classes
     .takeslist = TRUE,  # may be FALSE, but only if length(intype) is 1
-    .returnslist = TRUE  # may be FALSE, but only if length(outtype) is 1
+    .returnslist = TRUE,  # may be FALSE, but only if length(outtype) is 1
+
+    # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
+    .result = NULL
   )
 )
