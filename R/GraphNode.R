@@ -3,12 +3,12 @@ GraphElement = R6::R6Class("GraphElement",
   active = list(
       intype = function() stop("abstract"),  # list of character
       outtype = function() stop("abstract"),  # list of character
-      in_edges = function() stop("abstract"),  # list of GraphEdge
-      out_edges = function() stop("abstract")  # list of GraphEdge
+      in_channels = function() stop("abstract"),  # list of NodeChannel
+      out_channels = function() stop("abstract")  # list of NodeChannel
   )
 )
 
-GraphEdge = R6::R6Class("GraphEdge",
+NodeChannel = R6::R6Class("NodeChannel",
   public = list(
       name = NULL,
       element = NULL,
@@ -57,10 +57,10 @@ GraphNode = R6::R6Class("GraphNode",
     initialize = function(pipeop, graph) {
       private$.pipeop = pipeop
       private$.graph = graph
-      private$.next_node_edges = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
-      private$.prev_node_edges = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
-      private$.in_edges = sapply(numbername(pipeop$intype), GraphEdge$new, element = self, simplify = FALSE, direction = "in")
-      private$.out_edges = sapply(numbername(pipeop$outtype), GraphEdge$new, element = self, simplify = FALSE, direction = "out")
+      private$.next_node_channels = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
+      private$.prev_node_channels = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
+      private$.in_channels = sapply(numbername(pipeop$intype), NodeChannel$new, element = self, simplify = FALSE, direction = "in")
+      private$.out_channels = sapply(numbername(pipeop$outtype), NodeChannel$new, element = self, simplify = FALSE, direction = "out")
       graph$add_node(self)
       self
     },
@@ -71,33 +71,33 @@ GraphNode = R6::R6Class("GraphNode",
 
   ),
   private = list(
-      .next_node_edges = NULL,
-      .prev_node_edges = NULL,
+      .next_node_channels = NULL,
+      .prev_node_channels = NULL,
       .editlock = FALSE,
-      .in_edges = NULL,
-      .out_edges = NULL,
+      .in_channels = NULL,
+      .out_channels = NULL,
       .graph = NULL,
       .pipeop = NULL
   ),
   active = list(
       graph = function() private$.graph,
       pipeop = function() private$.pipeop,
-      prev_node_edges = function(prev) {
+      prev_node_channels = function(prev) {
         if (!missing(prev)) {
-          connectgn(prev, ".prev_node_edges", "next_node_edges", "in", self, private)
+          connectgn(prev, ".prev_node_channels", "next_node_channels", "in", self, private)
         }
-        private$.prev_node_edges
+        private$.prev_node_channels
       },
-      next_node_edges = function(nxt) {
+      next_node_channels = function(nxt) {
         if (!missing(nxt)) {
-          connectgn(nxt, ".next_node_edges", "prev_node_edges", "out", self, private)
+          connectgn(nxt, ".next_node_channels", "prev_node_channels", "out", self, private)
         }
-        private$.next_node_edges
+        private$.next_node_channels
       },
-      next_nodes = function() map(self$next_node_edges, "element"),
-      prev_nodes = function() map(self$prev_node_edges, "element"),
-      in_edges = function() private$.in_edges,
-      out_edges = function() private$.out_edges,
+      next_nodes = function() map(self$next_node_channels, "element"),
+      prev_nodes = function() map(self$prev_node_channels, "element"),
+      in_channels = function() private$.in_channels,
+      out_channels = function() private$.out_channels,
       intype = function() self$pipeop$intype,
       outtype = function() self$pipeop$outtype,
     input_complete = function() !any(sapply(self$prev_nodes, is.null)),
@@ -114,7 +114,7 @@ connectgn = function(newedges, oldedgename, inverseedgename, direction, self, pr
   on.exit({private$.editlock = FALSE})
   private$.editlock = TRUE
   for (edge in newedges) {
-    # todo: assert edge is a GraphEdge
+    # todo: assert edge is a NodeChannel
     # TODO: check types
     if (!identical(edge$element$graph, private$.graph)) {
       stop("Can't connect nodes that are not in the same graph")
@@ -129,7 +129,7 @@ connectgn = function(newedges, oldedgename, inverseedgename, direction, self, pr
     edgename = names2(newedges)[[idx]]
     if (is.na(edgename)) edgename = idx
     oldedge$element$next_nodes[[oldedge$name]] = NULL
-    newedges[[idx]]$element[[inverseedgename]][[newedges[[idx]]$name]] = GraphEdge$new(edgename, self, direction)
+    newedges[[idx]]$element[[inverseedgename]][[newedges[[idx]]$name]] = NodeChannel$new(edgename, self, direction)
   }
   private[[oldedgename]] = newedges
   self$graph$update_connections()

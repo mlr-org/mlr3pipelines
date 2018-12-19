@@ -17,7 +17,7 @@
 #   - do we want the fourth layer of topological sorting?
 #   - how do we loops over all nodes? how do we apply something to all nodes?
 Graph = R6Class("Graph",
-  inherit = GraphElement,
+  inherit = GraphNode,
   public = list(
 
     initialize = function() {
@@ -26,8 +26,8 @@ Graph = R6Class("Graph",
     },
 
     update_connections = function() {  # update intype, outtype, inputs, outputs
-      private$.in_edges = list()
-      private$.out_edges = list()
+      private$.in_channels = list()
+      private$.out_channels = list()
       private$.intype = list()
       private$.outtype = list()
       for (node in self$node_list) {
@@ -43,8 +43,8 @@ Graph = R6Class("Graph",
             }
           }
         }
-        assigncon(node$in_edges, node$intype, node$next_nodes, ".in_edges", ".intype")
-        assigncon(node$out_edges, node$outtype, node$prev_nodes, ".out_edges", ".outtype")
+        assigncon(node$in_channels, node$intype, node$next_nodes, ".in_channels", ".intype")
+        assigncon(node$out_channels, node$outtype, node$prev_nodes, ".out_channels", ".outtype")
       }
     },
 
@@ -115,15 +115,15 @@ Graph = R6Class("Graph",
       },
       intype = function() private$.intype,
       outtype = function() private$.outtype,
-      in_edges = function() private$.in_edges,
-      out_edges = function() private$.out_edges,
+      in_channels = function() private$.in_channels,
+      out_channels = function() private$.out_channels,
 
       source_nodes = function() {
-        source_ids = unique(map_chr(self$in_edges, function(edge) edge$element$pipeop$id))
+        source_ids = unique(map_chr(self$in_channels, function(edge) edge$node$pipeop$id))
         self$node_list[source_ids]
       },
       sink_nodes = function() {
-        sink_ids = unique(map_chr(self$out_edges, function(edge) edge$element$pipeop$id))
+        sink_ids = unique(map_chr(self$out_channels, function(edge) edge$node$pipeop$id))
         self$node_list[sink_ids]
       },
     is_learnt = function(value) {
@@ -145,8 +145,8 @@ Graph = R6Class("Graph",
       .node_list = list(),
       .intype = NULL,
       .outtype = NULL,
-      .in_edges = NULL,
-      .out_edges = NULL
+      .in_channels = NULL,
+      .out_channels = NULL
   )
 )
 
