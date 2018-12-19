@@ -2,7 +2,7 @@
 PipeOp = R6::R6Class("PipeOp",
   public = list(
     packages = character(0),
-
+    cached_output = NULL,
     initialize = function(id, param_set = ParamSet$new(), param_vals = NULL, ...) {
       private$.id = id
       private$.param_set = param_set
@@ -51,6 +51,17 @@ PipeOp = R6::R6Class("PipeOp",
     is_learnt = function() !is.null(self$state),
     intype = function() private$.intype,
     outtype = function() private$.outtype
+    takeslist = function() {
+      tl = private$.takeslist
+      assert(!tl || length(self$intype) == 1)
+      tl
+    },
+    returnslist = function() {
+      rl = private$.returnslist
+      assert(!rl || length(self$outtype) == 1)
+      rl
+    }
+
   ),
 
   private = list(
@@ -59,6 +70,8 @@ PipeOp = R6::R6Class("PipeOp",
     .param_vals = NULL,
     .state = NULL,
     .intype = NULL,  # list of character vectors, identifying the input classes
-    .outtype = NULL  # list of character vectors, identifying output classes
+    .outtype = NULL,  # list of character vectors, identifying output classes
+    .takeslist = TRUE,  # may be FALSE, but only if length(intype) is 1
+    .returnslist = TRUE  # may be FALSE, but only if length(outtype) is 1
   )
 )

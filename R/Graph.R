@@ -151,29 +151,64 @@ Graph = R6Class("Graph",
 
 
 
+# input: e.g. task
+# fncall: character(1) identifying a function to call for each edge. probably "train" or "predict"
+# cache_result: whether to store cached_output pipeop
+reduceGraph = function(input, fncall, cache_result = FALSE) {
 
-trainGraph = function(roots, task) {
-
-  lapply(roots, function(x) x$inputs = list(task))
-  front = GraphNodesList$new(roots)
-
-  while(length(front) > 0L) {
-    BBmisc::messagef("front step, front=%s", front$print_str)
-    new_front = GraphNodesList$new()
-    to_remove = integer(0L)
-    for (i in seq_along(front)) {
-      op = front[[i]]
-      BBmisc::messagef("checking front node %s, can_fire=%s", op$id, op$can_fire)
-      if (op$can_fire) {
-        op$train()
-        new_front$join_new(op$next_nodes)
-      } else {
-        new_front$add(op)
-      }
-    }
-    front = new_front
-    BBmisc::messagef("front step done, front=%s", front$print_str)
+  sorted_nodes = self$sorted_node_list
+  in_channels = self$in_channels
+  out_channels = self$out_channels
+  if (length(in_channels) != 1) {
+    stop("Graph has != 1 in_channels, not supported yet")
   }
+  if (length(out_channels) != 1) {
+    stop("Graph has != 1 out_channels, not supported yet")
+  }
+  startnode = which(names(sorted_nodes) == in_channels[[1]]$node$pipeop$id)
+  stopnode = which(names(sorted_nodes) == out_channels[[1]]$node$pipeop$id)
+  assert(length(startnode) == 1) ; assert(length(stopnode) == 1) ; assert(startnode <= stopnode)
+  assert(identical(in_channels[[1]]$node, sorted_nodes[[startnode]]))
+  assert(identical(out_channels[[1]]$node, sorted_nodes[[stopnode]]))
+  assert(startnode == 1)  # don't support producers yet
+
+  sorted_nodes = sorted_nodes[startnode:stopnode]
+
+  inlist = list(input)
+  names(inlist) = names(sorted_nodes[[1]]$intype)
+
+  inputs = list()
+  inputs[[names(sorted_nodes)[1]]] = inlist
+
+  for (node in sorted_nodes) {
+    assert(node$pipeop$id %in% names(inputs))
+    curin = inputs[[node$pipeop$id]]
+    inputs[[node$pipeop$id]] = "00SENTINEL00"  # check later that we don't run in circles
+    if (!node$pipeop$takeslist) {
+      assert(length(curin) == 1)
+      curin = curin[[1]]
+    }
+    curout = node$pipeop[[fncall]](curin)
+    if (cache_result) node$pipeop$cached_output = curout
+    if (!node$pipeop$returnslist) {
+      assert(length(node$outtype) == 1)
+      curout = list(curout)
+      names(curout) = names(node$outtype)
+    }
+    assert(length(curout) == length(node$outtype))
+
+    for (idx in seq_along(node$outtype)) {
+      outchannel = node$next_node_channels[[idx]]
+      nodename = outchannel$node$pipeop$id
+      if (nodename %nin% names(inputs)) {
+        inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE)
+      }
+      assert(!identical(inputs[[nodename]], "00SENTINEL00"))
+      inputs[[nodename]][[outchannel$name]] = curout[[idx]]
+    }
+  }
+  assret(length(curout) == 1)
+  curout[[1]]
 }
 
 #' @export
