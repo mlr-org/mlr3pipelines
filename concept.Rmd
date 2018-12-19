@@ -16,6 +16,11 @@ During training it takes inputs, tranforms them, while doing that learns and sto
 parameters and then returns the output.
 During prediction it applies the learned params to the input and transforms the input to an output.
 
+A PipeOp specifies the types of inputs and outputs as `intype` and `outtype`, a list of <something specifying types>.
+The length of these lists determines the length of input / output the PipeOp produces. Typically the PipeOp input / output
+is a list of specified length, but PipeOps with input / output length 1 can specify that they don't use lists but use singular
+values instead (`.takeslist` / `.returnslist` set to `FALSE`)
+
 Usage:
 - new(id, params) [character(1), ParamSet] -> [PipeOp]
 - id  [character(1)]
@@ -25,54 +30,89 @@ Usage:
 - result [any]
 - train(input) : [any] -> [any]
 - predict(input) : [any] -> [any]
-- package [character(k)]
+- packages [character]
+- `.intype`: [list of something]
+- `.outtype`: [list of something]
+- `.takeslist`: [logical(1)]
+- `.returnslist`: [logical(1)]
+
+Suggestions:
+- rename 'params' to 'state'. I mean, come on.
 
 Details:
-  id: AB that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
-  param_set: The set of all exposed parameters of the PipeOp.
-  par_vals: A named list of parameter settings where all setting must come from `param_set`.
-  params: The object of learned parameters, obtained in the training step, and applied in the
+  `id`: AB that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
+  `param_set`: The set of all exposed parameters of the PipeOp.
+  `par_vals`: A named list of parameter settings where all setting must come from `param_set`.
+  `params`: The object of learned parameters, obtained in the training step, and applied in the
     predict step. #FIXME: what if the this is NULL? then the PO is untrained! we need a special "empty" object for POs which do not learn anything
-  new: Baseclass constructor, called by derived classes.
-  train: Function that is responsible to train on `input`, transform it to output and store the learned `params`.
+  `new`: Baseclass constructor, called by derived classes.
+  `train`: Function that is responsible to train on `input`, transform it to output and store the learned `params`.
     If the PipeOp is already trained, already present `params` are overwritten.
-  predict: Function that is responsible to predict on `input`, and transform it to output by applying the learned `params`.
+  `predict`: Function that is responsible to predict on `input`, and transform it to output by applying the learned `params`.
     If `is_trained = FALSE` the function cannot be applied.
-  result: A slot to store the result of either the `train` or the `predict` step, after it was
+  `result`: A slot to store the result of either the `train` or the `predict` step, after it was
     applied.
   # FIXME: this is a bit weird. Is this set by the pipeop? by the training of the graph? when do we delete this?
-  is_trained: Is the PipeOp currently trained?
+  `is_trained`: Is the PipeOp currently trained?
+  `.intype`: list of input types to accept
+  `.outtype`: list of output types that are returned
+  `.takeslist`: `TRUE` if input of `train` / `predict` is a list, `FALSE` if it is a singular value. If this is `FALSE`, `length(.intype)` must be 1
+  `.returnslist`: `TRUE` if output of `train` / `predict` is a list, `FALSE` if it is a singular value. If this is `FALSE`, `length(.outtype)` must be 1
 
+## class NodeChannel
 
+Description
+Represents an input / output slot of a node. A node can have multiple of these slots for input / output, they may be named and / or numbered.
+
+Usage:
+- `name`: [numeric(1) | character(1)]
+- `node`: [GraphNode]
+- `direction`: [character(1)] `"in"` or `"out"`
+
+Details:
+- `name`: Indexes the connection. May be a `character(1)` or a `numeric(1)`.
+- `node`: The GraphNode whose input / output is considered.
+- `direction` must be `"in"` if this is a channel representing input values of a `PipeOp` or `"out"` if this represents an item of the output list given by that `PipeOp`.
 
 ## class GraphNode
 
 Description:
-A GraphNode is a node of a (doubly connected) DAG, where each node carries as payload a single PipeOp.
+A GraphNode is a node of a (doubly connected) directed acyclic multigraph, where each node carries as payload a single PipeOp,
+and each edge represents the flow of a single list-element of a list returned by one PipeOp, into a single list-element
+of a list used as input of another PipeOp.
 Computational results in that graph only flow forward, but we store connections to predecessors of a node for
-convenience.
-The operation of a node can be executed when results from all predecessors are available.
-They are then passed to the PipeOp, the PipeOp is trained / predicted, and the result is stored in the PipeOp.
+convenience. A GraphNode is always a member of exactly one Graph, an can not have connections to GraphNodes
+not in this graph.
+
+A GraphNode has a set of "input channels" and "output channels"; edges go from output channels of one node to the input channel of another node. 
 
 Usage:
-- pipeop  [PipeOp]      : operator in that node
-- next_nodes [list]
-- prev_nodes  [list]
-- set_next(ops)  [list of GraphNode] -> self
-- set_prev(ops) [list of GraphNode] -> self
-- has_lhs [logical(1)]
-- has_rhs [logical(1)]
-- can_fire [logical(1)]
+- `graph` [Graph]
+- `pipeop`  [PipeOp]
+- `in_channels` [list of NodeChannel]
+- `out_channels` [list of NodeChannel]
+- `next_node_channels` [list of NodeChannel]
+- `prev_node_channels` [list of NodeChannel]
+- `next_nodes` [list of GraphNode]: 
+- `prev_nodes` [list of GraphNode]: 
+- `input_complete` [logical(1)] 
+- `output_complete` [logical(1)] 
+- `intype` [list of any]
+- `outtype` [list of any]
 
 Details:
-pipeop: Operator in that node
-next_nodes: List of successor nodes
-prev_nodes: List of predecessor nodes
-set_next: Mutator that makes the passed nodes the successor nodes of the current one - and automatically reverse-connects the successors to this node.
-set_prev: Mutator that makes the current node the single successor of the passed nodes - and reverse-connects this node to the passed nodes.
-has_lhs: Does this node have predecessors?
-has_rhs: Does this node have successors?
-can_fire: Can this node compute its results - because all inputs / results of previous nodes are available?
+`graph`: the graph that this node belongs to
+`pipeop`: Operator in that node
+`in_channels`: list of NodeChannel that can be put into `next_node_channels` of another node to form a connection.
+`out_channels`: list of NodeChannel that can be put into `prev_node_channels` of another node to form a connection.
+`next_node_channels`: the respective `in_channels` of successor nodes where data flows. Mutable to change connections.
+`prev_node_channels`: the respective `out_channels` of predecessor nodes where data comes from. Mutable to change connections.
+`next_nodes`: nodes connected by `next_node_channels`, readonly
+`prev_nodes`: nodes connected by `prev_node_channels`, readonly
+`input_complete`: whether all input channels have a connected node
+`output_complete`: whether all output channels have a connected note
+`intype` mirrors the pipeop `intype`
+`outtype` mirrors the pipeop `outtype`
 
 ## class Graph
 
@@ -81,15 +121,53 @@ The graph is a container class for the complete computational graph. It is made 
 (connected) GraphNodes, it can be trained and predicted.
 
 Usage:
-- nodes [list of GraphNode]
-- ids [character]
-- lhs [list of GraphNode]
-- rhs [list of GraphNode]
-- get_node(id) [character(1)] -> [GraphNode]
-- get_pipeop(id) [character(1)] -> [PipeOp]
+- `new` [Graph]
+- `node_list` [list of GraphNode]
+- `sorted_node_list` [list of GraphNode]
+- `intype` [list of any]]
+- `outtype` [list of any]]
+- `in_channels` [list of NodeChannel]
+- `out_channels` [list of NodeChannel]
+- `source_nodes` [list of GraphNode]
+- `sink_nodes` [list of GraphNode]
+- `add_node()` [GraphNode | PipeOp] -> [Graph]
+- `train()` [any] -> [any]
+- `predict()` [any] -> [any]
+- `plot()`
+- `extend()` [Graph] -> [Graph]
+- `map()` [function], [logical] -> [list of any]
+
+- `update_connections()`
+- `update_ids()`
+- `[[`
+
+Aggregated info
+- `param_set` [ParamSet]
+- `param_vals` [list]
+- `packages` [character]
+
+Remove the following?:
+- `is_learnt`
+- `rhs`
+- `lhs`
+
 
 Details:
-- get_node: Return GraphNode by id of the enclosed PipeOp.
+- Get node by `[[id]]`
+- `new` with optional Graph argument: copy constructor
+- `node_list` list of GraphNode, indexed by ID
+- `sorted_node_list` like `node_list`, but ordered by their connections
+- `intype`: types of the `in_channels`
+- `outtype`: types of the `out_channels`
+- `source_nodes`: nodes that have unconnected input channels and therefore act as graph input
+- `sink_nodes`: nodes that have unconnected output channels and therefore act as graph output
+- `add_node`: Mutates graph by adding a PipeOp or GraphNode. GraphNode calls this automatically on construction, so a user should only call this with a PipeOp.
+
+- `train()`: train on input (e.g. Task), returns processed output (e.g. modified task)
+- `predict()`: predict on input (e.g. Data), get processed output (e.g. predictions)
+- `plot()`: plot of graph
+- `extend()`: Add other graph as disjoint union
+
 - get_pipeop: Returns PipeOp by its id.
 - ids: Ids of all PipeOps in the graph.
 - lhs: Returns all nodes which have no predecessors
@@ -164,7 +242,7 @@ Prediction on a graph works exactly the same. We feed the input object to the LH
 `predict` on each node, layer by layer, until we have done that also on the RHS.
 
 
-#FIXME: we need to specifiy the concept of brnaching / multiplexing
+FIXME: we need to specifiy the concept of brnaching / multiplexing
 
 
 

@@ -1,65 +1,29 @@
-#' ListNamedEls for GraphNodes.
-#'
-#' @description
-#' It is used mainly inside the GraphNode class
-#' to store the next and previous nodes.
-#'
-#' It's not exported.
-#'
-#' @noRd
-#'
-GraphNodesList = R6Class("GraphNodesList",
-   inherit = ListNamedEls,
 
-   public = list(
-     initialize = function(xs = list()) {
-       super$initialize(xs, "GraphNode", get_key = function(x) x$pipeop$id)
-     },
-     set_next = function(nodes) {
-       nodes = wrap_nodes(nodes)
-       self$map(function(x) x$set_next(nodes))
-       GraphNodesList$new(nodes)
-     }
-   )
+NodeChannel = R6::R6Class("NodeChannel",
+  public = list(
+      name = NULL,
+      node = NULL,
+      direction = NULL,
+      initialize = function(name, node, direction) {
+        assert_choice(direction, c("in", "out"))
+        self$name = name
+        self$node = node
+        self$direction = direction
+      },
+      print = function() {
+        catf("Channel name %s %s GraphNode %s", self$name, if (self$direction == "in") "into" else "out of", self$node$pipeop$id)
+      }
+  )
 )
 
-##### Methods definitions #####
-# set_next
-graph_node_set_next = function(nodes) {
-
-  nodes = wrap_nodes(nodes)
-  self$next_nodes = GraphNodesList$new(nodes)
-  for(nn in nodes) {
-    nn$add_prev(self)
-  }
-
-  self$next_nodes
+numbername = function(li) {
+  res = lapply(seq_along(li), function(x) {
+    ret = names2(li)[x]
+    if (is.na(ret)) x else ret
+  })
+  names(res) = names(li)
+  res
 }
-
-# set_prev
-graph_node_set_prev = function(nodes) {
-
-  nodes = wrap_nodes(nodes)
-  self$prev_nodes = GraphNodesList$new(nodes)
-  for(nn in nodes) {
-    nn$add_next(self)
-  }
-  self$prev_nodes
-}
-
-
-graph_node_add_next = function(nodes) {
-  nodes = wrap_nodes(nodes)
-  self$next_nodes$join_new(GraphNodesList$new(nodes))
-  self
-}
-
-graph_node_add_prev = function(nodes) {
-  nodes = wrap_nodes(nodes)
-  self$prev_nodes$join_new(GraphNodesList$new(nodes))
-  self
-}
-
 
 #### Class definition ####
 
@@ -76,70 +40,85 @@ graph_node_add_prev = function(nodes) {
 #' @importFrom R6 R6Class
 #'
 #'
-GraphNode = R6::R6Class(
-  "GraphNode",
+GraphNode = R6::R6Class("GraphNode",
   public = list(
-    initialize = function(pipeop) {
-      self$pipeop = pipeop
-      self$next_nodes = GraphNodesList$new()
-      self$prev_nodes = GraphNodesList$new()
-    },
-    pipeop = NULL,
-    inputs = list(),
 
-    # next, prev
-    next_nodes = NULL,
-    prev_nodes = NULL,
-    set_next = graph_node_set_next,
-    set_prev = graph_node_set_prev,
-    add_next = graph_node_add_next,
-    add_prev = graph_node_add_prev,
-    train = function() {
-      if (self$has_lhs) {
-        self$inputs = self$prev_nodes$map(function(x) x$result)
-      }
-      messagef("Train op='%s'", self$id)
-      self$pipeop$train(self$inputs)
+    initialize = function(pipeop, graph) {
+      private$.pipeop = pipeop
+      private$.graph = graph
+      private$.next_node_channels = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
+      private$.prev_node_channels = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
+      private$.in_channels = sapply(numbername(pipeop$intype), NodeChannel$new, node = self, simplify = FALSE, direction = "in")
+      private$.out_channels = sapply(numbername(pipeop$outtype), NodeChannel$new, node = self, simplify = FALSE, direction = "out")
+      graph$add_node(self)
+      self
     },
-    next_node = function(id = 1) self$next_nodes[[id]],
 
     print = function(...) {
-      catf("GraphNode: <%s>", self$id)
+      catf("GraphNode: <%s>", self$pipeop$id)
     }
+
   ),
-  private = list(),
+  private = list(
+      .next_node_channels = NULL,
+      .prev_node_channels = NULL,
+      .editlock = FALSE,
+      .in_channels = NULL,
+      .out_channels = NULL,
+      .graph = NULL,
+      .pipeop = NULL,
+      connectgn = function(newedges, oldedgename, inverseedgename, direction) {
+        # TODO: assert prev is a list
+        if (!identical(names(newedges), names(private[[oldedgename]]))) {
+          stop("Can't change names of nodes")
+        }
+        if (private$.editlock) return(NULL)
+        on.exit({private$.editlock = FALSE})
+        private$.editlock = TRUE
+        for (edge in newedges) {
+          # todo: assert edge is a NodeChannel
+          # TODO: check types
+          if (!identical(edge$node$graph, private$.graph)) {
+            stop("Can't connect nodes that are not in the same graph")
+          }
+        }
+        for (idx in seq_along(newedges)) {
+          oldedge = private[[oldedgename]][[idx]]
+          if (identical(newedges[[idx]], oldedge)) {
+            next
+          }
+
+          edgename = names2(newedges)[[idx]]
+          if (is.na(edgename)) edgename = idx
+          oldedge$node[[inverseedgename]][[oldedge$name]] = NULL
+          newedges[[idx]]$node[[inverseedgename]][[newedges[[idx]]$name]] = NodeChannel$new(edgename, self, direction)
+        }
+        private[[oldedgename]] = newedges
+        self$graph$update_connections()
+      }
+  ),
   active = list(
-
-    # forwarded
-    id = function() self$pipeop$id,
-    result = function() self$pipeop$result,
-    has_result = function() !is.null(self$pipeop$result),
-    is_learnt  = function() self$pipeop$is_learnt,
-
-    has_lhs = function() length(self$prev_nodes) > 0L,
-    has_rhs = function() length(self$next_nodes) > 0L,
-    can_fire = function() {
-      if (!self$has_lhs) length(self$inputs) > 0
-      else all(self$prev_nodes$map_s(function(x) x$has_result))
-    },
-    root_node = function() {
-      if(self$has_no_prevs) return(self)
-      self$prev_nodes[[1]]$root_node
-    }
+      graph = function() private$.graph,
+      pipeop = function() private$.pipeop,
+      prev_node_channels = function(prev) {
+        if (!missing(prev)) {
+          private$connectgn(prev, ".prev_node_channels", "next_node_channels", "in")
+        }
+        private$.prev_node_channels
+      },
+      next_node_channels = function(nxt) {
+        if (!missing(nxt)) {
+          private$connectgn(nxt, ".next_node_channels", "prev_node_channels", "out")
+        }
+        private$.next_node_channels
+      },
+      next_nodes = function() map(self$next_node_channels, "node"),
+      prev_nodes = function() map(self$prev_node_channels, "node"),
+      in_channels = function() private$.in_channels,
+      out_channels = function() private$.out_channels,
+      intype = function() self$pipeop$intype,
+      outtype = function() self$pipeop$outtype,
+    input_complete = function() !any(sapply(self$prev_nodes, is.null)),
+    output_complete = function() !any(sapply(self$next_nodes, is.null))
   )
 )
-
-wrap_nodes = function(x) {
-
-  check_node = function(y) {
-    checkmate::assert_class(y, "GraphNode")
-    y
-  }
-
-  if(inherits(x, "GraphNode")) {
-    x = list(check_node(x))
-  } else if(is.list(x)) {
-    x = lapply(x, check_node)
-  }
-  x
-}

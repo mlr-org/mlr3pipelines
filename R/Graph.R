@@ -1,27 +1,65 @@
-graph_gather_params = function(root) {
 
-  all_params = graph_map_topo(
-    root,
-    function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
-    simplify = FALSE
-  )
 
-  all_params_named = mapply(function(params_list, id) {
 
-    lapply(params_list, function(x) {
+# input: e.g. task
+# fncall: character(1) identifying a function to call for each edge. probably "train" or "predict"
+# cache_result: whether to store cached_output pipeop
+reduceGraph = function(input, fncall, cache_result = FALSE) {
 
-      x = x$clone(deep = TRUE)
-      x$id = paste(id, x$id, sep =":")
-      x
-    })
+  sorted_nodes = self$sorted_node_list
+  in_channels = self$in_channels
+  out_channels = self$out_channels
+  if (length(in_channels) != 1) {
+    stop("Graph has != 1 in_channels, not supported yet")
+  }
+  if (length(out_channels) != 1) {
+    stop("Graph has != 1 out_channels, not supported yet")
+  }
+  startnode = which(names(sorted_nodes) == in_channels[[1]]$node$pipeop$id)
+  stopnode = which(names(sorted_nodes) == out_channels[[1]]$node$pipeop$id)
+  assert(length(startnode) == 1) ; assert(length(stopnode) == 1) ; assert(startnode <= stopnode)
+  assert(identical(in_channels[[1]]$node, sorted_nodes[[startnode]]))
+  assert(identical(out_channels[[1]]$node, sorted_nodes[[stopnode]]))
+  assert(startnode == 1)  # don't support producers yet
 
-  }, all_params, names(all_params), SIMPLIFY = FALSE)
+  sorted_nodes = sorted_nodes[startnode:stopnode]
 
-  paradox::ParamSet$new(params = unlist(all_params_named))
+  inlist = list(input)
+  names(inlist) = names(sorted_nodes[[1]]$intype)
+
+  inputs = list()
+  inputs[[names(sorted_nodes)[1]]] = inlist
+
+  for (node in sorted_nodes) {
+    assert(node$pipeop$id %in% names(inputs))
+    curin = inputs[[node$pipeop$id]]
+    inputs[[node$pipeop$id]] = "00SENTINEL00"  # check later that we don't run in circles
+    if (!node$pipeop$takeslist) {
+      assert(length(curin) == 1)
+      curin = curin[[1]]
+    }
+    curout = node$pipeop[[fncall]](curin)
+    if (cache_result) node$pipeop$result = curout
+    if (!node$pipeop$returnslist) {
+      assert(length(node$outtype) == 1)
+      curout = list(curout)
+      names(curout) = names(node$outtype)
+    }
+    assert(length(curout) == length(node$outtype))
+
+    for (idx in seq_along(node$outtype)) {
+      outchannel = node$next_node_channels[[idx]]
+      nodename = outchannel$node$pipeop$id
+      if (nodename %nin% names(inputs)) {
+        inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE)
+      }
+      assert(!identical(inputs[[nodename]], "00SENTINEL00"))
+      inputs[[nodename]][[outchannel$name]] = curout[[idx]]
+    }
+  }
+  assret(length(curout) == 1)
+  curout[[1]]
 }
-
-
-
 
 
 # class Graph
@@ -42,66 +80,104 @@ graph_gather_params = function(root) {
 #   - do we want the fourth layer of topological sorting?
 #   - how do we loops over all nodes? how do we apply something to all nodes?
 Graph = R6Class("Graph",
-
+  cloneable = FALSE,
   public = list(
 
-    source_nodes = list(),
-
-    # FIXME: Do we need task_type and id?
-    task_type = "classif",
-    id = "foobar",
-
-    # Do we clone/copy here? Otherwise state of OP's trained outside will change
-    initialize = function(source_nodes) {
-      # handles only GraphNode or list of the graph nodes
-      if(inherits(source_nodes, "GraphNode")) {
-        source_nodes = list(source_nodes)
-      } else if(is.list(source_nodes)) {
-        if(!all(vapply(source_nodes, TRUE, FUN = inherits, what = "GraphNode"))) {
-          stop("Graph can only be initialized using GraphNode or a list of GraphNodes")
-        }
-      } else {
-        stop("Only GraphNode or list of GraphNodes is supported.")
+    initialize = function(copy = NULL) {
+      self$update_connections()
+      if (!is.null(copy)) {
+        self$extend(copy)
       }
+      self
+    },
 
-      # Fixme: Should we do consitency checks (unique Id's etc here?)
-      self$source_nodes = source_nodes
+    update_connections = function() {  # update intype, outtype, inputs, outputs
+      private$.in_channels = list()
+      private$.out_channels = list()
+      private$.intype = list()
+      private$.outtype = list()
+      for (node in self$node_list) {
+        assigncon = function(channels, types, otherchan, edgetarget, typetarget) {
+          for (conidx in seq_along(channels)) {
+            if (is.null(otherchan[[conidx]])) {
+              edgename = names2(channels)[[conidx]]
+              if (is.na(edgename)) {
+                edgename = length(private[[edgetarget]]) + 1
+              }
+              private[[edgetarget]][[edgename]] = channels[[conidx]]
+              private[[typetarget]][[edgename]] = types[[conidx]]
+            }
+          }
+        }
+        assigncon(node$in_channels, node$intype, node$prev_node_channels, ".in_channels", ".intype")
+        assigncon(node$out_channels, node$outtype, node$next_node_channels, ".out_channels", ".outtype")
+      }
+    },
+    update_ids = function() {
+      names(private$.node_list) = map_chr(private$.node_list, function(x) x$pipeop$id)
+    },
+
+    add_node = function(node) {
+      if (!inherits(node, "GraphNode")) {
+        # TODO: assert node inherits PipeOp
+        GraphNode$new(node, self)
+      } else {
+        assert(identical(node$graph, self))
+        assert_null(private$.node_list[[node$pipeop$id]])
+        private$.node_list[[node$pipeop$id]] = node
+        self$update_connections()
+      }
       self
     },
 
     # This should basically call trainGraph
     train = function(task) {
-      trainGraph(self$source_nodes, task)
-      invisible(self)
+      private$.reduceGraph(task, "train", TRUE)
+    },
+    predict = function(task) {
+      private$.reduceGraph(task, "predict", TRUE)
     },
     plot = function() {
-      graph_plot(self$source_nodes)
+      graph_plot(self$node_list)
       invisible(self)
     },
 
-    # FIXME: the "state" of the coded pipeline is now in self and model. that seems weird?
-    # can we remove "ops" from pipeline
-    predict = function(task) {
-      # FIXME: This should basically call the predict function on the GraphNodes
-      nodes = self$map(function(x) x, simplify = FALSE) # get the nodes in topo order
-      lapply(nodes, function(x) x$predict(task))
-      invisible(self)
+    extend = function(graph) {
+      # add nodes: easy
+      for (node in graph$node_list) {
+        self$add_node(node$pipeop)
+      }
+
+      # replicate connections: harder
+      for (nodename in names(graph$node_list)) {
+        oldnode = graph$node_list[[nodename]]
+        newnode = self$node_list[[nodename]]
+        for (idx in seq_along(newnode$outtype)) {
+          oldchannel = oldnode$next_node_channels[[idx]]
+          if (is.null(oldchannel)) next
+          newchannel = self$node_list[[oldchannel$node$pipeop$id]]$in_channels[[oldchannel$name]]
+          newnode$next_node_channels[[idx]] = newchannel
+        }
+      }
+      self
     },
 
     print = function(...) {
-      res = graph_map_topo(self$source_nodes, add_layer = TRUE)
+      if (!length(self$node_list)) return(cat("Empty Graph.\n"))
+
+      layers = sort_nodes(self$node_list, TRUE)
       res_string = tapply(
-        res,
-        attr(res, "layer"),
-        FUN = function(x) paste(x, collapse = ",")
+        names(layers),
+        layers,
+        FUN = paste,
+        collapse = ","
       )
 
       res_size = tapply(
-        res,
-        attr(res, "layer"),
-        FUN = function(x) length(x)
+        names(layers),
+        layers,
+        FUN = length
       )
-
       output_string = paste(
         sprintf("[(%s), %s]", res_string, res_size),
         collapse = " >> "
@@ -112,25 +188,28 @@ Graph = R6Class("Graph",
       cat(output_string, "\n")
     },
 
-    reset = function() {
-      self$map(function(x) x$pipeop$reset(), simplify = FALSE)
-      invisible(self)
-    },
-
     map = function(fnc, simplify = TRUE) {
-      graph_map_topo(self$source_nodes, fnc, simplify = simplify)
-    },
-
-    find_by_id = function(id) {
-      # FIXME: We might want a version of traverseGraph that does this more efficiently.
-      assert_choice(id, self$ids)
-      nodes = self$map(function(x) {
-        if(x$id == id) return(x)
-      })
-      nodes[[1]]
+      sapply(self$sorted_node_list, fnc, simplify = simplify)
     }
   ),
   active = list(
+      node_list = function() private$.node_list,
+      sorted_node_list = function() {
+        sort_nodes(self$node_list)
+      },
+      intype = function() private$.intype,
+      outtype = function() private$.outtype,
+      in_channels = function() private$.in_channels,
+      out_channels = function() private$.out_channels,
+
+      source_nodes = function() {
+        source_ids = unique(map_chr(self$in_channels, function(edge) edge$node$pipeop$id))
+        self$node_list[source_ids]
+      },
+      sink_nodes = function() {
+        sink_ids = unique(map_chr(self$out_channels, function(edge) edge$node$pipeop$id))
+        self$node_list[sink_ids]
+      },
     is_learnt = function(value) {
         all(self$map(function(x) x$is_learnt))
     },
@@ -139,74 +218,46 @@ Graph = R6Class("Graph",
       },
     param_vals = function(value) {
       if (missing(value)) list()
-      # FIXME: Allow setting Params for the Operators here
-    },
-    ids = function(value) {
-      # FIXME: How are parallel Op's treated here?
-      if (missing(value)) {
-        self$map(function(x) x$id)
-      } else {
-        # FIXME: Should we allow overwriting id's here?
-      }
     },
     packages = function() {
-      pkgs = self$map(function(x) x$pipeop$packages)
-      unique(pkgs)
+      unique(self$map(function(x) x$pipeop$packages))
     },
-    lhs = function() { self$source_nodes },
-    rhs = function() {
-      self$map(function(x) {
-        if(x$next_nodes$is_empty) return(x)
-      })
-    }
+    lhs = function() self$source_nodes,
+    rhs = function() self$sink_nodes
+  ),
+  private = list(
+      .node_list = list(),
+      .intype = NULL,
+      .outtype = NULL,
+      .in_channels = NULL,
+      .out_channels = NULL,
+      .reduceGraph = reduceGraph
   )
 )
 
-trainGraph = function(roots, task) {
-
-  lapply(roots, function(x) x$inputs = list(task))
-  front = GraphNodesList$new(roots)
-
-  while(length(front) > 0L) {
-    messagef("front step, front=%s", front$print_str)
-    new_front = GraphNodesList$new()
-    to_remove = integer(0L)
-    for (i in seq_along(front)) {
-      op = front[[i]]
-      messagef("checking front node %s, can_fire=%s", op$id, op$can_fire)
-      if (op$can_fire) {
-        op$train()
-        new_front$join_new(op$next_nodes)
-      } else {
-        new_front$add(op)
-      }
-    }
-    front = new_front
-    messagef("front step done, front=%s", front$print_str)
-  }
-}
-
 #' @export
 length.Graph = function(x) {
-  length(x$ids)
+  length(x$node_list)
 }
 
 #' @export
 `[[.Graph` = function(x, i, j, ...) {
-  if (is.character(i)) {
-    x$find_by_id(i)
-  } else if (is.integer(i)) {
-    # FIXME: This will break for parallel operators.
-    x$find_by_id(x$ids[i])
-  }
+  x$node_list[[i]]
 }
 
-graph_to_edge_list = function(root) {
-  edges = graph_map_topo(root, simplify = FALSE, function(x) {
-    res = cbind(
+#' @export
+`[[<-.Graph` = function(x, i, j, value) {
+  if (!identical(x$node_list[[i]], value)) {
+    stop("Cannot re-assign graph nodes")
+  }
+  x
+}
 
-      x$id,
-      x$next_nodes$map(function(y) y$id)
+graph_to_edge_list = function(nodes) {
+  edges = map(sort_nodes(nodes), function(x) {
+    res = cbind(
+      x$pipeop$id,
+      map_chr(Filter(Negate(is.null), x$next_nodes), function(y) y$pipeop$id)
     )
     if(ncol(res) > 1) res
   })
@@ -216,77 +267,70 @@ graph_to_edge_list = function(root) {
   edges
 }
 
-graph_plot = function(root) {
+graph_plot = function(nodes) {
   if (!requireNamespace("igraph", quietly = TRUE)) {
     stop("Please install package 'igraph'")
   }
 
-  edges = graph_to_edge_list(root)
-  g = igraph::graph_from_edgelist(edges)
-  layout =  igraph::layout_with_sugiyama(g)
+  edges = graph_to_edge_list(nodes)
+  if (length(edges)) {
+    g = igraph::graph_from_edgelist(edges, directed = TRUE)
+  } else {
+    g = igraph::make_empty_graph()
+  }
 
+  forgotten = setdiff(names(nodes), edges)
+  g = igraph::add_vertices(g, length(forgotten), name = forgotten)
+  layout = igraph::layout_with_sugiyama(g)
   plot(g, layout = layout$layout)
 }
 
-#' graph_map_topo
-#'
-#' @param root root node of the graph.
-#' @param fnc function to apply
-#' @param simplify should the result be simplified using simplify2array.
-#' Default TRUE.
-#' @param add_layer if true add information about the layer as a attribute.
-#'
-#' @return
-#'
-#' List (possibly simplified to vector) with the output
-#' of function `fnc`  applied to all the nodes of the graph
-#' in topological order. Note that only the output is in
-#' topological order. The function `fnc` is not applied in that order,
-#' contrary, the algorithm uses a `depth-first search`,
-#' so it starts applying the function from the last element.
-#'
-#' @noRd
-#'
-graph_map_topo = function(roots, fnc = function(x) x$id, simplify = TRUE, add_layer = FALSE) {
 
-  state = new.env()
-  state$permanent = c()
-  state$temporary = c()
-  state$list = list()
-  state$depth = numeric()
-
-  visit = function(node, state, depth = 1) {
-    if(node$id %in% state$permanent) {
-      state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
-      return()
-    }
-    if(node$id %in% state$temporary) stop("Not a DAG")
-    state$temporary = c(node$id, state$temporary) # mark temporarily
-
-    if(node$has_rhs) {
-      res = lapply(
-        node$next_nodes$xs,
-        visit,
-        state = state,
-        depth = depth + 1
-      )
-    } else {
-      res = NULL
-    }
-    state$permanent = c(node$id, state$permanent) # mark permanent
-    state$temporary = state$temporary[node$id != state$temporary]
-
-    state$list[[node$id]] = fnc(node)
-    state$depth[node$id] = pmax(depth, state$depth[node$id], na.rm = TRUE)
+sort_nodes = function(node_list, layerinfo = FALSE) {
+  pending = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
+  cache = map_dbl(node_list, pending)
+  queue = names(cache)[cache == 0]
+  layers = sapply(queue, function(.) 0, simplify = FALSE)
+  cache = cache[cache != 0]
+  queueidx = 1
+  while (queueidx <= length(queue)) {
+    current = queue[queueidx]
+    nexts = table(map_chr(Filter(Negate(is.null), node_list[[current]]$next_nodes), function(n) n$pipeop$id))
+    if (any(nexts %in% queue)) stop("Cycles in graph!")
+    cache[names(nexts)] = cache[names(nexts)] - nexts
+    for (n in names(nexts)) layers[[n]] = min(layers[[n]], layers[[current]] + 1)
+    queue = c(queue, names(cache)[cache == 0])
+    cache = cache[cache != 0]
+    queueidx = queueidx + 1
   }
-
-  lapply(roots, visit, state = state)
-
-  state$depth = state$depth[names(state$list)]
-  result      = state$list[order(state$depth)]
-  state$depth = sort(state$depth)
-
-  result = if(simplify) simplify2array(result) else result
-  if(add_layer) attr(result, "layer") = state$depth
-  result
+  if (length(cache)) {
+    stop("Unconnected nodes found")
+  }
+  if (layerinfo) {
+    sort(map_dbl(layers, identity))
+  } else {
+    node_list[queue]
+  }
 }
+
+graph_gather_params = function(root) {
+
+  all_params = root$map(
+    function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
+    simplify = FALSE
+  )
+
+  all_params_named = mapply(function(params_list, id) {
+
+    lapply(params_list, function(x) {
+
+      x = x$clone(deep = TRUE)
+      x$id = paste(id, x$id, sep =":")
+      x
+    })
+
+  }, all_params, names(all_params), SIMPLIFY = FALSE)
+
+  paradox::ParamSet$new(params = unlist(all_params_named))
+}
+

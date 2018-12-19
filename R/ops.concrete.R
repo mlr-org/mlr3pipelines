@@ -6,12 +6,15 @@ PipeOpNULL = R6Class("PipeOpNULL",
   public = list(
     initialize = function(id = "OpNULL") {
       super$initialize(id)
+      private$.intype = list("any")
+      private$.outtype = list("any")
     },
 
     train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
+#      assert_list(inputs, len = 1L, type = "Task")
       private$.result = inputs[[1L]]
       private$.params = list()
+      inputs
     },
 
     predict = function(inputs) {
@@ -29,6 +32,8 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
   public = list(
     initialize = function(id = "PipeOpFeatureTransform", ps = ParamSet$new()) {
       super$initialize(id, ps)
+      private$.intype = list("any")
+      private$.outtype = list("any")
     },
 
     train = function(inputs) {
@@ -95,6 +100,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf)
       ))
       super$initialize(id, ps)
+      private$.intype = list("any")
+      private$.outtype = list("any")
     },
 
     train_dt = function(dt) {
@@ -127,6 +134,9 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
       ))
       super$initialize(id, ps)
       self$packages = "irlba"
+      private$.intype = list("any")
+      private$.outtype = list("any")
+
     },
 
     train = function(inputs) {
@@ -185,6 +195,9 @@ PipeOpScaler = R6Class("PipeOpScaler",
         ParamLgl$new("scale", default = TRUE)
       ))
       super$initialize(id, ps)
+      private$.intype = list("any")
+      private$.outtype = list("any")
+
     },
 
     train = function(inputs) {
@@ -230,6 +243,9 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
         ParamLgl$new("stratify", default = FALSE)
       ))
       super$initialize(id, ps)
+      private$.intype = list("any")
+      private$.outtype = list("any")
+
     },
 
     train2 = function() {
