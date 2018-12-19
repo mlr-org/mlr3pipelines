@@ -1,5 +1,5 @@
+#' @rawNamespace import(data.table, except = transpose)
 #' @import checkmate
-#' @import data.table
 #' @import mlr3
 #' @import paradox
 #' @import mlr3misc

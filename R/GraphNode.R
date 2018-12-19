@@ -35,7 +35,7 @@ numbername = function(li) {
 #' connections between the \code{PipeOps}. The set of interconnected
 #' GraphNodes creates the pipeline graph.
 #'
-#' @usage GraphNode$new(pipeop)
+#' @usage GraphNode
 #'
 #' @importFrom R6 R6Class
 #'
@@ -55,7 +55,7 @@ GraphNode = R6::R6Class("GraphNode",
     },
 
     print = function(...) {
-      BBmisc::catf("GraphNode: <%s>", self$pipeop$id)
+      catf("GraphNode: <%s>", self$pipeop$id)
     }
 
   ),

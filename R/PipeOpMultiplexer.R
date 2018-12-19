@@ -7,7 +7,7 @@ PipeOpMultiplexer = R6Class("PipeOpMultiplexer",
     ops = NULL,
 
     initialize = function(ops) {
-      op_ids = BBmisc::extractSubList(ops, "id")
+      op_ids = map(ops, "id")
       names(ops) = op_ids
       self$ops = ops
       ps = ParamSet$new(params = list(

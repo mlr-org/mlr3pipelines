@@ -7,7 +7,7 @@ PipeOp = R6::R6Class("PipeOp",
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
-      private$.param_vals = map(param_set$params, "default")
+      private$.param_vals = param_set$data$default
       addnl_params = c(list(...), param_vals)
       checkmate::assert_list(addnl_params, names = "unique")
       for (n in names(addnl_params)) {
@@ -15,12 +15,13 @@ PipeOp = R6::R6Class("PipeOp",
       }
       self
     },
+
     print = function(...) {
-      BBmisc::catf("PipeOp: <%s>", self$id)
-      BBmisc::catf("parvals: <%s>", BBmisc::listToShortString(self$param_vals))
-      BBmisc::catf("is_learnt=%s", self$is_learnt)
-      BBmisc::catf("Input: %s", BBmisc::listToShortString(self$inputs))
-      BBmisc::catf("Result: %s", BBmisc::listToShortString(self$result))
+      catf("PipeOp: <%s>", self$id)
+      catf("parvals: <%s>", as_short_string(self$param_vals))
+      catf("is_learnt=%s", self$is_learnt)
+      catf("Input: %s", as_short_string(self$inputs))
+      catf("Result: %s", as_short_string(self$result))
     },
 
     train = function(...) stop("no train function given"),  # TODO: some better way to make smth abstract?
