@@ -94,21 +94,22 @@ GraphNode = R6::R6Class("GraphNode",
     intype = function() self$pipeop$intype,  # [list of ..., indexed by channel_id] Identifies types of incoming data, see PipeOp->intype
     outtype = function() self$pipeop$outtype,  # [list of ..., indexed by channel_id] Identifies types of outgoing data, see PipeOp->outtype
     input_complete = function() !any(sapply(self$prev_nodes, is.null)),  # [logical(1)] Whether all incoming channels are connected to other nodes
-    output_complete = function() !any(sapply(self$next_nodes, is.null))  # [logical(1)] Whether all outgoing channels are connected to other nodes
+    output_complete = function() !any(sapply(self$next_nodes, is.null)),  # [logical(1)] Whether all outgoing channels are connected to other nodes
+    editlock = function() private$.editlock
   )
 )
 
 # connectgn: change prev_node_channels or next_node_channels (and update other node's connections
 # to point back to us)
 # @param newedges: [list of NodeChannel, indexed by channel_id] new channels to connect to
-# @param oldedgename [character(1)]: slot name of `private` that gives the related old list of GraphNode, indexed by channel_id.
+# @param oldchannelname [character(1)]: slot name of `private` that gives the related old list of GraphNode, indexed by channel_id.
 #   (probably ".next_node_channels" or ".prev_node_channels")
 # @param inverseedgename [character(1)]: slot name other nodes that we could be connected to. (We need to access OTHERNODE[[inverseedgename]]).
-#   (probably "prev_node_channels" or "next_node_channels" -- always the one OPPOSITE of `oldedgename`
+#   (probably "prev_node_channels" or "next_node_channels" -- always the one OPPOSITE of `oldchannelname`
 # @param direction [character(1)] "in" or "out". "in" if we are changing prev_node_channels, otherwise "out".
-GraphNode$set("private", "connectgn", function(newedges, oldedgename, inverseedgename, direction) {
+GraphNode$set("private", "connectgn", function(newedges, oldchannelname, inverseedgename, direction) {
   # TODO: assert prev is a list
-  if (!identical(names(newedges), names(private[[oldedgename]]))) {
+  if (!identical(names(newedges), names(private[[oldchannelname]]))) {
     stop("Can't change names of nodes")
   }
 
@@ -150,7 +151,7 @@ GraphNode$set("private", "connectgn", function(newedges, oldedgename, inverseedg
   }
   # actually change the [prev/next]_node_channels
   private[[oldchannelname]] = newedges
-
+  private$.editlock = FALSE
   self$graph$update_connections()  # update the graph's info about unconnected nodes
 })
 

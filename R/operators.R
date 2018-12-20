@@ -49,8 +49,8 @@
   for (idx in seq_along(lhs$out_channels)) {
     fromchan = lhs$out_channels[[idx]]
     tochan = rhs$in_channels[[idx]]
-    newtochan = returngraph[[tochan$node$pipeop$id]]$in_channels[[tochan$name]]
-    returngraph[[fromchan$node$pipeop$id]]$next_node_channels[[fromchan$name]] = newtochan
+    newtochan = returngraph[[tochan$node$pipeop$id]]$in_channels[[tochan$channel_id]]
+    returngraph[[fromchan$node$pipeop$id]]$next_node_channels[[fromchan$channel_id]] = newtochan
   }
   returngraph
 }
