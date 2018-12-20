@@ -1,5 +1,16 @@
-# Sparse PCA
-# [sparseMatrix] -> [dt]
+#' @title PipeOpSparsePCA
+#' @format [R6Class] PipeOpSparsePCA
+#'
+#' @description
+#'   Extracts principle components from a sparse matrix.
+#'   See [irlbae::prcomp_irlba] for details  and parameters.
+#' @section Usage:
+#' Inherits from [PipeOp]
+#' * `f = pipeOpSparsePCA$new(id)` \cr
+#'     `character(1)` -> [PipeOpSparsePCA]
+#' @name PipeOpSparsePCA
+#' @family PipeOp, PipeOpPCA
+#' @export
 PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
 
   inherit = PipeOp,

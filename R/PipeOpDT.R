@@ -11,10 +11,11 @@
 #'   We thus enforce: [dt] -> [dt].
 #'   For examples see [pipeOpPCA] or [pipeOpScale].
 #' @section Usage:
+#' Inherits from [PipeOp]
 #' * `f = pipeOpDT$new(id, ps)` \cr
 #'     `character(1)`, `[ParamSet]` -> [PipeOpDT]
-#' @name pipeOpDT
-#' @family pipeOp, pipeOpDT
+#' @name PipeOpDT
+#' @family PipeOp, PipeOpDT
 #' @export
 PipeOpDT = R6Class("PipeOpDT",
 
