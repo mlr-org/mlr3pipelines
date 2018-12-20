@@ -2,17 +2,11 @@
 #   - does index op also work with ints?
 #   - do we want the fourth layer of topological sorting?
 #   - how do we loops over all nodes? how do we apply something to all nodes?
+#   - ids [character]. Id's of PipeOp's in the graph.
 
 #' @include utils.R
 #' @title Graph
 #' @format [R6Class] Graph
-#
-# active bindings:
-#  
-#   - parset [ParamSet]. Returns flat ParamSet, names are pipeOpid:parid, it is computed on the fly.
-#   - parvals [list]. Set param vals, name scheme as above, passed them down to pipeOps via id.
-#   - ids [character]. Id's of PipeOp's in the graph.
-#
 #' @description
 #'   The graph is a container class for the complete computational graph. It is made up of a list of
 #'   (connected) GraphNodes, it can be trained and used for prediction. 
