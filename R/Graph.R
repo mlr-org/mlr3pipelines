@@ -1,31 +1,87 @@
-#' @include utils.R
+# FIXME
+#   - does index op also work with ints?
+#   - do we want the fourth layer of topological sorting?
+#   - how do we loops over all nodes? how do we apply something to all nodes?
 
-# class Graph
-# members:
-#   source_node
-#
-# methods
-# - index operator [[id]]  --> points to GraphNode
+#' @include utils.R
+#' @title Graph
+#' @format [R6Class] Graph
 #
 # active bindings:
-#   - is_learnt [logical].  Are all underlying operators trained?
+#  
 #   - parset [ParamSet]. Returns flat ParamSet, names are pipeOpid:parid, it is computed on the fly.
 #   - parvals [list]. Set param vals, name scheme as above, passed them down to pipeOps via id.
 #   - ids [character]. Id's of PipeOp's in the graph.
 #
-# questions:
-#   - does index op also work with ints?
-#   - do we want the fourth layer of topological sorting?
-#   - how do we loops over all nodes? how do we apply something to all nodes?
+#' @description
+#'   The graph is a container class for the complete computational graph. It is made up of a list of
+#'   (connected) GraphNodes, it can be trained and used for prediction. 
+#' @section Usage:
+#' * `f = Graph$new(copy = NULL)` \cr
+#' *  `[Graph]` | `NULL`-> [Graph]
+#' * `f$node_list` -> `list of [GraphNode]`
+#' * `f$sorted_node_list` -> `list of [GraphNode]`
+#' * `f$is_trained` -> `logical(1)`
+#' * `f$intype` -> `list of any`
+#' * `f$outtype` -> `list of any`
+#' * `f$in_channels` -> `list of [NodeChannel]`
+#' * `f$out_channels` -> `list of [NodeChannel]`
+#' * `f$source_nodes` -> `list of [GraphNode]`
+#' * `f$sink_nodes` -> `list of [GraphNode]`
+#' * `param_set` -> [ParamSet] The set of all exposed parameters of the PipeOp.
+#' * `par_vals` -> `named list`
+#' * `f$add_node(node = pipeOp$new())` \cr
+#' *  `[GraphNode] | [PipeOp]` -> [Graph]
+#' * `f$extend(g)` \cr
+#' *  `[Graph]` -> `[Graph]`
+#' * `f$map(fnc, simplify)` \cr
+#' *  `function`, `logical` -> 'list of any` 
+#' * `f$train()`
+#' * `f$predict()`
+#' * `f$plot()`
+#' * `f$print()`
+#' * `f$update_connections()`
+#' * `f$update_ids()`
+#' * `f[[` -> `[PipeOp]`
+#' 
+#' Aggregated info:
+#' * `param_set` [ParamSet]
+#' * `param_vals` [list]
+#' * `packages` [character]
+#' 
+#' @section Details:
+#' - `new()`: Constructs an empty Graph, or copies an existing graph if `copy` is a graph.
+#' * `node_list`: list of [GraphNode], indexed by ID.
+#' * `sorted_node_list`: like `node_list`, but ordered by connections.
+#' * `f[[`: Get a PipeOp by `[[id]]`
+#' * `intype`: types of the `in_channels`.
+#' * `outtype`: types of the `out_channels`.
+#' * `source_nodes`: nodes that have unconnected input channels and therefore act as graph input.
+#' * `sink_nodes`: nodes that have unconnected output channels and therefore act as graph output.
+#' * `add_node`: Mutates graph by adding a [PipeOp] or [GraphNode] to the end of the graph.
+#' 
+#'   [GraphNode] calls this automatically on construction, so a user should only call this with a PipeOp.
+#' * `train()`: train on input (e.g. Task), returns processed output (e.g. modified task).
+#' * `predict()`: predict on input (e.g. Data), get processed output (e.g. predictions).
+#' * `plot()`: plot the graph.
+#' * `extend(g)`: Add other graph `g` to the current graph as disjoint union.
+#' @name Graph
+#' @family Graph
+#' @example
+#' # Initialize a new GraphNode
+#' g = Graph$new()
+#' # Add a new node / pipeOp
+#' g$add_node(PipeOp$new())
 Graph = R6Class("Graph",
   cloneable = FALSE,
   public = list(
     initialize = function(copy = NULL) {
+      assert_class(copy, "Graph", null.ok = TRUE)
       self$update_connections()
       if (!is.null(copy)) {
         self$extend(copy)
       }
-      self
+      return(self)
     },
     update_ids = function() {
       names(private$.node_list) = map_chr(private$.node_list, function(x) x$pipeop$id)
@@ -70,7 +126,7 @@ Graph = R6Class("Graph",
           newnode$next_node_channels[[idx]] = newchannel
         }
       }
-      self
+      return(self)
     },
     print = function(...) {
       if (!length(self$node_list)) return(cat("Empty Graph.\n"))
