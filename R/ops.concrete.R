@@ -94,7 +94,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
       ps = ParamSet$new(params = list(
         ParamLgl$new("center", default = TRUE),
         ParamLgl$new("scale.", default = FALSE),
-        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf)
+        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL))
       ))
       super$initialize(id, ps)
     },
