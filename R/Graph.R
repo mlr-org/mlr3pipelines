@@ -9,7 +9,7 @@
 #' @format [R6Class] Graph
 #' @description
 #'   The graph is a container class for the complete computational graph. It is made up of a list of
-#'   (connected) GraphNodes, it can be trained and used for prediction. 
+#'   (connected) GraphNodes, it can be trained and used for prediction.
 #' @section Usage:
 #' * `f = Graph$new(copy = NULL)` \cr
 #' *  `[Graph]` | `NULL`-> [Graph]
@@ -29,7 +29,7 @@
 #' * `f$extend(g)` \cr
 #' *  `[Graph]` -> `[Graph]`
 #' * `f$map(fnc, simplify)` \cr
-#' *  `function`, `logical` -> 'list of any` 
+#' *  `function`, `logical` -> 'list of any`
 #' * `f$train()`
 #' * `f$predict()`
 #' * `f$plot()`
@@ -37,12 +37,12 @@
 #' * `f$update_connections()`
 #' * `f$update_ids()`
 #' * `f[[` -> `[PipeOp]`
-#' 
+#'
 #' Aggregated info:
 #' * `param_set` [ParamSet]
 #' * `param_vals` [list]
 #' * `packages` [character]
-#' 
+#'
 #' @section Details:
 #' - `new()`: Constructs an empty Graph, or copies an existing graph if `copy` is a graph.
 #' * `node_list`: list of [GraphNode], indexed by ID.
