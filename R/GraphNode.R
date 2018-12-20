@@ -17,15 +17,6 @@ NodeChannel = R6::R6Class("NodeChannel",
   )
 )
 
-numbername = function(li) {
-  res = lapply(seq_along(li), function(x) {
-    ret = names2(li)[x]
-    if (is.na(ret)) x else ret
-  })
-  names(res) = names(li)
-  res
-}
-
 #### Class definition ####
 
 #' GraphNode
@@ -67,39 +58,7 @@ GraphNode = R6::R6Class("GraphNode",
       .in_channels = NULL,
       .out_channels = NULL,
       .graph = NULL,
-      .pipeop = NULL,
-      connectgn = function(newedges, oldedgename, inverseedgename, direction) {
-        # TODO: assert prev is a list
-        if (!identical(names(newedges), names(private[[oldedgename]]))) {
-          stop("Can't change names of nodes")
-        }
-        if (private$.editlock) return(NULL)
-        on.exit({private$.editlock = FALSE})
-        private$.editlock = TRUE
-        for (edge in newedges) {
-          # todo: assert edge is a NodeChannel
-          # TODO: check types
-          if (!is.null(edge) && !identical(edge$node$graph, private$.graph)) {
-            stop("Can't connect nodes that are not in the same graph")
-          }
-        }
-        for (idx in seq_along(newedges)) {
-          oldedge = private[[oldedgename]][[idx]]
-          if (identical(newedges[[idx]], oldedge)) {
-            next
-          }
-
-          edgename = names2(newedges)[[idx]]
-          if (is.na(edgename)) edgename = idx
-
-          if (!is.null(oldedge)) oldedge$node[[inverseedgename]][oldedge$name] = list(NULL)
-          if (!is.null(newedges[[idx]])) {
-            newedges[[idx]]$node[[inverseedgename]][[newedges[[idx]]$name]] = NodeChannel$new(edgename, self, direction)
-          }
-        }
-        private[[oldedgename]] = newedges
-        self$graph$update_connections()
-      }
+      .pipeop = NULL
   ),
   active = list(
       graph = readonly("graph"),
@@ -126,3 +85,45 @@ GraphNode = R6::R6Class("GraphNode",
     output_complete = function() !any(sapply(self$next_nodes, is.null))
   )
 )
+
+GraphNode$set("private", "connectgn", function(newedges, oldedgename, inverseedgename, direction) {
+  # TODO: assert prev is a list
+  if (!identical(names(newedges), names(private[[oldedgename]]))) {
+    stop("Can't change names of nodes")
+  }
+  if (private$.editlock) return(NULL)
+  on.exit({private$.editlock = FALSE})
+  private$.editlock = TRUE
+  for (edge in newedges) {
+    # todo: assert edge is a NodeChannel
+    # TODO: check types
+    if (!is.null(edge) && !identical(edge$node$graph, private$.graph)) {
+      stop("Can't connect nodes that are not in the same graph")
+    }
+  }
+  for (idx in seq_along(newedges)) {
+    oldedge = private[[oldedgename]][[idx]]
+    if (identical(newedges[[idx]], oldedge)) {
+      next
+    }
+
+    edgename = names2(newedges)[[idx]]
+    if (is.na(edgename)) edgename = idx
+
+    if (!is.null(oldedge)) oldedge$node[[inverseedgename]][oldedge$name] = list(NULL)
+    if (!is.null(newedges[[idx]])) {
+      newedges[[idx]]$node[[inverseedgename]][[newedges[[idx]]$name]] = NodeChannel$new(edgename, self, direction)
+    }
+  }
+  private[[oldedgename]] = newedges
+  self$graph$update_connections()
+})
+
+numbername = function(li) {
+  res = lapply(seq_along(li), function(x) {
+    ret = names2(li)[x]
+    if (is.na(ret)) x else ret
+  })
+  names(res) = names(li)
+  res
+}
