@@ -40,10 +40,7 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
       
       # Subset data, clone task and overwrite data in it.
       tsklst = map(idx, function(x) {
-        newdt = task$backend$data(cols = colns, rows = x)
-        tsk = task$clone()
-        tsk$overwrite(newdt)
-        return(tsk)
+        task$clone()$filter(x)
       })
       return(tsklst)
     },
