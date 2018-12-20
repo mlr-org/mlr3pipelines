@@ -10,9 +10,8 @@
 #'   During prediction it applies the learned params to the input and transforms the input to an output.'
 #'
 #'   A PipeOp specifies the types of inputs and outputs as `intype` and `outtype`, a list of <something specifying types>.
-#'   The length of these lists determines the length of input / output the PipeOp produces. Typically the PipeOp input / output
-#'   is a list of specified length, but PipeOps with input / output length 1 can specify that they don't use lists but use singular
-#'   values instead (`.takeslist` / `.returnslist` set to `FALSE`)#'
+#'   The length of these lists determines the length of input / output the PipeOp produces. The PipeOp input / output
+#'   is a list of specified length.
 #'
 #' @section Usage:
 #' * `f = pipeOp$new(id, params)` \cr
@@ -26,8 +25,6 @@
 #' * `f$result` -> `any`
 #' * `f$intype` -> `list of any`
 #' * `f$outtype` -> `list of any`
-#' * `f$takeslist` -> `logical(1)`
-#' * `f$returnslist` -> `logical(1)`
 #' * `f$print()`
 #' * `f$train()` \cr
 #'   `any` -> `any`
@@ -51,16 +48,10 @@
 #' *   If `is_trained = FALSE` the function cannot be applied.
 #' * `intype`: list of input types the pipeOp accepts. Read-only.
 #' * `outtype`: list of output types that are returned by the pipeOp. Read-only.
-#' * `takeslist`: `TRUE` if input of `train` / `predict` is a list, `FALSE` if it is a singular value.
-#'   If this is `FALSE`, `length(.intype)` must be 1.  Read-only.
-#' * `returnslist`: `TRUE` if output of `train` / `predict` is a list, `FALSE` if it is a singular value.
-#'   If this is `FALSE`, `length(.outtype)` must be 1.  Read-only.
 #'
 #' @section Internals:
 #' * `.intype`: `list of any`
 #' * `.outtype`: `list of any`
-#' * `.takeslist`: `logical(1)`
-#' * `.returnslist`: `logical(1)`'
 #'
 #' @name PipeOp
 #' @family PipeOp
@@ -94,17 +85,16 @@ PipeOp = R6::R6Class("PipeOp",
   ),
 
   active = list(
-    id = function(id) {
+    id = function(id) {  # [character(1)] identifier of PipeOp within the Graph. Always call containing graph's update_ids() when changing this.
       if (missing(id)) {
         private$.id
       } else {
         private$.id = id
-
         # TODO: maybe notify the graph about changed ID?
       }
     },
-    param_set = function() private$.param_set,
-    param_vals = function(vals) {
+    param_set = function() private$.param_set,  # [ParamSet] ParamSet of the PipeOp
+    param_vals = function(vals) {  # [named list] parameter values, one for each parameter of the ParamSet. Mutable, with feasibility check.
       if (!missing(vals)) {
         # TODO: param check
         if (!self$param_set$test(vals)) {
@@ -114,30 +104,18 @@ PipeOp = R6::R6Class("PipeOp",
       }
       private$.param_vals
     },
-    intype = function() private$.intype,
-    outtype = function() private$.outtype,
-    takeslist = function() {
-      tl = private$.takeslist
-      assert(tl || length(self$intype) == 1)
-      tl
-    },
-    returnslist = function() {
-      rl = private$.returnslist
-      assert(rl || length(self$outtype) == 1)
-      rl
-    },
+    intype = function() private$.intype,  # [list, indexed by channel_id] input types
+    outtype = function() private$.outtype,  # [list, indexed by channel_id] output types
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
-    is_trained = function() !is.null(self$state)
+    is_trained = function() !is.null(self$state)  # [logical(1)] whether the `train()` function was called at least once.
   ),
 
   private = list(
-    .id = NULL,  # id, name within a graph, must be unique within that graph
+    .id = NULL,
     .param_set = NULL,
     .param_vals = NULL,
-    .intype = NULL,  # list of character vectors, identifying the input classes
-    .outtype = NULL,  # list of character vectors, identifying output classes
-    .takeslist = TRUE,  # may be FALSE, but only if length(intype) is 1
-    .returnslist = TRUE  # may be FALSE, but only if length(outtype) is 1
+    .intype = NULL,
+    .outtype = NULL
   )
 )
