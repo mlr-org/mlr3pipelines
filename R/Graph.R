@@ -14,7 +14,6 @@
 #' * `f = Graph$new(copy = NULL)` \cr
 #' *  `[Graph]` | `NULL`-> [Graph]
 #' * `f$node_list` -> `list of [GraphNode]`
-#' * `f$sorted_node_list` -> `list of [GraphNode]`
 #' * `f$is_trained` -> `logical(1)`
 #' * `f$intype` -> `list of any`
 #' * `f$outtype` -> `list of any`
@@ -47,7 +46,6 @@
 #' * `new()`: Constructs an empty Graph, copies an existing graph if `fill` is a graph, or fills graph
 #'   with node(s) if `fill` is a PipeOp. `fill` can also be a list of multiple Graphs / PipeOps.
 #' * `node_list`: list of [GraphNode], indexed by ID.
-#' * `sorted_node_list`: like `node_list`, but ordered by connections.
 #' * `f[[`: Get a PipeOp by `[[id]]`
 #' * `intype`: types of the `in_channels`.
 #' * `outtype`: types of the `out_channels`.
@@ -159,12 +157,11 @@ Graph = R6Class("Graph",
       cat(output_string, "\n")
     },
     map = function(fnc, simplify = TRUE) {
-      sapply(self$sorted_node_list, fnc, simplify = simplify)
+      sapply(self$node_list, fnc, simplify = simplify)
     }
   ),
   active = list(
-    node_list = readonly("node_list"),  # this list actually contains all nodes contained in the Graph
-    sorted_node_list = function() sort_nodes(self$node_list),  # active binding that sorts the nodes topologically.
+    node_list = readonly("node_list"),  # this list actually contains all nodes contained in the Graph, topologically sorted.
     intype = function() private$.intype,  #
     outtype = function() private$.outtype,
     in_channels = readonly("in_channels"),
@@ -255,7 +252,7 @@ union_params = function(graph) {
 # fncall: character(1) identifying a function to call for each edge. probably "train" or "predict"
 # cache_result: whether to store cached_output pipeop
 Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE) {
-  sorted_nodes = self$sorted_node_list
+  sorted_nodes = self$node_list
   in_channels = self$in_channels
   out_channels = self$out_channels
   if (length(in_channels) != 1) {
@@ -328,12 +325,13 @@ Graph$set("public", "update_connections", function() {  # update intype, outtype
     assigncon(node$in_channels, node$intype, node$prev_node_channels, ".in_channels", ".intype")
     assigncon(node$out_channels, node$outtype, node$next_node_channels, ".out_channels", ".outtype")
   }
+  private$.node_list = sort_nodes(private$.node_list)
 })
 
 # ----------------- plotting ----------------
 
 graph_to_edge_list = function(nodes) {
-  edges = map(sort_nodes(nodes), function(x) {
+  edges = map(nodes, function(x) {
     res = cbind(
       x$pipeop$id,
       map_chr(Filter(Negate(is.null), x$next_nodes), function(y) y$pipeop$id)
