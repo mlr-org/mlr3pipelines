@@ -1,4 +1,22 @@
-# simple feature transform, no hyperpars
+#' @title PipeOpNULL
+#' @format [R6Class] PipeOpNULL
+#' 
+#' @description
+#'   Simply pushes the input forward unchanged.
+#'   Can be usefull for example to keep the original task in conjunction with
+#'   `gunion()` to keep a copy of the original data.
+#' 
+#' @section Usage:
+#' * `f = pipeOpNULL$new(id)` \cr
+#'     `character(1)` -> [PipeOpNULL]
+#' @name pipeOpNULL
+#' @family pipeOp
+#' @examples
+#' # Do PCA on input data, but also keep a copy of the original input.
+#' op1 = PipeOpNULL$new()
+#' op2 = PipeOpPCA$new()
+#' g = gunion(op1, op2) %>>% pipeOpFeatureUnion()
+#' @export
 PipeOpNULL = R6Class("PipeOpNULL",
 
   inherit = PipeOp,
@@ -22,14 +40,30 @@ PipeOpNULL = R6Class("PipeOpNULL",
   )
 )
 
-# This let's us work with a dt instead of a Task
-# [dt] -> [dt]
-PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
+#' @title PipeOpDT
+#' @format [R6Class] PipeOpDT
+#' 
+#' @description
+#'   This let's us work with a [data.table] instead of a Task and
+#'   delegate all handling of [Task]s and [DataBackend] to the class.
+#'   Allows us to specify functions  `train_dt()` and `predict_dt` instead of
+#'   `train()` and `predict`, that expect the [data.table] containing only
+#'   the features from a [Task], and automatically
+#'   reconstruct the appropriate Task from a returned [data.table].
+#'   We thus enforce: [dt] -> [dt].
+#'   For examples see [pipeOpPCA] or [pipeOpScale].
+#' @section Usage:
+#' * `f = pipeOpDT$new(id, ps)` \cr
+#'     `character(1)`, `[ParamSet]` -> [PipeOpDT]
+#' @name pipeOpDT
+#' @family pipeOp, pipeOpDT
+#' @export
+PipeOpDT = R6Class("PipeOpDT",
 
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "PipeOpFeatureTransform", ps = ParamSet$new()) {
+    initialize = function(id = "PipeOpDT", ps = ParamSet$new()) {
       super$initialize(id, ps)
       private$.intype = list("any")
       private$.outtype = list("any")
@@ -45,8 +79,7 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       d = task$data()
 
       # Call train_dt function on features
-      dt = self$train_dt(d[, ..fn])
-      assert_data_table(dt)
+      dt = as.data.table(self$train_dt(d[, ..fn]))
       assert_true(nrow(dt) == nrow(d))
 
       # Drop old features, add new features
@@ -69,8 +102,7 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       d = task$data()
 
       # Call train_dt function on features
-      dt = self$predict_dt(d[, ..fn])
-      assert_data_table(dt)
+      dt = as.data.table(self$predict_dt(d[, ..fn]))
       assert_true(nrow(dt) == nrow(d))
 
       # Drop old features, add new features
@@ -83,9 +115,45 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
   )
 )
 
+# Scale Data
+# [dt] -> [dt]
+PipeOpScaler = R6Class("PipeOpScaler",
+
+  inherit = PipeOpDT,
+
+  public = list(
+    initialize = function(id = "scaler") {
+      ps = ParamSet$new(params = list(
+        ParamLgl$new("center", default = TRUE),
+        ParamLgl$new("scale", default = TRUE)
+      ))
+      super$initialize(id, ps)
+    },
+
+    train_dt = function(dt) {
+      sc = scale(as.matrix(d[, ..fn]),
+        center = self$param_vals$center,
+        scale = self$param_vals$scale)
+
+      private$state = list(
+        center = attr(sc, "scaled:center") %??% 0,
+        scale = attr(sc, "scaled:scale") %??% 1
+      )
+      return(sc)
+    },
+
+    predict_dt = function(newdt) {
+      scaled = (newdt - private$state$center) / private$state$center
+      return(scaled)
+    }
+  )
+)
+
+# Rotate data
+# [dt] -> [dt]
 PipeOpPCA = R6Class("PipeOpPCA",
 
-  inherit = PipeOpFeatureTransform,
+  inherit = PipeOpDT,
 
   public = list(
     initialize = function(id = "pca") {
@@ -103,16 +171,17 @@ PipeOpPCA = R6Class("PipeOpPCA",
         scale. = self$param_vals$scale.,
         rank.  = self$param_vals$rank.)
       self$state = pcr
-      as.data.table(pcr$x)
+      return(pcr$x)
     },
 
     predict_dt = function(newdt) {
       rotated = predict(self$state, as.matrix(newdt))
-      return(as.data.table(rotated))
+      return(rotated)
     }
   )
 )
 
+# Sparse PCA
 # [sparseMatrix] -> [dt]
 PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
 
@@ -173,53 +242,6 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
   )
 )
 
-# simple feature transform, but hyperpars
-PipeOpScaler = R6Class("PipeOpScaler",
-
-  inherit = PipeOp,
-
-  public = list(
-    initialize = function(id = "scaler") {
-
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE),
-        ParamLgl$new("scale", default = TRUE)
-      ))
-      super$initialize(id, ps)
-      private$.intype = list("any")
-      private$.outtype = list("any")
-
-    },
-
-    train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
-      task = inputs[[1L]]
-
-      fn = task$feature_names
-      d = task$data()
-
-      sc = scale(as.matrix(d[, ..fn]),
-        center = self$param_vals$center,
-        scale = self$param_vals$scale)
-
-      private$.params = list(
-        center = attr(sc, "scaled:center") %??% FALSE,
-        scale = attr(sc, "scaled:scale") %??% FALSE
-      )
-      d[, fn] = as.data.table(sc)
-
-      db = as_data_backend(d)
-      list(TaskClassif$new(id = task$id, backend = db, target = task$target_names))
-    },
-
-    predict = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
-      task = self$inputs[[1L]]
-      list(as.data.frame(scale(as.matrix(input),
-        center = self$params$center, scale = self$params$scale)))
-    }
-  )
-)
 
 # simple feature transform, no hyperpars
 PipeOpDownsample = R6Class("PipeOpDownsample",
