@@ -68,13 +68,9 @@
 Graph = R6Class("Graph",
   cloneable = FALSE,
   public = list(
-    initialize = function(copy = NULL) {
-      assert_class(copy, "Graph", null.ok = TRUE)
+    initialize = function(fill = NULL) {
       self$update_connections()
-      if (!is.null(copy)) {
-        self$extend(copy)
-      }
-      return(self)
+      self$extend(fill)
     },
     update_ids = function() {
       names(private$.node_list) = map_chr(private$.node_list, function(x) x$pipeop$id)
@@ -89,7 +85,7 @@ Graph = R6Class("Graph",
         private$.node_list[[node$pipeop$id]] = node
         self$update_connections()
       }
-      self
+      invisible(self)
     },
     # This should basically call trainGraph
     train = function(task) {
@@ -102,15 +98,25 @@ Graph = R6Class("Graph",
       graph_plot(self$node_list)
       invisible(self)
     },
-    extend = function(graph) {
+    extend = function(src) {
+      assert_class(srcn, c("Graph", "PipeOp", "list"), null.ok = TRUE)
+      if (inherits(src, "list")) {
+        for (el in src) {
+          self$extend(el)
+        }
+        return(invisible(self))
+      }
+      if (inherits(src, "PipeOp")) {
+        return(self$add_node(src))
+      }
       # add nodes: easy
-      for (node in graph$node_list) {
+      for (node in src$node_list) {
         self$add_node(node$pipeop)
       }
 
       # replicate connections: harder
-      for (nodename in names(graph$node_list)) {
-        oldnode = graph$node_list[[nodename]]
+      for (nodename in names(src$node_list)) {
+        oldnode = src$node_list[[nodename]]
         newnode = self$node_list[[nodename]]
         for (idx in seq_along(newnode$outtype)) {
           oldchannel = oldnode$next_node_channels[[idx]]
@@ -119,7 +125,7 @@ Graph = R6Class("Graph",
           newnode$next_node_channels[[idx]] = newchannel
         }
       }
-      return(self)
+      invisible(self)
     },
     print = function(...) {
       if (!length(self$node_list)) return(cat("Empty Graph.\n"))
