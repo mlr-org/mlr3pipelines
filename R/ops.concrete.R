@@ -13,7 +13,7 @@ PipeOpNULL = R6Class("PipeOpNULL",
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
       private$.result = inputs[[1L]]
-      private$.params = list()
+      self$state = list()
       inputs
     },
 
@@ -60,12 +60,10 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
 
       # Should be:
       # private$.result = task$overwrite(d)
-      private$.result = TaskClassif$new(id = task$id, backend = db, target = tn)
-
-      return(private$.result)
+      list(TaskClassif$new(id = task$id, backend = db, target = tn))
     },
 
-    predict2 = function() {
+    predict = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       assert_function(self$predict_dt, args = "newdt")
       task = self$inputs[[1L]]
@@ -82,8 +80,7 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       d[, (colnames(dt)) := dt]
       d[, "..row_id" := seq_len(nrow(d))]
 
-      private$.result = task$overwrite(d)
-      return(private$.result)
+      list(task$overwrite(d))
     }
   )
 )
@@ -97,11 +94,9 @@ PipeOpPCA = R6Class("PipeOpPCA",
       ps = ParamSet$new(params = list(
         ParamLgl$new("center", default = TRUE),
         ParamLgl$new("scale.", default = FALSE),
-        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf)
+        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL))
       ))
       super$initialize(id, ps)
-      private$.intype = list("any")
-      private$.outtype = list("any")
     },
 
     train_dt = function(dt) {
@@ -109,12 +104,12 @@ PipeOpPCA = R6Class("PipeOpPCA",
         center = self$param_vals$center,
         scale. = self$param_vals$scale.,
         rank.  = self$param_vals$rank.)
-      private$.params = pcr
+      self$state = pcr
       as.data.table(pcr$x)
     },
 
     predict_dt = function(newdt) {
-      rotated = predict(private$.params, as.matrix(newdt))
+      rotated = predict(self$state, as.matrix(newdt))
       return(as.data.table(rotated))
     }
   )
@@ -149,7 +144,7 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
       spmat = task$backend$data(paste0("row_", seq_len(nrow(d))), task$feature_names, format = "sparse")
       sc = irlba::prcomp_irlba(spmat, center = self$param_vals$center, scale = self$param_vals$scale, n = self$param_vals$n)
 
-      private$.params = sc
+      self$state = sc
 
       d[, fn] = NULL
       d[, colnames(sc$x)] = as.data.table(sc$x)
@@ -157,11 +152,10 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
 
       db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
       tn = task$target_names
-      private$.result = TaskRegr$new(id = task$id, backend = db, target = tn)
-      return(private$.result)
+      list(TaskRegr$new(id = task$id, backend = db, target = tn))
     },
 
-    predict2 = function() {
+    predict = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       task = self$inputs[[1L]]
       fn = task$feature_names
@@ -169,15 +163,14 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
       # Get sparse matrix
       d = task$data()
       spmat = task$backend$data(paste0("row_", seq_len(nrow(d))), task$feature_names, format = "sparse")
-      dt = as.data.table(predict(private$.params, spmat))
+      dt = as.data.table(predict(self$state, spmat))
       assert_true(nrow(dt) == nrow(d))
 
       # Drop old features, add new features
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
 
-      private$.result = TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names)
-      return(private$.result)
+      list(TaskClassif$new(id = task$id, backend = as_data_backend(d), target = task$target_names))
     }
   )
 )
@@ -248,20 +241,20 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 
     },
 
-    train2 = function() {
+    train = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       # FIXME: this is really bad code how i change the data of the task
       # ich muss hier das backend austauschen
       task = self$inputs[[1L]]
       fn = task$feature_names
       # FIXME: Discuss whether we want to use the current mlr implementation
-      TaskClassif$new(id = task$id, data = d, target = task$target_names)
+      list(TaskClassif$new(id = task$id, data = d, target = task$target_names))
     },
 
-    predict2 = function() {
+    predict = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       # FIXME: Make sure dimensions fit (if input did not have full rank)
-      as.data.frame(as.matrix(input) %*% self$params)
+      list(as.data.frame(as.matrix(input) %*% self$params))
     }
   )
 )

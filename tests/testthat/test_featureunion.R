@@ -15,6 +15,9 @@ test_that("featureunion - basic", {
   lrn = mlr_learners$get("classif.rpart")
   op4 = PipeOpLearner$new(learner = lrn)
 
+  PipeOpCopy$new(2)
+
+
   root = GraphNode$new(op1)
   root$
     set_next(list(GraphNode$new(op2a), GraphNode$new(op2b)))$
