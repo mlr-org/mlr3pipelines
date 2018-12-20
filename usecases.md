@@ -231,8 +231,8 @@ g$predict(task)
 
 #### Usecase b): Resample Linear Pipeline
 
-*Scenario:*
-*We want to resample the Graph on different folds of the data.*
+Scenario:
+We want to resample the Graph on different folds of the data.
 
 We create a `GraphLearner` from the Graph and use **mlr3's** resampling.
 
@@ -252,8 +252,8 @@ rr[1, "models"]$learner.model[["pca"]]$params
 
 #### Usecase c): Tune Linear Pipeline
 
-*Scenario:*
-*We want to tune the Graph.*
+Scenario:
+We want to tune the Graph.
 
 We use the `GraphLearner` and use **mlr3's** tuning.
 
@@ -286,9 +286,9 @@ op1 %>>% gunion(op2a, op2b) %>>% op3 %>>% op4
 
 ### Usecase: Bagging (Downsampling, Modelling and Modelaveraging)
 
-*Scenario:*
-*We want to do bagging (Train several models on subsamples of the data and
-average predictions).*
+Scenario:
+We want to do bagging (Train several models on subsamples of the data and
+average predictions).
 
 We use the `PipeOpDownSample` operator in conjunction with a `PipeOpLearner` to train a model. `greplicate()` let's us do the same operation multiple times.
 Afterwards we average all predictions using `PipeOpModelAverage`
@@ -311,8 +311,8 @@ greplicate(op1 %>>% op2, 30) %>>% op3
 
 ### Usecase: Stacking
 
-*Scenario:*
-*We want to do stacking (Train several models on the data and combine predictions).*
+Scenario:
+We want to do stacking (Train several models on the data and combine predictions).
 
 #### Usecase a): Stacking with simple Averaging
 
@@ -326,7 +326,6 @@ gunion(op1, op2) %>>% PipeOpModelAverage$new()
 ```
 
 #### Usecase b): Stacking with SuperLearner
-
 
 Instead of using `PipeOpModelAverage`, we combine predictions to a `PipeOpLearner`.
 Instead of a `pipeOpLearner` we use a `PipeOpLearnerCV`, in order to avoid overfitting.
@@ -360,9 +359,9 @@ g = gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>%
 
 ### Usecase: Multiclass with Binary
 
-*Scenario:*
-*We have a multiclass target, and want to predict each class in a binarized manner.*
-*This occurs, for example if our model can only do binary classification.*
+Scenario:
+We have a multiclass target, and want to predict each class in a binarized manner.
+This occurs, for example if our model can only do binary classification.
 
 We use `PipeOpMultiClass2Binary` in order to split our [[Task]] up into multiple binary [[Task]]s.
 Afterwards, we replicate our learner $k$ (where $k$ = number of classes - 1) times.
@@ -380,9 +379,9 @@ op1 %>=>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 
 ### Usecase: Multiplexing of different Ops
 
-*Scenario:*
-*We want our pipeline to branch out, either in one direction or the other.*
-*This is usefull, for example when tuning over multiple learners.*
+Scenario:
+We want our pipeline to branch out, either in one direction or the other.
+This is usefull, for example when tuning over multiple learners.
 
 ####  Usecase: Multiplexing different learners
 
@@ -413,9 +412,9 @@ g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% pipeOpUnbranch(agg
 
 ### Usecase: Chunk data into k parts, train on each, then model average
 
-*Scenario:*
-*We want our pipeline to branch out, either in one direction or the other.*
-*This is usefull, for example when tuning over multiple learners.*
+Scenario:
+We want our pipeline to branch out, either in one direction or the other.
+This is usefull, for example when tuning over multiple learners.
 
 
 We use the `pipeOpChunk` operator to partition the [[Task]] into $k$ smaller [[Task]]s.
@@ -429,8 +428,8 @@ pipeOpChunk(k) %>>% greplicate(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpMo
 
 ### Usecase: Thresholding
 
-*Scenario:*
-*We want to obtain an optimal threshold in order to decide whether something is of class x or y.*
+Scenario:
+We want to obtain an optimal threshold in order to decide whether something is of class x or y.
 
 We use `PipeOpLearnerCV` to obtain cross-validated predictions. Afterwards we use `PipeOpThreshold()` to compute an
 optimal threshold.
@@ -448,8 +447,8 @@ g = op1 %>>% op2
 
 ### Usecase: ThresholdingTrafo y (logarithm of y)
 
-*Scenario:*
-*We want to transform our target variable, for example using a log-transform.*
+Scenario:
+We want to transform our target variable, for example using a log-transform.
 
 We use the `PipeOpTrafoY` in order to log-transform the data.
 We use another `PipeOpTrafoY` after the learner in order to re-transform our data onto the original scale.
@@ -477,8 +476,8 @@ FIXME:
 
 ####  Usecase a): MultiOutput Parallel
 
-*Scenario:*
-*We have three possible output variables we want to predict in parallel.*
+Scenario:
+We have three possible output variables we want to predict in parallel.
 
 We set different targets before training each learner using `PipeOpSetTarget`.
 Afterwards the different predictions are collected with `PipeOpModelAverage`.
@@ -493,9 +492,9 @@ g = gunion(
 
 ####  Usecase b): MultiOutput Chained
 
-*Scenario:*
-*We have three possible output variables available during training, but they will not be availalbe during test time.*
-*We want to leverage info from out1 and out2 to improve prediction on final_out*
+Scenario:
+We have three possible output variables available during training, but they will not be availalbe during test time.
+We want to leverage info from out1 and out2 to improve prediction on final_out*
 
 We obtain cross-validated predictions using `PipeOpLearnerCV` sequentially for each target and use them to train the sequential models.
 
@@ -514,9 +513,9 @@ g = PipeOpSetTarget("out1") %>>%
 
 ####  Usecase c): Hurdle Models
 
-*Scenario:*
-*We have a zero-inflated numeric target variable (e.g. amount unpaid bills).*
-*We want to leverage the info that most are $0$ in our model.*
+Scenario:
+We have a zero-inflated numeric target variable (e.g. amount unpaid bills).
+We want to leverage the info that most are $0$ in our model.
 
 We obtain cross-validated predictions for whether the target variable is 0.
 We the use the prediction for this intermediate target for the final prediction.
