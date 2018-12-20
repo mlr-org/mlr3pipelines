@@ -101,7 +101,11 @@ Graph = R6Class("Graph",
       invisible(self)
     },
     extend = function(src) {
-      assert_class(srcn, c("Graph", "PipeOp", "list"), null.ok = TRUE)
+      assert(
+          check_class(src, "Graph", null.ok = TRUE),
+          check_class(src, "PipeOp", null.ok = TRUE),
+          check_class(src, "list", null.ok = TRUE)
+      )
 
       # if src is a list, call self recursively
       if (inherits(src, "list")) {
@@ -180,9 +184,9 @@ Graph = R6Class("Graph",
     param_set = function() union_params(self),  # [ParamSet] unified ParamSet of all PipeOps. param IDs are prefixed by PipeOp ID.
     param_vals = function(value) {  # [named list] unified parameter values of all PipeOps. param IDs are prefixed by PipeOp ID.
       if (!missing(value)) {
-        parids = union_parids(self)  # collect all parameter IDs
+        parids = union_parids(self)  # collect all parameter ID mappings
         assert_list(value, names = "unique")  # length may not change
-        assert(all(names(value) %in% parids))
+        assert(all(names(value) %in% names(parids)))
         if (!self$param_set$test(value)) {
           stop("Parameters out of bounds")
         }
@@ -381,7 +385,10 @@ Graph$set("public", "update_connections", function() {  # update intype, outtype
     assigncon(node$in_channels, node$intype, node$prev_node_channels, ".in_channels", ".intype")
     assigncon(node$out_channels, node$outtype, node$next_node_channels, ".out_channels", ".outtype")
   }
-  private$.node_list = sort_nodes(private$.node_list)
+  if (!any(map_lgl(private$.node_list, "editlock"))) {
+    private$.node_list = sort_nodes(private$.node_list)
+  }
+  invisible(self)
 })
 
 # ----------------- plotting ----------------

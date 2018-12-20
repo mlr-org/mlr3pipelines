@@ -1,6 +1,6 @@
 #' @title PipeOpScale
 #' @format [R6Class] PipeOpScale
-#' 
+#'
 #' @description
 #'   Scales the data to mean = 0 and standard deviation 1.
 #'   See [base::scale] for details and parameters.
@@ -29,7 +29,7 @@ PipeOpScale = R6Class("PipeOpScale",
         center = self$param_vals$center,
         scale = self$param_vals$scale)
 
-      private$state = list(
+      self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1
       )
@@ -37,7 +37,7 @@ PipeOpScale = R6Class("PipeOpScale",
     },
 
     predict_dt = function(newdt) {
-      scaled = (newdt - private$state$center) / private$state$center
+      scaled = (newdt - self$state$center) / self$state$center
       return(scaled)
     }
   )
