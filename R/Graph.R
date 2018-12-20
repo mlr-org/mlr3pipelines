@@ -180,22 +180,23 @@ Graph = R6Class("Graph",
     param_set = function() union_params(self),  # [ParamSet] unified ParamSet of all PipeOps. param IDs are prefixed by PipeOp ID.
     param_vals = function(value) {  # [named list] unified parameter values of all PipeOps. param IDs are prefixed by PipeOp ID.
       if (!missing(value)) {
-        parids = union_parids(self)
-        assert_list(value, len = length(parids), names = "unique")
+        parids = union_parids(self)  # collect all parameter IDs
+        assert_list(value, names = "unique")  # length may not change
+        assert(all(names(value) %in% parids))
         if (!self$param_set$test(value)) {
           stop("Parameters out of bounds")
         }
         for (pidx in names(value)) {
-          poid = parids[[pidx]][[1]]
-          parid = parids[[pidx]][[2]]
+          poid = parids[[pidx]][[1]]  # PipeOp ID of the PipeOp this pertains to
+          parid = parids[[pidx]][[2]]  # original parameter id, as the PipeOp knows it
           self[[poid]]$pipeop$param_vals[[parid]] = value[[pidx]]
         }
       }
       union_parvals(self)
     },
-    packages = function() unique(self$map(function(x) x$pipeop$packages)),
-    lhs = function() self$source_nodes,
-    rhs = function() self$sink_nodes
+    packages = function() unique(self$map(function(x) x$pipeop$packages)),  # [character] collection of all packages needed for all PipeOps in this Graph
+    lhs = function() self$source_nodes,  # alias for source_nodes
+    rhs = function() self$sink_nodes  # alias for sink_nodes
   ),
   private = list(
       .node_list = list(),
@@ -224,6 +225,11 @@ length.Graph = function(x) {
   x
 }
 
+# Topological sort of nodes
+# @param node_list [GraphNode] nodes in the same graph
+# @param layerinfo [logical(1)] Whether to return a vector of graph depths instead of nodes
+# @return the sorted `node_list` if `layerinfo` is FALSE. If `layerinfo` is TRUE, a named `numeric`
+#   with node depths, indexed by node pipeop IDs, is returned.
 sort_nodes = function(node_list, layerinfo = FALSE) {
   pending = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
   cache = map_dbl(node_list, pending)
@@ -251,6 +257,10 @@ sort_nodes = function(node_list, layerinfo = FALSE) {
   }
 }
 
+# Create unified ParamSet of all PipeOps inside a graph.
+# The parameter IDs are changed by prefixing each PipeOp's ID, separated by a dot.
+# @param graph [Graph]
+# @return [ParamSet]
 union_params = function(graph) {
   ps = ParamSet$new()
   graph$map(function(x) {
@@ -262,12 +272,25 @@ union_params = function(graph) {
   ps
 }
 
+# Create the unified parameter values of all PipeOps inside a graph.
+# The parameter IDs are changed by prefixing each PipeOp's ID, separated by a dot.
+# @param graph [Graph]
+# @return [named list]
 union_parvals = function(graph) {
   parvals = unlist(graph$map(function(x) x$pipeop$param_vals, simplify = FALSE), recursive = FALSE)
   assert_list(parvals, names = "unique")
   parvals
 }
 
+# Create a mapping from a Graph's unified parameter IDs (the IDs given by `union_params`
+# and `union_parvals`) to the actual PipeOp ID and its parameter ID.
+#
+# This is necessary because a global parameter ID of 'x.y.z' could pertain to a
+# PipeOp 'x' with parameter 'y.z', or to a PipeOp 'x.y' with parameter 'z'.
+# (In the first case, the returned value would be list(x.y.z = list('x', 'y.z')),
+# in the second case it would be list(x.y.z = list('x.y', 'z')))
+# @param graph [Graph]
+# @return [list] list of pairs list(<original PipeOp ID>, <Parameter ID within that PipeOp>)
 union_parids = function(graph) {
   parids = unlist(graph$map(function(x) {
     sapply(names(x$pipeop$param_vals), function(y) list(x$pipeop$id, y), simplify = FALSE)
@@ -276,11 +299,15 @@ union_parids = function(graph) {
   parids
 }
 
-# input: e.g. task
-# fncall: character(1) identifying a function to call for each edge. probably "train" or "predict"
-# cache_result: whether to store cached_output pipeop
+# Successively call PipeOp train / predict functions while moving data along the node edges.
+# @param input [any]: e.g. a task if the first node accepts a task input
+# @param fncall [character(1)]: identifying a function to call for each edge. probably "train" or "predict"
+# @param cache_result [logical(1)]: whether to store cached_output pipeop.
+# @return [any] whatever the last node in the graph returns.
 Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE) {
-  sorted_nodes = self$node_list
+
+  sorted_nodes = self$node_list  # we rely on this to be topologically sorted, so we can just walk along this list
+
   in_channels = self$in_channels
   out_channels = self$out_channels
   if (length(in_channels) != 1) {
@@ -289,6 +316,7 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
   if (length(out_channels) != 1) {
     stop("Graph has != 1 out_channels, not supported yet")
   }
+
   startnode = which(names(sorted_nodes) == in_channels[[1]]$node$pipeop$id)
   stopnode = which(names(sorted_nodes) == out_channels[[1]]$node$pipeop$id)
   assert(length(startnode) == 1) ; assert(length(stopnode) == 1) ; assert(startnode <= stopnode)
