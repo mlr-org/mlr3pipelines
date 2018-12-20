@@ -40,3 +40,21 @@ Remotes:
     mlr-org/mlr3,
     mlr-org/mlr3misc,
     mlr-org/paradox
+Collate: 
+    '01-List.R'
+    '02-graphlang.R'
+    'utils.R'
+    'Graph.R'
+    'GraphNode.R'
+    'PipeOp.R'
+    'PipeOpEnsemble.R'
+    'PipeOpFanOut.R'
+    'PipeOpFeatureUnion.R'
+    'PipeOpLearner.R'
+    'PipeOpMultiplexer.R'
+    'PipeOpTune.R'
+    'PipeOperatorSugar.R'
+    'PipelineLearner.R'
+    'ops.concrete.R'
+    'testclass.R'
+    'zzz.R'

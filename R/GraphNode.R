@@ -1,3 +1,4 @@
+#' @include utils.R
 
 NodeChannel = R6::R6Class("NodeChannel",
   public = list(
@@ -102,7 +103,7 @@ GraphNode = R6::R6Class("GraphNode",
   ),
   active = list(
       graph = function() private$.graph,
-      pipeop = function() private$.pipeop,
+      pipeop = readonly("pipeop"),
       prev_node_channels = function(prev) {
         if (!missing(prev)) {
           private$connectgn(prev, ".prev_node_channels", "next_node_channels", "in")

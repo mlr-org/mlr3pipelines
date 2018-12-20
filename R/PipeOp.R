@@ -1,3 +1,4 @@
+#' @include utils.R
 
 PipeOp = R6::R6Class("PipeOp",
   public = list(
@@ -52,12 +53,12 @@ PipeOp = R6::R6Class("PipeOp",
     outtype = function() private$.outtype,
     takeslist = function() {
       tl = private$.takeslist
-      assert(!tl || length(self$intype) == 1)
+      assert(tl || length(self$intype) == 1)
       tl
     },
     returnslist = function() {
       rl = private$.returnslist
-      assert(!rl || length(self$outtype) == 1)
+      assert(rl || length(self$outtype) == 1)
       rl
     },
 

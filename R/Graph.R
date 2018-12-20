@@ -1,3 +1,4 @@
+#' @include utils.R
 
 # class Graph
 # members:
