@@ -11,6 +11,9 @@
 #' @name PipeOpLearner
 #' @family PipeOp, PipeOpLearner
 #' @export
+#' @examples
+#' lrn = mlr3::mlr_learners$get("classif.rpart")
+#' op =  PipeOpLearner$new(lrn)
 PipeOpLearner = R6Class("PipeOpLearner",
 
   inherit = PipeOp,

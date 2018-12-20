@@ -12,10 +12,10 @@
 #' * `shuffle`: `logical(1)` Should the data be shuffled before chunking?
 #' * `stratify`: `logical(1)` Should the subsamples be stratified.
 #' @name PipeOpChunk
-#' @family PipeOp, PipeOpBroadcast, PipeOpDT, PipeOpChunk
+#' @family PipeOp, PipeOpBroadcast, PipeOpChunk
 #' @export
 PipeOpChunk = R6::R6Class("PipeOpChunk",
-  inherit = PipeOpDT,
+  inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "chunk") {
       ps = ParamSet$new(params = list(
@@ -27,14 +27,28 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
       private$.outtype = rep(list("Task"), outnum)
       private$.outnum = outnum
     },
-    train_dt = function(dt) {
+    train = function(input) {
+      assert_list(inputs, len = 1L, type = "Task")
       self$state = list()
-      # FIXME: Implement stratification
-      idx = chunk(rownames(dt), n.chunks = self$param_vals$outnum, shuffle = self$param_vals$shuffle)
-      map(idx, function(x) subset(dt, rownames(dt) %in% x))
+
+      # Get feature dt from task
+      task = inputs[[1L]]
+      colns = task$backend$colnames
+
+      # FIXME: Implement stratification?
+      idx = chunk(task$row_ids, n.chunks = self$param_vals$outnum, shuffle = self$param_vals$shuffle)
+      
+      # Subset data, clone task and overwrite data in it.
+      tsklst = map(idx, function(x) {
+        newdt = task$backend$data(cols = colns, rows = x)
+        tsk = task$clone()
+        tsk$overwrite(newdt)
+        return(tsk)
+      })
+      return(tsklst)
     },
-    predict_dt = function(dt) {
-      return(dt)
+    predict = function(input) {
+      return(input)
     }
   ),
   private = list(
