@@ -1,4 +1,18 @@
-# simple feature transform, no hyperpars
+#' @title PipeOpDownsample
+#' @format [R6Class] PipeOpDownsample
+#'
+#' @description
+#'   Subsamples a [Task] to include only a fraction of the rows.
+#' @section Usage:
+#' Inherits from [PipeOp]
+#' * `f = pipeOpDownsample$new(id)` \cr
+#'     `character(1)` -> [PipeOpSparsePCA]
+#' @section Details:
+#' * `perc`: `numeric(1)` Percentage of rows in the task to keep.
+#' * `stratify`: `logical(1)` Should the subsamples be stratified.
+#' @name PipeOpDownsample
+#' @family PipeOp, PipeOpDownsample
+#' @export
 PipeOpDownsample = R6Class("PipeOpDownsample",
 
   inherit = PipeOp,

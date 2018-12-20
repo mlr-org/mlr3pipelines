@@ -1,3 +1,18 @@
+#' @title PipeOpFeatureUnion
+#' @format [R6Class] PipeOpFeatureUnion
+#'
+#' @description
+#'   Aggregates features from all input tasks by cbinding them together
+#'   into a [data.table].
+#'   [DataBackend] primary keys and [Task] targets have to be equal across each
+#'   task. Only one target is kept.
+#' @section Usage:
+#' Inherits from [PipeOp]
+#' * `f = pipeOpFeatureUnion$new(id)` \cr
+#'     `character(1)` -> [PipeOpFeatureUnion]
+#' @name PipeOpFeatureUnion
+#' @family PipeOp, PipeOpAggregate, PipeOpFeatureUnion
+#' @export
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
   inherit = PipeOp,

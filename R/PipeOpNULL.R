@@ -7,10 +7,11 @@
 #'   `gunion()` to keep a copy of the original data.
 #' 
 #' @section Usage:
+#' Inherits from [PipeOp]
 #' * `f = pipeOpNULL$new(id)` \cr
 #'     `character(1)` -> [PipeOpNULL]
-#' @name pipeOpNULL
-#' @family pipeOp
+#' @name PipeOpNULL
+#' @family PipeOp
 #' @examples
 #' # Do PCA on input data, but also keep a copy of the original input.
 #' op1 = PipeOpNULL$new()

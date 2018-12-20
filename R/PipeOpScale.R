@@ -1,5 +1,16 @@
-# Scale Data
-# [dt] -> [dt]
+#' @title PipeOpScale
+#' @format [R6Class] PipeOpScale
+#' 
+#' @description
+#'   Scales the data to mean = 0 and standard deviation 1.
+#'   See [base::scale] for details and parameters.
+#' @section Usage:
+#' Inherits from [PipeOpDT]
+#' * `f = pipeOpDT$new(id)` \cr
+#'     `character(1)` -> [PipeOpDT]
+#' @name PipeOpScale
+#' @family PipeOp, PipeOpDT
+#' @export
 PipeOpScale = R6Class("PipeOpScale",
 
   inherit = PipeOpDT,

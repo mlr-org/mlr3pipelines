@@ -1,6 +1,17 @@
-
-
-
+#' @title PipeOpCopy
+#' @format [R6Class] PipeOpCopy
+#'
+#' @description
+#'   Copies its input `outnum` times.
+#' @section Usage:
+#' Inherits from [PipeOp]
+#' * `f = PipeOpCopy$new(outnum, id)` \cr
+#'     `integer(1)`, `character(1)` -> [PipeOpCopy]
+#' @section Details:
+#' * `outnum`: `integer(1)` Number of times the input is copied.
+#' @name PipeOpCopy
+#' @family PipeOp, PipeOpBroadcast, PipeOpCopy
+#' @export
 PipeOpCopy = R6::R6Class("PipeOpCopy",
   inherit = PipeOp,
   public = list(

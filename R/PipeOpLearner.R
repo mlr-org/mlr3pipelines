@@ -1,5 +1,19 @@
-# FIXME: war gibt das in train zurück? modell, task oder beidies?
-
+#' @title PipeOpLearner
+#' @format [R6Class] PipeOpLearner
+#'
+#' @description
+#'   Wraps a [mlr3::Learner] into a [PipeOp].
+#'   Inherits the `param_set` from the [mlr3::Learner] it is constructed from.
+#' @section Usage:
+#' Inherits from [PipeOp]
+#' * `f = PipeOpLearner$new(outnum, id)` \cr
+#'   `[Learner]` -> [PipeOpLearner]
+#' @name PipeOpLearner
+#' @family PipeOp, PipeOpLearner
+#' @export
+#' @examples
+#' lrn = mlr3::mlr_learners$get("classif.rpart")
+#' op =  PipeOpLearner$new(lrn)
 PipeOpLearner = R6Class("PipeOpLearner",
 
   inherit = PipeOp,

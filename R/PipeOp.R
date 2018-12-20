@@ -53,8 +53,8 @@
 #' * `.intype`: `list of any`
 #' * `.outtype`: `list of any`
 #'
-#' @name pipeOp
-#' @family pipeOp
+#' @name PipeOp
+#' @family PipeOp
 PipeOp = R6::R6Class("PipeOp",
   public = list(
     packages = character(0),

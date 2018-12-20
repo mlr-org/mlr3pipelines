@@ -1,5 +1,15 @@
-# Rotate data
-# [dt] -> [dt]
+#' @title PipeOpPCA
+#' @format [R6Class] PipeOpPCA
+#' @description
+#'   Extracts principle components from data.
+#'   See [stats::prcomp] for details  and parameters.
+#' @section Usage:
+#' Inherits from [PipeOpDT]
+#' * `f = pipeOpPCA$new(id)` \cr
+#'     `character(1)` -> [PipeOpPCA]
+#' @name PipeOpPCA
+#' @family PipeOp, PipeOpDT, PipeOpPCA
+#' @export
 PipeOpPCA = R6Class("PipeOpPCA",
 
   inherit = PipeOpDT,
