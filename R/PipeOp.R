@@ -9,13 +9,7 @@ PipeOp = R6::R6Class("PipeOp",
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
-      private$.param_vals = param_set$data$default
-      addnl_params = c(list(...), param_vals)
-      checkmate::assert_list(addnl_params, names = "unique")
-      for (n in names(addnl_params)) {
-        private$.param_vals[[n]] = addnl_params[[n]]
-      }
-      self
+      private$.param_vals = insert_named(param_set$data$default, param_vals)
     },
 
     print = function(...) {
@@ -31,15 +25,15 @@ PipeOp = R6::R6Class("PipeOp",
   ),
 
   active = list(
-      id = function(id) {
-        if (missing(id)) {
-          private$.id
-        } else {
-          private$.id = id
+    id = function(id) {
+      if (missing(id)) {
+        private$.id
+      } else {
+        private$.id = id
 
-          # TODO: maybe notify the graph about changed ID?
-        }
-      },
+        # TODO: maybe notify the graph about changed ID?
+      }
+    },
     param_set = function() private$.param_set,
     param_vals = function(vals) {
       if (missing(vals)) {

@@ -34,7 +34,6 @@ NodeChannel = R6::R6Class("NodeChannel",
 #'
 GraphNode = R6::R6Class("GraphNode",
   public = list(
-
     initialize = function(pipeop, graph) {
       private$.pipeop = pipeop
       private$.graph = graph
@@ -49,7 +48,6 @@ GraphNode = R6::R6Class("GraphNode",
     print = function(...) {
       catf("GraphNode: <%s>", self$pipeop$id)
     }
-
   ),
   private = list(
       .next_node_channels = NULL,
