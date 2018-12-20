@@ -10,6 +10,9 @@
 #' @name PipeOpPCA
 #' @family PipeOp, PipeOpDT, PipeOpPCA
 #' @export
+#' @examples
+#' # Instantiate PipeOpPCA
+#' op1 = PipeOpPCA$new()
 PipeOpPCA = R6Class("PipeOpPCA",
 
   inherit = PipeOpDT,
