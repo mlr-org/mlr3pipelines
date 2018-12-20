@@ -44,7 +44,8 @@
 #' * `packages` [character]
 #'
 #' @section Details:
-#' - `new()`: Constructs an empty Graph, or copies an existing graph if `copy` is a graph.
+#' * `new()`: Constructs an empty Graph, copies an existing graph if `fill` is a graph, or fills graph
+#'   with node(s) if `fill` is a PipeOp. `fill` can also be a list of multiple Graphs / PipeOps.
 #' * `node_list`: list of [GraphNode], indexed by ID.
 #' * `sorted_node_list`: like `node_list`, but ordered by connections.
 #' * `f[[`: Get a PipeOp by `[[id]]`
@@ -57,7 +58,7 @@
 #' * `train()`: train on input (e.g. Task), returns processed output (e.g. modified task).
 #' * `predict()`: predict on input (e.g. Data), get processed output (e.g. predictions).
 #' * `plot()`: plot the graph.
-#' * `extend(g)`: Add other graph `g` to the current graph as disjoint union.
+#' * `extend(g)`: Add other Graph, PipeOp, or list of Graphs / PipeOps to the current graph as disjoint union.
 #' @name Graph
 #' @family Graph
 #' @examples
@@ -72,9 +73,12 @@ Graph = R6Class("Graph",
       self$update_connections()
       self$extend(fill)
     },
+
+    # must be called when a member node's PipeOp-ID was changed.
     update_ids = function() {
       names(private$.node_list) = map_chr(private$.node_list, function(x) x$pipeop$id)
     },
+
     add_node = function(node) {
       if (!inherits(node, "GraphNode")) {
         # TODO: assert node inherits PipeOp
@@ -87,7 +91,6 @@ Graph = R6Class("Graph",
       }
       invisible(self)
     },
-    # This should basically call trainGraph
     train = function(task) {
       private$reduceGraph(task, "train", TRUE)
     },
@@ -100,15 +103,19 @@ Graph = R6Class("Graph",
     },
     extend = function(src) {
       assert_class(srcn, c("Graph", "PipeOp", "list"), null.ok = TRUE)
+
+      # if src is a list, call self recursively
       if (inherits(src, "list")) {
         for (el in src) {
           self$extend(el)
         }
         return(invisible(self))
       }
+
       if (inherits(src, "PipeOp")) {
         return(self$add_node(src))
       }
+
       # add nodes: easy
       for (node in src$node_list) {
         self$add_node(node$pipeop)
@@ -119,6 +126,7 @@ Graph = R6Class("Graph",
         oldnode = src$node_list[[nodename]]
         newnode = self$node_list[[nodename]]
         for (idx in seq_along(newnode$outtype)) {
+          # for every channel in the node in the old graph we create the respective channel in the new graph
           oldchannel = oldnode$next_node_channels[[idx]]
           if (is.null(oldchannel)) next
           newchannel = self$node_list[[oldchannel$node$pipeop$id]]$in_channels[[oldchannel$channel_id]]
@@ -155,9 +163,9 @@ Graph = R6Class("Graph",
     }
   ),
   active = list(
-    node_list = readonly("node_list"),
-    sorted_node_list = function() sort_nodes(self$node_list),
-    intype = function() private$.intype,
+    node_list = readonly("node_list"),  # this list actually contains all nodes contained in the Graph
+    sorted_node_list = function() sort_nodes(self$node_list),  # active binding that sorts the nodes topologically.
+    intype = function() private$.intype,  #
     outtype = function() private$.outtype,
     in_channels = readonly("in_channels"),
     out_channels = readonly("out_channels"),
