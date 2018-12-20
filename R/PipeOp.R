@@ -94,17 +94,16 @@ PipeOp = R6::R6Class("PipeOp",
   ),
 
   active = list(
-    id = function(id) {
+    id = function(id) {  # [character(1)] identifier of PipeOp within the Graph. Always call containing graph's update_ids() when changing this.
       if (missing(id)) {
         private$.id
       } else {
         private$.id = id
-
         # TODO: maybe notify the graph about changed ID?
       }
     },
-    param_set = function() private$.param_set,
-    param_vals = function(vals) {
+    param_set = function() private$.param_set,  # [ParamSet] ParamSet of the PipeOp
+    param_vals = function(vals) {  # [named list] parameter values, one for each parameter of the ParamSet. Mutable, with feasibility check.
       if (!missing(vals)) {
         # TODO: param check
         if (!self$param_set$test(vals)) {
@@ -114,18 +113,8 @@ PipeOp = R6::R6Class("PipeOp",
       }
       private$.param_vals
     },
-    intype = function() private$.intype,
-    outtype = function() private$.outtype,
-    takeslist = function() {
-      tl = private$.takeslist
-      assert(tl || length(self$intype) == 1)
-      tl
-    },
-    returnslist = function() {
-      rl = private$.returnslist
-      assert(rl || length(self$outtype) == 1)
-      rl
-    },
+    intype = function() private$.intype,  # [list, indexed by channel_id] input types
+    outtype = function() private$.outtype,  # [list, indexed by channel_id] output types
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
     is_trained = function() !is.null(self$state)
@@ -136,8 +125,6 @@ PipeOp = R6::R6Class("PipeOp",
     .param_set = NULL,
     .param_vals = NULL,
     .intype = NULL,  # list of character vectors, identifying the input classes
-    .outtype = NULL,  # list of character vectors, identifying output classes
-    .takeslist = TRUE,  # may be FALSE, but only if length(intype) is 1
-    .returnslist = TRUE  # may be FALSE, but only if length(outtype) is 1
+    .outtype = NULL  # list of character vectors, identifying output classes
   )
 )
