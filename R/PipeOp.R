@@ -5,7 +5,7 @@ PipeOp = R6::R6Class("PipeOp",
     packages = character(0),
     state = NULL,
     result = NULL,
-    initialize = function(id, param_set = ParamSet$new(), param_vals = NULL, ...) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = NULL) {
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults

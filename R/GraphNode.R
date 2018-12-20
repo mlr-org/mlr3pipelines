@@ -2,18 +2,18 @@
 
 NodeChannel = R6::R6Class("NodeChannel",
   public = list(
-      name = NULL,
-      node = NULL,
-      direction = NULL,
-      initialize = function(name, node, direction) {
-        assert_choice(direction, c("in", "out"))
-        self$name = name
-        self$node = node
-        self$direction = direction
-      },
-      print = function() {
-        catf("Channel name %s %s GraphNode %s", self$name, if (self$direction == "in") "into" else "out of", self$node$pipeop$id)
-      }
+    name = NULL,
+    node = NULL,
+    direction = NULL,
+    initialize = function(name, node, direction) {
+      assert_choice(direction, c("in", "out"))
+      self$name = name
+      self$node = node
+      self$direction = direction
+    },
+    print = function() {
+      catf("Channel name %s %s GraphNode %s", self$name, if (self$direction == "in") "into" else "out of", self$node$pipeop$id)
+    }
   )
 )
 
@@ -102,7 +102,7 @@ GraphNode = R6::R6Class("GraphNode",
       }
   ),
   active = list(
-      graph = function() private$.graph,
+      graph = readonly("graph"),
       pipeop = readonly("pipeop"),
       prev_node_channels = function(prev) {
         if (!missing(prev)) {
