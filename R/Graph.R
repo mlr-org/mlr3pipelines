@@ -115,9 +115,7 @@ Graph = R6Class("Graph",
       self$node_list[sink_ids]
     },
     is_trained = function(value) all(self$map(function(x) x$pipeop$is_trained)),
-    param_set = function(value) {
-      if (missing(value)) graph_gather_params(self$source_nodes)
-    },
+    param_set = function() union_params(self),
     param_vals = function(value) {
       if (missing(value)) list()
     },
@@ -179,25 +177,15 @@ sort_nodes = function(node_list, layerinfo = FALSE) {
   }
 }
 
-graph_gather_params = function(root) {
-
-  all_params = root$map(
-    function(x) x$pipeop$param_set$clone(deep = TRUE)$params,
-    simplify = FALSE
-  )
-
-  all_params_named = mapply(function(params_list, id) {
-
-    lapply(params_list, function(x) {
-
-      x = x$clone(deep = TRUE)
-      x$id = paste(id, x$id, sep =":")
-      x
-    })
-
-  }, all_params, names(all_params), SIMPLIFY = FALSE)
-
-  paradox::ParamSet$new(params = unlist(all_params_named))
+union_params = function(graph) {
+  ps = ParamSet$new()
+  graph$map(function(x) {
+    prefix = x$pipeop$id
+    xps = x$pipeop$param_set
+    newps = ParamSet$new(lapply(xps$get_params(), function(x) { x$data$id = paste(prefix, x$id, sep = ".") ; x}))
+    ps$add_param_set(newps)
+  })
+  ps
 }
 
 # input: e.g. task
