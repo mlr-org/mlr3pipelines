@@ -2,7 +2,9 @@
 #' @format [R6Class] PipeOpChunk
 #'
 #' @description
-#'   Chunks its input into `outnum` chunks.
+#' Chunks its input into `outnum` chunks.
+#' Returns a list of [mlr3::Task]. 
+#' During predict simply passes on the input.
 #' @section Usage:
 #' Inherits from [PipeOpChunk]
 #' * `f = PipeOpChunk$new(outnum, id)` \cr
@@ -14,6 +16,8 @@
 #' @name PipeOpChunk
 #' @family PipeOp, PipeOpBroadcast, PipeOpChunk
 #' @export
+#' @examples
+#' op = PipeOpChunk$new(5)
 PipeOpChunk = R6::R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
@@ -39,10 +43,9 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
       idx = chunk(task$row_ids, n.chunks = self$param_vals$outnum, shuffle = self$param_vals$shuffle)
       
       # Subset data, clone task and overwrite data in it.
-      tsklst = map(idx, function(x) {
+      map(idx, function(x) {
         task$clone()$filter(x)
       })
-      return(tsklst)
     },
     predict = function(input) {
       return(input)
