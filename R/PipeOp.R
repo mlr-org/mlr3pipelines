@@ -2,6 +2,7 @@
 PipeOp = R6::R6Class("PipeOp",
   public = list(
     packages = character(0),
+    state = NULL,
     result = NULL,
     initialize = function(id, param_set = ParamSet$new(), param_vals = NULL, ...) {
       private$.id = id
@@ -47,7 +48,6 @@ PipeOp = R6::R6Class("PipeOp",
         private$.param_vals = vals
       }
     },
-    state = function() private$.state,
     intype = function() private$.intype,
     outtype = function() private$.outtype,
     takeslist = function() {
@@ -69,7 +69,6 @@ PipeOp = R6::R6Class("PipeOp",
     .id = NULL,  # id, name within a graph, must be unique within that graph
     .param_set = NULL,
     .param_vals = NULL,
-    .state = NULL,
     .intype = NULL,  # list of character vectors, identifying the input classes
     .outtype = NULL,  # list of character vectors, identifying output classes
     .takeslist = TRUE,  # may be FALSE, but only if length(intype) is 1
