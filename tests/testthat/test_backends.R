@@ -11,7 +11,7 @@ test_that("PipeOp - SparsePCA", {
 
   op1 = PipeOpSparsePCA$new()
   expect_class(op1, "PipeOpSparsePCA")
-  expect_false(op1$is_learnt)
+  expect_false(op1$is_trained)
 
   n1 = GraphNode$new(op1)
   expect_false(n1$can_fire)

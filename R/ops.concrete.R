@@ -11,7 +11,7 @@ PipeOpNULL = R6Class("PipeOpNULL",
     },
 
     train = function(inputs) {
-#      assert_list(inputs, len = 1L, type = "Task")
+      assert_list(inputs, len = 1L, type = "Task")
       private$.result = inputs[[1L]]
       private$.params = list()
       inputs

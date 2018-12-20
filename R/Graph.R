@@ -96,19 +96,20 @@ Graph = R6Class("Graph",
       private$.out_channels = list()
       private$.intype = list()
       private$.outtype = list()
-      for (node in self$node_list) {
-        assigncon = function(channels, types, otherchan, edgetarget, typetarget) {
-          for (conidx in seq_along(channels)) {
-            if (is.null(otherchan[[conidx]])) {
-              edgename = names2(channels)[[conidx]]
-              if (is.na(edgename)) {
-                edgename = length(private[[edgetarget]]) + 1
-              }
-              private[[edgetarget]][[edgename]] = channels[[conidx]]
-              private[[typetarget]][[edgename]] = types[[conidx]]
+      assigncon = function(channels, types, otherchan, edgetarget, typetarget) {
+        for (conidx in seq_along(channels)) {
+          if (is.null(otherchan[[conidx]])) {
+            edgename = names2(channels)[[conidx]]
+            if (is.na(edgename)) {
+              edgename = length(private[[edgetarget]]) + 1
             }
+            private[[edgetarget]][[edgename]] = channels[[conidx]]
+            private[[typetarget]][[edgename]] = types[[conidx]]
           }
         }
+      }
+
+      for (node in self$node_list) {
         assigncon(node$in_channels, node$intype, node$prev_node_channels, ".in_channels", ".intype")
         assigncon(node$out_channels, node$outtype, node$next_node_channels, ".out_channels", ".outtype")
       }

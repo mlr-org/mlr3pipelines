@@ -46,8 +46,8 @@ GraphNode = R6::R6Class("GraphNode",
     initialize = function(pipeop, graph) {
       private$.pipeop = pipeop
       private$.graph = graph
-      private$.next_node_channels = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
-      private$.prev_node_channels = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
+      private$.next_node_channels = sapply(pipeop$outtype, function(.) NULL, simplify = FALSE)
+      private$.prev_node_channels = sapply(pipeop$intype, function(.) NULL, simplify = FALSE)
       private$.in_channels = sapply(numbername(pipeop$intype), NodeChannel$new, node = self, simplify = FALSE, direction = "in")
       private$.out_channels = sapply(numbername(pipeop$outtype), NodeChannel$new, node = self, simplify = FALSE, direction = "out")
       graph$add_node(self)
@@ -78,7 +78,7 @@ GraphNode = R6::R6Class("GraphNode",
         for (edge in newedges) {
           # todo: assert edge is a NodeChannel
           # TODO: check types
-          if (!identical(edge$node$graph, private$.graph)) {
+          if (!is.null(edge) && !identical(edge$node$graph, private$.graph)) {
             stop("Can't connect nodes that are not in the same graph")
           }
         }
@@ -90,8 +90,11 @@ GraphNode = R6::R6Class("GraphNode",
 
           edgename = names2(newedges)[[idx]]
           if (is.na(edgename)) edgename = idx
-          oldedge$node[[inverseedgename]][[oldedge$name]] = NULL
-          newedges[[idx]]$node[[inverseedgename]][[newedges[[idx]]$name]] = NodeChannel$new(edgename, self, direction)
+
+          if (!is.null(oldedge)) oldedge$node[[inverseedgename]][oldedge$name] = list(NULL)
+          if (!is.null(newedges[[idx]])) {
+            newedges[[idx]]$node[[inverseedgename]][[newedges[[idx]]$name]] = NodeChannel$new(edgename, self, direction)
+          }
         }
         private[[oldedgename]] = newedges
         self$graph$update_connections()
