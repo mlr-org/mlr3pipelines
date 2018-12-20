@@ -29,14 +29,14 @@ We first create an mlr task that, which we want to transform with the pipeline.
 ```
 
 
-An often-applied preprocessing step is to simply **center** and **scale** the data to mean $0$ and standard deviation $1$. In order to do this we create a new `PipeOp`: **PipeOpScaler**.
+An often-applied preprocessing step is to simply **center** and **scale** the data to mean $0$ and standard deviation $1$. In order to do this we create a new `PipeOp`: **PipeOpScale**.
 
 ```{r}
-  op1 = PipeOpScaler$new()
+  op1 = PipeOpScale$new()
 ```
 
 In order to not leak data from the test set into the training set it is imperative to treat train and test data correctly. For this we require a function `train` that learns the appropriate transformations from the training set and a function `test` that applies the transformation on future data.
-This is already handled in `PipeOpScaler`.
+This is already handled in `PipeOpScale`.
 
 The **PipeOp** does not work stand-alone, as we expect that it is wrapped in a `GraphNode`. This handles all connectivity to the previous and following nodes of the graph.
 
@@ -75,7 +75,7 @@ In this example, we first `scale` the data, apply `PCA` and then train a
 
 ```{r}
   # Create the PipeOp's:
-  op1 = PipeOpScaler$new()
+  op1 = PipeOpScale$new()
   op2 = PipeOpPCA$new()
   op3 = PipeOpLearner$new(learner = mlr_learners$get("classif.rpart"))
   # Connect the operators

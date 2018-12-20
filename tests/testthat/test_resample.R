@@ -1,7 +1,7 @@
 # test_that("PipeOp - Resample", {
 #   task = mlr_tasks$get("iris")
 #
-#   op1 = PipeOpScaler$new()
+#   op1 = PipeOpScale$new()
 #   lrn = mlr_learners$get("classif.rpart")
 #   op2 = PipeOpLearner$new(learner = lrn)
 #   pp = Pipeline$new(list(op2))

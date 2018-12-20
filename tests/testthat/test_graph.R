@@ -3,7 +3,7 @@ context("Graph")
 test_that("Graph", {
   task = mlr_tasks$get("iris")
 
-  op1 = PipeOpScaler$new()
+  op1 = PipeOpScale$new()
   op2 = PipeOpPCA$new()
   lrn = mlr_learners$get("classif.rpart")
   lrn$predict_type = "prob"
@@ -43,7 +43,7 @@ test_that("Parallel graph", {
   task = mlr_tasks$get("iris")
 
   op1 = PipeOpNULL$new()
-  op2a = PipeOpScaler$new()
+  op2a = PipeOpScale$new()
   op2b = PipeOpPCA$new()
   lrn = mlr_learners$get("classif.rpart")
   lrn$predict_type = "prob"
