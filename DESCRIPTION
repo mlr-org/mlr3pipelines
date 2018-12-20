@@ -47,6 +47,7 @@ Collate:
     'Graph.R'
     'GraphNode.R'
     'PipeOp.R'
+    'PipeOpCopy.R'
     'PipeOpEnsemble.R'
     'PipeOpFanOut.R'
     'PipeOpFeatureUnion.R'
