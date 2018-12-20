@@ -108,14 +108,14 @@ PipeOp = R6::R6Class("PipeOp",
     outtype = function() private$.outtype,  # [list, indexed by channel_id] output types
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
-    is_trained = function() !is.null(self$state)
+    is_trained = function() !is.null(self$state)  # [logical(1)] whether the `train()` function was called at least once.
   ),
 
   private = list(
-    .id = NULL,  # id, name within a graph, must be unique within that graph
+    .id = NULL,
     .param_set = NULL,
     .param_vals = NULL,
-    .intype = NULL,  # list of character vectors, identifying the input classes
-    .outtype = NULL  # list of character vectors, identifying output classes
+    .intype = NULL,
+    .outtype = NULL
   )
 )
