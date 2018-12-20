@@ -59,7 +59,6 @@
 #' * `source_nodes`: nodes that have unconnected input channels and therefore act as graph input.
 #' * `sink_nodes`: nodes that have unconnected output channels and therefore act as graph output.
 #' * `add_node`: Mutates graph by adding a [PipeOp] or [GraphNode] to the end of the graph.
-#' 
 #'   [GraphNode] calls this automatically on construction, so a user should only call this with a PipeOp.
 #' * `train()`: train on input (e.g. Task), returns processed output (e.g. modified task).
 #' * `predict()`: predict on input (e.g. Data), get processed output (e.g. predictions).
@@ -112,7 +111,7 @@ Graph = R6Class("Graph",
     extend = function(graph) {
       # add nodes: easy
       for (node in graph$node_list) {
-        self$add_node(node$pipeop$clone(deep = TRUE))
+        self$add_node(node$pipeop)
       }
 
       # replicate connections: harder
@@ -173,19 +172,7 @@ Graph = R6Class("Graph",
     is_trained = function(value) all(self$map(function(x) x$pipeop$is_trained)),
     param_set = function() union_params(self),
     param_vals = function(value) {
-      if (!missing(value)) {
-        parids = union_parids(self)
-        assert_list(value, len = length(parids), names = "unique")
-        if (!self$param_set$test(value)) {
-          stop("Parameters out of bounds")
-        }
-        for (pidx in names(value)) {
-          poid = parids[[pidx]][[1]]
-          parid = parids[[pidx]][[2]]
-          self[[poid]]$pipeop$param_vals[[parid]] = value[[pidx]]
-        }
-      }
-      union_parvals(self)
+      if (missing(value)) list()
     },
     packages = function() unique(self$map(function(x) x$pipeop$packages)),
     lhs = function() self$source_nodes,
@@ -251,23 +238,9 @@ union_params = function(graph) {
     prefix = x$pipeop$id
     xps = x$pipeop$param_set
     newps = ParamSet$new(lapply(xps$get_params(), function(x) { x$data$id = paste(prefix, x$id, sep = ".") ; x}))
-    ps <<- ps$add_param_set(newps)
+    ps$add_param_set(newps)
   })
   ps
-}
-
-union_parvals = function(graph) {
-  parvals = unlist(graph$map(function(x) x$pipeop$param_vals, simplify = FALSE), recursive = FALSE)
-  assert_list(parvals, names = "unique")
-  parvals
-}
-
-union_parids = function(graph) {
-  parids = unlist(graph$map(function(x) {
-    sapply(names(x$pipeop$param_vals), function(y) list(x$pipeop$id, y), simplify = FALSE)
-  }, simplify = FALSE), recursive = FALSE)
-  assert_list(parids, names = "unique")
-  parids
 }
 
 # input: e.g. task
