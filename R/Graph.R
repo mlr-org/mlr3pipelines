@@ -66,7 +66,7 @@
 #' * `extend(g)`: Add other graph `g` to the current graph as disjoint union.
 #' @name Graph
 #' @family Graph
-#' @example
+#' @examples
 #' # Initialize a new GraphNode
 #' g = Graph$new()
 #' # Add a new node / pipeOp
