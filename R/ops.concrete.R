@@ -12,7 +12,6 @@ PipeOpNULL = R6Class("PipeOpNULL",
 
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
-      private$.result = inputs[[1L]]
       self$state = list()
       inputs
     },
@@ -59,7 +58,6 @@ PipeOpFeatureTransform = R6Class("PipeOpFeatureTransform",
       tn = task$target_names
 
       # Should be:
-      # private$.result = task$overwrite(d)
       list(TaskClassif$new(id = task$id, backend = db, target = tn))
     },
 
@@ -211,15 +209,14 @@ PipeOpScaler = R6Class("PipeOpScaler",
       d[, fn] = as.data.table(sc)
 
       db = as_data_backend(d)
-      private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
-      private$.result
+      list(TaskClassif$new(id = task$id, backend = db, target = task$target_names))
     },
 
-    predict2 = function() {
+    predict = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       task = self$inputs[[1L]]
-      as.data.frame(scale(as.matrix(input),
-        center = self$params$center, scale = self$params$scale))
+      list(as.data.frame(scale(as.matrix(input),
+        center = self$params$center, scale = self$params$scale)))
     }
   )
 )

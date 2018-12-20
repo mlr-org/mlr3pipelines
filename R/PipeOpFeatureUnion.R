@@ -3,10 +3,11 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "featureunion") {
+    initialize = function(innum, id = "featureunion") {
+      private$.intype = rep(list("any"), innum)
+      private$.outtype = list("any")
       super$initialize(id)
     },
-
 
     train = function(inputs) {
 
@@ -27,14 +28,14 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       data = do.call(cbind, c(all_data, list(targets)))
       db = as_data_backend(data)
 
-      private$.result = TaskClassif$new(
+      list(TaskClassif$new(
         id = input1$id,
         backend = db,
         target = input1$target_names
-      )
+      ))
     },
 
-    predict2 = function(input) {
+    predict = function(input) {
       do.call(cbind, input)
     }
   )
