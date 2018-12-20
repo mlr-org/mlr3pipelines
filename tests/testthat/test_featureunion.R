@@ -5,7 +5,7 @@ test_that("featureunion - basic", {
   dd = iris[, -5]
   nd = iris[, -5]
 
-  op1 = PipeOpScaler$new()
+  op1 = PipeOpScale$new()
 
   op2a = PipeOpPCA$new()
   op2b = PipeOpNULL$new()
