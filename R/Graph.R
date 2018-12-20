@@ -100,12 +100,12 @@ Graph = R6Class("Graph",
     }
   ),
   active = list(
-    node_list = function() private$.node_list,
+    node_list = readonly("node_list"),
     sorted_node_list = function() sort_nodes(self$node_list),
     intype = function() private$.intype,
     outtype = function() private$.outtype,
-    in_channels = function() private$.in_channels,
-    out_channels = function() private$.out_channels,
+    in_channels = readonly("in_channels"),
+    out_channels = readonly("out_channels"),
     source_nodes = function() {
       source_ids = unique(map_chr(self$in_channels, function(edge) edge$node$pipeop$id))
       self$node_list[source_ids]
@@ -247,6 +247,10 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
 
     for (idx in seq_along(node$outtype)) {
       outchannel = node$next_node_channels[[idx]]
+      if (is.null(outchannel)) {
+        assert(identical(node, tail(sorted_nodes, 1)[[1]]))
+        next
+      }
       nodename = outchannel$node$pipeop$id
       if (nodename %nin% names(inputs)) {
         inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE)
@@ -255,7 +259,7 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
       inputs[[nodename]][[outchannel$name]] = curout[[idx]]
     }
   }
-  assret(length(curout) == 1)
+  assert(length(curout) == 1)
   curout[[1]]
 })
 
