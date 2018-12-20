@@ -156,27 +156,27 @@ Graph = R6Class("Graph",
       cat("Pipeline Graph:\n")
       cat(output_string, "\n")
     },
-    map = function(fnc, simplify = TRUE) {
+    map = function(fnc, simplify = TRUE) {  # map over every node in the graph
       sapply(self$node_list, fnc, simplify = simplify)
     }
   ),
   active = list(
-    node_list = readonly("node_list"),  # this list actually contains all nodes contained in the Graph, topologically sorted.
-    intype = function() private$.intype,  #
-    outtype = function() private$.outtype,
-    in_channels = readonly("in_channels"),
-    out_channels = readonly("out_channels"),
-    source_nodes = function() {
+    node_list = readonly("node_list"),  # [list of GraphNode] this list actually contains all nodes contained in the Graph, topologically sorted.
+    intype = function() private$.intype,  # [list] identifies types for the ingoing channels of nodes that are not connected yet.
+    outtype = function() private$.outtype,  # [list] identifies types for the outgoing channels of nodes that are not connected yet.
+    in_channels = readonly("in_channels"),  # [list of NodeChannel] incoming NodeChannels of nodes that are not connected yet.
+    out_channels = readonly("out_channels"),  # [list of NodeChannel] outgoing NodeChannels of nodes that are not connected yet.
+    source_nodes = function() {  # [list of GraphNode] all nodes that have some incoming NodeChannels that are not connected
       source_ids = unique(map_chr(self$in_channels, function(edge) edge$node$pipeop$id))
       self$node_list[source_ids]
     },
-    sink_nodes = function() {
+    sink_nodes = function() {  # [list of GraphNode] all nodes that have some outgoing NodeChannels that are not connected
       sink_ids = unique(map_chr(self$out_channels, function(edge) edge$node$pipeop$id))
       self$node_list[sink_ids]
     },
-    is_trained = function(value) all(self$map(function(x) x$pipeop$is_trained)),
-    param_set = function() union_params(self),
-    param_vals = function(value) {
+    is_trained = function() all(self$map(function(x) x$pipeop$is_trained)),  # [logical(1)] Whether all PipeOps in the graph are 'trained'
+    param_set = function() union_params(self),  # [ParamSet] unified ParamSet of all PipeOps. param IDs are prefixed by PipeOp ID.
+    param_vals = function(value) {  # [named list] unified parameter values of all PipeOps. param IDs are prefixed by PipeOp ID.
       if (missing(value)) list()
     },
     packages = function() unique(self$map(function(x) x$pipeop$packages)),
