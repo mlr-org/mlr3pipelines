@@ -56,7 +56,7 @@ Graph = R6Class("Graph",
     extend = function(graph) {
       # add nodes: easy
       for (node in graph$node_list) {
-        self$add_node(node$pipeop)
+        self$add_node(node$pipeop$clone(deep = TRUE))
       }
 
       # replicate connections: harder
