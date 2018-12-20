@@ -115,7 +115,7 @@ Graph = R6Class("Graph",
         for (idx in seq_along(newnode$outtype)) {
           oldchannel = oldnode$next_node_channels[[idx]]
           if (is.null(oldchannel)) next
-          newchannel = self$node_list[[oldchannel$node$pipeop$id]]$in_channels[[oldchannel$name]]
+          newchannel = self$node_list[[oldchannel$node$pipeop$id]]$in_channels[[oldchannel$channel_id]]
           newnode$next_node_channels[[idx]] = newchannel
         }
       }
@@ -269,17 +269,9 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
     assert(node$pipeop$id %in% names(inputs))
     curin = inputs[[node$pipeop$id]]
     inputs[[node$pipeop$id]] = "00SENTINEL00"  # check later that we don't run in circles
-    if (!node$pipeop$takeslist) {
-      assert(length(curin) == 1)
-      curin = curin[[1]]
-    }
     curout = node$pipeop[[fncall]](curin)
     if (cache_result) node$pipeop$result = curout
-    if (!node$pipeop$returnslist) {
-      assert(length(node$outtype) == 1)
-      curout = list(curout)
-      names(curout) = names(node$outtype)
-    }
+    names(curout) = names(node$outtype)
     assert(length(curout) == length(node$outtype))
 
     for (idx in seq_along(node$outtype)) {
@@ -293,7 +285,7 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
         inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE)
       }
       assert(!identical(inputs[[nodename]], "00SENTINEL00"))
-      inputs[[nodename]][[outchannel$name]] = curout[[idx]]
+      inputs[[nodename]][[outchannel$channel_id]] = curout[[idx]]
     }
   }
   assert(length(curout) == 1)

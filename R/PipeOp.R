@@ -10,9 +10,8 @@
 #'   During prediction it applies the learned params to the input and transforms the input to an output.'
 #'
 #'   A PipeOp specifies the types of inputs and outputs as `intype` and `outtype`, a list of <something specifying types>.
-#'   The length of these lists determines the length of input / output the PipeOp produces. Typically the PipeOp input / output
-#'   is a list of specified length, but PipeOps with input / output length 1 can specify that they don't use lists but use singular
-#'   values instead (`.takeslist` / `.returnslist` set to `FALSE`)#'
+#'   The length of these lists determines the length of input / output the PipeOp produces. The PipeOp input / output
+#'   is a list of specified length.
 #'
 #' @section Usage:
 #' * `f = pipeOp$new(id, params)` \cr
@@ -26,8 +25,6 @@
 #' * `f$result` -> `any`
 #' * `f$intype` -> `list of any`
 #' * `f$outtype` -> `list of any`
-#' * `f$takeslist` -> `logical(1)`
-#' * `f$returnslist` -> `logical(1)`
 #' * `f$print()`
 #' * `f$train()` \cr
 #'   `any` -> `any`
@@ -51,16 +48,10 @@
 #' *   If `is_trained = FALSE` the function cannot be applied.
 #' * `intype`: list of input types the pipeOp accepts. Read-only.
 #' * `outtype`: list of output types that are returned by the pipeOp. Read-only.
-#' * `takeslist`: `TRUE` if input of `train` / `predict` is a list, `FALSE` if it is a singular value.
-#'   If this is `FALSE`, `length(.intype)` must be 1.  Read-only.
-#' * `returnslist`: `TRUE` if output of `train` / `predict` is a list, `FALSE` if it is a singular value.
-#'   If this is `FALSE`, `length(.outtype)` must be 1.  Read-only.
 #'
 #' @section Internals:
 #' * `.intype`: `list of any`
 #' * `.outtype`: `list of any`
-#' * `.takeslist`: `logical(1)`
-#' * `.returnslist`: `logical(1)`'
 #'
 #' @name pipeOp
 #' @family pipeOp
