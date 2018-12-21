@@ -12,18 +12,18 @@ This document contains a list of use-cases we want to contain.
 ## Pipe Operators:
 
 - **Meta:**
-  - `pipeOpBranch`                          | broadcast
-  - `pipeOpChunk`                           | broadcast
-  - `pipeOpUnbranch`                        | aggregate
-  - `pipeOpFeatureUnion`                    | aggregate
-  - `pipeOpNULL`                            | linear
-  - `pipeOpCopy`                            | broadcast
+  - `PipeOpBranch`                          | broadcast
+  - `PipeOpChunk`                           | broadcast
+  - `PipeOpUnbranch`                        | aggregate
+  - `PipeOpFeatureUnion`                    | aggregate
+  - `PipeOpNULL`                            | linear
+  - `PipeOpCopy`                            | broadcast
 
                                               train: input --store-params--> output        predict: input --use-params--> output
 - **Learner:**
-  - `pipeOpLearner`                         | linear    | task --model--> NULL           | task --model--> prediction
+  - `PipeOpLearner`                         | linear    | task --model--> NULL           | task --model--> prediction
   - `PipeOpLearnerCV`                       | linear    | task --model--> cvtask         | task --model--> prediction
-  - `pipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
+  - `PipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
 
 - **Preprocessing:**
   - `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
@@ -36,7 +36,7 @@ This document contains a list of use-cases we want to contain.
   - `PipeOpMultiClass2Binary`               | broadcast | task --NULL--> list-of-task    | task --NULL--> list-of-tasks
   - `PipeOpSetTarget`                       | linear    | task --NULL--> task            | task --NULL--> task
 
-##### [[pipeOpPCA]]
+##### [[PipeOpPCA]]
 
   - **train**:
     - input: [[Task]]
@@ -48,7 +48,7 @@ This document contains a list of use-cases we want to contain.
     - does: rotates input data using **.params** slot.
     - returns: [[Task]]
 
-##### [[pipeOpLearner]]
+##### [[PipeOpLearner]]
 
   - **train**:
     - input: [[Task]]
@@ -108,7 +108,7 @@ This document contains a list of use-cases we want to contain.
     - does: Transform prediction by fun
     - returns: Prediction
 
-##### [[pipeOpScale]]
+##### [[PipeOpScale]]
 
   - **train**:
     - input: [[Task]]
@@ -120,7 +120,7 @@ This document contains a list of use-cases we want to contain.
     - does: scales input [[Task]] using **.params** slot.
     - returns: [[Task]]
 
-##### [[pipeOpNull]]
+##### [[PipeOpNull]]
 
   - **train**:
     - input: Anything
@@ -132,7 +132,7 @@ This document contains a list of use-cases we want to contain.
     - does: Nothing
     - returns: Input (Anything)
 
-##### [[pipeOpFeatureUnion]]
+##### [[PipeOpFeatureUnion]]
 
   - **train**:
     - input: List of [[Task]]'s
@@ -224,7 +224,7 @@ This internally does the following:
 ```r
 task = mlr_tasks$get("iris")
 lrn_rp = mlr_learners$get("classif.rpart")
-g = pipeOpScale() %>>% PipeOpPCA() %>>% PipeOpLearner(lrn_rp)
+g = PipeOpScale() %>>% PipeOpPCA() %>>% PipeOpLearner(lrn_rp)
 g$train(task)
 g$predict(task)
 ```
@@ -328,7 +328,7 @@ gunion(op1, op2) %>>% PipeOpModelAverage$new()
 #### Usecase b): Stacking with SuperLearner
 
 Instead of using `PipeOpModelAverage`, we combine predictions to a `PipeOpLearner`.
-Instead of a `pipeOpLearner` we use a `PipeOpLearnerCV`, in order to avoid overfitting.
+Instead of a `PipeOpLearner` we use a `PipeOpLearnerCV`, in order to avoid overfitting.
 
 ```r
 # Superlearner: We instead use PipeOpLearnerCV
@@ -340,7 +340,7 @@ gunion(op1, op2) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.lm")
 
 #### Usecase c): Stacking with SuperLearner and original data.
 
-By adding a `pipeOpNull`, we add the original features to the SuperLearner.
+By adding a `PipeOpNull`, we add the original features to the SuperLearner.
 
 ```r
 gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.lm")
@@ -351,8 +351,8 @@ gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>% PipeOpLearner("regr.
 We can do the same on multiple levels by just adding the same `PipeOpLearnerCV()` again after the feature union.
 
 ```r
-g = gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>% 
-	gunion(op1, op2) %>>% PipeOpFeatureUnion() %>>% 
+g = gunion(op1, op2, PipeOpNull) %>>% PipeOpFeatureUnion() %>>%
+	gunion(op1, op2) %>>% PipeOpFeatureUnion() %>>%
 	PipeOpLearner("regr.lm")
 ```
 
@@ -375,7 +375,7 @@ op1 %>>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 # or:
 op1 %>=>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
 ```
-	
+
 
 ### Usecase: Multiplexing of different Ops
 
@@ -385,15 +385,15 @@ This is usefull, for example when tuning over multiple learners.
 
 ####  Usecase: Multiplexing different learners
 
-We use the `pipeOpBranch` in order to have our data flow only to one of the following operators.
-Afterwards we collect the two streams using `pipeOpUnbranch`.
+We use the `PipeOpBranch` in order to have our data flow only to one of the following operators.
+Afterwards we collect the two streams using `PipeOpUnbranch`.
 We can now treat the pipeline like a linear pipeline.
 
 
 ```r
 op1 = PipeOpLearner$new("regr.rpart")
 op2 = PipeOpLearner$new("regr.svm")
-g = pipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% pipeOpUnbranch(aggrFun = NULL)
+g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpUnbranch(aggrFun = NULL)
 ```
 
 
@@ -404,7 +404,7 @@ op1 = PipeOpLearnerPCA$new()
 op2 = PipeOpNULL$new()
 op3 = PipeOpLearner$new("classif.rpart")
 
-g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% pipeOpUnbranch(aggrFun = NULL) %>>% op3
+g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpUnbranch(aggrFun = NULL) %>>% op3
 ```
 
 **FIXME:** Does every PipeOp have a default method when NULL is passed?
@@ -417,12 +417,12 @@ We want our pipeline to branch out, either in one direction or the other.
 This is usefull, for example when tuning over multiple learners.
 
 
-We use the `pipeOpChunk` operator to partition the [[Task]] into $k$ smaller [[Task]]s.
+We use the `PipeOpChunk` operator to partition the [[Task]] into $k$ smaller [[Task]]s.
 Afterwards we train $k$ learners on each sub[[Task]].
 Afterwards the predictions are averaged in order to get a single prediction.
 
 ```r
-pipeOpChunk(k) %>>% greplicate(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg()
+PipeOpChunk(k) %>>% greplicate(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg()
 ```
 
 
@@ -499,7 +499,7 @@ We want to leverage info from out1 and out2 to improve prediction on final_out*
 We obtain cross-validated predictions using `PipeOpLearnerCV` sequentially for each target and use them to train the sequential models.
 
 ```r
-pnop = pipeOpNull()
+pnop = PipeOpNull()
 
 g = PipeOpSetTarget("out1") %>>%
   gunion(PipeOpLearnerCV("rpart", id = "r1"), pnop) %>>%
@@ -522,7 +522,7 @@ We the use the prediction for this intermediate target for the final prediction.
 
 
 ```r
-pnop = pipeOpNull()
+pnop = PipeOpNull()
 # data is our dt with a numeric "target"
 data$target_is_null = data$target > 0
 g = PipeOpSetTarget("target_is_null") %>>%
