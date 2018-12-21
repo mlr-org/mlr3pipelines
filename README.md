@@ -3,6 +3,7 @@
 [![Travis build status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
 
 ## Target
+
 This package aims to fill the gap between loading the data and fitting models.
 
 **This entails not only:**
@@ -19,7 +20,6 @@ This package aims to fill the gap between loading the data and fitting models.
 - Stacking
 - Ensembling
 
-
 A predecessor to this package is the [mlrCPO-package](https://github.com/mlr-org/mlrCPO).
 We intend to replicate most of its functionality, i.e.
 
@@ -33,12 +33,35 @@ We intend to replicate most of its functionality, i.e.
 
 A rough draft of the design document, and some first usecases
 can be found in **concept.txt**.
+A series of usecases and PipeOperators can be found in usecases.md.
 
-Specification of syntax to construct graphs quickly
-https://docs.google.com/document/d/1JbzulUkLrMS0Xyk38NF5SyhpAfr2FIFsh9FJ8yiDtbE/edit?usp=sharing
+## PipeOperators and Status
+
+- **Meta:**
+  - [ ] `PipeOpBranch`                          | broadcast
+  - [x] `PipeOpChunk`                           | broadcast
+  - [ ] `PipeOpUnbranch`                        | aggregate
+  - [x] `PipeOpFeatureUnion`                    | aggregate
+  - [x] `PipeOpNULL`                            | linear
+  - [x] `PipeOpCopy`                            | broadcast
+
+                                              train: input --store-params--> output        predict: input --use-params--> output
+- **Learner:**
+  - [x] `PipeOpLearner`                         | linear    | task --model--> NULL           | task --model--> prediction
+  - [ ] `PipeOpLearnerCV`                       | linear    | task --model--> cvtask         | task --model--> prediction
+  - [ ] `PipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
+
+- **Preprocessing:**
+  - [x] `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
+  - [x] `PipeOpScale`                           | linear    | task --params--> task          | task --params--> task
+  - [ ] `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
+
+- **Target Operators:**
+  - [ ] `PipeOpThreshold`                       | linear    | cvtask --threshold--> NULL     | prediction --threshold--> prediction
+  - [ ] `PipeOpTrafoY`                          | linear    | task --NULL--> task            | prediction --NULL--> prediction
+  - [ ] `PipeOpMultiClass2Binary`               | broadcast | task --NULL--> list-of-task    | task --NULL--> list-of-tasks
+  - [ ] `PipeOpSetTarget`                       | linear    | task --NULL--> task            | task --NULL--> task
 
 
-
-## Todo's
-Open Todo's are found either in the Github Issue's or in **todos.txt**.
-Additionally, some questions that need to be discussed are in the **concept.txt**
+### Old Specs Doc:
+(https://docs.google.com/document/d/1JbzulUkLrMS0Xyk38NF5SyhpAfr2FIFsh9FJ8yiDtbE/edit?usp=sharing)
