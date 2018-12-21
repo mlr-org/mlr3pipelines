@@ -35,32 +35,32 @@ A rough draft of the design document, and some first usecases
 can be found in **concept.txt**.
 A series of usecases and PipeOperators can be found in usecases.md.
 
-## PipeOperators
+## PipeOperators and Status
 
 - **Meta:**
-  - `PipeOpBranch`                          | broadcast
-  - `PipeOpChunk`                           | broadcast
-  - `PipeOpUnbranch`                        | aggregate
-  - `PipeOpFeatureUnion`                    | aggregate
-  - `PipeOpNULL`                            | linear
-  - `PipeOpCopy`                            | broadcast
+  - [ ] `PipeOpBranch`                          | broadcast
+  - [x] `PipeOpChunk`                           | broadcast
+  - [ ] `PipeOpUnbranch`                        | aggregate
+  - [x] `PipeOpFeatureUnion`                    | aggregate
+  - [x] `PipeOpNULL`                            | linear
+  - [x] `PipeOpCopy`                            | broadcast
 
                                               train: input --store-params--> output        predict: input --use-params--> output
 - **Learner:**
-  - `PipeOpLearner`                         | linear    | task --model--> NULL           | task --model--> prediction
-  - `PipeOpLearnerCV`                       | linear    | task --model--> cvtask         | task --model--> prediction
-  - `PipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
+  - [x] `PipeOpLearner`                         | linear    | task --model--> NULL           | task --model--> prediction
+  - [ ] `PipeOpLearnerCV`                       | linear    | task --model--> cvtask         | task --model--> prediction
+  - [ ] `PipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
 
 - **Preprocessing:**
-  - `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
-  - `PipeOpScale`                           | linear    | task --params--> task          | task --params--> task
-  - `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
+  - [x] `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
+  - [x] `PipeOpScale`                           | linear    | task --params--> task          | task --params--> task
+  - [ ] `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
 
 - **Target Operators:**
-  - `PipeOpThreshold`                       | linear    | cvtask --threshold--> NULL     | prediction --threshold--> prediction
-  - `PipeOpTrafoY`                          | linear    | task --NULL--> task            | prediction --NULL--> prediction
-  - `PipeOpMultiClass2Binary`               | broadcast | task --NULL--> list-of-task    | task --NULL--> list-of-tasks
-  - `PipeOpSetTarget`                       | linear    | task --NULL--> task            | task --NULL--> task
+  - [ ] `PipeOpThreshold`                       | linear    | cvtask --threshold--> NULL     | prediction --threshold--> prediction
+  - [ ] `PipeOpTrafoY`                          | linear    | task --NULL--> task            | prediction --NULL--> prediction
+  - [ ] `PipeOpMultiClass2Binary`               | broadcast | task --NULL--> list-of-task    | task --NULL--> list-of-tasks
+  - [ ] `PipeOpSetTarget`                       | linear    | task --NULL--> task            | task --NULL--> task
 
 
 ### Old Specs Doc:
