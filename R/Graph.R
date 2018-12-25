@@ -26,9 +26,9 @@
 #' * `out_channels`   :: `list of [NodeChannel]` \cr
 #'   Outgoing NodeChannels of nodes that are not connected yet.
 #' * `source_nodes`   ::  list of [GraphNode]` \cr
-#'   The 'left-hand-side' nodes that have unconnected input channels and therefore act as graph input layer.
+#'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as graph input layer.
 #' * `sink_nodes`     :: `list of [GraphNode]` \cr
-#'   The 'right-hand-side' nodes that have unconnected output channels and therefore act as graph output layer.
+#'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as graph output layer.
 #'
 #' @section Methods
 #' * `new(fill = NULL)` \cr
@@ -82,16 +82,20 @@ Graph = R6Class("Graph",
       }
       invisible(self)
     },
+
     train = function(task) {
       private$reduceGraph(task, "train", TRUE)
     },
+
     predict = function(task) {
       private$reduceGraph(task, "predict", TRUE)
     },
+
     plot = function() {
       graph_plot(self$node_list)
       invisible(self)
     },
+
     extend = function(src) {
       assert(
           check_class(src, "Graph", null.ok = TRUE),
@@ -131,6 +135,7 @@ Graph = R6Class("Graph",
       }
       invisible(self)
     },
+
     print = function(...) {
       if (!length(self$node_list)) return(cat("Empty Graph.\n"))
       layers = sort_nodes(self$node_list, TRUE)
@@ -154,25 +159,27 @@ Graph = R6Class("Graph",
       cat("Pipeline Graph:\n")
       cat(output_string, "\n")
     },
+
     map = function(fnc, simplify = TRUE) {  # map over every node in the graph
       sapply(self$node_list, fnc, simplify = simplify)
     }
   ),
+
   active = list(
     node_list = readonly("node_list"),
     intype = function() private$.intype,
     outtype = function() private$.outtype,
     in_channels = readonly("in_channels"),
     out_channels = readonly("out_channels"),
-    source_nodes = function() {  # [list of GraphNode] all nodes that have some incoming NodeChannels that are not connected
+    source_nodes = function() {
       source_ids = unique(map_chr(self$in_channels, function(edge) edge$node$pipeop$id))
       self$node_list[source_ids]
     },
-    sink_nodes = function() {  # [list of GraphNode] all nodes that have some outgoing NodeChannels that are not connected
+    sink_nodes = function() {
       sink_ids = unique(map_chr(self$out_channels, function(edge) edge$node$pipeop$id))
       self$node_list[sink_ids]
     },
-    is_trained = function() all(self$map(function(x) x$pipeop$is_trained)),
+    is_trained = function() all(self$map(function(x) x$pipeop$is_trained)), # all contained POs trained?
     param_set = function() union_params(self),
     param_vals = function(value) {
       if (!missing(value)) {
@@ -190,16 +197,15 @@ Graph = R6Class("Graph",
       }
       union_parvals(self)
     },
-    packages = function() unique(self$map(function(x) x$pipeop$packages)),
-    lhs = function() self$source_nodes,  # alias for source_nodes
-    rhs = function() self$sink_nodes  # alias for sink_nodes
+    packages = function() unique(self$map(function(x) x$pipeop$packages))
   ),
+
   private = list(
-      .node_list = list(),
-      .intype = NULL,
-      .outtype = NULL,
-      .in_channels = NULL,
-      .out_channels = NULL
+    .node_list = list(),
+    .intype = NULL,
+    .outtype = NULL,
+    .in_channels = NULL,
+    .out_channels = NULL
   )
 )
 
