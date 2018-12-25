@@ -11,7 +11,7 @@
 #' * `f = pipeOpFeatureUnion$new(id)` \cr
 #'     `character(1)` -> [PipeOpFeatureUnion]
 #' @name PipeOpFeatureUnion
-#' @family PipeOp, PipeOpAggregate, PipeOpFeatureUnion
+#' @family PipeOp
 #' @export
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 

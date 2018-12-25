@@ -6,12 +6,11 @@
 #' @section Usage:
 #' Inherits from [PipeOp]
 #' * `f = pipeOpDownsample$new(id)` \cr
-#'     `character(1)` -> [PipeOpSparsePCA]
 #' @section Details:
 #' * `perc`: `numeric(1)` Percentage of rows in the task to keep.
 #' * `stratify`: `logical(1)` Should the subsamples be stratified.
 #' @name PipeOpDownsample
-#' @family PipeOp, PipeOpDownsample
+#' @family PipeOp
 #' @export
 PipeOpDownsample = R6Class("PipeOpDownsample",
 

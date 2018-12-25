@@ -8,7 +8,7 @@
 #' * `f = pipeOpPCA$new(id)` \cr
 #'     `character(1)` -> [PipeOpPCA]
 #' @name PipeOpPCA
-#' @family PipeOp, PipeOpDT, PipeOpPCA
+#' @family PipeOp
 #' @export
 #' @examples
 #' # Instantiate PipeOpPCA

@@ -55,7 +55,6 @@ Collate:
     'PipeOpNULL.R'
     'PipeOpPCA.R'
     'PipeOpScale.R'
-    'PipeOpSparsePCA.R'
     'PipelineLearner.R'
     'greplicate.R'
     'gunion.R'

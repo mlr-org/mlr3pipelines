@@ -31,9 +31,9 @@
 #' * `result`                     :: any
 #'   A slot to store the result of either the `train` or the `predict` step, after it was
 #' * `intype`                     :: [list]
-#'   Input types the pipeOp accepts. Read-only.
+#'   Input types the pipeOp accepts. Indexed by channel_id. Read-only.
 #' * `outtype`                    :: [list]
-#'   Output types that are returned by the pipeOp. Read-only.
+#'   Output types that are returned by the pipeOp. Indexed by channel_id. Read-only.
 #'
 #' @section Methods
 #' * new(id, params)` \cr
@@ -78,23 +78,24 @@ PipeOp = R6::R6Class("PipeOp",
       catf("Result: %s", as_short_string(self$result))
     },
 
-    train = function(...) stop("no train function given"),  # TODO: some better way to make smth abstract?
-    predict = function(...) stop("no predict function given")
+    train = function(...) stop("abstract"),
+    predict = function(...) stop("abstract")
   ),
 
   active = list(
-    id = function(id) {  # [character(1)] identifier of PipeOp within the Graph. Always call containing graph's update_ids() when changing this.
+    #FIXME: the comment below seems weird. Either we do that automatically or we should not allow changing of ids?
+    id = function(id) {  # Always call containing graph's update_ids() when changing this.
       if (missing(id)) {
         private$.id
       } else {
         private$.id = id
-        # TODO: maybe notify the graph about changed ID?
+        # FIXME: maybe notify the graph about changed ID?
       }
     },
-    param_set = function() private$.param_set,  # [ParamSet] ParamSet of the PipeOp
-    param_vals = function(vals) {  # [named list] parameter values, one for each parameter of the ParamSet. Mutable, with feasibility check.
+    param_set = function() private$.param_set,
+    param_vals = function(vals) {
       if (!missing(vals)) {
-        # TODO: param check
+        # FIXME: param check
         if (!self$param_set$test(vals)) {
           stop("Parameters out of bounds")
         }
@@ -102,11 +103,11 @@ PipeOp = R6::R6Class("PipeOp",
       }
       private$.param_vals
     },
-    intype = function() private$.intype,  # [list, indexed by channel_id] input types
-    outtype = function() private$.outtype,  # [list, indexed by channel_id] output types
+    intype = function() private$.intype,
+    outtype = function() private$.outtype,
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
-    is_trained = function() !is.null(self$state)  # [logical(1)] whether the `train()` function was called at least once.
+    is_trained = function() !is.null(self$state)
   ),
 
   private = list(
