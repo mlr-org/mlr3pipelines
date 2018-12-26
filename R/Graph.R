@@ -25,9 +25,9 @@
 #'   Incoming NodeChannels of nodes that are not connected yet.
 #' * `out_channels`   :: `list of [NodeChannel]` \cr
 #'   Outgoing NodeChannels of nodes that are not connected yet.
-#' * `source_nodes`   ::  list of [GraphNode]` \cr
+#' * `lhs`   ::  list of [GraphNode]` \cr
 #'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as graph input layer.
-#' * `sink_nodes`     :: `list of [GraphNode]` \cr
+#' * `rhs`     :: `list of [GraphNode]` \cr
 #'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as graph output layer.
 #'
 #' @section Methods
@@ -171,11 +171,11 @@ Graph = R6Class("Graph",
     outtype = function() private$.outtype,
     in_channels = readonly("in_channels"),
     out_channels = readonly("out_channels"),
-    source_nodes = function() {
+    lhs = function() {
       source_ids = unique(map_chr(self$in_channels, function(edge) edge$node$pipeop$id))
       self$node_list[source_ids]
     },
-    sink_nodes = function() {
+    rhs = function() {
       sink_ids = unique(map_chr(self$out_channels, function(edge) edge$node$pipeop$id))
       self$node_list[sink_ids]
     },
@@ -232,21 +232,25 @@ length.Graph = function(x) {
 # @param layerinfo [logical(1)] Whether to return a vector of graph depths instead of nodes
 # @return the sorted `node_list` if `layerinfo` is FALSE. If `layerinfo` is TRUE, a named `numeric`
 #   with node depths, indexed by node pipeop IDs, is returned.
+# idea of code: for every node, we track how many unhandled prev nodes we have. only if this becomes 0,
+# we can add the node to the toposort. if we do that, we substract each next_node counter by 1.
 sort_nodes = function(node_list, layerinfo = FALSE) {
   pending = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
-  cache = map_dbl(node_list, pending)
-  queue = names(cache)[cache == 0]
+  cache = map_dbl(node_list, pending) # count how many prev nodes a node has
+  queue = names(cache)[cache == 0] # active queue for toposort, charvec if ids, we start with LHS nodes
   layers = sapply(queue, function(.) 0, simplify = FALSE)
-  cache = cache[cache != 0]
+  cache = cache[cache != 0] # remove LHS nodes from cache
   queueidx = 1
   while (queueidx <= length(queue)) {
     current = queue[queueidx]
     nexts = table(map_chr(Filter(Negate(is.null), node_list[[current]]$next_nodes), function(n) n$pipeop$id))
-    if (any(nexts %in% queue)) stop("Cycles in graph!")
-    cache[names(nexts)] = cache[names(nexts)] - nexts
-    for (n in names(nexts)) layers[[n]] = max(layers[[n]], layers[[current]] + 1)
-    queue = c(queue, names(cache)[cache == 0])
-    cache = cache[cache != 0]
+    if (any(nexts %in% queue))
+      stop("Cycles in graph!")
+    cache[names(nexts)] = cache[names(nexts)] - nexts # remove current next-node-counters from cache
+    for (n in names(nexts))
+      layers[[n]] = max(layers[[n]], layers[[current]] + 1)  # FIXME: bad code, we know when layer is corrent, this is when pending nodes become 0
+    queue = c(queue, names(cache)[cache == 0])    # add nodes with no prending prev nodes to end of queue
+    cache = cache[cache != 0]      # only keep nodes with pending prev nodes
     queueidx = queueidx + 1
   }
   if (length(cache)) {
@@ -319,8 +323,8 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
     stop("Graph has != 1 out_channels, not supported yet")
   }
 
-  startnode = which(names(sorted_nodes) == in_channels[[1]]$node$pipeop$id)
-  stopnode = which(names(sorted_nodes) == out_channels[[1]]$node$pipeop$id)
+  startnode = which(names(sorted_nodes) == in_channels[[1]]$node$pipeop$id) # index in sorted_nodes
+  stopnode = which(names(sorted_nodes) == out_channels[[1]]$node$pipeop$id) # index in sorted_nodes
   assert(length(startnode) == 1) ; assert(length(stopnode) == 1) ; assert(startnode <= stopnode)
   assert(identical(in_channels[[1]]$node, sorted_nodes[[startnode]]))
   assert(identical(out_channels[[1]]$node, sorted_nodes[[stopnode]]))
@@ -331,27 +335,34 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
   inlist = list(input)
   names(inlist) = names(sorted_nodes[[1]]$intype)
 
+  # the list of current inputs to some nodes
+  # doubly indexed, 1st-index = node-id, 2nd-index = channel-id
   inputs = list()
   inputs[[names(sorted_nodes)[1]]] = inlist
 
+  # go thru all nodes in toposorted order, call train/pred on them, store result
   for (node in sorted_nodes) {
     assert(node$pipeop$id %in% names(inputs))
-    curin = inputs[[node$pipeop$id]]
+    curin = inputs[[node$pipeop$id]]  # get input to current GN
     inputs[[node$pipeop$id]] = "00SENTINEL00"  # check later that we don't run in circles
-    curout = node$pipeop[[fncall]](curin)
-    if (cache_result) node$pipeop$result = curout
-    names(curout) = names(node$outtype)
-    assert(length(curout) == length(node$outtype))
+    curout = node$pipeop[[fncall]](curin)   # work, with current input
+    if (cache_result) node$pipeop$result = curout # store result in pipeop
+    names(curout) = names(node$outtype)   # set the names of the output list # FIXME: this should not happen here
+    assert(length(curout) == length(node$outtype)) # FIXME: this stuff should happen in pipeop, or graphnode
 
+
+    # iterate thru all outchannels / elements of output-list
+    # store element for connected-to node in the "inputs" structure
     for (idx in seq_along(node$outtype)) {
       outchannel = node$next_node_channels[[idx]]
-      if (is.null(outchannel)) {
+      if (is.null(outchannel)) { # FIXME: why can an output channel be NULL...?
         assert(identical(node, tail(sorted_nodes, 1)[[1]]))
         next
       }
       nodename = outchannel$node$pipeop$id
+      # if there is no element in inputs for the next node, create it
       if (nodename %nin% names(inputs)) {
-        inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE)
+        inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE) # FIXME: fugly init code..
       }
       assert(!identical(inputs[[nodename]], "00SENTINEL00"))
       inputs[[nodename]][[outchannel$channel_id]] = curout[[idx]]
