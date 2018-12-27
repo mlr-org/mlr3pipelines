@@ -14,7 +14,7 @@
 #' The length of these lists determines the length of input / output the PipeOp produces. The PipeOp input / output
 #' is a list of specified length.
 #'
-#' @section Public Members / Active Bindings
+#' @section Public Members / Active Bindings:
 #' * `id`                         :: [character]
 #'   Active binding that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
 #' * `packages`                   :: [character]
@@ -35,7 +35,7 @@
 #' * `outtype`                    :: [list]
 #'   Output types that are returned by the pipeOp. Indexed by channel_id. Read-only.
 #'
-#' @section Methods
+#' @section Methods:
 #' * new(id, params)` \cr
 #'   `character(1)`, `ParamSet` -> [PipeOp]
 #'   Constructs the pipeOp from an id string and a (possibly empty) [ParamSet].
