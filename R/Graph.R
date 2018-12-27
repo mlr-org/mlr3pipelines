@@ -6,7 +6,7 @@
 #' The graph is a container class for the complete computational graph. It is made up of a list of
 #' (connected) GraphNodes, it can be trained and used for prediction.
 #'
-#' @section Public Members / Active Bindings
+#' @section Public Members / Active Bindings:
 #' * `param_set`        ::  [ParamSet] \cr
 #'   Set of all exposed parameters of the graph, a union of all `param_set` objects of all contained [PipeOp] objects.
 #'   Parameter IDs are prefixed by PipeOp ID. Returns a deep-copy of all param sets.
@@ -31,7 +31,7 @@
 #' * `rhs`     :: `list of [GraphNode]` \cr
 #'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as graph output layer.
 #'
-#' @section Methods
+#' @section Methods:
 #' * `new(fill = NULL)` \cr
 #'   ([Graph]` | `NULL` | [PipeOp]) -> [Graph]
 #'   Constructs an empty Graph, copies an existing graph if `fill` is a graph, or fills graph

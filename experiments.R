@@ -6,6 +6,8 @@ options(error=recover)
 devtools::document("mlr3pipelines")
 
 devtools::load_all("mlr3pipelines")
+testthat::test("mlr3pipelines")
+testthat::test_package("mlr3pipelines")
 
 BasicPO = R6::R6Class("BasicPO",
   inherit = PipeOp,

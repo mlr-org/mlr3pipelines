@@ -6,7 +6,7 @@
 #' This identifies the `node`, and the index or channel_id of this node to which
 #' (out of which) data is flowing.
 #'
-#' @section Public Members / Active Bindings
+#' @section Public Members / Active Bindings:
 #' * `node`                       :: [GraphNode]
 #'   Node that the channel is connected to.
 #' * `channel_id`                 :: [character(1)] | [numeric(1)]

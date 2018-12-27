@@ -7,7 +7,7 @@
 #' connections between the \code{PipeOps}. The set of interconnected
 #' GraphNodes creates the pipeline graph.
 #'
-#' @section Public Members / Active Bindings
+#' @section Public Members / Active Bindings:
 #' * `graph`                :: [Graph]
 #'   Graph that this node is a member of.
 #' * `pipeop`               :: [PipeOp]
