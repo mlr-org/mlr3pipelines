@@ -23,11 +23,10 @@
 #'   The set of all exposed parameters of the PipeOp.
 #' * `par_vals`                   :: named [list]
 #'   Parameter settings where all setting must come from `param_set`, named with param IDs.
-#' * `params`                     :: [anys]
+#' * `state`                      :: [anys]
 #'   The object of learned parameters, obtained in the training step, and applied in the predict step.
 #' * `is_trained`                 :: [logical(1)]
 #'   Is the PipeOp currently trained?
-#' * `params`                     :: any
 #' * `result`                     :: any
 #'   A slot to store the result of either the `train` or the `predict` step, after it was
 #' * `intype`                     :: [list]

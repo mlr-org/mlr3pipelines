@@ -3,6 +3,23 @@ collapse = function(x) {
 }
 
 
+# specify an R6 active binding as readonly that can still have its member variables changed.
+#
+# E.g. ```obj$readonlyvar$member = newval``` should work if `readonlyvar` is an R6 object,
+# but will usually fail if it is a naively implemented active binding.
+#
+# '<name>' should be the name of the active binding, and a private member variable named `.<name>`:
+#
+# Example:
+#
+# Class = R6Class("Class",
+#   active = list(
+#     var = readonly("var")
+#   ),
+#   private = list(
+#     .var = OtherClass$new()
+#   )
+# )
 readonly = function(name) {
   body = substitute({
     var = private[[paste0(".", name)]]
