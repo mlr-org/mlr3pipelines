@@ -11,22 +11,16 @@
 #' @name PipeOpLearner
 #' @family PipeOp, PipeOpLearner
 #' @export
-#' @examples
-#' lrn = mlr3::mlr_learners$get("classif.rpart")
-#' op =  PipeOpLearner$new(lrn)
-PipeOpLearner = R6Class("PipeOpLearner",
-
-  inherit = PipeOp,
-
+PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
-
     learner = NULL,
 
     initialize = function(learner) {
       self$learner = learner
       super$initialize(learner$id)
+      private$.intype = list("data.frame")
+      private$.outtype = list("model")
     },
-
 
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
@@ -34,20 +28,21 @@ PipeOpLearner = R6Class("PipeOpLearner",
 
       experiment = Experiment$new(task = task, learner = self$learner)
       experiment$train()
-      private$.params = experiment
+      self$state = experiment
+      return(list(NULL))
+      # FIXME: what do we return here? prediction on train data?
+      # experiment$predict()
+      # d = experiment$prediction[,-1]
+      # colnames(d)[seq_along(task$target_names)] = task$target_names
 
-      experiment$predict()
-      d = experiment$prediction[,-1]
-      colnames(d)[seq_along(task$target_names)] = task$target_names
-
-      db = as_data_backend(d)
-      private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
-      private$.result
+      # db = as_data_backend(d)
+      # private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
+      # private$.result
     },
 
     predict2 = function() {
       assert_list(inputs, len = 1L, type = "Task")
-      predict(self$params)
+      predict(self$state)
     }
   ),
 

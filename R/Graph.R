@@ -8,7 +8,8 @@
 #'
 #' @section Public Members / Active Bindings
 #' * `param_set`        ::  [ParamSet] \cr
-#'   Set of all exposed parameters of the graph, a union of all `param_set` objects of all contained [PipeOp] objects. Parameter IDs are prefixed by PipeOp ID.
+#'   Set of all exposed parameters of the graph, a union of all `param_set` objects of all contained [PipeOp] objects.
+#'   Parameter IDs are prefixed by PipeOp ID. Returns a deep-copy of all param sets.
 #' * `par_vals`         ::  named `list`
 #'   Set of all configured parameters of the graph, a union of all `param_vals` objects of all contained [PipeOp] objects. Parameter IDs are prefixed by PipeOp ID.
 #' * `packages`         :: `character`
@@ -180,7 +181,17 @@ Graph = R6Class("Graph",
       self$node_list[sink_ids]
     },
     is_trained = function() all(self$map(function(x) x$pipeop$is_trained)), # all contained POs trained?
-    param_set = function() union_params(self),
+    param_set = function() {
+      # loop over all nodes, and add their paramsets (with prefix) to result object
+      ps = ParamSet$new()
+      for (node in self$node_list) {
+        prefix = paste0(node$pipeop$id, ".")
+        ps2 = node$pipeop$param_set$clone(deep = TRUE)
+        ps2$data$id = paste0(prefix, ps2$data$id)
+        ps = ps$add_param_set(ps2) # FIXME: here the state in paradox of ps should change
+      }
+      return(ps)
+    },
     param_vals = function(value) {
       if (!missing(value)) {
         parids = union_parids(self)  # collect all parameter ID mappings
@@ -263,20 +274,6 @@ sort_nodes = function(node_list, layerinfo = FALSE) {
   }
 }
 
-# Create unified ParamSet of all PipeOps inside a graph.
-# The parameter IDs are changed by prefixing each PipeOp's ID, separated by a dot.
-# @param graph [Graph]
-# @return [ParamSet]
-union_params = function(graph) {
-  ps = ParamSet$new()
-  graph$map(function(x) {
-    prefix = x$pipeop$id
-    xps = x$pipeop$param_set
-    newps = ParamSet$new(lapply(xps$get_params(), function(x) { x$data$id = paste(prefix, x$id, sep = ".") ; x}))
-    ps <<- ps$add_param_set(newps)
-  })
-  ps
-}
 
 # Create the unified parameter values of all PipeOps inside a graph.
 # The parameter IDs are changed by prefixing each PipeOp's ID, separated by a dot.
