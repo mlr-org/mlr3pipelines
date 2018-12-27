@@ -1,53 +1,51 @@
 #' @include utils.R
+#'
 #' @title PipeOp
 #' @format [R6Class] PipeOp
 #'
 #' @description
-#'   A PipeOp is a single tranformation of inputs into outputs.
-#'   This class is the baseclass for all pipeOp's, and is not intended for direct use.
-#'   During training it takes inputs, tranforms them, while doing that learns and stores its
-#'   parameters and then returns the output.
-#'   During prediction it applies the learned params to the input and transforms the input to an output.'
+#' A PipeOp is a single tranformation of inputs into outputs.
+#' This class is the baseclass for all pipeOp's, and is not intended for direct use.
+#' During training it takes inputs, tranforms them, while doing that learns and stores its
+#' parameters and then returns the output.
+#' During prediction it applies the learned params to the input and transforms the input to an output.'
 #'
-#'   A PipeOp specifies the types of inputs and outputs as `intype` and `outtype`, a list of <something specifying types>.
-#'   The length of these lists determines the length of input / output the PipeOp produces. The PipeOp input / output
-#'   is a list of specified length.
+#' A PipeOp specifies the types of inputs and outputs as `intype` and `outtype`, a list of <something specifying types>.
+#' The length of these lists determines the length of input / output the PipeOp produces. The PipeOp input / output
+#' is a list of specified length.
 #'
-#' @section Usage:
-#' * `f = pipeOp$new(id, params)` \cr
-#'     `character(1)`, `ParamSet` -> [PipeOp]
-#' * `f$id` -> `character(1)`
-#' * `f$packages -> `character`
-#' * `f$param_set` -> `ParamSet`
-#' * `f$par_vals` -> `named list`
-#' * `f$is_trained` -> `logical(1)`
-#' * `f$params` -> `any`
-#' * `f$result` -> `any`
-#' * `f$intype` -> `list of any`
-#' * `f$outtype` -> `list of any`
-#' * `f$print()`
-#' * `f$train()` \cr
-#'   `any` -> `any`
-#' * `f$predict()` \cr
-#'   `any` -> `any`
+#' @section Public Members / Active Bindings
+#' * `id`                         :: [character]
+#'   Active binding that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
+#' * `packages`                   :: [character]
+#'   Packages required for the pipeOp.
+#' * `param_set`                  :: [ParamSet]
+#'   The set of all exposed parameters of the PipeOp.
+#' * `par_vals`                   :: named [list]
+#'   Parameter settings where all setting must come from `param_set`, named with param IDs.
+#' * `params`                     :: [anys]
+#'   The object of learned parameters, obtained in the training step, and applied in the predict step.
+#' * `is_trained`                 :: [logical(1)]
+#'   Is the PipeOp currently trained?
+#' * `params`                     :: any
+#' * `result`                     :: any
+#'   A slot to store the result of either the `train` or the `predict` step, after it was
+#' * `intype`                     :: [list]
+#'   Input types the pipeOp accepts. Indexed by channel_id. Read-only.
+#' * `outtype`                    :: [list]
+#'   Output types that are returned by the pipeOp. Indexed by channel_id. Read-only.
 #'
-#' @section Details:
-#' * `new()`: Constructs the pipeOp from an id string and a (possibly empty) [ParamSet].
-#' * `id`: Active binding that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
-#' * `packages`: Packages required for the pipeOp.
-#' * `param_set`: The set of all exposed parameters of the PipeOp.
-#' * `par_vals`: A named list of parameter settings where all setting must come from `param_set`.
-#' * `is_trained`: Is the PipeOp currently trained?
-#' * `params`: The object of learned parameters, obtained in the training step, and applied in the predict step.
-#' * `result`: A slot to store the result of either the `train` or the `predict` step, after it was
-#' *   applied.
-#' * `print()`: Prints
-#' * `train()`: Function that is responsible to train on `input`, transform it to output and store the learned `params`.
-#' *   If the PipeOp is already trained, already present `params` are overwritten.
-#' * `predict()`: Function that is responsible to predict on `input`, and transform it to output by applying the learned `params`.
+#' @section Methods
+#' * new(id, params)` \cr
+#'   `character(1)`, `ParamSet` -> [PipeOp]
+#'   Constructs the pipeOp from an id string and a (possibly empty) [ParamSet].
+#' * `train()`:
+#'    Train graph on `input`, transform it to output and store the learned `params`.
+#'    If the PipeOp is already trained, already present `params` are overwritten.
+#' * `predict()` \cr
+#' *  Predict with graph on `input`, and transform it to output by applying the learned `params`.
 #' *   If `is_trained = FALSE` the function cannot be applied.
-#' * `intype`: list of input types the pipeOp accepts. Read-only.
-#' * `outtype`: list of output types that are returned by the pipeOp. Read-only.
+#' * `print()`: Prints
 #'
 #' @section Internals:
 #' * `.intype`: `list of any`
@@ -80,23 +78,24 @@ PipeOp = R6::R6Class("PipeOp",
       catf("Result: %s", as_short_string(self$result))
     },
 
-    train = function(...) stop("no train function given"),  # TODO: some better way to make smth abstract?
-    predict = function(...) stop("no predict function given")
+    train = function(...) stop("abstract"),
+    predict = function(...) stop("abstract")
   ),
 
   active = list(
-    id = function(id) {  # [character(1)] identifier of PipeOp within the Graph. Always call containing graph's update_ids() when changing this.
+    #FIXME: the comment below seems weird. Either we do that automatically or we should not allow changing of ids?
+    id = function(id) {  # Always call containing graph's update_ids() when changing this.
       if (missing(id)) {
         private$.id
       } else {
         private$.id = id
-        # TODO: maybe notify the graph about changed ID?
+        # FIXME: maybe notify the graph about changed ID?
       }
     },
-    param_set = function() private$.param_set,  # [ParamSet] ParamSet of the PipeOp
-    param_vals = function(vals) {  # [named list] parameter values, one for each parameter of the ParamSet. Mutable, with feasibility check.
+    param_set = function() private$.param_set,
+    param_vals = function(vals) {
       if (!missing(vals)) {
-        # TODO: param check
+        # FIXME: param check
         if (!self$param_set$test(vals)) {
           stop("Parameters out of bounds")
         }
@@ -104,11 +103,11 @@ PipeOp = R6::R6Class("PipeOp",
       }
       private$.param_vals
     },
-    intype = function() private$.intype,  # [list, indexed by channel_id] input types
-    outtype = function() private$.outtype,  # [list, indexed by channel_id] output types
+    intype = function() private$.intype,
+    outtype = function() private$.outtype,
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
-    is_trained = function() !is.null(self$state)  # [logical(1)] whether the `train()` function was called at least once.
+    is_trained = function() !is.null(self$state)
   ),
 
   private = list(

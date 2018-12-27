@@ -1,21 +1,18 @@
 #' @title PipeOpDT
 #' @format [R6Class] PipeOpDT
-#' 
+#'
 #' @description
-#'   This let's us work with a [data.table] instead of a Task and
-#'   delegate all handling of [Task]s and [DataBackend] to the class.
-#'   Allows us to specify functions  `train_dt()` and `predict_dt` instead of
-#'   `train()` and `predict`, that expect the [data.table] containing only
-#'   the features from a [Task], and automatically
-#'   reconstruct the appropriate Task from a returned [data.table].
-#'   We thus enforce: [dt] -> [dt].
-#'   For examples see [pipeOpPCA] or [pipeOpScale].
-#' @section Usage:
-#' Inherits from [PipeOp]
-#' * `f = pipeOpDT$new(id, ps)` \cr
-#'     `character(1)`, `[ParamSet]` -> [PipeOpDT]
+#' This let's us work with a [data.table] instead of a Task and
+#' delegate all handling of [Task]s and [DataBackend] to the class.
+#' Allows us to specify functions  `train_dt()` and `predict_dt` instead of
+#' `train()` and `predict`, that expect the [data.table] containing only
+#' the features from a [Task], and automatically
+#' reconstruct the appropriate Task from a returned [data.table].
+#' We thus enforce: [dt] -> [dt].
+#' For examples see [PipeOpPCA] or [PipeOpScale].
+#'
 #' @name PipeOpDT
-#' @family PipeOp, PipeOpDT
+#' @family PipeOp
 #' @export
 PipeOpDT = R6Class("PipeOpDT",
 

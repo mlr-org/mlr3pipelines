@@ -1,70 +1,62 @@
-# FIXME
-#   - does index op also work with ints?
-#   - do we want the fourth layer of topological sorting?
-#   - how do we loops over all nodes? how do we apply something to all nodes?
-#   - ids [character]. Id's of PipeOp's in the graph.
-
 #' @include utils.R
 #' @title Graph
 #' @format [R6Class] Graph
+#'
 #' @description
-#'   The graph is a container class for the complete computational graph. It is made up of a list of
-#'   (connected) GraphNodes, it can be trained and used for prediction.
-#' @section Usage:
-#' * `f = Graph$new(copy = NULL)` \cr
-#' *  `[Graph]` | `NULL`-> [Graph]
-#' * `f$node_list` -> `list of [GraphNode]`
-#' * `f$is_trained` -> `logical(1)`
-#' * `f$intype` -> `list of any`
-#' * `f$outtype` -> `list of any`
-#' * `f$in_channels` -> `list of [NodeChannel]`
-#' * `f$out_channels` -> `list of [NodeChannel]`
-#' * `f$source_nodes` -> `list of [GraphNode]`
-#' * `f$sink_nodes` -> `list of [GraphNode]`
-#' * `param_set` -> [ParamSet] The set of all exposed parameters of the PipeOp.
-#' * `par_vals` -> `named list`
-#' * `f$add_node(node = pipeOp$new())` \cr
-#' *  `[GraphNode] | [PipeOp]` -> [Graph]
-#' * `f$extend(g)` \cr
-#' *  `[Graph]` -> `[Graph]`
-#' * `f$map(fnc, simplify)` \cr
-#' *  `function`, `logical` -> 'list of any`
-#' * `f$train()`
-#' * `f$predict()`
-#' * `f$plot()`
-#' * `f$print()`
-#' * `f$update_connections()`
-#' * `f$update_ids()`
-#' * `f[[` -> `[PipeOp]`
+#' The graph is a container class for the complete computational graph. It is made up of a list of
+#' (connected) GraphNodes, it can be trained and used for prediction.
 #'
-#' Aggregated info:
-#' * `param_set` [ParamSet]
-#' * `param_vals` [list]
-#' * `packages` [character]
+#' @section Public Members / Active Bindings
+#' * `param_set`        ::  [ParamSet] \cr
+#'   Set of all exposed parameters of the graph, a union of all `param_set` objects of all contained [PipeOp] objects. Parameter IDs are prefixed by PipeOp ID.
+#' * `par_vals`         ::  named `list`
+#'   Set of all configured parameters of the graph, a union of all `param_vals` objects of all contained [PipeOp] objects. Parameter IDs are prefixed by PipeOp ID.
+#' * `packages`         :: `character`
+#'   Set of all required packages of the graph, a union of all required packages of all contained [PipeOp] objects.
+#' * `node_list`      :: list of [GraphNode]` \cr
+#'   Contains all nodes contained in the Graph, topologically sorted.
+#' * `is_trained`     :: `logical(1)` \cr
+#'   Is the graph, are all of its PipeOps, fully trained - and is the graph ready to predict?
+#' * `intype`         :: `list` \cr
+#'   Types of the `in_channels`, identifies types for the ingoing channels of nodes that are not connected yet.
+#' * `outtype`        :: `list of any` \cr
+#'   Types of the `out_channels`, identifies types for the outgoing channels of nodes that are not connected yet.
+#' * `in_channels`    :: `list of [NodeChannel]` \cr
+#'   Incoming NodeChannels of nodes that are not connected yet.
+#' * `out_channels`   :: `list of [NodeChannel]` \cr
+#'   Outgoing NodeChannels of nodes that are not connected yet.
+#' * `lhs`   ::  list of [GraphNode]` \cr
+#'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as graph input layer.
+#' * `rhs`     :: `list of [GraphNode]` \cr
+#'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as graph output layer.
 #'
-#' @section Details:
-#' * `new()`: Constructs an empty Graph, copies an existing graph if `fill` is a graph, or fills graph
+#' @section Methods
+#' * `new(fill = NULL)` \cr
+#'   ([Graph]` | `NULL` | [PipeOp]) -> [Graph]
+#'   Constructs an empty Graph, copies an existing graph if `fill` is a graph, or fills graph
 #'   with node(s) if `fill` is a PipeOp. `fill` can also be a list of multiple Graphs / PipeOps.
-#' * `node_list`: list of [GraphNode], indexed by ID.
+#' * `f$add_node(node)` \cr
+#'   (`[GraphNode] | [PipeOp]`) -> [Graph]
+#'   Mutates graph by adding a [PipeOp] or [GraphNode] to the end of the graph.
+#' * `extend(g)` \cr
+#'   ([Graph] | PipeOp | list f [Graph]) -> `self`
+#'   Add to the current graph per disjoint union.
+#' * `f$map(fnc, simplify)` \cr
+#'   `function`, `logical` -> 'list'
+#'   Maps function over all graph nodes, returns a list, named by [PipeOp] ids.
+#' * `f$train()`
+#'   Train graph on its inputs, ensure that after that all nodes are trained and that an output list is present.
+#' * `f$predict()`
+#'    Predict graph on its inputs, ensure that after that an output list is present.
+#' * `f$plot()`
+#'    Plot the graph, via igraph.
+#' * `f$print()`
+#'   Print a minimal representaion of graph on console.
+#' * get_pipeop
+#'   list of [GraphNode], indexed by ID.
 #' * `f[[`: Get a PipeOp by `[[id]]`
-#' * `intype`: types of the `in_channels`.
-#' * `outtype`: types of the `out_channels`.
-#' * `source_nodes`: nodes that have unconnected input channels and therefore act as graph input.
-#' * `sink_nodes`: nodes that have unconnected output channels and therefore act as graph output.
-#' * `add_node`: Mutates graph by adding a [PipeOp] or [GraphNode] to the end of the graph.
-#'
-#'   [GraphNode] calls this automatically on construction, so a user should only call this with a PipeOp.
-#' * `train()`: train on input (e.g. Task), returns processed output (e.g. modified task).
-#' * `predict()`: predict on input (e.g. Data), get processed output (e.g. predictions).
-#' * `plot()`: plot the graph.
-#' * `extend(g)`: Add other Graph, PipeOp, or list of Graphs / PipeOps to the current graph as disjoint union.
 #' @name Graph
 #' @family Graph
-#' @examples
-#' # Initialize a new GraphNode
-#' g = Graph$new()
-#' # Add a new node / pipeOp
-#' g$add_node(PipeOp$new())
 Graph = R6Class("Graph",
   cloneable = FALSE,
   public = list(
@@ -90,16 +82,20 @@ Graph = R6Class("Graph",
       }
       invisible(self)
     },
+
     train = function(task) {
       private$reduceGraph(task, "train", TRUE)
     },
+
     predict = function(task) {
       private$reduceGraph(task, "predict", TRUE)
     },
+
     plot = function() {
       graph_plot(self$node_list)
       invisible(self)
     },
+
     extend = function(src) {
       assert(
           check_class(src, "Graph", null.ok = TRUE),
@@ -139,6 +135,7 @@ Graph = R6Class("Graph",
       }
       invisible(self)
     },
+
     print = function(...) {
       if (!length(self$node_list)) return(cat("Empty Graph.\n"))
       layers = sort_nodes(self$node_list, TRUE)
@@ -162,27 +159,29 @@ Graph = R6Class("Graph",
       cat("Pipeline Graph:\n")
       cat(output_string, "\n")
     },
+
     map = function(fnc, simplify = TRUE) {  # map over every node in the graph
       sapply(self$node_list, fnc, simplify = simplify)
     }
   ),
+
   active = list(
-    node_list = readonly("node_list"),  # [list of GraphNode] this list actually contains all nodes contained in the Graph, topologically sorted.
-    intype = function() private$.intype,  # [list] identifies types for the ingoing channels of nodes that are not connected yet.
-    outtype = function() private$.outtype,  # [list] identifies types for the outgoing channels of nodes that are not connected yet.
-    in_channels = readonly("in_channels"),  # [list of NodeChannel] incoming NodeChannels of nodes that are not connected yet.
-    out_channels = readonly("out_channels"),  # [list of NodeChannel] outgoing NodeChannels of nodes that are not connected yet.
-    source_nodes = function() {  # [list of GraphNode] all nodes that have some incoming NodeChannels that are not connected
+    node_list = readonly("node_list"),
+    intype = function() private$.intype,
+    outtype = function() private$.outtype,
+    in_channels = readonly("in_channels"),
+    out_channels = readonly("out_channels"),
+    lhs = function() {
       source_ids = unique(map_chr(self$in_channels, function(edge) edge$node$pipeop$id))
       self$node_list[source_ids]
     },
-    sink_nodes = function() {  # [list of GraphNode] all nodes that have some outgoing NodeChannels that are not connected
+    rhs = function() {
       sink_ids = unique(map_chr(self$out_channels, function(edge) edge$node$pipeop$id))
       self$node_list[sink_ids]
     },
-    is_trained = function() all(self$map(function(x) x$pipeop$is_trained)),  # [logical(1)] Whether all PipeOps in the graph are 'trained'
-    param_set = function() union_params(self),  # [ParamSet] unified ParamSet of all PipeOps. param IDs are prefixed by PipeOp ID.
-    param_vals = function(value) {  # [named list] unified parameter values of all PipeOps. param IDs are prefixed by PipeOp ID.
+    is_trained = function() all(self$map(function(x) x$pipeop$is_trained)), # all contained POs trained?
+    param_set = function() union_params(self),
+    param_vals = function(value) {
       if (!missing(value)) {
         parids = union_parids(self)  # collect all parameter ID mappings
         assert_list(value, names = "unique")  # length may not change
@@ -198,16 +197,15 @@ Graph = R6Class("Graph",
       }
       union_parvals(self)
     },
-    packages = function() unique(self$map(function(x) x$pipeop$packages)),  # [character] collection of all packages needed for all PipeOps in this Graph
-    lhs = function() self$source_nodes,  # alias for source_nodes
-    rhs = function() self$sink_nodes  # alias for sink_nodes
+    packages = function() unique(self$map(function(x) x$pipeop$packages))
   ),
+
   private = list(
-      .node_list = list(),
-      .intype = NULL,
-      .outtype = NULL,
-      .in_channels = NULL,
-      .out_channels = NULL
+    .node_list = list(),
+    .intype = NULL,
+    .outtype = NULL,
+    .in_channels = NULL,
+    .out_channels = NULL
   )
 )
 
@@ -234,21 +232,25 @@ length.Graph = function(x) {
 # @param layerinfo [logical(1)] Whether to return a vector of graph depths instead of nodes
 # @return the sorted `node_list` if `layerinfo` is FALSE. If `layerinfo` is TRUE, a named `numeric`
 #   with node depths, indexed by node pipeop IDs, is returned.
+# idea of code: for every node, we track how many unhandled prev nodes we have. only if this becomes 0,
+# we can add the node to the toposort. if we do that, we substract each next_node counter by 1.
 sort_nodes = function(node_list, layerinfo = FALSE) {
   pending = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
-  cache = map_dbl(node_list, pending)
-  queue = names(cache)[cache == 0]
+  cache = map_dbl(node_list, pending) # count how many prev nodes a node has
+  queue = names(cache)[cache == 0] # active queue for toposort, charvec if ids, we start with LHS nodes
   layers = sapply(queue, function(.) 0, simplify = FALSE)
-  cache = cache[cache != 0]
+  cache = cache[cache != 0] # remove LHS nodes from cache
   queueidx = 1
   while (queueidx <= length(queue)) {
     current = queue[queueidx]
     nexts = table(map_chr(Filter(Negate(is.null), node_list[[current]]$next_nodes), function(n) n$pipeop$id))
-    if (any(nexts %in% queue)) stop("Cycles in graph!")
-    cache[names(nexts)] = cache[names(nexts)] - nexts
-    for (n in names(nexts)) layers[[n]] = max(layers[[n]], layers[[current]] + 1)
-    queue = c(queue, names(cache)[cache == 0])
-    cache = cache[cache != 0]
+    if (any(nexts %in% queue))
+      stop("Cycles in graph!")
+    cache[names(nexts)] = cache[names(nexts)] - nexts # remove current next-node-counters from cache
+    for (n in names(nexts))
+      layers[[n]] = max(layers[[n]], layers[[current]] + 1)  # FIXME: bad code, we know when layer is corrent, this is when pending nodes become 0
+    queue = c(queue, names(cache)[cache == 0])    # add nodes with no prending prev nodes to end of queue
+    cache = cache[cache != 0]      # only keep nodes with pending prev nodes
     queueidx = queueidx + 1
   }
   if (length(cache)) {
@@ -321,8 +323,8 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
     stop("Graph has != 1 out_channels, not supported yet")
   }
 
-  startnode = which(names(sorted_nodes) == in_channels[[1]]$node$pipeop$id)
-  stopnode = which(names(sorted_nodes) == out_channels[[1]]$node$pipeop$id)
+  startnode = which(names(sorted_nodes) == in_channels[[1]]$node$pipeop$id) # index in sorted_nodes
+  stopnode = which(names(sorted_nodes) == out_channels[[1]]$node$pipeop$id) # index in sorted_nodes
   assert(length(startnode) == 1) ; assert(length(stopnode) == 1) ; assert(startnode <= stopnode)
   assert(identical(in_channels[[1]]$node, sorted_nodes[[startnode]]))
   assert(identical(out_channels[[1]]$node, sorted_nodes[[stopnode]]))
@@ -333,27 +335,34 @@ Graph$set("private", "reduceGraph", function(input, fncall, cache_result = FALSE
   inlist = list(input)
   names(inlist) = names(sorted_nodes[[1]]$intype)
 
+  # the list of current inputs to some nodes
+  # doubly indexed, 1st-index = node-id, 2nd-index = channel-id
   inputs = list()
   inputs[[names(sorted_nodes)[1]]] = inlist
 
+  # go thru all nodes in toposorted order, call train/pred on them, store result
   for (node in sorted_nodes) {
     assert(node$pipeop$id %in% names(inputs))
-    curin = inputs[[node$pipeop$id]]
+    curin = inputs[[node$pipeop$id]]  # get input to current GN
     inputs[[node$pipeop$id]] = "00SENTINEL00"  # check later that we don't run in circles
-    curout = node$pipeop[[fncall]](curin)
-    if (cache_result) node$pipeop$result = curout
-    names(curout) = names(node$outtype)
-    assert(length(curout) == length(node$outtype))
+    curout = node$pipeop[[fncall]](curin)   # work, with current input
+    if (cache_result) node$pipeop$result = curout # store result in pipeop
+    names(curout) = names(node$outtype)   # set the names of the output list # FIXME: this should not happen here
+    assert(length(curout) == length(node$outtype)) # FIXME: this stuff should happen in pipeop, or graphnode
 
+
+    # iterate thru all outchannels / elements of output-list
+    # store element for connected-to node in the "inputs" structure
     for (idx in seq_along(node$outtype)) {
       outchannel = node$next_node_channels[[idx]]
-      if (is.null(outchannel)) {
+      if (is.null(outchannel)) { # FIXME: why can an output channel be NULL...?
         assert(identical(node, tail(sorted_nodes, 1)[[1]]))
         next
       }
       nodename = outchannel$node$pipeop$id
+      # if there is no element in inputs for the next node, create it
       if (nodename %nin% names(inputs)) {
-        inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE)
+        inputs[[nodename]] = sapply(outchannel$node$intype, function(.) NULL, simplify = FALSE) # FIXME: fugly init code..
       }
       assert(!identical(inputs[[nodename]], "00SENTINEL00"))
       inputs[[nodename]][[outchannel$channel_id]] = curout[[idx]]

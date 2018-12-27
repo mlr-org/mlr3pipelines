@@ -1,5 +1,10 @@
 context("Graph")
 
+test_that("simple graph operations with stupid pipeops", {
+  g = Graph$new()
+  g$add(th_po_1)
+})
+
 #test_that("Graph", {
 #  task = mlr_tasks$get("iris")
 

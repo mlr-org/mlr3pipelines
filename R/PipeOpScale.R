@@ -9,7 +9,7 @@
 #' * `f = pipeOpDT$new(id)` \cr
 #'     `character(1)` -> [PipeOpDT]
 #' @name PipeOpScale
-#' @family PipeOp, PipeOpDT
+#' @family PipeOp
 #' @export
 PipeOpScale = R6Class("PipeOpScale",
 

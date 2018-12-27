@@ -1,45 +1,40 @@
 #' @include utils.R
-
-# Identifies the exact point to which data is delivered when coming out of an operation
-# (or, inversely, the point /from which/ data is coming when flowing into a node).
-# This identifies the `node`, and the index or channel_id of this node to which
-# (out of which) data is flowing.
-#
-# `node` [GraphNode] Node that is connected to
-# `channel_id` [character(1) | numeric(1)] index or name of connected node's channel
-# `direction` [character(1)] "in" or "out"
-NodeChannel = R6::R6Class("NodeChannel",
-  public = list(
-    channel_id = NULL,
-    node = NULL,
-    direction = NULL,
-    initialize = function(channel_id, node, direction) {
-      assert_choice(direction, c("in", "out"))
-      self$channel_id = channel_id
-      self$node = node
-      self$direction = direction
-    },
-    print = function() {
-      catf("Channel with id [%s] %s GraphNode %s", self$channel_id, if (self$direction == "in") "into" else "out of", self$node$pipeop$id)
-    }
-  )
-)
-
-#### Class definition ####
-
-#' GraphNode
+#'
+#' @title GraphNode
 #'
 #' @description
-#'
 #' The \code{GraphNode} class implements behaviors required to define the
 #' connections between the \code{PipeOps}. The set of interconnected
 #' GraphNodes creates the pipeline graph.
 #'
-#' @usage GraphNode
-#'
-#' @importFrom R6 R6Class
-#'
-#'
+#' @section Public Members / Active Bindings
+#' * `graph`                :: [Graph]
+#'   Graph that this node is a member of.
+#' * `pipeop`               :: [PipeOp]
+#'   Contained PipeOp.
+#' * `prev_node_channels`   :: list of [NodeChannel]
+#'   Identifies the channels from previous nodes that we are connected to.
+#'   Mutation can be used to change connections.
+#' * `next_node_channels`   :: list of [NodeChannel]
+#'   Identifies the channels from successor nodes that we are connected to.
+#'   Mutation can be used to change connections.
+#' * `next_nodes`           :: list of [GraphNode]
+#'   Successor nodes, indexed by channel_id.
+#' * `prev_nodes`           :: list of [GraphNode]
+#'   Predecessor nodes, indexed by channel_id.
+#' * `in_channels`          :: list of [GraphChannel]
+#'   Cached identifiers of incoming nodes, indexed by channel id.
+#' * `out_channels`         :: list of [GraphChannel]
+#'   Cached identifiers of outgoing nodes, indexed by channel id.
+#' * `intype`               :: [list]
+#'   Identifies types of incoming data, see PipeOp$intype; indexed by channel_id.
+#' * `outtype`              :: [list]
+#'   Identifies types of outgoing data, see PipeOp$outtype; indexed by channel_id.
+#' * `input_complete`       :: [logical(1)]
+#'   Whether all incoming channels are connected to other nodes
+#' * `output_complete`      :: [logical(1)]
+#'   Whether all outgoing channels are connected to other nodes
+#' * editlock              ????????????????
 GraphNode = R6::R6Class("GraphNode",
   public = list(
     initialize = function(pipeop, graph) {
@@ -67,34 +62,28 @@ GraphNode = R6::R6Class("GraphNode",
       .pipeop = NULL
   ),
   active = list(
-    graph = readonly("graph"),  # [Graph] that this GraphNode is a member of
-    pipeop = readonly("pipeop"),  # [PipeOp] that this GraphNode contains
+    graph = readonly("graph"),
+    pipeop = readonly("pipeop"),
     prev_node_channels = function(prev) {
-      # [list of NodeChannel]
-      # Identifies the channels from previous nodes that we are connected to.
-      # Mutation can be used to change connections.
       if (!missing(prev)) {
         private$connectgn(prev, ".prev_node_channels", "next_node_channels", "in")
       }
       private$.prev_node_channels
     },
     next_node_channels = function(nxt) {
-      # [list of NodeChannel]
-      # Identifies the channels from successor nodes that we are connected to.
-      # Mutation can be used to change connections.
       if (!missing(nxt)) {
         private$connectgn(nxt, ".next_node_channels", "prev_node_channels", "out")
       }
       private$.next_node_channels
     },
-    next_nodes = function() map(self$next_node_channels, "node"),  # [list of GraphNode, indexed by channel_id] Successor nodes
-    prev_nodes = function() map(self$prev_node_channels, "node"),  # [list of GraphNode, indexed by channel_id] Predecessor nodes
-    in_channels = function() private$.in_channels,  # [list of GraphChannel, indexed by channel_id] cached identifiers of incoming nodes
-    out_channels = function() private$.out_channels,  # [list of GraphChannel, indexed by channel_id] cached identifiers of outgoing nodes
-    intype = function() self$pipeop$intype,  # [list of ..., indexed by channel_id] Identifies types of incoming data, see PipeOp->intype
-    outtype = function() self$pipeop$outtype,  # [list of ..., indexed by channel_id] Identifies types of outgoing data, see PipeOp->outtype
-    input_complete = function() !any(sapply(self$prev_nodes, is.null)),  # [logical(1)] Whether all incoming channels are connected to other nodes
-    output_complete = function() !any(sapply(self$next_nodes, is.null)),  # [logical(1)] Whether all outgoing channels are connected to other nodes
+    next_nodes = function() map(self$next_node_channels, "node"),
+    prev_nodes = function() map(self$prev_node_channels, "node"),
+    in_channels = function() private$.in_channels,
+    out_channels = function() private$.out_channels,
+    intype = function() self$pipeop$intype,
+    outtype = function() self$pipeop$outtype,
+    input_complete = function() !any(sapply(self$prev_nodes, is.null)),
+    output_complete = function() !any(sapply(self$next_nodes, is.null)),
     editlock = function() private$.editlock
   )
 )

@@ -1,12 +1,14 @@
 #' @title Union of graphs
-#' 
+#'
 #' @description
 #' Takes an arbitrary amount of Graphs, GraphNodes and PipeOps as inputs and joins
 #' them by "stacking" them one over the other.
 #' Returns the full graph.
-#' @param `...` `list of `[Graph]`, `[GraphNode]` or `[PipeOp]`` \cr
+#'
+#' @param ... A list of [Graph], [GraphNode] or [PipeOp] \cr
 #' List of elements with one of the types defined above.
-#' @param `.graphs` `list of [Graph]` \cr
+#' @param .graphs list of [Graph]` \cr
+#'   Graphs which are to be joined.
 #' @return `[Graph]`
 gunion = function(..., .graphs = NULL) {
   graphs = c(list(...), .graphs)

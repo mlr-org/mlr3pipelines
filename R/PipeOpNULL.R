@@ -1,22 +1,17 @@
 #' @title PipeOpNULL
 #' @format [R6Class] PipeOpNULL
-#' 
+#'
 #' @description
 #'   Simply pushes the input forward unchanged.
 #'   Can be usefull for example to keep the original task in conjunction with
 #'   `gunion()` to keep a copy of the original data.
-#' 
+#'
 #' @section Usage:
 #' Inherits from [PipeOp]
 #' * `f = pipeOpNULL$new(id)` \cr
 #'     `character(1)` -> [PipeOpNULL]
 #' @name PipeOpNULL
 #' @family PipeOp
-#' @examples
-#' # Do PCA on input data, but also keep a copy of the original input.
-#' op1 = PipeOpNULL$new()
-#' op2 = PipeOpPCA$new()
-#' g = gunion(op1, op2) %>>% pipeOpFeatureUnion()
 #' @export
 PipeOpNULL = R6Class("PipeOpNULL",
 

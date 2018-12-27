@@ -14,39 +14,32 @@ readonly = function(name) {
 
 
 # FIXME: This should be in mlr3misc
-#' Chunk elements of vectors into blocks of nearly equal size.
-#'
-#' In case of shuffling and vectors that cannot be chunked evenly,
-#' it is chosen randomly which levels / chunks will receive 1 element less.
-#' If you do not shuffle, always the last chunks will receive 1 element less.
-#'
-#' @param x [ANY]\cr
-#'   Vector, list or other type supported by \code{\link[base]{split}}.
-#' @param chunk.size [\code{integer(1)}]\cr
-#'   Requested number of elements in each chunk.
-#'   Cannot be used in combination with \code{n.chunks} or \code{props}.
-#'   If \code{x} cannot be evenly chunked, some chunks will have less elements.
-#' @param n.chunks [\code{integer(1)}]\cr
-#'   Requested number of chunks.
-#'   If more chunks than elements in \code{x} are requested, empty chunks are
-#'   dropped.
-#'   Can not be used in combination with \code{chunks.size} or \code{props}.
-#' @param props [\code{numeric}]\cr
-#'   Vector of proportions for chunk sizes.
-#'   Empty chunks may occur, depending on the length of \code{x} and the given
-#'   proportions.
-#'   Cannot be used in combination with \code{chunks.size} or \code{n.chunks}.
-#' @param shuffle [\code{logical(1)}]\cr
-#'   Shuffle \code{x}?
-#'   Default is \code{FALSE}.
-#' @return [unnamed \code{list}] of chunks.
-#' @export
-#' @examples
-#' xs = 1:10
-#' chunk(xs, chunk.size = 3)
-#' chunk(xs, n.chunks = 2)
-#' chunk(xs, n.chunks = 2, shuffle = TRUE)
-#' chunk(xs, props = c(7, 3))
+# Chunk elements of vectors into blocks of nearly equal size.
+#
+# In case of shuffling and vectors that cannot be chunked evenly,
+# it is chosen randomly which levels / chunks will receive 1 element less.
+# If you do not shuffle, always the last chunks will receive 1 element less.
+#
+# @param x [ANY]\cr
+#   Vector, list or other type supported by \code{\link[base]{split}}.
+# @param chunk.size [\code{integer(1)}]\cr
+#   Requested number of elements in each chunk.
+#   Cannot be used in combination with \code{n.chunks} or \code{props}.
+#   If \code{x} cannot be evenly chunked, some chunks will have less elements.
+# @param n.chunks [\code{integer(1)}]\cr
+#   Requested number of chunks.
+#   If more chunks than elements in \code{x} are requested, empty chunks are
+#   dropped.
+#   Can not be used in combination with \code{chunks.size} or \code{props}.
+# @param props [\code{numeric}]\cr
+#   Vector of proportions for chunk sizes.
+#   Empty chunks may occur, depending on the length of \code{x} and the given
+#   proportions.
+#   Cannot be used in combination with \code{chunks.size} or \code{n.chunks}.
+# @param shuffle [\code{logical(1)}]\cr
+#   Shuffle \code{x}?
+#   Default is \code{FALSE}.
+# @return [unnamed \code{list}] of chunks.
 chunk = function(x, chunk.size, n.chunks, props, shuffle = FALSE) {
   assertFlag(shuffle)
   method = c("chunk.size", "n.chunks", "props")
