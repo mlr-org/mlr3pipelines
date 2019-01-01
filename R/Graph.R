@@ -10,7 +10,7 @@
 #' * `param_set`        ::  [ParamSet] \cr
 #'   Set of all exposed parameters of the graph, a union of all `param_set` objects of all contained [PipeOp] objects.
 #'   Parameter IDs are prefixed by PipeOp ID. Returns a deep-copy of all param sets.
-#' * `par_vals`         ::  named `list`
+#' * `param_vals`         ::  named `list`
 #'   Set of all configured parameters of the graph, a union of all `param_vals` objects of all contained [PipeOp] objects. Parameter IDs are prefixed by PipeOp ID.
 #' * `packages`         :: `character`
 #'   Set of all required packages of the graph, a union of all required packages of all contained [PipeOp] objects.

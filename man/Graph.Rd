@@ -16,8 +16,9 @@ The graph is a container class for the complete computational graph. It is made 
 
 \itemize{
 \item \code{param_set}        ::  \link{ParamSet} \cr
-Set of all exposed parameters of the graph, a union of all \code{param_set} objects of all contained \link{PipeOp} objects. Parameter IDs are prefixed by PipeOp ID.
-\item \code{par_vals}         ::  named \code{list}
+Set of all exposed parameters of the graph, a union of all \code{param_set} objects of all contained \link{PipeOp} objects.
+Parameter IDs are prefixed by PipeOp ID. Returns a deep-copy of all param sets.
+\item \code{param_vals}         ::  named \code{list}
 Set of all configured parameters of the graph, a union of all \code{param_vals} objects of all contained \link{PipeOp} objects. Parameter IDs are prefixed by PipeOp ID.
 \item \code{packages}         :: \code{character}
 Set of all required packages of the graph, a union of all required packages of all contained \link{PipeOp} objects.

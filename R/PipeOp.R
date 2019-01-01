@@ -21,7 +21,7 @@
 #'   Packages required for the pipeOp.
 #' * `param_set`                  :: [ParamSet]
 #'   The set of all exposed parameters of the PipeOp.
-#' * `par_vals`                   :: named [list]
+#' * `param_vals`                   :: named [list]
 #'   Parameter settings where all setting must come from `param_set`, named with param IDs.
 #' * `state`                      :: [anys]
 #'   The object of learned parameters, obtained in the training step, and applied in the predict step.
