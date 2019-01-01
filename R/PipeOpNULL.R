@@ -35,3 +35,6 @@ PipeOpNULL = R6Class("PipeOpNULL",
     }
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpNULL", PipeOpNULL)

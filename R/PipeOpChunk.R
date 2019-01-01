@@ -58,3 +58,6 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
     outnum = function() private$.outnum
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpChunk", PipeOpChunk)
