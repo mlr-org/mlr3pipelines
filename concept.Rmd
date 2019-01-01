@@ -13,7 +13,7 @@ functions that transform a pipe's inputs to its outputs.
 Description:
 A PipeOp is a single tranformation of inputs into outputs.
 During training it takes inputs, tranforms them, while doing that learns and stores its
-parameters and then returns the output.
+parameters (into its 'state') and then returns the output.
 During prediction it applies the learned params to the input and transforms the input to an output.
 
 A PipeOp specifies the types of inputs and outputs as `intype` and `outtype`, a list of <something specifying types>.
@@ -25,8 +25,8 @@ Usage:
 - new(id, params) [character(1), ParamSet] -> [PipeOp]
 - id  [character(1)]
 - param_set [ParamSet]
-- par_vals [named list]
-- params [any]
+- param_vals [named list]
+- state [any]
 - result [any]
 - train(input) : [any] -> [any]
 - predict(input) : [any] -> [any]
@@ -36,14 +36,12 @@ Usage:
 - `.takeslist`: [logical(1)]
 - `.returnslist`: [logical(1)]
 
-Suggestions:
-- rename 'params' to 'state'. I mean, come on.
 
 Details:
   `id`: AB that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
   `param_set`: The set of all exposed parameters of the PipeOp.
-  `par_vals`: A named list of parameter settings where all setting must come from `param_set`.
-  `params`: The object of learned parameters, obtained in the training step, and applied in the
+  `param_vals`: A named list of parameter settings where all setting must come from `param_set`.
+  `state`: The object of learned parameters, obtained in the training step, and applied in the
     predict step. #FIXME: what if the this is NULL? then the PO is untrained! we need a special "empty" object for POs which do not learn anything
   `new`: Baseclass constructor, called by derived classes.
   `train`: Function that is responsible to train on `input`, transform it to output and store the learned `params`.
@@ -242,7 +240,7 @@ Prediction on a graph works exactly the same. We feed the input object to the LH
 `predict` on each node, layer by layer, until we have done that also on the RHS.
 
 
-FIXME: we need to specifiy the concept of brnaching / multiplexing
+FIXME: we need to specifiy the concept of branching / multiplexing
 
 # Graph Operation Concepts
 
@@ -323,13 +321,17 @@ these GraphNodes, generate the data that is fed to a given slot of a train / pre
 GraphNode provides active bindings `next_node_channels` and `prev_node_channels` that make it easy to create and change connections between GraphNodes.
 To make sure that the **second** list element of the result of node **`AA`** is fed to the **third** list element of the **input** of node **`BB`**,
 one would just assign the corresponding `NodeChannel` to `next_node_channels` of `AA`:
+
 ```
 AA$next_node_channels[[2]] = NodeChannel$new(node = BB, channel_id = 3, direction = "in")
 ```
+
 Alternatively, it is possible to assign the output node channel of `AA` to the `prev_node_channels` entry of `BB`:
+
 ```
 BB$prev_node_channels[[3]] = NodeChannel$new(node = AA, channel_id = 2, direction = "out")
 ```
+
 The active binding code makes sure that these two assignments have the same effect. In addition, whenever a connection is updated like this, the
 code ensures that previous connections to other nodes are removed.
 
@@ -340,7 +342,9 @@ for the statements above, one could instead write the following effectively iden
 ```
 AA$next_node_channels[[2]] = BB$in_channels[[3]]
 ```
+
 or
+
 ```
 BB$prev_node_channels[[3]] = AA$out_channels[[2]]
 ```
