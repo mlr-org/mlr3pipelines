@@ -40,9 +40,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       # private$.result
     },
 
-    predict2 = function() {
+    predict = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
-      predict(self$state)
+      task = inputs[[1L]]
+      list(self$state$learner$predict(task))
     }
   ),
 
