@@ -50,10 +50,10 @@ PipeOpDT = R6Class("PipeOpDT",
       list(TaskClassif$new(id = task$id, backend = db, target = tn))
     },
 
-    predict = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
+    predict = function(inputs) {
+      assert_list(inputs, len = 1L, type = "Task")
       assert_function(self$predict_dt, args = "newdt")
-      task = self$inputs[[1L]]
+      task = inputs[[1L]]
       fn = task$feature_names
       d = task$data()
 
@@ -66,7 +66,9 @@ PipeOpDT = R6Class("PipeOpDT",
       d[, (colnames(dt)) := dt]
       d[, "..row_id" := seq_len(nrow(d))]
 
-      list(task$overwrite(d))
+      db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
+      tn = task$target_names
+      list(TaskClassif$new(id = task$id, backend = db, target = tn))
     }
   )
 )
