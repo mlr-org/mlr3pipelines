@@ -61,11 +61,11 @@ PipeOp = R6::R6Class("PipeOp",
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
-      private$.param_vals = param_set$data$default
-      names(private$.param_vals) = param_set$ids
-      private$.param_vals = insert_named(private$.param_vals, param_vals)
-      if (!param_set$test(private$.param_vals)) {
-        stop("Parameters out of bounds")
+      private$.param_vals = param_set$defaults
+      if(!is.null(private$.param_vals)) {
+        if (!param_set$test(private$.param_vals)) {
+          stop("Parameters out of bounds")
+        }
       }
     },
 
