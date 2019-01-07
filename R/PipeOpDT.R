@@ -51,21 +51,32 @@ PipeOpDT = R6Class("PipeOpDT",
     },
 
     predict = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
       assert_function(self$predict_dt, args = "newdt")
-      task = self$inputs[[1L]]
-      fn = task$feature_names
-      d = task$data()
+      assert(
+          check_list(self$inputs, len = 1L, type = "Task"),
+          check_list(self$inputs, len = 1L, type = "data.frame")
+      )
+      if (is.data.frame(self$inputs[[1]])) {
+        indata = as.data.table(self$inputs[[1]])
+      } else {
+        task = self$inputs[[1L]]
+        fn = task$feature_names
+        indata = task$data()[, ..fn]
+      }
 
       # Call train_dt function on features
-      dt = as.data.table(self$predict_dt(d[, ..fn]))
-      assert_true(nrow(dt) == nrow(d))
-
+      dt = as.data.table(self$predict_dt(indata))
+      assert_true(nrow(dt) == nrow(indata))
+      if (is.data.frame(self$inputs[[1]])) {
+        if (!is.data.table(self$inputs[[1]])) {
+          dt = as.data.frame(dt)
+        }
+        return(list(dt))
+      }
       # Drop old features, add new features
       d[, (fn) := NULL]
       d[, (colnames(dt)) := dt]
       d[, "..row_id" := seq_len(nrow(d))]
-
       list(task$overwrite(d))
     }
   )
