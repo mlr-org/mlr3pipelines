@@ -1,16 +1,29 @@
 context("PipeOp")
 
-
 test_that("PipeOp - simple pipe", {
 
- task = mlr3::mlr_tasks$get("iris")
+  task = mlr_tasks$get("iris")
 
- op1 = PipeOpScale$new()
- expect_class(op1, "PipeOpScale")
- expect_false(op1$is_trained)
+  op1 = PipeOpScale$new()
+  expect_class(op1, "PipeOpScale")
+  expect_false(op1$is_trained)
 
- g1 = Graph$new(op1)
- g1$train(task)
+  n1 = Graph$new(op1)
+  expect_false(n1$is_trained)
+
+  tscaled = n1$train(task)
+  expect_class(tscaled, "Task")
+
+  tdx = task$data()
+  tdx$Species = NULL
+
+
+  tds = tscaled$data()
+  tds$Species = NULL
+  expect_equal(as.matrix(tds), scale(tdx), check.attributes = FALSE)
+
+  expect_true(n1$is_trained)
+
 })
 
 #test_that("PipeOp - learner pipe", {
