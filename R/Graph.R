@@ -246,26 +246,26 @@ length.Graph = function(x) {
 # idea of code: for every node, we track how many unhandled prev nodes we have. only if this becomes 0,
 # we can add the node to the toposort. if we do that, we substract each next_node counter by 1.
 sort_nodes = function(node_list, layerinfo = FALSE) {
-  pending = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
-  cache = map_dbl(node_list, pending) # count how many prev nodes a node has
+  numparents = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
+  cache = map_dbl(node_list, numparents) # count how many connections to prev nodes a node has
   queue = names(cache)[cache == 0] # active queue for toposort, charvec if ids, we start with LHS nodes
-  layers = sapply(queue, function(.) 0, simplify = FALSE)
+  layers = sapply(queue, function(.) 0)
   cache = cache[cache != 0] # remove LHS nodes from cache
   queueidx = 1
   while (queueidx <= length(queue)) {
     current = queue[queueidx]
     nexts = table(map_chr(Filter(Negate(is.null), node_list[[current]]$next_nodes), function(n) n$pipeop$id))
     if (any(nexts %in% queue))
-      stop("Cycles in graph!")
+      stop("Graph is broken, this should never happen.")  # next_nodes and prev_nodes disagree about the graph structure.
     cache[names(nexts)] = cache[names(nexts)] - nexts # remove current next-node-counters from cache
     for (n in names(nexts))
-      layers[[n]] = max(layers[[n]], layers[[current]] + 1)  # FIXME: bad code, we know when layer is corrent, this is when pending nodes become 0
+      layers[n] = max(layers[n], layers[current] + 1)  # FIXME: bad code, we know when layer is corrent, this is when pending nodes become 0.
     queue = c(queue, names(cache)[cache == 0])    # add nodes with no prending prev nodes to end of queue
     cache = cache[cache != 0]      # only keep nodes with pending prev nodes
     queueidx = queueidx + 1
   }
   if (length(cache)) {
-    stop("Unconnected nodes found")
+    stop("Cycles in graph!")
   }
   if (layerinfo) {
     sort(map_dbl(layers, identity))

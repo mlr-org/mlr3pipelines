@@ -35,9 +35,6 @@ test_that("featureunion - basic", {
   expect_true(length(graph) == 4L)
 
   trained = graph$train(task)
-
-  # Note: The order of features is IMPORTANT, if topological sort messes this
-  # up it is BROKEN.
   expect_equal(trained$feature_names, c("PC1", "PC2", "PC3", "PC4", "Petal.Length",
     "Petal.Width", "Sepal.Length", "Sepal.Width"))
   # expect_true(graph$is_trained)
