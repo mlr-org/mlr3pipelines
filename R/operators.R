@@ -7,8 +7,7 @@
 
 #' @export
 `%>>%.PipeOp` = function(lhs, rhs) {
-  graph = Graph$new()
-  graph$add_node(lhs$clone(deep = TRUE))
+  graph = Graph$new(lhs$clone(deep = TRUE))
   `%>>%`(graph, rhs)
 }
 
@@ -31,8 +30,7 @@
     rhs = rhs$pipeop
   }
   if (inherits(rhs, "PipeOp")) {
-    graph = Graph$new()
-    graph$add_node(rhs$clone(deep = TRUE))
+    graph = Graph$new(rhs$clone(deep = TRUE))
     rhs = graph
   }
   if (!inherits(rhs, "Graph")) {
