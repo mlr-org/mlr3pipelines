@@ -9,15 +9,14 @@ test_that("PipeOp - SparsePCA", {
   b = as_data_backend(data)
   task = TaskRegr$new(id = "spmat", b, target = "target")
 
-  op1 = PipeOpSparsePCA$new()
-  expect_class(op1, "PipeOpSparsePCA")
+  op1 = PipeOpPCA$new()
+  expect_class(op1, "PipeOpPCA")
   expect_false(op1$is_trained)
 
   graph = Graph$new()
   graph$add_node(op1)
 
   expect_class(graph$train(task), "Task")
-  expect_true(graph[["sparsePca"]]$pipeop$is_trained)
-  expect_class(op1, "PipeOpSparsePCA")
+  expect_true(graph[["pca"]]$pipeop$is_trained)
 
 })
