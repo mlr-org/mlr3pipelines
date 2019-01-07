@@ -208,7 +208,7 @@ Graph = R6Class("Graph",
       }
       union_parvals(self)
     },
-    packages = function() unique(self$map(function(x) x$pipeop$packages))
+    packages = function() unlist(unique(self$map(function(x) x$pipeop$packages)))
   ),
 
   private = list(
