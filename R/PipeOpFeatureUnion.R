@@ -24,34 +24,41 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       super$initialize(id)
     },
 
-    train = function(inputs) {
+    train = function(inputs) cbind_tasks(inputs),
 
-      ## check if all target_names are equal
-      is_target_equal = length(unique(vapply(
-        inputs,
-        function(x) digest::digest(x$target_names),
-        FUN.VALUE = ""
-      ))) == 1
-
-      all_data = lapply(inputs, function(x) {
-        x$data(cols = x$feature_names)
-      })
-
-      input1 = inputs[[1]]
-      targets = input1$data(cols = input1$target_names)
-
-      data = do.call(cbind, c(all_data, list(targets)))
-      db = as_data_backend(data)
-
-      list(TaskClassif$new(
-        id = input1$id,
-        backend = db,
-        target = input1$target_names
-      ))
-    },
-
-    predict = function(input) {
-      do.call(cbind, input)
+    predict = function(inputs) {
+      # FIXME: check that all types are equal
+      # in theory we could down-convert, but that ewould probably be a bug on the user's side.
+      if (is.data.frame(input[[1]])) {
+        list(do.call(cbind, inputs))
+      } else {
+        cbind_tasks(inputs)
+      }
     }
   )
 )
+
+cbind_tasks = function(inputs) {
+  inputs = Filter(Negate(is.null), inputs)
+  ## check if all target_names are equal
+  is_target_equal = length(unique(vapply(
+    inputs,
+    function(x) digest::digest(x$target_names),
+    FUN.VALUE = ""
+  ))) == 1
+  assert(is_target_equal)
+  # FIXME: assert tasks agree on other characteristics:
+  #  - row IDs
+  #  - task types
+  #  - ???
+
+  all_data = lapply(inputs, function(x) {
+    x$data()[, x$feature_names, with = FALSE]
+  })
+
+  input1 = inputs[[1]]
+  targets = input1$data()[, input1$target_names, with = FALSE]
+
+  data = do.call(cbind, c(all_data, input1$row_ids))
+  list(task_update_data(input1, data))
+}
