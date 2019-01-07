@@ -1,26 +1,13 @@
 library("paradox")
-library("mlr3")
+library("mlr3") r
 
 options(error=recover)
 
 devtools::document("mlr3pipelines")
 
 devtools::load_all("mlr3pipelines")
-testthat::test("mlr3pipelines")
 testthat::test_package("mlr3pipelines")
 
-BasicPO = R6::R6Class("BasicPO",
-  inherit = PipeOp,
-  public = list(
-      train = function(...) print("hi"),
-      predict = function(...) print("yo"),
-      initialize = function(...) {
-        super$initialize(...)
-        private$.intype = list("data.frame")
-        private$.outtype = list("data.frame")
-      }
-  )
-)
 BasicPOAny = R6::R6Class("BasicPOAny",
   inherit = PipeOp,
   public = list(
@@ -68,20 +55,6 @@ gr3 = Graph$new()
 
 pipeop = BasicPO$new("testa")
 
-gr = Graph$new()
-gr$add_node(BasicPO$new("testa"))
-gr$add_node(BasicPO$new("testb"))
-gr$add_node(BasicPO$new("testc"))
-gr[["testa"]]$next_node_channels[[1]] = gr[["testb"]]$in_channels[[1]]
-gr$plot()
-
-
-
-gr$add_node(BasicPO$new("testa2"))
-gr$add_node(BasicPO$new("testb2"))
-gr$add_node(BasicPO$new("testc2"))
-
-
 gr2$add_node(BasicPOAny$new(1, 2, "testad"))
 gr2$add_node(BasicPOAny$new(1, 2, "testbd"))
 gr2$add_node(BasicPOAny$new(1, 2, "testcd"))
@@ -125,45 +98,8 @@ gr3$predict(2)
 gr3[["testyy"]]$prev_node_channels['a'] = list(NULL)
 gr3[["testxx"]]$next_node_channels[[1]] = gr3[["testyy"]]$in_channels$a
 
-gr3$plot()
-
-
-
-gr2$plot()
-gr3$plot()
-
-
-
-gr$plot()
-
 gr2[["testad"]]$graph
 gr2[["testbd"]]$graph
-
-
-
-gr$plot()
-gr2$plot()
-
-
-
-gr[["testb"]]$out_channels$pca
-
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testa"]]$out_channels$pca
-
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testa"]]$out_channels[[1]]
-gr[["testb"]]$prev_node_channels[[2]] = gr[["testc"]]$out_channels[[1]]  # add connection
-
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testa"]]$out_channels[[1]]
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testc"]]$out_channels[[1]]  # replace connection
-
-
-gr$plot()
-
-gr[["pca"]]$prev_node_channels[[1]] = gr[["mplx"]]$out_channels[["pca"]]
-gr[["ica"]]$prev_node_channels[[1]] = gr[["mplx"]]$out_channels[["ica"]]
-
-
-
 
 bpo = BasicPO$new("testid")
 bpo2 = BasicPO$new("testid2")
