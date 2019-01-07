@@ -97,7 +97,7 @@ GraphNode = R6::R6Class("GraphNode",
 #   (probably "prev_node_channels" or "next_node_channels" -- always the one OPPOSITE of `oldchannelname`
 # @param direction [character(1)] "in" or "out". "in" if we are changing prev_node_channels, otherwise "out".
 GraphNode$set("private", "connectgn", function(newedges, oldchannelname, inverseedgename, direction) {
-  # TODO: assert prev is a list
+  # FIXME: assert prev is a list
   if (!identical(names(newedges), names(private[[oldchannelname]]))) {
     stop("Can't change names of nodes")
   }
@@ -113,8 +113,8 @@ GraphNode$set("private", "connectgn", function(newedges, oldchannelname, inverse
 
   # Check that input is okay before we start changing edges
   for (edge in newedges) {
-    # todo: assert edge is a NodeChannel
-    # TODO: check types
+    # FIXME: assert edge is a NodeChannel
+    # FIXME: check types
     if (!is.null(edge) && !identical(edge$node$graph, private$.graph)) {
       stop("Can't connect nodes that are not in the same graph")
     }

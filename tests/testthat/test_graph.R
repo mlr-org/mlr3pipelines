@@ -1,9 +1,14 @@
 context("Graph")
 
 test_that("simple graph operations with stupid pipeops", {
+  po_1 = PipeOpTest1$new()
   g = Graph$new()
-  g$add(th_po_1)
+  expect_true(length(g) == 0)
+  g$add_node(po_1)
+  expect_true(length(g) == 1)
+  # g$param_set()
 })
+
 
 #test_that("Graph", {
 #  task = mlr_tasks$get("iris")
