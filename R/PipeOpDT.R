@@ -40,9 +40,7 @@ PipeOpDT = R6Class("PipeOpDT",
       dt = as.data.table(self$train_dt(d[, ..fn]))
       assert_true(nrow(dt) == nrow(d))
 
-      dt = cbind(dt, task$row_ids)
-
-      list(task$select(character(0))$cbind(dt))
+      list(task_update_data(task, dt))
     },
 
     predict = function() {
@@ -69,8 +67,7 @@ PipeOpDT = R6Class("PipeOpDT",
         return(list(dt))
       }
       # Drop old features, add new features
-      dt = cbind(dt, task$row_ids)
-      list(task$select(character(0))$cbind(dt))
+      list(task_update_data(task, dt))
     }
   )
 )
