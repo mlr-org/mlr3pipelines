@@ -1,25 +1,17 @@
 context("PipeOp")
 
 
-#test_that("PipeOp - simple pipe", {
+test_that("PipeOp - simple pipe", {
 
-#  task = mlr_tasks$get("iris")
+ task = mlr3::mlr_tasks$get("iris")
 
-#  op1 = PipeOpScaler$new()
-#  expect_class(op1, "PipeOpScaler")
-#  expect_false(op1$is_learnt)
+ op1 = PipeOpScale$new()
+ expect_class(op1, "PipeOpScale")
+ expect_false(op1$is_trained)
 
-#  n1 = GraphNode$new(op1)
-#  expect_false(n1$can_fire)
-
-#  trainGraph(list(n1), task)
-#  expect_true(n1$can_fire)
-
-#  expect_class(op1, "PipeOpScaler")
-#  expect_true(op1$is_learnt)
-#  expect_class(op1$result, "Task")
-
-#})
+ g1 = Graph$new(op1)
+ g1$train(task)
+})
 
 #test_that("PipeOp - learner pipe", {
 
