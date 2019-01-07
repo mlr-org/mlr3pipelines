@@ -11,6 +11,8 @@
 #' We thus enforce: [dt] -> [dt].
 #' For examples see [PipeOpPCA] or [PipeOpScale].
 #'
+#' The underlying operation must not change row order or number.
+#'
 #' @name PipeOpDT
 #' @family PipeOp
 #' @export
@@ -38,16 +40,9 @@ PipeOpDT = R6Class("PipeOpDT",
       dt = as.data.table(self$train_dt(d[, ..fn]))
       assert_true(nrow(dt) == nrow(d))
 
-      # Drop old features, add new features
-      d[, (fn) := NULL]
-      d[, (colnames(dt)) := dt]
-      d[, "..row_id" := seq_len(nrow(d))]
+      dt = cbind(dt, task$row_ids)
 
-      db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
-      tn = task$target_names
-
-      # Should be:
-      list(TaskClassif$new(id = task$id, backend = db, target = tn))
+      list(task$select(character(0))$cbind(dt))
     },
 
     predict = function() {
@@ -74,10 +69,8 @@ PipeOpDT = R6Class("PipeOpDT",
         return(list(dt))
       }
       # Drop old features, add new features
-      d[, (fn) := NULL]
-      d[, (colnames(dt)) := dt]
-      d[, "..row_id" := seq_len(nrow(d))]
-      list(task$overwrite(d))
+      dt = cbind(dt, task$row_ids)
+      list(task$select(character(0))$cbind(dt))
     }
   )
 )

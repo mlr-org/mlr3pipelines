@@ -17,6 +17,8 @@ the features from a \link{Task}, and automatically
 reconstruct the appropriate Task from a returned \link{data.table}.
 We thus enforce: \link{dt} -> \link{dt}.
 For examples see \link{PipeOpPCA} or \link{PipeOpScale}.
+
+The underlying operation must not change row order or number.
 }
 \seealso{
 Other PipeOp: \code{\link{PipeOpDownsample}},
