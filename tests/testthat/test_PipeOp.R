@@ -5,7 +5,7 @@ test_that("PipeOp - General functions", {
   # Test a lot of the standard slots of a PipeOp
   po_1 = PipeOpTest1$new()
   expect_class(po_1, "PipeOpTest1")
-  expect_true(po_1$id == "th_po_1")
+  expect_true(po_1$id == "th_po")
   expect_false(po_1$is_trained)
   expect_class(po_1$param_set, "ParamSet")
   expect_list(po_1$param_vals, names = "unique")
