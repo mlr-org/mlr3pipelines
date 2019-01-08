@@ -39,12 +39,29 @@ graph2$param_vals$choice.selection = "oppca"
 assert(all.equal(graph2$train(task), oppca$train(list(task))[[1]]))
 assert(all.equal(graph2$predict(task), oppca$predict(list(task))[[1]]))
 
-# ----------------------
+# ----------------------  Learner
 
 task = mlr_tasks$get("iris")
 lrn = mlr_learners$get("classif.rpart")
 graph = PipeOpScale$new() %>>% PipeOpPCA$new() %>>% PipeOpLearner$new(lrn)
+assert(is.null(graph$train(task)))
+graph$predict(task)  # problem is in mlr3
 
+# ---------------------- Complex graph structure
+
+gr = BasicPOAny$new(1, 2, "beginning") %>>%
+  greplicate(BasicPOAny$new(1, 2, "middle"), 2) %>>%
+  gunion(BasicPOAny$new(1, 2, "left"), BasicPOAny$new(2, 2, "secondmiddle"), BasicPOAny$new(1, 2, "right")) %>>%
+  greplicate(BasicPOAny$new(3, 2, "lower"), 2) %>>%
+  BasicPOAny$new(4, 1, "end")
+
+gr$plot()
+
+assert(gr$train(0) == 8)
+assert(gr$predict(0) == 8)
+
+
+# --------------------- PipeOpLearnerCV
 
 
 
