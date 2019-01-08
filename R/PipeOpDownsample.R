@@ -40,7 +40,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
       }
       tsk$set_row_role(setdiff(tsk$row_roles$use, keep), character(0))
       self$state = list()
-      return(tsk)
+      return(list(tsk))
     },
     predict = function(inputs) {return(inputs)}
   )
