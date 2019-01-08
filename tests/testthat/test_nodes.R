@@ -22,7 +22,7 @@ test_that("pipe concatenation works", {
   gr$add_node(BasicPO$new("testc"))
   freegr = Graph$new(gr)
 
-  expect_equal(freegr, gr)
+  expect_equal(freegr, gr)  # breaks because of issue #149 in paradox
 
   gr[["testa"]]$next_node_channels[[1]] = gr[["testb"]]$in_channels[[1]]
   expect_equal(gr$node_list$testa$next_node_channels, gr$node_list$testb$in_channels)
@@ -52,7 +52,7 @@ test_that("pipe concatenation works", {
   expect_set_equal(names(gr$lhs), c("testa", "testc"))
   expect_set_equal(names(gr$rhs), c("testb", "testc"))
 
-  # expect_error({gr[["testb"]]$prev_node_channels[[2]] = gr[["testc"]]$out_channels[[1]]})  # FIXME: not implemented
+  expect_error({gr[["testb"]]$prev_node_channels[[2]] = gr[["testc"]]$out_channels[[1]]})
 
   gr[["testc"]]$prev_node_channels[[1]] = gr[["testa"]]$out_channels[[1]]  # reform connection
   expect_equal(gr$node_list$testa$next_node_channels, gr$node_list$testc$in_channels)
