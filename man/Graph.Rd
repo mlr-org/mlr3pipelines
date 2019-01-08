@@ -45,9 +45,11 @@ The 'right-hand-side' nodes that have some unconnected output channels and there
 
 \itemize{
 \item \code{new(fill = NULL)} \cr
-(\link{Graph}\code{|}NULL\code{| [PipeOp]) -> [Graph] Constructs an empty Graph, copies an existing graph if}fill\code{is a graph, or fills graph with node(s) if}fill\code{is a PipeOp.}fill` can also be a list of multiple Graphs / PipeOps.
+(\code{\link{Graph}} | \code{NULL} | \code{\link{PipeOp}}) -> \link{Graph}
+Constructs an empty Graph, copies an existing graph if \code{fill} is a graph, or fills graph
+with node(s) if \code{fill} is a PipeOp. \code{fill} can also be a list of multiple Graphs / PipeOps.
 \item \code{f$add_node(node)} \cr
-(\code{[GraphNode] | [PipeOp]}) -> \link{Graph}
+(\code{\link{GraphNode}} | \code{\link{PipeOp}}) -> \link{Graph}
 Mutates graph by adding a \link{PipeOp} or \link{GraphNode} to the end of the graph.
 \item \code{extend(g)} \cr
 (\link{Graph} | PipeOp | list f \link{Graph}) -> \code{self}
