@@ -57,4 +57,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpLearner", PipeOpLearner)
 
