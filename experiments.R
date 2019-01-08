@@ -8,9 +8,55 @@ devtools::document("mlr3pipelines")
 devtools::load_all("mlr3pipelines")
 testthat::test_package("mlr3pipelines")
 
+
+gr = Graph$new()
+
+
+# ---------------------- multiplex
+
+task = mlr_tasks$get("iris")
+opchoice = PipeOpChoice$new(3)
+opchoicenamed = PipeOpChoice$new(c("opscale", "oppca", "opnop"))
+opscale = PipeOpScale$new()
+oppca = PipeOpPCA$new()
+opnop = PipeOpNULL$new()
+opunchoice = PipeOpUnchoice$new(3)
+
+graph1 = opchoice %>>% gunion(opscale, oppca, opnop) %>>% opunchoice
+graph2 = opchoicenamed %>>% gunion(opscale, oppca, opnop) %>>% opunchoice
+
+graph1$param_vals$choice.selection = 1
+assert(all.equal(graph1$train(task), opscale$train(list(task))[[1]]))
+
+graph1$param_vals$choice.selection = 2
+assert(all.equal(graph1$train(task), oppca$train(list(task))[[1]]))
+assert(all.equal(graph1$predict(task), oppca$predict(list(task))[[1]]))
+
+graph2$param_vals$choice.selection = "opscale"
+assert(all.equal(graph2$train(task), opscale$train(list(task))[[1]]))
+
+graph2$param_vals$choice.selection = "oppca"
+assert(all.equal(graph2$train(task), oppca$train(list(task))[[1]]))
+assert(all.equal(graph2$predict(task), oppca$predict(list(task))[[1]]))
+
+# ----------------------
+
+task = mlr_tasks$get("iris")
+lrn = mlr_learners$get("classif.rpart")
+graph = PipeOpScale$new() %>>% PipeOpPCA$new() %>>% PipeOpLearner$new(lrn)
+
+
+
+
+
+
+
+
 gr = Graph$new()
 gr2 = Graph$new()
 gr3 = Graph$new()
+
+
 
 
 pipeop = BasicPO$new("testa")
