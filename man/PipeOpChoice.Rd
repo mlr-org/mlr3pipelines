@@ -12,6 +12,33 @@ PipeOpChoice
 This is one choice PipeOp! Used for multiplexing between different
 possible paths.
 }
+\section{Methods}{
+
+\itemize{
+\item \code{new(options = 1, id = "choice")} \cr
+(\code{integer(1)} | \code{character}), \code{character(1)} -> \code{\link{PipeOpChoice}}
+}
+}
+
+\section{Parameters}{
+
+\itemize{
+\item \code{selection}: integer or discrete
+}
+}
+
+\section{Details}{
+
+Creates a PipeOp with multiple output channels that can be used to
+create a Graph network with alternative paths. If \code{options} is an \code{integer(1)},
+it determines the number of out-paths and \code{selection} is an integer parameter
+choosing between these paths. If \code{options} is a \code{character}, then \code{length(options)}
+out channels are created, each named according to \code{options}.
+
+To create a usable graph, the branching paths need to be brought together
+using \code{\link{PipeOpUnchoice}}.
+}
+
 \examples{
 pca = PipeOpPCA$new()
 nop = PipeOpNULL$new()

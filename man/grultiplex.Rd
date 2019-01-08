@@ -4,7 +4,8 @@
 \alias{grultiplex}
 \title{grultiplex}
 \usage{
-grultiplex(..., .graph = NULL, .id = "")
+grultiplex(..., .graphs = NULL, .id = "",
+  .prefix.gunion.names = FALSE)
 }
 \arguments{
 \item{`...`:}{Multiple graphs, possibly named. They all must have exactly one in_channel and
@@ -18,6 +19,10 @@ be given. Default is \code{NULL}.}
 \item{`.id`}{(\link{character(1)}):
 Optional id prefix to prepend to \code{\link{PipeOpChoice}} and \code{\link{PipeOpUnchoice}} id. Their
 resulting IDs will be \code{"choice"} and \code{"unchoice"}, prefixed by \code{.id}. Default is \code{""}.}
+
+\item{`.prefix.gunion.names`}{(\link{logical(1)}):
+Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
+avoid ID clashes in resulting graph. Default \code{FALSE}.}
 }
 \description{
 Create a multiplexed graph.
