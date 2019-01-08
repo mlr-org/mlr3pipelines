@@ -17,7 +17,7 @@ GraphDT = R6Class("Graph",
       assert_class(op, "PipeOp")
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
-      self$pipeops = c(self$pipeops, set_names(list(op), op$id))
+      self$pipeops = c(self$pipeops, set_names(list(op$clone(deep = TRUE)), op$id))
       invisible(self)
     },
 
@@ -89,6 +89,16 @@ GraphDT = R6Class("Graph",
 
     rhs = function() { # return OP?
       setdiff(names(self$pipeops), unique(self$channels$src_id))
+    }
+  ),
+
+  private = list(
+    deep_clone = function(name, value) {
+      switch(name,
+        "channels" = copy(value),
+        "pipeops" = map(value, function(x) x$clone(deep = TRUE)),
+        value
+      )
     }
   )
 )
