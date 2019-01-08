@@ -40,21 +40,21 @@ This document contains a list of use-cases we want to contain.
 
   - **train**:
     - input: [[Task]]
-    - does: Computes and stores rotation matrix into **.params** slot.
+    - does: Computes and stores rotation matrix into **.state** slot.
     - returns: [[Task]]
-  - **params:**: rotation matrix
+  - **state:**: prcomp return (without $x): rotation matrix, center, scale, std deviations
   - **predict**:
     - input: [[Task]]
-    - does: rotates input data using **.params** slot.
+    - does: (possibly center, scale, ) rotate input data using **state** slot.
     - returns: [[Task]]
 
 ##### [[PipeOpLearner]]
 
   - **train**:
     - input: [[Task]]
-    - does: Calls the learner's`train()` method on it. Stores the model in **.params**.
+    - does: Calls the learner's`train()` method on it. Stores the model in **state**.
     - returns: NULL
-  - **params:**: trained model
+  - **state:**: trained model
   - **predict**:
     - input: [[Task]]
     - does: Calls the `predict()` method of the stored model.
@@ -70,31 +70,43 @@ This document contains a list of use-cases we want to contain.
   - **predict**:
     - input: [[Task]]
     - does: Calls the `predict()` method on the Graph.
-    - returns: NULL
+    - returns: Prediction
 
 ##### [[PipeOpSetTarget]]
 
   - **train**:
     - input: [[Task]]
-    - does: Set previous target col to hidden. Set new target variable.
+    - does: Set previous target col to hidden. Set new target variable according to hyperparameter.
     - returns: [[Task]]
-  - **params:**:
+  - **state:**: Nothing
   - **predict**:
     - input: [[Task]]
-    - does: Nothing
-    - returns: [™Task]]
+    - does: Make previous target hidden if present, set new target according to hyperparameter if present in the dataset
+    - returns: [[Task]]
 
 ##### [[PipeOpMultiClass2Binary]]
 
   - **train**:
     - input: [[Task]]
     - does: Produces multiple [[Task]]s, where y is the binarized version of original y.
-    - returns: List of [[Task]]s
-  - **params:**: Nothing
+    - returns: Multiple [[Task]]s
+  - **state:**: Nothing
   - **predict**:
     - input: [[Task]]
-    - does: Copy [[Task]] k-times
+    - does: Copy [[Task]] k-times, possibly copy ground-truth column
     - returns: List of [[Task]]s
+
+##### [[PipeOpPredictMultiClassFromBinary]]
+    
+  - **train**:
+    - input: NULL
+    - does: nothing
+    - returns: NULL
+  - **state:**: Nothing
+  - **predict**:
+    - input: Multiple binary predictions
+    - does: Create Multiclass prediction, possibly combine truth-columns as well
+    - returns: Single Prediction
 
 ##### [[PipeOpTrafoY]]
 
@@ -102,22 +114,35 @@ This document contains a list of use-cases we want to contain.
     - input: [[Task]]
     - does: Transforms target by fun.
     - returns: [[Task]]
-  - **params:**:
+  - **state:**: Nothing
   - **predict**:
-    - input: Prediction
-    - does: Transform prediction by fun
-    - returns: Prediction
+    - input: [[Task]]
+    - does: Transform prediction, if present, by fun
+    - returns: [[Task]]
+
+
+##### [[PipeOpTrafoPrediction]]
+
+  - **train**:
+    - input: NULL
+    - does: nothing
+    - returns: NULL
+  - **state:**: Nothing
+  - **predict**: 
+    - input: [[Prediction]]
+    - does: Transform prediction, (and if present, ground truth) by fun. This should be an inverse of PipeOpTrafoY. 
+    - returns: [[Prediction]]
 
 ##### [[PipeOpScale]]
 
   - **train**:
     - input: [[Task]]
-    - does: Scales [[Task]] to mean 0 and sd 1. Stores mean and sd into **.params**
+    - does: Scales [[Task]] to mean 0 and sd 1. Stores mean and sd into **.state**
     - returns: [[Task]]
-  - **params:**: mean, sd of all training data features.
+  - **state:**: mean, sd of all training data features.
   - **predict**:
     - input: [[Task]]
-    - does: scales input [[Task]] using **.params** slot.
+    - does: scales input [[Task]] using **.state** slot.
     - returns: [[Task]]
 
 ##### [[PipeOpNull]]
@@ -126,7 +151,7 @@ This document contains a list of use-cases we want to contain.
     - input: Anything
     - does: Nothing
     - returns: Input (Anything)
-    - **params:**: Nothing
+    - **state:**: Nothing
   - **predict**:
     - input: Anything
     - does: Nothing
@@ -135,24 +160,34 @@ This document contains a list of use-cases we want to contain.
 ##### [[PipeOpFeatureUnion]]
 
   - **train**:
-    - input: List of [[Task]]'s
-    - does: Cbinds features from all [[Task]]s and one target col.
+    - input: List of [[Task]]s or Predictions (as returned by PipeOpCV)
+    - does: Cbinds features / predictions from all [[Task]]s and one target col.
         (constraint: target cols and row ids all need to be the same,
         and same order).
     - returns: [[Task]]
-  - **params:**: Nothing
+  - **state:**: Nothing
   - **predict**:
-    - input: List of [[Task]]'s
+    - input: List of [[Task]]s or Predictions
     - does:  same as train (without targets, here we have to  do nothing).
     - returns: [[Task]]
 
-##### [[PipeOpBranch]]
+##### [[PipeOpChoice]]
 
   - **train**:
     - input: Anything
-    - does: Creates list [NULL, NULL, X, NULL]; where X is at position **selected**.
-    - returns: List of [[Task]] / NULLs
-  - **params:**: Nothing
+    - does: Creates list [NULL, NULL, X, NULL]; where X is at position of hyperparameter **selected**. selected may be
+      a discrete or an integer hyperparam.
+    - returns: List of ANY / NULLs
+  - **state:**: Nothing
+  - **predict**: Same as train.
+
+##### [[PipeOpUnchoice]]
+
+  - **train**:
+    - input: List of [NULL, NULL, ..., X, ..., NULL]: all but one entry are NULL.
+    - does: Select the non-null entry of input list.
+    - returns: Any
+  - **state:**: Nothing
   - **predict**: Same as train.
 
 ##### [[PipeOpDownsample]]
@@ -161,7 +196,7 @@ This document contains a list of use-cases we want to contain.
     - input: [[Task]]
     - does: Downsamples (samples rows with replacement) the input for a fraction of the original n.
     - returns: [[Task]]
-  - **params:**: Nothing
+  - **state:**: Nothing
   - **predict**:
     - input: [[Task]]
     - does: Nothing
@@ -176,7 +211,7 @@ This document contains a list of use-cases we want to contain.
   - **params:**: Nothing
   - **predict**:
     - input: List of Predictions
-    - does: Averages Predictions
+    - does: Averages Predictions, possibly average ground truths
     - returns: Prediction
 
 ##### [[PipeOpLearnerCV]]
@@ -184,13 +219,13 @@ This document contains a list of use-cases we want to contain.
   - **train**:
     - input: [[Task]]
     - does: 1. Trains models an different folds of data. Predicts on holdout splits.
-        		2. Trains a model on full data, saves model to **.params**.
+            2. Trains a model on full data, saves model to **.state**.
     - returns: Prediction
-  - **params:**: trained model
+  - **state:**: trained model
   - **predict**:
     - input: [[Task]]
-    - does: Predict with model from .params
-    - returns: Prediction
+    - does: Predict with model from .state
+    - returns: .state model prediction
 
 ##### [[PipeOpThreshold]]
 
@@ -198,11 +233,23 @@ This document contains a list of use-cases we want to contain.
     - input: Prediction
     - does: Optimizes the threshold for a given performance metric.
     - returns: Prediction
-  - **params:**: Optimal threshold
+  - **state:**: Optimal threshold
   - **predict**:
     - input: Prediction
-    - does: Binarizes the prediction using **.params**
+    - does: Binarizes the prediction using **.states**
     - returns: Prediction
+
+##### [[PipeOpFilter]]
+
+  - **train**:
+    - input: [[Task]]
+    - does: Filters features according to mlr3featsel. Featsel class is given as ParamVal. Selected features saved in 'state'
+    - returns: [[Task]]
+  - **state:**: Selected features
+  - **predict**:
+    - input: [[Task]]
+    - does: Subset features as given by 
+    - returns: [[Task]]
 
 
 
