@@ -7,8 +7,8 @@
 #' possible paths.
 #'
 #' @section Methods
-#' * `new(options = 1)` \cr
-#'   (`integer(1)` | `character`) -> [`PipeOpChoice`]
+#' * `new(options = 1, id = "choice")` \cr
+#'   (`integer(1)` | `character`), `character(1)` -> [`PipeOpChoice`]
 #'
 #' @section Parameters:
 #' * `selection`: integer or discrete
@@ -31,6 +31,46 @@
 #'
 #' @family PipeOp
 #' @export
+PipeOpChoice = R6::R6Class("PipeOpChoice",
+  inherit = PipeOp,
+  public = list(
+    initialize = function(options, id = "choice") {
+      assert(
+        check_int(options, len = 1, any.missing = FALSE, lower = 1),
+        check_character(options, min.len = 1, any.missing = FALSE)
+      )
+      if (is.numeric(options)) {
+        options = round(options)
+        param = ParamInt$new("selection", lower = 1, upper = options, default = 1)
+        outnum = options
+      } else {
+        param = ParamFct$new("selection", values = options, default = options[1])
+        outnum = length(options)
+      }
+      super$initialize(id, ParamSet$new(params = list(param)))
+      private$.intype = list("any")
+      private$.outtype = rep(list("any"), outnum)
+      private$.defaultreturn = rep(list(NULL), outnum)
+      if (is.character(options)) {
+        names(private$.outtype) = options
+        names(private$.defaultreturn) = options
+      }
+    },
+    train = function(input) {
+      ret = private$.defaultreturn
+      ret[[self$param_vals[[1]]]] = input[[1]]
+      ret
+    },
+    predict = function(input) {
+      ret = private$.defaultreturn
+      ret[[self$param_vals[[1]]]] = input[[1]]
+      ret
+    }
+  ),
+  private = list(
+    .defaultreturn = NULL  # list of NULLs with the correct length and names
+  )
+)
 
 #' @title PipeOpUnchoice
 #' @format [R6Class] PipeOpUnchoice
@@ -68,7 +108,10 @@
 #'   unique names.
 #' @param `.graphs` ([list of Graph]):
 #'   Additionally to the graphs given in `...`, a (posibly named) list of graphs can
-#'   be given.
+#'   be given. Default is `NULL`.
+#' @param `.id` ([character(1)]):
+#'   Optional id prefix to prepend to [`PipeOpChoice`] and [`PipeOpUnchoice`] id. Their
+#'   resulting IDs will be `"choice"` and `"unchoice"`, prefixed by `.id`. Default is `""`.
 #' @examples
 #' grultiplex(pca = PipeOpPCA$new(), nop = PipeOpNULL$new())
 #' # gives the same as
@@ -77,7 +120,7 @@
 #' choices = c("pca", "nothing")
 #' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
 #' @export
-grultiplex <- function(..., .graph = NULL) {
+grultiplex <- function(..., .graph = NULL, .id = "") {
   assert_list(.graphs, nullok = TRUE)
   graphs <- c(list(...), .graph)
   assert(
