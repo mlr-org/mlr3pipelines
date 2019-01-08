@@ -14,10 +14,7 @@ test_that("PipeOpBranch - basic properties", {
 
 test_that("PipeOpBranch - train and predict", {
   # Define PipeOp's
-  branch = PipeOpBranch$new(2)
   t1 = mlr_tasks$get("iris")
-  t2 = mlr_tasks$get("pima")
-
 
   branch = PipeOpBranch$new(2)
   tout = branch$train(list(t1))

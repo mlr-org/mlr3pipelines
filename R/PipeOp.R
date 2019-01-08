@@ -61,6 +61,7 @@ PipeOp = R6::R6Class("PipeOp",
     packages = character(0),
     state = NULL,
     result = NULL,
+    # FIXME: Enforce len(train_intypes) == len(predict_intypes), same outtypes
     train_intypes = "any",
     train_outtypes = "any",
     predict_intypes = "any",

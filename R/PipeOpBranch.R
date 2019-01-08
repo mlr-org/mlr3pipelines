@@ -59,12 +59,14 @@ PipeOpBranch = R6::R6Class("PipeOpBranch",
       }
     },
     train = function(input) {
+      assert_list(input, len = private$.outnum)
       self$state = list()
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
       return(ret)
     },
     predict = function(input) {
+      assert_list(input, len = private$.outnum)
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
       return(ret)
@@ -110,34 +112,43 @@ mlr_pipeops$add("PipeOpBranch", PipeOpBranch)
 PipeOpUnbranch = R6::R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "unchoice") {
+    initialize = function(options, id = "unbranch") {
       assert(
         check_int(options, lower = 1),
         check_character(options, min.len = 1, any.missing = FALSE)
       )
       if (is.numeric(options)) {
         options = round(options)
-        outnum = options
+        innum = options
       } else {
-        outnum = length(options)
+        innum = length(options)
       }
       super$initialize(id)
-      private$.outtype = list("any")
-      private$.intype = rep(list("any"), outnum)
-      if (is.character(options)) {
-        names(private$.intype) = options
-      }
+      private$.innum = innum
+      self$train_intypes = rep("any", innum)
+      self$train_outtypes = "any"
+      self$predict_intypes = rep("any", innum)
+      self$predict_outtypes = "any"
     },
     train = function(input) {
+      assert_list(input, len = private$.innum)
+      self$state = list()
       nonnull = Filter(Negate(is.null), input)
       assert_list(nonnull, any.missing = FALSE, len = 1)
-      nonnull
+      return(nonnull)
     },
     predict = function(input) {
+      assert_list(input, len = private$.innum)
       nonnull = Filter(Negate(is.null), input)
       assert_list(nonnull, any.missing = FALSE, len = 1)
-      nonnull
+      return(nonnull)
     }
+  ),
+  private = list(
+   .innum = NULL
+  ),
+  active = list(
+    innum = function() private$.innum
   )
 )
 
