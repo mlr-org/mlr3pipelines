@@ -18,10 +18,12 @@ PipeOpNULL = R6Class("PipeOpNULL",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "OpNULL") {
+    initialize = function(id = "PipeOpNULL") {
       super$initialize(id)
-      private$.intype = list("any")
-      private$.outtype = list("any")
+      train_intypes = "any"
+      train_outtypes = "any"
+      predict_intypes = "any"
+      predict_outtypes = "any"
     },
 
     train = function(inputs) {
@@ -32,3 +34,6 @@ PipeOpNULL = R6Class("PipeOpNULL",
     predict = identity
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpNULL", PipeOpNULL)

@@ -8,7 +8,7 @@
 #' `train()` and `predict`, that expect the [data.table] containing only
 #' the features from a [Task], and automatically
 #' reconstruct the appropriate Task from a returned [data.table].
-#' We thus enforce: [dt] -> [dt].
+#' We thus enforce: [data.table] -> [data.table].
 #' For examples see [PipeOpPCA] or [PipeOpScale].
 #'
 #' The underlying operation must not change row order or number.
@@ -23,8 +23,10 @@ PipeOpDT = R6Class("PipeOpDT",
   public = list(
     initialize = function(id = "PipeOpDT", ps = ParamSet$new()) {
       super$initialize(id, ps)
-      private$.intype = list("any")
-      private$.outtype = list("any")
+      self$train_intypes = "Task"
+      self$train_outtypes = "Task"
+      self$predict_intypes = "Task"
+      self$predict_outtypes = "Task"
     },
 
     train = function(inputs) {

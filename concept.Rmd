@@ -27,35 +27,35 @@ Usage:
 - param_set [ParamSet]
 - param_vals [named list]
 - state [any]
-- result [any]
-- train(input) : [any] -> [any]
-- predict(input) : [any] -> [any]
-- packages [character]
-- `.intype`: [list of something]
-- `.outtype`: [list of something]
-- `.takeslist`: [logical(1)]
-- `.returnslist`: [logical(1)]
-
+- result [any]  # debug only
+- train(input) : [list of any] -> [list of any]
+- predict(input) : [list of any] -> [list of any]
+- packages : [character]
+- `train_intypes` : [character]
+- `train_outtypes` : [character]
+- `predict_intypes` : [character]
+- `predict_outtypes` : [character]
+- `is_trained`: [logical(1)]
 
 Details:
   `id`: AB that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
   `param_set`: The set of all exposed parameters of the PipeOp.
-  `param_vals`: A named list of parameter settings where all setting must come from `param_set`.
+  `param_vals`: (AB r/w, automatically checks feasibility) checks A named list of parameter settings where all setting must come from `param_set`.
   `state`: The object of learned parameters, obtained in the training step, and applied in the
-    predict step. #FIXME: what if the this is NULL? then the PO is untrained! we need a special "empty" object for POs which do not learn anything
+    predict step. If a PO creates an "empty" state during training this should be set to `list()`
   `new`: Baseclass constructor, called by derived classes.
   `train`: Function that is responsible to train on `input`, transform it to output and store the learned `params`.
     If the PipeOp is already trained, already present `params` are overwritten.
   `predict`: Function that is responsible to predict on `input`, and transform it to output by applying the learned `params`.
     If `is_trained = FALSE` the function cannot be applied.
   `result`: A slot to store the result of either the `train` or the `predict` step, after it was
-    applied.
-  # FIXME: this is a bit weird. Is this set by the pipeop? by the training of the graph? when do we delete this?
-  `is_trained`: Is the PipeOp currently trained?
-  `.intype`: list of input types to accept
-  `.outtype`: list of output types that are returned
-  `.takeslist`: `TRUE` if input of `train` / `predict` is a list, `FALSE` if it is a singular value. If this is `FALSE`, `length(.intype)` must be 1
-  `.returnslist`: `TRUE` if output of `train` / `predict` is a list, `FALSE` if it is a singular value. If this is `FALSE`, `length(.outtype)` must be 1
+    applied. Set by the framework, (planned: depending on debug option)
+  `is_trained`: (AB, checks `is.null(state)`) Is the PipeOp currently trained?
+  `train_intypes`: Types of the inputs expected during training. Can be `any` if the PipeOp does not require a specific type. Index specifies the position in the input.
+  `train_outtypes`: Types of the inputs expected during training. Can be `any` if the PipeOp does not require a specific type.
+  `predict_intypes`: Types of the inputs expected during prediction. Can be `any` if the PipeOp does not require a specific type.
+  `predict_outtypes`: Types of the inputs expected during prediction. Can be `any` if the PipeOp does not require a specific type.
+
 
 ## class NodeChannel
 
@@ -63,16 +63,21 @@ Description
 Represents an input / output slot of a node. A node can have multiple of these slots for input / output, they may be named and / or numbered.
 
 Usage:
-- `name`: [numeric(1) | character(1)]
 - `node`: [GraphNode]
+- `channel`: [numeric(1) | character(1)]
 - `direction`: [character(1)] `"in"` or `"out"`
 
 Details:
-- `name`: Indexes the connection. May be a `character(1)` or a `numeric(1)`.
 - `node`: The GraphNode whose input / output is considered.
+- `channel`: Indexes the connection. May be a `character(1)` or a `numeric(1)`.
 - `direction` must be `"in"` if this is a channel representing input values of a `PipeOp` or `"out"` if this represents an item of the output list given by that `PipeOp`.
 
 ## class GraphNode
+`node$next_nodes = list(node_a, node_b, node_c)`
+
+
+`node$next_nodes = list([node_a, eingang 4543], [node_b, eingang 34345 von node_b], [node_c, eingang 2])`
+
 
 Description:
 A GraphNode is a node of a (doubly connected) directed acyclic multigraph, where each node carries as payload a single PipeOp,

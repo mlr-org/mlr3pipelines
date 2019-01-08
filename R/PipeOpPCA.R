@@ -33,12 +33,15 @@ PipeOpPCA = R6Class("PipeOpPCA",
         scale. = self$param_vals$scale.,
         rank.  = self$param_vals$rank.)
       self$state = pcr
-      return(pcr$x)
+      self$state$x = NULL
+      pcr$x
     },
 
     predict_dt = function(newdt) {
-      rotated = predict(self$state, as.matrix(newdt))
-      return(rotated)
+      predict(self$state, as.matrix(newdt))
     }
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpPCA", PipeOpPCA)
