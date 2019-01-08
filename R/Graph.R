@@ -1,20 +1,23 @@
 # TODO:
 # * print()
-# * ids(sorted = FALSE)
-# * train()
-# * predict()
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
     channels = NULL,
     initialize = function() {
       self$pipeops = list()
-      self$channels = data.table(
-        src_id = character(0L),
-        src_channel = character(0L),
-        dst_id = character(0L),
-        dst_channel = character(0L)
-      )
+      self$channels = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
+    },
+
+    ids = function(sorted = FALSE) {
+      if (length(self$pipeops) == 0L)
+        return(character())
+      if (!sorted)
+        return(names(self$pipeops))
+
+      tmp = self$channels[, list(parents = list(src_id)), by = list(id = dst_id)]
+      tmp = rbind(tmp, data.table(id = self$lhs, parents = list(character(0L))))
+      topo_sort(tmp)$id
     },
 
     add_pipeop = function(op) {
@@ -64,34 +67,12 @@ Graph = R6Class("Graph",
       self
     },
 
-    # trains or predicts, depending on stage
-    fire = function(input, stage) {
-      assert_list(input)
-      assert_choice(stage, c("train", "predict"))
+    train = function(inputs) {
+      graph_fire(self, private, inputs, "train")
+    },
 
-      # add virtual channel to "__init__" in private copy of "channels"
-      channels = copy(self$channels)
-      channels = rbind(channels, data.table(src_id = "__init__", src_channel = "1",
-        dst_id = self$lhs, dst_channel = "1"))
-
-      # add new column to store results and store 'input' as result of virtual operator "__init__"
-      channels$result = list()
-      channels[src_id == "__init__", result := list(input)]
-
-      # topo-sort the pipeop ids
-      tmp = channels[, list(parents = list(src_id)), by = list(id = dst_id)]
-      tmp = rbind(tmp, data.table(id = "__init__", parents = list(character(0L))))
-      ids = setdiff(topo_sort(tmp)$id, "__init__")
-
-      # walk over ids, learning each operator
-      for (id in ids) {
-        op = self$pipeops[[id]]
-        input = channels[dst_id == op$id, "result"][[1L]]
-        tmp = if (stage == "train") op$train(input) else op$predict(input)
-        channels[src_id == op$id, result := list(tmp)]
-      }
-
-      tmp
+    predict = function(inputs) {
+      graph_fire(self, private, inputs, "predict")
     }
   ),
 
@@ -102,7 +83,12 @@ Graph = R6Class("Graph",
 
     rhs = function() { # return OP?
       setdiff(names(self$pipeops), unique(self$channels$src_id))
+    },
+
+    packages = function() {
+      unique(unlist(map(self$pipeops, "packages")))
     }
+
   ),
 
   private = list(
@@ -115,3 +101,31 @@ Graph = R6Class("Graph",
     }
   )
 )
+
+
+graph_fire = function(self, private, input, stage) {
+  assert_list(input)
+  assert_choice(stage, c("train", "predict"))
+
+  # add virtual channel to "__init__" in private copy of "channels"
+  channels = copy(self$channels)
+  channels = rbind(channels, data.table(src_id = "__init__", src_channel = "1",
+      dst_id = self$lhs, dst_channel = "1"))
+
+  # add new column to store results and store 'input' as result of virtual operator "__init__"
+  channels$result = list()
+  channels[src_id == "__init__", result := list(input)]
+
+  # get the topo-sorted the pipeop ids
+  ids = setdiff(self$ids(sorted = TRUE), "__init__")
+
+  # walk over ids, learning each operator
+  for (id in ids) {
+    op = self$pipeops[[id]]
+    input = channels[dst_id == op$id, "result"][[1L]]
+    tmp = if (stage == "train") op$train(input) else op$predict(input)
+    channels[src_id == op$id, result := list(tmp)]
+  }
+
+  tmp
+}

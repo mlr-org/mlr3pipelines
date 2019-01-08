@@ -1,7 +1,8 @@
-context("graphdt")
+context("graph")
 
 test_that("linear graph", {
   g = Graph$new()
+  g$ids(sorted = TRUE)
 
   op_ds = PipeOpDownsample$new()
   op_pca = PipeOpPCA$new()
@@ -15,11 +16,9 @@ test_that("linear graph", {
   expect_graph(g)
 
   input = mlr_tasks$mget("iris")
-  x = g$fire(input, "train")
+  x = g$train(input)
   expect_task(x[[1]])
 
-  out = g$fire(input, "predict")
+  out = g$predict(input)
   expect_task(x[[1]])
 })
-
-graphs = list(g, g)
