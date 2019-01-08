@@ -6,81 +6,14 @@ options(error=recover)
 devtools::document("mlr3pipelines")
 
 devtools::load_all("mlr3pipelines")
-testthat::test("mlr3pipelines")
 testthat::test_package("mlr3pipelines")
 
-BasicPO = R6::R6Class("BasicPO",
-  inherit = PipeOp,
-  public = list(
-      train = function(...) print("hi"),
-      predict = function(...) print("yo"),
-      initialize = function(...) {
-        super$initialize(...)
-        private$.intype = list("data.frame")
-        private$.outtype = list("data.frame")
-      }
-  )
-)
-BasicPOAny = R6::R6Class("BasicPOAny",
-  inherit = PipeOp,
-  public = list(
-      nin = NULL,
-      nout = NULL,
-      train = function(input) {
-        catf("Training %s with input %s", self$id, deparse(input))
-        self$state = input
-        iin = input[[1]]
-        as.list(iin + seq_len(self$nout))
-      },
-      predict = function(input) {
-        catf("Predicting %s with input %s and state %s", self$id, deparse(input), deparse(self$state))
-        iin = input[[1]]
-        as.list(iin + seq_len(self$nout))
-      },
-      initialize = function(nin, nout, id, ...) {
-        p = ParamInt$new(id = "par", lower = 0, upper = 10, default = 0)
-        self$nin = nin
-        self$nout = nout
-        super$initialize(id, ParamSet$new(list(p)), list(...))
-        private$.intype = rep(list("data.frame"), nin)
-        private$.outtype = rep(list("data.table"), nout)
-      }
-  )
-)
-BasicPOAnyNamed = R6::R6Class("BasicPOAnyNamed",
-  inherit = PipeOp,
-  public = list(
-      train = function(...) print("hi"),
-      predict = function(...) print("yo"),
-      initialize = function(nin, nout, ...) {
-        super$initialize(...)
-        private$.intype = rep(list("data.frame"), nin)
-        names(private$.intype) = letters[seq_along(private$.intype)]
-        private$.outtype = rep(list("data.table"), nout)
-        names(private$.outtype) = letters[seq_along(private$.outtype)]
-      }
-  )
-)
 gr = Graph$new()
 gr2 = Graph$new()
 gr3 = Graph$new()
 
 
 pipeop = BasicPO$new("testa")
-
-gr = Graph$new()
-gr$add_node(BasicPO$new("testa"))
-gr$add_node(BasicPO$new("testb"))
-gr$add_node(BasicPO$new("testc"))
-gr[["testa"]]$next_node_channels[[1]] = gr[["testb"]]$in_channels[[1]]
-gr$plot()
-
-
-
-gr$add_node(BasicPO$new("testa2"))
-gr$add_node(BasicPO$new("testb2"))
-gr$add_node(BasicPO$new("testc2"))
-
 
 gr2$add_node(BasicPOAny$new(1, 2, "testad"))
 gr2$add_node(BasicPOAny$new(1, 2, "testbd"))
@@ -125,45 +58,8 @@ gr3$predict(2)
 gr3[["testyy"]]$prev_node_channels['a'] = list(NULL)
 gr3[["testxx"]]$next_node_channels[[1]] = gr3[["testyy"]]$in_channels$a
 
-gr3$plot()
-
-
-
-gr2$plot()
-gr3$plot()
-
-
-
-gr$plot()
-
 gr2[["testad"]]$graph
 gr2[["testbd"]]$graph
-
-
-
-gr$plot()
-gr2$plot()
-
-
-
-gr[["testb"]]$out_channels$pca
-
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testa"]]$out_channels$pca
-
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testa"]]$out_channels[[1]]
-gr[["testb"]]$prev_node_channels[[2]] = gr[["testc"]]$out_channels[[1]]  # add connection
-
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testa"]]$out_channels[[1]]
-gr[["testb"]]$prev_node_channels[[1]] = gr[["testc"]]$out_channels[[1]]  # replace connection
-
-
-gr$plot()
-
-gr[["pca"]]$prev_node_channels[[1]] = gr[["mplx"]]$out_channels[["pca"]]
-gr[["ica"]]$prev_node_channels[[1]] = gr[["mplx"]]$out_channels[["ica"]]
-
-
-
 
 bpo = BasicPO$new("testid")
 bpo2 = BasicPO$new("testid2")

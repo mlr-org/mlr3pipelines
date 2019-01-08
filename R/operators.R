@@ -7,8 +7,7 @@
 
 #' @export
 `%>>%.PipeOp` = function(lhs, rhs) {
-  graph = Graph$new()
-  graph$add_node(lhs$clone(deep = TRUE))
+  graph = Graph$new(lhs$clone(deep = TRUE))
   `%>>%`(graph, rhs)
 }
 
@@ -31,8 +30,7 @@
     rhs = rhs$pipeop
   }
   if (inherits(rhs, "PipeOp")) {
-    graph = Graph$new()
-    graph$add_node(rhs$clone(deep = TRUE))
+    graph = Graph$new(rhs$clone(deep = TRUE))
     rhs = graph
   }
   if (!inherits(rhs, "Graph")) {
@@ -46,7 +44,7 @@
   returngraph$extend(lhs)
   returngraph$extend(rhs)
 
-  for (idx in seq_along(lhs$out_channels)) {
+  for (idx in rev(seq_along(lhs$out_channels))) {
     fromchan = lhs$out_channels[[idx]]
     tochan = rhs$in_channels[[idx]]
     newtochan = returngraph[[tochan$node$pipeop$id]]$in_channels[[tochan$channel_id]]

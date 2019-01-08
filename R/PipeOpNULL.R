@@ -18,21 +18,20 @@ PipeOpNULL = R6Class("PipeOpNULL",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "OpNULL") {
+    initialize = function(id = "PipeOpNULL") {
       super$initialize(id)
-      private$.intype = list("any")
-      private$.outtype = list("any")
+      train_intypes = "any"
+      train_outtypes = "any"
+      predict_intypes = "any"
+      predict_outtypes = "any"
     },
 
     train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
       self$state = list()
       inputs
     },
 
-    predict = function(inputs) {
-      return(inputs)
-    }
+    predict = identity
   )
 )
 

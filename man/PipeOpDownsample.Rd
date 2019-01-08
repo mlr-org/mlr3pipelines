@@ -9,7 +9,7 @@
 PipeOpDownsample
 }
 \description{
-Subsamples a \link{Task} to include only a fraction of the rows.
+Subsamples a \link{Task} to use only a fraction of the rows.
 }
 \section{Usage}{
 
@@ -23,15 +23,16 @@ Inherits from \link{PipeOp}
 
 \itemize{
 \item \code{perc}: \code{numeric(1)} Percentage of rows in the task to keep.
-\item \code{stratify}: \code{logical(1)} Should the subsamples be stratified.
+\item \code{stratify}: \code{logical(1)} Should the subsamples be stratified by target?
 }
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpFeatureUnion}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOp}}
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}},
+  \code{\link{PipeOp}}
 }
 \concept{PipeOp}
 \keyword{datasets}

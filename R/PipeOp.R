@@ -21,7 +21,7 @@
 #'   Packages required for the pipeOp.
 #' * `param_set`                  :: [ParamSet]
 #'   The set of all exposed parameters of the PipeOp.
-#' * `par_vals`                   :: named [list]
+#' * `param_vals`                   :: named [list]
 #'   Parameter settings where all setting must come from `param_set`, named with param IDs.
 #' * `state`                      :: [anys]
 #'   The object of learned parameters, obtained in the training step, and applied in the predict step.
@@ -29,10 +29,14 @@
 #'   Is the PipeOp currently trained?
 #' * `result`                     :: any
 #'   A slot to store the result of either the `train` or the `predict` step, after it was
-#' * `intype`                     :: [list]
-#'   Input types the pipeOp accepts. Indexed by channel_id. Read-only.
-#' * `outtype`                    :: [list]
-#'   Output types that are returned by the pipeOp. Indexed by channel_id. Read-only.
+#' * `train_intypes`                       :: [character]
+#'   Input types the PipeOp accepts during training. Read-only.
+#' * `train_outtypes`                      :: [character]
+#'   Output types that are returned by the PipeOp during training. Read-only.
+#' * `predict_intypes`                     :: [character]
+#'   Input types the PipeOp accepts during prediction. Read-only.
+#' * `predict_outtypes`                    :: [character]
+#'   Output types that are returned by the PipeOp. Read-only.
 #'
 #' @section Methods:
 #' * new(id, params)` \cr
@@ -57,12 +61,16 @@ PipeOp = R6::R6Class("PipeOp",
     packages = character(0),
     state = NULL,
     result = NULL,
+    train_intypes = "any",
+    train_outtypes = "any",
+    predict_intypes = "any",
+    predict_outtypes = "any",
+
     initialize = function(id, param_set = ParamSet$new(), param_vals = NULL) {
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
-      private$.param_vals = param_set$data$default
-      names(private$.param_vals) = param_set$ids
+      private$.param_vals = param_set$defaults
       private$.param_vals = insert_named(private$.param_vals, param_vals)
       if (!param_set$test(private$.param_vals)) {
         stop("Parameters out of bounds")
@@ -112,8 +120,6 @@ PipeOp = R6::R6Class("PipeOp",
   private = list(
     .id = NULL,
     .param_set = NULL,
-    .param_vals = NULL,
-    .intype = NULL,
-    .outtype = NULL
+    .param_vals = NULL
   )
 )

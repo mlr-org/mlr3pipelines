@@ -8,8 +8,10 @@
 #' `train()` and `predict`, that expect the [data.table] containing only
 #' the features from a [Task], and automatically
 #' reconstruct the appropriate Task from a returned [data.table].
-#' We thus enforce: [dt] -> [dt].
+#' We thus enforce: [data.table] -> [data.table].
 #' For examples see [PipeOpPCA] or [PipeOpScale].
+#'
+#' The underlying operation must not change row order or number.
 #'
 #' @name PipeOpDT
 #' @family PipeOp
@@ -21,8 +23,10 @@ PipeOpDT = R6Class("PipeOpDT",
   public = list(
     initialize = function(id = "PipeOpDT", ps = ParamSet$new()) {
       super$initialize(id, ps)
-      private$.intype = list("any")
-      private$.outtype = list("any")
+      self$train_intypes = "Task"
+      self$train_outtypes = "Task"
+      self$predict_intypes = "Task"
+      self$predict_outtypes = "Task"
     },
 
     train = function(inputs) {
@@ -38,35 +42,34 @@ PipeOpDT = R6Class("PipeOpDT",
       dt = as.data.table(self$train_dt(d[, ..fn]))
       assert_true(nrow(dt) == nrow(d))
 
-      # Drop old features, add new features
-      d[, (fn) := NULL]
-      d[, (colnames(dt)) := dt]
-      d[, "..row_id" := seq_len(nrow(d))]
-
-      db = DataBackendDataTable$new(d, primary_key = task$backend$primary_key)
-      tn = task$target_names
-
-      # Should be:
-      list(TaskClassif$new(id = task$id, backend = db, target = tn))
+      list(task_update_data(task, dt))
     },
 
-    predict = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
+    predict = function(inputs) {
       assert_function(self$predict_dt, args = "newdt")
-      task = self$inputs[[1L]]
-      fn = task$feature_names
-      d = task$data()
+      assert(
+          check_list(inputs, len = 1L, type = "Task"),
+          check_list(inputs, len = 1L, type = "data.frame")
+      )
+      if (is.data.frame(inputs[[1]])) {
+        indata = as.data.table(inputs[[1]])
+      } else {
+        task = inputs[[1L]]
+        fn = task$feature_names
+        indata = task$data()[, ..fn]
+      }
 
       # Call train_dt function on features
-      dt = as.data.table(self$predict_dt(d[, ..fn]))
-      assert_true(nrow(dt) == nrow(d))
-
+      dt = as.data.table(self$predict_dt(indata))
+      assert_true(nrow(dt) == nrow(indata))
+      if (is.data.frame(inputs[[1]])) {
+        if (!is.data.table(inputs[[1]])) {
+          dt = as.data.frame(dt)
+        }
+        return(list(dt))
+      }
       # Drop old features, add new features
-      d[, (fn) := NULL]
-      d[, (colnames(dt)) := dt]
-      d[, "..row_id" := seq_len(nrow(d))]
-
-      list(task$overwrite(d))
+      list(task_update_data(task, dt))
     }
   )
 )

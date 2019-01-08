@@ -46,7 +46,7 @@ Active binding that allows to return and set the id of the PipeOps. Ids are user
 Packages required for the pipeOp.
 \item \code{param_set}                  :: \link{ParamSet}
 The set of all exposed parameters of the PipeOp.
-\item \code{par_vals}                   :: named \link{list}
+\item \code{param_vals}                   :: named \link{list}
 Parameter settings where all setting must come from \code{param_set}, named with param IDs.
 \item \code{state}                      :: \link{anys}
 The object of learned parameters, obtained in the training step, and applied in the predict step.
@@ -54,10 +54,14 @@ The object of learned parameters, obtained in the training step, and applied in 
 Is the PipeOp currently trained?
 \item \code{result}                     :: any
 A slot to store the result of either the \code{train} or the \code{predict} step, after it was
-\item \code{intype}                     :: \link{list}
-Input types the pipeOp accepts. Indexed by channel_id. Read-only.
-\item \code{outtype}                    :: \link{list}
-Output types that are returned by the pipeOp. Indexed by channel_id. Read-only.
+\item \code{train_intypes}                       :: \link{character}
+Input types the PipeOp accepts during training. Read-only.
+\item \code{train_outtypes}                      :: \link{character}
+Output types that are returned by the PipeOp during training. Read-only.
+\item \code{predict_intypes}                     :: \link{character}
+Input types the PipeOp accepts during prediction. Read-only.
+\item \code{predict_outtypes}                    :: \link{character}
+Output types that are returned by the PipeOp. Read-only.
 }
 }
 
@@ -85,17 +89,17 @@ If the PipeOp is already trained, already present \code{params} are overwritten.
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}}
 
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}}
 }
 \concept{PipeOp}
 \keyword{datasets}
