@@ -20,9 +20,9 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   public = list(
     initialize = function(innum, id = "featureunion") {
       super$initialize(id)
-      self$train_intypes = rep("Task", inum)
+      self$train_intypes = rep("Task", innum)
       self$train_outtypes = "Task"
-      self$predict_intypes = rep("Task", inum)
+      self$predict_intypes = rep("Task", innum)
       self$predict_outtypes = "Task"
       private$.innum = innum
     },

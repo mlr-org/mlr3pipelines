@@ -5,7 +5,8 @@ test_that("featureunion - basic properties", {
   # Test basic properties
   op = PipeOpFeatureUnion$new(3)
   test_basic_pipeop_props(op)
-  expect_true(length(op$intype) == 3L)
+  expect_true(length(op$train_intypes) == 3L)
+  expect_true(length(op$predict_intypes) == 3L)
 })
 
 
