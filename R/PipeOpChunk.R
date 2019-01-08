@@ -22,13 +22,16 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "chunk") {
+      assert_integerish(outnum)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)
       ))
       super$initialize(id, ps)
-      private$.intype = list("Task")
-      private$.outtype = rep(list("Task"), outnum)
+      self$train_intypes = "Task"
+      self$train_outtypes = rep("Task", outnum)
+      self$predict_intypes = "Task"
+      self$predict_outtypes = rep("Task", outnum)
       private$.outnum = outnum
     },
     train = function(input) {
@@ -58,3 +61,6 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
     outnum = function() private$.outnum
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpChunk", PipeOpChunk)

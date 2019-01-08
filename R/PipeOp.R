@@ -29,10 +29,14 @@
 #'   Is the PipeOp currently trained?
 #' * `result`                     :: any
 #'   A slot to store the result of either the `train` or the `predict` step, after it was
-#' * `intype`                     :: [list]
-#'   Input types the pipeOp accepts. Indexed by channel_id. Read-only.
-#' * `outtype`                    :: [list]
-#'   Output types that are returned by the pipeOp. Indexed by channel_id. Read-only.
+#' * `train_intypes`                       :: [character]
+#'   Input types the PipeOp accepts during training. Read-only.
+#' * `train_outtypes`                      :: [character]
+#'   Output types that are returned by the PipeOp during training. Read-only.
+#' * `predict_intypes`                     :: [character]
+#'   Input types the PipeOp accepts during prediction. Read-only.
+#' * `predict_outtypes`                    :: [character]
+#'   Output types that are returned by the PipeOp. Read-only.
 #'
 #' @section Methods:
 #' * new(id, params)` \cr
@@ -57,6 +61,11 @@ PipeOp = R6::R6Class("PipeOp",
     packages = character(0),
     state = NULL,
     result = NULL,
+    train_intypes = "any",
+    train_outtypes = "any",
+    predict_intypes = "any",
+    predict_outtypes = "any",
+
     initialize = function(id, param_set = ParamSet$new(), param_vals = NULL) {
       private$.id = id
       private$.param_set = param_set
@@ -111,8 +120,6 @@ PipeOp = R6::R6Class("PipeOp",
   private = list(
     .id = NULL,
     .param_set = NULL,
-    .param_vals = NULL,
-    .intype = NULL,
-    .outtype = NULL
+    .param_vals = NULL
   )
 )

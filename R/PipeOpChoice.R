@@ -1,10 +1,8 @@
-
 #' @title PipeOpChoice
 #' @format [R6Class] PipeOpChoice
 #'
 #' @description
-#' This is one choice PipeOp! Used for multiplexing between different
-#' possible paths.
+#' This pipeop is used for multiplexing between different possible paths.
 #'
 #' @section Methods:
 #' * `new(options = 1, id = "choice")` \cr
@@ -48,8 +46,10 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
         outnum = length(options)
       }
       super$initialize(id, ParamSet$new(params = list(param)))
-      private$.intype = list("any")
-      private$.outtype = rep(list("any"), outnum)
+      self$train_intypes = "any"
+      self$train_outtypes = rep("any", outnum)
+      self$predict_intypes = "any"
+      self$predict_outtypes = rep("any", outnum)
       private$.defaultreturn = rep(list(NULL), outnum)
       if (is.character(options)) {
         names(private$.outtype) = options
@@ -71,6 +71,10 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
     .defaultreturn = NULL  # list of NULLs with the correct length and names
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpChoice", PipeOpChoice)
+
 
 #' @title PipeOpUnchoice
 #' @format [R6Class] PipeOpUnchoice
@@ -129,6 +133,9 @@ PipeOpUnchoice = R6::R6Class("PipeOpUnchoice",
     }
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpUnchoice", PipeOpUnchoice)
 
 #' @title grultiplex
 #'

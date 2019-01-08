@@ -19,8 +19,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       assert_learner(learner)
       self$learner = learner
       super$initialize(learner$id)
-      private$.intype = list("data.frame")
-      private$.outtype = list("model")
+      self$train_intypes = "Task"
+      self$train_outtypes = "any"
+      self$predict_intypes = "Task"
+      self$predict_outtypes = "Prediction"
     },
 
     train = function(inputs) {
@@ -57,4 +59,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpLearner", PipeOpLearner)
 

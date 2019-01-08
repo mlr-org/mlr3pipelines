@@ -9,8 +9,7 @@
 PipeOpChoice
 }
 \description{
-This is one choice PipeOp! Used for multiplexing between different
-possible paths.
+This pipeop is used for multiplexing between different possible paths.
 }
 \section{Methods}{
 

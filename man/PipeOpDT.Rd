@@ -15,7 +15,7 @@ Allows us to specify functions  \code{train_dt()} and \code{predict_dt} instead 
 \code{train()} and \code{predict}, that expect the \link{data.table} containing only
 the features from a \link{Task}, and automatically
 reconstruct the appropriate Task from a returned \link{data.table}.
-We thus enforce: \link{dt} -> \link{dt}.
+We thus enforce: \link{data.table} -> \link{data.table}.
 For examples see \link{PipeOpPCA} or \link{PipeOpScale}.
 
 The underlying operation must not change row order or number.

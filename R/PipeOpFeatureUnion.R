@@ -19,8 +19,10 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
   public = list(
     initialize = function(innum, id = "featureunion") {
-      private$.intype = rep(list("any"), innum)
-      private$.outtype = list("any")
+      self$train_intypes = rep("Task", inum)
+      self$train_outtypes = "Task"
+      self$predict_intypes = rep("Task", inum)
+      self$predict_outtypes = "Task"
       super$initialize(id)
     },
 
@@ -41,7 +43,12 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpFeatureUnion", PipeOpFeatureUnion)
+
+
 cbind_tasks = function(inputs) {
+  # FIXME: I think we should cbind the DataBackends instead.
   inputs = Filter(Negate(is.null), inputs)
   ## check if all target_names are equal
   is_target_equal = length(unique(vapply(

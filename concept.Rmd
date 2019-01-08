@@ -30,9 +30,11 @@ Usage:
 - result [any]  # debug only
 - train(input) : [list of any] -> [list of any]
 - predict(input) : [list of any] -> [list of any]
-- packages [character]
-- `.intype`: [list of $train, $predict, same length, giving character values identifying types, as in check_list(types=)]
-- `.outtype`: [list of $train, $predict, same length, giving character values identifying types, as in check_list(types=)]
+- packages : [character]
+- `train_intypes` : [character]
+- `train_outtypes` : [character]
+- `predict_intypes` : [character]
+- `predict_outtypes` : [character]
 - `is_trained`: [logical(1)]
 
 Details:
@@ -49,8 +51,11 @@ Details:
   `result`: A slot to store the result of either the `train` or the `predict` step, after it was
     applied. Set by the framework, (planned: depending on debug option)
   `is_trained`: (AB, checks `is.null(state)`) Is the PipeOp currently trained?
-  `.intype`: list of lists of input types to accept: $train, $predict
-  `.outtype`: list of lists of output types that are returned, $train, $predict
+  `train_intypes`: Types of the inputs expected during training. Can be `any` if the PipeOp does not require a specific type. Index specifies the position in the input.
+  `train_outtypes`: Types of the inputs expected during training. Can be `any` if the PipeOp does not require a specific type.
+  `predict_intypes`: Types of the inputs expected during prediction. Can be `any` if the PipeOp does not require a specific type.
+  `predict_outtypes`: Types of the inputs expected during prediction. Can be `any` if the PipeOp does not require a specific type.
+
 
 ## class NodeChannel
 
