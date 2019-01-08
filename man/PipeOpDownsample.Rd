@@ -28,10 +28,11 @@ Inherits from \link{PipeOp}
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpFeatureUnion}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOp}}
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}},
+  \code{\link{PipeOp}}
 }
 \concept{PipeOp}
 \keyword{datasets}

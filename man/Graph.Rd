@@ -16,8 +16,9 @@ The graph is a container class for the complete computational graph. It is made 
 
 \itemize{
 \item \code{param_set}        ::  \link{ParamSet} \cr
-Set of all exposed parameters of the graph, a union of all \code{param_set} objects of all contained \link{PipeOp} objects. Parameter IDs are prefixed by PipeOp ID.
-\item \code{par_vals}         ::  named \code{list}
+Set of all exposed parameters of the graph, a union of all \code{param_set} objects of all contained \link{PipeOp} objects.
+Parameter IDs are prefixed by PipeOp ID. Returns a deep-copy of all param sets.
+\item \code{param_vals}         ::  named \code{list}
 Set of all configured parameters of the graph, a union of all \code{param_vals} objects of all contained \link{PipeOp} objects. Parameter IDs are prefixed by PipeOp ID.
 \item \code{packages}         :: \code{character}
 Set of all required packages of the graph, a union of all required packages of all contained \link{PipeOp} objects.
@@ -44,9 +45,11 @@ The 'right-hand-side' nodes that have some unconnected output channels and there
 
 \itemize{
 \item \code{new(fill = NULL)} \cr
-(\link{Graph}\code{|}NULL\code{| [PipeOp]) -> [Graph] Constructs an empty Graph, copies an existing graph if}fill\code{is a graph, or fills graph with node(s) if}fill\code{is a PipeOp.}fill` can also be a list of multiple Graphs / PipeOps.
+(\code{\link{Graph}} | \code{NULL} | \code{\link{PipeOp}}) -> \link{Graph}
+Constructs an empty Graph, copies an existing graph if \code{fill} is a graph, or fills graph
+with node(s) if \code{fill} is a PipeOp. \code{fill} can also be a list of multiple Graphs / PipeOps.
 \item \code{f$add_node(node)} \cr
-(\code{[GraphNode] | [PipeOp]}) -> \link{Graph}
+(\code{\link{GraphNode}} | \code{\link{PipeOp}}) -> \link{Graph}
 Mutates graph by adding a \link{PipeOp} or \link{GraphNode} to the end of the graph.
 \item \code{extend(g)} \cr
 (\link{Graph} | PipeOp | list f \link{Graph}) -> \code{self}

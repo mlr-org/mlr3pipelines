@@ -21,7 +21,7 @@
 #'   Packages required for the pipeOp.
 #' * `param_set`                  :: [ParamSet]
 #'   The set of all exposed parameters of the PipeOp.
-#' * `par_vals`                   :: named [list]
+#' * `param_vals`                   :: named [list]
 #'   Parameter settings where all setting must come from `param_set`, named with param IDs.
 #' * `state`                      :: [anys]
 #'   The object of learned parameters, obtained in the training step, and applied in the predict step.
@@ -61,8 +61,7 @@ PipeOp = R6::R6Class("PipeOp",
       private$.id = id
       private$.param_set = param_set
       #FIXME: we really need a function in paradox now to get defaults
-      private$.param_vals = param_set$data$default
-      names(private$.param_vals) = param_set$ids
+      private$.param_vals = param_set$defaults
       private$.param_vals = insert_named(private$.param_vals, param_vals)
       if (!param_set$test(private$.param_vals)) {
         stop("Parameters out of bounds")

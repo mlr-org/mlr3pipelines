@@ -21,9 +21,5 @@ Inherits from \link{PipeOp}
 }
 }
 
-\examples{
-lrn = mlr3::mlr_learners$get("classif.rpart")
-op =  PipeOpLearner$new(lrn)
-}
 \concept{PipeOp, PipeOpLearner}
 \keyword{datasets}

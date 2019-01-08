@@ -24,9 +24,10 @@ Inherits from \link{PipeOp}
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}}, \code{\link{PipeOpNULL}},
-  \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}},
   \code{\link{PipeOp}}
 }
 \concept{PipeOp}

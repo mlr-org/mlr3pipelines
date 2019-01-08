@@ -46,13 +46,12 @@ Active binding that allows to return and set the id of the PipeOps. Ids are user
 Packages required for the pipeOp.
 \item \code{param_set}                  :: \link{ParamSet}
 The set of all exposed parameters of the PipeOp.
-\item \code{par_vals}                   :: named \link{list}
+\item \code{param_vals}                   :: named \link{list}
 Parameter settings where all setting must come from \code{param_set}, named with param IDs.
-\item \code{params}                     :: \link{anys}
+\item \code{state}                      :: \link{anys}
 The object of learned parameters, obtained in the training step, and applied in the predict step.
 \item \code{is_trained}                 :: \link{logical(1)}
 Is the PipeOp currently trained?
-\item \code{params}                     :: any
 \item \code{result}                     :: any
 A slot to store the result of either the \code{train} or the \code{predict} step, after it was
 \item \code{intype}                     :: \link{list}
@@ -86,17 +85,17 @@ If the PipeOp is already trained, already present \code{params} are overwritten.
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}}
 
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}}
 }
 \concept{PipeOp}
 \keyword{datasets}

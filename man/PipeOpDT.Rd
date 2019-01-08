@@ -17,12 +17,16 @@ the features from a \link{Task}, and automatically
 reconstruct the appropriate Task from a returned \link{data.table}.
 We thus enforce: \link{dt} -> \link{dt}.
 For examples see \link{PipeOpPCA} or \link{PipeOpScale}.
+
+The underlying operation must not change row order or number.
 }
 \seealso{
-Other PipeOp: \code{\link{PipeOpDownsample}},
+Other PipeOp: \code{\link{PipeOpChoice}},
+  \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOp}}
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}},
+  \code{\link{PipeOp}}
 }
 \concept{PipeOp}
 \keyword{datasets}
