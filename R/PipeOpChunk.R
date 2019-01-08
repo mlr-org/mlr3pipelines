@@ -3,7 +3,7 @@
 #'
 #' @description
 #' Chunks its input into `outnum` chunks.
-#' Returns a list of [mlr3::Task]. 
+#' Returns a list of [mlr3::Task].
 #' During predict simply passes on the input.
 #' @section Usage:
 #' Inherits from [PipeOpChunk]
@@ -22,7 +22,7 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "chunk") {
-      assert_integerish(outnum)
+      assert_int(outnum, lower = 2L)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)
@@ -44,7 +44,7 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
 
       # FIXME: Implement stratification?
       idx = chunk(task$row_ids, n.chunks = self$param_vals$outnum, shuffle = self$param_vals$shuffle)
-      
+
       # Subset data, clone task and overwrite data in it.
       map(idx, function(x) {
         task$clone()$filter(x)

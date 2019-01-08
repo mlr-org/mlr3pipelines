@@ -19,6 +19,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
   public = list(
     initialize = function(innum, id = "featureunion") {
+      assert_int(innum, lower = 2L)
       super$initialize(id)
       self$train_intypes = rep("Task", innum)
       self$train_outtypes = "Task"

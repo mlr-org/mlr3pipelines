@@ -4,7 +4,7 @@
 \alias{gunion}
 \title{Union of graphs}
 \usage{
-gunion(..., .graphs = NULL)
+gunion(graphs)
 }
 \arguments{
 \item{...}{A list of \link{Graph}, \link{GraphNode} or \link{PipeOp} \cr

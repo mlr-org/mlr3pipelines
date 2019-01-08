@@ -80,10 +80,10 @@ PipeOp = R6::R6Class("PipeOp",
 
     print = function(...) {
       catf("PipeOp: <%s>", self$id)
-      catf("parvals: <%s>", as_short_string(self$param_vals))
-      catf("is_trained=%s", self$is_trained)
-      catf("Input: %s", as_short_string(self$inputs))
-      catf("Result: %s", as_short_string(self$result))
+      # catf("parvals: <%s>", as_short_string(self$param_vals))
+      # catf("is_trained=%s", self$is_trained)
+      # catf("Input: %s", as_short_string(self$inputs))
+      # catf("Result: %s", as_short_string(self$result))
     },
 
     train = function(...) stop("abstract"),
