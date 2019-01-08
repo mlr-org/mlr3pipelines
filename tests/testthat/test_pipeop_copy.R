@@ -16,10 +16,17 @@ test_that("PipeOpCopy - train and predict", {
   # Define PipeOp's
   copy = PipeOpCopy$new(2)
   task = mlr_tasks$get("iris")
-
+  
   tout = copy$train(list(task))
   expect_true(copy$is_trained)
+  expect_true(length(tout) == copy$outnum)
   expect_list(tout, types = "Task")
   expect_equal(tout[[1]], task)
   expect_equal(tout[[2]], task)
+  
+  pout = copy$predict(list(task))
+  expect_true(length(tout) == copy$outnum)
+  expect_list(pout, types = "Task")
+  expect_equal(pout[[1]], task)
+  expect_equal(pout[[2]], task)
 })
