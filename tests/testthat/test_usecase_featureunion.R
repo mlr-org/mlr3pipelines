@@ -20,7 +20,7 @@ test_that("Usecase - Featureunion", {
 
   # Train and predict
   graph$train(task)
-  expect_class(graph[["classif.rpart"]]$pipeop$state, "Learner")
+  expect_class(graph[["classif.rpart"]]$pipeop$state, "Experiment")
   # graph$predict(task)
 })
 
