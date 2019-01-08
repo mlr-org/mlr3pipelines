@@ -1,0 +1,178 @@
+franz schreiben
+zygmunt shcrieben
+
+
+### CRITICAL ERRORS ###
+
+vignettes wieder zum laufen bringen
+
+es ist SEHR komisch dass nach dieser operation
+der knoten "scale" sowohl einzige source wie auch sink ist?
+task = mlr_tasks$get("iris")
+g = Graph$new()
+g$add_node(PipeOpScale$new())
+lrn = mlr_learners$get("classif.rpart")
+g$add_node(PipeOpLearner$new(lrn))
+print(g)
+----> problem ist wohl dass wir die knoten nicht connected haben?
+trotzdem scheint das komisch zu sein. müsssten wir dann nicht ZWEI sinks und sources haben?
+
+warum führt der code zu einem Fehler?
+g = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
+Error in `%>>%.Graph`(graph, rhs) :
+  Can only connect graphs if lhs has same number of out-channels as rhs has in-channels.
+----> repariert. aber das sollte ein usecase unittest werden
+wir sollten auch testen dass das eine deep copy ist. vielleicht aber auch gleich der pipeop nur eine deepcopy returnen?
+damit man die nicht ändern kann? oder wir locken das ganze?
+
+wir brauchen eine ensuregraph methode, die wird in gunion und greplicate gecalled.
+bzw diese funktionen sollten NUR auf graphen gehen. der operator macht das "hochleveln"
+
+Graph:ParamSet geht nicht und sollte einen unit test haben
+---> erstmal repariert. braucht aber noch einen test.
+
+### API SPECS ###
+Graph: exposen wir wirklich update_ids aund update connections? die solten privat sein?
+
+graph interface sieht ümermässig komplex aus
+
+Graph getter umbenennen, kein [[]]
+
+PipeOp: wieso setzen wir manche sachen im super-konstruktor, macnhe direkt
+(gemeint sind paramset, vals, ids, usw)
+wrum sind viele felder im pipeop privat?
+
+gtraph: wie setzt man die inputs? wie bekommt man die outputs? bei train und predict
+
+NodeChannel: sollte keine direction haben? und einen src und target node
+
+NodeChannel: kann der index nur ein numeric oder ein char sein?
+
+### MINOR CLEAN UP ###
+
+PipeOp: on construction sollte der weder ein paramvals nehmen, noch
+feasibility checks durchführen. das passiert im setter!
+
+PipeOp: wie definieren wir defaults für jeden parameter? doch über params im constructor?
+
+Graph: weollen wir wirklich ein map function?
+
+aus FIXMEs sollten wir issues machen
+
+readonly--> has to go
+
+iisue: reenable SparsePCA when we are better suited for this
+
+wir brauchen einen helper für requireSuggestedPackage
+
+warum ist im graphnode alles privat? gucken ob man das publicm machen kann
+
+warum ist im PipeOp alles privat? soll das so sein? vermutlich nein
+
+sowas sollte mit purr besser gehen?
+packages = function() unique(self$map(function(x) x$pipeop$packages)),
+
+union_paramset, parvals und ids sollten methoden im graph sein, nicht außen definiert.
+
+graph:extend sollte nicht direkt delegieren and add_node? das ist doch quatsch?
+extend: das replizieren der connections scheint auch sehr scheiße? kann
+man die nicht wiedervewrwenden? oder sollte man den graphen innen drin clonen und beim
+clonen passiert das replizieren der connections?
+
+graph sollte eine size und is_empty methode haben, die sollte in printer auch gecalled werden
+
+union_param_set: sowas ist quatsch hier, man kann den zustand ändern
+ps <<- ps$add_param_set(newps)
+
+union_parvals code ist zu kompliziert und asserts sollte der auch nicht haben
+
+union_parids sieht wie bullshit aus. sowas verkompliziert alles.
+das ist schlecht sowas zu tun. entweder
+
+graphnode sollte ein AB "id" haben
+
+#######################################################################
+
+
+warum hat der graph überhaupt irgendwelche channel? sollte die nicht nur ein node haben?
+
+ParamSet: sollte das vielleicht nicht die ParamVals speichern?
+wir duplizieren da relativ viel code, und das gehört zusammen? vielleicht als subklasse?
+
+
+
+was genau soll dieser printer bedeuten?
+│Pipeline Graph:
+│  [(scale,classif.rpart), 2]
+
+
+wir callen ca. 10000mal toposort wenn wir irgendwas in den graph adden. das scheint nicht besonders schlau zu sein.
+
+vielleicht sollten wir GN und PO doch wieder mergen? dazwischen zu unterscheiden gibt weniger sinn?
+---> vermutlich schlechte idee. wird zu komplexe klasse
+
+die verknpüfungen mit den edges sind einfach zu kompliziert. das muss einfacher gehen.
+
+vielleicht sollte man in paradox gleich sowas wie ein prefix in den paramset krams einbauen?
+
+für den PipeOpLearner muss besser definierrt werden was der zurückgeben soll
+
+
+
+für die besprechung: bzgl. matrins version die am 22.12. noch existierte
+0) das interface ist an vielen stellen VIEL zu reichhaltig
+  es muss immer erst mal EIN we gebautr werden, statt 3
+1) zB sugar im konstruktor wenn ein setter exististiert
+2) zB 3 typen im arg, wenn ein typ gereicht hätte
+3) sowas ist scheiße? aliase?
+    lhs = function() self$source_nodes,  # alias for source_nodes
+    rhs = function() self$sink_nodes  # alias for sink_nodes
+4) wenn wir oben API doks schreiben sollen die nicht unten KOPIERT als kommentare noch stehen
+5) bitte NICHT sowas wie "readonly" bauen. das ist aktuell undokumentiert!
+und "löst" ein generelles R6 problem, in einem paket was nicht dafür da ist!
+das korrekte vorgehen ist, hier ERSTMAL Notizen zu machen. GERNE an einer globalen stelle.
+aber NICHT neue R6 infrstruktur HIER undoumentiert und ungetested bauen.
+6) warum ist alles private? das ist unsinn. erst private machen wenn es wirklich so ein MUSS!
+   Im PipeOp wurde zB "id" privat genmacht. dann wurde ein AB geschrieben, der genau das gleiche wie public zugriff erlaubt.....
+7) generell ist es sinnvoll zilen zu sparen. keine überlangen zeilen, aber bei einem
+  mini-if braucht es keine curly braces
+8) gunuin ist fehldesigned. das sollte NUR eine liste von graphs nehmen.
+9) tests und rcheck MÜSSEN laufen. das muss man sicherstellen. man muss halt minimale und sinnvolle docs und tests dafür dann schreiben,
+  nicht irgendeinen kram wo unklar ist ob man den braucht
+10) man MUSS sachen vorspezifizieren. das MUSS sein. martin hat ein komplett neues konzept reingebraucht mit den nodechannels. dafür hätte ein kurzes
+dok geschrieben werden müssen, wie ich das in dem konzept gemacht hab. und danach DISKUTIERT man das. und DANN codet man.
+11) Im PipeOp wurde zB "id" privat genmacht. dann wurde ein AB geschrieben, der genau das gleiche wie public zugriff erlaubt.....
+12) man gibt auch nicht JEDEM pipeOP eine family? das ist copy-paste-dokuemntieren. PipeOp als family scheint erstmal gut?
+13; bitte nicht sowas schreiben "if (length(cache))". da ist formal korrekt aber schlechter stil
+14) der gesamte toposort code ist nicht-trivial und unkommentiert. das geht nicht.
+  es müssen wenigstens KURZ datentypen und semantik der wihtigsten strukturen beschrieben werden!
+15) union_parids ist überkomlex. sowas ist ist bullshit, das muss man anders machen.
+16) wärhrend des gesamtem WS sind anscheinend keine realistischen unit tests geschrieben worden. ist halt etwas doof
+17) statt irgendwelcher sinnvollen tests werden schon examples hingescrieben. das ist vollkommen falsche reihenfolge.
+die muss man alle jetzt wieder rausnehmen. gerade bei den Pipeops gehören sie sowieso nicht hin.
+
+
+vim:
+- screenshotz hotkey ausmachen
+- line move around plugin finden
+- vim surround mit backticks
+- vim surround mit []
+_ vim hotkey für toggle roxygen docs
+- vim: backtick nur mit einem keystrike hinbekommen
+
+
+
+
+
+
+
+
+
+
+
+
+### r6 notizen ###
+
+- absract base classes wären toll, mit besserem support
+- interfaces wären sinnvoll
+-
