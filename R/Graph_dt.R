@@ -6,9 +6,9 @@ GraphDT = R6Class("Graph",
     initialize = function() {
       self$pipeops = list()
       self$channels = data.table(
-        src_node = list(),
+        src_id = character(0L),
         src_channel = character(0L),
-        dst_node = list(),
+        dst_id = character(0L),
         dst_channel = character(0L)
       )
     },
@@ -21,20 +21,16 @@ GraphDT = R6Class("Graph",
       invisible(self)
     },
 
-    add_channel = function(src_node, src_channel, dst_node, dst_channel) {
-      assert_choice(src_node, names(self$pipeops))
+    add_channel = function(src_id, src_channel, dst_id, dst_channel) {
+      assert_choice(src_id, names(self$pipeops))
       assert_string(src_channel)
-      assert_choice(dst_node, names(self$pipeops))
+      assert_choice(dst_id, names(self$pipeops))
       assert_string(dst_channel)
 
-      src = self$pipeops[[src_node]]
-      dst = self$pipeops[[dst_node]]
-      row = data.table(
-        src_node = list(src),
-        src_channel = src_channel,
-        dst_node = list(dst),
-        dst_channel = dst_channel
-      )
+      src = self$pipeops[[src_id]]
+      dst = self$pipeops[[dst_id]]
+      row = data.table(src_id = src_id, src_channel = src_channel,
+        dst_id = dst_id, dst_channel = dst_channel)
       self$channels = rbind(self$channels, row)
     },
 
@@ -44,7 +40,7 @@ GraphDT = R6Class("Graph",
         ig = igraph::make_empty_graph()
         extra_vertices = names(self$pipeops)
       } else {
-        df = self$channels[, list(from = map_chr(src_node, "id"), to = map_chr(dst_node, "id"))]
+        df = self$channels[, list(from = src_id, to = dst_id)]
         ig = igraph::graph_from_data_frame(df)
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }
@@ -62,12 +58,8 @@ GraphDT = R6Class("Graph",
 
       # add virtual channel to "__init__" in private copy of "channels"
       channels = copy(self$channels)
-      op_init = PipeOpNULL$new("__init__")
-      channels = rbind(channels, data.table(src_node = list(op_init), src_channel = "1",
-        dst_node = self$pipeops[self$lhs], dst_channel = "1"))
-
-      # add helper columns
-      channels[, c("src_id", "dst_id") := list(map_chr(src_node, "id"), map_chr(dst_node, "id"))]
+      channels = rbind(channels, data.table(src_id = "__init__", src_channel = "1",
+        dst_id = self$lhs, dst_channel = "1"))
 
       # add new column to store results and store 'input' as result of virtual operator "__init__"
       channels$result = list()
@@ -92,11 +84,11 @@ GraphDT = R6Class("Graph",
 
   active = list(
     lhs = function() { # return OP?
-      setdiff(names(self$pipeops), unique(map_chr(self$channels$dst_node, "id")))
+      setdiff(names(self$pipeops), unique(self$channels$dst_id))
     },
 
     rhs = function() { # return OP?
-      setdiff(names(self$pipeops), unique(map_chr(self$channels$src_node, "id")))
+      setdiff(names(self$pipeops), unique(self$channels$src_id))
     }
   )
 )
