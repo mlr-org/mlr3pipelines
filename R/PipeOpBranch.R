@@ -1,12 +1,12 @@
-#' @title PipeOpChoice
-#' @format [R6Class] PipeOpChoice
+#' @title PipeOpBranch
+#' @format [R6Class] PipeOpBranch
 #'
 #' @description
 #' This pipeop is used for multiplexing between different possible paths.
 #'
 #' @section Methods:
 #' * `new(options = 1, id = "choice")` \cr
-#'   (`integer(1)` | `character`), `character(1)` -> [`PipeOpChoice`]
+#'   (`integer(1)` | `character`), `character(1)` -> [`PipeOpBranch`]
 #'
 #' @section Parameters:
 #' * `selection`: integer or discrete
@@ -19,17 +19,18 @@
 #' out channels are created, each named according to `options`.
 #'
 #' To create a usable graph, the branching paths need to be brought together
-#' using [`PipeOpUnchoice`].
+#' using [`PipeOpUnbranch`].
 #'
 #' @examples
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
+#' PipeOpBranch
+#' $new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #'
 #' @family PipeOp
 #' @export
-PipeOpChoice = R6::R6Class("PipeOpChoice",
+PipeOpBranch = R6::R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
     initialize = function(options, id = "choice") {
@@ -73,34 +74,34 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpChoice", PipeOpChoice)
+mlr_pipeops$add("PipeOpBranch", PipeOpBranch)
 
 
-#' @title PipeOpUnchoice
-#' @format [R6Class] PipeOpUnchoice
+#' @title PipeOpUnbranch
+#' @format [R6Class] PipeOpUnbranch
 #'
 #' @description
-#' Used to bring together different paths created by [`PipeOpChoice`].
+#' Used to bring together different paths created by [`PipeOpBranch`].
 #'
 #' @section Methods
 #' * `new(options = 1)` \cr
-#'   (`integer(1)` | `character`) -> [`PipeOpChoice`]
+#'   (`integer(1)` | `character`) -> [`PipeOpBranch`]
 #'
 #' @section Details:
 #' Creates a PipeOp with multiple input channels that can be used to
-#' create a Graph network with alternative paths. `options` works as in [`PipeOpChoice`]
+#' create a Graph network with alternative paths. `options` works as in [`PipeOpBranch`]
 #' and should probably be the same value as the `options` given to the corresponding
-#' [`PipeOpChoice`] instance.
+#' [`PipeOpBranch`] instance.
 #'
 #' @examples
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
+#' PipeOpUnbranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #'
 #' @family PipeOp
 #' @export
-PipeOpUnchoice = R6::R6Class("PipeOpUnchoice",
+PipeOpUnbranch = R6::R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(
     initialize = function(options, id = "unchoice") {
@@ -135,7 +136,7 @@ PipeOpUnchoice = R6::R6Class("PipeOpUnchoice",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpUnchoice", PipeOpUnchoice)
+mlr_pipeops$add("PipeOpUnbranch", PipeOpUnbranch)
 
 #' @title grultiplex
 #'
@@ -150,7 +151,7 @@ mlr_pipeops$add("PipeOpUnchoice", PipeOpUnchoice)
 #'   Additionally to the graphs given in `...`, a (posibly named) list of graphs can
 #'   be given. Default is `NULL`.
 #' @param `.id` ([character(1)]):
-#'   Optional id prefix to prepend to [`PipeOpChoice`] and [`PipeOpUnchoice`] id. Their
+#'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`] id. Their
 #'   resulting IDs will be `"choice"` and `"unchoice"`, prefixed by `.id`. Default is `""`.
 #' @param `.prefix.gunion.names` ([logical(1)]):
 #'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
@@ -161,7 +162,7 @@ mlr_pipeops$add("PipeOpUnchoice", PipeOpUnchoice)
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
+#' PipeOpBranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #' @export
 grultiplex <- function(..., .graphs = NULL, .id = "", .prefix.gunion.names = FALSE) {
   assert_list(.graphs, null.ok = TRUE)
@@ -189,7 +190,7 @@ grultiplex <- function(..., .graphs = NULL, .id = "", .prefix.gunion.names = FAL
   } else {
     names(graphs) = NULL
   }
-  PipeOpChoice$new(choices, id = paste0(.id, "choice")) %>>%
+  PipeOpBranch$new(choices, id = paste0(.id, "choice")) %>>%
     gunion(.graphs = graphs) %>>%
-    PipeOpUnchoice$new(choices, id = paste0(.id, "unchoice"))
+    PipeOpUnbranch$new(choices, id = paste0(.id, "unchoice"))
 }
