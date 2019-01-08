@@ -113,8 +113,6 @@ GraphNode$set("private", "connectgn", function(newedges, oldchannelname, inverse
 
   # Check that input is okay before we start changing edges
   for (edge in newedges) {
-    # FIXME: assert edge is a NodeChannel
-    # FIXME: check types
     if (!is.null(edge) && !identical(edge$node$graph, private$.graph)) {
       stop("Can't connect nodes that are not in the same graph")
     }

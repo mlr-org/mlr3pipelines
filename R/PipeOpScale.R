@@ -33,12 +33,11 @@ PipeOpScale = R6Class("PipeOpScale",
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1
       )
-      return(sc)
+      sc
     },
 
     predict_dt = function(newdt) {
-      scaled = (newdt - self$state$center) / self$state$center
-      return(scaled)
+      t((t(newdt) - self$state$center) / self$state$scale)
     }
   )
 )
