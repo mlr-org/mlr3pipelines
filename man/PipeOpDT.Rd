@@ -21,11 +21,11 @@ For examples see \link{PipeOpPCA} or \link{PipeOpScale}.
 The underlying operation must not change row order or number.
 }
 \seealso{
-Other PipeOp: \code{\link{PipeOpChoice}},
+Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnchoice}},
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnbranch}},
   \code{\link{PipeOp}}
 }
 \concept{PipeOp}

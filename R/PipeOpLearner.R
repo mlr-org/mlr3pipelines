@@ -43,10 +43,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       # private$.result
     },
 
-    predict2 = function() {
-      assert_list(inputs, len = 1L, type = "Task")
-      self$state$predict(inputs[[1]])
-    }
+    predict = function(inputs) {
+     assert_list(inputs, len = 1L, type = "Task")
+     list(self$state$predict(inputs[[1]]))
+   }
   ),
 
   active = list(
