@@ -44,6 +44,7 @@ Collate:
     'utils.R'
     'Graph.R'
     'GraphNode.R'
+    'Graph_dt.R'
     'NodeChannel.R'
     'PipeOp.R'
     'mlr_pipeops.R'
