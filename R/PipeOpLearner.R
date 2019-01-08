@@ -16,6 +16,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     learner = NULL,
 
     initialize = function(learner) {
+      assert_learner(learner)
       self$learner = learner
       super$initialize(learner$id)
       private$.intype = list("data.frame")
@@ -26,9 +27,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       assert_list(inputs, len = 1L, type = "Task")
       task = inputs[[1L]]
 
-      experiment = Experiment$new(task = task, learner = self$learner)
-      experiment$train()
-      self$state = experiment
+      # FIXME: clone has advantages and disadvantages here, if there is ever a reason
+      # to change parameter values after train we may not want to clone here.
+      self$state = self$learner$clone(deep = TRUE)$train(task)
       return(list(NULL))
       # FIXME: what do we return here? prediction on train data?
       # experiment$predict()
@@ -42,7 +43,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
     predict2 = function() {
       assert_list(inputs, len = 1L, type = "Task")
-      predict(self$state)
+      self$state$predict(inputs[[1]])
     }
   ),
 
