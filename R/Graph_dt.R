@@ -6,8 +6,10 @@ Graph = R6Class("Graph",
     initialize = function() {
       self$pipeops = list()
       self$channels = data.table(
+        src_id = character(0L),
         src_node = list(),
         src_channel = character(0L),
+        dst_id = character(0L),
         dst_node = list(),
         dst_channel = character(0L)
       )
@@ -15,24 +17,29 @@ Graph = R6Class("Graph",
 
     add_pipeop = function(op) {
       assert_class(op, "PipeOp")
-      if (op$id %in% map_chr(self$pipeops, "id"))
+      if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops = c(self$pipeops, set_names(list(op), op$id))
       invisible(self)
     },
 
     add_channel = function(src_node, src_channel, dst_node, dst_channel) {
-      assert_string(src_node) # FIXME
-      assert_string(src_node)
-      assert_string(src_node)
-      assert_string(src_node)
+      assert_choice(src_node, names(self$pipeops))
+      assert_string(src_channel)
+      assert_choice(dst_node, names(self$pipeops))
+      assert_string(dst_channel)
 
-      self$channels = rbind(self$channels, data.table(
-          src_node = list(self$pipeops[[src_node]]),
-          src_channel = src_channel,
-          dst_node = list(self$pipeops[[dst_node]]),
-          dst_channel = dst_channel
-      ))
+      src = self$pipeops[[src_node]]
+      dst = self$pipeops[[dst_node]]
+      row = data.table(
+        src_id = src$id,
+        src_node = list(src),
+        src_channel = src_channel,
+        dst = dst$id,
+        dst_node = list(dst),
+        dst_channel = dst_channel
+      )
+      self$channels = rbindlist(list(self$channels, row))
     },
 
     plot = function() {
@@ -41,7 +48,7 @@ Graph = R6Class("Graph",
         ig = igraph::make_empty_graph()
         extra_vertices = names(self$pipeops)
       } else {
-        df = self$channels[, list(from = map(src_node, "id"), to = map(dst_node, "id"))]
+        df = self$channels[, list(from = src_id, to = dst_id)]
         ig = igraph::graph_from_data_frame(df)
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }
@@ -50,6 +57,16 @@ Graph = R6Class("Graph",
       if (!is.matrix(layout))
         layout = t(layout) # bug in igraph, dimension is dropped
       plot(ig, layout = layout)
+    }
+  ),
+
+  active = list(
+    lhs = function() {
+      setdiff(names(self$pipeops), self$channels[, unique(dst_id)])
+    },
+
+    rhs = function() {
+      setdiff(names(self$pipeops), self$channels[, unique(src_id)])
     }
   )
 )
@@ -64,7 +81,9 @@ if (FALSE) {
 
   op_scale = PipeOpScale$new()
   g$add_pipeop(op_scale)
+  g$plot()
 
+  src_node = "pca"; src_channel = "1"; dst_node = "scale"; dst_channel = "1"
   g$add_channel("pca", "1", "scale", "1")
   g$channels
 
@@ -72,4 +91,7 @@ if (FALSE) {
   g$add_pipeop(op_lrn)
 
   g$plot()
+
+  g$lhs
+  g$rhs
 }
