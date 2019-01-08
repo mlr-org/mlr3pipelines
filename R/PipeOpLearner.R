@@ -59,6 +59,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       task[[self$state$task$target_names]] = col
       self$state$predict(newdata = task)
     }
+
   ),
 
   active = list(

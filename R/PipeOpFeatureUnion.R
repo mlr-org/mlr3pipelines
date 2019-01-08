@@ -11,7 +11,7 @@
 #' * `f = pipeOpFeatureUnion$new(id)` \cr
 #'     `character(1)` -> [PipeOpFeatureUnion]
 #' @name PipeOpFeatureUnion
-#' @family PipeOp
+#' @family PipeOp, PipeOpAggregate
 #' @export
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
@@ -19,11 +19,12 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
   public = list(
     initialize = function(innum, id = "featureunion") {
-      self$train_intypes = rep("Task", inum)
-      self$train_outtypes = "Task"
-      self$predict_intypes = rep("Task", inum)
-      self$predict_outtypes = "Task"
       super$initialize(id)
+      self$train_intypes = rep("Task", innum)
+      self$train_outtypes = "Task"
+      self$predict_intypes = rep("Task", innum)
+      self$predict_outtypes = "Task"
+      private$.innum = innum
     },
 
     train = function(inputs) {
@@ -40,6 +41,12 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
         cbind_tasks(inputs)
       }
     }
+  ),
+  private = list(
+    .innum = NULL
+  ),
+  active = list(
+    innum = function() private$.innum
   )
 )
 

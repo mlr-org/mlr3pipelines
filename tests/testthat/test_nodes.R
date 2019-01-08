@@ -1,4 +1,4 @@
-
+context("Nodes")
 
 test_that("pipe concatenation works", {
   gr = Graph$new()

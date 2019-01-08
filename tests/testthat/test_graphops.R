@@ -1,4 +1,4 @@
-
+context("GraphOps")
 
 test_that("gunion", {
   g1 = PipeOpPCA$new() %>>% PipeOpScale$new()

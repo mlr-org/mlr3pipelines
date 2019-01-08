@@ -171,7 +171,7 @@ This document contains a list of use-cases we want to contain.
     - does:  same as train (without targets, here we have to  do nothing).
     - returns: [[Task]]
 
-##### [[PipeOpChoice]]
+##### [[PipeOpBranch]]
 
   - **train**:
     - input: Anything
@@ -181,7 +181,7 @@ This document contains a list of use-cases we want to contain.
   - **state:**: Nothing
   - **predict**: Same as train.
 
-##### [[PipeOpUnchoice]]
+##### [[PipeOpUnbranch]]
 
   - **train**:
     - input: List of [NULL, NULL, ..., X, ..., NULL]: all but one entry are NULL.

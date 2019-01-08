@@ -47,7 +47,7 @@ Collate:
     'NodeChannel.R'
     'PipeOp.R'
     'mlr_pipeops.R'
-    'PipeOpChoice.R'
+    'PipeOpBranch.R'
     'PipeOpChunk.R'
     'PipeOpCopy.R'
     'PipeOpDT.R'

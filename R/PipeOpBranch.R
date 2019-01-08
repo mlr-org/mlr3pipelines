@@ -1,12 +1,12 @@
-#' @title PipeOpChoice
-#' @format [R6Class] PipeOpChoice
+#' @title PipeOpBranch
+#' @format [R6Class] PipeOpBranch
 #'
 #' @description
 #' This pipeop is used for multiplexing between different possible paths.
 #'
 #' @section Methods:
 #' * `new(options = 1, id = "choice")` \cr
-#'   (`integer(1)` | `character`), `character(1)` -> [`PipeOpChoice`]
+#'   (`integer(1)` | `character`), `character(1)` -> [`PipeOpBranch`]
 #'
 #' @section Parameters:
 #' * `selection`: integer or discrete
@@ -19,20 +19,21 @@
 #' out channels are created, each named according to `options`.
 #'
 #' To create a usable graph, the branching paths need to be brought together
-#' using [`PipeOpUnchoice`].
+#' using [`PipeOpUnbranch`].
 #'
 #' @examples
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
+#' PipeOpBranch
+#' $new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #'
-#' @family PipeOp
+#' @family PipeOp, PipeOpBroadcast
 #' @export
-PipeOpChoice = R6::R6Class("PipeOpChoice",
+PipeOpBranch = R6::R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "choice") {
+    initialize = function(options, id = "branch") {
       assert(
         check_int(options, lower = 1),
         check_character(options, min.len = 1, any.missing = FALSE)
@@ -51,91 +52,108 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
       self$predict_intypes = "any"
       self$predict_outtypes = rep("any", outnum)
       private$.defaultreturn = rep(list(NULL), outnum)
+      private$.outnum = outnum
       if (is.character(options)) {
         names(private$.outtype) = options
         names(private$.defaultreturn) = options
       }
     },
     train = function(input) {
+      assert_list(input, len = private$.outnum)
+      self$state = list()
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
-      ret
+      return(ret)
     },
     predict = function(input) {
+      assert_list(input, len = private$.outnum)
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
-      ret
+      return(ret)
     }
   ),
   private = list(
-    .defaultreturn = NULL  # list of NULLs with the correct length and names
+    .defaultreturn = NULL,  # list of NULLs with the correct length and names
+    .outnum = NULL
+  ),
+  active = list(
+    outnum = function() private$.outnum
   )
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpChoice", PipeOpChoice)
+mlr_pipeops$add("PipeOpBranch", PipeOpBranch)
 
 
-#' @title PipeOpUnchoice
-#' @format [R6Class] PipeOpUnchoice
+#' @title PipeOpUnbranch
+#' @format [R6Class] PipeOpUnbranch
 #'
 #' @description
-#' Used to bring together different paths created by [`PipeOpChoice`].
+#' Used to bring together different paths created by [`PipeOpBranch`].
 #'
 #' @section Methods
 #' * `new(options = 1)` \cr
-#'   (`integer(1)` | `character`) -> [`PipeOpChoice`]
+#'   (`integer(1)` | `character`) -> [`PipeOpBranch`]
 #'
 #' @section Details:
 #' Creates a PipeOp with multiple input channels that can be used to
-#' create a Graph network with alternative paths. `options` works as in [`PipeOpChoice`]
+#' create a Graph network with alternative paths. `options` works as in [`PipeOpBranch`]
 #' and should probably be the same value as the `options` given to the corresponding
-#' [`PipeOpChoice`] instance.
+#' [`PipeOpBranch`] instance.
 #'
 #' @examples
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
+#' PipeOpUnbranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #'
-#' @family PipeOp
+#' @family PipeOp, PipeOpAggregate
 #' @export
-PipeOpUnchoice = R6::R6Class("PipeOpUnchoice",
+PipeOpUnbranch = R6::R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "unchoice") {
+    initialize = function(options, id = "unbranch") {
       assert(
         check_int(options, lower = 1),
         check_character(options, min.len = 1, any.missing = FALSE)
       )
       if (is.numeric(options)) {
         options = round(options)
-        outnum = options
+        innum = options
       } else {
-        outnum = length(options)
+        innum = length(options)
       }
       super$initialize(id)
-      private$.outtype = list("any")
-      private$.intype = rep(list("any"), outnum)
-      if (is.character(options)) {
-        names(private$.intype) = options
-      }
+      private$.innum = innum
+      self$train_intypes = rep("any", innum)
+      self$train_outtypes = "any"
+      self$predict_intypes = rep("any", innum)
+      self$predict_outtypes = "any"
     },
     train = function(input) {
+      assert_list(input, len = private$.innum)
+      self$state = list()
       nonnull = Filter(Negate(is.null), input)
       assert_list(nonnull, any.missing = FALSE, len = 1)
-      nonnull
+      return(nonnull)
     },
     predict = function(input) {
+      assert_list(input, len = private$.innum)
       nonnull = Filter(Negate(is.null), input)
       assert_list(nonnull, any.missing = FALSE, len = 1)
-      nonnull
+      return(nonnull)
     }
+  ),
+  private = list(
+   .innum = NULL
+  ),
+  active = list(
+    innum = function() private$.innum
   )
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpUnchoice", PipeOpUnchoice)
+mlr_pipeops$add("PipeOpUnbranch", PipeOpUnbranch)
 
 #' @title grultiplex
 #'
@@ -150,7 +168,7 @@ mlr_pipeops$add("PipeOpUnchoice", PipeOpUnchoice)
 #'   Additionally to the graphs given in `...`, a (posibly named) list of graphs can
 #'   be given. Default is `NULL`.
 #' @param `.id` ([character(1)]):
-#'   Optional id prefix to prepend to [`PipeOpChoice`] and [`PipeOpUnchoice`] id. Their
+#'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`] id. Their
 #'   resulting IDs will be `"choice"` and `"unchoice"`, prefixed by `.id`. Default is `""`.
 #' @param `.prefix.gunion.names` ([logical(1)]):
 #'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
@@ -161,7 +179,7 @@ mlr_pipeops$add("PipeOpUnchoice", PipeOpUnchoice)
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
+#' PipeOpBranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #' @export
 grultiplex <- function(..., .graphs = NULL, .id = "", .prefix.gunion.names = FALSE) {
   assert_list(.graphs, null.ok = TRUE)
@@ -189,7 +207,7 @@ grultiplex <- function(..., .graphs = NULL, .id = "", .prefix.gunion.names = FAL
   } else {
     names(graphs) = NULL
   }
-  PipeOpChoice$new(choices, id = paste0(.id, "choice")) %>>%
+  PipeOpBranch$new(choices, id = paste0(.id, "choice")) %>>%
     gunion(.graphs = graphs) %>>%
-    PipeOpUnchoice$new(choices, id = paste0(.id, "unchoice"))
+    PipeOpUnbranch$new(choices, id = paste0(.id, "unchoice"))
 }
