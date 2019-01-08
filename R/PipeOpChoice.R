@@ -46,8 +46,10 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
         outnum = length(options)
       }
       super$initialize(id, ParamSet$new(params = list(param)))
-      private$.intype = list("any")
-      private$.outtype = rep(list("any"), outnum)
+      self$train_intypes = "any"
+      self$train_outtypes = rep("any", outnum)
+      self$predict_intypes = "any"
+      self$predict_outtypes = rep("any", outnum)
       private$.defaultreturn = rep(list(NULL), outnum)
       if (is.character(options)) {
         names(private$.outtype) = options
