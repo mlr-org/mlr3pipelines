@@ -1,3 +1,4 @@
+library(checkmate)
 library(testthat)
 library(mlr3)
 library(paradox)

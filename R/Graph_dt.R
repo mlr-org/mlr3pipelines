@@ -1,4 +1,4 @@
-Graph = R6Class("Graph",
+GraphDT = R6Class("Graph",
   cloneable = FALSE,
   public = list(
     pipeops = NULL,
@@ -6,10 +6,8 @@ Graph = R6Class("Graph",
     initialize = function() {
       self$pipeops = list()
       self$channels = data.table(
-        src_id = character(0L),
         src_node = list(),
         src_channel = character(0L),
-        dst_id = character(0L),
         dst_node = list(),
         dst_channel = character(0L)
       )
@@ -32,14 +30,12 @@ Graph = R6Class("Graph",
       src = self$pipeops[[src_node]]
       dst = self$pipeops[[dst_node]]
       row = data.table(
-        src_id = src$id,
         src_node = list(src),
         src_channel = src_channel,
-        dst = dst$id,
         dst_node = list(dst),
         dst_channel = dst_channel
       )
-      self$channels = rbindlist(list(self$channels, row))
+      self$channels = rbind(self$channels, row)
     },
 
     plot = function() {
@@ -48,7 +44,7 @@ Graph = R6Class("Graph",
         ig = igraph::make_empty_graph()
         extra_vertices = names(self$pipeops)
       } else {
-        df = self$channels[, list(from = src_id, to = dst_id)]
+        df = self$channels[, list(from = map_chr(src_node, "id"), to = map_chr(dst_node, "id"))]
         ig = igraph::graph_from_data_frame(df)
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }
@@ -66,21 +62,26 @@ Graph = R6Class("Graph",
 
       # add virtual channel to "__init__" in private copy of "channels"
       channels = copy(self$channels)
-      channels = rbind(channels, data.table(src_id = "__init__", src_node = list(NULL), src_channel = "1",
-          dst_id = self$lhs, dst_node = self$pipeops[self$lhs], dst_channel = "1"))
+      op_init = PipeOpNULL$new("__init__")
+      channels = rbind(channels, data.table(src_node = list(op_init), src_channel = "1",
+        dst_node = self$pipeops[self$lhs], dst_channel = "1"))
+
+      # add helper columns
+      channels[, c("src_id", "dst_id") := list(map_chr(src_node, "id"), map_chr(dst_node, "id"))]
 
       # add new column to store results and store 'input' as result of virtual operator "__init__"
+      channels$result = list()
       channels[src_id == "__init__", result := list(input)]
 
       # topo-sort the pipeop ids
-      tmp = self$channels[, list(parents = list(src_id)), by = list(id = dst_id)]
-      tmp = rbind(tmp, data.table(id = self$lhs, parents = list(character(0L))))
-      ids = topo_sort(tmp)$id
+      tmp = channels[, list(parents = list(src_id)), by = list(id = dst_id)]
+      tmp = rbind(tmp, data.table(id = "__init__", parents = list(character(0L))))
+      ids = setdiff(topo_sort(tmp)$id, "__init__")
 
       # walk over ids, learning each operator
       for (id in ids) {
         op = self$pipeops[[id]]
-        input = channels[dst_id == op$id]$result
+        input = channels[dst_id == op$id, "result"]$result
         tmp = if (stage == "train") op$train(input) else op$predict(input)
         channels[src_id == op$id, result := list(tmp)]
       }
@@ -91,42 +92,11 @@ Graph = R6Class("Graph",
 
   active = list(
     lhs = function() { # return OP?
-      setdiff(names(self$pipeops), self$channels[, unique(dst_id)])
+      setdiff(names(self$pipeops), unique(map_chr(self$channels$dst_node, "id")))
     },
 
     rhs = function() { # return OP?
-      setdiff(names(self$pipeops), self$channels[, unique(src_id)])
+      setdiff(names(self$pipeops), unique(map_chr(self$channels$src_node, "id")))
     }
   )
 )
-
-if (FALSE) {
-  devtools::load_all()
-  self = g = Graph$new()
-
-  op_pca = PipeOpPCA$new()
-  g$add_pipeop(op_pca)
-  g$plot()
-
-  op_scale = PipeOpScale$new()
-  g$add_pipeop(op_scale)
-  g$plot()
-
-  src_node = "pca"; src_channel = "1"; dst_node = "scale"; dst_channel = "1"
-  g$add_channel("pca", "1", "scale", "1")
-  g$channels
-
-  op_lrn = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
-  g$add_pipeop(op_lrn)
-  g$add_channel("scale", "1", "classif.rpart", "1")
-
-  g$plot()
-
-  input = mlr_tasks$mget("iris")
-  g$fire(input, "train")
-  self = g
-  g$fire(input, "predict")
-
-  # self$pipeops$scale$state
-  # self$pipeops$classif.rpart$state$model
-}
