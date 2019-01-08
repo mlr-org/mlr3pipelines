@@ -1,5 +1,4 @@
-GraphDT = R6Class("Graph",
-  cloneable = FALSE,
+Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
     channels = NULL,
@@ -49,6 +48,15 @@ GraphDT = R6Class("Graph",
       if (!is.matrix(layout))
         layout = t(layout) # bug in igraph, dimension is dropped
       plot(ig, layout = layout)
+    },
+
+    set_names = function(old, new) {
+      new_ids = map_values(names(self$pipeops), old, new)
+      names(self$pipeops) = new_ids
+      self$pipeops = imap(self$pipeops, function(x, nn) { x$id = nn; x })
+
+      self$channels[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
+      self
     },
 
     # trains or predicts, depending on stage

@@ -10,31 +10,14 @@
 #' @param .graphs list of [Graph]` \cr
 #'   Graphs which are to be joined.
 #' @return `[Graph]`
-gunion = function(..., .graphs = NULL) {
-  graphs = c(list(...), .graphs)
-  resultgraph = Graph$new()
-  for (idx in seq_along(graphs)) {
-    g = graphs[[idx]]
-    n = names2(graphs)[idx]
-    if (inherits(g, "PipeOp")) {
-      g = g$clone(deep = TRUE)
-      if (!is.na(n)) {
-        g$id = paste(g$id, n, sep = "_")
-      }
-      resultgraph$add_node(g)
-    } else if (inherits(g, "Graph")) {
-      intermediate = Graph$new(g)
-      if (!is.na(n)) {
-        for (nodeid in names(intermediate$node_list)) {
-          intermediate[[nodeid]]$pipeop$id = paste(nodeid, n, sep = "_")
-        }
-        intermediate$update_ids()
-      }
-      resultgraph$extend(intermediate)
-    } else {
-      stop("Given element was not a Graph or PipeOp")
-    }
-  }
-  resultgraph
+gunion = function(graphs) {
+  graphs = map(graphs, ensure_graph)
+
+  g = Graph$new()
+  g$pipeops = unlist(map(graphs, "pipeops"), recursive = FALSE)
+  assert_names(names(g$pipeops), type = "unique", .var.name = "ids of pipe operators")
+  g$pipeops = map(g$pipeops, function(x) x$clone(deep = TRUE))
+  g$channels = rbindlist(map(graphs, "channels"))
+  g
 }
 

@@ -1,7 +1,7 @@
 context("graphdt")
 
 test_that("linear graph", {
-  g = GraphDT$new()
+  g = Graph$new()
 
   op_ds = PipeOpDownsample$new()
   op_pca = PipeOpPCA$new()
@@ -21,3 +21,5 @@ test_that("linear graph", {
   out = g$fire(input, "predict")
   expect_task(x[[1]])
 })
+
+graphs = list(g, g)

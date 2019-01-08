@@ -11,16 +11,16 @@ greplicate = function(graph, n) {
 #' @export
 greplicate.PipeOp = function(graph, n) {
   greplicate(ensure_graph(graph), n)
-  greplicate(g, n)
 }
 
 #' @export
 greplicate.Graph = function(graph, n) {
   n = assert_count(n, positive = TRUE, coerce = TRUE)
-  graphs = replicate(n, graph$clone(deep = TRUE))
-  gunion(graphs)
+  x = map(seq_len(n), function(i) {
+    g = graph$clone(deep = TRUE)
+    ids = names(g$pipeops)
+    g$set_names(ids, sprintf("%s_%03i", ids, i))
+  })
+
+  gunion(x)
 }
-
-
-
-
