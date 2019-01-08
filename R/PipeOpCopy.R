@@ -26,10 +26,10 @@ PipeOpCopy = R6::R6Class("PipeOpCopy",
     },
     train = function(input) {
       self$state = list()
-      rep(input, self$outnum)
+      map(seq_len(self$outnum), function(x) input[[1]]$clone())
     },
     predict = function(input) {
-      rep(input, self$outnum)
+      map(seq_len(self$outnum), function(x) input[[1]]$clone())
     }
   ),
   private = list(
