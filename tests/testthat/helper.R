@@ -15,6 +15,8 @@ expect_graph = function(g) {
   expect_set_equal(g$ids(), names(g$pipeops))
   expect_set_equal(g$ids(sorted = TRUE), names(g$pipeops))
 
+  expect_flag(g$is_trained)
+
   # expect_list(graph$intype)
   # expect_list(graph$outtype)
 }

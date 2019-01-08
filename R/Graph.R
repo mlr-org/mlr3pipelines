@@ -77,6 +77,10 @@ Graph = R6Class("Graph",
   ),
 
   active = list(
+    is_trained = function() {
+      all(map_lgl(self$pipeops, "is_trained"))
+    },
+
     lhs = function() { # return OP?
       setdiff(names(self$pipeops), unique(self$channels$dst_id))
     },

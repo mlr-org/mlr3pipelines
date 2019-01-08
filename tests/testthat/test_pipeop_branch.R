@@ -34,7 +34,7 @@ test_that("PipeOpBranch - train and predict", {
   expect_class(tout[[branch2$param_vals$selection]], "Task")
   expect_equal(tout[[branch2$param_vals$selection]], t1)
   expect_equal(tout[[1]], NULL)
-  
+
   pout = branch$predict(list(task))
   expect_true(length(pout) == branch$outnum)
   expect_equal(pout[[1]], t1)
