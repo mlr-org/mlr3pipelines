@@ -36,7 +36,7 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
   public = list(
     initialize = function(options, id = "choice") {
       assert(
-        check_int(options, len = 1, any.missing = FALSE, lower = 1),
+        check_int(options, lower = 1),
         check_character(options, min.len = 1, any.missing = FALSE)
       )
       if (is.numeric(options)) {
@@ -99,9 +99,9 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
 PipeOpUnchoice = R6::R6Class("PipeOpUnchoice",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "choice") {
+    initialize = function(options, id = "unchoice") {
       assert(
-        check_int(options, len = 1, any.missing = FALSE, lower = 1),
+        check_int(options, lower = 1),
         check_character(options, min.len = 1, any.missing = FALSE)
       )
       if (is.numeric(options)) {
@@ -153,9 +153,9 @@ PipeOpUnchoice = R6::R6Class("PipeOpUnchoice",
 #' choices = c("pca", "nothing")
 #' PipeOpChoice$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnchoice$new(choices)
 #' @export
-grultiplex <- function(..., .graph = NULL, .id = "") {
-  assert_list(.graphs, nullok = TRUE)
-  graphs <- c(list(...), .graph)
+grultiplex <- function(..., .graphs = NULL, .id = "") {
+  assert_list(.graphs, null.ok = TRUE)
+  graphs <- c(list(...), .graphs) ; rm(.graphs)
   assert(
       check_list(graphs, min.len = 1, types = c("PipeOp", "Graph"), any.missing = FALSE, names = "unique"),
       check_list(graphs, min.len = 1, types = c("PipeOp", "Graph"), any.missing = FALSE, names = "unnamed")
@@ -163,14 +163,16 @@ grultiplex <- function(..., .graph = NULL, .id = "") {
 
   graphs = lapply(graphs, Graph$new)
   imap(graphs, function(g, idx) {
-    if (length(g$in_channels != 1)) {
+    if (length(g$in_channels) != 1) {
       stopf("Graph %s must have exactly one in_channel", idx)
     }
-    if (length(g$out_channels != 1)) {
+    if (length(g$out_channels) != 1) {
       stopf("Graph %s must have exactly one out_channel", idx)
     }
   })
 
   choices = if (is.null(names(graphs))) length(graphs) else names(graphs)
-  PipeOpChoice() %>>% gunion(.graphs = graphs) %>>% PipeOpUnchoice()
+  PipeOpChoice$new(choices, id = paste0(.id, "choice")) %>>%
+    gunion(.graphs = graphs) %>>%
+    PipeOpUnchoice$new(choices, id = paste0(.id, "unchoice"))
 }
