@@ -96,6 +96,39 @@ PipeOpChoice = R6::R6Class("PipeOpChoice",
 #'
 #' @family PipeOp
 #' @export
+PipeOpUnchoice = R6::R6Class("PipeOpUnchoice",
+  inherit = PipeOp,
+  public = list(
+    initialize = function(options, id = "choice") {
+      assert(
+        check_int(options, len = 1, any.missing = FALSE, lower = 1),
+        check_character(options, min.len = 1, any.missing = FALSE)
+      )
+      if (is.numeric(options)) {
+        options = round(options)
+        outnum = options
+      } else {
+        outnum = length(options)
+      }
+      super$initialize(id)
+      private$.outtype = list("any")
+      private$.intype = rep(list("any"), outnum)
+      if (is.character(options)) {
+        names(private$.intype) = options
+      }
+    },
+    train = function(input) {
+      nonnull = Filter(Negate(is.null), input)
+      assert_list(nonnull, any.missing = FALSE, len = 1)
+      nonnull
+    },
+    predict = function(input) {
+      nonnull = Filter(Negate(is.null), input)
+      assert_list(nonnull, any.missing = FALSE, len = 1)
+      nonnull
+    }
+  )
+)
 
 #' @title grultiplex
 #'
