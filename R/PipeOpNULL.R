@@ -25,13 +25,10 @@ PipeOpNULL = R6Class("PipeOpNULL",
     },
 
     train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
       self$state = list()
       inputs
     },
 
-    predict = function(inputs) {
-      return(inputs)
-    }
+    predict = identity
   )
 )

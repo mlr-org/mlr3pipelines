@@ -1,21 +1,6 @@
 
 
 test_that("pipe concatenation works", {
-
-  BasicPO = R6::R6Class("BasicPO",
-    inherit = PipeOp,
-    public = list(
-        train = function(...) print("hi"),
-        predict = function(...) print("yo"),
-        initialize = function(...) {
-          super$initialize(...)
-          private$.intype = list("data.frame")
-          private$.outtype = list("data.frame")
-        }
-    )
-  )
-
-
   gr = Graph$new()
   gr$add_node(BasicPO$new("testa"))
   gr$add_node(BasicPO$new("testb"))
