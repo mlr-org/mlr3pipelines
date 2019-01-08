@@ -10,7 +10,7 @@
 #' @section Details:
 #' * `outnum`: `integer(1)` Number of times the input is copied.
 #' @name PipeOpCopy
-#' @family PipeOp, PipeOpBroadcast, PipeOpCopy
+#' @family PipeOp, PipeOpBroadcast
 #' @export
 PipeOpCopy = R6::R6Class("PipeOpCopy",
   inherit = PipeOp,

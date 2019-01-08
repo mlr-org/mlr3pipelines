@@ -28,7 +28,7 @@
 #' PipeOpBranch
 #' $new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #'
-#' @family PipeOp
+#' @family PipeOp, PipeOpBroadcast
 #' @export
 PipeOpBranch = R6::R6Class("PipeOpBranch",
   inherit = PipeOp,
@@ -105,7 +105,7 @@ mlr_pipeops$add("PipeOpBranch", PipeOpBranch)
 #' choices = c("pca", "nothing")
 #' PipeOpUnbranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #'
-#' @family PipeOp
+#' @family PipeOp, PipeOpAggregate
 #' @export
 PipeOpUnbranch = R6::R6Class("PipeOpUnbranch",
   inherit = PipeOp,

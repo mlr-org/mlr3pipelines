@@ -14,7 +14,7 @@
 #' * `shuffle`: `logical(1)` Should the data be shuffled before chunking?
 #' * `stratify`: `logical(1)` Should the subsamples be stratified.
 #' @name PipeOpChunk
-#' @family PipeOp, PipeOpBroadcast, PipeOpChunk
+#' @family PipeOp, PipeOpBroadcast
 #' @export
 #' @examples
 #' op = PipeOpChunk$new(5)
