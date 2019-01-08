@@ -32,13 +32,13 @@ PipeOpPCA = R6Class("PipeOpPCA",
         center = self$param_vals$center,
         scale. = self$param_vals$scale.,
         rank.  = self$param_vals$rank.)
-      self$state = pcr
-      return(pcr$x)
+      ret = pcr
+      pcr$x = NULL
+      ret
     },
 
     predict_dt = function(newdt) {
-      rotated = predict(self$state, as.matrix(newdt))
-      return(rotated)
+      predict(self$state, as.matrix(newdt))
     }
   )
 )
