@@ -57,15 +57,44 @@ Graph = R6Class("Graph",
       if (!is.matrix(layout))
         layout = t(layout) # bug in igraph, dimension is dropped
       plot(ig, layout = layout)
+    },
+
+    # trains or predicts, depending on stage
+    fire = function(input, stage) {
+      assert_list(input)
+      assert_choice(stage, c("train", "predict"))
+
+      # add virtual channel to "__init__" in private copy of "channels"
+      channels = copy(self$channels)
+      channels = rbind(channels, data.table(src_id = "__init__", src_node = list(NULL), src_channel = "1",
+          dst_id = self$lhs, dst_node = self$pipeops[self$lhs], dst_channel = "1"))
+
+      # add new column to store results and store 'input' as result of virtual operator "__init__"
+      channels[src_id == "__init__", result := list(input)]
+
+      # topo-sort the pipeop ids
+      tmp = self$channels[, list(parents = list(src_id)), by = list(id = dst_id)]
+      tmp = rbind(tmp, data.table(id = self$lhs, parents = list(character(0L))))
+      ids = topo_sort(tmp)$id
+
+      # walk over ids, learning each operator
+      for (id in ids) {
+        op = self$pipeops[[id]]
+        input = channels[dst_id == op$id]$result
+        tmp = if (stage == "train") op$train(input) else op$predict(input)
+        channels[src_id == op$id, result := list(tmp)]
+      }
+
+      tmp
     }
   ),
 
   active = list(
-    lhs = function() {
+    lhs = function() { # return OP?
       setdiff(names(self$pipeops), self$channels[, unique(dst_id)])
     },
 
-    rhs = function() {
+    rhs = function() { # return OP?
       setdiff(names(self$pipeops), self$channels[, unique(src_id)])
     }
   )
@@ -89,9 +118,15 @@ if (FALSE) {
 
   op_lrn = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
   g$add_pipeop(op_lrn)
+  g$add_channel("scale", "1", "classif.rpart", "1")
 
   g$plot()
 
-  g$lhs
-  g$rhs
+  input = mlr_tasks$mget("iris")
+  g$fire(input, "train")
+  self = g
+  g$fire(input, "predict")
+
+  # self$pipeops$scale$state
+  # self$pipeops$classif.rpart$state$model
 }
