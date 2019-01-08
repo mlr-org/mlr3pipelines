@@ -38,9 +38,9 @@ A series of usecases and PipeOperators can be found in usecases.md.
 ## PipeOperators and Status
 
 - **Meta:**
-  - [ ] `PipeOpBranch`                          | broadcast
+  - [x] `PipeOpBranch`                          | broadcast
   - [x] `PipeOpChunk`                           | broadcast
-  - [ ] `PipeOpUnbranch`                        | aggregate
+  - [x] `PipeOpUnbranch`                        | aggregate
   - [x] `PipeOpFeatureUnion`                    | aggregate
   - [x] `PipeOpNULL`                            | linear
   - [x] `PipeOpCopy`                            | broadcast
@@ -54,7 +54,7 @@ A series of usecases and PipeOperators can be found in usecases.md.
 - **Preprocessing:**
   - [x] `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
   - [x] `PipeOpScale`                           | linear    | task --params--> task          | task --params--> task
-  - [ ] `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
+  - [x] `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
 
 - **Target Operators:**
   - [ ] `PipeOpThreshold`                       | linear    | cvtask --threshold--> NULL     | prediction --threshold--> prediction

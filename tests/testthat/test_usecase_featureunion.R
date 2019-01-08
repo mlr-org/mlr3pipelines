@@ -1,3 +1,4 @@
+context("Usecase - Featureunion")
 test_that("Usecase - Featureunion", {
 
   # Define PipeOp's
