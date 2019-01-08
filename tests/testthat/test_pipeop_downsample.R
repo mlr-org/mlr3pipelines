@@ -1,3 +1,5 @@
+context("downsample")
+
 test_that("PipeOpDownsample - basic properties", {
   op = PipeOpDownsample$new()
   test_basic_pipeop_props(op)

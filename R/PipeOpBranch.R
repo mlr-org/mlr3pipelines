@@ -33,7 +33,7 @@
 PipeOpBranch = R6::R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "choice") {
+    initialize = function(options, id = "branch") {
       assert(
         check_int(options, lower = 1),
         check_character(options, min.len = 1, any.missing = FALSE)
@@ -52,24 +52,30 @@ PipeOpBranch = R6::R6Class("PipeOpBranch",
       self$predict_intypes = "any"
       self$predict_outtypes = rep("any", outnum)
       private$.defaultreturn = rep(list(NULL), outnum)
+      private$.outnum = outnum
       if (is.character(options)) {
         names(private$.outtype) = options
         names(private$.defaultreturn) = options
       }
     },
     train = function(input) {
+      self$state = list()
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
-      ret
+      return(ret)
     },
     predict = function(input) {
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
-      ret
+      return(ret)
     }
   ),
   private = list(
-    .defaultreturn = NULL  # list of NULLs with the correct length and names
+    .defaultreturn = NULL,  # list of NULLs with the correct length and names
+    .outnum = NULL
+  ),
+  active = list(
+    outnum = function() private$.outnum
   )
 )
 
