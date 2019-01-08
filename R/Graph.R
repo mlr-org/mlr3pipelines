@@ -249,7 +249,7 @@ sort_nodes = function(node_list, layerinfo = FALSE) {
   numparents = function(node) sum(map_lgl(node$prev_nodes, Negate(is.null)))
   cache = map_dbl(node_list, numparents) # count how many connections to prev nodes a node has
   queue = names(cache)[cache == 0] # active queue for toposort, charvec if ids, we start with LHS nodes
-  layers = sapply(queue, function(.) 0)
+  layers = sapply(queue, function(.) 0, simplify = FALSE)  # this MUST be a list.
   cache = cache[cache != 0] # remove LHS nodes from cache
   queueidx = 1
   while (queueidx <= length(queue)) {
@@ -259,7 +259,7 @@ sort_nodes = function(node_list, layerinfo = FALSE) {
       stop("Graph is broken, this should never happen.")  # next_nodes and prev_nodes disagree about the graph structure.
     cache[names(nexts)] = cache[names(nexts)] - nexts # remove current next-node-counters from cache
     for (n in names(nexts))
-      layers[n] = max(layers[n], layers[current] + 1)  # FIXME: bad code, we know when layer is corrent, this is when pending nodes become 0.
+      layers[[n]] = max(layers[[n]], layers[[current]] + 1)  # FIXME: bad code, we know when layer is corrent, this is when pending nodes become 0.
     queue = c(queue, names(cache)[cache == 0])    # add nodes with no prending prev nodes to end of queue
     cache = cache[cache != 0]      # only keep nodes with pending prev nodes
     queueidx = queueidx + 1
