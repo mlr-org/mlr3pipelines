@@ -27,7 +27,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
     train = function(inputs) {
       self$state = list()
       cbind_tasks(inputs)
-    }
+    },
 
     predict = function(inputs) {
       # FIXME: check that all types are equal

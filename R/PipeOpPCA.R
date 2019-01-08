@@ -32,9 +32,9 @@ PipeOpPCA = R6Class("PipeOpPCA",
         center = self$param_vals$center,
         scale. = self$param_vals$scale.,
         rank.  = self$param_vals$rank.)
-      ret = pcr
-      pcr$x = NULL
-      ret
+      self$state = pcr
+      self$state$x = NULL
+      pcr$x
     },
 
     predict_dt = function(newdt) {
