@@ -1,3 +1,8 @@
+# TODO:
+# * print()
+# * ids(sorted = FALSE)
+# * train()
+# * predict()
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
@@ -81,7 +86,7 @@ Graph = R6Class("Graph",
       # walk over ids, learning each operator
       for (id in ids) {
         op = self$pipeops[[id]]
-        input = channels[dst_id == op$id, "result"]$result
+        input = channels[dst_id == op$id, "result"][[1L]]
         tmp = if (stage == "train") op$train(input) else op$predict(input)
         channels[src_id == op$id, result := list(tmp)]
       }
