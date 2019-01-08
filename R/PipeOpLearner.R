@@ -31,9 +31,12 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
       # FIXME: clone has advantages and disadvantages here, if there is ever a reason
       # to change parameter values after train we may not want to clone here.
-      self$state = self$learner$clone(deep = TRUE)$train(task)
-      return(list(NULL))
-      # FIXME: what do we return here? prediction on train data?
+      self$state = Experiment$new(
+        task = task,
+        learner = self$learner$clone(deep = TRUE)
+      )$train()
+
+
       # experiment$predict()
       # d = experiment$prediction[,-1]
       # colnames(d)[seq_along(task$target_names)] = task$target_names
@@ -41,11 +44,20 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       # db = as_data_backend(d)
       # private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
       # private$.result
+      return(list(NULL))
     },
 
     predict = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
-      list(self$state$predict(inputs[[1]]))
+      assert_list(inputs, len = 1L, type = c("Task", "data.frame"))
+      task = inputs[[1]]
+      if (!is.data.frame(task)) {
+        task = task$data()[, task$feature_names, with = FALSE]
+      }
+      # navigate around bugs in mlr3
+      col = self$state$task$data()[1, self$state$task$target_names, with = FALSE][[1]]
+      col[1] = NA
+      task[[self$state$task$target_names]] = col
+      self$state$predict(newdata = task)
     }
   ),
 
