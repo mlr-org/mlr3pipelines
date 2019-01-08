@@ -10,17 +10,15 @@ greplicate = function(graph, n) {
 
 #' @export
 greplicate.PipeOp = function(graph, n) {
-  g = Graph$new()
-  g$add_node(graph)
+  greplicate(ensure_graph(graph), n)
   greplicate(g, n)
 }
 
 #' @export
 greplicate.Graph = function(graph, n) {
-  if (is.numeric(n)) {
-    n = as.character(seq_len(n))
-  }
-  gunion(.graphs = sapply(n, function(.) graph, simplify = FALSE))
+  n = assert_count(n, positive = TRUE, coerce = TRUE)
+  graphs = replicate(n, graph$clone(deep = TRUE))
+  gunion(graphs)
 }
 
 
