@@ -33,11 +33,11 @@
 #'
 #' @section Methods:
 #' * `new(fill = NULL)` \cr
-#'   ([Graph]` | `NULL` | [PipeOp]) -> [Graph]
+#'   ([`Graph`] | `NULL` | [`PipeOp`]) -> [Graph]
 #'   Constructs an empty Graph, copies an existing graph if `fill` is a graph, or fills graph
 #'   with node(s) if `fill` is a PipeOp. `fill` can also be a list of multiple Graphs / PipeOps.
 #' * `f$add_node(node)` \cr
-#'   (`[GraphNode] | [PipeOp]`) -> [Graph]
+#'   ([`GraphNode`] | [`PipeOp`]) -> [Graph]
 #'   Mutates graph by adding a [PipeOp] or [GraphNode] to the end of the graph.
 #' * `extend(g)` \cr
 #'   ([Graph] | PipeOp | list f [Graph]) -> `self`
