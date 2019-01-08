@@ -23,11 +23,9 @@ Inherits from \link{PipeOp}
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpBranch}},
-  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
-  \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
+Other PipeOp: \code{\link{PipeOpDT}},
+  \code{\link{PipeOpDownsample}}, \code{\link{PipeOpPCA}},
+  \code{\link{PipeOpScale}}, \code{\link{PipeOp}}
 }
 \concept{PipeOp}
 \keyword{datasets}

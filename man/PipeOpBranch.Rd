@@ -47,12 +47,8 @@ $new(choices) \%>>\% gunion(pca, nop) \%>>\% PipeOpUnbranch$new(choices)
 
 }
 \seealso{
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}},
-  \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnbranch}},
-  \code{\link{PipeOp}}
+Other PipeOp, PipeOpBroadcast: \code{\link{PipeOpChunk}},
+  \code{\link{PipeOpCopy}}
 }
-\concept{PipeOp}
+\concept{PipeOp, PipeOpBroadcast}
 \keyword{datasets}

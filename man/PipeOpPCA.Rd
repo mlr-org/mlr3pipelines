@@ -26,11 +26,9 @@ Inherits from \link{PipeOpDT}
 op1 = PipeOpPCA$new()
 }
 \seealso{
-Other PipeOp: \code{\link{PipeOpBranch}},
-  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
-  \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpNULL}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
+Other PipeOp: \code{\link{PipeOpDT}},
+  \code{\link{PipeOpDownsample}}, \code{\link{PipeOpNULL}},
+  \code{\link{PipeOpScale}}, \code{\link{PipeOp}}
 }
 \concept{PipeOp}
 \keyword{datasets}

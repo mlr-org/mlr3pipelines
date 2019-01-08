@@ -13,10 +13,9 @@ Depends:
     R (>= 3.0.2)
 Imports:
     R6,
-    backports (>= 1.1.0),
-    checkmate (>= 1.8.2),
+    backports,
+    checkmate,
     data.table,
-    methods,
     mlr3,
     mlr3misc,
     paradox,
@@ -40,7 +39,7 @@ Remotes:
     mlr-org/mlr3,
     mlr-org/mlr3misc,
     mlr-org/paradox
-Collate: 
+Collate:
     'Graph_dt.R'
     'utils.R'
     'PipeOp.R'
@@ -50,6 +49,7 @@ Collate:
     'PipeOpCopy.R'
     'PipeOpDT.R'
     'PipeOpDownsample.R'
+    'PipeOpEnsemble.R'
     'PipeOpFeatureUnion.R'
     'PipeOpLearner.R'
     'PipeOpNULL.R'

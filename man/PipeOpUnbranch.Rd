@@ -11,6 +11,22 @@ PipeOpUnbranch
 \description{
 Used to bring together different paths created by \code{\link{PipeOpBranch}}.
 }
+\section{Methods}{
+
+\itemize{
+\item \code{new(options = 1)} \cr
+(\code{integer(1)} | \code{character}) -> \code{\link{PipeOpBranch}}
+}
+}
+
+\section{Details}{
+
+Creates a PipeOp with multiple input channels that can be used to
+create a Graph network with alternative paths. \code{options} works as in \code{\link{PipeOpBranch}}
+and should probably be the same value as the \code{options} given to the corresponding
+\code{\link{PipeOpBranch}} instance.
+}
+
 \examples{
 pca = PipeOpPCA$new()
 nop = PipeOpNULL$new()
@@ -19,11 +35,7 @@ PipeOpUnbranch$new(choices) \%>>\% gunion(pca, nop) \%>>\% PipeOpUnbranch$new(ch
 
 }
 \seealso{
-Other PipeOp: \code{\link{PipeOpBranch}},
-  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
-  \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOp}}
+Other PipeOp, PipeOpAggregate: \code{\link{PipeOpFeatureUnion}}
 }
-\concept{PipeOp}
+\concept{PipeOp, PipeOpAggregate}
 \keyword{datasets}

@@ -34,5 +34,9 @@ Inherits from \link{PipeOpChunk}
 \examples{
 op = PipeOpChunk$new(5)
 }
-\concept{PipeOp, PipeOpBroadcast, PipeOpChunk}
+\seealso{
+Other PipeOp, PipeOpBroadcast: \code{\link{PipeOpBranch}},
+  \code{\link{PipeOpCopy}}
+}
+\concept{PipeOp, PipeOpBroadcast}
 \keyword{datasets}

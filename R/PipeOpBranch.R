@@ -91,7 +91,7 @@ mlr_pipeops$add("PipeOpBranch", PipeOpBranch)
 #' @description
 #' Used to bring together different paths created by [`PipeOpBranch`].
 #'
-#' @section Methods
+#' @section Methods:
 #' * `new(options = 1)` \cr
 #'   (`integer(1)` | `character`) -> [`PipeOpBranch`]
 #'

@@ -27,5 +27,9 @@ Inherits from \link{PipeOp}
 }
 }
 
-\concept{PipeOp, PipeOpBroadcast, PipeOpCopy}
+\seealso{
+Other PipeOp, PipeOpBroadcast: \code{\link{PipeOpBranch}},
+  \code{\link{PipeOpChunk}}
+}
+\concept{PipeOp, PipeOpBroadcast}
 \keyword{datasets}
