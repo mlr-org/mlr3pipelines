@@ -6,7 +6,7 @@
 #' PipeOps, and a [`data.table`] of edges. It can be trained and used for prediction.
 #'
 #' @section Public Members / Active Bindings:
-#' * `pipeops`      :: named list of [PipeOp]` \cr
+#' * `pipeops`      :: named list of [PipeOp] \cr
 #'   Contains all PipeOps contained in the Graph, named by the PipeOp `$id`.
 #' * `edges`        :: [`data.table`] \cr
 #'   List of connections between the PipeOps. A `data.table` with columns `src_id`, `src_channel`,
@@ -42,7 +42,7 @@
 #'   short representation of `state`.
 #' * `f$set_names(old, new)` \cr
 #'   (`character`, `character`) -> `self` \cr
-#'   list of [GraphNode], indexed by ID.
+#'   Rename PipeOps: Change ID of each PipeOp as identified by `old` to the corresponding item in `new`.
 #' * `f$train()` \cr
 #'   [`Task`] -> `list` of any \cr
 #'   Train graph by calling all the PipeOps' $train method. Return a list of outputs for each unconnected

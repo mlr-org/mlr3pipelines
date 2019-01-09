@@ -9,7 +9,23 @@ devtools::load_all("mlr3pipelines")
 testthat::test_package("mlr3pipelines")
 
 
+
+testthat::test_package("mlr3pipelines", filter = "Graph")
+testthat::test_package("mlr3pipelines", filter = "greplicate")
+
+
+
+
 gr = Graph$new()
+gr$add_pipeop(PipeOpScale$new())
+gr$add_pipeop(PipeOpPCA$new())
+gr$ids(TRUE)
+
+gr$add_edge("scale", "1", "pca", "1")
+gr$add_edge("scale", "1", "pca", "1")
+
+gr
+
 
 
 # ---------------------- multiplex

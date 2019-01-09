@@ -39,7 +39,7 @@
 #'   Output types that are returned by the PipeOp. Read-only.
 #'
 #' @section Methods:
-#' * new(id, params)` \cr
+#' * `new(id, params)` \cr
 #'   `character(1)`, `ParamSet` -> [PipeOp]
 #'   Constructs the pipeOp from an id string and a (possibly empty) [ParamSet].
 #' * `train()`:
