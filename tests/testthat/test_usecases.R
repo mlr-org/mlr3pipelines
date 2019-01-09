@@ -36,7 +36,7 @@ test_that("bagging", {
   lrn = mlr_learners$get("classif.rpart")
 
   g = greplicate(PipeOpDownsample$new() %>>% PipeOpLearner$new(lrn), 2L) %>>%
-    PipeOpModelAvg$new(innum = 2L)
+    PipeOpMajorityVote$new(innum = 2L)
   expect_graph(g, n_nodes = 5L, n_edges = 4L)
 
   g$train(task)
