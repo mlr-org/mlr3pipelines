@@ -15,7 +15,7 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  inputs = mlr_tasks$mget("iris")
+  inputs = mlr_tasks$get("iris")
   x = g$train(inputs)
   expect_task(x[[1]])
 

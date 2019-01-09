@@ -10,7 +10,7 @@ test_that("PipeOp - simple pipe", {
   n1 = Graph$new()$add_pipeop(op1)
   expect_false(n1$is_trained)
 
-  tscaled = n1$train(list(task))
+  tscaled = n1$train(task)
   expect_class(tscaled[[1]], "Task")
 
   tdx = task$data()
