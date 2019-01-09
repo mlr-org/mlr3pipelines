@@ -1,15 +1,10 @@
 context("PipeOpBranch")
 
 test_that("PipeOpBranch - basic properties", {
-  op = PipeOpBranch$new(3)
-  expect_pipeop(op)
-  # expect_true(length(op$train_intypes) == 1L)
-  # expect_true(length(op$predict_intypes) == 1L)
-  # expect_true(length(op$train_outtypes) == 3L)
-  # expect_true(length(op$predict_outtypes) == 3L)
-
-  op2 = PipeOpBranch$new(c("pca", "null"))
-  expect_pipeop(op2)
+  po = PipeOpBranch$new(3)
+  expect_pipeop(po)
+  expect_data_table(po$input, nrow = 1)
+  expect_data_table(po$output, nrow = 3)
 })
 
 
@@ -25,8 +20,8 @@ test_that("PipeOpBranch - train and predict", {
   expect_equal(tout[[branch$param_vals$selection]], t1)
   expect_class(tout[[2]], "NULL")
 
-  branch2 = PipeOpBranch$new(c("t1", "t2"))
-  branch2$param_vals$selection = "t2"
+  branch2 = PipeOpBranch$new(2)
+  branch2$param_vals$selection = 2L
   tout = train_pipeop(branch2, list(t1))
   # expect_true(length(tout) == branch2$outnum)
   # expect_list(tout, len = branch2$outnum)

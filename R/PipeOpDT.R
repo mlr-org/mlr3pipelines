@@ -1,4 +1,6 @@
 #' @title PipeOpDT
+#'
+#' @name PipeOpDT
 #' @format [R6Class] PipeOpDT
 #'
 #' @description
@@ -13,20 +15,21 @@
 #'
 #' The underlying operation must not change row order or number.
 #'
-#' @name PipeOpDT
 #' @family PipeOp
+NULL
+
+#' @include PipeOp.R
 #' @export
 PipeOpDT = R6Class("PipeOpDT",
 
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "PipeOpDT", ps = ParamSet$new()) {
-      super$initialize(id, ps)
-      self$train_intypes = "Task"
-      self$train_outtypes = "Task"
-      self$predict_intypes = "Task"
-      self$predict_outtypes = "Task"
+    initialize = function(id = "PipeOpDT", param_set = ParamSet$new()) {
+      super$initialize(id, param_set = param_set,
+        input = data.table(name = "task", train = "Task", predict = "Task"),
+        output = data.table(name = "task", train = "Task", predict = "Task")
+      )
     },
 
     train = function(inputs) {

@@ -1,4 +1,4 @@
-PipeOpTest1 = R6::R6Class("PipeOpTest1", inherit = PipeOp,
+PipeOpTest1 = R6Class("PipeOpTest1", inherit = PipeOp,
   public = list(
     initialize = function() {
       ps = paradox::ParamSet$new(list(paradox::ParamDbl$new("dbl", lower = 1, upper = 10)))
@@ -14,7 +14,7 @@ PipeOpTest1 = R6::R6Class("PipeOpTest1", inherit = PipeOp,
 )
 
 
-BasicPO = R6::R6Class("BasicPO",
+BasicPO = R6Class("BasicPO",
   inherit = PipeOp,
   public = list(
       train = function(...) print("hi"),
@@ -27,7 +27,7 @@ BasicPO = R6::R6Class("BasicPO",
   )
 )
 
-BasicPOAny = R6::R6Class("BasicPOAny",
+BasicPOAny = R6Class("BasicPOAny",
   inherit = PipeOp,
   public = list(
       nin = NULL,
@@ -54,7 +54,7 @@ BasicPOAny = R6::R6Class("BasicPOAny",
   )
 )
 
-BasicPOAnyNamed = R6::R6Class("BasicPOAnyNamed",
+BasicPOAnyNamed = R6Class("BasicPOAnyNamed",
   inherit = PipeOp,
   public = list(
       train = function(...) print("hi"),

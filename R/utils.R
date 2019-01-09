@@ -1,3 +1,7 @@
+rep_suffix = function(x, n) {
+  sprintf("%s_%04i", x, seq_len(n))
+}
+
 # FIXME: This should be in mlr3misc
 # Chunk elements of vectors into blocks of nearly equal size.
 #

@@ -30,9 +30,5 @@ Inherits from \link{PipeOpMajorityVote}
 \examples{
 op = PipeOpMajorityVote$new(3)
 }
-\seealso{
-Other PipeOp, PipeOpAggregate, PipeOpEnsemble: \code{\link{PipeOpEnsemble}},
-  \code{\link{PipeOpModelAvg}}
-}
 \concept{PipeOp, PipeOpAggregate, PipeOpEnsemble}
 \keyword{datasets}

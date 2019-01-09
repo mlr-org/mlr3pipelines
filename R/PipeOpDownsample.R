@@ -1,4 +1,6 @@
 #' @title PipeOpDownsample
+#'
+#' @name PipeOpDownsample
 #' @format [R6Class] PipeOpDownsample
 #'
 #' @description
@@ -9,11 +11,12 @@
 #' @section Details:
 #' * `perc`: `numeric(1)` Percentage of rows in the task to keep.
 #' * `stratify`: `logical(1)` Should the subsamples be stratified by target?
-#' @name PipeOpDownsample
 #' @family PipeOp
+NULL
+
+#' @include PipeOp.R
 #' @export
 PipeOpDownsample = R6Class("PipeOpDownsample",
-
   inherit = PipeOp,
 
   public = list(
@@ -22,11 +25,10 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
         ParamDbl$new("perc", default = 0.7, lower = 0, upper = 1),
         ParamLgl$new("stratify", default = FALSE)
       ))
-      super$initialize(id, ps)
-      self$train_intypes = "Task"
-      self$train_outtypes = "Task"
-      self$predict_intypes = "Task"
-      self$predict_outtypes = "Task"
+      super$initialize(id, param_set = ps,
+        input = data.table(name = "task", train = "Task", predict = "Task"),
+        output = data.table(name = "task", train = "Task", predict = "Task")
+      )
     },
 
     train = function(inputs) {
@@ -42,7 +44,10 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
       self$state = list()
       return(list(tsk))
     },
-    predict = function(inputs) {return(inputs)}
+
+    predict = function(inputs) {
+      return(inputs)
+    }
   )
 )
 
