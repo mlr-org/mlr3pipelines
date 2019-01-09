@@ -13,6 +13,8 @@ greplicate.PipeOp = function(graph, n) {
   greplicate(ensure_graph(graph), n)
 }
 
+# FIXME: unify we dont need s3
+
 #' @export
 greplicate.Graph = function(graph, n) {
   n = assert_count(n, positive = TRUE, coerce = TRUE)
