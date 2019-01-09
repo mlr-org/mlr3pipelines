@@ -91,9 +91,9 @@ PipeOp = R6Class("PipeOp",
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
-      check_types(input, "input", "train")
+      check_types(self, input, "input", "train")
       output = self$train(input)
-      check_types(output, "output", "train")
+      check_types(self, output, "output", "train")
       output
     },
     predict_internal = function(input) {
@@ -103,9 +103,9 @@ PipeOp = R6Class("PipeOp",
         }
         return(named_list(self$output$name, NO_OP))
       }
-      check_types(input, "input", "predict")
+      check_types(self, input, "input", "predict")
       output = self$train(input)
-      check_types(output, "output", "predict")
+      check_types(self, output, "output", "predict")
       output
     },
     train = function(input) stop("abstract"),
@@ -151,11 +151,11 @@ assert_connection_table = function(x) {
 #   and then to have the types as given by the `$input` or `$output` data.table.
 # @param direction [character(1)] is either `"input"` or `"output"`
 # @param operation [character(1)] is either `"train"` or `"predict"`.
-check_types = function(data, direction, operation) {
+check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   assert_list(data, len = nrow(typetable))
   for (idx in seq_along(data)) {
-    typereq = typetable[[direction]][idx]
+    typereq = typetable[[operation]][idx]
     if (typereq == "*")
       next
     assert_class(data[[idx]], typereq,
