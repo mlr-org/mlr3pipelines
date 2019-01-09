@@ -38,7 +38,7 @@ predict_pipeop = function(po, inputs) {
 
 expect_graph = function(g) {
   expect_class(g, "Graph")
-  expect_data_table(g$channels, any.missing = FALSE)
+  expect_data_table(g$edges, any.missing = FALSE)
   expect_list(g$pipeops, "PipeOp")
   expect_character(g$packages, any.missing = FALSE, unique = TRUE)
 

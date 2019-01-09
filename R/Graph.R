@@ -29,10 +29,12 @@ Graph = R6Class("Graph",
     },
 
     add_channel = function(src_id, src_channel, dst_id, dst_channel) {
-      # FIXME: we need to check channel names
       assert_choice(src_id, names(self$pipeops))
-      assert_string(src_channel)
       assert_choice(dst_id, names(self$pipeops))
+      # FIXME: as soon as intypes / outtypes are present the following two lines should be:
+      # assert_choice(src_channel, rownames(self$pipeops[[src_id]]$outtypes))
+      # assert_choice(dst_channel, rownames(self$pipeops[[dst_id]]$intypes))
+      assert_string(src_channel)
       assert_string(dst_channel)
 
       # FIXME: 2 deadlines?
