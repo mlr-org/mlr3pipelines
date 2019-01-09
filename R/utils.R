@@ -1,35 +1,3 @@
-collapse = function(x) {
-  paste(x, collapse = ",")
-}
-
-
-# specify an R6 active binding as readonly that can still have its member variables changed.
-#
-# E.g. ```obj$readonlyvar$member = newval``` should work if `readonlyvar` is an R6 object,
-# but will usually fail if it is a naively implemented active binding.
-#
-# '<name>' should be the name of the active binding, and a private member variable named `.<name>`:
-#
-# Example:
-#
-# Class = R6Class("Class",
-#   active = list(
-#     var = readonly("var")
-#   ),
-#   private = list(
-#     .var = OtherClass$new()
-#   )
-# )
-readonly = function(name) {
-  body = substitute({
-    var = private[[paste0(".", name)]]
-    if (!missing(x) && !identical(x, var)) stopf("Variable %s is read-only", name)
-    var
-  })
-  eval(call("function", as.pairlist(alist(x = )), body))
-}
-
-
 # FIXME: This should be in mlr3misc
 # Chunk elements of vectors into blocks of nearly equal size.
 #
