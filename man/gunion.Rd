@@ -7,17 +7,15 @@
 gunion(graphs)
 }
 \arguments{
-\item{...}{A list of \link{Graph}, \link{GraphNode} or \link{PipeOp} \cr
-List of elements with one of the types defined above.}
-
-\item{.graphs}{list of \link{Graph}` \cr
-Graphs which are to be joined.}
+\item{graphs}{A list of \link{Graph} or \link{PipeOp} \cr
+List of elements with one of the types defined above, which are the
+graphs to be joined.}
 }
 \value{
 \code{[Graph]}
 }
 \description{
-Takes an arbitrary amount of Graphs, GraphNodes and PipeOps as inputs and joins
+Takes an arbitrary amount of \link{Graph}s and/or \link{PipeOp}s as inputs and joins
 them by "stacking" them one over the other.
 Returns the full graph.
 }
