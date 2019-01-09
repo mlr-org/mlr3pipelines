@@ -13,20 +13,6 @@ PipeOpTest1 = R6::R6Class("PipeOpTest1", inherit = PipeOp,
   )
 )
 
-test_basic_pipeop_props = function(po) {
-  expect_class(po, "PipeOp")
-  expect_character(po$id)
-  expect_class(po$param_set, "ParamSet")
-  expect_list(po$param_vals, names = "unique")
-  expect_output(print(po), "PipeOp:")
-  expect_character(po$packages)
-  expect_null(po$state)
-  expect_null(po$result)
-  expect_character(po$train_intypes)
-  expect_character(po$train_outtypes)
-  expect_character(po$predict_intypes)
-  expect_character(po$predict_outtypes)
-}
 
 BasicPO = R6::R6Class("BasicPO",
   inherit = PipeOp,

@@ -1,5 +1,37 @@
 lapply(list.files(system.file("testthat", package = "mlr3"), pattern = "^helper.*\\.[rR]", full.names = TRUE), source)
 
+expect_pipeop = function(po) {
+  expect_class(po, "PipeOp")
+  expect_string(po$id)
+  expect_class(po$param_set, "ParamSet")
+  expect_list(po$param_vals, names = "unique")
+  expect_output(print(po), "PipeOp:")
+  expect_character(po$packages, any.missing = FALSE, unique = TRUE)
+  # expect_null(po$state)
+  # expect_null(po$result)
+  # expect_character(po$train_intypes)
+  # expect_character(po$train_outtypes)
+  # expect_character(po$predict_intypes)
+  # expect_character(po$predict_outtypes)
+}
+
+train_pipeop = function(po, inputs) {
+  expect_pipeop(po)
+  expect_null(po$state)
+  expect_false(po$is_trained)
+  result = po$train(inputs)
+  expect_list(result)
+  expect_true(!is.null(po$state))
+  expect_true(po$is_trained)
+}
+
+predict_pipeop = function(po, inputs) {
+  expect_pipeop(po)
+  expect_true(po$is_trained)
+  result = po$predict(inputs)
+  expect_list(result)
+}
+
 expect_graph = function(g) {
   expect_class(g, "Graph")
   expect_data_table(g$channels, any.missing = FALSE)
