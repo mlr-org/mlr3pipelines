@@ -17,7 +17,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(innum, id) {
+    initialize = function(innum, id = "PipeOpEnsemble") {
       assert_integerish(innum)
       super$initialize(id)
     },
@@ -25,7 +25,8 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
     train = function(inputs) {
       self$state = list()
       return(list())
-    }
+    }, 
+    predict = function(inputs) {}
   ),
   private = list(
     merge_predictions = function(inputs) {

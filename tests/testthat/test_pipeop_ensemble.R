@@ -1,8 +1,18 @@
 context("PipeOpModelAvg")
 
 
+test_that("PipeOpEnsemble - basic properties", {
+  op = PipeOpEnsemble$new(3)
+  expect_pipeop(op)
+  # expect_true(length(op$train_intypes) == 3L)
+  # expect_true(length(op$predict_intypes) == 3L)
+  # expect_true(length(op$train_outtypes) == 1L)
+  # expect_true(length(op$predict_outtypes) == 1L)
+  # expect_true(op$innum == 3)
+})
+
+
 test_that("PipeOpMajorityVote - basic properties", {
-  # Test basic properties
   op = PipeOpMajorityVote$new(3)
   expect_pipeop(op)
   # expect_true(length(op$train_intypes) == 3L)
@@ -30,7 +40,6 @@ test_that("PipeOpMajorityVote - train and predict", {
 })
 
 test_that("PipeOpModelAvg - basic properties", {
-  # Test basic properties
   op = PipeOpModelAvg$new(3)
   expect_pipeop(op)
   # expect_true(length(op$train_intypes) == 3L)
