@@ -68,6 +68,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     param_set = function() self$learner$param_set,
 
     param_vals = function(value) {
+      # FIXME This is a bug, add tests
       if (missing(value)) return(self$learner$param_vals)
       else self$learner$param_set = value
     }
