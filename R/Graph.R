@@ -1,3 +1,4 @@
+
 # TODO:
 # * print()
 Graph = R6Class("Graph",
@@ -22,7 +23,7 @@ Graph = R6Class("Graph",
       assert_class(op, "PipeOp")
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
-      self$pipeops = c(self$pipeops, set_names(list(op$clone(deep = TRUE)), op$id))
+      self$pipeops[[op$id]] = op$clone(deep = TRUE)
       invisible(self)
     },
 
@@ -35,8 +36,6 @@ Graph = R6Class("Graph",
       assert_string(src_channel)
       assert_string(dst_channel)
 
-      # FIXME: 2 deadlines?
-      dst = self$pipeops[[dst_id]]
       row = data.table(src_id = src_id, src_channel = src_channel,
         dst_id = dst_id, dst_channel = dst_channel)
       self$edges = rbind(self$edges, row)
@@ -59,17 +58,28 @@ Graph = R6Class("Graph",
       plot(ig, layout = layout)
     },
 
+    print = function() {
+      lines = map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
+        data.frame(ID = pipeop$id, State = sprintf("<%s>", class(pipeop$state)[1]))
+      })
+      if (length(lines)) {
+        catf("Graph with %s PipeOps:", length(lines))
+        print(do.call(rbind, unname(lines)))
+      } else {
+        cat("Empty Graph.\n")
+      }
+      invisible(self)
+    },
+
     set_names = function(old, new) {
       new_ids = map_values(names(self$pipeops), old, new)
       names(self$pipeops) = new_ids
-      self$pipeops = imap(self$pipeops, function(x, nn) { x$id = nn; x })
+      imap(self$pipeops, function(x, nn) x$id = nn)
 
       self$edges[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
-      self
+      invisible(self)
     },
 
-    # FIXME: why does this take a list of inputs? in in "graph_fire" the arg is called "input"?
-    # shouldnt this always be a single task?
     train = function(inputs) {
       graph_fire(self, private, inputs, "train")
     },
@@ -80,23 +90,10 @@ Graph = R6Class("Graph",
   ),
 
   active = list(
-    is_trained = function() {
-      all(map_lgl(self$pipeops, "is_trained"))
-    },
-
-    # FIXME: lhs and rhs need to return sorzed in order of IDs
-    lhs = function() { # return OP?
-      setdiff(names(self$pipeops), unique(self$edges$dst_id))
-    },
-
-    rhs = function() { # return OP?
-      setdiff(names(self$pipeops), unique(self$edges$src_id))
-    },
-
-    packages = function() {
-      unique(unlist(map(self$pipeops, "packages")))
-    }
-
+    is_trained = function() all(map_lgl(self$pipeops, "is_trained")),
+    lhs = function() sort(setdiff(names(self$pipeops), self$edges$dst_id)),
+    rhs = function() sort(setdiff(names(self$pipeops), self$edges$src_id)),
+    packages = function() unique(unlist(map(self$pipeops, "packages")))
   ),
 
   private = list(
