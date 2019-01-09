@@ -38,11 +38,17 @@ predict_pipeop = function(po, inputs) {
   return(result)
 }
 
-expect_graph = function(g) {
+expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
   expect_class(g, "Graph")
-  expect_data_table(g$channels, any.missing = FALSE)
   expect_list(g$pipeops, "PipeOp")
+  if (!is.null(n_nodes))
+    expect_length(g$pipeops, n_nodes)
   expect_character(g$packages, any.missing = FALSE, unique = TRUE)
+
+  expect_data_table(g$edges, any.missing = FALSE)
+  if (!is.null(n_edges))
+    expect_equal(nrow(g$edges), n_egdes)
+
 
   # expect_class(g$param_set, "ParamSet")
   # expect_list(g$param_vals, names = "unique")

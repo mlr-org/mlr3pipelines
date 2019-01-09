@@ -5,18 +5,7 @@
 # returns a Graph
 #' @export
 greplicate = function(graph, n) {
-  UseMethod("greplicate")
-}
-
-#' @export
-greplicate.PipeOp = function(graph, n) {
-  greplicate(ensure_graph(graph), n)
-}
-
-# FIXME: unify we dont need s3
-
-#' @export
-greplicate.Graph = function(graph, n) {
+  graph = ensure_graph(graph)
   n = assert_count(n, positive = TRUE, coerce = TRUE)
   x = map(seq_len(n), function(i) {
     g = graph$clone(deep = TRUE)
