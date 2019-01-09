@@ -1,17 +1,20 @@
 #FIXME: pipeops shouldnt have an ID in their constructor. the ID should be an AB.
 
+# FIXME: maybe we can do the train/predict/expect stuff for the graph in a helper file?
+
 context("usecases for pipelines")
 
-test_that("linear: scale + pca", {
+test_that("linear: scale + pca + learn", {
   # check that we can train and predict, on the same data, result should be the same
   task = mlr_tasks$get("iris")
-  g = PipeOpScale$new() %>>% PipeOpPCA$new()
-  expect_graph(g)
-  res1 = g$train(task)
-  assert_list(res1, types = "Task")
-  res2 = g$predict(task)
-  assert_list(res2, types = "Task")
-  expect_equal(res1[[1]]$data(), res2[[1]]$data())
+  lrn = mlr_learners$get("classif.rpart")
+  g = PipeOpScale$new() %>>% PipeOpPCA$new() %>>% PipeOpLearner$new(learner = lrn)
+  expect_graph(g, n_nodes = 3L, n_edges = 2L)
+  res = g$train(task)
+  expect_true(g$is_trained)
+  expect_equal(res, list(NULL))
+  res = g$predict(task)
+  assert_list(res, types = "Prediction")
 })
 
 
@@ -19,14 +22,15 @@ test_that("featureunion", {
   task = mlr_tasks$get("iris")
   lrn = mlr_learners$get("classif.rpart")
 
-  g = gunion(list(PipeOpPCA$new(), PipeOpNULL$new())) %>>% PipeOpFeatureUnion$new(2L) %>>% PipeOpLearner$new(learner = lrn)
-  expect_false(g$is_trained)
+  g = gunion(list(PipeOpPCA$new(), PipeOpNULL$new())) %>>%
+    PipeOpFeatureUnion$new(2L) %>>% PipeOpLearner$new(learner = lrn)
   expect_graph(g, n_nodes = 4L, n_edges = 3L)
 
-  g$train(task)
-  # # FIXME: also do a predict
-  # # graph$predict(task)
-  # FIXME: at least roughly check that correct stuff is returned
+  res = g$train(task)
+  expect_true(g$is_trained)
+  expect_equal(res, list(NULL))
+  res = g$predict(task)
+  expect_list(res, types = "Prediction")
 })
 
 #FIXME: have a look at intermediate results in all usecase, we should expect some stuff there
@@ -39,8 +43,11 @@ test_that("bagging", {
     PipeOpMajorityVote$new(innum = 2L)
   expect_graph(g, n_nodes = 5L, n_edges = 4L)
 
-  g$train(task)
-  g$predict(task)
+  res = g$train(task)
+  expect_true(g$is_trained)
+  expect_equal(res, list(NULL))
+  res = g$predict(task)
+  expect_list(res, types = "Prediction")
 })
 
 
@@ -59,10 +66,13 @@ test_that("branching", {
   g = PipeOpBranch$new(2L) %>>%
     gunion(list(PipeOpLearner$new(lrn1), PipeOpLearner$new(lrn2))) %>>%
     PipeOpUnbranch$new(2L)
-  # expect_graph(g, n_nodes = 5L, n_edges = 4L)
-   #FIXME: finish test
-  # g$train(list(task))
-  # graph$predict(task)
+  expect_graph(g, n_nodes = 4L, n_edges = 4L)
+
+  res = g$train(task)
+  expect_true(g$is_trained)
+  expect_equal(res, list(NULL))
+  res = g$predict(task)
+  expect_list(res, types = "Prediction")
 })
 
 

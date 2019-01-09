@@ -33,7 +33,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 
     train = function(inputs) {
       self$state = list()
-      return(list())
+      return(list(NULL))
     },
     predict = function(inputs) {}
   ),
