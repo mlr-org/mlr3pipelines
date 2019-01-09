@@ -23,6 +23,7 @@ train_pipeop = function(po, inputs) {
   expect_list(result)
   expect_true(!is.null(po$state))
   expect_true(po$is_trained)
+  return(result)
 }
 
 predict_pipeop = function(po, inputs) {
@@ -30,6 +31,7 @@ predict_pipeop = function(po, inputs) {
   expect_true(po$is_trained)
   result = po$predict(inputs)
   expect_list(result)
+  return(result)
 }
 
 expect_graph = function(g) {
