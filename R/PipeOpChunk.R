@@ -43,12 +43,11 @@ PipeOpChunk = R6Class("PipeOpChunk",
       assert_list(inputs, len = 1L, type = "Task")
       self$state = list()
 
-      # Get feature dt from task
       task = inputs[[1L]]
       colns = task$backend$colnames
 
       # FIXME: Implement stratification?
-      idx = chunk(task$row_ids, n.chunks = self$outnum, shuffle = self$param_vals$shuffle)
+      idx = chunk(task$row_ids[[1L]], n.chunks = self$outnum, shuffle = self$param_vals$shuffle)
 
       # Subset data, clone task and overwrite data in it.
       map(idx, function(x) {

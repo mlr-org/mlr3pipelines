@@ -79,7 +79,7 @@ test_that("branching", {
 
 test_that("task chunking", {
   task = mlr_tasks$get("iris")
-  lrn1 = mlr_learners$get("classif.rpart")
+  lrn = mlr_learners$get("classif.rpart")
 
   g = PipeOpChunk$new(2L) %>>% greplicate(PipeOpLearner$new(lrn), 2L) %>>%
     PipeOpMajorityVote$new(2L)
@@ -92,6 +92,8 @@ test_that("task chunking", {
   expect_list(res, types = "Prediction")
 })
 
+
+# FIXME: implement stacking, maybe even with orig features fed into superlearner
 
 
 
