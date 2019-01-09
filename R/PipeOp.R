@@ -86,6 +86,8 @@ PipeOp = R6Class("PipeOp",
       # catf("Result: %s", as_short_string(self$result))
     },
 
+    # FIXME: these methods should actually call .train from the basecclasses, and then
+    # do some asserts on input and output types and sizes
     train = function(...) stop("abstract"),
     predict = function(...) stop("abstract")
   ),

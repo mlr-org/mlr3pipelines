@@ -63,6 +63,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
       assert_list(inputs)
       self$state = list()
       ret = named_list(self$output$name)
+      # FIXME: we change names here of "ret"... that is bad!
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     },
@@ -70,6 +71,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
     predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name)
+      # FIXME: we change names here of "ret"... that is bad!
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     }
