@@ -19,7 +19,6 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       do.call("rbind", map(inputs, function(x) as.data.table(x)))
     }
   )
-
 )
 
 PipeOpModelAvg = R6Class("PipeOpModelAvg",
