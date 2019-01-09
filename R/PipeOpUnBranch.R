@@ -1,6 +1,6 @@
 #' @title PipeOpUnbranch
 #'
-#' @name PipeOpUnBranch
+#' @name PipeOpUnbranch
 #' @format [R6Class] PipeOpUnbranch
 #'
 #' @description
@@ -20,7 +20,7 @@
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpUnbranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
+#' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 #'
 #' @family PipeOp
 #' @family PipeOpAggregate
@@ -53,16 +53,16 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
     train = function(inputs) {
       assert_list(inputs, len = self$innum)
       self$state = list()
-      nonnull = Filter(Negate(is.null), inputs)
-      assert_list(nonnull, any.missing = FALSE, len = 1)
-      return(nonnull)
+      result = filter_noop(inputs)
+      assert_list(result, len = 1)
+      return(result)
     },
 
     predict = function(inputs) {
       assert_list(inputs, len = self$innum)
-      nonnull = Filter(Negate(is.null), inputs)
-      assert_list(nonnull, any.missing = FALSE, len = 1)
-      return(nonnull)
+      result = filter_noop(inputs)
+      assert_list(result, len = 1)
+      return(result)
     }
   )
 )

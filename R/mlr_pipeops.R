@@ -12,10 +12,6 @@
 #' @family Dictionary
 #' @family PipeOps
 #' @name mlr_pipeops
-#' @examples
-#' mlr_pipeops$ids()
-#' as.data.table(mlr_pipeops)
-
 NULL
 
 DictionaryPipeOp = R6Class("DictionaryPipeOp",

@@ -29,9 +29,20 @@
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpBranch
-#' $new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
+#' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 NULL
+
+# special new data type for no-ops. Distinct from NULL for easier
+# and distinction from unintentional NULL returns.
+#' @export
+NO_OP = R6Class("NO_OP", cloneable = FALSE,
+  public = list(
+    initialize = function() {},
+    print = function() cat("mlr3pipelines NO_OP indicator\n")
+  ),
+)$new()
+is_noop = function(x) test_r6(x, "NO_OP")
+filter_noop = function(x) Filter(Negate(is_noop), x)
 
 #' @include PipeOp.R
 #' @export
@@ -48,6 +59,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
         options = round(options)
         param = ParamInt$new("selection", lower = 1, upper = options, default = 1)
         outnum = options
+        options = rep_suffix("output", outnum)
       } else {
         param = ParamFct$new("selection", values = options, default = options[1])
         outnum = length(options)
@@ -55,7 +67,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
       super$initialize(id,
         param_set = ParamSet$new(params = list(param)),
         input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*")
+        output = data.table(name = options, train = "*", predict = "*")
       )
       self$outnum = outnum
     },
@@ -63,16 +75,14 @@ PipeOpBranch = R6Class("PipeOpBranch",
     train = function(inputs) {
       assert_list(inputs)
       self$state = list()
-      ret = named_list(self$output$name)
-      # FIXME: we change names here of "ret"... that is bad!
+      ret = named_list(self$output$name, NO_OP)
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     },
 
     predict = function(inputs) {
       assert_list(inputs)
-      ret = named_list(self$output$name)
-      # FIXME: we change names here of "ret"... that is bad!
+      ret = named_list(self$output$name, NO_OP)
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     }

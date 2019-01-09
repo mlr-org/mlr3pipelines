@@ -16,11 +16,11 @@ test_that("PipeOpUnbranch - train and predict", {
   ubranch = PipeOpUnbranch$new(2)
   expect_true(ubranch$innum == 2L)
 
-  tout = train_pipeop(ubranch, (list(t1, NULL)))
+  tout = train_pipeop(ubranch, (list(t1, NO_OP)))
   expect_class(tout[[1]], "Task")
   expect_true(length(tout) == 1L)
 
-  pout = predict_pipeop(ubranch, (list(NULL, t2)))
+  pout = predict_pipeop(ubranch, (list(NO_OP, t2)))
   expect_true(length(pout) == 1)
   expect_equal(pout[[1]], t2)
 

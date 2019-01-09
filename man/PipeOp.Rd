@@ -30,9 +30,9 @@ Packages required for the pipeOp.
 The set of all exposed parameters of the PipeOp.
 \item \code{param_vals}                   :: named \link{list}
 Parameter settings where all setting must come from \code{param_set}, named with param IDs.
-\item \code{state}                      :: \link{anys}
+\item \code{state}                      :: any
 The object of learned parameters, obtained in the training step, and applied in the predict step.
-\item \code{is_trained}                 :: \link{logical(1)}
+\item \code{is_trained}                 :: \code{logical(1)}
 Is the PipeOp currently trained?
 \item \code{result}                     :: any
 A slot to store the result of either the \code{train} or the \code{predict} step, after it was
@@ -80,7 +80,7 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpLearner}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOpUnBranch}}
+  \code{\link{PipeOpUnbranch}}
 }
 \concept{PipeOp}
 \keyword{datasets}
