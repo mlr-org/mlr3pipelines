@@ -202,7 +202,7 @@ This document contains a list of use-cases we want to contain.
     - does: Nothing
     - returns: [[Task]]
 
-##### [[PipeOpModelAverage]]
+##### [[PipeOpModelAvg]]
 
   - **train**:
     - input: Nothing
@@ -213,6 +213,18 @@ This document contains a list of use-cases we want to contain.
     - input: List of Predictions
     - does: Averages Predictions, possibly average ground truths
     - returns: Prediction
+
+##### [[PipeOpMajorityVote]]
+  - **train**:
+    - input: Nothing
+    - does: Nothing
+    - returns: Nothing
+  - **params:**: Nothing
+  - **predict**:
+    - input: List of Predictions
+    - does: Averages Predictions, possibly average ground truths
+    - returns: Prediction
+
 
 ##### [[PipeOpLearnerCV]]
 

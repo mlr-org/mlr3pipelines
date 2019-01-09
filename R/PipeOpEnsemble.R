@@ -1,64 +1,58 @@
-# PipeOpEnsemble = R6Class("PipeOpEnsemble",
-#   inherit = PipeOp,
+PipeOpEnsemble = R6Class("PipeOpEnsemble",
+  inherit = PipeOp,
 
-#   public = list(
-#     initialize = function(id, param_set = ParamSet$new()) {
-#       super$initialize(id, param_set)
-#       private$.intype = list("any")
-#       private$.outtype = list("any")
+  public = list(
+    initialize = function(innum, id) {
+      super$initialize(id)
+    },
 
-#     },
+    train = function(inputs) {
+      self$state = list()
+      return(list())
+    },
 
-#     train2 = function() {
-#       apply_fun_to_rows()
-#     },
+    predict = function(inputs) {
+    }
+  ),
+  private = list(
+    merge_predictions = function(inputs) {
+      do.call("rbind", map(inputs, function(x) as.data.table(x)))
+    }
+  )
+)
 
-#     predict2 = function() {
-#       apply_fun_to_rows()
-#     }
-#   ),
+PipeOpModelAvg = R6Class("PipeOpModelAvg",
+  inherit = PipeOpEnsemble,
 
-#   private = list(
-#     apply_fun_to_rows = function() {
-#       assert_list(self$inputs, len = 1L, type = "Task")
-#       task = self$inputs[[1L]]
-#       # FIXME: this is really bad code how i change the data of the task
-#       fn = task$feature_names
-#       d = task$data()
-#       # FIXME: Use propper dt style
-#       avg = dd[, ..fn][, private$fun(), by = ..I]
-#       return(avg)
-#     }
-#   )
-# )
+  public = list(
+    initialize = function() {
+      super$initialize("PipeOpModelAvg")
+    },
+    predict = function(inputs) {
+      prds = private$merge_predictions(inputs)
+      prds[, list(response = mean(response, na.rm = TRUE), truth = truth[1]), by = "row_id"]
+      
+      p = PredictionRegr$new(row_id = prds$row_id, response = prds$response,
+        truth = prds$truth)
+      return(p)
+    }
+  )
+)
 
-# PipeOpEnsembleAverage = R6Class("PipeOpEnsembleAverage",
-#   inherit = PipeOpEnsemble,
+PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
+  inherit = PipeOpEnsemble,
 
-#   public = list(
-#     initialize = function() {
-#       super$initialize("PipeOpEnsembleAverage")
-#       private$fun = function(x) mean(x, na.rm = TRUE)
-#     }
-#   )
-# )
+  public = list(
+    initialize = function() {
+      super$initialize("PipeOpMajorityVote")
+    },
+    predict = function(inputs) {
+      prds = private$merge_predictions(inputs)
+      prds[, list(response = compute_mode(response), truth = truth[1]), by = "row_id"]
 
-# PipeOpEnsembleMajorityVote = R6Class("PipeOpEnsembleMajorityVote",
-#   inherit = PipeOpEnsemble,
-
-#   public = list(
-#     initialize = function() {
-#       super$initialize("PipeOpEnsembleMajorityVote")
-#       private$fun = function(x) mean(x, na.rm = TRUE)
-#     }
-#   ),
-
-#   private = list(
-#     mode = function(x) {
-#       tab = tabulate(x)
-#       modecol = which.max(tab)
-#       if(sum(tab == max(tab)) > 1) modecol = NA
-#       return(modecol)
-#     }
-#   )
-# )
+      p = PredictionRegr$new(row_id = prds$row_id, response = prds$response,
+        truth = prds$truth)
+      return(p)
+    }
+  )
+)
