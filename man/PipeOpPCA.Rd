@@ -29,7 +29,7 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpLearner}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnBranch}},
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnbranch}},
   \code{\link{PipeOp}}
 }
 \concept{PipeOp}

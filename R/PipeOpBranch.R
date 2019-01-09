@@ -29,8 +29,7 @@
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpBranch
-#' $new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
+#' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 NULL
 
 #' @include PipeOp.R

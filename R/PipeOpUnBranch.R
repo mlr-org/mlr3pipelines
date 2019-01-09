@@ -1,6 +1,6 @@
 #' @title PipeOpUnbranch
 #'
-#' @name PipeOpUnBranch
+#' @name PipeOpUnbranch
 #' @format [R6Class] PipeOpUnbranch
 #'
 #' @description
@@ -20,7 +20,7 @@
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
-#' PipeOpUnbranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
+#' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 #'
 #' @family PipeOp
 #' @family PipeOpAggregate

@@ -35,11 +35,11 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpLearner}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOpUnBranch}}, \code{\link{PipeOp}}
+  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
 
 Other PipeOpAggregate: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpUnBranch}}
+  \code{\link{PipeOpUnbranch}}
 
 Other PipeOpEnsemble: \code{\link{PipeOpEnsemble}}
 }

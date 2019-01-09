@@ -7,8 +7,6 @@
 \format{\link{R6Class} PipeOpLearner}
 \usage{
 PipeOpLearner
-
-PipeOpLearner
 }
 \description{
 Wraps a \link[mlr3:Learner]{mlr3::Learner} into a \link{PipeOp}.
@@ -33,5 +31,16 @@ Inherits from \link{PipeOp}
 }
 }
 
+\seealso{
+Other PipeOp: \code{\link{PipeOpBranch}},
+  \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpFeatureUnion}},
+  \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
+  \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
+  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
+}
+\concept{PipeOp}
 \concept{PipeOp, PipeOpLearner}
 \keyword{datasets}

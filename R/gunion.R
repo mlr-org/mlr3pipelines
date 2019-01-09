@@ -9,6 +9,7 @@
 #'   List of elements with one of the types defined above, which are the
 #'   graphs to be joined.
 #' @return `[Graph]`
+#' @export
 gunion = function(graphs) {
   graphs = map(graphs, ensure_graph)
 
