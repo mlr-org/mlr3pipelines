@@ -22,6 +22,7 @@ Imports:
 Suggests:
     igraph,
     knitr,
+    logger,
     mlbench,
     rmarkdown,
     rpart,

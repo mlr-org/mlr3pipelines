@@ -3,7 +3,7 @@ context("featureunion")
 
 test_that("featureunion - basic properties", {
   po = PipeOpFeatureUnion$new(3)
-  expect_pipeop(op)
+  expect_pipeop(po)
   expect_data_table(po$input, nrow = 3)
   expect_data_table(po$output, nrow = 1)
 })
