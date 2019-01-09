@@ -27,7 +27,7 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    add_channel = function(src_id, src_channel, dst_id, dst_channel) {
+    add_edge = function(src_id, src_channel, dst_id, dst_channel) {
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
       # FIXME: as soon as intypes / outtypes are present the following two lines should be:

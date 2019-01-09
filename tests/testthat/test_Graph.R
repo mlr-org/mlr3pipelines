@@ -10,8 +10,8 @@ test_that("linear graph", {
   g$add_pipeop(op_ds)
   g$add_pipeop(op_pca)
   # g$add_pipeop(op_lrn)
-  g$add_channel("downsample", "1", "pca", "1")
-  # g$add_channel("pca", "1", "classif.rpart", "1")
+  g$add_edge("downsample", "1", "pca", "1")
+  # g$add_edge("pca", "1", "classif.rpart", "1")
 
   expect_graph(g)
 
