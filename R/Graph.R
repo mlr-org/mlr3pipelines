@@ -1,6 +1,4 @@
 
-# TODO:
-# * print()
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
@@ -93,6 +91,9 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
+    # Mutator to change PipeOp IDs
+    # Modifies both the index in $pipeops, as well as the respective PipeOp's ID. Do this here and not
+    # by setting `graph$pipeops[[x]]$id <- y`!
     set_names = function(old, new) {
       new_ids = map_values(names(self$pipeops), old, new)
       names(self$pipeops) = new_ids
@@ -102,10 +103,14 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
+    # Train graph by calling all the PipeOps' $train method
+    # return a list of outputs for each unconnected PipeOp out-channel
     train = function(input) {
       graph_fire(self, private, input, "train")
     },
 
+    # Predict with the graph by calling all the PipeOps' $predict method
+    # return a list of outputs for each unconnected PipeOp out-channel
     predict = function(input) {
       graph_fire(self, private, input, "predict")
     }
