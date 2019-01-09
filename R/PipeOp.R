@@ -87,7 +87,9 @@ PipeOp = R6Class("PipeOp",
     },
 
     train_internal = function(input) {
-      if (any(map_lgl(input, is_noop))) {
+      if (all(map_lgl(input, is_noop))) {
+        # FIXME: maybe we want to skip on `any` NO_OP, but that would require special handling in PipeOpUnbranch.
+        # Would require same adjustment in predict_internal
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
@@ -97,14 +99,14 @@ PipeOp = R6Class("PipeOp",
       output
     },
     predict_internal = function(input) {
-      if (any(map_lgl(input, is_noop))) {
+      if (all(map_lgl(input, is_noop))) {
         if (is_noop(self$state)) {
           stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
         }
         return(named_list(self$output$name, NO_OP))
       }
       check_types(self, input, "input", "predict")
-      output = self$train(input)
+      output = self$predict(input)
       check_types(self, output, "output", "predict")
       output
     },
