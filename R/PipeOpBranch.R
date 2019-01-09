@@ -47,6 +47,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
         options = round(options)
         param = ParamInt$new("selection", lower = 1, upper = options, default = 1)
         outnum = options
+        options = rep_suffix("output", outnum)
       } else {
         param = ParamFct$new("selection", values = options, default = options[1])
         outnum = length(options)
@@ -54,7 +55,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
       super$initialize(id,
         param_set = ParamSet$new(params = list(param)),
         input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*")
+        output = data.table(name = options, train = "*", predict = "*")
       )
       self$outnum = outnum
     },
@@ -63,7 +64,6 @@ PipeOpBranch = R6Class("PipeOpBranch",
       assert_list(inputs)
       self$state = list()
       ret = named_list(self$output$name)
-      # FIXME: we change names here of "ret"... that is bad!
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     },
@@ -71,7 +71,6 @@ PipeOpBranch = R6Class("PipeOpBranch",
     predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name)
-      # FIXME: we change names here of "ret"... that is bad!
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     }
