@@ -59,14 +59,14 @@ PipeOpBranch = R6::R6Class("PipeOpBranch",
       }
     },
     train = function(input) {
-      assert_list(input, len = private$.outnum)
+      assert_list(input)
       self$state = list()
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
       return(ret)
     },
     predict = function(input) {
-      assert_list(input, len = private$.outnum)
+      assert_list(input)
       ret = private$.defaultreturn
       ret[[self$param_vals[[1]]]] = input[[1]]
       return(ret)
