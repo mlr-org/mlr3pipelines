@@ -2,6 +2,14 @@ context("downsample")
 
 test_that("PipeOpDownsample - basic properties", {
   op = PipeOpDownsample$new()
+  task = mlr_tasks$get("iris")
+  expect_pipeop(op)
+  train_pipeop(op, input = list(task))
+  predict_pipeop(op, input = list(task))
+})
+
+test_that("PipeOpDownsample - basic properties", {
+  op = PipeOpDownsample$new()
   test_basic_pipeop_props(op)
 })
 
