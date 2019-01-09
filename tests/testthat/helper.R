@@ -10,6 +10,11 @@ expect_pipeop = function(po) {
   expect_character(po$packages, any.missing = FALSE, unique = TRUE, label = label)
   expect_function(po$train, args = "inputs")
   expect_function(po$predict, args = "inputs")
+  expect_data_table(po$input, any.missing = FALSE)
+  expect_names(names(po$input), permutation.of = c("name", "train", "predict"))
+  expect_data_table(po$output, any.missing = FALSE)
+  expect_names(names(po$output), permutation.of = c("name", "train", "predict"))
+
   # expect_null(po$state)
   # expect_null(po$result)
   # expect_character(po$train_intypes)

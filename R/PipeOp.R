@@ -58,24 +58,24 @@
 #' @family PipeOp
 PipeOp = R6::R6Class("PipeOp",
   public = list(
+    id = NULL,
     packages = character(0),
     state = NULL,
     result = NULL,
-    # FIXME: Enforce len(train_intypes) == len(predict_intypes), same outtypes
-    train_intypes = "any",
-    train_outtypes = "any",
-    predict_intypes = "any",
-    predict_outtypes = "any",
+    input = NULL,
+    output = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = NULL) {
-      private$.id = id
+    initialize = function(id, param_set = ParamSet$new(), param_vals = NULL,
+      input = NULL, output = NULL) {
+      self$id = assert_string(id)
       private$.param_set = param_set
-      #FIXME: we really need a function in paradox now to get defaults
       private$.param_vals = param_set$defaults
       private$.param_vals = insert_named(private$.param_vals, param_vals)
-      if (!param_set$test(private$.param_vals)) {
+      if (!param_set$test(private$.param_vals))
         stop("Parameters out of bounds")
-      }
+
+      self$input = assert_connection_table(input)
+      self$output = assert_connection_table(output)
     },
 
     print = function(...) {
@@ -91,15 +91,6 @@ PipeOp = R6::R6Class("PipeOp",
   ),
 
   active = list(
-    #FIXME: the comment below seems weird. Either we do that automatically or we should not allow changing of ids?
-    id = function(id) {  # Always call containing graph's update_ids() when changing this.
-      if (missing(id)) {
-        private$.id
-      } else {
-        private$.id = id
-        # FIXME: maybe notify the graph about changed ID?
-      }
-    },
     param_set = function() private$.param_set,
     param_vals = function(vals) {
       if (!missing(vals)) {
@@ -119,8 +110,15 @@ PipeOp = R6::R6Class("PipeOp",
   ),
 
   private = list(
-    .id = NULL,
     .param_set = NULL,
     .param_vals = NULL
   )
 )
+
+assert_connection_table = function(x) {
+  if (is.null(x))
+    return(data.table(name = character(0L), train = character(0L), predict = character(0L)))
+  assert_data_table(x, .var.name = deparse(substitute(x)))
+  assert_names(names(x), permutation.of = c("name", "train", "predict"), .var.name = deparse(substitute(x)))
+  x
+}

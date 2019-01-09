@@ -33,6 +33,7 @@
 PipeOpBranch = R6::R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
+    outnum = NULL,
     initialize = function(options, id = "branch") {
       assert(
         check_int(options, lower = 1),
@@ -46,38 +47,28 @@ PipeOpBranch = R6::R6Class("PipeOpBranch",
         param = ParamFct$new("selection", values = options, default = options[1])
         outnum = length(options)
       }
-      super$initialize(id, ParamSet$new(params = list(param)))
-      self$train_intypes = "any"
-      self$train_outtypes = rep("any", outnum)
-      self$predict_intypes = "any"
-      self$predict_outtypes = rep("any", outnum)
-      private$.defaultreturn = rep(list(NULL), outnum)
-      private$.outnum = outnum
-      if (is.character(options)) {
-        names(private$.outtype) = options
-        names(private$.defaultreturn) = options
-      }
+      super$initialize(id,
+        param_set = ParamSet$new(params = list(param)),
+        input = data.table(name = "input", train = "*", predict = "*"),
+        output = data.table(name = rep_suffix("input", outnum), train = "*", predict = "*")
+      )
+      self$outnum = outnum
     },
+
     train = function(inputs) {
       assert_list(inputs)
       self$state = list()
-      ret = private$.defaultreturn
-      ret[[self$param_vals[[1]]]] = inputs[[1]]
+      ret = named_list(self$output$name)
+      ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     },
+
     predict = function(inputs) {
       assert_list(inputs)
-      ret = private$.defaultreturn
-      ret[[self$param_vals[[1]]]] = inputs[[1]]
+      ret = named_list(self$output$name)
+      ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     }
-  ),
-  private = list(
-    .defaultreturn = NULL,  # list of NULLs with the correct length and names
-    .outnum = NULL
-  ),
-  active = list(
-    outnum = function() private$.outnum
   )
 )
 
@@ -112,6 +103,7 @@ mlr_pipeops$add("PipeOpBranch", PipeOpBranch)
 PipeOpUnbranch = R6::R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(
+    innum = NULL,
     initialize = function(options, id = "unbranch") {
       assert(
         check_int(options, lower = 1),
@@ -123,32 +115,27 @@ PipeOpUnbranch = R6::R6Class("PipeOpUnbranch",
       } else {
         innum = length(options)
       }
-      super$initialize(id)
-      private$.innum = innum
-      self$train_intypes = rep("any", innum)
-      self$train_outtypes = "any"
-      self$predict_intypes = rep("any", innum)
-      self$predict_outtypes = "any"
+      super$initialize(id,
+        input = data.table(name = rep_suffix("input", innum), train = "*", predict = "*"),
+        output = data.table(name = "output", train = "*", predict = "*")
+      )
+      self$innum = innum
     },
+
     train = function(inputs) {
-      assert_list(inputs, len = private$.innum)
+      assert_list(inputs, len = self$innum)
       self$state = list()
       nonnull = Filter(Negate(is.null), inputs)
       assert_list(nonnull, any.missing = FALSE, len = 1)
       return(nonnull)
     },
+
     predict = function(inputs) {
-      assert_list(inputs, len = private$.innum)
+      assert_list(inputs, len = self$innum)
       nonnull = Filter(Negate(is.null), inputs)
       assert_list(nonnull, any.missing = FALSE, len = 1)
       return(nonnull)
     }
-  ),
-  private = list(
-   .innum = NULL
-  ),
-  active = list(
-    innum = function() private$.innum
   )
 )
 
