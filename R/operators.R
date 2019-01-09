@@ -28,11 +28,11 @@
 
   g = gunion(list(g1, g2))
   # FIXME: code needs to be checked. correct? comment a bit!
-  new_channels = cbind(
+  new_edges = cbind(
     rbindlist(map(g1$rhs, function(id) data.table(src_id = id, src_channel = seq_along(g1$pipeops[[id]]$train_outtypes)))),
     rbindlist(map(g2$lhs, function(id) data.table(dst_id = id, dst_channel = seq_along(g2$pipeops[[id]]$train_outtypes))))
   )
 
-  g$channels = rbind(g$channels, new_channels)
+  g$edges = rbind(g$edges, new_edges)
   g
 }

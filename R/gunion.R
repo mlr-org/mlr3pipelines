@@ -17,7 +17,7 @@ gunion = function(graphs) {
   g$pipeops = unlist(map(graphs, "pipeops"), recursive = FALSE)
   assert_names(names(g$pipeops), type = "unique", .var.name = "ids of pipe operators")
   g$pipeops = map(g$pipeops, function(x) x$clone(deep = TRUE))
-  g$channels = rbindlist(map(graphs, "channels"))
+  g$edges = rbindlist(map(graphs, "edges"))
   g
 }
 

@@ -3,11 +3,10 @@
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
-    # FIXME: rename to edges
-    channels = NULL,
+    edges = NULL,
     initialize = function() {
       self$pipeops = list()
-      self$channels = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
+      self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
     },
 
     ids = function(sorted = FALSE) {
@@ -16,7 +15,7 @@ Graph = R6Class("Graph",
       if (!sorted)
         return(names(self$pipeops))
 
-      tmp = self$channels[, list(parents = list(src_id)), by = list(id = dst_id)]
+      tmp = self$edges[, list(parents = list(src_id)), by = list(id = dst_id)]
       tmp = rbind(tmp, data.table(id = self$lhs, parents = list(character(0L))))
       topo_sort(tmp)$id
     },
@@ -40,16 +39,16 @@ Graph = R6Class("Graph",
       dst = self$pipeops[[dst_id]]
       row = data.table(src_id = src_id, src_channel = src_channel,
         dst_id = dst_id, dst_channel = dst_channel)
-      self$channels = rbind(self$channels, row)
+      self$edges = rbind(self$edges, row)
     },
 
     plot = function() {
       require_namespaces("igraph")
-      if (nrow(self$channels) == 0L) {
+      if (nrow(self$edges) == 0L) {
         ig = igraph::make_empty_graph()
         extra_vertices = names(self$pipeops)
       } else {
-        df = self$channels[, list(from = src_id, to = dst_id)]
+        df = self$edges[, list(from = src_id, to = dst_id)]
         ig = igraph::graph_from_data_frame(df)
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }
@@ -65,7 +64,7 @@ Graph = R6Class("Graph",
       names(self$pipeops) = new_ids
       self$pipeops = imap(self$pipeops, function(x, nn) { x$id = nn; x })
 
-      self$channels[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
+      self$edges[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
       self
     },
 
@@ -85,11 +84,11 @@ Graph = R6Class("Graph",
 
     # FIXME: lhs and rhs need to return sorzed in order of IDs
     lhs = function() { # return OP?
-      setdiff(names(self$pipeops), unique(self$channels$dst_id))
+      setdiff(names(self$pipeops), unique(self$edges$dst_id))
     },
 
     rhs = function() { # return OP?
-      setdiff(names(self$pipeops), unique(self$channels$src_id))
+      setdiff(names(self$pipeops), unique(self$edges$src_id))
     },
 
     packages = function() {
@@ -101,8 +100,8 @@ Graph = R6Class("Graph",
   private = list(
     deep_clone = function(name, value) {
       switch(name,
-        "channels" = copy(value),
-        "pipeops" = map(value, function(x) x$clone(deep = TRUE)),
+        edges = copy(value),
+        pipeops = map(value, function(x) x$clone(deep = TRUE)),
         value
       )
     }
@@ -114,14 +113,14 @@ graph_fire = function(self, private, input, stage) {
   assert_list(input)
   assert_choice(stage, c("train", "predict"))
 
-  # add virtual channel to "__init__" in private copy of "channels"
-  channels = copy(self$channels)
-  channels = rbind(channels, data.table(src_id = "__init__", src_channel = "1",
+  # add virtual channel to "__init__" in private copy of "edges"
+  edges = copy(self$edges)
+  edges = rbind(edges, data.table(src_id = "__init__", src_channel = "1",
       dst_id = self$lhs, dst_channel = "1"))
 
   # add new column to store results and store 'input' as result of virtual operator "__init__"
-  channels$result = list()
-  channels[get("src_id") == "__init__", "result" := list(input)]
+  edges$result = list()
+  edges[get("src_id") == "__init__", "result" := list(input)]
 
   # get the topo-sorted the pipeop ids
   ids = setdiff(self$ids(sorted = TRUE), "__init__")
@@ -129,9 +128,9 @@ graph_fire = function(self, private, input, stage) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-    input = channels[get("dst_id") == op$id, "result"][[1L]]
+    input = edges[get("dst_id") == op$id, "result"][[1L]]
     tmp = if (stage == "train") op$train(input) else op$predict(input)
-    channels[get("src_id") == op$id, "result" := list(tmp)]
+    edges[get("src_id") == op$id, "result" := list(tmp)]
   }
 
   tmp
