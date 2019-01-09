@@ -25,12 +25,15 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   public = list(
     initialize = function(innum, id = "PipeOpEnsemble") {
       assert_integerish(innum)
-      super$initialize(id)
+      super$initialize(id,
+        input = data.table(name = rep_suffix("prediction", innum), train = "Prediction", predict = "Prediction"),
+        output = data.table(name = "prediction", train = "NULL", predict = "Prediction")
+      )
     },
 
     train = function(inputs) {
       self$state = list()
-      return(list())
+      return(list(NULL))
     },
     predict = function(inputs) {}
   ),
