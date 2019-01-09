@@ -23,7 +23,7 @@ test_that("PipeOpMajorityVote - train and predict", {
 
   po = PipeOpMajorityVote$new(3)
 
-  expect_list(train_pipeop(po, prds), len = 0)
+  expect_list(train_pipeop(po, prds), len = 1)
 
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prd))
@@ -45,7 +45,7 @@ test_that("PipeOpModelAvg - train and predict", {
 
   po = PipeOpModelAvg$new(3)
 
-  expect_list(train_pipeop(po, prds), len = 0)
+  expect_list(train_pipeop(po, prds), len = 1)
 
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prd))
@@ -54,7 +54,7 @@ test_that("PipeOpModelAvg - train and predict", {
   prd2$response = 10:1
 
   po2 = PipeOpModelAvg$new(2)
-  expect_list(train_pipeop(po2, list(prd, prd2)), len = 0)
+  expect_list(train_pipeop(po2, list(prd, prd2)), len = 1)
 
   out2 = predict_pipeop(po2, list(prd, prd2))
   prd_ref = prd2$clone()
