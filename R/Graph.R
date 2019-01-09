@@ -3,6 +3,7 @@
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
+    # FIXME: rename to edges
     channels = NULL,
     initialize = function() {
       self$pipeops = list()
@@ -29,12 +30,13 @@ Graph = R6Class("Graph",
     },
 
     add_channel = function(src_id, src_channel, dst_id, dst_channel) {
+      # FIXME: we need to check channel names
       assert_choice(src_id, names(self$pipeops))
       assert_string(src_channel)
       assert_choice(dst_id, names(self$pipeops))
       assert_string(dst_channel)
 
-      src = self$pipeops[[src_id]]
+      # FIXME: 2 deadlines?
       dst = self$pipeops[[dst_id]]
       row = data.table(src_id = src_id, src_channel = src_channel,
         dst_id = dst_id, dst_channel = dst_channel)
@@ -81,6 +83,7 @@ Graph = R6Class("Graph",
       all(map_lgl(self$pipeops, "is_trained"))
     },
 
+    # FIXME: lhs and rhs need to return sorzed in order of IDs
     lhs = function() { # return OP?
       setdiff(names(self$pipeops), unique(self$channels$dst_id))
     },
