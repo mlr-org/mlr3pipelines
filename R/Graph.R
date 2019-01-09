@@ -1,3 +1,4 @@
+
 # TODO:
 # * print()
 Graph = R6Class("Graph",
@@ -55,6 +56,19 @@ Graph = R6Class("Graph",
       if (!is.matrix(layout))
         layout = t(layout) # bug in igraph, dimension is dropped
       plot(ig, layout = layout)
+    },
+
+    print = function() {
+      lines = map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
+        data.table(ID = pipeop$id, State = sprintf("<%s>", class(pipeop$state)[1]))
+      })
+      if (length(lines)) {
+        catf("Graph with %s PipeOps:", length(lines))
+        print(as.data.frame(rbindlist(lines)))
+      } else {
+        cat("Empty Graph.\n")
+      }
+      invisible(self)
     },
 
     set_names = function(old, new) {
