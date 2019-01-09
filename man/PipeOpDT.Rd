@@ -20,8 +20,10 @@ The underlying operation must not change row order or number.
 Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
   \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpLearner}}, \code{\link{PipeOpNULL}},
+  \code{\link{PipeOpLearner}},
+  \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
   \code{\link{PipeOpUnBranch}}, \code{\link{PipeOp}}
 }

@@ -22,8 +22,10 @@ Inherits from \link{PipeOp}
 Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
   \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpLearner}}, \code{\link{PipeOpPCA}},
+  \code{\link{PipeOpLearner}},
+  \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpPCA}},
   \code{\link{PipeOpScale}}, \code{\link{PipeOpUnBranch}},
   \code{\link{PipeOp}}
 }

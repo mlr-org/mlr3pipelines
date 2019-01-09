@@ -1,4 +1,4 @@
-context("featureunion")
+context("PipeOpFeatureUnion")
 
 
 test_that("featureunion - basic properties", {
@@ -33,8 +33,6 @@ test_that("PipeOpFeatureunion - train and predict", {
 #   op2a = PipeOpPCA$new()
 #   op2b = PipeOpNULL$new()
 #   op3 = PipeOpFeatureUnion$new(2)
-#   expect_true(length(op3$train_intypes) == 2L)
-#   expect_true(length(op3$predict_intypes) == 2L)
 
 #   task = mlr_tasks$get("iris")
 #   lrn = mlr_learners$get("classif.rpart")

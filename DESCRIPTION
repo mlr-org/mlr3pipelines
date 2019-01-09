@@ -49,6 +49,7 @@ Collate:
     'PipeOpCopy.R'
     'PipeOpDT.R'
     'PipeOpDownsample.R'
+    'PipeOpEnsemble.R'
     'PipeOpFeatureUnion.R'
     'PipeOpLearner.R'
     'PipeOpNULL.R'

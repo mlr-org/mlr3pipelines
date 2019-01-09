@@ -50,7 +50,7 @@ Output types that are returned by the PipeOp. Read-only.
 \section{Methods}{
 
 \itemize{
-\item new(id, params)\code{\cr}character(1)\code{,}ParamSet` -> \link{PipeOp}
+\item new(id, params)\code{\cr}character(1)\code{, }ParamSet` -> \link{PipeOp}
 Constructs the pipeOp from an id string and a (possibly empty) \link{ParamSet}.
 \item \code{train()}:
 Train graph on \code{input}, transform it to output and store the learned \code{params}.
@@ -74,8 +74,10 @@ If the PipeOp is already trained, already present \code{params} are overwritten.
 Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
   \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpLearner}}, \code{\link{PipeOpNULL}},
+  \code{\link{PipeOpLearner}},
+  \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
   \code{\link{PipeOpUnBranch}}
 }
