@@ -10,10 +10,8 @@ Graph = R6Class("Graph",
     },
 
     ids = function(sorted = FALSE) {
-      if (length(self$pipeops) == 0L)
-        return(character())
-      if (!sorted)
-        return(names(self$pipeops))
+      if (!sorted || !nrow(self$edges))
+        return(names2(self$pipeops))
 
       tmp = self$edges[, list(parents = list(src_id)), by = list(id = dst_id)]
       tmp = rbind(tmp, data.table(id = self$lhs, parents = list(character(0L))))
@@ -114,7 +112,7 @@ Graph = R6Class("Graph",
 
 
 graph_fire = function(self, private, inputs, stage) {
-  assert_list(input, types = "Task")
+  assert_list(inputs, types = "Task")
   assert_choice(stage, c("train", "predict"))
 
   # add virtual channel to "__init__" in private copy of "edges"
