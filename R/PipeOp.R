@@ -23,9 +23,9 @@
 #'   The set of all exposed parameters of the PipeOp.
 #' * `param_vals`                   :: named [list]
 #'   Parameter settings where all setting must come from `param_set`, named with param IDs.
-#' * `state`                      :: [anys]
+#' * `state`                      :: any
 #'   The object of learned parameters, obtained in the training step, and applied in the predict step.
-#' * `is_trained`                 :: [logical(1)]
+#' * `is_trained`                 :: `logical(1)`
 #'   Is the PipeOp currently trained?
 #' * `result`                     :: any
 #'   A slot to store the result of either the `train` or the `predict` step, after it was
@@ -86,10 +86,32 @@ PipeOp = R6Class("PipeOp",
       # catf("Result: %s", as_short_string(self$result))
     },
 
-    # FIXME: these methods should actually call .train from the basecclasses, and then
-    # do some asserts on input and output types and sizes
-    train = function(...) stop("abstract"),
-    predict = function(...) stop("abstract")
+    train_internal = function(input) {
+      if (all(map_lgl(input, is_noop))) {
+        # FIXME: maybe we want to skip on `any` NO_OP, but that would require special handling in PipeOpUnbranch.
+        # Would require same adjustment in predict_internal
+        self$state = NO_OP
+        return(named_list(self$output$name, NO_OP))
+      }
+      check_types(self, input, "input", "train")
+      output = self$train(input)
+      check_types(self, output, "output", "train")
+      output
+    },
+    predict_internal = function(input) {
+      if (all(map_lgl(input, is_noop))) {
+        if (is_noop(self$state)) {
+          stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
+        }
+        return(named_list(self$output$name, NO_OP))
+      }
+      check_types(self, input, "input", "predict")
+      output = self$predict(input)
+      check_types(self, output, "output", "predict")
+      output
+    },
+    train = function(input) stop("abstract"),
+    predict = function(input) stop("abstract")
   ),
 
   active = list(
@@ -123,4 +145,23 @@ assert_connection_table = function(x) {
   assert_data_table(x, .var.name = deparse(substitute(x)))
   assert_names(names(x), permutation.of = c("name", "train", "predict"), .var.name = deparse(substitute(x)))
   x
+}
+
+
+# Checks that data conforms to the type specifications given.
+# @param `data` [list of any] is either the input or output given to a train/predict function. it is checked to be a *list* first
+#   and then to have the types as given by the `$input` or `$output` data.table.
+# @param direction [character(1)] is either `"input"` or `"output"`
+# @param operation [character(1)] is either `"train"` or `"predict"`.
+check_types = function(self, data, direction, operation) {
+  typetable = self[[direction]]
+  assert_list(data, len = nrow(typetable))
+  for (idx in seq_along(data)) {
+    typereq = typetable[[operation]][idx]
+    if (typereq == "*")
+      next
+    assert_class(data[[idx]], typereq,
+      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
+        direction, idx, self$input$name[idx], self$id))
+  }
 }

@@ -196,9 +196,9 @@ graph_fire = function(self, private, input, stage) {
     op = self$pipeops[[id]]
 
     input = edges[get("dst_id") == op$id, "result"][[1L]]
-    tmp = if (stage == "train") op$train(input) else op$predict(input)
+    tmp = if (stage == "train") op$train_internal(input) else op$predict_internal(input)
     edges[get("src_id") == op$id, "result" := list(tmp)]
   }
 
-  tmp
+  filter_noop(tmp)
 }

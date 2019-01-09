@@ -38,8 +38,7 @@ using \code{\link{PipeOpUnbranch}}.
 pca = PipeOpPCA$new()
 nop = PipeOpNULL$new()
 choices = c("pca", "nothing")
-PipeOpBranch
-$new(choices) \%>>\% gunion(pca, nop) \%>>\% PipeOpUnbranch$new(choices)
+PipeOpBranch$new(choices) \%>>\% gunion(list(pca, nop)) \%>>\% PipeOpUnbranch$new(choices)
 }
 \seealso{
 Other PipeOp: \code{\link{PipeOpChunk}},
@@ -50,7 +49,7 @@ Other PipeOp: \code{\link{PipeOpChunk}},
   \code{\link{PipeOpLearner}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOpUnBranch}}, \code{\link{PipeOp}}
+  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
 
 Other PipeOpBroadcast: \code{\link{PipeOpChunk}},
   \code{\link{PipeOpCopy}}

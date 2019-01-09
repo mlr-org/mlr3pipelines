@@ -14,9 +14,5 @@ Each learner has an associated help page, see \code{mlr_pipeops_[id]}.
 See \link[mlr3:Dictionary]{mlr3::Dictionary}.
 }
 
-\examples{
-mlr_pipeops$ids()
-as.data.table(mlr_pipeops)
-}
 \concept{Dictionary}
 \concept{PipeOps}

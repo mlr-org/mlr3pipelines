@@ -25,6 +25,6 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOpUnBranch}}, \code{\link{PipeOp}}
+  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
 }
 \concept{PipeOp}
