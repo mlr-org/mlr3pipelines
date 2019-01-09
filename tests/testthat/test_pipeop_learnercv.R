@@ -17,6 +17,12 @@ test_that("PipeOLearnerCV - basic properties", {
   vals = factor(unique(tsk$data(col = tsk$feature_names)$response))
   expect_character(setdiff(vals, task$class_names), len = 0)
 
-  result = predict_pipeop(po, list(task = task))
-  expect_class(result[[1L]], "Prediction")
+  tsk = predict_pipeop(po, list(task = task))[[1]]
+  expect_class(tsk, "Task")
+  expect_true(tsk$nrow == 150L)
+  expect_true(tsk$ncol == 2L)
+  expect_equal(task$target_names, tsk$target_names)
+  expect_equal(task$class_names, tsk$class_names)
+  vals = factor(unique(tsk$data(col = tsk$feature_names)$response))
+  expect_character(setdiff(vals, task$class_names), len = 0)
 })
