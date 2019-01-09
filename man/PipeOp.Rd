@@ -50,7 +50,7 @@ Output types that are returned by the PipeOp. Read-only.
 \section{Methods}{
 
 \itemize{
-\item new(id, params)\code{\cr}character(1)\code{,}ParamSet` -> \link{PipeOp}
+\item new(id, params)\code{\cr}character(1)\code{, }ParamSet` -> \link{PipeOp}
 Constructs the pipeOp from an id string and a (possibly empty) \link{ParamSet}.
 \item \code{train()}:
 Train graph on \code{input}, transform it to output and store the learned \code{params}.

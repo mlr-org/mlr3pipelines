@@ -1,13 +1,16 @@
 context("PipeOpBranch")
 
 test_that("PipeOpBranch - basic properties", {
-  # Test basic properties
   op = PipeOpBranch$new(3)
   expect_pipeop(op)
   # expect_true(length(op$train_intypes) == 1L)
   # expect_true(length(op$predict_intypes) == 1L)
   # expect_true(length(op$train_outtypes) == 3L)
   # expect_true(length(op$predict_outtypes) == 3L)
+
+  op2 = PipeOpBranch$new(c("pca", "null"))
+  expect_pipeop(op2)
+
 })
 
 
