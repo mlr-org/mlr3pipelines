@@ -34,7 +34,7 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
       self$predict_outtypes = rep("Task", outnum)
       private$.outnum = outnum
     },
-    train = function(input) {
+    train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
       self$state = list()
 
@@ -50,8 +50,8 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
         task$clone()$filter(x)
       })
     },
-    predict = function(input) {
-      return(input)
+    predict = function(inputs) {
+      return(inputs)
     }
   ),
   private = list(

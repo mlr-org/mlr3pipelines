@@ -32,15 +32,15 @@ BasicPOAny = R6::R6Class("BasicPOAny",
   public = list(
       nin = NULL,
       nout = NULL,
-      train = function(input) {
-        catf("Training %s with input %s", self$id, deparse(input))
+      train = function(inputs) {
+        catf("Training %s with input %s", self$id, deparse(inputs))
         self$state = input
-        iin = input[[1]]
+        iin = inputs[[1]]
         as.list(iin + seq_len(self$nout))
       },
-      predict = function(input) {
-        catf("Predicting %s with input %s and state %s", self$id, deparse(input), deparse(self$state))
-        iin = input[[1]]
+      predict = function(inputs) {
+        catf("Predicting %s with input %s and state %s", self$id, deparse(inputs), deparse(self$state))
+        iin = inputs[[1]]
         as.list(iin + seq_len(self$nout))
       },
       initialize = function(nin, nout, id, ...) {

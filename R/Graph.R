@@ -111,8 +111,8 @@ Graph = R6Class("Graph",
 )
 
 
-graph_fire = function(self, private, input, stage) {
-  assert_list(input)
+graph_fire = function(self, private, inputs, stage) {
+  assert_list(inputs)
   assert_choice(stage, c("train", "predict"))
 
   # add virtual channel to "__init__" in private copy of "edges"
@@ -120,9 +120,9 @@ graph_fire = function(self, private, input, stage) {
   edges = rbind(edges, data.table(src_id = "__init__", src_channel = "1",
       dst_id = self$lhs, dst_channel = "1"))
 
-  # add new column to store results and store 'input' as result of virtual operator "__init__"
+  # add new column to store results and store 'inputs' as result of virtual operator "__init__"
   edges$result = list()
-  edges[get("src_id") == "__init__", "result" := list(input)]
+  edges[get("src_id") == "__init__", "result" := list(inputs)]
 
   # get the topo-sorted the pipeop ids
   ids = setdiff(self$ids(sorted = TRUE), "__init__")
@@ -130,8 +130,9 @@ graph_fire = function(self, private, input, stage) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-    input = edges[get("dst_id") == op$id, "result"][[1L]]
-    tmp = if (stage == "train") op$train(input) else op$predict(input)
+
+    inputs = edges[get("dst_id") == op$id, "result"][[1L]]
+    tmp = if (stage == "train") op$train(inputs) else op$predict(inputs)
     edges[get("src_id") == op$id, "result" := list(tmp)]
   }
 
