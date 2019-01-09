@@ -237,7 +237,7 @@ This document contains a list of use-cases we want to contain.
   - **predict**:
     - input: [[Task]]
     - does: Predict with model from .state
-    - returns: .state model prediction
+    - returns: .state model prediction as a [Task]
 
 ##### [[PipeOpThreshold]]
 
