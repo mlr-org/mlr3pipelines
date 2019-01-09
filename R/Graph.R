@@ -51,7 +51,7 @@ Graph = R6Class("Graph",
         (dst_id == dst_id_ & dst_channel == dst_channel_), ]
       if (nrow(priorcon)) {
         stopf("Cannot add multiple edges to a channel.\n%s",
-          paste(sprintf("Channel %s of node %s already connected to node %s channel %s",
+          paste(sprintf("Channel %s of node %s already connected to node %s channel %s.",
             priorcon$src_id, priorcon$src_channel, priorcon$dst_id, priorcon$dst_channel), collapse = "\n"))
       }
       row = data.table(src_id = src_id, src_channel = src_channel,
@@ -59,6 +59,7 @@ Graph = R6Class("Graph",
       self$edges = rbind(self$edges, row)
     },
 
+    # Plot the graph, using igraph
     plot = function() {
       require_namespaces("igraph")
       if (nrow(self$edges) == 0L) {
@@ -76,9 +77,12 @@ Graph = R6Class("Graph",
       plot(ig, layout = layout)
     },
 
+    # Print a representation of the graph
+    # Output is currently a table of <id> <class of 'state'>
     print = function() {
       lines = map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
-        data.frame(ID = pipeop$id, State = sprintf("<%s>", class(pipeop$state)[1]))
+        data.frame(ID = pipeop$id, State = sprintf("<%s>",
+          map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
       })
       if (length(lines)) {
         catf("Graph with %s PipeOps:", length(lines))
