@@ -15,7 +15,8 @@ PipeOps, and a \code{\link{data.table}} of edges. It can be trained and used for
 \section{Public Members / Active Bindings}{
 
 \itemize{
-\item \code{pipeops}      :: named list of \link{PipeOp}\code{\cr Contains all PipeOps contained in the Graph, named by the PipeOp}$id`.
+\item \code{pipeops}      :: named list of \link{PipeOp} \cr
+Contains all PipeOps contained in the Graph, named by the PipeOp \code{$id}.
 \item \code{edges}        :: \code{\link{data.table}} \cr
 List of connections between the PipeOps. A \code{data.table} with columns \code{src_id}, \code{src_channel},
 \code{dst_id}, \code{dst_channel}. \code{src_id} and \code{dst_id} are IDs of PipeOps that must be present in
@@ -54,7 +55,7 @@ Print a representation of the graph on the console. Output is currently a table 
 short representation of \code{state}.
 \item \code{f$set_names(old, new)} \cr
 (\code{character}, \code{character}) -> \code{self} \cr
-list of \link{GraphNode}, indexed by ID.
+Rename PipeOps: Change ID of each PipeOp as identified by \code{old} to the corresponding item in \code{new}.
 \item \code{f$train()} \cr
 \code{\link{Task}} -> \code{list} of any \cr
 Train graph by calling all the PipeOps' $train method. Return a list of outputs for each unconnected
