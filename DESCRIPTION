@@ -22,6 +22,7 @@ Imports:
 Suggests:
     igraph,
     knitr,
+    logger,
     mlbench,
     rmarkdown,
     rpart,
@@ -55,7 +56,7 @@ Collate:
     'PipeOpNULL.R'
     'PipeOpPCA.R'
     'PipeOpScale.R'
-    'PipelineLearner.R'
+    'PipeOpUnBranch.R'
     'ensure_graph.R'
     'greplicate.R'
     'gunion.R'

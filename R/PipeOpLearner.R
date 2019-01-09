@@ -1,4 +1,6 @@
 #' @title PipeOpLearner
+#'
+#' @name PipeOpLearner
 #' @format [R6Class] PipeOpLearner
 #'
 #' @description
@@ -8,8 +10,10 @@
 #' Inherits from [PipeOp]
 #' * `f = PipeOpLearner$new(outnum, id)` \cr
 #'   `[Learner]` -> [PipeOpLearner]
-#' @name PipeOpLearner
-#' @family PipeOp, PipeOpLearner
+#' @family PipeOp
+NULL
+
+#' @include PipeOp.R
 #' @export
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
@@ -18,11 +22,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     initialize = function(learner) {
       assert_learner(learner)
       self$learner = learner
-      super$initialize(learner$id)
-      self$train_intypes = "Task"
-      self$train_outtypes = "any"
-      self$predict_intypes = "Task"
-      self$predict_outtypes = "Prediction"
+      super$initialize(learner$id,
+        input = data.table(name = "task", train = "Task", predict = "Task"),
+        output = data.table(name = "output", train = "*", predict = "Prediction")
+      )
     },
 
     train = function(inputs) {
@@ -31,7 +34,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
       # FIXME: clone has advantages and disadvantages here, if there is ever a reason
       # to change parameter values after train we may not want to clone here.
-      self$state = self$learner$clone(deep = TRUE)$train(task)
+      self$state = Experiment$new(
+        task = task,
+        learner = self$learner$clone(deep = TRUE)
+      )$train()
 
 
       # experiment$predict()
@@ -45,8 +51,15 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     },
 
     predict = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
-      list(self$state$predict(task))
+      assert_list(inputs, len = 1L, type = c("Task", "data.frame"))
+      task = inputs[[1]]
+
+      if (is.data.frame(task)) {
+        self$state$predict(newdata = task)
+      } else {
+        self$state$predict(row_ids = task$row_ids[[1L]])
+      }
+      list(output = self$state$prediction)
     }
 
   ),
@@ -63,4 +76,3 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
 #' @include mlr_pipeops.R
 mlr_pipeops$add("PipeOpLearner", PipeOpLearner)
-

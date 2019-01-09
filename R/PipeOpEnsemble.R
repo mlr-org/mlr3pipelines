@@ -1,4 +1,6 @@
 #' @title PipeOpEnsemble
+#'
+#' @name PipeOpEnsemble
 #' @format [R6Class] PipeOpEnsemble
 #'
 #' @description
@@ -10,8 +12,12 @@
 #'     `integer(1)`, `character(1)` -> [PipeOpEnsemble]
 #' @section Details:
 #' * `innum`: `integer(1)` Number of inputs.
-#' @name PipeOpEnsemble
-#' @family PipeOp, PipeOpAggregate, PipeOpEnsemble
+#' @family PipeOp
+#' @family PipeOpAggregate
+#' @family PipeOpEnsemble
+NULL
+
+#' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
@@ -25,7 +31,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
     train = function(inputs) {
       self$state = list()
       return(list())
-    }, 
+    },
     predict = function(inputs) {}
   ),
   private = list(
@@ -37,6 +43,8 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 
 
 #' @title PipeOpModelAvg
+#'
+#' @name PipeOpModelAvg
 #' @format [R6Class] PipeOpModelAvg
 #'
 #' @description
@@ -49,10 +57,15 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 #' @section Details:
 #' * `innum`: `integer(1)` Number of inputs.
 #' @name PipeOpModelAvg
-#' @family PipeOp, PipeOpAggregate, PipeOpEnsemble
-#' @export
+#' @family PipeOp
+#' @family PipeOpAggregate
+#' @family PipeOpEnsemble
 #' @examples
 #' op = PipeOpModelAvg$new(3)
+NULL
+
+#' @include PipeOp.R
+#' @export
 PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
 
@@ -62,7 +75,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
     },
     predict = function(inputs) {
       prds = private$merge_predictions(inputs)
-      prds = prds[, list(response = mean(response, na.rm = TRUE), truth = truth[1]), by = "row_id"] 
+      prds = prds[, list(response = mean(response, na.rm = TRUE), truth = truth[1]), by = "row_id"]
       # FIXME This is ugly, but currently the best way
       p = PredictionRegr$new()
       p$row_ids = prds$row_id

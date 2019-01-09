@@ -1,14 +1,11 @@
-context("featureunion")
+context("PipeOpFeatureUnion")
 
 
 test_that("featureunion - basic properties", {
-  # Test basic properties
-  op = PipeOpFeatureUnion$new(3)
-  expect_pipeop(op)
-  # expect_true(length(op$train_intypes) == 3L)
-  # expect_true(length(op$predict_intypes) == 3L)
-  # expect_true(length(op$train_outtypes) == 1L)
-  # expect_true(length(op$predict_outtypes) == 1L)
+  po = PipeOpFeatureUnion$new(3)
+  expect_pipeop(po)
+  expect_data_table(po$input, nrow = 3)
+  expect_data_table(po$output, nrow = 1)
 })
 
 
@@ -36,8 +33,6 @@ test_that("PipeOpFeatureunion - train and predict", {
 #   op2a = PipeOpPCA$new()
 #   op2b = PipeOpNULL$new()
 #   op3 = PipeOpFeatureUnion$new(2)
-#   expect_true(length(op3$train_intypes) == 2L)
-#   expect_true(length(op3$predict_intypes) == 2L)
 
 #   task = mlr_tasks$get("iris")
 #   lrn = mlr_learners$get("classif.rpart")

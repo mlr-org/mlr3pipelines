@@ -1,4 +1,6 @@
 #' @title PipeOpChunk
+#'
+#' @name PipeOpChunk
 #' @format [R6Class] PipeOpChunk
 #'
 #' @description
@@ -13,26 +15,29 @@
 #' * `outnum`: `integer(1)` Number of times the input is copied.
 #' * `shuffle`: `logical(1)` Should the data be shuffled before chunking?
 #' * `stratify`: `logical(1)` Should the subsamples be stratified.
-#' @name PipeOpChunk
-#' @family PipeOp, PipeOpBroadcast
-#' @export
+#' @family PipeOp
+#' @family PipeOpBroadcast
 #' @examples
 #' op = PipeOpChunk$new(5)
-PipeOpChunk = R6::R6Class("PipeOpChunk",
+NULL
+
+#' @include PipeOp.R
+#' @export
+PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
+    outnum = NULL,
     initialize = function(outnum, id = "chunk") {
-      assert_int(outnum, lower = 2L)
+      self$outnum = assert_int(outnum, lower = 2L)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)
       ))
-      super$initialize(id, ps)
-      self$train_intypes = "Task"
-      self$train_outtypes = rep("Task", outnum)
-      self$predict_intypes = "Task"
-      self$predict_outtypes = rep("Task", outnum)
-      private$.outnum = outnum
+      super$initialize(id,
+        param_set = ps,
+        input = data.table(name = "input", train = "Task", predict = "Task"),
+        output = data.table(name = rep_suffix("task", outnum), train = "Task", predict = "Task")
+      )
     },
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
@@ -43,22 +48,17 @@ PipeOpChunk = R6::R6Class("PipeOpChunk",
       colns = task$backend$colnames
 
       # FIXME: Implement stratification?
-      idx = chunk(task$row_ids, n.chunks = self$param_vals$outnum, shuffle = self$param_vals$shuffle)
+      idx = chunk(task$row_ids, n.chunks = self$outnum, shuffle = self$param_vals$shuffle)
 
       # Subset data, clone task and overwrite data in it.
       map(idx, function(x) {
         task$clone()$filter(x)
       })
     },
+
     predict = function(inputs) {
       return(inputs)
     }
-  ),
-  private = list(
-    .outnum = NULL
-  ),
-  active = list(
-    outnum = function() private$.outnum
   )
 )
 

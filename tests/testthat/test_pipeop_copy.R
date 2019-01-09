@@ -2,18 +2,14 @@ context("PipeOpCopy")
 
 
 test_that("PipeOpCopy - basic properties", {
-  # Test basic properties
-  op = PipeOpCopy$new(3)
-  expect_pipeop(op)
-  expect_true(length(op$train_intypes) == 1L)
-  expect_true(length(op$predict_intypes) == 1L)
-  expect_true(length(op$train_outtypes) == 3L)
-  expect_true(length(op$predict_outtypes) == 3L)
+  po = PipeOpCopy$new(3)
+  expect_pipeop(po)
+  expect_data_table(po$input, nrow = 1)
+  expect_data_table(po$output, nrow = 3)
 })
 
 
 test_that("PipeOpCopy - train and predict", {
-  # Define PipeOp's
   copy = PipeOpCopy$new(2)
   task = mlr_tasks$get("iris")
 

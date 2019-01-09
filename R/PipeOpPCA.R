@@ -1,5 +1,8 @@
 #' @title PipeOpPCA
+#'
+#' @name PipeOpPCA
 #' @format [R6Class] PipeOpPCA
+#'
 #' @description
 #'   Extracts principle components from data.
 #'   See [stats::prcomp] for details  and parameters.
@@ -7,16 +10,17 @@
 #' Inherits from [PipeOpDT]
 #' * `f = pipeOpPCA$new(id)` \cr
 #'     `character(1)` -> [PipeOpPCA]
-#' @name PipeOpPCA
 #' @family PipeOp
-#' @export
 #' @examples
 #' # Instantiate PipeOpPCA
 #' op1 = PipeOpPCA$new()
+NULL
+
+
+#' @include PipeOp.R
+#' @export
 PipeOpPCA = R6Class("PipeOpPCA",
-
   inherit = PipeOpDT,
-
   public = list(
     initialize = function(id = "pca") {
       ps = ParamSet$new(params = list(
@@ -24,7 +28,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
         ParamLgl$new("scale.", default = FALSE),
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL))
       ))
-      super$initialize(id, ps)
+      super$initialize(id, param_set = ps)
     },
 
     train_dt = function(dt) {

@@ -1,4 +1,4 @@
-context("downsample")
+context("PipeOpDownsample")
 
 test_that("PipeOpDownsample - basic properties", {
   op = PipeOpDownsample$new()
