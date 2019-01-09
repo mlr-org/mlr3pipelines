@@ -54,7 +54,8 @@ PipeOpBranch = R6::R6Class("PipeOpBranch",
       private$.defaultreturn = rep(list(NULL), outnum)
       private$.outnum = outnum
       if (is.character(options)) {
-        names(private$.outtype) = options
+        names(self$train_outtypes) = options
+        names(self$predict_outtypes) = options
         names(private$.defaultreturn) = options
       }
     },
