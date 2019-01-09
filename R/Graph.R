@@ -80,8 +80,6 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    # FIXME: why does this take a list of inputs? in in "graph_fire" the arg is called "input"?
-    # shouldnt this always be a single task?
     train = function(inputs) {
       graph_fire(self, private, inputs, "train")
     },
