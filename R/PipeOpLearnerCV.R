@@ -2,9 +2,14 @@
 #' @format [R6Class] PipeOpLearnerCV
 #'
 #' @description
-#'   Wraps a [mlr3::Learner] into a [PipeOp].
-#'   Returns cross-validated predictions during training and
-#'   Inherits the `param_set` from the [mlr3::Learner] it is constructed from.
+#' Wraps a [mlr3::Learner] into a [PipeOp].
+#' Returns cross-validated predictions during training and
+#' Inherits the `param_set` from the [mlr3::Learner] it is constructed from.
+#' Parameters:
+#' * `resamping`                         :: [character]
+#' Which resampling method do we want to use. Currently only supports 'cv'.
+#' * `folds`                   :: [integer]
+#' 
 #' @section Usage:
 #' Inherits from [PipeOp]
 #' * `f = PipeOpLearner$new(outnum, id)` \cr

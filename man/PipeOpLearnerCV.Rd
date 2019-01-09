@@ -8,6 +8,12 @@
 Wraps a \link[mlr3:Learner]{mlr3::Learner} into a \link{PipeOp}.
 Returns cross-validated predictions during training and
 Inherits the \code{param_set} from the \link[mlr3:Learner]{mlr3::Learner} it is constructed from.
+Parameters:
+\itemize{
+\item \code{resamping}                         :: \link{character}
+Which resampling method do we want to use. Currently only supports 'cv'.
+\item \code{folds}                   :: \link{integer}
+}
 }
 \section{Usage}{
 
