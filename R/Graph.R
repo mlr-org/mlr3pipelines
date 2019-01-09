@@ -5,11 +5,15 @@ Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
     edges = NULL,
+
+    # Initialize empty Graph
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
     },
 
+    # Get IDs of all PipeOps. This is in order that PipeOps were added if
+    # sorted is FALSE, and topologically sorted if sorted is TRUE.
     ids = function(sorted = FALSE) {
       if (!sorted || !nrow(self$edges))
         return(names2(self$pipeops))
@@ -19,6 +23,7 @@ Graph = R6Class("Graph",
       topo_sort(tmp)$id
     },
 
+    # Mutator that adds PipeOp 'op' to the Graph (without adding any edges)
     add_pipeop = function(op) {
       assert_class(op, "PipeOp")
       if (op$id %in% names(self$pipeops))
@@ -27,6 +32,8 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
+    # add an edge from node src_id, and its channel src_channel, to
+    # node dst_id's channel dst_channel
     add_edge = function(src_id, src_channel, dst_id, dst_channel) {
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
@@ -35,7 +42,18 @@ Graph = R6Class("Graph",
       # assert_choice(dst_channel, rownames(self$pipeops[[dst_id]]$intypes))
       assert_string(src_channel)
       assert_string(dst_channel)
-
+      src_id_ = src_id
+      dst_id_ = dst_id
+      src_channel_ = src_channel
+      dst_channel_ = dst_channel
+      priorcon = self$edges[
+        (src_id == src_id_ & src_channel == src_channel_) |
+        (dst_id == dst_id_ & dst_channel == dst_channel_), ]
+      if (nrow(priorcon)) {
+        stopf("Cannot add multiple edges to a channel.\n%s",
+          paste(sprintf("Channel %s of node %s already connected to node %s channel %s",
+            priorcon$src_id, priorcon$src_channel, priorcon$dst_id, priorcon$dst_channel), collapse = "\n"))
+      }
       row = data.table(src_id = src_id, src_channel = src_channel,
         dst_id = dst_id, dst_channel = dst_channel)
       self$edges = rbind(self$edges, row)
