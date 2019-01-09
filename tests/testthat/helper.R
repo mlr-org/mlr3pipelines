@@ -21,7 +21,7 @@ train_pipeop = function(po, inputs) {
   expect_pipeop(po)
   expect_null(po$state, label = label)
   expect_false(po$is_trained, label = label)
-  result = po$train(inputs, label = label)
+  result = po$train(inputs)
   expect_list(result, label = label)
   expect_true(!is.null(po$state), label = label)
   expect_true(po$is_trained, label = label)
