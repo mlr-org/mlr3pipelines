@@ -12,8 +12,8 @@ test_that("PipeOLearnerCV - basic properties", {
   expect_class(tsk, "Task")
   expect_true(tsk$nrow == 150L)
   expect_true(tsk$ncol == 2L)
-  # expect_true(task$target_names == tsk$target_names)
-  # expect_true(task$class_names == tsk$class_names)
+  expect_equal(task$target_names, tsk$target_names)
+  expect_equal(task$class_names, tsk$class_names)
   vals = factor(unique(tsk$data(col = tsk$feature_names)$response))
   expect_character(setdiff(vals, task$class_names), len = 0)
 
