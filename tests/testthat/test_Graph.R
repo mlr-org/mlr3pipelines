@@ -1,4 +1,4 @@
-context("graph")
+context("Graph")
 
 test_that("linear graph", {
   g = Graph$new()
