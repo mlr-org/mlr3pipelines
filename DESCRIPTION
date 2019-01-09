@@ -45,6 +45,7 @@ Collate:
     'PipeOp.R'
     'mlr_pipeops.R'
     'PipeOpBranch.R'
+    'PipeOpCVLearner.R'
     'PipeOpChunk.R'
     'PipeOpCopy.R'
     'PipeOpDT.R'
