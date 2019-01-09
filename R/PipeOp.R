@@ -160,6 +160,6 @@ check_types = function(self, data, direction, operation) {
       next
     assert_class(data[[idx]], typereq,
       .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
-        direction, idx, self$input$name, self$id))
+        direction, idx, self$input$name[idx], self$id))
   }
 }
