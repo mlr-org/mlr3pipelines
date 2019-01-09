@@ -8,6 +8,8 @@ expect_pipeop = function(po) {
   expect_list(po$param_vals, names = "unique", label = label)
   expect_output(print(po), "PipeOp:", label = label)
   expect_character(po$packages, any.missing = FALSE, unique = TRUE, label = label)
+  expect_function(po$train, args = "inputs")
+  expect_function(po$predict, args = "inputs")
   # expect_null(po$state)
   # expect_null(po$result)
   # expect_character(po$train_intypes)

@@ -4,8 +4,8 @@ test_that("PipeOpDownsample - basic properties", {
   op = PipeOpDownsample$new()
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
-  train_pipeop(op, input = list(task))
-  predict_pipeop(op, input = list(task))
+  train_pipeop(op, inputs = list(task))
+  predict_pipeop(op, inputs = list(task))
 })
 
 test_that("PipeOpDownsample - basic properties", {

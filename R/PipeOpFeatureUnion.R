@@ -36,7 +36,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
     predict = function(inputs) {
       # FIXME: check that all types are equal
       # in theory we could down-convert, but that ewould probably be a bug on the user's side.
-      if (is.data.frame(input[[1]])) {
+      if (is.data.frame(inputs[[1]])) {
         list(do.call(cbind, inputs))
       } else {
         cbind_tasks(inputs)
