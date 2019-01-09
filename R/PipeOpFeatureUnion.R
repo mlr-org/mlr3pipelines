@@ -75,7 +75,6 @@ cbind_tasks = function(inputs) {
   })
 
   input1 = inputs[[1]]
-  targets = input1$data()[, input1$target_names, with = FALSE]
 
   data = do.call(cbind, c(all_data, input1$row_ids))
   list(task_update_data(input1, data))

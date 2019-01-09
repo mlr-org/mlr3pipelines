@@ -18,8 +18,7 @@ Imports:
     data.table,
     mlr3,
     mlr3misc,
-    paradox,
-    stats
+    paradox
 Suggests:
     igraph,
     knitr,
@@ -40,7 +39,7 @@ Remotes:
     mlr-org/mlr3misc,
     mlr-org/paradox
 Collate:
-    'Graph_dt.R'
+    'Graph.R'
     'utils.R'
     'PipeOp.R'
     'mlr_pipeops.R'

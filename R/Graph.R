@@ -118,7 +118,7 @@ graph_fire = function(self, private, input, stage) {
 
   # add new column to store results and store 'input' as result of virtual operator "__init__"
   channels$result = list()
-  channels[src_id == "__init__", result := list(input)]
+  channels[get("src_id") == "__init__", "result" := list(input)]
 
   # get the topo-sorted the pipeop ids
   ids = setdiff(self$ids(sorted = TRUE), "__init__")
@@ -126,9 +126,9 @@ graph_fire = function(self, private, input, stage) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-    input = channels[dst_id == op$id, "result"][[1L]]
+    input = channels[get("dst_id") == op$id, "result"][[1L]]
     tmp = if (stage == "train") op$train(input) else op$predict(input)
-    channels[src_id == op$id, result := list(tmp)]
+    channels[get("src_id") == op$id, "result" := list(tmp)]
   }
 
   tmp

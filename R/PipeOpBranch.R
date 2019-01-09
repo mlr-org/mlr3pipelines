@@ -208,6 +208,6 @@ grultiplex <- function(..., .graphs = NULL, .id = "", .prefix.gunion.names = FAL
     names(graphs) = NULL
   }
   PipeOpBranch$new(choices, id = paste0(.id, "choice")) %>>%
-    gunion(.graphs = graphs) %>>%
+    gunion(list(graphs)) %>>%
     PipeOpUnbranch$new(choices, id = paste0(.id, "unchoice"))
 }
