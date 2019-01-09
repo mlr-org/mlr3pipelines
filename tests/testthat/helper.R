@@ -47,7 +47,7 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
 
   expect_data_table(g$edges, any.missing = FALSE)
   if (!is.null(n_edges))
-    expect_equal(nrow(g$edges), n_egdes)
+    expect_equal(nrow(g$edges), n_edges)
 
 
   # expect_class(g$param_set, "ParamSet")

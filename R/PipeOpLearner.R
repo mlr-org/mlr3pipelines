@@ -31,10 +31,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
       # FIXME: clone has advantages and disadvantages here, if there is ever a reason
       # to change parameter values after train we may not want to clone here.
-      self$state = Experiment$new(
-        task = task,
-        learner = self$learner$clone(deep = TRUE)
-      )$train()
+      self$state = self$learner$clone(deep = TRUE)$train(task)
 
 
       # experiment$predict()
@@ -48,16 +45,8 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     },
 
     predict = function(inputs) {
-      assert_list(inputs, len = 1L, type = c("Task", "data.frame"))
-      task = inputs[[1]]
-      if (!is.data.frame(task)) {
-        task = task$data()[, task$feature_names, with = FALSE]
-      }
-      # navigate around bugs in mlr3
-      col = self$state$task$data()[1, self$state$task$target_names, with = FALSE][[1]]
-      col[1] = NA
-      task[[self$state$task$target_names]] = col
-      self$state$predict(newdata = task)
+      assert_list(inputs, len = 1L, type = "Task")
+      list(self$state$predict(task))
     }
 
   ),

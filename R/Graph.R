@@ -1,19 +1,67 @@
-
-# TODO:
-# * print()
+#' @title Graph
+#' @format [R6Class] Graph
+#'
+#' @description
+#' The graph is a container class for the complete computational graph. It is made up of a list of
+#' PipeOps, and a [`data.table`] of edges. It can be trained and used for prediction.
+#'
+#' @section Public Members / Active Bindings:
+#' * `pipeops`      :: named list of [PipeOp]` \cr
+#'   Contains all PipeOps contained in the Graph, named by the PipeOp `$id`.
+#' * `edges`        :: [`data.table`] \cr
+#'   List of connections between the PipeOps. A `data.table` with columns `src_id`, `src_channel`,
+#'   `dst_id`, `dst_channel`. `src_id` and `dst_id` are IDs of PipeOps that must be present in
+#'   the `pipeops` list. `src_channel` and `dst_channel` must be channel IDs of the respective PipeOps.
+#' * `is_trained`   :: `logical(1)` \cr
+#'   Is the graph, are all of its PipeOps, fully trained - and is the graph ready to predict?
+#' * `lhs`          ::  list of [PipeOp]` \cr
+#'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as graph input layer.
+#' * `rhs`          :: `list of [PipeOp]` \cr
+#'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as graph output layer.
+#' * `packages`     :: `character`
+#'   Set of all required packages of the graph, a union of all required packages of all contained [PipeOp] objects.
+#'
+#' @section Methods:
+#' * `Graph$new()` \cr
+#'   Constructs an empty Graph.
+#' * `f$ids(sorted = FALSE)` \cr
+#'   `logical(0)` -> `character` \cr
+#'   Get IDs of all PipeOps. This is in order that PipeOps were added if
+#'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
+#' * `f$add_pipeop(op)` \cr
+#'   ([`PipeOp`]) -> [Graph] \cr
+#'   Mutates graph by adding a [PipeOp] to the graph (without adding any edges)
+#' * `f$add_edge(src_id, src_channel, dst_id, dst_channel)` \cr
+#'   (`character(1)`, `character(1)`, `character(1)`, `character(1)`) -> `self` \cr
+#'   Add an edge from node `src_id`, and its channel `src_channel`, to node `dst_id`'s
+#'   channel `dst_channel`.
+#' * `f$plot()` \cr
+#'   Plot the graph, via igraph.
+#' * `f$print()` \cr
+#'   Print a representation of the graph on the console. Output is currently a table with columns `id`, and
+#'   short representation of `state`.
+#' * `f$set_names(old, new)` \cr
+#'   (`character`, `character`) -> `self` \cr
+#'   list of [GraphNode], indexed by ID.
+#' * `f$train()` \cr
+#'   [`Task`] -> `list` of any \cr
+#'   Train graph by calling all the PipeOps' $train method. Return a list of outputs for each unconnected
+#'   PipeOp out-channel. During training, the `$state` member of the PipeOps will be set.
+#' * `f$predict()` \cr
+#'   [`Task`] -> `list` of any \cr
+#'   Predict with the graph by calling all the PipeOps' $predict method. Return a list of outputs for each
+#'   unconnected PipeOp out-channel
+#' @name Graph
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
     edges = NULL,
 
-    # Initialize empty Graph
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
     },
 
-    # Get IDs of all PipeOps. This is in order that PipeOps were added if
-    # sorted is FALSE, and topologically sorted if sorted is TRUE.
     ids = function(sorted = FALSE) {
       if (!sorted || !nrow(self$edges))
         return(names2(self$pipeops))
@@ -23,7 +71,6 @@ Graph = R6Class("Graph",
       topo_sort(tmp)$id
     },
 
-    # Mutator that adds PipeOp 'op' to the Graph (without adding any edges)
     add_pipeop = function(op) {
       assert_class(op, "PipeOp")
       if (op$id %in% names(self$pipeops))
@@ -32,8 +79,6 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    # add an edge from node src_id, and its channel src_channel, to
-    # node dst_id's channel dst_channel
     add_edge = function(src_id, src_channel, dst_id, dst_channel) {
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
@@ -59,7 +104,6 @@ Graph = R6Class("Graph",
       self$edges = rbind(self$edges, row)
     },
 
-    # Plot the graph, using igraph
     plot = function() {
       require_namespaces("igraph")
       if (nrow(self$edges) == 0L) {
@@ -77,9 +121,8 @@ Graph = R6Class("Graph",
       plot(ig, layout = layout)
     },
 
-    # Print a representation of the graph
-    # Output is currently a table of <id> <class of 'state'>
     print = function() {
+      # print table <id>, <state>, where <state> is class(pipeop$state)
       lines = map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
         data.frame(ID = pipeop$id, State = sprintf("<%s>",
           map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
@@ -93,6 +136,9 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
+    # Mutator to change PipeOp IDs
+    # Modifies both the index in $pipeops, as well as the respective PipeOp's ID. Do this here and not
+    # by setting `graph$pipeops[[x]]$id <- y`!
     set_names = function(old, new) {
       new_ids = map_values(names(self$pipeops), old, new)
       names(self$pipeops) = new_ids
@@ -128,7 +174,6 @@ Graph = R6Class("Graph",
     }
   )
 )
-
 
 graph_fire = function(self, private, input, stage) {
   assert_task(input)
