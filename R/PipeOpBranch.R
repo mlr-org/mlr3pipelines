@@ -32,6 +32,18 @@
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 NULL
 
+# special new data type for no-ops. Distinct from NULL for easier
+# and distinction from unintentional NULL returns.
+#' @export
+NO_OP = R6Class("NO_OP", cloneable = FALSE,
+  public = list(
+    initialize = function() {},
+    print = function() cat("mlr3pipelines NO_OP indicator\n")
+  ),
+)$new()
+is_noop = function(x) test_r6(x, "NO_OP")
+filter_noop = function(x) Filter(Negate(is_noop), x)
+
 #' @include PipeOp.R
 #' @export
 PipeOpBranch = R6Class("PipeOpBranch",
@@ -63,14 +75,14 @@ PipeOpBranch = R6Class("PipeOpBranch",
     train = function(inputs) {
       assert_list(inputs)
       self$state = list()
-      ret = named_list(self$output$name)
+      ret = named_list(self$output$name, NO_OP)
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     },
 
     predict = function(inputs) {
       assert_list(inputs)
-      ret = named_list(self$output$name)
+      ret = named_list(self$output$name, NO_OP)
       ret[[self$param_vals[[1L]]]] = inputs[[1L]]
       return(ret)
     }

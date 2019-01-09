@@ -53,16 +53,16 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
     train = function(inputs) {
       assert_list(inputs, len = self$innum)
       self$state = list()
-      nonnull = Filter(Negate(is.null), inputs)
-      assert_list(nonnull, any.missing = FALSE, len = 1)
-      return(nonnull)
+      result = filter_noop(inputs)
+      assert_list(result, len = 1)
+      return(result)
     },
 
     predict = function(inputs) {
       assert_list(inputs, len = self$innum)
-      nonnull = Filter(Negate(is.null), inputs)
-      assert_list(nonnull, any.missing = FALSE, len = 1)
-      return(nonnull)
+      result = filter_noop(inputs)
+      assert_list(result, len = 1)
+      return(result)
     }
   )
 )
