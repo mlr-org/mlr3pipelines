@@ -100,11 +100,12 @@ PipeOp = R6Class("PipeOp",
     },
     predict_internal = function(input) {
       if (all(map_lgl(input, is_noop))) {
-        if (is_noop(self$state)) {
-          stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
-        }
         return(named_list(self$output$name, NO_OP))
       }
+      if (is_noop(self$state)) {
+        stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
+      }
+
       check_types(self, input, "input", "predict")
       output = self$predict(input)
       check_types(self, output, "output", "predict")

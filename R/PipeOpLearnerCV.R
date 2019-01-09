@@ -59,13 +59,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       rdesc$param_vals = list(folds = self$param_vals[["folds"]])
       res = resample(task, learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
-      setnames(prds, "row_id", task$backend$primary_key)
-      prds[, truth := NULL]
-
-      newtsk = task$clone()$select(character())$cbind(prds)
+      
+      newtsk = private$pred_to_task(prds, task)
       return(list(newtsk))
     },
-
     predict = function(inputs) {
       assert_list(inputs, len = 1L, type = c("Task", "data.frame"))
       task = inputs[[1]]
@@ -75,9 +72,17 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       } else {
         self$state$predict(row_ids = task$row_ids[[1L]])
       }
-      list(output = self$state$prediction)
+      newtsk = private$pred_to_task(self$state$prediction, task)
+      list(output = newtsk)
     }
-
+  ),
+  private = list(
+    pred_to_task = function(prds, task) {
+      prds = as.data.table(prds)
+      setnames(prds, "row_id", task$backend$primary_key)
+      prds[, truth := NULL]
+      task$clone()$select(character())$cbind(prds)
+    }
   ),
 
   active = list(
