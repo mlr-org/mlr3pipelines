@@ -77,7 +77,20 @@ test_that("branching", {
 })
 
 
+test_that("task chunking", {
+  task = mlr_tasks$get("iris")
+  lrn1 = mlr_learners$get("classif.rpart")
 
+  g = PipeOpChunk$new(2L) %>>% greplicate(PipeOpLearner$new(lrn), 2L) %>>%
+    PipeOpMajorityVote$new(2L)
+  expect_graph(g, n_nodes = 4L, n_edges = 4L)
+
+  res = g$train(task)
+  expect_true(g$is_trained)
+  expect_equal(res, list(NULL))
+  res = g$predict(task)
+  expect_list(res, types = "Prediction")
+})
 
 
 
