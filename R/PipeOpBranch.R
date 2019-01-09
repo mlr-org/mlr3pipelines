@@ -58,17 +58,17 @@ PipeOpBranch = R6::R6Class("PipeOpBranch",
         names(private$.defaultreturn) = options
       }
     },
-    train = function(input) {
-      assert_list(input)
+    train = function(inputs) {
+      assert_list(inputs)
       self$state = list()
       ret = private$.defaultreturn
-      ret[[self$param_vals[[1]]]] = input[[1]]
+      ret[[self$param_vals[[1]]]] = inputs[[1]]
       return(ret)
     },
-    predict = function(input) {
-      assert_list(input)
+    predict = function(inputs) {
+      assert_list(inputs)
       ret = private$.defaultreturn
-      ret[[self$param_vals[[1]]]] = input[[1]]
+      ret[[self$param_vals[[1]]]] = inputs[[1]]
       return(ret)
     }
   ),
@@ -130,16 +130,16 @@ PipeOpUnbranch = R6::R6Class("PipeOpUnbranch",
       self$predict_intypes = rep("any", innum)
       self$predict_outtypes = "any"
     },
-    train = function(input) {
-      assert_list(input, len = private$.innum)
+    train = function(inputs) {
+      assert_list(inputs, len = private$.innum)
       self$state = list()
-      nonnull = Filter(Negate(is.null), input)
+      nonnull = Filter(Negate(is.null), inputs)
       assert_list(nonnull, any.missing = FALSE, len = 1)
       return(nonnull)
     },
-    predict = function(input) {
-      assert_list(input, len = private$.innum)
-      nonnull = Filter(Negate(is.null), input)
+    predict = function(inputs) {
+      assert_list(inputs, len = private$.innum)
+      nonnull = Filter(Negate(is.null), inputs)
       assert_list(nonnull, any.missing = FALSE, len = 1)
       return(nonnull)
     }

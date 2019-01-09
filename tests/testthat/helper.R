@@ -8,6 +8,8 @@ expect_pipeop = function(po) {
   expect_list(po$param_vals, names = "unique", label = label)
   expect_output(print(po), "PipeOp:", label = label)
   expect_character(po$packages, any.missing = FALSE, unique = TRUE, label = label)
+  expect_function(po$train, args = "inputs")
+  expect_function(po$predict, args = "inputs")
   # expect_null(po$state)
   # expect_null(po$result)
   # expect_character(po$train_intypes)
@@ -38,7 +40,7 @@ predict_pipeop = function(po, inputs) {
 
 expect_graph = function(g) {
   expect_class(g, "Graph")
-  expect_data_table(g$channels, any.missing = FALSE)
+  expect_data_table(g$edges, any.missing = FALSE)
   expect_list(g$pipeops, "PipeOp")
   expect_character(g$packages, any.missing = FALSE, unique = TRUE)
 
