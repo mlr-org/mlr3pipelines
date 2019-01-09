@@ -60,11 +60,11 @@ Graph = R6Class("Graph",
 
     print = function() {
       lines = map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
-        data.table(ID = pipeop$id, State = sprintf("<%s>", class(pipeop$state)[1]))
+        data.frame(ID = pipeop$id, State = sprintf("<%s>", class(pipeop$state)[1]))
       })
       if (length(lines)) {
         catf("Graph with %s PipeOps:", length(lines))
-        print(as.data.frame(rbindlist(lines)))
+        print(do.call(rbind, unname(lines)))
       } else {
         cat("Empty Graph.\n")
       }
