@@ -71,9 +71,13 @@ If the PipeOp is already trained, already present \code{params} are overwritten.
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}}, \code{\link{PipeOpNULL}},
-  \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}}
+Other PipeOp: \code{\link{PipeOpBranch}},
+  \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
+  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpFeatureUnion}},
+  \code{\link{PipeOpLearner}}, \code{\link{PipeOpNULL}},
+  \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
+  \code{\link{PipeOpUnBranch}}
 }
 \concept{PipeOp}
 \keyword{datasets}

@@ -1,4 +1,6 @@
 #' @title PipeOpNULL
+#'
+#' @name PipeOpNULL
 #' @format [R6Class] PipeOpNULL
 #'
 #' @description
@@ -10,20 +12,19 @@
 #' Inherits from [PipeOp]
 #' * `f = pipeOpNULL$new(id)` \cr
 #'     `character(1)` -> [PipeOpNULL]
-#' @name PipeOpNULL
 #' @family PipeOp
+NULL
+
+#' @include PipeOp.R
 #' @export
 PipeOpNULL = R6Class("PipeOpNULL",
-
   inherit = PipeOp,
-
   public = list(
     initialize = function(id = "PipeOpNULL") {
-      super$initialize(id)
-      train_intypes = "any"
-      train_outtypes = "any"
-      predict_intypes = "any"
-      predict_outtypes = "any"
+      super$initialize(id,
+        input = data.table(name = "input", train = "*", predict = "*"),
+        output = data.table(name = "output", train = "*", predict = "*")
+      )
     },
 
     train = function(inputs) {
@@ -31,7 +32,9 @@ PipeOpNULL = R6Class("PipeOpNULL",
       inputs
     },
 
-    predict = identity
+    predict = function(inputs) {
+      inputs
+    }
   )
 )
 

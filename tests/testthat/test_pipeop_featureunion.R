@@ -2,13 +2,10 @@ context("featureunion")
 
 
 test_that("featureunion - basic properties", {
-  # Test basic properties
-  op = PipeOpFeatureUnion$new(3)
+  po = PipeOpFeatureUnion$new(3)
   expect_pipeop(op)
-  # expect_true(length(op$train_intypes) == 3L)
-  # expect_true(length(op$predict_intypes) == 3L)
-  # expect_true(length(op$train_outtypes) == 1L)
-  # expect_true(length(op$predict_outtypes) == 1L)
+  expect_data_table(po$input, nrow = 3)
+  expect_data_table(po$output, nrow = 1)
 })
 
 

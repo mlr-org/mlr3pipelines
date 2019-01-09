@@ -1,4 +1,6 @@
 #' @title PipeOpScale
+#'
+#' @name PipeOpScale
 #' @format [R6Class] PipeOpScale
 #'
 #' @description
@@ -8,13 +10,13 @@
 #' Inherits from [PipeOpDT]
 #' * `f = pipeOpDT$new(id)` \cr
 #'     `character(1)` -> [PipeOpDT]
-#' @name PipeOpScale
 #' @family PipeOp
+NULL
+
+#' @include PipeOp.R
 #' @export
 PipeOpScale = R6Class("PipeOpScale",
-
   inherit = PipeOpDT,
-
   public = list(
     initialize = function(id = "scale") {
       ps = ParamSet$new(params = list(
@@ -44,4 +46,3 @@ PipeOpScale = R6Class("PipeOpScale",
 
 #' @include mlr_pipeops.R
 mlr_pipeops$add("PipeOpScale", PipeOpScale)
-

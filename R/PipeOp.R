@@ -56,7 +56,7 @@
 #'
 #' @name PipeOp
 #' @family PipeOp
-PipeOp = R6::R6Class("PipeOp",
+PipeOp = R6Class("PipeOp",
   public = list(
     id = NULL,
     packages = character(0),

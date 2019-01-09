@@ -1,4 +1,6 @@
 #' @title PipeOpCopy
+#'
+#' @name PipeOpCopy
 #' @format [R6Class] PipeOpCopy
 #'
 #' @description
@@ -9,33 +11,32 @@
 #'     `integer(1)`, `character(1)` -> [PipeOpCopy]
 #' @section Details:
 #' * `outnum`: `integer(1)` Number of times the input is copied.
-#' @name PipeOpCopy
-#' @family PipeOp, PipeOpBroadcast
+#' @family PipeOp
+#' @family PipeOpBroadcast
+NULL
+
+#' @include PipeOp.R
 #' @export
-PipeOpCopy = R6::R6Class("PipeOpCopy",
+PipeOpCopy = R6Class("PipeOpCopy",
   inherit = PipeOp,
   public = list(
+    outnum = NULL,
     initialize = function(outnum, id = "scatter") {
-      assert_integerish(outnum)
-      super$initialize(id)
-      self$train_intypes = "any"
-      self$train_outtypes = rep("any", outnum)
-      self$predict_intypes = "any"
-      self$predict_outtypes = rep("any", outnum)
-      private$.outnum = outnum
+      assert_count(outnum)
+      super$initialize(id,
+        input = data.table(name = "input", train = "*", predict = "*"),
+        output = data.table(name = rep_suffix("input", outnum), train = "*", predict = "*")
+      )
+      self$outnum = outnum
     },
+
     train = function(inputs) {
       self$state = list()
       map(seq_len(self$outnum), function(x) inputs[[1]]$clone())
     },
+
     predict = function(inputs) {
       map(seq_len(self$outnum), function(x) inputs[[1]]$clone())
     }
-  ),
-  private = list(
-    .outnum = NULL
-  ),
-  active = list(
-    outnum = function() private$.outnum
   )
 )
