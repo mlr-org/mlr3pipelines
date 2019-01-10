@@ -3,7 +3,8 @@ rep_suffix = function(x, n) {
 }
 
 # FIXME --- vvv do this using paradox when paradox is able to do that
-# paramsets [possibly named list of ParamSet]
+# paramsets [possibly named list of ParamSet]. if the list is named, param-IDs are renamed to
+#   [name in list].[paramid], otherwise the param IDs are just concatenated.
 union_param_sets = function(paramsets) {
   # loop over all nodes, and add their paramsets (with prefix) to result object
   allparams = unlist(map(paramsets, function(x) x$clone(deep = TRUE)$params), recursive = FALSE)
