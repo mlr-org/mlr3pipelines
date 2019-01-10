@@ -26,3 +26,15 @@ test_that("PipeOLearnerCV - basic properties", {
   vals = factor(unique(tsk$data(col = tsk$feature_names)$response))
   expect_character(setdiff(vals, task$class_names), len = 0)
 })
+
+test_that("PipeOpLearnerCV - param values", {
+
+  lrn = mlr_learners$get("classif.rpart")
+  polrn = PipeOpLearnerCV$new(lrn)
+  expect_subset(c("minsplit", "resampling", "folds"), names(polrn$param_set$params))
+  expect_equal(polrn$param_vals, list(resampling = "cv", folds = 3))
+  polrn$param_vals$minsplit = 2
+  expect_equal(polrn$param_vals, list(minsplit = 2, resampling = "cv", folds = 3))
+  polrn$param_vals$folds = 4
+  expect_equal(polrn$param_vals, list(minsplit = 2, resampling = "cv", folds = 4))
+})

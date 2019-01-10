@@ -13,33 +13,6 @@ testthat::test_package("mlr3pipelines")
 testthat::test_package("mlr3pipelines", filter = "Graph")
 testthat::test_package("mlr3pipelines", filter = "greplicate")
 
-lrn = mlr_learners$get("classif.rpart")
-polrn = PipeOpLearnerCV$new(lrn)
-polrn$param_set
-polrn$param_vals
-polrn$param_vals$minsplit = 2
-polrn$param_vals
-polrn$learner$param_vals
-polrn$param_vals$folds = 3
-polrn$param_vals
-
-
-gr = Graph$new()
-gr$add_pipeop(PipeOpScale$new())
-gr$add_pipeop(PipeOpPCA$new())
-gr$ids(TRUE)
-
-gr$pipeops$scale$param_vals$center
-gr$param_vals$scale.center = FALSE
-gr$pipeops$scale$param_vals$center
-
-
-gr$pipeops$pca$param_vals$center
-gr$param_vals$pca.center = FALSE
-gr$pipeops$pca$param_vals$center
-
-# expect error: gr$param_vals$scale.center = 1
-
 gr$hash
 gr$param_vals$pca.center = FALSE
 gr$hash
