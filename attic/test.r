@@ -43,3 +43,4 @@ g$fire(list(task = task), "predict")
 g = PipeOpChunk$new(3) %>>% PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 g$plot()
 g$channels
+}
