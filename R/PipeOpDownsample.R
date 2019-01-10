@@ -14,6 +14,9 @@
 #' @family PipeOp
 NULL
 
+#FIXME: remove stratify for now? does not work for regression.
+# or robustify it
+
 #' @include PipeOp.R
 #' @export
 PipeOpDownsample = R6Class("PipeOpDownsample",

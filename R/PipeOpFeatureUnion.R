@@ -46,6 +46,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 mlr_pipeops$add("PipeOpFeatureUnion", PipeOpFeatureUnion)
 
 
+#FIXME: this really should be suported by mlr3 and the code looks horrible
 cbind_tasks = function(inputs) {
   task = inputs[[1L]]$clone(deep = TRUE)
   ids = task$row_ids[[1L]]
