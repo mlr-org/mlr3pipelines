@@ -32,7 +32,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("resampling", values = "cv", default = "cv"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L)
-      ))
+        ))
+      private$.crossval_param_vals = list(resampling = "cv", folds = 3)
 
       super$initialize(id = learner$id,
         input = data.table(name = "task", train = "Task", predict = "Task"),
