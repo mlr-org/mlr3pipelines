@@ -11,6 +11,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
     initialize = function(graph, task_type = "classif") {
+      assert_r6(graph, "Graph")
+      assert_choice(task_type, c("classif", "regr"))
       # FIXME: drop task_type and allow all task types, as soon as mlr3 allows that
       id = paste(graph$ids(sorted = TRUE), collapse = ".")
       super$initialize(id = id, task_type = task_type,
