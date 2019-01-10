@@ -13,8 +13,6 @@ test_that("PipeOp - General functions", {
   expect_true(po_1$packages == "package1")
   expect_null(po_1$state)
   expect_null(po_1$result)
-  expect_null(po_1$intype)
-  expect_null(po_1$outtype)
 
   expect_true(po_1$train() == 1)
   expect_true(po_1$state == 1)

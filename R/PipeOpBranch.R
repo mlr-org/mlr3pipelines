@@ -49,7 +49,6 @@ filter_noop = function(x) Filter(Negate(is_noop), x)
 PipeOpBranch = R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
-    outnum = NULL,
     initialize = function(options, id = "branch") {
       assert(
         check_int(options, lower = 1),
@@ -69,7 +68,6 @@ PipeOpBranch = R6Class("PipeOpBranch",
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*")
       )
-      self$outnum = outnum
     },
 
     train = function(inputs) {
