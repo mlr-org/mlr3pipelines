@@ -41,6 +41,7 @@ Remotes:
     mlr-org/paradox
 Collate:
     'Graph.R'
+    'GraphLearner.R'
     'utils.R'
     'PipeOp.R'
     'mlr_pipeops.R'
