@@ -165,32 +165,11 @@ Graph = R6Class("Graph",
     param_vals = function(rhs) {
       if (!missing(rhs)) {
         private$.hash = NA_character_
-
-        # FIXME --- vvv do this using paradox when paradox is able to do that
-        parids = union_parids(self)  # collect all parameter ID mappings
-        assert_list(value, names = "unique")  # length may not change
-        assert(all(names(value) %in% names(parids)))
-        if (!self$param_set$test(value)) {
-          stop("Parameters out of bounds")
-        }
-        for (pidx in names(value)) {
-          poid = parids[[pidx]][[1]]  # PipeOp ID of the PipeOp this pertains to
-          parid = parids[[pidx]][[2]]  # original parameter id, as the PipeOp knows it
-          self[[poid]]$pipeop$param_vals[[parid]] = value[[pidx]]
-        }
       }
-      union_parvals(self)
-      # FIXME --- ^^^
+      union_param_vals(self$pipeops, "param_vals", rhs)
     },
     param_set = function() {
-      # FIXME --- vvv do this using paradox when paradox is able to do that
-      # loop over all nodes, and add their paramsets (with prefix) to result object
-      allparams = unlist(
-          map(self$pipeops, function(x) x$param_set$clone(deep = TRUE)$params),
-        recursive = FALSE)
-      imap(allparams, function(param, id) param$id = id)
-      ParamSet$new(allparams)
-      # FIXME --- ^^^
+      union_param_sets(map(self$pipeops, function(x) x$param_set))
     },
     hash = function() {
       if (is.na(private$.hash))
@@ -240,34 +219,3 @@ graph_fire = function(self, private, input, stage) {
   filter_noop(tmp)
 }
 
-
-# FIXME ---- parameter collection stuff, can be removed as soon as ParamSet does something better ----
-
-# v- a glimpse of past glory -v
-
-# Create the unified parameter values of all PipeOps inside a graph.
-# The parameter IDs are changed by prefixing each PipeOp's ID, separated by a dot.
-# @param graph [Graph]
-# @return [named list]
-union_parvals = function(graph) {
-  parvals = unlist(graph$map(function(x) x$pipeop$param_vals, simplify = FALSE), recursive = FALSE)
-  assert_list(parvals, names = "unique")
-  parvals
-}
-
-# Create a mapping from a Graph's unified parameter IDs (the IDs given by `union_params`
-# and `union_parvals`) to the actual PipeOp ID and its parameter ID.
-#
-# This is necessary because a global parameter ID of 'x.y.z' could pertain to a
-# PipeOp 'x' with parameter 'y.z', or to a PipeOp 'x.y' with parameter 'z'.
-# (In the first case, the returned value would be list(x.y.z = list('x', 'y.z')),
-# in the second case it would be list(x.y.z = list('x.y', 'z')))
-# @param graph [Graph]
-# @return [list] list of pairs list(<original PipeOp ID>, <Parameter ID within that PipeOp>)
-union_parids = function(graph) {
-  parids = unlist(graph$map(function(x) {
-    sapply(names(x$pipeop$param_vals), function(y) list(x$pipeop$id, y), simplify = FALSE)
-  }, simplify = FALSE), recursive = FALSE)
-  assert_list(parids, names = "unique")
-  parids
-}
