@@ -40,7 +40,7 @@ union_param_sets = function(paramsets) {
 # parvalname [character(1)] name of parameter values inside parvalhavers
 # parvalhavers [named(!) list of things x so that x[[parvalname]] are the parameter values ]
 # newval [named list] new parameter values
-union_param_vals = function(paramset, parvalhavers, parvalname, newval) {
+union_param_vals = function(param_set, parvalhavers, parvalname, newval) {
 
   if (!missing(newval)) {
     # collect all parameter ID mappings

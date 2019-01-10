@@ -166,7 +166,7 @@ Graph = R6Class("Graph",
       if (!missing(rhs)) {
         private$.hash = NA_character_
       }
-      union_param_vals(self$pipeops, "param_vals", rhs)
+      union_param_vals(self$param_set, self$pipeops, "param_vals", rhs)
     },
     param_set = function() {
       union_param_sets(map(self$pipeops, function(x) x$param_set))
@@ -174,7 +174,7 @@ Graph = R6Class("Graph",
     hash = function() {
       if (is.na(private$.hash))
         # FIXME: how do we depend on digest?
-        private$.hash = digest::digest(list(elf$id, self$param_vals), algo = "xxhash64")
+        private$.hash = digest::digest(list(self$id, self$param_vals), algo = "xxhash64")
       private$.hash
     }
   ),
