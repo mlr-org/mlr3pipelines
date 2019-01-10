@@ -6,7 +6,7 @@
 \format{\link{R6Class} PipeOpEnsemble}
 \description{
 Abstract base-class.
-Aggregates a list of predictions.
+Parent class for PipeOps that aggregate a list of predictions.
 }
 \section{Usage}{
 
@@ -30,15 +30,18 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpLearner}},
+  \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
   \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
 
 Other PipeOpAggregate: \code{\link{PipeOpFeatureUnion}},
+  \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpModelAvg}},
   \code{\link{PipeOpUnbranch}}
 
-Other PipeOpEnsemble: \code{\link{PipeOpModelAvg}}
+Other PipeOpEnsemble: \code{\link{PipeOpMajorityVote}},
+  \code{\link{PipeOpModelAvg}}
 }
 \concept{PipeOp}
 \concept{PipeOpAggregate}

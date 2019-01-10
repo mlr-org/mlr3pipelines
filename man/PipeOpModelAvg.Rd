@@ -6,7 +6,7 @@
 \format{\link{R6Class} PipeOpModelAvg}
 \description{
 Averages its input (a list of \link[mlr3:Prediction]{mlr3::Prediction}).
-Returns a \link[mlr3:Prediction]{mlr3::Prediction}.
+Returns a \link{Prediction}s.
 }
 \section{Usage}{
 
@@ -33,15 +33,19 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpLearner}}, \code{\link{PipeOpNULL}},
-  \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
+  \code{\link{PipeOpLearner}},
+  \code{\link{PipeOpMajorityVote}},
+  \code{\link{PipeOpNULL}}, \code{\link{PipeOpPCA}},
+  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnbranch}},
+  \code{\link{PipeOp}}
 
 Other PipeOpAggregate: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
+  \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpUnbranch}}
 
-Other PipeOpEnsemble: \code{\link{PipeOpEnsemble}}
+Other PipeOpEnsemble: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpMajorityVote}}
 }
 \concept{PipeOp}
 \concept{PipeOpAggregate}

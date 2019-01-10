@@ -40,10 +40,12 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
       if (!self$param_vals$stratify) {
         keep = sample(tsk$row_roles$use, ceiling(self$param_vals$perc * tsk$nrow))
       } else {
+        if (!inherits(tsk, "TaskClassif"))
+          stopf("Stratification not supported for %s", class(tsk))
         splt = split(tsk$row_roles$use, tsk$data(cols = tsk$target_names))
         keep = unlist(map(splt, function(x) sample(x, ceiling(self$param_vals$perc * length(x)))))
       }
-      tsk$set_row_role(setdiff(tsk$row_roles$use, keep), character(0))
+      tsk$filter(keep)
       self$state = list()
       return(list(tsk))
     },

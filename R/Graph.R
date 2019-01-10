@@ -161,7 +161,23 @@ Graph = R6Class("Graph",
     is_trained = function() all(map_lgl(self$pipeops, "is_trained")),
     lhs = function() sort(setdiff(names(self$pipeops), self$edges$dst_id)),
     rhs = function() sort(setdiff(names(self$pipeops), self$edges$src_id)),
-    packages = function() unique(unlist(map(self$pipeops, "packages")))
+    packages = function() unique(unlist(map(self$pipeops, "packages"))),
+    param_vals = function(rhs) {
+      if (!missing(rhs)) {
+        private$.hash = NA_character_
+      }
+      union_param_vals(self$param_set, self$pipeops, "param_vals", rhs)
+    },
+    param_set = function() {
+      union_param_sets(map(self$pipeops, function(x) x$param_set))
+    },
+    hash = function() {
+      # FIXME: warn the user that he should not change param vals by graph$pipeops$pipeopid$param_vals!!
+      if (is.na(private$.hash))
+        # FIXME: how do we depend on digest?
+        private$.hash = digest::digest(list(self$ids(), self$param_vals), algo = "xxhash64")
+      private$.hash
+    }
   ),
 
   private = list(
@@ -171,7 +187,8 @@ Graph = R6Class("Graph",
         pipeops = map(value, function(x) x$clone(deep = TRUE)),
         value
       )
-    }
+    },
+    .hash = NA_character_
   )
 )
 
@@ -202,3 +219,4 @@ graph_fire = function(self, private, input, stage) {
 
   filter_noop(tmp)
 }
+

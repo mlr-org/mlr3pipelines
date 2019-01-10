@@ -5,7 +5,7 @@
 #'
 #' @description
 #' Abstract base-class.
-#' Aggregates a list of predictions.
+#' Parent class for PipeOps that aggregate a list of predictions.
 #' @section Usage:
 #' Inherits from [PipeOpEnsemble]
 #' * `f = PipeOpEnsemble$new(outnum, id)` \cr
@@ -26,7 +26,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
     initialize = function(innum, id = "PipeOpEnsemble") {
       assert_integerish(innum)
       super$initialize(id,
-        input = data.table(name = rep_suffix("prediction", innum), train = "Prediction", predict = "Prediction"),
+        input = data.table(name = rep_suffix("prediction", innum), train = "NULL", predict = "Prediction"),
         output = data.table(name = "prediction", train = "NULL", predict = "Prediction")
       )
     },
@@ -52,7 +52,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 #'
 #' @description
 #' Averages its input (a list of [mlr3::Prediction]).
-#' Returns a [mlr3::Prediction].
+#' Returns a [Prediction]s.
 #' @section Usage:
 #' Inherits from [PipeOpEnsemble]
 #' * `f = PipeOpModelAvg$new(innum, id)` \cr
@@ -102,10 +102,15 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
 #' @section Details:
 #' * `innum`: `integer(1)` Number of inputs.
 #' @name PipeOpMajorityVote
-#' @family PipeOp, PipeOpAggregate, PipeOpEnsemble
-#' @export
+#' @family PipeOp
+#' @family PipeOpAggregate
+#' @family PipeOpEnsemble
 #' @examples
 #' op = PipeOpMajorityVote$new(3)
+NULL
+
+#' @include PipeOp.R
+#' @export
 PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   inherit = PipeOpEnsemble,
 
@@ -113,7 +118,9 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     initialize = function(innum, id = "PipeOpMajorityVote") {
       super$initialize(innum, id)
     },
+
     predict = function(inputs) {
+      # cbind all predictions and aggregate by "row_id"
       prds = private$merge_predictions(inputs)
       prds = prds[, list(response = compute_mode(response), truth = truth[1]), by = "row_id"]
       # FIXME This is ugly, but currently the best way

@@ -38,41 +38,25 @@ PipeOpDT = R6Class("PipeOpDT",
 
       # Get feature dt from task
       task = inputs[[1L]]
-      fn = task$feature_names
-      d = task$data()
+      d = task$data(cols = task$feature_names)
 
       # Call train_dt function on features
-      dt = as.data.table(self$train_dt(d[, ..fn]))
-      assert_true(nrow(dt) == nrow(d))
+      dt = as.data.table(self$train_dt(d))
 
-      list(task_update_data(task, dt))
+      list(task = task$clone(deep = TRUE)$replace_features(dt))
     },
 
     predict = function(inputs) {
+      assert_list(inputs, len = 1L, type = "Task")
       assert_function(self$predict_dt, args = "newdt")
-      assert(
-          check_list(inputs, len = 1L, type = "Task"),
-          check_list(inputs, len = 1L, type = "data.frame")
-      )
-      if (is.data.frame(inputs[[1]])) {
-        indata = as.data.table(inputs[[1]])
-      } else {
-        task = inputs[[1L]]
-        fn = task$feature_names
-        indata = task$data()[, ..fn]
-      }
 
-      # Call train_dt function on features
-      dt = as.data.table(self$predict_dt(indata))
-      assert_true(nrow(dt) == nrow(indata))
-      if (is.data.frame(inputs[[1]])) {
-        if (!is.data.table(inputs[[1]])) {
-          dt = as.data.frame(dt)
-        }
-        return(list(dt))
-      }
-      # Drop old features, add new features
-      list(task_update_data(task, dt))
+      task = inputs[[1L]]
+      d = task$data(cols = task$feature_names)
+
+      # Call predict_dt function on features
+      dt = as.data.table(self$predict_dt(d))
+
+      return(list(task = task$clone(deep = TRUE)$replace_features(dt)))
     }
   )
 )

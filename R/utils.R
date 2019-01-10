@@ -2,28 +2,41 @@ rep_suffix = function(x, n) {
   sprintf("%s_%04i", x, seq_len(n))
 }
 
-# replace columns with new data. A bit hacky because mlr3 doesn't supply this out of the box
-# and makes it a bit harder than it needs to be. if no primary key column is present, it is
-# added. In that case the number of rows must be identical.
-#
-# task will be cloned.
+# FIXME --- vvv do this using paradox when paradox is able to do that
+# paramsets [named list of ParamSet]
+union_param_sets = function(paramsets) {
+  # loop over all nodes, and add their paramsets (with prefix) to result object
+  allparams = unlist(map(paramsets, function(x) x$clone(deep = TRUE)$params), recursive = FALSE)
+  imap(allparams, function(param, id) param$id = id)
+  ParamSet$new(allparams)
+}
 
-#FIXME: make this an issue, this seems pretty central. this should not be hacky and weird
-task_update_data = function(task, newdata) {
-  rowids = task$row_ids
-  keyname = names(rowids)
-  assert(length(keyname) == 1)
-  if (keyname %nin% rownames(newdata)) {
-    assert(nrow(newdata) == task$nrow)
-    newdata = cbind(newdata, rowids)
+
+# parvalname [character(1)] name of parameter values inside parvalhavers
+# parvalhavers [named(!) list of things x so that x[[parvalname]] are the parameter values ]
+# newval [named list] new parameter values
+union_param_vals = function(param_set, parvalhavers, parvalname, newval) {
+
+  if (!missing(newval)) {
+    # collect all parameter ID mappings
+    parids = unlist(imap(parvalhavers, function(pop, popid) {
+      imap(pop[[parvalname]], function(pv, pvid) list(popid, pvid))
+    }), recursive = FALSE)
+    assert_list(parids, names = "unique")
+
+    assert_list(newval, names = "unique")  # length may not change
+    assert(all(names(newval) %in% names(parids)))
+    if (!param_set$test(newval)) {
+      stop("Parameters out of bounds")
+    }
+
+    for (pidx in names(newval)) {
+      poid = parids[[pidx]][[1]]  # PipeOp ID of the PipeOp this pertains to
+      parid = parids[[pidx]][[2]]  # original parameter id, as the PipeOp knows it
+      parvalhavers[[poid]][[parvalname]][[parid]] = newval[[pidx]]
+    }
   }
-  overwriting = setdiff(intersect(colnames(newdata), task$col_info$id), keyname)  # must take all col_info$id columns
-  adding = setdiff(colnames(newdata), c(overwriting, keyname))
-
-  task = task$clone(deep = TRUE)$
-    select(overwriting)$
-    replace_columns(newdata[, c(overwriting, keyname), with = FALSE])$
-    cbind(newdata[, c(adding, keyname), with = FALSE])
-
-  task$set_col_role(setdiff(colnames(newdata), keyname), "feature")
+  parvals = unlist(map(parvalhavers, "param_vals"), recursive = FALSE)
+  assert_list(parvals, names = "unique")
+  parvals
 }

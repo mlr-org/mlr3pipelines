@@ -42,7 +42,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       super$initialize(learner$id,
         param_set = ps,
         input = data.table(name = "task", train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "Task", predict = "Prediction")
+        output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
 
@@ -76,6 +76,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       list(output = newtsk)
     }
   ),
+
   private = list(
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)

@@ -23,6 +23,7 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
+  \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
   \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
