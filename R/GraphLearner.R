@@ -45,7 +45,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     param_vals = function(rhs) {
       if (!missing(rhs)) {
-        private$.hash = NA_character_
         self$graph$param_vals = rhs
       }
       self$graph$param_vals

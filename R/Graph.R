@@ -168,20 +168,17 @@ Graph = R6Class("Graph",
     rhs = function() sort(setdiff(names(self$pipeops), self$edges$src_id)),
     packages = function() unique(unlist(map(self$pipeops, "packages"))),
     param_vals = function(rhs) {
-      if (!missing(rhs)) {
-        private$.hash = NA_character_
-      }
       union_param_vals(map(self$pipeops, "param_set"), self$pipeops, "param_vals", rhs)
     },
     param_set = function() {
       union_param_sets(map(self$pipeops, "param_set"))
     },
     hash = function() {
-      # FIXME: warn the user that he should not change param vals by graph$pipeops$pipeopid$param_vals!!
-      if (is.na(private$.hash))
-        # FIXME: how do we depend on digest?
-        private$.hash = digest::digest(list(self$ids(), self$param_vals), algo = "xxhash64")
-      private$.hash
+      # FIXME: how do we depend on digest?
+      # FIXME: maybe some pipeops need to tell us more about themselves than just ID (implicitly in map()), class, and param_vals?
+      digest::digest(
+        list(map(self$pipeops, class), self$param_vals, self$pipeops),
+        algo = "xxhash64")
     }
   ),
 
