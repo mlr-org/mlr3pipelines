@@ -11,7 +11,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
     initialize = function(graph, task_type = "classif") {
-      assert_r6(graph, "Graph")
+      # Please don't `assert_r6(graph, "Graph")` here, we have ensure_graph for that, graph can be a PipeOp too
       assert_choice(task_type, c("classif", "regr"))
       # FIXME: drop task_type and allow all task types, as soon as mlr3 allows that
       assert_subset(task_type, mlr_reflections$task_types)
