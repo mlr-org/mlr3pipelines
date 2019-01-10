@@ -7,6 +7,8 @@ rep_suffix = function(x, n) {
 # added. In that case the number of rows must be identical.
 #
 # task will be cloned.
+
+#FIXME: make this an issue, this seems pretty central. this should not be hacky and weird
 task_update_data = function(task, newdata) {
   rowids = task$row_ids
   keyname = names(rowids)

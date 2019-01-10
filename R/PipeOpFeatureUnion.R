@@ -52,6 +52,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 mlr_pipeops$add("PipeOpFeatureUnion", PipeOpFeatureUnion)
 
 
+#FIXME: this really should be suported by mlr3 and the code looks horrible
 cbind_tasks = function(inputs) {
   # FIXME: I think we should cbind the DataBackends instead.
   inputs = Filter(Negate(is.null), inputs)
