@@ -14,14 +14,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_r6(graph, "Graph")
       assert_choice(task_type, c("classif", "regr"))
       # FIXME: drop task_type and allow all task types, as soon as mlr3 allows that
+      assert_subset(task_type, mlr_reflections$task_types)
+      graph = ensure_graph(graph)$clone(deep = TRUE)
+
       id = paste(graph$ids(sorted = TRUE), collapse = ".")
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
-        predict_types = unique(unlist(mlr_reflections$predict_types, use.names = FALSE)),
+        predict_types = mlr_reflections$predict_types[[task_type]],
         packages = graph$packages,
         param_set = graph$param_set,
         param_vals = graph$param_vals,
-        properties = unique(unlist(mlr_reflections$learner_properties, use.names = FALSE)))
+        properties = mlr_reflections$learner_properties[[task_type]])
       private$.predict_type = "response"  # FIXME: Learner init should do this.
       self$graph = graph
     },
