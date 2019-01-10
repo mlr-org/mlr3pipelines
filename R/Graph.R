@@ -63,6 +63,7 @@ Graph = R6Class("Graph",
     },
 
     ids = function(sorted = FALSE) {
+      assert_flag(sorted)
       if (!sorted || !nrow(self$edges))
         return(names2(self$pipeops))
 
@@ -72,7 +73,7 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      assert_class(op, "PipeOp")
+      assert_r6(op, "PipeOp")
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
@@ -85,6 +86,7 @@ Graph = R6Class("Graph",
       # FIXME: as soon as intypes / outtypes are present the following two lines should be:
       # assert_choice(src_channel, rownames(self$pipeops[[src_id]]$outtypes))
       # assert_choice(dst_channel, rownames(self$pipeops[[dst_id]]$intypes))
+      # FIXME: make these assert better? we cannot use arbitrary names
       assert_string(src_channel)
       assert_string(dst_channel)
       src_id_ = src_id
@@ -140,7 +142,10 @@ Graph = R6Class("Graph",
     # Modifies both the index in $pipeops, as well as the respective PipeOp's ID. Do this here and not
     # by setting `graph$pipeops[[x]]$id <- y`!
     set_names = function(old, new) {
-      new_ids = map_values(names(self$pipeops), old, new)
+      ids = names(self$pipeops)
+      assert_subset(old, ids)
+      assert_character(new, any.missing = FALSE)
+      new_ids = map_values(ids, old, new)
       names(self$pipeops) = new_ids
       imap(self$pipeops, function(x, nn) x$id = nn)
 
@@ -149,11 +154,11 @@ Graph = R6Class("Graph",
     },
 
     train = function(input) {
-      graph_fire(self, private, input, "train")
+      graph_fire(self, private, input, "train") # input assert in call
     },
 
     predict = function(input) {
-      graph_fire(self, private, input, "predict")
+      graph_fire(self, private, input, "predict") # input assert in call
     }
   ),
 

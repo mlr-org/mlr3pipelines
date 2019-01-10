@@ -11,6 +11,7 @@
 #' @return `[Graph]`
 #' @export
 gunion = function(graphs) {
+  assert_list(graphs)
   graphs = map(graphs, ensure_graph)
 
   g = Graph$new()

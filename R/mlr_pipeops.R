@@ -14,8 +14,7 @@
 #' @name mlr_pipeops
 NULL
 
-DictionaryPipeOp = R6Class("DictionaryPipeOp",
-  inherit = mlr3::Dictionary,
+DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3::Dictionary,
   cloneable = FALSE
 )
 
