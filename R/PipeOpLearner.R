@@ -39,14 +39,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         learner = self$learner$clone(deep = TRUE)
       )$train()
 
-
-      # experiment$predict()
-      # d = experiment$prediction[,-1]
-      # colnames(d)[seq_along(task$target_names)] = task$target_names
-
-      # db = as_data_backend(d)
-      # private$.result = TaskClassif$new(id = task$id, backend = db, target = task$target_names)
-      # private$.result
       return(list(NULL))
     },
 
@@ -68,9 +60,8 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     param_set = function() self$learner$param_set,
 
     param_vals = function(value) {
-      # FIXME This is a bug, add tests
       if (missing(value)) return(self$learner$param_vals)
-      else self$learner$param_set = value
+      else self$learner$param_vals = value
     }
   )
 )
