@@ -33,17 +33,13 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
     train = function(inputs) {
       self$state = list()
-      cbind_tasks(inputs)
+      task = cbind_tasks(inputs)
+      list(task = task)
     },
 
     predict = function(inputs) {
-      # FIXME: check that all types are equal
-      # in theory we could down-convert, but that ewould probably be a bug on the user's side.
-      if (is.data.frame(inputs[[1]])) {
-        list(do.call(cbind, inputs))
-      } else {
-        cbind_tasks(inputs)
-      }
+      task = cbind_tasks(inputs)
+      list(task = task)
     }
   )
 )
@@ -53,26 +49,16 @@ mlr_pipeops$add("PipeOpFeatureUnion", PipeOpFeatureUnion)
 
 
 cbind_tasks = function(inputs) {
-  # FIXME: I think we should cbind the DataBackends instead.
-  inputs = Filter(Negate(is.null), inputs)
-  ## check if all target_names are equal
-  is_target_equal = length(unique(vapply(
-    inputs,
-    function(x) digest::digest(x$target_names),
-    FUN.VALUE = ""
-  ))) == 1
-  assert(is_target_equal)
-  # FIXME: assert tasks agree on other characteristics:
-  #  - row IDs
-  #  - task types
-  #  - ???
+  task = inputs[[1L]]$clone(deep = TRUE)
+  ids = task$row_ids[[1L]]
+  inputs = discard(inputs, is.null)
 
-  all_data = lapply(inputs, function(x) {
-    x$data()[, x$feature_names, with = FALSE]
-  })
+  targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
+  if (!setequal(targets, task$target_names))
+    stopf("All tasks must have the same target columns")
 
-  input1 = inputs[[1]]
-
-  data = do.call(cbind, c(all_data, input1$row_ids))
-  list(task_update_data(input1, data))
+  Reduce(function(x, y) {
+    data = y$data(ids, y$feature_names)
+    x$cbind(data)
+  }, tail(inputs, -1L), init = task)
 }
