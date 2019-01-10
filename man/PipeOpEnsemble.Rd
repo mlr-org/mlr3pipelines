@@ -6,7 +6,7 @@
 \format{\link{R6Class} PipeOpEnsemble}
 \description{
 Abstract base-class.
-Aggregates a list of predictions.
+Parent class for PipeOps that aggregate a list of predictions.
 }
 \section{Usage}{
 

@@ -6,7 +6,7 @@
 \format{\link{R6Class} PipeOpModelAvg}
 \description{
 Averages its input (a list of \link[mlr3:Prediction]{mlr3::Prediction}).
-Returns a \link[mlr3:Prediction]{mlr3::Prediction}.
+Returns a \link{Prediction}s.
 }
 \section{Usage}{
 
