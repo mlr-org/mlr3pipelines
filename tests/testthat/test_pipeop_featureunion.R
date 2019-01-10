@@ -15,7 +15,10 @@ test_that("PipeOpFeatureunion - train and predict", {
   t1 = tsk$clone()$set_col_role(c("Sepal.Length", "Sepal.Width"), character())
   t2 = tsk$clone()$set_col_role(c("Petal.Length", "Petal.Width"), character())
 
+  expect_task(cbind_tasks(inputs = list(t1, t2)))
+
   po = PipeOpFeatureUnion$new(2)
+
   tout = train_pipeop(po, list(t1, t2))
   expect_equivalent(tout[[1]]$feature_names, tsk$feature_names)
   expect_equivalent(tout[[1]]$target_names, tsk$target_names)
@@ -23,7 +26,6 @@ test_that("PipeOpFeatureunion - train and predict", {
   pout = predict_pipeop(po, list(t1, t2))
   expect_equivalent(pout[[1]]$feature_names, tsk$feature_names)
   expect_equivalent(pout[[1]]$target_names, tsk$target_names)
-
 })
 
 # test_that("PipeOpBranch - train and predict", {

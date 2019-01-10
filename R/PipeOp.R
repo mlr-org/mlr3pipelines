@@ -129,9 +129,6 @@ PipeOp = R6Class("PipeOp",
     },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
-
-
-    # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
     is_trained = function() !is.null(self$state)
   ),
 
