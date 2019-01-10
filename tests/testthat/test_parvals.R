@@ -31,6 +31,16 @@ test_that("graph param vals", {
 
   expect_error({gr$pipeops$pca$param_vals$center = 1})  # type mismatch
   expect_error({gr$param_vals$pca.center = 1})
+})
+
+test_that("graph has value changes when param vals change", {
+  gr$param_vals$pca.center = FALSE
+  hashbeginning = gr$hash
+  gr$param_vals$pca.center = TRUE
+  hashend = gr$hash
+  expect_character(hashbeginning, len = 1)
+  expect_character(hashend, len = 1)
+  expect_true(hashbeginning != hashend)
 
 })
 

@@ -13,17 +13,6 @@ testthat::test_package("mlr3pipelines")
 testthat::test_package("mlr3pipelines", filter = "Graph")
 testthat::test_package("mlr3pipelines", filter = "greplicate")
 
-gr$hash
-gr$param_vals$pca.center = FALSE
-gr$hash
-gr$param_vals$pca.center = TRUE
-gr$hash
-
-gr$param_vals
-
-
-
-
 
 gr$param_vals$scale.scale = FALSE
 
