@@ -166,10 +166,10 @@ Graph = R6Class("Graph",
       if (!missing(rhs)) {
         private$.hash = NA_character_
       }
-      union_param_vals(self$param_set, self$pipeops, "param_vals", rhs)
+      union_param_vals(map(self$pipeops, "param_set"), self$pipeops, "param_vals", rhs)
     },
     param_set = function() {
-      union_param_sets(map(self$pipeops, function(x) x$param_set))
+      union_param_sets(map(self$pipeops, "param_set"))
     },
     hash = function() {
       # FIXME: warn the user that he should not change param vals by graph$pipeops$pipeopid$param_vals!!

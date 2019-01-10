@@ -28,7 +28,7 @@ task_update_data = function(task, newdata) {
 
 
 # FIXME --- vvv do this using paradox when paradox is able to do that
-# paramsets [named list of ParamSet]
+# paramsets [possibly named list of ParamSet]
 union_param_sets = function(paramsets) {
   # loop over all nodes, and add their paramsets (with prefix) to result object
   allparams = unlist(map(paramsets, function(x) x$clone(deep = TRUE)$params), recursive = FALSE)
@@ -37,31 +37,40 @@ union_param_sets = function(paramsets) {
 }
 
 
-# parvalname [character(1)] name of parameter values inside parvalhavers
-# parvalhavers [named(!) list of things x so that x[[parvalname]] are the parameter values ]
+# parvalname [character] name of parameter values inside parvalhavers. if length 1 it us used for all,
+#   otherwise it must be indexable by parvalhavers' index.
+# parvalhavers [possibly named list of things x so that x[[parvalname]] are the parameter values ]
 # newval [named list] new parameter values
-union_param_vals = function(param_set, parvalhavers, parvalname, newval) {
+union_param_vals = function(param_sets, parvalhavers, parvalname, newval) {
 
+  getpvn = function(popid) {
+    if (length(parvalname) == 1) {
+      parvalname
+    } else {
+      parvalname[[popid]]
+    }
+  }
   if (!missing(newval)) {
+    psunion = union_param_sets(param_sets)
     # collect all parameter ID mappings
     parids = unlist(imap(parvalhavers, function(pop, popid) {
-      imap(pop[[parvalname]], function(pv, pvid) list(popid, pvid))
+      imap(param_sets[[popid]]$params, function(pv, pvid) list(popid, pvid))
     }), recursive = FALSE)
     assert_list(parids, names = "unique")
 
     assert_list(newval, names = "unique")  # length may not change
-    assert(all(names(newval) %in% names(parids)))
-    if (!param_set$test(newval)) {
+    assert(all(names(newval) %in% names(psunion$params)))
+    if (!psunion$test(newval)) {
       stop("Parameters out of bounds")
     }
 
     for (pidx in names(newval)) {
       poid = parids[[pidx]][[1]]  # PipeOp ID of the PipeOp this pertains to
       parid = parids[[pidx]][[2]]  # original parameter id, as the PipeOp knows it
-      parvalhavers[[poid]][[parvalname]][[parid]] = newval[[pidx]]
+      parvalhavers[[poid]][[getpvn(poid)]][[parid]] = newval[[pidx]]
     }
   }
-  parvals = unlist(map(parvalhavers, "param_vals"), recursive = FALSE)
+  parvals = unlist(imap(parvalhavers, function(pop, popid) pop[[getpvn(popid)]]), recursive = FALSE)
   assert_list(parvals, names = "unique")
   parvals
 }

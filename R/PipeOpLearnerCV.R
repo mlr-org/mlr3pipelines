@@ -9,7 +9,7 @@
 #' * `resamping`                         :: [character]
 #' Which resampling method do we want to use. Currently only supports 'cv'.
 #' * `folds`                   :: [integer]
-#' 
+#'
 #' @section Usage:
 #' Inherits from [PipeOp]
 #' * `f = PipeOpLearner$new(outnum, id)` \cr
@@ -25,22 +25,16 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOp,
   public = list(
     learner = NULL,
-
     initialize = function(learner) {
       assert_learner(learner)
       self$learner = learner
 
-      #FIXME: It is unclear if we want to keep this as-is
-      #       Maybe use ParamSetCollection in the future
-      #       Resampling will be extended in the future
-      ps = ParamSet$new(params = list(
+      private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("resampling", values = "cv", default = "cv"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L)
       ))
-      ps$add(self$learner$param_set)
 
-      super$initialize(learner$id,
-        param_set = ps,
+      super$initialize(id = learner$id,
         input = data.table(name = "task", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
@@ -49,7 +43,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     train = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
       task = inputs[[1L]]
-      learner = self$learner$clone(deep = TRUE)
+      learner = self$learner
 
       # Train a learner for predicting
       self$state = Experiment$new(task = task, learner = learner)$train()
@@ -59,7 +53,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       rdesc$param_vals = list(folds = self$param_vals[["folds"]])
       res = resample(task, learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
-      
+
       newtsk = private$pred_to_task(prds, task)
       return(list(newtsk))
     },
@@ -83,21 +77,19 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       setnames(prds, "row_id", task$backend$primary_key)
       prds[, truth := NULL]
       task$clone()$select(character())$cbind(prds)
-    }
+    },
+    .crossval_param_set = NULL,
+    .crossval_param_vals = NULL
   ),
 
   active = list(
-    param_set = function() private$.param_set,
+    param_set = function() {
+      union_param_sets(list(self$learner$param_set, private$.crossval_param_set))
+    },
     # FIXME: Not sure if this works
     param_vals = function(vals) {
-      if (!missing(vals)) {
-        # FIXME: param check
-        if (!self$param_set$test(vals)) {
-          stop("Parameters out of bounds")
-        }
-        private$.param_vals = vals
-      }
-      private$.param_vals
+      union_param_vals(list(self$learner$param_set, private$.crossval_param_set),
+        list(self$learner, private), c("param_vals", ".crossval_param_vals"), vals)
     }
   )
 )
