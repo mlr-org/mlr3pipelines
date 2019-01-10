@@ -127,8 +127,9 @@ PipeOp = R6Class("PipeOp",
       }
       private$.param_vals
     },
-    intype = function() private$.intype,
-    outtype = function() private$.outtype,
+    innum = function() nrow(self$input),
+    outnum = function() nrow(self$output),
+
 
     # ------------ BELOW HERE SHOULD BE DROPPED AT SOME POINT
     is_trained = function() !is.null(self$state)
