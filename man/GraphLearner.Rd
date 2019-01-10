@@ -9,6 +9,11 @@
 GraphLearner
 }
 \description{
-GraphLearner
+A \link{Learner} that encapsulates a \link{Graph} to be used in mlr3
+resampling and benchmarks.
+
+The Graph must return a single \code{\link{Prediction}} on its \code{$predict()}
+call. The result of the \code{$train()} call is discarded, only the
+internal state changes during training are used.
 }
 \keyword{datasets}
