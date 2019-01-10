@@ -20,14 +20,12 @@ NULL
 PipeOpCopy = R6Class("PipeOpCopy",
   inherit = PipeOp,
   public = list(
-    outnum = NULL,
     initialize = function(outnum, id = "scatter") {
       assert_count(outnum)
       super$initialize(id,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = rep_suffix("input", outnum), train = "*", predict = "*")
       )
-      self$outnum = outnum
     },
 
     train = function(inputs) {
