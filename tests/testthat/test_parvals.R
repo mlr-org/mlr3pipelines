@@ -34,6 +34,13 @@ test_that("graph param vals", {
 })
 
 test_that("graph has value changes when param vals change", {
+
+  gr = Graph$new()
+  gr$add_pipeop(PipeOpScale$new())
+  gr$add_pipeop(PipeOpPCA$new())
+  expect_equal(gr$ids(TRUE), c("scale", "pca"))
+
+
   gr$param_vals$pca.center = FALSE
   hashbeginning = gr$hash
   gr$param_vals$pca.center = TRUE
