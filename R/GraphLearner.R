@@ -1,6 +1,6 @@
 #' @title GraphLearner
 #' @format [R6::R6Class()] inheriting from [LearnerClassif].
-#' @Description
+#' @description
 #' A [Learner] that encapsulates a [Graph] to be used in mlr3
 #' resampling and benchmarks.
 #'
