@@ -1,4 +1,4 @@
-context("Graph")
+context("GraphParamSet")
 
 test_that("graph param vals", {
 

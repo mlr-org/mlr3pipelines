@@ -19,8 +19,49 @@ gr$param_vals$scale.scale = FALSE
 gr$add_edge("scale", "1", "pca", "1")
 gr$add_edge("scale", "1", "pca", "1")
 
-gr
+task = mlr_tasks$get("iris")
 
+lrn = mlr_learners$get("classif.rpart")
+gr = PipeOpLearner$new(lrn)
+
+glrn = GraphLearner$new(gr)
+expect_learner_fits(glrn, task)
+
+glrn = GraphLearner$new(gr)
+glrn$train(task)
+expect_prediction_classif({graphpred = glrn$predict(task)})
+expect_equal(graphpred,
+  lrn$train(task)$predict(task))
+
+set.seed(1)
+resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
+set.seed(1)
+resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
+expect_equal(resgraphlrn$data$prediction, resjustlrn$data$prediction)
+
+gr2 = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
+glrn2 = GraphLearner$new(gr2)
+expect_learner_fits(glrn, task)
+glrn2$train(task)
+expect_prediction_classif({graphpred2 = glrn2$predict(task)})
+
+scidf = cbind(scale(iris[1:4]), iris[5])
+scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
+expect_equal(graphpred, lrn$train(scalediris)$predict(scalediris))
+expect_equal(graphpred2, lrn$train(scalediris)$predict(scalediris))
+
+dblrn = mlr_learners$get("classif.debug")
+
+
+
+
+
+
+MeasureClassifACC$new()$calculate(Experiment$new(task, lrn)$train()$predict())
+MeasureClassifACC$new()$calculate(Experiment$new(task, lrn)$train()$predict())
+
+MeasureClassifACC$new()$aggregate
+C
 
 
 # ---------------------- multiplex
