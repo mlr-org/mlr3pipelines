@@ -172,9 +172,10 @@ Graph = R6Class("Graph",
       union_param_sets(map(self$pipeops, function(x) x$param_set))
     },
     hash = function() {
+      # FIXME: warn the user that he should not change param vals by graph$pipeops$pipeopid$param_vals!!
       if (is.na(private$.hash))
         # FIXME: how do we depend on digest?
-        private$.hash = digest::digest(list(self$id, self$param_vals), algo = "xxhash64")
+        private$.hash = digest::digest(list(self$ids(), self$param_vals), algo = "xxhash64")
       private$.hash
     }
   ),
