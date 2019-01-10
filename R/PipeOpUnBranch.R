@@ -31,7 +31,6 @@ NULL
 PipeOpUnbranch = R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(
-    innum = NULL,
     initialize = function(options, id = "unbranch") {
       assert(
         check_int(options, lower = 1),
@@ -47,7 +46,6 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
         input = data.table(name = rep_suffix("input", innum), train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
-      self$innum = innum
     },
 
     train = function(inputs) {

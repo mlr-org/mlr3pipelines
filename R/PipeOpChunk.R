@@ -26,9 +26,8 @@ NULL
 PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
-    outnum = NULL,
     initialize = function(outnum, id = "chunk") {
-      self$outnum = assert_int(outnum, lower = 2L)
+      outnum = assert_int(outnum, lower = 2L)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)

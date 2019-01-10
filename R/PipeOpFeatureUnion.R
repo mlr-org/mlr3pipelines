@@ -21,14 +21,12 @@ NULL
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
-    innum = NULL,
     initialize = function(innum, id = "featureunion") {
       assert_int(innum, lower = 2L)
       super$initialize(id,
         input = data.table(name = rep_suffix("task", innum), train = "Task", predict = "Task"),
         output = data.table(name = "task", train = "Task", predict = "Task")
       )
-      self$innum = innum
     },
 
     train = function(inputs) {
