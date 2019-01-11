@@ -48,8 +48,8 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
     expect_equal(nrow(g$edges), n_edges)
 
 
-  # expect_class(g$param_set, "ParamSet")
-  # expect_list(g$param_vals, names = "unique")
+  expect_class(g$param_set, "ParamSet")
+  expect_list(g$param_vals, names = "unique")
 
   expect_character(g$lhs, any.missing = FALSE)
   expect_character(g$rhs, any.missing = FALSE)
@@ -59,6 +59,4 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
 
   expect_flag(g$is_trained)
 
-  # expect_list(graph$intype)
-  # expect_list(graph$outtype)
 }

@@ -36,3 +36,8 @@ test_that("linear graph", {
   expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*classif\\.rpart.*already in Graph")
 
 })
+
+test_that("complex graph", {
+
+
+})
