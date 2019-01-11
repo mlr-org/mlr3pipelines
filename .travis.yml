@@ -1,5 +1,69 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
 language: R
 sudo: false
 cache: packages
+r:
+  - release
+
+env:
+  global:
+    - _R_CHECK_TIMINGS_=0
+    - _R_CHECK_FORCE_SUGGESTS_=false
+    - _R_CHECK_TESTS_NLINES_=999
+
+before_install:
+  - Rscript -e 'message("INSTALLED PACKS:"); installed.packages()[,2:3]'
+
+before_script:
+  - rm inst/doc/*.*
+  - Rscript -e 'if (!require("roxygen2")) install.packages("roxygen2")'
+  - Rscript -e 'if (!require("covr")) install.packages("covr")'
+  - Rscript -e 'if (!require("pkgdown")) install.packages("pkgdown")'
+  - Rscript -e 'devtools::document()'
+
+stages:
+  - test
+  - name: document
+    if: branch = master AND type IN (push, api, cron)
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - R CMD build .
+        - travis_wait 100 R CMD check mlr3pipelines*.tar.gz --as-cran --run-donttest
+        - grep -q -R "WARNING" mlr3pipelines.Rcheck/00check.log" ; [ $? -ne 0 ]
+    - stage: test
+        - travis_wait 100 Rscript -e 'covr::codecov(quiet = FALSE)'
+    - stage: document
+      script:
+        - true
+      before_deploy:
+        - Rscript -e 'devtools::install(quick = TRUE); pkgdown::build_site(); devtools::document(); devtools::build_vignettes();'
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        github-token: $GITHUB_TOKEN
+        on:
+          branch: covr # FIXME: change to master as soon as this works
+      after_deploy:
+        - git checkout covr  # otherwise we're in detached head
+        - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
+        - git config user.name Travis
+        - git config user.email '<>'
+        - git config credential.helper "store --file=.git/credentials"
+        - echo "https://${GITHUB_TOKEN}:@github.com" >> .git/credentials
+        - git config push.default matching
+        - |
+          git difftool -yx "diff -qI '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]\\\\|environment. 0x\\\\|time: [0-9.]\\\\+'" | \
+          grep 'and inst/doc' | sed -e 's|.*and inst/doc|inst/doc|' -e 's/ differ$//' | xargs git add
+        - git fadd --force man/*
+        - git add DESCRIPTION NAMESPACE
+        - git commit -m "update auto-generated documentation [ci skip]" || true
+        - git push
+
+on_success: change
+on_failure: always
+
+notifications:
+  email: false
+
