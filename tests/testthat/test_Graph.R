@@ -5,6 +5,8 @@ test_that("linear graph", {
   g = Graph$new()
   expect_equal(g$ids(sorted = TRUE), character(0))
 
+  # FIXME: we should use PipeopNULL here, or "dummy" ops, so we can change properties of the ops at will
+  # FIXME: we should packages of the graph
   op_ds = PipeOpDownsample$new()
   op_pca = PipeOpPCA$new()
   op_lrn = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
