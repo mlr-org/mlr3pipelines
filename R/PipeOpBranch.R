@@ -32,8 +32,12 @@
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 NULL
 
-# special new data type for no-ops. Distinct from NULL for easier
-# and distinction from unintentional NULL returns.
+#' @title No-Op Sentinel Used for Alternative Branching
+#'
+#' @description
+#' Special data type for no-ops. Distinct from NULL for easier
+#' and distinction from unintentional NULL returns.
+#'
 #' @export
 NO_OP = R6Class("NO_OP", cloneable = FALSE,
   public = list(
