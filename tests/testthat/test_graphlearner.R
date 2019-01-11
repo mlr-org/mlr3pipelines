@@ -28,4 +28,22 @@ test_that("basic graphlearn tests", {
   glrn2$train(task)
   expect_prediction_classif({graphpred2 = glrn2$predict(task)})
 
+  scidf = cbind(scale(iris[1:4]), iris[5])
+  scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
+
+  dblrn = mlr_learners$get("classif.debug")
+  dblrn$param_vals$save_tasks = TRUE
+
+  dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
+
+  dbgr$train(task)
+
+  dbgr$predict(task)
+
+  dbmodels = dbgr$pipeops$classif.debug$state$model
+
+  expect_equal(dbmodels[[1]]$data(), scalediris$data())
+  expect_equal(dbmodels[[2]]$data(), scalediris$data())
+
 })
+
