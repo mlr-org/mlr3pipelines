@@ -23,7 +23,7 @@ before_script:
 stages:
   - test
   - name: document
-    if: branch = master AND type IN (push, api, cron)
+    if: branch = covr AND type IN (push, api, cron)  # FIXME: change to master when it works
 
 jobs:
   include:
