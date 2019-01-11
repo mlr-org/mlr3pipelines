@@ -170,4 +170,93 @@ PipeOpScale = R6Class("PipeOpScale",
 
 
 
-## An advanced example: ... Operator
+## An advanced example: PipeOpPCA Operator
+
+In this example we will create a `PipeOp` that allows us to transform our data using **PCA**.
+
+As an `id` we will use `PipeOpPCA`.
+
+In the next step we will define the `train` function:
+
+```{r}
+    train = function(inputs) {
+      # We require our inputs to be a (list of) Task(s)
+      assert_list(inputs, len = 1L, type = "Task")
+      task = inputs[[1L]]
+
+      # We obtain data and the feature names from the task
+      fn = task$feature_names
+      dt = task$data()
+
+      # And then extract principal components.
+      # We will focus on the self$param_vals further down.
+      pcr = prcomp(as.matrix(dt),
+        center = self$param_vals$center,
+        scale. = self$param_vals$scale.,
+        rank.  = self$param_vals$rank.)
+      # Then we save the "pca-model" in the .params slot.
+      private$.params = pcr
+      # And convert the transformed data to a data.table
+      x = as.data.table(pcr$x)
+
+      # Now we drop the old features from the data.table
+      dt[, (fn) := NULL]
+      # And add the rotated features
+      dt[, (colnames(x)) := x]
+
+      # Now we overwrite the data.table in the task
+      # with our new data, save it to the
+      # "-result" slot
+      private$.result = task$overwrite(dt)
+      # and return the new task
+      private$.result
+    }
+```
+
+And the `predict()` function:
+
+```{r}
+    predict = function() {
+      assert_list(self$inputs, len = 1L, type = "Task")
+      task = self$inputs[[1L]]
+      fn = task$feature_names
+      d = task$data()
+
+      # Call train_dt function on features
+      rotated = predict(private$.params, as.matrix(d[, ..fn]))
+      dt = as.data.table(rotated)
+
+      # Drop old features, add new features
+      d[, (fn) := NULL]
+      d[, (colnames(dt)) := dt]
+
+      # See "train()"
+      private$.result = task$overwrite(d)
+      return(private$.result)
+    }
+```
+
+And the `ParamSet`:
+
+```{r}
+      ps = ParamSet$new(params = list(
+        ParamFlag$new("center", default = TRUE),
+        ParamFlag$new("scale", default = TRUE)
+      ))
+```
+
+Afterwards we can put everything together and create a new **R6** Object:
+
+
+```{r}
+PipeOpPCA = R6Class("PipeOpPCA",
+  inherit = PipeOp,
+  public = list(
+    initialize = function(id = "pca") {
+      super$initialize(id, ps)
+    },
+    train = train,
+    predict2 = predict
+  )
+)
+```
