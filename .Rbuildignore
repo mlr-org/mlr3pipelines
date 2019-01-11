@@ -1,5 +1,3 @@
-^tic\.R$
-^appveyor\.yml$
 .ignore
 .editorconfig
 .gitignore
@@ -10,3 +8,4 @@
 ^attic$
 ^docs$
 ^pkgdown$
+^info$

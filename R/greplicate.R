@@ -1,8 +1,15 @@
 
-#replicate a graph and joins it by a union
-# takes a Graph and integer(1) n
-# n may also be a character: a vector of postfixes to use.
-# returns a Graph
+#' @title Create Disjoint Graph Union of Copies of a Graph
+#'
+#' Create a new graph containing `n` copies of the input graph.
+#' To avoid ID collisions, PipeOp IDs are suffixed with `_i`
+#' where `i` ranges from 1 to `n`.
+#'
+#' @param graph [`Graph`] \cr
+#'   Graph to replicate.
+#' @param n `integer(1)`
+#'   Number of copies to create.
+#' @return [`Graph`] containing `n` copies of input `graph`.
 #' @export
 greplicate = function(graph, n) {
   graph = ensure_graph(graph)
