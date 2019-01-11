@@ -40,4 +40,23 @@ test_that("linear graph", {
 test_that("complex graph", {
 
 
+  # test that debug pipeops exist
+  expect_pipeop(PipeOpDebugBasic$new())
+  expect_pipeop(PipeOpDebugMulti$new(1, 1))
+  expect_pipeop(PipeOpDebugMulti$new(3, 2))
+
+  expect_graph(PipeOpDebugBasic$new() %>>% PipeOpDebugMulti$new(1, 2) %>>% PipeOpDebugMulti$new(2, 1, "debug2"))
+
+  expect_graph(PipeOpDebugBasic$new() %>>% PipeOpDebugMulti$new(1, 2) %>>%
+    greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2))
+
+  # FIXME: the following gives warnings and the resulting graph differs from what the user should expect
+  ## biggraph = PipeOpDebugBasic$new() %>>%
+  ##   PipeOpDebugMulti$new(1, 2) %>>%
+  ##   greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2) %>>%
+  ##   gunion(list(PipeOpDebugBasic$new("basictop"),
+  ##     PipeOpDebugMulti$new(2, 1, "debug2"),
+  ##     PipeOpDebugBasic$new("basicbottom"))) %>>%
+  ##   PipeOpDebugMulti$new(3, 1, "debug3")
+
 })
