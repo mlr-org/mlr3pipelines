@@ -14,7 +14,7 @@ before_install:
   - Rscript -e 'message("INSTALLED PACKS:"); installed.packages()[,2:3]'
 
 before_script:
-  - rm inst/doc/*.*
+  - rm inst/doc/*.* || true
   - Rscript -e 'if (!require("roxygen2")) install.packages("roxygen2")'
   - Rscript -e 'if (!require("covr")) install.packages("covr")'
   - Rscript -e 'if (!require("pkgdown")) install.packages("pkgdown")'
