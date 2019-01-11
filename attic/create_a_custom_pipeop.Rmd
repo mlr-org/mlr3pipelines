@@ -1,0 +1,173 @@
+---
+title: "Showcase: Custom PipeOps"
+author: "Florian Pfisterer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This vignette showcases the how the `mlr3pipelines` package can be extended to 
+include custom `PipeOps`.
+
+In order to test and showcase our PipeOp, we first create a `Task`.
+```{r}
+  library(mlr3)
+  task = mlr_tasks$get("iris")
+```
+
+
+## An introductory example: Scaling Operator
+
+In order to understand the general setup, we first look at an already existing 
+CPO:  **PipeOpScale**. This helps us understand the general structure of a 
+PipeOp.
+
+An often-applied preprocessing step is to simply **center** and **scale** the data to mean $0$ and standard deviation $1$. In order to do this we create a new `PipeOp`: **PipeOpScale**.
+
+```{r}
+  library(mlr3pipelines)
+  op1 = PipeOpScale$new()
+```
+
+### Train and Test transformations 
+
+In order to not leak data from the test set into the training set it is imperative to treat train and test data correctly. For this we require a 
+`train` function  that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
+This is already handled in `PipeOpScale`:
+For further info, we can look into the `$train_dt` and `$test_dt` methods defined in the PipeOp.
+
+```{r}
+  op1$train_dt
+```
+
+What does `train_dt` do?
+  1. It expects a single input `dt`.
+  2. It converts the input to a matrix and scales it using `scale`.
+  3. It saves the applied transformations (mean and standard 
+     deviation of each row) to `self$state`.
+  4. It returns the scaled data `sc`.
+
+
+```{r}
+  op1$predict_dt
+```
+
+What does `predict_dt` do?
+  1. It expects a single input `dt`.
+  2. It converts the transforms the input using the transformations 
+     from `self$state`.
+  3. It returns the scaled data.
+
+**We can now apply this to our dataset**
+
+```{r}
+# Randomly assign 50 Observations to the validation set
+task$set_row_role(sample(seq_len(150), 50), "validation")
+
+# And train
+scaled = op1$train(list(task))
+scaled[[1]]$head()
+```
+
+**And use the predict method to rescale with the learned values**
+
+```{r, eval = FALSE}
+# Get validation data
+task$row_roles = setNames(task$row_roles, c("validation", "use"))
+
+rescaled = op1$predict(list(task))
+rescaled[[1]]$head()
+```
+
+### General Semantics
+
+All PipeOps inherit from a base-class **PipeOp** that provides the general 
+structure and functionality of each PipeOp.
+
+The following slots (and more) are thus contained in each PipeOp:
+* `train`                 :: `function(inputs)`
+  Function used to train the PipeOp.
+* `predict`               :: `function(inputs)`
+  Function used to predict with the PipeOp.
+* `id`                         :: [character]
+  Allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
+* `param_set`                  :: [ParamSet]
+  The set of all exposed parameters of the PipeOp.
+* `param_vals`                   :: named [list]
+  Parameter settings where all setting must come from `param_set`, named with param IDs.
+* `state`                      :: any
+  The object of learned parameters, obtained in the training step, and applied in the predict step.
+* `is_trained`                 :: `logical(1)`
+  Is the PipeOp currently trained?
+
+
+Additional mempers of a PipeOp can be obtained via: 
+
+```{r, eval = FALSE}
+ls(op1)
+```
+
+### Abstractions
+
+The PipeOp used in the earlier example only manipulates the features of a Task. All other Task properties stay intact. This means, we only have to
+manipulate the `data.table` containing the features instead of manipulating
+the whole task.
+As this is a fairly common operation, an abstract base class `PipeOpDT` 
+has been created which facilitates this.
+This let's us define a set of functions `train_dt` and `predict_dt`, which 
+expect a `data.table` as input and output. All other conversions are handled implicitly by the PipeOp.
+
+The full code for PipeOpScale now looks as follows:
+
+```{r, eval = FALSE}
+PipeOpScale = R6Class("PipeOpScale",
+  inherit = PipeOpDT,
+  public = list(
+    initialize = function(id = "scale") {
+      ps = ParamSet$new(params = list(
+        ParamLgl$new("center", default = TRUE),
+        ParamLgl$new("scale", default = TRUE)
+      ))
+      super$initialize(id, ps)
+    },
+
+    train_dt = function(dt) {
+      sc = scale(as.matrix(dt),
+        center = self$param_vals$center,
+        scale = self$param_vals$scale)
+
+      self$state = list(
+        center = attr(sc, "scaled:center") %??% 0,
+        scale = attr(sc, "scaled:scale") %??% 1
+      )
+      sc
+    },
+
+    predict_dt = function(newdt) {
+      t((t(newdt) - self$state$center) / self$state$scale)
+    }
+  )
+)
+```
+
+* We create a new `R6` class 'PipeOpScale'.
+* This class is a child class of `PipeOpDT`.
+* We initialize a new PipeOp by defining a `ParamSet`, i.e. a set of possible
+  parameter settings, and using it to initialize the parent class.
+* We define functions `train_dt` and `test_dt` that expect a `data.table` as 
+  input and return a `data.table`.
+
+
+
+## An advanced example: ... Operator

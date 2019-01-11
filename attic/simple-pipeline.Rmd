@@ -1,5 +1,5 @@
 ---
-title: "Showcase: Simple Pipelines"
+title: "Showcase: A first Pipeline"
 author: "Author"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -35,38 +35,55 @@ An often-applied preprocessing step is to simply **center** and **scale** the da
   op1 = PipeOpScale$new()
 ```
 
-In order to not leak data from the test set into the training set it is imperative to treat train and test data correctly. For this we require a function `train` that learns the appropriate transformations from the training set and a function `test` that applies the transformation on future data.
-This is already handled in `PipeOpScale`.
-
-The **PipeOp** does not work stand-alone, as we expect that it is wrapped in a `GraphNode`. This handles all connectivity to the previous and following nodes of the graph.
-
-```{r}
-  n1 = GraphNode$new(op1)
-```
-
-When we initialize the Node it is untrained:
-```{r}
-n1$is_learnt
-```
-
-This graph can now be trained:
+In order to not leak data from the test set into the training set it is imperative to treat train and test data correctly. For this we require a 
+`train` function  that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
+This is already handled in `PipeOpScale`:
+For further info, we can look into the `$train_dt` and `$test_dt` methods defined in the PipeOp.
 
 ```{r}
-  g = Graph$new(n1)
-  g$train(task)
+  op1$train_dt
 ```
 
-This has the following side effects:
-- The **train** function of `op1` is called.
-- The graph is now *learnt*.
-- The data transformation is learned and stored in the `params` slot of `op1`.
-- The transformed task is saved in the `result` slot of `op1`.
+What does `train_dt` do?
+  1. It expects a single input `dt`.
+  2. It converts the input to a matrix and scales it using `scale`.
+  3. It saves the applied transformations (mean and standard 
+     deviation of each row) to `self$state`.
+  4. It returns the scaled data `sc`.
+
 
 ```{r}
-n1$is_learnt
-scaled_task = n1$result
-head(scaled_task$data())
+  op1$predict_dt
 ```
+
+What does `predict_dt` function do?
+  1. It expects a single input `dt`.
+  2. It converts the transforms the input using the transformations 
+     from `self$state`.
+  3. It returns the scaled data.
+
+
+**We can now apply this to our dataset**
+
+```{r}
+# Randomly assign 50 Observations to the validation set
+task$set_row_role(sample(seq_len(150), 50), "validation")
+
+# And train
+scaled = op1$train(list(task))
+scaled[[1]]$head()
+```
+
+**And use the predict method to rescale with the learned values**
+
+```{r}
+# Get validation data
+task$row_roles = setNames(task$row_roles, c("validation", "use"))
+
+rescaled = op1$predict(list(task))
+rescaled[[1]]$head()
+```
+
 
 ## A more complex example: Scale -> PCA -> Learner:
 
