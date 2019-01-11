@@ -60,3 +60,8 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
   expect_flag(g$is_trained)
 
 }
+
+
+PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
+PipeOpLrnFL = PipeOpLearner$new(mlr_learners$get("classif.featureless"))
+
