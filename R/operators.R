@@ -9,6 +9,17 @@
 # we need to simply document a few cases where >> works. it does not need to in totally arbitrary cases, but robustly in the cases it
 # asserts
 
+#' @title PipeOp Composition Operator
+#'
+#' @description
+#' This operator \dQuote{pipes} data from the source `g1` into the sink `g2`. Both source and sink can either be
+#' a [Graph] or a [PipeOp]. The number of output channels of `g1` must equal the number of input channels
+#' of the `g2`.
+#'
+#' @param g1 ([`Graph`] | [`PipeOp`]) \cr
+#'   [Graph] / [PipeOp] to put in front of `g2`.
+#' @param g2 ([`Graph`] | [`PipeOp`]) \cr
+#'   [Graph] / [PipeOp] to put after  `g1`.
 #' @export
 `%>>%` = function(g1, g2) {
   g1 = ensure_graph(g1)
