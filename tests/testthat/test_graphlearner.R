@@ -28,4 +28,58 @@ test_that("basic graphlearn tests", {
   glrn2$train(task)
   expect_prediction_classif({graphpred2 = glrn2$predict(task)})
 
+  scidf = cbind(scale(iris[1:4]), iris[5])
+  scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
+
+  dblrn = mlr_learners$get("classif.debug")
+  dblrn$param_vals$save_tasks = TRUE
+
+  dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
+
+  dbgr$train(task)
+
+  dbgr$predict(task)
+
+  dbmodels = dbgr$pipeops$classif.debug$state$model
+
+  expect_equal(dbmodels[[1]]$data(), scalediris$data())
+  expect_equal(dbmodels[[2]]$data(), scalediris$data())
+
+})
+
+test_that("graphlearner parameters behave as they should", {
+
+  dblrn = mlr_learners$get("classif.debug")
+  dblrn$param_vals$save_tasks = TRUE
+
+  dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
+
+  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
+
+  dbgr$param_vals$classif.debug.x = 1
+
+  expect_equal(dbgr$param_vals$classif.debug.x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 1)
+
+  dbgr$pipeops$classif.debug$param_vals$x = 0
+
+  expect_equal(dbgr$param_vals$classif.debug.x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0)
+
+  dbgr$pipeops$classif.debug$learner$param_vals$x = 0.5
+
+  expect_equal(dbgr$param_vals$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0.5)
+
+  expect_error({dbgr$param_vals$classif.debug.x = "a"})
+  expect_error({dbgr$pipeops$classif.debug$param_vals$x = "a"})
+  expect_error({dbgr$pipeops$classif.debug$learner$param_vals$x = "a"})
+
+  expect_equal(dbgr$param_vals$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0.5)
+
 })

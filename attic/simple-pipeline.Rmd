@@ -1,5 +1,5 @@
 ---
-title: "Showcase: Simple Pipelines"
+title: "Showcase: A first Pipeline"
 author: "Author"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -19,172 +19,69 @@ knitr::opts_chunk$set(
 
 This vignette showcases the general syntax and semantic behind `mlr3pipelines`.
 
-## Simple preprocessing
+## An introduction to PipeOperators
 
-We first create an mlr task that, which we want to transform with the pipeline.
+In this example, we create a ĺinear Pipeline. After scaling all 
+input features, we rotate our data using principal component analysis.
+After transformation, we use a simple Decision Tree learner for classification.
+
+We first create an mlr task that, which we want to transform with the pipeline. This task contains the famous iris dataset and some meta-information, such as the target variable.
 
 ```{r}
   library(mlr3)
   task = mlr_tasks$get("iris")
 ```
 
+A Pipeline (or `Graph`) contains multiple PipeOperators, where each `PipeOp`
+transforms the data when it flows through it. For this usecase, we require 3 transformations:
+- A PipeOp that scales the data
+- A PipeOp that performs PCA
+- A PipeOp that contains the **Decision Tree** learner
 
-An often-applied preprocessing step is to simply **center** and **scale** the data to mean $0$ and standard deviation $1$. In order to do this we create a new `PipeOp`: **PipeOpScale**.
+A list of available PipeOps can be obtained from
 
 ```{r}
-  op1 = PipeOpScale$new()
+  library(mlr3pipelines)
+  mlr_pipeops$ids()
 ```
 
-In order to not leak data from the test set into the training set it is imperative to treat train and test data correctly. For this we require a function `train` that learns the appropriate transformations from the training set and a function `test` that applies the transformation on future data.
-This is already handled in `PipeOpScale`.
-
-The **PipeOp** does not work stand-alone, as we expect that it is wrapped in a `GraphNode`. This handles all connectivity to the previous and following nodes of the graph.
+First we define the required PipeOps:
 
 ```{r}
-  n1 = GraphNode$new(op1)
-```
-
-When we initialize the Node it is untrained:
-```{r}
-n1$is_learnt
-```
-
-This graph can now be trained:
-
-```{r}
-  g = Graph$new(n1)
-  g$train(task)
-```
-
-This has the following side effects:
-- The **train** function of `op1` is called.
-- The graph is now *learnt*.
-- The data transformation is learned and stored in the `params` slot of `op1`.
-- The transformed task is saved in the `result` slot of `op1`.
-
-```{r}
-n1$is_learnt
-scaled_task = n1$result
-head(scaled_task$data())
-```
-
-## A more complex example: Scale -> PCA -> Learner:
-
-In this example, we first `scale` the data, apply `PCA` and then train a
-**Decision Tree** on the transformed learner.
-
-```{r}
-  # Create the PipeOp's:
   op1 = PipeOpScale$new()
   op2 = PipeOpPCA$new()
   op3 = PipeOpLearner$new(learner = mlr_learners$get("classif.rpart"))
-  # Connect the operators
-  root = GraphNode$new(op1)
-  root$
-    set_next(GraphNode$new(op2))$
-    set_next(GraphNode$new(op3))
-  # And instantiate the graph
-  g = Graph$new(root)
-  print(g)
 ```
 
-## Creating a custom PipeOp
+In order to get a better understanding of what the respective PipeOps do, 
+we quickly look at one of them in detail:
 
-Creating a `PipeOp` requires the following objects:
-- An `id` for the new `PipeOp`
-- A `train()` function that stores values required for the transformation and
-  saves the transformed data.
-- A `predict()` function that uses the values obtained in `train()`to
-  transform new data.
-- Optionally, a `ParamSet` that contains hyperparameter ranges.
+The following slots (and more) are thus contained in each PipeOp:
+- `train`: Function used to train the PipeOp.
+- `predict`: Function used to predict with the PipeOp.
+- `id`: Set/Get the id of the PipeOp.
+- `param_set`: The set of all exposed parameters of the PipeOp.
+- `param_vals`: Current hyperparameter settings.
+- `is_trained`: Is the PipeOp currently trained?
 
-
-In this example we will create a `PipeOp` that allows us to transform our data using **PCA**.
-
-As an `id` we will use `PipeOpPCA`.
-
-In the next step we will define the `train` function:
-
+We can check the properties by accessing the respective slot.
 
 ```{r}
-    train = function(inputs) {
-      # We require our inputs to be a (list of) Task(s)
-      assert_list(inputs, len = 1L, type = "Task")
-      task = inputs[[1L]]
-
-      # We obtain data and the feature names from the task
-      fn = task$feature_names
-      dt = task$data()
-
-      # And then extract principal components.
-      # We will focus on the self$param_vals further down.
-      pcr = prcomp(as.matrix(dt),
-        center = self$param_vals$center,
-        scale. = self$param_vals$scale.,
-        rank.  = self$param_vals$rank.)
-      # Then we save the "pca-model" in the .params slot.
-      private$.params = pcr
-      # And convert the transformed data to a data.table
-      x = as.data.table(pcr$x)
-
-      # Now we drop the old features from the data.table
-      dt[, (fn) := NULL]
-      # And add the rotated features
-      dt[, (colnames(x)) := x]
-
-      # Now we overwrite the data.table in the task
-      # with our new data, save it to the
-      # "-result" slot
-      private$.result = task$overwrite(dt)
-      # and return the new task
-      private$.result
-    }
+  op3$id
+  op3$is_trained
 ```
 
-And the `predict()` function:
+The `param_set` and `param_vals` are required if our PipeOp contains
+hyperparameters we want to set. See [ParamSet] for a quick intro on how `ParamSet`s work.
 
-```{r}
-    predict = function() {
-      assert_list(self$inputs, len = 1L, type = "Task")
-      task = self$inputs[[1L]]
-      fn = task$feature_names
-      d = task$data()
+The `train()` and `predict()` functions define the core functionality of
+our PipeOp. 
+In many cases, inorder to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a `train` function that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
 
-      # Call train_dt function on features
-      rotated = predict(private$.params, as.matrix(d[, ..fn]))
-      dt = as.data.table(rotated)
-
-      # Drop old features, add new features
-      d[, (fn) := NULL]
-      d[, (colnames(dt)) := dt]
-
-      # See "train()"
-      private$.result = task$overwrite(d)
-      return(private$.result)
-    }
-```
-
-And the `ParamSet`:
-
-```{r}
-      ps = ParamSet$new(params = list(
-        ParamFlag$new("center", default = TRUE),
-        ParamFlag$new("scale", default = TRUE)
-      ))
-```
-
-Afterwards we can put everything together and create a new **R6** Object:
-
-
-```{r}
-PipeOpPCA = R6Class("PipeOpPCA",
-  inherit = PipeOp,
-  public = list(
-    initialize = function(id = "pca") {
-      super$initialize(id, ps)
-    },
-    train = train,
-    predict2 = predict
-  )
-)
-```
+In the case of `PipeOpLearner` this means the following:
+- `train()` trains a model on its input  Task and saves the trained model to
+  an additional slot, `.$state`. It returns a `list(NULL)`, as subsequent 
+  operators usually do not require any output.
+- `predict()` uses the model stored in `.$state` in order to predict
+  the class of a new input task. It returns a [Prediction] object.
+  This object contains the learner's predictions.

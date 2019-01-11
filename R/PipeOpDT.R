@@ -27,8 +27,8 @@ PipeOpDT = R6Class("PipeOpDT",
   public = list(
     initialize = function(id = "PipeOpDT", param_set = ParamSet$new()) {
       super$initialize(id, param_set = param_set,
-        input = data.table(name = "task", train = "Task", predict = "Task"),
-        output = data.table(name = "task", train = "Task", predict = "Task")
+        input = data.table(name = "input", train = "Task", predict = "Task"),
+        output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
 

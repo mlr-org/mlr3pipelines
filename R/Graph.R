@@ -98,8 +98,8 @@ Graph = R6Class("Graph",
         (dst_id == dst_id_ & dst_channel == dst_channel_), ]
       if (nrow(priorcon)) {
         stopf("Cannot add multiple edges to a channel.\n%s",
-          paste(sprintf("Channel %s of node %s already connected to node %s channel %s.",
-            priorcon$src_id, priorcon$src_channel, priorcon$dst_id, priorcon$dst_channel), collapse = "\n"))
+          paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.",
+            priorcon$src_channel, priorcon$src_id, priorcon$dst_channel, priorcon$dst_id), collapse = "\n"))
       }
       row = data.table(src_id = src_id, src_channel = src_channel,
         dst_id = dst_id, dst_channel = dst_channel)
