@@ -63,6 +63,7 @@ Graph = R6Class("Graph",
     },
 
     ids = function(sorted = FALSE) {
+      assert_flag(sorted)
       if (!sorted || !nrow(self$edges))
         return(names2(self$pipeops))
 
@@ -72,7 +73,7 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      assert_class(op, "PipeOp")
+      assert_r6(op, "PipeOp")
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
@@ -85,6 +86,7 @@ Graph = R6Class("Graph",
       # FIXME: as soon as intypes / outtypes are present the following two lines should be:
       # assert_choice(src_channel, rownames(self$pipeops[[src_id]]$outtypes))
       # assert_choice(dst_channel, rownames(self$pipeops[[dst_id]]$intypes))
+      # FIXME: make these assert better? we cannot use arbitrary names
       assert_string(src_channel)
       assert_string(dst_channel)
       src_id_ = src_id
@@ -140,7 +142,10 @@ Graph = R6Class("Graph",
     # Modifies both the index in $pipeops, as well as the respective PipeOp's ID. Do this here and not
     # by setting `graph$pipeops[[x]]$id <- y`!
     set_names = function(old, new) {
-      new_ids = map_values(names(self$pipeops), old, new)
+      ids = names(self$pipeops)
+      assert_subset(old, ids)
+      assert_character(new, any.missing = FALSE)
+      new_ids = map_values(ids, old, new)
       names(self$pipeops) = new_ids
       imap(self$pipeops, function(x, nn) x$id = nn)
 
@@ -149,11 +154,11 @@ Graph = R6Class("Graph",
     },
 
     train = function(input) {
-      graph_fire(self, private, input, "train")
+      graph_fire(self, private, input, "train") # input assert in call
     },
 
     predict = function(input) {
-      graph_fire(self, private, input, "predict")
+      graph_fire(self, private, input, "predict") # input assert in call
     }
   ),
 
@@ -163,20 +168,17 @@ Graph = R6Class("Graph",
     rhs = function() sort(setdiff(names(self$pipeops), self$edges$src_id)),
     packages = function() unique(unlist(map(self$pipeops, "packages"))),
     param_vals = function(rhs) {
-      if (!missing(rhs)) {
-        private$.hash = NA_character_
-      }
       union_param_vals(map(self$pipeops, "param_set"), self$pipeops, "param_vals", rhs)
     },
     param_set = function() {
       union_param_sets(map(self$pipeops, "param_set"))
     },
     hash = function() {
-      # FIXME: warn the user that he should not change param vals by graph$pipeops$pipeopid$param_vals!!
-      if (is.na(private$.hash))
-        # FIXME: how do we depend on digest?
-        private$.hash = digest::digest(list(self$ids(), self$param_vals), algo = "xxhash64")
-      private$.hash
+      # FIXME: how do we depend on digest?
+      # FIXME: maybe some pipeops need to tell us more about themselves than just ID (implicitly in map()), class, and param_vals?
+      digest::digest(
+        list(map(self$pipeops, class), self$param_vals, self$pipeops),
+        algo = "xxhash64")
     }
   ),
 
