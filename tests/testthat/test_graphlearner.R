@@ -74,6 +74,12 @@ test_that("graphlearner parameters behave as they should", {
   expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0.5)
   expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0.5)
 
+  expect_error({dbgr$param_vals$classif.debug.x = "a"})
+  expect_error({dbgr$pipeops$classif.debug$param_vals$x = "a"})
+  expect_error({dbgr$pipeops$classif.debug$learner$param_vals$x = "a"})
 
+  expect_equal(dbgr$param_vals$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0.5)
 
 })
