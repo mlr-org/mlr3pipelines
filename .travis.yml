@@ -23,7 +23,7 @@ before_script:
 stages:
   - test
   - name: document
-    if: branch = covr AND type IN (push, api, cron)  # FIXME: change to master when it works
+    if: branch = master AND type IN (push, api, cron)
 
 jobs:
   include:
@@ -46,9 +46,9 @@ jobs:
         github-token: $GITHUB_TOKEN
         local-dir: docs
         on:
-          branch: covr # FIXME: change to master as soon as this works
+          branch: master
       after_deploy:
-        - git checkout covr  # otherwise we're in detached head
+        - git checkout master  # otherwise we're in detached head
         - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
         - git config user.name Travis
         - git config user.email '<>'
