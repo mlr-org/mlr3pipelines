@@ -2,7 +2,7 @@ context("Graph")
 
 test_that("linear graph", {
   g = Graph$new()
-  g$ids(sorted = TRUE)
+  expect_equal(g$ids(sorted = TRUE), character(0))
 
   op_ds = PipeOpDownsample$new()
   op_pca = PipeOpPCA$new()
@@ -15,9 +15,15 @@ test_that("linear graph", {
 
   expect_graph(g)
 
+  expect_output(print(g), "Graph with 2 PipeOps.*downsample.*UNTRAINED.*pca.*UNTRAINED")
+
+
+
   inputs = mlr_tasks$get("iris")
   x = g$train(inputs)
   expect_task(x[[1]])
+
+  expect_output(print(g), "Graph with 2 PipeOps.*downsample.*list.*pca.*prcomp")
 
   out = g$predict(inputs)
   expect_task(x[[1]])
