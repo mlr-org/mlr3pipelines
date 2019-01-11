@@ -47,3 +47,33 @@ test_that("basic graphlearn tests", {
 
 })
 
+test_that("graphlearner parameters behave as they should", {
+
+  dblrn = mlr_learners$get("classif.debug")
+  dblrn$param_vals$save_tasks = TRUE
+
+  dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
+
+  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
+
+  dbgr$param_vals$classif.debug.x = 1
+
+  expect_equal(dbgr$param_vals$classif.debug.x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 1)
+
+  dbgr$pipeops$classif.debug$param_vals$x = 0
+
+  expect_equal(dbgr$param_vals$classif.debug.x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0)
+
+  dbgr$pipeops$classif.debug$learner$param_vals$x = 0.5
+
+  expect_equal(dbgr$param_vals$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0.5)
+
+
+
+})
