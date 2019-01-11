@@ -1,6 +1,7 @@
 context("Graph")
 
 test_that("linear graph", {
+
   g = Graph$new()
   expect_equal(g$ids(sorted = TRUE), character(0))
 
@@ -9,9 +10,8 @@ test_that("linear graph", {
   op_lrn = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
   g$add_pipeop(op_ds)
   g$add_pipeop(op_pca)
-  # g$add_pipeop(op_lrn)
+
   g$add_edge("downsample", "1", "pca", "1")
-  # g$add_edge("pca", "1", "classif.rpart", "1")
 
   expect_graph(g)
 
@@ -27,4 +27,12 @@ test_that("linear graph", {
 
   out = g$predict(inputs)
   expect_task(x[[1]])
+
+  g$add_pipeop(op_lrn)
+
+  expect_error(g$add_edge("downsample", "1", "classif.rpart", "1"),
+    "Channel.*1.*of node.*downsample.*already connected to channel.*1.*of node pca")
+
+  expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*classif\\.rpart.*already in Graph")
+
 })
