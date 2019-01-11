@@ -33,6 +33,7 @@ jobs:
         - travis_wait 100 R CMD check mlr3pipelines*.tar.gz --as-cran --run-donttest
         - grep -q -R "WARNING" mlr3pipelines.Rcheck/00check.log" ; [ $? -ne 0 ]
     - stage: test
+      script:
         - travis_wait 100 Rscript -e 'covr::codecov(quiet = FALSE)'
     - stage: document
       script:
