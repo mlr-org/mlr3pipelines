@@ -213,12 +213,15 @@ graph_fire = function(self, private, input, stage) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-
     input = edges[get("dst_id") == op$id, "result"][[1L]]
     tmp = if (stage == "train") op$train_internal(input) else op$predict_internal(input)
+    #FIXME: why do we use "get" here? also used in other places!
+    # FIXME: how can we ever be sure that the results here are EVER written to the correct channehls
+    # in the correct order....?
     edges[get("src_id") == op$id, "result" := list(tmp)]
   }
-
+  # FIXME: actually we SHOUKD store the intermediate results in the pipeop itself, much easier
+  print(edges)
   filter_noop(tmp)
 }
 
