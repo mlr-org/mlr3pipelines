@@ -32,14 +32,15 @@ op = PipeOpChunk$new(5)
 }
 \seealso{
 Other PipeOp: \code{\link{PipeOpBranch}},
-  \code{\link{PipeOpCopy}}, \code{\link{PipeOpDT}},
-  \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpCopy}}, \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpLearner}},
   \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
+  \code{\link{PipeOpTaskPreprocSimple}},
+  \code{\link{PipeOpTaskPreproc}},
   \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
 
 Other PipeOpBroadcast: \code{\link{PipeOpBranch}},

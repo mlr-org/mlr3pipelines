@@ -24,13 +24,15 @@ op1 = PipeOpPCA$new()
 \seealso{
 Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
-  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpLearner}},
   \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
-  \code{\link{PipeOpScale}}, \code{\link{PipeOpUnbranch}},
-  \code{\link{PipeOp}}
+  \code{\link{PipeOpScale}},
+  \code{\link{PipeOpTaskPreprocSimple}},
+  \code{\link{PipeOpTaskPreproc}},
+  \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
 }
 \concept{PipeOp}

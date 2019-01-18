@@ -25,7 +25,7 @@ Inherits from \link{PipeOp}
 
 \seealso{
 Other PipeOp: \code{\link{PipeOpBranch}},
-  \code{\link{PipeOpChunk}}, \code{\link{PipeOpDT}},
+  \code{\link{PipeOpChunk}},
   \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
@@ -33,6 +33,8 @@ Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
+  \code{\link{PipeOpTaskPreprocSimple}},
+  \code{\link{PipeOpTaskPreproc}},
   \code{\link{PipeOpUnbranch}}, \code{\link{PipeOp}}
 
 Other PipeOpBroadcast: \code{\link{PipeOpBranch}},

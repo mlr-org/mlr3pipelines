@@ -33,14 +33,15 @@ PipeOpBranch$new(choices) \%>>\% gunion(list(pca, nop)) \%>>\% PipeOpUnbranch$ne
 \seealso{
 Other PipeOp: \code{\link{PipeOpBranch}},
   \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
-  \code{\link{PipeOpDT}}, \code{\link{PipeOpDownsample}},
+  \code{\link{PipeOpDownsample}},
   \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
   \code{\link{PipeOpLearner}},
   \code{\link{PipeOpMajorityVote}},
   \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
   \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
-  \code{\link{PipeOp}}
+  \code{\link{PipeOpTaskPreprocSimple}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}}
 
 Other PipeOpAggregate: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpFeatureUnion}},
