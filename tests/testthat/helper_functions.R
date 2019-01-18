@@ -1,4 +1,4 @@
-lapply(list.files(system.file("testthat", package = "mlr3"), pattern = "^helper.*\\.[rR]", full.names = TRUE), source)
+
 
 expect_pipeop = function(po) {
   label = sprintf("pipeop '%s'", po$id)
@@ -8,8 +8,8 @@ expect_pipeop = function(po) {
   expect_list(po$param_vals, names = "unique", label = label)
   expect_output(print(po), "PipeOp:", label = label)
   expect_character(po$packages, any.missing = FALSE, unique = TRUE, label = label)
-  expect_function(po$train, args = "inputs")
-  expect_function(po$predict, args = "inputs")
+  expect_function(po$train, nargs = 1)
+  expect_function(po$predict, nargs = 1)
   expect_data_table(po$input, any.missing = FALSE)
   expect_names(names(po$input), permutation.of = c("name", "train", "predict"))
   expect_data_table(po$output, any.missing = FALSE)
