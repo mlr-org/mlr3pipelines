@@ -10,7 +10,7 @@ union_param_sets = function(paramsets) {
   # loop over all nodes, and add their paramsets (with prefix) to result object
   allparams = unlist(map(paramsets, function(x) x$clone(deep = TRUE)$params), recursive = FALSE)
   imap(allparams, function(param, id) param$id = id)
-  ParamSet$new(allparams)
+  ParamSet$new(allparams %??% list())
 }
 
 # param_sets [possibly named list of ParamSet]. same as in union_param_sets
@@ -46,7 +46,7 @@ union_param_vals = function(param_sets, parvalhavers, parvalname, newval) {
     # This avoid ambiguities when dispatching Parameter values if PipeOpID or ParamID contain dots.
     parids = unlist(imap(parvalhavers, function(pop, popid) {
       imap(param_sets[[popid]]$params, function(pv, pvid) list(popid, pvid))
-    }), recursive = FALSE)
+    }), recursive = FALSE) %??% list()
     assert_list(parids, names = "unique")
 
     for (pidx in names(newval)) {
@@ -55,7 +55,7 @@ union_param_vals = function(param_sets, parvalhavers, parvalname, newval) {
       parvalhavers[[poid]][[getpvn(poid)]][[parid]] = newval[[pidx]]
     }
   }
-  parvals = unlist(imap(parvalhavers, function(pop, popid) pop[[getpvn(popid)]]), recursive = FALSE)
+  parvals = unlist(imap(parvalhavers, function(pop, popid) pop[[getpvn(popid)]]), recursive = FALSE) %??% list()
   assert_list(parvals, names = "unique")
   parvals
 }
