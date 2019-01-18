@@ -86,9 +86,23 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       list(intask)
     },
 
-    train_task = function(task) stop("Abstract"),
+    train_task = function(task) {
+      dt = task$data(cols = self$select_cols(task))
+      dt = self$train_dt(dt)
+      task$select(setdiff(task$feature_names, cols))$cbind(dt)
+    },
 
-    predict_task = function(task) stop("Abstract")
+    predict_task = function(task) {
+      dt = task$data(cols = self$select_cols(task))
+      dt = self$predict_dt(dt)
+      task$select(setdiff(task$feature_names, cols))$cbind(dt)
+    },
+
+    train_dt = function(dt) stop("Abstract."),
+
+    predict_dt = function(dt) stop("Abstract."),
+
+    select_cols = function(dt) stop("Abstract.")
   )
 )
 
@@ -128,9 +142,20 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
       },
       predict_task = function(task) self$transform(task),
 
-      get_state = function(task) stop("Abstract"),
+      get_state = function(task)  {
+        dt = task$data(cols = self$select_cols(task))
+        self$get_state_dt(dt)
+      },
 
-      transform = function(task) stop("Abstract")
+      transform = function(task) {
+        dt = task$data(cols = self$select_cols(task))
+        dt = self$transform_dt(dt)
+        task$select(setdiff(task$feature_names, cols))$cbind(dt)
+      },
+
+      get_state_dt = function(dt) stop("Abstract"),
+
+      transform_dt= function(dt) stop("Abstract")
   }
 )
 
