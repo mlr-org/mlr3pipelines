@@ -6,6 +6,7 @@
     - [ ] deep copy on %>>%
   - [ ] pipeop tests
     - [ ] unify, automate
+    - [ ] clean up redundant tests
     - [ ] test remaining pipeops
       - [ ] PipeOpNULL
       - [ ] PipeOpPCA
