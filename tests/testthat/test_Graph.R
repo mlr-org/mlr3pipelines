@@ -41,6 +41,8 @@ test_that("linear graph", {
 
   expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*classif\\.rpart.*already in Graph")
 
+  expect_deep_clone(g, g$clone(deep = TRUE))
+
 })
 
 test_that("complex graph", {
