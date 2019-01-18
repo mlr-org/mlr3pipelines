@@ -6,6 +6,8 @@
 \alias{mlr3pipelines-package}
 \title{mlr3pipelines: Preprocessing Operators and Pipelines for mlr3}
 \description{
+\if{html}{\figure{logo.png}{options: align='right'}}
+
 Pipelines for mlr3. Work in progress.
 }
 \seealso{

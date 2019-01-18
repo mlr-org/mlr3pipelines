@@ -9,7 +9,7 @@
 Graph
 }
 \description{
-The graph is a container class for the complete computational graph. It is made up of a list of
+\code{Graph} is a container class for the complete computational graph. It is made up of a list of
 PipeOps, and a \code{\link{data.table}} of edges. It can be trained and used for prediction.
 }
 \section{Public Members / Active Bindings}{
