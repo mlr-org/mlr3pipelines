@@ -119,7 +119,6 @@ PipeOp = R6Class("PipeOp",
     param_set = function() private$.param_set,
     param_vals = function(vals) {
       if (!missing(vals)) {
-        # FIXME: param check
         if (!self$param_set$test(vals)) {
           stop("Parameters out of bounds")
         }

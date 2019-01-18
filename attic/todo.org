@@ -16,14 +16,15 @@
 - [ ] new pipeops
   - [ ] stacking
 - [-] pipeop functionality
-  - [-] affecting only needed
+  - [X] affecting only needed
     - [X] selection functionality
-    - [ ] affect_columns parameter
+    - [X] affect_columns parameter
   - [ ] varargs
   - [ ] do not init paramvals on construction
   - [ ] allow for param_vals %nin% param_set
   - [ ] only tasks, no data.frames
   - [ ] parallel graph
   - [ ] task / data.frame conversion
+  - [ ] param val feasibility check
 - [ ] documentation
   - [ ] pipeop
