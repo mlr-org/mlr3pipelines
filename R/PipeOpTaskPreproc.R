@@ -33,14 +33,18 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     can_subset = NULL,
 
     initialize = function(param_set = ParamSet$new(), can_subset = TRUE) {
+      self$can_subset = can_subset
+      if (can_subset) {
+        ac_par = R6Class("ParamFctOneArg", inherit = ParamUty,
+          private = list(.check = function(x) test_function(x, nargs = 1))
+        )$new("affect_columns", special_vals = list(NULL))
+
+        param_set$add(ac_par)
+      }
       super$initialize(param_set = param_set,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
-      self$can_subset = can_subset
-      if (can_subset) {
-        # FIXME: add hyperparameter affect_columns
-      }
     },
 
     train = function(inputs) {
