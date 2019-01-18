@@ -177,7 +177,7 @@ Graph = R6Class("Graph",
       # FIXME: how do we depend on digest?
       # FIXME: maybe some pipeops need to tell us more about themselves than just ID (implicitly in map()), class, and param_vals?
       digest::digest(
-        list(map(self$pipeops, class), self$param_vals, self$pipeops),
+        list(map(self$pipeops, "hash"), self$edges),
         algo = "xxhash64")
     }
   ),

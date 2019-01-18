@@ -129,7 +129,11 @@ PipeOp = R6Class("PipeOp",
     },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
-    is_trained = function() !is.null(self$state)
+    is_trained = function() !is.null(self$state),
+    hash = function() {
+      digest(list(self$param_set, self$param_vals),
+        algo = "xxhash64")
+    }
   ),
 
   private = list(
