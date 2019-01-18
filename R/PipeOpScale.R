@@ -16,7 +16,7 @@ NULL
 #' @include PipeOp.R
 #' @export
 PipeOpScale = R6Class("PipeOpScale",
-  inherit = PipeOpDT,
+  inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "scale") {
       ps = ParamSet$new(params = list(
@@ -24,6 +24,10 @@ PipeOpScale = R6Class("PipeOpScale",
         ParamLgl$new("scale", default = TRUE)
       ))
       super$initialize(id, ps)
+    },
+
+    select_cols = function(task) {
+      task$feature_types[get("type") == "numeric", get("id")]
     },
 
     train_dt = function(dt) {
@@ -35,11 +39,11 @@ PipeOpScale = R6Class("PipeOpScale",
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1
       )
-      sc
+      dt
     },
 
-    predict_dt = function(newdt) {
-      t((t(newdt) - self$state$center) / self$state$scale)
+    predict_dt = function(dt) {
+      t((t(dt) - self$state$center) / self$state$scale)
     }
   )
 )

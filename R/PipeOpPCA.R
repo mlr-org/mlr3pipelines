@@ -20,7 +20,7 @@ NULL
 #' @include PipeOp.R
 #' @export
 PipeOpPCA = R6Class("PipeOpPCA",
-  inherit = PipeOpDT,
+  inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "pca") {
       ps = ParamSet$new(params = list(
@@ -29,6 +29,10 @@ PipeOpPCA = R6Class("PipeOpPCA",
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL))
       ))
       super$initialize(id, param_set = ps)
+    },
+
+    select_cols = function(task) {
+      task$feature_types[get("type") == "numeric", get("id")]
     },
 
     train_dt = function(dt) {
@@ -41,8 +45,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
       pcr$x
     },
 
-    predict_dt = function(newdt) {
-      predict(self$state, as.matrix(newdt))
+    predict_dt = function(dt) {
+      predict(self$state, as.matrix(dt))
     }
   )
 )
