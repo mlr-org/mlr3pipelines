@@ -4,12 +4,27 @@ context("PipeOpModelAvg")
 test_that("PipeOpEnsemble - basic properties", {
   op = PipeOpEnsemble$new(3)
   expect_pipeop(op)
+  expect_pipeop_class(PipeOpEnsemble, list(3))
+  expect_pipeop_class(PipeOpEnsemble, list(1))
+  expect_error(PipeOpEnsemble$new(3))
+})
+
+
+test_that("PipeOpModelAvg - basic properties", {
+  op = PipeOpModelAvg$new(3)
+  expect_pipeop(op)
+  expect_pipeop_class(PipeOpModelAvg, list(3))
+  expect_pipeop_class(PipeOpModelAvg, list(1))
+  expect_error(PipeOpModelAvg$new(3))
 })
 
 
 test_that("PipeOpMajorityVote - basic properties", {
   op = PipeOpMajorityVote$new(3)
   expect_pipeop(op)
+  expect_pipeop_class(PipeOpMajorityVote, list(3))
+  expect_pipeop_class(PipeOpMajorityVote, list(1))
+  expect_error(PipeOpMajorityVote$new(3))
 })
 
 

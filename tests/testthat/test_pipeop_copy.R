@@ -2,6 +2,10 @@ context("PipeOpCopy")
 
 
 test_that("PipeOpCopy - basic properties", {
+  expect_pipeop_class(PipeOpCopy, list(1))
+  expect_pipeop_class(PipeOpCopy, list(3))
+  expect_error(PipeOpCopy$new(0))
+
   po = PipeOpCopy$new(3)
   expect_pipeop(po)
   expect_data_table(po$input, nrow = 1)

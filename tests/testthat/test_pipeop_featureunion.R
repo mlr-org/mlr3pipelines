@@ -6,6 +6,11 @@ test_that("featureunion - basic properties", {
   expect_pipeop(po)
   expect_data_table(po$input, nrow = 3)
   expect_data_table(po$output, nrow = 1)
+
+  expect_pipeop_class(PipeOpFeatureUnion, list(1))
+  expect_pipeop_class(PipeOpFeatureUnion, list(3))
+  expect_error(PipeOpFeatureUnion$new(0))
+
 })
 
 

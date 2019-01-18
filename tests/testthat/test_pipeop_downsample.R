@@ -1,11 +1,16 @@
 context("PipeOpDownsample")
 
 test_that("PipeOpDownsample - basic properties", {
+
+
   op = PipeOpDownsample$new()
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
   train_pipeop(op, inputs = list(task))
   predict_pipeop(op, inputs = list(task))
+
+  expect_datapreproc_pipeop_class(PipeOpDownsample, task = task,
+    predict_like_train = FALSE, deterministic_train = FALSE)
 })
 
 test_that("PipeOpDownsample works unstratified", {

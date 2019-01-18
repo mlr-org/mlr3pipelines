@@ -6,6 +6,11 @@ test_that("PipeOpUnbranch - basic properties", {
   expect_pipeop(po)
   expect_data_table(po$input, nrow = 3)
   expect_data_table(po$output, nrow = 1)
+
+  expect_pipeop_class(PipeOpUnBranch, list(1))
+  expect_pipeop_class(PipeOpUnBranch, list(3))
+  expect_error(PipeOpUnBranch$new(0))
+
 })
 
 

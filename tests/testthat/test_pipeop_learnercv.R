@@ -25,6 +25,10 @@ test_that("PipeOLearnerCV - basic properties", {
   expect_equal(task$class_names, tsk$class_names)
   vals = factor(unique(tsk$data(col = tsk$feature_names)$response))
   expect_character(setdiff(vals, task$class_names), len = 0)
+
+  expect_pipeop_class(PipeOpLearnerCV, list(lrn))
+  expect_error(PipeOpLearnerCV$new())
+
 })
 
 test_that("PipeOpLearnerCV - param values", {

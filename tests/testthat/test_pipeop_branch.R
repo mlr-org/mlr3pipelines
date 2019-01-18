@@ -1,8 +1,15 @@
 context("PipeOpBranch")
 
 test_that("PipeOpBranch - basic properties", {
+  expect_pipeop_class(PipeOpBranch, list(1))
+  expect_pipeop_class(PipeOpBranch, list(3))
+  expect_error(PipeOpBranch$new(0))
+
+
   po = PipeOpBranch$new(3)
   expect_pipeop(po)
+
+
   expect_data_table(po$input, nrow = 1)
   expect_data_table(po$output, nrow = 3)
 })
