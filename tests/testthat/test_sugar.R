@@ -1,7 +1,8 @@
+context("sugar")
 
 # FIXME: unit test file for the arrow-op, needs to be cleaned up and only test that connecting properties of the aarow op work
 
-context("Sugar")
+
 
 # test_that("Simple ops", {
 
