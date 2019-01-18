@@ -155,7 +155,7 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 
       get_state_dt = function(dt) stop("Abstract"),
 
-      transform_dt= function(dt) stop("Abstract")
-  }
+      transform_dt = function(dt) stop("Abstract")
+  )
 )
 
