@@ -5,6 +5,7 @@
 #' @import mlr3misc
 #' @importFrom R6 R6Class
 #' @importFrom utils tail
+#' @importFrom digest digest
 "_PACKAGE"
 
 .onLoad = function(libname, pkgname) { #nocov start

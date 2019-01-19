@@ -18,7 +18,8 @@ Imports:
     data.table,
     mlr3,
     mlr3misc,
-    paradox
+    paradox,
+    digest
 Suggests:
     igraph,
     knitr,
