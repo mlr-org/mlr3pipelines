@@ -41,7 +41,7 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
           inputs = paste0("input_", seq_len(inputs))
         }
         if (is.numeric(outputs)) {
-          inputs = paste0("output_", seq_len(outputs))
+          outputs = paste0("output_", seq_len(outputs))
         }
         p = ParamInt$new(id = "par", lower = 0, upper = 10, default = 0)
         self$nin = length(inputs)

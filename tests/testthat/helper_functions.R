@@ -99,9 +99,10 @@ expect_pipeop_class = function(poclass, constargs = list()) {
   poclone = po$clone(deep = TRUE)
   expect_deep_clone(po, poclone)
 
-  in_nop = rep(list(NO_OP, po$innum))
-  in_nonnop = rep(list(NULL, po$innum))
-  out_nop = rep(list(NO_OP, po$outnum))
+  in_nop = rep(list(NO_OP), po$innum)
+  in_nonnop = rep(list(NULL), po$innum)
+  out_nop = rep(list(NO_OP), po$outnum)
+  names(out_nop) = po$output$name
 
   expect_false(po$is_trained)
   expect_equal(po$train_internal(in_nop), out_nop)
@@ -109,7 +110,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
   expect_true(is_noop(po$state))
   expect_true(po$is_trained)
 
-  expect_error(po$predict(in_nonnop), "Pipeop .* got NO_OP during train")
+  expect_error(po$predict_internal(in_nonnop), "Pipeop .* got NO_OP during train")
 
   # check again with no_op-trained PO
   expect_pipeop(po)

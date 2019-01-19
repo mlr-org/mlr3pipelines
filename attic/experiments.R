@@ -1,3 +1,6 @@
+
+
+
 library("paradox")
 library("mlr3")
 
@@ -6,7 +9,9 @@ options(error=recover)
 devtools::document("mlr3pipelines")
 
 devtools::load_all("mlr3pipelines")
-testthat::test_package("mlr3pipelines")
+
+
+testthat::test_package("mlr3pipelines", filter = "Graph")
 
 
 
