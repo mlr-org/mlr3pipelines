@@ -41,7 +41,7 @@ test_that("basic graphlearn tests", {
 
   dbgr$predict(task)
 
-  dbmodels = dbgr$graph$pipeops$classif.debug$state$model
+  dbmodels = dbgr$graph$pipeops$debug$state$model
 
   expect_equal(dbmodels[[1]]$data(), scalediris$data())
   expect_equal(dbmodels[[2]]$data(), scalediris$data())
@@ -55,32 +55,32 @@ test_that("graphlearner parameters behave as they should", {
 
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
-  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
+  expect_subset(c("scale.center", "scale.scale", "debug.x"), names(dbgr$param_set$params))
 
-  dbgr$param_vals$classif.debug.x = 1
+  dbgr$param_vals$debug.x = 1
 
-  expect_equal(dbgr$param_vals$classif.debug.x, 1)
-  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 1)
-  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 1)
+  expect_equal(dbgr$param_vals$debug.x, 1)
+  expect_equal(dbgr$pipeops$debug$param_vals$x, 1)
+  expect_equal(dbgr$pipeops$debug$learner$param_vals$x, 1)
 
-  dbgr$pipeops$classif.debug$param_vals$x = 0
+  dbgr$pipeops$debug$param_vals$x = 0
 
-  expect_equal(dbgr$param_vals$classif.debug.x, 0)
-  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0)
-  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0)
+  expect_equal(dbgr$param_vals$debug.x, 0)
+  expect_equal(dbgr$pipeops$debug$param_vals$x, 0)
+  expect_equal(dbgr$pipeops$debug$learner$param_vals$x, 0)
 
-  dbgr$pipeops$classif.debug$learner$param_vals$x = 0.5
+  dbgr$pipeops$debug$learner$param_vals$x = 0.5
 
-  expect_equal(dbgr$param_vals$classif.debug.x, 0.5)
-  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0.5)
-  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0.5)
+  expect_equal(dbgr$param_vals$debug.x, 0.5)
+  expect_equal(dbgr$pipeops$debug$param_vals$x, 0.5)
+  expect_equal(dbgr$pipeops$debug$learner$param_vals$x, 0.5)
 
-  expect_error({dbgr$param_vals$classif.debug.x = "a"})
-  expect_error({dbgr$pipeops$classif.debug$param_vals$x = "a"})
-  expect_error({dbgr$pipeops$classif.debug$learner$param_vals$x = "a"})
+  expect_error({dbgr$param_vals$debug.x = "a"})
+  expect_error({dbgr$pipeops$debug$param_vals$x = "a"})
+  expect_error({dbgr$pipeops$debug$learner$param_vals$x = "a"})
 
-  expect_equal(dbgr$param_vals$classif.debug.x, 0.5)
-  expect_equal(dbgr$pipeops$classif.debug$param_vals$x, 0.5)
-  expect_equal(dbgr$pipeops$classif.debug$learner$param_vals$x, 0.5)
+  expect_equal(dbgr$param_vals$debug.x, 0.5)
+  expect_equal(dbgr$pipeops$debug$param_vals$x, 0.5)
+  expect_equal(dbgr$pipeops$debug$learner$param_vals$x, 0.5)
 
 })

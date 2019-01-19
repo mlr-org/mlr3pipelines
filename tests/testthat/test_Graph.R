@@ -36,10 +36,10 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  expect_error(g$add_edge("downsample", "1", "classif.rpart", "1"),
+  expect_error(g$add_edge("downsample", "1", "rpart", "1"),
     "Channel.*1.*of node.*downsample.*already connected to channel.*1.*of node pca")
 
-  expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*classif\\.rpart.*already in Graph")
+  expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*rpart.*already in Graph")
 
   expect_deep_clone(g, g$clone(deep = TRUE))
 
