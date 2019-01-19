@@ -23,7 +23,7 @@ PipeOpScale = R6Class("PipeOpScale",
         ParamLgl$new("center", default = TRUE),
         ParamLgl$new("scale", default = TRUE)
       ))
-      super$initialize(id, ps)
+      super$initialize(id = id, param_set = ps)
     },
 
     select_cols = function(task) {
@@ -31,10 +31,7 @@ PipeOpScale = R6Class("PipeOpScale",
     },
 
     train_dt = function(dt) {
-      sc = scale(as.matrix(dt),
-        center = self$param_vals$center,
-        scale = self$param_vals$scale)
-
+      sc = invoke(scale, as.matrix(dt), .args = self$param_vals[c("center", "scale")])
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1

@@ -36,10 +36,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
     },
 
     train_dt = function(dt) {
-      pcr = prcomp(as.matrix(dt),
-        center = self$param_vals$center,
-        scale. = self$param_vals$scale.,
-        rank.  = self$param_vals$rank.)
+      pcr = invoke(stats::prcomp, as.matrix(dt),
+        .args = self$param_vals[c("center", "scale.", "rank.")])
       self$state = pcr
       self$state$x = NULL
       pcr$x
