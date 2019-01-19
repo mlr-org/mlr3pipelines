@@ -36,7 +36,7 @@ PipeOpScale = R6Class("PipeOpScale",
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1
       )
-      dt
+      sc
     },
 
     predict_dt = function(dt) {
