@@ -37,21 +37,24 @@ expect_deep_clone = function(one, two) {
 
     # recurse
     if (base::is.function(a)) {
-      # maybe this is overdoing it
-      expect_references_differ(base::formals(a), base::formals(b), c(path, "[function args]"))
-      expect_references_differ(base::body(a), base::body(b), c(path, "[function body]"))
+      return(invisible(NULL))
+      ## # maybe this is overdoing it
+      ## expect_references_differ(base::formals(a), base::formals(b), c(path, "[function args]"))
+      ## expect_references_differ(base::body(a), base::body(b), c(path, "[function body]"))
+    }
+    objnames = base::names(a)
+    if (is.null(objnames) || anyDuplicated(objnames)) {
+      index = seq_len(base::length(a))
     } else {
-      objnames = base::names(a)
-      if (is.null(objnames) || anyDuplicated(objnames)) {
-        index = seq_len(base::length(a))
-      } else {
-        index = objnames
+      index = objnames
+      if (base::is.environment(a)) {
+        index = Filter(function(x) !bindingIsActive(x, a), index)
       }
-      for (i in index) {
-        if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile")) next
-        expect_references_differ(base::`[[`(a, i), base::`[[`(b, i), c(path, sprintf("[element %s]%s", i,
-          if (!is.null(objnames)) sprintf(" '%s'", if (is.character(index)) i else objnames[[i]]) else "")))
-      }
+    }
+    for (i in index) {
+      if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile")) next
+      expect_references_differ(base::`[[`(a, i), base::`[[`(b, i), c(path, sprintf("[element %s]%s", i,
+        if (!is.null(objnames)) sprintf(" '%s'", if (is.character(index)) i else objnames[[i]]) else "")))
     }
   }
   expect_references_differ(one, two, "ROOT")
