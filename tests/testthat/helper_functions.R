@@ -231,7 +231,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
 
   if (isTRUE(get0("can_subset", po))) {
     selector = function(data) data$feature_names != data$feature_names[1]
-    po2$param_vals$affect_columns = selector
+    po2$affect_columns = selector
     trained.subset = po$train_internal(list(task2))[[1]]
     trained2.subset = po2$train_internal(list(task))[[1]]
     if (deterministic_train) {
@@ -249,7 +249,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
     }
 
     selector = function(data) rep(FALSE, data$ncol)
-    po2$param_vals$affect_columns = selector
+    po2$affect_columns = selector
 
     # FIXME: the following should ensure that data has not changed
     # but number of rows or row indices could change in theory change, so the tests will need to be adapted
