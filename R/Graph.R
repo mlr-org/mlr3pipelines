@@ -176,7 +176,7 @@ Graph = R6Class("Graph",
     hash = function() {
       # FIXME: how do we depend on digest?
       # FIXME: maybe some pipeops need to tell us more about themselves than just ID (implicitly in map()), class, and param_vals?
-      digest::digest(
+      digest(
         list(map(self$pipeops, "hash"), self$edges),
         algo = "xxhash64")
     }
@@ -221,7 +221,6 @@ graph_fire = function(self, private, input, stage) {
     edges[get("src_id") == op$id, "result" := list(tmp)]
   }
   # FIXME: actually we SHOUKD store the intermediate results in the pipeop itself, much easier
-  print(edges)
   filter_noop(tmp)
 }
 
