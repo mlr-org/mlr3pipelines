@@ -34,13 +34,14 @@ test_that("basic graphlearn tests", {
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_vals$save_tasks = TRUE
 
-  dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
+  dbgr = GraphLearner$new(PipeOpScale$new() %>>% PipeOpLearner$new(dblrn))
 
-  dbgr$train(task)
+
+  expect_equal(dbgr$train(task), dbgr)
 
   dbgr$predict(task)
 
-  dbmodels = dbgr$pipeops$classif.debug$state$model
+  dbmodels = dbgr$graph$pipeops$classif.debug$state$model
 
   expect_equal(dbmodels[[1]]$data(), scalediris$data())
   expect_equal(dbmodels[[2]]$data(), scalediris$data())
