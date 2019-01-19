@@ -29,18 +29,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   public = list(
     intasklayout = NULL,
     outtasklayout = NULL,
-    affect_cols = NULL,
-    can_subset = NULL,
+    affected_cols = NULL,
 
     initialize = function(id, param_set = ParamSet$new(), can_subset = TRUE) {
-      self$can_subset = can_subset
-      if (can_subset) {
-        ac_par = R6Class("ParamFctOneArg", inherit = ParamUty,
-          private = list(.check = function(x) is.null(x) || test_function(x, nargs = 1))
-        )$new("affect_columns", default = NULL)
-
-        param_set$add(ac_par)
-      }
+      private$.can_subset = can_subset
+      private$.affect_columns = NULL
       super$initialize(id = id, param_set = param_set,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
@@ -49,11 +42,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = self$can_subset && !is.null(self$param_vals$affect_columns)
+      do_subset = !is.null(self$affect_columns)
       if (do_subset) {
-        self$affect_cols = intask$feature_names[self$param_vals$affect_columns(intask)]
+        self$affected_cols = intask$feature_names[self$affect_columns(intask)]
         # FIXME: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, self$affect_cols)
+        remove_cols = setdiff(intask$feature_names, self$affected_cols)
         intask$set_col_role(remove_cols, character(0))
       }
       self$intasklayout = intask$feature_types
@@ -68,10 +61,10 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = self$can_subset && !is.null(self$param_vals$affect_columns)
+      do_subset = !is.null(self$affect_columns)
       if (do_subset) {
         # FIXME: see train fixme: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, self$affect_cols)
+        remove_cols = setdiff(intask$feature_names, self$affected_cols)
         intask$set_col_role(remove_cols, character(0))
       }
       if (!all.equal(self$intasklayout, intask$feature_types)) {
@@ -107,6 +100,21 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     predict_dt = function(dt) stop("Abstract."),
 
     select_cols = function(dt) stop("Abstract.")
+  ),
+  active = list(
+    can_subset = function() private$.can_subset,
+    affect_columns = function(val) {
+      if (!missing(val)) {
+        assert_true(self$can_subset)
+        assert_function(val, nargs = 1, null.ok = TRUE)
+        private$.affect_columns = val
+      }
+      private$.affect_columns
+    }
+  ),
+  private = list(
+    .can_subset = NULL,
+    .affect_columns = NULL
   )
 )
 

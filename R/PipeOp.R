@@ -68,6 +68,7 @@ PipeOp = R6Class("PipeOp",
     initialize = function(id, param_set = ParamSet$new(), input = NULL, output = NULL) {
       self$id = assert_string(id)
       private$.param_set = param_set
+      private$.param_vals = list()
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
     },
