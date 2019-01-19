@@ -107,7 +107,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     predict_dt = function(dt) stop("Abstract."),
 
-    select_cols = function(dt) stop("Abstract.")
+    select_cols = function(task) task$feature_names
   ),
   active = list(
     can_subset_cols = function() private$.can_subset_cols,
