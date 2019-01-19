@@ -7,8 +7,8 @@ test_that("graph param vals", {
   gr$add_pipeop(PipeOpPCA$new())
   expect_equal(gr$ids(TRUE), c("scale", "pca"))
 
-  expect_equal(gr$pipeops$scale$param_vals$center, TRUE)
-  expect_equal(gr$param_vals$scale.center, TRUE)
+  expect_equal(gr$pipeops$scale$param_vals$center, NULL)
+  expect_equal(gr$param_vals$scale.center, NULL)
   gr$param_vals$scale.center = FALSE
   expect_equal(gr$pipeops$scale$param_vals$center, FALSE)
   expect_equal(gr$param_vals$scale.center, FALSE)
@@ -17,8 +17,8 @@ test_that("graph param vals", {
   expect_equal(gr$param_vals$scale.center, TRUE)
 
 
-  expect_equal(gr$pipeops$pca$param_vals$center, TRUE)
-  expect_equal(gr$param_vals$pca.center, TRUE)
+  expect_equal(gr$pipeops$pca$param_vals$center, NULL)
+  expect_equal(gr$param_vals$pca.center, NULL)
   gr$param_vals$pca.center = FALSE
   expect_equal(gr$pipeops$pca$param_vals$center, FALSE)
   expect_equal(gr$param_vals$pca.center, FALSE)
