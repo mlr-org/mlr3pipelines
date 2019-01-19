@@ -23,6 +23,8 @@
 #' To create a usable graph, the branching paths need to be brought together
 #' using [`PipeOpUnbranch`].
 #'
+#' Not to be confused with [`PipeOpCopy`], the naming scheme is a bit unfortunate.
+#'
 #' @family PipeOp
 #' @family PipeOpBroadcast
 #' @examples
@@ -65,7 +67,6 @@ PipeOpBranch = R6Class("PipeOpBranch",
         options = rep_suffix("output", outnum)
       } else {
         param = ParamFct$new("selection", values = options, default = options[1])
-        outnum = length(options)
       }
       super$initialize(id,
         param_set = ParamSet$new(params = list(param)),
@@ -75,17 +76,16 @@ PipeOpBranch = R6Class("PipeOpBranch",
     },
 
     train = function(inputs) {
-      assert_list(inputs)
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_vals[[1L]]]] = inputs[[1L]]
+      ret[[self$param_vals[[1]]]] = inputs[[1]]
       return(ret)
     },
 
     predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_vals[[1L]]]] = inputs[[1L]]
+      ret[[self$param_vals[[1]]]] = inputs[[1]]
       return(ret)
     }
   )
