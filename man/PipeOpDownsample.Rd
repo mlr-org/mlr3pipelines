@@ -18,8 +18,8 @@ Inherits from \link{PipeOp}
 \section{Details}{
 
 \itemize{
-\item \code{perc}: \code{numeric(1)} Percentage of rows in the task to keep.
-\item \code{stratify}: \code{logical(1)} Should the subsamples be stratified by target?
+\item \code{frac}: \code{numeric(1)} Fracentage of rows in the task to keep. Default 1.
+\item \code{stratify}: \code{logical(1)} Should the subsamples be stratified by target? Default FALSE.
 }
 }
 
