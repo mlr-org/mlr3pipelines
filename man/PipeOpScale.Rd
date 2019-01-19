@@ -10,10 +10,10 @@ See \link[base:scale]{base::scale} for details and parameters.
 }
 \section{Usage}{
 
-Inherits from \link{PipeOpDT}
+Inherits from \link{PipeOpTaskPreproc}
 \itemize{
 \item \code{f = pipeOpDT$new(id)} \cr
-\code{character(1)} -> \link{PipeOpDT}
+\code{character(1)} -> \link{PipeOpScale}
 }
 }
 

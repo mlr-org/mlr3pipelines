@@ -10,7 +10,7 @@ See \link[stats:prcomp]{stats::prcomp} for details  and parameters.
 }
 \section{Usage}{
 
-Inherits from \link{PipeOpDT}
+Inherits from \link{PipeOpPCA}
 \itemize{
 \item \code{f = pipeOpPCA$new(id)} \cr
 \code{character(1)} -> \link{PipeOpPCA}

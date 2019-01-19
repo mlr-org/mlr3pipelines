@@ -14,7 +14,7 @@ Users must implement train_task and predict_task, which have a Task
 input and should manipulate that task in-place; return values are
 ignored.
 
-If \code{can_subset} is \code{TRUE}, then the hyperparameter \code{affect_columns}
+If \code{can_subset_cols} is \code{TRUE}, then the hyperparameter \code{affect_columns}
 is added, which is a function that takes the Task as input and returns
 a logical as output, indicating what columns to choose.
 }
