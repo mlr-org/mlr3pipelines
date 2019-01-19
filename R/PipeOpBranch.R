@@ -39,7 +39,7 @@ NULL
 #' and distinction from unintentional NULL returns.
 #'
 #' @export
-NO_OP = R6Class("NO_OP", cloneable = FALSE,
+NO_OP = R6Class("NO_OP",
   public = list(
     initialize = function() {},
     print = function() cat("mlr3pipelines NO_OP indicator\n")
