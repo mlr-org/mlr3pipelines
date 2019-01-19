@@ -67,11 +67,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         remove_cols = setdiff(intask$feature_names, self$affected_cols)
         intask$set_col_role(remove_cols, character(0))
       }
-      if (!all.equal(self$intasklayout, intask$feature_types)) {
+      if (!isTRUE(all.equal(self$intasklayout, intask$feature_types))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
       self$predict_task(intask)
-      if (!all.equal(self$outtasklayout, intask$feature_types)) {
+      if (!isTRUE(all.equal(self$outtasklayout, intask$feature_types))) {
         stop("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       if (do_subset) {
@@ -82,14 +82,22 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     },
 
     train_task = function(task) {
-      cols = self$select_cols(task)
+      private$.dt_columns = self$select_cols(task)
+      cols = private$.dt_columns
+      if (!length(cols)) {
+        self$state = list()
+        return(NULL)
+      }
       dt = task$data(cols = cols)
       dt = as.data.table(self$train_dt(dt))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
     predict_task = function(task) {
-      cols = self$select_cols(task)
+      cols = private$.dt_columns
+      if (!length(cols)) {
+        return(NULL)
+      }
       dt = task$data(cols = cols)
       dt = as.data.table(self$predict_dt(dt))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
@@ -114,7 +122,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   ),
   private = list(
     .can_subset = NULL,
-    .affect_columns = NULL
+    .affect_columns = NULL,
+    .dt_columns = NULL
   )
 )
 
@@ -145,7 +154,7 @@ NULL
 #' @export
 PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 
-  inherit = PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreproc,
 
   public = list(
       train_task = function(task) {
@@ -155,12 +164,18 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
       predict_task = function(task) self$transform(task),
 
       get_state = function(task)  {
-        dt = task$data(cols = self$select_cols(task))
+        private$.dt_columns = self$select_cols(task)
+        cols = private$.dt_columns
+        if (!length(cols)) {
+          return(list())
+        }
+        dt = task$data(cols = cols)
         self$get_state_dt(dt)
       },
 
       transform = function(task) {
-        dt = task$data(cols = self$select_cols(task))
+        cols = private$.dt_columns
+        dt = task$data()
         dt = self$transform_dt(dt)
         task$select(setdiff(task$feature_names, cols))$cbind(dt)
       },
