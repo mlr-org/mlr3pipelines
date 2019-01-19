@@ -1,8 +1,6 @@
 context("PipeOpDownsample")
 
 test_that("PipeOpDownsample - basic properties", {
-
-
   op = PipeOpDownsample$new()
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
@@ -18,6 +16,12 @@ test_that("PipeOpDownsample works unstratified", {
   po = PipeOpDownsample$new()
 
   tnew = train_pipeop(po, list(task))
+  expect_true(tnew[[1]]$nrow == task$nrow)
+
+  po = PipeOpDownsample$new()
+  po$param_vals$frac = 0.7
+
+  tnew = train_pipeop(po, list(task))
   expect_true(tnew[[1]]$nrow == ceiling(task$nrow * 0.7))
   expect_subset(tnew[[1]]$row_roles$use, task$row_roles$use)
 
@@ -25,11 +29,11 @@ test_that("PipeOpDownsample works unstratified", {
   expect_true(pnew[[1]]$nrow == task$nrow)
   expect_equal(pnew[[1]], task)
 
-  task = mlr_tasks$get("iris")$filter(1)
+  task = mlr_tasks$get("iris")$filter(1L)  # actually has to be an int m(
   po = PipeOpDownsample$new()
   tnew = train_pipeop(po, list(task))
 
-  task = mlr_tasks$get("bh")$filter(1)
+  task = mlr_tasks$get("bh")$filter(1L)  # actually has to be an int m(
   po = PipeOpDownsample$new()
   po$param_vals = list(stratify = TRUE, frac = 0.6)
   expect_error(train_pipeop(po, list(task)))

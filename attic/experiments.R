@@ -10,13 +10,8 @@ devtools::document("mlr3pipelines")
 
 devtools::load_all("mlr3pipelines")
 
+testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "Graph")
-
-
-
-testthat::test_package("mlr3pipelines", filter = "Graph")
-testthat::test_package("mlr3pipelines", filter = "greplicate")
 
 
 gr$param_vals$scale.scale = FALSE

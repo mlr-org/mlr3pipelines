@@ -7,9 +7,9 @@ test_that("PipeOpUnbranch - basic properties", {
   expect_data_table(po$input, nrow = 3)
   expect_data_table(po$output, nrow = 1)
 
-  expect_pipeop_class(PipeOpUnBranch, list(1))
-  expect_pipeop_class(PipeOpUnBranch, list(3))
-  expect_error(PipeOpUnBranch$new(0))
+  expect_pipeop_class(PipeOpUnbranch, list(1))
+  expect_pipeop_class(PipeOpUnbranch, list(3))
+  expect_error(PipeOpUnbranch$new(0))
 
 })
 

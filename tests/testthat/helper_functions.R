@@ -30,6 +30,9 @@ expect_deep_clone = function(one, two) {
 
     # check that environments differ
     if (base::is.environment(a)) {
+      if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
+        return(invisible(NULL))  # don't check if smth is not cloneable
+      }
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
       expect_null(visited_b[[addr_a]], label = label)
@@ -58,6 +61,15 @@ expect_deep_clone = function(one, two) {
     }
   }
   expect_references_differ(one, two, "ROOT")
+}
+
+expect_shallow_clone = function(one, two) {
+  expect_equal(one, two)
+  if (base::is.environment(one)) {
+    addr_a= data.table::address(one)
+    addr_b = data.table::address(two)
+    expect_true(addr_a != addr_b, label = "Objects are shallow clones")
+  }
 }
 
 
@@ -146,7 +158,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
   deterministic_train = TRUE, deterministic_predict = TRUE) {
 
   original_clone = task$clone(deep = TRUE)
-  expect_deep_clone(task, original_clone)
+  expect_shallow_clone(task, original_clone)
 
   expect_pipeop_class(poclass, constargs)
 
@@ -161,7 +173,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
   expect_equal(po$output$train, "Task")
   expect_equal(po$output$predict, "Task")
 
-  expect_error(po$train_internal(list(NULL)), "types.*Task")
+  expect_error(po$train_internal(list(NULL)), "class.*Task.*but has class")
 
   expect_false(po$is_trained)
 
@@ -187,7 +199,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
 
   expect_deep_clone(po, po$clone(deep = TRUE))
 
-  expect_error(po$predict_internal(list(NULL)), "types.*Task")
+  expect_error(po$predict_internal(list(NULL)), "class.*Task.*but has class")
 
   predicted = po$predict_internal(list(task))
   predicted2 = po$predict(list(task))
@@ -223,12 +235,12 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
 
   task2 = task$clone(deep = TRUE)
   task2$select(task2$feature_names[-1])
-  expect_error(trained$predict(list(task2)), "Input task during prediction .* does not match input task during training")
+  expect_error(po$predict(list(task2)), "Input task during prediction .* does not match input task during training")
 
   emptytask = task$clone(deep = TRUE)$select(character(0))
 
-  expect_equal(po$train_internal(list(emptytask))[[1]]$ncol, 0)
-  expect_equal(po$predict_internal(list(emptytask))[[1]]$ncol, 0)
+  expect_equal(length(po$train_internal(list(emptytask))[[1]]$feature_names), 0)
+  expect_equal(length(po$predict_internal(list(emptytask))[[1]]$feature_names), 0)
 
   if (isTRUE(get0("can_subset", po))) {
     selector = function(data) data$feature_names != data$feature_names[1]
@@ -236,7 +248,8 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
     trained.subset = po$train_internal(list(task2))[[1]]
     trained2.subset = po2$train_internal(list(task))[[1]]
     if (deterministic_train) {
-      expect_equal(trained.subset$data(), trained2.subset$data(cols = setdiff(trained2.subset$feature_names, task$feature_names[1])))
+      expect_equal(trained.subset$data(cols = c(trained.subset$target_names, trained.subset$feature_names)),
+        trained2.subset$data(cols = setdiff(c(trained2.subset$target_names, trained2.subset$feature_names), task$feature_names[1])))
     }
     predicted.subset = po$predict_internal(list(task2))[[1]]
     predicted2.subset = po2$predict_internal(list(task2))[[1]]
@@ -245,15 +258,16 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
     }
     predicted2.subset2 = po2$predict_internal(list(task))[[1]]
     if (deterministic_predict) {
-      expect_equal(predicted2.subset$data(),
-        predicted2.subset2$data(cols = setdiff(predicted2.subset2$feature_names, task$feature_names[1])))
+      expect_equal(predicted.subset$data(cols = c(predicted.subset$target_names, predicted.subset$feature_names)),
+        predicted2.subset2$data(cols = setdiff(c(predicted2.subset2$target_names, predicted2.subset2$feature_names),
+          task$feature_names[1])))
     }
 
-    selector = function(data) rep(FALSE, data$ncol)
+    selector = function(data) rep(FALSE, length(data$feature_names))
     po2$affect_columns = selector
 
     # FIXME: the following should ensure that data has not changed
-    # but number of rows or row indices could change in theory change, so the tests will need to be adapted
+    # but number of rows or row indices could change in theory change, so the tests will need to be adapted if that is ever the case
     trained = po2$train_internal(list(task))[[1]]
     expect_equal(trained$data(cols = trained$feature_names), task$data(cols = task$feature_names))
 
@@ -261,15 +275,15 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
     expect_equal(predicted$data(cols = predicted$feature_names), task$data(cols = task$feature_names))
 
     predicted2 = po2$predict_internal(list(emptytask))[[1]]
-    expect_equal(predicted2$data(cols = predicted2$feature_names), predicted$data(cols = predicted2$feature_names))
+    expect_equal(predicted2$feature_names, character(0))
 
   }
 
   po$train_internal(list(task))
 
-  norowtask = taks$clone(deep = TRUE)$filter(integer(0))
+  norowtask = task$clone(deep = TRUE)$filter(integer(0))
   whichrow = sample(task$nrow, 1)
-  onerowtask = taks$clone(deep = TRUE)$filter(whichrow)
+  onerowtask = task$clone(deep = TRUE)$filter(whichrow)
 
 
   predicted = po$predict_internal(list(norowtask))[[1]]
@@ -278,7 +292,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
   }
 
   predicted = po$predict_internal(list(onerowtask))[[1]]
-  if (predict_row_independent) {
+  if (predict_rows_independent) {
     expect_equal(predicted$nrow, 1)
     if (deterministic_predict) {
       expect_equal(predicted$data(), po$predict_internal(list(task))[[1]]$filter(whichrow)$data())
@@ -296,7 +310,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
       predicted.targetless$data(cols = predicted.targetless$feature_names))
   }
 
-  expect_deep_clone(task, original_clone)  # test that task was not changed by all the training / prediction
+  expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
 
 }
 

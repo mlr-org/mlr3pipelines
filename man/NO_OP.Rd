@@ -4,7 +4,7 @@
 \name{NO_OP}
 \alias{NO_OP}
 \title{No-Op Sentinel Used for Alternative Branching}
-\format{An object of class \code{NO_OP} (inherits from \code{R6}) of length 3.}
+\format{An object of class \code{NO_OP} (inherits from \code{R6}) of length 4.}
 \usage{
 NO_OP
 }

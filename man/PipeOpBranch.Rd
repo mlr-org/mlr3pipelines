@@ -32,6 +32,8 @@ out channels are created, each named according to \code{options}.
 
 To create a usable graph, the branching paths need to be brought together
 using \code{\link{PipeOpUnbranch}}.
+
+Not to be confused with \code{\link{PipeOpCopy}}, the naming scheme is a bit unfortunate.
 }
 
 \examples{

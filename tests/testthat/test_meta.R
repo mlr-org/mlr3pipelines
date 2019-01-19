@@ -27,6 +27,16 @@ test_that("expect_deep_clone catches non-deep clones", {
   expect_deep_clone(po, po1)
 })
 
+test_that("expect_shallow_clone catches non-clones", {
+
+  task = mlr_tasks$get("iris")
+  expect_error(expect_deep_clone(task, task$clone()))
+  expect_shallow_clone(task, task$clone())
+  expect_error(expect_shallow_clone(task, task))
+  expect_error(expect_shallow_clone(task, NULL))
+
+})
+
 # PO defined in helper_pipeops.R
 test_that("Test auxiliary PipeOps", {
   expect_pipeop_class(PipeOpDebugBasic)
