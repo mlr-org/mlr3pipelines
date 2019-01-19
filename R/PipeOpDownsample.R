@@ -20,7 +20,7 @@ NULL
 #' @include PipeOp.R
 #' @export
 PipeOpDownsample = R6Class("PipeOpDownsample",
-  inherit = PipeOp,
+  inherit = PipeOpTaskPreproc,
 
   public = list(
     initialize = function(id = "downsample") {
@@ -28,32 +28,24 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
         ParamDbl$new("frac", default = 1, lower = 0, upper = 1),
         ParamLgl$new("stratify", default = FALSE)
       ))
-      super$initialize(id, param_set = ps,
-        input = data.table(name = "task", train = "Task", predict = "Task"),
-        output = data.table(name = "task", train = "Task", predict = "Task")
-      )
+      super$initialize(id, param_set = ps, can_subset = FALSE)
       self$param_vals = list(frac = 1, stratify = FALSE)
     },
 
-    train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
-      tsk = inputs[[1]]$clone()
+    train_task = function(task) {
       if (!self$param_vals$stratify) {
-        keep = sample(tsk$row_roles$use, ceiling(self$param_vals$frac * tsk$nrow))
+        keep = sample(task$row_roles$use, ceiling(self$param_vals$frac * task$nrow))
       } else {
-        if (!inherits(tsk, "TaskClassif"))
-          stopf("Stratification not supported for %s", class(tsk))
-        splt = split(tsk$row_roles$use, tsk$data(cols = tsk$target_names))
+        if (!inherits(task, "TaskClassif"))
+          stopf("Stratification not supported for %s", class(task))
+        splt = split(task$row_roles$use, task$data(cols = task$target_names))
         keep = unlist(map(splt, function(x) sample(x, ceiling(self$param_vals$frac * length(x)))))
       }
-      tsk$filter(keep)
       self$state = list()
-      return(list(tsk))
+      task$filter(keep)
     },
 
-    predict = function(inputs) {
-      return(inputs)
-    }
+    predict_task = identity
   )
 )
 
