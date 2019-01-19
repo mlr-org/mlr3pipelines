@@ -65,15 +65,9 @@ PipeOp = R6Class("PipeOp",
     input = NULL,
     output = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = NULL,
-      input = NULL, output = NULL) {
+    initialize = function(id, param_set = ParamSet$new(), input = NULL, output = NULL) {
       self$id = assert_string(id)
       private$.param_set = param_set
-      private$.param_vals = param_set$defaults
-      private$.param_vals = insert_named(private$.param_vals, param_vals)
-      if (!param_set$test(private$.param_vals))
-        stop("Parameters out of bounds")
-
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
     },
@@ -141,12 +135,12 @@ PipeOp = R6Class("PipeOp",
   )
 )
 
-assert_connection_table = function(x) {
-  if (is.null(x))
+assert_connection_table = function(table) {
+  if (is.null(table))
     return(data.table(name = character(0L), train = character(0L), predict = character(0L)))
-  assert_data_table(x, .var.name = deparse(substitute(x)))
-  assert_names(names(x), permutation.of = c("name", "train", "predict"), .var.name = deparse(substitute(x)))
-  x
+  assert_data_table(table, .var.name = deparse(substitute(table)))
+  assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = deparse(substitute(table)))
+  table
 }
 
 
