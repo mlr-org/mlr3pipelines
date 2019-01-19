@@ -7,7 +7,7 @@
 #'   Extracts principle components from data.
 #'   See [stats::prcomp] for details  and parameters.
 #' @section Usage:
-#' Inherits from [PipeOpDT]
+#' Inherits from [PipeOpPCA]
 #' * `f = pipeOpPCA$new(id)` \cr
 #'     `character(1)` -> [PipeOpPCA]
 #' @family PipeOp

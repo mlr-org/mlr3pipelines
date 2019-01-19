@@ -7,9 +7,9 @@
 #'   Scales the data to mean = 0 and standard deviation 1.
 #'   See [base::scale] for details and parameters.
 #' @section Usage:
-#' Inherits from [PipeOpDT]
+#' Inherits from [PipeOpTaskPreproc]
 #' * `f = pipeOpDT$new(id)` \cr
-#'     `character(1)` -> [PipeOpDT]
+#'     `character(1)` -> [PipeOpScale]
 #' @family PipeOp
 NULL
 
