@@ -21,14 +21,6 @@ test_that("PipeOp - General functions", {
 })
 
 
-
-# PO defined in helper_pipeops.R
-test_that("Test auxiliary PipeOps", {
-  expect_pipeop_class(PipeOpDebugBasic)
-  expect_pipeop_class(PipeOpDebugMulti, list(inputs = 1, outputs = 1))
-  expect_pipeop_class(PipeOpDebugMulti, list(inputs = 2, outputs = 3))
-})
-
 test_that("PipeOp - simple tests with PipeOpScale", {
   p = PipeOpScale$new()
   expect_class(p, "PipeOpScale")
