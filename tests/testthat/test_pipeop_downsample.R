@@ -31,7 +31,7 @@ test_that("PipeOpDownsample works unstratified", {
 
   task = mlr_tasks$get("bh")$filter(1)
   po = PipeOpDownsample$new()
-  po$param_vals = list(stratify = TRUE, perc = 0.6)
+  po$param_vals = list(stratify = TRUE, frac = 0.6)
   expect_error(train_pipeop(po, list(task)))
 
 })
@@ -40,7 +40,7 @@ test_that("PipeOpDownsample works stratified", {
   task = mlr_tasks$get("iris")
 
   po = PipeOpDownsample$new()
-  po$param_vals = list(stratify = TRUE, perc = 0.6)
+  po$param_vals = list(stratify = TRUE, frac = 0.6)
   expect_class(po, "PipeOpDownsample")
 
   tnew = train_pipeop(po, list(task))
