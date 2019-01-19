@@ -28,7 +28,7 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
         ParamDbl$new("frac", default = 1, lower = 0, upper = 1),
         ParamLgl$new("stratify", default = FALSE)
       ))
-      super$initialize(id, param_set = ps, can_subset = FALSE)
+      super$initialize(id, param_set = ps, can_subset_cols = FALSE)
       self$param_vals = list(frac = 1, stratify = FALSE)
     },
 

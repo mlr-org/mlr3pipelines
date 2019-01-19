@@ -13,7 +13,7 @@
 #' input and should manipulate that task in-place; return values are
 #' ignored.
 #'
-#' If `can_subset` is `TRUE`, then the hyperparameter `affect_columns`
+#' If `can_subset_cols` is `TRUE`, then the hyperparameter `affect_columns`
 #' is added, which is a function that takes the Task as input and returns
 #' a logical as output, indicating what columns to choose.
 #'
@@ -31,8 +31,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     outtasklayout = NULL,
     affected_cols = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), can_subset = TRUE) {
-      private$.can_subset = can_subset
+    initialize = function(id, param_set = ParamSet$new(), can_subset_cols= TRUE) {
+      private$.can_subset_cols = can_subset_cols
       private$.affect_columns = NULL
       super$initialize(id = id, param_set = param_set,
         input = data.table(name = "input", train = "Task", predict = "Task"),
@@ -110,10 +110,10 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     select_cols = function(dt) stop("Abstract.")
   ),
   active = list(
-    can_subset = function() private$.can_subset,
+    can_subset_cols = function() private$.can_subset_cols,
     affect_columns = function(val) {
       if (!missing(val)) {
-        assert_true(self$can_subset)
+        assert_true(self$can_subset_cols)
         assert_function(val, nargs = 1, null.ok = TRUE)
         private$.affect_columns = val
       }
@@ -121,7 +121,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     }
   ),
   private = list(
-    .can_subset = NULL,
+    .can_subset_cols = NULL,
     .affect_columns = NULL,
     .dt_columns = NULL
   )
