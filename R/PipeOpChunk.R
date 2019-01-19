@@ -27,7 +27,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "chunk") {
-      outnum = assert_int(outnum, lower = 2L)
+      outnum = assert_int(outnum, lower = 1)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)
@@ -35,11 +35,11 @@ PipeOpChunk = R6Class("PipeOpChunk",
       super$initialize(id,
         param_set = ps,
         input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = rep_suffix("task", outnum), train = "Task", predict = "Task")
+        output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task")
       )
+      self$param_vals = list(shuffle = TRUE, stratify = FALSE)
     },
     train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
       self$state = list()
 
       task = inputs[[1L]]
@@ -51,12 +51,12 @@ PipeOpChunk = R6Class("PipeOpChunk",
 
       # Subset data, clone task and overwrite data in it.
       map(idx, function(x) {
-        task$clone()$filter(x)
+        task$clone(deep = TRUE)$filter(x)
       })
     },
 
     predict = function(inputs) {
-      return(rep(list(inputs[[1]]), self$outnum))
+      return(rep(inputs, self$outnum))
     }
   )
 )
