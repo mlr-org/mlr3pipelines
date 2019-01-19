@@ -1,20 +1,4 @@
-PipeOpTest1 = R6Class("PipeOpTest1", inherit = PipeOp,
-  public = list(
-    initialize = function() {
-      ps = paradox::ParamSet$new(list(paradox::ParamDbl$new("dbl", lower = 1, upper = 10)))
-      super$initialize("th_po", param_set = ps, param_vals = list(dbl = 1))
-      self$packages = "package1"
-    },
-    train = function(inputs) {
-      self$state = 1
-      return(1)
-    },
-    predict = function() {return(2)}
-  )
-)
-
-
-PipeOpDebugBasic = R6Class("BasicPO",
+PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
   inherit = PipeOp,
   public = list(
       train = function(inputs) {
@@ -25,8 +9,8 @@ PipeOpDebugBasic = R6Class("BasicPO",
         catf("predicting %s", self$id)
         self$state = c(self$state, inputs)
       },
-      initialize = function(id = "debug.basic", param_set = ParamSet$new(), param_vals = list()) {
-        super$initialize(id = id, param_set = param_set, param_vals = param_vals,
+      initialize = function(id = "debug.basic", param_set = ParamSet$new()) {
+        super$initialize(id = id, param_set = param_set,
           input = data.table(name = "input", train = "*", predict = "*"),
           output = data.table(name = "output", train = "*", predict = "*")
         )
@@ -35,7 +19,7 @@ PipeOpDebugBasic = R6Class("BasicPO",
 )
 
 # initialize with inputs / outputs: input / output channel names, or number of channels
-PipeOpDebugMulti = R6Class("BasicPOAny",
+PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
   inherit = PipeOp,
   public = list(
       nin = NULL,

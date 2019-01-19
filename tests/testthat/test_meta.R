@@ -4,7 +4,7 @@ context("meta")
 
 test_that("expect_deep_clone catches non-deep clones", {
 
-  po = PipeOpTest1$new()
+  po = PipeOpDebugBasic$new()
 
   expect_error(expect_deep_clone(po, po))  # can't use expect_failure for some reason
   po1 = po$clone(deep = TRUE)
