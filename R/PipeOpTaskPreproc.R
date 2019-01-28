@@ -158,7 +158,7 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 
   public = list(
       train_task = function(task) {
-        self$state = self$get_state()
+        self$state = self$get_state(task)
         self$transform(task)
       },
       predict_task = function(task) self$transform(task),
@@ -175,8 +175,8 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 
       transform = function(task) {
         cols = private$.dt_columns
-        dt = task$data()
-        dt = self$transform_dt(dt)
+        dt = task$data(cols = cols)
+        dt = as.data.table(self$transform_dt(dt))
         task$select(setdiff(task$feature_names, cols))$cbind(dt)
       },
 
