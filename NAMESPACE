@@ -2,7 +2,9 @@
 
 S3method(as.data.table,DictionaryPipeOp)
 export("%>>%")
+export(Graph)
 export(NO_OP)
+export(PipeOp)
 export(PipeOpBranch)
 export(PipeOpChunk)
 export(PipeOpCopy)

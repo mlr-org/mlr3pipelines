@@ -11,8 +11,8 @@ and expect the column layout of these tasks during input and output
 to be the same.
 
 Users must implement train_task and predict_task, which have a Task
-input and should manipulate that task in-place; return values are
-ignored.
+input and should return that task. The task should, if possible, be
+manipulated in-place, and should not be cloned.
 
 If \code{can_subset_cols} is \code{TRUE}, then the hyperparameter \code{affect_columns}
 is added, which is a function that takes the Task as input and returns
