@@ -16,12 +16,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(mlr3pipelines)
 ```
 
 
-This vignette showcases how the `mlr3pipelines` package can be extended to include custom `PipeOps`.
-
-In order to test and showcase our PipeOp, we first create a `Task`. We are using the well-known "iris" task:
+This vignette shows how the `mlr3pipelines` package can be extended to include custom `PipeOps`. To run the following examples, we will need a `Task`; we are using the well-known "Iris" task:
 ```{r}
 library(mlr3)
 task = mlr_tasks$get("iris")
@@ -29,22 +28,22 @@ task = mlr_tasks$get("iris")
 task$data()
 ```
 
-# How Things Work Around Here
+## How Things Work Around Here
 
-`mlr3pipelines` is fundamentally built around [`R6`](https://r6.r-lib.org/). To create custom `PipeOp` objects, it can only help to [familiarize yourself with it](https://adv-r.hadley.nz/r6.html).
+`mlr3pipelines` is fundamentally built around [`R6`](https://r6.r-lib.org/). When planning to create custom `PipeOp` objects, it can only help to [familiarize yourself with it](https://adv-r.hadley.nz/r6.html).
 
 In principle, all a `PipeOp` must do is inherit from the `PipeOp` R6 class and implement the `train()` and `test()` functions. There are, however, several auxiliary subclasses that can make the creation of *certain* operations much easier.
 
-# General Case Example: `PipeOpCopy`
+## General Case Example: `PipeOpCopy`
 
-A very simple yet useful `PipeOp` is `PipeOpCopy`, which takes a single input and creates a variable number of output channels, all of which get a version of the input data. It is a good example that showcases the important steps in defining a custom `PipeOp`. We will show a simplified version here, **`PipeOpCopyTwo`**, that creates exactly two copies of its input data.
+A very simple yet useful `PipeOp` is `PipeOpCopy`, which takes a single input and creates a variable number of output channels, all of which receive a copy of the input data. It is a simple example that showcases the important steps in defining a custom `PipeOp`. We will show a simplified version here, **`PipeOpCopyTwo`**, that creates exactly two copies of its input data.
 
-## First Steps: Inheriting from `PipeOp`
+### First Steps: Inheriting from `PipeOp`
 
 The first part of creating a custom `PipeOp` is inheriting from `PipeOp`. We make a mental note that we need to implement a `train()` and a `predict()` function, and that we probably want to have an `initialize()` as well:
 
 ```{r, eval = FALSE}
-PipeOpCopyTwo = R6Class("PipeOpCopyTwo",
+PipeOpCopyTwo = R6::R6Class("PipeOpCopyTwo",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "copy.two") {
@@ -62,7 +61,7 @@ PipeOpCopyTwo = R6Class("PipeOpCopyTwo",
 )
 ```
 
-## Channel Definitions
+### Channel Definitions
 
 We need to tell the `PipeOp` the layout of its channels: How many there are, what their names are going to be, and what types are acceptable. This is done on initialization of the `PipeOp` (using a `super$initialize` call) by giving the `input` and `output` `data.table` objects. These must have three columns: a `"name"` column giving the names of input and output channels, and a `"train"` and `"predict"` column naming the class of objects we expect during training and prediction as input / output. A special value for these classes is `"*"`, which indicates that any class will be accepted; our simple copy operator accepts any kind of input, so this will be useful. We have only one input, but two output channels.
 
@@ -71,10 +70,10 @@ By convention, we should name a single channel `"input"` or `"output"`, and a gr
 All of this is given to the `PipeOp` creator. Our `initialize()` will thus look as follows:
 ```{r, eval = FALSE}
     initialize = function(id = "copy.two") {
-      input = data.table(name = "input", train = "*", predict = "*")
+      input = data.table::data.table(name = "input", train = "*", predict = "*")
       # the following will create two rows and automatically fill the `train`
       # and `predict` cols with "*"
-      output = data.table(
+      output = data.table::data.table(
         name = c("output1", "output2"),
         train = "*", predict = "*"
       )
@@ -85,7 +84,7 @@ All of this is given to the `PipeOp` creator. Our `initialize()` will thus look 
     }
 ```
 
-## Train and Predict
+### Train and Predict
 
 Both `train()` and `predict()` will receive a `list` as input and must give a `list` in return. According to our `input` and `output` definitions, we will always get a list with a single element as input, and will need to return a list with two elements. Because all we want to do is create two copies, we will just write `c(inputs, inputs)`.
 
@@ -106,17 +105,17 @@ Our `train()` and `predict()` functions are now:
     }
 ```
 
-## Putting it Together
+### Putting it Together
 
 The whole definition thus becomes
 ```{r}
-PipeOpCopyTwo = R6Class("PipeOpCopyTwo",
+PipeOpCopyTwo = R6::R6Class("PipeOpCopyTwo",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "copy.two") {
       super$initialize(id,
-        input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = c("output1", "output2"),
+        input = data.table::data.table(name = "input", train = "*", predict = "*"),
+        output = data.table::data.table(name = c("output1", "output2"),
                             train = "*", predict = "*")
       )
     },
@@ -147,7 +146,7 @@ result = gr$train(task)
 str(result)
 ```
 
-# Special Case: Preprocessing
+## Special Case: Preprocessing
 
 Many PipeOps perform an operation on exactly one `Task`, and return exactly one `Task`. They may even not care about the "Target" / "Outcome" variable of that task, and only do some modification of some input data. However, it is usually important to them that the `Task` on which they perform prediction has the same data columns as the `Task` on which they train. For these cases, the auxiliary base class `PipeOpTaskPreproc` exists. It inherits from `PipeOp` itself, and other PipeOps should use it if they fall in the kind of use-case named above.
 
@@ -155,7 +154,7 @@ When inheriting from `PipeOpTaskPreproc`, one must either implement the `train_t
 
 The following will show two examples: `PipeOpDropNA`, which removes a `Task`'s rows with missing values during training (and implements `train_task` and `predict_task`), and `PipeOpScale`, which scales a `Task`'s numeric columns (and implements `train_dt`, `predict_dt`, and `select_cols`).
 
-## `PipeOpDropNA`
+### `PipeOpDropNA`
 
 Dropping rows with missing values may be important when training a model that can not handle them.
 
@@ -168,7 +167,7 @@ When we inherit from `PipeOpTaskPreproc`, it sets the `input` and `output` `data
 The complete `PipeOpDropNA` can therefore be written as follows. Note that it inherits from `PipeOpTaskPreproc`, unlike the `PipeOpCopyTwo` example from above:
 
 ```{r}
-PipeOpDropNA = R6Class("PipeOpDropNA",
+PipeOpDropNA = R6::R6Class("PipeOpDropNA",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "drop.na") {
@@ -209,7 +208,7 @@ print(filtered_task$data())
 ```
 
 
-## `PipeOpScale`
+### `PipeOpScale`
 
 An often-applied preprocessing step is to simply **center** and/or **scale** the data to mean $0$ and standard deviation $1$. This fits the `PipeOpTaskPreproc` pattern quite well. Because it always replaces all columns that it operates on, and does not require any information about the task's target, it only needs to overload the `train_dt` and `predict_dt` functions. This saves some boilerplate-code from getting the correct feature columns out of the task, and replacing them after modification.
 
@@ -220,7 +219,7 @@ This is the first `PipeOp` where we will be using the `$state` slot for somethin
 For simplicity, we are not using hyperparameters and will always scale and center all data. Compare this `PipeOpScaleAlways` operator to the one defined inside the `mlr3pipelines` package, `PipeOpScale`, defined in `PipeOpScale.R`.
 
 ```{r}
-PipeOpScaleAlways = R6Class("PipeOpScaleAlways",
+PipeOpScaleAlways = R6::R6Class("PipeOpScaleAlways",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "scale.always") {
@@ -260,7 +259,7 @@ result = gr$train(task)
 result[[1]]$data()
 ```
 
-# Hyperparameters
+## Hyperparameters
 
 `mlr3pipelines` uses the [`paradox`](https://github.com/mlr-org/paradox) package to define parameter spaces for `PipeOp`s. Parameters for `PipeOp`s can modify their behaviour in certain ways, e.g. switch centering or scaling off in the `PipeOpScale` operator. The unified interface makes it possible to have parameters for whole `Graph`s that modify the individual `PipeOp`'s behaviour. The `Graph`s, when encapsuled in `GraphLearner`s, can even be tuned using the tuning functionality in [`mlr3tuning`](https://github.com/mlr-org/mlr3tuning).
 
@@ -272,7 +271,7 @@ When a `PipeOp` is initialized, it usually does not have any parameter values---
 
 When using an underlying library function (the `scale` function in `PipeOpScale`, say), then there is usually a "default" behaviour of that function when a parameter is not given. It is good practice to use this default behaviour whenever a parameter is not set (or when it was removed). This can easily be done when using the [`mlr3misc`](https://github.com/mlr-org/mlr3misc) library's `invoke()` function, which has functionality similar to `base::do.call()`.
 
-## Hyperparameter Example: `PipeOpScale`
+### Hyperparameter Example: `PipeOpScale`
 
 How to use hyperparameters can best be shown through the example of `PipeOpScale`, which is very similar to the example above, `PipeOpScaleAlways`. The difference is made by the presence of hyperparameters. `PipeOpScale` constructs a `ParamSet` in its `$initialize` function and gives this to the `super$initialize` function:
 ```{r}
@@ -301,7 +300,7 @@ PipeOpScale$public_methods$train
 Another change that is necessary compared to `PipeOpScaleAlways` is that the attributes `"scaled:scale"` and `"scaled:center"` are not always present, depending on parameters, and possibly need to be set to default values $1$ or $0$, respectively.
 
 It is now even possible (if a bit pointless) to call `PipeOpScale` with both `scale` and `center` set to `FALSE`, which returns the original dataset, unchanged.
-```r
+```{r}
 pss$param_vals$scale = FALSE
 pss$param_vals$center = FALSE
 
