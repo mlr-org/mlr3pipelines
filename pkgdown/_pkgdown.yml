@@ -1,0 +1,11 @@
+template:
+  params:
+    bootswatch: cosmo
+
+development:
+  mode: unreleased
+  version_label: default
+  version_tooltip: "Github Version"
+
+toc:
+  depth: 3
