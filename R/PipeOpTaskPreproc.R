@@ -86,7 +86,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       cols = private$.dt_columns
       if (!length(cols)) {
         self$state = list()
-        return(NULL)
+        return(task)
       }
       dt = task$data(cols = cols)
       dt = as.data.table(self$train_dt(dt))
@@ -96,7 +96,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     predict_task = function(task) {
       cols = private$.dt_columns
       if (!length(cols)) {
-        return(NULL)
+        return(task)
       }
       dt = task$data(cols = cols)
       dt = as.data.table(self$predict_dt(dt))
