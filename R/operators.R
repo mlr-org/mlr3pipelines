@@ -24,13 +24,20 @@
 `%>>%` = function(g1, g2) {
   g1 = ensure_graph(g1)
   g2 = ensure_graph(g2)
+  g1out = g1$output
+  g2in = g2$input
+  if (nrow(g1out) != nrow(g2in)) {
+    stopf("Graphs / PipeOps to be connected have mismatching number of inputs / outputs.")
+  }
   g = gunion(list(g1, g2))
-  # FIXME: code needs to be checked. correct? comment a bit!
-  new_edges = cbind(
-    rbindlist(map(g1$rhs, function(id) data.table(src_id = id, src_channel = seq_along(g1$pipeops[[id]]$output$train)))),
-    rbindlist(map(g2$lhs, function(id) data.table(dst_id = id, dst_channel = seq_along(g2$pipeops[[id]]$input$train))))
-  )
 
-  g$edges = rbind(g$edges, new_edges)
+  # build edges from free output channels of g1 and free input channels of g2
+  newedges = cbind(g1out[, list(src_id = op.id, src_channel = channel.name)],
+    g2in[, list(dst_id = op.id, dst_channel = channel.name)])
+
+  # we could also just rbind this with the edge list, but we better go the official
+  # route which checks for mismatches.
+  lapply(transpose(newedges), do.call, what = g$add_edge)
+
   g
 }

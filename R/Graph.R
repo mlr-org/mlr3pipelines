@@ -84,27 +84,37 @@ Graph = R6Class("Graph",
     add_edge = function(src_id, src_channel, dst_id, dst_channel) {
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
-      # FIXME: as soon as intypes / outtypes are present the following two lines should be:
-      # assert_choice(src_channel, rownames(self$pipeops[[src_id]]$outtypes))
-      # assert_choice(dst_channel, rownames(self$pipeops[[dst_id]]$intypes))
-      # FIXME: make these assert better? we cannot use arbitrary names
-      assert_string(src_channel)
-      assert_string(dst_channel)
-      src_id_ = src_id
-      dst_id_ = dst_id
-      src_channel_ = src_channel
-      dst_channel_ = dst_channel
-      priorcon = self$edges[
-        (src_id == src_id_ & src_channel == src_channel_) |
-        (dst_id == dst_id_ & dst_channel == dst_channel_), ]
-      if (nrow(priorcon)) {
+      assert(
+          check_integerish(src_channel, lower = 1,
+            upper = nrow(self$pipeops[[src_id]]$output), any.missing = FALSE),
+          check_choice(src_channel, self$pipeops[[src_id]]$output$name)
+      )
+      if (is.numeric(src_channel))
+        src_channel = self$pipeops[[src_id]]$output$name[src_channel]
+      assert(
+          check_integerish(dst_channel, lower = 1,
+            upper = nrow(self$pipeops[[dst_id]]$input), any.missing = FALSE),
+          check_choice(dst_channel, self$pipeops[[dst_id]]$input$name)
+      )
+      if (is.numeric(dst_channel))
+        dst_channel = self$pipeops[[dst_id]]$input$name[dst_channel]
+
+      badrows = self$edges$src_id == src_id & self$edges$src_channel == src_channel |
+        self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel
+      if (any(badrows)) {
+        priorcon = self$edges[badrows]
         stopf("Cannot add multiple edges to a channel.\n%s",
           paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.",
             priorcon$src_channel, priorcon$src_id, priorcon$dst_channel, priorcon$dst_id), collapse = "\n"))
       }
-      row = data.table(src_id = src_id, src_channel = src_channel,
-        dst_id = dst_id, dst_channel = dst_channel)
+      row = data.table(src_id, src_channel, dst_id, dst_channel)
+      oldedges = self$edges
       self$edges = rbind(self$edges, row)
+      # check for loops
+      on.exit({self$edges = oldedges})
+      self$ids(sorted = TRUE)  # if we fail here, edges get reset.
+      on.exit()
+      invisible(self)
     },
 
     plot = function() {
@@ -125,7 +135,7 @@ Graph = R6Class("Graph",
     },
 
     print = function() {
-      # print table <id>, <state>, where <state> is class(pipeop$state)
+      # print table <id>, <state>, where <state> is `class(pipeop$state)`
       lines = map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
         data.frame(ID = pipeop$id, State = sprintf("<%s>",
           map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
@@ -154,19 +164,25 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    train = function(input) {
-      graph_fire(self, private, input, "train") # input assert in call
+    train = function(input, single_input = TRUE) {
+      graph_fire(self, private, input, "train", single_input)
     },
 
-    predict = function(input) {
-      graph_fire(self, private, input, "predict") # input assert in call
+    predict = function(input, single_input = TRUE) {
+      graph_fire(self, private, input, "predict", single_input)
     }
   ),
 
   active = list(
     is_trained = function() all(map_lgl(self$pipeops, "is_trained")),
-    lhs = function() sort(setdiff(names(self$pipeops), self$edges$dst_id)),
-    rhs = function() sort(setdiff(names(self$pipeops), self$edges$src_id)),
+    lhs = function() unique(self$input$op.id),
+    rhs = function() unique(self$output$op.id),
+    input = function() {
+      graph_channels(self$edges$dst_id, self$edges$dst_channel, self$pipeops, "input")
+    },
+    output = function() {
+      graph_channels(self$edges$src_id, self$edges$src_channel, self$pipeops, "output")
+    },
     packages = function() unique(unlist(map(self$pipeops, "packages"))),
     param_vals = function(rhs) {
       union_param_vals(map(self$pipeops, "param_set"), self$pipeops, "param_vals", rhs)
@@ -175,8 +191,6 @@ Graph = R6Class("Graph",
       union_param_sets(map(self$pipeops, "param_set"))
     },
     hash = function() {
-      # FIXME: how do we depend on digest?
-      # FIXME: maybe some pipeops need to tell us more about themselves than just ID (implicitly in map()), class, and param_vals?
       digest(
         list(map(self$pipeops, "hash"), self$edges),
         algo = "xxhash64")
@@ -190,14 +204,54 @@ Graph = R6Class("Graph",
         pipeops = map(value, function(x) x$clone(deep = TRUE)),
         value
       )
-    },
-    .hash = NA_character_
+    }
   )
 )
 
-graph_fire = function(self, private, input, stage) {
-  assert_task(input)
+# build the '$input' or '$output' active binding
+# ids, channels: either src_{ids,channels} or dst_{ids,channels}, depending on if we are input or output
+# pipeops: list of pipeops
+# direction: "input" or "output"
+graph_channels = function(ids, channels, pipeops, direction) {
+  dfx = lapply(pipeops, function(po) {
+    # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
+    # (and factor 2 faster than a naive data.table implementation below).
+    # $input and $output is actually a bottleneck for %>>%, so we want this to be fast.
+    # Please don't change without benchmark.
+    df = as.data.frame(po[[direction]], stringsAsFactors = FALSE)
+    rows = df$name %nin% channels[ids == po$id]
+    if (!any(rows)) {
+      return(data.frame(name = character(0),
+        train = character(0), predict = character(0),
+        op.id = character(0), channel.name = character(0),
+        stringsAsFactors = FALSE))
+    }
+    df$op.id = po$id
+    df = df[rows,
+      c("name", "train", "predict", "op.id", "name")]
+    df[[1]] = paste0(po$id, ".", df[[1]])
+    names(df)[5] = "channel.name"
+    df
+  })
+  rbindlist(dfx)
+}
+
+graph_channels_dt = function(ids, channels, pipeops, direction) {
+  # for reference: this is the above in data.tablle
+  rbindlist(lapply(pipeops, function(po) {
+    po[[direction]][name %nin% channels[ids == po$id],
+      list(name = paste0(po$id, ".", name),
+        train = train, predict = predict, op.id = po$id, channel.name = name)]
+  }))
+}
+
+graph_fire = function(self, private, input, stage, single_input) {
+  assert_flag(single_input)
   assert_choice(stage, c("train", "predict"))
+
+
+
+
 
   # add virtual channel to "__init__" in private copy of "edges"
   edges = copy(self$edges)
