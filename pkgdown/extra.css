@@ -2,3 +2,8 @@
     content: '>';
     margin-right: 0.5em;
 }
+
+#tocnav ul ul a {
+    padding: 5px 15px !important;
+    font-size: 80%;
+}
