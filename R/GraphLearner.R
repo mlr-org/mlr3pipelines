@@ -10,6 +10,7 @@
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
+    model = NULL,
     initialize = function(graph, task_type = "classif") {
       # Please don't `assert_r6(graph, "Graph")` here, we have ensure_graph for that, graph can be a PipeOp too
       assert_choice(task_type, c("classif", "regr"))
@@ -30,6 +31,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     train = function(task) {
       self$graph$train(task)
+      self$model = self$graph
       invisible(self)
     },
     predict = function(task) {
