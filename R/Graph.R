@@ -52,6 +52,7 @@
 #'   Predict with the graph by calling all the PipeOps' $predict method. Return a list of outputs for each
 #'   unconnected PipeOp out-channel
 #' @name Graph
+#' @export
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,

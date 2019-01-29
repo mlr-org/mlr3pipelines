@@ -10,8 +10,8 @@
 #' to be the same.
 #'
 #' Users must implement train_task and predict_task, which have a Task
-#' input and should manipulate that task in-place; return values are
-#' ignored.
+#' input and should return that task. The task should, if possible, be
+#' manipulated in-place, and should not be cloned.
 #'
 #' If `can_subset_cols` is `TRUE`, then the hyperparameter `affect_columns`
 #' is added, which is a function that takes the Task as input and returns
@@ -50,7 +50,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         intask$set_col_role(remove_cols, character(0))
       }
       self$intasklayout = intask$feature_types
-      self$train_task(intask)
+      intask = self$train_task(intask)
       self$outtasklayout = intask$feature_types
       if (do_subset) {
         # FIXME: this fails if train_task added a column with the same name
@@ -70,7 +70,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       if (!isTRUE(all.equal(self$intasklayout, intask$feature_types))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
-      self$predict_task(intask)
+      intask = self$predict_task(intask)
       if (!isTRUE(all.equal(self$outtasklayout, intask$feature_types))) {
         stop("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
@@ -107,7 +107,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     predict_dt = function(dt) stop("Abstract."),
 
-    select_cols = function(dt) stop("Abstract.")
+    select_cols = function(task) task$feature_names
   ),
   active = list(
     can_subset_cols = function() private$.can_subset_cols,
@@ -158,7 +158,7 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 
   public = list(
       train_task = function(task) {
-        self$state = self$get_state()
+        self$state = self$get_state(task)
         self$transform(task)
       },
       predict_task = function(task) self$transform(task),
@@ -175,8 +175,8 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 
       transform = function(task) {
         cols = private$.dt_columns
-        dt = task$data()
-        dt = self$transform_dt(dt)
+        dt = task$data(cols = cols)
+        dt = as.data.table(self$transform_dt(dt))
         task$select(setdiff(task$feature_names, cols))$cbind(dt)
       },
 

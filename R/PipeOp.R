@@ -56,6 +56,7 @@
 #'
 #' @name PipeOp
 #' @family PipeOp
+#' @export
 PipeOp = R6Class("PipeOp",
   public = list(
     id = NULL,
