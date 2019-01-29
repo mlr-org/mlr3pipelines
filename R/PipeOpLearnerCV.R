@@ -32,7 +32,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("resampling", values = "cv", default = "cv"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L)
-        ))
+        )
+      )
       private$.crossval_param_vals = list(resampling = "cv", folds = 3)
 
       super$initialize(id = learner$id,
@@ -42,12 +43,11 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
 
     train = function(inputs) {
-      assert_list(inputs, len = 1L, type = "Task")
       task = inputs[[1L]]
-      learner = self$learner
+      learner = self$learner$clone(deep = TRUE)  # FIXME: see PipeOpLearner FIXME about cloning learner
 
       # Train a learner for predicting
-      self$state = Experiment$new(task = task, learner = learner)$train()
+      self$state = learner$train(task)
 
       # Compute CV Predictions
       rdesc = mlr_resamplings$get(self$param_vals[["resampling"]])
@@ -59,16 +59,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       return(list(newtsk))
     },
     predict = function(inputs) {
-      assert_list(inputs, len = 1L, type = c("Task", "data.frame"))
       task = inputs[[1]]
 
-      if (is.data.frame(task)) {
-        self$state$predict(newdata = task)
-      } else {
-        self$state$predict(row_ids = task$row_ids[[1L]])
-      }
-      newtsk = private$pred_to_task(self$state$prediction, task)
-      list(output = newtsk)
+      prediction = self$state$predict(task)
+
+      newtsk = private$pred_to_task(prediction, task)
+      list(newtsk)
     }
   ),
 
