@@ -29,11 +29,11 @@ test_that("expect_deep_clone catches non-deep clones", {
 
 test_that("expect_shallow_clone catches non-clones", {
 
-  task = mlr_tasks$get("iris")
-  expect_error(expect_deep_clone(task, task$clone()))
-  expect_shallow_clone(task, task$clone())
-  expect_error(expect_shallow_clone(task, task))
-  expect_error(expect_shallow_clone(task, NULL))
+  gr = Graph$new()$add_pipeop(PipeOpScale$new())
+  expect_error(expect_deep_clone(gr, gr$clone()))
+  expect_shallow_clone(gr, gr$clone())
+  expect_error(expect_shallow_clone(gr, gr))
+  expect_error(expect_shallow_clone(gr, NULL))
 
 })
 
