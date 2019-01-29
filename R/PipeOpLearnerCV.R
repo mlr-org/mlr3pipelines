@@ -58,6 +58,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       newtsk = private$pred_to_task(prds, task)
       return(list(newtsk))
     },
+
     predict = function(inputs) {
       task = inputs[[1]]
 

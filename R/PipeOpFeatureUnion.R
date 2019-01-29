@@ -49,7 +49,7 @@ mlr_pipeops$add("PipeOpFeatureUnion", PipeOpFeatureUnion)
 #FIXME: this really should be suported by mlr3 and the code looks horrible
 cbind_tasks = function(inputs) {
   task = inputs[[1L]]$clone(deep = TRUE)
-  ids = task$row_ids[[1L]]
+  ids = task$row_ids
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
