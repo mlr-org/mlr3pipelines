@@ -62,7 +62,9 @@ jobs:
         - git config push.default matching
         - |
           git difftool -yx "diff -qI '20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\\|environment. 0x\\|time. [0-9.]\\+'" | \
-          grep 'and inst/doc' | sed -e 's|.*and inst/doc|inst/doc|' -e 's/ differ$//' | xargs git add
+          grep ' and inst/doc' | sed -e 's|.*and inst/doc|inst/doc|' -e 's/ differ$//' | xargs git add
+        - git ls-files --deleted | grep '^inst/doc/' | xargs git add
+        - git ls-files --others  | grep '^inst/doc/.*\.html$' | xargs git add
         - git fadd --force man/*
         - git add DESCRIPTION NAMESPACE
         - git commit -m "update auto-generated documentation [ci skip]" || true
