@@ -54,6 +54,7 @@ jobs:
           branch: master
       after_deploy:
         - git checkout master  # otherwise we're in detached head
+        - git checkout .gitignore  # because devtools is dumb and fills it with garbage
         - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
         - git config user.name Travis
         - git config user.email '<>'
