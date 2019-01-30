@@ -80,14 +80,14 @@ PipeOpBranch = R6Class("PipeOpBranch",
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_vals$selection]] = inputs[[1]]
-      return(ret)
+      ret
     },
 
     predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_vals$selection]] = inputs[[1]]
-      return(ret)
+      ret
     }
   )
 )

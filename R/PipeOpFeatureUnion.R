@@ -24,20 +24,20 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
     initialize = function(innum, id = "featureunion") {
       assert_int(innum, lower = 1)
       super$initialize(id,
-        input = data.table(name = rep_suffix("task", innum), train = "Task", predict = "Task"),
-        output = data.table(name = "task", train = "Task", predict = "Task")
+        input = data.table(name = rep_suffix("input", innum), train = "Task", predict = "Task"),
+        output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
 
     train = function(inputs) {
       self$state = list()
       task = cbind_tasks(inputs)
-      list(task = task)
+      list(task)
     },
 
     predict = function(inputs) {
       task = cbind_tasks(inputs)
-      list(task = task)
+      list(task)
     }
   )
 )

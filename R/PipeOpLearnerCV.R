@@ -37,7 +37,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_vals = list(resampling = "cv", folds = 3)
 
       super$initialize(id = learner$id,
-        input = data.table(name = "task", train = "Task", predict = "Task"),
+        input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
@@ -56,7 +56,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
 
       newtsk = private$pred_to_task(prds, task)
-      return(list(newtsk))
+      list(newtsk)
     },
 
     predict = function(inputs) {

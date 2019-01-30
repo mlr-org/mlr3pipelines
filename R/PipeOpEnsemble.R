@@ -26,16 +26,16 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
     initialize = function(innum, id = "PipeOpEnsemble") {
       assert_integerish(innum)
       super$initialize(id,
-        input = data.table(name = rep_suffix("prediction", innum), train = "NULL", predict = "Prediction"),
-        output = data.table(name = "prediction", train = "NULL", predict = "Prediction")
+        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
+        output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
     },
 
     train = function(inputs) {
       self$state = list()
-      return(list(NULL))
+      list(NULL)
     },
-    predict = function(inputs) {}
+    predict = function(inputs) stop("abstract")
   ),
   private = list(
     merge_predictions = function(inputs) {
@@ -84,7 +84,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       p$row_ids = prds$row_id
       p$response = prds$response
       p$truth = prds$truth
-      return(list(p))
+      list(p)
     }
   )
 )
@@ -128,7 +128,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       p$row_ids = prds$row_id
       p$response = prds$response
       p$truth = prds$truth
-      return(list(p))
+      list(p)
     }
   )
 )
