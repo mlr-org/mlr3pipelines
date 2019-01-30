@@ -31,10 +31,15 @@
 #' * `f$add_pipeop(op)` \cr
 #'   ([`PipeOp`]) -> [Graph] \cr
 #'   Mutates graph by adding a [PipeOp] to the graph (without adding any edges)
-#' * `f$add_edge(src_id, src_channel, dst_id, dst_channel)` \cr
-#'   (`character(1)`, `character(1)`, `character(1)`, `character(1)`) -> `self` \cr
-#'   Add an edge from node `src_id`, and its channel `src_channel`, to node `dst_id`'s
-#'   channel `dst_channel`.
+#' * `f$add_edge(src_id, dst_id, src_channel, dst_channel)` \cr
+#'   (`character(1)`, `character(1)`,
+#'   `character(1)` | `numeric(1)` | `NULL`,
+#'   `character(1)` | `numeric(1)` | `NULL`) -> `self` \cr
+#'   Add an edge from node `src_id`, and its channel `src_channel`
+#'   (identified by its name or line number in the node's `$output`), to node `dst_id`'s
+#'   channel `dst_channel` (identified by its name or line number in the node's `$input`).
+#'   If source or destination node have only one input / output channel and `src_channel` / `dst_channel`
+#'   are therefore unambiguous they can be omitted (left as `NULL`).
 #' * `f$plot()` \cr
 #'   Plot the graph, via igraph.
 #' * `f$print()` \cr
