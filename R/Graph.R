@@ -81,9 +81,21 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    add_edge = function(src_id, src_channel, dst_id, dst_channel) {
+    add_edge = function(src_id, dst_id, src_channel = NULL, dst_channel = NULL) {
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
+      if (is.null(src_channel)) {
+        if (length(self$pipeops[[src_id]]$output$name) > 1) {
+          stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
+        }
+        src_channel = 1
+      }
+      if (is.null(dst_channel)) {
+        if (length(self$pipeops[[dst_id]]$input$name) > 1) {
+          stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
+        }
+        dst_channel = 1
+      }
       assert(
           check_integerish(src_channel, lower = 1,
             upper = nrow(self$pipeops[[src_id]]$output), any.missing = FALSE),
