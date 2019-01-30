@@ -182,11 +182,11 @@ Graph = R6Class("Graph",
     },
 
     train = function(input, single_input = TRUE) {
-      graph_fire(self, private, input, "train", single_input)
+      graph_reduce(self, private, input, "train_internal", single_input)
     },
 
     predict = function(input, single_input = TRUE) {
-      graph_fire(self, private, input, "predict", single_input)
+      graph_reduce(self, private, input, "predict_internal", single_input)
     }
   ),
 
@@ -269,47 +269,65 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
   }))
 }
 
-graph_fire = function(self, private, input, stage, single_input) {
+graph_reduce = function(self, private, input, fun, single_input) {
   assert_flag(single_input)
-  assert_choice(stage, c("train", "predict"))
-
-  edges = copy(self$edges)
 
   graph_input = self$input
   graph_output = self$output
+
+  edges = copy(self$edges)
+
+  # create virtual "__initial__" and "__terminal__" nodes with edges to inputs / outputs of graph.
+  edges = rbind(edges,
+    data.table(src_id = "__initial__", src_channel = graph_input$name,
+      dst_id = graph_input$op.id, dst_channel = graph_input$channel.name),
+    data.table(src_id = graph_output$op.id, src_channel = graph_output$channel.name,
+      dst_id = "__terminal__", dst_channel = graph_output$name))
+
+  # add new column to store content that is sent along an edge
+  edges$payload = list()
 
   if (!single_input) {
     # input can be a named list (will be distributed to respective edges) or unnamed.
     # if it is named, we check that names are unambiguous.
     assert_list(input, len = nrow(graph_input))
     if (!is.null(names(input))) {
-#      if (anyDuplicated(graph_input$name
+      if (anyDuplicated(graph_input$name)) {
+        stopf("'input' must not be a named list because Graph %s input channels have duplicated names.", self$id)
+      }
+      assert_names(names(input), subset.of = graph_input$name)
+      edges[list("__initial__", names(input)), "payload" := list(input), on = c("src_id", "src_channel")]
     }
+  } else {
+    edges[get("src_id") == "__initial__", "payload" := list(list(input))]
   }
 
-  # add virtual channel to "__init__" in private copy of "edges"
-  edges = copy(self$edges)
-  edges = rbind(edges, data.table(src_id = "__init__", src_channel = "1",
-      dst_id = self$lhs, dst_channel = "1"))
-
-  # add new column to store results and store 'input' as result of virtual operator "__init__"
-  edges$result = list()
-  edges[get("src_id") == "__init__", "result" := list(list(input))]
-
-  # get the topo-sorted the pipeop ids
-  ids = setdiff(self$ids(sorted = TRUE), "__init__")
+  # get the topo-sorted pipeop ids
+  ids = self$ids(sorted = TRUE)  # won't contain __initial__  or __terminal__ which are only in our local copy
 
   # walk over ids, learning each operator
   for (id in ids) {
-    op = self$pipeops[[id]]
-    input = edges[get("dst_id") == op$id, "result"][[1L]]
-    tmp = if (stage == "train") op$train_internal(input) else op$predict_internal(input)
-    #FIXME: why do we use "get" here? also used in other places!
-    # FIXME: how can we ever be sure that the results here are EVER written to the correct channehls
-    # in the correct order....?
-    edges[get("src_id") == op$id, "result" := list(tmp)]
+    op = self$pipeop[[id]]
+    input_tbl = edges[get("dst_id") == id, c("dst_channel", "payload")]
+    input = input_tbl$payload
+    names(input) = input_tbl$dst_channel
+    input = input[op$input$name]
+
+    output = op[[fun]](input)
+    output_channel = names2(output)
+    assert_subset(output_channel, c(NA_character_, op$output$name),
+      .var.name = sprintf("Names of output list from operator %s", id))
+    output_channel[is.na(output_channel)] = setdiff(op$output$name, output_channel)
+
+    edges[list(id, output_channel), "payload" := list(output), on = c("src_id", "src_channel")]
   }
-  # FIXME: actually we SHOUKD store the intermediate results in the pipeop itself, much easier
-  filter_noop(tmp)
+
+  # get payload of edges that go to terminal node.
+  # can't use 'dst_id == "__terminal__", because output channel names for Graphs may be duplicated.
+  output_tbl = edges[list(graph_output$op.id, graph_output$channel.name),
+    c("dst_channel", "payload"), on = c("src_id", "src_channel")]
+  output = output_tbl$payload
+  names(output) = output_tbl$dst_channel
+  output
 }
 
