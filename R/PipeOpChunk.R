@@ -46,7 +46,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
       colns = task$backend$colnames
 
       # FIXME: Implement stratification?
-      idx = task$row_ids[[1L]]
+      idx = task$row_ids
       idx = split(idx, chunk(idx, n_chunks = self$outnum, shuffle = self$param_vals$shuffle))
 
       # Subset data, clone task and overwrite data in it.
