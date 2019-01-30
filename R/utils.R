@@ -1,5 +1,5 @@
 rep_suffix = function(x, n) {
-  sprintf("%s_%04i", x, seq_len(n))
+  paste0(x, seq_len(n))
 }
 
 # FIXME --- vvv do stuff below here using paradox when paradox is able to do that
