@@ -226,11 +226,15 @@ Graph = R6Class("Graph",
 )
 
 # build the '$input' or '$output' active binding
-# ids, channels: either src_{ids,channels} or dst_{ids,channels}, depending on if we are input or output
+# ids, channels: columns of $edges DT. Either src_{ids,channels} or dst_{ids,channels}, depending on if we are input or output
 # pipeops: list of pipeops
 # direction: "input" or "output"
 graph_channels = function(ids, channels, pipeops, direction) {
-  dfx = lapply(pipeops, function(po) {
+  if (!length(pipeops)) {
+    return(data.table(name = character(0), train = character(0),
+      predict = character(0), op.id = character(0), channel.name = character(0)))
+  }
+  rbindlist(lapply(pipeops, function(po) {
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
     # (and factor 2 faster than a naive data.table implementation below).
     # $input and $output is actually a bottleneck for %>>%, so we want this to be fast.
@@ -249,12 +253,15 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df[[1]] = paste0(po$id, ".", df[[1]])
     names(df)[5] = "channel.name"
     df
-  })
-  rbindlist(dfx)
+  }))
 }
 
 graph_channels_dt = function(ids, channels, pipeops, direction) {
-  # for reference: this is the above in data.tablle
+  # for reference: this is the above in data.table
+  if (!length(pipeops)) {
+    return(data.table(name = character(0), train = character(0),
+      predict = character(0), op.id = character(0), channel.name = character(0)))
+  }
   rbindlist(lapply(pipeops, function(po) {
     po[[direction]][name %nin% channels[ids == po$id],
       list(name = paste0(po$id, ".", name),
@@ -266,9 +273,19 @@ graph_fire = function(self, private, input, stage, single_input) {
   assert_flag(single_input)
   assert_choice(stage, c("train", "predict"))
 
+  edges = copy(self$edges)
 
+  graph_input = self$input
+  graph_output = self$output
 
-
+  if (!single_input) {
+    # input can be a named list (will be distributed to respective edges) or unnamed.
+    # if it is named, we check that names are unambiguous.
+    assert_list(input, len = nrow(graph_input))
+    if (!is.null(names(input))) {
+#      if (anyDuplicated(graph_input$name
+    }
+  }
 
   # add virtual channel to "__init__" in private copy of "edges"
   edges = copy(self$edges)
