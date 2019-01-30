@@ -24,7 +24,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 
   public = list(
     initialize = function(innum, id = "PipeOpEnsemble") {
-      assert_integerish(innum)
+      assert_integerish(innum, lower = 1)
       super$initialize(id,
         input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
