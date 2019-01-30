@@ -6,7 +6,7 @@ library("mlr3")
 
 options(error=recover)
 options(error=dump.frames)
-
+data.table::setDTthreads(0)
 data.table::setDTthreads(1)
 
 devtools::document("mlr3pipelines")
@@ -15,7 +15,13 @@ devtools::load_all("mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
 
-system.time(for (i in seq_len(100)) {gr <- PipeOpScale$new() %>>% PipeOpPCA$new()}) / 100
+PipeOpScale$new() %>>% PipeOpPCA$new()
+
+profvis::profvis(Reduce(`%>>%`, lapply(c(letters, paste0(letters, "1"), paste0(letters, "2")), PipeOpScale$new)))
+
+  paste0(letters, as.character(0:9))
+
+system.time(for (i in seq_len(100)) {gr <- PipeOpScale$new() %>>% PipeOpPCA$new() }) / 100
 system.time(for (i in seq_len(100)) {gr <- PipeOpScale$new() %>>% PipeOpPCA$new() %>>% PipeOpScale$new("scale2") %>>% PipeOpPCA$new("pca2")}) / 100
 
 system.time(for (i in seq_len(100)) {g1 <- ensure_graph(PipeOpScale$new())}) / 100
