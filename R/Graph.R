@@ -307,7 +307,7 @@ graph_reduce = function(self, private, input, fun, single_input) {
 
   # walk over ids, learning each operator
   for (id in ids) {
-    op = self$pipeop[[id]]
+    op = self$pipeops[[id]]
     input_tbl = edges[get("dst_id") == id, c("dst_channel", "payload")]
     input = input_tbl$payload
     names(input) = input_tbl$dst_channel
