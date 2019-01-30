@@ -39,7 +39,12 @@ jobs:
       script:
         - true
       before_deploy:
-        - Rscript -e 'devtools::install(quick = TRUE); pkgdown::build_site(); devtools::document(); devtools::build_vignettes();'
+        - rm -rf doc | true
+        - rm -rf inst | true
+        - Rscript -e 'devtools::install(quick = TRUE); pkgdown::build_site(); devtools::document()'
+        - Rscript -e 'devtools::build_vignettes(dependencies = FALSE, keep_md = FALSE)'
+        - mkdir inst
+        - mv doc inst
       deploy:
         provider: pages
         skip-cleanup: true

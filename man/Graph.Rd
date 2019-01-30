@@ -44,10 +44,15 @@ Get IDs of all PipeOps. This is in order that PipeOps were added if
 \item \code{f$add_pipeop(op)} \cr
 (\code{\link{PipeOp}}) -> \link{Graph} \cr
 Mutates graph by adding a \link{PipeOp} to the graph (without adding any edges)
-\item \code{f$add_edge(src_id, src_channel, dst_id, dst_channel)} \cr
-(\code{character(1)}, \code{character(1)}, \code{character(1)}, \code{character(1)}) -> \code{self} \cr
-Add an edge from node \code{src_id}, and its channel \code{src_channel}, to node \code{dst_id}'s
-channel \code{dst_channel}.
+\item \code{f$add_edge(src_id, dst_id, src_channel, dst_channel)} \cr
+(\code{character(1)}, \code{character(1)},
+\code{character(1)} | \code{numeric(1)} | \code{NULL},
+\code{character(1)} | \code{numeric(1)} | \code{NULL}) -> \code{self} \cr
+Add an edge from node \code{src_id}, and its channel \code{src_channel}
+(identified by its name or line number in the node's \code{$output}), to node \code{dst_id}'s
+channel \code{dst_channel} (identified by its name or line number in the node's \code{$input}).
+If source or destination node have only one input / output channel and \code{src_channel} / \code{dst_channel}
+are therefore unambiguous they can be omitted (left as \code{NULL}).
 \item \code{f$plot()} \cr
 Plot the graph, via igraph.
 \item \code{f$print()} \cr
