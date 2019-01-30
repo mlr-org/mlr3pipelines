@@ -5,6 +5,9 @@ library("paradox")
 library("mlr3")
 
 options(error=recover)
+options(error=dump.frames)
+
+data.table::setDTthreads(1)
 
 devtools::document("mlr3pipelines")
 
@@ -12,6 +15,49 @@ devtools::load_all("mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
 
+system.time(for (i in seq_len(100)) {gr <- PipeOpScale$new() %>>% PipeOpPCA$new()}) / 100
+system.time(for (i in seq_len(100)) {gr <- PipeOpScale$new() %>>% PipeOpPCA$new() %>>% PipeOpScale$new("scale2") %>>% PipeOpPCA$new("pca2")}) / 100
+
+system.time(for (i in seq_len(100)) {g1 <- ensure_graph(PipeOpScale$new())}) / 100
+system.time(for (i in seq_len(100)) {g1 <- ensure_graph(PipeOpScale$new()) ; g2 <- ensure_graph(PipeOpPCA$new())}) / 100
+system.time(for (i in seq_len(100)) {g1 <- ensure_graph(PipeOpScale$new()) ; g2 <- ensure_graph(PipeOpPCA$new()) ; gu <- gunion(list(g1, g2)) ; g1out <- g1$output}) / 100
+
+system.time(for (i in seq_len(100)) {g1 <- ensure_graph(PipeOpScale$new()) ; g2 <- ensure_graph(PipeOpPCA$new()) ; gu <- gunion(list(g1, g2)) ; g1out <- g1$output}) / 100
+
+
+
+system.time(for (i in seq_len(100)) {g1 <- ensure_graph(PipeOpScale$new()) ; g2 <- ensure_graph(PipeOpPCA$new()) ; gu <- gunion(list(g1, g2)) ; g1out <- g1$output ; g2in <- g2$input ;   newedges <- cbind(g1out[, list(src_id = op.id, src_channel = channel.name)],g2in[, list(dst_id = op.id, dst_channel = channel.name)]) ; do.call(gu$add_edge, transpose(newedges)[[1]])}) / 100
+
+
+g1 <- ensure_graph(PipeOpScale$new())
+g1$input
+g1$output
+
+g1 <- gunion(list(PipeOpScale$new(), PipeOpPCA$new()))
+
+
+
+system.time(for (i in seq_len(1000)) {g1$input}) / 1000
+system.time(for (i in seq_len(1000)) {g1$output}) / 1000
+
+Graph$active$input
+Graph$active$output
+
+g1$input
+g1$output
+
+
+
+g
+
+gr$add_pipeop(PipeOpUnbranch$new(2))
+
+gr$input
+gr$output
+gr$lhs
+gr$rhs
+
+gr$edges
 
 
 gr$param_vals$scale.scale = FALSE
