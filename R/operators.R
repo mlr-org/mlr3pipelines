@@ -32,12 +32,11 @@
   g = gunion(list(g1, g2))
 
   # build edges from free output channels of g1 and free input channels of g2
-  newedges = cbind(g1out[, list(src_id = op.id, src_channel = channel.name)],
+  new_edges = cbind(g1out[, list(src_id = op.id, src_channel = channel.name)],
     g2in[, list(dst_id = op.id, dst_channel = channel.name)])
 
-  # we could also just rbind this with the edge list, but we better go the official
-  # route which checks for mismatches.
-  lapply(transpose(newedges), do.call, what = g$add_edge)
+  g$edges = rbind(g$edges, new_edges)
+
 
   g
 }
