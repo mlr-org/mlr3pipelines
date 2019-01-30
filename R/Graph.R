@@ -314,12 +314,7 @@ graph_reduce = function(self, private, input, fun, single_input) {
     input = input[op$input$name]
 
     output = op[[fun]](input)
-    output_channel = names2(output)
-    assert_subset(output_channel, c(NA_character_, op$output$name),
-      .var.name = sprintf("Names of output list from operator %s", id))
-    output_channel[is.na(output_channel)] = setdiff(op$output$name, output_channel)
-
-    edges[list(id, output_channel), "payload" := list(output), on = c("src_id", "src_channel")]
+    edges[list(id, op$output$name), "payload" := list(output), on = c("src_id", "src_channel")]
   }
 
   # get payload of edges that go to terminal node.
