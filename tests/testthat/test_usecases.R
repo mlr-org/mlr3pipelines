@@ -4,11 +4,14 @@ test_graph = function(g, n_nodes, n_edges) {
   task = mlr_tasks$get("iris")
   expect_graph(g, n_nodes = n_nodes, n_edges = n_edges)
   res.train = g$train(task)
-  expect_equal(res.train, list(NULL))
+  outlist = list(NULL)
+  names(outlist) = g$output$name
+  expect_equal(res.train, outlist)
   g.trained = g$clone()
   expect_true(g$is_trained)
   res.pred = g$predict(task)
   expect_list(res.pred, types = "Prediction")
+  expect_equal(names(res.pred), g$output$name)
   g.predicted = g$clone()
   list(g.trained = g.trained, g.predicted = g.predicted)
 }
