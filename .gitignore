@@ -1,6 +1,7 @@
 /inst/doc/*
 !/inst/doc/*.html
 /doc/
+/docs/
 .Rproj.user
 .Rhistory
 .RData
