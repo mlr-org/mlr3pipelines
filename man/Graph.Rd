@@ -9,26 +9,43 @@
 Graph
 }
 \description{
-\code{Graph} is a container class for the complete computational graph. It is made up of a list of
+A \code{Graph} is a representation of a machine learning pipeline graph. It is made up of a list of
 PipeOps, and a \code{\link{data.table}} of edges. It can be trained and used for prediction.
 }
 \section{Public Members / Active Bindings}{
 
 \itemize{
-\item \code{pipeops}      :: named list of \link{PipeOp} \cr
-Contains all PipeOps contained in the Graph, named by the PipeOp \code{$id}.
-\item \code{edges}        :: \code{\link{data.table}} \cr
-List of connections between the PipeOps. A \code{data.table} with columns \code{src_id}, \code{src_channel},
-\code{dst_id}, \code{dst_channel}. \code{src_id} and \code{dst_id} are IDs of PipeOps that must be present in
-the \code{pipeops} list. \code{src_channel} and \code{dst_channel} must be channel IDs of the respective PipeOps.
+\item \code{pipeops}      :: named \code{list} of \code{\link{PipeOp}} \cr
+Contains all \code{PipeOp}s in the Graph, named by the \code{PipeOp}'s \code{$id}.
+\item \code{edges}        :: \code{\link{data.table}}  with \code{character} columns \code{src_id}, \code{src_channel}, \code{dst_id}, \code{dst_channel} \cr
+Table of connections between the \code{PipeOp}s. A \code{data.table}. \code{src_id} and \code{dst_id} are \code{$id}s of \code{PipeOp}s that must be present in
+the \code{$pipeops} list. \code{src_channel} and \code{dst_channel} must respectively be \code{$output} and \code{$input} channel names of the
+respective \code{PipeOp}s.
 \item \code{is_trained}   :: \code{logical(1)} \cr
-Is the graph, are all of its PipeOps, fully trained - and is the graph ready to predict?
-\item \code{lhs}          ::  list of \link{PipeOp}` \cr
-The 'left-hand-side' nodes that have some unconnected input channels and therefore act as graph input layer.
-\item \code{rhs}          :: \code{list of [PipeOp]} \cr
-The 'right-hand-side' nodes that have some unconnected output channels and therefore act as graph output layer.
-\item \code{packages}     :: \code{character}
-Set of all required packages of the graph, a union of all required packages of all contained \link{PipeOp} objects.
+Is the \code{Graph}, i.e. are all of its \code{PipeOp}s, trained, and can the \code{Graph} be used for prediction?
+\item \code{lhs}          ::  \code{list} of \code{\link{PipeOp}} \cr
+The 'left-hand-side' nodes that have some unconnected input channels and therefore act as \code{Graph} input layer.
+\item \code{rhs}          :: \code{list of [}PipeOp\code{] \cr The 'right-hand-side' nodes that have some unconnected output channels and therefore act as }Graph` output layer.
+\item \code{input}        :: \code{\link{data.table}} with \code{character} columns \code{name}, \code{train}, \code{predict}, \code{op.id}, \code{channel.name} \cr
+Input channels of the \code{Graph}. For each channel lists the name, input type during training, input type during prediction,
+\code{PipeOp} \code{$id} of the \code{PipeOp} the channel pertains to, and channel name as the \code{PipeOp} knows it.
+\item \code{output}        :: \code{\link{data.table}} with \code{character} columns \code{name}, \code{train}, \code{predict}, \code{op.id}, \code{channel.name} \cr
+Output channels of the \code{Graph}. For each channel lists the name, output type during training, output type during prediction,
+\code{PipeOp} \code{$id} of the \code{PipeOp} the channel pertains to, and channel name as the \code{PipeOp} knows it.
+\item \code{packages}     :: \code{character} \cr
+Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
+\code{\link{PipeOp}} objects.
+\item \code{param_vals}   :: named \code{list} \cr
+Parameter values of all \code{PipeOp}s in the \code{Graph}. Changing this value propagates the changes directly to the contained
+\code{PipeOp}s and is an alternative to changing a \code{PipeOp}s \code{$param_vals} directly. Parameter values are checked against
+parameter constraints in \code{$param_set}. Parameter names as seen by the \code{Graph} have the naming scheme
+\code{<PipeOp$id>.<PipeOp original parameter name>}.
+\item \code{param_set}    :: \code{\link{ParamSet}} \cr
+Parameter constraints \code{$param_vals}. These are the union of \code{$param_set}s of all \code{PipeOp}s in the \code{Graph}. Parameter names
+as seen by the \code{Graph} have the naming scheme \code{<PipeOp$id>.<PipeOp original parameter name>}.
+\item \code{hash}         :: \code{\link{character(1)}} \cr
+Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes and the \code{$edges} hashes, but
+is independent of the \code{$param_vals} configuration.
 }
 }
 
@@ -36,25 +53,28 @@ Set of all required packages of the graph, a union of all required packages of a
 
 \itemize{
 \item \code{Graph$new()} \cr
+() -> \code{self} \cr
 Constructs an empty Graph.
-\item \code{f$ids(sorted = FALSE)} \cr
-\code{logical(0)} -> \code{character} \cr
+\item \code{ids(sorted = FALSE)} \cr
+(\code{logical(1)}) -> \code{character} \cr
 Get IDs of all PipeOps. This is in order that PipeOps were added if
 \code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
-\item \code{f$add_pipeop(op)} \cr
-(\code{\link{PipeOp}}) -> \link{Graph} \cr
-Mutates graph by adding a \link{PipeOp} to the graph (without adding any edges)
-\item \code{f$add_edge(src_id, dst_id, src_channel, dst_channel)} \cr
+\item \code{add_pipeop(op)} \cr
+(\code{\link{PipeOp}}) -> \code{self} \cr
+Mutates \code{Graph} by adding a \code{PipeOp} to the \code{Graph}. This does not add any edges, so the new \code{PipeOp}
+will not be connected within the \code{Graph} at first.
+\item \code{add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)} \cr
 (\code{character(1)}, \code{character(1)},
 \code{character(1)} | \code{numeric(1)} | \code{NULL},
 \code{character(1)} | \code{numeric(1)} | \code{NULL}) -> \code{self} \cr
-Add an edge from node \code{src_id}, and its channel \code{src_channel}
-(identified by its name or line number in the node's \code{$output}), to node \code{dst_id}'s
-channel \code{dst_channel} (identified by its name or line number in the node's \code{$input}).
-If source or destination node have only one input / output channel and \code{src_channel} / \code{dst_channel}
-are therefore unambiguous they can be omitted (left as \code{NULL}).
-\item \code{f$plot()} \cr
-Plot the graph, via igraph.
+Add an edge from \code{PipeOp} \code{src_id}, and its channel \code{src_channel}
+(identified by its name or number as listed in the \code{PipeOp}'s \code{$output}), to \code{PipeOp} \code{dst_id}'s
+channel \code{dst_channel} (identified by its name or number as listed in the \code{PipeOp}'s \code{$input}).
+If source or destination \code{PipeOp} have only one input / output channel and \code{src_channel} / \code{dst_channel}
+are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
+\item \code{plot()} \cr
+() -> \code{NULL} \cr
+Plot the graph, using the \code{\link[igraph:igraph-package]{igraph}} package.
 \item \code{f$print()} \cr
 Print a representation of the graph on the console. Output is currently a table with columns \code{id}, and
 short representation of \code{state}.

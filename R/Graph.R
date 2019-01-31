@@ -2,60 +2,104 @@
 #' @format [R6Class] Graph
 #'
 #' @description
-#' `Graph` is a container class for the complete computational graph. It is made up of a list of
+#' A `Graph` is a representation of a machine learning pipeline graph. It is made up of a list of
 #' PipeOps, and a [`data.table`] of edges. It can be trained and used for prediction.
 #'
 #' @section Public Members / Active Bindings:
-#' * `pipeops`      :: named list of [PipeOp] \cr
-#'   Contains all PipeOps contained in the Graph, named by the PipeOp `$id`.
-#' * `edges`        :: [`data.table`] \cr
-#'   List of connections between the PipeOps. A `data.table` with columns `src_id`, `src_channel`,
-#'   `dst_id`, `dst_channel`. `src_id` and `dst_id` are IDs of PipeOps that must be present in
-#'   the `pipeops` list. `src_channel` and `dst_channel` must be channel IDs of the respective PipeOps.
+#' * `pipeops`      :: named `list` of [`PipeOp`] \cr
+#'   Contains all `PipeOp`s in the Graph, named by the `PipeOp`'s `$id`.
+#' * `edges`        :: [`data.table`]  with `character` columns `src_id`, `src_channel`, `dst_id`, `dst_channel` \cr
+#'   Table of connections between the `PipeOp`s. A `data.table`. `src_id` and `dst_id` are `$id`s of `PipeOp`s that must be present in
+#'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
+#'   respective `PipeOp`s.
 #' * `is_trained`   :: `logical(1)` \cr
-#'   Is the graph, are all of its PipeOps, fully trained - and is the graph ready to predict?
-#' * `lhs`          ::  list of [PipeOp]` \cr
-#'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as graph input layer.
-#' * `rhs`          :: `list of [PipeOp]` \cr
-#'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as graph output layer.
-#' * `packages`     :: `character`
-#'   Set of all required packages of the graph, a union of all required packages of all contained [PipeOp] objects.
+#'   Is the `Graph`, i.e. are all of its `PipeOp`s, trained, and can the `Graph` be used for prediction?
+#' * `lhs`          ::  `list` of [`PipeOp`] \cr
+#'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as `Graph` input layer.
+#' * `rhs`          :: `list of [`PipeOp`] \cr
+#'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as `Graph` output layer.
+#' * `input`        :: [`data.table`] with `character` columns `name`, `train`, `predict`, `op.id`, `channel.name` \cr
+#'   Input channels of the `Graph`. For each channel lists the name, input type during training, input type during prediction,
+#'   `PipeOp` `$id` of the `PipeOp` the channel pertains to, and channel name as the `PipeOp` knows it.
+#' * `output`        :: [`data.table`] with `character` columns `name`, `train`, `predict`, `op.id`, `channel.name` \cr
+#'   Output channels of the `Graph`. For each channel lists the name, output type during training, output type during prediction,
+#'   `PipeOp` `$id` of the `PipeOp` the channel pertains to, and channel name as the `PipeOp` knows it.
+#' * `packages`     :: `character` \cr
+#'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
+#'   [`PipeOp`] objects.
+#' * `param_vals`   :: named `list` \cr
+#'   Parameter values of all `PipeOp`s in the `Graph`. Changing this value propagates the changes directly to the contained
+#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_vals` directly. Parameter values are checked against
+#'   parameter constraints in `$param_set`. Parameter names as seen by the `Graph` have the naming scheme
+#'   `<PipeOp$id>.<PipeOp original parameter name>`.
+#' * `param_set`    :: [`ParamSet`] \cr
+#'   Parameter constraints `$param_vals`. These are the union of `$param_set`s of all `PipeOp`s in the `Graph`. Parameter names
+#'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
+#' * `hash`         :: [`character(1)`] \cr
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes and the `$edges` hashes, but
+#'   is independent of the `$param_vals` configuration.
 #'
 #' @section Methods:
 #' * `Graph$new()` \cr
+#'   () -> `self` \cr
 #'   Constructs an empty Graph.
-#' * `f$ids(sorted = FALSE)` \cr
-#'   `logical(0)` -> `character` \cr
+#' * `ids(sorted = FALSE)` \cr
+#'   (`logical(1)`) -> `character` \cr
 #'   Get IDs of all PipeOps. This is in order that PipeOps were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
-#' * `f$add_pipeop(op)` \cr
-#'   ([`PipeOp`]) -> [Graph] \cr
-#'   Mutates graph by adding a [PipeOp] to the graph (without adding any edges)
-#' * `f$add_edge(src_id, dst_id, src_channel, dst_channel)` \cr
+#' * `add_pipeop(op)` \cr
+#'   ([`PipeOp`]) -> `self` \cr
+#'   Mutates `Graph` by adding a `PipeOp` to the `Graph`. This does not add any edges, so the new `PipeOp`
+#'   will not be connected within the `Graph` at first.
+#' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
 #'   (`character(1)`, `character(1)`,
 #'   `character(1)` | `numeric(1)` | `NULL`,
 #'   `character(1)` | `numeric(1)` | `NULL`) -> `self` \cr
-#'   Add an edge from node `src_id`, and its channel `src_channel`
-#'   (identified by its name or line number in the node's `$output`), to node `dst_id`'s
-#'   channel `dst_channel` (identified by its name or line number in the node's `$input`).
-#'   If source or destination node have only one input / output channel and `src_channel` / `dst_channel`
-#'   are therefore unambiguous they can be omitted (left as `NULL`).
-#' * `f$plot()` \cr
-#'   Plot the graph, via igraph.
-#' * `f$print()` \cr
-#'   Print a representation of the graph on the console. Output is currently a table with columns `id`, and
-#'   short representation of `state`.
-#' * `f$set_names(old, new)` \cr
+#'   Add an edge from `PipeOp` `src_id`, and its channel `src_channel`
+#'   (identified by its name or number as listed in the `PipeOp`'s `$output`), to `PipeOp` `dst_id`'s
+#'   channel `dst_channel` (identified by its name or number as listed in the `PipeOp`'s `$input`).
+#'   If source or destination `PipeOp` have only one input / output channel and `src_channel` / `dst_channel`
+#'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
+#' * `plot()` \cr
+#'   () -> `NULL` \cr
+#'   Plot the graph, using the [`igraph`][igraph::igraph-package] package.
+#' * `print()` \cr
+#'   () -> `NULL` \cr
+#'   Print a representation of the graph on the console. Output is a table with one row for each contained `PipeOp` and
+#'   columns `ID` (`$id` of `PipeOp`) and `State` (short representation of `$state` of `PipeOp`).
+#' * `set_names(old, new)` \cr
 #'   (`character`, `character`) -> `self` \cr
-#'   Rename PipeOps: Change ID of each PipeOp as identified by `old` to the corresponding item in `new`.
-#' * `f$train()` \cr
-#'   [`Task`] -> `list` of any \cr
-#'   Train graph by calling all the PipeOps' $train method. Return a list of outputs for each unconnected
-#'   PipeOp out-channel. During training, the `$state` member of the PipeOps will be set.
-#' * `f$predict()` \cr
-#'   [`Task`] -> `list` of any \cr
-#'   Predict with the graph by calling all the PipeOps' $predict method. Return a list of outputs for each
-#'   unconnected PipeOp out-channel
+#'   Rename PipeOps: Change ID of each PipeOp as identified by `old` to the corresponding item in `new`. This should be used
+#'   instead of changing a `PipeOp`'s `$id` value directly!
+#' * `train(input, single_input = TRUE)` \cr
+#'   (`any`, `logical(1)`) -> `list` of `any` \cr
+#'   Train `Graph` by calling all the `PipeOp`'s `$train` methods. Return a named `list` of outputs for each unconnected
+#'   `PipeOp` out-channel, named according to the `Graph`'s `$output` `name` column. During training, the `$state`
+#'   member of the `PipeOp`s will be set and the `$is_trained` slot of the `Graph` (and each individual `PipeOp`) will
+#'   consequently be set to `TRUE`.\cr
+#'   If `single_input` is `TRUE`, the `input` value will be sent to each unconnected `PipeOp`'s input channel
+#'   (as listed in the `Graph`'s `$input`). Typically, `input` should be a [`Task`]. If `single_input` is `FALSE`, then
+#'   `input` should be a `list` with the same length as the `Graph`'s `$input` table has rows; each list item will be sent
+#'   to a corresponding input channel of the `Graph`. If `input` is a named `list`, names must correspond to input channel
+#'   names (`$input$name`) and inputs will be sent to the channels by name; otherwise they will be sent to the channels
+#'   in order in which they are listed in `$input`.
+#' * `predict(input, single_input = TRUE)` \cr
+#'   (`any`, `logical(1)`) -> `list` of `any` \cr
+#'   Predict with the `Graph` by calling all the `PipeOp`'s `$train` methods. Input and output, as well as the function
+#'   of the `single_input` argument, are analogous to `$train()`.
+#'
+#' @examples
+#' g = Graph$new()$
+#'   add_pipeop(PipeOpScale$new(id = "scale"))$
+#'   add_pipeop(PipeOpPCA$new(id = "pca"))$
+#'   add_edge("scale", "pca")
+#' g$input
+#' g$output
+#'
+#' trained = g$train(mlr::mlr_task("iris"))
+#'
+#' predicted = g$predict(mlr::mlr_task("iris")$filter(1:10))
+#'
 #' @name Graph
 #' @export
 Graph = R6Class("Graph",
@@ -182,11 +226,11 @@ Graph = R6Class("Graph",
     },
 
     train = function(input, single_input = TRUE) {
-      graph_reduce(self, private, input, "train_internal", single_input)
+      graph_reduce(self, input, "train_internal", single_input)
     },
 
     predict = function(input, single_input = TRUE) {
-      graph_reduce(self, private, input, "predict_internal", single_input)
+      graph_reduce(self, input, "predict_internal", single_input)
     }
   ),
 
@@ -269,7 +313,16 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
   }))
 }
 
-graph_reduce = function(self, private, input, fun, single_input) {
+# walk along Graph edges, evaluate [[fun]](), return named list of output
+# self: Graph's `$self`
+# input: as given by `$train`, `$predict`. single valued to be copied (if
+#   `single_input` is `TRUE`) or (possibly named) list of values for each
+#   incoming edge.
+# fun: function of each `PipeOp` to call; should be `train_internal` oder
+#   `predict_internal`.
+# single_input: whether `input` is to be copied to all input channels
+#   (`TRUE`) or is a list with different input for each channel (`FALSE`).
+graph_reduce = function(self, input, fun, single_input) {
   assert_flag(single_input)
 
   graph_input = self$input
@@ -323,6 +376,6 @@ graph_reduce = function(self, private, input, fun, single_input) {
     c("dst_channel", "payload"), on = c("src_id", "src_channel")]
   output = output_tbl$payload
   names(output) = output_tbl$dst_channel
-  output
+  filter_noop(output)
 }
 
