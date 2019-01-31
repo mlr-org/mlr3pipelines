@@ -1,116 +1,66 @@
-context("sugar")
+context("double-arrow")
 
-# FIXME: unit test file for the arrow-op, needs to be cleaned up and only test that connecting properties of the aarow op work
+test_that("Simple ops do what we expect", {
+  p1 = PipeOpNULL$new("p1")
+  p2 = PipeOpNULL$new("p2")
+  p3 = PipeOpNULL$new("p3")
+  p4 = PipeOpNULL$new("p4")
+  p5 = PipeOpNULL$new("p5")
+  p6 = PipeOpNULL$new("p6")
+  p7 = PipeOpNULL$new("p7")
 
+  g = p1 %>>% p2 %>>% p3
+  expect_class(g, "Graph")
+  expect_equal(g$rhs[[1]], p3$id)
 
+  expect_error(p1 %>>% gunion(list(p2, p3)), "mismatching number of inputs / outputs")
 
-# test_that("Simple ops", {
+  g = p1 %>>% PipeOpBranch$new(2) %>>% gunion(list(p2, p3))
+  expect_class(g, "Graph")
+  expect_set_equal(g$rhs, c(p2$id, p3$id))
 
-#   p1 = PipeOpNULL$new("p1")
-#   p2 = PipeOpNULL$new("p2")
-#   p3 = PipeOpNULL$new("p3")
-#   p4 = PipeOpNULL$new("p4")
-#   p5 = PipeOpNULL$new("p5")
+  expect_error(gunion(list(p2, p3)) %>>% p4, "mismatching number of inputs / outputs")
 
-#   ### 1-to-1
-#   g = p1 %>>% p2 %>>% p3
-#   expect_class(g, "Graph")
-#   expect_equal(g$rhs[[1]]$pipeop, p3)
+  g = p1 %>>% PipeOpBranch$new(2) %>>% gunion(list(p2, p3)) %>>% PipeOpUnbranch$new(2) %>>% p4
 
-#   ### 1-to-2
-#   g = p1 %>>% list(p2, p3)
-#   expect_class(g, "Graph")
-#   expect_equal(g$rhs[[1]]$pipeop, p2)
-#   expect_equal(g$rhs[[2]]$pipeop, p3)
+  expect_equal(g$rhs, p4$id)
 
-#   ### 1-to-2-to-1
-#   g = p1 %>>% list(p2, p3) %>>%  p4
-#   expect_equal(g$rhs[[1]]$pipeop, p4)
-#   expect_equal(g$rhs$p4$prev_nodes[[1]]$pipeop, p2)
-#   expect_equal(g$rhs$p4$prev_nodes[[2]]$pipeop, p3)
+  # check that edges are as they should be, but don't make assumptions about order of edges:
+  # convert edges DT into comma separated values
+  edges_csv = apply(g$edges, 1, paste, collapse = ",")
+  expect_set_equal(edges_csv,
+    c("p1,output,branch,input", "branch,output1,p2,input", "branch,output2,p3,input",
+      "p2,output,unbranch,input1","p3,output,unbranch,input2","unbranch,output,p4,input"))
 
-#   ### 1-to-2-to-2 - error n-to-m not supported
-#   expect_error(p1 %>>% list(p2, p3) %>>%  list(p4, p5))
+  g = p1 %>>% PipeOpBranch$new(3) %>>% gunion(list(p2, p3, p4)) %>>% gunion(list(p5, p6, p7))
 
-# })
+  edges_csv = apply(g$edges, 1, paste, collapse = ",")
+  expect_set_equal(edges_csv,
+    c("p1,output,branch,input", "branch,output1,p2,input", "branch,output2,p3,input", "branch,output3,p4,input",
+      "p2,output,p5,input", "p3,output,p6,input", "p4,output,p7,input"))
 
-# test_that("%>=>% - n-to-n", {
+  g = gunion(list(p2, p3, p4)) %>>% gunion(list(p5, p6, p7))
 
-#   p1 = PipeOpNULL$new("p1")
-#   p2 = PipeOpNULL$new("p2")
-#   p3 = PipeOpNULL$new("p3")
-#   p4 = PipeOpNULL$new("p4")
-#   p5 = PipeOpNULL$new("p5")
-#   p6 = PipeOpNULL$new("p6")
-#   p7 = PipeOpNULL$new("p7")
+  edges_csv = apply(g$edges, 1, paste, collapse = ",")
+  expect_set_equal(edges_csv,
+    c("p2,output,p5,input", "p3,output,p6,input", "p4,output,p7,input"))
 
-#   g = p1 %>=>% p2 %>=>% p3
+})
 
-#   g = p1 %>>% list(p2, p3, p4) %>=>% list(p5, p6, p7)
-#   rhs_pipeops = lapply(g$rhs, function(x) x$pipeop)
+test_that("operations make deep copies", {
 
-#   # correct rhs
-#   expect_equal(rhs_pipeops[[1]], p5)
-#   expect_equal(rhs_pipeops[[2]], p6)
-#   expect_equal(rhs_pipeops[[3]], p7)
+  p1 = PipeOpNULL$new("p1")
+  p2 = PipeOpNULL$new("p2")
 
-#   # only one prev node for each rhs
-#   expect_true(
-#     all(vapply(g$rhs, function(x) length(x$prev_nodes) == 1, FUN.VALUE = TRUE))
-#   )
+  g3 = Graph$new()$add_pipeop(PipeOpNULL$new("p3"))
+  g4 = Graph$new()$add_pipeop(PipeOpNULL$new("p4"))
 
-#   # correct prev node - orders matter!
-#   expect_equal(g$rhs$p5$prev_nodes[[1]]$pipeop, p2)
-#   expect_equal(g$rhs$p6$prev_nodes[[1]]$pipeop, p3)
-#   expect_equal(g$rhs$p7$prev_nodes[[1]]$pipeop, p4)
+  g = p1 %>>% p2
+  expect_deep_clone(g$pipeops$p1, p1)
+  expect_deep_clone(g$pipeops$p2, p2)
 
-# })
+  g = g3 %>>% g4
+  expect_deep_clone(g$pipeops$p3, g3$pipeops$p3)
+  expect_deep_clone(g$pipeops$p4, g4$pipeops$p4)
 
-# test_that("%>x>% - n-to-m", {
-
-#   p1 = PipeOpNULL$new("p1")
-#   p2 = PipeOpNULL$new("p2")
-#   p3 = PipeOpNULL$new("p3")
-#   p4 = PipeOpNULL$new("p4")
-#   p5 = PipeOpNULL$new("p5")
-#   p6 = PipeOpNULL$new("p6")
-#   p7 = PipeOpNULL$new("p7")
-
-#   g = p1 %>x>% p2 %>x>% p3
-
-#   g = p1 %>x>% list(p2, p3, p4) %>x>% list(p5, p6, p7)
-#   rhs_pipeops = lapply(g$rhs, function(x) x$pipeop)
-
-#   # correct rhs
-#   expect_equal(rhs_pipeops[[1]], p5)
-#   expect_equal(rhs_pipeops[[2]], p6)
-#   expect_equal(rhs_pipeops[[3]], p7)
-
-#   # each element of rhs has 3 predecessors
-#   expect_true(
-#     all(vapply(g$rhs, function(x) length(x$prev_nodes) == 3, FUN.VALUE = TRUE))
-#   )
-
-#   expect_equal(g$rhs$p5$prev_nodes[[1]]$pipeop, p2)
-#   expect_equal(g$rhs$p6$prev_nodes[[1]]$pipeop, p2)
-#   expect_equal(g$rhs$p7$prev_nodes[[1]]$pipeop, p2)
-
-#   expect_equal(g$rhs$p5$prev_nodes[[2]]$pipeop, p3)
-#   expect_equal(g$rhs$p6$prev_nodes[[2]]$pipeop, p3)
-#   expect_equal(g$rhs$p7$prev_nodes[[2]]$pipeop, p3)
-
-#   expect_equal(g$rhs$p5$prev_nodes[[3]]$pipeop, p4)
-#   expect_equal(g$rhs$p6$prev_nodes[[3]]$pipeop, p4)
-#   expect_equal(g$rhs$p7$prev_nodes[[3]]$pipeop, p4)
-
-#   g = list(p1, p2) %>x>% list(p3, p4, p5) %>x>% list(p6, p7)
-
-#   expect_false(g[["p1"]]$has_lhs)
-#   expect_false(g[["p2"]]$has_lhs)
-#   expect_equal(length(g[["p3"]]$prev_nodes), 2)
-#   expect_equal(length(g[["p4"]]$prev_nodes), 2)
-#   expect_equal(length(g[["p5"]]$prev_nodes), 2)
-#   expect_equal(length(g[["p6"]]$prev_nodes), 3)
-#   expect_equal(length(g[["p7"]]$prev_nodes), 3)
-
-# })
+})
