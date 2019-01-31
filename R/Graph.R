@@ -96,9 +96,9 @@
 #' g$input
 #' g$output
 #'
-#' trained = g$train(mlr::mlr_task("iris"))
+#' trained = g$train(mlr3::mlr_task("iris"))
 #'
-#' predicted = g$predict(mlr::mlr_task("iris")$filter(1:10))
+#' predicted = g$predict(mlr3::mlr_task("iris")$filter(1:10))
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
