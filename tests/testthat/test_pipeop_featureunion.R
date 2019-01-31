@@ -33,33 +33,35 @@ test_that("PipeOpFeatureunion - train and predict", {
   expect_equivalent(pout[[1]]$target_names, tsk$target_names)
 })
 
-# test_that("PipeOpBranch - train and predict", {
+test_that("PipeOpBranch - train and predict", {
 
-#   # Define PipeOp's
-#   scatter = PipeOpCopy$new(2)
-#   op2a = PipeOpPCA$new()
-#   op2b = PipeOpNULL$new()
-#   op3 = PipeOpFeatureUnion$new(2)
+  # Define PipeOp's
+  scatter = PipeOpCopy$new(2)
+  op2a = PipeOpPCA$new()
+  op2b = PipeOpNULL$new()
+  op3 = PipeOpFeatureUnion$new(2)
 
-#   task = mlr_tasks$get("iris")
-#   lrn = mlr_learners$get("classif.rpart")
-#   op4 = PipeOpLearner$new(learner = lrn)
+  task = mlr_tasks$get("iris")
+  lrn = mlr_learners$get("classif.rpart")
+  op4 = PipeOpLearner$new(learner = lrn)
 
-#   #  FIXME: Check param_set
-#   param_names_union = c(
-#     "OpNULL.Petal.Width", "OpNULL.Petal.Length",
-#     "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2",
-#     "OpNULL.Sepal.Width", "pca.PC3")
+  #  FIXME: Check param_set
+  param_names_union = c(
+    "OpNULL.Petal.Width", "OpNULL.Petal.Length",
+    "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2",
+    "OpNULL.Sepal.Width", "pca.PC3")
 
-#   graph = scatter %>>% gunion(op2a, op2b)
-#   graph = graph %>>% op3
-#   expect_false(graph$is_trained)
-#   # test_basic_graph_props(graph)
-#   expect_true(length(graph) == 4L)
+  graph = scatter %>>% gunion(list(op2a, op2b))
+  graph = graph %>>% op3
+  expect_false(graph$is_trained)
+  expect_graph(graph)
+  expect_true(length(graph$pipeops) == 4L)
 
-#   # trained = graph$train(task)
-#   # expect_equal(trained$feature_names, c("PC1", "PC2", "PC3", "PC4", "Petal.Length",
-#   #   "Petal.Width", "Sepal.Length", "Sepal.Width"))
-#   # expect_true(graph$is_trained)
-# })
+  result = graph$train(task)
+  expect_equal(names(result), "featureunion.output")
+  trained = result[[1]]
+  expect_set_equal(trained$feature_names, c("PC1", "PC2", "PC3", "PC4", "Petal.Length",
+    "Petal.Width", "Sepal.Length", "Sepal.Width"))
+  expect_true(graph$is_trained)
+})
 

@@ -5,7 +5,8 @@ test_that("linear graph", {
   g = Graph$new()
   expect_equal(g$ids(sorted = TRUE), character(0))
 
-  # FIXME: we should use PipeopNULL here, or "dummy" ops, so we can change properties of the ops at will
+  # FIXME: we should  "dummy" ops, so we can change properties of the ops at will
+  # we should NOT use PipeOpNULL, because we want to check that $train/$predict actually does something.
   # FIXME: we should packages of the graph
   op_ds = PipeOpDownsample$new()
   op_pca = PipeOpPCA$new()
@@ -46,8 +47,6 @@ test_that("linear graph", {
 })
 
 test_that("complex graph", {
-
-
   # test that debug pipeops exist
   expect_pipeop(PipeOpDebugBasic$new())
   expect_pipeop(PipeOpDebugMulti$new(1, 1))
@@ -58,13 +57,29 @@ test_that("complex graph", {
   expect_graph(PipeOpDebugBasic$new() %>>% PipeOpDebugMulti$new(1, 2) %>>%
     greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2))
 
-  # FIXME: the following gives warnings and the resulting graph differs from what the user should expect
-  ## biggraph = PipeOpDebugBasic$new() %>>%
-  ##   PipeOpDebugMulti$new(1, 2) %>>%
-  ##   greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2) %>>%
-  ##   gunion(list(PipeOpDebugBasic$new("basictop"),
-  ##     PipeOpDebugMulti$new(2, 1, "debug2"),
-  ##     PipeOpDebugBasic$new("basicbottom"))) %>>%
-  ##   PipeOpDebugMulti$new(3, 1, "debug3")
+  biggraph = PipeOpDebugBasic$new() %>>%
+    PipeOpDebugMulti$new(1, 2) %>>%
+    greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2) %>>%
+    gunion(list(PipeOpDebugBasic$new("basictop"),
+      PipeOpDebugMulti$new(2, 1, "debug2"),
+      PipeOpDebugBasic$new("basicbottom"))) %>>%
+    PipeOpDebugMulti$new(3, 1, "debug3")
+
+  # it's a beauty: biggraph$plot()
+
+  lines = strsplit(capture_output(biggraph$train(1)), "\n")[[1]]
+
+  expect_set_equal(lines,
+    c("Training debug.basic",
+      "Training debug.multi with input list(input_1 = 1)",
+      "Training debug2_001 with input list(input_1 = 2)",
+      "Training debug2_002 with input list(input_1 = 3)",
+      "Training basictop",
+      "Training basicbottom",
+      "Training debug2 with input list(input_1 = 4, input_2 = 4)",
+      "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"))
+
+
+  biggraph$plot()
 
 })

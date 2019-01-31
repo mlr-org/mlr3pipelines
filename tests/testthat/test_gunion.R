@@ -7,4 +7,5 @@ test_that("gunion", {
   g4 = gunion(list(g1, g2, g3))
   expect_graph(g4)
   expect_set_equal(g4$ids(), c("pca", "pca2", "scale", "xx", "blub", "foo"))
+
 })

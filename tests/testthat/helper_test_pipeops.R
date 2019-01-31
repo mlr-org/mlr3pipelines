@@ -2,11 +2,11 @@ PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
   inherit = PipeOp,
   public = list(
       train = function(inputs) {
-        catf("training %s", self$id)
+        catf("Training %s", self$id)
         self$state = inputs
       },
       predict = function(inputs) {
-        catf("predicting %s", self$id)
+        catf("Predicting %s", self$id)
         self$state = c(self$state, inputs)
       },
       initialize = function(id = "debug.basic", param_set = ParamSet$new()) {
