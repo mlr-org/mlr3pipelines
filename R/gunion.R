@@ -12,13 +12,15 @@
 #' @export
 gunion = function(graphs) {
   assert_list(graphs)
-  graphs = map(graphs, ensure_graph)
+  graphs = map(graphs, assert_graph, coerce = TRUE)
 
   g = Graph$new()
-  g$pipeops = unlist(map(graphs, "pipeops"), recursive = FALSE)
-  assert_names(names(g$pipeops), type = "unique", .var.name = "ids of pipe operators")
-  g$pipeops = map(g$pipeops, function(x) x$clone(deep = TRUE))
-  g$edges = rbindlist(map(graphs, "edges"))
+  if (length(graphs)) {
+    g$pipeops = unlist(map(graphs, "pipeops"), recursive = FALSE)
+    assert_names(names(g$pipeops), type = "unique", .var.name = "ids of pipe operators")
+    g$pipeops = map(g$pipeops, function(x) x$clone(deep = TRUE))
+    g$edges = rbindlist(map(graphs, "edges"))
+  }
   g
 }
 

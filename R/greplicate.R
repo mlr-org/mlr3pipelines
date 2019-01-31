@@ -12,7 +12,7 @@
 #' @return [`Graph`] containing `n` copies of input `graph`.
 #' @export
 greplicate = function(graph, n) {
-  graph = ensure_graph(graph)
+  graph = assert_graph(graph, coerce = TRUE)
   n = assert_count(n, positive = TRUE, coerce = TRUE)
   x = map(seq_len(n), function(i) {
     g = graph$clone(deep = TRUE)

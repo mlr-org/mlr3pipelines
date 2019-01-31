@@ -30,5 +30,5 @@ assert_graph = function(x, coerce = FALSE, deep_copy = FALSE) {
   if (deep_copy) {
     x = x$copy(deep = TRUE)
   }
-  x
+  invisible(x)
 }
