@@ -16,7 +16,7 @@
 #'   Is the `Graph`, i.e. are all of its `PipeOp`s, trained, and can the `Graph` be used for prediction?
 #' * `lhs`          ::  `list` of [`PipeOp`] \cr
 #'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as `Graph` input layer.
-#' * `rhs`          :: `list of [`PipeOp`] \cr
+#' * `rhs`          :: `list` of [`PipeOp`] \cr
 #'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as `Graph` output layer.
 #' * `input`        :: [`data.table`] with `character` columns `name`, `train`, `predict`, `op.id`, `channel.name` \cr
 #'   Input channels of the `Graph`. For each channel lists the name, input type during training, input type during prediction,
