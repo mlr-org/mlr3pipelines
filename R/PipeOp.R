@@ -4,57 +4,106 @@
 #' @format [R6Class] PipeOp
 #'
 #' @description
-#' A PipeOp is a single tranformation of inputs into outputs.
-#' This class is the baseclass for all pipeOp's, and is not intended for direct use.
-#' During training it takes inputs, tranforms them, while doing that learns and stores its
-#' parameters and then returns the output.
-#' During prediction it applies the learned params to the input and transforms the input to an output.'
+#' A `PipeOp` represents a tranformation of "input" into "output", during multiple stages: "training"
+#' and "prediction". It can be understood as a generalisation of function with multiple outputs and
+#' multiple stages. The "training" stage can be used when training a machine learning pipeline or
+#' fitting a statistical model, and the "predicting" stage can then be used when making predictions
+#' on new data.
 #'
-#' A PipeOp specifies the types of inputs and outputs as `intype` and `outtype`, a list of <something specifying types>.
-#' The length of these lists determines the length of input / output the PipeOp produces. The PipeOp input / output
-#' is a list of specified length.
+#' During training, a `PipeOp` takes inputs and tranforms them while simultaneously storing a state
+#' in the `$state` slot. During prediction, information in the `$state` slot is often used for prediction
+#' on the new data.
+#'
+#' A `PipeOp` is usually used in a [`Graph`] object, a representation of a computational graph. It can have
+#' multiple **input channels**---think of these as multiple arguments to a function, for example when averaging
+#' different models---, and multiple **output channels**, the "dual" to input channels---a transformation may
+#' return different objects, for example different subsets of a [`Task`], that can then be processed by distinct
+#' functions.
+#'
+#' Input and output channels are defined in the `$input` and `$output` slots; each channel has a *name*, a required
+#' type during training, and a required type during prediction. When inheriting from a `PipeOp`, the `$train()` and
+#' `$predict()` functions must be overloaded. Each of these functions then receives a named `list` according to
+#' the `PipeOp`'s input channels, and must return a `list` (names are ignored) with values in the order of output
+#' channels in `$output`.
+#'
+#' The `$train()` and `$predict()` function should not be called by the user; instead, a `PipeOp` should be added
+#' to a `Graph` (possibly as singleton in that `Graph`), and the `Graph`'s `$train` / `$predict` methods should be
+#' called.
+#'
+#' This class is an abstract base class that all `PipeOp`s being used in a [`Graph`] should inherit from,  and
+#' is not intended to be instantiated.
 #'
 #' @section Public Members / Active Bindings:
-#' * `id`                         :: [character]
-#'   Active binding that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
-#' * `packages`                   :: [character]
-#'   Packages required for the pipeOp.
-#' * `param_set`                  :: [ParamSet]
-#'   The set of all exposed parameters of the PipeOp.
-#' * `param_vals`                   :: named [list]
-#'   Parameter settings where all setting must come from `param_set`, named with param IDs.
-#' * `state`                      :: any
-#'   The object of learned parameters, obtained in the training step, and applied in the predict step.
-#' * `is_trained`                 :: `logical(1)`
-#'   Is the PipeOp currently trained?
-#' * `result`                     :: any
-#'   A slot to store the result of either the `train` or the `predict` step, after it was
-#' * `train_intypes`                       :: [character]
-#'   Input types the PipeOp accepts during training. Read-only.
-#' * `train_outtypes`                      :: [character]
-#'   Output types that are returned by the PipeOp during training. Read-only.
-#' * `predict_intypes`                     :: [character]
-#'   Input types the PipeOp accepts during prediction. Read-only.
-#' * `predict_outtypes`                    :: [character]
-#'   Output types that are returned by the PipeOp. Read-only.
+#' * `id`                         :: `character` \cr
+#'   ID of the `PipeOp`. IDs are user-configurable, and IDs of `PipeOp`s must be unique within a `Graph`. IDs of
+#'   `PipeOp`s must not be changed once they are part of a `Graph`, instead the `Graph`'s `$set_names()` method
+#'   should be used.
+#' * `packages`                   :: `character` \cr
+#'   Set of all required packages for the `PipeOp`'s `$train` and `$predict` methods.
+#' * `param_set`                  :: [`ParamSet`] \cr
+#'   Parameter constraints for `$param_vals`.
+#' * `param_vals`                 :: named `list` \cr
+#'   Parameter values that influence the functioning of `$train` and / or `$predict`. Parameter values are checked
+#'   against parameter constraints in `$param_set`.
+#' * `state`                      :: `any` \cr
+#'   Method-dependent state obtained during training step, and usually required for the prediction step.
+#' * input                        :: [`data.table`] with `character` columns `name`, `train`, `predict` \cr
+#'   Input channels of `PipeOp`. Column `name` gives the names (and order) of values in the list given to
+#'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
+#'   training, column `predict` is the (S3) class that an input object must conform to during prediction. Types
+#'   are checked by the `PipeOp` and do not need to be checked by `$train` / `$predict` code.
+#' * output                       :: [`data.table`] with `character` columns `name`, `train`, `predict` \cr
+#'   Output channels of `PipeOp`, in the order in which they must be given in the list returned by `$train` and
+#'   `$predict` functions. Column `train` is the (S3) class that an output object must conform to during training,
+#'   column `predict` is the (S3) class that an output object must conform to during prediction. The `PipeOp` checks
+#'   values returned by `$train` and `$predict` against these types specifications.
+#' * `innum`                      :: `numeric(1)` \cr
+#'   Number of input channels. This equals `nrow($input)`.
+#' * `outnum`                     :: `numeric(1)` \cr
+#'   Number of output channels. This equals `nrow($output)`.
+#' * `is_trained`                 :: `logical(1)` \cr
+#'   Is the PipeOp currently trained and can therefore be used for prediction?
+#' * `hash`                       :: `character(1)` \cr
+#'   Checksum calculated on the `PipeOp`, depending on `$id`, `$param_set`, `$param_vals`, and `$param_set`. If a
+#'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
+#'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #'
 #' @section Methods:
-#' * `new(id, params)` \cr
-#'   `character(1)`, `ParamSet` -> [PipeOp]
-#'   Constructs the pipeOp from an id string and a (possibly empty) [ParamSet].
-#' * `train()`:
-#'    Train graph on `input`, transform it to output and store the learned `params`.
-#'    If the PipeOp is already trained, already present `params` are overwritten.
-#' * `predict()` \cr
-#' *  Predict with graph on `input`, and transform it to output by applying the learned `params`.
-#' *   If `is_trained = FALSE` the function cannot be applied.
-#' * `print()`: Prints
-#'
-#' @section Internals:
-#' * `.intype`: `list of any`
-#' * `.outtype`: `list of any`
+#' * `PipeOp$new(id, param_set = ParamSet$new(), input, output)` \cr
+#'   (`character(1)`, `ParamSet`, [`data.table`], [`data.table`]) -> `PipeOp` \cr
+#'   Constructs the pipeOp from an ID string, a (possibly empty) [`ParamSet`], an and an input and output channel
+#'   description. `input` and `output` must conform to the `$input` and `$output` slots described above. `PipeOp`s
+#'   that inherit from this class and which are not abstract should have an `$initialize()` function with a default value
+#'   for `id`, should construct the `param_set`, `input` and `output` values inside that function, and then call `super$initialize`
+#'   with these values.
+#' * `train(input)` \cr
+#'   (named `list`) -> `list` \cr
+#'   Train `PipeOp` on `inputs`, transform it to output and store the learned `$state`. If the PipeOp is already
+#'   trained, already present `$state` is overwritten. Input list is named according to `$input` `name` column, and was
+#'   typechecked against the `$input` `type` column. Return value should be a list with as many entries as `$output` has
+#'   rows, with each entry having a class according to the `$output` `train` column. Names of the returned list are ignored.\cr
+#'   The `$train()` method should not be called by a user; instead, the `PipeOp` should be added to a `Graph`, and the `Graph`'s
+#'   `$train()` method should be used.
+#' * `predict(input)` \cr
+#'   (named `list`) -> `list` \cr
+#'   Predict on new data in `input`, possibly using the stored `$state`. Unlike `$train()`, `$predict()` should not modify
+#'   the `PipeOp` in any way. `$predict()` will not be called by a `Graph` if the `$state` is empty, so its presence should
+#'   not be checked. Input and output are specified by `$input` and `$output` in the same way as for `$train()`, except that
+#'   the `predict` column is used for type checking.\cr
+#'   Just as `$train()`, `$predict` should not be called by a user; instead a `Graph`'s `$predict()` method should be used.
+#' * `train_internal(input)` \cr
+#'   (named `list`) -> `list` \cr
+#'   Internal function used by a `Graph` to call `$train()`. Does type checking and possibly skips a function call if a
+#'   [`NO_OP`] is received. Should not be overloaded by inheriting classes.
+#' * `predict_internal(input)` \cr
+#'   (named `list`) -> `list` \cr
+#'   Internal function used by a `Graph` to call `$predict()`, function analogous to `$train_internal()`.
+#' * `print()` \cr
+#'   () -> `NULL` \cr
+#'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_vals`, `$input` and `$output`.
 #'
 #' @name PipeOp
+#' @family mlr3pipelines backend related
 #' @family PipeOp
 #' @export
 PipeOp = R6Class("PipeOp",
@@ -62,11 +111,10 @@ PipeOp = R6Class("PipeOp",
     id = NULL,
     packages = character(0),
     state = NULL,
-    result = NULL,
     input = NULL,
     output = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), input = NULL, output = NULL) {
+    initialize = function(id, param_set = ParamSet$new(), input, output) {
       self$id = assert_string(id)
       private$.param_set = param_set
       private$.param_vals = list()

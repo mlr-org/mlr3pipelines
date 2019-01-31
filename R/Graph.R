@@ -27,17 +27,17 @@
 #' * `packages`     :: `character` \cr
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
+#' * `param_set`    :: [`ParamSet`] \cr
+#'   Parameter constraints for `$param_vals`. These are the union of `$param_set`s of all `PipeOp`s in the `Graph`. Parameter names
+#'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
 #' * `param_vals`   :: named `list` \cr
 #'   Parameter values of all `PipeOp`s in the `Graph`. Changing this value propagates the changes directly to the contained
 #'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_vals` directly. Parameter values are checked against
 #'   parameter constraints in `$param_set`. Parameter names as seen by the `Graph` have the naming scheme
 #'   `<PipeOp$id>.<PipeOp original parameter name>`.
-#' * `param_set`    :: [`ParamSet`] \cr
-#'   Parameter constraints `$param_vals`. These are the union of `$param_set`s of all `PipeOp`s in the `Graph`. Parameter names
-#'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
-#' * `hash`         :: [`character(1)`] \cr
-#'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes and the `$edges` hashes, but
-#'   is independent of the `$param_vals` configuration.
+#' * `hash`         :: `character(1)` \cr
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes (and therefore their `$param_vals`)
+#'   and a hash of `$edges`.
 #'
 #' @section Methods:
 #' * `Graph$new()` \cr
