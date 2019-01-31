@@ -75,11 +75,19 @@ PipeOp = R6Class("PipeOp",
     },
 
     print = function(...) {
-      catf("PipeOp: <%s>", self$id)
-      # catf("parvals: <%s>", as_short_string(self$param_vals))
-      # catf("is_trained=%s", self$is_trained)
-      # catf("Input: %s", as_short_string(self$inputs))
-      # catf("Result: %s", as_short_string(self$result))
+      type_table_printout = function(table) {
+        strings = do.call(sprintf, cbind(fmt = "%s`[%s,%s]", table[, c("name", "train", "predict")]))
+        strings = strwrap(paste(strings, collapse = ", "), indent = 2, exdent = 2)
+        if (length(strings) > 6) {
+          strings = c(strings[1:5], sprintf("  [... (%s lines omitted)]", length(strings) - 5))
+        }
+        gsub("`", " ", paste(strings, collapse = "\n"))
+      }
+
+      catf("PipeOp: <%s> (%strained)", self$id, if (self$is_trained) "" else "not ")
+      catf("param_vals: <%s>", as_short_string(self$param_vals))
+      catf("Input channels <name [train type, predict type]>:\n%s", type_table_printout(self$input))
+      catf("Output channels <name [train type, predict type]>:\n%s", type_table_printout(self$output))
     },
 
     train_internal = function(input) {
@@ -126,7 +134,7 @@ PipeOp = R6Class("PipeOp",
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
     hash = function() {
-      digest(list(self$param_set, self$param_vals),
+      digest(list(class(self), self$id, self$param_set, self$param_vals),
         algo = "xxhash64")
     }
   ),
