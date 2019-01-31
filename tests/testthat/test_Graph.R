@@ -100,6 +100,9 @@ test_that("input / output lists and naming", {
 
   expect_output(gr$train(-9), "list\\(input_1 = -9, input_2 = -9\\)")
 
+  expect_output(gr$train(list(1, 2), single_input = FALSE),
+    "list\\(input_1 = 1, input_2 = 2\\)")
+
   expect_output(gr$train(list(debug.multi.input_1 = 1, debug.multi.input_2 = 2), single_input = FALSE),
     "list\\(input_1 = 1, input_2 = 2\\)")
 
@@ -113,6 +116,79 @@ test_that("input / output lists and naming", {
   expect_error(gr$train(list(), single_input = FALSE), "have length 2")
   expect_error(gr$train(list(1, 2, 3), single_input = FALSE), "have length 2")
 
-  gr$train(list(1, 2), single_input = FALSE)
+  expect_equal(gr$train(1), list(debug.multi.output_1 = 2, debug.multi.output_2 = 3))
+
+  gr$add_pipeop(PipeOpDebugMulti$new(2, 3, "debug2"))
+  gr$add_pipeop(PipeOpDebugMulti$new(3, 2, "debug3"))
+
+  gr$add_edge("debug.multi", "debug3", 1, 2)
+  gr$add_edge("debug.multi", "debug3", "output_2", "input_1")
+
+  gr$add_edge("debug2", "debug.multi", 2, 1)
+  gr$add_edge("debug2", "debug.multi", "output_1", "input_2")
+
+  # layout now:
+  #
+  # |     1\    2/
+  # |     <debug2>
+  # |     1/ 2| 3\
+  # |     /   |   \
+  # |   2|   1|    \
+  # |   <multi>    |
+  # |   1|   2|    |
+  # \    |   /     |
+  # 3\  2| 1/      |
+  #   <debug3>     |
+  #    1/   2\     |
+  #
+  # input should be debug2.1, debug2.2, debug3.3
+  # output should be debug2.3, debug3.1, debug3.2
+  # (inputs and outputs in PipeOp order first, in channel order second)
+
+  expect_equal(csvify(gr$input),
+    c("debug2.input_1,*,*,debug2,input_1",
+      "debug2.input_2,*,*,debug2,input_2",
+      "debug3.input_3,*,*,debug3,input_3"))
+
+  expect_equal(csvify(gr$output),
+    c("debug2.output_3,*,*,debug2,output_3",
+      "debug3.output_1,*,*,debug3,output_1",
+      "debug3.output_2,*,*,debug3,output_2"))
+
+  lines = strsplit(capture_output(
+      {trained = gr$train(list(debug2.input_2 = 10, debug3.input_3 = 100, debug2.input_1 = 1000), single_input = FALSE)}),
+    "\n")[[1]]
+
+  expect_equal(lines,
+    c("Training debug2 with input list(input_1 = 1000, input_2 = 10)",
+      "Training debug.multi with input list(input_1 = 1002, input_2 = 1001)",
+      "Training debug3 with input list(input_1 = 1004, input_2 = 1003, input_3 = 100)"))
+
+  expect_equal(trained, list(debug2.output_3 = 1003, debug3.output_1 = 1005, debug3.output_2 = 1006))
+
+})
+
+test_that("edges that introduce loops cannot be added", {
+
+
+  g = Graph$new()$
+    add_pipeop(PipeOpNULL$new("p1"))$
+    add_pipeop(PipeOpNULL$new("p2"))
+
+  gclone = g$clone(deep = TRUE)
+  expect_deep_clone(g, gclone)
+
+  expect_error(g$add_edge("p1", "p1", 1, 1), "Cycle detected")
+
+  expect_deep_clone(g, gclone) # check that edges did not change
+
+  g$add_edge("p1", "p2")
+
+  gclone = g$clone(deep = TRUE)
+  expect_deep_clone(g, gclone)
+
+  expect_error(g$add_edge("p2", "p1", 1, 1), "Cycle detected")
+
+  expect_deep_clone(g, gclone) # check that edges did not change
 
 })

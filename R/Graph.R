@@ -119,7 +119,12 @@ Graph = R6Class("Graph",
         return(names2(self$pipeops))
 
       tmp = self$edges[, list(parents = list(unique(src_id))), by = list(id = dst_id)]
-      tmp = rbind(tmp, data.table(id = setdiff(names(self$pipeops), self$edges$dst_id), parents = list(character(0L))))
+      orphans = setdiff(names(self$pipeops), self$edges$dst_id)  # the ones without parents
+      if (length(orphans)) {
+        # if orphans is empty either the Graph is empty (won't happen here) or has cycles, in
+        # which case we still call topo_sort to get unified error messages.
+        tmp = rbind(tmp, data.table(id = orphans, parents = list(character(0L))))
+      }
       topo_sort(tmp)$id
     },
 
