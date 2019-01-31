@@ -203,13 +203,16 @@ Graph = R6Class("Graph",
 
     print = function() {
       # print table <id>, <state>, where <state> is `class(pipeop$state)`
-      lines = map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
+      lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
         data.frame(ID = pipeop$id, State = sprintf("<%s>",
           map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
-      })
-      if (length(lines)) {
+      }))
+      if (nrow(lines)) {
+        prd = self$edges[, list(prdcssors = list(unique(src_id))), by = list(ID = dst_id)]
+        scc = self$edges[, list(sccssors = list(unique(dst_id))), by = list(ID = src_id)]
+        lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
         catf("Graph with %s PipeOps:", length(lines))
-        print(do.call(rbind, unname(lines)))
+        print(lines)
       } else {
         cat("Empty Graph.\n")
       }
