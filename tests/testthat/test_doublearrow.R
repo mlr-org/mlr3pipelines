@@ -27,21 +27,21 @@ test_that("Simple ops do what we expect", {
 
   # check that edges are as they should be, but don't make assumptions about order of edges:
   # convert edges DT into comma separated values
-  edges_csv = apply(g$edges, 1, paste, collapse = ",")
+  edges_csv = csvify(g$edges)
   expect_set_equal(edges_csv,
     c("p1,output,branch,input", "branch,output1,p2,input", "branch,output2,p3,input",
       "p2,output,unbranch,input1","p3,output,unbranch,input2","unbranch,output,p4,input"))
 
   g = p1 %>>% PipeOpBranch$new(3) %>>% gunion(list(p2, p3, p4)) %>>% gunion(list(p5, p6, p7))
 
-  edges_csv = apply(g$edges, 1, paste, collapse = ",")
+  edges_csv = csvify(g$edges)
   expect_set_equal(edges_csv,
     c("p1,output,branch,input", "branch,output1,p2,input", "branch,output2,p3,input", "branch,output3,p4,input",
       "p2,output,p5,input", "p3,output,p6,input", "p4,output,p7,input"))
 
   g = gunion(list(p2, p3, p4)) %>>% gunion(list(p5, p6, p7))
 
-  edges_csv = apply(g$edges, 1, paste, collapse = ",")
+  edges_csv = csvify(g$edges)
   expect_set_equal(edges_csv,
     c("p2,output,p5,input", "p3,output,p6,input", "p4,output,p7,input"))
 

@@ -118,8 +118,8 @@ Graph = R6Class("Graph",
       if (!sorted || !nrow(self$edges))
         return(names2(self$pipeops))
 
-      tmp = self$edges[, list(parents = list(src_id)), by = list(id = dst_id)]
-      tmp = rbind(tmp, data.table(id = self$lhs, parents = list(character(0L))))
+      tmp = self$edges[, list(parents = list(unique(src_id))), by = list(id = dst_id)]
+      tmp = rbind(tmp, data.table(id = setdiff(names(self$pipeops), self$edges$dst_id), parents = list(character(0L))))
       topo_sort(tmp)$id
     },
 
@@ -351,6 +351,9 @@ graph_reduce = function(self, input, fun, single_input) {
       }
       assert_names(names(input), subset.of = graph_input$name)
       edges[list("__initial__", names(input)), "payload" := list(input), on = c("src_id", "src_channel")]
+    } else {
+      # don't rely on unique graph_input$name!
+      edges[get("src_id") == "__initial__", "payload" := list(input)]
     }
   } else {
     edges[get("src_id") == "__initial__", "payload" := list(list(input))]

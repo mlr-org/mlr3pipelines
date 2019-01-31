@@ -381,3 +381,8 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
 PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 PipeOpLrnFL = PipeOpLearner$new(mlr_learners$get("classif.featureless"))
 
+# turn data.table of character into comma-separated rows, so they can
+# be checked easily with expect_equal and expect_set_equal
+csvify = function(table) {
+  apply(table, 1, paste, collapse = ",")
+}

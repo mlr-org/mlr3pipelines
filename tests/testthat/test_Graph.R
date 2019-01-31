@@ -83,3 +83,36 @@ test_that("complex graph", {
   biggraph$plot()
 
 })
+
+
+test_that("input / output lists and naming", {
+
+  gr = Graph$new()$add_pipeop(PipeOpDebugMulti$new(2, 2))
+
+  expect_equal(csvify(gr$input),
+    c("debug.multi.input_1,*,*,debug.multi,input_1",
+      "debug.multi.input_2,*,*,debug.multi,input_2"))
+  expect_equal(csvify(gr$output),
+    c("debug.multi.output_1,*,*,debug.multi,output_1",
+      "debug.multi.output_2,*,*,debug.multi,output_2"))
+
+  expect_output(gr$train(9), "list\\(input_1 = 9, input_2 = 9\\)")
+
+  expect_output(gr$train(-9), "list\\(input_1 = -9, input_2 = -9\\)")
+
+  expect_output(gr$train(list(debug.multi.input_1 = 1, debug.multi.input_2 = 2), single_input = FALSE),
+    "list\\(input_1 = 1, input_2 = 2\\)")
+
+  expect_output(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_1 = 1), single_input = FALSE),
+    "list\\(input_1 = 1, input_2 = 2\\)")
+
+
+  expect_error(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_99 = 1), single_input = FALSE),
+    "debug.multi.input_1,debug.multi.input_2")
+
+  expect_error(gr$train(list(), single_input = FALSE), "have length 2")
+  expect_error(gr$train(list(1, 2, 3), single_input = FALSE), "have length 2")
+
+  gr$train(list(1, 2), single_input = FALSE)
+
+})
