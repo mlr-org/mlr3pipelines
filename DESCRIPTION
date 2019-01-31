@@ -59,7 +59,7 @@ Collate:
     'PipeOpScale.R'
     'PipeOpTaskPreproc.R'
     'PipeOpUnBranch.R'
-    'ensure_graph.R'
+    'assert_graph.R'
     'greplicate.R'
     'gunion.R'
     'operators.R'
