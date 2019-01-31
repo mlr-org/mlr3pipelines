@@ -104,7 +104,7 @@
 #'
 #' @name PipeOp
 #' @family mlr3pipelines backend related
-#' @family PipeOp
+#' @family PipeOps
 #' @export
 PipeOp = R6Class("PipeOp",
   public = list(

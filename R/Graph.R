@@ -101,6 +101,7 @@
 #' predicted = g$predict(mlr::mlr_task("iris")$filter(1:10))
 #'
 #' @name Graph
+#' @family mlr3pipelines backend related
 #' @export
 Graph = R6Class("Graph",
   public = list(
