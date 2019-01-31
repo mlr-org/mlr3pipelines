@@ -309,8 +309,8 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
   }
   rbindlist(lapply(pipeops, function(po) {
     po[[direction]][name %nin% channels[ids == po$id],
-      list(name = paste0(po$id, ".", name),
-        train = get("train"), predict = get("predict"), op.id = po$id, channel.name = name)]
+      list(name = paste0(po$id, ".", get("name")),
+        train = get("train"), predict = get("predict"), op.id = po$id, channel.name = get("name"))]
   }))
 }
 
