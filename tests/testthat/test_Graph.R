@@ -146,12 +146,14 @@ test_that("input / output lists and naming", {
   # (inputs and outputs in PipeOp order first, in channel order second)
 
   # test output 1: debug.multi was already trained above
-  expect_output(print(gr), "debug2.*<<UNTRAINED>>.*debug.multi.*<list>.*debug3.*<<UNTRAINED>>")
+  expect_output(print(gr),
+    "debug2.*<<UNTRAINED>>.*debug.multi.*\n.*debug.multi.*<list>.*debug3.*debug2.*\n.*debug3.*<<UNTRAINED>>.*debug.multi")
+
   gr$pipeops$debug.multi$state = NULL
-  expect_output(print(gr), "debug2.*<<UNTRAINED>>.*debug.multi.*<<UNTRAINED>>.*debug3.*<<UNTRAINED>>")
+  expect_output(print(gr),
+    "debug2.*<<UNTRAINED>>.*debug.multi.*\n.*debug.multi.*<<UNTRAINED>>.*debug3.*debug2.*\n.*debug3.*<<UNTRAINED>>.*debug.multi")
 
-
-  expect_equal(csvify(gr$input),
+    expect_equal(csvify(gr$input),
     c("debug2.input_1,*,*,debug2,input_1",
       "debug2.input_2,*,*,debug2,input_2",
       "debug3.input_3,*,*,debug3,input_3"))
@@ -173,7 +175,8 @@ test_that("input / output lists and naming", {
   expect_equal(trained, list(debug2.output_3 = 1003, debug3.output_1 = 1005, debug3.output_2 = 1006))
 
   # test output II
-  expect_output(print(gr), "debug2.*<list>.*debug.multi.*<list>.*debug3.*<list>")
+  expect_output(print(gr),
+    "debug2.*<list>.*debug.multi.*\n.*debug.multi.*<list>.*debug3.*debug2.*\n.*debug3.*<list>.*debug.multi")
 
 
 })
