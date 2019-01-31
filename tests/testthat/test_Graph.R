@@ -145,6 +145,12 @@ test_that("input / output lists and naming", {
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
 
+  # test output 1: debug.multi was already trained above
+  expect_output(print(gr), "debug2.*<<UNTRAINED>>.*debug.multi.*<list>.*debug3.*<<UNTRAINED>>")
+  gr$pipeops$debug.multi$state = NULL
+  expect_output(print(gr), "debug2.*<<UNTRAINED>>.*debug.multi.*<<UNTRAINED>>.*debug3.*<<UNTRAINED>>")
+
+
   expect_equal(csvify(gr$input),
     c("debug2.input_1,*,*,debug2,input_1",
       "debug2.input_2,*,*,debug2,input_2",
@@ -165,6 +171,10 @@ test_that("input / output lists and naming", {
       "Training debug3 with input list(input_1 = 1004, input_2 = 1003, input_3 = 100)"))
 
   expect_equal(trained, list(debug2.output_3 = 1003, debug3.output_1 = 1005, debug3.output_2 = 1006))
+
+  # test output II
+  expect_output(print(gr), "debug2.*<list>.*debug.multi.*<list>.*debug3.*<list>")
+
 
 })
 
@@ -192,3 +202,4 @@ test_that("edges that introduce loops cannot be added", {
   expect_deep_clone(g, gclone) # check that edges did not change
 
 })
+
