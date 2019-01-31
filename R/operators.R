@@ -24,8 +24,8 @@
 #' result1 = o1 %>>% o2
 #'
 #' result2 = Graph$new()$
-#'   add_pipeop(o1$copy(deep = TRUE))$
-#'   add_pipeop(o2$copy(deep = TRUE))$
+#'   add_pipeop(o1$clone(deep = TRUE))$
+#'   add_pipeop(o2$clone(deep = TRUE))$
 #'   add_edge(o1$id, o2$id)
 #' @family mlr3pipelines backend related
 #' @export
