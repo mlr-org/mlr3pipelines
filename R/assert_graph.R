@@ -28,7 +28,7 @@ assert_graph = function(x, coerce = FALSE, deep_copy = FALSE) {
   }
   assert_r6(x, "Graph")
   if (deep_copy) {
-    x = x$copy(deep = TRUE)
+    x = x$clone(deep = TRUE)
   }
   invisible(x)
 }

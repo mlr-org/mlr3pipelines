@@ -96,9 +96,9 @@
 #' g$input
 #' g$output
 #'
-#' trained = g$train(mlr3::mlr_task("iris"))
+#' trained = g$train(mlr3::mlr_tasks$get("iris"))
 #'
-#' predicted = g$predict(mlr3::mlr_task("iris")$filter(1:10))
+#' predicted = g$predict(mlr3::mlr_tasks$get("iris")$filter(1:10))
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
@@ -308,7 +308,7 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
       predict = character(0), op.id = character(0), channel.name = character(0)))
   }
   rbindlist(lapply(pipeops, function(po) {
-    po[[direction]][name %nin% channels[ids == po$id],
+    po[[direction]][get("name") %nin% channels[ids == po$id],
       list(name = paste0(po$id, ".", get("name")),
         train = get("train"), predict = get("predict"), op.id = po$id, channel.name = get("name"))]
   }))
