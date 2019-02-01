@@ -5,7 +5,6 @@
 #'
 #' @description
 #'   Copies its input `outnum` times.
-#' @section Usage:
 #' @section Methods:
 #' * `PipeOpEnsemble$new(outnum, id)` \cr
 #'   (`numeric(1)`, `character(1)`) -> `self` \cr
