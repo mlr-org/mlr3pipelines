@@ -12,9 +12,9 @@
 
   `` `Graph$new()` \cr``
   
-  ``add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL) \cr``
+  `` `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr``
   
-* **method type description in `@section Methods`**: classes in backticks (linked if not default R package classes; possibly with length given in parentheses if vector type), alternative classes separated by vertical bars (`|`), different arguments comma-separated, all surrounded by parentheses. Spaces before and after `|`, after `,`, but not after `(` or before `)` or `,`. Followed by arrow (` -> ` with spaces), followed by return type, followed by `\cr`. Functions without input have `()` in type, functions with `invisible(NULL)` (e.g. `print`, `plot`) have `` `NULL` `` return type.
+* **method type description in `@section Methods`**: classes in backticks (linked if not default R package classes; possibly with length given in parentheses if vector type), alternative classes separated by vertical bars (`|`), different arguments comma-separated, all surrounded by parentheses. Spaces before and after `|`, after `,`, but not after `(` or before `)` or `,`. Followed by arrow (` -> ` with spaces), followed by return type, followed by `\cr`. Functions without input ("nullary functions") have `()` in-type, functions with `invisible(NULL)` (e.g. `print`, `plot`) have `` `NULL` `` return type.
 
   ``() -> `NULL` \cr``
   
@@ -67,9 +67,19 @@ The following should *not* be backtick-quoted:
 
 The following should be linked (i.e. put in []):
 
-* Every function that is not a R6 method.
-* First mention of any type / class that is not in R default packages.
+* Every function that is not an R6 method.
+* First mention of any type / class that is not in R default packages (The "first mention" *can* be an occurrence in a type description; if the class is mentioned later it shouldn't be linked any more).
 * Every type, class, function that is not in R default packages in a member var type description or function type description.
+
+Don't link things like "character(1)" or "character" because (1) it would be silly and (2) it would lead to an inconsistent typeface.
+
+## @family
+
+The `@family` tag creates a group of documentation pages that mutually link each other. Writing `@family <TEXT>` will create the line "Other \<TEXT\>: \[link\] \[link\] \[link\]". The following rules for this:
+
+* Family \<TEXT\> should be short but is allowed to, and should probably, contain spaces. It should make a natural sentence when written as "Other \<TEXT\>:".
+* A page can be member of multiple families if that is natural.
+* Do not create families with only one member.
 
 ## Example
 
@@ -110,5 +120,6 @@ Syntax
 #' @examples
 #' g = Graph$new()
 #'
+#' @family mlr3pipelines backend related
 #' @export
 ```
