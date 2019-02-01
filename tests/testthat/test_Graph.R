@@ -232,3 +232,35 @@ test_that("assert_graph test", {
   expect_deep_clone(po, po2)
 
 })
+
+test_that("Graph printer aux function calculates col widths well", {
+  skip_on_cran()
+  set.seed(8008135)
+
+  effective_outwidth = function(colwidths, collimit) {
+    colwidths[colwidths > collimit] = collimit + 3  # this is how data.table does it
+    sum(colwidths + 1) + 3  # add 1 spacer between columns, and an extra margin of 3
+  }
+
+  test_outlimit = function(colwidths, outwidth) {
+    collimit = calculate_collimit(colwidths, outwidth)
+    if (effective_outwidth(colwidths, collimit) > outwidth) {
+      # expectations are *really* slow, so only do them if they fail in this high volume test
+      expect_lte(effective_outwidth(colwidths, collimit), outwidth)
+    }
+  }
+
+  test_all_outlimits = function(colwidths) {
+    for (outwidth in seq(max(length(colwidths), length(colwidths) * min(colwidths) - 2),
+      length(colwidths) * max(colwidths) + 2)) {
+      test_outlimit(colwidths, outwidth)
+    }
+  }
+
+  for (numcols in 1:10) {
+    replicate(1000, test_all_outlimits(rgeom(numcols, 0.1)))
+  }
+
+  expect_string("spurious expectation to show that we didn't skip this test")
+
+})

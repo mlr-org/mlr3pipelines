@@ -59,3 +59,23 @@ union_param_vals = function(param_sets, parvalhavers, parvalname, newval) {
   assert_list(parvals, names = "unique")
   parvals
 }
+
+calculate_collimit = function(colwidths, outwidth) {
+  margin = length(colwidths) + 3  # columns are separated by one space, with some breathing room
+  numcols = length(colwidths)     # number of columns that we expect to limit
+  repeat {
+    # collimit: the width at which we limit data.table column output. If some columns are very
+    # small, we can be more generous for other columns.
+    collimit = floor((outwidth - margin) / numcols)
+    violating = colwidths > collimit - 2
+    if (sum(violating) >= numcols)
+      break
+    margin = length(colwidths) + 3 + sum(colwidths[!violating])
+    numcols = sum(violating)
+    if (numcols == 0) {
+      collimit = outwidth
+      break
+    }
+  }
+  collimit - 3
+}

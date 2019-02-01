@@ -9,6 +9,7 @@ env:
     - _R_CHECK_TIMINGS_=0
     - _R_CHECK_FORCE_SUGGESTS_=false
     - _R_CHECK_TESTS_NLINES_=999
+    - NOT_CRAN=true
 
 before_install:
   - Rscript -e 'message("INSTALLED PACKS:"); installed.packages()[,2:3]'

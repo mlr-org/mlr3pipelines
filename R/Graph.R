@@ -204,15 +204,25 @@ Graph = R6Class("Graph",
     print = function() {
       # print table <id>, <state>, where <state> is `class(pipeop$state)`
       lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
-        data.frame(ID = pipeop$id, State = sprintf("<%s>",
+        data.table(ID = pipeop$id, State = sprintf("<%s>",
           map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
       }))
       if (nrow(lines)) {
-        prd = self$edges[, list(prdcssors = list(unique(src_id))), by = list(ID = dst_id)]
-        scc = self$edges[, list(sccssors = list(unique(dst_id))), by = list(ID = src_id)]
+        prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
+        scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
         lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
         catf("Graph with %s PipeOps:", length(lines))
-        print(lines)
+        ## limit column width ##
+
+        # reset DT output options after printing
+        dtpwidth = getOption("datatable.prettyprint.char")
+        on.exit(options(datatable.prettyprint.char = dtpwidth))
+
+        outwidth = getOption("width") %??% 80  # output width we want (default 80)
+        colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
+        collimit = calculate_collimit(colwidths, outwidth)
+        options(datatable.prettyprint.char = collimit)  # minus three because '...' gets appended
+        print(lines, row.names = FALSE)
       } else {
         cat("Empty Graph.\n")
       }
