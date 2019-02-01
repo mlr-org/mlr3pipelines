@@ -18,7 +18,7 @@
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
-PipeOpSample = R6Class("PipeOpSubsample",
+PipeOpSubsample = R6Class("PipeOpSubsample",
   inherit = PipeOpTaskPreproc,
 
 #FIXME: remove stratify for now? does not work for regression.
@@ -27,7 +27,7 @@ PipeOpSample = R6Class("PipeOpSubsample",
   public = list(
     initialize = function(id = "subsample") {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("frac", default = 1, lower = 0, upper = 1),
+        ParamDbl$new("frac", default = 1, lower = 0, upper = Inf),
         ParamLgl$new("stratify", default = FALSE),
         ParamLgl$new("replace", default = FALSE)
       ))
