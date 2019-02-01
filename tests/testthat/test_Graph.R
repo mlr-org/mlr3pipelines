@@ -206,3 +206,29 @@ test_that("edges that introduce loops cannot be added", {
 
 })
 
+
+test_that("assert_graph test", {
+
+  gr = PipeOpNULL$new() %>>% PipeOpDebugMulti$new(1, 1)
+
+  gr2 = assert_graph(gr)
+
+  expect_error(expect_deep_clone(gr, gr2), "addresses differ.*isn't true")
+
+  gr2 = assert_graph(gr, deep_copy = TRUE)
+
+  expect_deep_clone(gr, gr2)
+
+  expect_error(assert_graph(PipeOpNULL$new()), "inherit from class.*Graph")
+
+  assert_graph(assert_graph(PipeOpNULL$new(), coerce = TRUE))
+
+  po = PipeOpNULL$new()
+
+  expect_error(expect_deep_clone(po, po), "addresses differ.*isn't true")
+
+  po2 = assert_graph(po, coerce = TRUE, deep_copy = TRUE)$pipeops[[1]]
+
+  expect_deep_clone(po, po2)
+
+})
