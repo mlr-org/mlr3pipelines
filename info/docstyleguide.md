@@ -115,10 +115,11 @@ Syntax
 
 * `<>`: object dependent strings.
 * `{{}}`: optional strings
+* `{{|}}`: alterantives
 
 ```
 #' @title <classname>
-#' @format [`R6Class`] object{{[ inheriting from [`<superclass>`]}}.
+#' @format {{[`R6Class`] object|Abstract [`R6Class`]}}{{ inheriting from [`<superclass>`]}}.
 #'
 #' @description
 #' Long form description. Mentions [`PipeOp`] once. Mentions `PipeOp` twice.
