@@ -43,8 +43,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
-#' Averages its input (a `list` of [`Prediction`]). Returns a
-#' single [`Prediction`].
+#' Averages its input (a `list` of [`Prediction`]).
+#' Returns a single [`Prediction`].
+#' Used for regression `Prediction`s.
 #'
 #' @family PipeOps
 #' @examples
@@ -74,7 +75,8 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
 # #' @include mlr_pipeops.R
 # mlr_pipeops$add("modelavg", PipeOpModelAvg)
 
-
+#' @title PipeOpMajorityVote
+#'
 #' @format [R6Class] PipeOpMajorityVote
 #'
 #' @name mlr_pipeop_majorityvote
@@ -82,6 +84,8 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
 #'
 #' @description
 #' Computes the mode over different predictions for each row_id.
+#' Returns a single [`Prediction`].
+#' Used for classification `Prediction`s.
 #'
 #' @family PipeOps
 #' @examples
