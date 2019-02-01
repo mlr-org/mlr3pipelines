@@ -439,8 +439,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb6-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">print</span>(gr)</a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Graph with 1 PipeOps:</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;         ID         State</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; 1 copy.two &lt;&lt;UNTRAINED&gt;&gt;</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;        ID         State sccssors prdcssors</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  copy.two &lt;&lt;UNTRAINED&gt;&gt;</span></a>
 <a class="sourceLine" id="cb6-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10">result =<span class="st"> </span>gr<span class="op">$</span><span class="kw">train</span>(task)</a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"></a>
@@ -704,7 +704,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb21-5" data-line-number="5"><span class="co">#&gt;         ParamLgl$new(&quot;scale&quot;, default = TRUE)))</span></a>
 <a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">#&gt;     super$initialize(id = id, param_set = ps)</span></a>
 <a class="sourceLine" id="cb21-7" data-line-number="7"><span class="co">#&gt; }</span></a>
-<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="co">#&gt; &lt;bytecode: 0x85a1d68&gt;</span></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="co">#&gt; &lt;bytecode: 0x91235e8&gt;</span></a>
 <a class="sourceLine" id="cb21-9" data-line-number="9"><span class="co">#&gt; &lt;environment: namespace:mlr3pipelines&gt;</span></a></code></pre></div>
 <p>The user has access to this and can set and get parameters. Types are automatically checked:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">pss =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
@@ -728,7 +728,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb25-6" data-line-number="6"><span class="co">#&gt;         0, scale = attr(sc, &quot;scaled:scale&quot;) %??% 1)</span></a>
 <a class="sourceLine" id="cb25-7" data-line-number="7"><span class="co">#&gt;     sc</span></a>
 <a class="sourceLine" id="cb25-8" data-line-number="8"><span class="co">#&gt; }</span></a>
-<a class="sourceLine" id="cb25-9" data-line-number="9"><span class="co">#&gt; &lt;bytecode: 0x85a4e08&gt;</span></a>
+<a class="sourceLine" id="cb25-9" data-line-number="9"><span class="co">#&gt; &lt;bytecode: 0x91227e8&gt;</span></a>
 <a class="sourceLine" id="cb25-10" data-line-number="10"><span class="co">#&gt; &lt;environment: namespace:mlr3pipelines&gt;</span></a></code></pre></div>
 <p>Another change that is necessary compared to <code>PipeOpScaleAlways</code> is that the attributes <code>&quot;scaled:scale&quot;</code> and <code>&quot;scaled:center&quot;</code> are not always present, depending on parameters, and possibly need to be set to default values <span class="math inline">\(1\)</span> or <span class="math inline">\(0\)</span>, respectively.</p>
 <p>It is now even possible (if a bit pointless) to call <code>PipeOpScale</code> with both <code>scale</code> and <code>center</code> set to <code>FALSE</code>, which returns the original dataset, unchanged.</p>

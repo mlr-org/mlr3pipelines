@@ -1,8 +1,25 @@
 # Documentation style guide
 
+## Sections
+
+Note that section names must always end with a `:`, otherwise they will not be rendered.
+
+### `@section Public Members / Active Bindings:`
+
+Describes member variables and active bindings.
+
+### `@section Methods:`
+
+Describes public methods *and* class methods (`$new`).
+
+### `@section Param Set:`
+
+Describes parameters in `$param_set` / `$param_vals`. Format is the same as for "Public Members / Active Bindings".
+
+
 ## Style guide for entities:
 
-* **slot description in `@section Public Members / Active Bindings`**: name in backticks, followed by ` :: ` (with spaces; possibly multiple spaces for vertical alignment), followed by type description, followed by `\cr`.
+* **slot description in `@section Public Members / Active Bindings` and `@section Param Set`**: name in backticks, followed by ` :: ` (with spaces; possibly multiple spaces for vertical alignment), followed by type description, followed by `\cr`.
 
   `` `id` :: `character(1)` \cr``
   
@@ -73,13 +90,24 @@ The following should be linked (i.e. put in []):
 
 Don't link things like "character(1)" or "character" because (1) it would be silly and (2) it would lead to an inconsistent typeface.
 
+## Linking
+
+* Simple links: `[link]`.
+* Links of things in monospace typeface: ``[`link`]`` *exception* for functions, they appear in monospace automatically: `[link()]`.
+* Linking to entities in other packages: ``[`package::link`]`` or `[package::link()]`. If the package should not be part of the text: ``[`link`][package::link]`` or `[link()][package::link]`.
+* Linking to other packages themselves: `[mlr3][mlr3::mlr3-package]`
+
 ## @family
 
 The `@family` tag creates a group of documentation pages that mutually link each other. Writing `@family <TEXT>` will create the line "Other \<TEXT\>: \[link\] \[link\] \[link\]". The following rules for this:
 
-* Family \<TEXT\> should be short but is allowed to, and should probably, contain spaces. It should make a natural sentence when written as "Other \<TEXT\>:".
+* Family \<TEXT\> should be short but is allowed to, and should probably, contain spaces. It should make a natural sentence when written as "Other \<TEXT\>:". This means if it is a noun (e.g. "PipeOps") it should therefore probably be plural.
 * A page can be member of multiple families if that is natural.
 * Do not create families with only one member.
+
+## @include
+
+It is a good idea to `@include` the file defining the the superclass, if any.
 
 ## Example
 
@@ -87,10 +115,11 @@ Syntax
 
 * `<>`: object dependent strings.
 * `{{}}`: optional strings
+* `{{|}}`: alterantives
 
 ```
 #' @title <classname>
-#' @format [R6Class] <classname>{{[. Inherits from [<superclass>]}}
+#' @format {{[`R6Class`] object|Abstract [`R6Class`]}}{{ inheriting from [`<superclass>`]}}.
 #'
 #' @description
 #' Long form description. Mentions [`PipeOp`] once. Mentions `PipeOp` twice.
@@ -121,5 +150,6 @@ Syntax
 #' g = Graph$new()
 #'
 #' @family mlr3pipelines backend related
+#' {{@include <superclass>.R}}
 #' @export
 ```
