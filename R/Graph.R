@@ -211,6 +211,7 @@ Graph = R6Class("Graph",
         prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
         scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
         lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
+        lines[is.na(lines)] = ""
         catf("Graph with %s PipeOps:", length(lines))
         ## limit column width ##
 

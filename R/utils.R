@@ -61,7 +61,7 @@ union_param_vals = function(param_sets, parvalhavers, parvalname, newval) {
 }
 
 calculate_collimit = function(colwidths, outwidth) {
-  margin = length(colwidths) + 3  # columns are separated by one space, with some breathing room
+  margin = length(colwidths) + 4  # columns are separated by one space, with some breathing room
   numcols = length(colwidths)     # number of columns that we expect to limit
   repeat {
     # collimit: the width at which we limit data.table column output. If some columns are very
@@ -70,7 +70,7 @@ calculate_collimit = function(colwidths, outwidth) {
     violating = colwidths > collimit - 2
     if (sum(violating) >= numcols)
       break
-    margin = length(colwidths) + 3 + sum(colwidths[!violating])
+    margin = length(colwidths) + 4 + sum(colwidths[!violating])
     numcols = sum(violating)
     if (numcols == 0) {
       collimit = outwidth

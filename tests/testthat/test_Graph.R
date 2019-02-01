@@ -239,7 +239,7 @@ test_that("Graph printer aux function calculates col widths well", {
 
   effective_outwidth = function(colwidths, collimit) {
     colwidths[colwidths > collimit] = collimit + 3  # this is how data.table does it
-    sum(colwidths + 1) + 3  # add 1 spacer between columns, and an extra margin of 3
+    sum(colwidths + 1) + 4  # add 1 spacer between columns, and an extra margin of 4
   }
 
   test_outlimit = function(colwidths, outwidth) {
