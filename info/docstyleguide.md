@@ -81,6 +81,10 @@ The `@family` tag creates a group of documentation pages that mutually link each
 * A page can be member of multiple families if that is natural.
 * Do not create families with only one member.
 
+## @include
+
+It is a good idea to `@include` the file defining the the superclass, if any.
+
 ## Example
 
 Syntax
@@ -121,5 +125,6 @@ Syntax
 #' g = Graph$new()
 #'
 #' @family mlr3pipelines backend related
+#' {{@include <superclass>.R}}
 #' @export
 ```
