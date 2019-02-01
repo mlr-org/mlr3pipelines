@@ -77,7 +77,7 @@ Don't link things like "character(1)" or "character" because (1) it would be sil
 
 The `@family` tag creates a group of documentation pages that mutually link each other. Writing `@family <TEXT>` will create the line "Other \<TEXT\>: \[link\] \[link\] \[link\]". The following rules for this:
 
-* Family \<TEXT\> should be short but is allowed to, and should probably, contain spaces. It should make a natural sentence when written as "Other \<TEXT\>:".
+* Family \<TEXT\> should be short but is allowed to, and should probably, contain spaces. It should make a natural sentence when written as "Other \<TEXT\>:". This means if it is a noun (e.g. "PipeOps") it should therefore probably be plural.
 * A page can be member of multiple families if that is natural.
 * Do not create families with only one member.
 
