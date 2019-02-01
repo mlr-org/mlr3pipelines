@@ -1,8 +1,25 @@
 # Documentation style guide
 
+## Sections
+
+Note that section names must always end with a `:`, otherwise they will not be rendered.
+
+### `@section Public Members / Active Bindings:`
+
+Describes member variables and active bindings.
+
+### `@section Methods:`
+
+Describes public methods *and* class methods (`$new`).
+
+### `@section Param Set:`
+
+Describes parameters in `$param_set` / `$param_vals`. Format is the same as for "Public Members / Active Bindings".
+
+
 ## Style guide for entities:
 
-* **slot description in `@section Public Members / Active Bindings`**: name in backticks, followed by ` :: ` (with spaces; possibly multiple spaces for vertical alignment), followed by type description, followed by `\cr`.
+* **slot description in `@section Public Members / Active Bindings` and `@section Param Set`**: name in backticks, followed by ` :: ` (with spaces; possibly multiple spaces for vertical alignment), followed by type description, followed by `\cr`.
 
   `` `id` :: `character(1)` \cr``
   
