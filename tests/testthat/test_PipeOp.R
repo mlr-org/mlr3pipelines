@@ -26,3 +26,24 @@ test_that("PipeOp - simple tests with PipeOpScale", {
   expect_false(p$is_trained)
   expect_class(p$param_set, "ParamSet")
 })
+
+test_that("PipeOp printer", {
+
+  expect_output(print(PipeOpNULL$new()),
+    "PipeOp.*<PipeOpNULL>.*not trained.*param_vals.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
+
+
+  expect_output(print(PipeOpDebugMulti$new(3, 4)),
+    "PipeOp.*<debug.multi>.*not trained.*param_vals.*list().*Input channels.*input_1 \\[\\*,\\*\\], input_2 \\[\\*,\\*\\], input_3 \\[\\*,\\*\\]\n.*Output channels.*output_1 \\[\\*,\\*\\], output_2 \\[\\*,\\*\\], output_3 \\[\\*,\\*\\], output_4 \\[\\*,\\*\\]$")
+
+
+  expect_output(print(PipeOpDebugMulti$new(100, 0)),
+    "\\[\\.\\.\\. \\([0-9]+ lines omitted\\)\\]")
+
+  expect_output(print(PipeOpBranch$new(c("odin", "dva", "tri"))),
+    "Output channels.*odin \\[\\*,\\*\\], dva \\[\\*,\\*\\], tri \\[\\*,\\*\\]$")
+
+  expect_output(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))),
+    "PipeOp.*<debug>.*Input channels.*input \\[Task,Task\\]\nOutput channels.*output \\[NULL,Prediction\\]$")
+
+})
