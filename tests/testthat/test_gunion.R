@@ -9,3 +9,9 @@ test_that("gunion", {
   expect_set_equal(g4$ids(), c("pca", "pca2", "scale", "xx", "blub", "foo"))
 
 })
+
+test_that("empty gunion", {
+
+  expect_equal(gunion(list()), Graph$new())
+
+})
