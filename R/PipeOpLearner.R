@@ -59,5 +59,8 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("learner", PipeOpLearner)
+# This does not work because we do not have a "default" learner.
+# Maybe we initialize with NULL and let the user set $learner?
+# Would have to be careful with param_set and param_vals
+# #' @include mlr_pipeops.R
+# mlr_pipeops$add("learner", PipeOpLearner)

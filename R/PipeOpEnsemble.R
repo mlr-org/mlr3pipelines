@@ -70,8 +70,9 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpModelAvg", PipeOpModelAvg)
+# See issue #117
+# #' @include mlr_pipeops.R
+# mlr_pipeops$add("modelavg", PipeOpModelAvg)
 
 
 #' @format [R6Class] PipeOpMajorityVote
@@ -108,5 +109,6 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpMajorityVote", PipeOpMajorityVote)
+# See issue #117
+# #' @include mlr_pipeops.R
+# mlr_pipeops$add("majorityvote", PipeOpMajorityVote)

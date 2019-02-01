@@ -84,6 +84,8 @@ PipeOpBranch = R6Class("PipeOpBranch",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpBranch", PipeOpBranch)
+# This doesn't work, because there is no "default" number of options
+# (and there really shouldn't be!)
+# #' @include mlr_pipeops.R
+# mlr_pipeops$add("branch", PipeOpBranch)
 

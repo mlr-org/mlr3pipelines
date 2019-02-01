@@ -36,5 +36,7 @@ PipeOpCopy = R6Class("PipeOpCopy",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpCopy", PipeOpCopy)
+# This doesn't work, because there is no "default" number of options
+# (and there really shouldn't be!)
+# #' @include mlr_pipeops.R
+# mlr_pipeops$add("copy", PipeOpCopy)

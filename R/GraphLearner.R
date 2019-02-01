@@ -1,5 +1,5 @@
 #' @title GraphLearner
-#' @format [`R6::R6Class`] object inheriting from [`mlr3::Learner`].
+#' @format [`R6Class`] object inheriting from [`mlr3::Learner`].
 #'
 #' @description
 #' A [`Learner`][mlr3::Learner] that encapsulates a [`Graph`] to be used in

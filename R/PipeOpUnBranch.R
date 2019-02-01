@@ -66,5 +66,8 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpUnbranch", PipeOpUnbranch)
+
+# This does not make sense until we have varargs
+# See issue #117
+# #' @include mlr_pipeops.R
+# mlr_pipeops$add("unbranch", PipeOpUnbranch)

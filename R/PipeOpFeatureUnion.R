@@ -40,8 +40,9 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpFeatureUnion", PipeOpFeatureUnion)
+# # See issue #117
+# #' @include mlr_pipeops.R
+# mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
 
 
 #FIXME: this really should be suported by mlr3 and the code looks horrible

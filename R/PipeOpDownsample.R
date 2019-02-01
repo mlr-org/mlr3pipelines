@@ -49,4 +49,4 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpDownsample", PipeOpDownsample)
+mlr_pipeops$add("downsample", PipeOpDownsample)
