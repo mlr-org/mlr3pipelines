@@ -73,6 +73,13 @@ The following should be linked (i.e. put in []):
 
 Don't link things like "character(1)" or "character" because (1) it would be silly and (2) it would lead to an inconsistent typeface.
 
+## Linking
+
+* Simple links: `[link]`.
+* Links of things in monospace typeface: ``[`link`]`` *exception* for functions, they appear in monospace automatically: `[link()]`.
+* Linking to entities in other packages: ``[`package::link`]`` or `[package::link()]`. If the package should not be part of the text: ``[`link`][package::link]`` or `[link()][package::link]`.
+* Linking to other packages themselves: `[mlr3][mlr3::mlr3-package]`
+
 ## @family
 
 The `@family` tag creates a group of documentation pages that mutually link each other. Writing `@family <TEXT>` will create the line "Other \<TEXT\>: \[link\] \[link\] \[link\]". The following rules for this:
