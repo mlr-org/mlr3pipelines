@@ -16,7 +16,8 @@
 #' @export
 gunion = function(graphs) {
   assert_list(graphs)
-  graphs = map(graphs, assert_graph, coerce = TRUE)
+  graphs = Filter(function(x) length(x$pipeops), map(graphs, assert_graph, coerce = TRUE))
+
 
   g = Graph$new()
   if (length(graphs)) {

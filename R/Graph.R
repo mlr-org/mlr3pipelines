@@ -137,6 +137,9 @@ Graph = R6Class("Graph",
     },
 
     add_edge = function(src_id, dst_id, src_channel = NULL, dst_channel = NULL) {
+      if (!length(self$pipeops)) {
+        stop("Cannot add edge to empty Graph.")
+      }
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
       if (is.null(src_channel)) {
@@ -185,6 +188,10 @@ Graph = R6Class("Graph",
     },
 
     plot = function() {
+      if (!length(self$pipeops)) {
+        cat("Empty Graph, not plotting.\n")
+        return(invisible(NULL))
+      }
       require_namespaces("igraph")
       if (nrow(self$edges) == 0L) {
         ig = igraph::make_empty_graph()
@@ -234,7 +241,7 @@ Graph = R6Class("Graph",
     # Modifies both the index in $pipeops, as well as the respective PipeOp's ID. Do this here and not
     # by setting `graph$pipeops[[x]]$id <- y`!
     set_names = function(old, new) {
-      ids = names(self$pipeops)
+      ids = names2(self$pipeops)
       assert_subset(old, ids)
       assert_character(new, any.missing = FALSE)
       new_ids = map_values(ids, old, new)

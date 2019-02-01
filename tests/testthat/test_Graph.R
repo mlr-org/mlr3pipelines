@@ -233,6 +233,28 @@ test_that("assert_graph test", {
 
 })
 
+test_that("Empty Graph", {
+
+  expect_equal(length(Graph$new()$pipeops), 0)
+
+  expect_equal(nrow(Graph$new()$edges), 0)
+
+  expect_output(print(Graph$new()), "^Empty Graph\\.$")
+
+  expect_output(Graph$new()$plot(), "^Empty Graph, not plotting\\.$")
+
+  expect_equal(gunion(list()), Graph$new())
+
+  expect_equal(gunion(list(Graph$new())), Graph$new())
+
+  expect_equal(gunion(list(Graph$new(), Graph$new())), Graph$new())
+
+  expect_equal(greplicate(Graph$new(), 100), Graph$new())
+
+  expect_error(Graph$new()$add_edge("a", "b"), "Cannot add edge to empty Graph")
+
+})
+
 test_that("Graph printer aux function calculates col widths well", {
   skip_on_cran()
   set.seed(8008135)
