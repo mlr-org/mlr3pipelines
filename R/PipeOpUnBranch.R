@@ -1,14 +1,17 @@
 #' @title PipeOpUnbranch
 #'
-#' @name PipeOpUnbranch
-#' @format [R6Class] PipeOpUnbranch
+#' @name mlr_pipeop_unbranch
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Used to bring together different paths created by [`PipeOpBranch`].
 #'
 #' @section Methods:
-#' * `new(options = 1)` \cr
-#'   (`integer(1)` | `character`) -> [`PipeOpBranch`]
+#' * `PipeOpUnbranch$new(options, id = "unbranch")` \cr
+#'   (`numeric(1)` | `character`, `character(1)`) -> `self` \cr
+#'   Constructor. If `options` is an integer number, it determines the number of
+#'   input channels that are created, named `input1`...`input<n>`. If `options` is a
+#'   `character`, it determines the names of channels directly.
 #'
 #' @section Details:
 #' Creates a PipeOp with multiple input channels that can be used to
@@ -22,10 +25,8 @@
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 #'
-#' @family PipeOp
-#' @family PipeOpAggregate
-NULL
-
+#' @family PipeOps
+#' @family Path Branching
 #' @include PipeOp.R
 #' @export
 PipeOpUnbranch = R6Class("PipeOpUnbranch",

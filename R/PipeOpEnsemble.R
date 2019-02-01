@@ -1,29 +1,22 @@
 #' @title PipeOpEnsemble
 #'
-#' @name PipeOpEnsemble
-#' @format [R6Class] PipeOpEnsemble
+#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
-#' Abstract base-class.
 #' Parent class for PipeOps that aggregate a list of predictions.
-#' @section Usage:
-#' Inherits from [PipeOpEnsemble]
-#' * `f = PipeOpEnsemble$new(outnum, id)` \cr
-#'     `integer(1)`, `character(1)` -> [PipeOpEnsemble]
-#' @section Details:
-#' * `innum`: `integer(1)` Number of inputs.
-#' @family PipeOp
-#' @family PipeOpAggregate
-#' @family PipeOpEnsemble
-NULL
-
+#' Offers the private method `$merge_predictions()` which does exactly that.
+#' @section Methods:
+#' * `PipeOpEnsemble$new(innum, id)` \cr
+#'   (`numeric(1)`, `character(1)`) -> `self` \cr
+#'   Constructor. `innum` determines the number of input channels.
+#' @family PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(innum, id = "PipeOpEnsemble") {
+    initialize = function(innum, id) {
       assert_integerish(innum, lower = 1)
       super$initialize(id,
         input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
@@ -44,30 +37,18 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   )
 )
 
-
 #' @title PipeOpModelAvg
 #'
-#' @name PipeOpModelAvg
-#' @format [R6Class] PipeOpModelAvg
+#' @name mlr_pipeop_modelavg
+#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
-#' Averages its input (a list of [mlr3::Prediction]).
-#' Returns a [Prediction]s.
-#' @section Usage:
-#' Inherits from [PipeOpEnsemble]
-#' * `f = PipeOpModelAvg$new(innum, id)` \cr
-#'     `integer(1)`, `character(1)` -> [PipeOpModelAvg]
-#' @section Details:
-#' * `innum`: `integer(1)` Number of inputs.
-#' @name PipeOpModelAvg
-#' @family PipeOp
-#' @family PipeOpAggregate
-#' @family PipeOpEnsemble
+#' Averages its input (a `list` of [`Prediction`]). Returns a
+#' single [`Prediction`].
+#'
+#' @family PipeOps
 #' @examples
 #' op = PipeOpModelAvg$new(3)
-NULL
-
-#' @include PipeOp.R
 #' @export
 PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
@@ -89,33 +70,27 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   )
 )
 
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpModelAvg", PipeOpModelAvg)
 
-#' @title PipeOpMajorityVote
+
 #' @format [R6Class] PipeOpMajorityVote
+#'
+#' @name mlr_pipeop_majorityvote
+#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
 #' Computes the mode over different predictions for each row_id.
-#' @section Usage:
-#' Inherits from [PipeOpMajorityVote]
-#' * `f = PipeOpMajorityVote$new(outnum, id)` \cr
-#'     `integer(1)`, `character(1)` -> [PipeOpMajorityVote]
-#' @section Details:
-#' * `innum`: `integer(1)` Number of inputs.
-#' @name PipeOpMajorityVote
-#' @family PipeOp
-#' @family PipeOpAggregate
-#' @family PipeOpEnsemble
+#'
+#' @family PipeOps
 #' @examples
 #' op = PipeOpMajorityVote$new(3)
-NULL
-
-#' @include PipeOp.R
 #' @export
 PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "PipeOpMajorityVote") {
+    initialize = function(innum, id = "majorityvote") {
       super$initialize(innum, id)
     },
 
@@ -132,3 +107,6 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     }
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpMajorityVote", PipeOpMajorityVote)

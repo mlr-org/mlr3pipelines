@@ -1,17 +1,27 @@
 #' @title PipeOpBranch
 #'
-#' @name PipeOpBranch
-#' @format [R6Class] PipeOpBranch
+#' @name mlr_pipeop_branch
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' This pipeop is used for multiplexing between different possible paths.
+#' This pipeop is used for multiplexing between different possible paths and
+#' should be used in conjunction with [`PipeOpUnbranch`].
 #'
 #' @section Methods:
-#' * `new(options = 1, id = "choice")` \cr
-#'   (`integer(1)` | `character`), `character(1)` -> [`PipeOpBranch`]
+#' * `PipeOpBranch$new(options, id = "branch")` \cr
+#'   (`numeric(1)` | `character`, `character(1)`) -> `self` \cr
+#'   Constructor. If `options` is an integer number, it determines the number of
+#'   output channels / options that are created, named `output1`...`output<n>`. The
+#'   `$selection` parameter will then be a [`ParamInt`].
+#'   If `options` is a `character`, it determines the names of channels directly.
+#'   The `$selection` parameter will then be a [`ParamFct`].
 #'
 #' @section Parameters:
-#' * `selection`: integer or discrete
+#' * `selection`: (`numeric(1)` | `character(1)`) \cr
+#'   Selection of branching path to take. Is a `ParamInt` if the `options` parameter
+#'   during construction was a `numeric(1)`, and ranges from 1 to `options`. Is a
+#'   `ParamFct` if the `options` parameter was a `character` and its possible values
+#'   are the `options` values.
 #'
 #' @section Details:
 #' Creates a PipeOp with multiple output channels that can be used to
@@ -25,31 +35,13 @@
 #'
 #' Not to be confused with [`PipeOpCopy`], the naming scheme is a bit unfortunate.
 #'
-#' @family PipeOp
-#' @family PipeOpBroadcast
 #' @examples
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
-NULL
-
-#' @title No-Op Sentinel Used for Alternative Branching
-#'
-#' @description
-#' Special data type for no-ops. Distinct from NULL for easier
-#' and distinction from unintentional NULL returns.
-#'
-#' @export
-NO_OP = R6Class("NO_OP",
-  public = list(
-    initialize = function() {},
-    print = function() cat("mlr3pipelines NO_OP indicator\n")
-  ),
-)$new()
-is_noop = function(x) test_r6(x, "NO_OP")
-filter_noop = function(x) Filter(Negate(is_noop), x)
-
+#' @family PipeOps
+#' @family Path Branching
 #' @include PipeOp.R
 #' @export
 PipeOpBranch = R6Class("PipeOpBranch",

@@ -1,26 +1,20 @@
 #' @title PipeOpNULL
 #'
-#' @name PipeOpNULL
-#' @format [R6Class] PipeOpNULL
+#' @name mlr_pipeop_NULL
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#'   Simply pushes the input forward unchanged.
-#'   Can be usefull for example to keep the original task in conjunction with
-#'   `gunion()` to keep a copy of the original data.
+#' Simply pushes the input forward unchanged.
+#' Can be usefull to keep the original task in conjunction with
+#' `gunion()`.
 #'
-#' @section Usage:
-#' Inherits from [PipeOp]
-#' * `f = pipeOpNULL$new(id)` \cr
-#'     `character(1)` -> [PipeOpNULL]
-#' @family PipeOp
-NULL
-
+#' @family PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpNULL = R6Class("PipeOpNULL",
   inherit = PipeOp,
   public = list(
-    initialize = function(id = "PipeOpNULL") {
+    initialize = function(id = "NULL") {
       super$initialize(id,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")

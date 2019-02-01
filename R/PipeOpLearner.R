@@ -1,28 +1,31 @@
 #' @title PipeOpLearner
 #'
-#' @name PipeOpLearner
-#' @format [R6Class] PipeOpLearner
+#' @name mlr_pipeop_learner
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#'   Wraps a [mlr3::Learner] into a [PipeOp].
-#'   Inherits the `param_set` from the [mlr3::Learner] it is constructed from.
-#' @section Usage:
-#' Inherits from [PipeOp]
-#' * `f = PipeOpLearner$new(outnum, id)` \cr
-#'   `[Learner]` -> [PipeOpLearner]
-#' @family PipeOp
-NULL
-
+#'   Wraps an [`mlr3::Learner`] into a [`PipeOp`].
+#'   Inherits the `$param_set` and `$param_vals` from the `Learner` it is constructed from.
+#'
+#' @section Public Members / Active Bindings:
+#' * `learner`  :: [`Learner`] \cr
+#'   Learner to use for cross validation / prediction.
+#' @section Methods:
+#' * `PipeOpLearner$new(learner, id = learner$id)` \cr
+#'   ([`Learner`], `character(1)`) -> `self` \cr
+#'   Constructor. The given learner will be used for crossvalidation.
+#' @family PipeOps
+#' @family Meta PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     learner = NULL,
 
-    initialize = function(learner) {
+    initialize = function(learner, id = learner$id) {
       assert_learner(learner)
       self$learner = learner
-      super$initialize(learner$id,
+      super$initialize(id,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
@@ -57,4 +60,4 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpLearner", PipeOpLearner)
+mlr_pipeops$add("learner", PipeOpLearner)

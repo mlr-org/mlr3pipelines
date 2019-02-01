@@ -1,31 +1,41 @@
 #' @title PipeOpLearnerCV
-#' @format [R6Class] PipeOpLearnerCV
+#' @name mlr_pipeop_learner_cv
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
-#' Wraps a [mlr3::Learner] into a [PipeOp].
-#' Returns cross-validated predictions during training and
-#' Inherits the `param_set` from the [mlr3::Learner] it is constructed from.
-#' Parameters:
-#' * `resamping`                         :: [character]
-#' Which resampling method do we want to use. Currently only supports 'cv'.
-#' * `folds`                   :: [integer]
+#' Wraps an [`mlr3::Learner`] into a [`PipeOp`].
+#' Returns cross-validated predictions during training phase and stores a model of the
+#' `Learner` trained on the whole data in `$state` as a new `Task` with a single column.
+#' Returns this model's prediction during prediction phase, as a new `Task` with a single
+#' column.
 #'
-#' @section Usage:
-#' Inherits from [PipeOp]
-#' * `f = PipeOpLearner$new(outnum, id)` \cr
-#'   `[Learner]` -> [PipeOpLearnerCV]
-#' @name PipeOpLearnerCV
-#' @family PipeOp, PipeOpLearner
+#' Inherits the `$param_set` and `$param_vals` from the `Learner` it is constructed from.
+#'
+#' @section Public Members / Active Bindings:
+#' * `learner`  :: [`Learner`] \cr
+#'   Learner to use for cross validation / prediction.
+#' @section Methods:
+#' * `PipeOpLearner$new(learner, id = learner$id)` \cr
+#'   ([`Learner`], `character(1)`) -> `self` \cr
+#'   Constructor. The given learner will be used for crossvalidation.
+#'
+#' @section Parameter Set:
+#' * `resamping` :: `character(1)` \cr
+#'   Which resampling method do we want to use. Currently only supports 'cv'.
+#' * `folds`     :: `numeric(1)` \cr
+#'   Number of cross validation folds.
+#' * `...` \cr
+#'   The [`ParamSet`] of `$learner` is also made available.
+#' @family Pipeops
+#' @family Meta PipeOps
 #' @export
-NULL
-
-#' @include PipeOp.R
+#' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
-  inherit = PipeOp,
+  inherit = PipeOpTaskPreproc,
   public = list(
     learner = NULL,
-    initialize = function(learner) {
+    initialize = function(learner, id = learner$id) {
       assert_learner(learner)
       self$learner = learner
 
@@ -36,14 +46,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       )
       private$.crossval_param_vals = list(resampling = "cv", folds = 3)
 
-      super$initialize(id = learner$id,
-        input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "Task", predict = "Task")
-      )
+      super$initialize(id, can_subset_cols = FALSE)
     },
 
-    train = function(inputs) {
-      task = inputs[[1L]]
+    train_task= function(task) {
       learner = self$learner$clone(deep = TRUE)  # FIXME: see PipeOpLearner FIXME about cloning learner
 
       # Train a learner for predicting
@@ -55,17 +61,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       res = resample(task, learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
 
-      newtsk = private$pred_to_task(prds, task)
-      list(newtsk)
+      private$pred_to_task(prds, task)
     },
 
-    predict = function(inputs) {
-      task = inputs[[1]]
-
+    predict_task = function(task) {
       prediction = self$state$predict(task)
-
       newtsk = private$pred_to_task(prediction, task)
-      list(newtsk)
     }
   ),
 
@@ -74,7 +75,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       prds = as.data.table(prds)
       setnames(prds, "row_id", task$backend$primary_key)
       prds[, truth := NULL]
-      task$clone()$select(character())$cbind(prds)
+      task$clone()$select(character(0))$cbind(prds)
     },
     .crossval_param_set = NULL,
     .crossval_param_vals = NULL
@@ -93,4 +94,4 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpLearnerCV", PipeOpLearnerCV)
+mlr_pipeops$add("learner_cv", PipeOpLearnerCV)

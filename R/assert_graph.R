@@ -1,4 +1,3 @@
-
 #' @title Assertion for mlr3pipeline Graph
 #'
 #' @description
@@ -18,6 +17,9 @@
 #'   of throwing an error.
 #' @param deep_copy (`logical(1)`) \cr
 #'   Whether to return a deep copy.
+#' @return ['Graph'] `x` or a deep clone of it.
+#' @family Graph operators
+#' @export
 assert_graph = function(x, coerce = FALSE, deep_copy = FALSE) {
   assert_flag(coerce)
   assert_flag(deep_copy)

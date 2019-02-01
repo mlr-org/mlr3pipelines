@@ -1,12 +1,14 @@
 #' @title GraphLearner
-#' @format [R6::R6Class()] inheriting from [LearnerClassif].
-#' @description
-#' A [Learner] that encapsulates a [Graph] to be used in mlr3
-#' resampling and benchmarks.
+#' @format [`R6::R6Class`] object inheriting from [`mlr3::Learner`].
 #'
-#' The Graph must return a single [`Prediction`] on its `$predict()`
+#' @description
+#' A [`Learner`][mlr3::Learner] that encapsulates a [`Graph`] to be used in
+#' [mlr3][mlr3::mlr3-package] resampling and benchmarks.
+#'
+#' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,

@@ -1,19 +1,16 @@
 #' @title PipeOpScale
 #'
-#' @name PipeOpScale
-#' @format [R6Class] PipeOpScale
+#' @name mlr_pipeop_scale
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
-#'   Scales the data to mean = 0 and standard deviation 1.
-#'   See [base::scale] for details and parameters.
-#' @section Usage:
-#' Inherits from [PipeOpTaskPreproc]
-#' * `f = pipeOpDT$new(id)` \cr
-#'     `character(1)` -> [PipeOpScale]
-#' @family PipeOp
-NULL
-
-#' @include PipeOp.R
+#' Scales the data to mean = 0 (if `$center` parameter is `TRUE`) and standard deviation 1
+#' (if `$scale` parameter is `TRUE`).
+#'
+#' See [base::scale] for details and parameters.
+#'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpScale = R6Class("PipeOpScale",
   inherit = PipeOpTaskPreproc,

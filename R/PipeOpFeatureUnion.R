@@ -1,21 +1,19 @@
 #' @title PipeOpFeatureUnion
 #'
-#' @name PipeOpFeatureUnion
-#' @format [R6Class] PipeOpFeatureUnion
+#' @name mlr_pipeop_featureunion
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #'   Aggregates features from all input tasks by cbinding them together
-#'   into a [data.table].
-#'   [DataBackend] primary keys and [Task] targets have to be equal across each
-#'   task. Only one target is kept.
-#' @section Usage:
-#' Inherits from [PipeOp]
-#' * `f = pipeOpFeatureUnion$new(id)` \cr
-#'     `character(1)` -> [PipeOpFeatureUnion]
-#' @family PipeOp
-#' @family PipeOpAggregate
-NULL
-
+#'   into a [`data.table`].
+#'   [`DataBackend`] primary keys and [`Task`] targets have to be equal across each
+#'   `Task`. Only one target columns is kept.
+#'
+#' @section Methods:
+#' * `PipeOpFeatureUnion$new(innum, id = "featureunion")` \cr
+#'   (`numeric(1)`, `character(1)`) -> `self` \cr
+#'   Constructor. `innum` determines the number of input channels.
+#' @family PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
@@ -53,6 +51,7 @@ cbind_tasks = function(inputs) {
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
+  # FIXME: we could also say we drop all targets except the first, maybe with a flag
   if (!setequal(targets, task$target_names))
     stopf("All tasks must have the same target columns")
 

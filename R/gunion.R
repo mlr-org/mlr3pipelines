@@ -1,14 +1,18 @@
-#' @title Union of graphs
+#' @title Disjoint Union of Graphs
 #'
 #' @description
-#' Takes an arbitrary amount of [Graph]s and/or [PipeOp]s as inputs and joins
-#' them by "stacking" them one over the other.
-#' Returns the full graph.
+#' Takes an arbitrary amount of [`Graph`]s and/or [`PipeOp`]s as inputs and joins
+#' them in a new `Graph`.
 #'
-#' @param graphs A list of [Graph] or [PipeOp] \cr
+#' The `PipeOp`s of the input `Graph`s are not joined with new edges across
+#' `Graph`s, so if `length(graphs) > 1` the resulting `Graph` will be disconnected.
+#'
+#' @param graphs `list` of ([`Graph`] | [`PipeOp`]) \cr
 #'   List of elements with one of the types defined above, which are the
 #'   graphs to be joined.
-#' @return `[Graph]`
+#' @return [`Graph`] the resulting `Graph`.
+#'
+#' @family Graph operators
 #' @export
 gunion = function(graphs) {
   assert_list(graphs)

@@ -15,7 +15,7 @@
 #'   `Graph` / `PipeOp` to put in front of `g2`.
 #' @param g2 ([`Graph`] | [`PipeOp`]) \cr
 #'   `Graph` / `PipeOp` to put after  `g1`.
-#'
+#' @return [`Graph`] the constructed `Graph`.
 #' @examples
 #' o1 = PipeOpScale$new()
 #' o2 = PipeOpPCA$new()
@@ -27,7 +27,7 @@
 #'   add_pipeop(o1$clone(deep = TRUE))$
 #'   add_pipeop(o2$clone(deep = TRUE))$
 #'   add_edge(o1$id, o2$id)
-#' @family mlr3pipelines backend related
+#' @family Graph operators
 #' @export
 `%>>%` = function(g1, g2) {
   g1 = assert_graph(g1, coerce = TRUE)

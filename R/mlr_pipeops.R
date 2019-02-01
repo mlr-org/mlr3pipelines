@@ -1,15 +1,15 @@
 #' @title Dictionary of PipeOps
 #'
-#' @format [R6Class] object
+#' @format [`R6Class`] object inheriting from [`mlr3::Dictionary`]
 #' @description
-#' A simple [Dictionary] storing objects of class [PipeOp].
-#' Each learner has an associated help page, see `mlr_pipeops_[id]`.
+#' A simple [`Dictionary`][mlr3::Dictionary] storing objects of class [`PipeOp`].
+#' Each `PipeOp` has an associated help page, see `mlr_pipeop_[id]`.
 #'
 #' @section Usage:
 #'
-#' See [mlr3::Dictionary].
+#' See [`mlr3::Dictionary`].
 #'
-#' @family Dictionary
+#' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @name mlr_pipeops
 NULL

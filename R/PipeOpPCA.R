@@ -1,23 +1,17 @@
 #' @title PipeOpPCA
 #'
-#' @name PipeOpPCA
-#' @format [R6Class] PipeOpPCA
+#' @name mlr_pipeop_pca
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
-#'   Extracts principle components from data.
-#'   See [stats::prcomp] for details  and parameters.
-#' @section Usage:
-#' Inherits from [PipeOpPCA]
-#' * `f = pipeOpPCA$new(id)` \cr
-#'     `character(1)` -> [PipeOpPCA]
-#' @family PipeOp
+#' Extracts principle components from data.
+#'
+#' See [stats::prcomp] for details  and parameters.
 #' @examples
 #' # Instantiate PipeOpPCA
 #' op1 = PipeOpPCA$new()
-NULL
-
-
-#' @include PipeOp.R
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpPCA = R6Class("PipeOpPCA",
   inherit = PipeOpTaskPreproc,

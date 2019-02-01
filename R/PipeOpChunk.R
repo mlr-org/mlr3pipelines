@@ -1,26 +1,26 @@
 #' @title PipeOpChunk
 #'
-#' @name PipeOpChunk
-#' @format [R6Class] PipeOpChunk
+#' @name mlr_pipeop_chunk
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Chunks its input into `outnum` chunks.
-#' Returns a list of [mlr3::Task].
-#' During predict simply passes on the input.
-#' @section Usage:
-#' Inherits from [PipeOpChunk]
-#' * `f = PipeOpChunk$new(outnum, id)` \cr
-#'     `integer(1)`, `character(1)` -> [PipeOpCopy]
-#' @section Details:
-#' * `outnum`: `integer(1)` Number of times the input is copied.
-#' * `shuffle`: `logical(1)` Should the data be shuffled before chunking?
-#' * `stratify`: `logical(1)` Should the subsamples be stratified.
-#' @family PipeOp
-#' @family PipeOpBroadcast
+#' Returns a list of [`Task`]s during training, and
+#' simply passes on the input during prediction.
+#'
+#' @section Methods:
+#' * `PipeOpChunk$new(outnum, id = "chunk")` \cr
+#'   (`integer(1)`, `character(1)`) -> `self` \cr
+#'   Constructor. `outnum` gives the number of output
+#'   channels / chunks that are created.
+#' @section Parameter Set:
+#' * `shuffle` :: `logical(1)` \cr
+#'   Should the data be shuffled before chunking? Default `TRUE`
+#' * `stratify` :: `logical(1)` \cr
+#'   Should the subsamples be stratified. Default `FALSE`.
+#' @family PipeOps
 #' @examples
 #' op = PipeOpChunk$new(5)
-NULL
-
 #' @include PipeOp.R
 #' @export
 PipeOpChunk = R6Class("PipeOpChunk",

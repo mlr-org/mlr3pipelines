@@ -1,20 +1,17 @@
 #' @title PipeOpCopy
 #'
-#' @name PipeOpCopy
-#' @format [R6Class] PipeOpCopy
+#' @name mlr_pipeop_copy
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #'   Copies its input `outnum` times.
 #' @section Usage:
-#' Inherits from [PipeOp]
-#' * `f = PipeOpCopy$new(outnum, id)` \cr
-#'     `integer(1)`, `character(1)` -> [PipeOpCopy]
-#' @section Details:
-#' * `outnum`: `integer(1)` Number of times the input is copied.
-#' @family PipeOp
-#' @family PipeOpBroadcast
-NULL
-
+#' @section Methods:
+#' * `PipeOpEnsemble$new(outnum, id)` \cr
+#'   (`numeric(1)`, `character(1)`) -> `self` \cr
+#'   Constructor. `outnum` determines the number of output channels and
+#'   copies that will be made.
+#' @family PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpCopy = R6Class("PipeOpCopy",
@@ -38,3 +35,6 @@ PipeOpCopy = R6Class("PipeOpCopy",
     }
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpCopy", PipeOpCopy)
