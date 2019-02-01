@@ -106,7 +106,7 @@ Syntax
 #'   to slots.
 #'
 #' @section Methods:
-#' * `new(x, y)` \cr
+#' * `<classname>$new(x, y)` \cr
 #'   (`character` | `NULL`, `numeric(1)`) -> `self` \cr
 #'   The `$new()` method always returns `self`.
 #' * `mutate(x = default)` \cr
