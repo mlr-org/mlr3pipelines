@@ -47,6 +47,7 @@ test_that("branching", {
   g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new(2L)
   z = test_graph(g, n_nodes = 4L, n_edges = 4L)
 
+  task = mlr_tasks$get("iris")
   res = g$train(task)
   expect_true(g$is_trained)
   expect_equal(res, list(unbranch.output = NULL))
