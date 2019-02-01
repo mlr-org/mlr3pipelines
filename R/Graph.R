@@ -222,7 +222,7 @@ Graph = R6Class("Graph",
         outwidth = getOption("width") %??% 80  # output width we want (default 80)
         colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
         collimit = calculate_collimit(colwidths, outwidth)
-        options(datatable.prettyprint.char = collimit)  # minus three because '...' gets appended
+        options(datatable.prettyprint.char = collimit)
         print(lines, row.names = FALSE)
       } else {
         cat("Empty Graph.\n")

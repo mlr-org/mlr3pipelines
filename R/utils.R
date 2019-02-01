@@ -77,5 +77,5 @@ calculate_collimit = function(colwidths, outwidth) {
       break
     }
   }
-  collimit - 3
+  collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
