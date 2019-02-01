@@ -47,3 +47,16 @@ test_that("PipeOp printer", {
     "PipeOp.*<debug>.*Input channels.*input \\[Task,Task\\]\nOutput channels.*output \\[NULL,Prediction\\]$")
 
 })
+
+test_that("Prevent creation of PipeOps with no channels", {
+
+  expect_class(PipeOp$new("id", input = data.table(name = "input", train = "*", predict = "*"),
+    output = data.table(name = "output", train = "*", predict = "*")), "PipeOp")
+
+  expect_error(PipeOp$new("id", input = data.table(name = "input", train = "*", predict = "*")[FALSE],
+    output = data.table(name = "output", train = "*", predict = "*")), "input.*at least 1 row")
+
+  expect_error(PipeOp$new("id", input = data.table(name = "input", train = "*", predict = "*"),
+    output = data.table(name = "output", train = "*", predict = "*")[FALSE]), "output.*at least 1 row")
+
+})
