@@ -101,7 +101,7 @@ Syntax
 
 ```
 #' @title <classname>
-#' @format [R6Class] <classname>{{[. Inherits from [<superclass>]}}
+#' @format [`R6Class`] object{{[ inheriting from [`<superclass>`]}}.
 #'
 #' @description
 #' Long form description. Mentions [`PipeOp`] once. Mentions `PipeOp` twice.
