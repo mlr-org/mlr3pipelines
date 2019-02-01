@@ -12,7 +12,7 @@
 
 <meta name="author" content="Author" />
 
-<meta name="date" content="2019-01-30" />
+<meta name="date" content="2019-02-01" />
 
 <title>Showcase: A first Pipeline</title>
 
@@ -302,7 +302,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Showcase: A first Pipeline</h1>
 <h4 class="author"><em>Author</em></h4>
-<h4 class="date"><em>2019-01-30</em></h4>
+<h4 class="date"><em>2019-02-01</em></h4>
 
 
 
@@ -317,10 +317,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>A list of available PipeOps can be obtained from</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">  <span class="kw">library</span>(mlr3pipelines)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">  mlr_pipeops<span class="op">$</span><span class="kw">ids</span>()</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;  [1] &quot;PipeOpBranch&quot;       &quot;PipeOpChunk&quot;        &quot;PipeOpDownsample&quot;  </span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;  [4] &quot;PipeOpFeatureUnion&quot; &quot;PipeOpLearner&quot;      &quot;PipeOpLearnerCV&quot;   </span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;  [7] &quot;PipeOpNULL&quot;         &quot;PipeOpPCA&quot;          &quot;PipeOpScale&quot;       </span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; [10] &quot;PipeOpUnbranch&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; [1] &quot;downsample&quot; &quot;learner_cv&quot; &quot;NULL&quot;       &quot;pca&quot;        &quot;scale&quot;</span></a></code></pre></div>
 <p>First we define the required PipeOps:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">  op1 =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">  op2 =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>
