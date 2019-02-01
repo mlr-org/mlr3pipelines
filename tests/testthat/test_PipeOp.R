@@ -30,7 +30,7 @@ test_that("PipeOp - simple tests with PipeOpScale", {
 test_that("PipeOp printer", {
 
   expect_output(print(PipeOpNULL$new()),
-    "PipeOp.*<PipeOpNULL>.*not trained.*param_vals.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
+    "PipeOp.*<NULL>.*not trained.*param_vals.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
 
 
   expect_output(print(PipeOpDebugMulti$new(3, 4)),

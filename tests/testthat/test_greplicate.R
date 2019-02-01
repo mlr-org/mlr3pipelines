@@ -5,5 +5,5 @@ test_that("greplicate / pipeop", {
   g = greplicate(op_ds, 3)
   expect_graph(g)
   expect_character(g$ids(), len = 3)
-  expect_equal(names(g$pipeops), c("downsample_001", "downsample_002", "downsample_003"))
+  expect_equal(names(g$pipeops), c("downsample_1", "downsample_2", "downsample_3"))
 })

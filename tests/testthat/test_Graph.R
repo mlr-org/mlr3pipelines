@@ -72,15 +72,16 @@ test_that("complex graph", {
   expect_set_equal(lines,
     c("Training debug.basic",
       "Training debug.multi with input list(input_1 = 1)",
-      "Training debug2_001 with input list(input_1 = 2)",
-      "Training debug2_002 with input list(input_1 = 3)",
+      "Training debug2_1 with input list(input_1 = 2)",
+      "Training debug2_2 with input list(input_1 = 3)",
       "Training basictop",
       "Training basicbottom",
       "Training debug2 with input list(input_1 = 4, input_2 = 4)",
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"))
 
-
+  pdf(file = NULL)  # don't show plot. It is annoying, and triggers issue mlr-org/mlr3#158
   biggraph$plot()
+  dev.off()
 
 })
 
