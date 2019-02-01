@@ -25,7 +25,8 @@ respective \code{PipeOp}s.
 Is the \code{Graph}, i.e. are all of its \code{PipeOp}s, trained, and can the \code{Graph} be used for prediction?
 \item \code{lhs}          ::  \code{list} of \code{\link{PipeOp}} \cr
 The 'left-hand-side' nodes that have some unconnected input channels and therefore act as \code{Graph} input layer.
-\item \code{rhs}          :: \code{list of [}PipeOp\code{] \cr The 'right-hand-side' nodes that have some unconnected output channels and therefore act as }Graph` output layer.
+\item \code{rhs}          :: \code{list} of \code{\link{PipeOp}} \cr
+The 'right-hand-side' nodes that have some unconnected output channels and therefore act as \code{Graph} output layer.
 \item \code{input}        :: \code{\link{data.table}} with \code{character} columns \code{name}, \code{train}, \code{predict}, \code{op.id}, \code{channel.name} \cr
 Input channels of the \code{Graph}. For each channel lists the name, input type during training, input type during prediction,
 \code{PipeOp} \code{$id} of the \code{PipeOp} the channel pertains to, and channel name as the \code{PipeOp} knows it.
@@ -35,17 +36,17 @@ Output channels of the \code{Graph}. For each channel lists the name, output typ
 \item \code{packages}     :: \code{character} \cr
 Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
 \code{\link{PipeOp}} objects.
+\item \code{param_set}    :: \code{\link{ParamSet}} \cr
+Parameter constraints for \code{$param_vals}. These are the union of \code{$param_set}s of all \code{PipeOp}s in the \code{Graph}. Parameter names
+as seen by the \code{Graph} have the naming scheme \code{<PipeOp$id>.<PipeOp original parameter name>}.
 \item \code{param_vals}   :: named \code{list} \cr
 Parameter values of all \code{PipeOp}s in the \code{Graph}. Changing this value propagates the changes directly to the contained
 \code{PipeOp}s and is an alternative to changing a \code{PipeOp}s \code{$param_vals} directly. Parameter values are checked against
 parameter constraints in \code{$param_set}. Parameter names as seen by the \code{Graph} have the naming scheme
 \code{<PipeOp$id>.<PipeOp original parameter name>}.
-\item \code{param_set}    :: \code{\link{ParamSet}} \cr
-Parameter constraints \code{$param_vals}. These are the union of \code{$param_set}s of all \code{PipeOp}s in the \code{Graph}. Parameter names
-as seen by the \code{Graph} have the naming scheme \code{<PipeOp$id>.<PipeOp original parameter name>}.
-\item \code{hash}         :: \code{\link{character(1)}} \cr
-Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes and the \code{$edges} hashes, but
-is independent of the \code{$param_vals} configuration.
+\item \code{hash}         :: \code{character(1)} \cr
+Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes (and therefore their \code{$param_vals})
+and a hash of \code{$edges}.
 }
 }
 
@@ -75,21 +76,50 @@ are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
 \item \code{plot()} \cr
 () -> \code{NULL} \cr
 Plot the graph, using the \code{\link[igraph:igraph-package]{igraph}} package.
-\item \code{f$print()} \cr
-Print a representation of the graph on the console. Output is currently a table with columns \code{id}, and
-short representation of \code{state}.
-\item \code{f$set_names(old, new)} \cr
+\item \code{print()} \cr
+() -> \code{NULL} \cr
+Print a representation of the graph on the console. Output is a table with one row for each contained \code{PipeOp} and
+columns \code{ID} (\code{$id} of \code{PipeOp}) and \code{State} (short representation of \code{$state} of \code{PipeOp}).
+\item \code{set_names(old, new)} \cr
 (\code{character}, \code{character}) -> \code{self} \cr
-Rename PipeOps: Change ID of each PipeOp as identified by \code{old} to the corresponding item in \code{new}.
-\item \code{f$train()} \cr
-\code{\link{Task}} -> \code{list} of any \cr
-Train graph by calling all the PipeOps' $train method. Return a list of outputs for each unconnected
-PipeOp out-channel. During training, the \code{$state} member of the PipeOps will be set.
-\item \code{f$predict()} \cr
-\code{\link{Task}} -> \code{list} of any \cr
-Predict with the graph by calling all the PipeOps' $predict method. Return a list of outputs for each
-unconnected PipeOp out-channel
+Rename PipeOps: Change ID of each PipeOp as identified by \code{old} to the corresponding item in \code{new}. This should be used
+instead of changing a \code{PipeOp}'s \code{$id} value directly!
+\item \code{train(input, single_input = TRUE)} \cr
+(\code{any}, \code{logical(1)}) -> \code{list} of \code{any} \cr
+Train \code{Graph} by calling all the \code{PipeOp}'s \code{$train} methods. Return a named \code{list} of outputs for each unconnected
+\code{PipeOp} out-channel, named according to the \code{Graph}'s \code{$output} \code{name} column. During training, the \code{$state}
+member of the \code{PipeOp}s will be set and the \code{$is_trained} slot of the \code{Graph} (and each individual \code{PipeOp}) will
+consequently be set to \code{TRUE}.\cr
+If \code{single_input} is \code{TRUE}, the \code{input} value will be sent to each unconnected \code{PipeOp}'s input channel
+(as listed in the \code{Graph}'s \code{$input}). Typically, \code{input} should be a \code{\link{Task}}. If \code{single_input} is \code{FALSE}, then
+\code{input} should be a \code{list} with the same length as the \code{Graph}'s \code{$input} table has rows; each list item will be sent
+to a corresponding input channel of the \code{Graph}. If \code{input} is a named \code{list}, names must correspond to input channel
+names (\code{$input$name}) and inputs will be sent to the channels by name; otherwise they will be sent to the channels
+in order in which they are listed in \code{$input}.
+\item \code{predict(input, single_input = TRUE)} \cr
+(\code{any}, \code{logical(1)}) -> \code{list} of \code{any} \cr
+Predict with the \code{Graph} by calling all the \code{PipeOp}'s \code{$train} methods. Input and output, as well as the function
+of the \code{single_input} argument, are analogous to \code{$train()}.
 }
 }
 
+\examples{
+g = Graph$new()$
+  add_pipeop(PipeOpScale$new(id = "scale"))$
+  add_pipeop(PipeOpPCA$new(id = "pca"))$
+  add_edge("scale", "pca")
+g$input
+g$output
+
+trained = g$train(mlr3::mlr_tasks$get("iris"))
+
+predicted = g$predict(mlr3::mlr_tasks$get("iris")$filter(1:10))
+
+}
+\seealso{
+Other mlr3pipelines backend related: \code{\link{PipeOpTaskPreprocSimple}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeops}}
+}
+\concept{mlr3pipelines backend related}
 \keyword{datasets}

@@ -8,13 +8,38 @@ g1 \%>>\% g2
 }
 \arguments{
 \item{g1}{(\code{\link{Graph}} | \code{\link{PipeOp}}) \cr
-\link{Graph} / \link{PipeOp} to put in front of \code{g2}.}
+\code{Graph} / \code{PipeOp} to put in front of \code{g2}.}
 
 \item{g2}{(\code{\link{Graph}} | \code{\link{PipeOp}}) \cr
-\link{Graph} / \link{PipeOp} to put after  \code{g1}.}
+\code{Graph} / \code{PipeOp} to put after  \code{g1}.}
+}
+\value{
+\code{\link{Graph}} the constructed \code{Graph}.
 }
 \description{
 This operator \dQuote{pipes} data from the source \code{g1} into the sink \code{g2}. Both source and sink can either be
-a \link{Graph} or a \link{PipeOp}. The number of output channels of \code{g1} must equal the number of input channels
-of the \code{g2}.
+a \code{\link{Graph}} or a \code{\link{PipeOp}}. The number of output channels of \code{g1} (as given by \code{g1$output}) must equal the
+number of input channels of \code{g2} (as given by \code{g2$input}). Connections between channels are created in the
+order in which they occur in \code{g1} and \code{g2}, respectively: \code{g1}'s output channel 1 is connected to \code{g2}'s input
+channel 1, channel 2 to 2 etc.
+
+This operator always created deep copies of its input arguments, so they cannot be modified by reference.
+To access individual \code{PipeOp}s after composition, use the resulting \code{Graph}'s \code{$pipeops} list.
 }
+\examples{
+o1 = PipeOpScale$new()
+o2 = PipeOpPCA$new()
+
+# The following two are equivalent:
+result1 = o1 \%>>\% o2
+
+result2 = Graph$new()$
+  add_pipeop(o1$clone(deep = TRUE))$
+  add_pipeop(o2$clone(deep = TRUE))$
+  add_edge(o1$id, o2$id)
+}
+\seealso{
+Other Graph operators: \code{\link{assert_graph}},
+  \code{\link{greplicate}}, \code{\link{gunion}}
+}
+\concept{Graph operators}

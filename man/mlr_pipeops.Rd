@@ -3,16 +3,36 @@
 \name{mlr_pipeops}
 \alias{mlr_pipeops}
 \title{Dictionary of PipeOps}
-\format{\link{R6Class} object}
+\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3:Dictionary]{mlr3::Dictionary}}}
 \description{
-A simple \link{Dictionary} storing objects of class \link{PipeOp}.
-Each learner has an associated help page, see \code{mlr_pipeops_[id]}.
+A simple \code{\link[mlr3:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
+Each \code{PipeOp} has an associated help page, see \code{mlr_pipeop_[id]}.
 }
 \section{Usage}{
 
 
-See \link[mlr3:Dictionary]{mlr3::Dictionary}.
+See \code{\link[mlr3:Dictionary]{mlr3::Dictionary}}.
 }
 
-\concept{Dictionary}
+\seealso{
+Other mlr3pipelines backend related: \code{\link{Graph}},
+  \code{\link{PipeOpTaskPreprocSimple}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}}
+
+Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_branch}},
+  \code{\link{mlr_pipeop_chunk}},
+  \code{\link{mlr_pipeop_copy}},
+  \code{\link{mlr_pipeop_downsample}},
+  \code{\link{mlr_pipeop_featureunion}},
+  \code{\link{mlr_pipeop_learner}},
+  \code{\link{mlr_pipeop_majorityvote}},
+  \code{\link{mlr_pipeop_modelavg}},
+  \code{\link{mlr_pipeop_pca}},
+  \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_unbranch}}
+}
 \concept{PipeOps}
+\concept{mlr3pipelines backend related}
