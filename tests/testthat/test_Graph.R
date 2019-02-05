@@ -287,3 +287,30 @@ test_that("Graph printer aux function calculates col widths well", {
   expect_string("spurious expectation to show that we didn't skip this test")
 
 })
+
+test_that("Intermediate results are saved to Graph if requested", {
+
+  g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
+    gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
+
+  task = mlr_tasks$get("iris")
+
+  res = g$train(task)
+
+  expect_null(g$pipeops$pca$.result)
+
+  g$keep_results = TRUE
+
+  res = g$predict(task)
+
+  restask = PipeOpPCA$new()$train(list(task))
+
+  expect_equal(g$pipeops$pca$.result, restask)
+
+  restask2 = PipeOpScale$new()$train(restask)
+
+  expect_equal(g$pipeops$scale$.result, restask2)
+
+  expect_equal(unname(g$pipeops[["NULL"]]$.result), restask)
+
+})

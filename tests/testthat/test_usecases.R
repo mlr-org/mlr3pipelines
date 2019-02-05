@@ -21,7 +21,6 @@ test_that("linear: scale + pca + learn", {
   z = test_graph(g, n_nodes = 3L, n_edges = 2L)
 })
 
-
 test_that("featureunion", {
   g = gunion(list(PipeOpPCA$new(), PipeOpNULL$new())) %>>%
     PipeOpFeatureUnion$new(2L) %>>% PipeOpLrnRP
