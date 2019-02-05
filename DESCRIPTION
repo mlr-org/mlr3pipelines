@@ -19,7 +19,8 @@ Imports:
     mlr3,
     mlr3misc,
     paradox,
-    digest
+    digest,
+    withr
 Suggests:
     igraph,
     knitr,

@@ -111,9 +111,12 @@ g = Graph$new()$
 g$input
 g$output
 
-trained = g$train(mlr3::mlr_tasks$get("iris"))
+task = mlr_tasks$get("iris")
+trained = g$train(task)
+trained[[1]]$data()
 
-predicted = g$predict(mlr3::mlr_tasks$get("iris")$filter(1:10))
+predicted = g$predict(task)
+predicted[[1]]$data()
 
 }
 \seealso{
