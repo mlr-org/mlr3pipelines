@@ -11,12 +11,19 @@ PipeOpUndersample
 }
 \description{
 Undersamples (filters) a \code{\link{Task}} to keep only a fraction of the rows with majority class.
+
+Possible parameters are \code{$frac} and \code{$ratio}, only one of which must be given. The majority
+class is never "up"-sampled, so if \code{$ratio} times the mean minority class size turns out
+larger than the initial majority class size, the number of rows is shuffled but not changed.
 }
 \section{Parameter Set}{
 
 \itemize{
-\item \code{frac} :: \code{numeric(1)} \cr
-Fraction of rows of the majority class to keep in the task. Default 1.
+\item \code{frac}  :: \code{numeric(1)} \cr
+Fraction of rows of the majority class to keep in the task.
+\item \code{ratio} :: \code{numeric(1)} \cr
+Ratio of number of rows of majority class to keep, relative
+to average minority class row number. Default is 1.
 }
 }
 

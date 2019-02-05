@@ -12,9 +12,9 @@
 
 <meta name="author" content="Author" />
 
-<meta name="date" content="2019-02-01" />
+<meta name="date" content="2019-02-05" />
 
-<title>Showcase: A first Pipeline</title>
+<title>Showcase: A simple pipeline</title>
 
 
 
@@ -300,38 +300,114 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
-<h1 class="title toc-ignore">Showcase: A first Pipeline</h1>
+<h1 class="title toc-ignore">Showcase: A simple pipeline</h1>
 <h4 class="author"><em>Author</em></h4>
-<h4 class="date"><em>2019-02-01</em></h4>
+<h4 class="date"><em>2019-02-05</em></h4>
 
 
 
 <p>This vignette showcases the general syntax and semantic behind <code>mlr3pipelines</code>.</p>
 <div id="an-introduction-to-pipeoperators" class="section level2">
 <h2>An introduction to PipeOperators</h2>
-<p>In this example, we create a ĺinear Pipeline. After scaling all input features, we rotate our data using principal component analysis. After transformation, we use a simple Decision Tree learner for classification.</p>
-<p>We first create an mlr task that, which we want to transform with the pipeline. This task contains the famous iris dataset and some meta-information, such as the target variable.</p>
+<p>In this example, we create a ĺinear Pipeline. After scaling all input features, we rotate our data using principal component analysis. After this transformation, we use a simple Decision Tree learner for classification.</p>
+<p>As exemplary data, we will use the <code>iris</code> task. This object contains the famous iris dataset and some meta-information, such as the target variable.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">  <span class="kw">library</span>(mlr3)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">  task =<span class="st"> </span>mlr_tasks<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;iris&quot;</span>)</a></code></pre></div>
+<p>We quickly split our data into a train and a test set:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">  test.idx =<span class="st"> </span><span class="kw">sample</span>(<span class="kw">seq_len</span>(task<span class="op">$</span>nrow), <span class="dv">30</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  train.idx =<span class="st"> </span><span class="kw">setdiff</span>(<span class="kw">seq_len</span>(task<span class="op">$</span>nrow), test.idx)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="co"># Set task to only use train indexes</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  task<span class="op">$</span>row_roles<span class="op">$</span>use =<span class="st"> </span>train.idx</a></code></pre></div>
 <p>A Pipeline (or <code>Graph</code>) contains multiple PipeOperators, where each <code>PipeOp</code> transforms the data when it flows through it. For this usecase, we require 3 transformations: - A PipeOp that scales the data - A PipeOp that performs PCA - A PipeOp that contains the <strong>Decision Tree</strong> learner</p>
 <p>A list of available PipeOps can be obtained from</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">  <span class="kw">library</span>(mlr3pipelines)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  mlr_pipeops<span class="op">$</span><span class="kw">ids</span>()</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; [1] &quot;downsample&quot; &quot;learner_cv&quot; &quot;NULL&quot;       &quot;pca&quot;        &quot;scale&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">  <span class="kw">library</span>(mlr3pipelines)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  mlr_pipeops<span class="op">$</span><span class="kw">ids</span>()</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [1] &quot;downsample&quot;  &quot;learner_cv&quot;  &quot;NULL&quot;        &quot;pca&quot;         &quot;scale&quot;      </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; [6] &quot;undersample&quot;</span></a></code></pre></div>
 <p>First we define the required PipeOps:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">  op1 =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  op2 =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  op3 =<span class="st"> </span>PipeOpLearner<span class="op">$</span><span class="kw">new</span>(<span class="dt">learner =</span> mlr_learners<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;classif.rpart&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">  op1 =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  op2 =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  op3 =<span class="st"> </span>PipeOpLearner<span class="op">$</span><span class="kw">new</span>(<span class="dt">learner =</span> mlr_learners<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;classif.rpart&quot;</span>))</a></code></pre></div>
+<div id="a-quick-glance-into-a-pipeop" class="section level3">
+<h3>A quick glance into a PipeOp</h3>
 <p>In order to get a better understanding of what the respective PipeOps do, we quickly look at one of them in detail:</p>
-<p>The following slots (and more) are thus contained in each PipeOp: - <code>train</code>: Function used to train the PipeOp. - <code>predict</code>: Function used to predict with the PipeOp. - <code>id</code>: Set/Get the id of the PipeOp. - <code>param_set</code>: The set of all exposed parameters of the PipeOp. - <code>param_vals</code>: Current hyperparameter settings. - <code>is_trained</code>: Is the PipeOp currently trained?</p>
+<p>The following slots (and more) are thus contained in each PipeOp: - <code>train</code>: A function used to train the PipeOp. - <code>predict</code>: A function used to predict with the PipeOp. - <code>id</code>: Set/Get the id of the PipeOp. - <code>param_set</code>: The set of all exposed parameters of the PipeOp. - <code>param_vals</code>: Current hyperparameter settings. - <code>is_trained</code>: Is the PipeOp currently trained?</p>
 <p>We can check the properties by accessing the respective slot.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">  op3<span class="op">$</span>id</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [1] &quot;rpart&quot;</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  op3<span class="op">$</span>is_trained</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
-<p>The <code>param_set</code> and <code>param_vals</code> are required if our PipeOp contains hyperparameters we want to set. See [ParamSet] for a quick intro on how <code>ParamSet</code>s work.</p>
-<p>The <code>train()</code> and <code>predict()</code> functions define the core functionality of our PipeOp. In many cases, inorder to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a <code>train</code> function that learns the appropriate transformations from the training set and a <code>test</code> function that applies the transformation on future data.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">  op3<span class="op">$</span>id</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; [1] &quot;rpart&quot;</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">  op3<span class="op">$</span>is_trained</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
+<p>The <code>param_set</code> and <code>param_vals</code> are required if a PipeOp contains hyperparameters we want to set. See [ParamSet] for a quick intro on how <code>ParamSet</code>s work.</p>
+<p>The <code>train()</code> and <code>predict()</code> functions define the core functionality of our PipeOp. In many cases, in order to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a <code>train</code> function that learns the appropriate transformations from the training set and a <code>test</code> function that applies the transformation on future data.</p>
 <p>In the case of <code>PipeOpLearner</code> this means the following: - <code>train()</code> trains a model on its input Task and saves the trained model to an additional slot, <code>.$state</code>. It returns a <code>list(NULL)</code>, as subsequent operators usually do not require any output. - <code>predict()</code> uses the model stored in <code>.$state</code> in order to predict the class of a new input task. It returns a [Prediction] object. This object contains the learner’s predictions.</p>
+</div>
+</div>
+<div id="constructing-the-pipeline" class="section level2">
+<h2>Constructing the Pipeline</h2>
+<p>We can now connect the <code>PipeOp</code>s constructed earlier to a <strong>Pipeline</strong>. We can do this using the <code>%&gt;&gt;%</code> operator.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">  linear_pipeline =<span class="st"> </span>op1 <span class="op">%&gt;&gt;%</span><span class="st"> </span>op2 <span class="op">%&gt;&gt;%</span><span class="st"> </span>op3</a></code></pre></div>
+<p>The result of this operation is a <code>graph</code>. A <code>graph</code> connects the input and output of each <code>PipeOp</code> to the following <code>PipeOp</code>. This allows us to specify linear processing pipelines. In this case, we connect the output of the <strong>scaling</strong> PipeOp to the input of the <strong>PCA</strong> PipeOp and the output of the <strong>PCA</strong> PipeOp to the input of <strong>PipeOpLearner</strong>.</p>
+<p>We can now train the <code>graph</code> using the iris <strong>Task</strong>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">  linear_pipeline<span class="op">$</span><span class="kw">train</span>(task)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; $rpart.output</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; NULL</span></a></code></pre></div>
+<p>When we now train the graph, the data flows through the graph as follows: - The Task flows into the <code>PipeOpScale</code>. The <code>PipeOp</code> scales each column in the data contained in the Task and returns a new Task that contains the scaled data to its output. Relevant information</p>
+<ul>
+<li><p>The scaled task flows into the <code>PipeOpPCA</code>. PCA transforms the data and returns a (possibly smaller) Task, that contains the transformed data.</p></li>
+<li><p>This transformed data then flows into the learner, in our case <strong>classif.rpart</strong>. It is then used to train the learner, and as a result saves a model that can be used to predict new data.</p></li>
+</ul>
+<p>In order to predict on new data, we need to save the relevant transformations our data went through while training. As a result, each PipeOp saves a state, where information requried to appropriately transform future data is stored. In our case, this is <strong>mean</strong> and <strong>standard deviation</strong> of each column for <code>PipeOpScale</code>, the PCA rotation matrix for <code>PipeOpPCA</code> and the learned model for <code>PipeOpLearner</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">  <span class="co"># predict on test.idx</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  task<span class="op">$</span>row_roles<span class="op">$</span>use =<span class="st"> </span>test.idx</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  linear_pipeline<span class="op">$</span><span class="kw">predict</span>(task)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; $rpart.output</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; &lt;PredictionClassif&gt; for 30 observations:</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;     row_id  response     truth</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;  1:      1    setosa    setosa</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;  2:      2    setosa    setosa</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;  3:      4    setosa    setosa</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; ---                           </span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; 28:    121 virginica virginica</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; 29:    131 virginica virginica</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; 30:    133 virginica virginica</span></a></code></pre></div>
+</div>
+<div id="using-the-pipeline-as-an-mlr3-learner" class="section level2">
+<h2>Using the Pipeline as an mlr3 learner</h2>
+<p>In most cases, we want to use the pipeline just like an <strong>mlr3</strong> learner. In order to achieve this, we simply construct a <code>GraphLearner</code> that contains the pipeline we defined.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">  graph_lrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(linear_pipeline)</a></code></pre></div>
+<p>We can now use this learner in order to create an [mlr3::Experiment].</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">  task =<span class="st"> </span>mlr_tasks<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;iris&quot;</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">  e =<span class="st"> </span>Experiment<span class="op">$</span><span class="kw">new</span>(<span class="dt">task =</span> task, <span class="dt">learner =</span> graph_lrn)</a></code></pre></div>
+<p>For training:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">  e<span class="op">$</span><span class="kw">train</span>(train.idx)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; INFO [mlr3] Training learner 'scale.pca.rpart' on task 'iris' ...</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">  e<span class="op">$</span>model</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; Graph with 3 PipeOps:</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;     ID                 State sccssors prdcssors</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;  scale                &lt;list&gt;      pca          </span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;    pca              &lt;prcomp&gt;    rpart     scale</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;  rpart &lt;LearnerClassifRpart&gt;                pca</span></a></code></pre></div>
+<p>testing:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">  e<span class="op">$</span><span class="kw">predict</span>(test.idx)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; INFO [mlr3] Predicting with model of learner 'scale.pca.rpart' on task 'iris' ...</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">  e<span class="op">$</span>prediction</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; &lt;PredictionClassif&gt; for 30 observations:</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;     row_id  response     truth</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;  1:      1    setosa    setosa</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;  2:      2    setosa    setosa</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;  3:      4    setosa    setosa</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; ---                           </span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; 28:    121 virginica virginica</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; 29:    131 virginica virginica</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; 30:    133 virginica virginica</span></a></code></pre></div>
+<p>and scoring:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">  e<span class="op">$</span><span class="kw">score</span>()</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt; INFO [mlr3] Scoring predictions of learner 'scale.pca.rpart' on task 'iris' ...</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">  e<span class="op">$</span>performance[<span class="st">&quot;mmce&quot;</span>]</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt; &lt;NA&gt; </span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;   NA</span></a></code></pre></div>
+<p>This allows us to seamlessly integrate pipelines with the whole [mlr3] ecosystem, and thus for example resample or benchmark pipelines, tune its params and many more things.</p>
+<p>For additional information on <code>mlr3</code> please refer to the respective vignettes.</p>
 </div>
 
 
