@@ -200,9 +200,10 @@ PipeOp = R6Class("PipeOp",
 )
 
 assert_connection_table = function(table) {
-  assert_data_table(table, .var.name = vname(table), min.rows = 1)
-  assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = vname(table))
-  assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", vname(table)))
+  varname = deparse(substitute(table))
+  assert_data_table(table, .var.name = varname, min.rows = 1)
+  assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = varname)
+  assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", varname))
   table
 }
 
