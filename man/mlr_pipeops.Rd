@@ -32,7 +32,8 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
-  \code{\link{mlr_pipeop_unbranch}}
+  \code{\link{mlr_pipeop_unbranch}},
+  \code{\link{mlr_pipeop_undersample}}
 }
 \concept{PipeOps}
 \concept{mlr3pipelines backend related}

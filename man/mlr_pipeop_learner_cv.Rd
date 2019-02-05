@@ -12,7 +12,11 @@ PipeOpLearnerCV
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 Returns cross-validated predictions during training phase and stores a model of the
-\code{Learner} trained on the whole data in \code{$state} as a new \code{Task} with a single column.
+\code{Learner} trained on the whole data in \code{$state} as a new \code{Task} with the predictions;
+usually a feature \code{<ID>.response} if the \code{Learner}'s \code{$predict.type} is \code{"response"},
+\code{<ID>.prob.<CLASS>} and \code{<ID>.response} for \code{$predict.type} \code{"prob"}, or \code{<ID>.response}
+and \code{<ID>.se} for \code{$predict.type} \code{"se"}. \code{<ID>} is here the \code{$id} of the \code{PipeOpLearnerCV}.
+
 Returns this model's prediction during prediction phase, as a new \code{Task} with a single
 column.
 

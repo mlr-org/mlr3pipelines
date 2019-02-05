@@ -61,6 +61,7 @@ Collate:
     'PipeOpPCA.R'
     'PipeOpScale.R'
     'PipeOpUnBranch.R'
+    'PipeOpUndersample.R'
     'assert_graph.R'
     'greplicate.R'
     'gunion.R'

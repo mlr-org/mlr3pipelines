@@ -51,7 +51,9 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_pca}},
-  \code{\link{mlr_pipeop_scale}}, \code{\link{mlr_pipeops}}
+  \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_undersample}},
+  \code{\link{mlr_pipeops}}
 
 Other Path Branching: \code{\link{NO_OP}},
   \code{\link{filter_noop}}, \code{\link{is_noop}},
