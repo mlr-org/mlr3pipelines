@@ -113,18 +113,19 @@
 PipeOp = R6Class("PipeOp",
   public = list(
     id = NULL,
-    packages = character(0),
+    packages = NULL,
     state = NULL,
     input = NULL,
     output = NULL,
     .result = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), input, output) {
+    initialize = function(id, param_set = ParamSet$new(), input, output, packages = character(0L)) {
       self$id = assert_string(id)
       private$.param_set = assert_param_set(param_set)
       private$.param_vals = list()
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
+      self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
     },
 
     print = function(...) {
