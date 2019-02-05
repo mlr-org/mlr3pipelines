@@ -17,10 +17,6 @@
 #' @export
 PipeOpDownsample = R6Class("PipeOpDownsample",
   inherit = PipeOpTaskPreproc,
-
-#FIXME: remove stratify for now? does not work for regression.
-# or robustify it
-
   public = list(
     initialize = function(id = "downsample") {
       ps = ParamSet$new(params = list(

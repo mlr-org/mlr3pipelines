@@ -146,8 +146,6 @@ PipeOp = R6Class("PipeOp",
 
     train_internal = function(input) {
       if (every(input, is_noop)) {
-        # FIXME: maybe we want to skip on `any` NO_OP, but that would require special handling in PipeOpUnbranch.
-        # Would require same adjustment in predict_internal
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }

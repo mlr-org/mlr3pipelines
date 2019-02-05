@@ -54,7 +54,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
 
     train_task= function(task) {
-      learner = self$learner$clone(deep = TRUE)  # FIXME: see PipeOpLearner FIXME about cloning learner
+      learner = self$learner$clone(deep = TRUE)
 
       # Train a learner for predicting
       self$state = learner$train(task)
@@ -91,8 +91,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     param_set = function() {
       union_param_sets(list(self$learner$param_set, private$.crossval_param_set))
     },
-    # FIXME: Not sure if this works
+
     param_vals = function(vals) {
+      # union param_vals of self$learner and self
       union_param_vals(list(self$learner$param_set, private$.crossval_param_set),
         list(self$learner, private), c("param_vals", ".crossval_param_vals"), vals)
     }

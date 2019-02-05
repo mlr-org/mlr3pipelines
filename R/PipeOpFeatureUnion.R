@@ -49,7 +49,6 @@ cbind_tasks = function(inputs) {
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
-  # FIXME: we could also say we drop all targets except the first, maybe with a flag
   if (!setequal(targets, task$target_names))
     stopf("All tasks must have the same target columns")
 

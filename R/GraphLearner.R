@@ -28,7 +28,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         param_set = graph$param_set,
         param_vals = graph$param_vals,
         properties = mlr_reflections$learner_properties[[task_type]])
-      private$.predict_type = "response"  # FIXME: Learner init should do this.
+      private$.predict_type = "response"
       self$graph = graph
     },
     train = function(task) {
