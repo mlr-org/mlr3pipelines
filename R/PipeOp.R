@@ -67,6 +67,10 @@
 #'   Checksum calculated on the `PipeOp`, depending on `$id`, `$param_set`, `$param_vals`, and `$param_set`. If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#' * `.result`                    :: `list` \cr
+#'   If the `Graph`'s `$keep_results` is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
+#'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
+#'   and done, if requested, by the `Graph` backend itself; it should *not* be done explicitly by `$train()` or `$predict()`.
 #'
 #' @section Methods:
 #' * `PipeOp$new(id, param_set = ParamSet$new(), input, output)` \cr
@@ -113,6 +117,7 @@ PipeOp = R6Class("PipeOp",
     state = NULL,
     input = NULL,
     output = NULL,
+    .result = NULL,
 
     initialize = function(id, param_set = ParamSet$new(), input, output) {
       self$id = assert_string(id)

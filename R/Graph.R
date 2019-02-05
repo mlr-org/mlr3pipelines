@@ -38,6 +38,8 @@
 #' * `hash`         :: `character(1)` \cr
 #'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes (and therefore their `$param_vals`)
 #'   and a hash of `$edges`.
+#' * `keep_results` :: `logical(1)` \cr
+#'   Whether to store intermediate results in the `PipeOp`'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #'
 #' @section Methods:
 #' * `Graph$new()` \cr
@@ -110,10 +112,12 @@ Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
     edges = NULL,
+    keep_results = NULL,
 
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
+      self$keep_results = FALSE
     },
 
     ids = function(sorted = FALSE) {
@@ -392,11 +396,15 @@ graph_reduce = function(self, input, fun, single_input) {
   for (id in ids) {
     op = self$pipeops[[id]]
     input_tbl = edges[get("dst_id") == id, c("dst_channel", "payload")]
+    edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
     names(input) = input_tbl$dst_channel
     input = input[op$input$name]
 
     output = op[[fun]](input)
+    if (self$keep_results) {
+      op$.result = output
+    }
     edges[list(id, op$output$name), "payload" := list(output), on = c("src_id", "src_channel")]
   }
 
