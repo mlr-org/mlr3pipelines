@@ -20,7 +20,7 @@
 #'   Constructor. The given learner will be used for crossvalidation.
 #'
 #' @section Parameter Set:
-#' * `resamping` :: `character(1)` \cr
+#' * `resampling` :: `character(1)` \cr
 #'   Which resampling method do we want to use. Currently only supports 'cv'.
 #' * `folds`     :: `numeric(1)` \cr
 #'   Number of cross validation folds.

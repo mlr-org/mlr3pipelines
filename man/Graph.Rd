@@ -47,6 +47,8 @@ parameter constraints in \code{$param_set}. Parameter names as seen by the \code
 \item \code{hash}         :: \code{character(1)} \cr
 Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes (and therefore their \code{$param_vals})
 and a hash of \code{$edges}.
+\item \code{keep_results} :: \code{logical(1)} \cr
+Whether to store intermediate results in the \code{PipeOp}'s \code{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 }
 }
 
