@@ -27,7 +27,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "chunk") {
-      outnum = assert_int(outnum, lower = 1)
+      outnum = assert_int(outnum, lower = 1L)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)
@@ -45,12 +45,19 @@ PipeOpChunk = R6Class("PipeOpChunk",
       task = inputs[[1L]]
       colns = task$backend$colnames
 
-      # FIXME: Implement stratification?
-      idx = task$row_ids
-      idx = split(idx, chunk(idx, n_chunks = self$outnum, shuffle = self$param_vals$shuffle))
+      if (self$param_vals$stratify) {
+        row_ids = task$row_ids
+        stratify = task$target_names
+        tmp = cbind(task$data(rows = row_ids, cols = stratify), ..row_id = row_ids)[, list(..N = .N, ..row_id = list(.SD$..row_id)), by = stratify]
+        row_ids = split(row_ids, unlist(map(tmp$..row_id, chunk, n_chunks = self$outnum, shuffle = self$param_vals$shuffle)))
+      } else {
+        # FIXME: Implement stratification?
+        row_ids = task$row_ids
+        row_ids = split(row_ids, chunk(row_ids, n_chunks = self$outnum, shuffle = self$param_vals$shuffle))
+      }
 
       # Subset data, clone task and overwrite data in it.
-      map(idx, function(x) {
+      map(row_ids, function(x) {
         task$clone(deep = TRUE)$filter(x)
       })
     },

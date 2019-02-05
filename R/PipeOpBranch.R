@@ -49,16 +49,16 @@ PipeOpBranch = R6Class("PipeOpBranch",
   public = list(
     initialize = function(options, id = "branch") {
       assert(
-        check_int(options, lower = 1),
-        check_character(options, min.len = 1, any.missing = FALSE)
+        check_int(options, lower = 1L),
+        check_character(options, min.len = 1L, any.missing = FALSE)
       )
       if (is.numeric(options)) {
         options = round(options)
-        param = ParamInt$new("selection", lower = 1, upper = options, default = 1)
+        param = ParamInt$new("selection", lower = 1L, upper = options, default = 1L)
         outnum = options
         options = rep_suffix("output", outnum)
       } else {
-        param = ParamFct$new("selection", values = options, default = options[1])
+        param = ParamFct$new("selection", values = options, default = options[1L])
       }
       super$initialize(id,
         param_set = ParamSet$new(params = list(param)),
