@@ -62,3 +62,48 @@ test_that("task chunking", {
 })
 
 
+test_that("stacking", {
+  task = mlr_tasks$get("iris")
+
+  lrn1 = mlr_learners$get("classif.rpart")
+  lrn2 = mlr_learners$get("classif.featureless")
+  pipe = gunion(list(
+    PipeOpLearnerCV$new(lrn1),
+    PipeOpLearnerCV$new(lrn2),
+    PipeOpNULL$new()))
+  pipe = pipe %>>% PipeOpFeatureUnion$new(3)
+
+  result = pipe$train(task)[[1]]
+
+  expect_task(result)
+
+  expect_set_equal(result$feature_names, c("rpart.response", "featureless.response", task$feature_names))
+
+  task_p = mlr_tasks$get("iris")$filter(1:10)
+  result_predict = pipe$predict(task_p)[[1]]
+
+  expect_set_equal(result_predict$feature_names, c("rpart.response", "featureless.response", task$feature_names))
+
+  pipe$pipeops$rpart$learner$predict_type = "prob"
+  pipe$pipeops$featureless$learner$predict_type = "prob"
+
+  result = pipe$train(task)[[1]]
+
+  expect_set_equal(result$feature_names,
+    c(paste0("rpart.prob.", task$class_names),
+      "rpart.response",
+      paste0("featureless.prob.", task$class_names),
+      "featureless.response",
+      task$feature_names))
+
+  result_predict = pipe$predict(task_p)[[1]]
+
+  expect_set_equal(result_predict$feature_names,
+    c(paste0("rpart.prob.", task$class_names),
+      "rpart.response",
+      paste0("featureless.prob.", task$class_names),
+      "featureless.response",
+      task$feature_names))
+
+})
+
