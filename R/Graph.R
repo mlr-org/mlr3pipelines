@@ -98,7 +98,7 @@
 #' g$input
 #' g$output
 #'
-#' task = mlr_tasks$get("iris")
+#' task = mlr3::mlr_tasks$get("iris")
 #' trained = g$train(task)
 #' trained[[1]]$data()
 #'
