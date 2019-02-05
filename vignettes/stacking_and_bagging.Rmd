@@ -91,6 +91,8 @@ This pipeline can again be used in conjunction with
   e$predict(test.idx)
 ```
 
+In conjunction with different `Backends`, this can be a very powerful tool, as in cases, where the data does not fully fit in memory, we can easily just obtain a fraction of the data for each learner from a `DataBaseBackend` and then aggregate predictions from all learners. 
+
 ## Stacking 
 
 Stacking is another technique that can improve model performance. The basic idea behind stacking is, that 
@@ -149,4 +151,4 @@ features.
 In this vignette, we only showcase a very simple usecase for stacking.
 In many real-world applications, stacking is done for multiple levels and on multiple representations of the dataset. On a lower level, different preprocessing methods can for example
 be defined in conjunction with several learners. On a higher level, we can then combine 
-those predictions in order to form a very powerfull model. 
+those predictions in order to form a very powerfull model.
