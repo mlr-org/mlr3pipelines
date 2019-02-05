@@ -74,6 +74,10 @@ Is the PipeOp currently trained and can therefore be used for prediction?
 Checksum calculated on the \code{PipeOp}, depending on \code{$id}, \code{$param_set}, \code{$param_vals}, and \code{$param_set}. If a
 \code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \code{$hash} active
 binding and calculate the hash as \code{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
+\item \code{.result}                    :: \code{list} \cr
+If the \code{Graph}'s \code{$keep_results} is set to \code{TRUE}, then the intermediate Results of \code{$train()} and \code{$predict()}
+are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
+and done, if requested, by the \code{Graph} backend itself; it should \emph{not} be done explicitly by \code{$train()} or \code{$predict()}.
 }
 }
 

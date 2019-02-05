@@ -32,10 +32,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     },
 
     train = function(inputs) {
-      task = inputs[[1L]]
-
       # FIXME: clone has advantages and disadvantages here, if there is ever a reason
       # to change parameter values after train we may not want to clone here.
+      task = inputs[[1L]]
       self$state = self$learner$clone(deep = TRUE)$train(task)
 
       list(NULL)
@@ -43,7 +42,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
     predict = function(inputs) {
       task = inputs[[1]]
-
       list(self$state$predict(task))
     }
 
@@ -53,8 +51,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     param_set = function() self$learner$param_set,
 
     param_vals = function(value) {
-      if (missing(value)) return(self$learner$param_vals)
-      else self$learner$param_vals = value
+      if (missing(value))
+        return(self$learner$param_vals)
+      self$learner$param_vals = value
     }
   )
 )
