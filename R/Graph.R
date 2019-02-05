@@ -102,6 +102,7 @@
 #' trained = g$train(task)
 #' trained[[1]]$data()
 #'
+#' task$filter(1:10)
 #' predicted = g$predict(task)
 #' predicted[[1]]$data()
 #'
