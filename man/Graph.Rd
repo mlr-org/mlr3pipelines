@@ -47,6 +47,8 @@ parameter constraints in \code{$param_set}. Parameter names as seen by the \code
 \item \code{hash}         :: \code{character(1)} \cr
 Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes (and therefore their \code{$param_vals})
 and a hash of \code{$edges}.
+\item \code{keep_results} :: \code{logical(1)} \cr
+Whether to store intermediate results in the \code{PipeOp}'s \code{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 }
 }
 
@@ -111,9 +113,12 @@ g = Graph$new()$
 g$input
 g$output
 
-trained = g$train(mlr3::mlr_tasks$get("iris"))
+task = mlr_tasks$get("iris")
+trained = g$train(task)
+trained[[1]]$data()
 
-predicted = g$predict(mlr3::mlr_tasks$get("iris")$filter(1:10))
+predicted = g$predict(task)
+predicted[[1]]$data()
 
 }
 \seealso{

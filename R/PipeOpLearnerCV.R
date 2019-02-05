@@ -5,7 +5,11 @@
 #' @description
 #' Wraps an [`mlr3::Learner`] into a [`PipeOp`].
 #' Returns cross-validated predictions during training phase and stores a model of the
-#' `Learner` trained on the whole data in `$state` as a new `Task` with a single column.
+#' `Learner` trained on the whole data in `$state` as a new `Task` with the predictions;
+#' usually a feature `<ID>.response` if the `Learner`'s `$predict.type` is `"response"`,
+#' `<ID>.prob.<CLASS>` and `<ID>.response` for `$predict.type` `"prob"`, or `<ID>.response`
+#' and `<ID>.se` for `$predict.type` `"se"`. `<ID>` is here the `$id` of the `PipeOpLearnerCV`.
+#'
 #' Returns this model's prediction during prediction phase, as a new `Task` with a single
 #' column.
 #'
@@ -20,7 +24,7 @@
 #'   Constructor. The given learner will be used for crossvalidation.
 #'
 #' @section Parameter Set:
-#' * `resamping` :: `character(1)` \cr
+#' * `resampling` :: `character(1)` \cr
 #'   Which resampling method do we want to use. Currently only supports 'cv'.
 #' * `folds`     :: `numeric(1)` \cr
 #'   Number of cross validation folds.
@@ -73,8 +77,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   private = list(
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
-      setnames(prds, "row_id", task$backend$primary_key)
       prds[, truth := NULL]
+      renaming = setdiff(colnames(prds), "row_id")
+      setnames(prds, renaming, paste(self$id, renaming, sep = "."))
+      setnames(prds, "row_id", task$backend$primary_key)
       task$clone()$select(character(0))$cbind(prds)
     },
     .crossval_param_set = NULL,

@@ -67,6 +67,10 @@
 #'   Checksum calculated on the `PipeOp`, depending on `$id`, `$param_set`, `$param_vals`, and `$param_set`. If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#' * `.result`                    :: `list` \cr
+#'   If the `Graph`'s `$keep_results` is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
+#'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
+#'   and done, if requested, by the `Graph` backend itself; it should *not* be done explicitly by `$train()` or `$predict()`.
 #'
 #' @section Methods:
 #' * `PipeOp$new(id, param_set = ParamSet$new(), input, output)` \cr
@@ -109,17 +113,19 @@
 PipeOp = R6Class("PipeOp",
   public = list(
     id = NULL,
-    packages = character(0),
+    packages = NULL,
     state = NULL,
     input = NULL,
     output = NULL,
+    .result = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), input, output) {
+    initialize = function(id, param_set = ParamSet$new(), input, output, packages = character(0L)) {
       self$id = assert_string(id)
-      private$.param_set = param_set
+      private$.param_set = assert_param_set(param_set)
       private$.param_vals = list()
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
+      self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
     },
 
     print = function(...) {
@@ -139,7 +145,7 @@ PipeOp = R6Class("PipeOp",
     },
 
     train_internal = function(input) {
-      if (all(map_lgl(input, is_noop))) {
+      if (every(input, is_noop)) {
         # FIXME: maybe we want to skip on `any` NO_OP, but that would require special handling in PipeOpUnbranch.
         # Would require same adjustment in predict_internal
         self$state = NO_OP
@@ -151,7 +157,7 @@ PipeOp = R6Class("PipeOp",
       output
     },
     predict_internal = function(input) {
-      if (all(map_lgl(input, is_noop))) {
+      if (every(input, is_noop)) {
         return(named_list(self$output$name, NO_OP))
       }
       if (is_noop(self$state)) {
@@ -194,10 +200,9 @@ PipeOp = R6Class("PipeOp",
 )
 
 assert_connection_table = function(table) {
-  varname = deparse(substitute(table))
-  assert_data_table(table, .var.name = varname, min.rows = 1)
-  assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = varname)
-  assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", varname))
+  assert_data_table(table, .var.name = vname(table), min.rows = 1)
+  assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = vname(table))
+  assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", vname(table)))
   table
 }
 
@@ -212,10 +217,10 @@ check_types = function(self, data, direction, operation) {
   assert_list(data, len = nrow(typetable))
   for (idx in seq_along(data)) {
     typereq = typetable[[operation]][idx]
-    if (typereq == "*")
-      next
-    assert_class(data[[idx]], typereq,
-      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
-        direction, idx, self$input$name[idx], self$id))
+    if (typereq != "*") {
+      assert_class(data[[idx]], typereq,
+        .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
+          direction, idx, self$input$name[idx], self$id))
+    }
   }
 }
