@@ -28,7 +28,8 @@ Suggests:
     mlbench,
     rmarkdown,
     rpart,
-    testthat
+    testthat,
+    kernlab
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
