@@ -45,10 +45,11 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("resampling", values = "cv", default = "cv"),
-        ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L)
+        ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
+        ParamLgl$new("keep_response", default = FALSE)
         )
       )
-      private$.crossval_param_vals = list(resampling = "cv", folds = 3)
+      private$.crossval_param_vals = list(resampling = "cv", folds = 3, keep_response = FALSE)
 
       super$initialize(id, can_subset_cols = FALSE)
     },
@@ -78,6 +79,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
       prds[, truth := NULL]
+      if (!self$param_vals[["keep_response"]] && self$learner$predict_type == "prob")
+        prds[, response := NULL]
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, paste(self$id, renaming, sep = "."))
       setnames(prds, "row_id", task$backend$primary_key)

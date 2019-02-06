@@ -152,3 +152,61 @@ In this vignette, we only showcase a very simple usecase for stacking.
 In many real-world applications, stacking is done for multiple levels and on multiple representations of the dataset. On a lower level, different preprocessing methods can for example
 be defined in conjunction with several learners. On a higher level, we can then combine 
 those predictions in order to form a very powerfull model.
+
+## Multilevel Stacking
+
+In order to showcase the power of `mlr3pipelines`, we will quickly introduce a more complicated 
+stacking example.
+
+In this case, we train a **glmnet** and 2 different *rpart* models (some transform its inputs using `PipeOpPCA`) on our task in the level 0 and concatenate them with the original features (via `PipeOpNull`).
+This is then passed on to level 1, where we copy the concatenated features
+$3$ times and put this task into a **rpart** and a **glmnet** model. 
+Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) and pass this on to level 2. In level 2 we simply concatenate all level 1 outputs and train a final decision tree.
+
+
+```{r, eval = FALSE}
+  library(mlr3learners)
+  rprt = mlr_learners$get("classif.rpart")
+  rprt$predict_type = "prob"
+  glmn = mlr_learners$get("classif.glmnet")
+  glmn$predict_type = "prob"
+
+  #  Create Learner CV Operators
+  lrn_0 = PipeOpLearnerCV$new(rprt, id = "rpart_cv_1")
+  lrn_0$param_vals$maxdepth = 5L
+  lrn_1 = PipeOpPCA$new(id = "pca1") %>>% PipeOpLearnerCV$new(rprt, id = "rpart_cv_2")
+  lrn_1$param_vals$maxdepth = 1L
+  lrn_2 = PipeOpPCA$new(id = "pca2") %>>% PipeOpLearnerCV$new(glmn)
+
+  # Union them with a PipeOpNULL to keep original features
+  level_0 = gunion(list(lrn_0, lrn_1,lrn_2, PipeOpNULL$new(id = "NULL1")))
+
+  # Cbind the output 3 times, train 2 learners but also keep level
+  # 0 predictions
+  level_1 = level_0 %>>%
+    PipeOpFeatureUnion$new(4) %>>%
+    PipeOpCopy$new(3) %>>%
+    gunion(list(
+      PipeOpLearnerCV$new(rprt, id = "rpart_cv_l1"),
+      PipeOpLearnerCV$new(glmn, id = "glmnt_cv_l1"),
+      PipeOpNULL$new(id = "NULL_l1")
+    ))
+
+  # Cbind predicitions, train a final learner.
+  level_2 = level_1 %>>%
+    PipeOpFeatureUnion$new(3, id = "u2") %>>%
+    PipeOpLearner$new(rprt,
+      id = "rpart_l2")
+
+  # Plot the resulting graph
+  level_2$plot()
+
+  e = Experiment$new(
+    task = mlr_tasks$get("iris"),
+    learner = GraphLearner$new(level_2)
+    )
+  e$train(train.idx)
+  e$predict(test.idx) 
+  e$score()
+  e$performance
+```
