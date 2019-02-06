@@ -129,12 +129,12 @@ test_that("stacking", {
 
   pipe$pipeops$rpart$learner$predict_type = "prob"
   pipe$pipeops$featureless$learner$predict_type = "prob"
+  pipe$pipeops$featureless$param_vals$keep_response = TRUE
 
   result = pipe$train(task)[[1]]
 
   expect_set_equal(result$feature_names,
     c(paste0("rpart.prob.", task$class_names),
-      "rpart.response",
       paste0("featureless.prob.", task$class_names),
       "featureless.response",
       task$feature_names))
@@ -143,7 +143,6 @@ test_that("stacking", {
 
   expect_set_equal(result_predict$feature_names,
     c(paste0("rpart.prob.", task$class_names),
-      "rpart.response",
       paste0("featureless.prob.", task$class_names),
       "featureless.response",
       task$feature_names))

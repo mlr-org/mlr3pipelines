@@ -36,9 +36,9 @@ test_that("PipeOpLearnerCV - param values", {
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
   expect_subset(c("minsplit", "resampling", "folds"), names(polrn$param_set$params))
-  expect_equal(polrn$param_vals, list(resampling = "cv", folds = 3))
+  expect_equal(polrn$param_vals, list(resampling = "cv", folds = 3, keep_response = FALSE))
   polrn$param_vals$minsplit = 2
-  expect_equal(polrn$param_vals, list(minsplit = 2, resampling = "cv", folds = 3))
+  expect_equal(polrn$param_vals, list(minsplit = 2, resampling = "cv", folds = 3, keep_response = FALSE))
   polrn$param_vals$folds = 4
-  expect_equal(polrn$param_vals, list(minsplit = 2, resampling = "cv", folds = 4))
+  expect_equal(polrn$param_vals, list(minsplit = 2, resampling = "cv", folds = 4, keep_response = FALSE))
 })
