@@ -17,7 +17,7 @@ test_that("PipeOLearner - basic properties", {
   expect_pipeop_class(PipeOpLearner, list(lrn))
   expect_error(PipeOpLearner$new())
 
-})
+p})
 
 
 test_that("PipeOLearner - param_set and param_vals", {

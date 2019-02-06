@@ -37,16 +37,14 @@ Output channels of the \code{Graph}. For each channel lists the name, output typ
 Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
 \code{\link{PipeOp}} objects.
 \item \code{param_set}    :: \code{\link{ParamSet}} \cr
-Parameter constraints for \code{$param_vals}. These are the union of \code{$param_set}s of all \code{PipeOp}s in the \code{Graph}. Parameter names
+Parameters and parameter constraints. Parameter values are in \code{$param_set$param_vals}. These are the union of \code{$param_set}s
+of all \code{PipeOp}s in the \code{Graph}. Parameter names
 as seen by the \code{Graph} have the naming scheme \code{<PipeOp$id>.<PipeOp original parameter name>}.
-\item \code{param_vals}   :: named \code{list} \cr
-Parameter values of all \code{PipeOp}s in the \code{Graph}. Changing this value propagates the changes directly to the contained
-\code{PipeOp}s and is an alternative to changing a \code{PipeOp}s \code{$param_vals} directly. Parameter values are checked against
-parameter constraints in \code{$param_set}. Parameter names as seen by the \code{Graph} have the naming scheme
-\code{<PipeOp$id>.<PipeOp original parameter name>}.
+Changing \code{$param_set$param_vals} also propagates the changes directly to the contained
+\code{PipeOp}s and is an alternative to changing a \code{PipeOp}s \code{$param_set$param_vals} directly.
 \item \code{hash}         :: \code{character(1)} \cr
-Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes (and therefore their \code{$param_vals})
-and a hash of \code{$edges}.
+Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes
+(and therefore their \code{$param_set$param_vals}) and a hash of \code{$edges}.
 \item \code{keep_results} :: \code{logical(1)} \cr
 Whether to store intermediate results in the \code{PipeOp}'s \code{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 }

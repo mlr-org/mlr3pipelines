@@ -112,13 +112,10 @@ Graph = R6Class("Graph",
     pipeops = NULL,
     edges = NULL,
     keep_results = NULL,
-    param_set = NULL,
-
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
       self$keep_results = FALSE
-      self$param_set = ParamSet$new()  # FIXME: create ParamSet when paradox/#201 is fixed
     },
 
     ids = function(sorted = FALSE) {
@@ -141,7 +138,7 @@ Graph = R6Class("Graph",
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
-      self$param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
+      private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
       invisible(self)
     },
 
@@ -282,17 +279,35 @@ Graph = R6Class("Graph",
       digest(
         list(map(self$pipeops, "hash"), self$edges),
         algo = "xxhash64")
+    },
+    param_set = function(val) {
+      # FIXME: It would be nice if we didn't need to do this.
+      if (is.null(private$.param_set)) {
+        if (!length(self$pipeops)) {
+          private$.param_set = ParamSet$new()  # FIXME: create ParamSet when paradox/#201 is fixed
+        } else {
+          private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
+        }
+      }
+      if (!missing(val)) {
+        if (!identical(val, private$.param_set)) {
+          stop("param_set is read-only.")
+        }
+      }
+      private$.param_set
     }
   ),
 
   private = list(
     deep_clone = function(name, value) {
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
       switch(name,
         edges = copy(value),
         pipeops = map(value, function(x) x$clone(deep = TRUE)),
         value
       )
-    }
+    },
+    .param_set = NULL
   )
 )
 

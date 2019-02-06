@@ -113,7 +113,6 @@
 #' @export
 PipeOp = R6Class("PipeOp",
   public = list(
-    id = NULL,
     packages = NULL,
     state = NULL,
     input = NULL,
@@ -121,11 +120,12 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
 
     initialize = function(id, param_set = ParamSet$new(), input, output, packages = character(0L)) {
-      self$id = assert_string(id)
       private$.param_set = assert_param_set(param_set)
+      self$id = assert_string(id)  # also sets the .param_set$set_id
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
+      if ("DUMMY" %nin% names(private$.param_set$params)) private$.param_set$add(ParamUty$new("DUMMY"))
     },
 
     print = function(...) {
@@ -177,8 +177,14 @@ PipeOp = R6Class("PipeOp",
         private$.id = val
         private$.param_set$set_id = val
       }
+      private$.id
     },
-    param_set = function() private$.param_set,
+    param_set = function(val) {
+      if (!missing(val) && !identical(val, private$.param_set)) {
+        stop("param_set is read-only.")
+      }
+      private$.param_set
+    },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),

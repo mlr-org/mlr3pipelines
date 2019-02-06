@@ -52,18 +52,15 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set$param_vals = list(resampling = "cv", folds = 3)
       private$.crossval_param_set$set_id = "resampling"
 
-      ps = ParamSetCollection$new(list(
-        private$.crossval_param_set,
-        self$learner$param_set
-      ))
-      super$initialize(id, param_set = ps, can_subset_cols = FALSE)
+      super$initialize(id, can_subset_cols = FALSE)
+      private$.param_set = NULL
     },
 
     train_task= function(task) {
       # Train a learner for predicting
       self$state = self$learner$train(task)
 
-      pv = self$param_set$param_vals
+      pv = private$.crossval_param_set$param_vals
 
       # Compute CV Predictions
       rdesc = mlr_resamplings$get(pv[["resampling"]])
@@ -79,8 +76,26 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       newtsk = private$pred_to_task(prediction, task)
     }
   ),
-
+  active = list(
+    param_set = function() {
+      if (is.null(private$.param_set)) {
+        private$.param_set = ParamSetCollection$new(list(
+          private$.crossval_param_set,
+          self$learner$param_set
+          ))
+        private$.param_set$set_id = self$id
+      }
+      private$.param_set
+    }
+  ),
   private = list(
+    deep_clone = function(name, value) {
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
+        return(value$clone(deep = TRUE))
+      }
+      value
+    },
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
       prds[, truth := NULL]
