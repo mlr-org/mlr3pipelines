@@ -26,6 +26,7 @@ Other contributors:
   \item Bernd Bischl \email{bernd_bischl@gmx.net} [contributor]
   \item Michel Lang \email{michellang@gmail.com} [contributor]
   \item Lars Kotthoff \email{larsko@cs.ubc.ca} [contributor]
+  \item Florian Pfisterer \email{pfistererf@googlemail.com} [contributor]
 }
 
 }

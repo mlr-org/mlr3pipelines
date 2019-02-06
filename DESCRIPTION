@@ -5,7 +5,8 @@ Authors@R: c(
     person("Martin", "Binder", email = "martin.binder@mail.com", role = c("aut", "cre")),
     person("Bernd", "Bischl", email = "bernd_bischl@gmx.net", role = "ctb"),
     person("Michel", "Lang", email = "michellang@gmail.com", role = "ctb"),
-    person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"))
+    person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"),
+    person("Florian", "Pfisterer", email = "pfistererf@googlemail.com", role = "ctb"))
 URL: https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 License: MIT + file LICENSE
@@ -30,7 +31,9 @@ Suggests:
     rpart,
     testthat,
     kernlab,
-    stringi
+    stringi,
+    ggplot2,
+    mlr3learners
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
