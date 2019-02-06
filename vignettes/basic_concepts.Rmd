@@ -51,14 +51,18 @@ In `mlr3pipelines` we consider $3$ basic types of PipeOps:
   This can for example be concatenating features from different inputs to a single task
   using `PipeOpFeatureUnion`.
 
-### A quick glance into a PipeOp
+### A deeper dive into PipeOps
 
 In order to get a better understanding, we focus on an exemplary `PipeOp`:
 As an example we choose `PipeOpLearner`.
-First, we create an instance of it by calling the `$new()` method.
+First, we create an instance of it by calling the `$new()` method with a learner
+from `mlr3`.
 
 ```{r}
-  op = PipeOpLearner$new()
+  library(mlr3)
+  library(mlr3pipelines)
+  lrn = mlr_learners$get("classif.rpart")
+  op = PipeOpLearner$new(lrn)
 ```
 
 The following slots (and more) are contained in each PipeOp:
@@ -73,7 +77,7 @@ We can check the properties by accessing the respective slot.
 
 ```{r}
   op$id
-  op3$is_trained
+  op$is_trained
 ```
 
 The `param_set` and `param_vals` are required if a PipeOp contains

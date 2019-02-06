@@ -97,35 +97,21 @@ ggplot(df) +
 In order to get a better understanding of what the respective PipeOps do, 
 we quickly look at one of them in detail:
 
-The following slots (and more) are thus contained in each PipeOp:
+The most important slots in a PipeOp are:
 - `train`: A function used to train the PipeOp.
 - `predict`: A function used to predict with the PipeOp.
 - `id`: Set/Get the id of the PipeOp.
-- `param_set`: The set of all exposed parameters of the PipeOp.
-- `param_vals`: Current hyperparameter settings.
-- `is_trained`: Is the PipeOp currently trained?
-
-We can check the properties by accessing the respective slot.
-
-```{r}
-  op3$id
-  op3$is_trained
-```
-
-The `param_set` and `param_vals` are required if a PipeOp contains
-hyperparameters we want to set. See [ParamSet] for a quick intro on how `ParamSet`s work.
 
 The `train()` and `predict()` functions define the core functionality of
-our PipeOp. 
+our PipeOp.
 In many cases, in order to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a `train` function that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
 
-In the case of `PipeOpLearner` this means the following:
-- `train()` trains a model on its input  Task and saves the trained model to
-  an additional slot, `.$state`. It returns a `list(NULL)`, as subsequent 
-  operators usually do not require any output.
-- `predict()` uses the model stored in `.$state` in order to predict
-  the class of a new input task. It returns a [Prediction] object.
-  This object contains the learner's predictions.
+In the case of `PipeOpPCA` this means the following:
+- `train()` learns a rotation matrix from its input and saves this matrix to
+  an additional slot, `.$state`. It returns the rotated input data stored 
+  in a new `Task`.
+- `predict()` uses the rotation matrix stored in `.$state` in order to rotate
+  future, unseen data. It returns those in a new `Task`.
 
 ## Constructing the Pipeline
 
