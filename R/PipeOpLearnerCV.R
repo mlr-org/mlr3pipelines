@@ -41,28 +41,34 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     learner = NULL,
     initialize = function(learner, id = learner$id) {
       assert_learner(learner)
-      self$learner = learner
+      self$learner = learner$clone(deep = TRUE)
+      self$learner$param_set$set_id = learner$id
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("resampling", values = "cv", default = "cv"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L)
         )
       )
-      private$.crossval_param_vals = list(resampling = "cv", folds = 3)
+      private$.crossval_param_set$param_vals = list(resampling = "cv", folds = 3)
+      private$.crossval_param_set$set_id = "resampling"
 
-      super$initialize(id, can_subset_cols = FALSE)
+      ps = ParamSetCollection$new(list(
+        private$.crossval_param_set,
+        self$learner$param_set
+      ))
+      super$initialize(id, param_set = ps, can_subset_cols = FALSE)
     },
 
     train_task= function(task) {
-      learner = self$learner$clone(deep = TRUE)
-
       # Train a learner for predicting
-      self$state = learner$train(task)
+      self$state = self$learner$train(task)
+
+      pv = self$param_set$param_vals
 
       # Compute CV Predictions
-      rdesc = mlr_resamplings$get(self$param_vals[["resampling"]])
-      rdesc$param_vals = list(folds = self$param_vals[["folds"]])
-      res = resample(task, learner, rdesc)
+      rdesc = mlr_resamplings$get(pv[["resampling"]])
+      rdesc$param_vals = list(folds = pv[["folds"]])
+      res = resample(task, self$learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
 
       private$pred_to_task(prds, task)
@@ -83,20 +89,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       setnames(prds, "row_id", task$backend$primary_key)
       task$clone()$select(character(0))$cbind(prds)
     },
-    .crossval_param_set = NULL,
-    .crossval_param_vals = NULL
-  ),
-
-  active = list(
-    param_set = function() {
-      union_param_sets(list(self$learner$param_set, private$.crossval_param_set))
-    },
-
-    param_vals = function(vals) {
-      # union param_vals of self$learner and self
-      union_param_vals(list(self$learner$param_set, private$.crossval_param_set),
-        list(self$learner, private), c("param_vals", ".crossval_param_vals"), vals)
-    }
+    .crossval_param_set = NULL
   )
 )
 

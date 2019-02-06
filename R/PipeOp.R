@@ -41,8 +41,8 @@
 #' * `packages`                   :: `character` \cr
 #'   Set of all required packages for the `PipeOp`'s `$train` and `$predict` methods.
 #' * `param_set`                  :: [`ParamSet`] \cr
-#'   Parameter constraints for `$param_vals`.
-#' * `param_vals`                 :: named `list` \cr
+#'   Parameters and parameter constraints. See `param_set$param_vals`.
+#' * `param_set$param_vals`                 :: named `list` \cr
 #'   Parameter values that influence the functioning of `$train` and / or `$predict`. Parameter values are checked
 #'   against parameter constraints in `$param_set`.
 #' * `state`                      :: `any` \cr
@@ -64,7 +64,8 @@
 #' * `is_trained`                 :: `logical(1)` \cr
 #'   Is the PipeOp currently trained and can therefore be used for prediction?
 #' * `hash`                       :: `character(1)` \cr
-#'   Checksum calculated on the `PipeOp`, depending on `$id`, `$param_set`, `$param_vals`, and `$param_set`. If a
+#'   Checksum calculated on the `PipeOp`, depending on the `PipeOp`'s `class` and the slots `$id` and `$param_set`
+#'   (and therefore also `$param_set$param_vals`). If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result`                    :: `list` \cr
@@ -122,7 +123,6 @@ PipeOp = R6Class("PipeOp",
     initialize = function(id, param_set = ParamSet$new(), input, output, packages = character(0L)) {
       self$id = assert_string(id)
       private$.param_set = assert_param_set(param_set)
-      private$.param_vals = list()
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
@@ -139,7 +139,7 @@ PipeOp = R6Class("PipeOp",
       }
 
       catf("PipeOp: <%s> (%strained)", self$id, if (self$is_trained) "" else "not ")
-      catf("param_vals: <%s>", as_short_string(self$param_vals))
+      catf("param_vals: <%s>", as_short_string(self$param_set$param_vals))
       catf("Input channels <name [train type, predict type]>:\n%s", type_table_printout(self$input))
       catf("Output channels <name [train type, predict type]>:\n%s", type_table_printout(self$output))
     },
@@ -172,28 +172,25 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
-    param_set = function() private$.param_set,
-    param_vals = function(vals) {
-      if (!missing(vals)) {
-        if (!self$param_set$test(vals)) {
-          stop("Parameters out of bounds")
-        }
-        private$.param_vals = vals
+    id = function(val) {
+      if (!missing(val)) {
+        private$.id = val
+        private$.param_set$set_id = val
       }
-      private$.param_vals
     },
+    param_set = function() private$.param_set,
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
     hash = function() {
-      digest(list(class(self), self$id, self$param_set, self$param_vals),
+      digest(list(class(self), self$id, self$param_set),
         algo = "xxhash64")
     }
   ),
 
   private = list(
     .param_set = NULL,
-    .param_vals = NULL
+    .id = NULL
   )
 )
 

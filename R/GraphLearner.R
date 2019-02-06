@@ -26,7 +26,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         predict_types = mlr_reflections$predict_types[[task_type]],
         packages = graph$packages,
         param_set = graph$param_set,
-        param_vals = graph$param_vals,
         properties = mlr_reflections$learner_properties[[task_type]])
       private$.predict_type = "response"
       self$graph = graph
@@ -46,12 +45,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   active = list(
     hash = function() {
       self$graph$hash
-    },
-    param_vals = function(rhs) {
-      if (!missing(rhs)) {
-        self$graph$param_vals = rhs
-      }
-      self$graph$param_vals
     },
     predict_type = function(rhs) {
       # overload this to avoid feasibility checks. all predict_types are allowed.

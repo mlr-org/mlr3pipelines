@@ -28,16 +28,14 @@
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
 #' * `param_set`    :: [`ParamSet`] \cr
-#'   Parameter constraints for `$param_vals`. These are the union of `$param_set`s of all `PipeOp`s in the `Graph`. Parameter names
+#'   Parameters and parameter constraints. Parameter values are in `$param_set$param_vals`. These are the union of `$param_set`s
+#'   of all `PipeOp`s in the `Graph`. Parameter names
 #'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
-#' * `param_vals`   :: named `list` \cr
-#'   Parameter values of all `PipeOp`s in the `Graph`. Changing this value propagates the changes directly to the contained
-#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_vals` directly. Parameter values are checked against
-#'   parameter constraints in `$param_set`. Parameter names as seen by the `Graph` have the naming scheme
-#'   `<PipeOp$id>.<PipeOp original parameter name>`.
+#'   Changing `$param_set$param_vals` also propagates the changes directly to the contained
+#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_set$param_vals` directly.
 #' * `hash`         :: `character(1)` \cr
-#'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes (and therefore their `$param_vals`)
-#'   and a hash of `$edges`.
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes
+#'   (and therefore their `$param_set$param_vals`) and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the `PipeOp`'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #'
@@ -114,11 +112,13 @@ Graph = R6Class("Graph",
     pipeops = NULL,
     edges = NULL,
     keep_results = NULL,
+    param_set = NULL,
 
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
       self$keep_results = FALSE
+      self$param_set = ParamSet$new()  # FIXME: create ParamSet when paradox/#201 is fixed
     },
 
     ids = function(sorted = FALSE) {
@@ -141,6 +141,7 @@ Graph = R6Class("Graph",
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
+      self$param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
       invisible(self)
     },
 
@@ -277,12 +278,6 @@ Graph = R6Class("Graph",
       graph_channels(self$edges$src_id, self$edges$src_channel, self$pipeops, "output")
     },
     packages = function() unique(unlist(map(self$pipeops, "packages"))),
-    param_vals = function(rhs) {
-      union_param_vals(map(self$pipeops, "param_set"), self$pipeops, "param_vals", rhs)
-    },
-    param_set = function() {
-      union_param_sets(map(self$pipeops, "param_set"))
-    },
     hash = function() {
       digest(
         list(map(self$pipeops, "hash"), self$edges),

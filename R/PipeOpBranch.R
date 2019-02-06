@@ -65,20 +65,20 @@ PipeOpBranch = R6Class("PipeOpBranch",
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*")
       )
-      self$param_vals$selection = self$param_set$params$selection$default
+      self$param_set$param_vals$selection = self$param_set$params$selection$default
     },
 
     train = function(inputs) {
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_vals$selection]] = inputs[[1]]
+      ret[[self$param_set$param_vals$selection]] = inputs[[1]]
       ret
     },
 
     predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_vals$selection]] = inputs[[1]]
+      ret[[self$param_set$param_vals$selection]] = inputs[[1]]
       ret
     }
   )
