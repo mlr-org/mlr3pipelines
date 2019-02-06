@@ -24,17 +24,17 @@ PipeOpDownsample = R6Class("PipeOpDownsample",
         ParamLgl$new("stratify", default = FALSE)
       ))
       super$initialize(id, param_set = ps, can_subset_cols = FALSE)
-      self$param_vals = list(frac = 1, stratify = FALSE)
+      self$param_set$param_vals = list(frac = 1, stratify = FALSE)
     },
 
     train_task = function(task) {
-      if (!self$param_vals$stratify) {
-        keep = sample(task$row_roles$use, ceiling(self$param_vals$frac * task$nrow))
+      if (!self$param_set$param_vals$stratify) {
+        keep = sample(task$row_roles$use, ceiling(self$param_set$param_vals$frac * task$nrow))
       } else {
         if (!inherits(task, "TaskClassif"))
           stopf("Stratification not supported for %s", class(task))
         splt = split(task$row_roles$use, task$data(cols = task$target_names))
-        keep = unlist(map(splt, function(x) sample(x, ceiling(self$param_vals$frac * length(x)))))
+        keep = unlist(map(splt, function(x) sample(x, ceiling(self$param_set$param_vals$frac * length(x)))))
       }
       self$state = list()
       task$filter(keep)

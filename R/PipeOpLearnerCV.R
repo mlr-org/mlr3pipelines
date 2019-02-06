@@ -13,7 +13,7 @@
 #' Returns this model's prediction during prediction phase, as a new `Task` with a single
 #' column.
 #'
-#' Inherits the `$param_set` and `$param_vals` from the `Learner` it is constructed from.
+#' Inherits the `$param_set` and therefore `$param_set$param_vals` from the `Learner` it is constructed from.
 #'
 #' @section Public Members / Active Bindings:
 #' * `learner`  :: [`Learner`] \cr

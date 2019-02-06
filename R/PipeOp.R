@@ -105,7 +105,7 @@
 #'   Internal function used by a `Graph` to call `$predict()`, function analogous to `$train_internal()`.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
-#'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_vals`, `$input` and `$output`.
+#'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_set$param_vals`, `$input` and `$output`.
 #'
 #' @name PipeOp
 #' @family mlr3pipelines backend related
