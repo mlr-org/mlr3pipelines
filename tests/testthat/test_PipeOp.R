@@ -8,7 +8,7 @@ test_that("PipeOp - General functions", {
   expect_true(po_1$id == "debug.basic")
   expect_false(po_1$is_trained)
   expect_class(po_1$param_set, "ParamSet")
-  expect_list(po_1$param_vals, names = "unique")
+  expect_list(po_1$param_set$param_vals, names = "unique")
   expect_output(print(po_1), "PipeOp:")
   expect_equal(po_1$packages, character(0))
   expect_null(po_1$state)

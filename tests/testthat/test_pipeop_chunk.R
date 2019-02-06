@@ -15,7 +15,7 @@ test_that("PipeOpChunk - basic properties", {
 
 test_that("PipeOpChunk - stratification", {
   po = PipeOpChunk$new(3)
-  po$param_vals = list(stratify = TRUE, shuffle = FALSE)
+  po$param_set$param_vals = list(stratify = TRUE, shuffle = FALSE)
 
   tasks = po$train(list(mlr_tasks$get("spam")))
   tabs = lapply(tasks, function(x) table(x$truth()))

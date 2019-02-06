@@ -13,7 +13,7 @@ test_that("PipeOpUndersample - basic properties", {
 
 test_that("PipeOpUndersample", {
   op = PipeOpUndersample$new()
-  op$param_vals = list(frac = 0.5)
+  op$param_set$param_vals = list(frac = 0.5)
   task = mlr_tasks$get("pima")
   nt = op$train(list(task))[[1L]]
 

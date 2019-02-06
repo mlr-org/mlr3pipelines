@@ -23,18 +23,18 @@ test_that("PipeOpBranch - train and predict", {
   tout = train_pipeop(branch, list(t1))
   expect_true(length(tout) == branch$outnum)
   expect_list(tout, len = branch$outnum)
-  expect_class(tout[[branch$param_vals$selection]], "Task")
-  expect_equal(tout[[branch$param_vals$selection]], t1)
+  expect_class(tout[[branch$param_set$param_vals$selection]], "Task")
+  expect_equal(tout[[branch$param_set$param_vals$selection]], t1)
   expect_class(tout[[2]], "NO_OP")
   expect_true(is_noop(tout[[2]]))
 
   branch2 = PipeOpBranch$new(2)
-  branch2$param_vals$selection = 2L
+  branch2$param_set$param_vals$selection = 2L
   tout = train_pipeop(branch2, list(t1))
   # expect_true(length(tout) == branch2$outnum)
   # expect_list(tout, len = branch2$outnum)
-  expect_class(tout[[branch2$param_vals$selection]], "Task")
-  expect_equal(tout[[branch2$param_vals$selection]], t1)
+  expect_class(tout[[branch2$param_set$param_vals$selection]], "Task")
+  expect_equal(tout[[branch2$param_set$param_vals$selection]], t1)
   expect_class(tout[[1]], "NO_OP")
   expect_true(is_noop(tout[[1]]))
 

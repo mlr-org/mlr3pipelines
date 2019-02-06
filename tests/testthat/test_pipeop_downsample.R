@@ -19,7 +19,7 @@ test_that("PipeOpDownsample works unstratified", {
   expect_true(tnew[[1]]$nrow == task$nrow)
 
   po = PipeOpDownsample$new()
-  po$param_vals$frac = 0.7
+  po$param_set$param_vals$frac = 0.7
 
   tnew = train_pipeop(po, list(task))
   expect_true(tnew[[1]]$nrow == ceiling(task$nrow * 0.7))
@@ -35,7 +35,7 @@ test_that("PipeOpDownsample works unstratified", {
 
   task = mlr_tasks$get("bh")$filter(1L)  # actually has to be an int m(
   po = PipeOpDownsample$new()
-  po$param_vals = list(stratify = TRUE, frac = 0.6)
+  po$param_set$param_vals = list(stratify = TRUE, frac = 0.6)
   expect_error(train_pipeop(po, list(task)))
 
 })
@@ -44,7 +44,7 @@ test_that("PipeOpDownsample works stratified", {
   task = mlr_tasks$get("iris")
 
   po = PipeOpDownsample$new()
-  po$param_vals = list(stratify = TRUE, frac = 0.6)
+  po$param_set$param_vals = list(stratify = TRUE, frac = 0.6)
   expect_class(po, "PipeOpDownsample")
 
   tnew = train_pipeop(po, list(task))

@@ -27,15 +27,15 @@ test_that("PipeOLearner - param_set and param_vals", {
   # Setting and getting pipeops works
   expect_pipeop(po)
   expect_equal(po$param_set, po$learner$param_set)
-  expect_equal(po$param_vals, po$learner$param_vals)
-  expect_error({po$param_vals$minsplit = "foo"})
-  po$param_vals$minsplit = 2L
-  expect_equal(po$param_vals, po$learner$param_vals)
-  expect_equal(po$param_vals, list(minsplit = 2L))
-  po$param_vals$maxdepth = 1L
-  expect_equal(po$param_vals, list(minsplit = 2L, maxdepth = 1L))
-  po$param_vals = list(minsplit = 1L)
-  expect_equal(po$param_vals, list(minsplit = 1L))
-  expect_error({po$param_vals = list(minsplit = "foo")})
-  expect_error({po$param_vals = list(foo = "foo")})
+  expect_equal(po$param_set$param_vals, po$learner$param_set$param_vals)
+  expect_error({po$param_set$param_vals$minsplit = "foo"})
+  po$param_set$param_vals$minsplit = 2L
+  expect_equal(po$param_set$param_vals, po$learner$param_set$param_vals)
+  expect_equal(po$param_set$param_vals, list(minsplit = 2L))
+  po$param_set$param_vals$maxdepth = 1L
+  expect_equal(po$param_set$param_vals, list(minsplit = 2L, maxdepth = 1L))
+  po$param_set$param_vals = list(minsplit = 1L)
+  expect_equal(po$param_set$param_vals, list(minsplit = 1L))
+  expect_error({po$param_set$param_vals = list(minsplit = "foo")})
+  expect_error({po$param_set$param_vals = list(foo = "foo")})
 })
