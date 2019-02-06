@@ -15,3 +15,81 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+This tutorial focusses on the more technical concepts underlying `mlr3pipelines`.
+The core building blocks of a `Pipeline` are **PipeOperators** (`PipeOp`) and
+**Graphs**. A **Graph** is a concatenation of one or several `PipeOps`.
+
+We will use the terms Pipeline and Graph interchangeably in this section, as a Pipeline inherently is a **Directed Acyclic Graph**.
+
+Before diving deeper into the concept of a Graph, we will quickly look
+into its basic building blocks: `PipeOp`s. 
+
+
+## PipeOp
+
+In `mlr3pipelines` we consider $3$ basic types of PipeOps: 
+
+| Type  | Input Dim  | Output Dim | Examples           |
+|---    |---         |  ---       |---                 |
+| linear  |  1       |  1         | PipeOpPCA          |
+| linear  |  1       |  1         | PipeOpLearner      |
+|broadcast|  1       |  n         | PipeOpCopy         |
+|broadcast|  1       |  n         | PipeOpBranch       | 
+|aggregate|  n       |  1         | PipeOpFeatureUnion |
+|aggregate|  n       |  1         | PipeOpUnbranch     |
+
+-**linear** `PipeOp`s transform its inputs and returns a single output. 
+  This can for example be rotating the data usign Principle Component Analysis (PCA) 
+  and returning the rotated data.
+
+-**broadcast** `PipeOp`s do some operation on a single input, and return multiple outputs.
+  We could for example chunk the data into several chunks using `PipeOpChunk` and send 
+  each chunk to a different subsequent node.
+
+-**aggregate** `PipeOp`s recieve multiple inputs and transform them into a single output.
+  This can for example be concatenating features from different inputs to a single task
+  using `PipeOpFeatureUnion`.
+
+### A quick glance into a PipeOp
+
+In order to get a better understanding, we focus on an exemplary `PipeOp`:
+As an example we choose `PipeOpLearner`.
+First, we create an instance of it by calling the `$new()` method.
+
+```{r}
+  op = PipeOpLearner$new()
+```
+
+The following slots (and more) are contained in each PipeOp:
+- `train`: A function used to train the PipeOp.
+- `predict`: A function used to predict with the PipeOp.
+- `id`: Allows us to set or get the id of the PipeOp.
+- `param_set`: The set of all exposed parameters of the PipeOp.
+- `param_vals`: Current hyperparameter settings.
+- `is_trained`: Is the PipeOp already trained?
+
+We can check the properties by accessing the respective slot.
+
+```{r}
+  op$id
+  op3$is_trained
+```
+
+The `param_set` and `param_vals` are required if a PipeOp contains
+hyperparameters we want to set. See [ParamSet] for a quick intro on how `ParamSet`s work.
+
+The `train()` and `predict()` functions define the core functionality of
+our PipeOp. 
+In many cases, in order to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a `train` function that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
+
+In the case of `PipeOpLearner` this means the following:
+- `train()` trains a model on its input  Task and saves the trained model to
+  an additional slot, `.$state`. It returns a `list(NULL)`, as subsequent 
+  operators usually do not require any output.
+- `predict()` uses the model stored in `.$state` in order to predict
+  the class of a new input task. It returns a [Prediction] object.
+  This object contains the learner's predictions.
+
+
+## Graph

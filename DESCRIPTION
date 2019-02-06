@@ -29,7 +29,9 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    kernlab
+    kernlab,
+    ggplot2,
+    mlr3learners
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
