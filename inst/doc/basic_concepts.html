@@ -12,12 +12,100 @@
 
 <meta name="author" content="Author" />
 
-<meta name="date" content="2019-02-05" />
+<meta name="date" content="2019-02-06" />
 
-<title>Showcase: Basic Concepts</title>
+<title>Showcase: Basic Concepts: PipeOp and Graph</title>
 
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -212,13 +300,90 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
-<h1 class="title toc-ignore">Showcase: Basic Concepts</h1>
+<h1 class="title toc-ignore">Showcase: Basic Concepts: PipeOp and Graph</h1>
 <h4 class="author"><em>Author</em></h4>
-<h4 class="date"><em>2019-02-05</em></h4>
+<h4 class="date"><em>2019-02-06</em></h4>
 
 
 
-
+<p>This tutorial focusses on the more technical concepts underlying <code>mlr3pipelines</code>. The core building blocks of a <code>Pipeline</code> are <strong>PipeOperators</strong> (<code>PipeOp</code>) and <strong>Graphs</strong>. A <strong>Graph</strong> is a concatenation of one or several <code>PipeOps</code>.</p>
+<p>We will use the terms Pipeline and Graph interchangeably in this section, as a Pipeline inherently is a <strong>Directed Acyclic Graph</strong>.</p>
+<p>Before diving deeper into the concept of a Graph, we will quickly look into its basic building blocks: <code>PipeOp</code>s.</p>
+<div id="pipeop" class="section level2">
+<h2>PipeOp</h2>
+<p>In <code>mlr3pipelines</code> we consider <span class="math inline">\(3\)</span> basic types of PipeOps:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Input Dim</th>
+<th>Output Dim</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>linear</td>
+<td>1</td>
+<td>1</td>
+<td>PipeOpPCA</td>
+</tr>
+<tr class="even">
+<td>linear</td>
+<td>1</td>
+<td>1</td>
+<td>PipeOpLearner</td>
+</tr>
+<tr class="odd">
+<td>broadcast</td>
+<td>1</td>
+<td>n</td>
+<td>PipeOpCopy</td>
+</tr>
+<tr class="even">
+<td>broadcast</td>
+<td>1</td>
+<td>n</td>
+<td>PipeOpBranch</td>
+</tr>
+<tr class="odd">
+<td>aggregate</td>
+<td>n</td>
+<td>1</td>
+<td>PipeOpFeatureUnion</td>
+</tr>
+<tr class="even">
+<td>aggregate</td>
+<td>n</td>
+<td>1</td>
+<td>PipeOpUnbranch</td>
+</tr>
+</tbody>
+</table>
+<p>-<strong>linear</strong> <code>PipeOp</code>s transform its inputs and returns a single output. This can for example be rotating the data usign Principle Component Analysis (PCA) and returning the rotated data.</p>
+<p>-<strong>broadcast</strong> <code>PipeOp</code>s do some operation on a single input, and return multiple outputs. We could for example chunk the data into several chunks using <code>PipeOpChunk</code> and send each chunk to a different subsequent node.</p>
+<p>-<strong>aggregate</strong> <code>PipeOp</code>s recieve multiple inputs and transform them into a single output. This can for example be concatenating features from different inputs to a single task using <code>PipeOpFeatureUnion</code>.</p>
+<div id="a-deeper-dive-into-pipeops" class="section level3">
+<h3>A deeper dive into PipeOps</h3>
+<p>In order to get a better understanding, we focus on an exemplary <code>PipeOp</code>: As an example we choose <code>PipeOpLearner</code>. First, we create an instance of it by calling the <code>$new()</code> method with a learner from <code>mlr3</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">  <span class="kw">library</span>(mlr3)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="kw">library</span>(mlr3pipelines)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">  lrn =<span class="st"> </span>mlr_learners<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;classif.rpart&quot;</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">  op =<span class="st"> </span>PipeOpLearner<span class="op">$</span><span class="kw">new</span>(lrn)</a></code></pre></div>
+<p>The following slots (and more) are contained in each PipeOp: - <code>train</code>: A function used to train the PipeOp. - <code>predict</code>: A function used to predict with the PipeOp. - <code>id</code>: Allows us to set or get the id of the PipeOp. - <code>param_set</code>: The set of all exposed parameters of the PipeOp. - <code>param_vals</code>: Current hyperparameter settings. - <code>is_trained</code>: Is the PipeOp already trained?</p>
+<p>We can check the properties by accessing the respective slot.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">  op<span class="op">$</span>id</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; [1] &quot;rpart&quot;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  op<span class="op">$</span>is_trained</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
+<p>The <code>param_set</code> and <code>param_vals</code> are required if a PipeOp contains hyperparameters we want to set. See [ParamSet] for a quick intro on how <code>ParamSet</code>s work.</p>
+<p>The <code>train()</code> and <code>predict()</code> functions define the core functionality of our PipeOp. In many cases, in order to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a <code>train</code> function that learns the appropriate transformations from the training set and a <code>test</code> function that applies the transformation on future data.</p>
+<p>In the case of <code>PipeOpLearner</code> this means the following: - <code>train()</code> trains a model on its input Task and saves the trained model to an additional slot, <code>.$state</code>. It returns a <code>list(NULL)</code>, as subsequent operators usually do not require any output. - <code>predict()</code> uses the model stored in <code>.$state</code> in order to predict the class of a new input task. It returns a [Prediction] object. This object contains the learner’s predictions.</p>
+</div>
+</div>
+<div id="graph" class="section level2">
+<h2>Graph</h2>
+</div>
 
 
 

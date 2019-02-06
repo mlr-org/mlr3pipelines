@@ -12,7 +12,7 @@
 
 <meta name="author" content="Author" />
 
-<meta name="date" content="2019-02-05" />
+<meta name="date" content="2019-02-06" />
 
 <title>Showcase: Bagging and Stacking</title>
 
@@ -302,7 +302,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Showcase: Bagging and Stacking</h1>
 <h4 class="author"><em>Author</em></h4>
-<h4 class="date"><em>2019-02-05</em></h4>
+<h4 class="date"><em>2019-02-06</em></h4>
 
 
 
@@ -368,6 +368,55 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb12-8" data-line-number="8">  e<span class="op">$</span><span class="kw">predict</span>(test.idx)</a>
 <a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; INFO [mlr3] Predicting with model of learner 'rpart_cv.NULL.featureunion.rpart' on task 'iris' ...</span></a></code></pre></div>
 <p>In this vignette, we only showcase a very simple usecase for stacking. In many real-world applications, stacking is done for multiple levels and on multiple representations of the dataset. On a lower level, different preprocessing methods can for example be defined in conjunction with several learners. On a higher level, we can then combine those predictions in order to form a very powerfull model.</p>
+</div>
+<div id="multilevel-stacking" class="section level2">
+<h2>Multilevel Stacking</h2>
+<p>In order to showcase the power of <code>mlr3pipelines</code>, we will quickly introduce a more complicated stacking example.</p>
+<p>In this case, we train a <strong>glmnet</strong> and 2 different <em>rpart</em> models (some transform its inputs using <code>PipeOpPCA</code>) on our task in the level 0 and concatenate them with the original features (via <code>PipeOpNull</code>). This is then passed on to level 1, where we copy the concatenated features <span class="math inline">\(3\)</span> times and put this task into a <strong>rpart</strong> and a <strong>glmnet</strong> model. Additionally, we also keep a version of the level 0 output (via <code>PipeOpNull</code>) and pass this on to level 2. In level 2 we simply concatenate all level 1 outputs and train a final decision tree.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">  <span class="kw">library</span>(mlr3learners)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">  rprt =<span class="st"> </span>mlr_learners<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;classif.rpart&quot;</span>)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">  rprt<span class="op">$</span>predict_type =<span class="st"> &quot;prob&quot;</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">  glmn =<span class="st"> </span>mlr_learners<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;classif.glmnet&quot;</span>)</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">  glmn<span class="op">$</span>predict_type =<span class="st"> &quot;prob&quot;</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">  <span class="co">#  Create Learner CV Operators</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">  lrn_<span class="dv">0</span> =<span class="st"> </span>PipeOpLearnerCV<span class="op">$</span><span class="kw">new</span>(rprt, <span class="dt">id =</span> <span class="st">&quot;rpart_cv_1&quot;</span>)</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">  lrn_<span class="dv">0</span><span class="op">$</span>param_vals<span class="op">$</span>maxdepth =<span class="st"> </span>5L</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">  lrn_<span class="dv">1</span> =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;pca1&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span>PipeOpLearnerCV<span class="op">$</span><span class="kw">new</span>(rprt, <span class="dt">id =</span> <span class="st">&quot;rpart_cv_2&quot;</span>)</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">  lrn_<span class="dv">1</span><span class="op">$</span>param_vals<span class="op">$</span>maxdepth =<span class="st"> </span>1L</a>
+<a class="sourceLine" id="cb13-12" data-line-number="12">  lrn_<span class="dv">2</span> =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;pca2&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span>PipeOpLearnerCV<span class="op">$</span><span class="kw">new</span>(glmn)</a>
+<a class="sourceLine" id="cb13-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14">  <span class="co"># Union them with a PipeOpNULL to keep original features</span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15">  level_<span class="dv">0</span> =<span class="st"> </span><span class="kw">gunion</span>(<span class="kw">list</span>(lrn_<span class="dv">0</span>, lrn_<span class="dv">1</span>,lrn_<span class="dv">2</span>, PipeOpNULL<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;NULL1&quot;</span>)))</a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb13-17" data-line-number="17">  <span class="co"># Cbind the output 3 times, train 2 learners but also keep level</span></a>
+<a class="sourceLine" id="cb13-18" data-line-number="18">  <span class="co"># 0 predictions</span></a>
+<a class="sourceLine" id="cb13-19" data-line-number="19">  level_<span class="dv">1</span> =<span class="st"> </span>level_<span class="dv">0</span> <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb13-20" data-line-number="20"><span class="st">    </span>PipeOpFeatureUnion<span class="op">$</span><span class="kw">new</span>(<span class="dv">4</span>) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb13-21" data-line-number="21"><span class="st">    </span>PipeOpCopy<span class="op">$</span><span class="kw">new</span>(<span class="dv">3</span>) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="st">    </span><span class="kw">gunion</span>(<span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb13-23" data-line-number="23">      PipeOpLearnerCV<span class="op">$</span><span class="kw">new</span>(rprt, <span class="dt">id =</span> <span class="st">&quot;rpart_cv_l1&quot;</span>),</a>
+<a class="sourceLine" id="cb13-24" data-line-number="24">      PipeOpLearnerCV<span class="op">$</span><span class="kw">new</span>(glmn, <span class="dt">id =</span> <span class="st">&quot;glmnt_cv_l1&quot;</span>),</a>
+<a class="sourceLine" id="cb13-25" data-line-number="25">      PipeOpNULL<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;NULL_l1&quot;</span>)</a>
+<a class="sourceLine" id="cb13-26" data-line-number="26">    ))</a>
+<a class="sourceLine" id="cb13-27" data-line-number="27"></a>
+<a class="sourceLine" id="cb13-28" data-line-number="28">  <span class="co"># Cbind predicitions, train a final learner.</span></a>
+<a class="sourceLine" id="cb13-29" data-line-number="29">  level_<span class="dv">2</span> =<span class="st"> </span>level_<span class="dv">1</span> <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb13-30" data-line-number="30"><span class="st">    </span>PipeOpFeatureUnion<span class="op">$</span><span class="kw">new</span>(<span class="dv">3</span>, <span class="dt">id =</span> <span class="st">&quot;u2&quot;</span>) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb13-31" data-line-number="31"><span class="st">    </span>PipeOpLearner<span class="op">$</span><span class="kw">new</span>(rprt,</a>
+<a class="sourceLine" id="cb13-32" data-line-number="32">      <span class="dt">id =</span> <span class="st">&quot;rpart_l2&quot;</span>)</a>
+<a class="sourceLine" id="cb13-33" data-line-number="33"></a>
+<a class="sourceLine" id="cb13-34" data-line-number="34">  <span class="co"># Plot the resulting graph</span></a>
+<a class="sourceLine" id="cb13-35" data-line-number="35">  level_<span class="dv">2</span><span class="op">$</span><span class="kw">plot</span>()</a>
+<a class="sourceLine" id="cb13-36" data-line-number="36"></a>
+<a class="sourceLine" id="cb13-37" data-line-number="37">  e =<span class="st"> </span>Experiment<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb13-38" data-line-number="38">    <span class="dt">task =</span> mlr_tasks<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;iris&quot;</span>),</a>
+<a class="sourceLine" id="cb13-39" data-line-number="39">    <span class="dt">learner =</span> GraphLearner<span class="op">$</span><span class="kw">new</span>(level_<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb13-40" data-line-number="40">    )</a>
+<a class="sourceLine" id="cb13-41" data-line-number="41">  e<span class="op">$</span><span class="kw">train</span>(train.idx)</a>
+<a class="sourceLine" id="cb13-42" data-line-number="42">  e<span class="op">$</span><span class="kw">predict</span>(test.idx) </a>
+<a class="sourceLine" id="cb13-43" data-line-number="43">  e<span class="op">$</span><span class="kw">score</span>()</a>
+<a class="sourceLine" id="cb13-44" data-line-number="44">  e<span class="op">$</span>performance</a></code></pre></div>
 </div>
 
 
