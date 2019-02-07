@@ -45,7 +45,7 @@ mlr_pipeops$add("one_hot", PipeOpOneHot)
 
 
 one_hot = function(task, method) {
-  info = task$col_info[get("type") == "factor" & lengths(levels) > 1L, c("id", "levels")]
+  info = task$col_info[task$feature_names, on = "id"][get("type") == "factor" & lengths(levels) > 0L, c("id", "levels")]
   if (method == "reference")
     info[, "levels" := lapply(get("levels"), tail, -1L)]
   data = task$data(col = info$id)
