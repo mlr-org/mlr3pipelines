@@ -102,4 +102,8 @@ In the case of `PipeOpLearner` this means the following:
   This object contains the learner's predictions.
 
 
+### PipeOp Types
+
 ## Graph
+
+A `Graph` now allows us to connect several `PipeOp`s together, and thus let's us control how and in which order data flows through it. It basically connects the nodes (`PipeOp`s) to a `Graph` by adding edges between them.
