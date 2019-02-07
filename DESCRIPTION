@@ -31,7 +31,6 @@ Suggests:
     rpart,
     testthat,
     kernlab,
-    stringi,
     ggplot2,
     mlr3learners
 Encoding: UTF-8

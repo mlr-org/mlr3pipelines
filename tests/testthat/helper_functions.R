@@ -386,6 +386,3 @@ PipeOpLrnFL = PipeOpLearner$new(mlr_learners$get("classif.featureless"))
 csvify = function(table) {
   apply(table, 1, paste, collapse = ",")
 }
-
-# FIXME TODO ETC: remove this when paradox/#204 is solved
-library(stringi)

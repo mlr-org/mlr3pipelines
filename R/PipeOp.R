@@ -125,7 +125,7 @@ PipeOp = R6Class("PipeOp",
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
-      if ("DUMMY" %nin% names(private$.param_set$params)) private$.param_set$add(ParamUty$new("DUMMY"))
+      if (!length(private$.param_set$params)) private$.param_set$add(ParamUty$new("DUMMY"))
     },
 
     print = function(...) {
@@ -191,6 +191,12 @@ PipeOp = R6Class("PipeOp",
     hash = function() {
       digest(list(class(self), self$id, self$param_set),
         algo = "xxhash64")
+    },
+    param_vals = function(val) {
+      if (!missing(val)) {
+        self$param_set$param_vals = val
+      }
+      self$param_set$param_vals
     }
   ),
 
