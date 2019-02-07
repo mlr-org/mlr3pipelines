@@ -11,10 +11,12 @@ data.table::setDTthreads(1)
 
 devtools::document("mlr3pipelines")
 
+devtools::load_all("paradox")
+
 devtools::load_all("mlr3pipelines")
 
 
-library("paradox")
+
 
 testthat::test_package("mlr3pipelines")
 
