@@ -20,3 +20,12 @@ test_that("PipeOpUndersample", {
   expect_true(table(task$truth())[["pos"]] == table(nt$truth())[["pos"]])
   expect_true(table(task$truth())[["neg"]] >  table(nt$truth())[["neg"]])
 })
+
+
+test_that("PipeOpUndersample: rate and multiple classes", {
+  task = mlr_tasks$get("zoo")
+  op = PipeOpUndersample$new()
+  table(op$train(list(task))[[1L]]$truth())
+  nt = op$train(list(task))[[1L]]
+  expect_equal(table(nt$truth())[["mammal"]], 10L)
+})

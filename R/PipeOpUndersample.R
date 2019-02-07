@@ -35,23 +35,24 @@ PipeOpUndersample = R6Class("PipeOpUndersample",
 
     train_task = function(task) {
       self$state = list()
-      classtbl = sort(table(task$truth()), decreasing = TRUE)
+      truth = task$truth()
+      tbl = sort(table(truth), decreasing = TRUE)
       frac = self$param_set$param_vals$frac
       ratio = self$param_set$param_vals$ratio
       if (!is.null(frac)) {
         if (!is.null(ratio)) {
           stop("Only one of 'ratio' and 'frac' params must be given.")
         }
-        keep_major = seq_len(classtbl[1]) <= round(frac * classtbl[1])
+        keep_major = seq_len(tbl[1]) <= round(frac * tbl[1])
       } else {
         if (is.null(ratio)) {
           stop("One of 'ratio' or 'frac' params must be given.")
         }
-        keep_major = seq_len(classtbl[1]) <= round(ratio * mean(classtbl[-1]))
+        keep_major = seq_len(tbl[1]) <= round(ratio * mean(tbl[-1]))
       }
-      keep_all = rep(TRUE, task$nrow)
-      keep_all[task$truth() == names(classtbl)[1]] = sample(keep_major)
-      task$filter(which(keep_all))
+      keep_all = rep(TRUE, length(truth))
+      keep_all[truth == names(tbl)[1]] = shuffle(keep_major)
+      task$filter(task$row_ids[keep_all])
     },
 
     predict_task = identity
