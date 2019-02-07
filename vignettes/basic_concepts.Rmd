@@ -18,17 +18,24 @@ knitr::opts_chunk$set(
 
 This tutorial focusses on the more technical concepts underlying `mlr3pipelines`.
 The core building blocks of a `Pipeline` are **PipeOperators** (`PipeOp`) and
-**Graphs**. A **Graph** is a concatenation of one or several `PipeOps`.
+**Graphs**. 
 
-We will use the terms Pipeline and Graph interchangeably in this section, as a Pipeline inherently is a **Directed Acyclic Graph**.
 
-Before diving deeper into the concept of a Graph, we will quickly look
+#### PipeOp: A `PipeOp` is a node, that transforms data flowing through it.
+
+#### Graph: A `Graph` is a concatenation of one or several `PipeOps`.
+
+By connecting several `PipeOp`s we can build a `Graphs`.
+We will use the terms **Pipeline** and **Graph** interchangeably in this section,
+as a Pipeline inherently is a **Directed Acyclic Graph**.
+Before diving deeper into the concept of `Graph`s, we will quickly look
 into its basic building blocks: `PipeOp`s. 
 
 
 ## PipeOp
 
-In `mlr3pipelines` we consider $3$ basic types of PipeOps: 
+In `mlr3pipelines` we consider $3$ basic types of PipeOps;
+*linear*, *broadcast* and *aggregate*:
 
 | Type  | Input Dim  | Output Dim | Examples           |
 |---    |---         |  ---       |---                 |
@@ -56,7 +63,7 @@ In `mlr3pipelines` we consider $3$ basic types of PipeOps:
 In order to get a better understanding, we focus on an exemplary `PipeOp`:
 As an example we choose `PipeOpLearner`.
 First, we create an instance of it by calling the `$new()` method with a learner
-from `mlr3`.
+from `mlr3`. A `PipeOp` is an [`R6`](https://r6.r-lib.org/) class.
 
 ```{r}
   library(mlr3)
@@ -66,14 +73,14 @@ from `mlr3`.
 ```
 
 The following slots (and more) are contained in each PipeOp:
-- `train`: A function used to train the PipeOp.
+- `train`: A function used to train with the PipeOp.
 - `predict`: A function used to predict with the PipeOp.
 - `id`: Allows us to set or get the id of the PipeOp.
 - `param_set`: The set of all exposed parameters of the PipeOp.
 - `param_vals`: Current hyperparameter settings.
 - `is_trained`: Is the PipeOp already trained?
 
-We can check the properties by accessing the respective slot.
+We can check properties by accessing the respective slots.
 
 ```{r}
   op$id
@@ -81,14 +88,13 @@ We can check the properties by accessing the respective slot.
 ```
 
 The `param_set` and `param_vals` are required if a PipeOp contains
-hyperparameters we want to set. See [ParamSet] for a quick intro on how `ParamSet`s work.
+hyperparameters we want to set. See [paradox::ParamSet] for a quick intro on how `ParamSet`s work.
 
 The `train()` and `predict()` functions define the core functionality of
-our PipeOp. 
-In many cases, in order to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a `train` function that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
+our PipeOp. In many cases, in order to not leak information from the test set into the training set it is imperative to treat train and test data separately. In order to achieve this, we requrie a `train` function that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
 
 In the case of `PipeOpLearner` this means the following:
-- `train()` trains a model on its input  Task and saves the trained model to
+- `train()` trains a model on its input Task and saves the trained model to
   an additional slot, `.$state`. It returns a `list(NULL)`, as subsequent 
   operators usually do not require any output.
 - `predict()` uses the model stored in `.$state` in order to predict
