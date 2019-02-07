@@ -17,7 +17,7 @@ test_that("PipeOLearner - basic properties", {
   expect_pipeop_class(PipeOpLearner, list(lrn))
   expect_error(PipeOpLearner$new())
 
-p})
+})
 
 
 test_that("PipeOLearner - param_set and param_vals", {
@@ -27,6 +27,8 @@ test_that("PipeOLearner - param_set and param_vals", {
   # Setting and getting pipeops works
   expect_pipeop(po)
   expect_equal(po$param_set, po$learner$param_set)
+
+
   expect_equal(po$param_set$param_vals, po$learner$param_set$param_vals)
   expect_error({po$param_set$param_vals$minsplit = "foo"})
   po$param_set$param_vals$minsplit = 2L

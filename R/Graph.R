@@ -138,7 +138,7 @@ Graph = R6Class("Graph",
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
-      private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
+      private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))  # FIXME: $add() when it becomes available
       invisible(self)
     },
 
@@ -283,11 +283,7 @@ Graph = R6Class("Graph",
     param_set = function(val) {
       # FIXME: It would be nice if we didn't need to do this.
       if (is.null(private$.param_set)) {
-        if (!length(self$pipeops)) {
-          private$.param_set = ParamSet$new()  # FIXME: create ParamSet when paradox/#201 is fixed
-        } else {
-          private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
-        }
+        private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
       }
       if (!missing(val)) {
         if (!identical(val, private$.param_set)) {
@@ -295,6 +291,12 @@ Graph = R6Class("Graph",
         }
       }
       private$.param_set
+    },
+    param_vals = function(val) {
+      if (!missing(val)) {
+        self$param_set$param_vals = val
+      }
+      self$param_set$param_vals
     }
   ),
 
