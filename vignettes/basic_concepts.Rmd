@@ -278,8 +278,9 @@ We additionally want to detail some meta operators that can be useful in the pro
 ### PipeOpNULL
 
 It is often useful to simply pass on the data unchanged, while the data is transformed by some `PipeOp` in parallel.
-This can be done using `PipeOpNull`, which simply passes on its inputs unchanged, both during the training and the predict phase.
+This can be done using `PipeOpNull`, which simply passes on its inputs unchanged, both during the training and the predict phase. An example for this can be seen in the vignette on **Stacking**.
 
 ```r
-PipeOpNULL$new()
+po_null = PipeOpNULL$new()
+gunion(list(pop, po_null))
 ```
