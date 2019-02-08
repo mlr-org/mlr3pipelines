@@ -5,7 +5,7 @@
 #'
 #' @description
 #'   Wraps an [`mlr3::Learner`] into a [`PipeOp`].
-#'   Inherits the `$param_set` and `$param_vals` from the `Learner` it is constructed from.
+#'   Inherits the `$param_set` and `$values` from the `Learner` it is constructed from.
 #'
 #' @section Public Members / Active Bindings:
 #' * `learner`  :: [`Learner`] \cr
@@ -47,6 +47,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
 # This does not work because we do not have a "default" learner.
 # Maybe we initialize with NULL and let the user set $learner?
-# Would have to be careful with param_set and param_vals
+# Would have to be careful with param_set and values
 # #' @include mlr_pipeops.R
 # mlr_pipeops$add("learner", PipeOpLearner)

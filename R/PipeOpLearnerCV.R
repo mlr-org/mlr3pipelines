@@ -13,7 +13,7 @@
 #' Returns this model's prediction during prediction phase, as a new `Task` with a single
 #' column.
 #'
-#' Inherits the `$param_set` and therefore `$param_set$param_vals` from the `Learner` it is constructed from.
+#' Inherits the `$param_set` and therefore `$param_set$values` from the `Learner` it is constructed from.
 #'
 #' @section Public Members / Active Bindings:
 #' * `learner`  :: [`Learner`] \cr
@@ -50,7 +50,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         ParamLgl$new("keep_response", default = FALSE)
         )
       )
-      private$.crossval_param_set$param_vals = list(resampling = "cv", folds = 3, keep_response = FALSE)
+      private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
 
       super$initialize(id, can_subset_cols = FALSE)
@@ -61,11 +61,11 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # Train a learner for predicting
       self$state = self$learner$train(task)
 
-      pv = private$.crossval_param_set$param_vals
+      pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
       rdesc = mlr_resamplings$get(pv[["resampling"]])
-      rdesc$param_vals = list(folds = pv[["folds"]])
+      rdesc$values = list(folds = pv[["folds"]])
       res = resample(task, self$learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
 
@@ -100,7 +100,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
       prds[, truth := NULL]
-      if (!self$param_vals[["keep_response"]] && self$learner$predict_type == "prob")
+      if (!self$values[["keep_response"]] && self$learner$predict_type == "prob")
         prds[, response := NULL]
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, paste(self$id, renaming, sep = "."))

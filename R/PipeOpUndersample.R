@@ -30,15 +30,15 @@ PipeOpUndersample = R6Class("PipeOpUndersample",
         ParamDbl$new("ratio", lower = 0, upper = Inf, special_vals = list(NULL), default = 1)
       ))
       super$initialize(id, param_set = ps)
-      self$param_set$param_vals = list(ratio = 1)
+      self$param_set$values = list(ratio = 1)
     },
 
     train_task = function(task) {
       self$state = list()
       truth = task$truth()
       tbl = sort(table(truth), decreasing = TRUE)
-      frac = self$param_set$param_vals$frac
-      ratio = self$param_set$param_vals$ratio
+      frac = self$param_set$values$frac
+      ratio = self$param_set$values$ratio
       if (!is.null(frac)) {
         if (!is.null(ratio)) {
           stop("Only one of 'ratio' and 'frac' params must be given.")
