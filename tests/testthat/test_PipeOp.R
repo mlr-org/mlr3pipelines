@@ -8,7 +8,7 @@ test_that("PipeOp - General functions", {
   expect_true(po_1$id == "debug.basic")
   expect_false(po_1$is_trained)
   expect_class(po_1$param_set, "ParamSet")
-  expect_list(po_1$param_set$param_vals, names = "unique")
+  expect_list(po_1$param_set$values, names = "unique")
   expect_output(print(po_1), "PipeOp:")
   expect_equal(po_1$packages, character(0))
   expect_null(po_1$state)
@@ -30,11 +30,11 @@ test_that("PipeOp - simple tests with PipeOpScale", {
 test_that("PipeOp printer", {
 
   expect_output(print(PipeOpNULL$new()),
-    "PipeOp.*<NULL>.*not trained.*param_vals.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
+    "PipeOp.*<NULL>.*not trained.*values.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
 
 
   expect_output(print(PipeOpDebugMulti$new(3, 4)),
-    "PipeOp.*<debug.multi>.*not trained.*param_vals.*list().*Input channels.*input_1 \\[\\*,\\*\\], input_2 \\[\\*,\\*\\], input_3 \\[\\*,\\*\\]\n.*Output channels.*output_1 \\[\\*,\\*\\], output_2 \\[\\*,\\*\\], output_3 \\[\\*,\\*\\], output_4 \\[\\*,\\*\\]$")
+    "PipeOp.*<debug.multi>.*not trained.*values.*list().*Input channels.*input_1 \\[\\*,\\*\\], input_2 \\[\\*,\\*\\], input_3 \\[\\*,\\*\\]\n.*Output channels.*output_1 \\[\\*,\\*\\], output_2 \\[\\*,\\*\\], output_3 \\[\\*,\\*\\], output_4 \\[\\*,\\*\\]$")
 
 
   expect_output(print(PipeOpDebugMulti$new(100, 0)),

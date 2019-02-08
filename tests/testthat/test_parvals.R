@@ -7,30 +7,30 @@ test_that("graph param vals", {
   gr$add_pipeop(PipeOpPCA$new())
   expect_equal(gr$ids(TRUE), c("scale", "pca"))
 
-  expect_equal(gr$pipeops$scale$param_set$param_vals$center, NULL)
-  expect_equal(gr$param_set$param_vals$scale.center, NULL)
-  gr$param_set$param_vals$scale.center = FALSE
-  expect_equal(gr$pipeops$scale$param_set$param_vals$center, FALSE)
-  expect_equal(gr$param_set$param_vals$scale.center, FALSE)
-  gr$pipeops$scale$param_set$param_vals$center = TRUE
-  expect_equal(gr$pipeops$scale$param_set$param_vals$center, TRUE)
-  expect_equal(gr$param_set$param_vals$scale.center, TRUE)
+  expect_equal(gr$pipeops$scale$param_set$values$center, NULL)
+  expect_equal(gr$param_set$values$scale.center, NULL)
+  gr$param_set$values$scale.center = FALSE
+  expect_equal(gr$pipeops$scale$param_set$values$center, FALSE)
+  expect_equal(gr$param_set$values$scale.center, FALSE)
+  gr$pipeops$scale$param_set$values$center = TRUE
+  expect_equal(gr$pipeops$scale$param_set$values$center, TRUE)
+  expect_equal(gr$param_set$values$scale.center, TRUE)
 
 
-  expect_equal(gr$pipeops$pca$param_set$param_vals$center, NULL)
-  expect_equal(gr$param_set$param_vals$pca.center, NULL)
-  gr$param_set$param_vals$pca.center = FALSE
-  expect_equal(gr$pipeops$pca$param_set$param_vals$center, FALSE)
-  expect_equal(gr$param_set$param_vals$pca.center, FALSE)
-  gr$pipeops$pca$param_set$param_vals$center = TRUE
-  expect_equal(gr$pipeops$pca$param_set$param_vals$center, TRUE)
-  expect_equal(gr$param_set$param_vals$pca.center, TRUE)
+  expect_equal(gr$pipeops$pca$param_set$values$center, NULL)
+  expect_equal(gr$param_set$values$pca.center, NULL)
+  gr$param_set$values$pca.center = FALSE
+  expect_equal(gr$pipeops$pca$param_set$values$center, FALSE)
+  expect_equal(gr$param_set$values$pca.center, FALSE)
+  gr$pipeops$pca$param_set$values$center = TRUE
+  expect_equal(gr$pipeops$pca$param_set$values$center, TRUE)
+  expect_equal(gr$param_set$values$pca.center, TRUE)
 
   expect_set_equal(names(gr$param_set$params),
     c("scale.center", "scale.scale", "pca.center", "pca.scale.", "pca.rank."))
 
-  expect_error({gr$pipeops$pca$param_set$param_vals$center = 1})  # type mismatch
-  expect_error({gr$param_set$param_vals$pca.center = 1})
+  expect_error({gr$pipeops$pca$param_set$values$center = 1})  # type mismatch
+  expect_error({gr$param_set$values$pca.center = 1})
 })
 
 test_that("graph has value changes when param vals change", {
@@ -41,9 +41,9 @@ test_that("graph has value changes when param vals change", {
   expect_equal(gr$ids(TRUE), c("scale", "pca"))
 
 
-  gr$param_set$param_vals$pca.center = FALSE
+  gr$param_set$values$pca.center = FALSE
   hashbeginning = gr$hash
-  gr$param_set$param_vals$pca.center = TRUE
+  gr$param_set$values$pca.center = TRUE
   hashend = gr$hash
   expect_character(hashbeginning, len = 1)
   expect_character(hashend, len = 1)

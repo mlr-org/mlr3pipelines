@@ -58,8 +58,8 @@ test_that("featureunion", {
 
 test_that("bagging", {
   g = greplicate(PipeOpDownsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpMajorityVote$new(innum = 2L)
-  g$pipeops$downsample_1$param_set$param_vals$frac = .5
-  g$pipeops$downsample_2$param_set$param_vals$frac = .5
+  g$pipeops$downsample_1$param_set$values$frac = .5
+  g$pipeops$downsample_2$param_set$values$frac = .5
   z = test_graph(g, n_nodes = 5L, n_edges = 4L)
 
   expect_equal(z$g.trained$pipeops$rpart_1$.result, list(NULL))
@@ -129,7 +129,7 @@ test_that("stacking", {
 
   pipe$pipeops$rpart$learner$predict_type = "prob"
   pipe$pipeops$featureless$learner$predict_type = "prob"
-  pipe$pipeops$featureless$param_vals$keep_response = TRUE
+  pipe$pipeops$featureless$values$keep_response = TRUE
 
   result = pipe$train(task)[[1]]
 
