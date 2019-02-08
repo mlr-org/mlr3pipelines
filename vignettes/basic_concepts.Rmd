@@ -77,7 +77,7 @@ The following slots (and more) are contained in each PipeOp:
 - `predict`: A function used to predict with the PipeOp.
 - `id`: Allows us to set or get the id of the PipeOp.
 - `param_set`: The set of all exposed parameters of the PipeOp.
-- `param_vals`: Current hyperparameter settings.
+- `values`: Current hyperparameter settings.
 - `is_trained`: Is the PipeOp already trained?
 
 We can check properties by accessing the respective slots.
@@ -87,7 +87,7 @@ We can check properties by accessing the respective slots.
   op$is_trained
 ```
 
-The `param_set` and `param_vals` are required if a PipeOp contains
+The `param_set` and `values` are required if a PipeOp contains
 hyperparameters we want to set. See [paradox::ParamSet] for a quick intro on how `ParamSet`s work.
 
 The `train()` and `predict()` functions define the core functionality of
