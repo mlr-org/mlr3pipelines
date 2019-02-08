@@ -285,10 +285,8 @@ Graph = R6Class("Graph",
       if (is.null(private$.param_set)) {
         private$.param_set = ParamSetCollection$new(unname(map(self$pipeops, "param_set"))) # FIXME: don't need unname when paradox/#211 is fixed
       }
-      if (!missing(val)) {
-        if (!identical(val, private$.param_set)) {
+      if (!missing(val) && !identical(val, private$.param_set)) {
           stop("param_set is read-only.")
-        }
       }
       private$.param_set
     },

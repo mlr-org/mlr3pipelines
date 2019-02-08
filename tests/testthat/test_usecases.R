@@ -129,7 +129,7 @@ test_that("stacking", {
 
   pipe$pipeops$rpart$learner$predict_type = "prob"
   pipe$pipeops$featureless$learner$predict_type = "prob"
-  pipe$pipeops$featureless$values$keep_response = TRUE
+  pipe$pipeops$featureless$values$resampling.keep_response = TRUE
 
   result = pipe$train(task)[[1]]
 

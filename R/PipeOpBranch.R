@@ -58,7 +58,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
         outnum = options
         options = rep_suffix("output", outnum)
       } else {
-        param = ParamFct$new("selection", values = options, default = options[1L])
+        param = ParamFct$new("selection", levels = options, default = options[1L])
       }
       super$initialize(id,
         param_set = ParamSet$new(params = list(param)),

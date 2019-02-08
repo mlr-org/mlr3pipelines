@@ -42,6 +42,21 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       task = inputs[[1]]
       list(self$state$predict(task))
     }
+  ),
+  active = list(
+    param_set = function(rhs) {
+      if (!missing(rhs) && !identical(rhs, self$learner$param_set)) {
+        stop("param_set is read-only.")
+      }
+      self$learner$param_set
+    },
+    id = function(val) {
+      if (!missing(val)) {
+        private$.id = val
+        self$learner$param_set$set_id = val
+      }
+      private$.id
+    }
   )
 )
 

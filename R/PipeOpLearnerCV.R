@@ -45,9 +45,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       self$learner$param_set$set_id = learner$id
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("resampling", values = "cv", default = "cv"),
+        ParamFct$new("resampling", levels = "cv", default = "cv", tags = "required"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
-        ParamLgl$new("keep_response", default = FALSE)
+        ParamLgl$new("keep_response", default = FALSE, tags = "required")
         )
       )
       private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
@@ -65,7 +65,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
       # Compute CV Predictions
       rdesc = mlr_resamplings$get(pv[["resampling"]])
-      rdesc$values = list(folds = pv[["folds"]])
+      rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, self$learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
 
@@ -78,13 +78,16 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   active = list(
-    param_set = function() {
+    param_set = function(val) {
       if (is.null(private$.param_set)) {
         private$.param_set = ParamSetCollection$new(list(
           private$.crossval_param_set,
           self$learner$param_set
           ))
         private$.param_set$set_id = self$id
+      }
+      if (!missing(val) && !identical(val, private$.param_set)) {
+        stop("param_set is read-only.")
       }
       private$.param_set
     }
@@ -100,7 +103,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
       prds[, truth := NULL]
-      if (!self$values[["keep_response"]] && self$learner$predict_type == "prob")
+      if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob")
         prds[, response := NULL]
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, paste(self$id, renaming, sep = "."))
