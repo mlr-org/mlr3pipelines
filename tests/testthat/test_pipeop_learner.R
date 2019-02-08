@@ -20,7 +20,7 @@ test_that("PipeOLearner - basic properties", {
 })
 
 
-test_that("PipeOLearner - param_set and param_vals", {
+test_that("PipeOLearner - param_set and values", {
   lrn = mlr_learners$get("classif.rpart")
   po = PipeOpLearner$new(lrn)
 
@@ -29,15 +29,15 @@ test_that("PipeOLearner - param_set and param_vals", {
   expect_equal(po$param_set, po$learner$param_set)
 
 
-  expect_equal(po$param_set$param_vals, po$learner$param_set$param_vals)
-  expect_error({po$param_set$param_vals$minsplit = "foo"})
-  po$param_set$param_vals$minsplit = 2L
-  expect_equal(po$param_set$param_vals, po$learner$param_set$param_vals)
-  expect_equal(po$param_set$param_vals, list(minsplit = 2L))
-  po$param_set$param_vals$maxdepth = 1L
-  expect_equal(po$param_set$param_vals, list(minsplit = 2L, maxdepth = 1L))
-  po$param_set$param_vals = list(minsplit = 1L)
-  expect_equal(po$param_set$param_vals, list(minsplit = 1L))
-  expect_error({po$param_set$param_vals = list(minsplit = "foo")})
-  expect_error({po$param_set$param_vals = list(foo = "foo")})
+  expect_equal(po$param_set$values, po$learner$param_set$values)
+  expect_error({po$param_set$values$minsplit = "foo"})
+  po$param_set$values$minsplit = 2L
+  expect_equal(po$param_set$values, po$learner$param_set$values)
+  expect_equal(po$param_set$values, list(minsplit = 2L))
+  po$param_set$values$maxdepth = 1L
+  expect_equal(po$param_set$values, list(minsplit = 2L, maxdepth = 1L))
+  po$param_set$values = list(minsplit = 1L)
+  expect_equal(po$param_set$values, list(minsplit = 1L))
+  expect_error({po$param_set$values = list(minsplit = "foo")})
+  expect_error({po$param_set$values = list(foo = "foo")})
 })

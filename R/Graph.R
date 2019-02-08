@@ -28,14 +28,14 @@
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
 #' * `param_set`    :: [`ParamSet`] \cr
-#'   Parameters and parameter constraints. Parameter values are in `$param_set$param_vals`. These are the union of `$param_set`s
+#'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
 #'   of all `PipeOp`s in the `Graph`. Parameter names
 #'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
-#'   Changing `$param_set$param_vals` also propagates the changes directly to the contained
-#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_set$param_vals` directly.
+#'   Changing `$param_set$values` also propagates the changes directly to the contained
+#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_set$values` directly.
 #' * `hash`         :: `character(1)` \cr
 #'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes
-#'   (and therefore their `$param_set$param_vals`) and a hash of `$edges`.
+#'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the `PipeOp`'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #'
@@ -285,18 +285,16 @@ Graph = R6Class("Graph",
       if (is.null(private$.param_set)) {
         private$.param_set = ParamSetCollection$new(unname(map(self$pipeops, "param_set"))) # FIXME: don't need unname when paradox/#211 is fixed
       }
-      if (!missing(val)) {
-        if (!identical(val, private$.param_set)) {
+      if (!missing(val) && !identical(val, private$.param_set)) {
           stop("param_set is read-only.")
-        }
       }
       private$.param_set
     },
-    param_vals = function(val) {
+    values = function(val) {
       if (!missing(val)) {
-        self$param_set$param_vals = val
+        self$param_set$values = val
       }
-      self$param_set$param_vals
+      self$param_set$values
     }
   ),
 
