@@ -47,7 +47,7 @@
 PipeOpBranch = R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "branch") {
+    initialize = function(options, id = "branch", param_vals = list()) {
       assert(
         check_int(options, lower = 1L),
         check_character(options, min.len = 1L, any.missing = FALSE)
@@ -60,12 +60,12 @@ PipeOpBranch = R6Class("PipeOpBranch",
       } else {
         param = ParamFct$new("selection", levels = options, default = options[1L])
       }
-      super$initialize(id,
-        param_set = ParamSet$new(params = list(param)),
+      ps = ParamSet$new(params = list(param))
+      ps$values$selection = self$param_set$params$selection$default
+      super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*")
       )
-      self$param_set$values$selection = self$param_set$params$selection$default
     },
 
     train = function(inputs) {

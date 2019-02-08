@@ -32,7 +32,7 @@
 PipeOpUnbranch = R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "unbranch") {
+    initialize = function(options, id = "unbranch", param_vals = list()) {
       assert(
         check_int(options, lower = 1),
         check_character(options, min.len = 1, any.missing = FALSE)
@@ -43,7 +43,7 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
       } else {
         innum = length(options)
       }
-      super$initialize(id,
+      super$initialize(id, param_vals = param_vals,
         input = data.table(name = rep_suffix("input", innum), train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )

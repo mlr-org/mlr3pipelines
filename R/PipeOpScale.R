@@ -15,12 +15,12 @@
 PipeOpScale = R6Class("PipeOpScale",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "scale") {
+    initialize = function(id = "scale", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamLgl$new("center", default = TRUE),
         ParamLgl$new("scale", default = TRUE)
       ))
-      super$initialize(id = id, param_set = ps)
+      super$initialize(id = id, param_set = ps, param_vals = param_vals)
     },
 
     select_cols = function(task) {

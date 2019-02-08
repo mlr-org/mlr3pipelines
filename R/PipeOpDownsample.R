@@ -18,13 +18,13 @@
 PipeOpDownsample = R6Class("PipeOpDownsample",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "downsample") {
+    initialize = function(id = "downsample", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamDbl$new("frac", default = 1, lower = 0, upper = 1),
         ParamLgl$new("stratify", default = FALSE)
       ))
-      super$initialize(id, param_set = ps, can_subset_cols = FALSE)
-      self$param_set$values = list(frac = 1, stratify = FALSE)
+      ps$values = list(frac = 1, stratify = FALSE)
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
     train_task = function(task) {

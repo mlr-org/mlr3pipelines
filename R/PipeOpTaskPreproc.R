@@ -91,10 +91,10 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     outtasklayout = NULL,
     affected_cols = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), can_subset_cols = TRUE) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE) {
       private$.can_subset_cols = can_subset_cols
       private$.affect_columns = NULL
-      super$initialize(id = id, param_set = param_set,
+      super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )

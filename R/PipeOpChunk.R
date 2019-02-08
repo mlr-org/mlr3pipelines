@@ -26,18 +26,18 @@
 PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
-    initialize = function(outnum, id = "chunk") {
+    initialize = function(outnum, id = "chunk", param_vals = list()) {
       outnum = assert_int(outnum, lower = 1L)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)
       ))
+      ps$values = list(shuffle = TRUE, stratify = FALSE)
       super$initialize(id,
-        param_set = ps,
+        param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task")
       )
-      self$param_set$values = list(shuffle = TRUE, stratify = FALSE)
     },
     train = function(inputs) {
       self$state = list()

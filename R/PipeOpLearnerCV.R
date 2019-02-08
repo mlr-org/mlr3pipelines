@@ -39,7 +39,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     learner = NULL,
-    initialize = function(learner, id = learner$id) {
+    initialize = function(learner, id = learner$id, param_vals = list()) {
       assert_learner(learner)
       self$learner = learner$clone(deep = TRUE)
       self$learner$param_set$set_id = learner$id
@@ -53,8 +53,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
 
-      super$initialize(id, can_subset_cols = FALSE)
-      private$.param_set = NULL
+      super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
     train_task= function(task) {

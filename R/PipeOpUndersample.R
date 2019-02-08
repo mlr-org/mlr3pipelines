@@ -24,13 +24,14 @@ PipeOpUndersample = R6Class("PipeOpUndersample",
   inherit = PipeOpTaskPreproc,
 
   public = list(
-    initialize = function(id = "undersample") {
+    initialize = function(id = "undersample", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamDbl$new("frac", lower = 0, upper = 1, special_vals = list(NULL)),
         ParamDbl$new("ratio", lower = 0, upper = Inf, special_vals = list(NULL), default = 1)
       ))
-      super$initialize(id, param_set = ps)
-      self$param_set$values = list(ratio = 1)
+      ps$values = list(ratio = 1)
+      super$initialize(id, param_set = ps, param_vals = param_vals)
+
     },
 
     train_task = function(task) {
