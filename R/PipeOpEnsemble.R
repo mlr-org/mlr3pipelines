@@ -113,6 +113,5 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-# See issue #117
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("majorityvote", PipeOpMajorityVote)

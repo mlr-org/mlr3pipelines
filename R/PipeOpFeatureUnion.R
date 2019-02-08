@@ -38,9 +38,8 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
-# # See issue #117
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
 
 
 cbind_tasks = function(inputs) {

@@ -68,7 +68,5 @@ PipeOpChunk = R6Class("PipeOpChunk",
   )
 )
 
-# This does not work until we have a "default"
-# chunking.
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("PipeOpChunk", PipeOpChunk)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpChunk", PipeOpChunk)
