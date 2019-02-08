@@ -311,6 +311,6 @@ test_that("Intermediate results are saved to Graph if requested", {
 
   expect_equal(g$pipeops$scale$.result, restask2)
 
-  expect_equal(unname(g$pipeops[["NULL"]]$.result), restask)
+  expect_equal(unname(g$pipeops$null$.result), restask)
 
 })

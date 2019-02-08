@@ -47,7 +47,7 @@ test_that("featureunion", {
   expect_equal(abs(as.matrix(z$g.trained$pipeops$pca$.result[[1]]$data(cols = paste0("PC", 1:4)))),
     abs(prcomp(iris[1:4])$x))
 
-  expect_equal(z$g.trained$pipeops[["NULL"]]$.result[[1]], mlr_tasks$get("iris"))
+  expect_equal(z$g.trained$pipeops$null$.result[[1]], mlr_tasks$get("iris"))
 
   expect_equal(abs(as.matrix(z$g.trained$pipeops$featureunion$.result[[1]]$data(cols = c(paste0("PC", 1:4), colnames(iris)[1:4])))),
     as.matrix(cbind(abs(prcomp(iris[1:4])$x), iris[1:4])))
