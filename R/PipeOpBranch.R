@@ -61,7 +61,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
         param = ParamFct$new("selection", levels = options, default = options[1L])
       }
       ps = ParamSet$new(params = list(param))
-      ps$values$selection = self$param_set$params$selection$default
+      ps$values$selection = ps$params$selection$default
       super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*")

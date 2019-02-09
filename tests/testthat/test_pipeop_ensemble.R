@@ -2,10 +2,10 @@ context("PipeOpModelAvg")
 
 
 test_that("PipeOpEnsemble - basic properties", {
-  op = PipeOpEnsemble$new(3, "ensemble")
+  op = PipeOpEnsemble$new(3, "ensemble", param_vals = list())
   expect_pipeop(op)
-  expect_pipeop_class(PipeOpEnsemble, list(3, "ensemble"))
-  expect_pipeop_class(PipeOpEnsemble, list(1, "ensemble"))
+  expect_pipeop_class(PipeOpEnsemble, list(3, "ensemble", param_vals = list()))
+  expect_pipeop_class(PipeOpEnsemble, list(1, "ensemble", param_vals = list()))
   expect_error(PipeOpEnsemble$new(0))
 })
 
