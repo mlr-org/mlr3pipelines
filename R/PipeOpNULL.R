@@ -33,4 +33,4 @@ PipeOpNULL = R6Class("PipeOpNULL",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("NULL", PipeOpNULL)
+mlr_pipeops$add("null", PipeOpNULL)
