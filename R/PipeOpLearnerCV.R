@@ -83,7 +83,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
           private$.crossval_param_set,
           self$learner$param_set
           ))
-        private$.param_set$set_id = self$id
+        private$.param_set$set_id = self$id %??% self$learner$id  # self$id may be NULL during initialize() call
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
