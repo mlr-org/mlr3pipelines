@@ -25,7 +25,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = mlr_reflections$predict_types[[task_type]],
         packages = graph$packages,
-        param_set = ParamSet$new(list(ParamDbl$new("DUMMY"))),  # FIXME: workaround for mlr-org/paradox#219
         properties = mlr_reflections$learner_properties[[task_type]])
       private$.predict_type = predict_type
       self$graph$param_set$values = param_vals

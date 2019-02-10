@@ -121,7 +121,6 @@ PipeOp = R6Class("PipeOp",
 
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0)) {
       private$.param_set = assert_param_set(param_set)
-      if (!length(private$.param_set$params)) private$.param_set$add(ParamDbl$new("DUMMY")) # FIXME: workaround for mlr-org/paradox#219
       private$.param_set$values = insert_named(private$.param_set$values, param_vals)
       self$id = assert_string(id)  # also sets the .param_set$set_id
       self$input = assert_connection_table(input)
