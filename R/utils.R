@@ -81,6 +81,6 @@ calculate_collimit = function(colwidths, outwidth) {
   collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
-task_levels = function(dt, cols) {
+task_levels = function(task, cols) {
   structure(task$col_info[cols, get("levels"), on = "id"], names = cols)
 }
