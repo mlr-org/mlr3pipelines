@@ -19,42 +19,41 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpOneHot = R6Class("PipeOpOneHot",
-  inherit = PipeOpTaskPreproc,
+  inherit = PipeOpTaskPreprocSimple,
 
   public = list(
     initialize = function(id = "onehot", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("1-of-n", "reference"), default = "1-of-n")
+        ParamFct$new("method", levels = c("1-of-n", "reference", "reference-with-intercept"), default = "1-of-n")
         ))
       ps$values = list(method = "1-of-n")
       super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
-    train_task = function(task) {
-      self$state = list()
-      one_hot(task, self$param_set$values$method)
+    select_cols = function(task) {
+      task$feature_types[get("type") == "factor", get("id")]
     },
 
-    predict_task = function(task) {
-      one_hot(task, self$param_set$values$method)
+    get_state_dt = function(dt) {
+      form = switch(self$param_set$values$method,
+        "1-of-n" = ~ 0 + .,
+        reference = ~ .,
+        "reference-with-intercept" = ~ .,
+        stop("Unknown 'method' parameter value."))
+      attr(form, ".Environment") = baseenv()
+      mf = model.frame(form, dt)
+      terms = terms(mf)
+      if (self$param_set$values$method == "reference") {
+        attr(terms, "intercept") = 0L
+      }
+      list(terms = terms, xlev = .getXlevels(terms(mf), mf))
+    },
+
+    transform_dt = function(dt) {
+      model.matrix(self$state$terms, dt, xlev = self$state$xlev)
     }
   )
 )
 
 #' @include mlr_pipeops.R
 mlr_pipeops$add("onehot", PipeOpOneHot)
-
-
-one_hot = function(task, method) {
-  info = task$col_info[task$feature_names, on = "id"][get("type") == "factor" & lengths(levels) > 0L, c("id", "levels")]
-  if (method == "reference")
-    info[, "levels" := lapply(get("levels"), tail, -1L)]
-  data = task$data(col = info$id)
-
-  new_cols = pmap_dtc(info, function(id, levels) {
-    x = data[[id]]
-    tab = as.data.table(outer(x, levels, FUN = "=="))
-    setnames(tab, names(tab), make.names(sprintf("%s.%s", id, levels), unique = TRUE))
-  })
-  task$select(setdiff(task$feature_names, info$id))$cbind(new_cols)
-}
