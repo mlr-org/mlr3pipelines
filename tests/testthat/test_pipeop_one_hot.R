@@ -1,14 +1,14 @@
 context("PipeOpOneHot")
 
-test_that("PipeOpOneHot", {
+test_that("PipeOpEncode", {
 
   task = mlr_tasks$get("bh")
 
-  expect_datapreproc_pipeop_class(PipeOpOneHot, task = task)
+  expect_datapreproc_pipeop_class(PipeOpEncode, task = task)
 
-  expect_datapreproc_pipeop_class(PipeOpOneHot, task = mlr_tasks$get("iris"))
+  expect_datapreproc_pipeop_class(PipeOpEncode, task = mlr_tasks$get("iris"))
 
-  op = PipeOpOneHot$new()
+  op = PipeOpEncode$new()
   expect_pipeop(op)
 
   nt = train_pipeop(op, inputs = list(task))[[1L]]
@@ -39,7 +39,7 @@ test_that("PipeOpOneHot", {
 
 
   # repeat with method == reference
-  op = PipeOpOneHot$new()
+  op = PipeOpEncode$new()
   op$param_set$values = list(method = "treatment")
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -57,7 +57,7 @@ test_that("PipeOpOneHot", {
   expect_true(all(make.names(sprintf("town.%s", tail(task$levels("town"), -1L)), unique = TRUE) %in% fn))
   expect_true(all(make.names(sprintf("town.%s", head(task$levels("town"), 1L)), unique = TRUE) %nin% fn))
 
-  op = PipeOpOneHot$new()
+  op = PipeOpEncode$new()
   op$param_set$values$method = "helmert"
   nt = train_pipeop(op, inputs = list(task))[[1L]]
 
@@ -67,7 +67,7 @@ test_that("PipeOpOneHot", {
     make.names(sprintf("chas.%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
     make.names(sprintf("town.%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
 
-  op = PipeOpOneHot$new()
+  op = PipeOpEncode$new()
   op$param_set$values$method = "sum"
   nt = train_pipeop(op, inputs = list(task))[[1L]]
 
@@ -77,7 +77,7 @@ test_that("PipeOpOneHot", {
     make.names(sprintf("chas.%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
     make.names(sprintf("town.%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
 
-  op = PipeOpOneHot$new()
+  op = PipeOpEncode$new()
   op$param_set$values$method = "poly"
   nt = train_pipeop(op, inputs = list(task))[[1L]]
 
