@@ -44,7 +44,7 @@ VignetteBuilder: knitr
 Remotes:
     mlr-org/mlr3,
     mlr-org/mlr3misc,
-    mlr-org/paradox@a7c416bc22d9
+    mlr-org/paradox
 Collate:
     'Graph.R'
     'GraphLearner.R'
