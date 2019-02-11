@@ -64,8 +64,8 @@ test_that("PipeOpOneHot", {
   fn = nt$feature_names
 
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
-    make.names(sprintf("chas.V%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
-    make.names(sprintf("town.V%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
+    make.names(sprintf("chas.%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
+    make.names(sprintf("town.%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
 
   op = PipeOpOneHot$new()
   op$param_set$values$method = "sum"
@@ -74,8 +74,8 @@ test_that("PipeOpOneHot", {
   fn = nt$feature_names
 
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
-    make.names(sprintf("chas.V%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
-    make.names(sprintf("town.V%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
+    make.names(sprintf("chas.%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
+    make.names(sprintf("town.%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
 
   op = PipeOpOneHot$new()
   op$param_set$values$method = "poly"
@@ -84,7 +84,8 @@ test_that("PipeOpOneHot", {
   fn = nt$feature_names
 
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
-    make.names(sprintf("chas..%s", "L"), unique = TRUE),
-    make.names(sprintf("town..%s", c("L", "Q", "C", seq(4, length(task$levels("town")) -1L))), unique = TRUE)))
+    make.names(sprintf("chas.%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
+    make.names(sprintf("town.%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
+
 
 })
