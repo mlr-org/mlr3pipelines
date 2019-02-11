@@ -47,6 +47,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
         poly = function(x) {
           cont = stats::contr.poly(x)
           rownames(cont) = x
+          colnames(cont) = NULL
           cont
         },
         sum = stats::contr.sum,
