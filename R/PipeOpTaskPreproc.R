@@ -150,7 +150,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
-      dt = as.data.table(self$train_dt(dt, task_levels(dt, cols)))
+      dt = as.data.table(self$train_dt(dt, task_levels(task, cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
@@ -160,7 +160,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
-      dt = as.data.table(self$predict_dt(dt, task_levels(dt, cols)))
+      dt = as.data.table(self$predict_dt(dt, task_levels(task, cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
@@ -264,7 +264,7 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
           return(list())
         }
         dt = task$data(cols = cols)
-        self$get_state_dt(dt, task_levels(dt, cols))
+        self$get_state_dt(dt, task_levels(task, cols))
       },
 
       transform = function(task) {
@@ -273,7 +273,7 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
           return(task)
         }
         dt = task$data(cols = cols)
-        dt = as.data.table(self$transform_dt(dt, task_levels(dt, cols)))
+        dt = as.data.table(self$transform_dt(dt, task_levels(task, cols)))
         task$select(setdiff(task$feature_names, cols))$cbind(dt)
       },
 
