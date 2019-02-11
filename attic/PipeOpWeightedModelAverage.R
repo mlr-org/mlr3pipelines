@@ -4,11 +4,10 @@
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
-#' Averages its input (a `list` of [`Prediction`]).
-#' Weights can be learned to optimize a specified
-#' measure.
+#' Averages its inputs (a `list` of ldarner [`Prediction`]).
+#' Weights can be learned to optimize a specified measure.
+#' This is internally done using (nloptr)[https://cran.r-project.org/web/packages/nloptr/index.html].
 #' Returns a single [`Prediction`].
-#' Used for regression `Prediction`s.
 #'
 #' @family PipeOps
 #' @examples
@@ -19,10 +18,19 @@ PipeOpWeightedModelAvg = R6Class("PipeOpWeightedModelAvg",
 
   public = list(
     initialize = function(innum, id = "PipeOpWeightedModelAvg", param_vals = list()) {
-      super$initialize(innum, id, param_vals = param_vals)
+      ps = ParamSet$new(params = list(
+        ParamUty$new("measure", default = NULL),
+        ParamFct$new("strategy", default = "1", levels = c("1"))
+      ))
+      ps$values = list(measure = NULL, strategy = "1")
+      super$initialize(innum, id, param_set = ps, param_vals = param_vals)
     },
     train = function(inputs) {
+      browser()
+      meas = mlr_measures$get("regr.mse")
+      weights = rep(1L, length(inputs))
 
+      self$state = 0L
     },
     predict = function(inputs) {
       prds = private$merge_predictions(inputs)
@@ -34,9 +42,32 @@ PipeOpWeightedModelAvg = R6Class("PipeOpWeightedModelAvg",
       p$truth = prds$truth
       list(p)
     }
+  ),
+
+  private = list(
+    merge_predictions = function() {}
   )
 )
 
 # See issue #117
 # #' @include mlr_pipeops.R
 # mlr_pipeops$add("modelavg", PipeOpModelAvg)
+
+
+truth = rnorm(1000)
+prd = data.table(
+  truth + rnorm(1000, 0, .01),
+  truth + rnorm(1000, 0, .1),
+  truth + rnorm(1000, 1, 1)
+)
+
+objfun = function(wts) {
+  predicted = apply(prd, 1, weighted.mean, wts)
+  Metrics::mae(truth, predicted)
+}
+
+nloptr::nloptr(
+  x0 = rep(1, 3),
+  eval_f = objfun,
+  opts = list("algorithm" = "NLOPT_LN_COBYLA")
+)

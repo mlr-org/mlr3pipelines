@@ -16,9 +16,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(innum, id, param_vals) {
+    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list()) {
       assert_integerish(innum, lower = 1)
-      super$initialize(id, param_vals = param_vals,
+      super$initialize(id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
