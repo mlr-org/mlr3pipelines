@@ -11,16 +11,19 @@ data.table::setDTthreads(1)
 
 devtools::document("mlr3pipelines")
 
+devtools::load_all("paradox")
+
 devtools::load_all("mlr3pipelines")
 
 
-library("paradox")
+
 
 testthat::test_package("mlr3pipelines")
 
+
 testthat::test_package("mlr3pipelines", filter = "usecases")
 
-testthat::test_package("mlr3pipelines", filter = "Graph")
+testthat::test_package("mlr3pipelines", filter = "pipeop_learnercv")
 
 
 PipeOpScale$new() %>>% PipeOpPCA$new()

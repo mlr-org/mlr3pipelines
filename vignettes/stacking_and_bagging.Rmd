@@ -173,9 +173,9 @@ Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) an
 
   #  Create Learner CV Operators
   lrn_0 = PipeOpLearnerCV$new(rprt, id = "rpart_cv_1")
-  lrn_0$param_vals$maxdepth = 5L
+  lrn_0$values$maxdepth = 5L
   lrn_1 = PipeOpPCA$new(id = "pca1") %>>% PipeOpLearnerCV$new(rprt, id = "rpart_cv_2")
-  lrn_1$param_vals$maxdepth = 1L
+  lrn_1$values$maxdepth = 1L
   lrn_2 = PipeOpPCA$new(id = "pca2") %>>% PipeOpLearnerCV$new(glmn)
 
   # Union them with a PipeOpNULL to keep original features

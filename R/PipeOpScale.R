@@ -15,12 +15,12 @@
 PipeOpScale = R6Class("PipeOpScale",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "scale") {
+    initialize = function(id = "scale", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamLgl$new("center", default = TRUE),
         ParamLgl$new("scale", default = TRUE)
       ))
-      super$initialize(id = id, param_set = ps)
+      super$initialize(id = id, param_set = ps, param_vals = param_vals)
     },
 
     select_cols = function(task) {
@@ -28,7 +28,7 @@ PipeOpScale = R6Class("PipeOpScale",
     },
 
     train_dt = function(dt) {
-      sc = invoke(scale, as.matrix(dt), .args = self$param_set$param_vals)
+      sc = invoke(scale, as.matrix(dt), .args = self$param_set$values)
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1

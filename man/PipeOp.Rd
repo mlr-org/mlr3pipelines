@@ -48,8 +48,8 @@ should be used.
 \item \code{packages}                   :: \code{character} \cr
 Set of all required packages for the \code{PipeOp}'s \code{$train} and \code{$predict} methods.
 \item \code{param_set}                  :: \code{\link{ParamSet}} \cr
-Parameters and parameter constraints. See \code{param_set$param_vals}.
-\item \code{param_set$param_vals}                 :: named \code{list} \cr
+Parameters and parameter constraints. See \code{param_set$values}.
+\item \code{param_set$values}                 :: named \code{list} \cr
 Parameter values that influence the functioning of \code{$train} and / or \code{$predict}. Parameter values are checked
 against parameter constraints in \code{$param_set}.
 \item \code{state}                      :: \code{any} \cr
@@ -72,7 +72,7 @@ Number of output channels. This equals \code{nrow($output)}.
 Is the PipeOp currently trained and can therefore be used for prediction?
 \item \code{hash}                       :: \code{character(1)} \cr
 Checksum calculated on the \code{PipeOp}, depending on the \code{PipeOp}'s \code{class} and the slots \code{$id} and \code{$param_set}
-(and therefore also \code{$param_set$param_vals}). If a
+(and therefore also \code{$param_set$values}). If a
 \code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \code{$hash} active
 binding and calculate the hash as \code{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
 \item \code{.result}                    :: \code{list} \cr
@@ -116,7 +116,7 @@ Internal function used by a \code{Graph} to call \code{$train()}. Does type chec
 Internal function used by a \code{Graph} to call \code{$predict()}, function analogous to \code{$train_internal()}.
 \item \code{print()} \cr
 () -> \code{NULL} \cr
-Prints the \code{PipeOp}s most salient information: \code{$id}, \code{$is_trained}, \code{$param_set$param_vals}, \code{$input} and \code{$output}.
+Prints the \code{PipeOp}s most salient information: \code{$id}, \code{$is_trained}, \code{$param_set$values}, \code{$input} and \code{$output}.
 }
 }
 
@@ -141,7 +141,6 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_unbranch}},
   \code{\link{mlr_pipeop_undersample}},
-  \code{\link{mlr_pipeop_weightedmodelavg}},
   \code{\link{mlr_pipeops}}
 }
 \concept{PipeOps}

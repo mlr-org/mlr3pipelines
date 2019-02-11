@@ -19,9 +19,9 @@
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum, id = "featureunion") {
+    initialize = function(innum, id = "featureunion", param_vals = list()) {
       assert_int(innum, lower = 1)
-      super$initialize(id,
+      super$initialize(id, param_vals = param_vals,
         input = data.table(name = rep_suffix("input", innum), train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
@@ -38,9 +38,8 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
-# # See issue #117
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
 
 
 cbind_tasks = function(inputs) {

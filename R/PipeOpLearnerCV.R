@@ -13,7 +13,7 @@
 #' Returns this model's prediction during prediction phase, as a new `Task` with a single
 #' column.
 #'
-#' Inherits the `$param_set` and therefore `$param_set$param_vals` from the `Learner` it is constructed from.
+#' Inherits the `$param_set` and therefore `$param_set$values` from the `Learner` it is constructed from.
 #'
 #' @section Public Members / Active Bindings:
 #' * `learner`  :: [`Learner`] \cr
@@ -39,33 +39,32 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     learner = NULL,
-    initialize = function(learner, id = learner$id) {
+    initialize = function(learner, id = learner$id, param_vals = list()) {
       assert_learner(learner)
       self$learner = learner$clone(deep = TRUE)
       self$learner$param_set$set_id = learner$id
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("resampling", values = "cv", default = "cv"),
+        ParamFct$new("resampling", levels = "cv", default = "cv", tags = "required"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
-        ParamLgl$new("keep_response", default = FALSE)
+        ParamLgl$new("keep_response", default = FALSE, tags = "required")
         )
       )
-      private$.crossval_param_set$param_vals = list(resampling = "cv", folds = 3, keep_response = FALSE)
+      private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
 
-      super$initialize(id, can_subset_cols = FALSE)
-      private$.param_set = NULL
+      super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
     train_task= function(task) {
       # Train a learner for predicting
       self$state = self$learner$train(task)
 
-      pv = private$.crossval_param_set$param_vals
+      pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
       rdesc = mlr_resamplings$get(pv[["resampling"]])
-      rdesc$param_vals = list(folds = pv[["folds"]])
+      rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, self$learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
 
@@ -78,13 +77,16 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   active = list(
-    param_set = function() {
+    param_set = function(val) {
       if (is.null(private$.param_set)) {
         private$.param_set = ParamSetCollection$new(list(
           private$.crossval_param_set,
           self$learner$param_set
           ))
-        private$.param_set$set_id = self$id
+        private$.param_set$set_id = self$id %??% self$learner$id  # self$id may be NULL during initialize() call
+      }
+      if (!missing(val) && !identical(val, private$.param_set)) {
+        stop("param_set is read-only.")
       }
       private$.param_set
     }
@@ -100,7 +102,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
       prds[, truth := NULL]
-      if (!self$param_vals[["keep_response"]] && self$learner$predict_type == "prob")
+      if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob")
         prds[, response := NULL]
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, paste(self$id, renaming, sep = "."))

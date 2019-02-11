@@ -14,10 +14,10 @@
 #'   respective `PipeOp`s.
 #' * `is_trained`   :: `logical(1)` \cr
 #'   Is the `Graph`, i.e. are all of its `PipeOp`s, trained, and can the `Graph` be used for prediction?
-#' * `lhs`          ::  `list` of [`PipeOp`] \cr
-#'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as `Graph` input layer.
-#' * `rhs`          :: `list` of [`PipeOp`] \cr
-#'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as `Graph` output layer.
+#' * `lhs`          ::  `character(n)` \cr
+#'   Ids of the 'left-hand-side' nodes that have some unconnected input channels and therefore act as `Graph` input layer.
+#' * `rhs`          :: `character(n)` \cr
+#'   Ids of the 'right-hand-side' nodes that have some unconnected output channels and therefore act as `Graph` output layer.
 #' * `input`        :: [`data.table`] with `character` columns `name`, `train`, `predict`, `op.id`, `channel.name` \cr
 #'   Input channels of the `Graph`. For each channel lists the name, input type during training, input type during prediction,
 #'   `PipeOp` `$id` of the `PipeOp` the channel pertains to, and channel name as the `PipeOp` knows it.
@@ -28,14 +28,14 @@
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
 #' * `param_set`    :: [`ParamSet`] \cr
-#'   Parameters and parameter constraints. Parameter values are in `$param_set$param_vals`. These are the union of `$param_set`s
+#'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
 #'   of all `PipeOp`s in the `Graph`. Parameter names
 #'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
-#'   Changing `$param_set$param_vals` also propagates the changes directly to the contained
-#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_set$param_vals` directly.
+#'   Changing `$param_set$values` also propagates the changes directly to the contained
+#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_set$values` directly.
 #' * `hash`         :: `character(1)` \cr
 #'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes
-#'   (and therefore their `$param_set$param_vals`) and a hash of `$edges`.
+#'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the `PipeOp`'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #'
@@ -138,7 +138,7 @@ Graph = R6Class("Graph",
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
-      private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
+      private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))  # FIXME: $add() when it becomes available
       invisible(self)
     },
 
@@ -283,18 +283,18 @@ Graph = R6Class("Graph",
     param_set = function(val) {
       # FIXME: It would be nice if we didn't need to do this.
       if (is.null(private$.param_set)) {
-        if (!length(self$pipeops)) {
-          private$.param_set = ParamSet$new()  # FIXME: create ParamSet when paradox/#201 is fixed
-        } else {
-          private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
-        }
+        private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
       }
-      if (!missing(val)) {
-        if (!identical(val, private$.param_set)) {
+      if (!missing(val) && !identical(val, private$.param_set)) {
           stop("param_set is read-only.")
-        }
       }
       private$.param_set
+    },
+    values = function(val) {
+      if (!missing(val)) {
+        self$param_set$values = val
+      }
+      self$param_set$values
     }
   ),
 

@@ -16,13 +16,13 @@
 PipeOpPCA = R6Class("PipeOpPCA",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "pca") {
+    initialize = function(id = "pca", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamLgl$new("center", default = TRUE),
         ParamLgl$new("scale.", default = FALSE),
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL))
       ))
-      super$initialize(id, param_set = ps)
+      super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
     select_cols = function(task) {
@@ -30,7 +30,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
     },
 
     train_dt = function(dt) {
-      pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$param_vals)
+      pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$values)
       self$state = pcr
       self$state$x = NULL
       pcr$x

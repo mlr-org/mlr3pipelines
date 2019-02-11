@@ -47,7 +47,7 @@ test_that("featureunion", {
   expect_equal(abs(as.matrix(z$g.trained$pipeops$pca$.result[[1]]$data(cols = paste0("PC", 1:4)))),
     abs(prcomp(iris[1:4])$x))
 
-  expect_equal(z$g.trained$pipeops[["NULL"]]$.result[[1]], mlr_tasks$get("iris"))
+  expect_equal(z$g.trained$pipeops$null$.result[[1]], mlr_tasks$get("iris"))
 
   expect_equal(abs(as.matrix(z$g.trained$pipeops$featureunion$.result[[1]]$data(cols = c(paste0("PC", 1:4), colnames(iris)[1:4])))),
     as.matrix(cbind(abs(prcomp(iris[1:4])$x), iris[1:4])))
@@ -58,8 +58,8 @@ test_that("featureunion", {
 
 test_that("bagging", {
   g = greplicate(PipeOpDownsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpMajorityVote$new(innum = 2L)
-  g$pipeops$downsample_1$param_set$param_vals$frac = .5
-  g$pipeops$downsample_2$param_set$param_vals$frac = .5
+  g$pipeops$downsample_1$param_set$values$frac = .5
+  g$pipeops$downsample_2$param_set$values$frac = .5
   z = test_graph(g, n_nodes = 5L, n_edges = 4L)
 
   expect_equal(z$g.trained$pipeops$rpart_1$.result, list(NULL))
@@ -129,7 +129,7 @@ test_that("stacking", {
 
   pipe$pipeops$rpart$learner$predict_type = "prob"
   pipe$pipeops$featureless$learner$predict_type = "prob"
-  pipe$pipeops$featureless$param_vals$keep_response = TRUE
+  pipe$pipeops$featureless$values$resampling.keep_response = TRUE
 
   result = pipe$train(task)[[1]]
 

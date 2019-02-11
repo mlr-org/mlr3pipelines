@@ -24,21 +24,22 @@ PipeOpUndersample = R6Class("PipeOpUndersample",
   inherit = PipeOpTaskPreproc,
 
   public = list(
-    initialize = function(id = "undersample") {
+    initialize = function(id = "undersample", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamDbl$new("frac", lower = 0, upper = 1, special_vals = list(NULL)),
         ParamDbl$new("ratio", lower = 0, upper = Inf, special_vals = list(NULL), default = 1)
       ))
-      super$initialize(id, param_set = ps)
-      self$param_set$param_vals = list(ratio = 1)
+      ps$values = list(ratio = 1)
+      super$initialize(id, param_set = ps, param_vals = param_vals)
+
     },
 
     train_task = function(task) {
       self$state = list()
       truth = task$truth()
       tbl = sort(table(truth), decreasing = TRUE)
-      frac = self$param_set$param_vals$frac
-      ratio = self$param_set$param_vals$ratio
+      frac = self$param_set$values$frac
+      ratio = self$param_set$values$ratio
       if (!is.null(frac)) {
         if (!is.null(ratio)) {
           stop("Only one of 'ratio' and 'frac' params must be given.")

@@ -23,10 +23,10 @@ the \code{$pipeops} list. \code{src_channel} and \code{dst_channel} must respect
 respective \code{PipeOp}s.
 \item \code{is_trained}   :: \code{logical(1)} \cr
 Is the \code{Graph}, i.e. are all of its \code{PipeOp}s, trained, and can the \code{Graph} be used for prediction?
-\item \code{lhs}          ::  \code{list} of \code{\link{PipeOp}} \cr
-The 'left-hand-side' nodes that have some unconnected input channels and therefore act as \code{Graph} input layer.
-\item \code{rhs}          :: \code{list} of \code{\link{PipeOp}} \cr
-The 'right-hand-side' nodes that have some unconnected output channels and therefore act as \code{Graph} output layer.
+\item \code{lhs}          ::  \code{character(n)} \cr
+Ids of the 'left-hand-side' nodes that have some unconnected input channels and therefore act as \code{Graph} input layer.
+\item \code{rhs}          :: \code{character(n)} \cr
+Ids of the 'right-hand-side' nodes that have some unconnected output channels and therefore act as \code{Graph} output layer.
 \item \code{input}        :: \code{\link{data.table}} with \code{character} columns \code{name}, \code{train}, \code{predict}, \code{op.id}, \code{channel.name} \cr
 Input channels of the \code{Graph}. For each channel lists the name, input type during training, input type during prediction,
 \code{PipeOp} \code{$id} of the \code{PipeOp} the channel pertains to, and channel name as the \code{PipeOp} knows it.
@@ -37,14 +37,14 @@ Output channels of the \code{Graph}. For each channel lists the name, output typ
 Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
 \code{\link{PipeOp}} objects.
 \item \code{param_set}    :: \code{\link{ParamSet}} \cr
-Parameters and parameter constraints. Parameter values are in \code{$param_set$param_vals}. These are the union of \code{$param_set}s
+Parameters and parameter constraints. Parameter values are in \code{$param_set$values}. These are the union of \code{$param_set}s
 of all \code{PipeOp}s in the \code{Graph}. Parameter names
 as seen by the \code{Graph} have the naming scheme \code{<PipeOp$id>.<PipeOp original parameter name>}.
-Changing \code{$param_set$param_vals} also propagates the changes directly to the contained
-\code{PipeOp}s and is an alternative to changing a \code{PipeOp}s \code{$param_set$param_vals} directly.
+Changing \code{$param_set$values} also propagates the changes directly to the contained
+\code{PipeOp}s and is an alternative to changing a \code{PipeOp}s \code{$param_set$values} directly.
 \item \code{hash}         :: \code{character(1)} \cr
 Stores a checksum calculated on the \code{Graph} configuration, which includes all \code{PipeOp} hashes
-(and therefore their \code{$param_set$param_vals}) and a hash of \code{$edges}.
+(and therefore their \code{$param_set$values}) and a hash of \code{$edges}.
 \item \code{keep_results} :: \code{logical(1)} \cr
 Whether to store intermediate results in the \code{PipeOp}'s \code{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 }

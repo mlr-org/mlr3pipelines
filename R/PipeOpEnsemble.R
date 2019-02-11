@@ -16,9 +16,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(innum, id) {
+    initialize = function(innum, id, param_vals) {
       assert_integerish(innum, lower = 1)
-      super$initialize(id,
+      super$initialize(id, param_vals = param_vals,
         input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
@@ -55,8 +55,8 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "PipeOpModelAvg") {
-      super$initialize(innum, id)
+    initialize = function(innum, id = "PipeOpModelAvg", param_vals = list()) {
+      super$initialize(innum, id, param_vals = param_vals)
     },
     predict = function(inputs) {
       prds = private$merge_predictions(inputs)
@@ -95,8 +95,8 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "majorityvote") {
-      super$initialize(innum, id)
+    initialize = function(innum, id = "majorityvote", param_vals = list()) {
+      super$initialize(innum, id, param_vals = param_vals)
     },
 
     predict = function(inputs) {
@@ -113,49 +113,5 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-# See issue #117
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
-
-#' @title PipeOpWeightedModelAvg
-#'
-#' @name mlr_pipeop_weightedmodelavg
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
-#'
-#' @description
-#' Averages its input (a `list` of [`Prediction`]).
-#' Weights can be learned to optimize a specified 
-#' measure.
-#' Returns a single [`Prediction`].
-#' Used for regression `Prediction`s.
-#'
-#' @family PipeOps
-#' @examples
-#' op = PipeOpWeightedModelAvg$new(3)
-#' @export
-PipeOpWeightedModelAvg = R6Class("PipeOpWeightedModelAvg",
-  inherit = PipeOpEnsemble,
-
-  public = list(
-    initialize = function(innum, id = "PipeOpWeightedModelAvg") {
-      super$initialize(innum, id)
-    },
-    train = function(inputs) {
-
-    },
-    predict = function(inputs) {
-      prds = private$merge_predictions(inputs)
-      prds = prds[, list(response = mean(response, na.rm = TRUE), truth = truth[1]), by = "row_id"]
-      # FIXME This is ugly, but currently the best way
-      p = PredictionRegr$new()
-      p$row_ids = prds$row_id
-      p$response = prds$response
-      p$truth = prds$truth
-      list(p)
-    }
-  )
-)
-
-# See issue #117
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("modelavg", PipeOpModelAvg)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("majorityvote", PipeOpMajorityVote)

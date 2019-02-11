@@ -31,7 +31,6 @@ Suggests:
     rpart,
     testthat,
     kernlab,
-    stringi,
     ggplot2,
     mlr3learners
 Encoding: UTF-8
@@ -45,17 +44,17 @@ VignetteBuilder: knitr
 Remotes:
     mlr-org/mlr3,
     mlr-org/mlr3misc,
-    mlr-org/paradox
+    mlr-org/paradox@a7c416bc22d9
 Collate:
     'Graph.R'
     'GraphLearner.R'
     'NO_OP.R'
     'utils.R'
     'PipeOp.R'
+    'mlr_pipeops.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
     'PipeOpCopy.R'
-    'mlr_pipeops.R'
     'PipeOpTaskPreproc.R'
     'PipeOpDownsample.R'
     'PipeOpEnsemble.R'

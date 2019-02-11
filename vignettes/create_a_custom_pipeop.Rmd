@@ -378,9 +378,9 @@ result_posa_simple$data()
 
 Hyperparameters are declared during initialization, when calling the `PipeOp`'s `$initialize()` function, by giving a `param_set` argument. The `param_set` must be a `ParamSet` from the `paradox` package; see the [vignette](https://mlr-org.github.io/paradox/articles/paradox.html) for more information on how to define parameter spaces. After construction, the `ParamSet` can be accessed through the `$param_set` slot. While it is *possible* to modify this `ParamSet`, using e.g. the `$add()` and `$add_dep()` functions, *after* adding it to the `PipeOp`, it is strongly advised against.
 
-Hyperparameters can be set and queried through the `$param_vals` slot. When setting hyperparameters, they are automatically checked to satisfy all conditions set by the `$param_set`, so it is not necessary to type check them. Be aware that it is always possible to *remove* hyperparameter values.
+Hyperparameters can be set and queried through the `$values` slot. When setting hyperparameters, they are automatically checked to satisfy all conditions set by the `$param_set`, so it is not necessary to type check them. Be aware that it is always possible to *remove* hyperparameter values.
 
-When a `PipeOp` is initialized, it usually does not have any parameter values---`$param_vals` takes the value `list()`. It is possible to set initial parameter values in the `$initialize()` constructor; this must be done *after* the `super$initialize()` call where the corresponding `ParamSet` must be supplied. This is because setting `$param_vals` checks against the current `$param_set`, which would fail if the `$param_set` was not set yet.
+When a `PipeOp` is initialized, it usually does not have any parameter values---`$values` takes the value `list()`. It is possible to set initial parameter values in the `$initialize()` constructor; this must be done *after* the `super$initialize()` call where the corresponding `ParamSet` must be supplied. This is because setting `$values` checks against the current `$param_set`, which would fail if the `$param_set` was not set yet.
 
 When using an underlying library function (the `scale` function in `PipeOpScale`, say), then there is usually a "default" behaviour of that function when a parameter is not given. It is good practice to use this default behaviour whenever a parameter is not set (or when it was removed). This can easily be done when using the [`mlr3misc`](https://github.com/mlr-org/mlr3misc) library's `invoke()` function, which has functionality similar to `base::do.call()`.
 
@@ -397,14 +397,14 @@ pss = PipeOpScale$new()
 print(pss$param_set)
 ```
 ```{r}
-pss$param_vals$center = FALSE
-print(pss$param_vals)
+pss$values$center = FALSE
+print(pss$values)
 ```
 ```{r, error = TRUE}
-pss$param_vals$scale = "TRUE"  # bad input is checked!
+pss$values$scale = "TRUE"  # bad input is checked!
 ```
 
-How `PipeOpScale` handles its parameters can be seen in its `$train` method: It gets the relevant parameters from its `$param_vals` slot and uses them in the `mlr3misc::invoke` call. This has the advantage over calling `scale()` directly that if a parameter is not given, its default value from the `base::scale` function will be used.
+How `PipeOpScale` handles its parameters can be seen in its `$train` method: It gets the relevant parameters from its `$values` slot and uses them in the `mlr3misc::invoke` call. This has the advantage over calling `scale()` directly that if a parameter is not given, its default value from the `base::scale` function will be used.
 
 ```{r}
 PipeOpScale$public_methods$train
@@ -414,8 +414,8 @@ Another change that is necessary compared to `PipeOpScaleAlways` is that the att
 
 It is now even possible (if a bit pointless) to call `PipeOpScale` with both `scale` and `center` set to `FALSE`, which returns the original dataset, unchanged.
 ```{r}
-pss$param_vals$scale = FALSE
-pss$param_vals$center = FALSE
+pss$values$scale = FALSE
+pss$values$center = FALSE
 
 gr = Graph$new()
 gr$add_pipeop(pss)

@@ -11,7 +11,7 @@ PipeOpLearner
 }
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
-Inherits the \code{$param_set} and \code{$param_vals} from the \code{Learner} it is constructed from.
+Inherits the \code{$param_set} and \code{$values} from the \code{Learner} it is constructed from.
 }
 \section{Public Members / Active Bindings}{
 
@@ -45,7 +45,6 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_unbranch}},
   \code{\link{mlr_pipeop_undersample}},
-  \code{\link{mlr_pipeop_weightedmodelavg}},
   \code{\link{mlr_pipeops}}
 
 Other Meta PipeOps: \code{\link{mlr_pipeop_learner_cv}}

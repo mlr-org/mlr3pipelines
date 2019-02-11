@@ -20,7 +20,7 @@ and \code{<ID>.se} for \code{$predict.type} \code{"se"}. \code{<ID>} is here the
 Returns this model's prediction during prediction phase, as a new \code{Task} with a single
 column.
 
-Inherits the \code{$param_set} and therefore \code{$param_set$param_vals} from the \code{Learner} it is constructed from.
+Inherits the \code{$param_set} and therefore \code{$param_set$values} from the \code{Learner} it is constructed from.
 }
 \section{Public Members / Active Bindings}{
 

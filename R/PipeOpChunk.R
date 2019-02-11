@@ -26,18 +26,18 @@
 PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
-    initialize = function(outnum, id = "chunk") {
+    initialize = function(outnum, id = "chunk", param_vals = list()) {
       outnum = assert_int(outnum, lower = 1L)
       ps = ParamSet$new(params = list(
         ParamLgl$new("shuffle", default = TRUE),
         ParamLgl$new("stratify", default = FALSE)
       ))
+      ps$values = list(shuffle = TRUE, stratify = FALSE)
       super$initialize(id,
-        param_set = ps,
+        param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task")
       )
-      self$param_set$param_vals = list(shuffle = TRUE, stratify = FALSE)
     },
     train = function(inputs) {
       self$state = list()
@@ -45,15 +45,15 @@ PipeOpChunk = R6Class("PipeOpChunk",
       task = inputs[[1L]]
       colns = task$backend$colnames
 
-      if (self$param_set$param_vals$stratify) {
+      if (self$param_set$values$stratify) {
         row_ids = task$row_ids
         stratify = task$target_names
         tmp = cbind(task$data(rows = row_ids, cols = stratify), ..row_id = row_ids)[, list(..N = .N, ..row_id = list(.SD$..row_id)), by = stratify]
-        row_ids = split(row_ids, unlist(map(tmp$..row_id, chunk, n_chunks = self$outnum, shuffle = self$param_set$param_vals$shuffle)))
+        row_ids = split(row_ids, unlist(map(tmp$..row_id, chunk, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)))
       } else {
         # FIXME: Implement stratification?
         row_ids = task$row_ids
-        row_ids = split(row_ids, chunk(row_ids, n_chunks = self$outnum, shuffle = self$param_set$param_vals$shuffle))
+        row_ids = split(row_ids, chunk(row_ids, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle))
       }
 
       # Subset data, clone task and overwrite data in it.
@@ -68,7 +68,5 @@ PipeOpChunk = R6Class("PipeOpChunk",
   )
 )
 
-# This does not work until we have a "default"
-# chunking.
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("PipeOpChunk", PipeOpChunk)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("chunk", PipeOpChunk)

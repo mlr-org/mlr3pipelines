@@ -41,8 +41,8 @@
 #' * `packages`                   :: `character` \cr
 #'   Set of all required packages for the `PipeOp`'s `$train` and `$predict` methods.
 #' * `param_set`                  :: [`ParamSet`] \cr
-#'   Parameters and parameter constraints. See `param_set$param_vals`.
-#' * `param_set$param_vals`                 :: named `list` \cr
+#'   Parameters and parameter constraints. See `param_set$values`.
+#' * `param_set$values`                 :: named `list` \cr
 #'   Parameter values that influence the functioning of `$train` and / or `$predict`. Parameter values are checked
 #'   against parameter constraints in `$param_set`.
 #' * `state`                      :: `any` \cr
@@ -65,7 +65,7 @@
 #'   Is the PipeOp currently trained and can therefore be used for prediction?
 #' * `hash`                       :: `character(1)` \cr
 #'   Checksum calculated on the `PipeOp`, depending on the `PipeOp`'s `class` and the slots `$id` and `$param_set`
-#'   (and therefore also `$param_set$param_vals`). If a
+#'   (and therefore also `$param_set$values`). If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result`                    :: `list` \cr
@@ -105,7 +105,7 @@
 #'   Internal function used by a `Graph` to call `$predict()`, function analogous to `$train_internal()`.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
-#'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_set$param_vals`, `$input` and `$output`.
+#'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_set$values`, `$input` and `$output`.
 #'
 #' @name PipeOp
 #' @family mlr3pipelines backend related
@@ -119,13 +119,13 @@ PipeOp = R6Class("PipeOp",
     output = NULL,
     .result = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), input, output, packages = character(0L)) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0)) {
       private$.param_set = assert_param_set(param_set)
+      private$.param_set$values = insert_named(private$.param_set$values, param_vals)
       self$id = assert_string(id)  # also sets the .param_set$set_id
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
-      if ("DUMMY" %nin% names(private$.param_set$params)) private$.param_set$add(ParamUty$new("DUMMY"))
     },
 
     print = function(...) {
@@ -139,7 +139,7 @@ PipeOp = R6Class("PipeOp",
       }
 
       catf("PipeOp: <%s> (%strained)", self$id, if (self$is_trained) "" else "not ")
-      catf("param_vals: <%s>", as_short_string(self$param_set$param_vals))
+      catf("values: <%s>", as_short_string(self$param_set$values))
       catf("Input channels <name [train type, predict type]>:\n%s", type_table_printout(self$input))
       catf("Output channels <name [train type, predict type]>:\n%s", type_table_printout(self$output))
     },
@@ -191,6 +191,12 @@ PipeOp = R6Class("PipeOp",
     hash = function() {
       digest(list(class(self), self$id, self$param_set),
         algo = "xxhash64")
+    },
+    values = function(val) {
+      if (!missing(val)) {
+        self$param_set$values = val
+      }
+      self$param_set$values
     }
   ),
 
