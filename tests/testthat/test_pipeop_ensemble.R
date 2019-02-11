@@ -34,6 +34,7 @@ test_that("PipeOpMajorityVote - train and predict", {
   prd$row_ids = seq_len(10)
   prd$response = rep(c("a", "b"), 5)
   prd$truth = rep(c("a", "b"), 5)
+  prd$predict_types = "response"
   prds = map(seq_len(3), function(x) prd$clone())
 
   po = PipeOpMajorityVote$new(3)
@@ -50,29 +51,95 @@ test_that("PipeOpModelAvg - basic properties", {
 })
 
 
-test_that("PipeOpModelAvg - train and predict", {
+test_that("PipeOpWeightedModelAvg - train and predict", {
 
-  prd = PredictionRegr$new()
-  prd$row_ids = seq_len(10)
-  prd$response = seq_len(10)
-  prd$truth = seq_len(10)
-  prds = map(seq_len(3), function(x) prd$clone())
+  # Create 4 predictions
+  truth = rnorm(70)
+  prds = replicate(4, {
+    prd = PredictionRegr$new()
+    prd$row_ids = seq_len(70)
+    prd$response = truth + rnorm(70, sd = 0.1)
+    prd$truth = truth
+    return(prd)
+  })
 
-  po = PipeOpModelAvg$new(3)
-
+  po = PipeOpWtModelAvg$new(4)
   expect_list(train_pipeop(po, prds), len = 1)
-
   out = predict_pipeop(po, prds)
-  expect_equal(out, list(prd))
 
-  prd2 = prd$clone()
-  prd2$response = 10:1
+  # Returns the same if weights are 1, rest 0
+  po = PipeOpWtModelAvg$new(4)
+  po$weights = c(0, 0, 1, 0)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_equal(out, list(prds[[3]]))
 
-  po2 = PipeOpModelAvg$new(2)
-  expect_list(train_pipeop(po2, list(prd, prd2)), len = 1)
-
-  out2 = predict_pipeop(po2, list(prd, prd2))
-  prd_ref = prd2$clone()
-  prd_ref$response = rep(5.5, 10)
-  expect_equivalent(out2, list(prd_ref))
 })
+
+test_that("PipeOpWeightedMajorityVote - response -train and predict", {
+
+  trx = sample(1:150, 80)
+  prds = replicate(4, {
+    lrn = mlr_learners$get("classif.rpart", predict_type = "response")
+    lrn$param_set$values$maxdepth = sample(1:10, 1)
+    lrn$param_set$values$minsplit = sample(1:20, 1)
+    lrn$param_set$values$cp = sample(c(0.01, 0.1, 0.5), 1)
+    tsk = mlr_tasks$get("iris")
+    e = Experiment$new(tsk, lrn)
+    e$train(trx)
+    e$predict(setdiff(1:150, trx))
+    e$prediction
+  })
+
+  po = PipeOpWtMajorityVote$new(4)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+
+  po = PipeOpWtMajorityVote$new(4)
+  po$weights = c(0, 0, 0, 1)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+  expect_equal(out[[1]], prds[[4]])
+
+})
+
+test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
+
+  trx = sample(1:150, 80)
+  prds = replicate(4, {
+    lrn = mlr_learners$get("classif.rpart", predict_type = "prob")
+    lrn$param_set$values$maxdepth = sample(1:10, 1)
+    lrn$param_set$values$minsplit = sample(1:20, 1)
+    lrn$param_set$values$cp = sample(c(0.01, 0.1, 0.5), 1)
+    tsk = mlr_tasks$get("iris")
+    e = Experiment$new(tsk, lrn)
+    e$train(trx)
+    e$predict(setdiff(1:150, trx))
+    e$prediction
+  })
+
+  po = PipeOpWtMajorityVote$new(4)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+
+  po = PipeOpWtMajorityVote$new(4)
+  po$weights = c(0, 0, 0, 1)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+  expect_equivalent(out[[1]], prds[[4]])
+
+})
+
+
+
+
+
+
+
+
+
+
