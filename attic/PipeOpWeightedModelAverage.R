@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # # We basically have two scenarios:
 
 # ensemble_selection = function(predictions, truth, ensemble_size) {
@@ -76,3 +77,22 @@
 # # See issue #117
 # # #' @include mlr_pipeops.R
 # # mlr_pipeops$add("modelavg", PipeOpModelAvg)
+
+
+# truth = rnorm(1000)
+# prd = data.table(
+#   truth + rnorm(1000, 0, .01),
+#   truth + rnorm(1000, 0, .1),
+#   truth + rnorm(1000, 1, 1)
+# )
+
+# objfun = function(wts) {
+#   predicted = apply(prd, 1, weighted.mean, wts)
+#   Metrics::mae(truth, predicted)
+# }
+
+# nloptr::nloptr(
+#   x0 = rep(1, 3),
+#   eval_f = objfun,
+#   opts = list("algorithm" = "NLOPT_LN_COBYLA")
+# )
