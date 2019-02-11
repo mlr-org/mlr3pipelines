@@ -1,5 +1,6 @@
 #' @title PipeOpOneHot
 #'
+#' @name mlr_pipeop_onehot
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
@@ -21,12 +22,12 @@ PipeOpOneHot = R6Class("PipeOpOneHot",
   inherit = PipeOpTaskPreproc,
 
   public = list(
-    initialize = function(id = "one_hot") {
+    initialize = function(id = "onehot", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamFct$new("method", values = c("1-of-n", "reference"), default = "1-of-n")
-      ))
-      super$initialize(id, param_set = ps)
-      self$param_set$param_vals = list(method = "1-of-n")
+        ParamFct$new("method", levels = c("1-of-n", "reference"), default = "1-of-n")
+        ))
+      ps$values = list(method = "1-of-n")
+      super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
     train_task = function(task) {
@@ -41,7 +42,7 @@ PipeOpOneHot = R6Class("PipeOpOneHot",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("one_hot", PipeOpOneHot)
+mlr_pipeops$add("onehot", PipeOpOneHot)
 
 
 one_hot = function(task, method) {
