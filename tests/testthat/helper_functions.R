@@ -30,6 +30,10 @@ expect_deep_clone = function(one, two) {
 
     # check that environments differ
     if (base::is.environment(a)) {
+      # some special environments
+      if (identical(a, baseenv()) || identical(a, globalenv()) || identical(a, emptyenv())) {
+        return(invisible(NULL))
+      }
       if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
         return(invisible(NULL))  # don't check if smth is not cloneable
       }
