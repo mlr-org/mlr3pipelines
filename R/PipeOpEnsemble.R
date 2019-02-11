@@ -147,7 +147,7 @@ mlr_pipeops$add("wtmodelavg", PipeOpWtModelAvg)
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
-#' Aggregates over different [`PredictionClassif`s].
+#' Aggregates over different [`PredictionClassif`]s.
 #' Either computes the mode, if `predict_type` is `"response"`,
 #' or averages probabilities if `predict_type` is `"prob"`.
 #' Returns a single [`PredictionClassif`].
@@ -213,7 +213,7 @@ mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
 #' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
 #'
 #' @description
-#' Aggregates over different [`PredictionClassif`s].
+#' Aggregates over different [`PredictionClassif`]s.
 #' Either computes the mode, if `predict_type` is `"response"`,
 #' or averages probabilities if `predict_type` is `"prob"`.
 #' Returns a single [`PredictionClassif`].
