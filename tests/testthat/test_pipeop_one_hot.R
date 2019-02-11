@@ -40,7 +40,7 @@ test_that("PipeOpOneHot", {
 
   # repeat with method == reference
   op = PipeOpOneHot$new()
-  op$param_set$param_vals = list(method = "reference")
+  op$param_set$values = list(method = "reference")
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
 

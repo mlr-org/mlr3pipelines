@@ -32,11 +32,11 @@ PipeOpOneHot = R6Class("PipeOpOneHot",
 
     train_task = function(task) {
       self$state = list()
-      one_hot(task, self$param_set$param_vals$method)
+      one_hot(task, self$param_set$values$method)
     },
 
     predict_task = function(task) {
-      one_hot(task, self$param_set$param_vals$method)
+      one_hot(task, self$param_set$values$method)
     }
   )
 )
