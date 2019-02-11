@@ -24,10 +24,10 @@ PipeOpScale = R6Class("PipeOpScale",
     },
 
     select_cols = function(task) {
-      task$feature_types[get("type") == "numeric", get("id")]
+      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    train_dt = function(dt) {
+    train_dt = function(dt, levels) {
       sc = invoke(scale, as.matrix(dt), .args = self$param_set$values)
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
@@ -36,7 +36,7 @@ PipeOpScale = R6Class("PipeOpScale",
       sc
     },
 
-    predict_dt = function(dt) {
+    predict_dt = function(dt, levels) {
       t((t(dt) - self$state$center) / self$state$scale)
     }
   )

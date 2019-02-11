@@ -26,17 +26,17 @@ PipeOpPCA = R6Class("PipeOpPCA",
     },
 
     select_cols = function(task) {
-      task$feature_types[get("type") == "numeric", get("id")]
+      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    train_dt = function(dt) {
+    train_dt = function(dt, levels) {
       pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$values)
       self$state = pcr
       self$state$x = NULL
       pcr$x
     },
 
-    predict_dt = function(dt) {
+    predict_dt = function(dt, levels) {
       predict(self$state, as.matrix(dt))
     }
   )
