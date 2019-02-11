@@ -1,4 +1,4 @@
-#' @title PipeOpOneHot
+#' @title PipeOpEncode
 #'
 #' @name mlr_pipeop_encode
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
@@ -24,7 +24,7 @@
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
-PipeOpOneHot = R6Class("PipeOpEncode",
+PipeOpEncode = R6Class("PipeOpEncode",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "encode", param_vals = list()) {
