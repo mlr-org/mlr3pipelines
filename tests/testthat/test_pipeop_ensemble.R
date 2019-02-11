@@ -60,6 +60,7 @@ test_that("PipeOpWeightedModelAvg - train and predict", {
     prd$row_ids = seq_len(70)
     prd$response = truth + rnorm(70, sd = 0.1)
     prd$truth = truth
+    prd$predict_types = "response"
     return(prd)
   })
 

@@ -77,6 +77,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       p$row_ids = prds$row_id
       p$response = prds$response
       p$truth = prds$truth
+      p$predict_types = "response"
       return(p)
     }
   )
@@ -107,6 +108,7 @@ PipeOpWtModelAvg = R6Class("PipeOpWtModelAvg",
   inherit = PipeOpModelAvg,
 
   public = list(
+    weights = NULL,
     initialize = function(innum, weights = NULL, id = "PipeOpWtModelAvg", param_vals = list()) {
       super$initialize(innum, id, param_vals = param_vals)
       if (is.null(weights)) weights = rep(1L, innum)
@@ -227,6 +229,7 @@ PipeOpWtMajorityVote = R6Class("PipeOpWtMajorityVote",
   inherit = PipeOpMajorityVote,
 
   public = list(
+    weights = NULL,
     initialize = function(innum, weights = NULL, id = "majorityvote", param_vals = list()) {
       super$initialize(innum, id, param_vals = param_vals)
       if(is.null(weights)) weights = rep(1L, innum)
