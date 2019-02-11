@@ -1,7 +1,13 @@
 context("PipeOpOneHot")
 
 test_that("PipeOpOneHot", {
+
   task = mlr_tasks$get("bh")
+
+  expect_datapreproc_pipeop_class(PipeOpOneHot, task = task)
+
+  expect_datapreproc_pipeop_class(PipeOpOneHot, task = mlr_tasks$get("iris"))
+
   op = PipeOpOneHot$new()
   expect_pipeop(op)
 
