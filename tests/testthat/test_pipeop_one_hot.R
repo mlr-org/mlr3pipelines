@@ -40,7 +40,7 @@ test_that("PipeOpOneHot", {
 
   # repeat with method == reference
   op = PipeOpOneHot$new()
-  op$param_set$values = list(method = "reference")
+  op$param_set$values = list(method = "treatment")
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
 
@@ -56,4 +56,35 @@ test_that("PipeOpOneHot", {
   # town is one-hot encoded, without 1st level
   expect_true(all(make.names(sprintf("town.%s", tail(task$levels("town"), -1L)), unique = TRUE) %in% fn))
   expect_true(all(make.names(sprintf("town.%s", head(task$levels("town"), 1L)), unique = TRUE) %nin% fn))
+
+  op = PipeOpOneHot$new()
+  op$param_set$values$method = "helmert"
+  nt = train_pipeop(op, inputs = list(task))[[1L]]
+
+  fn = nt$feature_names
+
+  expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
+    make.names(sprintf("chas.V%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
+    make.names(sprintf("town.V%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
+
+  op = PipeOpOneHot$new()
+  op$param_set$values$method = "sum"
+  nt = train_pipeop(op, inputs = list(task))[[1L]]
+
+  fn = nt$feature_names
+
+  expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
+    make.names(sprintf("chas.V%s", seq_len(length(task$levels("chas")) -1)), unique = TRUE),
+    make.names(sprintf("town.V%s", seq_len(length(task$levels("town")) -1L)), unique = TRUE)))
+
+  op = PipeOpOneHot$new()
+  op$param_set$values$method = "poly"
+  nt = train_pipeop(op, inputs = list(task))[[1L]]
+
+  fn = nt$feature_names
+
+  expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
+    make.names(sprintf("chas..%s", "L"), unique = TRUE),
+    make.names(sprintf("town..%s", c("L", "Q", "C", seq(4, length(task$levels("town")) -1L))), unique = TRUE)))
+
 })

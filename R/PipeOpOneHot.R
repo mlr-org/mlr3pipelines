@@ -12,7 +12,7 @@
 #'
 #' @section Parameter Set:
 #' * `method`  :: `character(1)` \cr
-#'   If set to "1-of-n", creates a new column for each factor level.
+#'   If set to "one-hot", creates a new column for each factor level.
 #'   If set to "reference", creates $n-1$ columns leaving out the first factor level of each factor variable.
 #'
 #' @family PipeOps
@@ -24,33 +24,39 @@ PipeOpOneHot = R6Class("PipeOpOneHot",
   public = list(
     initialize = function(id = "onehot", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("1-of-n", "reference", "reference-with-intercept"), default = "1-of-n")
-        ))
-      ps$values = list(method = "1-of-n")
+        ParamFct$new("method", levels = c("one-hot", "treatment", "helmert", "poly", "sum"), default = "one-hot")
+      ))
+      ps$values = list(method = "one-hot")
       super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
     select_cols = function(task) {
-      task$feature_types[get("type") == "factor", get("id")]
+      task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
     },
 
-    get_state_dt = function(dt) {
-      form = switch(self$param_set$values$method,
-        "1-of-n" = ~ 0 + .,
-        reference = ~ .,
-        "reference-with-intercept" = ~ .,
+    get_state_dt = function(dt, levels) {
+      contrasts = switch(self$param_set$values$method,
+        "one-hot" = function(x) contr.treatment(x, contrasts = FALSE),
+        treatment = contr.treatment,
+        helmert = contr.helmert,
+        poly = function(x) {
+          cont = contr.poly(x)
+          rownames(cont) = x
+          cont
+        },
+        sum = contr.sum,
         stop("Unknown 'method' parameter value."))
-      attr(form, ".Environment") = baseenv()
-      mf = model.frame(form, dt)
-      terms = terms(mf)
-      if (self$param_set$values$method == "reference") {
-        attr(terms, "intercept") = 0L
-      }
-      list(terms = terms, xlev = .getXlevels(terms(mf), mf))
+      lapply(levels, contrasts)
     },
 
-    transform_dt = function(dt) {
-      model.matrix(self$state$terms, dt, xlev = self$state$xlev)
+    transform_dt = function(dt, levels) {
+      cols = imap(self$state, function(contrasts, id) {
+        x = dt[[id]]
+        contrasts[x, , drop = FALSE]
+      })
+      cols = as.data.table(cols)
+      colnames(cols) = make.names(colnames(cols), unique = TRUE)
+      cols
     }
   )
 )
