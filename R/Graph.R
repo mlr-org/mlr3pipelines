@@ -204,6 +204,13 @@ Graph = R6Class("Graph",
         extra_vertices = names(self$pipeops)
       } else {
         df = self$edges[, list(from = src_id, to = dst_id)]
+        df = rbind(df, self$input[, list(from = "<INPUT>", to = op.id)])
+        output = self$output
+        if (nrow(output) > 1) {
+          df = rbind(df, output[, list(from = op.id, to = paste0("<OUTPUT>\n", name))])
+        } else {
+          df = rbind(df, output[, list(from = op.id, to = "<OUTPUT>")])
+        }
         ig = igraph::graph_from_data_frame(df)
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }

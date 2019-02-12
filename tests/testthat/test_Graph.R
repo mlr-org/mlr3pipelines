@@ -65,8 +65,6 @@ test_that("complex graph", {
       PipeOpDebugBasic$new("basicbottom"))) %>>%
     PipeOpDebugMulti$new(3, 1, "debug3")
 
-  # it's a beauty: biggraph$plot()
-
   lines = strsplit(capture_output(biggraph$train(1)), "\n")[[1]]
 
   expect_set_equal(lines,
@@ -79,7 +77,7 @@ test_that("complex graph", {
       "Training debug2 with input list(input_1 = 4, input_2 = 4)",
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"))
 
-  pdf(file = NULL)  # don't show plot. It is annoying, and triggers issue mlr-org/mlr3#158
+  pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
 
@@ -145,6 +143,11 @@ test_that("input / output lists and naming", {
   # input should be debug2.1, debug2.2, debug3.3
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
+
+  pdf(file = NULL)  # don't show plot. It is annoying.
+  gr$plot()
+  dev.off()
+
 
   # test output 1: debug.multi was already trained above
   expect_output(print(gr),
