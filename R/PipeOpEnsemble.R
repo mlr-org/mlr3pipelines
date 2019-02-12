@@ -16,10 +16,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list()) {
-
+    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
       assert_integerish(innum, lower = 1)
-      super$initialize(id, param_set = param_set, param_vals = param_vals,
+      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
@@ -57,8 +56,10 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "PipeOpModelAvg", param_vals = list()) {
-      super$initialize(innum, id, param_vals = param_vals)
+    initialize = function(innum, id = "PipeOpModelAvg", param_vals = list(),
+      param_set = ParamSet$new(), packages = character(0)) {
+      super$initialize(innum, id, param_vals = param_vals, param_set = param_set,
+        packages = packages)
     },
     predict = function(inputs) {
       assert_true(unique(map_chr(inputs, "task_type")) == "regr")
@@ -109,8 +110,9 @@ PipeOpWtModelAvg = R6Class("PipeOpWtModelAvg",
 
   public = list(
     weights = NULL,
-    initialize = function(innum, weights = NULL, id = "PipeOpWtModelAvg", param_vals = list()) {
-      super$initialize(innum, id, param_vals = param_vals)
+    initialize = function(innum, weights = NULL, id = "PipeOpWtModelAvg", param_vals = list(),
+      param_set = ParamSet$new(), packages = character(0)) {
+      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
       if (is.null(weights)) weights = rep(1L, innum)
       assert_numeric(weights, len = innum)
       self$weights = weights
@@ -161,23 +163,27 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "majorityvote", param_vals = list()) {
-      super$initialize(innum, id, param_vals = param_vals)
+    initialize = function(innum, id = "majorityvote", param_vals = list(), param_set = ParamSet$new(), packages = character(0)) {
+      super$initialize(innum, id, param_vals = param_vals,
+        param_set = param_set, packages = packages)
     },
     predict = function(inputs) {
       assert_list(inputs, "PredictionClassif")
-      has_probs = all(map_lgl(inputs, function(x) {"prob" %in% x$predict_types}))
-      if (has_probs) {
-        prds = private$model_avg_probs(inputs)
-        prds = merge(prds, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
-      } else {
-        prds = private$majority_vote(inputs)
-      }
+      prds = private$avg_predictions(inputs)
       p = private$make_prediction_classif(prds, inputs[[1]]$predict_types)
       list(p)
     }
   ),
   private = list(
+    avg_predictions = function(inputs) {
+      has_probs = all(map_lgl(inputs, function(x) {"prob" %in% x$predict_types}))
+      if (has_probs) {
+        prds = private$model_avg_probs(inputs)
+        merge(prds, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
+      } else {
+        private$majority_vote(inputs)
+      }
+    },
     model_avg_probs = function(inputs) {
       df = map_dtr(inputs, function(x) {data.frame("row_id" = x$row_ids, x$prob)})
       df = unique(df[, lapply(.SD, mean), by = "row_id"])
@@ -234,45 +240,54 @@ PipeOpWtMajorityVote = R6Class("PipeOpWtMajorityVote",
 
   public = list(
     weights = NULL,
-    initialize = function(innum, weights = NULL, id = "majorityvote", param_vals = list()) {
-      super$initialize(innum, id, param_vals = param_vals)
+    initialize = function(innum, weights = NULL, id = "majorityvote", param_vals = list(),
+      param_set = ParamSet$new(), packages = character(0)) {
+      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
       if(is.null(weights)) weights = rep(1L, innum)
       assert_numeric(weights, len = innum)
       self$weights = weights
     },
     predict = function(inputs) {
       assert_list(inputs, "PredictionClassif")
-      has_probs = all(map_lgl(inputs, function(x) {"prob" %in% x$predict_types}))
-      if (has_probs) {
-        prds = private$weighted_prob_avg(inputs, self$weights)
-      } else {
-        prds = private$weighted_majority_vote(inputs, self$weights)
-      }
-      prds = merge(prds, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
+      prds = private$weighted_avg_predictions(inputs, self$weights)
       p = private$make_prediction_classif(prds, inputs[[1]]$predict_types)
       list(p)
     }
   ),
   private = list(
-    weighted_majority_vote = function(inputs, weights) {
-      assert_numeric(weights, len = length(inputs))
+    weighted_avg_predictions = function(inputs, wts) {
+      assert_numeric(wts, len = length(inputs))
+      assert_true(sum(wts) != 0)
+
+      # Drop zero-weights for efficiency
+      inputs = inputs[!(wts == 0)]
+      wts = wts[!(wts == 0)]
+
+      has_probs = all(map_lgl(inputs, function(x) {"prob" %in% x$predict_types}))
+        if (has_probs) {
+          private$weighted_prob_avg(inputs, wts)
+        } else {
+          private$weighted_majority_vote(inputs, wts)
+        }
+    },
+    weighted_majority_vote = function(inputs, wts) {
       # Unpack predictions, add weights
       df = imap_dtr(inputs, function(x, i) {
-        data.frame("row_id" = x$row_ids, "response" = x$response, "weight" = weights[i])
+        data.frame("row_id" = x$row_ids, "response" = x$response, "weight" = wts[i])
       })
       # Sum weights over response, keep max row.
       df[, weight := sum(weight), by = list(response, row_id)]
       df = unique(df[, maxwt := max(weight), by = "row_id"])[weight == maxwt]
-      return(df[, c("row_id", "response")])
+      merge(df[, c("row_id", "response")], as.data.table(inputs[[1]])[, c("row_id", "truth")],
+        by = "row_id")
     },
-    weighted_prob_avg = function(inputs, weights) {
-      assert_numeric(weights, len = length(inputs))
+    weighted_prob_avg = function(inputs, wts) {
       df = map_dtr(inputs, function(x) {data.frame("row_id" = x$row_ids, x$prob)})
-      df = unique(df[, lapply(.SD, weighted.mean, w = weights), by = "row_id"])
+      df = unique(df[, lapply(.SD, weighted.mean, w = wts), by = row_id])
       max.prob = max.col(df[, -"row_id"], ties.method='first')
       df$response = factor(max.prob, labels = colnames(df[, -"row_id"])[unique(max.prob)])
       levels(df$response) = colnames(df[, -c("row_id", "response")])
-return(df)
+      merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
     }
   )
 )
@@ -281,4 +296,78 @@ return(df)
 mlr_pipeops$add("wtmajorityvote", PipeOpWtMajorityVote)
 
 
+#' @title PipeOpNlOptMajorityVote
+#'
+#' @format [R6Class] PipeOpNlOptMajorityVote
+#'
+#' @name mlr_pipeop_nloptmajorityvote
+#' @format [`R6Class`] inheriting from [`PipeOpWtMajorityVote`].
+#'
+#' @description
+#' Aggregates over different [`PredictionClassif`]s.
+#' Either computes the mode, if `predict_type` is `"response"`,
+#' or averages probabilities if `predict_type` is `"prob"`.
+#' Returns a single [`PredictionClassif`].
+#' Offers a `$weights` slot to set/get weights for each learner.
+#' Used for classification `Prediction`s.
+#' Defaults to equal weights for each model.
+#'
+#' @family PipeOps
+#' @examples
+#' op = PipeOpNlOptMajorityVote$new(3)
+#' @export
+PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
+  inherit = PipeOpWtMajorityVote,
+
+  public = list(
+    measure = NULL,
+
+    initialize = function(innum, id = "majorityvote", param_vals = list()) {
+      ps = ParamSet$new(params = list(
+        ParamUty$new("measure", default = NULL),
+        ParamFct$new("algorithm", default = "NLOPT_LN_COBYLA",
+          levels = strsplit(nloptr::nloptr.get.default.options()[1, "possible_values"], ", ")[[1]]),
+        ParamDbl$new("xtol_rel", default = 10^-4, lower = 0, upper = Inf),
+        ParamDbl$new("xtol_abs", default = 0, lower = 0, upper = Inf),
+        ParamDbl$new("ftol_rel", default = 0, lower = 0, upper = Inf),
+        ParamDbl$new("ftol_abs", default = 0, lower = 0, upper = Inf),
+        ParamDbl$new("stopval", default = -Inf, lower = -Inf, upper = Inf),
+        ParamInt$new("maxeval", default = 100, lower = 1L, upper = Inf),
+        ParamInt$new("maxtime", default = -1L, lower = 0L, upper = Inf, special_vals = list(-1L))
+        # FIXME: Possibly implement more, currently not important
+      ))
+      super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
+    },
+    train = function(inputs) {
+      assert_list(inputs, "PredictionClassif")
+      self$measure = self$param_set$values$measure
+      if (is.null(self$measure)) self$measure = mlr_measures$get("classif.mmce")
+      assert_measure(self$measure)
+      assert_true(self$measure$task_type == "classif")
+      wts = private$optimize_objfun_nlopt(inputs)
+      self$weights = wts
+      self$state = list("weights" = wts)
+    }
+  ),
+  private = list(
+    objfun = function(wts, inputs) {
+      prd = private$weighted_avg_predictions(inputs, wts)
+      e = list("prediction" = prd)
+      res = self$measure$calculate(e)
+      if (!self$measure$minimize) res = -res
+      res
+    },
+    optimize_objfun_nlopt = function(inputs, algorithm = "NLOPT_LN_COBYLA", xtol_rel = 10^-8) {
+      requireNamespace("nloptr")
+      init_weights = rep(1, length(inputs))
+      opt = nloptr::nloptr(
+        x0 = init_weights,
+        eval_f = private$objfun,
+        opts = list("algorithm" = "NLOPT_LN_COBYLA", xtol_rel = 10^-8),
+        inputs = inputs
+      )
+      return(opt$solution)
+    }
+  )
+)
 
