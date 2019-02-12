@@ -55,7 +55,7 @@ add_class_hierarchy_cache = function(hierarchy) {
 #' @family class hierarchy operations
 #' @export
 reset_class_hierarchy_cache = function() {
-  rm(names(class_hierarchy_cache), envir = class_hierarchy_cache)
+  rm(list = names(class_hierarchy_cache), envir = class_hierarchy_cache)
   for (item in default_chc) {
     add_class_hierarchy_cache(item)
   }
