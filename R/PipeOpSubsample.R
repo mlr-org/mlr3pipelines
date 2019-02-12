@@ -1,4 +1,4 @@
-#' @title PipeOpSample
+#' @title PipeOpSubsample
 #'
 #' @name mlr_pipeop_subsample
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
