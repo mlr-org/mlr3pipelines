@@ -55,7 +55,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "PipeOpModelAvg", param_vals = list()) {
+    initialize = function(innum, id = "modelavg", param_vals = list()) {
       super$initialize(innum, id, param_vals = param_vals)
     },
     predict = function(inputs) {
