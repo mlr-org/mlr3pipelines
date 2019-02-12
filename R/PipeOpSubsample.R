@@ -32,14 +32,14 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
     },
 
     train_task = function(task) {
-      if (!self$param_vals$stratify) {
-        keep = sample(task$row_roles$use, ceiling(self$param_set$values$frac * task$nrow), replace = self$param_vals$replace)
+      if (!self$param_set$values$stratify) {
+        keep = sample(task$row_roles$use, ceiling(self$param_set$values$frac * task$nrow), replace = self$param_set$values$replace)
       } else {
         if (!inherits(task, "TaskClassif"))
           stopf("Stratification not supported for %s", class(task))
         splt = split(task$row_roles$use, task$data(cols = task$target_names))
         keep = unlist(map(splt, function(x) {
-          sample(x, ceiling(self$param_set$values$frac * length(x)), replace = self$param_vals$replace)
+          sample(x, ceiling(self$param_set$values$frac * length(x)), replace = self$param_set$values$replace)
         }))
       }
       self$state = list()
