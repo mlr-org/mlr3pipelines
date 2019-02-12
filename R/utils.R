@@ -81,6 +81,26 @@ calculate_collimit = function(colwidths, outwidth) {
   collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
+# Get 'levels' of task columns as named list [feature name] -> [levels]
+# If a feature has no levels, the entry is NULL
+# @param task [Task] the task
+# @param cols [character] the columns to query
+# @return named [list]
 task_levels = function(task, cols) {
   structure(task$col_info[cols, get("levels"), on = "id"], names = cols)
+}
+
+# same as task$filter(), but allows duplicate row IDs
+# @param task [Task] the task
+# @param row_ids [numeric] the row IDs to select
+# @return [Task] the modified task
+task_filter_ex = function(task, row_ids) {
+  addedrows = row_ids[duplicated(row_ids)]
+
+  row_ids[duplicated(row_ids)] = task$nrow + seq_along(addedrows)
+
+  if (length(addedrows)) {
+    task$rbind(task$data(rows = addedrows))
+  }
+  task$filter(row_ids)
 }
