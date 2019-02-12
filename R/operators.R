@@ -39,6 +39,18 @@
   }
   g = gunion(list(g1, g2))
 
+  # check that types agree
+  for (row in seq_len(nrow(g1out))) {
+    if (!are_types_compatible(g1out$train[row], g2in$train[row])) {
+      stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
+        g1out$op.id[row], g1out$train[row], g2in$op.id[row], g2in$train[row])
+    }
+    if (!are_types_compatible(g1out$predict[row], g2in$predict[row])) {
+      stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
+        g1out$op.id[row], g1out$predict[row], g2in$op.id[row], g2in$predict[row])
+    }
+  }
+
   # build edges from free output channels of g1 and free input channels of g2
   new_edges = cbind(g1out[, list(src_id = get("op.id"), src_channel = get("channel.name"))],
     g2in[, list(dst_id = get("op.id"), dst_channel = get("channel.name"))])
