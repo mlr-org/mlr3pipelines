@@ -1,4 +1,4 @@
-context("PipeOpOneHot")
+context("PipeOpEncode")
 
 test_that("PipeOpEncode", {
 
