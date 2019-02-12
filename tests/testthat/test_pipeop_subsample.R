@@ -74,3 +74,22 @@ test_that("PipeOpSubsample works stratified", {
     table(rep(c("setosa", "versicolor", "virginica"), 30)))
 
 })
+
+
+
+test_that("task filter utility function", {
+  task = mlr_tasks$get("iris")
+
+  rowidx = c(1, 2, 3, 2, 1, 2, 3, 2, 1)
+
+  tfiltered = task_filter_ex(task$clone(), rowidx)
+
+  expect_equal(tfiltered$data(), task$data(rows = rowidx))
+
+  task$select(c("Petal.Length", "Petal.Width"))
+
+  tfiltered = task_filter_ex(task$clone(), rowidx)
+
+  expect_equal(tfiltered$data(), task$data(rows = rowidx))
+
+})
