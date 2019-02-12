@@ -68,10 +68,10 @@ test_that("PipeOpSubsample works stratified", {
   expect_class(po, "PipeOpSubsample")
 
   tnew = train_pipeop(po, list(task))
-  expect_true(tnew[[1]]$nrow == ceiling(task$nrow * 0.6))
+  expect_true(tnew[[1]]$nrow == ceiling(task$nrow * 2))
   # Proportions as expected
   expect_equal(table(tnew[[1]]$data(cols = tnew[[1]]$target_names)),
-    table(rep(c("setosa", "versicolor", "virginica"), 30)))
+    table(rep(c("setosa", "versicolor", "virginica"), 100)))
 
 })
 
