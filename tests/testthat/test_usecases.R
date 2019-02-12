@@ -57,7 +57,7 @@ test_that("featureunion", {
 #FIXME: have a look at intermediate results in all usecase, we should expect some stuff there
 
 test_that("bagging", {
-  g = greplicate(PipeOpDownsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpMajorityVote$new(innum = 2L)
+  g = greplicate(PipeOpSubsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpMajorityVote$new(innum = 2L)
   g$pipeops$downsample_1$param_set$values$frac = .5
   g$pipeops$downsample_2$param_set$values$frac = .5
   z = test_graph(g, n_nodes = 5L, n_edges = 4L)

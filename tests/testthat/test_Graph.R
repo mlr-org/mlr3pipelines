@@ -8,7 +8,7 @@ test_that("linear graph", {
   # FIXME: we should  "dummy" ops, so we can change properties of the ops at will
   # we should NOT use PipeOpNULL, because we want to check that $train/$predict actually does something.
   # FIXME: we should packages of the graph
-  op_ds = PipeOpDownsample$new()
+  op_ds = PipeOpSubsample$new()
   op_pca = PipeOpPCA$new()
   op_lrn = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
   g$add_pipeop(op_ds)
