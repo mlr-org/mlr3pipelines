@@ -126,6 +126,7 @@ PipeOp = R6Class("PipeOp",
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
+      require_namespaces(self$packages)
     },
 
     print = function(...) {
