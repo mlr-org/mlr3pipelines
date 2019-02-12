@@ -1,5 +1,38 @@
 
 
+# Check whether Classes are Compatible
+#
+# This is a permissible test to check whether `$input` type of one
+# `PipeOp` and `$output` type of another `PipeOp` could in principle
+# agree. It is a symmetric check if `class1` and `class2` have overlap
+# in their class hierarchies.
+#
+# Class hierarchies are checked using the "`class_hierarchy_cache`",
+# which in particular contains the class hierarchies in `default_chc`,
+# and the R6 class hierarchy using `get_r6_inheritance()`.
+#
+# If any of the arguments are `"*"`, this returns `TRUE`. It furthermore
+# returns `TRUE` if there is any overlap in the class hierarchy. Otherwise
+# it returns `FALSE`.
+#
+# It may be useful to check that the input class of one `PipeOp` is a strict
+# superclass of the output class of the other `PipeOp`, but that is not done
+# here (yet).
+#
+# @param class1 `character(1)` One class to check
+# @param class2 `character(1)` Other class to check
+# @return `logical(1)`
+are_types_compatible = function(class1, class2) {
+  assert_string(class1)
+  assert_string(class2)
+  if ("*" %in% c(class1, class2)) {
+    return(TRUE)
+  }
+  cpi = intersect(get_class_hierarchy(class1), get_class_hierarchy(class2))
+
+  length(cpi) > 0
+}
+
 # Try to find the `character` vector of superclass classnames
 # @param classname [character(1)] the class name; the search path is searched for
 #   an R6ClassGenerator by this name, and its super-classes are
@@ -66,3 +99,4 @@ default_chc = list(
 )
 
 class_hierarchy_cache = new.env(parent = emptyenv())
+reset_class_hierarchy_cache()

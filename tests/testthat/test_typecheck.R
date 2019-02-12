@@ -11,6 +11,8 @@ test_that("utility function works", {
 
   expect_equal(get_r6_inheritance("LearnerClassifDebug"), c("LearnerClassifDebug", "LearnerClassif", "Learner"))
 
+  expect_equal(get_class_hierarchy("data.table"), c("data.table", "data.frame"))
+
   reset_class_hierarchy_cache()
 
   oldcache = as.environment(as.list(class_hierarchy_cache))
@@ -28,4 +30,27 @@ test_that("utility function works", {
   reset_class_hierarchy_cache()
 
   expect_equal(oldcache, class_hierarchy_cache)
+
+  expect_true(are_types_compatible("PipeOp", "PipeOp"))
+  expect_true(are_types_compatible("LearnerClassifDebug", "LearnerClassifRpart"))
+  expect_false(are_types_compatible("PipeOpEncode", "LearnerClassifDebug"))
+
+  expect_true(are_types_compatible("PipeOp", "*"))
+  expect_true(are_types_compatible("*", "PipeOp"))
+
+  expect_true(are_types_compatible("data.table", "*"))
+  expect_true(are_types_compatible("*", "data.table"))
+
+
+  expect_true(are_types_compatible("ewjoifj", "*"))
+  expect_true(are_types_compatible("*", "jewpoijfj"))
+
+
+  expect_true(are_types_compatible("data.table", "data.frame"))
+
+  expect_true(are_types_compatible("ajfpoiewj", "ajfpoiewj"))
+
+  expect_false(are_types_compatible("ajfpoiewj", "sjpoawj"))
+
+
 })
