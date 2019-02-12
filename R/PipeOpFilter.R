@@ -49,7 +49,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         ParamDbl$new("frac", lower = 0, upper = 1),
         ParamDbl$new("cutoff")
       ))
-      super$initialize(id, ps, param_vals = param_vals, packages = "mlr3featsel")
+      super$initialize(id, ps, param_vals = param_vals)
     },
 
     get_state = function(task) {
@@ -64,21 +64,21 @@ PipeOpFilter = R6Class("PipeOpFilter",
       settings = self$param_set$values$settings %??% list()
 
       filtertask = task$clone()
-      filtertask$select(filtertask$feature_types[get("type") %in% filter$feature_types, get("id")])
-      maxfeat = length(filtertask$feature_name)
+      filtertask$select(filtertask$feature_types[get("type") %in% self$filter$feature_types, get("id")])
+      maxfeat = length(filtertask$feature_names)
 
       self$filter$calculate(filtertask, settings)
 
       values = sort(self$filter$filter_values, decreasing = TRUE)
       features = switch(filtercrit,
         cutoff = names(values)[values >= critvalue],
-        nfeat = values[seq_len(min(maxfeat, critvalue))],
-        frac = values[seq_len(round(maxfeat * critvalue))],
+        nfeat = names(values)[seq_len(min(maxfeat, critvalue))],
+        frac = names(values)[seq_len(round(maxfeat * critvalue))],
         stop("unknown filter criterion"))
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
 
-      list(values = values, features = feature)  # we don't use 'values', but maybe the user cares.
+      list(values = values, features = features)  # we don't use 'values', but maybe the user cares.
     },
 
     transform = function(task) {
@@ -87,4 +87,6 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
+#' @include mlr_pipeops.R
+mlr_pipeops$add("filter", PipeOpFilter)
 
