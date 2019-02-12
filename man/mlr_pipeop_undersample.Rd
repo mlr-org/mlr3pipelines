@@ -12,8 +12,8 @@ PipeOpUndersample
 \description{
 Undersamples (filters) a \code{\link{Task}} to keep only a fraction of the rows with majority class.
 
-Possible parameters are \code{$frac} and \code{$ratio}, only one of which must be given. The majority
-class is never "up"-sampled, so if \code{$ratio} times the mean minority class size turns out
+Possible parameters are \code{$frac} and \code{$ratio}, only one of which must be given. The
+classes are never "up"-sampled, so if \code{$ratio} times the mean minority class size turns out
 larger than the initial majority class size, the number of rows is shuffled but not changed.
 }
 \section{Parameter Set}{
@@ -24,6 +24,11 @@ Fraction of rows of the majority class to keep in the task.
 \item \code{ratio} :: \code{numeric(1)} \cr
 Ratio of number of rows of majority class to keep, relative
 to average minority class row number. Default is 1.
+\item \code{all}   :: \code{logical(1)} \cr
+Whether to sub-sample all classes (instead of just the class with the most instances).
+If this is \code{TRUE} (the default), all classes with fewer instances than determined
+by \code{frac} or \code{ratio} are sub-sampled; otherwise, only the class with most instances
+is sub-sampled.
 }
 }
 
