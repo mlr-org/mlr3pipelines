@@ -48,7 +48,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       self$graph$hash
     },
     predict_type = function(rhs) {
-      # overload this to avoid feasibility checks. all predict_types are allowed.
+      # overload this to avoid feasibility checks. all predict_types are allowed in principle
+      # (although we don't--can't--change the underlying graph's behaviour).
       if (!missing(rhs)) {
         private$.predict_type = rhs
       }
