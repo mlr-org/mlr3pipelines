@@ -46,3 +46,24 @@ task_filter_ex = function(task, row_ids) {
   }
   task$filter(row_ids)
 }
+
+
+# Try to find the `character` vector of superclass classnames
+# @param classname [character(1)] the class name; the search path is searched for
+#   an R6ClassGenerator by this name, and its super-classes are
+get_r6_inheritance = function(classname) {
+  if (!exists(classname, mode = "environment")) {
+    return(NULL)
+  }
+  gen = get(classname, mode = "environment")
+  if ("R6ClassGenerator" %nin% class(gen)) {
+    return(NULL)
+  }
+  recurse_classname = function(gen) {
+    if (is.null(gen)) {
+      return(NULL)
+    }
+    c(gen$classname, recurse_classname(gen$get_inherit()))
+  }
+  recurse_classname(gen)
+}
