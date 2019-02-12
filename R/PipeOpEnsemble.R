@@ -61,7 +61,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       super$initialize(innum, id, param_vals = param_vals)
     },
     predict = function(inputs) {
-      assert_true(unique(map_chr(inputs, "task_type")) == "classif")
+      assert_true(unique(map_chr(inputs, "task_type")) == "regr")
       prds = private$model_avg(inputs)
       list(private$make_prediction_regr(prds))
     }
@@ -169,19 +169,23 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       has_probs = all(map_lgl(inputs, function(x) {"prob" %in% x$predict_types}))
       if (has_probs) {
         prds = private$model_avg_probs(inputs)
-        p = private$make_prediction_classif(prds, "prob")
+        prds = merge(prds, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
       } else {
         prds = private$majority_vote(inputs)
-        p = private$make_prediction_classif(prds, "response")
       }
+      p = private$make_prediction_classif(prds, inputs[[1]]$predict_types)
       list(p)
     }
   ),
   private = list(
     model_avg_probs = function(inputs) {
-      prds = private$merge_predictions(inputs)
-      prds[, list(prob = mean(prob, na.rm = TRUE), truth = truth[1]), by = "row_id"]
-    },
+      df = map_dtr(inputs, function(x) {data.frame("row_id" = x$row_ids, x$prob)})
+      df = unique(df[, lapply(.SD, mean), by = "row_id"])
+      max.prob = max.col(df[, -"row_id"], ties.method='first')
+      df$response = factor(max.prob, labels = colnames(df[, -"row_id"])[unique(max.prob)])
+      levels(df$response) = colnames(df[, -c("row_id", "response")])
+      return(df)
+      },
     majority_vote = function(inputs) {
       prds = private$merge_predictions(inputs)
       prds[, list(response = compute_mode(response), truth = truth[1]), by = "row_id"]
@@ -192,7 +196,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       p$row_ids = prds$row_id
       p$truth = prds$truth
       p$predict_types = type
-      if ("prob"%in% type) {
+      if ("prob" %in% type) {
         p$prob = as.matrix(prds[, -c("row_id", "response", "truth")])
       }
       if ("response" %in% type) p$response = prds$response
@@ -265,8 +269,10 @@ PipeOpWtMajorityVote = R6Class("PipeOpWtMajorityVote",
       assert_numeric(weights, len = length(inputs))
       df = map_dtr(inputs, function(x) {data.frame("row_id" = x$row_ids, x$prob)})
       df = unique(df[, lapply(.SD, weighted.mean, w = weights), by = "row_id"])
-      df$response = factor(max.col(df[, -"row_id"], ties.method='first'), labels = colnames(df[, -"row_id"]))
-      return(df)
+      max.prob = max.col(df[, -"row_id"], ties.method='first')
+      df$response = factor(max.prob, labels = colnames(df[, -"row_id"])[unique(max.prob)])
+      levels(df$response) = colnames(df[, -c("row_id", "response")])
+return(df)
     }
   )
 )
