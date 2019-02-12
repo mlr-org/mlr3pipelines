@@ -188,7 +188,7 @@ Graph = R6Class("Graph",
           src_id, types_src$train, dst_id, types_dst$train)
       }
       if (!are_types_compatible(types_src$predict, types_dst$predict)) {
-        stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
+        stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
           src_id, types_src$predict, dst_id, types_dst$predict)
       }
 
