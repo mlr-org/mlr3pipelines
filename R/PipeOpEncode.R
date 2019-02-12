@@ -1,7 +1,7 @@
 #' @title PipeOpEncode
 #'
 #' @name mlr_pipeop_encode
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`].
 #'
 #' @description
 #' Encodes `factor`, `character` and `ordered factor` columns.
