@@ -12,9 +12,9 @@
 
 <meta name="author" content="Author" />
 
-<meta name="date" content="2019-02-01" />
+<meta name="date" content="2019-02-10" />
 
-<title>Showcase: A first Pipeline</title>
+<title>Showcase: Branching</title>
 
 
 
@@ -300,38 +300,41 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
-<h1 class="title toc-ignore">Showcase: A first Pipeline</h1>
+<h1 class="title toc-ignore">Showcase: Branching</h1>
 <h4 class="author"><em>Author</em></h4>
-<h4 class="date"><em>2019-02-01</em></h4>
+<h4 class="date"><em>2019-02-10</em></h4>
 
 
 
-<p>This vignette showcases the general syntax and semantic behind <code>mlr3pipelines</code>.</p>
-<div id="an-introduction-to-pipeoperators" class="section level2">
-<h2>An introduction to PipeOperators</h2>
-<p>In this example, we create a ĺinear Pipeline. After scaling all input features, we rotate our data using principal component analysis. After transformation, we use a simple Decision Tree learner for classification.</p>
-<p>We first create an mlr task that, which we want to transform with the pipeline. This task contains the famous iris dataset and some meta-information, such as the target variable.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">  <span class="kw">library</span>(mlr3)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">  task =<span class="st"> </span>mlr_tasks<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;iris&quot;</span>)</a></code></pre></div>
-<p>A Pipeline (or <code>Graph</code>) contains multiple PipeOperators, where each <code>PipeOp</code> transforms the data when it flows through it. For this usecase, we require 3 transformations: - A PipeOp that scales the data - A PipeOp that performs PCA - A PipeOp that contains the <strong>Decision Tree</strong> learner</p>
-<p>A list of available PipeOps can be obtained from</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">  <span class="kw">library</span>(mlr3pipelines)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  mlr_pipeops<span class="op">$</span><span class="kw">ids</span>()</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; [1] &quot;downsample&quot; &quot;learner_cv&quot; &quot;NULL&quot;       &quot;pca&quot;        &quot;scale&quot;</span></a></code></pre></div>
-<p>First we define the required PipeOps:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">  op1 =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  op2 =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  op3 =<span class="st"> </span>PipeOpLearner<span class="op">$</span><span class="kw">new</span>(<span class="dt">learner =</span> mlr_learners<span class="op">$</span><span class="kw">get</span>(<span class="st">&quot;classif.rpart&quot;</span>))</a></code></pre></div>
-<p>In order to get a better understanding of what the respective PipeOps do, we quickly look at one of them in detail:</p>
-<p>The following slots (and more) are thus contained in each PipeOp: - <code>train</code>: Function used to train the PipeOp. - <code>predict</code>: Function used to predict with the PipeOp. - <code>id</code>: Set/Get the id of the PipeOp. - <code>param_set</code>: The set of all exposed parameters of the PipeOp. - <code>param_vals</code>: Current hyperparameter settings. - <code>is_trained</code>: Is the PipeOp currently trained?</p>
-<p>We can check the properties by accessing the respective slot.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">  op3<span class="op">$</span>id</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [1] &quot;rpart&quot;</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  op3<span class="op">$</span>is_trained</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
-<p>The <code>param_set</code> and <code>param_vals</code> are required if our PipeOp contains hyperparameters we want to set. See [ParamSet] for a quick intro on how <code>ParamSet</code>s work.</p>
-<p>The <code>train()</code> and <code>predict()</code> functions define the core functionality of our PipeOp. In many cases, inorder to not leak information from the test set into the training set it is imperative to treat train and test data separately. For this we require a <code>train</code> function that learns the appropriate transformations from the training set and a <code>test</code> function that applies the transformation on future data.</p>
-<p>In the case of <code>PipeOpLearner</code> this means the following: - <code>train()</code> trains a model on its input Task and saves the trained model to an additional slot, <code>.$state</code>. It returns a <code>list(NULL)</code>, as subsequent operators usually do not require any output. - <code>predict()</code> uses the model stored in <code>.$state</code> in order to predict the class of a new input task. It returns a [Prediction] object. This object contains the learner’s predictions.</p>
+<div id="branching-and-unbranching" class="section level2">
+<h2>Branching and Unbranching</h2>
+<p>Consider a scenario, in which there are different options for a given modeling step. A researcher might, in an initial step want to try different options for this. This can be done by specifying <strong>branching</strong> and <strong>unbranching</strong> operators. In the long term, this also allows us to tune over the whole space, i.e. we learn which preprocessing option makes sense for our data.</p>
+<p>We will investigate the inner workings of such a Graph. In this example we consider three options for preprocessing our data before we train a model.</p>
+<p>In a first step we define the different preprocessing steps: We will consider scaling the data, transforming it using PCA, or not transforming the data at all (using <code>PipeOpNULL</code>).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">op1 =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">op2 =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">op3 =<span class="st"> </span>PipeOpNULL<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">opts =<span class="st"> </span><span class="kw">gunion</span>(<span class="kw">list</span>(op1, op2, op3))</a></code></pre></div>
+<p>Additionally, we create the learner <code>PipeOp</code>.</p>
+<pre class="ŕ"><code>polrn = PipeOpLearner$new(mlr_learners$get(&quot;rpart&quot;))</code></pre>
+<p>In order to create a mental image of our Pipeline, we have to consider, how the data flows through our computational graph. In case we simply want to do scaling, our pipeline would look like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">op1 <span class="op">%&gt;&gt;%</span><span class="st"> </span>polrn</a></code></pre></div>
+<p>If we want to actively select one <code>PipeOp</code> in a set, we need to add a <code>PipeOp</code> that orchestrates the selection of the following <code>PipeOp</code> using <code>PipeOpBranch</code>. After choosing one <code>PipeOp</code>, all not-selected operators simply recieve a <code>NO_OP</code> object. We can now collect the activated/deactivated <code>PipeOp</code>s again using <code>PipeOpUnBranch</code>. This will become clearer in a short example.</p>
+<div id="pipeopbranch" class="section level3">
+<h3>PipeOpBranch</h3>
+<p>We create a <code>PipeOpBranch</code> that let’s us select one of the following <span class="math inline">\(3\)</span> operators. We have to initialize this <code>PipeOp</code> with the number of output branches.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">po_b =<span class="st"> </span>PipeOpBranch<span class="op">$</span><span class="kw">new</span>(<span class="dv">3</span>)</a></code></pre></div>
+<p>This can be connected to the different preprocessing features.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">g =<span class="st"> </span>po_b <span class="op">%&gt;&gt;%</span><span class="st"> </span>opts</a></code></pre></div>
+</div>
+<div id="pipeopunbranch" class="section level3">
+<h3>PipeOpUnbranch</h3>
+<p>In order to collect the different inputs again, we use the <code>PipeOpUnbranch</code> operator. Again, we have to initialize this operator with the number of inputs it expects.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">po_ub =<span class="st"> </span>PipeOpUnbranch<span class="op">$</span><span class="kw">new</span>(<span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">g =<span class="st"> </span>g <span class="op">%&gt;&gt;%</span><span class="st"> </span>po_ub</a></code></pre></div>
+<p>We can visualize the resulting graph before diving into a more detailed explanation.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">g<span class="op">$</span><span class="kw">plot</span>()</a></code></pre></div>
+</div>
 </div>
 
 

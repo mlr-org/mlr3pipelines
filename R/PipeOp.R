@@ -41,8 +41,8 @@
 #' * `packages`                   :: `character` \cr
 #'   Set of all required packages for the `PipeOp`'s `$train` and `$predict` methods.
 #' * `param_set`                  :: [`ParamSet`] \cr
-#'   Parameter constraints for `$param_vals`.
-#' * `param_vals`                 :: named `list` \cr
+#'   Parameters and parameter constraints. See `param_set$values`.
+#' * `param_set$values`                 :: named `list` \cr
 #'   Parameter values that influence the functioning of `$train` and / or `$predict`. Parameter values are checked
 #'   against parameter constraints in `$param_set`.
 #' * `state`                      :: `any` \cr
@@ -64,9 +64,14 @@
 #' * `is_trained`                 :: `logical(1)` \cr
 #'   Is the PipeOp currently trained and can therefore be used for prediction?
 #' * `hash`                       :: `character(1)` \cr
-#'   Checksum calculated on the `PipeOp`, depending on `$id`, `$param_set`, `$param_vals`, and `$param_set`. If a
+#'   Checksum calculated on the `PipeOp`, depending on the `PipeOp`'s `class` and the slots `$id` and `$param_set`
+#'   (and therefore also `$param_set$values`). If a
 #'   `PipeOp`'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#' * `.result`                    :: `list` \cr
+#'   If the `Graph`'s `$keep_results` is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
+#'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
+#'   and done, if requested, by the `Graph` backend itself; it should *not* be done explicitly by `$train()` or `$predict()`.
 #'
 #' @section Methods:
 #' * `PipeOp$new(id, param_set = ParamSet$new(), input, output)` \cr
@@ -100,7 +105,7 @@
 #'   Internal function used by a `Graph` to call `$predict()`, function analogous to `$train_internal()`.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
-#'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_vals`, `$input` and `$output`.
+#'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_set$values`, `$input` and `$output`.
 #'
 #' @name PipeOp
 #' @family mlr3pipelines backend related
@@ -108,18 +113,19 @@
 #' @export
 PipeOp = R6Class("PipeOp",
   public = list(
-    id = NULL,
-    packages = character(0),
+    packages = NULL,
     state = NULL,
     input = NULL,
     output = NULL,
+    .result = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), input, output) {
-      self$id = assert_string(id)
-      private$.param_set = param_set
-      private$.param_vals = list()
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0)) {
+      private$.param_set = assert_param_set(param_set)
+      private$.param_set$values = insert_named(private$.param_set$values, param_vals)
+      self$id = assert_string(id)  # also sets the .param_set$set_id
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
+      self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
     },
 
     print = function(...) {
@@ -133,15 +139,13 @@ PipeOp = R6Class("PipeOp",
       }
 
       catf("PipeOp: <%s> (%strained)", self$id, if (self$is_trained) "" else "not ")
-      catf("param_vals: <%s>", as_short_string(self$param_vals))
+      catf("values: <%s>", as_short_string(self$param_set$values))
       catf("Input channels <name [train type, predict type]>:\n%s", type_table_printout(self$input))
       catf("Output channels <name [train type, predict type]>:\n%s", type_table_printout(self$output))
     },
 
     train_internal = function(input) {
-      if (all(map_lgl(input, is_noop))) {
-        # FIXME: maybe we want to skip on `any` NO_OP, but that would require special handling in PipeOpUnbranch.
-        # Would require same adjustment in predict_internal
+      if (every(input, is_noop)) {
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
@@ -151,7 +155,7 @@ PipeOp = R6Class("PipeOp",
       output
     },
     predict_internal = function(input) {
-      if (all(map_lgl(input, is_noop))) {
+      if (every(input, is_noop)) {
         return(named_list(self$output$name, NO_OP))
       }
       if (is_noop(self$state)) {
@@ -168,28 +172,37 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
-    param_set = function() private$.param_set,
-    param_vals = function(vals) {
-      if (!missing(vals)) {
-        if (!self$param_set$test(vals)) {
-          stop("Parameters out of bounds")
-        }
-        private$.param_vals = vals
+    id = function(val) {
+      if (!missing(val)) {
+        private$.id = val
+        private$.param_set$set_id = val
       }
-      private$.param_vals
+      private$.id
+    },
+    param_set = function(val) {
+      if (!missing(val) && !identical(val, private$.param_set)) {
+        stop("param_set is read-only.")
+      }
+      private$.param_set
     },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
     hash = function() {
-      digest(list(class(self), self$id, self$param_set, self$param_vals),
+      digest(list(class(self), self$id, self$param_set),
         algo = "xxhash64")
+    },
+    values = function(val) {
+      if (!missing(val)) {
+        self$param_set$values = val
+      }
+      self$param_set$values
     }
   ),
 
   private = list(
     .param_set = NULL,
-    .param_vals = NULL
+    .id = NULL
   )
 )
 
@@ -212,10 +225,10 @@ check_types = function(self, data, direction, operation) {
   assert_list(data, len = nrow(typetable))
   for (idx in seq_along(data)) {
     typereq = typetable[[operation]][idx]
-    if (typereq == "*")
-      next
-    assert_class(data[[idx]], typereq,
-      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
-        direction, idx, self$input$name[idx], self$id))
+    if (typereq != "*") {
+      assert_class(data[[idx]], typereq,
+        .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
+          direction, idx, self$input$name[idx], self$id))
+    }
   }
 }

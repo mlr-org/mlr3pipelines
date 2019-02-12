@@ -14,10 +14,10 @@
 #'   respective `PipeOp`s.
 #' * `is_trained`   :: `logical(1)` \cr
 #'   Is the `Graph`, i.e. are all of its `PipeOp`s, trained, and can the `Graph` be used for prediction?
-#' * `lhs`          ::  `list` of [`PipeOp`] \cr
-#'   The 'left-hand-side' nodes that have some unconnected input channels and therefore act as `Graph` input layer.
-#' * `rhs`          :: `list` of [`PipeOp`] \cr
-#'   The 'right-hand-side' nodes that have some unconnected output channels and therefore act as `Graph` output layer.
+#' * `lhs`          ::  `character(n)` \cr
+#'   Ids of the 'left-hand-side' nodes that have some unconnected input channels and therefore act as `Graph` input layer.
+#' * `rhs`          :: `character(n)` \cr
+#'   Ids of the 'right-hand-side' nodes that have some unconnected output channels and therefore act as `Graph` output layer.
 #' * `input`        :: [`data.table`] with `character` columns `name`, `train`, `predict`, `op.id`, `channel.name` \cr
 #'   Input channels of the `Graph`. For each channel lists the name, input type during training, input type during prediction,
 #'   `PipeOp` `$id` of the `PipeOp` the channel pertains to, and channel name as the `PipeOp` knows it.
@@ -28,16 +28,16 @@
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
 #' * `param_set`    :: [`ParamSet`] \cr
-#'   Parameter constraints for `$param_vals`. These are the union of `$param_set`s of all `PipeOp`s in the `Graph`. Parameter names
+#'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
+#'   of all `PipeOp`s in the `Graph`. Parameter names
 #'   as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
-#' * `param_vals`   :: named `list` \cr
-#'   Parameter values of all `PipeOp`s in the `Graph`. Changing this value propagates the changes directly to the contained
-#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_vals` directly. Parameter values are checked against
-#'   parameter constraints in `$param_set`. Parameter names as seen by the `Graph` have the naming scheme
-#'   `<PipeOp$id>.<PipeOp original parameter name>`.
+#'   Changing `$param_set$values` also propagates the changes directly to the contained
+#'   `PipeOp`s and is an alternative to changing a `PipeOp`s `$param_set$values` directly.
 #' * `hash`         :: `character(1)` \cr
-#'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes (and therefore their `$param_vals`)
-#'   and a hash of `$edges`.
+#'   Stores a checksum calculated on the `Graph` configuration, which includes all `PipeOp` hashes
+#'   (and therefore their `$param_set$values`) and a hash of `$edges`.
+#' * `keep_results` :: `logical(1)` \cr
+#'   Whether to store intermediate results in the `PipeOp`'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #'
 #' @section Methods:
 #' * `Graph$new()` \cr
@@ -96,9 +96,13 @@
 #' g$input
 #' g$output
 #'
-#' trained = g$train(mlr3::mlr_tasks$get("iris"))
+#' task = mlr3::mlr_tasks$get("iris")
+#' trained = g$train(task)
+#' trained[[1]]$data()
 #'
-#' predicted = g$predict(mlr3::mlr_tasks$get("iris")$filter(1:10))
+#' task$filter(1:10)
+#' predicted = g$predict(task)
+#' predicted[[1]]$data()
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
@@ -107,15 +111,16 @@ Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,
     edges = NULL,
-
+    keep_results = NULL,
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
+      self$keep_results = FALSE
     },
 
     ids = function(sorted = FALSE) {
       assert_flag(sorted)
-      if (!sorted || !nrow(self$edges))
+      if (!sorted || nrow(self$edges) == 0L)
         return(names2(self$pipeops))
 
       tmp = self$edges[, list(parents = list(unique(src_id))), by = list(id = dst_id)]
@@ -133,6 +138,7 @@ Graph = R6Class("Graph",
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
+      private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))  # FIXME: $add() when it becomes available
       invisible(self)
     },
 
@@ -146,16 +152,16 @@ Graph = R6Class("Graph",
         if (length(self$pipeops[[src_id]]$output$name) > 1) {
           stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
         }
-        src_channel = 1
+        src_channel = 1L
       }
       if (is.null(dst_channel)) {
         if (length(self$pipeops[[dst_id]]$input$name) > 1) {
           stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
         }
-        dst_channel = 1
+        dst_channel = 1L
       }
       assert(
-          check_integerish(src_channel, lower = 1,
+          check_integerish(src_channel, lower = 1L,
             upper = nrow(self$pipeops[[src_id]]$output), any.missing = FALSE),
           check_choice(src_channel, self$pipeops[[src_id]]$output$name)
       )
@@ -169,19 +175,19 @@ Graph = R6Class("Graph",
       if (is.numeric(dst_channel))
         dst_channel = self$pipeops[[dst_id]]$input$name[dst_channel]
 
-      badrows = self$edges$src_id == src_id & self$edges$src_channel == src_channel |
-        self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel
-      if (any(badrows)) {
-        priorcon = self$edges[badrows]
+      bad_rows = (self$edges$src_id == src_id & self$edges$src_channel == src_channel) |
+        (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel)
+      if (any(bad_rows)) {
+        prior_con = self$edges[bad_rows]
         stopf("Cannot add multiple edges to a channel.\n%s",
           paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.",
-            priorcon$src_channel, priorcon$src_id, priorcon$dst_channel, priorcon$dst_id), collapse = "\n"))
+            prior_con$src_channel, prior_con$src_id, prior_con$dst_channel, prior_con$dst_id), collapse = "\n"))
       }
       row = data.table(src_id, src_channel, dst_id, dst_channel)
-      oldedges = self$edges
+      old_edges = self$edges
       self$edges = rbind(self$edges, row)
       # check for loops
-      on.exit({self$edges = oldedges})
+      on.exit({self$edges = old_edges})
       self$ids(sorted = TRUE)  # if we fail here, edges get reset.
       on.exit()
       invisible(self)
@@ -222,15 +228,12 @@ Graph = R6Class("Graph",
         catf("Graph with %s PipeOps:", nrow(lines))
         ## limit column width ##
 
-        # reset DT output options after printing
-        dtpwidth = getOption("datatable.prettyprint.char")
-        on.exit(options(datatable.prettyprint.char = dtpwidth))
-
         outwidth = getOption("width") %??% 80  # output width we want (default 80)
         colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
         collimit = calculate_collimit(colwidths, outwidth)
-        options(datatable.prettyprint.char = collimit)
-        print(lines, row.names = FALSE)
+        with_options(list(datatable.prettyprint.char = collimit), {
+          print(lines, row.names = FALSE)
+        })
       } else {
         cat("Empty Graph.\n")
       }
@@ -272,27 +275,39 @@ Graph = R6Class("Graph",
       graph_channels(self$edges$src_id, self$edges$src_channel, self$pipeops, "output")
     },
     packages = function() unique(unlist(map(self$pipeops, "packages"))),
-    param_vals = function(rhs) {
-      union_param_vals(map(self$pipeops, "param_set"), self$pipeops, "param_vals", rhs)
-    },
-    param_set = function() {
-      union_param_sets(map(self$pipeops, "param_set"))
-    },
     hash = function() {
       digest(
         list(map(self$pipeops, "hash"), self$edges),
         algo = "xxhash64")
+    },
+    param_set = function(val) {
+      # FIXME: It would be nice if we didn't need to do this.
+      if (is.null(private$.param_set)) {
+        private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
+      }
+      if (!missing(val) && !identical(val, private$.param_set)) {
+          stop("param_set is read-only.")
+      }
+      private$.param_set
+    },
+    values = function(val) {
+      if (!missing(val)) {
+        self$param_set$values = val
+      }
+      self$param_set$values
     }
   ),
 
   private = list(
     deep_clone = function(name, value) {
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
       switch(name,
         edges = copy(value),
         pipeops = map(value, function(x) x$clone(deep = TRUE)),
         value
       )
-    }
+    },
+    .param_set = NULL
   )
 )
 
@@ -302,8 +317,8 @@ Graph = R6Class("Graph",
 # direction: "input" or "output"
 graph_channels = function(ids, channels, pipeops, direction) {
   if (!length(pipeops)) {
-    return(data.table(name = character(0), train = character(0),
-      predict = character(0), op.id = character(0), channel.name = character(0)))
+    return(data.table(name = character(), train = character(),
+      predict = character(), op.id = character(), channel.name = character()))
   }
   rbindlist(lapply(pipeops, function(po) {
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
@@ -313,9 +328,9 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df = as.data.frame(po[[direction]], stringsAsFactors = FALSE)
     rows = df$name %nin% channels[ids == po$id]
     if (!any(rows)) {
-      return(data.frame(name = character(0),
-        train = character(0), predict = character(0),
-        op.id = character(0), channel.name = character(0),
+      return(data.frame(name = character(),
+        train = character(), predict = character(),
+        op.id = character(), channel.name = character(),
         stringsAsFactors = FALSE))
     }
     df$op.id = po$id
@@ -330,8 +345,8 @@ graph_channels = function(ids, channels, pipeops, direction) {
 graph_channels_dt = function(ids, channels, pipeops, direction) {
   # for reference: this is the above in data.table
   if (!length(pipeops)) {
-    return(data.table(name = character(0), train = character(0),
-      predict = character(0), op.id = character(0), channel.name = character(0)))
+    return(data.table(name = character(), train = character(),
+      predict = character(), op.id = character(), channel.name = character()))
   }
   rbindlist(lapply(pipeops, function(po) {
     po[[direction]][get("name") %nin% channels[ids == po$id],
@@ -392,11 +407,15 @@ graph_reduce = function(self, input, fun, single_input) {
   for (id in ids) {
     op = self$pipeops[[id]]
     input_tbl = edges[get("dst_id") == id, c("dst_channel", "payload")]
+    edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
     names(input) = input_tbl$dst_channel
     input = input[op$input$name]
 
     output = op[[fun]](input)
+    if (self$keep_results) {
+      op$.result = output
+    }
     edges[list(id, op$output$name), "payload" := list(output), on = c("src_id", "src_channel")]
   }
 

@@ -30,6 +30,10 @@ expect_deep_clone = function(one, two) {
 
     # check that environments differ
     if (base::is.environment(a)) {
+      # some special environments
+      if (identical(a, baseenv()) || identical(a, globalenv()) || identical(a, emptyenv())) {
+        return(invisible(NULL))
+      }
       if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
         return(invisible(NULL))  # don't check if smth is not cloneable
       }
@@ -80,7 +84,7 @@ expect_pipeop = function(po) {
   expect_class(po, "PipeOp", label = label)
   expect_string(po$id, label = label)
   expect_class(po$param_set, "ParamSet", label = label)
-  expect_list(po$param_vals, names = "unique", label = label)
+  expect_list(po$param_set$values, names = "unique", label = label)
   expect_flag(po$is_trained, label = label)
   expect_output(print(po), "PipeOp:", label = label)
   expect_character(po$packages, any.missing = FALSE, unique = TRUE, label = label)
@@ -366,7 +370,7 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
   expect_character(g$hash)
 
   expect_class(g$param_set, "ParamSet")
-  expect_list(g$param_vals, names = "unique")
+  expect_list(g$param_set$values, names = "unique")
 
   expect_character(g$lhs, any.missing = FALSE)
   expect_character(g$rhs, any.missing = FALSE)

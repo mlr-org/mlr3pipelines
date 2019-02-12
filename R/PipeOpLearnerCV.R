@@ -5,11 +5,15 @@
 #' @description
 #' Wraps an [`mlr3::Learner`] into a [`PipeOp`].
 #' Returns cross-validated predictions during training phase and stores a model of the
-#' `Learner` trained on the whole data in `$state` as a new `Task` with a single column.
+#' `Learner` trained on the whole data in `$state` as a new `Task` with the predictions;
+#' usually a feature `<ID>.response` if the `Learner`'s `$predict.type` is `"response"`,
+#' `<ID>.prob.<CLASS>` and `<ID>.response` for `$predict.type` `"prob"`, or `<ID>.response`
+#' and `<ID>.se` for `$predict.type` `"se"`. `<ID>` is here the `$id` of the `PipeOpLearnerCV`.
+#'
 #' Returns this model's prediction during prediction phase, as a new `Task` with a single
 #' column.
 #'
-#' Inherits the `$param_set` and `$param_vals` from the `Learner` it is constructed from.
+#' Inherits the `$param_set` and therefore `$param_set$values` from the `Learner` it is constructed from.
 #'
 #' @section Public Members / Active Bindings:
 #' * `learner`  :: [`Learner`] \cr
@@ -20,7 +24,7 @@
 #'   Constructor. The given learner will be used for crossvalidation.
 #'
 #' @section Parameter Set:
-#' * `resamping` :: `character(1)` \cr
+#' * `resampling` :: `character(1)` \cr
 #'   Which resampling method do we want to use. Currently only supports 'cv'.
 #' * `folds`     :: `numeric(1)` \cr
 #'   Number of cross validation folds.
@@ -35,30 +39,33 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     learner = NULL,
-    initialize = function(learner, id = learner$id) {
+    initialize = function(learner, id = learner$id, param_vals = list()) {
       assert_learner(learner)
-      self$learner = learner
+      self$learner = learner$clone(deep = TRUE)
+      self$learner$param_set$set_id = learner$id
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("resampling", values = "cv", default = "cv"),
-        ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L)
+        ParamFct$new("resampling", levels = "cv", default = "cv", tags = "required"),
+        ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
+        ParamLgl$new("keep_response", default = FALSE, tags = "required")
         )
       )
-      private$.crossval_param_vals = list(resampling = "cv", folds = 3)
+      private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
+      private$.crossval_param_set$set_id = "resampling"
 
-      super$initialize(id, can_subset_cols = FALSE)
+      super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
     train_task= function(task) {
-      learner = self$learner$clone(deep = TRUE)  # FIXME: see PipeOpLearner FIXME about cloning learner
-
       # Train a learner for predicting
-      self$state = learner$train(task)
+      self$state = self$learner$train(task)
+
+      pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
-      rdesc = mlr_resamplings$get(self$param_vals[["resampling"]])
-      rdesc$param_vals = list(folds = self$param_vals[["folds"]])
-      res = resample(task, learner, rdesc)
+      rdesc = mlr_resamplings$get(pv[["resampling"]])
+      rdesc$param_set$values = list(folds = pv[["folds"]])
+      res = resample(task, self$learner, rdesc)
       prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
 
       private$pred_to_task(prds, task)
@@ -69,27 +76,40 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       newtsk = private$pred_to_task(prediction, task)
     }
   ),
-
+  active = list(
+    param_set = function(val) {
+      if (is.null(private$.param_set)) {
+        private$.param_set = ParamSetCollection$new(list(
+          private$.crossval_param_set,
+          self$learner$param_set
+          ))
+        private$.param_set$set_id = self$id %??% self$learner$id  # self$id may be NULL during initialize() call
+      }
+      if (!missing(val) && !identical(val, private$.param_set)) {
+        stop("param_set is read-only.")
+      }
+      private$.param_set
+    }
+  ),
   private = list(
+    deep_clone = function(name, value) {
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
+        return(value$clone(deep = TRUE))
+      }
+      value
+    },
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
-      setnames(prds, "row_id", task$backend$primary_key)
       prds[, truth := NULL]
+      if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob")
+        prds[, response := NULL]
+      renaming = setdiff(colnames(prds), "row_id")
+      setnames(prds, renaming, paste(self$id, renaming, sep = "."))
+      setnames(prds, "row_id", task$backend$primary_key)
       task$clone()$select(character(0))$cbind(prds)
     },
-    .crossval_param_set = NULL,
-    .crossval_param_vals = NULL
-  ),
-
-  active = list(
-    param_set = function() {
-      union_param_sets(list(self$learner$param_set, private$.crossval_param_set))
-    },
-    # FIXME: Not sure if this works
-    param_vals = function(vals) {
-      union_param_vals(list(self$learner$param_set, private$.crossval_param_set),
-        list(self$learner, private), c("param_vals", ".crossval_param_vals"), vals)
-    }
+    .crossval_param_set = NULL
   )
 )
 

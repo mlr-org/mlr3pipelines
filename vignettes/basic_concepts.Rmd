@@ -1,0 +1,286 @@
+---
+title: "Showcase: Basic Concepts: PipeOp and Graph"
+author: "Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This tutorial focusses on the more technical concepts underlying `mlr3pipelines`.
+The core building blocks of a `Pipeline` are **PipeOperators** (`PipeOp`) and
+**Graphs**. 
+
+
+#### PipeOp: A `PipeOp` is a node, that transforms data flowing through it.
+
+#### Graph: A `Graph` is a concatenation of one or several `PipeOps`.
+
+By connecting several `PipeOp`s we can build a `Graphs`.
+We will use the terms **Pipeline** and **Graph** interchangeably in this section,
+as a Pipeline inherently is a **Directed Acyclic Graph**.
+Before diving deeper into the concept of `Graph`s, we will quickly look
+into its basic building blocks: `PipeOp`s. 
+
+
+## PipeOp
+
+In order to construct complicated pipelines, different PipeOps that help organizing how the data
+flows through the graph are required. 
+We will quickly introduce two examples, where this becomes aparent:
+
+- We want to execute a part of the `Pipeline` only if certain criteria are met.
+- We want to use the same data with different transformations and later on combine those.
+
+In `mlr3pipelines` we consider $3$ basic types of PipeOps;
+*linear*, *broadcast* and *aggregate*:
+
+| Type  | Input Dim  | Output Dim | Examples           |
+|---    |---         |  ---       |---                 |
+| linear  |  1       |  1         | PipeOpPCA          |
+| linear  |  1       |  1         | PipeOpLearner      |
+|broadcast|  1       |  n         | PipeOpCopy         |
+|broadcast|  1       |  n         | PipeOpBranch       | 
+|aggregate|  n       |  1         | PipeOpFeatureUnion |
+|aggregate|  n       |  1         | PipeOpUnbranch     |
+
+-**linear** `PipeOp`s transform its inputs and returns a single output. 
+  This can for example be rotating the data usign Principle Component Analysis (PCA) 
+  and returning the rotated data.
+
+-**broadcast** `PipeOp`s do some operation on a single input, and return multiple outputs.
+  We could for example chunk the data into several chunks using `PipeOpChunk` and send 
+  each chunk to a different subsequent node.
+
+-**aggregate** `PipeOp`s recieve multiple inputs and transform them into a single output.
+  This can for example be concatenating features from different inputs to a single task
+  using `PipeOpFeatureUnion`.
+
+### A deeper dive into PipeOps
+
+In order to get a better understanding, we focus on an exemplary `PipeOp`:
+As an example we choose `PipeOpLearner`.
+First, we create an instance of it by calling the `$new()` method with a learner
+from `mlr3`. A `PipeOp` is an [`R6`](https://r6.r-lib.org/) class.
+
+```{r}
+  library(mlr3)
+  library(mlr3pipelines)
+  lrn = mlr_learners$get("classif.rpart")
+  op = PipeOpLearner$new(lrn)
+```
+
+The following slots (and more) are contained in each PipeOp:
+- `train`: A function used to train with the PipeOp.
+- `predict`: A function used to predict with the PipeOp.
+- `id`: Allows us to set or get the id of the PipeOp.
+- `param_set`: The set of all exposed parameters of the PipeOp.
+- `values`: Current hyperparameter settings.
+- `is_trained`: Is the PipeOp already trained?
+
+We can check properties by accessing the respective slots.
+
+```{r}
+  op$id
+  op$is_trained
+```
+
+The `param_set` and `values` are required if a PipeOp contains
+hyperparameters we want to set. See [paradox::ParamSet] for a quick intro on how `ParamSet`s work.
+
+The `train()` and `predict()` functions define the core functionality of
+our PipeOp. In many cases, in order to not leak information from the test set into the training set it is imperative to treat train and test data separately. In order to achieve this, we requrie a `train` function that learns the appropriate transformations from the training set and a `test` function that applies the transformation on future data.
+
+In the case of `PipeOpLearner` this means the following:
+- `train()` trains a model on its input Task and saves the trained model to
+  an additional slot, `.$state`. It returns a `list(NULL)`, as subsequent 
+  operators usually do not require any output.
+- `predict()` uses the model stored in `.$state` in order to predict
+  the class of a new input task. It returns a [Prediction] object.
+  This object contains the learner's predictions.
+
+## Connecting PipeOps to a Graph
+
+We define three different `PipeOp`s, which will be connected to a Pipeline:
+
+```r
+pou = PipeOpUndersample$new()
+pop = PipeOpPCA$new()
+pos = PipeOpScale$new()
+```
+
+Now depending on the order of how we connect those `PipeOp`s, different results can arise:
+
+There are two basic ways of connecting `PipeOp`s to a `Graph`:
+
+### Using the `%>>%` operator
+
+In order to connect `PipeOp`s, we can use the `%>>%` operator. 
+It is conceptually similar to `[mlrCPO](https://github.com/mlr-org/mlrCPO)`'s `%>>%` which in turn stems from the idea of [`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html)s 
+`%>%` command.
+
+The following defines a `Graph`, that connects the outputs of the left hand side `PipeOp` to the input of the right hand side. 
+
+```r
+gr = pou %>>% pos
+```
+
+The object returned by this operator is an [`R6`](https://r6.r-lib.org/) class: `Graph`
+that contains the `PipeOp`s and some meta-information, i.e. how the different operators are connected.
+
+If we want to extend the `Graph` by adding another `PipeOp`, we can simply append another operator. 
+This connects the output of the last `PipeOp` in the `Graph` with the input of the new operator.
+
+```r
+gr = gr %>>% pop 
+```
+
+The `%>>%` operator also allows us to connect `Graphs` with `Graphs`, by connecting the first output of the lhs `Graph` with the first input of the rhs `Graph`.
+
+### Building the Graph from scratch
+
+We can define the same `Graph` by sequentially adding `PipeOp`s to the `Graph` and connecting them
+with an **edge**.
+
+```r
+gr = Graph$new()
+gr$add_pipeop(pou)
+gr$add_pipeop(pos)
+gr$add_edge("undersample", "scale")
+```
+Analogously to how it is done above, we can again add 
+additional `PipeOps`:
+
+```r
+gr$add_pipeop(pop)
+gr$add_edge("scale", "pca")
+```
+
+The latter notation has some pro's and cons:
+- This is more verbose, but we also have to type out everything.
+- It is not easily readable
+- We can connect arbitrary inputs and outputs of `PipeOp`s.
+  This allows us to specify very complicated Pipelines.
+
+In order to see how the nodes in the graph are connected, we can simply visualize the graph:
+
+```r
+gr$plot()
+``` 
+
+## Graph
+
+A `Graph` allows us to connect several `PipeOp`s together, and thus let's us control how and in which order data flows through it. It defines vertices that connect the nodes (`PipeOp`s) to a 
+`Graph`.
+It is a container class for the complete computational graph, i.e. it allows us to go through the `Graph` and **train** or **predict** on every node.
+
+In the example above, a new `Graph` was constructed using `Graph$new()`.
+Then new `PipeOp`s are added to the `pipeop` slot using `add_pipeop()`.
+`pipeops` is a [list of `PipeOp`s] contained in the `Graph` named by
+the `PipeOp`'s `$id`.
+Afterwards we added edges between the `PipeOp`s to the `edges` slot using `add_edge()`.
+`edges` is a [`data.table`] with `character` columns `src_id`, `src_channel`, `dst_id`,
+`dst_channel`. This table contains the connections between the `PipeOp`s, i.e. 
+which PipeOp is connected to which and to which `channel`. 
+
+The full `Graph` also has an input and output node, i.e. the inputs and outputs of the first `PipeOp` and the last `PipeOp` in our `Graph` respectively.
+Those can be accessed using `$input` and `$output`. They return a [`data.table`] with 
+`character` columns `name`, `train`, `predict`, `op.id`, `channel.name`. 
+We can obtain the ids of input and output `PipeOp`s using `lhs` and `rhs`.
+
+Additionally, a `Graph` collects information from the different `PipeOp`s it contains.
+
+We can obtain a sorted/unsorted list of the id's of all `PipeOps` contained in a `Graph`
+using `ids()`. The collection of all `packages` required to run the `Pipeline` can be found in the `packages` slot.
+
+The `param_set` collects the `param_set`s of each `PipeOp` into a single [`ParamSet`].
+Those contain parameters and parameter constraints for all `PipeOp`s. The actual parameter values can be set or obtained from `$param_set$values`.
+Parameter names, as seen by the `Graph` have the naming scheme `<PipeOp$id>.<PipeOp original parameter name>`.
+Changing `$param_set$param_vals` also propagates the changes directly to the contained
+`PipeOp`s and is an alternative to changing a `PipeOp`s `$param_set$param_vals` directly.
+
+In order to compare or check whether a `Graph` has changed, we can obtain its 
+hash: 
+
+```r
+# First we compute the hash
+gr$hash
+# Now we set the scale parameter of the PCA operator
+gr$param_set$values$pca.scale. = TRUE
+# Compute hash again to see whether the object changed
+gr$hash
+```
+
+### Training and Prediction
+
+The main components of each `PipeOp` are its `train` and `predict` function.
+The Graph orchestrates the training and prediction of each `PipeOp` by sequentially 
+training `PipeOp`s along the `Graph`. Training a `Graph` thus corresponds to training each `PipeOp`. 
+When all `PipeOp`s are trained, the `Graph` can be used for prediction.
+
+We can for example train our graph on the **iris** Task.
+
+```r
+gr$train(mlr_tasks$get("iris"))
+```
+
+and transform new data with the trained `Pipeline`:
+
+```r
+gr$train(mlr_tasks$get("iris"))
+```
+
+Whether we store the intermediate results in the `PipeOp`'s `$.result` slot can be controlled via `keep_results` . This is can be done mostly for debugging purposes. Default `FALSE`.
+
+## Graph Union and Replication
+
+We define two important helper functions, that are usefull for building larger `Graph`s.
+PipeOp's can either be added to a `Graph` sequentially using `%>>%` or next to each other, i.e. in parallel. 
+This can be achieved using `gunion` and `greplicate`.
+Putting `PipeOp`s next to each other is especially usefull in situations, where we either want to do **Branching**, e.g. use tuning in order to select
+which of the operators to use, or **Copying**, where an input is copied to all following nodes, which can then be evaluated in parallel.
+The resulting outputs can then for example be collected into a single input using `PipeOpFeatureUnion`. 
+
+### `gunion`
+
+We can use `gunion` to add a list of `PipeOp`s or `Graph`s to a ned `Graph`.
+This results in a `Graph` without any edges between the unioned operators.
+```r
+gr = gunion(list(pou, pop, pos))
+gr$plot()
+```
+
+### `greplicate`
+
+A `PipeOp` or `Graph` can also be replicated $n$ times using `greplicate`.
+In this example, we again use the `PipeOp`s for Undersampling (pou) and CPA (pop) defined above and
+connect them to a simple `Graph`. We can then replicate this `Graph` $4$ times in order to do Principal Component Analysis $4$ times after obtaining $4$ different subsamples of our input data..
+
+```r
+gr = pou %>>% pop
+gr2 = greplicate(gr, 4)
+gr$plot()
+```
+
+## Meta Pipeoperators
+
+We additionally want to detail some meta operators that can be useful in the process of building pipelines.
+
+### PipeOpNULL
+
+It is often useful to simply pass on the data unchanged, while the data is transformed by some `PipeOp` in parallel.
+This can be done using `PipeOpNull`, which simply passes on its inputs unchanged, both during the training and the predict phase. An example for this can be seen in the vignette on **Stacking**.
+
+```r
+po_null = PipeOpNULL$new()
+gunion(list(pop, po_null))
+```

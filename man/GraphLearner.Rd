@@ -4,15 +4,15 @@
 \name{GraphLearner}
 \alias{GraphLearner}
 \title{GraphLearner}
-\format{\code{\link[R6:R6Class]{R6::R6Class()}} inheriting from \link{LearnerClassif}.}
+\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3:Learner]{mlr3::Learner}}.}
 \usage{
 GraphLearner
 }
 \description{
-A \link{Learner} that encapsulates a \link{Graph} to be used in mlr3
-resampling and benchmarks.
+A \code{\link[mlr3:Learner]{Learner}} that encapsulates a \code{\link{Graph}} to be used in
+\link[mlr3:mlr3-package]{mlr3} resampling and benchmarks.
 
-The Graph must return a single \code{\link{Prediction}} on its \code{$predict()}
+The Graph must return a single \code{\link[mlr3:Prediction]{Prediction}} on its \code{$predict()}
 call. The result of the \code{$train()} call is discarded, only the
 internal state changes during training are used.
 }

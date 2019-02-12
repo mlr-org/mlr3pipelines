@@ -8,7 +8,7 @@ test_that("PipeOp - Resample", {
   op2 = PipeOpLearner$new(learner = lrn)
   pp = GraphLearner$new(op2)
   resa = mlr_resamplings$get("cv")
-  resa$param_vals$folds = 2L
+  resa$param_set$values$folds = 2L
 
   rr = mlr3::resample(task, pp, resa)
 

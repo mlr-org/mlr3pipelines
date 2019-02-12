@@ -47,45 +47,43 @@
 PipeOpBranch = R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "branch") {
+    initialize = function(options, id = "branch", param_vals = list()) {
       assert(
-        check_int(options, lower = 1),
-        check_character(options, min.len = 1, any.missing = FALSE)
+        check_int(options, lower = 1L),
+        check_character(options, min.len = 1L, any.missing = FALSE)
       )
       if (is.numeric(options)) {
         options = round(options)
-        param = ParamInt$new("selection", lower = 1, upper = options, default = 1)
+        param = ParamInt$new("selection", lower = 1L, upper = options, default = 1L)
         outnum = options
         options = rep_suffix("output", outnum)
       } else {
-        param = ParamFct$new("selection", values = options, default = options[1])
+        param = ParamFct$new("selection", levels = options, default = options[1L])
       }
-      super$initialize(id,
-        param_set = ParamSet$new(params = list(param)),
+      ps = ParamSet$new(params = list(param))
+      ps$values$selection = ps$params$selection$default
+      super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*")
       )
-      self$param_vals$selection = self$param_set$params$selection$default
     },
 
     train = function(inputs) {
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_vals$selection]] = inputs[[1]]
+      ret[[self$param_set$values$selection]] = inputs[[1]]
       ret
     },
 
     predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_vals$selection]] = inputs[[1]]
+      ret[[self$param_set$values$selection]] = inputs[[1]]
       ret
     }
   )
 )
 
-# This doesn't work, because there is no "default" number of options
-# (and there really shouldn't be!)
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("branch", PipeOpBranch)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("branch", PipeOpBranch)
 

@@ -25,7 +25,7 @@ NO_OP = R6Class("NO_OP",
 #' @return `logical(1)`: Whether `x` is a `NO_OP`.
 #' @family Path Branching
 #' @export
-is_noop = function(x) test_r6(x, "NO_OP")
+is_noop = function(x) inherits(x, "NO_OP")
 
 #' @title Remove NO_OPs from a List
 #'
@@ -37,4 +37,4 @@ is_noop = function(x) test_r6(x, "NO_OP")
 #' @return `list`: The input list, with all `NO_OP` elements removed.
 #' @family Path Branching
 #' @export
-filter_noop = function(x) Filter(Negate(is_noop), x)
+filter_noop = function(x) discard(x, is_noop)

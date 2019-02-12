@@ -19,9 +19,9 @@
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum, id = "featureunion") {
+    initialize = function(innum, id = "featureunion", param_vals = list()) {
       assert_int(innum, lower = 1)
-      super$initialize(id,
+      super$initialize(id, param_vals = param_vals,
         input = data.table(name = rep_suffix("input", innum), train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
@@ -29,35 +29,28 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
     train = function(inputs) {
       self$state = list()
-      task = cbind_tasks(inputs)
-      list(task)
+      list(cbind_tasks(inputs))
     },
 
     predict = function(inputs) {
-      task = cbind_tasks(inputs)
-      list(task)
+      list(cbind_tasks(inputs))
     }
   )
 )
 
-# # See issue #117
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
 
 
-#FIXME: this really should be suported by mlr3 and the code looks horrible
 cbind_tasks = function(inputs) {
-  task = inputs[[1L]]$clone(deep = TRUE)
+  task = inputs[[1L]]
   ids = task$row_ids
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
-  # FIXME: we could also say we drop all targets except the first, maybe with a flag
   if (!setequal(targets, task$target_names))
     stopf("All tasks must have the same target columns")
 
-  Reduce(function(x, y) {
-    data = y$data(ids, y$feature_names)
-    x$cbind(data)
-  }, tail(inputs, -1L), init = task)
+  new_cols = Reduce(function(x, y) ref_cbind(x, y$data(ids, y$feature_names)), tail(inputs, -1L), init = data.table())
+  task$clone(deep = TRUE)$cbind(new_cols)
 }

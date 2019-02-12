@@ -6,6 +6,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom utils tail
 #' @importFrom digest digest
+#' @importFrom withr with_options local_options
 "_PACKAGE"
 
 .onLoad = function(libname, pkgname) { #nocov start

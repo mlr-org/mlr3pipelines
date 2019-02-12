@@ -9,81 +9,141 @@
 PipeOp
 }
 \description{
-A PipeOp is a single tranformation of inputs into outputs.
-This class is the baseclass for all pipeOp's, and is not intended for direct use.
-During training it takes inputs, tranforms them, while doing that learns and stores its
-parameters and then returns the output.
-During prediction it applies the learned params to the input and transforms the input to an output.'
+A \code{PipeOp} represents a tranformation of "input" into "output", during multiple stages: "training"
+and "prediction". It can be understood as a generalisation of function with multiple outputs and
+multiple stages. The "training" stage can be used when training a machine learning pipeline or
+fitting a statistical model, and the "predicting" stage can then be used when making predictions
+on new data.
 
-A PipeOp specifies the types of inputs and outputs as \code{intype} and \code{outtype}, a list of <something specifying types>.
-The length of these lists determines the length of input / output the PipeOp produces. The PipeOp input / output
-is a list of specified length.
+During training, a \code{PipeOp} takes inputs and tranforms them while simultaneously storing a state
+in the \code{$state} slot. During prediction, information in the \code{$state} slot is often used for prediction
+on the new data.
+
+A \code{PipeOp} is usually used in a \code{\link{Graph}} object, a representation of a computational graph. It can have
+multiple \strong{input channels}---think of these as multiple arguments to a function, for example when averaging
+different models---, and multiple \strong{output channels}, the "dual" to input channels---a transformation may
+return different objects, for example different subsets of a \code{\link{Task}}, that can then be processed by distinct
+functions.
+
+Input and output channels are defined in the \code{$input} and \code{$output} slots; each channel has a \emph{name}, a required
+type during training, and a required type during prediction. When inheriting from a \code{PipeOp}, the \code{$train()} and
+\code{$predict()} functions must be overloaded. Each of these functions then receives a named \code{list} according to
+the \code{PipeOp}'s input channels, and must return a \code{list} (names are ignored) with values in the order of output
+channels in \code{$output}.
+
+The \code{$train()} and \code{$predict()} function should not be called by the user; instead, a \code{PipeOp} should be added
+to a \code{Graph} (possibly as singleton in that \code{Graph}), and the \code{Graph}'s \code{$train} / \code{$predict} methods should be
+called.
+
+This class is an abstract base class that all \code{PipeOp}s being used in a \code{\link{Graph}} should inherit from,  and
+is not intended to be instantiated.
 }
 \section{Public Members / Active Bindings}{
 
 \itemize{
-\item \code{id}                         :: \link{character}
-Active binding that allows to return and set the id of the PipeOps. Ids are user-configurable, and ids of PipeOps in graphs must be unique.
-\item \code{packages}                   :: \link{character}
-Packages required for the pipeOp.
-\item \code{param_set}                  :: \link{ParamSet}
-The set of all exposed parameters of the PipeOp.
-\item \code{param_vals}                   :: named \link{list}
-Parameter settings where all setting must come from \code{param_set}, named with param IDs.
-\item \code{state}                      :: any
-The object of learned parameters, obtained in the training step, and applied in the predict step.
-\item \code{is_trained}                 :: \code{logical(1)}
-Is the PipeOp currently trained?
-\item \code{result}                     :: any
-A slot to store the result of either the \code{train} or the \code{predict} step, after it was
-\item \code{train_intypes}                       :: \link{character}
-Input types the PipeOp accepts during training. Read-only.
-\item \code{train_outtypes}                      :: \link{character}
-Output types that are returned by the PipeOp during training. Read-only.
-\item \code{predict_intypes}                     :: \link{character}
-Input types the PipeOp accepts during prediction. Read-only.
-\item \code{predict_outtypes}                    :: \link{character}
-Output types that are returned by the PipeOp. Read-only.
+\item \code{id}                         :: \code{character} \cr
+ID of the \code{PipeOp}. IDs are user-configurable, and IDs of \code{PipeOp}s must be unique within a \code{Graph}. IDs of
+\code{PipeOp}s must not be changed once they are part of a \code{Graph}, instead the \code{Graph}'s \code{$set_names()} method
+should be used.
+\item \code{packages}                   :: \code{character} \cr
+Set of all required packages for the \code{PipeOp}'s \code{$train} and \code{$predict} methods.
+\item \code{param_set}                  :: \code{\link{ParamSet}} \cr
+Parameters and parameter constraints. See \code{param_set$values}.
+\item \code{param_set$values}                 :: named \code{list} \cr
+Parameter values that influence the functioning of \code{$train} and / or \code{$predict}. Parameter values are checked
+against parameter constraints in \code{$param_set}.
+\item \code{state}                      :: \code{any} \cr
+Method-dependent state obtained during training step, and usually required for the prediction step.
+\item input                        :: \code{\link{data.table}} with \code{character} columns \code{name}, \code{train}, \code{predict} \cr
+Input channels of \code{PipeOp}. Column \code{name} gives the names (and order) of values in the list given to
+\code{$train()} and \code{$predict()}. Column \code{train} is the (S3) class that an input object must conform to during
+training, column \code{predict} is the (S3) class that an input object must conform to during prediction. Types
+are checked by the \code{PipeOp} and do not need to be checked by \code{$train} / \code{$predict} code.
+\item output                       :: \code{\link{data.table}} with \code{character} columns \code{name}, \code{train}, \code{predict} \cr
+Output channels of \code{PipeOp}, in the order in which they must be given in the list returned by \code{$train} and
+\code{$predict} functions. Column \code{train} is the (S3) class that an output object must conform to during training,
+column \code{predict} is the (S3) class that an output object must conform to during prediction. The \code{PipeOp} checks
+values returned by \code{$train} and \code{$predict} against these types specifications.
+\item \code{innum}                      :: \code{numeric(1)} \cr
+Number of input channels. This equals \code{nrow($input)}.
+\item \code{outnum}                     :: \code{numeric(1)} \cr
+Number of output channels. This equals \code{nrow($output)}.
+\item \code{is_trained}                 :: \code{logical(1)} \cr
+Is the PipeOp currently trained and can therefore be used for prediction?
+\item \code{hash}                       :: \code{character(1)} \cr
+Checksum calculated on the \code{PipeOp}, depending on the \code{PipeOp}'s \code{class} and the slots \code{$id} and \code{$param_set}
+(and therefore also \code{$param_set$values}). If a
+\code{PipeOp}'s functionality may change depending on more than these values, it should inherit the \code{$hash} active
+binding and calculate the hash as \code{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
+\item \code{.result}                    :: \code{list} \cr
+If the \code{Graph}'s \code{$keep_results} is set to \code{TRUE}, then the intermediate Results of \code{$train()} and \code{$predict()}
+are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
+and done, if requested, by the \code{Graph} backend itself; it should \emph{not} be done explicitly by \code{$train()} or \code{$predict()}.
 }
 }
 
 \section{Methods}{
 
 \itemize{
-\item \code{new(id, params)} \cr
-\code{character(1)}, \code{ParamSet} -> \link{PipeOp}
-Constructs the pipeOp from an id string and a (possibly empty) \link{ParamSet}.
-\item \code{train()}:
-Train graph on \code{input}, transform it to output and store the learned \code{params}.
-If the PipeOp is already trained, already present \code{params} are overwritten.
-\item \code{predict()} \cr
-\item Predict with graph on \code{input}, and transform it to output by applying the learned \code{params}.
-\item If \code{is_trained = FALSE} the function cannot be applied.
-\item \code{print()}: Prints
-}
-}
-
-\section{Internals}{
-
-\itemize{
-\item \code{.intype}: \code{list of any}
-\item \code{.outtype}: \code{list of any}
+\item \code{PipeOp$new(id, param_set = ParamSet$new(), input, output)} \cr
+(\code{character(1)}, \code{ParamSet}, \code{\link{data.table}}, \code{\link{data.table}}) -> \code{PipeOp} \cr
+Constructs the pipeOp from an ID string, a (possibly empty) \code{\link{ParamSet}}, an and an input and output channel
+description. \code{input} and \code{output} must conform to the \code{$input} and \code{$output} slots described above. \code{PipeOp}s
+that inherit from this class and which are not abstract should have an \code{$initialize()} function with a default value
+for \code{id}, should construct the \code{param_set}, \code{input} and \code{output} values inside that function, and then call \code{super$initialize}
+with these values.
+\item \code{train(input)} \cr
+(named \code{list}) -> \code{list} \cr
+Train \code{PipeOp} on \code{inputs}, transform it to output and store the learned \code{$state}. If the PipeOp is already
+trained, already present \code{$state} is overwritten. Input list is named according to \code{$input} \code{name} column, and was
+typechecked against the \code{$input} \code{type} column. Return value should be a list with as many entries as \code{$output} has
+rows, with each entry having a class according to the \code{$output} \code{train} column. Names of the returned list are ignored.\cr
+The \code{$train()} method should not be called by a user; instead, the \code{PipeOp} should be added to a \code{Graph}, and the \code{Graph}'s
+\code{$train()} method should be used.
+\item \code{predict(input)} \cr
+(named \code{list}) -> \code{list} \cr
+Predict on new data in \code{input}, possibly using the stored \code{$state}. Unlike \code{$train()}, \code{$predict()} should not modify
+the \code{PipeOp} in any way. \code{$predict()} will not be called by a \code{Graph} if the \code{$state} is empty, so its presence should
+not be checked. Input and output are specified by \code{$input} and \code{$output} in the same way as for \code{$train()}, except that
+the \code{predict} column is used for type checking.\cr
+Just as \code{$train()}, \code{$predict} should not be called by a user; instead a \code{Graph}'s \code{$predict()} method should be used.
+\item \code{train_internal(input)} \cr
+(named \code{list}) -> \code{list} \cr
+Internal function used by a \code{Graph} to call \code{$train()}. Does type checking and possibly skips a function call if a
+\code{\link{NO_OP}} is received. Should not be overloaded by inheriting classes.
+\item \code{predict_internal(input)} \cr
+(named \code{list}) -> \code{list} \cr
+Internal function used by a \code{Graph} to call \code{$predict()}, function analogous to \code{$train_internal()}.
+\item \code{print()} \cr
+() -> \code{NULL} \cr
+Prints the \code{PipeOp}s most salient information: \code{$id}, \code{$is_trained}, \code{$param_set$values}, \code{$input} and \code{$output}.
 }
 }
 
 \seealso{
-Other PipeOp: \code{\link{PipeOpBranch}},
-  \code{\link{PipeOpChunk}}, \code{\link{PipeOpCopy}},
-  \code{\link{PipeOpDownsample}},
-  \code{\link{PipeOpEnsemble}},
-  \code{\link{PipeOpFeatureUnion}},
-  \code{\link{PipeOpLearner}},
-  \code{\link{PipeOpMajorityVote}},
-  \code{\link{PipeOpModelAvg}}, \code{\link{PipeOpNULL}},
-  \code{\link{PipeOpPCA}}, \code{\link{PipeOpScale}},
+Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOpTaskPreprocSimple}},
   \code{\link{PipeOpTaskPreproc}},
-  \code{\link{PipeOpUnbranch}}
+  \code{\link{mlr_pipeops}}
+
+Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpTaskPreproc}},
+  \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_branch}},
+  \code{\link{mlr_pipeop_chunk}},
+  \code{\link{mlr_pipeop_copy}},
+  \code{\link{mlr_pipeop_downsample}},
+  \code{\link{mlr_pipeop_encode}},
+  \code{\link{mlr_pipeop_featureunion}},
+  \code{\link{mlr_pipeop_learner}},
+  \code{\link{mlr_pipeop_majorityvote}},
+  \code{\link{mlr_pipeop_modelavg}},
+  \code{\link{mlr_pipeop_pca}},
+  \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_unbranch}},
+  \code{\link{mlr_pipeop_undersample}},
+  \code{\link{mlr_pipeops}}
 }
-\concept{PipeOp}
+\concept{PipeOps}
+\concept{mlr3pipelines backend related}
 \keyword{datasets}

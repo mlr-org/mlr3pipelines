@@ -5,7 +5,8 @@ Authors@R: c(
     person("Martin", "Binder", email = "martin.binder@mail.com", role = c("aut", "cre")),
     person("Bernd", "Bischl", email = "bernd_bischl@gmx.net", role = "ctb"),
     person("Michel", "Lang", email = "michellang@gmail.com", role = "ctb"),
-    person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"))
+    person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"),
+    person("Florian", "Pfisterer", email = "pfistererf@googlemail.com", role = "ctb"))
 URL: https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 License: MIT + file LICENSE
@@ -19,7 +20,8 @@ Imports:
     mlr3,
     mlr3misc,
     paradox,
-    digest
+    digest,
+    withr
 Suggests:
     igraph,
     knitr,
@@ -27,7 +29,10 @@ Suggests:
     mlbench,
     rmarkdown,
     rpart,
-    testthat
+    testthat,
+    kernlab,
+    ggplot2,
+    mlr3learners
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
@@ -46,12 +51,13 @@ Collate:
     'NO_OP.R'
     'utils.R'
     'PipeOp.R'
+    'mlr_pipeops.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
     'PipeOpCopy.R'
-    'mlr_pipeops.R'
     'PipeOpTaskPreproc.R'
     'PipeOpDownsample.R'
+    'PipeOpEncode.R'
     'PipeOpEnsemble.R'
     'PipeOpFeatureUnion.R'
     'PipeOpLearner.R'
@@ -60,6 +66,7 @@ Collate:
     'PipeOpPCA.R'
     'PipeOpScale.R'
     'PipeOpUnBranch.R'
+    'PipeOpUndersample.R'
     'assert_graph.R'
     'greplicate.R'
     'gunion.R'

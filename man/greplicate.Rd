@@ -4,7 +4,7 @@
 \alias{greplicate}
 \title{Create Disjoint Graph Union of Copies of a Graph
 
-Create a new graph containing \code{n} copies of the input graph.
+Create a new \code{\link{Graph}} containing \code{n} copies of the input \code{Graph} / \code{\link{PipeOp}}.
 To avoid ID collisions, PipeOp IDs are suffixed with \code{_i}
 where \code{i} ranges from 1 to \code{n}.}
 \usage{
@@ -23,7 +23,12 @@ Number of copies to create.}
 \description{
 Create Disjoint Graph Union of Copies of a Graph
 
-Create a new graph containing \code{n} copies of the input graph.
+Create a new \code{\link{Graph}} containing \code{n} copies of the input \code{Graph} / \code{\link{PipeOp}}.
 To avoid ID collisions, PipeOp IDs are suffixed with \code{_i}
 where \code{i} ranges from 1 to \code{n}.
 }
+\seealso{
+Other Graph operators: \code{\link{\%>>\%}},
+  \code{\link{assert_graph}}, \code{\link{gunion}}
+}
+\concept{Graph operators}

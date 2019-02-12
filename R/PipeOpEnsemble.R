@@ -16,9 +16,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(innum, id) {
+    initialize = function(innum, id, param_vals) {
       assert_integerish(innum, lower = 1)
-      super$initialize(id,
+      super$initialize(id, param_vals = param_vals,
         input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
@@ -55,8 +55,8 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "PipeOpModelAvg") {
-      super$initialize(innum, id)
+    initialize = function(innum, id = "PipeOpModelAvg", param_vals = list()) {
+      super$initialize(innum, id, param_vals = param_vals)
     },
     predict = function(inputs) {
       prds = private$merge_predictions(inputs)
@@ -95,8 +95,8 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "majorityvote") {
-      super$initialize(innum, id)
+    initialize = function(innum, id = "majorityvote", param_vals = list()) {
+      super$initialize(innum, id, param_vals = param_vals)
     },
 
     predict = function(inputs) {
@@ -113,6 +113,5 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-# See issue #117
-# #' @include mlr_pipeops.R
-# mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
+#' @include mlr_pipeops.R
+mlr_pipeops$add("majorityvote", PipeOpMajorityVote)

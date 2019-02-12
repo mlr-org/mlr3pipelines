@@ -49,14 +49,16 @@ A series of usecases and PipeOperators can be found in usecases.md.
                                               train: input --store-params--> output        predict: input --use-params--> output
 - **Learner:**
   - [x] `PipeOpLearner`                         | linear    | task --model--> NULL           | task --model--> prediction
-  - [ ] `PipeOpLearnerCV`                       | linear    | task --model--> cvtask         | task --model--> prediction
-  - [ ] `PipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
+  - [X] `PipeOpLearnerCV`                       | linear    | task --model--> cvtask         | task --model--> prediction
+  - [X] `PipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
 
 - **Preprocessing:**
   - [x] `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
   - [x] `PipeOpScale`                           | linear    | task --params--> task          | task --params--> task
   - [x] `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
-
+  - [ ] `PipeOpUpsample`                        | linear    | task --NULL--> task            | task --NULL--> task 
+  - [ ] `PipeOpImpute`                        | linear    | task --NULL--> task            | task --NULL--> task
+  
 - **Target Operators:**
   - [ ] `PipeOpThreshold`                       | linear    | cvtask --threshold--> NULL     | prediction --threshold--> prediction
   - [ ] `PipeOpTrafoY`                          | linear    | task --NULL--> task            | prediction --NULL--> prediction
