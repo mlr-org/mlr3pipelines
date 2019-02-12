@@ -17,9 +17,8 @@ test_that("Dictionary contains all PipeOps", {
       PipeOpModelAvg = list(innum = 2),
       PipeOpUnbranch = list(options = 2))
 
-
-
-
+  # The PipeOps that may have a default ID different from the mlr_pipeops key
+  unequal_id = c("PipeOpLearner", "PipeOpLearnerCV")
 
   inherits_from_pipeop = function(r6cg) {
     if (r6cg$classname == "PipeOp") {
@@ -35,8 +34,6 @@ test_that("Dictionary contains all PipeOps", {
   nspath = dirname(system.file("NAMESPACE", package = "mlr3pipelines"))
   exports = parseNamespaceFile(basename(nspath), dirname(nspath))$exports
 
-
-
   pkgenv = asNamespace("mlr3pipelines")
   pipeops = Filter(function(x) {
     objgen = get(x, pkgenv)
@@ -45,8 +42,6 @@ test_that("Dictionary contains all PipeOps", {
   }, ls(pkgenv, all.names = TRUE))
 
   pipeops = intersect(pipeops, exports)
-
-
 
   pipeops = setdiff(pipeops, abstracts)
 
@@ -68,6 +63,11 @@ test_that("Dictionary contains all PipeOps", {
     args = initargs[[pipeops[idx]]] %??% list()
 
     test_obj = do.call(pogen$new, args)
+
+    # check that mlr_pipeops key is the default ID
+    if (pipeops[idx] %nin% unequal_id) {
+      expect_equal(test_obj$id, dictname)
+    }
 
     # check that mlr_pipeops$get gives the right object
 
