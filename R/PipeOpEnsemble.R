@@ -307,10 +307,10 @@ mlr_pipeops$add("wtmajorityvote", PipeOpWtMajorityVote)
 #' Aggregates over different [`PredictionClassif`]s.
 #' Either computes the mode, if `predict_type` is `"response"`,
 #' or averages probabilities if `predict_type` is `"prob"`.
+#' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
+#' For help with nloptr see [`nloptr::nloptr.print.options()`].
 #' Returns a single [`PredictionClassif`].
-#' Offers a `$weights` slot to set/get weights for each learner.
-#' Used for classification `Prediction`s.
-#' Defaults to equal weights for each model.
+#' Used for classification [`Prediction`]s.
 #'
 #' @family PipeOps
 #' @examples
