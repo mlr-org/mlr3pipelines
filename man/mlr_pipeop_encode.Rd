@@ -5,7 +5,7 @@
 \alias{mlr_pipeop_encode}
 \alias{PipeOpEncode}
 \title{PipeOpEncode}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}.}
+\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}.}
 \usage{
 PipeOpEncode
 }
@@ -39,6 +39,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_chunk}},
   \code{\link{mlr_pipeop_copy}},
   \code{\link{mlr_pipeop_featureunion}},
+  \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},

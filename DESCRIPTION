@@ -61,6 +61,7 @@ Collate:
     'PipeOpEncode.R'
     'PipeOpEnsemble.R'
     'PipeOpFeatureUnion.R'
+    'PipeOpFilter.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
     'PipeOpNULL.R'
@@ -73,4 +74,5 @@ Collate:
     'greplicate.R'
     'gunion.R'
     'operators.R'
+    'typecheck.R'
     'zzz.R'
