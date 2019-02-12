@@ -71,4 +71,5 @@ Collate:
     'greplicate.R'
     'gunion.R'
     'operators.R'
+    'typecheck.R'
     'zzz.R'
