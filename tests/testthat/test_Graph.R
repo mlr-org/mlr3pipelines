@@ -16,11 +16,11 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  g$add_edge("downsample", "pca")
+  g$add_edge("subsample", "pca")
 
   expect_graph(g)
 
-  expect_output(print(g), "Graph with 2 PipeOps.*downsample.*UNTRAINED.*pca.*UNTRAINED")
+  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*UNTRAINED.*pca.*UNTRAINED")
 
 
 
@@ -28,7 +28,7 @@ test_that("linear graph", {
   x = g$train(inputs)
   expect_task(x[[1]])
 
-  expect_output(print(g), "Graph with 2 PipeOps.*downsample.*list.*pca.*prcomp")
+  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*list.*pca.*prcomp")
 
   out = g$predict(inputs)
   expect_task(x[[1]])
@@ -37,8 +37,8 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  expect_error(g$add_edge("downsample", "rpart"),
-    "Channel.*output.*of node.*downsample.*already connected to channel.*input.*of node pca")
+  expect_error(g$add_edge("subsample", "rpart"),
+    "Channel.*output.*of node.*subsample.*already connected to channel.*input.*of node pca")
 
   expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*rpart.*already in Graph")
 
