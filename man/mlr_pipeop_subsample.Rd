@@ -4,7 +4,7 @@
 \name{mlr_pipeop_subsample}
 \alias{mlr_pipeop_subsample}
 \alias{PipeOpSubsample}
-\title{PipeOpSample}
+\title{PipeOpSubsample}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}.}
 \usage{
 PipeOpSubsample
