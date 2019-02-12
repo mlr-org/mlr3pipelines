@@ -183,4 +183,11 @@ test_that("PipeOpNlOptMajorityVote - prob - train and predict", {
   out = predict_pipeop(po, prds)
   expect_numeric(po$state$weights)
   expect_class(out[[1]], "PredictionClassif")
+
+  po = PipeOpNlOptMajorityVote$new(3)
+  expect_pipeop(po)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_numeric(po$state$weights)
+  expect_class(out[[1]], "PredictionClassif")
 })
