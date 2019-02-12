@@ -1,4 +1,6 @@
 #' @title GraphLearner
+#'
+#' @name mlr_learners_graph
 #' @format [`R6Class`] object inheriting from [`mlr3::Learner`].
 #'
 #' @description
@@ -60,3 +62,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   )
 )
+
+# FIXME This could work if mlr-org/mlr3#177 were addressed
+# mlr_learners$add("graph", GraphLearner)

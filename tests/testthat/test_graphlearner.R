@@ -83,4 +83,20 @@ test_that("graphlearner parameters behave as they should", {
   expect_equal(dbgr$pipeops$debug$param_set$values$x, 0.5)
   expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 0.5)
 
+  dblrn = mlr_learners$get("classif.debug")
+  dblrn$param_set$values$message_train = TRUE
+  dblrn$param_set$values$message_predict = TRUE
+  dblrn$param_set$values$warning_train = TRUE
+  dblrn$param_set$values$warning_predict = TRUE
+
+  pol = PipeOpLearner$new(dblrn, param_vals = list(message_predict = FALSE, warning_train = FALSE, warning_predict = FALSE))
+
+  gl = GraphLearner$new(pol, param_vals = list(debug.warning_train = TRUE, debug.warning_predict = TRUE))
+
+  gl$param_set$values$debug.warning_predict = FALSE
+
+  expect_equal(gl$param_set$values,
+    list(debug.message_train = TRUE, debug.message_predict = FALSE, debug.warning_train = TRUE, debug.warning_predict = FALSE))
+
 })
+
