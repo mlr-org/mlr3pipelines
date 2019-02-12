@@ -180,6 +180,18 @@ Graph = R6Class("Graph",
       if (is.numeric(dst_channel))
         dst_channel = self$pipeops[[dst_id]]$input$name[dst_channel]
 
+      types_src = self$pipeops[[src_id]]$output[get("name") == src_channel, c("train", "predict")]
+      types_dst = self$pipeops[[dst_id]]$input[get("name") == dst_channel, c("train", "predict")]
+
+      if (!are_types_compatible(types_src$train, types_dst$train)) {
+        stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
+          src_id, types_src$train, dst_id, types_dst$train)
+      }
+      if (!are_types_compatible(types_src$predict, types_dst$predict)) {
+        stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
+          src_id, types_src$predict, dst_id, types_dst$predict)
+      }
+
       bad_rows = (self$edges$src_id == src_id & self$edges$src_channel == src_channel) |
         (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel)
       if (any(bad_rows)) {
