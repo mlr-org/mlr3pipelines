@@ -15,10 +15,11 @@ test_that("Dictionary contains all PipeOps", {
       PipeOpLearnerCV = list(learner = mlr_learners$get("classif.rpart")),
       PipeOpMajorityVote = list(innum = 2),
       PipeOpModelAvg = list(innum = 2),
-      PipeOpUnbranch = list(options = 2))
+      PipeOpUnbranch = list(options = 2),
+      PipeOpFilter = list(filter = mlr3featsel::FilterVariance$new(), param_vals = list(nfeat = 1)))
 
   # The PipeOps that may have a default ID different from the mlr_pipeops key
-  unequal_id = c("PipeOpLearner", "PipeOpLearnerCV")
+  unequal_id = c("PipeOpLearner", "PipeOpLearnerCV", "PipeOpFilter")
 
   inherits_from_pipeop = function(r6cg) {
     if (r6cg$classname == "PipeOp") {
