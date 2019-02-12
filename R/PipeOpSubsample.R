@@ -43,7 +43,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         }))
       }
       self$state = list()
-      task$filter(keep)
+      task_filter_ex(task, keep)
     },
 
     predict_task = identity
