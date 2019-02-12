@@ -99,5 +99,8 @@ task_filter_ex = function(task, row_ids) {
 
   row_ids[duplicated(row_ids)] = task$nrow + seq_along(addedrows)
 
-  task$rbind(task$data(rows = addedrows))$filter(row_ids)
+  if (length(addedrows)) {
+    task$rbind(task$data(rows = addedrows))
+  }
+  task$filter(row_ids)
 }
