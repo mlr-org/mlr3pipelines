@@ -371,3 +371,5 @@ PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
   )
 )
 
+#' @include mlr_pipeops.R
+mlr_pipeops$add("nloptmajorityvote", PipeOpNLOptMajorityVote)
