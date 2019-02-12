@@ -16,8 +16,6 @@ devtools::load_all("paradox")
 devtools::load_all("mlr3pipelines")
 
 
-
-
 testthat::test_package("mlr3pipelines")
 
 
@@ -26,7 +24,7 @@ testthat::test_package("mlr3pipelines", filter = "usecases")
 testthat::test_package("mlr3pipelines", filter = "pipeop_learnercv")
 
 
-PipeOpScale$new() %>>% PipeOpPCA$new()
+g = PipeOpScale$new() %>>% PipeOpPCA$new()
 
 profvis::profvis(Reduce(`%>>%`, lapply(c(letters, paste0(letters, "1"), paste0(letters, "2")), PipeOpScale$new)))
 
