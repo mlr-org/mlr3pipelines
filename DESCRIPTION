@@ -34,7 +34,8 @@ Suggests:
     ggplot2,
     mlr3learners,
     mlr3featsel,
-    mlr3tuning
+    mlr3tuning,
+    glmnet
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
