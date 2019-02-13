@@ -10,9 +10,13 @@
 PipeOpModelAvg
 }
 \description{
-Averages its input (a \code{list} of \code{\link{Prediction}}).
-Returns a single \code{\link{Prediction}}.
-Used for regression \code{Prediction}s.
+Averages its input (a \code{list} of \code{\link{PredictionRegr}}).
+Only used for regression \code{Prediction}s.
+Weights can be set by the user, if none are provided, defaults to
+equal weights \code{rep(1/innum, innum)} for each prediction.
+Offers a \code{$weights} slot to set/get weights for each learner.
+Returns a single \code{\link{PredictionRegr}}.
+Defaults to equal weights for each model.
 }
 \examples{
 op = PipeOpModelAvg$new(3)
@@ -29,6 +33,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_majorityvote}},
+  \code{\link{mlr_pipeop_nloptmajorityvote}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_subsample}},
