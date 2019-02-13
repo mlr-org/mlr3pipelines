@@ -9,6 +9,34 @@
 
 `mlr3pipelines` is a [dataflow programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit for machine learning in `R` utilising the [`mlr3`](https://github.com/mlr-org/mlr3) package. Machine learning workflows can be written as directed "Graphs" that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the [`mlr3tuning`](https://github.com/mlr-org/mlr3tuning) package, it is possible to simultaneously optimize parameters of multiple processing units.
 
+In principle. `mlr3pipelines` is about making the following operation possible:
+
+```r
+task = mlr_tasks$get("iris")
+#> Error in eval(expr, envir, enclos): object 'mlr_tasks' not found
+learner = mlr_learners$get("classif.rpart")
+#> Error in eval(expr, envir, enclos): object 'mlr_learners' not found
+holdout = mlr_resamplings$get("holdout")$instantiate(task)
+#> Error in eval(expr, envir, enclos): object 'mlr_resamplings' not found
+
+graph =
+  mlr_pipeops$get("pca") %>>%
+  mlr_pipeops$get("filter",
+    filter = mlr3featsel::FilterVariance$new(),
+    param_vals = list(frac = 0.5)) %>>%
+  mlr_pipeops$get("learner", learner = learner)
+#> Error in mlr_pipeops$get("pca") %>>% mlr_pipeops$get("filter", filter = mlr3featsel::FilterVariance$new(), : could not find function "%>>%"
+
+print(graph)
+#> Error in print(graph): object 'graph' not found
+
+graph$train(task$clone()$filter(ho$train_set(1)))
+#> Error in eval(expr, envir, enclos): object 'graph' not found
+
+graph$predict(task$clone()$filter(ho$test_set(1)))
+#> Error in eval(expr, envir, enclos): object 'graph' not found
+```
+
 ## Feature Overview
 
 Single computational steps can be represented as so-called **`PipeOp`s**, which can then be connected with directed edges in a **`Graph`**. The scope of `mlr3pipelines` is still growing; currently supported features are:
