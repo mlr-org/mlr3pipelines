@@ -25,6 +25,20 @@ test_that("PipeOpFilter", {
 
   expect_set_equal(tt$feature_names, c("b", "chas", "rad", "tax", "town", "tract"))  # FIXME: this needs to change when mlr-org/mlr3featsel#15 is fixed
 
+  tt2 = po$predict(list(task$clone()$filter(1:10)))[[1]]
+
+  expect_set_equal(tt2$feature_names, c("b", "chas", "rad", "tax", "town", "tract"))  # FIXME: this needs to change when mlr-org/mlr3featsel#15 is fixed
+
+  # the following only operates on the five columns named below, one of which ('chas') is factorial and not affected
+  # by the variance filter. Filtering `frac = 0.5` should remove 'indus' and 'lon'.
+  po$affect_columns = function(task) c("chas", "b", "age", "indus", "lon")
+  po$param_set$values = list(frac = 0.5)
+
+  tt = po$train(list(task))[[1]]
+
+  expect_set_equal(tt$feature_names, c(setdiff(task$feature_names, po$affect_columns(task)), "chas", "b", "age"))
+
+
 })
 
 

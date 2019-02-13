@@ -19,7 +19,7 @@ devtools::load_all("mlr3pipelines")
 testthat::test_package("mlr3pipelines")
 
 
-testthat::test_package("mlr3pipelines", filter = "usecases")
+testthat::test_package("mlr3pipelines", filter = "dictionary")
 
 testthat::test_package("mlr3pipelines", filter = "pipeop_learnercv")
 

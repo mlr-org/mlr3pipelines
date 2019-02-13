@@ -14,7 +14,7 @@
 #'
 #' If `can_subset_cols` is `TRUE`, then the hyperparameter `affect_columns`
 #' is added, which is a function that takes the Task as input and returns
-#' a logical as output, indicating what columns to choose.
+#' a `character` as output, indicating what columns to choose.
 #'
 #' @section Public Members / Active Bindings:
 #' * `intasklayout`  :: [`data.table`] with columns `id`, `type` \cr
@@ -105,7 +105,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$affect_columns)
       if (do_subset) {
-        self$affected_cols = intask$feature_names[self$affect_columns(intask)]
+        self$affected_cols = self$affect_columns(intask)
         # FIXME: this fails when something is both a feature and something else
         remove_cols = setdiff(intask$feature_names, self$affected_cols)
         intask$set_col_role(remove_cols, character(0))
