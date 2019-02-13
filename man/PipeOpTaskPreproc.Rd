@@ -20,7 +20,7 @@ manipulated in-place, and should not be cloned.
 
 If \code{can_subset_cols} is \code{TRUE}, then the hyperparameter \code{affect_columns}
 is added, which is a function that takes the Task as input and returns
-a logical as output, indicating what columns to choose.
+a \code{character} as output, indicating what columns to choose.
 }
 \section{Public Members / Active Bindings}{
 
