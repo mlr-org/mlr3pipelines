@@ -33,7 +33,8 @@ Suggests:
     kernlab,
     ggplot2,
     mlr3learners,
-    mlr3featsel
+    mlr3featsel,
+    mlr3tuning
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
@@ -45,8 +46,9 @@ VignetteBuilder: knitr
 Remotes:
     mlr-org/mlr3,
     mlr-org/mlr3misc,
-    mlr-org/paradox,
-    mlr-org/mlr3featsel
+    mlr-org/paradox@ee64936,
+    mlr-org/mlr3featsel,
+    mlr-org/mlr3tuning
 Collate:
     'Graph.R'
     'GraphLearner.R'
