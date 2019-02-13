@@ -47,13 +47,9 @@ at a single, better predictor.
 
 We can achieve this by downsampling our data before training a learner, repeating this for say $10$ times and then performing a majority vote on the predictions.
 
-<<<<<<< HEAD
+
 First, we create a simple pipeline, that uses
-`PipeOpDownsample` before a `PipeOpLearner` is trained:
-=======
-First, we create a simple pipeline, that uses 
-`PipeOpSubsample` before a `PipeOpLearner` is trained: 
->>>>>>> origin/master
+`PipeOpSubsample` before a `PipeOpLearner` is trained:
 
 ```{r}
   single_pred = PipeOpSubsample$new() %>>%
