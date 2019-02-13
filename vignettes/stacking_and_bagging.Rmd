@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-Leveraging the different operations available to connect `PipeOps` to very powerfull graphs. 
-This vignette introduces two such well-known graph structures, that allow us to enhance single learners 
+Leveraging the different operations available to connect `PipeOps` to very powerfull graphs.
+This vignette introduces two such well-known graph structures, that allow us to enhance single learners
 to more powerfull combinations.
 
 Before we go into details, we split the task into train
@@ -36,17 +36,17 @@ and test indices.
 We first examine Bagging introduced by Breimann (1994).
 The basic idea is to create multiple predictors and then aggregate those to a single, more powerfull predictor.
 > "... multiple versions are formed
-> by making bootstrap replicates of the learning set 
+> by making bootstrap replicates of the learning set
 > and using these as new learning sets" (Breimann 1994)
 
-Bagging then aggregates a set of predictors by averaging (regression) or majority vote (classification). 
-The idea behind bagging is, that a set of weak, but different predictors can be combined in order to arrive 
+Bagging then aggregates a set of predictors by averaging (regression) or majority vote (classification).
+The idea behind bagging is, that a set of weak, but different predictors can be combined in order to arrive
 at a single, better predictor.
 
 We can achieve this by downsampling our data before training a learner, repeating this for say $10$ times and then performing a majority vote on the predictions.
 
-First, we create a simple pipeline, that uses 
-`PipeOpDownsample` before a `PipeOpLearner` is trained: 
+First, we create a simple pipeline, that uses
+`PipeOpDownsample` before a `PipeOpLearner` is trained:
 
 ```{r}
   single_pred = PipeOpDownsample$new() %>>%
@@ -56,22 +56,22 @@ First, we create a simple pipeline, that uses
 We can now repeat this $10$ times using `greplicate`.
 
 ```{r}
-  pred_set = greplicate(single_pred, 10L)   
+  pred_set = greplicate(single_pred, 10L)
 ```
 
-In order to visually inspect the resulting graph, 
+In order to visually inspect the resulting graph,
 we can plot it:
 
 ```{r, fig.width=7.5}
   pred_set$plot()
 ```
 
-Afterwards we need to aggregate the 10 pipelines 
-to form a single model: 
+Afterwards we need to aggregate the 10 pipelines
+to form a single model:
 
 ```{r}
   bagging = pred_set %>>%
-    PipeOpMajorityVote$new(innum = 10L)
+    PipeOpWtMajorityVote$new(innum = 10L)
 ```
 
 and plot again to see what happens:
@@ -81,7 +81,7 @@ and plot again to see what happens:
 ```
 
 This pipeline can again be used in conjunction with
-`GraphLearner` in order for Bagging to be used like a 
+`GraphLearner` in order for Bagging to be used like a
 [mlr3::Learner].
 
 ```{r}
@@ -91,25 +91,25 @@ This pipeline can again be used in conjunction with
   e$predict(test.idx)
 ```
 
-In conjunction with different `Backends`, this can be a very powerful tool, as in cases, where the data does not fully fit in memory, we can easily just obtain a fraction of the data for each learner from a `DataBaseBackend` and then aggregate predictions from all learners. 
+In conjunction with different `Backends`, this can be a very powerful tool, as in cases, where the data does not fully fit in memory, we can easily just obtain a fraction of the data for each learner from a `DataBaseBackend` and then aggregate predictions from all learners.
 
-## Stacking 
+## Stacking
 
-Stacking is another technique that can improve model performance. The basic idea behind stacking is, that 
-using predictions from one model as features of a subsequent model can possibly improve performance. 
+Stacking is another technique that can improve model performance. The basic idea behind stacking is, that
+using predictions from one model as features of a subsequent model can possibly improve performance.
 
-A very simple possibility would be to train a 
-decision tree and use the predictions from this 
-model in conjunction with the original features in order to train an additional model on top. 
+A very simple possibility would be to train a
+decision tree and use the predictions from this
+model in conjunction with the original features in order to train an additional model on top.
 The basic idea behind this is, that patterns a model detected in the data can be used by a higher level model, and thus result in a better performance.
 
 In order to limit overfitting, we additionally do not predict on
-the original predictions of the learner, but instead on out-of-bag predictions. This is automatically done by 
+the original predictions of the learner, but instead on out-of-bag predictions. This is automatically done by
 `PipeOpLearnerCV`.
 
 We first create a level 0 learner, which is used to
 extract a lower level prediction.
-We additionally `clone()` the learner object to obtain a copy 
+We additionally `clone()` the learner object to obtain a copy
 of the learner, and set a custom id for the `PipeOp`.
 
 ```{r}
@@ -119,21 +119,21 @@ of the learner, and set a custom id for the `PipeOp`.
 ```
 
 Additionally, we use a `PipeOpNULL` in parallel to
-the level 0 learner, in order to send the unchanged 
+the level 0 learner, in order to send the unchanged
 Task to the next level.
 
 ```{r}
   level_0 = gunion(list(lrn_0, PipeOpNULL$new()))
 ```
 
-Afterwards, we want to concatenate the predictions from 
+Afterwards, we want to concatenate the predictions from
 `PipeOpLearnerCV` and the original Task using `PipeOpFeatureUnion`.
 
 ```{r}
   combined = level_0 %>>% PipeOpFeatureUnion$new(2)
 ```
 
-We can now train another learner on top of the combined 
+We can now train another learner on top of the combined
 features.
 
 ```{r, fig.width=7.5}
@@ -150,17 +150,17 @@ features.
 
 In this vignette, we only showcase a very simple usecase for stacking.
 In many real-world applications, stacking is done for multiple levels and on multiple representations of the dataset. On a lower level, different preprocessing methods can for example
-be defined in conjunction with several learners. On a higher level, we can then combine 
+be defined in conjunction with several learners. On a higher level, we can then combine
 those predictions in order to form a very powerfull model.
 
 ## Multilevel Stacking
 
-In order to showcase the power of `mlr3pipelines`, we will quickly introduce a more complicated 
+In order to showcase the power of `mlr3pipelines`, we will quickly introduce a more complicated
 stacking example.
 
 In this case, we train a **glmnet** and 2 different *rpart* models (some transform its inputs using `PipeOpPCA`) on our task in the level 0 and concatenate them with the original features (via `PipeOpNull`).
 This is then passed on to level 1, where we copy the concatenated features
-$3$ times and put this task into a **rpart** and a **glmnet** model. 
+$3$ times and put this task into a **rpart** and a **glmnet** model.
 Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) and pass this on to level 2. In level 2 we simply concatenate all level 1 outputs and train a final decision tree.
 
 
@@ -206,7 +206,7 @@ Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) an
     learner = GraphLearner$new(level_2)
     )
   e$train(train.idx)
-  e$predict(test.idx) 
+  e$predict(test.idx)
   e$score()
   e$performance
 ```
