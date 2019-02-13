@@ -27,6 +27,7 @@ Suggests:
     knitr,
     logger,
     mlbench,
+    nloptr,
     rmarkdown,
     rpart,
     testthat,

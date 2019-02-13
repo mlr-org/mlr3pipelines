@@ -11,6 +11,6 @@ test_that("PipeOp - Resample", {
   resa$param_set$values$folds = 2L
 
   rr = mlr3::resample(task, pp, resa)
-
   assert_resample_result(rr)
+  expect_class(rr, "ResampleResult")
 })

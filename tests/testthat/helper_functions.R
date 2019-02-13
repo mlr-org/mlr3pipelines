@@ -381,6 +381,25 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
   expect_flag(g$is_trained)
 }
 
+make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "response",
+ seed = 1444L, nclasses = 3L) {
+  if (!noise) set.seed(seed)
+  p = PredictionClassif$new()
+  p$row_ids = seq_len(n)
+  p$truth = factor(sample(letters[seq_len(nclasses)], n, replace = TRUE))
+  p$predict_types = predict_types
+  if ("prob" %in% predict_types) {
+    p$prob = matrix(runif(n * nclasses), ncol = nclasses, nrow = n)
+    p$prob = t(apply(p$prob, 1, function(x) x / sum(x)))
+    colnames(p$prob) = unique(p$truth)
+    max.prob = max.col(p$prob, ties.method='first')
+    p$response = factor(max.prob, labels = unique(p$truth))
+    levels(p$response) = unique(p$truth)
+  } else {
+    p$response = factor(sample(letters[seq_len(nclasses)], n, replace = TRUE))
+  }
+  return(p)
+}
 
 PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 PipeOpLrnFL = PipeOpLearner$new(mlr_learners$get("classif.featureless"))
