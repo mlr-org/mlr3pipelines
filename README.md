@@ -9,7 +9,7 @@
 
 `mlr3pipelines` is a [dataflow programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit for machine learning in `R` utilising the [`mlr3`](https://github.com/mlr-org/mlr3) package. Machine learning workflows can be written as directed "Graphs" that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the [`mlr3tuning`](https://github.com/mlr-org/mlr3tuning) package, it is possible to simultaneously optimize parameters of multiple processing units.
 
-In principle. `mlr3pipelines` is about making the following operation possible:
+In principle, `mlr3pipelines` is about defining singular data and model manipulation steps as "PipeOp" steps:
 
 ```r
 task = mlr_tasks$get("iris")
@@ -21,7 +21,11 @@ filter = mlr_pipeops$get("filter",
   filter = mlr3featsel::FilterVariance$new(),
   param_vals = list(frac = 0.5))
 learner_po =  mlr_pipeops$get("learner", learner = learner)
+```
 
+These make the following possible:
+
+```r
 graph = pca %>>% filter %>>% learner_po
 
 print(graph)
