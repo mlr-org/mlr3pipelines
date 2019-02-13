@@ -56,9 +56,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   )
 )
 
-#' @title PipeOpWtModelAvg
+#' @title PipeOpModelAvg
 #'
-#' @name mlr_pipeop_weightedmodelavg
+#' @name mlr_pipeop_modelavg
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
@@ -72,9 +72,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 #'
 #' @family PipeOps
 #' @examples
-#' op = PipeOpWtModelAvg$new(3)
+#' op = PipeOpModelAvg$new(3)
 #' @export
-PipeOpWtModelAvg = R6Class("PipeOpWtModelAvg",
+PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
@@ -110,7 +110,7 @@ PipeOpWtModelAvg = R6Class("PipeOpWtModelAvg",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("wtmodelavg", PipeOpWtModelAvg)
+mlr_pipeops$add("modelavg", PipeOpModelAvg)
 
 
 #' @title PipeOpNlOptModelAvg
@@ -118,7 +118,7 @@ mlr_pipeops$add("wtmodelavg", PipeOpWtModelAvg)
 #' @format [R6Class] PipeOpNlOptModelAvg
 #'
 #' @name mlr_pipeop_nloptmajorityvote
-#' @format [`R6Class`] inheriting from [`PipeOpWtModelAvg`].
+#' @format [`R6Class`] inheriting from [`PipeOpModelAvg`].
 #'
 #' @description
 #' Aggregates over different [`PredictionRegr`]s.
@@ -132,12 +132,12 @@ mlr_pipeops$add("wtmodelavg", PipeOpWtModelAvg)
 #' @examples
 #' op = PipeOpNlOptModelAvg$new(3)
 #' @export
-PipeOpNlOptModelAvg = R6Class("PipeOpNlOptModelAvg",
-  inherit = PipeOpWtModelAvg,
+PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
+  inherit = PipeOpModelAvg,
 
   public = list(
     measure = NULL,
-    initialize = function(innum, id = "majorityvote", param_vals = list()) {
+    initialize = function(innum, id = "nloptmodelavg", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("measure", default = NULL),
         ParamFct$new("algorithm", default = "NLOPT_LN_COBYLA",
@@ -172,11 +172,11 @@ mlr_pipeops$add("nloptmodelavg", PipeOpNlOptModelAvg)
 
 
 
-#' @title PipeOpWtMajorityVote
+#' @title PipeOpMajorityVote
 #'
-#' @format [R6Class] PipeOpWtMajorityVote
+#' @format [R6Class] PipeOpMajorityVote
 #'
-#' @name mlr_pipeop_weightedmajorityvote
+#' @name mlr_pipeop_majorityvote
 #' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
 #'
 #' @description
@@ -191,9 +191,9 @@ mlr_pipeops$add("nloptmodelavg", PipeOpNlOptModelAvg)
 #'
 #' @family PipeOps
 #' @examples
-#' op = PipeOpWtMajorityVote$new(3)
+#' op = PipeOpMajorityVote$new(3)
 #' @export
-PipeOpWtMajorityVote = R6Class("PipeOpWtMajorityVote",
+PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   inherit = PipeOpEnsemble,
 
   public = list(
@@ -262,7 +262,7 @@ PipeOpWtMajorityVote = R6Class("PipeOpWtMajorityVote",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("wtmajorityvote", PipeOpWtMajorityVote)
+mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
 
 
 #' @title PipeOpNlOptMajorityVote
@@ -270,7 +270,7 @@ mlr_pipeops$add("wtmajorityvote", PipeOpWtMajorityVote)
 #' @format [R6Class] PipeOpNlOptMajorityVote
 #'
 #' @name mlr_pipeop_nloptmajorityvote
-#' @format [`R6Class`] inheriting from [`PipeOpWtMajorityVote`].
+#' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
 #'
 #' @description
 #' Aggregates over different [`PredictionClassif`]s.
@@ -287,12 +287,12 @@ mlr_pipeops$add("wtmajorityvote", PipeOpWtMajorityVote)
 #' op = PipeOpNlOptMajorityVote$new(3)
 #' @export
 PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
-  inherit = PipeOpWtMajorityVote,
+  inherit = PipeOpMajorityVote,
 
   public = list(
     measure = NULL,
 
-    initialize = function(innum, id = "majorityvote", param_vals = list()) {
+    initialize = function(innum, id = "nloptmajorityvote", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("measure", default = NULL),
         ParamFct$new("algorithm", default = "NLOPT_LN_COBYLA",

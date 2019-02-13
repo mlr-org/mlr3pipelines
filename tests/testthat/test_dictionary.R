@@ -15,6 +15,8 @@ test_that("Dictionary contains all PipeOps", {
       PipeOpLearnerCV = list(learner = mlr_learners$get("classif.rpart")),
       PipeOpMajorityVote = list(innum = 2),
       PipeOpModelAvg = list(innum = 2),
+      PipeOpNlOptMajorityVote = list(innum = 2),
+      PipeOpNlOptModelAvg = list(innum = 2),
       PipeOpUnbranch = list(options = 2),
       PipeOpFilter = list(filter = mlr3featsel::FilterVariance$new(), param_vals = list(nfeat = 1)))
 

@@ -74,7 +74,7 @@ to form a single model:
 
 ```{r}
   bagging = pred_set %>>%
-    PipeOpWtMajorityVote$new(innum = 10L)
+    PipeOpMajorityVote$new(innum = 10L)
 ```
 
 and plot again to see what happens:
