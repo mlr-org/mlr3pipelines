@@ -10,6 +10,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 set.seed(8008135)
+library("paradox")
+library("mlr3")
+library("mlr3pipelines")
+library("mlr3learners")
 logger::log_threshold(logger::WARN, namespace = "mlr3")
 ```
 
@@ -23,18 +27,19 @@ task = mlr_tasks$get("iris")
 learner = mlr_learners$get("classif.rpart")
 holdout = mlr_resamplings$get("holdout")$instantiate(task)
 
-graph =
-  mlr_pipeops$get("pca") %>>%
-  mlr_pipeops$get("filter",
-    filter = mlr3featsel::FilterVariance$new(),
-    param_vals = list(frac = 0.5)) %>>%
-  mlr_pipeops$get("learner", learner = learner)
+pca = mlr_pipeops$get("pca")
+filter = mlr_pipeops$get("filter",
+  filter = mlr3featsel::FilterVariance$new(),
+  param_vals = list(frac = 0.5))
+learner_po =  mlr_pipeops$get("learner", learner = learner)
+
+graph = pca %>>% filter %>>% learner_po
 
 print(graph)
 
-graph$train(task$clone()$filter(ho$train_set(1)))
+graph$train(task$clone()$filter(holdout$train_set(1)))
 
-graph$predict(task$clone()$filter(ho$test_set(1)))
+graph$predict(task$clone()$filter(holdout$test_set(1)))
 ```
 
 ## Feature Overview

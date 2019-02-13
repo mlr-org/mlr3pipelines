@@ -13,28 +13,39 @@ In principle. `mlr3pipelines` is about making the following operation possible:
 
 ```r
 task = mlr_tasks$get("iris")
-#> Error in eval(expr, envir, enclos): object 'mlr_tasks' not found
 learner = mlr_learners$get("classif.rpart")
-#> Error in eval(expr, envir, enclos): object 'mlr_learners' not found
 holdout = mlr_resamplings$get("holdout")$instantiate(task)
-#> Error in eval(expr, envir, enclos): object 'mlr_resamplings' not found
 
-graph =
-  mlr_pipeops$get("pca") %>>%
-  mlr_pipeops$get("filter",
-    filter = mlr3featsel::FilterVariance$new(),
-    param_vals = list(frac = 0.5)) %>>%
-  mlr_pipeops$get("learner", learner = learner)
-#> Error in mlr_pipeops$get("pca") %>>% mlr_pipeops$get("filter", filter = mlr3featsel::FilterVariance$new(), : could not find function "%>>%"
+pca = mlr_pipeops$get("pca")
+filter = mlr_pipeops$get("filter",
+  filter = mlr3featsel::FilterVariance$new(),
+  param_vals = list(frac = 0.5))
+learner_po =  mlr_pipeops$get("learner", learner = learner)
+
+graph = pca %>>% filter %>>% learner_po
 
 print(graph)
-#> Error in print(graph): object 'graph' not found
+#> Graph with 3 PipeOps:
+#>              ID         State       sccssors      prdcssors
+#>             pca <<UNTRAINED>> FilterVariance               
+#>  FilterVariance <<UNTRAINED>>          rpart            pca
+#>           rpart <<UNTRAINED>>                FilterVariance
 
-graph$train(task$clone()$filter(ho$train_set(1)))
-#> Error in eval(expr, envir, enclos): object 'graph' not found
+graph$train(task$clone()$filter(holdout$train_set(1)))
+#> $rpart.output
+#> NULL
 
-graph$predict(task$clone()$filter(ho$test_set(1)))
-#> Error in eval(expr, envir, enclos): object 'graph' not found
+graph$predict(task$clone()$filter(holdout$test_set(1)))
+#> $rpart.output
+#> <PredictionClassif> for 50 observations:
+#>     row_id  response     truth
+#>  1:      3    setosa    setosa
+#>  2:      6    setosa    setosa
+#>  3:      7    setosa    setosa
+#> ---                           
+#> 48:    143 virginica virginica
+#> 49:    145 virginica virginica
+#> 50:    148 virginica virginica
 ```
 
 ## Feature Overview
@@ -61,7 +72,6 @@ The graph is built using single processing units---"`PipeOp`s"---that are concat
 
 ```r
 library("paradox")
-#> Loading required package: data.table
 library("mlr3")
 library("mlr3pipelines")
 library("mlr3learners")
@@ -119,13 +129,13 @@ tuner$tune()
 
 tuner$tune_result()$values[names(ps$params)]
 #> $branch.selection
-#> [1] "pca"
+#> [1] "scale"
 #> 
 #> $rpart.rpart.maxdepth
 #> [1] 10
 ```
 
-This would tell us that the "pca" preprocessing branch with `rpart` `maxdepth`=10 performs well; although the usage of only few small resampling folds makes the result very stochastic.
+This would tell us that the "scale" preprocessing branch with `rpart` `maxdepth`=10 performs well; although the usage of only few small resampling folds makes the result very stochastic.
 
 ## Documentation
 
