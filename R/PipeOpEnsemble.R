@@ -131,7 +131,7 @@ mlr_pipeops$add("modelavg", PipeOpModelAvg)
 #' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
 #' For help with nloptr see [`nloptr::nloptr.print.options()`].
 #' Returns a single [`PredictionRegr`].
-#' By default, optimizes [`MeasureRegrMSE`] and only allows weights between [0, 1].
+#' By default, optimizes [`MeasureRegrMSE`] and only allows weights between 0 and 1.
 #' Used for regression [`Prediction`]s.
 #'
 #' @family PipeOps
