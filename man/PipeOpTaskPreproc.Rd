@@ -20,7 +20,7 @@ manipulated in-place, and should not be cloned.
 
 If \code{can_subset_cols} is \code{TRUE}, then the hyperparameter \code{affect_columns}
 is added, which is a function that takes the Task as input and returns
-a logical as output, indicating what columns to choose.
+a \code{character} as output, indicating what columns to choose.
 }
 \section{Public Members / Active Bindings}{
 
@@ -103,13 +103,15 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},
   \code{\link{mlr_pipeop_copy}},
-  \code{\link{mlr_pipeop_downsample}},
+  \code{\link{mlr_pipeop_encode}},
   \code{\link{mlr_pipeop_featureunion}},
+  \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},
   \code{\link{mlr_pipeop_undersample}},
   \code{\link{mlr_pipeops}}

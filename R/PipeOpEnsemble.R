@@ -78,7 +78,7 @@ PipeOpWtModelAvg = R6Class("PipeOpWtModelAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, weights = NULL, id = "PipeOpWtModelAvg", param_vals = list(),
+    initialize = function(innum, weights = NULL, id = "modelavg", param_vals = list(),
       param_set = ParamSet$new(), packages = character(0)) {
       super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
       if (is.null(weights)) weights = rep(1/innum, innum)

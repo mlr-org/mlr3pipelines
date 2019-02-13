@@ -12,7 +12,7 @@
 
 <meta name="author" content="Author" />
 
-<meta name="date" content="2019-02-10" />
+<meta name="date" content="2019-02-12" />
 
 <title>Showcase: A simple pipeline</title>
 
@@ -302,7 +302,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Showcase: A simple pipeline</h1>
 <h4 class="author"><em>Author</em></h4>
-<h4 class="date"><em>2019-02-10</em></h4>
+<h4 class="date"><em>2019-02-12</em></h4>
 
 
 
@@ -322,10 +322,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>A list of available PipeOps can be obtained from</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">  <span class="kw">library</span>(mlr3pipelines)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">  mlr_pipeops<span class="op">$</span><span class="kw">ids</span>()</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;  [1] &quot;branch&quot;       &quot;chunk&quot;        &quot;copy&quot;         &quot;downsample&quot;  </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;  [5] &quot;featureunion&quot; &quot;learner&quot;      &quot;learner_cv&quot;   &quot;majorityvote&quot;</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt;  [9] &quot;null&quot;         &quot;pca&quot;          &quot;scale&quot;        &quot;unbranch&quot;    </span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; [13] &quot;undersample&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;  [1] &quot;branch&quot;       &quot;chunk&quot;        &quot;copy&quot;         &quot;encode&quot;      </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;  [5] &quot;featureunion&quot; &quot;filter&quot;       &quot;learner&quot;      &quot;learner_cv&quot;  </span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt;  [9] &quot;majorityvote&quot; &quot;modelavg&quot;     &quot;null&quot;         &quot;pca&quot;         </span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; [13] &quot;scale&quot;        &quot;subsample&quot;    &quot;unbranch&quot;     &quot;undersample&quot;</span></a></code></pre></div>
 <p>First we define the required PipeOps:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">  op1 =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">  op2 =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>
@@ -361,13 +361,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; $rpart.output</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; &lt;PredictionClassif&gt; for 30 observations:</span></a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;     row_id  response     truth</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;  1:      6    setosa    setosa</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;  2:      7    setosa    setosa</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;  3:     18    setosa    setosa</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;  1:      1    setosa    setosa</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;  2:      5    setosa    setosa</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;  3:      8    setosa    setosa</span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; ---                           </span></a>
 <a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; 28:    134 virginica virginica</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; 29:    135 virginica virginica</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; 30:    136 virginica virginica</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; 29:    144 virginica virginica</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; 30:    146 virginica virginica</span></a></code></pre></div>
 </div>
 <div id="using-the-pipeline-as-an-mlr3-learner" class="section level2">
 <h2>Using the Pipeline as an mlr3 learner</h2>
@@ -391,13 +391,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb11-3" data-line-number="3">  e<span class="op">$</span>prediction</a>
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; &lt;PredictionClassif&gt; for 30 observations:</span></a>
 <a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;     row_id  response     truth</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;  1:      6    setosa    setosa</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;  2:      7    setosa    setosa</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;  3:     18    setosa    setosa</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;  1:      1    setosa    setosa</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;  2:      5    setosa    setosa</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;  3:      8    setosa    setosa</span></a>
 <a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; ---                           </span></a>
 <a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; 28:    134 virginica virginica</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; 29:    135 virginica virginica</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; 30:    136 virginica virginica</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; 29:    144 virginica virginica</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; 30:    146 virginica virginica</span></a></code></pre></div>
 <p>and scoring:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">  e<span class="op">$</span><span class="kw">score</span>()</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; INFO [mlr3] Scoring predictions of learner 'scale.pca.rpart' on task 'iris' ...</span></a>

@@ -8,7 +8,7 @@ test_that("linear graph", {
   # FIXME: we should  "dummy" ops, so we can change properties of the ops at will
   # we should NOT use PipeOpNULL, because we want to check that $train/$predict actually does something.
   # FIXME: we should packages of the graph
-  op_ds = PipeOpDownsample$new()
+  op_ds = PipeOpSubsample$new()
   op_pca = PipeOpPCA$new()
   op_lrn = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
   g$add_pipeop(op_ds)
@@ -16,11 +16,11 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  g$add_edge("downsample", "pca")
+  g$add_edge("subsample", "pca")
 
   expect_graph(g)
 
-  expect_output(print(g), "Graph with 2 PipeOps.*downsample.*UNTRAINED.*pca.*UNTRAINED")
+  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*UNTRAINED.*pca.*UNTRAINED")
 
 
 
@@ -28,7 +28,7 @@ test_that("linear graph", {
   x = g$train(inputs)
   expect_task(x[[1]])
 
-  expect_output(print(g), "Graph with 2 PipeOps.*downsample.*list.*pca.*prcomp")
+  expect_output(print(g), "Graph with 2 PipeOps.*subsample.*list.*pca.*prcomp")
 
   out = g$predict(inputs)
   expect_task(x[[1]])
@@ -37,8 +37,8 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  expect_error(g$add_edge("downsample", "rpart"),
-    "Channel.*output.*of node.*downsample.*already connected to channel.*input.*of node pca")
+  expect_error(g$add_edge("subsample", "rpart"),
+    "Channel.*output.*of node.*subsample.*already connected to channel.*input.*of node pca")
 
   expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*rpart.*already in Graph")
 
@@ -65,8 +65,6 @@ test_that("complex graph", {
       PipeOpDebugBasic$new("basicbottom"))) %>>%
     PipeOpDebugMulti$new(3, 1, "debug3")
 
-  # it's a beauty: biggraph$plot()
-
   lines = strsplit(capture_output(biggraph$train(1)), "\n")[[1]]
 
   expect_set_equal(lines,
@@ -79,7 +77,7 @@ test_that("complex graph", {
       "Training debug2 with input list(input_1 = 4, input_2 = 4)",
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"))
 
-  pdf(file = NULL)  # don't show plot. It is annoying, and triggers issue mlr-org/mlr3#158
+  pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
 
@@ -145,6 +143,11 @@ test_that("input / output lists and naming", {
   # input should be debug2.1, debug2.2, debug3.3
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
+
+  pdf(file = NULL)  # don't show plot. It is annoying.
+  gr$plot()
+  dev.off()
+
 
   # test output 1: debug.multi was already trained above
   expect_output(print(gr),

@@ -11,9 +11,11 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
+  cache = FALSE,
   collapse = TRUE,
   comment = "#>"
 )
+set.seed(8008135)
 ```
 
 Leveraging the different operations available to connect `PipeOps` to very powerfull graphs.
@@ -45,11 +47,16 @@ at a single, better predictor.
 
 We can achieve this by downsampling our data before training a learner, repeating this for say $10$ times and then performing a majority vote on the predictions.
 
+<<<<<<< HEAD
 First, we create a simple pipeline, that uses
 `PipeOpDownsample` before a `PipeOpLearner` is trained:
+=======
+First, we create a simple pipeline, that uses 
+`PipeOpSubsample` before a `PipeOpLearner` is trained: 
+>>>>>>> origin/master
 
 ```{r}
-  single_pred = PipeOpDownsample$new() %>>%
+  single_pred = PipeOpSubsample$new() %>>%
     PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 ```
 

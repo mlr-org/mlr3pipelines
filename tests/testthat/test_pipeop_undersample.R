@@ -7,13 +7,13 @@ test_that("PipeOpUndersample - basic properties", {
   train_pipeop(op, inputs = list(task))
   predict_pipeop(op, inputs = list(task))
 
-  expect_datapreproc_pipeop_class(PipeOpDownsample, task = task,
+  expect_datapreproc_pipeop_class(PipeOpSubsample, task = task,
     predict_like_train = FALSE, deterministic_train = FALSE)
 })
 
 test_that("PipeOpUndersample", {
   op = PipeOpUndersample$new()
-  op$param_set$values = list(frac = 0.5)
+  op$param_set$values = list(frac = 0.5, all = FALSE)
   task = mlr_tasks$get("pima")
   nt = op$train(list(task))[[1L]]
 
@@ -23,9 +23,33 @@ test_that("PipeOpUndersample", {
 
 
 test_that("PipeOpUndersample: rate and multiple classes", {
+
   task = mlr_tasks$get("zoo")
   op = PipeOpUndersample$new()
-  table(op$train(list(task))[[1L]]$truth())
+  intbl = table(task$truth())
+
   nt = op$train(list(task))[[1L]]
-  expect_equal(table(nt$truth())[["mammal"]], 10L)
+
+  outtbl = intbl
+  outtbl[outtbl > 10] = 10
+  expect_equal(table(nt$truth()), outtbl)
+
+  op$param_set$values$ratio = NULL
+  op$param_set$values$frac = 0.1
+
+  nt = op$train(list(task))[[1L]]
+
+  outtbl = intbl
+  outtbl[outtbl > 4] = 4
+  expect_equal(table(nt$truth()), outtbl)
+
+  op$param_set$values$all = FALSE
+
+  nt = op$train(list(task))[[1L]]
+
+  outtbl = intbl
+  outtbl[which.max(outtbl)] = 4
+  expect_equal(table(nt$truth()), outtbl)
+
+
 })

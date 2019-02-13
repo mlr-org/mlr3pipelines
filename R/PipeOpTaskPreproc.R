@@ -14,7 +14,7 @@
 #'
 #' If `can_subset_cols` is `TRUE`, then the hyperparameter `affect_columns`
 #' is added, which is a function that takes the Task as input and returns
-#' a logical as output, indicating what columns to choose.
+#' a `character` as output, indicating what columns to choose.
 #'
 #' @section Public Members / Active Bindings:
 #' * `intasklayout`  :: [`data.table`] with columns `id`, `type` \cr
@@ -91,12 +91,13 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     outtasklayout = NULL,
     affected_cols = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0)) {
       private$.can_subset_cols = can_subset_cols
       private$.affect_columns = NULL
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "Task", predict = "Task")
+        output = data.table(name = "output", train = "Task", predict = "Task"),
+        packages = packages
       )
     },
 
@@ -104,7 +105,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$affect_columns)
       if (do_subset) {
-        self$affected_cols = intask$feature_names[self$affect_columns(intask)]
+        self$affected_cols = self$affect_columns(intask)
         # FIXME: this fails when something is both a feature and something else
         remove_cols = setdiff(intask$feature_names, self$affected_cols)
         intask$set_col_role(remove_cols, character(0))
@@ -149,7 +150,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
-      dt = as.data.table(self$train_dt(dt))
+      dt = as.data.table(self$train_dt(dt, task_levels(task, cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
@@ -159,13 +160,13 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
-      dt = as.data.table(self$predict_dt(dt))
+      dt = as.data.table(self$predict_dt(dt, task_levels(task, cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
-    train_dt = function(dt) stop("Abstract."),
+    train_dt = function(dt, levels) stop("Abstract."),
 
-    predict_dt = function(dt) stop("Abstract."),
+    predict_dt = function(dt, levels) stop("Abstract."),
 
     select_cols = function(task) task$feature_names
   ),
@@ -263,19 +264,22 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
           return(list())
         }
         dt = task$data(cols = cols)
-        self$get_state_dt(dt)
+        self$get_state_dt(dt, task_levels(task, cols))
       },
 
       transform = function(task) {
         cols = private$.dt_columns
+        if (!length(cols)) {
+          return(task)
+        }
         dt = task$data(cols = cols)
-        dt = as.data.table(self$transform_dt(dt))
+        dt = as.data.table(self$transform_dt(dt, task_levels(task, cols)))
         task$select(setdiff(task$feature_names, cols))$cbind(dt)
       },
 
-      get_state_dt = function(dt) list(),
+      get_state_dt = function(dt, levels) list(),
 
-      transform_dt = function(dt) stop("Abstract")
+      transform_dt = function(dt, levels) stop("Abstract")
   )
 )
 

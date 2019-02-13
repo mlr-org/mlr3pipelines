@@ -138,7 +138,12 @@ Graph = R6Class("Graph",
       if (op$id %in% names(self$pipeops))
         stopf("PipeOp with id '%s' already in Graph", op$id)
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
-      private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))  # FIXME: $add() when it becomes available
+
+      if (!is.null(private$.param_set)) {
+        # param_set is built on-demand; if it has not been requested before, its value may be NULL
+        # and we don't need to add anything.
+        private$.param_set$add(self$pipeops[[op$id]]$param_set)
+      }
       invisible(self)
     },
 
@@ -175,6 +180,18 @@ Graph = R6Class("Graph",
       if (is.numeric(dst_channel))
         dst_channel = self$pipeops[[dst_id]]$input$name[dst_channel]
 
+      types_src = self$pipeops[[src_id]]$output[get("name") == src_channel, c("train", "predict")]
+      types_dst = self$pipeops[[dst_id]]$input[get("name") == dst_channel, c("train", "predict")]
+
+      if (!are_types_compatible(types_src$train, types_dst$train)) {
+        stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
+          src_id, types_src$train, dst_id, types_dst$train)
+      }
+      if (!are_types_compatible(types_src$predict, types_dst$predict)) {
+        stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
+          src_id, types_src$predict, dst_id, types_dst$predict)
+      }
+
       bad_rows = (self$edges$src_id == src_id & self$edges$src_channel == src_channel) |
         (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel)
       if (any(bad_rows)) {
@@ -204,6 +221,13 @@ Graph = R6Class("Graph",
         extra_vertices = names(self$pipeops)
       } else {
         df = self$edges[, list(from = src_id, to = dst_id)]
+        df = rbind(df, self$input[, list(from = "<INPUT>", to = op.id)])
+        output = self$output
+        if (nrow(output) > 1) {
+          df = rbind(df, output[, list(from = op.id, to = paste0("<OUTPUT>\n", name))])
+        } else {
+          df = rbind(df, output[, list(from = op.id, to = "<OUTPUT>")])
+        }
         ig = igraph::graph_from_data_frame(df)
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }

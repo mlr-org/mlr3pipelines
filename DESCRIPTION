@@ -33,7 +33,8 @@ Suggests:
     testthat,
     kernlab,
     ggplot2,
-    mlr3learners
+    mlr3learners,
+    mlr3featsel
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
@@ -45,7 +46,8 @@ VignetteBuilder: knitr
 Remotes:
     mlr-org/mlr3,
     mlr-org/mlr3misc,
-    mlr-org/paradox@a7c416bc22d9
+    mlr-org/paradox,
+    mlr-org/mlr3featsel
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -57,18 +59,21 @@ Collate:
     'PipeOpChunk.R'
     'PipeOpCopy.R'
     'PipeOpTaskPreproc.R'
-    'PipeOpDownsample.R'
+    'PipeOpEncode.R'
     'PipeOpEnsemble.R'
     'PipeOpFeatureUnion.R'
+    'PipeOpFilter.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
     'PipeOpNULL.R'
     'PipeOpPCA.R'
     'PipeOpScale.R'
+    'PipeOpSubsample.R'
     'PipeOpUnBranch.R'
     'PipeOpUndersample.R'
     'assert_graph.R'
     'greplicate.R'
     'gunion.R'
     'operators.R'
+    'typecheck.R'
     'zzz.R'
