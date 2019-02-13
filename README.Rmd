@@ -39,6 +39,7 @@ To show the power of `mlr3pipelines`, the following example shows how to build a
 
 The graph is built using single processing units---"`PipeOp`s"---that are concatenated using the piping operator "`%>>%`". Note the difference from the [`magrittr`](https://github.com/tidyverse/magrittr) package's operator "`%>%`".
 ```{r}
+library("paradox")
 library("mlr3")
 library("mlr3pipelines")
 library("mlr3learners")
@@ -62,7 +63,7 @@ graph =
   mlr_pipeops$get("learner", mlr_learners$get("regr.glmnet"))
 ```
 The topology of this graph can most easily be seen using the `Graph`'s `$plot` method:
-```{r}
+```{r graphplot}
 graph$plot()
 ```
 
@@ -92,7 +93,7 @@ tuner$tune()
 tuner$tune_result()$values[names(ps$params)]
 ```
 
-This would tell us that the `r tuner$tune_result()$values$branch.selection` preprocessing branch with `rpart` `maxdepth` `r tuner$tune_result()$values$rpart.rpart.maxdepth` performs well; although the usage of only few small resampling folds makes the result very stochastic.
+This would tell us that the "`r tuner$tune_result()$values$branch.selection`" preprocessing branch with `rpart` `maxdepth`=`r tuner$tune_result()$values$rpart.rpart.maxdepth` performs well; although the usage of only few small resampling folds makes the result very stochastic.
 
 ## Documentation
 

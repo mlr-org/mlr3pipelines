@@ -3,68 +3,120 @@
 [![Travis build status](https://travis-ci.com/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.com/mlr-org/mlr3pipelines)
 [![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
 
-## Target
-
-This package aims to fill the gap between loading the data and fitting models.
-
-**This entails not only:**
-
-- Preprocessing
-- Splitting / Combining Features
-- Imputation
-- Down/Upsampling
-
-**but also:**
-
-- Bagging
-- Tuning over preprocessing pipelines
-- Stacking
-- Ensembling
-
-A predecessor to this package is the [mlrCPO-package](https://github.com/mlr-org/mlrCPO).
-We intend to replicate most of its functionality, i.e.
-
-- simple feature transform, with hyperpars
-- `pca, all scales, all filters, all imputes, cvlearner, cpoDummyEncode`
-- `cpoSelect cpoCollapseFact cpoProbEncode cpoImpactEncode cpoSpatialSign`
-- `cpoCbind cpoMultiplex cpoWrap`
 
 
-## Design Documents
+## What is `mlr3pipelines`?
 
-A rough draft of the design document, and some first usecases
-can be found in **concept.txt**.
-A series of usecases and PipeOperators can be found in usecases.md.
+`mlr3pipelines` is a [dataflow programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit for machine learning in `R` utilising the [`mlr3`](https://github.com/mlr-org/mlr3) package. Machine learning workflows can be written as directed "Graphs" that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the [`mlr3tuning`](https://github.com/mlr-org/mlr3tuning) package, it is possible to simultaneously optimize parameters of multiple processing units.
 
-## PipeOperators and Status
+## Feature Overview
 
-- **Meta:**
-  - [x] `PipeOpBranch`                          | broadcast
-  - [x] `PipeOpChunk`                           | broadcast
-  - [x] `PipeOpUnbranch`                        | aggregate
-  - [x] `PipeOpFeatureUnion`                    | aggregate
-  - [x] `PipeOpNULL`                            | linear
-  - [x] `PipeOpCopy`                            | broadcast
+Single computational steps can be represented as so-called **`PipeOp`s**, which can then be connected with directed edges in a **`Graph`**. The scope of `mlr3pipelines` is still growing; currently supported features are:
 
-                                              train: input --store-params--> output        predict: input --use-params--> output
-- **Learner:**
-  - [x] `PipeOpLearner`                         | linear    | task --model--> NULL           | task --model--> prediction
-  - [X] `PipeOpLearnerCV`                       | linear    | task --model--> cvtask         | task --model--> prediction
-  - [X] `PipeOpModelAverage`                    | aggregate | task --NULL--> NULL            | list-of-prediction --NULL--> prediction
+* Simple preprocessing operations: `PipeOpScale`, `PipeOpPCA`.
+* Feature filtering: `PipeOpFilter`.
+* Data feature type conversion: `PipeOpEncode`.
+* Undersampling / subsampling for speed and outcome class imbalance handling: `PipeOpSubsample`, `PipeOpUndersample`.
+* `mlr3` `Learner` as operation in a `Graph`, both returning a "`Prediction`" (`PipeOpLearner`) and an added data feature for super learning (`PipeOpLearnerCV`).
+* Simple ensemble methods on `Prediction`s: `PipeOpMajorityVote`, `PipeOpModelAvg`.
+* Simultaneous alternative paths with same input data: `PipeOpCopy`.
+* Combination of data from alternative paths: `PipeOpFeatureUnion`.
+* Optional alternative paths, chosen by `Graph` hyperparameter: `PipeOpBranch`, `PipeOpUnbranch`.
 
-- **Preprocessing:**
-  - [x] `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
-  - [x] `PipeOpScale`                           | linear    | task --params--> task          | task --params--> task
-  - [x] `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
-  - [ ] `PipeOpUpsample`                        | linear    | task --NULL--> task            | task --NULL--> task 
-  - [ ] `PipeOpImpute`                        | linear    | task --NULL--> task            | task --NULL--> task
-  
-- **Target Operators:**
-  - [ ] `PipeOpThreshold`                       | linear    | cvtask --threshold--> NULL     | prediction --threshold--> prediction
-  - [ ] `PipeOpTrafoY`                          | linear    | task --NULL--> task            | prediction --NULL--> prediction
-  - [ ] `PipeOpMultiClass2Binary`               | broadcast | task --NULL--> list-of-task    | task --NULL--> list-of-tasks
-  - [ ] `PipeOpSetTarget`                       | linear    | task --NULL--> task            | task --NULL--> task
+Graphs can be collected into a "`GraphLearner`" object that behave like `mlr3` `Learners`, and can therefore be used both for model fitting and prediction, and can even be used in hyperparameter optimization.
+
+## Example
+
+To show the power of `mlr3pipelines`, the following example shows how to build a "`Graph`" that chooses between multiple preprocessing methods, fits both a classification tree (from the `rpart` package) and a linear model (using `R`'s `lm()` function), and performs "stacking"---using the predictions of these two models as covariates for a third machine learning method---with penalised linear regression (using the `glmnet` package). (The example was chosen to show the expressiveness of the `Graph` language, not to perform particularly well). For a detailed explanation of all steps involved see the [documentation](documentation).
+
+The graph is built using single processing units---"`PipeOp`s"---that are concatenated using the piping operator "`%>>%`". Note the difference from the [`magrittr`](https://github.com/tidyverse/magrittr) package's operator "`%>%`".
+
+```r
+library("paradox")
+#> Loading required package: data.table
+library("mlr3")
+library("mlr3pipelines")
+library("mlr3learners")
+
+graph =
+  mlr_pipeops$get("branch", c("null", "pca", "scale")) %>>%
+  gunion(list(
+      mlr_pipeops$get("null", id = "null1"),
+      mlr_pipeops$get("pca"),
+      mlr_pipeops$get("scale")
+  )) %>>%
+  mlr_pipeops$get("unbranch", c("null", "pca", "scale")) %>>%
+  mlr_pipeops$get("copy", 3) %>>%
+  gunion(list(
+      mlr_pipeops$get("null", id = "null2"),
+      mlr_pipeops$get("learner_cv", mlr_learners$get("regr.rpart")),
+      mlr_pipeops$get("learner_cv", mlr_learners$get("regr.lm"))
+  )) %>>%
+  mlr_pipeops$get("featureunion", 3) %>>%
+  mlr_pipeops$get("encode", param_vals = list(method = "treatment")) %>>%
+  mlr_pipeops$get("learner", mlr_learners$get("regr.glmnet"))
+```
+The topology of this graph can most easily be seen using the `Graph`'s `$plot` method:
+
+```r
+graph$plot()
+```
+
+![plot of chunk graphplot](figure/graphplot-1.png)
+
+The graph can itself be used to perform model fitting and prediction, but in our example we want to perform parameter tuning first, using the [`mlr3tuning`](https://github.com/mlr-org/mlr3tuning) package. For this we wrap the `Graph` in a `GraphLearner`, which behaves mostly like
+a `mlr3` "`Learner`" object. For simplicity, we decide only on a few parameters we want to tune: the preprocessing to perform (`branch.selection`), and the maximum tree depth (`regr.rpart.regr.rpart.maxdepth`).
+
+```r
+learner = GraphLearner$new(graph, task_type = "regr")
+
+ps = ParamSet$new(list(
+  ParamFct$new("branch.selection", levels = c("pca", "scale", "null")),
+  ParamInt$new("rpart.rpart.maxdepth", lower = 1, upper = 10)
+))
+
+task = mlr_tasks$get("bh")
+task$select(task$feature_types[type != "factor", id])
+
+resampling = mlr_resamplings$get("cv", param_vals = list(folds = 3))
+```
 
 
-### Old Specs Doc:
-(https://docs.google.com/document/d/1JbzulUkLrMS0Xyk38NF5SyhpAfr2FIFsh9FJ8yiDtbE/edit?usp=sharing)
+```r
+library("mlr3tuning")
+ff = FitnessFunction$new(task, learner, resampling, ps)
+tuner = TunerGridSearch$new(ff, TerminatorEvaluations$new(1), resolution = 3)
+
+tuner$tune()
+
+tuner$tune_result()$values[names(ps$params)]
+#> $branch.selection
+#> [1] "pca"
+#> 
+#> $rpart.rpart.maxdepth
+#> [1] 10
+```
+
+This would tell us that the "pca" preprocessing branch with `rpart` `maxdepth`=10 performs well; although the usage of only few small resampling folds makes the result very stochastic.
+
+## Documentation
+
+The easiest way to get started is reading some of the vignettes that are shipped with the package, which can also be viewed online:
+
+* [Introduction and Basic Concepts](https://mlr-org.github.io/mlr3pipelines/articles/basic_concepts.html)
+* [Linear Preprocessing Pipelines](https://mlr-org.github.io/mlr3pipelines/articles/a_simple_pipeline.html)
+* [Alternative Path Branching](https://mlr-org.github.io/mlr3pipelines/articles/branching.html)
+* [Ensemble Methods](https://mlr-org.github.io/mlr3pipelines/articles/stacking_and_bagging.html)
+* [Custom `PipeOp`s](https://mlr-org.github.io/mlr3pipelines/articles/create_a_custom_pipeop.html)
+
+## Bugs, Questions, Feedback
+
+`mlr3pipelines` is a free and open source software project that encourages participation and feedback. If you have any issues, questions, suggestions or feedback, please do not hesitate to open an "issue" about it on the GitHub page!
+
+In case of problems / bugs, it is often helpful if you provide a "minimum working example" that showcases the behaviour (but don't worry about this if the bug is obvious).
+
+Please understand that the ressources of the project are limited: response may sometimes be delayed by a few days, and some feature suggestions may be rejected if they are deemed too tangential to the vision behind the project.
+
+## Similar Projects
+
+A predecessor to this package is the [mlrCPO-package](https://github.com/mlr-org/mlrCPO), which works with `mlr` 2.x. Other packages that provide, to varying degree, some preprocessing functionality or machine learning domain specific language, are the [caret](https://github.com/topepo/caret) package and the related [recipes](https://tidymodels.github.io/recipes/) project and the [dplyr](https://github.com/tidyverse/dplyr) package.
