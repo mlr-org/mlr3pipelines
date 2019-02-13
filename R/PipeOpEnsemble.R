@@ -42,13 +42,19 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       if (!self$measure$minimize) res = -res
       res
     },
-    optimize_objfun_nlopt = function(inputs, algorithm = "NLOPT_LN_COBYLA", xtol_rel = 10^-8) {
+    optimize_objfun_nlopt = function(inputs) {
       requireNamespace("nloptr")
-      init_weights = rep(1, length(inputs))
+      init_weights = rep(1 / length(inputs), length(inputs))
+      pv = self$param_set$values
+      eval_g_ineq =
+      opts = pv[which(!(names(pv) %in% c("measure", "eval_g_ineq", "lb", "ub")))]
       opt = nloptr::nloptr(
         x0 = init_weights,
         eval_f = private$objfun,
-        opts = list("algorithm" = "NLOPT_LN_COBYLA", xtol_rel = 10^-8),
+        lb = rep(pv$lb, length(inputs)),
+        ub = rep(pv$ub, length(inputs)),
+        eval_g_ineq = pv$eval_g_ineq,
+        opts = opts,
         inputs = inputs
       )
       return(opt$solution)
@@ -125,7 +131,7 @@ mlr_pipeops$add("modelavg", PipeOpModelAvg)
 #' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
 #' For help with nloptr see [`nloptr::nloptr.print.options()`].
 #' Returns a single [`PredictionRegr`].
-#' Uses [`MeasureRegrMSE`] as a default.
+#' By default, optimizes [`MeasureRegrMSE`] and only allows weights between [0, 1].
 #' Used for regression [`Prediction`]s.
 #'
 #' @family PipeOps
@@ -149,9 +155,12 @@ PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
         ParamDbl$new("ftol_abs", default = 0, lower = 0, upper = Inf),
         ParamDbl$new("stopval", default = -Inf, lower = -Inf, upper = Inf),
         ParamInt$new("maxeval", default = 100, lower = 1L, upper = Inf),
-        ParamInt$new("maxtime", default = -1L, lower = 0L, upper = Inf, special_vals = list(-1L))
-        # FIXME: Possibly implement more, currently not important
+        ParamInt$new("maxtime", default = -1L, lower = 0L, upper = Inf, special_vals = list(-1L)),
+        ParamDbl$new("lb", default = 0, lower = -Inf, upper = Inf),
+        ParamDbl$new("ub", default = 1, lower = -Inf, upper = Inf)
+        # FIXME: Possibly implement more aprams, currently not important
       ))
+      ps$values = list(measure = NULL, algorithm = "NLOPT_LN_BOBYQA", xtol_rel = 10^-8, lb = 0, ub = 1)
       super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
     },
     train = function(inputs) {
@@ -279,7 +288,7 @@ mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
 #' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
 #' For help with nloptr see [`nloptr::nloptr.print.options()`].
 #' Returns a single [`PredictionClassif`].
-#' As a default, optimizes [`MeasureClassifMMCE`].
+#' As a default, optimizes [`MeasureClassifMMCE`] and only allows weights between [0, 1].
 #' Used for classification [`Prediction`]s.
 #'
 #' @family PipeOps
@@ -304,9 +313,12 @@ PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
         ParamDbl$new("ftol_abs", default = 0, lower = 0, upper = Inf),
         ParamDbl$new("stopval", default = -Inf, lower = -Inf, upper = Inf),
         ParamInt$new("maxeval", default = 100, lower = 1L, upper = Inf),
-        ParamInt$new("maxtime", default = -1L, lower = 0L, upper = Inf, special_vals = list(-1L))
-        # FIXME: Possibly implement more, currently not important
+        ParamInt$new("maxtime", default = -1L, lower = 0L, upper = Inf, special_vals = list(-1L)),
+        ParamDbl$new("lb", default = 0, lower = -Inf, upper = Inf),
+        ParamDbl$new("ub", default = 1, lower = -Inf, upper = Inf)
+        # FIXME: Possibly implement more aprams, currently not important
       ))
+      ps$values = list(measure = NULL, algorithm = "NLOPT_LN_BOBYQA", xtol_rel = 10^-8, lb = 0, ub = 1)
       super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
     },
     train = function(inputs) {
