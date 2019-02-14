@@ -69,8 +69,8 @@ jobs:
         - git ls-files --others  | grep '^inst/doc/.*\.html$' | xargs git add
         - git add --force man/*
         - git add DESCRIPTION NAMESPACE
-	- git add figure
-	- git add README.md
+        - git add figure
+        - git add README.md
         - git commit -m "update auto-generated documentation [ci skip]" || true
         - git push
 
