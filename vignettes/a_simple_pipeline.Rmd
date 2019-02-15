@@ -53,7 +53,7 @@ A list of available PipeOps can be obtained from
 
 ```{r}
   library(mlr3pipelines)
-  mlr_pipeops$ids()
+  mlr_pipeops$keys()
 ```
 
 First we define the required PipeOps:
