@@ -44,6 +44,6 @@ task_filter_ex = function(task, row_ids) {
   if (length(addedrows)) {
     task$rbind(task$data(rows = addedrows))
   }
-  task$filter(row_ids)
+  task$filter(as.integer(row_ids))  # yes, mlr3 wants actual integers m(
 }
 
