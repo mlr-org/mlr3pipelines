@@ -1,6 +1,6 @@
 ---
 title: "Showcase: Bagging and Stacking"
-author: "Author"
+author: "Florian Pfisterer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
