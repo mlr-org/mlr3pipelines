@@ -19,9 +19,9 @@
   - [x] `PipeOpPCA`                             | linear    | task --params--> task          | task --params--> task
   - [x] `PipeOpScale`                           | linear    | task --params--> task          | task --params--> task
   - [x] `PipeOpDownsample`                      | linear    | task --NULL--> task            | task --NULL--> task
-  - [ ] `PipeOpUpsample`                        | linear    | task --NULL--> task            | task --NULL--> task 
+  - [x] `PipeOpUpsample`                        | linear    | task --NULL--> task            | task --NULL--> task
   - [ ] `PipeOpImpute`                        | linear    | task --NULL--> task            | task --NULL--> task
-  
+
 - **Target Operators:**
   - [ ] `PipeOpThreshold`                       | linear    | cvtask --threshold--> NULL     | prediction --threshold--> prediction
   - [ ] `PipeOpTrafoY`                          | linear    | task --NULL--> task            | prediction --NULL--> prediction

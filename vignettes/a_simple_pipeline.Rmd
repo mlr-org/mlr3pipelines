@@ -1,6 +1,6 @@
 ---
 title: "Showcase: A simple pipeline"
-author: "Author"
+author: "Florian Pfisterer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -23,7 +23,7 @@ This vignette showcases the general syntax and semantic behind `mlr3pipelines`.
 
 ## An introduction to PipeOperators
 
-In this example, we create a ĺinear Pipeline. 
+In this example, we create a ĺinear Pipeline.
 After scaling all input features, we rotate our data using principal component analysis.
 After this transformation, we use a simple Decision Tree learner for classification.
 
@@ -35,7 +35,7 @@ This object contains the famous iris dataset and some meta-information, such as 
   task = mlr_tasks$get("iris")
 ```
 
-We quickly split our data into a train and a test set: 
+We quickly split our data into a train and a test set:
 ```{r}
   test.idx = sample(seq_len(task$nrow), 30)
   train.idx = setdiff(seq_len(task$nrow), test.idx)
@@ -64,7 +64,7 @@ First we define the required PipeOps:
   op3 = PipeOpLearner$new(learner = mlr_learners$get("classif.rpart"))
 ```
 
-We can quickly visualize what we want to achieve: 
+We can quickly visualize what we want to achieve:
 
 ```{r, echo = FALSE}
 library(ggplot2)
@@ -80,9 +80,9 @@ ggplot(df) +
   annotate("segment", x = -1, xend = -0.3, y = 1, yend = 1, size = 2L) +
   annotate("segment", x = 2.3, xend = 3, y = 1, yend = 1, size = 2L) +
   geom_label(aes(x = x, y = y, label = lab)) +
-  coord_cartesian(xlim = c(-2, 4), ylim = c(0.5, 1.5)) +
-  annotate("label", x = 0.5, y = 1, label = "%>>%") +
-  annotate("label", x = 1.5, y = 1, label = "%>>%") +
+  coord_cartesian(xlim = c(-1.5, 3.5), ylim = c(0.5, 1.5)) +
+  annotate("label", x = 0.5, y = 1, label = "%>>%", size = 2.5) +
+  annotate("label", x = 1.5, y = 1, label = "%>>%", size = 2.5) +
   scale_fill_manual(values = c("red", NA)) +
   guides(fill = FALSE) +
   theme_minimal() +
@@ -96,7 +96,7 @@ ggplot(df) +
 
 ### A quick glance into a PipeOp
 
-In order to get a better understanding of what the respective PipeOps do, 
+In order to get a better understanding of what the respective PipeOps do,
 we quickly look at one of them in detail:
 
 The most important slots in a PipeOp are:
@@ -110,7 +110,7 @@ In many cases, in order to not leak information from the test set into the train
 
 In the case of `PipeOpPCA` this means the following:
 - `train()` learns a rotation matrix from its input and saves this matrix to
-  an additional slot, `.$state`. It returns the rotated input data stored 
+  an additional slot, `.$state`. It returns the rotated input data stored
   in a new `Task`.
 - `predict()` uses the rotation matrix stored in `.$state` in order to rotate
   future, unseen data. It returns those in a new `Task`.
@@ -124,7 +124,7 @@ We can do this using the `%>>%` operator.
   linear_pipeline = op1 %>>% op2 %>>% op3
 ```
 
-The result of this operation is a `graph`. 
+The result of this operation is a `graph`.
 A `graph` connects the input and output of each `PipeOp` to the following `PipeOp`.
 This allows us to specify linear processing pipelines.
 In this case, we connect the output of the **scaling** PipeOp to the input of the **PCA** PipeOp
@@ -136,20 +136,20 @@ We can now train the `graph` using the iris **Task**.
   linear_pipeline$train(task)
 ```
 
-When we now train the graph, the data flows through the graph as follows: 
+When we now train the graph, the data flows through the graph as follows:
 - The Task flows into the `PipeOpScale`. The `PipeOp` scales each column in the data
   contained in the Task and returns a new Task that contains the scaled data to its output.
   Relevant information
 
-- The scaled task flows into the `PipeOpPCA`. PCA transforms the data and returns a (possibly smaller) 
-  Task, that contains the transformed data. 
+- The scaled task flows into the `PipeOpPCA`. PCA transforms the data and returns a (possibly smaller)
+  Task, that contains the transformed data.
 
 - This transformed data then flows into the learner, in our case **classif.rpart**.
-  It is then used to train the learner, and as a result saves a model that can be 
+  It is then used to train the learner, and as a result saves a model that can be
   used to predict new data.
 
 In order to predict on new data, we need to save the relevant transformations our data went through
-while training. As a result, each PipeOp saves a state, where information requried to appropriately 
+while training. As a result, each PipeOp saves a state, where information requried to appropriately
 transform future data is stored. In our case, this is **mean** and **standard deviation** of each column for `PipeOpScale`, the PCA rotation matrix for `PipeOpPCA` and the learned model for `PipeOpLearner`.
 
 
@@ -158,11 +158,11 @@ transform future data is stored. In our case, this is **mean** and **standard de
   task$row_roles$use = test.idx
   linear_pipeline$predict(task)
 ```
- 
+
 ## Using the Pipeline as an mlr3 learner
 
-In most cases, we want to use the pipeline just like an 
-**mlr3** learner. In order to achieve this, 
+In most cases, we want to use the pipeline just like an
+**mlr3** learner. In order to achieve this,
 we simply construct a `GraphLearner` that contains the
 pipeline we defined.
 
@@ -191,11 +191,11 @@ testing:
   e$prediction
 ```
 
-and scoring: 
+and scoring:
 
 ```{r}
   e$score()
-  e$performance["mmce"]
+  e$performance["classif.mmce"]
 ```
 
 This allows us to seamlessly integrate pipelines with the
