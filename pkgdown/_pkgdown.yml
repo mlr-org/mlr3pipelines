@@ -1,13 +1,54 @@
-# url: https://mlr3pipelines.mlr-org.com/
+url: https://mlr3pipelines.mlr-org.com
 
 template:
   params:
     bootswatch: cosmo
+  path: pkgdown/templates
+  assets: pkgdown/assets
+  default_assets: false
 
 development:
   mode: unreleased
+  destination: devel
   version_label: default
-  version_tooltip: "Github Version"
+  version_tooltip: "Github version"
 
 toc:
   depth: 3
+
+navbar:
+  title:
+  type: default
+  left:
+  #- icon: fa-home
+  #  href: index.html
+  - text: Basics
+    menu:
+    - text: A simple pipeline
+      href: articles/a_simple_pipeline.html
+    - text: Showcase: Basic Concepts: PipeOp and Graph
+      href: articles/basic_concepts.html
+    - text: Showcase: Branching
+      href: articles/branching.html
+    - text: Custom PipeOps
+      href: articles/create_a_custom_pipeop.html
+    - text: Showcase: Bagging and Stacking
+      href: articles/stacking_and_bagging.html
+
+  - text: Appendix
+    menu:
+    - text: Function Reference
+      href: reference/index.html
+    - text: News
+      href: news/index.html
+
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/mlr-org/mlr3pipelines
+  - icon: fa-slack
+    href: https://mlr-org.slack.com
+  - icon: fa-stack-overflow
+    href: https://stackoverflow.com/questions/tagged/mlr
+  - icon: fa-rss
+    href: https://mlr-web.com/
+
