@@ -25,14 +25,14 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       nin = NULL,
       nout = NULL,
       train = function(inputs) {
-        catf("Training %s with input %s", self$id, deparse(inputs))
+        catf("Training %s with input %s", self$id, deparse(inputs, control = "niceNames"))
         self$state = inputs
         iin = inputs[[1]]
         as.list(iin + seq_len(self$nout))
       },
       predict = function(inputs) {
         catf("Predicting %s with input %s and state %s",
-          self$id, deparse(inputs), deparse(self$state))
+          self$id, deparse(inputs, control = "niceNames"), deparse(self$state, control = "niceNames"))
         iin = inputs[[1]]
         as.list(iin + seq_len(self$nout))
       },
