@@ -18,6 +18,14 @@ PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
   )
 )
 
+deparse_list_safe = function(l) {  # deparse list, but work the same on all systems
+  if (!is.null(names(l))) {
+    sprintf("list(%s)", paste(names(l), sapply(l, deparse), sep = " = ", collapse = ", "))
+  } else {
+    sprintf("list(%s)", paste(as.character(l), sep = ", "))
+  }
+}
+
 # initialize with inputs / outputs: input / output channel names, or number of channels
 PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
   inherit = PipeOp,
@@ -25,14 +33,14 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       nin = NULL,
       nout = NULL,
       train = function(inputs) {
-        catf("Training %s with input %s", self$id, deparse(inputs, control = "niceNames"))
+        catf("Training %s with input %s", self$id, deparse_list_safe(inputs))
         self$state = inputs
         iin = inputs[[1]]
         as.list(iin + seq_len(self$nout))
       },
       predict = function(inputs) {
         catf("Predicting %s with input %s and state %s",
-          self$id, deparse(inputs, control = "niceNames"), deparse(self$state, control = "niceNames"))
+          self$id, deparse_list_safe(inputs), deparse_list_safe(self$state))
         iin = inputs[[1]]
         as.list(iin + seq_len(self$nout))
       },
