@@ -1,4 +1,5 @@
-url: https://mlr3pipelines.mlr-org.com
+url: https://mlr3pipelines.mlr-org.com/
+
 
 template:
   params:

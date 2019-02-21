@@ -1,3 +1,9 @@
+# mlr3pipelines <img src="man/figures/logo.png" align="right" />
+
+[![Travis build status](https://travis-ci.com/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.com/mlr-org/mlr3pipelines)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/mlr-org/mlr3pipelines?branch=master&svg=true)](https://ci.appveyor.com/project/mlr-org/mlr3pipelines)
+[![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
+
 
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 

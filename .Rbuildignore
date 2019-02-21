@@ -13,3 +13,5 @@
 ^pkgdown$
 ^info$
 ^figure$
+^README\.Rmd$
+^appveyor\.yml$
