@@ -238,8 +238,9 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     },
     weighted_majority_vote = function(inputs, wts) {
       # Unpack predictions, add weights
+      names(wts) = names(inputs)
       df = imap_dtr(inputs, function(x, i) {
-        data.frame("row_id" = x$row_ids, "response" = x$response, "weight" = wts[i])
+        data.table("row_id" = x$row_ids, "response" = x$response, "weight" = wts[i])
       })
       # Sum weights over response, keep max row.
       df[, weight := sum(weight), by = list(response, row_id)]
