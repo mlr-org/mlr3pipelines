@@ -60,3 +60,12 @@ test_that("Prevent creation of PipeOps with no channels", {
     output = data.table(name = "output", train = "*", predict = "*")[FALSE]), "output.*at least 1 row")
 
 })
+
+test_that("Errors occur for inputs", {
+  po = PipeOp$new("id", input = data.table(name = "input", train = "*", predict = "*"),
+    output = data.table(name = "output", train = "*", predict = "*"))
+  expect_error(train_pipeop(po, mlr_tasks$get("iris")), "abstract")
+  po$state = list(NULL)
+  expect_error(predict_pipeop(po, mlr_tasks$get("iris")), "abstract")
+  expect_error({po$param_set = ParamSet$new()}, "read-only")
+})
