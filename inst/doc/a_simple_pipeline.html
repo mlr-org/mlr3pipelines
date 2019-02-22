@@ -12,7 +12,7 @@
 
 <meta name="author" content="Florian Pfisterer" />
 
-<meta name="date" content="2019-02-15" />
+<meta name="date" content="2019-02-22" />
 
 <title>Showcase: A simple pipeline</title>
 
@@ -302,7 +302,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Showcase: A simple pipeline</h1>
 <h4 class="author"><em>Florian Pfisterer</em></h4>
-<h4 class="date"><em>2019-02-15</em></h4>
+<h4 class="date"><em>2019-02-22</em></h4>
 
 
 
@@ -381,31 +381,64 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>For training:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">  e<span class="op">$</span><span class="kw">train</span>(train.idx)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; INFO [mlr3] Training learner 'scale.pca.rpart' on task 'iris' ...</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">  e<span class="op">$</span>model</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; Graph with 3 PipeOps:</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;     ID                 State sccssors prdcssors</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  scale                &lt;list&gt;      pca          </span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;    pca              &lt;prcomp&gt;    rpart     scale</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  rpart &lt;LearnerClassifRpart&gt;                pca</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; &lt;Experiment&gt; [trained]:</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;  + Task: iris</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  + Learner: scale.pca.rpart</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  + Model: [Graph]</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  - Predictions: [missing]</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  - Performance: [missing]</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; Public: clone(), ctrl, data, has_errors, hash, learner, log(),</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;   model, performance, predict(), prediction, score(), seeds,</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;   state, task, test_set, timings, train_set, train(),</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;   validation_set</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14">  e<span class="op">$</span>model</a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; Graph with 3 PipeOps:</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;     ID                 State sccssors prdcssors</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt;  scale                &lt;list&gt;      pca          </span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt;    pca              &lt;prcomp&gt;    rpart     scale</span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt;  rpart &lt;LearnerClassifRpart&gt;                pca</span></a></code></pre></div>
 <p>testing:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">  e<span class="op">$</span><span class="kw">predict</span>(test.idx)</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; INFO [mlr3] Predicting with model of learner 'scale.pca.rpart' on task 'iris' ...</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">  e<span class="op">$</span>prediction</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; &lt;PredictionClassif&gt; for 30 observations:</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;     row_id  response     truth</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;  1:      1    setosa    setosa</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;  2:      5    setosa    setosa</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;  3:      8    setosa    setosa</span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; ---                           </span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; 28:    134 virginica virginica</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; 29:    144 virginica virginica</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; 30:    146 virginica virginica</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; &lt;Experiment&gt; [predicted]:</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt;  + Task: iris</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;  + Learner: scale.pca.rpart</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;  + Model: [Graph]</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;  + Predictions: [PredictionClassif]</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt;  - Performance: [missing]</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; Public: clone(), ctrl, data, has_errors, hash, learner, log(),</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt;   model, performance, predict(), prediction, score(), seeds,</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt;   state, task, test_set, timings, train_set, train(),</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt;   validation_set</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14">  e<span class="op">$</span>prediction</a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; &lt;PredictionClassif&gt; for 30 observations:</span></a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt;     row_id  response     truth</span></a>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt;  1:      1    setosa    setosa</span></a>
+<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt;  2:      5    setosa    setosa</span></a>
+<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt;  3:      8    setosa    setosa</span></a>
+<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; ---                           </span></a>
+<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt; 28:    134 virginica virginica</span></a>
+<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt; 29:    144 virginica virginica</span></a>
+<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt; 30:    146 virginica virginica</span></a></code></pre></div>
 <p>and scoring:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">  e<span class="op">$</span><span class="kw">score</span>()</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; INFO [mlr3] Scoring predictions of learner 'scale.pca.rpart' on task 'iris' ...</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">  e<span class="op">$</span>performance[<span class="st">&quot;classif.mmce&quot;</span>]</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; classif.mmce </span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;    0.1666667</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; &lt;Experiment&gt; [scored]:</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt;  + Task: iris</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;  + Learner: scale.pca.rpart</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;  + Model: [Graph]</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;  + Predictions: [PredictionClassif]</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;  + Performance: classif.mmce=0.1666667</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; Public: clone(), ctrl, data, has_errors, hash, learner, log(),</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt;   model, performance, predict(), prediction, score(), seeds,</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt;   state, task, test_set, timings, train_set, train(),</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt;   validation_set</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">  e<span class="op">$</span>performance[<span class="st">&quot;classif.mmce&quot;</span>]</a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; classif.mmce </span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt;    0.1666667</span></a></code></pre></div>
 <p>This allows us to seamlessly integrate pipelines with the whole [mlr3] ecosystem, and thus for example resample or benchmark pipelines, tune its params and many more things.</p>
 <p>For additional information on <code>mlr3</code> please refer to the respective vignettes.</p>
 </div>
