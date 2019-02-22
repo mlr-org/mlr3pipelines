@@ -10,9 +10,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="Author" />
+<meta name="author" content="Florian Pfisterer" />
 
-<meta name="date" content="2019-02-10" />
+<meta name="date" content="2019-02-15" />
 
 <title>Showcase: Basic Concepts: PipeOp and Graph</title>
 
@@ -301,8 +301,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">Showcase: Basic Concepts: PipeOp and Graph</h1>
-<h4 class="author"><em>Author</em></h4>
-<h4 class="date"><em>2019-02-10</em></h4>
+<h4 class="author"><em>Florian Pfisterer</em></h4>
+<h4 class="date"><em>2019-02-15</em></h4>
 
 
 
@@ -406,7 +406,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">gr =<span class="st"> </span>pou <span class="op">%&gt;&gt;%</span><span class="st"> </span>pos</a></code></pre></div>
 <p>The object returned by this operator is an <a href="https://r6.r-lib.org/"><code>R6</code></a> class: <code>Graph</code> that contains the <code>PipeOp</code>s and some meta-information, i.e. how the different operators are connected.</p>
 <p>If we want to extend the <code>Graph</code> by adding another <code>PipeOp</code>, we can simply append another operator. This connects the output of the last <code>PipeOp</code> in the <code>Graph</code> with the input of the new operator.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">gr =<span class="st"> </span>gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>pop </a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">gr =<span class="st"> </span>gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>pop</a></code></pre></div>
 <p>The <code>%&gt;&gt;%</code> operator also allows us to connect <code>Graphs</code> with <code>Graphs</code>, by connecting the first output of the lhs <code>Graph</code> with the first input of the rhs <code>Graph</code>.</p>
 </div>
 <div id="building-the-graph-from-scratch" class="section level3">
@@ -427,7 +427,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="graph" class="section level2">
 <h2>Graph</h2>
 <p>A <code>Graph</code> allows us to connect several <code>PipeOp</code>s together, and thus let’s us control how and in which order data flows through it. It defines vertices that connect the nodes (<code>PipeOp</code>s) to a <code>Graph</code>. It is a container class for the complete computational graph, i.e. it allows us to go through the <code>Graph</code> and <strong>train</strong> or <strong>predict</strong> on every node.</p>
-<p>In the example above, a new <code>Graph</code> was constructed using <code>Graph$new()</code>. Then new <code>PipeOp</code>s are added to the <code>pipeop</code> slot using <code>add_pipeop()</code>. <code>pipeops</code> is a [list of <code>PipeOp</code>s] contained in the <code>Graph</code> named by the <code>PipeOp</code>’s <code>$id</code>. Afterwards we added edges between the <code>PipeOp</code>s to the <code>edges</code> slot using <code>add_edge()</code>. <code>edges</code> is a [<code>data.table</code>] with <code>character</code> columns <code>src_id</code>, <code>src_channel</code>, <code>dst_id</code>, <code>dst_channel</code>. This table contains the connections between the <code>PipeOp</code>s, i.e. which PipeOp is connected to which and to which <code>channel</code>.</p>
+<p>In the example above, a new <code>Graph</code> was constructed using <code>Graph$new()</code>. Then new <code>PipeOp</code>s are added to the <code>pipeop</code> slot using <code>add_pipeop()</code>. <code>pipeops</code> is a [list of <code>PipeOp</code>s] contained in the <code>Graph</code> named by the <code>PipeOp</code>’s <code>$id</code>. Afterwards we added edges between the <code>PipeOp</code>s to the <code>edges</code> slot using <code>add_edge()</code>. <code>edges</code> is a [<code>data.table</code>] with <code>character</code> columns <code>src_id</code>, <code>src_channel</code>, <code>dst_id</code>, <code>dst_channel</code>. This table contains the connections between the <code>PipeOp</code>s, i.e. which PipeOp is connected to which and to which <code>channel</code>.</p>
 <p>The full <code>Graph</code> also has an input and output node, i.e. the inputs and outputs of the first <code>PipeOp</code> and the last <code>PipeOp</code> in our <code>Graph</code> respectively. Those can be accessed using <code>$input</code> and <code>$output</code>. They return a [<code>data.table</code>] with <code>character</code> columns <code>name</code>, <code>train</code>, <code>predict</code>, <code>op.id</code>, <code>channel.name</code>. We can obtain the ids of input and output <code>PipeOp</code>s using <code>lhs</code> and <code>rhs</code>.</p>
 <p>Additionally, a <code>Graph</code> collects information from the different <code>PipeOp</code>s it contains.</p>
 <p>We can obtain a sorted/unsorted list of the id’s of all <code>PipeOps</code> contained in a <code>Graph</code> using <code>ids()</code>. The collection of all <code>packages</code> required to run the <code>Pipeline</code> can be found in the <code>packages</code> slot.</p>
@@ -472,8 +472,18 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="pipeopnull" class="section level3">
 <h3>PipeOpNULL</h3>
 <p>It is often useful to simply pass on the data unchanged, while the data is transformed by some <code>PipeOp</code> in parallel. This can be done using <code>PipeOpNull</code>, which simply passes on its inputs unchanged, both during the training and the predict phase. An example for this can be seen in the vignette on <strong>Stacking</strong>.</p>
+<p>In order to, for example pass on the original data, and some transformed features, we can use <code>gunion</code> to add a <code>PipeOpNULL</code> and a <code>PipeOpPCA</code> to the pipeline. We can later on use <code>PipeOpFeatureUnion</code> to concatenate the resulting transformed data together.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">po_null =<span class="st"> </span>PipeOpNULL<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">gunion</span>(<span class="kw">list</span>(pop, po_null))</a></code></pre></div>
+<a class="sourceLine" id="cb14-2" data-line-number="2">pop =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">gunion</span>(<span class="kw">list</span>(pop, po_null)) <span class="op">%&gt;&gt;%</span><span class="st"> </span>PipeOpFeatureUnion<span class="op">$</span><span class="kw">new</span>(<span class="dv">2</span>)</a></code></pre></div>
+</div>
+<div id="pipeopfeatureunion" class="section level3">
+<h3>PipeOpFeatureUnion</h3>
+<p>In the example above, we used a <code>PipeOpFeatureUnion</code> to concatenate data from different <code>PipeOp</code>s. Internally, this checks whether the <code>target</code> in each task are equal, and then ‘cbinds’ the features from all tasks together.</p>
+</div>
+<div id="pipeopbranch-and-pipeopunbranch" class="section level3">
+<h3>PipeOpBranch and PipeOpUnbranch</h3>
+<p>In order to build <code>Pipelines</code> that involve a choice of one or several methods over others, we can use <code>PipeOpBranch</code> and <code>PipeOpUnbranch</code>. This is mostly usefull if we want to <strong>tune</strong> over different options, i.e. have the tuning algorithm decide between different learners. For a more detailed introduction to branching and unbranching, see the vignette <code>Showcase: Branching</code>.</p>
 </div>
 </div>
 

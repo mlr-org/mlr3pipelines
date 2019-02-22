@@ -75,7 +75,8 @@ test_that("complex graph", {
       "Training basictop",
       "Training basicbottom",
       "Training debug2 with input list(input_1 = 4, input_2 = 4)",
-      "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"))
+      "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"),
+    info = paste0("'", lines, "'", collapse = "', '"))
 
   pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
