@@ -65,6 +65,18 @@ test_that("PipeOpFeatureUnion - train and predict II", {
   expect_true(graph$is_trained)
 })
 
+test_that("Test wrong inputs", {
+  # Differing rows
+  pos = PipeOpSubsample$new()
+  pos$param_set$values$frac = 0.5
+  g = greplicate(
+    pos %>>% PipeOpPCA$new(),
+    2
+    ) %>>% PipeOpFeatureUnion$new(2)
+  task = mlr_tasks$get("iris")
+  expect_error(g$train(task), "Assertion on 'rows'")
+
+})
 # FIXME: depends on mlr-org/mlr3#179
 ## test_that("PipeOpFeatureUnion - levels are preserved", {
 ##
