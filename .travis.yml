@@ -1,7 +1,7 @@
 # DO NOT CHANGE THE CODE BELOW
 before_install:
   - R -q -e 'if (!requireNamespace("remotes")) install.packages("remotes"); if (!requireNamespace("curl")) install.packages("curl"); remotes::install_github("ropenscilabs/tic"); tic::prepare_all_stages(); tic::before_install()'
-  - openssl aes-256-cbc -K $encrypted_0a6446eb3ae3_key -iv $encrypted_0a6446eb3ae3_iv -in github_deploy_key.enc -out github_deploy_key -d
+  - openssl aes-256-cbc -K $encrypted_c6baf8820bec_key -iv $encrypted_c6baf8820bec_iv -in github_deploy_key.enc -out github_deploy_key -d
 install: R -q -e 'tic::install()'
 after_install: R -q -e 'tic::after_install()'
 before_script: R -q -e 'tic::before_script()'
