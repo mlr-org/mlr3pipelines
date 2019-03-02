@@ -212,7 +212,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
       if(is.null(weights)) weights = rep(1/innum, innum)
       assert_numeric(weights, len = innum)
-      self$weights = weights
+      self$weights = setNames(weights, self$input$name)
     },
     predict = function(inputs) {
       assert_list(inputs, "PredictionClassif")
@@ -239,7 +239,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     weighted_majority_vote = function(inputs, wts) {
       # Unpack predictions, add weights
       df = imap_dtr(inputs, function(x, i) {
-        data.frame("row_id" = x$row_ids, "response" = x$response, "weight" = wts[i])
+        data.table("row_id" = x$row_ids, "response" = x$response, "weight" = wts[i])
       })
       # Sum weights over response, keep max row.
       df[, weight := sum(weight), by = list(response, row_id)]
