@@ -33,7 +33,7 @@ navbar:
       href: articles/branching.html
     - text: Custom PipeOps
       href: articles/create_a_custom_pipeop.html
-    - text: Showcase: Bagging and Stacking
+    - text: "Showcase: Bagging and Stacking"
       href: articles/stacking_and_bagging.html
 
   - text: Appendix
