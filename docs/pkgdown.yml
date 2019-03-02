@@ -7,4 +7,7 @@ articles:
   branching: branching.html
   create_a_custom_pipeop: create_a_custom_pipeop.html
   stacking_and_bagging: stacking_and_bagging.html
+urls:
+  reference: https://mlr3pipelines.mlr-org.com//reference
+  article: https://mlr3pipelines.mlr-org.com//articles
 
