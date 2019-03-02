@@ -1,14 +1,8 @@
----
-output: github_document
----
-
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
-[![Build Status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
-[![Build status](https://ci.appveyor.com/api/projects/status/jmms5xaf0a2t8acq?svg=true)](https://ci.appveyor.com/project/mlr-org/mlr3pipelines)
-[![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![codecov](https://codecov.io/gh/mlr-org/mlr3pipelines/branch/master/graph/badge.svg)](https://codecov.io/gh/mlr-org/mlr3pipelines)
+[![Travis build status](https://travis-ci.com/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.com/mlr-org/mlr3pipelines)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/mlr-org/mlr3pipelines?branch=master&svg=true)](https://ci.appveyor.com/project/mlr-org/mlr3pipelines)
+[![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
