@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 set.seed(8008135)
+compiler::enableJIT(0)
 library(mlr3pipelines)
 ```
 
