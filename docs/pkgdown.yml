@@ -1,0 +1,13 @@
+pandoc: '2.5'
+pkgdown: 1.3.0
+pkgdown_sha: ~
+articles:
+  a_simple_pipeline: a_simple_pipeline.html
+  basic_concepts: basic_concepts.html
+  branching: branching.html
+  create_a_custom_pipeop: create_a_custom_pipeop.html
+  stacking_and_bagging: stacking_and_bagging.html
+urls:
+  reference: https://mlr3pipelines.mlr-org.com//reference
+  article: https://mlr3pipelines.mlr-org.com//articles
+

@@ -1,82 +1,25 @@
-language: R
+before_install: R -q -e 'if (!requireNamespace("remotes")) install.packages("remotes"); if (!requireNamespace("curl")) install.packages("curl"); remotes::install_github("ropenscilabs/tic"); tic::prepare_all_stages(); tic::before_install()'
+install: R -q -e 'tic::install()'
+after_install: R -q -e 'tic::after_install()'
+before_script: R -q -e 'tic::before_script()'
+script: R -q -e 'tic::script()'
+after_success: R -q -e 'tic::after_success()'
+after_failure: R -q -e 'tic::after_failure()'
+before_deploy: R -q -e 'tic::before_deploy()'
+deploy:
+  provider: script
+  script: R -q -e 'tic::deploy()'
+  on:
+    all_branches: true
+after_deploy: R -q -e 'tic::after_deploy()'
+after_script: R -q -e 'tic::after_script()'
+language: r
 sudo: false
+dist: xenial
 cache: packages
-r:
-  - release
-
+latex: true
+pandoc_version: 2.5
 env:
   global:
-    - _R_CHECK_TIMINGS_=0
-    - _R_CHECK_FORCE_SUGGESTS_=false
-    - _R_CHECK_TESTS_NLINES_=999
-    - NOT_CRAN=true
-
-before_install:
-  - Rscript -e 'message("INSTALLED PACKS:"); installed.packages()[,2:3]'
-
-before_script:
-  - rm inst/doc/*.* || true
-  - Rscript -e 'if (!require("roxygen2")) install.packages("roxygen2")'
-  - Rscript -e 'if (!require("covr")) install.packages("covr")'
-  - Rscript -e 'if (!require("pkgdown")) install.packages("pkgdown")'
-  - Rscript -e 'devtools::document()'
-
-stages:
-  - test
-  - name: document
-    if: branch = master AND type IN (push, api, cron)
-
-jobs:
-  include:
-    - stage: test
-      script:
-        - R CMD build .
-        - travis_wait 100 R CMD check mlr3pipelines*.tar.gz --as-cran --run-donttest
-        - grep -q -R "WARNING" "mlr3pipelines.Rcheck/00check.log" ; [ $? -ne 0 ]
-    - stage: test
-      script:
-        - travis_wait 100 Rscript -e 'covr::codecov(quiet = FALSE)'
-    - stage: document
-      script:
-        - true
-      before_deploy:
-        - rm -rf doc | true
-        - rm -rf inst | true
-        - Rscript -e 'devtools::install(quick = TRUE); pkgdown::build_site(); devtools::document(); knitr::knit("README.Rmd")'
-        - Rscript -e 'devtools::build_vignettes(dependencies = FALSE, keep_md = FALSE)'
-        - mkdir inst
-        - mv doc inst
-      deploy:
-        provider: pages
-        skip-cleanup: true
-        github-token: $GITHUB_TOKEN
-        local-dir: docs
-        on:
-          branch: master
-      after_deploy:
-        - git checkout master  # otherwise we're in detached head
-        - git checkout .gitignore  # because devtools is dumb and fills it with garbage
-        - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
-        - git config user.name Travis
-        - git config user.email '<>'
-        - git config credential.helper "store --file=.git/credentials"
-        - echo "https://${GITHUB_TOKEN}:@github.com" >> .git/credentials
-        - git config push.default matching
-        - |
-          git difftool -yx "diff -qI '20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\\|environment. 0x\\|bytecode. 0x\\|time. [0-9.]\\+'" | \
-          grep ' and inst/doc' | sed -e 's|.*and inst/doc|inst/doc|' -e 's/ differ$//' | xargs git add
-        - git ls-files --deleted | grep '^inst/doc/' | xargs git add
-        - git ls-files --others  | grep '^inst/doc/.*\.html$' | xargs git add
-        - git add --force man/*
-        - git add DESCRIPTION NAMESPACE
-        - git add figure
-        - git add README.md
-        - git commit -m "update auto-generated documentation [ci skip]" || true
-        - git push
-
-on_success: change
-on_failure: always
-
-notifications:
-  email: false
-
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  - MAKEFLAGS="-j 2"
