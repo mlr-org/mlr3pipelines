@@ -64,7 +64,7 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
         private$.new_task_type = ifelse(new_target_type %in% c("factor", "character"), "classif", "regr")
       }
       assert_choice(private$.new_task_type, mlr3::mlr_reflections$task_types)
-      intask$set_col_role(intask$col_roles$target, NULL)
+      intask$set_col_role(intask$col_roles$target, "unused")
       intask$set_col_role(self$new_target, "target")
 
       if (private$.new_task_type != intask$task_type) {
