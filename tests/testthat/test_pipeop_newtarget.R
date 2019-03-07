@@ -39,7 +39,10 @@ test_that("UseCase - Hurdle Model", {
   e$train()
   e$predict()
   e$score()
-}
+  expect_class(e, "Experiment")
+  expect_class(e$prediction, "PredictionRegr")
+  expect_numeric(e$performance)
+})
 
 test_that("UseCase - MultiOutput - Chained", {
   # Example task
@@ -80,4 +83,7 @@ test_that("UseCase - MultiOutput - Chained", {
   e$train()
   e$predict()
   e$score()
-}
+  expect_class(e, "Experiment")
+  expect_class(e$prediction, "PredictionRegr")
+  expect_numeric(e$performance)
+})

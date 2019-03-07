@@ -78,3 +78,6 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
     }
   )
 )
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("new_target", PipeOpNewTarget)
