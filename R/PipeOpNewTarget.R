@@ -9,7 +9,10 @@
 #'
 #' @section Public Members / Active Bindings:
 #' * `new_target` :: `character` \cr
+#' New target variable for the task. The previous target variable is set to 'unused'.
 #' * `new_task_type` :: `NULL` | `character` \cr
+#' New task type for the resulting task. Defaults to 'classif' if `new_target`is `character` | `factor`,
+#' else `regr`.
 #'
 #' @family PipeOps
 #' @include PipeOp.R
@@ -20,10 +23,7 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
 
   public = list(
     initialize = function(id = "new_target") {
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("old_target_to_feature", default = FALSE)
-      ))
-      super$initialize(id = id, param_set = ps, param_vals = list(old_target_to_feature = FALSE),
+      super$initialize(id = id, param_set = ParamSet$new(), param_vals = list(),
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
