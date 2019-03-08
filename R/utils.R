@@ -39,11 +39,15 @@ task_levels = function(task, cols) {
 task_filter_ex = function(task, row_ids) {
   addedrows = row_ids[duplicated(row_ids)]
 
-  row_ids[duplicated(row_ids)] = task$nrow + seq_along(addedrows)
+  newrows = task$nrow + seq_along(addedrows)
 
   if (length(addedrows)) {
     task$rbind(task$data(rows = addedrows))
   }
-  task$filter(as.integer(row_ids))  # yes, mlr3 wants actual integers m(
+
+  # row ids can be anything, we just take what mlr3 happens to assign.
+  row_ids[duplicated(row_ids)] = task$row_ids[newrows]
+
+  task$filter(row_ids)
 }
 
