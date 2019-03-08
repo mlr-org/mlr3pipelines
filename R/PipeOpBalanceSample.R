@@ -77,13 +77,13 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
       orig_ids = task$row_ids
       add_ids = integer(0)
       for (adjusting in adjustable) {
-        if (tbl[adjusting] <= target_size) {
+        if (tbl[adjusting] >= target_size) {
           # downsampling
-          keep_lgl = seq_len(tbl[adjusting]) <= to_keep
+          keep_lgl = seq_len(tbl[adjusting]) <= target_size
           keep_all[truth == adjusting] = shuffle(keep_lgl)
         } else {
           # upsampling
-          add_ids = c(add_ids, rep_len(shuffle(orig_ids[truth == adjusting]), tbl[adjusting] - target_size))
+          add_ids = c(add_ids, rep_len(shuffle(orig_ids[truth == adjusting]), target_size - tbl[adjusting]))
         }
       }
       new_ids = c(orig_ids[keep_all], add_ids)
