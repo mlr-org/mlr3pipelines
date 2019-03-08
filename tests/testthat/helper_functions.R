@@ -229,8 +229,8 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
     }
     if (predict_like_train) {
       # if deterministic_train is FALSE then `trained` may be different from `predicted`!
-      expect_equal(trained2$data(), predicted2$data())
-      expect_equal(trained3$data(), predicted3$data())
+      expect_equal(trained2$data(), predicted2$data(), ignore.col.order = TRUE)
+      expect_equal(trained3$data(), predicted3$data(), ignore.col.order = TRUE)
     }
   }
   if (predict_rows_independent) {
@@ -273,10 +273,10 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
     # FIXME: the following should ensure that data has not changed
     # but number of rows or row indices could change in theory change, so the tests will need to be adapted if that is ever the case
     trained = po2$train_internal(list(task))[[1]]
-    expect_equal(trained$data(cols = trained$feature_names), task$data(cols = task$feature_names))
+    expect_equal(trained$data(cols = trained$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE)
 
     predicted = po2$predict_internal(list(task))[[1]]
-    expect_equal(predicted$data(cols = predicted$feature_names), task$data(cols = task$feature_names))
+    expect_equal(predicted$data(cols = predicted$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE)
 
     predicted2 = po2$predict_internal(list(emptytask))[[1]]
     expect_equal(predicted2$feature_names, character(0))
@@ -299,7 +299,7 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
   if (predict_rows_independent) {
     expect_equal(predicted$nrow, 1)
     if (deterministic_predict) {
-      expect_equal(predicted$data(), po$predict_internal(list(task))[[1]]$filter(whichrow)$data())
+      expect_equal(predicted$data(), po$predict_internal(list(task))[[1]]$filter(whichrow)$data(), ignore.col.order = TRUE)
     }
   }
 
@@ -348,11 +348,11 @@ expect_pipeop_result_features = function(po, traintask, trainresult,
   predicttask = NULL, predictresult = NULL) {
 
   result = train_pipeop(po, list(traintask))
-  expect_equal(result$data(cols = result$feature_names))
+  expect_equal(result$data(cols = result$feature_names), trainresult, ignore.col.order = TRUE)
   assert(is.null(predicttask) == is.null(predictresult))
   if (!is.null(predicttask)) {
     result = predict_pipeop(po, list(traintask))
-    expect_equal(result$data(cols = result$feature_names))
+    expect_equal(result$data(cols = result$feature_names), predicttask, ignore.col.order = TRUE)
   }
 }
 
