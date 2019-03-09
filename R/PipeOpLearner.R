@@ -62,4 +62,5 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("learner", PipeOpLearner)
+mlr_pipeops$add("learner", PipeOpLearner,
+  list(R6Class("Learner", public = list(id = "learner", param_set = ParamSet$new()))$new()))

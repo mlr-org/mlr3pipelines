@@ -88,5 +88,5 @@ PipeOpFilter = R6Class("PipeOpFilter",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("filter", PipeOpFilter)
+mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "filter"))$new()))
 

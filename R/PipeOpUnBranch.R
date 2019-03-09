@@ -67,4 +67,4 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("unbranch", PipeOpUnbranch)
+mlr_pipeops$add("unbranch", PipeOpUnbranch, list("N"))

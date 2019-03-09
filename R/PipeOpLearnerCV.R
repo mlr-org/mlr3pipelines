@@ -114,4 +114,5 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("learner_cv", PipeOpLearnerCV)
+mlr_pipeops$add("learner_cv", PipeOpLearnerCV,
+  list(R6Class("Learner", public = list(id = "learner_cv", param_set = ParamSet$new()))$new()))
