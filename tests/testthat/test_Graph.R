@@ -318,3 +318,24 @@ test_that("Intermediate results are saved to Graph if requested", {
   expect_equal(unname(g$pipeops$null$.result), restask)
 
 })
+
+test_that("Namespaces get loaded", {
+
+  g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
+    gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
+
+  g$train(mlr_tasks$get("iris"))
+
+  g$pipeops$scale$packages = c("4rfjfw", "324r32")
+  g$pipeops$null$packages = c("4rfjfw", "9422228u")
+
+  res = try(g$train(mlr_tasks$get("iris")), silent = TRUE)
+
+  expect_class(res, "try-error")
+  expect_subset(c(
+      "  Error loading package 9422228u (required by null):",
+      "  Error loading package 4rfjfw (required by scale, null):",
+      "  Error loading package 324r32 (required by scale):"),
+    strsplit(res, "\n")[[1]])
+
+})
