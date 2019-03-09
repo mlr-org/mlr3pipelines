@@ -53,7 +53,7 @@ test_that("PipeOpBackupLearner - basic properties", {
 
   repaired_regr = po_regr$predict(list(demo_regr, regr_task))[[1]]
 
-  set$seed(1)
+  set.seed(1)
   normal_prediction = mlr_learners$get("regr.rpart")$train(regr_task)$predict(regr_task)
 
   expect_equal(unname(repaired_regr$response[1:3]), unname(normal_prediction$response[1:3]))
