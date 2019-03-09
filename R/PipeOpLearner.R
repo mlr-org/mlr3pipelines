@@ -9,11 +9,11 @@
 #'
 #' @section Public Members / Active Bindings:
 #' * `learner`  :: [`Learner`] \cr
-#'   Learner to use for cross validation / prediction.
+#'   Learner to use for prediction.
 #' @section Methods:
 #' * `PipeOpLearner$new(learner, id = learner$id)` \cr
 #'   ([`Learner`], `character(1)`) -> `self` \cr
-#'   Constructor. The given learner will be used for crossvalidation.
+#'   Constructor. The given learner will be used for prediction.
 #' @family PipeOps
 #' @family Meta PipeOps
 #' @include PipeOp.R

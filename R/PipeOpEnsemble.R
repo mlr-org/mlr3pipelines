@@ -100,7 +100,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   private = list(
     weighted_avg_predictions = function(inputs, weights) {
       assert_numeric(weights, len = length(inputs))
-      df = map_dtr(inputs, function(x) {data.frame("row_id" = x$row_ids, "response" = x$response)})
+      df = map_dtr(inputs, function(x) data.frame("row_id" = x$row_ids, "response" = x$response))
       df = unique(df[, lapply(.SD, weighted.mean, w = weights), by = "row_id"])
       merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
     },
