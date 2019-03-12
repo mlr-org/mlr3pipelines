@@ -119,7 +119,7 @@
       <h1>Showcase: A simple pipeline</h1>
                         <h4 class="author">Florian Pfisterer</h4>
             
-            <h4 class="date">2019-03-06</h4>
+            <h4 class="date">2019-03-12</h4>
       
       <!--The 'toc' block was inserted manually by @pat-s. It triggeres the inline ToC in the vignettes.-->
             <div id="toc">
@@ -160,12 +160,13 @@
 <p>A list of available PipeOps can be obtained from</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mlr3pipelines)</a>
 <a class="sourceLine" id="cb3-2" title="2">  mlr_pipeops<span class="op">$</span><span class="kw">keys</span>()</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;  [1] "branch"            "chunk"             "copy"             </span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt;  [4] "encode"            "featureunion"      "filter"           </span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;  [7] "learner"           "learner_cv"        "majorityvote"     </span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; [10] "modelavg"          "nloptmajorityvote" "nloptmodelavg"    </span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; [13] "null"              "pca"               "scale"            </span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; [16] "subsample"         "unbranch"          "undersample"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;  [1] "backuplearner"     "balancesample"     "branch"           </span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt;  [4] "chunk"             "copy"              "encode"           </span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;  [7] "featureunion"      "filter"            "impute"           </span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; [10] "learner"           "learner_cv"        "majorityvote"     </span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; [13] "modelavg"          "nloptmajorityvote" "nloptmodelavg"    </span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; [16] "null"              "pca"               "scale"            </span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; [19] "subsample"         "unbranch"</span></a></code></pre></div>
 <p>First we define the required PipeOps:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">  op1 =<span class="st"> </span>PipeOpScale<span class="op">$</span><span class="kw">new</span>()</a>
 <a class="sourceLine" id="cb4-2" title="2">  op2 =<span class="st"> </span>PipeOpPCA<span class="op">$</span><span class="kw">new</span>()</a>

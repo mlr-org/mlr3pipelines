@@ -115,7 +115,7 @@ In the case of `PipeOpLearner` this means the following:
 We define three different `PipeOp`s, which will be connected to a Pipeline:
 
 ```r
-pou = PipeOpUndersample$new()
+pou = PipeOpSubsample$new()
 pop = PipeOpPCA$new()
 pos = PipeOpScale$new()
 ```
