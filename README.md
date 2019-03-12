@@ -77,7 +77,7 @@ are:
   - Feature filtering: *PipeOpFilter*.
   - Data feature type conversion: *PipeOpEncode*.
   - Undersampling / subsampling for speed and outcome class imbalance
-    handling: *PipeOpSubsample*, *PipeOpUndersample*.
+    handling: *PipeOpSubsample*.
   - *mlr3* *Learner* as operation in a *Graph*, both returning a
     “*Prediction*” (*PipeOpLearner*) and an added data feature for
     super learning (*PipeOpLearnerCV*).
