@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Google Site Verification -->
 <meta name="google-site-verification" content="BrjL5fpoyHZu1rR8rwnnM2MBO3u3iIFB8NsmSuOsY84" />
-<title>PipeOpUnbranch — mlr_pipeop_unbranch • mlr3pipelines</title>
+<title>PipeOpBalanceSample — mlr_pipeop_balancesample • mlr3pipelines</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,11 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   <script src="../extra.js"></script>
-<meta property="og:title" content="PipeOpUnbranch — mlr_pipeop_unbranch" />
+<meta property="og:title" content="PipeOpBalanceSample — mlr_pipeop_balancesample" />
 
-<meta property="og:description" content="Used to bring together different paths created by PipeOpBranch." />
+<meta property="og:description" content="Both undersamples (filters) a Task to keep only a fraction of the rows with majority class,
+as well as oversamples (repeats datapoints) minorit-class rows.
+Possible parameters are $ratio, $reference, and $adjust." />
 
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -148,38 +150,45 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpUnbranch</h1>
-    <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpUnBranch.R'><code>R/PipeOpUnBranch.R</code></a></small>
+    <h1>PipeOpBalanceSample</h1>
+    <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpBalanceSample.R'><code>R/PipeOpBalanceSample.R</code></a></small>
     </div>
 
     
-    <p>Used to bring together different paths created by <code><a href='mlr_pipeop_branch.html'>PipeOpBranch</a></code>.</p>
+    <p>Both undersamples (filters) a <code>Task</code> to keep only a fraction of the rows with majority class,
+as well as oversamples (repeats datapoints) minorit-class rows.</p>
+<p>Possible parameters are <code>$ratio</code>, <code>$reference</code>, and <code>$adjust</code>.</p>
     
 
-    <pre class="usage"><span class='no'>PipeOpUnbranch</span></pre>
+    <pre class="usage"><span class='no'>PipeOpBalanceSample</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
     
-    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+    <h2 class="hasAnchor" id="parameter-set"><a class="anchor" href="#parameter-set"></a>Parameter Set</h2>
 
     
     <ul>
-<li><p><code>PipeOpUnbranch$new(options, id = "unbranch")</code> <br />
-(<code><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>numeric(1)</a></code> | <code>character</code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/character'>character(1)</a></code>) -&gt; <code>self</code> <br />
-Constructor. If <code>options</code> is an integer number, it determines the number of
-input channels that are created, named <code>input1</code>...<code>input&lt;n&gt;</code>. If <code>options</code> is a
-<code>character</code>, it determines the names of channels directly.</p></li>
+<li><p><code>ratio</code> :: <code><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>numeric(1)</a></code> <br />
+Ratio of number of rows of classes to keep, relative
+to the <code>$reference</code> value.</p></li>
+<li><p><code>reference</code> :: <code><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>numeric(1)</a></code> <br />
+What the <code>$ratio</code> value is measured against. Can be <code>"all"</code> (default, mean instance count of
+all classes), <code>"major"</code> (instance count of class with most instances), <code>"minor"</code>
+(instance count of class with fewest instances), <code>"nonmajor"</code> (average instance
+count of all classes except the major one), <code>"nonminor"</code> (average instance count
+of all classes except the minor one), and <code>"one"</code> (<code>$ratio</code> determines the number of
+instances to have, per class).</p></li>
+<li><p><code>adjust</code> :: <code><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>numeric(1)</a></code> <br />
+Which classes to up / downsample. Can be <code>"all"</code> (default, up and downsample all to match required
+instance count), <code>"major"</code>, <code>"minor"</code>, <code>"nonmajor"</code>, <code>"nonminor"</code> (see respective values
+for <code>$reference</code>), <code>"upsample"</code> (only upsample), and <code>"downsample"</code>.</p></li>
+<li><p><code>shuffle</code> :: <code><a href='https://www.rdocumentation.org/packages/base/topics/logical'>logical(1)</a></code> <br />
+Whether to shuffle the result. Otherwise, the resulting task will have the original items that
+were not removed in downsampling in-order, followed by all newly sampled items ordered by target class.
+Default is <code>TRUE</code>.</p></li>
 </ul>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-    <p>Creates a PipeOp with multiple input channels that can be used to
-create a Graph network with alternative paths. <code>options</code> works as in <code><a href='mlr_pipeop_branch.html'>PipeOpBranch</a></code>
-and should probably be the same value as the <code>options</code> given to the corresponding
-<code><a href='mlr_pipeop_branch.html'>PipeOpBranch</a></code> instance.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -187,7 +196,6 @@ and should probably be the same value as the <code>options</code> given to the c
   <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, <code><a href='PipeOp.html'>PipeOp</a></code>,
   <code><a href='mlr_pipeop_NULL.html'>mlr_pipeop_NULL</a></code>,
   <code><a href='mlr_pipeop_backup_learner.html'>mlr_pipeop_backup_learner</a></code>,
-  <code><a href='mlr_pipeop_balancesample.html'>mlr_pipeop_balancesample</a></code>,
   <code><a href='mlr_pipeop_branch.html'>mlr_pipeop_branch</a></code>,
   <code><a href='mlr_pipeop_chunk.html'>mlr_pipeop_chunk</a></code>,
   <code><a href='mlr_pipeop_copy.html'>mlr_pipeop_copy</a></code>,
@@ -202,23 +210,10 @@ and should probably be the same value as the <code>options</code> given to the c
   <code><a href='mlr_pipeop_pca.html'>mlr_pipeop_pca</a></code>,
   <code><a href='mlr_pipeop_scale.html'>mlr_pipeop_scale</a></code>,
   <code><a href='mlr_pipeop_subsample.html'>mlr_pipeop_subsample</a></code>,
-  <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
-<p>Other Path Branching: <code><a href='NO_OP.html'>NO_OP</a></code>,
-  <code><a href='filter_noop.html'>filter_noop</a></code>, <code><a href='is_noop.html'>is_noop</a></code>,
-  <code><a href='mlr_pipeop_branch.html'>mlr_pipeop_branch</a></code></p></div>
+  <code><a href='mlr_pipeop_unbranch.html'>mlr_pipeop_unbranch</a></code>,
+  <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>pca</span> <span class='kw'>=</span> <span class='no'>PipeOpPCA</span>$<span class='fu'>new</span>()
-<span class='no'>nop</span> <span class='kw'>=</span> <span class='no'>PipeOpNULL</span>$<span class='fu'>new</span>()
-<span class='no'>choices</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pca"</span>, <span class='st'>"nothing"</span>)
-<span class='no'>PipeOpBranch</span>$<span class='fu'>new</span>(<span class='no'>choices</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>pca</span>, <span class='no'>nop</span>)) <span class='kw'>%&gt;&gt;%</span> <span class='no'>PipeOpUnbranch</span>$<span class='fu'>new</span>(<span class='no'>choices</span>)</div><div class='output co'>#&gt; Graph with 4 PipeOps:
-#&gt;        ID         State sccssors prdcssors
-#&gt;    branch &lt;&lt;UNTRAINED&gt;&gt; pca,null          
-#&gt;       pca &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
-#&gt;      null &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
-#&gt;  unbranch &lt;&lt;UNTRAINED&gt;&gt;           pca,null</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -226,14 +221,10 @@ and should probably be the same value as the <code>options</code> given to the c
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#methods">Methods</a></li>
-
-      <li><a href="#details">Details</a></li>
+      <li><a href="#parameter-set">Parameter Set</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
