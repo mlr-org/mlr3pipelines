@@ -15,7 +15,17 @@
 NULL
 
 DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3::Dictionary,
-  cloneable = FALSE
+  cloneable = FALSE,
+  public = list(
+    metainf = new.env(parent = emptyenv()),
+    add = function(key, value, metainf = NULL) {
+      ret = super$add(key, value)
+      if (!is.null(metainf)) {
+        assign(x = key, value = metainf, envir = self$metainf)
+      }
+      invisible(self)
+    }
+  )
 )
 
 #' @export
@@ -23,8 +33,35 @@ mlr_pipeops = DictionaryPipeOp$new()
 
 #' @export
 as.data.table.DictionaryPipeOp = function(x, ...) {
-  setkeyv(map_dtr(x$ids(), function(id) {
-    l = x$get(id)
-    list(id = id, packages = list(l$packages))
+  setkeyv(map_dtr(x$keys(), function(id) {
+    metainf = x$metainf[[id]]
+    if (!is.null(metainf)) {
+      meta_one = lapply(metainf, function(x) if (identical(x, "N")) 1 else x)
+      meta_two = lapply(metainf, function(x) if (identical(x, "N")) 2 else x)
+      l1 = do.call(x$get, c(list(id), meta_one))
+      l2 = do.call(x$get, c(list(id), meta_two))
+    } else {
+      l1 = l2 = x$get(id)
+    }
+    if (nrow(l1$input) == nrow(l2$input)) {
+      innum = nrow(l1$input)
+    } else {
+      innum = NA
+    }
+    if (nrow(l1$output) == nrow(l2$output)) {
+      outnum = nrow(l1$output)
+    } else {
+      outnum = NA
+    }
+    list(
+      id = id,
+      packages = list(l1$packages),
+      input.num = innum,
+      output.num = outnum,
+      input.type.train = list(l1$input$train),
+      input.type.predict = list(l1$input$predict),
+      output.type.train = list(l1$output$train),
+      output.type.predict = list(l1$output$predict)
+    )
   }), "id")[]
 }

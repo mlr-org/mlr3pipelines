@@ -110,9 +110,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         remove_cols = setdiff(intask$feature_names, self$affected_cols)
         intask$set_col_role(remove_cols, character(0))
       }
-      self$intasklayout = intask$feature_types
+      self$intasklayout = copy(intask$feature_types)
       intask = self$train_task(intask)
-      self$outtasklayout = intask$feature_types
+
+      # FIXME: setkey() next line can go when https://github.com/mlr-org/mlr3/issues/193 is fixed
+      self$outtasklayout = copy(setkey(intask$feature_types, "id"))
       if (do_subset) {
         # FIXME: this fails if train_task added a column with the same name
         intask$set_col_role(remove_cols, "feature")
@@ -128,11 +130,13 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         remove_cols = setdiff(intask$feature_names, self$affected_cols)
         intask$set_col_role(remove_cols, character(0))
       }
-      if (!isTRUE(all.equal(self$intasklayout, intask$feature_types))) {
+      if (!isTRUE(all.equal(self$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
       intask = self$predict_task(intask)
-      if (!isTRUE(all.equal(self$outtasklayout, intask$feature_types))) {
+
+      # FIXME: setkey() next line can go when https://github.com/mlr-org/mlr3/issues/193 is fixed
+      if (!isTRUE(all.equal(self$outtasklayout, setkey(intask$feature_types, "id"), ignore.row.order = TRUE))) {
         stop("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       if (do_subset) {

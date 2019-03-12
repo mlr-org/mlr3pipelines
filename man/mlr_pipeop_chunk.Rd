@@ -41,11 +41,14 @@ op = PipeOpChunk$new(5)
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_backup_learner}},
+  \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_copy}},
   \code{\link{mlr_pipeop_encode}},
   \code{\link{mlr_pipeop_featureunion}},
   \code{\link{mlr_pipeop_filter}},
+  \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
@@ -54,7 +57,6 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},
-  \code{\link{mlr_pipeop_undersample}},
   \code{\link{mlr_pipeops}}
 }
 \concept{PipeOps}
