@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Google Site Verification -->
 <meta name="google-site-verification" content="BrjL5fpoyHZu1rR8rwnnM2MBO3u3iIFB8NsmSuOsY84" />
-<title>PipeOpChunk — mlr_pipeop_chunk • mlr3pipelines</title>
+<title>PipeOpNewTarget — PipeOpNewTarget • mlr3pipelines</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,11 +28,10 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   <script src="../extra.js"></script>
-<meta property="og:title" content="PipeOpChunk — mlr_pipeop_chunk" />
+<meta property="og:title" content="PipeOpNewTarget — PipeOpNewTarget" />
 
-<meta property="og:description" content="Chunks its input into outnum chunks.
-Returns a list of Tasks during training, and
-simply passes on the input during prediction." />
+<meta property="og:description" content="Substitutes the current target with a new target.
+Changes Task class if required." />
 
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -150,51 +149,41 @@ simply passes on the input during prediction." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpChunk</h1>
-    <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpChunk.R'><code>R/PipeOpChunk.R</code></a></small>
+    <h1>PipeOpNewTarget</h1>
+    <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpNewTarget.R'><code>R/PipeOpNewTarget.R</code></a></small>
     </div>
 
     
-    <p>Chunks its input into <code>outnum</code> chunks.
-Returns a list of <code>Task</code>s during training, and
-simply passes on the input during prediction.</p>
+    <p>Substitutes the current target with a new target.
+Changes Task class if required.</p>
     
 
-    <pre class="usage"><span class='no'>PipeOpChunk</span></pre>
+    <pre class="usage"><span class='no'>PipeOpNewTarget</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p>Abstract <code>R6Class</code> inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     
-    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+    <h2 class="hasAnchor" id="public-members-active-bindings"><a class="anchor" href="#public-members-active-bindings"></a>Public Members / Active Bindings</h2>
 
     
     <ul>
-<li><p><code>PipeOpChunk$new(outnum, id = "chunk")</code> <br />
-(<code><a href='https://www.rdocumentation.org/packages/base/topics/integer'>integer(1)</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/character'>character(1)</a></code>) -&gt; <code>self</code> <br />
-Constructor. <code>outnum</code> gives the number of output
-channels / chunks that are created.</p></li>
-</ul>
-    
-    <h2 class="hasAnchor" id="parameter-set"><a class="anchor" href="#parameter-set"></a>Parameter Set</h2>
-
-    
-    <ul>
-<li><p><code>shuffle</code> :: <code><a href='https://www.rdocumentation.org/packages/base/topics/logical'>logical(1)</a></code> <br />
-Should the data be shuffled before chunking? Default <code>TRUE</code></p></li>
-<li><p><code>stratify</code> :: <code><a href='https://www.rdocumentation.org/packages/base/topics/logical'>logical(1)</a></code> <br />
-Should the subsamples be stratified. Default <code>FALSE</code>.</p></li>
+<li><p><code>new_target</code> :: <code>character</code> <br />
+New target variable for the task. The previous target variable is set to 'unused'.</p></li>
+<li><p><code>new_task_type</code> :: <code>NULL</code> | <code>character</code> <br />
+New task type for the resulting task. Defaults to 'classif' if <code>new_target</code>is <code>character</code> | <code>factor</code>,
+else <code>regr</code>.</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
-  <code><a href='PipeOpNewTarget.html'>PipeOpNewTarget</a></code>,
   <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, <code><a href='PipeOp.html'>PipeOp</a></code>,
   <code><a href='mlr_pipeop_NULL.html'>mlr_pipeop_NULL</a></code>,
   <code><a href='mlr_pipeop_backup_learner.html'>mlr_pipeop_backup_learner</a></code>,
   <code><a href='mlr_pipeop_balancesample.html'>mlr_pipeop_balancesample</a></code>,
   <code><a href='mlr_pipeop_branch.html'>mlr_pipeop_branch</a></code>,
+  <code><a href='mlr_pipeop_chunk.html'>mlr_pipeop_chunk</a></code>,
   <code><a href='mlr_pipeop_copy.html'>mlr_pipeop_copy</a></code>,
   <code><a href='mlr_pipeop_encode.html'>mlr_pipeop_encode</a></code>,
   <code><a href='mlr_pipeop_featureunion.html'>mlr_pipeop_featureunion</a></code>,
@@ -211,8 +200,6 @@ Should the subsamples be stratified. Default <code>FALSE</code>.</p></li>
   <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>op</span> <span class='kw'>=</span> <span class='no'>PipeOpChunk</span>$<span class='fu'>new</span>(<span class='fl'>5</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -220,14 +207,10 @@ Should the subsamples be stratified. Default <code>FALSE</code>.</p></li>
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#methods">Methods</a></li>
-
-      <li><a href="#parameter-set">Parameter Set</a></li>
+      <li><a href="#public-members-active-bindings">Public Members / Active Bindings</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
