@@ -1,0 +1,85 @@
+---
+title: "Introduction to mlr3pipelines"
+author: "Martin Binder"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  cache = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+set.seed(8008135)
+compiler::enableJIT(0)
+library("mlr3")
+library("mlr3pipelines")
+```
+
+This vignette is an introduction to `mlr3pipelines`, the dataflow programming toolkit for machine learning in `R` using [`mlr3`](https://github.com/mlr-org/mlr3). It will quickly mention the basic concepts and then go through a few examples that both show the simplicity as well as the power and versaitility of using `mlr3pipelines`.
+
+## What's the Point
+
+Machine learning toolkits often try to abstract the processes happening inside machine learning algorithms, making it easy for the user to switch out one algorithm for another without having to worry about what is happening inside them, what kind of data they are able to operate with etc. The benefit of using `mlr3`, for example, is that one can create a `Learner`, a `Task`, a `Resampling` etc. and use them for typical machine learning operations. It is trivial to exchange individual components and therefore use, for example, a different `Learner` in the same experiment for comparison.
+
+```{r}
+task = TaskClassif$new("iris", as_data_backend(iris), "Species")
+
+lrn = mlr_learners$get("classif.rpart")
+
+rsmp = mlr_resamplings$get("holdout")
+
+resample(task, lrn, rsmp)
+```
+
+However, this modularity breaks down as soon as the learning algorithm encompasses more than just model fitting, but instead also things like data preprocessing or meta models. `mlr3pipelines` therefore goes one step further in modularity: it makes it possible to build individual steps within a "`Learner`" out of building blocks called **`PipeOp`s**.
+
+## Basic Concepts
+
+### `PipeOp`: Pipeline Operators
+
+The most basic unit of functionality within `mlr3pipelines` is the **`PipeOp`**, short for "pipeline operator", which represents a transformative operation on input (for example a training dataset) leading to output. It can therefore be seen as a generalised notion of a function, with a certain twist: `PipeOp`s behave differently during a "training phase" and a "prediction phase". The training phase will typically generate a certain model of the data that is saved as internal state. The prediction phase will then operate on the input data depending on the trained model.
+
+An example of this behaviour is the *principal component analysis* operation ("`PipeOpPCA`"): During training, it will transform incoming data by rotating it in a way that leads to uncorrelated features ordered by their contribution to total variance. It will *also* save the rotation matrix to be used during for new data. This makes it possible to perform "prediction" with single rows of new data, where this row's scores on each of the principal components of the training data is computed.
+
+```{r}
+po = mlr_pipeops$get("pca")
+
+po$train(list(task))[[1]]$data()
+```
+```{r}
+single_line_task = task$clone()$filter(1)
+
+po$predict(list(single_line_task))[[1]]$data()
+```
+
+```{r}
+po$state
+```
+
+This shows the most important primitives integrated by a `PipeOp`:
+
+- **`$train()`**, taking a list of input arguments, turning them into a list of outputs, meanwhile saving a state in `$state`
+- **`$predict()`**, taking a list of input arguments, turning them into a list of outputs, making use of the saved `$state`
+- **`$state`**, the "model" trained with `$train()` and utilised during `$predict()`.
+
+#### Why the `$state`
+
+It is important to take a moment and notice the importance of a `$state` variable and the `$train()` / `$predict()` dichotomy in a `PipeOp`. There are many preprocessing methods, for example scaling of parameters or imputation, that could in theory just be applied to training data and prediction / validation data separately, or they could be applied to a task before resampling is performed. This would, however, be fallacious:
+
+* The preprocessing on prediction data should not depend on the prediction dataset. A prediction on a single instance of new data should give the same result as prediction performed on a whole dataset.
+* Performing preprocessing on a task before doing resampling leaks information about the test set into the training set. Resampling should evaluate the generalisation performance of the *entire* machine learning method, therefore the behaviour of this entire method must only depend on the content of the training split during resampling.
+
+#### Where to Get `PipeOp`s
+
+Each `PipeOp` is an instance of an "`R6`" class, many of which are provided by the `mlr3pipelines` package itself. 
+
+### `Graph`: Networks of `PipeOp`s
+
+While having single `PipeOp`s 
