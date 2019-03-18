@@ -36,7 +36,8 @@ Suggests:
     mlr3learners,
     mlr3featsel,
     mlr3tuning,
-    glmnet
+    glmnet,
+    GenSA
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
@@ -71,8 +72,10 @@ Collate:
     'PipeOpLearnerCV.R'
     'PipeOpNULL.R'
     'PipeOpPCA.R'
+    'PipeOpPredPostproc.R'
     'PipeOpScale.R'
     'PipeOpSubsample.R'
+    'PipeOpThresholdTuning.R'
     'PipeOpUnBranch.R'
     'PipeOpUndersample.R'
     'assert_graph.R'

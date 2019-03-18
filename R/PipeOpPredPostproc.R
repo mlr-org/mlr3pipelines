@@ -25,7 +25,6 @@ PipeOpPredPostproc = R6Class("PipeOpPredPostproc",
     threshold = NULL,
     measure = NULL,
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
-      assert_integerish(innum, lower = 1)
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
@@ -44,25 +43,24 @@ PipeOpPredPostproc = R6Class("PipeOpPredPostproc",
       if (!self$measure$minimize) res = -res
       res
     },
-    optimize_objfun_gensa = function(input) {
+    optimize_objfun_gensa = function(input) { # 
       requireNamespace("GenSA")
-      init_threshold = rep(1 / length(inputs), length(inputs))
+      nclass = ncol(input$prob)
+      cnames = colnames(input$prob)
+      init_threshold = rep(1 / nclass, nclass)
       pv = self$param_set$values
-      eval_g_ineq =
-      opts = pv[which(!(names(pv) %in% c("measure", "eval_g_ineq", "lb", "ub")))]
-      opt = nloptr::nloptr(
-        x0 = init_weights,
-        eval_f = private$objfun,
-        lb = rep(pv$lb, length(inputs)),
-        ub = rep(pv$ub, length(inputs)),
-        eval_g_ineq = pv$eval_g_ineq,
-        opts = opts,
-        inputs = inputs
-      )
-      return(opt$solution)
+      ctrl = pv[which(!(names(pv) %in% c("measure", "algorithm", "lb", "ub")))]
+
+      or = GenSA::GenSA(par = init_threshold, fn = private$objfun(input),
+        lower = rep(pv$lower, nclass), upper = rep(pv$upper, nclass), control = ctrl)
+      th = or$par / sum(or$par)
+      names(th) = cnames
+      return(th)
     }
   )
 )
 
+#' @include mlr_pipeops.R
+mlr_pipeops$add("PipeOpPredPostproc", PipeOpPredPostproc)
 
 
