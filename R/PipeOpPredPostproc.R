@@ -26,7 +26,7 @@ PipeOpPredPostproc = R6Class("PipeOpPredPostproc",
     measure = NULL,
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
+        input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
     },
@@ -35,28 +35,6 @@ PipeOpPredPostproc = R6Class("PipeOpPredPostproc",
       list(NULL)
     },
     predict = function(input) stop("abstract")
-  ),
-  private = list(
-    objfun = function(input) {
-      e = list("prediction" = input)
-      res = self$measure$calculate(e)
-      if (!self$measure$minimize) res = -res
-      res
-    },
-    optimize_objfun_gensa = function(input) { # 
-      requireNamespace("GenSA")
-      nclass = ncol(input$prob)
-      cnames = colnames(input$prob)
-      init_threshold = rep(1 / nclass, nclass)
-      pv = self$param_set$values
-      ctrl = pv[which(!(names(pv) %in% c("measure", "algorithm", "lb", "ub")))]
-
-      or = GenSA::GenSA(par = init_threshold, fn = private$objfun(input),
-        lower = rep(pv$lower, nclass), upper = rep(pv$upper, nclass), control = ctrl)
-      th = or$par / sum(or$par)
-      names(th) = cnames
-      return(th)
-    }
   )
 )
 
