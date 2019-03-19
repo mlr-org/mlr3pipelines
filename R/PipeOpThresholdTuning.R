@@ -66,8 +66,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   ),
   private = list(
     objfun = function(threshold, pred) {
-      browser()
-      pred$threshold = threshold
+      pred$threshold = threshold / sum(threshold)
       e = list("prediction" = pred)
       res = self$measure$calculate(e)
       if (!self$measure$minimize) res = -res
@@ -90,10 +89,15 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     # FIXME This is ugly, but currently the best way
     make_prediction_classif = function(input) {
       p = PredictionClassif$new()
-      p$row_ids = input$row_ids
+      prob = as.matrix(input$data(cols = input$feature_names))
+      colnames(prob) = unlist(input$levels())
+      p$prob = prob
+      i = max.col(prob, ties.method = "random")
+      response = factor(colnames(prob)[i], levels = unlist(input$levels()))
+      p$response = response
       p$truth = input$truth()
-      p$predict_types = c("prob", "response")
-      p$prob = as.matrix(input$data(cols = input$feature_names))
+      p$predict_types = c("response", "prob")
+      p$row_ids = input$row_ids
       return(p)
     }
   )
