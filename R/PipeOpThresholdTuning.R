@@ -76,14 +76,20 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       requireNamespace("GenSA")
       nclass = ncol(pred$prob)
       cnames = colnames(pred$prob)
-      init_threshold = rep(1 / nclass, nclass)
       pv = self$param_set$values
       ctrl = pv[which(!(names(pv) %in% c("measure", "algorithm", "lower", "upper")))]
-
-      or = GenSA::GenSA(par = init_threshold, fn = private$objfun, pred = pred,
+      if (nclass > 2) {
+        # init_threshold = rep(1 / nclass, nclass)
+        # or = GenSA::GenSA(par = init_threshold, fn = private$objfun, pred = pred,
+        or = GenSA::GenSA(fn = private$objfun, pred = pred,
         lower = rep(pv$lower, nclass), upper = rep(pv$upper, nclass), control = ctrl)
-      th = or$par / sum(or$par)
-      names(th) = cnames
+        th = or$par / sum(or$par)
+        names(th) = cnames
+      } else if (nclass == 2) {
+        or = GenSA::GenSA(fn = private$objfun, pred = pred,
+          lower = pv$lower, upper = pv$upper, control = ctrl)
+        th = or$par
+      }
       return(th)
     },
     # FIXME This is ugly, but currently the best way
