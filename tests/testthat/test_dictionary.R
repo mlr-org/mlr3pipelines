@@ -109,3 +109,28 @@ test_that("Dictionary contains all PipeOps", {
   }
 
 })
+
+test_that("data.table of pipeops looks as it should", {
+
+  potable = as.data.table(mlr_pipeops)
+
+  expect_equal(colnames(potable),
+    c("id", "packages", "input.num", "output.num",
+      "input.type.train", "input.type.predict",
+      "output.type.train", "output.type.predict"))
+
+  expect_equal(nrow(potable), length(mlr_pipeops$keys()))
+
+  expect_set_equal(potable$id, mlr_pipeops$keys())
+
+  expect_equal(potable["branch"]$output.num, NA_integer_)
+  expect_equal(potable["unbranch"]$input.num, NA_integer_)
+
+  expect_equal(potable["branch"]$output.type.train, list("*"))
+  expect_equal(potable["featureunion"]$input.type.train, list("Task"))
+
+  expect_equal(potable["learner"]$output.type.train, list("NULL"))
+  expect_equal(potable["learner_cv"]$input.type.train, list("Task"))
+
+})
+

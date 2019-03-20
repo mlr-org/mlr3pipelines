@@ -17,7 +17,7 @@ Inherits the \code{$param_set} and \code{$values} from the \code{Learner} it is 
 
 \itemize{
 \item \code{learner}  :: \code{\link{Learner}} \cr
-Learner to use for cross validation / prediction.
+Learner to use for prediction.
 }
 }
 
@@ -26,7 +26,7 @@ Learner to use for cross validation / prediction.
 \itemize{
 \item \code{PipeOpLearner$new(learner, id = learner$id)} \cr
 (\code{\link{Learner}}, \code{character(1)}) -> \code{self} \cr
-Constructor. The given learner will be used for crossvalidation.
+Constructor. The given learner will be used for prediction.
 }
 }
 
@@ -34,12 +34,15 @@ Constructor. The given learner will be used for crossvalidation.
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_backup_learner}},
+  \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},
   \code{\link{mlr_pipeop_copy}},
   \code{\link{mlr_pipeop_encode}},
   \code{\link{mlr_pipeop_featureunion}},
   \code{\link{mlr_pipeop_filter}},
+  \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_nloptmajorityvote}},
@@ -47,10 +50,10 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},
-  \code{\link{mlr_pipeop_undersample}},
   \code{\link{mlr_pipeops}}
 
-Other Meta PipeOps: \code{\link{mlr_pipeop_learner_cv}}
+Other Meta PipeOps: \code{\link{mlr_pipeop_backup_learner}},
+  \code{\link{mlr_pipeop_learner_cv}}
 }
 \concept{Meta PipeOps}
 \concept{PipeOps}

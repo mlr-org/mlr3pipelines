@@ -80,7 +80,7 @@ test_that("PipeOpSubsample works stratified", {
 test_that("task filter utility function", {
   task = mlr_tasks$get("iris")
 
-  rowidx = c(1, 2, 3, 2, 1, 2, 3, 2, 1)
+  rowidx = as.integer(c(1, 2, 3, 2, 1, 2, 3, 2, 1))  # annoying and unnecessary mlr3 type strictness
 
   tfiltered = task_filter_ex(task$clone(), rowidx)
 

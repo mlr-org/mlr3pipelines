@@ -280,10 +280,12 @@ Graph = R6Class("Graph",
     },
 
     train = function(input, single_input = TRUE) {
+      graph_load_namespaces(self, "train")
       graph_reduce(self, input, "train_internal", single_input)
     },
 
     predict = function(input, single_input = TRUE) {
+      graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict_internal", single_input)
     }
   ),
@@ -452,3 +454,30 @@ graph_reduce = function(self, input, fun, single_input) {
   filter_noop(output)
 }
 
+# load namespaces for graph and give an informative error message if this fails
+# self: graph
+# info: what is being done, probably "train" or "predict"
+graph_load_namespaces = function(self, info) {
+  assert_string(info)
+  pkenv = new.env(parent = emptyenv())
+  for (po in self$pipeops) {
+    for (pkg in po$packages) {
+      pkenv[[pkg]] = c(pkenv[[pkg]], po$id)
+    }
+  }
+  errors = imap(as.list(pkenv), function(pipeops, package) {
+    tryCatch({
+      # not using requireNamespace here because a present package
+      # could still throw an error while being loaded.
+      suppressPackageStartupMessages(loadNamespace(package))
+      NULL
+    }, error = function(e) {
+      sprintf("Error loading package %s (required by %s):\n    %s",
+        package, str_collapse(pipeops, n = 4), e$message)
+    })
+  })
+  errors = discard(errors, is.null)
+  if (length(errors)) {
+    stopf("Error during %s:\n  %s", info, str_collapse(errors, sep = "\n  "))
+  }
+}

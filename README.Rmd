@@ -59,7 +59,7 @@ Single computational steps can be represented as so-called **PipeOps**, which ca
 * Simple preprocessing operations: *PipeOpScale*, *PipeOpPCA*.
 * Feature filtering: *PipeOpFilter*.
 * Data feature type conversion: *PipeOpEncode*.
-* Undersampling / subsampling for speed and outcome class imbalance handling: *PipeOpSubsample*, *PipeOpUndersample*.
+* Undersampling / subsampling for speed and outcome class imbalance handling: *PipeOpSubsample*.
 * *mlr3* *Learner* as operation in a *Graph*, both returning a "*Prediction*" (*PipeOpLearner*) and an added data feature for super learning (*PipeOpLearnerCV*).
 * Simple ensemble methods on Predictions: *PipeOpMajorityVote*, *PipeOpModelAvg*.
 * Simultaneous alternative paths with same input data: *PipeOpCopy*.

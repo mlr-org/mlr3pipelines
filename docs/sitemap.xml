@@ -52,6 +52,12 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_NULL.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_backup_learner.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_balancesample.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_branch.html</loc>
   </url>
   <url>
@@ -68,6 +74,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_filter.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_impute.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_learner.html</loc>
@@ -95,9 +104,6 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_unbranch.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeop_undersample.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops.html</loc>

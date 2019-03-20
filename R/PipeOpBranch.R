@@ -85,5 +85,5 @@ PipeOpBranch = R6Class("PipeOpBranch",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("branch", PipeOpBranch)
+mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 

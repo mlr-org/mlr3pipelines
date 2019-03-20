@@ -1,6 +1,6 @@
 context("PipeOpLearner")
 
-test_that("PipeOLearner - basic properties", {
+test_that("PipeOpLearner - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearner$new(lrn)
   expect_pipeop(po)

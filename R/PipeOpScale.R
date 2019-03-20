@@ -33,6 +33,9 @@ PipeOpScale = R6Class("PipeOpScale",
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1
       )
+      constfeat = self$state$scale == 0
+      self$state$scale[constfeat] = 1
+      sc[, constfeat] = 0
       sc
     },
 
