@@ -44,7 +44,7 @@ test_that("PipeOp printer", {
     "Output channels.*odin \\[\\*,\\*\\], dva \\[\\*,\\*\\], tri \\[\\*,\\*\\]$")
 
   expect_output(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))),
-    "PipeOp.*<debug>.*Input channels.*input \\[Task,Task\\]\nOutput channels.*output \\[NULL,Prediction\\]$")
+    "PipeOp.*<classif.debug>.*Input channels.*input \\[Task,Task\\]\nOutput channels.*output \\[NULL,Prediction\\]$")
 
 })
 
