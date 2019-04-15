@@ -78,8 +78,26 @@ It is important to take a moment and notice the importance of a `$state` variabl
 
 #### Where to Get `PipeOp`s
 
-Each `PipeOp` is an instance of an "`R6`" class, many of which are provided by the `mlr3pipelines` package itself. 
+Each `PipeOp` is an instance of an "`R6`" class, many of which are provided by the `mlr3pipelines` package itself. They can be constructed explicitly ("`PipeOpPCA$new()`") or retrieved from the `mlr_pipelines` collection: `mlr_pipeops$get("pca")`. The entire list of available `PipeOp`s, and some meta-information, can be retrieved using `as.data.table()`:
+
+```{r}
+as.data.table(mlr_pipeops)[, c("id", "input.num", "output.num")]
+```
+
+### PipeOp Channels
+
+Just like functions, `PipeOp`s can take multiple inputs in the form of list elements. For example, there is a `PipeOpFeatureUnion` that combines multiple tasks with different features and "`cbind()`s" them together, creating one combined task. When it is given two sections of the `iris` task, for example, it recreates the original task:
+```{r}
+iris_first_half = task$clone()$select(c("Petal.Length", "Petal.Width"))
+iris_second_half = task$clone()$select(c("Sepal.Length", "Sepal.Width"))
+
+pofu = mlr_pipeops$get("featureunion", innum = 2)
+
+pofu$train(list(iris_first_half, iris_second_half))[[1]]$data()
+```
+
+Because `PipeOpFeatureUnion` effectively takes two input arguments here, we can say it has two **input channels**.
 
 ### `Graph`: Networks of `PipeOp`s
 
-While having single `PipeOp`s 
+
