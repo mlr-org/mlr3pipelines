@@ -25,6 +25,8 @@ The core building blocks of a `Pipeline` are **PipeOperators** (`PipeOp`) and
 
 #### PipeOp: A `PipeOp` is a node, that transforms data flowing through it.
 
+![PipeOp](figures/po_viz.png){ width=70% }
+
 #### Graph: A `Graph` is a concatenation of one or several `PipeOps`.
 
 By connecting several `PipeOp`s we can build a `Graphs`.
