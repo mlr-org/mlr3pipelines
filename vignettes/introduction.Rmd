@@ -1,0 +1,231 @@
+---
+title: "Introduction to mlr3pipelines"
+author: "Martin Binder"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  cache = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+set.seed(8008135)
+compiler::enableJIT(0)
+library("mlr3")
+library("mlr3pipelines")
+```
+
+This vignette is an introduction to `mlr3pipelines`, the dataflow programming toolkit for machine learning in `R` using [`mlr3`](https://github.com/mlr-org/mlr3). It will quickly mention the basic concepts and then go through a few examples that both show the simplicity as well as the power and versaitility of using `mlr3pipelines`.
+
+## What's the Point
+
+Machine learning toolkits often try to abstract the processes happening inside machine learning algorithms, making it easy for the user to switch out one algorithm for another without having to worry about what is happening inside them, what kind of data they are able to operate with etc. The benefit of using `mlr3`, for example, is that one can create a `Learner`, a `Task`, a `Resampling` etc. and use them for typical machine learning operations. It is trivial to exchange individual components and therefore use, for example, a different `Learner` in the same experiment for comparison.
+
+```{r}
+task = TaskClassif$new("iris", as_data_backend(iris), "Species")
+
+lrn = mlr_learners$get("classif.rpart")
+
+rsmp = mlr_resamplings$get("holdout")
+
+resample(task, lrn, rsmp)
+```
+
+However, this modularity breaks down as soon as the learning algorithm encompasses more than just model fitting, but instead also things like data preprocessing or meta models. `mlr3pipelines` takes modularity one step further: it makes it possible to build individual steps within a "`Learner`" out of building blocks called **`PipeOp`s**.
+
+## `PipeOp`: Pipeline Operators
+
+The most basic unit of functionality within `mlr3pipelines` is the **`PipeOp`**, short for "pipeline operator", which represents a transformative operation on input (for example a training dataset) leading to output. It can therefore be seen as a generalised notion of a function, with a certain twist: `PipeOp`s behave differently during a "training phase" and a "prediction phase". The training phase will typically generate a certain model of the data that is saved as internal state. The prediction phase will then operate on the input data depending on the trained model.
+
+An example of this behaviour is the *principal component analysis* operation ("`PipeOpPCA`"): During training, it will transform incoming data by rotating it in a way that leads to uncorrelated features ordered by their contribution to total variance. It will *also* save the rotation matrix to be used during for new data. This makes it possible to perform "prediction" with single rows of new data, where this row's scores on each of the principal components of the training data is computed.
+
+```{r}
+po = mlr_pipeops$get("pca")
+
+po$train(list(task))[[1]]$data()
+```
+```{r}
+single_line_task = task$clone()$filter(1)
+
+po$predict(list(single_line_task))[[1]]$data()
+```
+
+```{r}
+po$state
+```
+
+This shows the most important primitives integrated by a `PipeOp`:
+
+- **`$train()`**, taking a list of input arguments, turning them into a list of outputs, meanwhile saving a state in `$state`
+- **`$predict()`**, taking a list of input arguments, turning them into a list of outputs, making use of the saved `$state`
+- **`$state`**, the "model" trained with `$train()` and utilised during `$predict()`.
+
+### Why the `$state`
+
+It is important to take a moment and notice the importance of a `$state` variable and the `$train()` / `$predict()` dichotomy in a `PipeOp`. There are many preprocessing methods, for example scaling of parameters or imputation, that could in theory just be applied to training data and prediction / validation data separately, or they could be applied to a task before resampling is performed. This would, however, be fallacious:
+
+* The preprocessing on prediction data should not depend on the prediction dataset. A prediction on a single instance of new data should give the same result as prediction performed on a whole dataset.
+* Performing preprocessing on a task before doing resampling leaks information about the test set into the training set. Resampling should evaluate the generalisation performance of the *entire* machine learning method, therefore the behaviour of this entire method must only depend on the content of the training split during resampling.
+
+### Where to Get `PipeOp`s
+
+Each `PipeOp` is an instance of an "`R6`" class, many of which are provided by the `mlr3pipelines` package itself. They can be constructed explicitly ("`PipeOpPCA$new()`") or retrieved from the `mlr_pipelines` collection: `mlr_pipeops$get("pca")`. The entire list of available `PipeOp`s, and some meta-information, can be retrieved using `as.data.table()`:
+
+```{r}
+as.data.table(mlr_pipeops)[, c("id", "input.num", "output.num")]
+```
+
+## PipeOp Channels
+
+### Input Channels
+
+Just like functions, `PipeOp`s can take multiple inputs. These multiple inputs are always given as elements in the input list. For example, there is a `PipeOpFeatureUnion` that combines multiple tasks with different features and "`cbind()`s" them together, creating one combined task. When it is given two sections of the `iris` task, for example, it recreates the original task:
+```{r}
+iris_first_half = task$clone()$select(c("Petal.Length", "Petal.Width"))
+iris_second_half = task$clone()$select(c("Sepal.Length", "Sepal.Width"))
+
+pofu = mlr_pipeops$get("featureunion", innum = 2)
+
+pofu$train(list(iris_first_half, iris_second_half))[[1]]$data()
+```
+
+Because `PipeOpFeatureUnion` effectively takes two input arguments here, we can say it has two **input channels**. An input channel also carries information about the *type* of input that is acceptable. The input channels of the `pofu` object constructed above, for examplel, each accept a `Task` during training and prediction. This information can be queried from the `$input` slot:
+```{r}
+pofu$input
+```
+
+Other `PipeOp`s may have channels that take different types during different phases. The `backuplearner` `PipeOp`, for example, takes a `NULL` and a `Task` during training, and a `Prediction` and a `Task` during prediction:
+```{r}
+mlr_pipeops$get("backuplearner")$input
+```
+
+### Output Channels
+
+Unlike the typical notion of a function, `PipeOp`s can also have multiple **output channels**. `$train()` and `$predict()` always return a list, so certain `PipeOp`s may return lists with more than one element. Similar to input channels, the information about the number and type of outputs given by a `PipeOp` is available in the `$output` slot. The `chunk` PipeOp, for example, chunks a given `Task` into subsets and consequently returns multiple `Task` objects, both during training and prediction. The number of output channels must be given during construction through the `outnum` argument.
+
+```{r}
+mlr_pipeops$get("chunk", outnum = 3)$output
+```
+
+### Channel Configuration
+
+Most `PipeOp`s have only one input channel (and take only a list with a single element), but there are a few with more than one; in many cases, the number of input or output channels is determined during construction, e.g. through the `innum` / `outnum` arguments. The `input.num` and `output.num` columns of the `mlr_pipeops`-table [above](#where-to-get-pipeops) show the default number of channels, and `NA` if the number depends on a construction argument.
+
+The default printer of a `PipeOp` gives information about channel names and types:
+```{r}
+mlr_pipeops$get("backuplearner")
+```
+
+## `Graph`: Networks of `PipeOp`s
+
+### Basics
+
+Because each `PipeOp` has a known number of input and output channels that always produce or accept data of a known type, it is possible to network them together in **`Graph`**s. A `Graph` is a collection of `PipeOp`s with "edges" between the `PipeOp`'s channels that mandate that data should be flowing along them.
+
+A `Graph` is empty when first created, and `PipeOp`s can be added using the **`$add_pipeop()`** method. The **`$add_edge()`** method is used to create connections between them. While the printer of a `Graph` gives some information about its layout, the most intuitive way of visualizing it is using the `$plot()` function.
+
+```{r}
+gr = Graph$new()
+
+gr$add_pipeop(mlr_pipeops$get("scale"))
+
+gr$add_pipeop(mlr_pipeops$get("subsample", param_vals = list(frac = 0.1)))
+
+gr$add_edge("scale", "subsample")
+```
+```{r}
+print(gr)
+```
+```{r}
+gr$plot()
+```
+
+A `Graph` itself has a **`$train()`** and a **`$predict()`** method that accept some data and propagate this data through the network of `PipeOp`s. The return value corresponds to the output of the `PipeOp` output channels that are not connected to other input channels.
+
+```{r}
+gr$train(task)[[1]]$data()
+```
+
+```{r}
+gr$predict(single_line_task)[[1]]$data()
+```
+
+### Networks
+
+The example above showed a linear preprocessing pipeline, but it is in fact possible to build true "graphs" of operations, as long as no loops are introduced^[It is tempting to denote this as a "directed acyclic graph", but the equivalence is not trivial because edges run between channels of `PipeOp`s, not `PipeOp`s themselves.]. `PipeOp`s with multiple output channels can feed their data to multiple different following `PipeOp`s, and `PipeOp`s with multiple input channels can take results from different `PipeOp`s. When a `PipeOp` has more than one input / output channel, then the `Graph`'s `$add_edge()` method needs additional arguments that indicate which channel to connect to. This argument can be given in the form of an integer, or as the name of the channel.
+
+The following constructs a `Graph` that copies the input and gives one copy each to a "scale" and a "pca" `PipeOp`. The resulting columns of each operation are put next to each other by "featureunion". 
+
+```{r}
+gr = Graph$new()$
+  add_pipeop(mlr_pipeops$get("copy", outnum = 2))$
+  add_pipeop(mlr_pipeops$get("scale"))$
+  add_pipeop(mlr_pipeops$get("pca"))$
+  add_pipeop(mlr_pipeops$get("featureunion", innum = 2))
+
+gr$
+  add_edge("copy", "scale", src_channel = 1)$        # designating channel by index
+  add_edge("copy", "pca", src_channel = "output2")$  # designating channel by name
+  add_edge("scale", "featureunion", dst_channel = 1)$
+  add_edge("pca", "featureunion", dst_channel = 2)
+
+gr$plot()
+```
+```{r}
+gr$train(iris_first_half)[[1]]$data()
+```
+
+### Syntactic Sugar
+
+Although it is possible to create intricate `Graphs` with edges going all over the place (as long as no loops are introduced), usually there is a clear direction of flow between "layers" in the `Graph`. It is therefore convenient to build up a `Graph` from layers, which can be done using the **`%>>%`** ("double-arrow") operator. It takes either a `PipeOp` or a `Graph` on each of its sides and connects all of the outputs of its left-hand side to one of the inputs each of its right-hand side--the number of inputs therefore must match the number of outputs. Together with the **`gunion()`** operation, which takes `PipeOp`s or `Graph`s and arranges them next to each other akin to a (disjoint) graph union, the above network can more easily be constructed as follows:
+
+```{r}
+gr = mlr_pipeops$get("copy", outnum = 2) %>>%
+  gunion(list(mlr_pipeops$get("scale"), mlr_pipeops$get("pca"))) %>>%
+  mlr_pipeops$get("featureunion", innum = 2)
+
+gr$plot()
+```
+
+## Learners in Graphs, Graphs in Learners
+
+The true power of `mlr3pipelines` derives from the fact that it can be integrated seamlessly with `mlr3`. Two components are mainly responsible for this:
+
+- **`PipeOpLearner`**, a `PipeOp` that encapsulates an `mlr3` `Learner` and creates a `Prediction` object in its `$predict()` phase
+- **`GraphLearner`**, a `Learner` that can be used in place of any other `mlr3` `Learner`, but which does prediction using a `Graph` given to it
+
+### `PipeOpLearner`
+
+The `PipeOpLearner` is constructed using an `mlr3` `Learner` and will use it to create a `Prediction` in the `$predict()` phase. The output during `$train()` is `NULL`. It can be used after a preprocessing pipeline, and it is even possible to perform operations on the `Prediction`, for example by averaging multiple predictions or by using the "backuplearner" to impute predictions that a given model failed to create.
+
+The following is a very simple `Graph` that performs training and prediction on data after performing principal component analysis.
+
+```{r}
+gr = mlr_pipeops$get("pca") %>>%
+  mlr_pipeops$get("learner", mlr_learners$get("classif.rpart"))
+```
+```{r}
+gr$train(task)
+
+gr$predict(task)
+```
+
+### `GraphLearner`
+
+Although a `Graph` has `$train()` and `$predict()` functions, it can not be used directly in places where `mlr3` `Learners` can be used like resamplin or benchmarks. For this, it needs to be wrapped in a `GraphLearner` object, which is a thin wrapper that enables this functionality. The resulting learner is extremely versatile, because every part of it can be modified, replaced, parameterized and optimized over. Resampling the graph above can be done the same way that resampling of the `Learner` was performed in the [introductory example](#what-s-the-point).
+
+```{r}
+lrngrph = GraphLearner$new(gr)
+
+resample(task, lrngrph, rsmp)
+```
+
+## Hyperparameters
+

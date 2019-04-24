@@ -25,16 +25,18 @@ navbar:
   #  href: index.html
   - text: Basics
     menu:
+    - text: Introduction
+      href: articles/introduction.html
     - text: A simple pipeline
       href: articles/a_simple_pipeline.html
     - text: "Showcase: Basic Concepts: PipeOp and Graph"
       href: articles/basic_concepts.html
     - text: "Showcase: Branching"
       href: articles/branching.html
-    - text: Custom PipeOps
-      href: articles/create_a_custom_pipeop.html
     - text: "Showcase: Bagging and Stacking"
       href: articles/stacking_and_bagging.html
+    - text: Custom PipeOps
+      href: articles/create_a_custom_pipeop.html
 
   - text: Appendix
     menu:
@@ -51,5 +53,5 @@ navbar:
   - icon: fa-stack-overflow
     href: https://stackoverflow.com/questions/tagged/mlr
   - icon: fa-rss
-    href: https://mlr-web.com/
+    href: https://mlr-org.com/
 

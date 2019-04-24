@@ -41,7 +41,7 @@ test_that("basic graphlearn tests", {
 
   dbgr$predict(task)
 
-  dbmodels = dbgr$graph$pipeops$debug$state$model
+  dbmodels = dbgr$graph$pipeops$classif.debug$state$model
 
   expect_equal(dbmodels[[1]]$data(), scalediris$data())
   expect_equal(dbmodels[[2]]$data(), scalediris$data())
@@ -55,33 +55,33 @@ test_that("graphlearner parameters behave as they should", {
 
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
-  expect_subset(c("scale.center", "scale.scale", "debug.x"), names(dbgr$param_set$params))
+  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
 
-  dbgr$param_set$values$debug.x = 1
+  dbgr$param_set$values$classif.debug.x = 1
 
-  expect_equal(dbgr$param_set$values$debug.x, 1)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 1)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 1)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 1)
 
-  dbgr$pipeops$debug$param_set$values$x = 0
+  dbgr$pipeops$classif.debug$param_set$values$x = 0
 
-  expect_equal(dbgr$param_set$values$debug.x, 0)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 0)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 0)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0)
 
-  dbgr$pipeops$debug$learner$param_set$values$x = 0.5
+  dbgr$pipeops$classif.debug$learner$param_set$values$x = 0.5
 
-  expect_equal(dbgr$param_set$values$debug.x, 0.5)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 0.5)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 0.5)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
-  expect_error({dbgr$param_set$values$debug.x = "a"})
-  expect_error({dbgr$pipeops$debug$param_set$values$x = "a"})
-  expect_error({dbgr$pipeops$debug$learner$param_set$values$x = "a"})
+  expect_error({dbgr$param_set$values$classif.debug.x = "a"})
+  expect_error({dbgr$pipeops$classif.debug$param_set$values$x = "a"})
+  expect_error({dbgr$pipeops$classif.debug$learner$param_set$values$x = "a"})
 
-  expect_equal(dbgr$param_set$values$debug.x, 0.5)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 0.5)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 0.5)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$message_train = TRUE
@@ -91,12 +91,12 @@ test_that("graphlearner parameters behave as they should", {
 
   pol = PipeOpLearner$new(dblrn, param_vals = list(message_predict = FALSE, warning_train = FALSE, warning_predict = FALSE))
 
-  gl = GraphLearner$new(pol, param_vals = list(debug.warning_train = TRUE, debug.warning_predict = TRUE))
+  gl = GraphLearner$new(pol, param_vals = list(classif.debug.warning_train = TRUE, classif.debug.warning_predict = TRUE))
 
-  gl$param_set$values$debug.warning_predict = FALSE
+  gl$param_set$values$classif.debug.warning_predict = FALSE
 
   expect_equal(gl$param_set$values,
-    list(debug.message_train = TRUE, debug.message_predict = FALSE, debug.warning_train = TRUE, debug.warning_predict = FALSE))
+    list(classif.debug.message_train = TRUE, classif.debug.message_predict = FALSE, classif.debug.warning_train = TRUE, classif.debug.warning_predict = FALSE))
 
 })
 
