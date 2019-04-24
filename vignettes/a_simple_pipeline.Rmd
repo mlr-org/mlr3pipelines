@@ -194,7 +194,7 @@ and scoring:
 
 ```{r}
   e$score()
-  e$performance["classif.mmce"]
+  e$performance["classif.ce"]
 ```
 
 This allows us to seamlessly integrate pipelines with the

@@ -324,7 +324,7 @@ PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
     train = function(inputs) {
       assert_list(inputs, "PredictionClassif")
       self$measure = self$param_set$values$measure
-      if (is.null(self$measure)) self$measure = mlr_measures$get("classif.mmce")
+      if (is.null(self$measure)) self$measure = mlr_measures$get("classif.ce")
       assert_measure(self$measure)
       assert_true(self$measure$task_type == "classif")
       wts = private$optimize_objfun_nlopt(inputs)
