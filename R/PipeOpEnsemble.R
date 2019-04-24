@@ -288,7 +288,7 @@ mlr_pipeops$add("majorityvote", PipeOpMajorityVote, list("N"))
 #' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
 #' For help with nloptr see [`nloptr::nloptr.print.options()`].
 #' Returns a single [`PredictionClassif`].
-#' As a default, optimizes [`MeasureClassifMMCE`] and only allows weights between 0 and 1.
+#' As a default, optimizes [`MeasureClassifCE`] and only allows weights between 0 and 1.
 #' Used for classification [`Prediction`]s.
 #'
 #' @family PipeOps
