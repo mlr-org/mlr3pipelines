@@ -24,6 +24,12 @@ DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3::Dictionary,
         assign(x = key, value = metainf, envir = self$metainf)
       }
       invisible(self)
+    },
+    get = function(key, ...) {
+      obj = get0(key, envir = self$items, inherits = FALSE, ifnotfound = NULL)
+      if (is.null(obj))
+        stopf("Element with key '%s' not found!%s", key, did_you_mean(key, self$keys()))
+      obj$value$new(...)
     }
   )
 )

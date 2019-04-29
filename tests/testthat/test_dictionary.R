@@ -50,7 +50,7 @@ test_that("Dictionary contains all PipeOps", {
 
   dictnames = map_chr(pipeops, function(pipe) {
     c(names(mlr_pipeops$items)[map_lgl(mlr_pipeops$items, function(gen) {
-      identical(gen, get(pipe, pkgenv))
+      identical(gen$value, get(pipe, pkgenv))
     })], "__NOT_FOUND__")[1]
   })
 
