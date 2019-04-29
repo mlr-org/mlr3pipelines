@@ -55,6 +55,12 @@ graph$train(task$clone()$filter(holdout$train_set(1)))
 graph$predict(task$clone()$filter(holdout$test_set(1)))
 ```
 
+Resampling (and even tuning, see below) is possible using the `GraphLearner`:
+```{r}
+glrn = GraphLearner$new(graph)
+resample(task, glrn, mlr_resamplings$get("cv"))
+```
+
 ## Feature Overview
 
 Single computational steps can be represented as so-called **PipeOps**, which can then be connected with directed edges in a **Graph**. The scope of *mlr3pipelines* is still growing; currently supported features are:
