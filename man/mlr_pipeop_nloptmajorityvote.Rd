@@ -26,7 +26,7 @@ or averages probabilities if \code{predict_type} is \code{"prob"}.
 Weights for each learner are learned using (nloptr)\link[nloptr:nloptr]{nloptr::nloptr}.
 For help with nloptr see \code{\link[nloptr:nloptr.print.options]{nloptr::nloptr.print.options()}}.
 Returns a single \code{\link{PredictionClassif}}.
-As a default, optimizes \code{\link{MeasureClassifMMCE}} and only allows weights between 0 and 1.
+As a default, optimizes \code{\link{MeasureClassifCE}} and only allows weights between 0 and 1.
 Used for classification \code{\link{Prediction}}s.
 }
 \examples{
