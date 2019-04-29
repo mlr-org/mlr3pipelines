@@ -164,7 +164,7 @@ The topology of this graph can most easily be seen using the `Graph`’s
 graph$plot()
 ```
 
-![](README_files/figure-gfm/graphplot-1.png)<!-- -->
+![](README_files/figure-markdown_github/graphplot-1.png)<!-- -->
 
 The graph can itself be used to perform model fitting and prediction,
 but in our example we want to perform parameter tuning first, using the
