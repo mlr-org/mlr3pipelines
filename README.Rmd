@@ -32,7 +32,7 @@ pca = mlr_pipeops$get("pca")
 
 filter = mlr_pipeops$get("filter",
   filter = mlr3featsel::FilterVariance$new(),
-  param_vals = list(frac = 0.5))
+  param_vals = list(filter.frac = 0.5))
 
 learner_po =  mlr_pipeops$get("learner",
   learner = mlr_learners$get("classif.rpart"))
@@ -127,7 +127,7 @@ learner = GraphLearner$new(graph, task_type = "regr")
 
 ps = ParamSet$new(list(
   ParamFct$new("branch.selection", levels = c("pca", "scale", "null")),
-  ParamInt$new("classif.rpart.classif.rpart.maxdepth", lower = 1, upper = 10)
+  ParamInt$new("regr.rpart.regr.rpart.maxdepth", lower = 1, upper = 10)
 ))
 
 task = mlr_tasks$get("bh")
