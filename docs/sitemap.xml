@@ -124,6 +124,9 @@
     <loc>https://mlr3pipelines.mlr-org.com//articles/create_a_custom_pipeop.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//articles/introduction.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//articles/stacking_and_bagging.html</loc>
   </url>
 </urlset>

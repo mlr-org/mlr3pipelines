@@ -32,18 +32,21 @@ pca = mlr_pipeops$get("pca")
 
 filter = mlr_pipeops$get("filter",
   filter = mlr3featsel::FilterVariance$new(),
-  param_vals = list(frac = 0.5))
+  param_vals = list(filter.frac = 0.5))
 
 learner_po =  mlr_pipeops$get("learner",
   learner = mlr_learners$get("classif.rpart"))
 ```
 
-These make the following possible:
+These pipeops can then be combined together to define machine learning pipelines:
 ```{r}
 graph = pca %>>% filter %>>% learner_po
 
 print(graph)
+```
 
+This example pipeline can be used for training and prediction:
+```{r}
 task = mlr_tasks$get("iris")
 holdout = mlr_resamplings$get("holdout")$instantiate(task)
 
@@ -52,10 +55,24 @@ graph$train(task$clone()$filter(holdout$train_set(1)))
 graph$predict(task$clone()$filter(holdout$test_set(1)))
 ```
 
+Resampling (and even tuning, see below) is possible using the `GraphLearner`:
+```{r}
+glrn = GraphLearner$new(graph)
+resample(task, glrn, mlr_resamplings$get("cv"))
+```
+
 ## Feature Overview
 
 Single computational steps can be represented as so-called **PipeOps**, which can then be connected with directed edges in a **Graph**. The scope of *mlr3pipelines* is still growing; currently supported features are:
 
+* Simple data manipulation and preprocessing operations, e.g. PCA, feature filtering
+* Task subsampling for speed and outcome class imbalance handling
+* *mlr3* *Learner* operations for prediction and stacking
+* Simultaneous path branching (data going both ways)
+* Alternative path branching (data going one specific way, controlled by hyperparameters)
+* Ensemble methods and aggregation of predictions
+
+<!--
 * Simple preprocessing operations: *PipeOpScale*, *PipeOpPCA*.
 * Feature filtering: *PipeOpFilter*.
 * Data feature type conversion: *PipeOpEncode*.
@@ -65,6 +82,7 @@ Single computational steps can be represented as so-called **PipeOps**, which ca
 * Simultaneous alternative paths with same input data: *PipeOpCopy*.
 * Combination of data from alternative paths: *PipeOpFeatureUnion*.
 * Optional alternative paths, chosen by *Graph* hyperparameter: *PipeOpBranch*, *PipeOpUnbranch*.
+-->
 
 Graphs can be collected into a "*GraphLearner*" object that behave like *mlr3* Learners, and can therefore be used both for model fitting and prediction, and can even be used in hyperparameter optimization.
 
@@ -109,7 +127,7 @@ learner = GraphLearner$new(graph, task_type = "regr")
 
 ps = ParamSet$new(list(
   ParamFct$new("branch.selection", levels = c("pca", "scale", "null")),
-  ParamInt$new("classif.rpart.classif.rpart.maxdepth", lower = 1, upper = 10)
+  ParamInt$new("regr.rpart.regr.rpart.maxdepth", lower = 1, upper = 10)
 ))
 
 task = mlr_tasks$get("bh")

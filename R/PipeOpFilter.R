@@ -43,33 +43,32 @@ PipeOpFilter = R6Class("PipeOpFilter",
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
-      ps = ParamSet$new(list(
-        ParamUty$new("settings", default = list()),
+      self$filter$param_set$set_id = filter$id
+      private$.outer_param_set = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0),
         ParamDbl$new("frac", lower = 0, upper = 1),
         ParamDbl$new("cutoff")
-      ))
-      super$initialize(id, ps, param_vals = param_vals)
+        ))
+      private$.outer_param_set$set_id = "filter"
+      super$initialize(id, self$param_set, param_vals = param_vals)
     },
 
     get_state = function(task) {
       filtercrit = c("nfeat", "frac", "cutoff")
-      filtercrit = Filter(function(name) !is.null(self$param_set$values[[name]]), filtercrit)
+      filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {
         stopf("Exactly one of 'nfeat', 'frac', 'cutoff' must be given. Instead given: %s",
           if (length(filtercrit) == 0) "none" else str_collapse(filtercrit))
       }
-      critvalue = self$param_set$values[[filtercrit]]
-
-      settings = self$param_set$values$settings %??% list()
+      critvalue = private$.outer_param_set$values[[filtercrit]]
 
       filtertask = task$clone()
       filtertask$select(filtertask$feature_types[get("type") %in% self$filter$feature_types, get("id")])
       maxfeat = length(filtertask$feature_names)
 
-      self$filter$calculate(filtertask, settings)
+      self$filter$calculate(filtertask)
 
-      values = sort(self$filter$filter_values, decreasing = TRUE)
+      values = sort(self$filter$scores, decreasing = TRUE)
       features = switch(filtercrit,
         cutoff = names(values)[values >= critvalue],
         nfeat = names(values)[seq_len(min(maxfeat, critvalue))],
@@ -84,9 +83,34 @@ PipeOpFilter = R6Class("PipeOpFilter",
     transform = function(task) {
       task$select(self$state$features)
     }
+  ),
+  active = list(
+    param_set = function(val) {
+      if (is.null(private$.param_set)) {
+        private$.param_set = ParamSetCollection$new(list(
+          private$.outer_param_set,
+          self$filter$param_set
+        ))
+        private$.param_set$set_id = self$id %??% self$filter$id  # self$id may be NULL during initialize() call
+      }
+      if (!missing(val) && !identical(val, private$.param_set)) {
+        stop("param_set is read-only.")
+      }
+      private$.param_set
+    }
+  ),
+  private = list(
+    deep_clone = function(name, value) {
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
+        return(value$clone(deep = TRUE))
+      }
+      value
+    },
+    .outer_param_set = NULL
   )
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "filter"))$new()))
+mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
 

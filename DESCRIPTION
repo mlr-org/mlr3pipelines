@@ -31,7 +31,6 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    kernlab,
     ggplot2,
     mlr3learners,
     mlr3featsel,

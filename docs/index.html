@@ -47,6 +47,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/introduction.html">Introduction</a>
+    </li>
+    <li>
       <a href="articles/a_simple_pipeline.html">A simple pipeline</a>
     </li>
     <li>
@@ -56,10 +59,10 @@
       <a href="articles/branching.html">Showcase: Branching</a>
     </li>
     <li>
-      <a href="articles/create_a_custom_pipeop.html">Custom PipeOps</a>
+      <a href="articles/stacking_and_bagging.html">Showcase: Bagging and Stacking</a>
     </li>
     <li>
-      <a href="articles/stacking_and_bagging.html">Showcase: Bagging and Stacking</a>
+      <a href="articles/create_a_custom_pipeop.html">Custom PipeOps</a>
     </li>
   </ul>
 </li>
@@ -99,7 +102,7 @@
   </a>
 </li>
 <li>
-  <a href="https://mlr-web.com/">
+  <a href="https://mlr-org.com/">
     <span class="fa fa-rss"></span>
      
   </a>
@@ -134,119 +137,133 @@
 <a class="sourceLine" id="cb1-2" title="2"></a>
 <a class="sourceLine" id="cb1-3" title="3">filter =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"filter"</span>,</a>
 <a class="sourceLine" id="cb1-4" title="4">  <span class="dt">filter =</span> mlr3featsel<span class="op">::</span>FilterVariance<span class="op">$</span><span class="kw">new</span>(),</a>
-<a class="sourceLine" id="cb1-5" title="5">  <span class="dt">param_vals =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">frac =</span> <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb1-5" title="5">  <span class="dt">param_vals =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">filter.frac =</span> <span class="fl">0.5</span>))</a>
 <a class="sourceLine" id="cb1-6" title="6"></a>
 <a class="sourceLine" id="cb1-7" title="7">learner_po =<span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"learner"</span>,</a>
 <a class="sourceLine" id="cb1-8" title="8">  <span class="dt">learner =</span> mlr_learners<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"classif.rpart"</span>))</a></code></pre></div>
-<p>These make the following possible:</p>
+<p>These pipeops can then be combined together to define machine learning pipelines:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">graph =<span class="st"> </span>pca <span class="op">%&gt;&gt;%</span><span class="st"> </span>filter <span class="op">%&gt;&gt;%</span><span class="st"> </span>learner_po</a>
 <a class="sourceLine" id="cb2-2" title="2"></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(graph)</a>
 <a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; Graph with 3 PipeOps:</span></a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt;              ID         State       sccssors      prdcssors</span></a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt;             pca &lt;&lt;UNTRAINED&gt;&gt; FilterVariance               </span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt;  FilterVariance &lt;&lt;UNTRAINED&gt;&gt;          rpart            pca</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt;           rpart &lt;&lt;UNTRAINED&gt;&gt;                FilterVariance</span></a>
-<a class="sourceLine" id="cb2-9" title="9"></a>
-<a class="sourceLine" id="cb2-10" title="10">task =<span class="st"> </span>mlr_tasks<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"iris"</span>)</a>
-<a class="sourceLine" id="cb2-11" title="11">holdout =<span class="st"> </span>mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"holdout"</span>)<span class="op">$</span><span class="kw">instantiate</span>(task)</a>
-<a class="sourceLine" id="cb2-12" title="12"></a>
-<a class="sourceLine" id="cb2-13" title="13">graph<span class="op">$</span><span class="kw">train</span>(task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(holdout<span class="op">$</span><span class="kw">train_set</span>(<span class="dv">1</span>)))</a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; $rpart.output</span></a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb2-16" title="16"></a>
-<a class="sourceLine" id="cb2-17" title="17">graph<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(holdout<span class="op">$</span><span class="kw">test_set</span>(<span class="dv">1</span>)))</a>
-<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; $rpart.output</span></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; &lt;PredictionClassif&gt; for 50 observations:</span></a>
-<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt;     row_id  response     truth</span></a>
-<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt;  1:      3    setosa    setosa</span></a>
-<a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt;  2:      6    setosa    setosa</span></a>
-<a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt;  3:      7    setosa    setosa</span></a>
-<a class="sourceLine" id="cb2-24" title="24"><span class="co">#&gt; ---                           </span></a>
-<a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt; 48:    143 virginica virginica</span></a>
-<a class="sourceLine" id="cb2-26" title="26"><span class="co">#&gt; 49:    145 virginica virginica</span></a>
-<a class="sourceLine" id="cb2-27" title="27"><span class="co">#&gt; 50:    148 virginica virginica</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt;  FilterVariance &lt;&lt;UNTRAINED&gt;&gt;  classif.rpart            pca</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt;   classif.rpart &lt;&lt;UNTRAINED&gt;&gt;                FilterVariance</span></a></code></pre></div>
+<p>This example pipeline can be used for training and prediction:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">task =<span class="st"> </span>mlr_tasks<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"iris"</span>)</a>
+<a class="sourceLine" id="cb3-2" title="2">holdout =<span class="st"> </span>mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"holdout"</span>)<span class="op">$</span><span class="kw">instantiate</span>(task)</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4">graph<span class="op">$</span><span class="kw">train</span>(task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(holdout<span class="op">$</span><span class="kw">train_set</span>(<span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt; $classif.rpart.output</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8">graph<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(holdout<span class="op">$</span><span class="kw">test_set</span>(<span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; $classif.rpart.output</span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; &lt;PredictionClassif&gt; for 50 observations:</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;     row_id  response     truth</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;  1:      3    setosa    setosa</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt;  2:      6    setosa    setosa</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt;  3:      7    setosa    setosa</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; ---                           </span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; 48:    143 virginica virginica</span></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; 49:    145 virginica virginica</span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; 50:    148 virginica virginica</span></a></code></pre></div>
+<p>Resampling (and even tuning, see below) is possible using the <code>GraphLearner</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">resample</span>(task, glrn, mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"cv"</span>))</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; &lt;ResampleResult&gt; of learner 'iris' on task 'pca.FilterVariance.classif.rpart' with 10 iterations</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt;     Measure Min. 1st Qu.  Median    Mean 3rd Qu.   Max.      Sd</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;  classif.ce    0       0 0.06667 0.07333 0.06667 0.2667 0.09135</span></a></code></pre></div>
 </div>
 <div id="feature-overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#feature-overview" class="anchor"></a>Feature Overview</h2>
 <p>Single computational steps can be represented as so-called <strong>PipeOps</strong>, which can then be connected with directed edges in a <strong>Graph</strong>. The scope of <em>mlr3pipelines</em> is still growing; currently supported features are:</p>
 <ul>
-<li>Simple preprocessing operations: <em>PipeOpScale</em>, <em>PipeOpPCA</em>.</li>
-<li>Feature filtering: <em>PipeOpFilter</em>.</li>
-<li>Data feature type conversion: <em>PipeOpEncode</em>.</li>
-<li>Undersampling / subsampling for speed and outcome class imbalance handling: <em>PipeOpSubsample</em>.</li>
+<li>Simple data manipulation and preprocessing operations, e.g. PCA, feature filtering</li>
+<li>Task subsampling for speed and outcome class imbalance handling</li>
 <li>
-<em>mlr3</em> <em>Learner</em> as operation in a <em>Graph</em>, both returning a “<em>Prediction</em>” (<em>PipeOpLearner</em>) and an added data feature for super learning (<em>PipeOpLearnerCV</em>).</li>
-<li>Simple ensemble methods on Predictions: <em>PipeOpMajorityVote</em>, <em>PipeOpModelAvg</em>.</li>
-<li>Simultaneous alternative paths with same input data: <em>PipeOpCopy</em>.</li>
-<li>Combination of data from alternative paths: <em>PipeOpFeatureUnion</em>.</li>
-<li>Optional alternative paths, chosen by <em>Graph</em> hyperparameter: <em>PipeOpBranch</em>, <em>PipeOpUnbranch</em>.</li>
+<em>mlr3</em> <em>Learner</em> operations for prediction and stacking</li>
+<li>Simultaneous path branching (data going both ways)</li>
+<li>Alternative path branching (data going one specific way, controlled by hyperparameters)</li>
+<li>Ensemble methods and aggregation of predictions</li>
 </ul>
-<p>Graphs can be collected into a “<em>GraphLearner</em>” object that behave like <em>mlr3</em> Learners, and can therefore be used both for model fitting and prediction, and can even be used in hyperparameter optimization.</p>
+<!--
+* Simple preprocessing operations: *PipeOpScale*, *PipeOpPCA*.
+* Feature filtering: *PipeOpFilter*.
+* Data feature type conversion: *PipeOpEncode*.
+* Undersampling / subsampling for speed and outcome class imbalance handling: *PipeOpSubsample*.
+* *mlr3* *Learner* as operation in a *Graph*, both returning a "*Prediction*" (*PipeOpLearner*) and an added data feature for super learning (*PipeOpLearnerCV*).
+* Simple ensemble methods on Predictions: *PipeOpMajorityVote*, *PipeOpModelAvg*.
+* Simultaneous alternative paths with same input data: *PipeOpCopy*.
+* Combination of data from alternative paths: *PipeOpFeatureUnion*.
+* Optional alternative paths, chosen by *Graph* hyperparameter: *PipeOpBranch*, *PipeOpUnbranch*.
+--><p>Graphs can be collected into a “<em>GraphLearner</em>” object that behave like <em>mlr3</em> Learners, and can therefore be used both for model fitting and prediction, and can even be used in hyperparameter optimization.</p>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>To show the power of <em>mlr3pipelines</em>, the following example shows how to build a <em>Graph</em> that chooses between multiple preprocessing methods, fits both a classification tree (from the <em>rpart</em> package) and a linear model (using R’s “lm()” function), and performs “stacking”—using the predictions of these two models as covariates for a third machine learning method—with penalised linear regression (using the <em>glmnet</em> package). (The example was chosen to show the expressiveness of the <em>Graph</em> language, not to perform particularly well). For a detailed explanation of all steps involved see the <a href="documentation">documentation</a>.</p>
 <p>The graph is built using single processing units—“PipeOps”—that are concatenated using the piping operator <code>%&gt;&gt;%</code>. Note the difference from the <em><a href="https://github.com/tidyverse/magrittr">magrittr</a></em> package’s operator <code>%&gt;%</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"paradox"</span>)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3"</span>)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3pipelines"</span>)</a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3learners"</span>)</a>
-<a class="sourceLine" id="cb3-5" title="5"></a>
-<a class="sourceLine" id="cb3-6" title="6">graph =</a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"branch"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"null"</span>, <span class="st">"pca"</span>, <span class="st">"scale"</span>)) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span><span class="kw"><a href="reference/gunion.html">gunion</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb3-9" title="9">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"null"</span>, <span class="dt">id =</span> <span class="st">"null1"</span>),</a>
-<a class="sourceLine" id="cb3-10" title="10">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"pca"</span>),</a>
-<a class="sourceLine" id="cb3-11" title="11">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"scale"</span>)</a>
-<a class="sourceLine" id="cb3-12" title="12">  )) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"unbranch"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"null"</span>, <span class="st">"pca"</span>, <span class="st">"scale"</span>)) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"copy"</span>, <span class="dv">3</span>) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="st">  </span><span class="kw"><a href="reference/gunion.html">gunion</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb3-16" title="16">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"null"</span>, <span class="dt">id =</span> <span class="st">"null2"</span>),</a>
-<a class="sourceLine" id="cb3-17" title="17">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"learner_cv"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"regr.rpart"</span>)),</a>
-<a class="sourceLine" id="cb3-18" title="18">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"learner_cv"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"regr.lm"</span>))</a>
-<a class="sourceLine" id="cb3-19" title="19">  )) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"featureunion"</span>, <span class="dv">3</span>) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb3-21" title="21"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"encode"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">method =</span> <span class="st">"treatment"</span>)) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb3-22" title="22"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"learner"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"regr.glmnet"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"paradox"</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3"</span>)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3pipelines"</span>)</a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3learners"</span>)</a>
+<a class="sourceLine" id="cb5-5" title="5"></a>
+<a class="sourceLine" id="cb5-6" title="6">graph =</a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"branch"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"null"</span>, <span class="st">"pca"</span>, <span class="st">"scale"</span>)) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="st">  </span><span class="kw"><a href="reference/gunion.html">gunion</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb5-9" title="9">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"null"</span>, <span class="dt">id =</span> <span class="st">"null1"</span>),</a>
+<a class="sourceLine" id="cb5-10" title="10">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"pca"</span>),</a>
+<a class="sourceLine" id="cb5-11" title="11">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"scale"</span>)</a>
+<a class="sourceLine" id="cb5-12" title="12">  )) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"unbranch"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"null"</span>, <span class="st">"pca"</span>, <span class="st">"scale"</span>)) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"copy"</span>, <span class="dv">3</span>) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="st">  </span><span class="kw"><a href="reference/gunion.html">gunion</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb5-16" title="16">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"null"</span>, <span class="dt">id =</span> <span class="st">"null2"</span>),</a>
+<a class="sourceLine" id="cb5-17" title="17">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"learner_cv"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"regr.rpart"</span>)),</a>
+<a class="sourceLine" id="cb5-18" title="18">      mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"learner_cv"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"regr.lm"</span>))</a>
+<a class="sourceLine" id="cb5-19" title="19">  )) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-20" title="20"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"featureunion"</span>, <span class="dv">3</span>) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-21" title="21"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"encode"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">method =</span> <span class="st">"treatment"</span>)) <span class="op">%&gt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-22" title="22"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"learner"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"regr.glmnet"</span>))</a></code></pre></div>
 <p>The topology of this graph can most easily be seen using the <code>Graph</code>’s <code>$plot</code> method:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">graph<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">graph<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>()</a></code></pre></div>
 <p><img src="index_files/figure-html/graphplot-1.png" width="700"></p>
 <p>The graph can itself be used to perform model fitting and prediction, but in our example we want to perform parameter tuning first, using the <em><a href="https://github.com/mlr-org/mlr3tuning">mlr3tuning</a></em> package. For this we wrap the <em>Graph</em> in a <em>GraphLearner</em>, which behaves mostly like a <em>mlr3</em> “Learner” object. For simplicity, we decide only on a few parameters we want to tune: the preprocessing to perform (<em>branch.selection</em>), and the maximum tree depth (<em>regr.rpart.regr.rpart.maxdepth</em>).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">learner =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph, <span class="dt">task_type =</span> <span class="st">"regr"</span>)</a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3">ps =<span class="st"> </span>ParamSet<span class="op">$</span><span class="kw">new</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb5-4" title="4">  ParamFct<span class="op">$</span><span class="kw">new</span>(<span class="st">"branch.selection"</span>, <span class="dt">levels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"pca"</span>, <span class="st">"scale"</span>, <span class="st">"null"</span>)),</a>
-<a class="sourceLine" id="cb5-5" title="5">  ParamInt<span class="op">$</span><span class="kw">new</span>(<span class="st">"rpart.rpart.maxdepth"</span>, <span class="dt">lower =</span> <span class="dv">1</span>, <span class="dt">upper =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb5-6" title="6">))</a>
-<a class="sourceLine" id="cb5-7" title="7"></a>
-<a class="sourceLine" id="cb5-8" title="8">task =<span class="st"> </span>mlr_tasks<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"bh"</span>)</a>
-<a class="sourceLine" id="cb5-9" title="9">task<span class="op">$</span><span class="kw">select</span>(task<span class="op">$</span>feature_types[type <span class="op">!=</span><span class="st"> "factor"</span>, id])</a>
-<a class="sourceLine" id="cb5-10" title="10"></a>
-<a class="sourceLine" id="cb5-11" title="11">resampling =<span class="st"> </span>mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"cv"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">folds =</span> <span class="dv">3</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3tuning"</span>)</a>
-<a class="sourceLine" id="cb6-2" title="2">ff =<span class="st"> </span>FitnessFunction<span class="op">$</span><span class="kw">new</span>(task, learner, resampling, ps)</a>
-<a class="sourceLine" id="cb6-3" title="3">tuner =<span class="st"> </span>TunerGridSearch<span class="op">$</span><span class="kw">new</span>(ff, TerminatorEvaluations<span class="op">$</span><span class="kw">new</span>(<span class="dv">1</span>), <span class="dt">resolution =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb6-4" title="4"></a>
-<a class="sourceLine" id="cb6-5" title="5">tuner<span class="op">$</span><span class="kw">tune</span>()</a>
-<a class="sourceLine" id="cb6-6" title="6"></a>
-<a class="sourceLine" id="cb6-7" title="7">tuner<span class="op">$</span><span class="kw">tune_result</span>()<span class="op">$</span>values[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(ps<span class="op">$</span>params)]</a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; $branch.selection</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; [1] "scale"</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt; $rpart.rpart.maxdepth</span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt; [1] 10</span></a></code></pre></div>
-<p>This would tell us that the “scale” preprocessing branch with <em>rpart</em> <em>maxdepth</em> = 10 performs well; although the usage of only few small resampling folds makes the result very stochastic.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">learner =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph, <span class="dt">task_type =</span> <span class="st">"regr"</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3">ps =<span class="st"> </span>ParamSet<span class="op">$</span><span class="kw">new</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb7-4" title="4">  ParamFct<span class="op">$</span><span class="kw">new</span>(<span class="st">"branch.selection"</span>, <span class="dt">levels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"pca"</span>, <span class="st">"scale"</span>, <span class="st">"null"</span>)),</a>
+<a class="sourceLine" id="cb7-5" title="5">  ParamInt<span class="op">$</span><span class="kw">new</span>(<span class="st">"regr.rpart.regr.rpart.maxdepth"</span>, <span class="dt">lower =</span> <span class="dv">1</span>, <span class="dt">upper =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb7-6" title="6">))</a>
+<a class="sourceLine" id="cb7-7" title="7"></a>
+<a class="sourceLine" id="cb7-8" title="8">task =<span class="st"> </span>mlr_tasks<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"bh"</span>)</a>
+<a class="sourceLine" id="cb7-9" title="9">task<span class="op">$</span><span class="kw">select</span>(task<span class="op">$</span>feature_types[type <span class="op">!=</span><span class="st"> "factor"</span>, id])</a>
+<a class="sourceLine" id="cb7-10" title="10"></a>
+<a class="sourceLine" id="cb7-11" title="11">resampling =<span class="st"> </span>mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"cv"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">folds =</span> <span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"mlr3tuning"</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2">ff =<span class="st"> </span>FitnessFunction<span class="op">$</span><span class="kw">new</span>(task, learner, resampling, ps)</a>
+<a class="sourceLine" id="cb8-3" title="3">tuner =<span class="st"> </span>TunerGridSearch<span class="op">$</span><span class="kw">new</span>(ff, TerminatorEvaluations<span class="op">$</span><span class="kw">new</span>(<span class="dv">1</span>), <span class="dt">resolution =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb8-4" title="4"></a>
+<a class="sourceLine" id="cb8-5" title="5">tuner<span class="op">$</span><span class="kw">tune</span>()</a>
+<a class="sourceLine" id="cb8-6" title="6"></a>
+<a class="sourceLine" id="cb8-7" title="7">tuner<span class="op">$</span><span class="kw">tune_result</span>()<span class="op">$</span>values[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(ps<span class="op">$</span>params)]</a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; $branch.selection</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; [1] "null"</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt; $regr.rpart.regr.rpart.maxdepth</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; [1] 10</span></a></code></pre></div>
+<p>This would tell us that the “null” preprocessing branch with <em>rpart</em> <em>maxdepth</em> = performs well; although the usage of only few small resampling folds makes the result very stochastic.</p>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <p>The easiest way to get started is reading some of the vignettes that are shipped with the package, which can also be viewed online:</p>
 <ul>
-<li><a href="https://mlr-org.github.io/mlr3pipelines/articles/basic_concepts.html">Introduction and Basic Concepts</a></li>
+<li><a href="https://mlr-org.github.io/mlr3pipelines/articles/introduction.html">Quick Introduction</a></li>
+<li><a href="https://mlr-org.github.io/mlr3pipelines/articles/basic_concepts.html">Basic Concepts</a></li>
 <li><a href="https://mlr-org.github.io/mlr3pipelines/articles/a_simple_pipeline.html">Linear Preprocessing Pipelines</a></li>
 <li><a href="https://mlr-org.github.io/mlr3pipelines/articles/branching.html">Alternative Path Branching</a></li>
 <li><a href="https://mlr-org.github.io/mlr3pipelines/articles/stacking_and_bagging.html">Ensemble Methods</a></li>

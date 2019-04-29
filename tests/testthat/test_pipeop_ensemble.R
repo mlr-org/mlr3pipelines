@@ -163,7 +163,7 @@ test_that("PipeOps break for bad inputs", {
   expect_error(train_pipeop(cpo2, clprds[[1]]))
   expect_error(train_pipeop(rpo2, rgrprds[[1]]))
 
-  rpo2$param_set$values$measure = mlr_measures$get("classif.mmce")
+  rpo2$param_set$values$measure = mlr_measures$get("classif.ce")
   cpo2$param_set$values$measure = mlr_measures$get("regr.mse")
   expect_error(train_pipeop(rpo2, rgrprds))
   expect_error(train_pipeop(cpo2, clprds))

@@ -18,7 +18,7 @@ test_that("Dictionary contains all PipeOps", {
       PipeOpNlOptMajorityVote = list(innum = 2),
       PipeOpNlOptModelAvg = list(innum = 2),
       PipeOpUnbranch = list(options = 2),
-      PipeOpFilter = list(filter = mlr3featsel::FilterVariance$new(), param_vals = list(nfeat = 1)))
+      PipeOpFilter = list(filter = mlr3featsel::FilterVariance$new(), param_vals = list(filter.nfeat = 1)))
 
   # The PipeOps that may have a default ID different from the mlr_pipeops key
   unequal_id = c("PipeOpLearner", "PipeOpLearnerCV", "PipeOpFilter")
@@ -50,7 +50,7 @@ test_that("Dictionary contains all PipeOps", {
 
   dictnames = map_chr(pipeops, function(pipe) {
     c(names(mlr_pipeops$items)[map_lgl(mlr_pipeops$items, function(gen) {
-      identical(gen, get(pipe, pkgenv))
+      identical(gen$value, get(pipe, pkgenv))
     })], "__NOT_FOUND__")[1]
   })
 
