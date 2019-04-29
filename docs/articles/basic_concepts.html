@@ -47,6 +47,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/introduction.html">Introduction</a>
+    </li>
+    <li>
       <a href="../articles/a_simple_pipeline.html">A simple pipeline</a>
     </li>
     <li>
@@ -56,10 +59,10 @@
       <a href="../articles/branching.html">Showcase: Branching</a>
     </li>
     <li>
-      <a href="../articles/create_a_custom_pipeop.html">Custom PipeOps</a>
+      <a href="../articles/stacking_and_bagging.html">Showcase: Bagging and Stacking</a>
     </li>
     <li>
-      <a href="../articles/stacking_and_bagging.html">Showcase: Bagging and Stacking</a>
+      <a href="../articles/create_a_custom_pipeop.html">Custom PipeOps</a>
     </li>
   </ul>
 </li>
@@ -99,7 +102,7 @@
   </a>
 </li>
 <li>
-  <a href="https://mlr-web.com/">
+  <a href="https://mlr-org.com/">
     <span class="fa fa-rss"></span>
      
   </a>
@@ -119,7 +122,7 @@
       <h1>Showcase: Basic Concepts: PipeOp and Graph</h1>
                         <h4 class="author">Florian Pfisterer</h4>
             
-            <h4 class="date">2019-03-12</h4>
+            <h4 class="date">2019-04-29</h4>
       
       <!--The 'toc' block was inserted manually by @pat-s. It triggeres the inline ToC in the vignettes.-->
             <div id="toc">
@@ -252,7 +255,7 @@
 <p>The following slots (and more) are contained in each PipeOp: - <code>$train()</code>: A function used to train with the PipeOp. - <code>$predict()</code>: A function used to predict with the PipeOp. - <code>$id</code>: Allows us to set or get the id of the PipeOp. - <code>$param_set</code>: The set of all exposed parameters of the PipeOp. - <code>$values</code>: Current hyperparameter settings. - <code>$is_trained</code>: Is the PipeOp already trained?</p>
 <p>We can check properties by accessing the respective slots.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">  op<span class="op">$</span>id</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; [1] "rpart"</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; [1] "classif.rpart"</span></a>
 <a class="sourceLine" id="cb2-3" title="3">  op<span class="op">$</span>is_trained</a>
 <a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
 <p>The <code>param_set</code> and <code>values</code> are required if a PipeOp contains hyperparameters we want to set. See [paradox::ParamSet] for a quick intro on how <code>ParamSet</code>s work.</p>
@@ -332,13 +335,13 @@
 <a class="sourceLine" id="cb10-5" title="5"><span class="co">#&gt; Features (4):</span></a>
 <a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt; * dbl (4): PC1, PC2, PC3, PC4</span></a>
 <a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; Public: all_classes, backend, cbind(), class_n, class_names,</span></a>
-<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt;   clone(), col_info, col_roles, data(), feature_names,</span></a>
-<a class="sourceLine" id="cb10-10" title="10"><span class="co">#&gt;   feature_types, filter(), formula, groups, hash, head(), id,</span></a>
-<a class="sourceLine" id="cb10-11" title="11"><span class="co">#&gt;   levels(), measures, ncol, negative, nrow, positive, properties,</span></a>
-<a class="sourceLine" id="cb10-12" title="12"><span class="co">#&gt;   rbind(), replace_features(), row_ids, row_roles, select(),</span></a>
-<a class="sourceLine" id="cb10-13" title="13"><span class="co">#&gt;   set_col_role(), set_row_role(), target_names, task_type,</span></a>
-<a class="sourceLine" id="cb10-14" title="14"><span class="co">#&gt;   truth(), weights</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; Public: backend, cbind(), class_n, class_names, clone(),</span></a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt;   col_info, col_roles, data_formats, data(), droplevels(),</span></a>
+<a class="sourceLine" id="cb10-10" title="10"><span class="co">#&gt;   feature_names, feature_types, filter(), formula(), groups, hash,</span></a>
+<a class="sourceLine" id="cb10-11" title="11"><span class="co">#&gt;   head(), id, levels(), measures, missings(), ncol, negative,</span></a>
+<a class="sourceLine" id="cb10-12" title="12"><span class="co">#&gt;   nrow, positive, properties, rbind(), replace_features(),</span></a>
+<a class="sourceLine" id="cb10-13" title="13"><span class="co">#&gt;   row_ids, row_roles, select(), set_col_role(), set_row_role(),</span></a>
+<a class="sourceLine" id="cb10-14" title="14"><span class="co">#&gt;   target_names, task_type, truth(), weights</span></a></code></pre></div>
 <p>and transform new data with the trained <code>Pipeline</code>:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">gr<span class="op">$</span><span class="kw">train</span>(mlr_tasks<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"iris"</span>))</a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="co">#&gt; $pca.output</span></a>
@@ -347,13 +350,13 @@
 <a class="sourceLine" id="cb11-5" title="5"><span class="co">#&gt; Features (4):</span></a>
 <a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt; * dbl (4): PC1, PC2, PC3, PC4</span></a>
 <a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt; Public: all_classes, backend, cbind(), class_n, class_names,</span></a>
-<a class="sourceLine" id="cb11-9" title="9"><span class="co">#&gt;   clone(), col_info, col_roles, data(), feature_names,</span></a>
-<a class="sourceLine" id="cb11-10" title="10"><span class="co">#&gt;   feature_types, filter(), formula, groups, hash, head(), id,</span></a>
-<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt;   levels(), measures, ncol, negative, nrow, positive, properties,</span></a>
-<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt;   rbind(), replace_features(), row_ids, row_roles, select(),</span></a>
-<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt;   set_col_role(), set_row_role(), target_names, task_type,</span></a>
-<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt;   truth(), weights</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt; Public: backend, cbind(), class_n, class_names, clone(),</span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="co">#&gt;   col_info, col_roles, data_formats, data(), droplevels(),</span></a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="co">#&gt;   feature_names, feature_types, filter(), formula(), groups, hash,</span></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt;   head(), id, levels(), measures, missings(), ncol, negative,</span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt;   nrow, positive, properties, rbind(), replace_features(),</span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt;   row_ids, row_roles, select(), set_col_role(), set_row_role(),</span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt;   target_names, task_type, truth(), weights</span></a></code></pre></div>
 <p>Whether we store the intermediate results in the <code>PipeOp</code>’s <code>$.result</code> slot can be controlled via <code>keep_results</code> . This is can be done mostly for debugging purposes. Default <code>FALSE</code>.</p>
 </div>
 </div>

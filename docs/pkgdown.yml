@@ -6,6 +6,7 @@ articles:
   basic_concepts: basic_concepts.html
   branching: branching.html
   create_a_custom_pipeop: create_a_custom_pipeop.html
+  introduction: introduction.html
   stacking_and_bagging: stacking_and_bagging.html
 urls:
   reference: https://mlr3pipelines.mlr-org.com//reference
