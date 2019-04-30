@@ -243,7 +243,7 @@ Graph = R6Class("Graph",
       lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
         data.table(ID = pipeop$id, State = sprintf("<%s>",
           map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
-      }))
+      }), use.names = TRUE)
       if (nrow(lines)) {
         prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
         scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
@@ -365,7 +365,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df[[1]] = paste0(po$id, ".", df[[1]])
     names(df)[5] = "channel.name"
     df
-  }))
+  }), use.names = TRUE)
 }
 
 graph_channels_dt = function(ids, channels, pipeops, direction) {
@@ -378,7 +378,7 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
     po[[direction]][get("name") %nin% channels[ids == po$id],
       list(name = paste0(po$id, ".", get("name")),
         train = get("train"), predict = get("predict"), op.id = po$id, channel.name = get("name"))]
-  }))
+  }), use.names = TRUE)
 }
 
 # walk along Graph edges, evaluate [[fun]](), return named list of output
