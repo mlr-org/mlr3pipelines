@@ -353,21 +353,21 @@
 <p>A <code>Graph</code> itself has a <strong><code>$train()</code></strong> and a <strong><code>$predict()</code></strong> method that accept some data and propagate this data through the network of <code>PipeOp</code>s. The return value corresponds to the output of the <code>PipeOp</code> output channels that are not connected to other input channels.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">gr<span class="op">$</span><span class="kw">train</span>(task)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>()</a>
 <a class="sourceLine" id="cb14-2" title="2"><span class="co">#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="co">#&gt;  1:     setosa   -1.3357516  -1.3110521  -0.89767388   1.0156020</span></a>
-<a class="sourceLine" id="cb14-4" title="4"><span class="co">#&gt;  2:     setosa   -1.3357516  -1.4422448  -1.25996379  -0.1315388</span></a>
-<a class="sourceLine" id="cb14-5" title="5"><span class="co">#&gt;  3:     setosa   -1.3357516  -1.3110521  -0.41462067   2.6215991</span></a>
-<a class="sourceLine" id="cb14-6" title="6"><span class="co">#&gt;  4:     setosa   -1.2224563  -1.3110521  -0.89767388   1.7038865</span></a>
-<a class="sourceLine" id="cb14-7" title="7"><span class="co">#&gt;  5: versicolor   -0.1461509  -0.2615107  -1.01843718  -2.4258204</span></a>
-<a class="sourceLine" id="cb14-8" title="8"><span class="co">#&gt;  6:  virginica    1.6099263   1.1816087   2.12140867  -0.1315388</span></a>
-<a class="sourceLine" id="cb14-9" title="9"><span class="co">#&gt;  7:  virginica    0.4203256   0.6568380  -1.13920048  -1.2786796</span></a>
-<a class="sourceLine" id="cb14-10" title="10"><span class="co">#&gt;  8:  virginica    1.1567451   0.7880307   1.03453895  -1.2786796</span></a>
-<a class="sourceLine" id="cb14-11" title="11"><span class="co">#&gt;  9:  virginica    0.7602115   1.0504160   0.79301235   0.3273175</span></a>
-<a class="sourceLine" id="cb14-12" title="12"><span class="co">#&gt; 10:  virginica    0.7602115   1.5751867  -0.05233076  -0.5903951</span></a>
-<a class="sourceLine" id="cb14-13" title="13"><span class="co">#&gt; 11:  virginica    0.9868021   0.7880307   0.79301235  -0.1315388</span></a>
-<a class="sourceLine" id="cb14-14" title="14"><span class="co">#&gt; 12:  virginica    0.6469162   1.0504160  -0.29385737  -0.5903951</span></a>
-<a class="sourceLine" id="cb14-15" title="15"><span class="co">#&gt; 13:  virginica    0.5902685   0.7880307   0.43072244  -0.5903951</span></a>
-<a class="sourceLine" id="cb14-16" title="16"><span class="co">#&gt; 14:  virginica    1.0434497   1.1816087   0.67224905  -0.5903951</span></a>
-<a class="sourceLine" id="cb14-17" title="17"><span class="co">#&gt; 15:  virginica    0.5902685   0.7880307   0.18919584  -0.1315388</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-3" title="3"><span class="co">#&gt;  1:     setosa   -1.3923993  -1.3110521   -1.3807271  0.32731751</span></a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="co">#&gt;  2:     setosa   -1.2224563  -1.3110521   -1.2599638  0.78617383</span></a>
+<a class="sourceLine" id="cb14-5" title="5"><span class="co">#&gt;  3:     setosa   -1.3923993  -1.0486668   -0.5353840  1.93331463</span></a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="co">#&gt;  4:     setosa   -1.2791040  -1.3110521   -1.1392005  0.09788935</span></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="co">#&gt;  5:     setosa   -1.3923993  -1.3110521   -1.7430170 -0.13153881</span></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="co">#&gt;  6:     setosa   -1.3923993  -1.1798595   -1.0184372  1.01560199</span></a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="co">#&gt;  7:     setosa   -1.3923993  -1.1798595   -1.6222537 -1.73753594</span></a>
+<a class="sourceLine" id="cb14-10" title="10"><span class="co">#&gt;  8:     setosa   -1.0525134  -1.0486668   -0.8976739  1.70388647</span></a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="co">#&gt;  9: versicolor    0.1370873   0.1320673    0.3099591 -0.59039513</span></a>
+<a class="sourceLine" id="cb14-12" title="12"><span class="co">#&gt; 10: versicolor    0.4203256   0.5256453    0.1891958  0.78617383</span></a>
+<a class="sourceLine" id="cb14-13" title="13"><span class="co">#&gt; 11: versicolor    0.1937350   0.1320673   -0.2938574 -0.13153881</span></a>
+<a class="sourceLine" id="cb14-14" title="14"><span class="co">#&gt; 12: versicolor   -0.2594462  -0.2615107   -1.0184372 -1.73753594</span></a>
+<a class="sourceLine" id="cb14-15" title="15"><span class="co">#&gt; 13: versicolor    0.3070303   0.1320673    0.4307224 -0.36096697</span></a>
+<a class="sourceLine" id="cb14-16" title="16"><span class="co">#&gt; 14:  virginica    0.6469162   0.7880307    0.5514857 -0.81982329</span></a>
+<a class="sourceLine" id="cb14-17" title="17"><span class="co">#&gt; 15:  virginica    0.8168591   1.0504160    0.7930124 -0.13153881</span></a></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">gr<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(single_line_task)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>()</a>
 <a class="sourceLine" id="cb15-2" title="2"><span class="co">#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></a>
 <a class="sourceLine" id="cb15-3" title="3"><span class="co">#&gt; 1:  setosa    -1.335752   -1.311052   -0.8976739    1.015602</span></a></code></pre></div>
@@ -462,7 +462,7 @@
 <a class="sourceLine" id="cb21-4" title="4"><span class="co">#&gt; INFO [mlr3] Running learner 'pca.classif.rpart' on task 'iris' (iteration 1/1)'</span></a>
 <a class="sourceLine" id="cb21-5" title="5"><span class="co">#&gt; &lt;ResampleResult&gt; of learner 'iris' on task 'pca.classif.rpart' with 1 iterations</span></a>
 <a class="sourceLine" id="cb21-6" title="6"><span class="co">#&gt;     Measure Min. 1st Qu. Median Mean 3rd Qu. Max. Sd</span></a>
-<a class="sourceLine" id="cb21-7" title="7"><span class="co">#&gt;  classif.ce 0.12    0.12   0.12 0.12    0.12 0.12 NA</span></a></code></pre></div>
+<a class="sourceLine" id="cb21-7" title="7"><span class="co">#&gt;  classif.ce 0.08    0.08   0.08 0.08    0.08 0.08 NA</span></a></code></pre></div>
 </div>
 </div>
 <div id="hyperparameters" class="section level2">

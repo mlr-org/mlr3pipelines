@@ -163,18 +163,18 @@
 <a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; &lt;PredictionClassif&gt; for 50 observations:</span></a>
 <a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;     row_id  response     truth</span></a>
 <a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;  1:      3    setosa    setosa</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt;  2:      6    setosa    setosa</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt;  3:      7    setosa    setosa</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt;  2:      5    setosa    setosa</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt;  3:      9    setosa    setosa</span></a>
 <a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; ---                           </span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; 48:    143 virginica virginica</span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; 48:    142 virginica virginica</span></a>
 <a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; 49:    145 virginica virginica</span></a>
 <a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; 50:    148 virginica virginica</span></a></code></pre></div>
 <p>Resampling (and even tuning, see below) is possible using the <code>GraphLearner</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="kw">resample</span>(task, glrn, mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/get">get</a></span>(<span class="st">"cv"</span>))</a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; &lt;ResampleResult&gt; of learner 'iris' on task 'pca.FilterVariance.classif.rpart' with 10 iterations</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt;     Measure Min. 1st Qu.  Median    Mean 3rd Qu.   Max.      Sd</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;  classif.ce    0       0 0.06667 0.07333 0.06667 0.2667 0.09135</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt;     Measure Min. 1st Qu.  Median Mean 3rd Qu.   Max.      Sd</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;  classif.ce    0       0 0.06667 0.06 0.06667 0.2667 0.07981</span></a></code></pre></div>
 </div>
 <div id="feature-overview" class="section level2">
 <h2 class="hasAnchor">
@@ -254,7 +254,7 @@
 <a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; [1] "null"</span></a>
 <a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt; $regr.rpart.regr.rpart.maxdepth</span></a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; [1] 10</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; [1] 5</span></a></code></pre></div>
 <p>This would tell us that the “null” preprocessing branch with <em>rpart</em> <em>maxdepth</em> = performs well; although the usage of only few small resampling folds makes the result very stochastic.</p>
 </div>
 <div id="documentation" class="section level2">
