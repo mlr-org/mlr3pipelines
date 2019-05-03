@@ -79,7 +79,7 @@ It is important to take a moment and notice the importance of a `$state` variabl
 Each `PipeOp` is an instance of an "`R6`" class, many of which are provided by the `mlr3pipelines` package itself. They can be constructed explicitly ("`PipeOpPCA$new()`") or retrieved from the `mlr_pipelines` collection: `mlr_pipeops$get("pca")`. The entire list of available `PipeOp`s, and some meta-information, can be retrieved using `as.data.table()`:
 
 ```{r}
-as.data.table(mlr_pipeops)[, c("id", "input.num", "output.num")]
+as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num")]
 ```
 
 ## PipeOp Channels
