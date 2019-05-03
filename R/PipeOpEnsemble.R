@@ -115,9 +115,6 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("modelavg", PipeOpModelAvg, list("N"))
-
 
 #' @title PipeOpNlOptModelAvg
 #'
@@ -175,10 +172,6 @@ PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("nloptmodelavg", PipeOpNlOptModelAvg, list("N"))
-
 
 
 #' @title PipeOpMajorityVote
@@ -270,9 +263,6 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("majorityvote", PipeOpMajorityVote, list("N"))
-
 
 #' @title PipeOpNlOptMajorityVote
 #'
@@ -333,6 +323,3 @@ PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("nloptmajorityvote", PipeOpNlOptMajorityVote, list("N"))

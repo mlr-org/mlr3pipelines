@@ -114,14 +114,14 @@ test_that("data.table of pipeops looks as it should", {
 
   potable = as.data.table(mlr_pipeops)
 
-  expect_equal(colnames(potable),
-    c("id", "packages", "input.num", "output.num",
+  expect_set_equal(colnames(potable),
+    c("key", "packages", "input.num", "output.num",
       "input.type.train", "input.type.predict",
       "output.type.train", "output.type.predict"))
 
   expect_equal(nrow(potable), length(mlr_pipeops$keys()))
 
-  expect_set_equal(potable$id, mlr_pipeops$keys())
+  expect_set_equal(potable$key, mlr_pipeops$keys())
 
   expect_equal(potable["branch"]$output.num, NA_integer_)
   expect_equal(potable["unbranch"]$input.num, NA_integer_)
@@ -133,4 +133,3 @@ test_that("data.table of pipeops looks as it should", {
   expect_equal(potable["learner_cv"]$input.type.train, list("Task"))
 
 })
-

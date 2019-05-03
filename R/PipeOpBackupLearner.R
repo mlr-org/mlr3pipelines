@@ -85,6 +85,3 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("backuplearner", PipeOpBackupLearner)

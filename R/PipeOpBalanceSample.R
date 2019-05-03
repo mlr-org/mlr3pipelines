@@ -96,6 +96,3 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
     predict_task = identity
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("balancesample", PipeOpBalanceSample)

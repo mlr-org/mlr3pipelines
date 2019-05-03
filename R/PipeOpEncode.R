@@ -72,6 +72,3 @@ PipeOpEncode = R6Class("PipeOpEncode",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("encode", PipeOpEncode)

@@ -133,7 +133,3 @@ PipeOpImpute = R6Class("PipeOpImpute",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("impute", PipeOpImpute)
-

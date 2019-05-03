@@ -41,6 +41,3 @@ PipeOpPCA = R6Class("PipeOpPCA",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("pca", PipeOpPCA)

@@ -63,6 +63,3 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
     predict_task = identity
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("subsample", PipeOpSubsample)

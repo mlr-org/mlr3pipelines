@@ -9,6 +9,11 @@
 #'
 #' See [`mlr3::Dictionary`].
 #'
+#' @section S3 methods:
+#' * `as.data.table(dict)`\cr
+#'   [Dictionary] -> [data.table::data.table()]\cr
+#'   Returns a `data.table()` with fields "key", "packages", and connectors.
+#'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @name mlr_pipeops
@@ -35,19 +40,19 @@ DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3::Dictionary,
 )
 
 #' @export
-mlr_pipeops = DictionaryPipeOp$new()
+mlr_pipeops = NULL
 
 #' @export
 as.data.table.DictionaryPipeOp = function(x, ...) {
-  setkeyv(map_dtr(x$keys(), function(id) {
-    metainf = x$metainf[[id]]
+  setkeyv(map_dtr(x$keys(), function(key) {
+    metainf = x$metainf[[key]]
     if (!is.null(metainf)) {
       meta_one = lapply(metainf, function(x) if (identical(x, "N")) 1 else x)
       meta_two = lapply(metainf, function(x) if (identical(x, "N")) 2 else x)
-      l1 = do.call(x$get, c(list(id), meta_one))
-      l2 = do.call(x$get, c(list(id), meta_two))
+      l1 = do.call(x$get, c(list(key), meta_one))
+      l2 = do.call(x$get, c(list(key), meta_two))
     } else {
-      l1 = l2 = x$get(id)
+      l1 = l2 = x$get(key)
     }
     if (nrow(l1$input) == nrow(l2$input)) {
       innum = nrow(l1$input)
@@ -60,7 +65,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
       outnum = NA
     }
     list(
-      id = id,
+      key = key,
       packages = list(l1$packages),
       input.num = innum,
       output.num = outnum,
@@ -69,5 +74,5 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
       output.type.train = list(l1$output$train),
       output.type.predict = list(l1$output$predict)
     )
-  }), "id")[]
+  }), "key")[]
 }

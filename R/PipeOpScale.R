@@ -44,6 +44,3 @@ PipeOpScale = R6Class("PipeOpScale",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("scale", PipeOpScale)
