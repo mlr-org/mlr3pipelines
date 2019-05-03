@@ -135,8 +135,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       }
       intask = self$predict_task(intask)
 
-      # FIXME: setkey() next line can go when https://github.com/mlr-org/mlr3/issues/193 is fixed
-      if (!isTRUE(all.equal(self$outtasklayout, setkey(intask$feature_types, "id"), ignore.row.order = TRUE))) {
+      if (!isTRUE(all.equal(self$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stop("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       if (do_subset) {
