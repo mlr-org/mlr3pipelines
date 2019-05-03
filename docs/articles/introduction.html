@@ -244,8 +244,8 @@
 <h3 class="hasAnchor">
 <a href="#where-to-get-pipeops" class="anchor"></a>Where to Get <code>PipeOp</code>s</h3>
 <p>Each <code>PipeOp</code> is an instance of an “<code>R6</code>” class, many of which are provided by the <code>mlr3pipelines</code> package itself. They can be constructed explicitly (“<code>PipeOpPCA$new()</code>”) or retrieved from the <code>mlr_pipelines</code> collection: <code>mlr_pipeops$get("pca")</code>. The entire list of available <code>PipeOp</code>s, and some meta-information, can be retrieved using <code>as.data.table()</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">as.data.table</span>(mlr_pipeops)[, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"id"</span>, <span class="st">"input.num"</span>, <span class="st">"output.num"</span>)]</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt;                    id input.num output.num</span></a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">as.data.table</span>(mlr_pipeops)[, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"key"</span>, <span class="st">"input.num"</span>, <span class="st">"output.num"</span>)]</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt;                   key input.num output.num</span></a>
 <a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt;  1:     backuplearner         2          1</span></a>
 <a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt;  2:     balancesample         1          1</span></a>
 <a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt;  3:            branch         1         NA</span></a>
