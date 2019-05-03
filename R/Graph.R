@@ -346,7 +346,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     return(data.table(name = character(), train = character(),
       predict = character(), op.id = character(), channel.name = character()))
   }
-  rbindlist(lapply(pipeops, function(po) {
+  map_dtr(pipeops, function(po) {
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
     # (and factor 2 faster than a naive data.table implementation below).
     # $input and $output is actually a bottleneck for %>>%, so we want this to be fast.
@@ -365,7 +365,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df[[1]] = paste0(po$id, ".", df[[1]])
     names(df)[5] = "channel.name"
     df
-  }), use.names = TRUE)
+  })
 }
 
 graph_channels_dt = function(ids, channels, pipeops, direction) {
@@ -374,11 +374,11 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
     return(data.table(name = character(), train = character(),
       predict = character(), op.id = character(), channel.name = character()))
   }
-  rbindlist(lapply(pipeops, function(po) {
+  map_dtr(pipeops, function(po) {
     po[[direction]][get("name") %nin% channels[ids == po$id],
       list(name = paste0(po$id, ".", get("name")),
         train = get("train"), predict = get("predict"), op.id = po$id, channel.name = get("name"))]
-  }), use.names = TRUE)
+  })
 }
 
 # walk along Graph edges, evaluate [[fun]](), return named list of output
