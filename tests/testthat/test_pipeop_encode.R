@@ -2,7 +2,7 @@ context("PipeOpEncode")
 
 test_that("PipeOpEncode", {
 
-  task = mlr_tasks$get("bh")
+  task = mlr_tasks$get("boston_housing")
 
   chaslevels = task$levels()$chas
   townlevels = task$levels()$town

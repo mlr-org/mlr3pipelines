@@ -43,7 +43,7 @@ graph = pca %>>% filter %>>% learner_po
 print(graph)
 #> Graph with 3 PipeOps:
 #>              ID         State       sccssors      prdcssors
-#>             pca <<UNTRAINED>> FilterVariance               
+#>             pca <<UNTRAINED>> FilterVariance
 #>  FilterVariance <<UNTRAINED>>  classif.rpart            pca
 #>   classif.rpart <<UNTRAINED>>                FilterVariance
 ```
@@ -65,7 +65,7 @@ graph$predict(task$clone()$filter(holdout$test_set(1)))
 #>  1:      3    setosa    setosa
 #>  2:      6    setosa    setosa
 #>  3:      7    setosa    setosa
-#> ---                           
+#> ---
 #> 48:    143 virginica virginica
 #> 49:    145 virginica virginica
 #> 50:    148 virginica virginica
@@ -183,7 +183,7 @@ ps = ParamSet$new(list(
   ParamInt$new("regr.rpart.regr.rpart.maxdepth", lower = 1, upper = 10)
 ))
 
-task = mlr_tasks$get("bh")
+task = mlr_tasks$get("boston_housing")
 task$select(task$feature_types[type != "factor", id])
 
 resampling = mlr_resamplings$get("cv", param_vals = list(folds = 3))
@@ -199,7 +199,7 @@ tuner$tune()
 tuner$tune_result()$values[names(ps$params)]
 #> $branch.selection
 #> [1] "null"
-#> 
+#>
 #> $regr.rpart.regr.rpart.maxdepth
 #> [1] 10
 ```

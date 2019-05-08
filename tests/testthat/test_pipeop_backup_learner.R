@@ -11,7 +11,7 @@ test_that("PipeOpBackupLearner - basic properties", {
   expect_data_table(po$output, nrow = 1)
 
   task = mlr_tasks$get("iris")
-  regr_task = mlr_tasks$get("bh")
+  regr_task = mlr_tasks$get("boston_housing")
 
   result = train_pipeop(po, list(learnerin = NULL, taskin = task))
   expect_equal(unname(result), list(NULL))
@@ -80,7 +80,7 @@ test_that("PipeOpBackupLearner usage", {
       mlr_pipeops$get("null"))) %>>%
     mlr_pipeops$get("backuplearner", mlr_learners$get("regr.featureless"))
 
-  bh = mlr_tasks$get("bh")
+  bh = mlr_tasks$get("boston_housing")
   graph$train(bh)
 
   bh_missings = bh$data()

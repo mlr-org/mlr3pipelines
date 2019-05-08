@@ -383,22 +383,28 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
 
 make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "response",
  seed = 1444L, nclasses = 3L) {
+
   if (!noise) set.seed(seed)
-  p = PredictionClassif$new()
-  p$row_ids = seq_len(n)
-  p$truth = factor(sample(letters[seq_len(nclasses)], n, replace = TRUE))
-  p$predict_types = predict_types
+  response = prob = NULL
+  truth = factor(sample(letters[seq_len(nclasses)], n, replace = TRUE))
+
   if ("prob" %in% predict_types) {
-    p$prob = matrix(runif(n * nclasses), ncol = nclasses, nrow = n)
-    p$prob = t(apply(p$prob, 1, function(x) x / sum(x)))
-    colnames(p$prob) = unique(p$truth)
-    max.prob = max.col(p$prob, ties.method='first')
-    p$response = factor(max.prob, labels = unique(p$truth))
-    levels(p$response) = unique(p$truth)
+    prob = matrix(runif(n * nclasses), ncol = nclasses, nrow = n)
+    prob = t(apply(prob, 1, function(x) x / sum(x)))
+    colnames(prob) = unique(truth)
+    max.prob = max.col(prob, ties.method='first')
+    response = factor(max.prob, labels = unique(truth))
+    levels(response) = unique(truth)
   } else {
-    p$response = factor(sample(letters[seq_len(nclasses)], n, replace = TRUE))
+    response = factor(sample(letters[seq_len(nclasses)], n, replace = TRUE))
   }
-  return(p)
+
+  PredictionClassif$new(
+    row_ids = seq_len(n),
+    truth = truth,
+    response = response,
+    prob = prob
+  )
 }
 
 PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))

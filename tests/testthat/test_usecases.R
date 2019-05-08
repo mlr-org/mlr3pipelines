@@ -65,7 +65,6 @@ test_that("bagging", {
   expect_equal(z$g.trained$pipeops$classif.rpart_1$.result, list(NULL))
   expect_equal(z$g.trained$pipeops$classif.rpart_2$.result, list(NULL))
   expect_equal(z$g.trained$pipeops$majorityvote$.result, list(NULL))
-
 })
 
 

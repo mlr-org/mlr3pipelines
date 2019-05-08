@@ -91,12 +91,14 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       assert_numeric(weights, len = innum)
       self$weights = weights
     },
+
     predict = function(inputs) {
       assert_true(unique(map_chr(inputs, "task_type")) == "regr")
       prds = private$weighted_avg_predictions(inputs, self$weights)
       list(private$make_prediction_regr(prds))
     }
   ),
+
   private = list(
     weighted_avg_predictions = function(inputs, weights) {
       assert_numeric(weights, len = length(inputs))
@@ -104,13 +106,14 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       df = unique(df[, lapply(.SD, weighted.mean, w = weights), by = "row_id"])
       merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
     },
+
     make_prediction_regr = function(prds) {
-      p = PredictionRegr$new()
-      p$row_ids = prds$row_id
-      p$response = prds$response
-      p$truth = prds$truth
-      p$predict_types = "response"
-      return(p)
+      PredictionRegr$new(
+        row_ids = prds$row_id,
+        response = prds$response,
+        truth = prds$truth,
+        se = prds$se
+      )
     }
   )
 )
@@ -248,17 +251,18 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       levels(df$response) = colnames(df[, -c("row_id", "response")])
       merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
     },
-    # FIXME This is ugly, but currently the best way
+
     make_prediction_classif = function(prds, type) {
-      p = PredictionClassif$new()
-      p$row_ids = prds$row_id
-      p$truth = prds$truth
-      p$predict_types = type
-      if ("prob" %in% type) {
-        p$prob = as.matrix(prds[, -c("row_id", "response", "truth")])
-      }
-      if ("response" %in% type) p$response = prds$response
-      return(p)
+      # TODO: is it really required that we work on data.tables instead of prediction objects directly?
+      prob = prds[, !c("row_id", "truth", "response"), with = FALSE]
+      prob = if (ncol(prob)) as.matrix(prob) else NULL
+
+      PredictionClassif$new(
+        row_ids = prds$row_id,
+        truth = prds$truth,
+        response = prds$response,
+        prob = prob
+      )
     }
   )
 )

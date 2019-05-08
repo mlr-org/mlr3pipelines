@@ -130,7 +130,7 @@ ps = ParamSet$new(list(
   ParamInt$new("regr.rpart.regr.rpart.maxdepth", lower = 1, upper = 10)
 ))
 
-task = mlr_tasks$get("bh")
+task = mlr_tasks$get("boston_housing")
 task$select(task$feature_types[type != "factor", id])
 
 resampling = mlr_resamplings$get("cv", param_vals = list(folds = 3))

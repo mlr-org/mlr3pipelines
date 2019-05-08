@@ -4,7 +4,7 @@ test_that("PipeOpScale", {
 
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("iris"))
 
-  expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("bh"))
+  expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("boston_housing"))
 
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("pima"))
 

@@ -33,7 +33,7 @@ test_that("PipeOpSubsample works unstratified", {
   po = PipeOpSubsample$new()
   tnew = train_pipeop(po, list(task))
 
-  task = mlr_tasks$get("bh")$filter(1L)  # actually has to be an int m(
+  task = mlr_tasks$get("boston_housing")$filter(1L)  # actually has to be an int m(
   po = PipeOpSubsample$new()
   po$param_set$values = list(stratify = TRUE, frac = 0.6)
   expect_error(train_pipeop(po, list(task)))

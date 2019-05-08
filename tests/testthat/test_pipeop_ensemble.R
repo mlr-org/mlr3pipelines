@@ -8,14 +8,7 @@ test_that("PipeOpEnsemble - basic properties", {
   expect_error(PipeOpEnsemble$new(0))
 
   truth = rnorm(70)
-  prds = replicate(4, {
-    prd = PredictionRegr$new()
-    prd$row_ids = seq_len(70)
-    prd$response = truth + rnorm(70, sd = 0.1)
-    prd$truth = truth
-    prd$predict_types = "response"
-    return(prd)
-  })
+  prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))
   expect_list(train_pipeop(op, prds), len = 1)
   expect_error(predict_pipeop(op, prds))
 })
@@ -23,14 +16,7 @@ test_that("PipeOpEnsemble - basic properties", {
 test_that("PipeOpWeightedModelAvg - train and predict", {
   # Create 4 predictions
   truth = rnorm(70)
-  prds = replicate(4, {
-    prd = PredictionRegr$new()
-    prd$row_ids = seq_len(70)
-    prd$response = truth + rnorm(70, sd = 0.1)
-    prd$truth = truth
-    prd$predict_types = "response"
-    return(prd)
-  })
+  prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))
 
   po = PipeOpModelAvg$new(4)
   expect_pipeop(po)
@@ -43,19 +29,12 @@ test_that("PipeOpWeightedModelAvg - train and predict", {
   expect_list(train_pipeop(po, prds), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prds[[3]]))
-
 })
 
 test_that("PipeOpNlOptModelAvg - response - train and predict", {
   truth = rnorm(70)
-  prds = replicate(7, {
-    prd = PredictionRegr$new()
-    prd$row_ids = seq_len(70)
-    prd$response = truth + rnorm(70, sd = 0.1)
-    prd$truth = truth
-    prd$predict_types = "response"
-    return(prd)
-  })
+  prds = replicate(7, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))
+
   po = PipeOpNlOptModelAvg$new(7)
   expect_pipeop(po)
   expect_list(train_pipeop(po, prds), len = 1)
@@ -86,7 +65,6 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
 })
 
 test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
-
   prds = replicate(4,
     make_prediction_obj_classif(n = 100, noise = TRUE,
       predict_types = c("response", "prob"), nclasses = 3)
@@ -104,7 +82,6 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
   expect_equivalent(out[[1]], prds[[4]])
-
 })
 
 test_that("PipeOpNlOptMajorityVote - response - train and predict", {
@@ -147,12 +124,7 @@ test_that("PipeOps break for bad inputs", {
 
   truth = rnorm(70)
   rgrprds = replicate(7, {
-    prd = PredictionRegr$new()
-    prd$row_ids = seq_len(70)
-    prd$response = truth + rnorm(70, sd = 0.1)
-    prd$truth = truth
-    prd$predict_types = "response"
-    return(prd)
+    PredictionRegr$new(row_ids = seq_len(70), response = truth + rnorm(70, sd = 0.1), truth = truth)
   })
 
   cpo2 = PipeOpNlOptMajorityVote$new(3)
