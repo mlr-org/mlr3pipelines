@@ -103,7 +103,6 @@
 #' task$filter(1:10)
 #' predicted = g$predict(task)
 #' predicted[[1]]$data()
-#'
 #' @name Graph
 #' @family mlr3pipelines backend related
 #' @export
@@ -120,11 +119,12 @@ Graph = R6Class("Graph",
 
     ids = function(sorted = FALSE) {
       assert_flag(sorted)
-      if (!sorted || nrow(self$edges) == 0L)
+      if (!sorted || nrow(self$edges) == 0L) {
         return(names2(self$pipeops))
+      }
 
       tmp = self$edges[, list(parents = list(unique(src_id))), by = list(id = dst_id)]
-      orphans = setdiff(names(self$pipeops), self$edges$dst_id)  # the ones without parents
+      orphans = setdiff(names(self$pipeops), self$edges$dst_id) # the ones without parents
       if (length(orphans)) {
         # if orphans is empty either the Graph is empty (won't happen here) or has cycles, in
         # which case we still call topo_sort to get unified error messages.
@@ -135,8 +135,9 @@ Graph = R6Class("Graph",
 
     add_pipeop = function(op) {
       assert_r6(op, "PipeOp")
-      if (op$id %in% names(self$pipeops))
+      if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
+      }
       self$pipeops[[op$id]] = op$clone(deep = TRUE)
 
       if (!is.null(private$.param_set)) {
@@ -148,6 +149,7 @@ Graph = R6Class("Graph",
     },
 
     add_edge = function(src_id, dst_id, src_channel = NULL, dst_channel = NULL) {
+
       if (!length(self$pipeops)) {
         stop("Cannot add edge to empty Graph.")
       }
@@ -166,19 +168,21 @@ Graph = R6Class("Graph",
         dst_channel = 1L
       }
       assert(
-          check_integerish(src_channel, lower = 1L,
-            upper = nrow(self$pipeops[[src_id]]$output), any.missing = FALSE),
-          check_choice(src_channel, self$pipeops[[src_id]]$output$name)
+        check_integerish(src_channel, lower = 1L,
+          upper = nrow(self$pipeops[[src_id]]$output), any.missing = FALSE),
+        check_choice(src_channel, self$pipeops[[src_id]]$output$name)
       )
-      if (is.numeric(src_channel))
+      if (is.numeric(src_channel)) {
         src_channel = self$pipeops[[src_id]]$output$name[src_channel]
+      }
       assert(
-          check_integerish(dst_channel, lower = 1,
-            upper = nrow(self$pipeops[[dst_id]]$input), any.missing = FALSE),
-          check_choice(dst_channel, self$pipeops[[dst_id]]$input$name)
+        check_integerish(dst_channel, lower = 1,
+          upper = nrow(self$pipeops[[dst_id]]$input), any.missing = FALSE),
+        check_choice(dst_channel, self$pipeops[[dst_id]]$input$name)
       )
-      if (is.numeric(dst_channel))
+      if (is.numeric(dst_channel)) {
         dst_channel = self$pipeops[[dst_id]]$input$name[dst_channel]
+      }
 
       types_src = self$pipeops[[src_id]]$output[get("name") == src_channel, c("train", "predict")]
       types_dst = self$pipeops[[dst_id]]$input[get("name") == dst_channel, c("train", "predict")]
@@ -204,8 +208,10 @@ Graph = R6Class("Graph",
       old_edges = self$edges
       self$edges = rbind(self$edges, row)
       # check for loops
-      on.exit({self$edges = old_edges})
-      self$ids(sorted = TRUE)  # if we fail here, edges get reset.
+      on.exit({
+        self$edges = old_edges
+      })
+      self$ids(sorted = TRUE) # if we fail here, edges get reset.
       on.exit()
       invisible(self)
     },
@@ -233,8 +239,9 @@ Graph = R6Class("Graph",
       }
       ig = igraph::add_vertices(ig, length(extra_vertices), name = extra_vertices)
       layout = igraph::layout_with_sugiyama(ig)$layout
-      if (!is.matrix(layout))
-        layout = t(layout) # bug in igraph, dimension is dropped
+      if (!is.matrix(layout)) {
+        layout = t(layout)
+      } # bug in igraph, dimension is dropped
       plot(ig, layout = layout)
     },
 
@@ -252,8 +259,8 @@ Graph = R6Class("Graph",
         catf("Graph with %s PipeOps:", nrow(lines))
         ## limit column width ##
 
-        outwidth = getOption("width") %??% 80  # output width we want (default 80)
-        colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
+        outwidth = getOption("width") %??% 80 # output width we want (default 80)
+        colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE)) # original width of columns
         collimit = calculate_collimit(colwidths, outwidth)
         with_options(list(datatable.prettyprint.char = collimit), {
           print(lines, row.names = FALSE)
@@ -287,8 +294,7 @@ Graph = R6Class("Graph",
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict_internal", single_input)
-    }
-  ),
+    }),
 
   active = list(
     is_trained = function() all(map_lgl(self$pipeops, "is_trained")),
@@ -312,7 +318,7 @@ Graph = R6Class("Graph",
         private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
-          stop("param_set is read-only.")
+        stop("param_set is read-only.")
       }
       private$.param_set
     },
@@ -321,12 +327,11 @@ Graph = R6Class("Graph",
         self$param_set$values = val
       }
       self$param_set$values
-    }
-  ),
+    }),
 
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
       switch(name,
         edges = copy(value),
         pipeops = map(value, function(x) x$clone(deep = TRUE)),
@@ -347,6 +352,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
       predict = character(), op.id = character(), channel.name = character()))
   }
   map_dtr(pipeops, function(po) {
+
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
     # (and factor 2 faster than a naive data.table implementation below).
     # $input and $output is actually a bottleneck for %>>%, so we want this to be fast.
@@ -391,6 +397,7 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
 # single_input: whether `input` is to be copied to all input channels
 #   (`TRUE`) or is a list with different input for each channel (`FALSE`).
 graph_reduce = function(self, input, fun, single_input) {
+
   assert_flag(single_input)
 
   graph_input = self$input
@@ -427,7 +434,7 @@ graph_reduce = function(self, input, fun, single_input) {
   }
 
   # get the topo-sorted pipeop ids
-  ids = self$ids(sorted = TRUE)  # won't contain __initial__  or __terminal__ which are only in our local copy
+  ids = self$ids(sorted = TRUE) # won't contain __initial__  or __terminal__ which are only in our local copy
 
   # walk over ids, learning each operator
   for (id in ids) {

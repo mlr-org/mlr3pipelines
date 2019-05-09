@@ -26,7 +26,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         ParamDbl$new("frac", default = 1, lower = 0, upper = Inf),
         ParamLgl$new("stratify", default = FALSE),
         ParamLgl$new("replace", default = FALSE)
-        ))
+      ))
       ps$values = list(frac = 1, stratify = FALSE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     },
@@ -47,8 +47,9 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
           ceiling(self$param_set$values$frac * task$nrow),
           replace = self$param_set$values$replace)
       } else {
-        if (!inherits(task, "TaskClassif"))
+        if (!inherits(task, "TaskClassif")) {
           stopf("Stratification not supported for %s", class(task))
+        }
         splt = split(task$row_roles$use, task$data(cols = task$target_names))
         keep = unlist(map(splt, function(x) {
           sample_safe(x,

@@ -70,6 +70,5 @@ PipeOpEncode = R6Class("PipeOpEncode",
       cols = as.data.table(cols)
       colnames(cols) = make.names(colnames(cols), unique = TRUE)
       cols
-    }
-  )
+    })
 )

@@ -43,7 +43,6 @@ test_that("PipeOpNlOptModelAvg - response - train and predict", {
 })
 
 test_that("PipeOpWeightedMajorityVote - response -train and predict", {
-
   prds = replicate(4,
     make_prediction_obj_classif(n = 100, noise = TRUE,
       predict_types = c("response"), nclasses = 3)
@@ -61,7 +60,6 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
   expect_equal(out[[1]], prds[[4]])
-
 })
 
 test_that("PipeOpWeightedMajorityVote - prob - train and predict", {

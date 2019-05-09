@@ -42,8 +42,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     predict = function(inputs) {
       task = inputs[[1]]
       list(self$state$predict(task))
-    }
-  ),
+    }),
   active = list(
     param_set = function(rhs) {
       if (!missing(rhs) && !identical(rhs, self$learner$param_set)) {
@@ -57,6 +56,5 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         self$learner$param_set$set_id = val
       }
       private$.id
-    }
-  )
+    })
 )

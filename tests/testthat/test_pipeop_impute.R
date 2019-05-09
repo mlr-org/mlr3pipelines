@@ -1,26 +1,25 @@
 context("PipeOpImpute")
 
 test_that("PipeOpImpute", {
-
   task = mlr_tasks$get("pima")
 
   expect_datapreproc_pipeop_class(PipeOpImpute, task = task)
 
   expect_datapreproc_pipeop_class(PipeOpImpute, task = mlr_tasks$get("iris"))
 
-  mdata <- data.frame(stringsAsFactors = FALSE,
-      a = c(1, 2, 3, 4, 5, NA),
-      b = c(1, 2, 3, 4, 5, 6),
-      c = c(1L, 2L, 3L, 4L, 5L, NA),
-      d = factor(c(letters[1:5], NA), levels = letters[1:6]),
-      e = factor(letters[1:6], levels = letters[1:6]),
-      f = ordered(c(letters[1:5], NA), levels = letters[1:6]),
-      g = ordered(letters[1:6], levels = letters[1:6]),
-      h = c(letters[1:5], NA),
-      i = letters[1:6],
-      j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
-      k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
-      l = letters[rep(1:2, 3)])
+  mdata = data.frame(stringsAsFactors = FALSE,
+    a = c(1, 2, 3, 4, 5, NA),
+    b = c(1, 2, 3, 4, 5, 6),
+    c = c(1L, 2L, 3L, 4L, 5L, NA),
+    d = factor(c(letters[1:5], NA), levels = letters[1:6]),
+    e = factor(letters[1:6], levels = letters[1:6]),
+    f = ordered(c(letters[1:5], NA), levels = letters[1:6]),
+    g = ordered(letters[1:6], levels = letters[1:6]),
+    h = c(letters[1:5], NA),
+    i = letters[1:6],
+    j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
+    k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
+    l = letters[rep(1:2, 3)])
 
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
   mdata$j = NULL
@@ -143,5 +142,4 @@ test_that("PipeOpImpute", {
     expect_true(task_predicted$a[6] <= 5 && task_trained$a[6] >= 1)
     expect_true(task_predicted$c[6] <= 5 && task_trained$c[6] >= 1)
   }
-
 })

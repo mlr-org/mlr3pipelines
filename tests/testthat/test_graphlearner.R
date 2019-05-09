@@ -1,7 +1,6 @@
 context("GraphLearn")
 
 test_that("basic graphlearn tests", {
-
   task = mlr_tasks$get("iris")
 
   lrn = mlr_learners$get("classif.rpart")
@@ -12,7 +11,9 @@ test_that("basic graphlearn tests", {
 
   glrn = GraphLearner$new(gr)
   glrn$train(task)
-  expect_prediction_classif({graphpred = glrn$predict(task)})
+  expect_prediction_classif({
+    graphpred = glrn$predict(task)
+  })
   expect_equal(graphpred,
     lrn$train(task)$predict(task))
 
@@ -26,7 +27,9 @@ test_that("basic graphlearn tests", {
   glrn2 = GraphLearner$new(gr2)
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
-  expect_prediction_classif({graphpred2 = glrn2$predict(task)})
+  expect_prediction_classif({
+    graphpred2 = glrn2$predict(task)
+  })
 
   scidf = cbind(scale(iris[1:4]), iris[5])
   scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
@@ -45,11 +48,9 @@ test_that("basic graphlearn tests", {
 
   expect_equal(dbmodels[[1]]$data(), scalediris$data())
   expect_equal(dbmodels[[2]]$data(), scalediris$data())
-
 })
 
 test_that("graphlearner parameters behave as they should", {
-
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
 
@@ -75,9 +76,15 @@ test_that("graphlearner parameters behave as they should", {
   expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
   expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
-  expect_error({dbgr$param_set$values$classif.debug.x = "a"})
-  expect_error({dbgr$pipeops$classif.debug$param_set$values$x = "a"})
-  expect_error({dbgr$pipeops$classif.debug$learner$param_set$values$x = "a"})
+  expect_error({
+    dbgr$param_set$values$classif.debug.x = "a"
+  })
+  expect_error({
+    dbgr$pipeops$classif.debug$param_set$values$x = "a"
+  })
+  expect_error({
+    dbgr$pipeops$classif.debug$learner$param_set$values$x = "a"
+  })
 
   expect_equal(dbgr$param_set$values$classif.debug.x, 0.5)
   expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
@@ -97,6 +104,4 @@ test_that("graphlearner parameters behave as they should", {
 
   expect_equal(gl$param_set$values,
     list(classif.debug.message_train = TRUE, classif.debug.message_predict = FALSE, classif.debug.warning_train = TRUE, classif.debug.warning_predict = FALSE))
-
 })
-

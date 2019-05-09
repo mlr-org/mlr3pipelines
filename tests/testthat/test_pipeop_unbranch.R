@@ -10,7 +10,6 @@ test_that("PipeOpUnbranch - basic properties", {
   expect_pipeop_class(PipeOpUnbranch, list(1))
   expect_pipeop_class(PipeOpUnbranch, list(3))
   expect_error(PipeOpUnbranch$new(0))
-
 })
 
 

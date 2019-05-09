@@ -64,6 +64,5 @@ PipeOpChunk = R6Class("PipeOpChunk",
 
     predict = function(inputs) {
       rep(inputs, self$outnum)
-    }
-  )
+    })
 )

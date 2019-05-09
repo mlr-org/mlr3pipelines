@@ -52,6 +52,7 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
     },
 
     train_task = function(task) {
+
       self$state = list()
       truth = task$truth()
       tbl = sort(table(truth), decreasing = TRUE)

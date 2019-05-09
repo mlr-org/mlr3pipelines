@@ -1,7 +1,6 @@
 context("PipeOpEncode")
 
 test_that("PipeOpEncode", {
-
   task = mlr_tasks$get("boston_housing")
 
   chaslevels = task$levels()$chas
@@ -67,8 +66,8 @@ test_that("PipeOpEncode", {
   fn = nt$feature_names
 
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
-    make.names(sprintf("chas.%s", seq_len(length(chaslevels) -1)), unique = TRUE),
-    make.names(sprintf("town.%s", seq_len(length(townlevels) -1L)), unique = TRUE)))
+    make.names(sprintf("chas.%s", seq_len(length(chaslevels) - 1)), unique = TRUE),
+    make.names(sprintf("town.%s", seq_len(length(townlevels) - 1L)), unique = TRUE)))
 
   op = PipeOpEncode$new()
   op$param_set$values$method = "sum"
@@ -77,8 +76,8 @@ test_that("PipeOpEncode", {
   fn = nt$feature_names
 
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
-    make.names(sprintf("chas.%s", seq_len(length(chaslevels) -1)), unique = TRUE),
-    make.names(sprintf("town.%s", seq_len(length(townlevels) -1L)), unique = TRUE)))
+    make.names(sprintf("chas.%s", seq_len(length(chaslevels) - 1)), unique = TRUE),
+    make.names(sprintf("town.%s", seq_len(length(townlevels) - 1L)), unique = TRUE)))
 
   op = PipeOpEncode$new()
   op$param_set$values$method = "poly"
@@ -87,8 +86,6 @@ test_that("PipeOpEncode", {
   fn = nt$feature_names
 
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
-    make.names(sprintf("chas.%s", seq_len(length(chaslevels) -1)), unique = TRUE),
-    make.names(sprintf("town.%s", seq_len(length(townlevels) -1L)), unique = TRUE)))
-
-
+    make.names(sprintf("chas.%s", seq_len(length(chaslevels) - 1)), unique = TRUE),
+    make.names(sprintf("town.%s", seq_len(length(townlevels) - 1L)), unique = TRUE)))
 })

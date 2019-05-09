@@ -47,7 +47,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       init_weights = rep(1 / length(inputs), length(inputs))
       pv = self$param_set$values
       eval_g_ineq =
-      opts = pv[which(!(names(pv) %in% c("measure", "eval_g_ineq", "lb", "ub")))]
+        opts = pv[which(!(names(pv) %in% c("measure", "eval_g_ineq", "lb", "ub")))]
       opt = nloptr::nloptr(
         x0 = init_weights,
         eval_f = private$objfun,
@@ -58,8 +58,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
         inputs = inputs
       )
       return(opt$solution)
-    }
-  )
+    })
 )
 
 #' @title PipeOpModelAvg
@@ -87,7 +86,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
     initialize = function(innum, weights = NULL, id = "modelavg", param_vals = list(),
       param_set = ParamSet$new(), packages = character(0)) {
       super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
-      if (is.null(weights)) weights = rep(1/innum, innum)
+      if (is.null(weights)) weights = rep(1 / innum, innum)
       assert_numeric(weights, len = innum)
       self$weights = weights
     },
@@ -96,8 +95,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       assert_true(unique(map_chr(inputs, "task_type")) == "regr")
       prds = private$weighted_avg_predictions(inputs, self$weights)
       list(private$make_prediction_regr(prds))
-    }
-  ),
+    }),
 
   private = list(
     weighted_avg_predictions = function(inputs, weights) {
@@ -114,8 +112,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
         truth = prds$truth,
         se = prds$se
       )
-    }
-  )
+    })
 )
 
 
@@ -172,8 +169,7 @@ PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
       wts = private$optimize_objfun_nlopt(inputs)
       self$weights = wts
       self$state = list("weights" = wts)
-    }
-  )
+    })
 )
 
 
@@ -206,7 +202,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     initialize = function(innum, weights = NULL, id = "majorityvote", param_vals = list(),
       param_set = ParamSet$new(), packages = character(0)) {
       super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
-      if(is.null(weights)) weights = rep(1/innum, innum)
+      if (is.null(weights)) weights = rep(1 / innum, innum)
       assert_numeric(weights, len = innum)
       self$weights = setNames(weights, self$input$name)
     },
@@ -215,8 +211,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       prds = private$weighted_avg_predictions(inputs, self$weights)
       p = private$make_prediction_classif(prds, inputs[[1]]$predict_types)
       list(p)
-    }
-  ),
+    }),
   private = list(
     weighted_avg_predictions = function(inputs, wts) {
       assert_numeric(wts, len = length(inputs))
@@ -225,12 +220,14 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       inputs = inputs[!(wts == 0)]
       wts = wts[!(wts == 0)]
 
-      has_probs = all(map_lgl(inputs, function(x) {"prob" %in% x$predict_types}))
-        if (has_probs) {
-          private$weighted_prob_avg(inputs, wts)
-        } else {
-          private$weighted_majority_vote(inputs, wts)
-        }
+      has_probs = all(map_lgl(inputs, function(x) {
+        "prob" %in% x$predict_types
+      }))
+      if (has_probs) {
+        private$weighted_prob_avg(inputs, wts)
+      } else {
+        private$weighted_majority_vote(inputs, wts)
+      }
     },
     weighted_majority_vote = function(inputs, wts) {
       # Unpack predictions, add weights
@@ -244,9 +241,11 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
         by = "row_id")
     },
     weighted_prob_avg = function(inputs, wts) {
-      df = map_dtr(inputs, function(x) {data.frame("row_id" = x$row_ids, x$prob)})
+      df = map_dtr(inputs, function(x) {
+        data.frame("row_id" = x$row_ids, x$prob)
+      })
       df = unique(df[, lapply(.SD, weighted.mean, w = wts), by = row_id])
-      max.prob = max.col(df[, -"row_id"], ties.method='first')
+      max.prob = max.col(df[, -"row_id"], ties.method = "first")
       df$response = factor(max.prob, labels = colnames(df[, -"row_id"])[unique(max.prob)])
       levels(df$response) = colnames(df[, -c("row_id", "response")])
       merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
@@ -263,8 +262,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
         response = prds$response,
         prob = prob
       )
-    }
-  )
+    })
 )
 
 
@@ -324,6 +322,5 @@ PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
       wts = private$optimize_objfun_nlopt(inputs)
       self$weights = wts
       self$state = list("weights" = wts)
-    }
-  )
+    })
 )

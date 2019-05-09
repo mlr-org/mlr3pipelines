@@ -102,6 +102,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     },
 
     train = function(inputs) {
+
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$affect_columns)
       if (do_subset) {
@@ -182,8 +183,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         private$.affect_columns = val
       }
       private$.affect_columns
-    }
-  ),
+    }),
   private = list(
     .can_subset_cols = NULL,
     .affect_columns = NULL,
@@ -254,35 +254,34 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
   inherit = PipeOpTaskPreproc,
 
   public = list(
-      train_task = function(task) {
-        self$state = self$get_state(task)
-        self$transform(task)
-      },
-      predict_task = function(task) self$transform(task),
+    train_task = function(task) {
+      self$state = self$get_state(task)
+      self$transform(task)
+    },
+    predict_task = function(task) self$transform(task),
 
-      get_state = function(task)  {
-        private$.dt_columns = self$select_cols(task)
-        cols = private$.dt_columns
-        if (!length(cols)) {
-          return(list())
-        }
-        dt = task$data(cols = cols)
-        self$get_state_dt(dt, task_levels(task, cols))
-      },
+    get_state = function(task) {
+      private$.dt_columns = self$select_cols(task)
+      cols = private$.dt_columns
+      if (!length(cols)) {
+        return(list())
+      }
+      dt = task$data(cols = cols)
+      self$get_state_dt(dt, task_levels(task, cols))
+    },
 
-      transform = function(task) {
-        cols = private$.dt_columns
-        if (!length(cols)) {
-          return(task)
-        }
-        dt = task$data(cols = cols)
-        dt = as.data.table(self$transform_dt(dt, task_levels(task, cols)))
-        task$select(setdiff(task$feature_names, cols))$cbind(dt)
-      },
+    transform = function(task) {
+      cols = private$.dt_columns
+      if (!length(cols)) {
+        return(task)
+      }
+      dt = task$data(cols = cols)
+      dt = as.data.table(self$transform_dt(dt, task_levels(task, cols)))
+      task$select(setdiff(task$feature_names, cols))$cbind(dt)
+    },
 
-      get_state_dt = function(dt, levels) list(),
+    get_state_dt = function(dt, levels) list(),
 
-      transform_dt = function(dt, levels) stop("Abstract")
+    transform_dt = function(dt, levels) stop("Abstract")
   )
 )
-

@@ -28,4 +28,3 @@ gunion = function(graphs) {
   }
   g
 }
-

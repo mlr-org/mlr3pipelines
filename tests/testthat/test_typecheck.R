@@ -2,7 +2,6 @@ context("Typecheck")
 
 
 test_that("utility function works", {
-
   expect_equal(get_r6_inheritance("data.table"), NULL)
 
   expect_equal(get_r6_inheritance("PipeOp"), "PipeOp")
@@ -51,12 +50,9 @@ test_that("utility function works", {
   expect_true(are_types_compatible("ajfpoiewj", "ajfpoiewj"))
 
   expect_false(are_types_compatible("ajfpoiewj", "sjpoawj"))
-
-
 })
 
 test_that("Graph is type-checking", {
-
   expect_error(PipeOpScale$new() %>>% PipeOpModelAvg$new(1),
     "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp modelavg \\(NULL\\)")
 
@@ -80,5 +76,4 @@ test_that("Graph is type-checking", {
 
   expect_error(gr$add_edge("scale", "modelavg"),
     "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(Prediction\\)")
-
 })

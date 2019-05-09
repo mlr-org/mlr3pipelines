@@ -41,6 +41,5 @@ PipeOpScale = R6Class("PipeOpScale",
 
     predict_dt = function(dt, levels) {
       t((t(dt) - self$state$center) / self$state$scale)
-    }
-  )
+    })
 )

@@ -24,7 +24,6 @@
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
-#'
 #' @family PipeOps
 #' @family Path Branching
 #' @include PipeOp.R
@@ -62,6 +61,5 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
       result = filter_noop(inputs)
       assert_list(result, len = 1)
       return(result)
-    }
-  )
+    })
 )

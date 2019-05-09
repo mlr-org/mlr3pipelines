@@ -4,13 +4,14 @@
 expect_deep_clone = function(one, two) {
   # is equal
   expect_equal(one, two)
-  visited <- new.env()
-  visited_b <- new.env()
+  visited = new.env()
+  visited_b = new.env()
   expect_references_differ = function(a, b, path) {
+
     force(path)
 
     # don't go in circles
-    addr_a= data.table::address(a)
+    addr_a = data.table::address(a)
     addr_b = data.table::address(b)
     if (!is.null(visited[[addr_a]])) {
       return(invisible(NULL))
@@ -35,7 +36,7 @@ expect_deep_clone = function(one, two) {
         return(invisible(NULL))
       }
       if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
-        return(invisible(NULL))  # don't check if smth is not cloneable
+        return(invisible(NULL)) # don't check if smth is not cloneable
       }
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
@@ -70,7 +71,7 @@ expect_deep_clone = function(one, two) {
 expect_shallow_clone = function(one, two) {
   expect_equal(one, two)
   if (base::is.environment(one)) {
-    addr_a= data.table::address(one)
+    addr_a = data.table::address(one)
     addr_b = data.table::address(two)
     expect_true(addr_a != addr_b, label = "Objects are shallow clones")
   }
@@ -80,6 +81,7 @@ expect_shallow_clone = function(one, two) {
 # check basic properties of a pipeop object
 # - properties / methods as we need them
 expect_pipeop = function(po) {
+
   label = sprintf("pipeop '%s'", po$id)
   expect_class(po, "PipeOp", label = label)
   expect_string(po$id, label = label)
@@ -108,6 +110,7 @@ expect_pipeop = function(po) {
 # - *_internal checks for classes
 # - *_internal handles NO_OP as it should
 expect_pipeop_class = function(poclass, constargs = list()) {
+
   po = do.call(poclass$new, constargs)
 
   expect_pipeop(po)
@@ -157,7 +160,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 #  - deep cloning clones the state
 #
 # `task` must have at least two feature columns and at least two rows.
-expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
+expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE) {
 
@@ -314,11 +317,12 @@ expect_datapreproc_pipeop_class= function(poclass, constargs = list(), task,
       predicted.targetless$data(cols = predicted.targetless$feature_names))
   }
 
-  expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
+  expect_shallow_clone(task, original_clone) # test that task was not changed by all the training / prediction
 
 }
 
 train_pipeop = function(po, inputs) {
+
   label = sprintf("pipeop '%s'", po$id)
   expect_pipeop(po)
   expect_null(po$state, label = label)
@@ -346,7 +350,6 @@ predict_pipeop = function(po, inputs) {
 # -- This only checks feature columns --
 expect_pipeop_result_features = function(po, traintask, trainresult,
   predicttask = NULL, predictresult = NULL) {
-
   result = train_pipeop(po, list(traintask))
   expect_equal(result$data(cols = result$feature_names), trainresult, ignore.col.order = TRUE)
   assert(is.null(predicttask) == is.null(predictresult))
@@ -357,15 +360,18 @@ expect_pipeop_result_features = function(po, traintask, trainresult,
 }
 
 expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
+
   expect_class(g, "Graph")
   expect_list(g$pipeops, "PipeOp")
-  if (!is.null(n_nodes))
+  if (!is.null(n_nodes)) {
     expect_length(g$pipeops, n_nodes)
+  }
   expect_character(g$packages, any.missing = FALSE, unique = TRUE)
 
   expect_data_table(g$edges, any.missing = FALSE)
-  if (!is.null(n_edges))
+  if (!is.null(n_edges)) {
     expect_equal(nrow(g$edges), n_edges)
+  }
 
   expect_character(g$hash)
 
@@ -382,8 +388,7 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
 }
 
 make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "response",
- seed = 1444L, nclasses = 3L) {
-
+  seed = 1444L, nclasses = 3L) {
   if (!noise) set.seed(seed)
   response = prob = NULL
   truth = factor(sample(letters[seq_len(nclasses)], n, replace = TRUE))
@@ -392,7 +397,7 @@ make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "r
     prob = matrix(runif(n * nclasses), ncol = nclasses, nrow = n)
     prob = t(apply(prob, 1, function(x) x / sum(x)))
     colnames(prob) = unique(truth)
-    max.prob = max.col(prob, ties.method='first')
+    max.prob = max.col(prob, ties.method = "first")
     response = factor(max.prob, labels = unique(truth))
     levels(response) = unique(truth)
   } else {

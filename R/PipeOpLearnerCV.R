@@ -48,7 +48,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         ParamFct$new("resampling", levels = "cv", default = "cv", tags = "required"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
         ParamLgl$new("keep_response", default = FALSE, tags = "required")
-        )
+      )
       )
       private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
@@ -56,7 +56,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
-    train_task= function(task) {
+    train_task = function(task) {
+
       # Train a learner for predicting
       self$state = self$learner$train(task)
 
@@ -74,8 +75,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     predict_task = function(task) {
       prediction = self$state$predict(task)
       newtsk = private$pred_to_task(prediction, task)
-    }
-  ),
+    }),
   active = list(
     param_set = function(val) {
       if (is.null(private$.param_set)) {
@@ -83,17 +83,16 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
           private$.crossval_param_set,
           self$learner$param_set
         ))
-        private$.param_set$set_id = self$id %??% self$learner$id  # self$id may be NULL during initialize() call
+        private$.param_set$set_id = self$id %??% self$learner$id # self$id may be NULL during initialize() call
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
       }
       private$.param_set
-    }
-  ),
+    }),
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }
@@ -102,8 +101,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     pred_to_task = function(prds, task) {
       prds = as.data.table(prds)
       prds[, truth := NULL]
-      if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob")
+      if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
+      }
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, paste(self$id, renaming, sep = "."))
       setnames(prds, "row_id", task$backend$primary_key)

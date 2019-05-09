@@ -1,7 +1,6 @@
 context("Graph")
 
 test_that("linear graph", {
-
   g = Graph$new()
   expect_equal(g$ids(sorted = TRUE), character(0))
 
@@ -43,7 +42,6 @@ test_that("linear graph", {
   expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*rpart.*already in Graph")
 
   expect_deep_clone(g, g$clone(deep = TRUE))
-
 })
 
 test_that("complex graph", {
@@ -78,15 +76,13 @@ test_that("complex graph", {
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"),
     info = paste0("'", lines, "'", collapse = "', '"))
 
-  pdf(file = NULL)  # don't show plot. It is annoying.
+  pdf(file = NULL) # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
-
 })
 
 
 test_that("input / output lists and naming", {
-
   gr = Graph$new()$add_pipeop(PipeOpDebugMulti$new(2, 2))
 
   expect_equal(csvify(gr$input),
@@ -145,7 +141,7 @@ test_that("input / output lists and naming", {
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
 
-  pdf(file = NULL)  # don't show plot. It is annoying.
+  pdf(file = NULL) # don't show plot. It is annoying.
   gr$plot()
   dev.off()
 
@@ -158,7 +154,7 @@ test_that("input / output lists and naming", {
   expect_output(print(gr),
     "debug2.*<<UNTRAINED>>.*debug.multi.*\n.*debug.multi.*<<UNTRAINED>>.*debug3.*debug2.*\n.*debug3.*<<UNTRAINED>>.*debug.multi")
 
-    expect_equal(csvify(gr$input),
+  expect_equal(csvify(gr$input),
     c("debug2.input_1,*,*,debug2,input_1",
       "debug2.input_2,*,*,debug2,input_2",
       "debug3.input_3,*,*,debug3,input_3"))
@@ -168,9 +164,10 @@ test_that("input / output lists and naming", {
       "debug3.output_1,*,*,debug3,output_1",
       "debug3.output_2,*,*,debug3,output_2"))
 
-  lines = strsplit(capture_output(
-      {trained = gr$train(list(debug2.input_2 = 10, debug3.input_3 = 100, debug2.input_1 = 1000), single_input = FALSE)}),
-    "\n")[[1]]
+  lines = strsplit(capture_output({
+    trained = gr$train(list(debug2.input_2 = 10, debug3.input_3 = 100, debug2.input_1 = 1000), single_input = FALSE)
+  }),
+  "\n")[[1]]
 
   expect_equal(lines,
     c("Training debug2 with input list(input_1 = 1000, input_2 = 10)",
@@ -182,13 +179,9 @@ test_that("input / output lists and naming", {
   # test output II
   expect_output(print(gr),
     "debug2.*<list>.*debug.multi.*\n.*debug.multi.*<list>.*debug3.*debug2.*\n.*debug3.*<list>.*debug.multi")
-
-
 })
 
 test_that("edges that introduce loops cannot be added", {
-
-
   g = Graph$new()$
     add_pipeop(PipeOpNULL$new("p1"))$
     add_pipeop(PipeOpNULL$new("p2"))
@@ -208,12 +201,10 @@ test_that("edges that introduce loops cannot be added", {
   expect_error(g$add_edge("p2", "p1", 1, 1), "Cycle detected")
 
   expect_deep_clone(g, gclone) # check that edges did not change
-
 })
 
 
 test_that("assert_graph test", {
-
   gr = PipeOpNULL$new() %>>% PipeOpDebugMulti$new(1, 1)
 
   gr2 = assert_graph(gr)
@@ -235,11 +226,9 @@ test_that("assert_graph test", {
   po2 = assert_graph(po, coerce = TRUE, deep_copy = TRUE)$pipeops[[1]]
 
   expect_deep_clone(po, po2)
-
 })
 
 test_that("Empty Graph", {
-
   expect_equal(length(Graph$new()$pipeops), 0)
 
   expect_equal(nrow(Graph$new()$edges), 0)
@@ -257,7 +246,6 @@ test_that("Empty Graph", {
   expect_equal(greplicate(Graph$new(), 100), Graph$new())
 
   expect_error(Graph$new()$add_edge("a", "b"), "Cannot add edge to empty Graph")
-
 })
 
 test_that("Graph printer aux function calculates col widths well", {
@@ -265,8 +253,8 @@ test_that("Graph printer aux function calculates col widths well", {
   set.seed(8008135)
 
   effective_outwidth = function(colwidths, collimit) {
-    colwidths[colwidths > collimit] = collimit + 3  # this is how data.table does it
-    sum(colwidths + 1) + 4  # add 1 spacer between columns, and an extra margin of 4
+    colwidths[colwidths > collimit] = collimit + 3 # this is how data.table does it
+    sum(colwidths + 1) + 4 # add 1 spacer between columns, and an extra margin of 4
   }
 
   test_outlimit = function(colwidths, outwidth) {
@@ -289,11 +277,9 @@ test_that("Graph printer aux function calculates col widths well", {
   }
 
   expect_string("spurious expectation to show that we didn't skip this test")
-
 })
 
 test_that("Intermediate results are saved to Graph if requested", {
-
   g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
     gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
 
@@ -316,11 +302,9 @@ test_that("Intermediate results are saved to Graph if requested", {
   expect_equal(g$pipeops$scale$.result, restask2)
 
   expect_equal(unname(g$pipeops$null$.result), restask)
-
 })
 
 test_that("Namespaces get loaded", {
-
   g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
     gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
 
@@ -333,9 +317,8 @@ test_that("Namespaces get loaded", {
 
   expect_class(res, "try-error")
   expect_subset(c(
-      "  Error loading package 9422228u (required by null):",
-      "  Error loading package 4rfjfw (required by scale, null):",
-      "  Error loading package 324r32 (required by scale):"),
-    strsplit(res, "\n")[[1]])
-
+    "  Error loading package 9422228u (required by null):",
+    "  Error loading package 4rfjfw (required by scale, null):",
+    "  Error loading package 324r32 (required by scale):"),
+  strsplit(res, "\n")[[1]])
 })

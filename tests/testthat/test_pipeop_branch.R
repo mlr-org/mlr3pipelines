@@ -43,5 +43,4 @@ test_that("PipeOpBranch - train and predict", {
   expect_equal(pout[[1]], t1)
   expect_class(pout[[2]], "NO_OP")
   expect_true(is_noop(pout[[2]]))
-
 })

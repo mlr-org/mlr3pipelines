@@ -1,7 +1,6 @@
 context("GraphParamSet")
 
 test_that("graph param vals", {
-
   gr = Graph$new()
   gr$add_pipeop(PipeOpScale$new())
   gr$add_pipeop(PipeOpPCA$new())
@@ -29,12 +28,15 @@ test_that("graph param vals", {
   expect_set_equal(names(gr$param_set$params),
     c("scale.center", "scale.scale", "pca.center", "pca.scale.", "pca.rank."))
 
-  expect_error({gr$pipeops$pca$param_set$values$center = 1})  # type mismatch
-  expect_error({gr$param_set$values$pca.center = 1})
+  expect_error({
+    gr$pipeops$pca$param_set$values$center = 1
+  }) # type mismatch
+  expect_error({
+    gr$param_set$values$pca.center = 1
+  })
 })
 
 test_that("graph has value changes when param vals change", {
-
   gr = Graph$new()
   gr$add_pipeop(PipeOpScale$new())
   gr$add_pipeop(PipeOpPCA$new())
@@ -48,6 +50,4 @@ test_that("graph has value changes when param vals change", {
   expect_character(hashbeginning, len = 1)
   expect_character(hashend, len = 1)
   expect_true(hashbeginning != hashend)
-
 })
-

@@ -4,15 +4,16 @@ rep_suffix = function(x, n) {
 }
 
 calculate_collimit = function(colwidths, outwidth) {
-  margin = length(colwidths) + 4  # columns are separated by one space, with some breathing room
-  numcols = length(colwidths)     # number of columns that we expect to limit
+  margin = length(colwidths) + 4 # columns are separated by one space, with some breathing room
+  numcols = length(colwidths) # number of columns that we expect to limit
   repeat {
     # collimit: the width at which we limit data.table column output. If some columns are very
     # small, we can be more generous for other columns.
     collimit = floor((outwidth - margin) / numcols)
     violating = colwidths > collimit - 2
-    if (sum(violating) >= numcols)
+    if (sum(violating) >= numcols) {
       break
+    }
     margin = length(colwidths) + 4 + sum(colwidths[!violating])
     numcols = sum(violating)
     if (numcols == 0) {
@@ -20,7 +21,7 @@ calculate_collimit = function(colwidths, outwidth) {
       break
     }
   }
-  collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
+  collimit - 3 # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
 # Get 'levels' of task columns as named list [feature name] -> [levels]
@@ -37,6 +38,7 @@ task_levels = function(task, cols) {
 # @param row_ids [numeric] the row IDs to select
 # @return [Task] the modified task
 task_filter_ex = function(task, row_ids) {
+
   addedrows = row_ids[duplicated(row_ids)]
 
   newrows = task$nrow + seq_along(addedrows)
@@ -50,4 +52,3 @@ task_filter_ex = function(task, row_ids) {
 
   task$filter(row_ids)
 }
-

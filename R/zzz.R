@@ -10,7 +10,9 @@
 "_PACKAGE"
 
 
-.onLoad = function(libname, pkgname) { #nocov start
+.onLoad = function(libname, pkgname) {
+
+  # nocov start
   backports::import(pkgname)
 
   mlr_pipeops <<- DictionaryPipeOp$new()
@@ -34,4 +36,4 @@
   mlr_pipeops$add("scale", PipeOpScale)
   mlr_pipeops$add("subsample", PipeOpSubsample)
   mlr_pipeops$add("unbranch", PipeOpUnbranch, list("N"))
-} #nocov end
+} # nocov end

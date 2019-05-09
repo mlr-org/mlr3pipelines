@@ -2,7 +2,6 @@ context("PipeOpBackupLearner")
 
 
 test_that("PipeOpBackupLearner - basic properties", {
-
   po = PipeOpBackupLearner$new()
 
   expect_pipeop(po)
@@ -65,11 +64,9 @@ test_that("PipeOpBackupLearner - basic properties", {
   # check that pipeops did not modify input objects
   expect_deep_clone(demo_regr_orig, demo_regr)
   expect_deep_clone(demo_classif_orig, demo_classif)
-
 })
 
 test_that("PipeOpBackupLearner usage", {
-
   testthat::skip("skip until mlr3 allows this")
 
   lrn = mlr3learners::LearnerRegrLm$new()
@@ -97,5 +94,4 @@ test_that("PipeOpBackupLearner usage", {
   expect_true(all(!is.na(goodprediction$response)))
 
   expect_equal(goodprediction$response[-(2:4)], badprediction$response[-(2:4)])
-
 })
