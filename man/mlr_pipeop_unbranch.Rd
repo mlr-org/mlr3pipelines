@@ -36,7 +36,6 @@ pca = PipeOpPCA$new()
 nop = PipeOpNULL$new()
 choices = c("pca", "nothing")
 PipeOpBranch$new(choices) \%>>\% gunion(list(pca, nop)) \%>>\% PipeOpUnbranch$new(choices)
-
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
