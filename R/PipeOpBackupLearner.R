@@ -67,7 +67,8 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
         }
       }
       list(prediction)
-    }),
+    }
+  ),
   active = list(
     param_set = function(rhs) {
       if (!missing(rhs) && !identical(rhs, self$learner$param_set)) {
@@ -81,5 +82,6 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
         self$learner$param_set$set_id = val
       }
       private$.id
-    })
+    }
+  )
 )

@@ -38,5 +38,6 @@ PipeOpPCA = R6Class("PipeOpPCA",
 
     predict_dt = function(dt, levels) {
       predict(self$state, as.matrix(dt))
-    })
+    }
+  )
 )

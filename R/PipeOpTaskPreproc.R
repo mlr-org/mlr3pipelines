@@ -183,7 +183,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         private$.affect_columns = val
       }
       private$.affect_columns
-    }),
+    }
+  ),
   private = list(
     .can_subset_cols = NULL,
     .affect_columns = NULL,

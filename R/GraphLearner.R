@@ -43,7 +43,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
-    }),
+    }
+  ),
   active = list(
     hash = function() {
       self$graph$hash
@@ -61,7 +62,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         stop("param_set is read-only.")
       }
       self$graph$param_set
-    })
+    }
+  )
 )
 
 # FIXME This could work if mlr-org/mlr3#177 were addressed

@@ -75,7 +75,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     predict_task = function(task) {
       prediction = self$state$predict(task)
       newtsk = private$pred_to_task(prediction, task)
-    }),
+    }
+  ),
   active = list(
     param_set = function(val) {
       if (is.null(private$.param_set)) {
@@ -89,7 +90,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         stop("param_set is read-only.")
       }
       private$.param_set
-    }),
+    }
+  ),
   private = list(
     deep_clone = function(name, value) {
       private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly

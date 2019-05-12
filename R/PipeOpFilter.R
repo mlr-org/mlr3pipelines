@@ -83,7 +83,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
     transform = function(task) {
       task$select(self$state$features)
-    }),
+    }
+  ),
   active = list(
     param_set = function(val) {
       if (is.null(private$.param_set)) {
@@ -97,7 +98,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
         stop("param_set is read-only.")
       }
       private$.param_set
-    }),
+    }
+  ),
   private = list(
     deep_clone = function(name, value) {
       private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly

@@ -34,7 +34,8 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
     predict = function(inputs) {
       list(cbind_tasks(inputs))
-    })
+    }
+  )
 )
 
 

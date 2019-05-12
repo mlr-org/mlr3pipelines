@@ -61,5 +61,6 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
       result = filter_noop(inputs)
       assert_list(result, len = 1)
       return(result)
-    })
+    }
+  )
 )

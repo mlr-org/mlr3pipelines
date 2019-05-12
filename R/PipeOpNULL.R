@@ -28,5 +28,6 @@ PipeOpNULL = R6Class("PipeOpNULL",
 
     predict = function(inputs) {
       inputs
-    })
+    }
+  )
 )

@@ -132,5 +132,6 @@ PipeOpImpute = R6Class("PipeOpImpute",
         return(task)
       }
       task$select(setdiff(task$feature_names, colnames(data)))$cbind(data)
-    })
+    }
+  )
 )

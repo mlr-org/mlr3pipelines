@@ -31,5 +31,6 @@ PipeOpCopy = R6Class("PipeOpCopy",
 
     predict = function(inputs) {
       rep(inputs, self$outnum)
-    })
+    }
+  )
 )

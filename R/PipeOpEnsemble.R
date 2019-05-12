@@ -58,7 +58,8 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
         inputs = inputs
       )
       return(opt$solution)
-    })
+    }
+  )
 )
 
 #' @title PipeOpModelAvg

@@ -198,7 +198,8 @@ PipeOp = R6Class("PipeOp",
         self$param_set$values = val
       }
       self$param_set$values
-    }),
+    }
+  ),
 
   private = list(
     .param_set = NULL,

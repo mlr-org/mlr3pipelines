@@ -36,7 +36,8 @@ DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3::Dictionary,
         stopf("Element with key '%s' not found!%s", key, did_you_mean(key, self$keys()))
       }
       obj$value$new(...)
-    })
+    }
+  )
 )
 
 #' @export

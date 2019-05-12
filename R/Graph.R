@@ -294,7 +294,8 @@ Graph = R6Class("Graph",
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict_internal", single_input)
-    }),
+    }
+  ),
 
   active = list(
     is_trained = function() all(map_lgl(self$pipeops, "is_trained")),
@@ -327,7 +328,8 @@ Graph = R6Class("Graph",
         self$param_set$values = val
       }
       self$param_set$values
-    }),
+    }
+  ),
 
   private = list(
     deep_clone = function(name, value) {
