@@ -125,7 +125,7 @@ learning method—with penalised linear regression (using the *glmnet*
 package). (The example was chosen to show the expressiveness of the
 *Graph* language, not to perform particularly well). For a detailed
 explanation of all steps involved see the
-[documentation](documentation).
+[documentation](#documentation).
 
 The graph is built using single processing units—“PipeOps”—that are
 concatenated using the piping operator `%>>%`. Note the difference from
