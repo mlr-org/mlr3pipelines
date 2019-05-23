@@ -34,6 +34,3 @@ PipeOpCopy = R6Class("PipeOpCopy",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("copy", PipeOpCopy, list("N"))

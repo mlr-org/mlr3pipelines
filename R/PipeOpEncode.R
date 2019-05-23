@@ -51,7 +51,8 @@ PipeOpEncode = R6Class("PipeOpEncode",
           cont
         },
         sum = stats::contr.sum,
-        stop("Unknown 'method' parameter value."))
+        stop("Unknown 'method' parameter value.")
+      )
       lapply(levels, function(x) {
         con = contrasts(x)
         if (is.null(colnames(con))) {
@@ -72,6 +73,3 @@ PipeOpEncode = R6Class("PipeOpEncode",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("encode", PipeOpEncode)

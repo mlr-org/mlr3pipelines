@@ -30,7 +30,7 @@ test_that("Simple ops do what we expect", {
   edges_csv = csvify(g$edges)
   expect_set_equal(edges_csv,
     c("p1,output,branch,input", "branch,output1,p2,input", "branch,output2,p3,input",
-      "p2,output,unbranch,input1","p3,output,unbranch,input2","unbranch,output,p4,input"))
+      "p2,output,unbranch,input1", "p3,output,unbranch,input2", "unbranch,output,p4,input"))
 
   g = p1 %>>% PipeOpBranch$new(3) %>>% gunion(list(p2, p3, p4)) %>>% gunion(list(p5, p6, p7))
 
@@ -44,11 +44,9 @@ test_that("Simple ops do what we expect", {
   edges_csv = csvify(g$edges)
   expect_set_equal(edges_csv,
     c("p2,output,p5,input", "p3,output,p6,input", "p4,output,p7,input"))
-
 })
 
 test_that("operations make deep copies", {
-
   p1 = PipeOpNULL$new("p1")
   p2 = PipeOpNULL$new("p2")
 
@@ -62,5 +60,4 @@ test_that("operations make deep copies", {
   g = g3 %>>% g4
   expect_deep_clone(g$pipeops$p3, g3$pipeops$p3)
   expect_deep_clone(g$pipeops$p4, g4$pipeops$p4)
-
 })

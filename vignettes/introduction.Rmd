@@ -5,7 +5,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Introduction to mlr3pipelines}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -79,7 +79,7 @@ It is important to take a moment and notice the importance of a `$state` variabl
 Each `PipeOp` is an instance of an "`R6`" class, many of which are provided by the `mlr3pipelines` package itself. They can be constructed explicitly ("`PipeOpPCA$new()`") or retrieved from the `mlr_pipelines` collection: `mlr_pipeops$get("pca")`. The entire list of available `PipeOp`s, and some meta-information, can be retrieved using `as.data.table()`:
 
 ```{r}
-as.data.table(mlr_pipeops)[, c("id", "input.num", "output.num")]
+as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num")]
 ```
 
 ## PipeOp Channels
@@ -161,7 +161,7 @@ gr$predict(single_line_task)[[1]]$data()
 
 The example above showed a linear preprocessing pipeline, but it is in fact possible to build true "graphs" of operations, as long as no loops are introduced^[It is tempting to denote this as a "directed acyclic graph", but the equivalence is not trivial because edges run between channels of `PipeOp`s, not `PipeOp`s themselves.]. `PipeOp`s with multiple output channels can feed their data to multiple different following `PipeOp`s, and `PipeOp`s with multiple input channels can take results from different `PipeOp`s. When a `PipeOp` has more than one input / output channel, then the `Graph`'s `$add_edge()` method needs additional arguments that indicate which channel to connect to. This argument can be given in the form of an integer, or as the name of the channel.
 
-The following constructs a `Graph` that copies the input and gives one copy each to a "scale" and a "pca" `PipeOp`. The resulting columns of each operation are put next to each other by "featureunion". 
+The following constructs a `Graph` that copies the input and gives one copy each to a "scale" and a "pca" `PipeOp`. The resulting columns of each operation are put next to each other by "featureunion".
 
 ```{r}
 gr = Graph$new()$

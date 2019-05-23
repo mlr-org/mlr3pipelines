@@ -2,7 +2,6 @@ context("PipeOpBackupLearner")
 
 
 test_that("PipeOpBackupLearner - basic properties", {
-
   po = PipeOpBackupLearner$new()
 
   expect_pipeop(po)
@@ -11,7 +10,7 @@ test_that("PipeOpBackupLearner - basic properties", {
   expect_data_table(po$output, nrow = 1)
 
   task = mlr_tasks$get("iris")
-  regr_task = mlr_tasks$get("bh")
+  regr_task = mlr_tasks$get("boston_housing")
 
   result = train_pipeop(po, list(learnerin = NULL, taskin = task))
   expect_equal(unname(result), list(NULL))
@@ -65,11 +64,9 @@ test_that("PipeOpBackupLearner - basic properties", {
   # check that pipeops did not modify input objects
   expect_deep_clone(demo_regr_orig, demo_regr)
   expect_deep_clone(demo_classif_orig, demo_classif)
-
 })
 
 test_that("PipeOpBackupLearner usage", {
-
   testthat::skip("skip until mlr3 allows this")
 
   lrn = mlr3learners::LearnerRegrLm$new()
@@ -80,7 +77,7 @@ test_that("PipeOpBackupLearner usage", {
       mlr_pipeops$get("null"))) %>>%
     mlr_pipeops$get("backuplearner", mlr_learners$get("regr.featureless"))
 
-  bh = mlr_tasks$get("bh")
+  bh = mlr_tasks$get("boston_housing")
   graph$train(bh)
 
   bh_missings = bh$data()
@@ -97,5 +94,4 @@ test_that("PipeOpBackupLearner usage", {
   expect_true(all(!is.na(goodprediction$response)))
 
   expect_equal(goodprediction$response[-(2:4)], badprediction$response[-(2:4)])
-
 })

@@ -67,6 +67,3 @@ PipeOpChunk = R6Class("PipeOpChunk",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("chunk", PipeOpChunk, list("N"))

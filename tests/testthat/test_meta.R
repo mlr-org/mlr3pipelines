@@ -3,10 +3,9 @@ context("meta")
 
 
 test_that("expect_deep_clone catches non-deep clones", {
-
   po = PipeOpDebugBasic$new()
 
-  expect_error(expect_deep_clone(po, po))  # can't use expect_failure for some reason
+  expect_error(expect_deep_clone(po, po)) # can't use expect_failure for some reason
   po1 = po$clone(deep = TRUE)
   expect_deep_clone(po, po1)
   po1$state = 1
@@ -28,13 +27,11 @@ test_that("expect_deep_clone catches non-deep clones", {
 })
 
 test_that("expect_shallow_clone catches non-clones", {
-
   gr = Graph$new()$add_pipeop(PipeOpScale$new())
   expect_error(expect_deep_clone(gr, gr$clone()))
   expect_shallow_clone(gr, gr$clone())
   expect_error(expect_shallow_clone(gr, gr))
   expect_error(expect_shallow_clone(gr, NULL))
-
 })
 
 # PO defined in helper_pipeops.R

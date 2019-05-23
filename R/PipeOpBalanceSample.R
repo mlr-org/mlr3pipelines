@@ -52,6 +52,7 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
     },
 
     train_task = function(task) {
+
       self$state = list()
       truth = task$truth()
       tbl = sort(table(truth), decreasing = TRUE)
@@ -96,6 +97,3 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
     predict_task = identity
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("balancesample", PipeOpBalanceSample)

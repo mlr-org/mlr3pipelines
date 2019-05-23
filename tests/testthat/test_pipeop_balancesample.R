@@ -18,23 +18,21 @@ test_that("PipeOpBalanceSample", {
   op$param_set$values = list(ratio = 0.5, reference = "major", adjust = "major", shuffle = TRUE)
   nt = op$train(list(task))[[1L]]
   expect_true(table(task$truth())[["pos"]] == table(nt$truth())[["pos"]])
-  expect_true(table(task$truth())[["neg"]] >  table(nt$truth())[["neg"]])
+  expect_true(table(task$truth())[["neg"]] > table(nt$truth())[["neg"]])
 
   op$param_set$values = list(ratio = 0.5, reference = "major", adjust = "minor", shuffle = TRUE)
   nt = op$train(list(task))[[1L]]
-  expect_true(table(task$truth())[["pos"]] >  table(nt$truth())[["pos"]])
+  expect_true(table(task$truth())[["pos"]] > table(nt$truth())[["pos"]])
   expect_true(table(task$truth())[["neg"]] == table(nt$truth())[["neg"]])
 
   op$param_set$values = list(ratio = 0.5, reference = "major", adjust = "all", shuffle = TRUE)
   nt = op$train(list(task))[[1L]]
-  expect_true(table(task$truth())[["pos"]] >  table(nt$truth())[["pos"]])
-  expect_true(table(task$truth())[["neg"]] >  table(nt$truth())[["neg"]])
-
+  expect_true(table(task$truth())[["pos"]] > table(nt$truth())[["pos"]])
+  expect_true(table(task$truth())[["neg"]] > table(nt$truth())[["neg"]])
 })
 
 
 test_that("PipeOpBalanceSample: rate and multiple classes", {
-
   task = mlr_tasks$get("zoo")
   op = PipeOpBalanceSample$new()
   intbl = table(task$truth())
@@ -73,5 +71,4 @@ test_that("PipeOpBalanceSample: rate and multiple classes", {
   outtbl = intbl
   outtbl[TRUE] = 1
   expect_equal(table(nt$truth()), outtbl)
-
 })

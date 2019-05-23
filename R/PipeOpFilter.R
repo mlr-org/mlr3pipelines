@@ -48,12 +48,13 @@ PipeOpFilter = R6Class("PipeOpFilter",
         ParamInt$new("nfeat", lower = 0),
         ParamDbl$new("frac", lower = 0, upper = 1),
         ParamDbl$new("cutoff")
-        ))
+      ))
       private$.outer_param_set$set_id = "filter"
       super$initialize(id, self$param_set, param_vals = param_vals)
     },
 
     get_state = function(task) {
+
       filtercrit = c("nfeat", "frac", "cutoff")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {
@@ -77,7 +78,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
 
-      list(values = values, features = features)  # we don't use 'values', but maybe the user cares.
+      list(values = values, features = features) # we don't use 'values', but maybe the user cares.
     },
 
     transform = function(task) {
@@ -91,7 +92,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
           private$.outer_param_set,
           self$filter$param_set
         ))
-        private$.param_set$set_id = self$id %??% self$filter$id  # self$id may be NULL during initialize() call
+        private$.param_set$set_id = self$id %??% self$filter$id # self$id may be NULL during initialize() call
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
@@ -101,7 +102,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
   ),
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }
@@ -110,7 +111,3 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .outer_param_set = NULL
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
-

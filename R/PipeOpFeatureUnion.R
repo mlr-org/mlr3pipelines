@@ -38,9 +38,6 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("featureunion", PipeOpFeatureUnion, list("N"))
-
 
 cbind_tasks = function(inputs) {
   task = inputs[[1L]]
@@ -48,8 +45,9 @@ cbind_tasks = function(inputs) {
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
-  if (!setequal(targets, task$target_names))
+  if (!setequal(targets, task$target_names)) {
     stopf("All tasks must have the same target columns")
+  }
 
   new_cols = Reduce(function(x, y) ref_cbind(x, y$data(ids, y$feature_names)), tail(inputs, -1L), init = data.table())
   task$clone(deep = TRUE)$cbind(new_cols)

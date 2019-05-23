@@ -16,7 +16,6 @@ test_that("PipeOpLearner - basic properties", {
 
   expect_pipeop_class(PipeOpLearner, list(lrn))
   expect_error(PipeOpLearner$new())
-
 })
 
 
@@ -30,7 +29,9 @@ test_that("PipeOLearner - param_set and values", {
 
 
   expect_equal(po$param_set$values, po$learner$param_set$values)
-  expect_error({po$param_set$values$minsplit = "foo"})
+  expect_error({
+    po$param_set$values$minsplit = "foo"
+  })
   po$param_set$values$minsplit = 2L
   expect_equal(po$param_set$values, po$learner$param_set$values)
   expect_equal(po$param_set$values, list(minsplit = 2L))
@@ -38,6 +39,10 @@ test_that("PipeOLearner - param_set and values", {
   expect_equal(po$param_set$values, list(minsplit = 2L, maxdepth = 1L))
   po$param_set$values = list(minsplit = 1L)
   expect_equal(po$param_set$values, list(minsplit = 1L))
-  expect_error({po$param_set$values = list(minsplit = "foo")})
-  expect_error({po$param_set$values = list(foo = "foo")})
+  expect_error({
+    po$param_set$values = list(minsplit = "foo")
+  })
+  expect_error({
+    po$param_set$values = list(foo = "foo")
+  })
 })

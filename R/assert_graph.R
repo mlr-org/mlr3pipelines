@@ -26,7 +26,7 @@ assert_graph = function(x, coerce = FALSE, deep_copy = FALSE) {
 
   if (coerce && inherits(x, "PipeOp")) {
     x = Graph$new()$add_pipeop(x)
-    deep_copy = FALSE  # add_pipeop already copies
+    deep_copy = FALSE # add_pipeop already copies
   }
   assert_r6(x, "Graph")
   if (deep_copy) {

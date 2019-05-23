@@ -1,6 +1,7 @@
 context("usecases for pipelines")
 
 test_graph = function(g, n_nodes, n_edges) {
+
   g$keep_results = TRUE
   task = mlr_tasks$get("iris")
   expect_graph(g, n_nodes = n_nodes, n_edges = n_edges)
@@ -36,7 +37,6 @@ test_that("linear: scale + pca + learn", {
     abs(prcomp(scale(iris[1:4]))$x))
 
   expect_equal(z$g.predicted$pipeops$classif.rpart$.result, unname(z$g.trained$predict(mlr_tasks$get("iris"))))
-
 })
 
 test_that("featureunion", {
@@ -51,10 +51,9 @@ test_that("featureunion", {
 
   expect_equal(abs(as.matrix(z$g.trained$pipeops$featureunion$.result[[1]]$data(cols = c(paste0("PC", 1:4), colnames(iris)[1:4])))),
     as.matrix(cbind(abs(prcomp(iris[1:4])$x), iris[1:4])))
-
 })
 
-#FIXME: have a look at intermediate results in all usecase, we should expect some stuff there
+# FIXME: have a look at intermediate results in all usecase, we should expect some stuff there
 
 test_that("bagging", {
   g = greplicate(PipeOpSubsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpMajorityVote$new(innum = 2L)
@@ -65,7 +64,6 @@ test_that("bagging", {
   expect_equal(z$g.trained$pipeops$classif.rpart_1$.result, list(NULL))
   expect_equal(z$g.trained$pipeops$classif.rpart_2$.result, list(NULL))
   expect_equal(z$g.trained$pipeops$majorityvote$.result, list(NULL))
-
 })
 
 
@@ -95,7 +93,6 @@ test_that("branching", {
   res = g$predict(task)
   expect_list(res, types = "Prediction")
   expect_equal(names(res), "unbranch.output")
-
 })
 
 
@@ -146,6 +143,4 @@ test_that("stacking", {
       paste0("classif.featureless.prob.", task$class_names),
       "classif.featureless.response",
       task$feature_names))
-
 })
-

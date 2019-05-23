@@ -14,6 +14,15 @@ Each \code{PipeOp} has an associated help page, see \code{mlr_pipeop_[id]}.
 See \code{\link[mlr3:Dictionary]{mlr3::Dictionary}}.
 }
 
+\section{S3 methods}{
+
+\itemize{
+\item \code{as.data.table(dict)}\cr
+\link{Dictionary} -> \code{\link[data.table:data.table]{data.table::data.table()}}\cr
+Returns a \code{data.table()} with fields "key", "packages", and connectors.
+}
+}
+
 \seealso{
 Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOpTaskPreprocSimple}},

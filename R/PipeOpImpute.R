@@ -58,6 +58,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
     },
 
     transform = function(task) {
+
       num_model = self$state$num_model
       fct_model = self$state$fct_model
       lgl_feats = self$state$lgl_feats
@@ -88,7 +89,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
               breaks = num_model[[colname]]$breaks
               which.bins = sample.int(length(counts), sum(is.na(col)), replace = TRUE, prob = counts)
               runif(length(which.bins), breaks[which.bins], breaks[which.bins + 1L])
-            })
+          })
           if (task$feature_types[colname, get("type")] == "integer") {
             num = as.integer(round(num))
           }
@@ -100,8 +101,9 @@ PipeOpImpute = R6Class("PipeOpImpute",
           }
           switch(method,
             newlvl = {
-              if (is.factor(col))
+              if (is.factor(col)) {
                 levels(col) = c(levels(col), ".MISSING")
+              }
               ".MISSING"
             },
             sample = sample(fct_model[[colname]], sum(is.na(col)), replace = TRUE)
@@ -133,7 +135,3 @@ PipeOpImpute = R6Class("PipeOpImpute",
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("impute", PipeOpImpute)
-

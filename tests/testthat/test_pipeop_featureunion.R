@@ -10,7 +10,6 @@ test_that("featureunion - basic properties", {
   expect_pipeop_class(PipeOpFeatureUnion, list(1))
   expect_pipeop_class(PipeOpFeatureUnion, list(3))
   expect_error(PipeOpFeatureUnion$new(0))
-
 })
 
 
@@ -72,10 +71,9 @@ test_that("Test wrong inputs", {
   g = greplicate(
     pos %>>% PipeOpPCA$new(),
     2
-    ) %>>% PipeOpFeatureUnion$new(2)
+  ) %>>% PipeOpFeatureUnion$new(2)
   task = mlr_tasks$get("iris")
   expect_error(g$train(task), "Assertion on 'rows'")
-
 })
 # FIXME: depends on mlr-org/mlr3#179
 ## test_that("PipeOpFeatureUnion - levels are preserved", {

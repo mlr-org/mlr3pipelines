@@ -57,7 +57,7 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
         newprediction = self$state$predict(task)
         for (repairing in c("response", "prob", "se")) {
           if (repairing %in% names(prediction) && !is.null(prediction[[repairing]]) &&
-              repairing %in% names(newprediction) && !is.null(newprediction[[repairing]])) {
+            repairing %in% names(newprediction) && !is.null(newprediction[[repairing]])) {
             if (is.matrix(prediction[[repairing]]) || is.data.frame(prediction[[repairing]])) {
               prediction[[repairing]][badrows, ] = newprediction[[repairing]]
             } else {
@@ -85,6 +85,3 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
     }
   )
 )
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("backuplearner", PipeOpBackupLearner)

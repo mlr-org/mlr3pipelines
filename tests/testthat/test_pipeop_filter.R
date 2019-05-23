@@ -1,8 +1,7 @@
 context("PipeOpFilter")
 
 test_that("PipeOpFilter", {
-
-  task = mlr_tasks$get("bh")
+  task = mlr_tasks$get("boston_housing")
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
     list(filter = mlr3featsel::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = task)
@@ -37,9 +36,4 @@ test_that("PipeOpFilter", {
   tt = po$train(list(task))[[1]]
 
   expect_set_equal(tt$feature_names, c(setdiff(task$feature_names, po$affect_columns(task)), "chas", "b", "age"))
-
-
 })
-
-
-
