@@ -19,7 +19,7 @@ library("paradox")
 library("mlr3")
 library("mlr3pipelines")
 library("mlr3learners")
-logger::log_threshold(logger::WARN, namespace = "mlr3")
+lgr::get_logger("mlr3")$set_threshold("warn")
 ```
 
 ## What is `mlr3pipelines`?

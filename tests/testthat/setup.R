@@ -1,2 +1,3 @@
-old_threshold = logger::log_threshold(namespace = "mlr3")
-logger::log_threshold(logger::WARN, namespace = "mlr3")
+lg = lgr::get_logger("mlr3")
+old_threshold = lg$threshold
+lg$set_threshold("warn")

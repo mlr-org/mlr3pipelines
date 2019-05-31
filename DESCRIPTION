@@ -25,7 +25,7 @@ Imports:
 Suggests:
     igraph,
     knitr,
-    logger,
+    lgr,
     mlbench,
     nloptr,
     rmarkdown,
