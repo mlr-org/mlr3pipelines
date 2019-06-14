@@ -24,7 +24,12 @@ testthat::test_package("mlr3pipelines", filter = "pipeop_filter")
 
 testthat::test_package("mlr3pipelines", filter = "dictionary")
 
-testthat::test_package("mlr3pipelines", filter = "pipeop_learnercv")
+testthat::test_package("mlr3pipelines", filter = "usecases")
+
+testthat::test_package("mlr3pipelines", filter = "^_[a-m].*")
+testthat::test_package("mlr3pipelines", filter = "^_[n-s].*")
+testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
+
 
 
 g = PipeOpScale$new() %>>% PipeOpPCA$new()

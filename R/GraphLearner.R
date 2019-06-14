@@ -15,7 +15,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
     model = NULL,
-    initialize = function(graph, task_type = "classif", id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), predict_type = mlr_reflections$learner_predict_types[[task_type]][1]) {
+    initialize = function(graph, task_type = "classif", id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]) {
 
       # Please don't `assert_r6(graph, "Graph")` here, we have assert_graph(coerce = TRUE) for that, graph can be a PipeOp too
       assert_choice(task_type, c("classif", "regr"))
@@ -26,7 +26,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
-        predict_types = mlr_reflections$learner_predict_types[[task_type]],
+        predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
         properties = mlr_reflections$learner_properties[[task_type]],
         param_vals = param_vals)
@@ -41,7 +41,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     predict = function(task) {
       self$model$param_set$values = self$param_set$values
       prediction = self$model$predict(task)
-      assert_list(prediction, types = "Prediction", len = 1,
+      assert_list(prediction, types = "PredictionData", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       lapply(as.list(prediction[[1]])[self$predict_types], function(x) {
         if (is.factor(x)) as.character(x) else x

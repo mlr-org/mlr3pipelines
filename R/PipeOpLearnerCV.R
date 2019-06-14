@@ -67,14 +67,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       rdesc = mlr_resamplings$get(pv[["resampling"]])
       rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, self$learner, rdesc)
-      prds = do.call("rbind", map(res$data$predicted, function(x) as.data.table(x)))
+      prds = do.call(rbind, lapply(res$data$predicted, as_prediction, task = task))
 
       private$pred_to_task(prds, task)
     },
 
     predict_task = function(task) {
       self$learner$model = self$state
-      prediction = convert_prediction(task, self$learner$predict(task))
+      prediction = as_prediction(task, convert_prediction(task, self$learner$predict(task)))
       private$pred_to_task(prediction, task)
     }
   ),

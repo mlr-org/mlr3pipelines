@@ -4,7 +4,6 @@
 #'
 #' @description
 #' Parent class for PipeOps that aggregate a list of predictions.
-#' Offers the private method `$merge_predictions()` which does exactly that.
 #' @section Methods:
 #' * `PipeOpEnsemble$new(innum, id)` \cr
 #'   (`numeric(1)`, `character(1)`) -> `self` \cr
@@ -21,8 +20,8 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
     initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
       assert_integerish(innum, lower = 1)
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction")
+        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "PredictionData"),
+        output = data.table(name = "output", train = "NULL", predict = "PredictionData")
       )
     },
     train = function(inputs) {
@@ -32,9 +31,6 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
     predict = function(inputs) stop("abstract")
   ),
   private = list(
-    merge_predictions = function(inputs) {
-      do.call("rbind", map(inputs, function(x) as.data.table(x)))
-    },
     objfun = function(wts, inputs) {
       prd = private$weighted_avg_predictions(inputs, wts)
       e = list("prediction" = prd)
@@ -68,12 +64,12 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
-#' Averages its input (a `list` of [`PredictionRegr`]).
+#' Averages its input (a `list` of [`PredictionDataRegr`]).
 #' Only used for regression `Prediction`s.
 #' Weights can be set by the user, if none are provided, defaults to
 #' equal weights `rep(1/innum, innum)` for each prediction.
 #' Offers a `$weights` slot to set/get weights for each learner.
-#' Returns a single [`PredictionRegr`].
+#' Returns a single [`PredictionDataRegr`].
 #' Defaults to equal weights for each model.
 #'
 #' @family PipeOps
@@ -93,27 +89,32 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
     },
 
     predict = function(inputs) {
-      assert_true(unique(map_chr(inputs, "task_type")) == "regr")
+      assert_list(inputs, types = "PredictionDataRegr")
       prds = private$weighted_avg_predictions(inputs, self$weights)
       list(private$make_prediction_regr(prds))
     }),
 
   private = list(
     weighted_avg_predictions = function(inputs, weights) {
+      map(inputs, function(x) assert_true(identical(inputs[[1]]$row_ids, x$row_ids)))
       assert_numeric(weights, len = length(inputs))
-      df = map_dtr(inputs, function(x) data.frame("row_id" = x$row_ids, "response" = x$response))
-      df = unique(df[, lapply(.SD, weighted.mean, w = weights), by = "row_id"])
-      merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
+      set_class(list(row_ids = inputs[[1]]$row_ids,
+        response = simplify2array(map(inputs, "response")) %*% (weights / sum(weights))),
+        c("PredictionDataRegr", "PredictionData"))
     },
 
     make_prediction_regr = function(prds) {
-      PredictionRegr$new(
-        row_ids = prds$row_id,
-        response = prds$response,
-        truth = prds$truth,
-        se = prds$se
-      )
-    })
+      stop(":-(")
+    ##   set_class(predicted, c("PredictionDataRegr", "PredictionData"),
+    ##   (
+    ##     row_ids = prds$row_id,
+    ##     response = prds$response,
+    ##     truth = prds$truth,
+    ##     se = prds$se
+    ##   )
+      ## )
+    }
+  )
 )
 
 
@@ -125,10 +126,10 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
 #' @format [`R6Class`] inheriting from [`PipeOpModelAvg`].
 #'
 #' @description
-#' Aggregates over different [`PredictionRegr`]s.
+#' Aggregates over different [`PredictionDataRegr`]s.
 #' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
 #' For help with nloptr see [`nloptr::nloptr.print.options()`].
-#' Returns a single [`PredictionRegr`].
+#' Returns a single [`PredictionDataRegr`].
 #' By default, optimizes [`MeasureRegrMSE`] and only allows weights between 0 and 1.
 #' Used for regression [`Prediction`]s.
 #'
@@ -162,7 +163,7 @@ PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
       super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
     },
     train = function(inputs) {
-      assert_list(inputs, "PredictionRegr")
+      assert_list(inputs, "PredictionDataRegr")
       self$measure = self$param_set$values$measure
       if (is.null(self$measure)) self$measure = mlr_measures$get("regr.mse")
       assert_measure(self$measure)
@@ -182,10 +183,10 @@ PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
 #' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
 #'
 #' @description
-#' Aggregates over different [`PredictionClassif`]s.
+#' Aggregates over different [`PredictionDataClassif`]s.
 #' Either computes the mode, if `predict_type` is `"response"`,
 #' or averages probabilities if `predict_type` is `"prob"`.
-#' Returns a single [`PredictionClassif`].
+#' Returns a single [`PredictionDataClassif`].
 #' Weights can be set by the user, if none are provided, defaults to
 #' equal weights `rep(1/innum, innum)` for each prediction.
 #' Used for classification `Prediction`s.
@@ -208,7 +209,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       self$weights = setNames(weights, self$input$name)
     },
     predict = function(inputs) {
-      assert_list(inputs, "PredictionClassif")
+      assert_list(inputs, "PredictionDataClassif")
       prds = private$weighted_avg_predictions(inputs, self$weights)
       p = private$make_prediction_classif(prds, inputs[[1]]$predict_types)
       list(p)
@@ -275,12 +276,12 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
 #' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
 #'
 #' @description
-#' Aggregates over different [`PredictionClassif`]s.
+#' Aggregates over different [`PredictionDataClassif`]s.
 #' Either computes the mode, if `predict_type` is `"response"`,
 #' or averages probabilities if `predict_type` is `"prob"`.
 #' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
 #' For help with nloptr see [`nloptr::nloptr.print.options()`].
-#' Returns a single [`PredictionClassif`].
+#' Returns a single [`PredictionDataClassif`].
 #' As a default, optimizes [`MeasureClassifCE`] and only allows weights between 0 and 1.
 #' Used for classification [`Prediction`]s.
 #'
@@ -315,7 +316,7 @@ PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
       super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
     },
     train = function(inputs) {
-      assert_list(inputs, "PredictionClassif")
+      assert_list(inputs, "PredictionDataClassif")
       self$measure = self$param_set$values$measure
       if (is.null(self$measure)) self$measure = mlr_measures$get("classif.ce")
       assert_measure(self$measure)

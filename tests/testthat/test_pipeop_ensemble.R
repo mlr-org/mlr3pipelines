@@ -16,7 +16,8 @@ test_that("PipeOpEnsemble - basic properties", {
 test_that("PipeOpWeightedModelAvg - train and predict", {
   # Create 4 predictions
   truth = rnorm(70)
-  prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))
+  prds = replicate(4, set_class(list(row_ids = seq_len(70), response = truth + rnorm(70, sd = 0.1)),
+    c("PredictionDataRegr", "PredictionData"))
 
   po = PipeOpModelAvg$new(4)
   expect_pipeop(po)

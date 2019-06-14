@@ -12,7 +12,7 @@ test_that("PipeOpLearner - basic properties", {
   expect_null(result[[1L]])
 
   result = predict_pipeop(po, list(task = task))
-  expect_class(result[[1L]], "Prediction")
+  expect_class(result[[1L]], "PredictionData")
 
   expect_pipeop_class(PipeOpLearner, list(lrn))
   expect_error(PipeOpLearner$new())
@@ -34,9 +34,9 @@ test_that("PipeOLearner - param_set and values", {
   })
   po$param_set$values$minsplit = 2L
   expect_equal(po$param_set$values, po$learner$param_set$values)
-  expect_equal(po$param_set$values, list(minsplit = 2L))
+  expect_equal(po$param_set$values, list(xval = 0L, minsplit = 2L))
   po$param_set$values$maxdepth = 1L
-  expect_equal(po$param_set$values, list(minsplit = 2L, maxdepth = 1L))
+  expect_equal(po$param_set$values, list(xval = 0L, minsplit = 2L, maxdepth = 1L))
   po$param_set$values = list(minsplit = 1L)
   expect_equal(po$param_set$values, list(minsplit = 1L))
   expect_error({
