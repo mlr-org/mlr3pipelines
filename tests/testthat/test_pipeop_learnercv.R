@@ -3,7 +3,7 @@ context("PipeOpLearnerCV")
 test_that("PipeOLearnerCV - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearnerCV$new(lrn)
-  expect_pipeop(po)
+  expect_pipeop(po$clone())
   expect_data_table(po$input, nrow = 1)
   expect_data_table(po$output, nrow = 1)
 

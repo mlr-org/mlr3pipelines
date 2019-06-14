@@ -11,13 +11,23 @@ test_that("basic graphlearn tests", {
 
   glrn = GraphLearner$new(gr)
   glrn$train(task)
+
   expect_prediction_classif({
-    graphpred = glrn$predict(task)
+    graphpred = as_prediction(task, task$row_ids, convert_prediction(task, glrn$predict(task)))
   })
   expect_equal(graphpred,
-    lrn$train(task)$predict(task))
+    Experiment$new(task, lrn)$train()$predict()$prediction)
+
+  expect_list({
+    graphpred = glrn$predict(task)
+  })
+  expect_equal(graphpred, {
+    lrn$model = lrn$train(task)
+    lrn$predict(task)
+  })
 
   set.seed(1)
+  lrn$model = NULL
   resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
   set.seed(1)
   resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
