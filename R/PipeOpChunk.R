@@ -48,8 +48,9 @@ PipeOpChunk = R6Class("PipeOpChunk",
       if (self$param_set$values$stratify) {
         row_ids = task$row_ids
         stratify = task$target_names
-        tmp = cbind(task$data(rows = row_ids, cols = stratify), ..row_id = row_ids)[, list(..N = .N, ..row_id = list(.SD$..row_id)), by = stratify]
-        row_ids = split(row_ids, unlist(map(tmp$..row_id, chunk, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)))
+        split_row_ids = split(row_ids, task$data(rows = row_ids, cols = stratify))
+        double_split = map(split_row_ids, chunk_vector, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
+        row_ids = map(transpose(double_split), unlist, use.names = FALSE)
       } else {
         # FIXME: Implement stratification?
         row_ids = chunk_vector(task$row_ids, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
