@@ -60,7 +60,7 @@ test_that("Graph is type-checking", {
   mavtest$input$train = "Task"
 
   expect_error(PipeOpScale$new() %>>% mavtest,
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionData\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionDataRegr\\)")
 
 
   gr = Graph$new()$
@@ -75,5 +75,5 @@ test_that("Graph is type-checking", {
     add_pipeop(mavtest)
 
   expect_error(gr$add_edge("scale", "modelavg"),
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionData\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionDataRegr\\)")
 })

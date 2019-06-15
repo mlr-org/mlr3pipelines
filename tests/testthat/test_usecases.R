@@ -91,7 +91,7 @@ test_that("branching", {
   expect_true(g$is_trained)
   expect_equal(res, list(unbranch.output = NULL))
   res = g$predict(task)
-  expect_list(res, types = "Prediction")
+  expect_list(res, types = "PredictionData")
   expect_equal(names(res), "unbranch.output")
 })
 
