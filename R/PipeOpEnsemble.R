@@ -63,12 +63,12 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
 #'
 #' @description
-#' Averages its input (a `list` of [`PredictionDataRegr`]).
+#' Averages its input (a `list` of `PredictionDataRegr`).
 #' Only used for regression `Prediction`s.
 #' Weights can be set by the user, if none are provided, defaults to
 #' equal weights `rep(1/innum, innum)` for each prediction.
 #' Offers a `$weights` slot to set/get weights for each learner.
-#' Returns a single [`PredictionDataRegr`].
+#' Returns a single `PredictionDataRegr`.
 #' Defaults to equal weights for each model.
 #'
 #' @family PipeOps
@@ -175,10 +175,10 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
 #' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
 #'
 #' @description
-#' Aggregates over different [`PredictionDataClassif`]s.
+#' Aggregates over different `PredictionDataClassif`s.
 #' Either computes the mode, if `predict_type` is `"response"`,
 #' or averages probabilities if `predict_type` is `"prob"`.
-#' Returns a single [`PredictionDataClassif`].
+#' Returns a single `PredictionDataClassif`.
 #' Weights can be set by the user, if none are provided, defaults to
 #' equal weights `rep(1/innum, innum)` for each prediction.
 #' Used for classification `Prediction`s.
