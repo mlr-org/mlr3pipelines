@@ -119,28 +119,3 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
 ##   expect_numeric(po$state$weights)
 ##   expect_class(out[[1]], "PredictionClassif")
 ## })
-
-test_that("PipeOps break for bad inputs", {
-  clprds = replicate(3,
-    make_prediction_obj_classif(n = 100, noise = TRUE,
-      predict_types = c("response", "prob"), nclasses = 2)
-  )
-
-  truth = rnorm(70)
-  rgrprds = replicate(7, {
-    PredictionRegr$new(row_ids = seq_len(70), response = truth + rnorm(70, sd = 0.1), truth = truth)
-  })
-
-  cpo2 = PipeOpNlOptMajorityVote$new(3)
-  rpo2 = PipeOpNlOptModelAvg$new(3)
-
-  expect_error(train_pipeop(rpo2, clprds))
-  expect_error(train_pipeop(cpo2, rgrprds))
-  expect_error(train_pipeop(cpo2, clprds[[1]]))
-  expect_error(train_pipeop(rpo2, rgrprds[[1]]))
-
-  rpo2$param_set$values$measure = mlr_measures$get("classif.ce")
-  cpo2$param_set$values$measure = mlr_measures$get("regr.mse")
-  expect_error(train_pipeop(rpo2, rgrprds))
-  expect_error(train_pipeop(cpo2, clprds))
-})
