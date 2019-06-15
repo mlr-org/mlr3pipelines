@@ -17,12 +17,11 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   public = list(
     weights = NULL,
     measure = NULL,
-    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
+    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0),
+                          input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "PredictionData"),
+                          output = data.table(name = "output", train = "NULL", predict = "PredictionData")) {
       assert_integerish(innum, lower = 1)
-      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "PredictionData"),
-        output = data.table(name = "output", train = "NULL", predict = "PredictionData")
-      )
+      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages, input = input, output = output)
     },
     train = function(inputs) {
       self$state = list()
@@ -82,14 +81,15 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   public = list(
     initialize = function(innum, weights = NULL, id = "modelavg", param_vals = list(),
       param_set = ParamSet$new(), packages = character(0)) {
-      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
+      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages,
+        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "PredictionDataRegr"),
+        output = data.table(name = "output", train = "NULL", predict = "PredictionDataRegr"))
       if (is.null(weights)) weights = rep(1 / innum, innum)
       assert_numeric(weights, len = innum)
       self$weights = weights
     },
 
     predict = function(inputs) {
-      assert_list(inputs, types = "PredictionDataRegr")
       list(private$weighted_avg_predictions(inputs, self$weights))
     }),
 
@@ -195,7 +195,9 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     weights = NULL,
     initialize = function(innum, weights = NULL, id = "majorityvote", param_vals = list(),
       param_set = ParamSet$new(), packages = character(0)) {
-      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
+      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages,
+        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "PredictionDataClassif"),
+        output = data.table(name = "output", train = "NULL", predict = "PredictionDataClassif"))
       if (is.null(weights)) weights = rep(1 / innum, innum)
       assert_numeric(weights, len = innum)
       self$weights = setNames(weights, self$input$name)
