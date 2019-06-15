@@ -10,10 +10,10 @@
 PipeOpMajorityVote
 }
 \description{
-Aggregates over different \code{\link{PredictionClassif}}s.
+Aggregates over different \code{\link{PredictionDataClassif}}s.
 Either computes the mode, if \code{predict_type} is \code{"response"},
 or averages probabilities if \code{predict_type} is \code{"prob"}.
-Returns a single \code{\link{PredictionClassif}}.
+Returns a single \code{\link{PredictionDataClassif}}.
 Weights can be set by the user, if none are provided, defaults to
 equal weights \code{rep(1/innum, innum)} for each prediction.
 Used for classification \code{Prediction}s.
@@ -37,7 +37,6 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_modelavg}},
-  \code{\link{mlr_pipeop_nloptmajorityvote}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_subsample}},
