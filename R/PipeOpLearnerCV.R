@@ -59,7 +59,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     train_task = function(task) {
 
       # Train a learner for predicting
-      self$state = self$learner$train(task)
+      self$state = self$learner$train(task)$model
 
       pv = private$.crossval_param_set$values
 
@@ -67,14 +67,15 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       rdesc = mlr_resamplings$get(pv[["resampling"]])
       rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, self$learner, rdesc)
-      prds = do.call("rbind", map(res$data$prediction, function(x) as.data.table(x)))
+      prds = do.call(rbind, lapply(res$data$predicted, as_prediction, task = task))
 
       private$pred_to_task(prds, task)
     },
 
     predict_task = function(task) {
-      prediction = self$state$predict(task)
-      newtsk = private$pred_to_task(prediction, task)
+      self$learner$model = self$state
+      prediction = as_prediction(task, convert_prediction(task, self$learner$predict(task)))
+      private$pred_to_task(prediction, task)
     }
   ),
   active = list(
@@ -107,7 +108,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         prds[, response := NULL]
       }
       renaming = setdiff(colnames(prds), "row_id")
-      setnames(prds, renaming, paste(self$id, renaming, sep = "."))
+      setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))
       setnames(prds, "row_id", task$backend$primary_key)
       task$clone()$select(character(0))$cbind(prds)
     },

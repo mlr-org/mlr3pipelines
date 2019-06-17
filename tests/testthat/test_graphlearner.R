@@ -11,13 +11,23 @@ test_that("basic graphlearn tests", {
 
   glrn = GraphLearner$new(gr)
   glrn$train(task)
+
   expect_prediction_classif({
-    graphpred = glrn$predict(task)
+    graphpred = as_prediction(task, convert_prediction(task, glrn$predict(task)))
   })
   expect_equal(graphpred,
-    lrn$train(task)$predict(task))
+    Experiment$new(task, lrn)$train()$predict()$prediction)
+
+  expect_list({
+    graphpred = glrn$predict(task)
+  })
+  expect_equal(graphpred, {
+    lrn$model = lrn$train(task)$model
+    lrn$predict(task)
+  })
 
   set.seed(1)
+  lrn$model = NULL
   resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
   set.seed(1)
   resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
@@ -28,7 +38,7 @@ test_that("basic graphlearn tests", {
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
   expect_prediction_classif({
-    graphpred2 = glrn2$predict(task)
+    graphpred2 = as_prediction(task, convert_prediction(task, glrn2$predict(task)))
   })
 
   scidf = cbind(scale(iris[1:4]), iris[5])
@@ -44,10 +54,10 @@ test_that("basic graphlearn tests", {
 
   dbgr$predict(task)
 
-  dbmodels = dbgr$graph$pipeops$classif.debug$state$model
+  dbmodels = dbgr$graph$pipeops$classif.debug$learner$model
 
-  expect_equal(dbmodels[[1]]$data(), scalediris$data())
-  expect_equal(dbmodels[[2]]$data(), scalediris$data())
+  expect_equal(dbmodels$task_train$data(), scalediris$data())
+  expect_equal(dbmodels$task_predict$data(), scalediris$data())
 })
 
 test_that("graphlearner parameters behave as they should", {

@@ -3,7 +3,7 @@ context("PipeOpLearnerCV")
 test_that("PipeOLearnerCV - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearnerCV$new(lrn)
-  expect_pipeop(po)
+  expect_pipeop(po$clone())
   expect_data_table(po$input, nrow = 1)
   expect_data_table(po$output, nrow = 1)
 
@@ -34,9 +34,9 @@ test_that("PipeOpLearnerCV - param values", {
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
   expect_subset(c("classif.rpart.minsplit", "resampling.resampling", "resampling.folds"), names(polrn$param_set$params))
-  expect_equal(polrn$param_set$values, list(resampling.resampling = "cv", resampling.folds = 3, resampling.keep_response = FALSE))
+  expect_equal(polrn$param_set$values, list(resampling.resampling = "cv", resampling.folds = 3, resampling.keep_response = FALSE, classif.rpart.xval = 0))
   polrn$param_set$values$classif.rpart.minsplit = 2
-  expect_equal(polrn$param_set$values, list(resampling.resampling = "cv", resampling.folds = 3, resampling.keep_response = FALSE, classif.rpart.minsplit = 2))
+  expect_equal(polrn$param_set$values, list(resampling.resampling = "cv", resampling.folds = 3, resampling.keep_response = FALSE, classif.rpart.minsplit = 2, classif.rpart.xval = 0))
   polrn$param_set$values$resampling.folds = 4
-  expect_equal(polrn$param_set$values, list(resampling.resampling = "cv", resampling.folds = 4, resampling.keep_response = FALSE, classif.rpart.minsplit = 2))
+  expect_equal(polrn$param_set$values, list(resampling.resampling = "cv", resampling.folds = 4, resampling.keep_response = FALSE, classif.rpart.minsplit = 2, classif.rpart.xval = 0))
 })

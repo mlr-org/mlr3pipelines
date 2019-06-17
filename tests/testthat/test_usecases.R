@@ -13,7 +13,7 @@ test_graph = function(g, n_nodes, n_edges) {
   g = g$clone(deep = TRUE)
   expect_true(g$is_trained)
   res.pred = g$predict(task)
-  expect_list(res.pred, types = "Prediction")
+  expect_list(res.pred, types = "PredictionData")
   expect_equal(names(res.pred), g$output$name)
   list(g.trained = g.trained, g.predicted = g)
 }
@@ -91,7 +91,7 @@ test_that("branching", {
   expect_true(g$is_trained)
   expect_equal(res, list(unbranch.output = NULL))
   res = g$predict(task)
-  expect_list(res, types = "Prediction")
+  expect_list(res, types = "PredictionData")
   expect_equal(names(res), "unbranch.output")
 })
 

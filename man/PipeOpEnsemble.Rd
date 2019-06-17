@@ -10,7 +10,6 @@ PipeOpEnsemble
 }
 \description{
 Parent class for PipeOps that aggregate a list of predictions.
-Offers the private method \code{$merge_predictions()} which does exactly that.
 }
 \section{Methods}{
 
@@ -36,7 +35,6 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
-  \code{\link{mlr_pipeop_nloptmajorityvote}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_subsample}},

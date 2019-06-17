@@ -15,13 +15,13 @@ test_that("PipeOpBackupLearner - basic properties", {
   result = train_pipeop(po, list(learnerin = NULL, taskin = task))
   expect_equal(unname(result), list(NULL))
 
-  demo_classif = mlr_learners$get("classif.featureless", predict_type = "prob")$train(task)$predict(task)
-  demo_regr = mlr_learners$get("regr.featureless")$train(regr_task)$predict(regr_task)
+  demo_classif = convert_prediction(task, mlr_learners$get("classif.featureless", predict_type = "prob")$train(task)$predict(task))
+  demo_regr = convert_prediction(regr_task, mlr_learners$get("regr.featureless")$train(regr_task)$predict(regr_task))
 
   orig_prob = demo_classif$prob
   orig_se = demo_regr$se
   orig_regr_response = demo_regr$response
-  before_clone = demo_regr$clone(deep = TRUE)
+  before_clone = demo_regr
 
   demo_classif$response[1:3] = NA
   demo_classif$prob[1:3, ] = NA
@@ -29,8 +29,8 @@ test_that("PipeOpBackupLearner - basic properties", {
   demo_regr$response[1:3] = NA
   demo_regr$se[1:3] = NA
 
-  demo_classif_orig = demo_classif$clone(deep = TRUE)
-  demo_regr_orig = demo_regr$clone(deep = TRUE)
+  demo_classif_orig = demo_classif
+  demo_regr_orig = demo_regr
 
   repaired = po$predict(list(demo_classif, task))[[1]]
 

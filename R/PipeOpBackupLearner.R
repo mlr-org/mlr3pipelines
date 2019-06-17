@@ -30,8 +30,8 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
       assert_learner(learner)
       self$learner = learner$clone(deep = TRUE)
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = c("learnerin", "taskin"), train = c("NULL", "Task"), predict = c("Prediction", "Task")),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction")
+        input = data.table(name = c("learnerin", "taskin"), train = c("NULL", "Task"), predict = c("PredictionData", "Task")),
+        output = data.table(name = "output", train = "NULL", predict = "PredictionData")
       )
       private$.param_set = NULL
     },
@@ -49,12 +49,10 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
       badrows = is.na(prediction$response)
 
       if (any(badrows)) {
-        prediction = prediction$clone(deep = TRUE)
-
         badrowids = prediction$row_ids[badrows]
         task = inputs[[2]]$clone(deep = TRUE)$filter(badrowids)
 
-        newprediction = self$state$predict(task)
+        newprediction = convert_prediction(task, self$state$predict(task))
         for (repairing in c("response", "prob", "se")) {
           if (repairing %in% names(prediction) && !is.null(prediction[[repairing]]) &&
             repairing %in% names(newprediction) && !is.null(newprediction[[repairing]])) {
