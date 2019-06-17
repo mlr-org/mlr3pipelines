@@ -138,7 +138,7 @@ resampling = mlr_resamplings$get("cv", param_vals = list(folds = 3))
 
 ```{r}
 library("mlr3tuning")
-ff = FitnessFunction$new(task, learner, resampling, ps)
+ff = PerformanceEvaluator$new(task, learner, resampling, ps)
 tuner = TunerGridSearch$new(ff, TerminatorEvaluations$new(1), resolution = 3)
 
 tuner$tune()
