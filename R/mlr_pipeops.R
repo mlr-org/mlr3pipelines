@@ -96,8 +96,7 @@ register_pipeop = function(key, value, metainf) {
 publish_registered_pipeops = function() {
   mlr_pipeops <<- DictionaryPipeOp$new()
 
-  for (n in names(mlr_pipeop_register)) {
-    registercall = mlr_pipeop_register[[n]]
+  for (registercall in as.list(mlr_pipeop_register)) {
     registercall[[1]] = quote(mlr_pipeops$add)
     eval(registercall, envir = parent.env(environment()))
   }
