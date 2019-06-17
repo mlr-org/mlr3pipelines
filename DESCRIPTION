@@ -80,5 +80,6 @@ Collate:
     'greplicate.R'
     'gunion.R'
     'operators.R'
+    'reexports.R'
     'typecheck.R'
     'zzz.R'
