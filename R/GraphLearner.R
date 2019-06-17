@@ -43,9 +43,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       prediction = self$model$predict(task)
       assert_list(prediction, types = "PredictionData", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
-      lapply(as.list(prediction[[1]])[intersect(self$predict_types, names(as.list(prediction[[1]])))], function(x) {
-        if (is.factor(x)) as.character(x) else x
-      })
+      prediction[[1]]
     }
   ),
   active = list(

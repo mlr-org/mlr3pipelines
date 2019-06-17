@@ -210,9 +210,11 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     }),
   private = list(
     weighted_avg_predictions = function(inputs, wts) {
+      map(inputs, function(x) assert_true(identical(inputs[[1]]$row_ids, x$row_ids)))
       assert_numeric(wts, len = length(inputs))
       assert_true(sum(wts) != 0)
       wts = wts / sum(wts)
+
       # Drop zero-weights for efficiency
       inputs = inputs[wts != 0]
       wts = wts[wts != 0]
@@ -220,53 +222,44 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       has_probs = all(map_lgl(inputs, function(x) {
         !is.null(x$prob)
       }))
-      if (has_probs) {
-        private$weighted_prob_avg(inputs, wts)
-      } else {
-        private$weighted_majority_vote(inputs, wts)
+      has_response = all(map_lgl(inputs, function(x) {
+        !is.null(x$response)
+      }))
+      if (!(has_probs || has_response)) {
+        stop("PipeOpMajorityVote input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
       }
+      prob = response = NULL
+      if (has_probs) {
+        prob = private$weighted_prob_avg(inputs, wts)
+      }
+      if (has_response) {
+        response = private$weighted_majority_vote(inputs, wts)
+      }
+      pd = discard(list(row_ids = inputs[[1]]$row_ids,
+        response = response, prob = prob), is.null)
     },
     weighted_majority_vote = function(inputs, wts) {
-      map(inputs, function(x) assert_true(identical(inputs[[1]]$row_ids, x$row_ids)))
-      map(inputs, function(x) assert_true(identical(levels(inputs[[1]]$response), levels(x$response))))
-
-      wts = wts / sum(wts)
+      map(inputs, function(x) assert_true(identical(sort(levels(inputs[[1]]$response)), sort(levels(x$response)))))
 
       alllevels = levels(inputs[[1]]$response)
       accmat = matrix(0, nrow = length(inputs[[1]]$response), ncol = length(alllevels))
       for (idx in seq_along(inputs)) {
-        rdf = data.frame(x = inputs[[idx]]$response)
+        rdf = data.frame(x = factor(inputs[[idx]]$response, levels = alllevels))
         curmat = model.matrix(~ 0 + x, rdf) * wts[idx]
         accmat = accmat + curmat
       }
-      set_class(list(row_ids = inputs[[1]]$row_ids,
-        response = factor(alllevels[max.col(accmat)], levels = alllevels)),
-        c("PredictionDataClassif", "PredictionData"))
+      factor(alllevels[max.col(accmat)], levels = alllevels)),
     },
     weighted_prob_avg = function(inputs, wts) {
-      map(inputs, function(x) assert_true(identical(inputs[[1]]$row_ids, x$row_ids)))
       map(inputs, function(x) assert_true(identical(ncol(inputs[[1]]$prob), ncol(x$prob))))
-      map(inputs, function(x) assert_true(identical(is.null(inputs[[1]]$response), is.null(x$response))))
+      map(inputs, function(x) assert_true(identical(sort(colnames(inputs[[1]]$prob)), sort(colnames(x$prob)))))
 
-      wts = wts / sum(wts)
-
+      alllevels = colnames(inputs[[1]]$prob)
       accmat = inputs[[1]]$prob * wts[1]
       for (idx in seq_along(inputs)[-1]) {
-        accmat = accmat + inputs[[idx]]$prob * wts[idx]
+        accmat = accmat + inputs[[idx]]$prob[, alllevels, drop = FALSE] * wts[idx]
       }
-
-      response = NULL
-      if (!is.null(inputs[[1]]$response)) {
-        map(inputs, function(x) assert_true(identical(levels(inputs[[1]]$response), levels(x$response))))
-        max.prob = max.col(accmat)
-        alllevels = levels(inputs[[1]]$response)
-        response = factor(alllevels[max.prob], levels = alllevels)
-      }
-      ret = set_class(list(row_ids = inputs[[1]]$row_ids,
-        response = response,
-        prob = accmat),
-        c("PredictionDataClassif", "PredictionData"))
-      ret
+      accmat
     }
   )
 )
