@@ -41,3 +41,5 @@ PipeOpPCA = R6Class("PipeOpPCA",
     }
   )
 )
+
+register_pipeop("pca", PipeOpPCA)

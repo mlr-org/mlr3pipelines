@@ -61,3 +61,5 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     }
   )
 )
+
+register_pipeop("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", param_set = ParamSet$new()))$new()))

@@ -135,3 +135,5 @@ PipeOpImpute = R6Class("PipeOpImpute",
     }
   )
 )
+
+register_pipeop("impute", PipeOpImpute)

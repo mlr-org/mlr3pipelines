@@ -108,6 +108,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   )
 )
 
+register_pipeop("modelavg", PipeOpModelAvg, list("N"))
 
 ## #' @title PipeOpNlOptModelAvg
 ## #'
@@ -166,6 +167,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
 ##     })
 ## )
 
+## register_pipeop("nloptmodelavg", PipeOpNlOptModelAvg, list("N"))
 
 #' @title PipeOpMajorityVote
 #'
@@ -269,6 +271,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
+register_pipeop("majorityvote", PipeOpMajorityVote, list("N"))
 
 ## #' @title PipeOpNlOptMajorityVote
 ## #'
@@ -328,3 +331,5 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
 ##       self$state = list("weights" = wts)
 ##     })
 ## )
+
+## register_pipeop("nloptmajorityvote", PipeOpNlOptMajorityVote, list("N"))

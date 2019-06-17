@@ -64,3 +64,5 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
     }
   )
 )
+
+register_pipeop("unbranch", PipeOpUnbranch, list("N"))

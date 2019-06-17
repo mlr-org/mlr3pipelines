@@ -115,3 +115,5 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     .crossval_param_set = NULL
   )
 )
+
+register_pipeop("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", param_set = ParamSet$new()))$new()))

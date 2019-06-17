@@ -64,3 +64,5 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
     predict_task = identity
   )
 )
+
+register_pipeop("subsample", PipeOpSubsample)

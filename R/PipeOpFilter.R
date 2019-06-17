@@ -111,3 +111,5 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .outer_param_set = NULL
   )
 )
+
+register_pipeop("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))

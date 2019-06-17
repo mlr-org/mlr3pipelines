@@ -83,3 +83,5 @@ PipeOpBranch = R6Class("PipeOpBranch",
     }
   )
 )
+
+register_pipeop("branch", PipeOpBranch, list("N"))
