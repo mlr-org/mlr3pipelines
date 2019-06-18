@@ -67,7 +67,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       rdesc = mlr_resamplings$get(pv[["resampling"]])
       rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, self$learner, rdesc)
-      prds = do.call(rbind, lapply(res$data$predicted, new_prediction, task = task))
+      prds = do.call(rbind, lapply(res$data$prediction_data, new_prediction, task = task))
+
 
       private$pred_to_task(prds, task)
     },
@@ -106,6 +107,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       prds[, truth := NULL]
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
+      }
+      if ("se" %in% colnames(prds) && self$learner$predict_type != "se") {  # TODO: temporary fix for mlr3#250
+        prds[, se := NULL]
       }
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))

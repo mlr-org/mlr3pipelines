@@ -237,6 +237,8 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       }
       pd = discard(list(row_ids = inputs[[1]]$row_ids,
         response = response, prob = prob), is.null)
+      class(pd) = c("PredictionDataClassif", "PredictionData")
+      pd
     },
     weighted_majority_vote = function(inputs, wts) {
       map(inputs, function(x) assert_true(identical(sort(levels(inputs[[1]]$response)), sort(levels(x$response)))))
@@ -248,7 +250,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
         curmat = model.matrix(~ 0 + x, rdf) * wts[idx]
         accmat = accmat + curmat
       }
-      factor(alllevels[max.col(accmat)], levels = alllevels)),
+      factor(alllevels[max.col(accmat)], levels = alllevels)
     },
     weighted_prob_avg = function(inputs, wts) {
       map(inputs, function(x) assert_true(identical(ncol(inputs[[1]]$prob), ncol(x$prob))))
