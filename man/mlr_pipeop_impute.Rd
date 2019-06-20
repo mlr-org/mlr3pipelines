@@ -19,9 +19,8 @@ Impute missing values with varying methods.
 \code{logical} features are always imputed by sampling from the training column.
 }
 \seealso{
-Other PipeOps: \code{\link{PipeOpEnsemble}},
-  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_NULL}},
+Other PipeOps: \code{\link{PipeOpTaskPreproc}},
+  \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -31,8 +30,6 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_featureunion}},
   \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_learner}},
-  \code{\link{mlr_pipeop_majorityvote}},
-  \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_subsample}},

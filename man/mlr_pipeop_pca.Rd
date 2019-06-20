@@ -19,9 +19,8 @@ See \link[stats:prcomp]{stats::prcomp} for details  and parameters.
 op1 = PipeOpPCA$new()
 }
 \seealso{
-Other PipeOps: \code{\link{PipeOpEnsemble}},
-  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_NULL}},
+Other PipeOps: \code{\link{PipeOpTaskPreproc}},
+  \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -32,8 +31,6 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
-  \code{\link{mlr_pipeop_majorityvote}},
-  \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},

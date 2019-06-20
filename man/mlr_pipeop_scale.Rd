@@ -16,9 +16,8 @@ Scales the data to mean = 0 (if \code{$center} parameter is \code{TRUE}) and sta
 See \link[base:scale]{base::scale} for details and parameters.
 }
 \seealso{
-Other PipeOps: \code{\link{PipeOpEnsemble}},
-  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_NULL}},
+Other PipeOps: \code{\link{PipeOpTaskPreproc}},
+  \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -29,8 +28,6 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
-  \code{\link{mlr_pipeop_majorityvote}},
-  \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},
