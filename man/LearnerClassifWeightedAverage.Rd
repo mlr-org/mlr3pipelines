@@ -10,22 +10,37 @@
 LearnerClassifWeightedAverage
 }
 \description{
-Computes a weighted average of the features.
-If \code{weights.method} is "manual", the average is computed over weights provided by the user, defaulting
+Computes a weighted average of inputs.
+Used in the context of computing weighted averages of predictions.
+
+If \code{weights.method} is "manual", the average is computed over weights provided by the user.
 Predictions are averaged using \code{weights} (in order of appearance in the data); \code{weights} defaults to equal
 weights for each feature.
-
 For \code{weights.method}: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
 for a measure provided in \code{measure} (defaults to \code{classif.acc}).
-
-Several nonlinear optimization methods from \code{nloptr} can be chosen.
-See \code{nloptr::nloptr.print.options()} for a list of possible options.
-This can be set via the \code{algorithm} parameter.
+Learned weights can be obtained from \code{.$model}.
 }
+\section{Parameter Set}{
+
+\itemize{
+\item \code{weights.method} :: \code{character(1)} \cr
+\code{manual} allows to supply weights, for \code{nloptr} weights are automatically determined using \code{nloptr}?
+Defaults to \code{manual}.
+\item \code{weights} :: \code{numeric(1)} \cr
+Numeric either of length 1 or the same length as the inputs. Defaults to 1.
+\item \code{measure} :: \code{character(1) | MeasureClassif} \cr
+Only for \code{weights.method = "nloptr"}. Measure to optimized weights for.
+The Measure is either obtained from \code{mlr_measures} or directly supplied. Defaults to \code{classif.acc}.
+\item \code{algorithm} :: \code{character(1)} \cr
+Several nonlinear optimization methods from \code{nloptr} are available.
+See \code{nloptr::nloptr.print.options()} for a list of possible options.
+}
+}
+
 \section{Methods}{
 
 \itemize{
-\item \code{LearnerClassifWeightedAverage$new(), id = "wtaverage")} \cr
+\item \code{LearnerClassifWeightedAverage$new(), id = "classif.weightedavg")} \cr
 (\code{chr}) -> \code{self} \cr
 Constructor.
 }

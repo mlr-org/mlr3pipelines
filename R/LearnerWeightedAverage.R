@@ -4,20 +4,32 @@
 #' @format [R6::R6Class()] inheriting from [mlr3::LearnerClassif].
 #'
 #' @description
-#' Computes a weighted average of the features.
-#' If `weights.method` is "manual", the average is computed over weights provided by the user, defaulting
+#' Computes a weighted average of inputs.
+#' Used in the context of computing weighted averages of predictions.
+#'
+#' If `weights.method` is "manual", the average is computed over weights provided by the user.
 #' Predictions are averaged using `weights` (in order of appearance in the data); `weights` defaults to equal
 #' weights for each feature.
-#'
 #' For `weights.method`: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
 #' for a measure provided in `measure` (defaults to `classif.acc`).
-#' 
-#' Several nonlinear optimization methods from `nloptr` can be chosen.
-#' See `nloptr::nloptr.print.options()` for a list of possible options.
-#' This can be set via the `algorithm` parameter.
-#' 
+#' Learned weights can be obtained from `.$model`.
+#'
+#'
+#' @section Parameter Set:
+#' * `weights.method` :: `character(1)` \cr
+#'   `manual` allows to supply weights, for `nloptr` weights are automatically determined using `nloptr`?
+#'   Defaults to `manual`.
+#' * `weights` :: `numeric(1)` \cr
+#'   Numeric either of length 1 or the same length as the inputs. Defaults to 1.
+#' * `measure` :: `character(1) | MeasureClassif` \cr
+#'   Only for `weights.method = "nloptr"`. Measure to optimized weights for.
+#'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`.
+#' * `algorithm` :: `character(1)` \cr
+#'   Several nonlinear optimization methods from `nloptr` are available.
+#'   See `nloptr::nloptr.print.options()` for a list of possible options.
+#'
 #' @section Methods:
-#' * `LearnerClassifWeightedAverage$new(), id = "wtaverage")` \cr
+#' * `LearnerClassifWeightedAverage$new(), id = "classif.weightedavg")` \cr
 #'   (`chr`) -> `self` \cr
 #'   Constructor.
 #' @family LearnerClassif
@@ -67,7 +79,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 
   private = list(
     compute_weighted_average = function(task, weights) {
-      data = task$data(cols = task$feature_names) 
+      data = task$data(cols = task$feature_names)
       fcts = map_lgl(data, is.factor)
 
       # One-Hot encode factors
@@ -77,7 +89,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
             x = t(sapply(x, function(x) as.numeric(seq_len(length(levels(x))) %in% x)))
             colnames(x) = levels(x)
           } else {
-            x = sapply(x, function(x) as.numeric(seq_len(length(levels(x)) - 1) %in% x)) 
+            x = sapply(x, function(x) as.numeric(seq_len(length(levels(x)) - 1) %in% x))
           }
         }
         return(x)
