@@ -45,7 +45,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       self$learner$param_set$set_id = learner$id
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("resampling", levels = "cv", default = "cv", tags = "required"),
+        ParamFct$new("resampling", levels = c("cv", "nocv"), default = "cv", tags = "required"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
         ParamLgl$new("keep_response", default = FALSE, tags = "required")
       )
@@ -64,8 +64,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
-      rdesc = mlr_resamplings$get(pv[["resampling"]])
-      rdesc$param_set$values = list(folds = pv[["folds"]])
+      if (pv[["resampling"]] == "nocv") {
+        rdesc = mlr_resamplings$get("custom")$instantiate(task, train_set = list(seq_len(task$nrow)), test_set = list(seq_len(task$nrow)))
+      } else {
+        rdesc = mlr_resamplings$get(pv[["resampling"]])
+        rdesc$param_set$values = list(folds = pv[["folds"]])
+      }
       res = resample(task, self$learner, rdesc)
       prds = do.call(rbind, lapply(res$data$prediction_data, new_prediction, task = task))
 

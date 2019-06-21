@@ -131,27 +131,27 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 })
 
 
-# test_that("LearnerClassifWeightedAverage Bagging Usecase", {
+test_that("LearnerClassifWeightedAverage Bagging Usecase", {
 
-#   tsk = mlr_tasks$get("iris")
+  # Bagging simply requires resampling "nocv"
+  lcv = PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"))
+  lcv$param_set$values$resampling.resampling = "nocv"
+  lrn = LearnerClassifWeightedAverage$new()
+  single_pred = PipeOpSubsample$new() %>>% lcv
 
-#   # Works for response
-#   lrn = LearnerClassifWeightedAverage$new()
-#   single_pred = PipeOpSubsample$new() %>>%
-#     PipeOpLearner$new(mlr_learners$get("classif.rpart"))
-#   pred_set = greplicate(single_pred, 3L) %>>%
-#     PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
-#     PipeOpLearner$new(lrn)
-#   expect_graph(pred_set)
+  pred_set = greplicate(single_pred, 3L) %>>%
+    PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
+    PipeOpLearner$new(lrn)
+  expect_graph(pred_set)
 
-#   pred_set$train(tsk)
-#   expect_true(pred_set$is_trained)
+  pred_set$train(tsk)
+  expect_true(pred_set$is_trained)
 
-#   prd_data = pred_set$predict(tsk)
-#   expect_class(prd_data[[1]], "PredictionDataClassif")
-#   prd = new_prediction(tsk, prd_data[[1]])
-#   expect_prediction(prd)
-# })
+  prd_data = pred_set$predict(tsk)
+  expect_class(prd_data[[1]], "PredictionDataClassif")
+  prd = new_prediction(tsk, prd_data[[1]])
+  expect_prediction(prd)
+})
 
 test_that("LearnerClassifWeightedAverage autotest", {
   lrn = LearnerClassifWeightedAverage$new()
