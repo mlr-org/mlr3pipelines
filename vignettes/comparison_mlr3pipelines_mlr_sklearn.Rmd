@@ -22,7 +22,58 @@ library("mlr3")
 library("mlr3pipelines")
 ```
 
+
+# Comparing mlr3pipelines to other frameworks
+
 ## mlr3pipelines vs. mlr
+
+In order to showcase the benefits of **mlr3pipelines** over **mlr's** `Wrapper` mechanism,
+we compare the case of imputing missing values before filtering the top 2 features and then applying a learner.
+
+
+### mlr
+
+```{r, eval = FALSE}
+library(mlr)
+# We first create a learner
+lrn = makeLearner("classif.rpart")
+# Wrap this learner in a FilterWrapper
+lrn.wrp = makeFilterWrapper(lrn, fw.abs = 2L)
+# And wrap the resulting wrapped learner into an ImputeWrapper.
+lrn.wrp = makeImputeWrapper(lrn.wrp)
+
+# Afterwards, we can train the resulting learner on a task
+train(lrn, iris.task)
+```
+
+### mlr3pipelines
+
+```{r, eval = FALSE}
+library(mlr3)
+library(mlr3pipelines)
+library(mlr3featsel)
+
+impute = PipeOpImpute$new()
+filter = PipeOpFilter$new(filter = FilterVariance$new())
+rpart = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
+
+# Assemble the Pipeline
+pipeline = impute %>>% filter %>>% rpart
+# And convert to a 'GraphLearner'
+learner = GraphLearner$new(id = "Pipeline", pipeline)
+# We want to filter out all but 2 features
+learner$param_set$values$variance.filter.nfeat = 2L
+
+e = Experiment$new(task = mlr_tasks$get("iris"), learner = learner)
+e$train()
+```
+
+The fact that **mlr's** wrappers have to be applied inside-out, i.e. in the reverse order
+is often confusing. This is way more straight-forward in `mlr3pipelines`, where
+we simply chaing the different methods using `%>>%`. Additionally, `mlr3pipelines`
+offers way greater possibilities with respect to the kinds of Pipelines that can be constructed.
+In `mlr3pipelines`, we allow for the construction of parallel and conditional pipelines.
+This was previously not possible.
 
 
 ## mlr3pipelines vs. sklearn.pipeline.Pipeline
@@ -53,6 +104,8 @@ that first Selects a feature and performs PCA on the original data, concatenates
 and applies a Support Vector Machine.
 
 
+### sklearn
+
 ```{python, eval = FALSE}
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.model_selection import GridSearchCV
@@ -72,17 +125,15 @@ pca = PCA(n_components=2)
 selection = SelectKBest(k=1)
 
 # Build estimator from PCA and Univariate selection:
-
 combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
 
 # Use combined features to transform dataset:
 X_features = combined_features.fit(X, y).transform(X)
-print("Combined space has", X_features.shape[1], "features")
+
 
 svm = SVC(kernel="linear")
 
 # Do grid search over k, n_components and C:
-
 pipeline = Pipeline([("features", combined_features), ("svm", svm)])
 
 param_grid = dict(features__pca__n_components=[1, 2, 3],
@@ -93,7 +144,7 @@ grid_search = GridSearchCV(pipeline, param_grid=param_grid, cv=5, verbose=10)
 grid_search.fit(X, y)
 ```
 
-We can achieve the same in `mlr3pipelines`:
+### mlr3pipelines
 
 ```{r, eval = FALSE}
 library(mlr3)
@@ -102,7 +153,6 @@ library(mlr3learners)
 library(mlr3featsel)
 library(mlr3tuning)
 
-# Get the data
 iris = mlr_tasks$get("iris")
 
 # Build the steps
@@ -117,11 +167,9 @@ svm$learner$param_set$values$kernel = "linear"
 pipeline = copy %>>% gunion(list(pca, selection)) %>>% union %>>% svm
 learner = GraphLearner$new(id = "Pipeline", pipeline)
 
-# For tuning, we define the resampling:
+# For tuning, we define the resampling and the Parameter Space
 resampling = mlr3::mlr_resamplings$get("cv")
 resampling$param_set$values$folds = 5
-
-# and the Parameter Space
 param_set = paradox::ParamSet$new(
   params = list(
     paradox::ParamDbl$new("classif.svm.cost", lower = 0.1, upper = 1),
@@ -137,9 +185,11 @@ tuner = TunerGridSearch$new(pe, terminator, resolution = 10)$tune()
 # Set the learner to the optimal values and train
 learner$param_set$values = tuner$tune_result()$values
 
-e = Experiment$new(
-  task = iris,
-  learner = learner
-)
+e = Experiment$new(task = iris, learner = learner)
 e$train()
 ```
+
+In summary, we can achieve similar results with a comparable number of lines, while at the
+same time offering greater flexibility with respect to which kinds of pipelines we want to
+optimize over. At the same time, experiments using `mlr3` can now be arbitrarily parallelized
+using `futures`.
