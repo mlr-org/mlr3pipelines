@@ -111,7 +111,7 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   # Works for probabilities
   lrn = LearnerClassifWeightedAverage$new()
   lrn$param_set$values = list(weights.method = "nloptr", measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA")
-  
+
   rp = mlr_learners$get("classif.rpart")
   rp$predict_type = "prob"
   single_pred = PipeOpSubsample$new() %>>%
@@ -130,10 +130,78 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   expect_prediction(prd)
 })
 
+
+# test_that("LearnerClassifWeightedAverage Bagging Usecase", {
+
+#   tsk = mlr_tasks$get("iris")
+
+#   # Works for response
+#   lrn = LearnerClassifWeightedAverage$new()
+#   single_pred = PipeOpSubsample$new() %>>%
+#     PipeOpLearner$new(mlr_learners$get("classif.rpart"))
+#   pred_set = greplicate(single_pred, 3L) %>>%
+#     PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
+#     PipeOpLearner$new(lrn)
+#   expect_graph(pred_set)
+
+#   pred_set$train(tsk)
+#   expect_true(pred_set$is_trained)
+
+#   prd_data = pred_set$predict(tsk)
+#   expect_class(prd_data[[1]], "PredictionDataClassif")
+#   prd = new_prediction(tsk, prd_data[[1]])
+#   expect_prediction(prd)
+# })
+
 test_that("LearnerClassifWeightedAverage autotest", {
   lrn = LearnerClassifWeightedAverage$new()
   expect_learner(lrn)
   lrn$param_set$values = list(weights.method = "nloptr", measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA")
   result = run_autotest(lrn, exclude = "(sanity|feat_single|feat_all_multiclass)")
   expect_true(result, info = result$error)
+})
+
+
+test_that("LearnerClassifWeightedAverage Pipeline", {
+
+  tsk = mlr_tasks$get("boston_housing")
+
+  # Works for response
+  lrn = LearnerRegrWeightedAverage$new()
+  single_pred = PipeOpSubsample$new() %>>%
+    PipeOpLearnerCV$new(mlr_learners$get("regr.featureless"))
+  pred_set = greplicate(single_pred, 3L) %>>%
+    PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
+    PipeOpLearner$new(lrn)
+  expect_graph(pred_set)
+
+  pred_set$train(tsk)
+  expect_true(pred_set$is_trained)
+
+  prd_data = pred_set$predict(tsk)
+  expect_class(prd_data[[1]], "PredictionDataRegr")
+  prd = new_prediction(tsk, prd_data[[1]])
+  expect_prediction(prd)
+
+
+  # Works for se
+  lrn = LearnerRegrWeightedAverage$new()
+  lrn$param_set$values = list(weights.method = "nloptr", measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA", est.se = TRUE)
+
+  ftless = mlr_learners$get("regr.featureless")
+  ftless$predict_type = "se"
+  single_pred = PipeOpSubsample$new() %>>%
+    PipeOpLearnerCV$new(ftless)
+  pred_set = greplicate(single_pred, 3L) %>>%
+    PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
+    PipeOpLearner$new(lrn)
+  expect_graph(pred_set)
+
+  pred_set$train(tsk)
+  expect_true(pred_set$is_trained)
+
+  prd_data = pred_set$predict(tsk)
+  expect_class(prd_data[[1]], "PredictionDataRegr")
+  prd = new_prediction(tsk, prd_data[[1]])
+  expect_prediction(prd)
 })

@@ -1,4 +1,4 @@
-#' @title Weighted Average of Features
+#' @title Weighted Average of Features for Classification
 #'
 #' @aliases mlr_learners_classif.weightedaverage
 #' @format [R6::R6Class()] inheriting from [mlr3::LearnerClassif].
@@ -146,6 +146,147 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
         measure = assert_measure(pars$measure)
       }
       n_weights = length(task$feature_names)
+
+      opt = nloptr::nloptr(
+        x0 = rep(1 / n_weights, n_weights),
+        eval_f = private$objfun,
+        lb = rep(0, n_weights), ub = rep(1, n_weights),
+        eval_g_ineq = function(x, task, measure) {max(x) - 1},
+        opts = list(algorithm = pars$algorithm, xtol_rel = 1.0e-8),
+        task = task,
+        measure = measure
+      )
+      return(opt$solution)
+    }
+  )
+)
+
+
+
+
+#' @title Weighted Average of Features for Regression
+#'
+#' @aliases mlr_learners_regr.weightedaverage
+#' @format [R6::R6Class()] inheriting from [mlr3::LearnerClassif].
+#'
+#' @description
+#' Computes a weighted average of inputs.
+#' Used in the context of computing weighted averages of predictions.
+#'
+#' If `weights.method` is "manual", the average is computed over weights provided by the user.
+#' Predictions are averaged using `weights` (in order of appearance in the data); `weights` defaults to equal
+#' weights for each feature.
+#' For `weights.method`: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
+#' for a measure provided in `measure` (defaults to `classif.acc`).
+#' Learned weights can be obtained from `.$model`.
+#'
+#'
+#' @section Parameter Set:
+#' * `weights.method` :: `character(1)` \cr
+#'   `manual` allows to supply weights, for `nloptr` weights are automatically determined using `nloptr`?
+#'   Defaults to `manual`.
+#' * `weights` :: `numeric(1)` \cr
+#'   Numeric either of length 1 or the same length as the inputs. Defaults to 1.
+#' * `measure` :: `character(1) | MeasureClassif` \cr
+#'   Only for `weights.method = "nloptr"`. Measure to optimized weights for.
+#'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`.
+#' * `algorithm` :: `character(1)` \cr
+#'   Several nonlinear optimization methods from `nloptr` are available.
+#'   See `nloptr::nloptr.print.options()` for a list of possible options.
+#'   Note that we only allow for derivative free local or global algorithms, i.e.
+#'   NLOPT_(G|L)N_.
+#'
+#' @section Methods:
+#' * `LearnerRegrWeightedAverage$new(), id = "classif.weightedavg")` \cr
+#'   (`chr`) -> `self` \cr
+#'   Constructor.
+#' @family LearnerClassif
+#' @export
+LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = LearnerRegr,
+  public = list(
+    initialize = function(id = "regr.weightedavg") {
+      super$initialize(
+        id = id,
+        param_set = ParamSet$new(
+          params = list(
+            ParamFct$new(id = "weights.method", default = "manual", levels = c("manual", "nloptr"), tags = "train"),
+            ParamUty$new(id = "weights", default = 1L, tags = "train"),
+            ParamLgl$new(id = "est.se", default = TRUE, tags = "train"),
+            ParamUty$new(id = "measure", default = "classif.acc", tags = "train"),
+            ParamFct$new(id = "algorithm", default = "NLOPT_LN_COBYLA", tags = "train",
+              levels = c("NLOPT_GN_DIRECT", "NLOPT_GN_DIRECT_L", "NLOPT_GN_DIRECT_L_RAND",
+                         "NLOPT_GN_DIRECT_NOSCAL", "NLOPT_GN_DIRECT_L_NOSCAL", "NLOPT_GN_DIRECT_L_RAND_NOSCAL",
+                         "NLOPT_GN_ORIG_DIRECT", "NLOPT_GN_ORIG_DIRECT_L", "NLOPT_LN_PRAXIS",
+                         "NLOPT_GN_CRS2_LM", "NLOPT_GN_MLSL", "NLOPT_GN_MLSL_LDS",
+                         "NLOPT_LN_COBYLA", "NLOPT_LN_NEWUOA", "NLOPT_LN_NEWUOA_BOUND",
+                         "NLOPT_LN_NELDERMEAD", "NLOPT_LN_SBPLX", "NLOPT_LN_AUGLAG",
+                         "NLOPT_LN_AUGLAG_EQ", "NLOPT_LN_BOBYQA", "NLOPT_GN_ISRES"))
+          )
+        ),
+        param_vals = list(weights.method = "nloptr", weights = 1L, measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA"),
+        predict_types = c("response", "se"),
+        feature_types = c("integer", "numeric")
+      )
+    },
+
+    train = function(task) {
+      pars = self$params("train")
+      if (pars$weights.method == "manual") {
+        assert_numeric(pars$weights, lower = 0L)
+        assert_true(length(pars$weights) == 1L | length(pars$weights) == length(task$feature_names))
+        assert_true(sum(pars$weights) > 0)
+        if (length(pars$weights) == 1L) weights = rep(pars$weights, length(task$feature_names))
+        else weights = pars$weights
+        self$model = list("weights" = weights)
+      } else {
+        self$model = list("weights" = private$optimize_objfun_nlopt(task, pars))
+      }
+      invisible(self)
+    },
+
+    predict = function(task) {
+      pars = self$params("predict")
+      private$compute_weighted_average(task, self$model$weights)
+    }
+  ),
+
+  private = list(
+    compute_weighted_average = function(task, weights) {
+      wts = weights / sum(weights)
+      data_response = task$data(cols = stri_subset(task$feature_names, regex = ".*\\.response"))
+      wt_avg = as.matrix(data_response) %*% wts
+
+      if (self$predict_type == "se") {
+        data_se = task$data(cols = stri_subset(task$feature_names, regex = ".*\\.se"))
+        if (ncol(data_se) == 0) {
+          se = rep(0, nrow(data_response))
+        } else {
+          se = sqrt(as.matrix(data_se)^2 %*% wts)
+        }
+        if (self$pars$est.se)
+          se = se + apply(data_response, 1, function(x, wt) {sum(wt *(x-weighted.mean(x, wt))^2)*(sum(wt)/(sum(wt)^2-sum(wt^2)))}, wt = wts)
+      } else {
+        se = NULL
+      }
+      as_prediction_data(task, response = wt_avg, se = se)
+    },
+    objfun = function(weights, task, measure) {
+      # This is the objective function we minimize using nlopt
+      prd = new_prediction(task, data = private$compute_weighted_average(task, weights))
+      res = measure$calculate(prediction = prd)
+      if (!measure$minimize) res = -res
+      return(res)
+    },
+    optimize_objfun_nlopt = function(task, pars) {
+      requireNamespace("nloptr")
+
+      if (is.character(pars$measure)) {
+        assert_true(mlr_measures$has(pars$measure))
+        measure = mlr_measures$get(pars$measure)
+      } else {
+        measure = assert_measure(pars$measure)
+      }
+      n_weights = length(stri_subset(task$feature_names, regex = ".*\\.response"))
 
       opt = nloptr::nloptr(
         x0 = rep(1 / n_weights, n_weights),
