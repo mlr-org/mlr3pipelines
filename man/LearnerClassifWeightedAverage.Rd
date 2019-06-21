@@ -34,6 +34,8 @@ The Measure is either obtained from \code{mlr_measures} or directly supplied. De
 \item \code{algorithm} :: \code{character(1)} \cr
 Several nonlinear optimization methods from \code{nloptr} are available.
 See \code{nloptr::nloptr.print.options()} for a list of possible options.
+Note that we only allow for derivative free local or global algorithms, i.e.
+NLOPT_(G|L)N_.
 }
 }
 

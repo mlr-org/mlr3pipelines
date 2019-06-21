@@ -30,7 +30,8 @@ library("mlr3pipelines")
 In order to showcase the benefits of **mlr3pipelines** over **mlr's** `Wrapper` mechanism,
 we compare the case of imputing missing values before filtering the top 2 features and then applying a learner.
 
-
+While **mlr** wrappers are generally less verbose and require a little fewer code, this heavily inhibits flexibility.
+Wrappers can generally not process data in parallel, i.e.
 ### mlr
 
 ```{r, eval = FALSE}
@@ -54,7 +55,7 @@ library(mlr3pipelines)
 library(mlr3featsel)
 
 impute = PipeOpImpute$new()
-filter = PipeOpFilter$new(filter = FilterVariance$new())
+filter = PipeOpFilter$new(filter = FilterVariance$new(), param_vals = list(filter.nfeat = 2L))
 rpart = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 
 # Assemble the Pipeline
@@ -62,7 +63,6 @@ pipeline = impute %>>% filter %>>% rpart
 # And convert to a 'GraphLearner'
 learner = GraphLearner$new(id = "Pipeline", pipeline)
 # We want to filter out all but 2 features
-learner$param_set$values$variance.filter.nfeat = 2L
 
 e = Experiment$new(task = mlr_tasks$get("iris"), learner = learner)
 e$train()

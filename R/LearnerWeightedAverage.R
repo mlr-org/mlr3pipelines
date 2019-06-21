@@ -27,6 +27,8 @@
 #' * `algorithm` :: `character(1)` \cr
 #'   Several nonlinear optimization methods from `nloptr` are available.
 #'   See `nloptr::nloptr.print.options()` for a list of possible options.
+#'   Note that we only allow for derivative free local or global algorithms, i.e.
+#'   NLOPT_(G|L)N_.
 #'
 #' @section Methods:
 #' * `LearnerClassifWeightedAverage$new(), id = "classif.weightedavg")` \cr
@@ -44,7 +46,14 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
             ParamFct$new(id = "weights.method", default = "manual", levels = c("manual", "nloptr"), tags = "train"),
             ParamUty$new(id = "weights", default = 1L, tags = "train"),
             ParamUty$new(id = "measure", default = "classif.acc", tags = "train"),
-            ParamFct$new(id = "algorithm", default = "NLOPT_LN_COBYLA", levels = c("NLOPT_LN_COBYLA", "NLOPT_LN_BOBYQA"), tags = "train")
+            ParamFct$new(id = "algorithm", default = "NLOPT_LN_COBYLA", tags = "train",
+              levels = c("NLOPT_GN_DIRECT", "NLOPT_GN_DIRECT_L", "NLOPT_GN_DIRECT_L_RAND",
+                         "NLOPT_GN_DIRECT_NOSCAL", "NLOPT_GN_DIRECT_L_NOSCAL", "NLOPT_GN_DIRECT_L_RAND_NOSCAL",
+                         "NLOPT_GN_ORIG_DIRECT", "NLOPT_GN_ORIG_DIRECT_L", "NLOPT_LN_PRAXIS",
+                         "NLOPT_GN_CRS2_LM", "NLOPT_GN_MLSL", "NLOPT_GN_MLSL_LDS",
+                         "NLOPT_LN_COBYLA", "NLOPT_LN_NEWUOA", "NLOPT_LN_NEWUOA_BOUND",
+                         "NLOPT_LN_NELDERMEAD", "NLOPT_LN_SBPLX", "NLOPT_LN_AUGLAG",
+                         "NLOPT_LN_AUGLAG_EQ", "NLOPT_LN_BOBYQA", "NLOPT_GN_ISRES"))
           )
         ),
         param_vals = list(weights.method = "manual", weights = 1L, measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA"),
@@ -151,4 +160,3 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
     }
   )
 )
-

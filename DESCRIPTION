@@ -54,11 +54,11 @@ Remotes:
 Collate:
     'Graph.R'
     'GraphLearner.R'
+    'LearnerWeightedAverage.R'
+    'NO_OP.R'
     'mlr_pipeops.R'
     'utils.R'
     'PipeOp.R'
-    'LearnerWeightedAverage.R'
-    'NO_OP.R'
     'PipeOpBackupLearner.R'
     'PipeOpTaskPreproc.R'
     'PipeOpBalanceSample.R'
