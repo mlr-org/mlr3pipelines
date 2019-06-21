@@ -59,6 +59,9 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
       pars = self$params("train")
       if (pars$weights.method == "manual") {
         assert_numeric(pars$weights, lower = 0L)
+        # For "prob" we blow up the weights vector.
+        if (unique(task$feature_types$type) == "numeric" & task$class_n > 2)
+          weights = rep(weights, each = task$class_n)
         assert_true(length(pars$weights) == 1L | length(pars$weights) == length(task$feature_names))
         assert_true(sum(pars$weights) > 0)
         if (length(pars$weights) == 1L) weights = rep(pars$weights, length(task$feature_names))
