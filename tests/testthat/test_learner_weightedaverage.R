@@ -133,15 +133,12 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
 test_that("LearnerClassifWeightedAverage Bagging Usecase", {
 
-  # Bagging simply requires resampling "nocv"
-  lcv = PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"))
-  lcv$param_set$values$resampling.resampling = "nocv"
-  lrn = LearnerClassifWeightedAverage$new()
-  single_pred = PipeOpSubsample$new() %>>% lcv
-
-  pred_set = greplicate(single_pred, 3L) %>>%
+  # Bagging requires setting resampling to "nocv"
+  subsampled_tree = PipeOpSubsample$new() %>>%
+    PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"), param_vals = list(resampling.resampling = "nocv"))
+  pred_set = greplicate(subsampled_tree, 3L) %>>%
     PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
-    PipeOpLearner$new(lrn)
+    PipeOpLearner$new(LearnerClassifWeightedAverage$new())
   expect_graph(pred_set)
 
   pred_set$train(tsk)
