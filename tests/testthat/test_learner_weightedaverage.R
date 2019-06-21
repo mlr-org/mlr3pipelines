@@ -184,7 +184,7 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   expect_prediction(prd)
 
 
-  # Works for se
+  # Works for "se"
   lrn = LearnerRegrWeightedAverage$new()
   lrn$param_set$values = list(weights.method = "nloptr", measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA", est.se = TRUE)
 

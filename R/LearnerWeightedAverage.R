@@ -179,6 +179,8 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #' For `weights.method`: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
 #' for a measure provided in `measure` (defaults to `classif.acc`).
 #' Learned weights can be obtained from `.$model`.
+#' For `est.se = TRUE` additional uncertainties are estimated from the weighted standard deviation in the different responses
+#' and added to the standard error estimates of the underlying model.
 #'
 #'
 #' @section Parameter Set:
@@ -187,6 +189,8 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #'   Defaults to `manual`.
 #' * `weights` :: `numeric(1)` \cr
 #'   Numeric either of length 1 or the same length as the inputs. Defaults to 1.
+#' * `est.se` :: `logical(1)` \cr
+#'   Should the standard deviation between different models be estimated?
 #' * `measure` :: `character(1) | MeasureClassif` \cr
 #'   Only for `weights.method = "nloptr"`. Measure to optimized weights for.
 #'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`.
@@ -197,10 +201,10 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #'   NLOPT_(G|L)N_.
 #'
 #' @section Methods:
-#' * `LearnerRegrWeightedAverage$new(), id = "classif.weightedavg")` \cr
+#' * `LearnerRegrWeightedAverage$new(), id = "regr.weightedavg")` \cr
 #'   (`chr`) -> `self` \cr
 #'   Constructor.
-#' @family LearnerClassif
+#' @family LearnerRegr
 #' @export
 LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = LearnerRegr,
   public = list(
@@ -264,7 +268,7 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
           se = sqrt(as.matrix(data_se)^2 %*% wts)
         }
         if (self$pars$est.se)
-          se = se + apply(data_response, 1, function(x, wt) {sum(wt *(x-weighted.mean(x, wt))^2)*(sum(wt)/(sum(wt)^2-sum(wt^2)))}, wt = wts)
+          se = se + apply(data_response, 1, function(x, wt) {sqrt(sum(wt *(x-weighted.mean(x, wt))^2)*(sum(wt)/(sum(wt)^2-sum(wt^2))))}, wt = wts)
       } else {
         se = NULL
       }
