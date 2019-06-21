@@ -41,7 +41,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
   public = list(
     filter = NULL,
     initialize = function(filter, id = filter$id, param_vals = list()) {
-      assert_class(filter, "Filter")
+      assert_class(filter, "FilterResult")
       self$filter = filter$clone(deep = TRUE)
       self$filter$param_set$set_id = filter$id
       private$.outer_param_set = ParamSet$new(list(
@@ -54,7 +54,6 @@ PipeOpFilter = R6Class("PipeOpFilter",
     },
 
     get_state = function(task) {
-
       filtercrit = c("nfeat", "frac", "cutoff")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {
@@ -69,11 +68,11 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
       self$filter$calculate(filtertask)
 
-      values = sort(self$filter$scores, decreasing = TRUE)
+      values = self$filter$scores[order(self$filter$scores$score, decreasing = TRUE),]
       features = switch(filtercrit,
-        cutoff = names(values)[values >= critvalue],
-        nfeat = names(values)[seq_len(min(maxfeat, critvalue))],
-        frac = names(values)[seq_len(round(maxfeat * critvalue))],
+        cutoff = values$feature[values$score >= critvalue],
+        nfeat = values$feature[seq_len(min(maxfeat, critvalue))],
+        frac =  values$feature[seq_len(round(maxfeat * critvalue))],
         stop("unknown filter criterion"))
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
@@ -112,4 +111,4 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
-register_pipeop("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+register_pipeop("filter", PipeOpFilter, list(R6Class("FilterResult", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))

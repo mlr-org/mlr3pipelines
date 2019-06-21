@@ -33,7 +33,6 @@
 #'   (`chr`) -> `self` \cr
 #'   Constructor.
 #' @family LearnerClassif
-#' @include PipeOp.R
 #' @export
 LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit = LearnerClassif,
   public = list(
@@ -152,7 +151,4 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
     }
   )
 )
-
-
-
 

@@ -1,0 +1,145 @@
+---
+title: "Comparing mlr3pipelines to mlr and Python"
+author: "Florian Pfisterer"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to mlr3pipelines}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  cache = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+set.seed(8008135)
+compiler::enableJIT(0)
+library("mlr3")
+library("mlr3pipelines")
+```
+
+## mlr3pipelines vs. mlr
+
+
+## mlr3pipelines vs. sklearn.pipeline.Pipeline
+
+In order to broaden the horizon, we compare to **Python** **sklearn's** `Pipeline` methods.
+`sklearn.pipeline.Pipeline` sequentially applies a list of transforms before fitting a final estimator.
+Intermediate steps of the pipeline are `transforms`, i.e. steps that can learn from the data,
+but also transform the data while it flows through it.
+The purpose of the pipeline is to assemble several steps that can be cross-validated together while setting different parameters.
+For this, it enables setting parameters of the various steps
+
+It is thus conceptually very similar to `mlr3pipelines`.
+Similarly to `mlr3pipelines`, we can tune over a full `Pipeline` using various tuning methods.
+`Pipeline` mainly supports linear pipelines. This means, that it can execute parallel steps, such as
+for example **Bagging**, but it does not support conditional execution, i.e. `PipeOpBranch`.
+
+At the same time, the different `transforms` in the pipeline can be cached, which makes tuning over the configuration
+space of a `Pipeline` more efficient, as executing some steps multiple times can be avoided.
+
+We compare functionality available in both `mlr3pipelines` and `sklearn.pipeline.Pipeline` to give a
+comparison.
+
+
+### Tuning Feature Selection and PCA before applying a SVM
+
+The following example obtained from the **sklearn** documentation showcases a **Pipeline**
+that first Selects a feature and performs PCA on the original data, concatenates the resulting datasets
+and applies a Support Vector Machine.
+
+
+```{python, eval = FALSE}
+from sklearn.pipeline import Pipeline, FeatureUnion
+from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVC
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+from sklearn.feature_selection import SelectKBest
+
+iris = load_iris()
+
+X, y = iris.data, iris.target
+
+# This dataset is way too high-dimensional. Better do PCA:
+pca = PCA(n_components=2)
+
+# Maybe some original features where good, too?
+selection = SelectKBest(k=1)
+
+# Build estimator from PCA and Univariate selection:
+
+combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
+
+# Use combined features to transform dataset:
+X_features = combined_features.fit(X, y).transform(X)
+print("Combined space has", X_features.shape[1], "features")
+
+svm = SVC(kernel="linear")
+
+# Do grid search over k, n_components and C:
+
+pipeline = Pipeline([("features", combined_features), ("svm", svm)])
+
+param_grid = dict(features__pca__n_components=[1, 2, 3],
+                  features__univ_select__k=[1, 2],
+                  svm__C=[0.1, 1, 10])
+
+grid_search = GridSearchCV(pipeline, param_grid=param_grid, cv=5, verbose=10)
+grid_search.fit(X, y)
+```
+
+We can achieve the same in `mlr3pipelines`:
+
+```{r, eval = FALSE}
+library(mlr3)
+library(mlr3pipelines)
+library(mlr3learners)
+library(mlr3featsel)
+library(mlr3tuning)
+
+# Get the data
+iris = mlr_tasks$get("iris")
+
+# Build the steps
+copy = PipeOpCopy$new(2)
+pca = PipeOpPCA$new()
+selection = PipeOpFilter$new(filter = FilterVariance$new())
+union = PipeOpFeatureUnion$new(2)
+svm = PipeOpLearner$new(mlr_learners$get("classif.svm"))
+svm$learner$param_set$values$kernel = "linear"
+
+# Assemble the Pipeline
+pipeline = copy %>>% gunion(list(pca, selection)) %>>% union %>>% svm
+learner = GraphLearner$new(id = "Pipeline", pipeline)
+
+# For tuning, we define the resampling:
+resampling = mlr3::mlr_resamplings$get("cv")
+resampling$param_set$values$folds = 5
+
+# and the Parameter Space
+param_set = paradox::ParamSet$new(
+  params = list(
+    paradox::ParamDbl$new("classif.svm.cost", lower = 0.1, upper = 1),
+    paradox::ParamInt$new("pca.rank.",  lower = 1, upper = 3),
+    paradox::ParamInt$new("variance.filter.nfeat",  lower = 1, upper = 2)
+  )
+)
+
+pe = PerformanceEvaluator$new(iris, learner, resampling, param_set)
+terminator = TerminatorEvaluations$new(60)
+tuner = TunerGridSearch$new(pe, terminator, resolution = 10)$tune()
+
+# Set the learner to the optimal values and train
+learner$param_set$values = tuner$tune_result()$values
+
+e = Experiment$new(
+  task = iris,
+  learner = learner
+)
+e$train()
+```
