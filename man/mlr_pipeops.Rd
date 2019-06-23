@@ -3,15 +3,15 @@
 \name{mlr_pipeops}
 \alias{mlr_pipeops}
 \title{Dictionary of PipeOps}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3:Dictionary]{mlr3::Dictionary}}}
+\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}}
 \description{
-A simple \code{\link[mlr3:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
+A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
 Each \code{PipeOp} has an associated help page, see \code{mlr_pipeop_[id]}.
 }
 \section{Usage}{
 
 
-See \code{\link[mlr3:Dictionary]{mlr3::Dictionary}}.
+See \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
 }
 
 \section{S3 methods}{
