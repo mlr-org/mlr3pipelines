@@ -50,7 +50,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
         stratify = task$target_names
         split_row_ids = split(row_ids, task$data(rows = row_ids, cols = stratify))
         double_split = map(split_row_ids, chunk_vector, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
-        row_ids = map(transpose(double_split), unlist, use.names = FALSE)
+        row_ids = map(transpose_list(double_split), unlist, use.names = FALSE)
       } else {
         # FIXME: Implement stratification?
         row_ids = chunk_vector(task$row_ids, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
