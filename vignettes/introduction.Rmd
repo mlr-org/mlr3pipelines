@@ -174,7 +174,7 @@ gr$train(task)[[1]]$data()
 gr$predict(single_line_task)[[1]]$data()
 ```
 
-The collection of `PipeOp`s inside a `Graph` can beaccessed through the **`$pipeops`** slot. The set of edges in the Graph can be inspected through the **`$edges`** slot. It is possible to modify individual `PipeOps` and edges in a Graph through these slots, but this is not recommended because no error checking is performed and it may put the `Graph` in an unsupported state. 
+The collection of `PipeOp`s inside a `Graph` can beaccessed through the **`$pipeops`** slot. The set of edges in the Graph can be inspected through the **`$edges`** slot. It is possible to modify individual `PipeOps` and edges in a Graph through these slots, but this is not recommended because no error checking is performed and it may put the `Graph` in an unsupported state.
 
 ### Networks
 
@@ -214,7 +214,7 @@ gr$plot()
 ```
 
 ### `PipeOp` IDs and ID Name Clashes
- 
+
 `PipeOp`s within a graph are addressed by their **`$id`**-slot. It is therefore necessary for all `PipeOp`s within a `Graph` to have a unique `$id`. The `$id` can be set during or after construction, but it should not directly be changed after a `PipeOp` was inserted in a `Graph`. At that point, the **`$set_names()`**-method can be used to change `PipeOp` ids.
 
 ```{r, error = TRUE}
@@ -230,7 +230,7 @@ gr
 ```{r}
 # Alternative ways of getting new ids:
 mlr_pipeops$get("scale", id = "scale2")
-PipeOpScale$new(scale", id = "scale2")
+PipeOpScale$new(id = "scale2")
 ```
 ```{r, error = TRUE}
 # sometimes names of PipeOps within a Graph need to be changed
@@ -259,8 +259,10 @@ The following is a very simple `Graph` that performs training and prediction on 
 
 ```{r}
 gr = mlr_pipeops$get("pca") %>>% mlr_pipeops$get("learner",
-  mlr_learners$get("classif.rpart")) ``` ```{r} gr$train(task)
-
+  mlr_learners$get("classif.rpart"))
+```
+```{r}
+gr$train(task)
 gr$predict(task)
 ```
 
