@@ -67,9 +67,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
       filtertask$select(filtertask$feature_types[get("type") %in% self$filter$feature_types, get("id")])
       maxfeat = length(filtertask$feature_names)
 
-      self$filter$calculate(filtertask)
-
-      scoretable = self$filter$scores[order(score), c("score", "feature")]
+      if (filtertask$nrow > 1 && length(filtertask$feature_names)) {
+        self$filter$calculate(filtertask)
+        scoretable = self$filter$scores[order(score, decreasing = TRUE), c("score", "feature")]
+      } else {
+        scoretable = CJ(score = 0, feature = shuffle(filtertask$feature_names))  # workaround for mlr-org/mlr3featsel#39
+      }
       features = switch(filtercrit,
         cutoff = scoretable$feature[scoretable$score >= critvalue],
         nfeat = scoretable$feature[seq_len(min(maxfeat, critvalue))],
