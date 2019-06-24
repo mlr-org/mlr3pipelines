@@ -31,3 +31,5 @@ PipeOpNULL = R6Class("PipeOpNULL",
     }
   )
 )
+
+register_pipeop("null", PipeOpNULL)

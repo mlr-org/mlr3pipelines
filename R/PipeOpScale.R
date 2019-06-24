@@ -44,3 +44,5 @@ PipeOpScale = R6Class("PipeOpScale",
     }
   )
 )
+
+register_pipeop("scale", PipeOpScale)

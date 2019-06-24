@@ -15,8 +15,8 @@ test_that("PipeOpBackupLearner - basic properties", {
   result = train_pipeop(po, list(learnerin = NULL, taskin = task))
   expect_equal(unname(result), list(NULL))
 
-  demo_classif = convert_prediction(task, mlr_learners$get("classif.featureless", predict_type = "prob")$train(task)$predict(task))
-  demo_regr = convert_prediction(regr_task, mlr_learners$get("regr.featureless")$train(regr_task)$predict(regr_task))
+  demo_classif = mlr_learners$get("classif.featureless", predict_type = "prob")$train(task)$predict(task)
+  demo_regr = mlr_learners$get("regr.featureless")$train(regr_task)$predict(regr_task)
 
   orig_prob = demo_classif$prob
   orig_se = demo_regr$se

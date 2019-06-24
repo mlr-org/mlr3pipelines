@@ -52,7 +52,7 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
         badrowids = prediction$row_ids[badrows]
         task = inputs[[2]]$clone(deep = TRUE)$filter(badrowids)
 
-        newprediction = convert_prediction(task, self$state$predict(task))
+        newprediction = self$state$predict(task)
         for (repairing in c("response", "prob", "se")) {
           if (repairing %in% names(prediction) && !is.null(prediction[[repairing]]) &&
             repairing %in% names(newprediction) && !is.null(newprediction[[repairing]])) {
@@ -83,3 +83,5 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
     }
   )
 )
+
+register_pipeop("backuplearner", PipeOpBackupLearner)

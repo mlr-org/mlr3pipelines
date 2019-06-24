@@ -1,4 +1,5 @@
 #' @include utils.R
+#' @include mlr_pipeops.R
 #'
 #' @title PipeOp
 #' @format [R6Class] PipeOp

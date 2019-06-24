@@ -1,13 +1,13 @@
 #' @title Dictionary of PipeOps
 #'
-#' @format [`R6Class`] object inheriting from [`mlr3::Dictionary`]
+#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`]
 #' @description
-#' A simple [`Dictionary`][mlr3::Dictionary] storing objects of class [`PipeOp`].
+#' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
 #' Each `PipeOp` has an associated help page, see `mlr_pipeop_[id]`.
 #'
 #' @section Usage:
 #'
-#' See [`mlr3::Dictionary`].
+#' See [`mlr3misc::Dictionary`].
 #'
 #' @section S3 methods:
 #' * `as.data.table(dict)`\cr
@@ -19,7 +19,7 @@
 #' @name mlr_pipeops
 NULL
 
-DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3::Dictionary,
+DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(
     metainf = new.env(parent = emptyenv()),
@@ -77,3 +77,29 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
     )
   }), "key")[]
 }
+
+
+# We would like to have the pipeops in the "mlr_pipeops" Dictionary, but adding
+# them at build time is apparently not a good idea. On the other hand we would
+# like to register pipeops near their deefinition to prevent confusing
+# dependencies throughout the codebase. Therefore we register the pipeops using
+# "register_pipeop()" below their definition and call
+# "publish_registered_pipeops()" in .onLoad.
+mlr_pipeop_register = new.env(parent = emptyenv())
+
+# nocov start
+register_pipeop = function(key, value, metainf) {
+  m = match.call(expand.dots = FALSE)
+  mlr_pipeop_register[[key]] = m
+}
+
+publish_registered_pipeops = function() {
+  mlr_pipeops <<- DictionaryPipeOp$new()
+
+  for (registercall in as.list(mlr_pipeop_register)) {
+    registercall[[1]] = quote(mlr_pipeops$add)
+    eval(registercall, envir = parent.env(environment()))
+  }
+  rm("mlr_pipeop_register", envir = parent.env(environment()))
+}
+# nocov end

@@ -13,7 +13,7 @@ test_that("basic graphlearn tests", {
   glrn$train(task)
 
   expect_prediction_classif({
-    graphpred = as_prediction(task, convert_prediction(task, glrn$predict(task)))
+    graphpred = new_prediction(task, glrn$predict(task))
   })
   expect_equal(graphpred,
     Experiment$new(task, lrn)$train()$predict()$prediction)
@@ -38,7 +38,7 @@ test_that("basic graphlearn tests", {
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
   expect_prediction_classif({
-    graphpred2 = as_prediction(task, convert_prediction(task, glrn2$predict(task)))
+    graphpred2 = new_prediction(task, glrn2$predict(task))
   })
 
   scidf = cbind(scale(iris[1:4]), iris[5])

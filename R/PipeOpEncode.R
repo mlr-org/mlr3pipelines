@@ -73,3 +73,5 @@ PipeOpEncode = R6Class("PipeOpEncode",
     }
   )
 )
+
+register_pipeop("encode", PipeOpEncode)

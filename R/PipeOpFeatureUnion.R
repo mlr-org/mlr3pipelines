@@ -38,6 +38,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
+register_pipeop("featureunion", PipeOpFeatureUnion, list("N"))
 
 cbind_tasks = function(inputs) {
   task = inputs[[1L]]

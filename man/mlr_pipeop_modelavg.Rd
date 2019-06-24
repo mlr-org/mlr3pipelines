@@ -10,12 +10,12 @@
 PipeOpModelAvg
 }
 \description{
-Averages its input (a \code{list} of \code{\link{PredictionDataRegr}}).
+Averages its input (a \code{list} of \code{PredictionDataRegr}).
 Only used for regression \code{Prediction}s.
 Weights can be set by the user, if none are provided, defaults to
 equal weights \code{rep(1/innum, innum)} for each prediction.
 Offers a \code{$weights} slot to set/get weights for each learner.
-Returns a single \code{\link{PredictionDataRegr}}.
+Returns a single \code{PredictionDataRegr}.
 Defaults to equal weights for each model.
 }
 \examples{

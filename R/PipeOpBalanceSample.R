@@ -97,3 +97,5 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
     predict_task = identity
   )
 )
+
+register_pipeop("balancesample", PipeOpBalanceSample)
