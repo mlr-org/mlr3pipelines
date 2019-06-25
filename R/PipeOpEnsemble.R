@@ -14,8 +14,6 @@
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    weights = NULL,
-    measure = NULL,
     initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
       assert_integerish(innum, lower = 1)
       param_set$add(ParamDbl$new("weight")$rep(innum))
@@ -129,7 +127,8 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
 
     predict = function(inputs) {
       list(private$weighted_avg_predictions(inputs, self$weights))
-    }),
+    }
+  ),
   private = list(
     weighted_avg_predictions = function(inputs, weights) {
       row_ids = inputs[[1]]$row_ids
