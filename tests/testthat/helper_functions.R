@@ -404,11 +404,9 @@ make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "r
     response = sample(letters[seq_len(nclasses)], n, replace = TRUE)
   }
 
-  set_class(list(
-    row_ids = seq_len(n),
+  PredictionClassif$new(row_ids = seq_len(n),
     response = factor(response, levels = letters),
-    prob = prob),
-    c("PredictionClassif", "Prediction"))
+    prob = prob)
 }
 
 PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
