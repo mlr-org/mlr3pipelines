@@ -41,7 +41,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     predict = function(task) {
       self$model$param_set$values = self$param_set$values
       prediction = self$model$predict(task)
-      assert_list(prediction, types = "PredictionData", len = 1,
+      assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
     }

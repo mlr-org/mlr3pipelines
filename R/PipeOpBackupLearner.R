@@ -30,8 +30,8 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
       assert_learner(learner)
       self$learner = learner$clone(deep = TRUE)
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = c("learnerin", "taskin"), train = c("NULL", "Task"), predict = c("PredictionData", "Task")),
-        output = data.table(name = "output", train = "NULL", predict = "PredictionData")
+        input = data.table(name = c("learnerin", "taskin"), train = c("NULL", "Task"), predict = c("Prediction", "Task")),
+        output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
       private$.param_set = NULL
     },
