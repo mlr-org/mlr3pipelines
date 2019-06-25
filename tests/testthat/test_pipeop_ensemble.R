@@ -16,8 +16,7 @@ test_that("PipeOpEnsemble - basic properties", {
 test_that("PipeOpWeightedModelAvg - train and predict", {
   # Create 4 predictions
   truth = rnorm(70)
-  prds = replicate(4, set_class(list(row_ids = seq_len(70), response = truth + rnorm(70, sd = 0.1)),
-    c("PredictionRegr", "Prediction")), simplify = FALSE)
+  prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)), simplify = FALSE)
 
   po = PipeOpModelAvg$new(4)
   expect_pipeop(po)
@@ -50,7 +49,7 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
       predict_types = c("response"), nclasses = 3),
     simplify = FALSE
   )
-
+  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
   po = PipeOpMajorityVote$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, prds), len = 1)
@@ -62,8 +61,7 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
   expect_list(train_pipeop(po, prds), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
-  prds[[4]]$prob = NULL
-  expect_equal(out[[1]], prds[[4]])
+  expect_equal(out[[1]]$data, prds[[4]]$data)
 })
 
 test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
@@ -72,7 +70,7 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
       predict_types = c("response", "prob"), nclasses = 3),
     simplify = FALSE
   )
-
+  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
   po = PipeOpMajorityVote$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, prds), len = 1)

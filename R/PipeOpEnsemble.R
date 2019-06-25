@@ -31,7 +31,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   ),
   active = list(
     weights = function(val) {
-      weightids = param_set$ids(tags = "weight_rep")
+      weightids = self$param_set$ids(tags = "weight_rep")
       if (!missing(val)) {
         assert_numeric(val, len = nrow(self$input), any.missing = FALSE)
         self$param_set$values[weightids] = val
@@ -75,17 +75,17 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
     weighted_avg_predictions = function(inputs, weights) {
       row_ids = inputs[[1]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
-      truth = c(discard(map(inputs, "truth"), is.null), list(NULL))[[1]]  # take first truth we find, in case some pathways dropped truth
+      truth = inputs[[1]]$truth
       weights = weights / sum(weights)
       responsematrix = simplify2array(map(inputs, "response"))
       response = c(responsematrix %*% weights)
       se = NULL
-      if (all(map_lgl(inputs, function(x) "se" %in% names(x)))) {
+      if (all(map_lgl(inputs, function(x) "se" %in% names(x$data)))) {
         se = c(sqrt(
           (
             simplify2array(map(inputs, "se"))^2 +
             (responsematrix - response)^2
-          ) %*% weight
+          ) %*% weights
         ))
       }
       PredictionRegr$new(row_ids = row_ids, truth = truth, response = response, se = se)
@@ -133,7 +133,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
     weighted_avg_predictions = function(inputs, weights) {
       row_ids = inputs[[1]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
-      truth = c(discard(map(inputs, "truth"), is.null), list(NULL))[[1]]  # take first truth we find, in case some pathways dropped truth
+      truth = inputs[[1]]$truth
 
       weights = weights / sum(weights)
 

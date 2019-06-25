@@ -404,7 +404,7 @@ make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "r
     response = sample(letters[seq_len(nclasses)], n, replace = TRUE)
   }
 
-  PredictionClassif$new(row_ids = seq_len(n),
+  PredictionClassif$new(row_ids = seq_len(n), truth = factor(truth, levels = letters[seq_len(nclasses)]),
     response = factor(response, levels = letters),
     prob = prob)
 }
