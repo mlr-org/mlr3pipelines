@@ -35,51 +35,21 @@ learner_po =  mlr_pipeops$get("learner",
 ```
 
 These pipeops can then be combined together to define machine learning
-pipelines:
+pipelines. These can be wrapped in a `GraphLearner` that behave like any
+other `Learner` in `mlr3`.
 
 ``` r
 graph = pca %>>% filter %>>% learner_po
-
-print(graph)
-#> Graph with 3 PipeOps:
-#>              ID         State       sccssors      prdcssors
-#>             pca <<UNTRAINED>> FilterVariance
-#>  FilterVariance <<UNTRAINED>>  classif.rpart            pca
-#>   classif.rpart <<UNTRAINED>>                FilterVariance
-```
-
-This example pipeline can be used for training and prediction:
-
-``` r
-task = mlr_tasks$get("iris")
-holdout = mlr_resamplings$get("holdout")$instantiate(task)
-
-graph$train(task$clone()$filter(holdout$train_set(1)))
-#> $classif.rpart.output
-#> NULL
-
-graph$predict(task$clone()$filter(holdout$test_set(1)))
-#> $classif.rpart.output
-#> <PredictionClassif> for 50 observations:
-#>     row_id  response     truth
-#>  1:      3    setosa    setosa
-#>  2:      6    setosa    setosa
-#>  3:      7    setosa    setosa
-#> ---
-#> 48:    143 virginica virginica
-#> 49:    145 virginica virginica
-#> 50:    148 virginica virginica
-```
-
-Resampling (and even tuning, see below) is possible using the
-`GraphLearner`:
-
-``` r
 glrn = GraphLearner$new(graph)
-resample(task, glrn, mlr_resamplings$get("cv"))
-#> <ResampleResult> of learner 'iris' on task 'pca.FilterVariance.classif.rpart' with 10 iterations
-#>     Measure Min. 1st Qu.  Median    Mean 3rd Qu.   Max.      Sd
-#>  classif.ce    0       0 0.06667 0.07333 0.06667 0.2667 0.09135
+```
+
+This learner can be used for resampling, benchmarking, and even tuning.
+
+``` r
+resample("iris", glrn, "cv")
+#> <ResampleResult> of learner 'iris' on task 'pca.variance.classif.rpart' with 10 iterations
+#>     Measure Min. 1st Qu.  Median Mean 3rd Qu.   Max.      Sd
+#>  classif.ce    0       0 0.06667 0.06  0.1167 0.1333 0.05837
 ```
 
 ## Feature Overview
@@ -98,133 +68,23 @@ are:
     by hyperparameters)
   - Ensemble methods and aggregation of predictions
 
-<!--
-* Simple preprocessing operations: *PipeOpScale*, *PipeOpPCA*.
-* Feature filtering: *PipeOpFilter*.
-* Data feature type conversion: *PipeOpEncode*.
-* Undersampling / subsampling for speed and outcome class imbalance handling: *PipeOpSubsample*.
-* *mlr3* *Learner* as operation in a *Graph*, both returning a "*Prediction*" (*PipeOpLearner*) and an added data feature for super learning (*PipeOpLearnerCV*).
-* Simple ensemble methods on Predictions: *PipeOpMajorityVote*, *PipeOpModelAvg*.
-* Simultaneous alternative paths with same input data: *PipeOpCopy*.
-* Combination of data from alternative paths: *PipeOpFeatureUnion*.
-* Optional alternative paths, chosen by *Graph* hyperparameter: *PipeOpBranch*, *PipeOpUnbranch*.
--->
-
-Graphs can be collected into a “*GraphLearner*” object that behave like
-*mlr3* Learners, and can therefore be used both for model fitting and
-prediction, and can even be used in hyperparameter optimization.
-
-## Example
-
-To show the power of *mlr3pipelines*, the following example shows how to
-build a *Graph* that chooses between multiple preprocessing methods,
-fits both a classification tree (from the *rpart* package) and a linear
-model (using R’s “lm()” function), and performs “stacking”—using the
-predictions of these two models as covariates for a third machine
-learning method—with penalised linear regression (using the *glmnet*
-package). (The example was chosen to show the expressiveness of the
-*Graph* language, not to perform particularly well). For a detailed
-explanation of all steps involved see the
-[documentation](#documentation).
-
-The graph is built using single processing units—“PipeOps”—that are
-concatenated using the piping operator `%>>%`. Note the difference from
-the *[magrittr](https://github.com/tidyverse/magrittr)* package’s
-operator `%>%`.
-
-``` r
-library("paradox")
-library("mlr3")
-library("mlr3pipelines")
-library("mlr3learners")
-
-graph =
-  mlr_pipeops$get("branch", c("null", "pca", "scale")) %>>%
-  gunion(list(
-      mlr_pipeops$get("null", id = "null1"),
-      mlr_pipeops$get("pca"),
-      mlr_pipeops$get("scale")
-  )) %>>%
-  mlr_pipeops$get("unbranch", c("null", "pca", "scale")) %>>%
-  mlr_pipeops$get("copy", 3) %>>%
-  gunion(list(
-      mlr_pipeops$get("null", id = "null2"),
-      mlr_pipeops$get("learner_cv", mlr_learners$get("regr.rpart")),
-      mlr_pipeops$get("learner_cv", mlr_learners$get("regr.lm"))
-  )) %>>%
-  mlr_pipeops$get("featureunion", 3) %>>%
-  mlr_pipeops$get("encode", param_vals = list(method = "treatment")) %>>%
-  mlr_pipeops$get("learner", mlr_learners$get("regr.glmnet"))
-```
-
-The topology of this graph can most easily be seen using the `Graph`’s
-`$plot` method:
-
-``` r
-graph$plot()
-```
-
-![](README_files/figure-markdown_github/graphplot-1.png)<!-- -->
-
-The graph can itself be used to perform model fitting and prediction,
-but in our example we want to perform parameter tuning first, using the
-*[mlr3tuning](https://github.com/mlr-org/mlr3tuning)* package. For this
-we wrap the *Graph* in a *GraphLearner*, which behaves mostly like a
-*mlr3* “Learner” object. For simplicity, we decide only on a few
-parameters we want to tune: the preprocessing to perform
-(*branch.selection*), and the maximum tree depth
-(*regr.rpart.regr.rpart.maxdepth*).
-
-``` r
-learner = GraphLearner$new(graph, task_type = "regr")
-
-ps = ParamSet$new(list(
-  ParamFct$new("branch.selection", levels = c("pca", "scale", "null")),
-  ParamInt$new("regr.rpart.regr.rpart.maxdepth", lower = 1, upper = 10)
-))
-
-task = mlr_tasks$get("boston_housing")
-task$select(task$feature_types[type != "factor", id])
-
-resampling = mlr_resamplings$get("cv", param_vals = list(folds = 3))
-```
-
-``` r
-library("mlr3tuning")
-ff = FitnessFunction$new(task, learner, resampling, ps)
-tuner = TunerGridSearch$new(ff, TerminatorEvaluations$new(1), resolution = 3)
-
-tuner$tune()
-
-tuner$tune_result()$values[names(ps$params)]
-#> $branch.selection
-#> [1] "null"
-#>
-#> $regr.rpart.regr.rpart.maxdepth
-#> [1] 10
-```
-
-This would tell us that the “null” preprocessing branch with *rpart*
-*maxdepth* = performs well; although the usage of only few small
-resampling folds makes the result very stochastic.
-
 ## Documentation
 
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
 
   - [Quick
-    Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html)
-  - [Basic
-    Concepts](https://mlr-org.github.io/mlr3pipelines/articles/basic_concepts.html)
-  - [Linear Preprocessing
-    Pipelines](https://mlr-org.github.io/mlr3pipelines/articles/a_simple_pipeline.html)
-  - [Alternative Path
-    Branching](https://mlr-org.github.io/mlr3pipelines/articles/branching.html)
-  - [Ensemble
-    Methods](https://mlr-org.github.io/mlr3pipelines/articles/stacking_and_bagging.html)
-  - [Custom
+    Introduction](https://mlr-org.github.io/mlr3pipelines/articles/quickintro.html),
+    with short examples to get started
+  - [Detailed
+    Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html),
+    diving into concepts and describing the objects involved
+  - [Example
+    Pipelines](https://mlr-org.github.io/mlr3pipelines/articles/examples.html)
+    that show the possibilities offered by `mlr3pipelines`
+  - [Writing Custom
     `PipeOp`s](https://mlr-org.github.io/mlr3pipelines/articles/create_a_custom_pipeop.html)
+    to extend and build on top of `mlr3pipelines`
 
 ## Bugs, Questions, Feedback
 
