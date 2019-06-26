@@ -10,10 +10,10 @@
 PipeOpMajorityVote
 }
 \description{
-Aggregates over different \code{PredictionDataClassif}s.
+Aggregates over different \code{PredictionClassif}s.
 Either computes the mode, if \code{predict_type} is \code{"response"},
 or averages probabilities if \code{predict_type} is \code{"prob"}.
-Returns a single \code{PredictionDataClassif}.
+Returns a single \code{PredictionClassif}.
 Weights can be set by the user, if none are provided, defaults to
 equal weights \code{rep(1/innum, innum)} for each prediction.
 Used for classification \code{Prediction}s.
