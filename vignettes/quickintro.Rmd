@@ -124,7 +124,7 @@ ps = ParamSet$new(list(
 ```
 ```{r}
 library("mlr3tuning")
-fitness = PerformanceEvaluator$new(task, glrn, cv10$instantiate(task), ps)
+fitness = PerformanceEvaluator$new(task, glrn, cv10, ps)
 tuner = TunerRandomSearch$new(fitness, TerminatorEvaluations$new(10))
 ```
 ```{r}
