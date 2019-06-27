@@ -216,7 +216,8 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    plot = function() {
+    plot = function(use_visNetwork = FALSE) {
+      assert_flag(use_visNetwork)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
         return(invisible(NULL))
@@ -242,7 +243,20 @@ Graph = R6Class("Graph",
       if (!is.matrix(layout)) {
         layout = t(layout)
       } # bug in igraph, dimension is dropped
-      plot(ig, layout = layout)
+      if (use_visNetwork) {
+        require_namespaces("visNetwork")
+        ig_data = visNetwork::toVisNetworkData(ig)
+        ig_data$nodes$shape = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "database", "<OUTPUT>" = "ellipse", "box"))
+        ig_data$nodes$title = "<p>Some text here</p>"
+        ig_data$edges$level = layout[, 2]
+        ig_data$edges$length = layout[, 1]
+        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
+        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, type = "straightCross", forceDirection = "vertical"))
+        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama")
+        print(p)
+      } else {
+        plot(ig, layout = layout)
+      }
     },
 
     print = function() {

@@ -20,11 +20,12 @@ set.seed(8008135)
 
 This vignette showcases the general syntax and semantic behind `mlr3pipelines`, going from small to more involved examples.
 
-## An introduction to "PipeOp"s
+## A simple Linear Pipeline
 
-In this example, we create a ĺinear Pipeline.
-After scaling all input features, we rotate our data using principal component analysis.
-After this transformation, we use a simple Decision Tree learner for classification.
+This example creates a linear pipeline, where the data is transformed using **PCA** before
+a decision tree is trained.
+The idea is thus, to first scale all input features before we rotate them using principal component analysis.
+After this transformation, we train a simple Decision Tree learner for classification.
 
 As exemplary data, we will use the "`iris`" classification task.
 This object contains the famous iris dataset and some meta-information, such as the target variable.
@@ -43,22 +44,21 @@ We quickly split our data into a train and a test set:
 ```
 
 A Pipeline (or `Graph`) contains multiple pipeline operators ("`PipeOp`"s), where each `PipeOp`
-transforms the data when it flows through it. For this usecase, we require 3 transformations:
+transforms the data when it flows through it.
+
+For this usecase, we require 3 transformations:
 
 - A `PipeOp` that scales the data
 - A `PipeOp` that performs PCA
 - A `PipeOp` that contains the **Decision Tree** learner
 
-A list of available `PipeOp`s can be obtained from
-
-```{r}
-  library(mlr3pipelines)
-  mlr_pipeops$keys()
-```
+A list of `PipeOp`s implemented in `mlr3pipelines` can be obtained from the
+`mlr_pipeops` dictionary using `mlr_pipeops$keys()`.
 
 First we define the required `PipeOp`s:
 
 ```{r}
+  library(mlr3pipelines)
   op1 = PipeOpScale$new()
   op2 = PipeOpPCA$new()
   op3 = PipeOpLearner$new(learner = mlr_learners$get("classif.rpart"))
@@ -157,7 +157,7 @@ transform future data is stored. In our case, this is **mean** and **standard de
   linear_pipeline$predict(task)
 ```
 
-### Using the Pipeline as an mlr3 learner
+### Using the Pipeline as a mlr3 learner
 
 In most cases, we want to use the pipeline just like an
 **mlr3** learner. In order to achieve this,
