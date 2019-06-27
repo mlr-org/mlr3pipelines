@@ -20,7 +20,7 @@ tools::buildVignettes(dir = "mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "pipeop_filter")
+testthat::test_package("mlr3pipelines", filter = "backup")
 
 testthat::test_package("mlr3pipelines", filter = "typecheck")
 

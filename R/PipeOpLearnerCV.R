@@ -48,8 +48,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         ParamFct$new("resampling", levels = c("cv", "nocv"), default = "cv", tags = "required"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
         ParamLgl$new("keep_response", default = FALSE, tags = "required")
-      )
-      )
+      ))
       private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
 
@@ -71,15 +70,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         rdesc$param_set$values = list(folds = pv[["folds"]])
       }
       res = resample(task, self$learner, rdesc)
-      prds = do.call(rbind, lapply(res$data$prediction_data, new_prediction, task = task))
-
+      prds = rbindlist(lapply(res$data$prediction, as.data.table))
 
       private$pred_to_task(prds, task)
     },
 
     predict_task = function(task) {
       self$learner$model = self$state
-      prediction = new_prediction(task, self$learner$predict(task))
+      prediction = as.data.table(self$learner$predict(task))
       private$pred_to_task(prediction, task)
     }
   ),
@@ -107,13 +105,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       value
     },
     pred_to_task = function(prds, task) {
-      prds = as.data.table(prds)
-      prds[, truth := NULL]
+      if (!is.null(prds$truth)) prds[, truth := NULL]
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
-      }
-      if ("se" %in% colnames(prds) && self$learner$predict_type != "se") {  # TODO: temporary fix for mlr3#250
-        prds[, se := NULL]
       }
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))

@@ -1,13 +1,13 @@
 #' @title Dictionary of PipeOps
 #'
-#' @format [`R6Class`] object inheriting from [`mlr3::Dictionary`]
+#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`]
 #' @description
-#' A simple [`Dictionary`][mlr3::Dictionary] storing objects of class [`PipeOp`].
+#' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
 #' Each `PipeOp` has an associated help page, see `mlr_pipeop_[id]`.
 #'
 #' @section Usage:
 #'
-#' See [`mlr3::Dictionary`].
+#' See [`mlr3misc::Dictionary`].
 #'
 #' @section S3 methods:
 #' * `as.data.table(dict)`\cr
@@ -19,7 +19,7 @@
 #' @name mlr_pipeops
 NULL
 
-DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3::Dictionary,
+DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(
     metainf = new.env(parent = emptyenv()),

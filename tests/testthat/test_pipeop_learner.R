@@ -12,7 +12,7 @@ test_that("PipeOpLearner - basic properties", {
   expect_null(result[[1L]])
 
   result = predict_pipeop(po, list(task = task))
-  expect_class(result[[1L]], "PredictionData")
+  expect_class(result[[1L]], "Prediction")
 
   expect_pipeop_class(PipeOpLearner, list(lrn))
   expect_error(PipeOpLearner$new())
