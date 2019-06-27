@@ -216,7 +216,7 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    plot = function(use_visNetwork = FALSE) {
+    plot = function(use_visNetwork = TRUE) {
       assert_flag(use_visNetwork)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
