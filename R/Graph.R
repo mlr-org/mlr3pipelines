@@ -247,11 +247,13 @@ Graph = R6Class("Graph",
         require_namespaces("visNetwork")
         ig_data = visNetwork::toVisNetworkData(ig)
         ig_data$nodes$shape = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "database", "<OUTPUT>" = "ellipse", "box"))
+        ig_data$nodes$color = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "lightgreen", "<OUTPUT>" = "red", "lightblue"))
         ig_data$nodes$title = "<p>Some text here</p>"
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
-        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, type = "straightCross", forceDirection = "vertical"))
-        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama")
-        print(p)
+        if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) # Bug in visNetwork?
+          p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama")
+        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+        return(p)
       } else {
         plot(ig, layout = layout)
       }

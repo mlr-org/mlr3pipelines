@@ -122,6 +122,8 @@ We can do this using the `%>>%` operator.
 
 ```{r}
   linear_pipeline = op1 %>>% op2 %>>% op3
+  # And visualize our pipleline
+  linear_pipeline$plot()
 ```
 
 The result of this operation is a "`Graph`".
@@ -134,6 +136,7 @@ We can now train the `Graph` using the `iris` **Task**.
 
 ```{r}
   linear_pipeline$train(task)
+
 ```
 
 When we now train the graph, the data flows through the graph as follows:
