@@ -247,7 +247,7 @@ Graph = R6Class("Graph",
         require_namespaces("visNetwork")
         ig_data = visNetwork::toVisNetworkData(ig)
         ig_data$nodes$shape = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "database", "<OUTPUT>" = "ellipse", "box"))
-        ig_data$nodes$color = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "lightgreen", "<OUTPUT>" = "red", "lightblue"))
+        ig_data$nodes$color = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "lightgreen", "<OUTPUT>" = "coral", "white"))
         ig_data$nodes$title = "<p>Some text here</p>"
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
         if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) # Bug in visNetwork?
