@@ -103,7 +103,6 @@ The following example obtained from the **sklearn** documentation showcases a **
 that first Selects a feature and performs PCA on the original data, concatenates the resulting datasets
 and applies a Support Vector Machine.
 
-
 ### sklearn
 
 ```{python, eval = FALSE}
@@ -193,3 +192,33 @@ In summary, we can achieve similar results with a comparable number of lines, wh
 same time offering greater flexibility with respect to which kinds of pipelines we want to
 optimize over. At the same time, experiments using `mlr3` can now be arbitrarily parallelized
 using `futures`.
+
+
+### Credit Data
+
+
+### recipies
+
+```{r, eval = FALSE}
+library(recipes)
+library(rsample)
+data("credit_data")
+
+set.seed(55)
+train_test_split <- initial_split(credit_data)
+credit_train <- training(train_test_split)
+
+
+credit_test <- testing(train_test_split)
+rec <- recipe(Status ~ ., data = credit_train) %>%
+  step_knnimpute(all_predictors()) %>%
+  step_dummy(all_predictors(), -all_numeric()) %>%
+  step_center(all_numeric()) %>%
+  step_scale(all_numeric())
+
+prep(sonar_rec, training = credit_train)
+
+# Apply to train and test set
+train_data <- bake(trained_rec, new_data = credit_train)
+test_data  <- bake(trained_rec, new_data = credit_test)
+```
