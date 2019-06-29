@@ -114,8 +114,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$intasklayout = copy(intask$feature_types)
       intask = self$train_task(intask)
 
-      # FIXME: setkey() next line can go when https://github.com/mlr-org/mlr3/issues/193 is fixed
-      self$outtasklayout = copy(setkey(intask$feature_types, "id"))
       if (do_subset) {
         # FIXME: this fails if train_task added a column with the same name
         intask$set_col_role(remove_cols, "feature")
