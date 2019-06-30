@@ -36,11 +36,11 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
     train = function(inputs) {
       self$state = list()
-      list(cbind_tasks(inputs), self$assert_targets_equal)
+      list(cbind_tasks(inputs, self$assert_targets_equal))
     },
 
     predict = function(inputs) {
-      list(cbind_tasks(inputs), self$assert_targets_equal)
+      list(cbind_tasks(inputs, self$assert_targets_equal))
     }
   )
 )
