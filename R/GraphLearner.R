@@ -23,6 +23,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_subset(task_type, mlr_reflections$task_types)
       graph = assert_graph(graph, coerce = TRUE, deep_copy = TRUE)
       self$graph = graph
+      output = graph$output
+      if (nrow(output) != 1) {
+        stop("'graph' has more than one output channel")
+      }
+      if (!are_types_compatible(output$predict, "Prediction")) {
+        stop("'graph' output type not 'Prediction' (or compatible with it)")
+      }
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
