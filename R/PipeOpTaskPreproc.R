@@ -114,6 +114,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$intasklayout = copy(intask$feature_types)
       intask = self$train_task(intask)
 
+      self$outtasklayout = copy(intask$feature_types)
       if (do_subset) {
         # FIXME: this fails if train_task added a column with the same name
         intask$set_col_role(remove_cols, "feature")
@@ -135,7 +136,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       intask = self$predict_task(intask)
 
       if (!isTRUE(all.equal(self$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
-        stop("Processed output task during prediction of %s does not match output task during training.", self$id)
+        stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       if (do_subset) {
         # FIXME: see train fixme: this fails if train_task added a column with the same name
