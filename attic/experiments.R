@@ -31,10 +31,29 @@ testthat::test_package("mlr3pipelines", filter = "^_[n-s].*")
 testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 
 
+pom = PipeOpMutate$new()
 
+pom$train(list(task))
 
+pom$param_set$values$delete_originals = TRUE
 
+pom$train(list(task))
 
+pom$param_set$values$delete_originals = FALSE
+
+pom$param_set$values$mutation = alist(x = Sepal.Width + Petal.Length)
+
+pom$train(list(task))[[1]]$data()
+
+pom$param_set$values$delete_originals = TRUE
+
+pom$train(list(task))[[1]]$data()
+
+pom$param_set$values$delete_originals = FALSE
+
+pom$param_set$values$mutation = alist(Sepal.Width = Sepal.Width + Petal.Length)
+
+pom$train(list(task))[[1]]$data()
 
 g = PipeOpScale$new() %>>% PipeOpApply$new()
 g2 = g$clone()

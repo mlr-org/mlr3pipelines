@@ -26,7 +26,7 @@ PipeOpSelect = R6Class("PipeOpSelect",
     initialize = function(id = "select", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("selector", custom_check = check_function, tags = "required"),
-        ParamLgl$new("invert")
+        ParamLgl$new("invert", tags = "required")
       ))
       ps$values = list(selector = selector_all(), invert = FALSE)
       super$initialize(id, ps, param_vals = param_vals)
