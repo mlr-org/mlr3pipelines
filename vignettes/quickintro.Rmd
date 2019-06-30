@@ -1,5 +1,5 @@
 ---
-title: "Introduction to mlr3pipelines"
+title: "Quick Introduction to mlr3pipelines"
 author: "Martin Binder"
 output:
   rmarkdown::html_vignette:
@@ -118,7 +118,7 @@ resample(task, glrn, cv10)
 ```{r}
 library("paradox")
 ps = ParamSet$new(list(
-  ParamDbl$new("classif.rpart.cp", lower = 0, upper = 0.05),
+  ParamDbl$new("cp", lower = 0, upper = 0.05),
   ParamDbl$new("variance.filter.frac", lower = 0.25, upper = 1)
 ))
 ```
