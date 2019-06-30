@@ -46,9 +46,12 @@ str(g$train(task)[[1]]$data())
 str(task$data())
 
 g = PipeOpScale$new() %>>% PipeOpSelect$new()
-
-
-
+str(g$train(task)[[1]]$data())
+g$param_set$values$select.invert = TRUE
+str(g$train(task)[[1]]$data())
+g$param_set$values$select.invert = FALSE
+g$param_set$values$select.selector = selector_grep("^Petal\\.")
+str(g$train(task)[[1]]$data())
 
 g = PipeOpScale$new() %>>% PipeOpPCA$new()
 
@@ -74,7 +77,10 @@ g1 <- ensure_graph(PipeOpScale$new())
 g1$input
 g1$output
 
-g1 <- gunion(list(PipeOpScale$new(), PipeOpPCA$new()))
+g1 <- PipeOpSelect$new(param_vals = list(selector = selector_type("numeric"))) %>>% gunion(list(PipeOpScale$new(), PipeOpPCA$new())) %>>% PipeOpFeatureUnion$new(2) %>>% PipeOpLearner$new(mlr_learners$get("regr.rpart"))
+
+g1$train(mlr_tasks$get("boston_housing"))
+predict(g1, iris[1:4])
 
 
 
