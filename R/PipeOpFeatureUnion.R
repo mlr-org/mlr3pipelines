@@ -7,20 +7,27 @@
 #'   Aggregates features from all input tasks by cbinding them together
 #'   into a [`data.table`].
 #'   [`DataBackend`] primary keys and [`Task`] targets have to be equal across each
-#'   `Task`. Only one target columns is kept.
+#'   `Task`. Only the target column(s) of the first task are kept.
+#'   If `assert_targets_equal` is `TRUE`, then an error is thrown if target column name(s)
+#'   disagree.
 #'
 #' @section Methods:
-#' * `PipeOpFeatureUnion$new(innum, id = "featureunion")` \cr
-#'   (`numeric(1)`, `character(1)`) -> `self` \cr
-#'   Constructor. `innum` determines the number of input channels.
+#' * `PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
+#'   (`numeric(1)`, `character(1)`, named `list`, `logical(1)`) -> `self` \cr
+#'   Constructor. `innum` determines the number of input channels. If `assert_targets_equal` is `TRUE` (Default),
+#'   task target column names are checked for agreement. Disagreeing target column names are usually a
+#'   bug, so this should often be left at the default.
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
+  assert_targets_equal = NULL,
   public = list(
-    initialize = function(innum, id = "featureunion", param_vals = list()) {
+    initialize = function(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
       assert_int(innum, lower = 1)
+      assert_flag(assert_targets_equal)
+      self$assert_targets_equal = assert_targets_equal
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = rep_suffix("input", innum), train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
@@ -29,24 +36,24 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
     train = function(inputs) {
       self$state = list()
-      list(cbind_tasks(inputs))
+      list(cbind_tasks(inputs), self$assert_targets_equal)
     },
 
     predict = function(inputs) {
-      list(cbind_tasks(inputs))
+      list(cbind_tasks(inputs), self$assert_targets_equal)
     }
   )
 )
 
 register_pipeop("featureunion", PipeOpFeatureUnion, list("N"))
 
-cbind_tasks = function(inputs) {
+cbind_tasks = function(inputs, assert_targets_equal) {
   task = inputs[[1L]]
   ids = task$row_ids
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
-  if (!setequal(targets, task$target_names)) {
+  if (assert_targets_equal && !setequal(targets, task$target_names)) {
     stopf("All tasks must have the same target columns")
   }
 
