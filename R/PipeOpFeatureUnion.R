@@ -22,8 +22,8 @@
 #' @export
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
-  assert_targets_equal = NULL,
   public = list(
+    assert_targets_equal = NULL,
     initialize = function(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
       assert_int(innum, lower = 1)
       assert_flag(assert_targets_equal)
