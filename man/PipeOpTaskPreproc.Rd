@@ -100,6 +100,7 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
 
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},

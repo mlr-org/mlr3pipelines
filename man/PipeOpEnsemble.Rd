@@ -23,6 +23,7 @@ Constructor. \code{innum} determines the number of input channels.
 \seealso{
 Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
