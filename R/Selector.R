@@ -17,12 +17,12 @@ selector_all = function() function(task) {
 #' @export
 #' @rdname Selector
 #'
-#' @param type (`character`) \cr
+#' @param types (`character`) \cr
 #'   Type of feature to select
-selector_type = function(type) {
-  assert_character(type, any.missing = FALSE)
+selector_type = function(types) {
+  assert_character(types, any.missing = FALSE)
   function(task) {
-    task$feature_types[get("type") %in% type, get("id")]
+    task$feature_types[get("type") %in% types, get("id")]
   }
 }
 
