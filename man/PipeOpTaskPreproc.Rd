@@ -25,10 +25,10 @@ a \code{character} as output, indicating what columns to choose.
 \section{Public Members / Active Bindings}{
 
 \itemize{
-\item \code{intasklayout}  :: \code{\link{data.table}} with columns \code{id}, \code{type} \cr
+\item \code{state$intasklayout}  :: \code{\link{data.table}} with columns \code{id}, \code{type} \cr
 Set during \code{$train()}: \code{$feature_types} of training \code{Task}, is used for verification
 during \code{$predict()} that columns have not changed.
-\item \code{outtasklayout} :: \code{\link{data.table}} with columns \code{id}, \code{type} \cr
+\item \code{state$outtasklayout} :: \code{\link{data.table}} with columns \code{id}, \code{type} \cr
 Set during \code{$train()}: \code{$feature_types} of transformed \code{Task}, is used for verification
 during \code{$predict()} that the transformed \code{Task} is the same as during training.
 \item \code{affect_columns} :: \code{NULL} | \code{function} \cr
@@ -38,7 +38,7 @@ should take one argument (the input \code{Task}) and return a \code{character} i
 columns that should be operated on. \code{$affect_columns()} is then called during training and
 only features named in its return value are seen by the training / prediction function. \cr
 This should not be changed if \code{can_subset_columns} is \code{FALSE}, and depends on the \code{PipeOpTaskPreproc} subclass.
-\item \code{affected_cols} :: \code{character} \cr
+\item \code{state$affected_cols} :: \code{character} \cr
 Set during \code{$train()}: Indicating the names of features to operate on, if  parameter
 \code{$affect_columns} is set.
 \item \code{can_subset_columns} :: \code{logical(1)} \cr

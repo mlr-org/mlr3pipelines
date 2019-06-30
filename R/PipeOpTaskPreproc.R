@@ -253,17 +253,17 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
     predict_task = function(task) self$transform(task),
 
     get_state = function(task) {
-      private$.dt_columns = self$select_cols(task)
-      cols = private$.dt_columns
+      dt_columns = self$select_cols(task)
+      cols = dt_columns
       if (!length(cols)) {
-        return(list())
+        return(list(dt_columns = dt_columns))
       }
       dt = task$data(cols = cols)
-      self$get_state_dt(dt, task_levels(task, cols))
+      c(self$get_state_dt(dt, task_levels(task, cols)), list(dt_columns = dt_columns))
     },
 
     transform = function(task) {
-      cols = private$.dt_columns
+      cols = self$state$dt_columns
       if (!length(cols)) {
         return(task)
       }

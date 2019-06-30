@@ -30,8 +30,8 @@ test_that("PipeOpFilter", {
 
   # the following only operates on the five columns named below, one of which ('chas') is factorial and not affected
   # by the variance filter. Filtering `frac = 0.5` should remove 'indus' and 'lon'.
-  po$param_set$values$affect_columns = function(task) c("chas", "b", "age", "indus", "lon")
   po$param_set$values = list(filter.frac = 0.5, na.rm = TRUE)
+  po$param_set$values$affect_columns = function(task) c("chas", "b", "age", "indus", "lon")
 
   tt = po$train(list(task))[[1]]
 
