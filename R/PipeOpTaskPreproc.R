@@ -89,7 +89,12 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   public = list(
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0)) {
       if (can_subset_cols) {
-        param_set$add(ParamUty$new("affect_columns", custom_check = function(x) assert_function(x, null.ok = TRUE)))
+        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null)
+        if ("ParamSetCollection" %in% class(param_set)) {
+          param_set$add(ParamSet$new(list(acp)))
+        } else {
+          param_set$add(acp)
+        }
       }
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
@@ -272,3 +277,6 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
     transform_dt = function(dt, levels) stop("Abstract")
   )
 )
+
+# needs to be here because all.equal fails otherwise.
+check_function_or_null = function(x) assert_function(x, null.ok = TRUE)
