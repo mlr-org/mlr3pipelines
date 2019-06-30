@@ -27,6 +27,8 @@
 #' * `packages`     :: `character` \cr
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
+#' * `model`        :: named `list` \cr
+#'   Get / Set the `$state` of each of the members of `PipeOp`.
 #' * `param_set`    :: [`ParamSet`] \cr
 #'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
 #'   of all `PipeOp`s in the `Graph`. Parameter names
@@ -328,6 +330,16 @@ Graph = R6Class("Graph",
         self$param_set$values = val
       }
       self$param_set$values
+    },
+    model = function(val) {
+      if (!missing(val)) {
+        assert_list(val, names = "unique")
+        assert_subset(names(val), names(self$pipeops))
+        imap(self$pipeops, function(pipeop, pname) pipeop$state = val[[pname]])
+        val
+      } else {
+        map(self$pipeops, "state")
+      }
     }
   ),
 

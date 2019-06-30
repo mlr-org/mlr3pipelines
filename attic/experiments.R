@@ -37,6 +37,11 @@ testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 
 
 g = PipeOpScale$new() %>>% PipeOpApply$new()
+g2 = g$clone()
+g2$train(task)
+
+
+g$model = g2$model
 
 g$param_set$values$apply.applicator = as.factor
 
@@ -77,12 +82,13 @@ g1 <- ensure_graph(PipeOpScale$new())
 g1$input
 g1$output
 
-g1 <- PipeOpSelect$new(param_vals = list(selector = selector_type("numeric"))) %>>% gunion(list(PipeOpScale$new(), PipeOpPCA$new())) %>>% PipeOpFeatureUnion$new(2) %>>% PipeOpLearner$new(mlr_learners$get("regr.rpart"))
+g1 <- PipeOpSelect$new(param_vals = list(selector = selector_type("numeric"))) %>>% PipeOpCopy$new(2) %>>% gunion(list(PipeOpScale$new(), PipeOpPCA$new())) %>>% PipeOpFeatureUnion$new(2) %>>% PipeOpLearner$new(mlr_learners$get("regr.rpart"))
 
 g1$train(mlr_tasks$get("boston_housing"))
-predict(g1, iris[1:4])
+predict(g1, mlr_tasks$get("boston_housing")$data()[, -"medv"])
+predict(g1, mlr_tasks$get("boston_housing"))
 
-
+(PipeOpSelect$new(param_vals = list(selector = selector_type("numeric"))) %>>% PipeOpCopy$new(2))$train(mlr_tasks$get("boston_housing"))
 
 system.time(for (i in seq_len(1000)) {g1$input}) / 1000
 system.time(for (i in seq_len(1000)) {g1$output}) / 1000
