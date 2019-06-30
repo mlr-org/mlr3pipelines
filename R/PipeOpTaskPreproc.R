@@ -89,7 +89,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   public = list(
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0)) {
       if (can_subset_cols) {
-        param_set$add(ParamUty$new(affect_columns, custom_check = function(x) assert_function(x, null.ok = TRUE)))
+        param_set$add(ParamUty$new("affect_columns", custom_check = function(x) assert_function(x, null.ok = TRUE)))
       }
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
@@ -101,9 +101,10 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     train = function(inputs) {
 
       intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = !is.null(selfparam_set$values$affect_columns)
+      do_subset = !is.null(self$param_set$values$affect_columns)
+      affected_cols = intask$feature_names
       if (do_subset) {
-        affected_cols = selfparam_set$values$affect_columns(intask)
+        affected_cols = self$param_set$values$affect_columns(intask)
         # FIXME: this fails when something is both a feature and something else
         remove_cols = setdiff(intask$feature_names, affected_cols)
         intask$set_col_role(remove_cols, character(0))
@@ -125,7 +126,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = !is.null(selfparam_set$values$affect_columns)
+      do_subset = !is.null(self$param_set$values$affect_columns)
       if (do_subset) {
         # FIXME: see train fixme: this fails when something is both a feature and something else
         remove_cols = setdiff(intask$feature_names, self$state$affected_cols)
