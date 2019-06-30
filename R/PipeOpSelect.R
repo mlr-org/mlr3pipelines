@@ -25,11 +25,11 @@ PipeOpSelect = R6Class("PipeOpSelect",
   public = list(
     initialize = function(id = "select", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("selector", custom_check = check_function),
+        ParamUty$new("selector", custom_check = check_function, tags = "required"),
         ParamLgl$new("invert")
       ))
       ps$values = list(selector = selector_all(), invert = FALSE)
-      super$initialize(id, self$param_set, param_vals = param_vals)
+      super$initialize(id, ps, param_vals = param_vals)
     },
 
     get_state = function(task) {
@@ -38,7 +38,7 @@ PipeOpSelect = R6Class("PipeOpSelect",
       if (self$param_set$values$invert) {
         selection = setdiff(task$feature_names, selection)
       }
-      list(selection = self$param_set$values$selector) # we don't use 'scores', but maybe the user cares.
+      list(selection = selection) # we don't use 'scores', but maybe the user cares.
     },
 
     transform = function(task) {

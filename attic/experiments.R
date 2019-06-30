@@ -32,6 +32,24 @@ testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 
 
 
+
+
+
+
+g = PipeOpScale$new() %>>% PipeOpApply$new()
+
+g$param_set$values$apply.applicator = as.factor
+
+task = mlr_tasks$get("iris")
+str(g$train(task)[[1]]$data())
+
+str(task$data())
+
+g = PipeOpScale$new() %>>% PipeOpSelect$new()
+
+
+
+
 g = PipeOpScale$new() %>>% PipeOpPCA$new()
 
 profvis::profvis(Reduce(`%>>%`, lapply(c(letters, paste0(letters, "1"), paste0(letters, "2")), PipeOpScale$new)))
