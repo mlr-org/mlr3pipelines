@@ -92,7 +92,9 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     affected_cols = NULL,
 
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0)) {
-      private$.can_subset_cols = can_subset_cols
+      if (can_subset_cols) {
+        param_set$add(ParamUty$new(affect_columns, custom_check = function(x) assert_function(x, null.ok = TRUE)))
+      }
       private$.affect_columns = NULL
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
@@ -174,19 +176,14 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     select_cols = function(task) task$feature_names
   ),
   active = list(
-    can_subset_cols = function() private$.can_subset_cols,
     affect_columns = function(val) {
       if (!missing(val)) {
-        assert_true(self$can_subset_cols)
-        assert_function(val, nargs = 1, null.ok = TRUE)
-        private$.affect_columns = val
+        self$param_set$values$affect_columns = val
       }
-      private$.affect_columns
+      self$param_set$values$affect_columns = val
     }
   ),
   private = list(
-    .can_subset_cols = NULL,
-    .affect_columns = NULL,
     .dt_columns = NULL
   )
 )
