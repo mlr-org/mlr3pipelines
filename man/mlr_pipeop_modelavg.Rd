@@ -10,12 +10,12 @@
 PipeOpModelAvg
 }
 \description{
-Averages its input (a \code{list} of \code{PredictionDataRegr}).
+Averages its input (a \code{list} of \code{PredictionRegr}).
 Only used for regression \code{Prediction}s.
 Weights can be set by the user, if none are provided, defaults to
 equal weights \code{rep(1/innum, innum)} for each prediction.
 Offers a \code{$weights} slot to set/get weights for each learner.
-Returns a single \code{PredictionDataRegr}.
+Returns a single \code{PredictionRegr}.
 Defaults to equal weights for each model.
 }
 \examples{
@@ -25,6 +25,7 @@ op = PipeOpModelAvg$new(3)
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -36,8 +37,10 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_majorityvote}},
+  \code{\link{mlr_pipeop_mutate}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_select}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},
   \code{\link{mlr_pipeops}}

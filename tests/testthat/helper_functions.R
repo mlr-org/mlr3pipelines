@@ -251,7 +251,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
   if (isTRUE(get0("can_subset", po))) {
     selector = function(data) data$feature_names != data$feature_names[1]
-    po2$affect_columns = selector
+    po2$param_set$values$affect_columns = selector
     trained.subset = po$train_internal(list(task2))[[1]]
     trained2.subset = po2$train_internal(list(task))[[1]]
     if (deterministic_train) {
@@ -271,7 +271,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     }
 
     selector = function(data) rep(FALSE, length(data$feature_names))
-    po2$affect_columns = selector
+    po2$param_set$values$affect_columns = selector
 
     # FIXME: the following should ensure that data has not changed
     # but number of rows or row indices could change in theory change, so the tests will need to be adapted if that is ever the case
@@ -404,11 +404,9 @@ make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "r
     response = sample(letters[seq_len(nclasses)], n, replace = TRUE)
   }
 
-  set_class(list(
-    row_ids = seq_len(n),
+  PredictionClassif$new(row_ids = seq_len(n), truth = factor(truth, levels = letters[seq_len(nclasses)]),
     response = factor(response, levels = letters),
-    prob = prob),
-    c("PredictionDataClassif", "PredictionData"))
+    prob = prob)
 }
 
 PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))

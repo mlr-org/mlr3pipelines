@@ -41,9 +41,9 @@ PipeOpFilter = R6Class("PipeOpFilter",
   public = list(
     filter = NULL,
     initialize = function(filter, id = filter$id, param_vals = list()) {
-      assert_class(filter, "FilterResult")
+      assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
-      self$filter$param_set$set_id = filter$id
+      self$filter$param_set$set_id = ""
       private$.outer_param_set = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0),
         ParamDbl$new("frac", lower = 0, upper = 1),
@@ -67,9 +67,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
       filtertask$select(filtertask$feature_types[get("type") %in% self$filter$feature_types, get("id")])
       maxfeat = length(filtertask$feature_names)
 
-      self$filter$calculate(filtertask)
-
-      scoretable = self$filter$scores[order(score), c("score", "feature")]
+      if (filtertask$nrow > 1 && length(filtertask$feature_names)) {
+        self$filter$calculate(filtertask)
+        scoretable = self$filter$scores[order(score, decreasing = TRUE), c("score", "feature")]
+      } else {
+        scoretable = CJ(score = 0, feature = shuffle(filtertask$feature_names))  # workaround for mlr-org/mlr3featsel#39
+      }
       features = switch(filtercrit,
         cutoff = scoretable$feature[scoretable$score >= critvalue],
         nfeat = scoretable$feature[seq_len(min(maxfeat, critvalue))],
@@ -112,4 +115,4 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
-register_pipeop("filter", PipeOpFilter, list(R6Class("FilterResult", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+register_pipeop("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))

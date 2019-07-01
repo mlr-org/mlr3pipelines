@@ -42,9 +42,9 @@ Constructor. The given learner will be used for crossvalidation.
 \section{Parameter Set}{
 
 \itemize{
-\item \code{resampling} :: \code{character(1)} \cr
+\item \code{resampling.method} :: \code{character(1)} \cr
 Which resampling method do we want to use. Currently only supports 'cv'.
-\item \code{folds}     :: \code{numeric(1)} \cr
+\item \code{resampling.folds}     :: \code{numeric(1)} \cr
 Number of cross validation folds.
 \item \code{...} \cr
 The \code{\link{ParamSet}} of \code{$learner} is also made available.

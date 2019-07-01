@@ -10,10 +10,10 @@
 PipeOpMajorityVote
 }
 \description{
-Aggregates over different \code{PredictionDataClassif}s.
+Aggregates over different \code{PredictionClassif}s.
 Either computes the mode, if \code{predict_type} is \code{"response"},
 or averages probabilities if \code{predict_type} is \code{"prob"}.
-Returns a single \code{PredictionDataClassif}.
+Returns a single \code{PredictionClassif}.
 Weights can be set by the user, if none are provided, defaults to
 equal weights \code{rep(1/innum, innum)} for each prediction.
 Used for classification \code{Prediction}s.
@@ -26,6 +26,7 @@ op = PipeOpMajorityVote$new(3)
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -37,8 +38,10 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
   \code{\link{mlr_pipeop_modelavg}},
+  \code{\link{mlr_pipeop_mutate}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_select}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},
   \code{\link{mlr_pipeops}}
