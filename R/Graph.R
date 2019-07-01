@@ -217,7 +217,7 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    plot = function(html = FALSE) {
+    plot = function(html = TRUE) {
       assert_flag(html)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
