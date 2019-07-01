@@ -23,6 +23,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_subset(task_type, mlr_reflections$task_types)
       graph = assert_graph(graph, coerce = TRUE, deep_copy = TRUE)
       self$graph = graph
+      output = graph$output
+      if (nrow(output) != 1) {
+        stop("'graph' has more than one output channel")
+      }
+      if (!are_types_compatible(output$predict, "Prediction")) {
+        stop("'graph' output type not 'Prediction' (or compatible with it)")
+      }
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
@@ -35,12 +42,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     train = function(task) {
       self$graph$train(task)
-      self$model = self$graph
+      self$model = self$graph$model
       invisible(self)
     },
     predict = function(task) {
-      self$model$param_set$values = self$param_set$values
-      prediction = self$model$predict(task)
+      self$graph$model = self$model
+      self$graph$param_set$values = self$param_set$values
+      prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
