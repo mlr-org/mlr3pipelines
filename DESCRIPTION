@@ -24,6 +24,7 @@ Imports:
     withr
 Suggests:
     igraph,
+    visNetwork,
     knitr,
     lgr,
     mlbench,
