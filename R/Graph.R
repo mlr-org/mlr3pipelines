@@ -331,7 +331,7 @@ Graph = R6Class("Graph",
       }
       self$param_set$values
     },
-    model = function(val) {
+    state = function(val) {
       if (!missing(val)) {
         assert_list(val, names = "unique")
         assert_subset(names(val), names(self$pipeops))
