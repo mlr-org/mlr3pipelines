@@ -19,6 +19,9 @@ weights for each feature.
 For \code{weights.method}: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
 for a measure provided in \code{measure} (defaults to \code{classif.acc}).
 Learned weights can be obtained from \code{.$model}.
+Using non-linear optimization is implemented in the SuperLearner R package.
+For a more detailed analysis the reader is refered to
+\emph{LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation}.
 }
 \section{Parameter Set}{
 

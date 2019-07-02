@@ -126,7 +126,8 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeops}}
 
-Other PipeOps: \code{\link{PipeOpTaskPreproc}},
+Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeop_NULL}},
   \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_backup_learner}},
@@ -139,12 +140,9 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
-<<<<<<< HEAD
-=======
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_mutate}},
->>>>>>> origin/master
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_select}},

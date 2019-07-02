@@ -67,6 +67,7 @@ Collate:
     'PipeOpChunk.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
+    'PipeOpEnsemble.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpImpute.R'
