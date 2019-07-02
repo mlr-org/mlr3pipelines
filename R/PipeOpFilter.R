@@ -43,7 +43,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "FilterResult")
       self$filter = filter$clone(deep = TRUE)
-      self$filter$param_set$set_id = filter$id
+      self$filter$param_set$set_id = ""
       private$.outer_param_set = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0),
         ParamDbl$new("frac", lower = 0, upper = 1),
@@ -66,18 +66,21 @@ PipeOpFilter = R6Class("PipeOpFilter",
       filtertask$select(filtertask$feature_types[get("type") %in% self$filter$feature_types, get("id")])
       maxfeat = length(filtertask$feature_names)
 
-      self$filter$calculate(filtertask)
-
-      values = self$filter$scores[order(self$filter$scores$score, decreasing = TRUE),]
+      if (filtertask$nrow > 1 && length(filtertask$feature_names)) {
+        self$filter$calculate(filtertask)
+        scoretable = self$filter$scores[order(score, decreasing = TRUE), c("score", "feature")]
+      } else {
+        scoretable = CJ(score = 0, feature = shuffle(filtertask$feature_names))  # workaround for mlr-org/mlr3featsel#39
+      }
       features = switch(filtercrit,
-        cutoff = values$feature[values$score >= critvalue],
-        nfeat = values$feature[seq_len(min(maxfeat, critvalue))],
-        frac =  values$feature[seq_len(round(maxfeat * critvalue))],
+        cutoff = scoretable$feature[scoretable$score >= critvalue],
+        nfeat = scoretable$feature[seq_len(min(maxfeat, critvalue))],
+        frac = scoretable$feature[seq_len(round(maxfeat * critvalue))],
         stop("unknown filter criterion"))
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
 
-      list(values = values, features = features) # we don't use 'values', but maybe the user cares.
+      list(scores = self$filter$scores, features = features) # we don't use 'scores', but maybe the user cares.
     },
 
     transform = function(task) {

@@ -28,9 +28,11 @@ are_types_compatible = function(class1, class2) {
   if ("*" %in% c(class1, class2)) {
     return(TRUE)
   }
-  cpi = intersect(get_class_hierarchy(class1), get_class_hierarchy(class2))
+  ch1 = unique(get_class_hierarchy(class1))
+  ch2 = unique(get_class_hierarchy(class2))
+  cpi = intersect(ch1, ch2)
 
-  length(cpi) > 0
+  length(cpi) == min(length(ch1), length(ch2))
 }
 
 # Try to find the `character` vector of superclass classnames
@@ -96,8 +98,8 @@ reset_class_hierarchy_cache = function() {
 
 default_chc = list(
   c("data.table", "data.frame"),
-  c("PredictionDataRegr", "PredictionData"),
-  c("PredictionDataClassif", "PredictionData")
+  c("PredictionRegr", "Prediction"),
+  c("PredictionClassif", "Prediction")
 )
 
 class_hierarchy_cache = new.env(parent = emptyenv())

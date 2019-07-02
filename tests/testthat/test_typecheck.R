@@ -31,7 +31,8 @@ test_that("utility function works", {
   expect_equal(oldcache, class_hierarchy_cache)
 
   expect_true(are_types_compatible("PipeOp", "PipeOp"))
-  expect_true(are_types_compatible("LearnerClassifDebug", "LearnerClassifRpart"))
+  expect_true(are_types_compatible("LearnerClassif", "LearnerClassifRpart"))
+  expect_false(are_types_compatible("LearnerClassifDebug", "LearnerClassifRpart"))
   expect_false(are_types_compatible("PipeOpEncode", "LearnerClassifDebug"))
 
   expect_true(are_types_compatible("PipeOp", "*"))
@@ -60,7 +61,7 @@ test_that("Graph is type-checking", {
   mavtest$input$train = "Task"
 
   expect_error(PipeOpScale$new() %>>% mavtest,
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionDataRegr\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionRegr\\)")
 
 
   gr = Graph$new()$
@@ -75,5 +76,5 @@ test_that("Graph is type-checking", {
     add_pipeop(mavtest)
 
   expect_error(gr$add_edge("scale", "modelavg"),
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionDataRegr\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionRegr\\)")
 })

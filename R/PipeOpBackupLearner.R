@@ -30,8 +30,8 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
       assert_learner(learner)
       self$learner = learner$clone(deep = TRUE)
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = c("learnerin", "taskin"), train = c("NULL", "Task"), predict = c("PredictionData", "Task")),
-        output = data.table(name = "output", train = "NULL", predict = "PredictionData")
+        input = data.table(name = c("learnerin", "taskin"), train = c("NULL", "Task"), predict = c("Prediction", "Task")),
+        output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
       private$.param_set = NULL
     },
@@ -46,20 +46,21 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
     predict = function(inputs) {
       prediction = inputs[[1]]
 
-      badrows = is.na(prediction$response)
+      badrows = is.na(prediction$data$response)
 
       if (any(badrows)) {
-        badrowids = prediction$row_ids[badrows]
+        prediction = prediction$clone(deep = TRUE)
+        badrowids = prediction$data$row_ids[badrows]
         task = inputs[[2]]$clone(deep = TRUE)$filter(badrowids)
 
         newprediction = self$state$predict(task)
         for (repairing in c("response", "prob", "se")) {
-          if (repairing %in% names(prediction) && !is.null(prediction[[repairing]]) &&
-            repairing %in% names(newprediction) && !is.null(newprediction[[repairing]])) {
-            if (is.matrix(prediction[[repairing]]) || is.data.frame(prediction[[repairing]])) {
-              prediction[[repairing]][badrows, ] = newprediction[[repairing]]
+          if (repairing %in% names(prediction$data) && !is.null(prediction$data[[repairing]]) &&
+            repairing %in% names(newprediction$data) && !is.null(newprediction$data[[repairing]])) {
+            if (is.matrix(prediction$data[[repairing]]) || is.data.frame(prediction$data[[repairing]])) {
+              prediction$data[[repairing]][badrows, ] = newprediction$data[[repairing]]
             } else {
-              prediction[[repairing]][badrows] = newprediction[[repairing]]
+              prediction$data[[repairing]][badrows] = newprediction$data[[repairing]]
             }
           }
         }

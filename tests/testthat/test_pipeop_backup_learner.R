@@ -16,28 +16,28 @@ test_that("PipeOpBackupLearner - basic properties", {
   expect_equal(unname(result), list(NULL))
 
   demo_classif = mlr_learners$get("classif.featureless", predict_type = "prob")$train(task)$predict(task)
-  demo_regr = mlr_learners$get("regr.featureless")$train(regr_task)$predict(regr_task)
+  demo_regr = mlr_learners$get("regr.featureless", predict_type = "se")$train(regr_task)$predict(regr_task)
 
   orig_prob = demo_classif$prob
   orig_se = demo_regr$se
   orig_regr_response = demo_regr$response
-  before_clone = demo_regr
+  before_clone = demo_regr$clone(deep = TRUE)
 
-  demo_classif$response[1:3] = NA
-  demo_classif$prob[1:3, ] = NA
+  demo_classif$data$response[1:3] = NA
+  demo_classif$data$prob[1:3, ] = NA
 
-  demo_regr$response[1:3] = NA
-  demo_regr$se[1:3] = NA
+  demo_regr$data$response[1:3] = NA
+  demo_regr$data$se[1:3] = NA
 
-  demo_classif_orig = demo_classif
-  demo_regr_orig = demo_regr
+  demo_classif_orig = demo_classif$clone(deep = TRUE)
+  demo_regr_orig = demo_regr$clone(deep = TRUE)
 
   repaired = po$predict(list(demo_classif, task))[[1]]
 
   expect_equal(repaired$prob, orig_prob)
   expect_true(!any(is.na(repaired$response)))
 
-  po_regr = PipeOpBackupLearner$new(learner = mlr_learners$get("regr.featureless"))
+  po_regr = PipeOpBackupLearner$new(learner = mlr_learners$get("regr.featureless", predict_type = "se"))
   expect_equal(unname(po_regr$train(list(NULL, regr_task))), list(NULL))
   repaired_regr = po_regr$predict(list(demo_regr, regr_task))[[1]]
 

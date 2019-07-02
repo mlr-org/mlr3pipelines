@@ -20,17 +20,65 @@ tools::buildVignettes(dir = "mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "pipeop_filter")
+testthat::test_package("mlr3pipelines", filter = "backup")
 
 testthat::test_package("mlr3pipelines", filter = "typecheck")
 
-testthat::test_package("mlr3pipelines", filter = "usecases")
+testthat::test_package("mlr3pipelines", filter = "dictionary")
+
+
+testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-m].*")
 testthat::test_package("mlr3pipelines", filter = "^_[n-s].*")
 testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 
 
+pom = PipeOpMutate$new()
+
+pom$train(list(task))
+
+pom$param_set$values$delete_originals = TRUE
+
+pom$train(list(task))
+
+pom$param_set$values$delete_originals = FALSE
+
+pom$param_set$values$mutation = alist(x = Sepal.Width + Petal.Length)
+
+pom$train(list(task))[[1]]$data()
+
+pom$param_set$values$delete_originals = TRUE
+
+pom$train(list(task))[[1]]$data()
+
+pom$param_set$values$delete_originals = FALSE
+
+pom$param_set$values$mutation = alist(Sepal.Width = Sepal.Width + Petal.Length)
+
+pom$train(list(task))[[1]]$data()
+
+g = PipeOpScale$new() %>>% PipeOpApply$new()
+g2 = g$clone()
+g2$train(task)
+
+
+g$model = g2$model
+
+g$param_set$values$apply.applicator = as.factor
+
+task = mlr_tasks$get("iris")
+str(g$train(task)[[1]]$data())
+
+str(task$data())
+
+g = PipeOpScale$new() %>>% PipeOpSelect$new()
+str(g$train(task)[[1]]$data())
+g$param_set$values$select.invert = TRUE
+str(g$train(task)[[1]]$data())
+g$param_set$values$select.invert = FALSE
+g$param_set$values$select.selector = selector_grep("^Petal\\.")
+str(g$train(task)[[1]]$data())
 
 g = PipeOpScale$new() %>>% PipeOpPCA$new()
 
@@ -56,9 +104,13 @@ g1 <- ensure_graph(PipeOpScale$new())
 g1$input
 g1$output
 
-g1 <- gunion(list(PipeOpScale$new(), PipeOpPCA$new()))
+g1 <- PipeOpSelect$new(param_vals = list(selector = selector_type("numeric"))) %>>% PipeOpCopy$new(2) %>>% gunion(list(PipeOpScale$new(), PipeOpPCA$new())) %>>% PipeOpFeatureUnion$new(2) %>>% PipeOpLearner$new(mlr_learners$get("regr.rpart"))
 
+g1$train(mlr_tasks$get("boston_housing"))
+predict(g1, mlr_tasks$get("boston_housing")$data()[, -"medv"])
+predict(g1, mlr_tasks$get("boston_housing"))
 
+(PipeOpSelect$new(param_vals = list(selector = selector_type("numeric"))) %>>% PipeOpCopy$new(2))$train(mlr_tasks$get("boston_housing"))
 
 system.time(for (i in seq_len(1000)) {g1$input}) / 1000
 system.time(for (i in seq_len(1000)) {g1$output}) / 1000

@@ -13,20 +13,31 @@ PipeOpFeatureUnion
 Aggregates features from all input tasks by cbinding them together
 into a \code{\link{data.table}}.
 \code{\link{DataBackend}} primary keys and \code{\link{Task}} targets have to be equal across each
-\code{Task}. Only one target columns is kept.
+\code{Task}. Only the target column(s) of the first task are kept.
+If \code{assert_targets_equal} is \code{TRUE}, then an error is thrown if target column name(s)
+disagree.
 }
 \section{Methods}{
 
 \itemize{
-\item \code{PipeOpFeatureUnion$new(innum, id = "featureunion")} \cr
-(\code{numeric(1)}, \code{character(1)}) -> \code{self} \cr
-Constructor. \code{innum} determines the number of input channels.
+\item \code{PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)} \cr
+(\code{numeric(1)}, \code{character(1)}, named \code{list}, \code{logical(1)}) -> \code{self} \cr
+Constructor. \code{innum} determines the number of input channels. If \code{assert_targets_equal} is \code{TRUE} (Default),
+task target column names are checked for agreement. Disagreeing target column names are usually a
+bug, so this should often be left at the default.
 }
 }
 
 \seealso{
+<<<<<<< HEAD
 Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
+=======
+Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_apply}},
+>>>>>>> origin/master
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -36,8 +47,15 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
+<<<<<<< HEAD
+=======
+  \code{\link{mlr_pipeop_majorityvote}},
+  \code{\link{mlr_pipeop_modelavg}},
+  \code{\link{mlr_pipeop_mutate}},
+>>>>>>> origin/master
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_select}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}},
   \code{\link{mlr_pipeops}}

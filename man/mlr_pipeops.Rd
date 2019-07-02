@@ -3,15 +3,15 @@
 \name{mlr_pipeops}
 \alias{mlr_pipeops}
 \title{Dictionary of PipeOps}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3:Dictionary]{mlr3::Dictionary}}}
+\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}}
 \description{
-A simple \code{\link[mlr3:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
+A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
 Each \code{PipeOp} has an associated help page, see \code{mlr_pipeop_[id]}.
 }
 \section{Usage}{
 
 
-See \code{\link[mlr3:Dictionary]{mlr3::Dictionary}}.
+See \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
 }
 
 \section{S3 methods}{
@@ -28,8 +28,15 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOpTaskPreprocSimple}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}}
 
+<<<<<<< HEAD
 Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
+=======
+Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeop_NULL}},
+  \code{\link{mlr_pipeop_apply}},
+>>>>>>> origin/master
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -40,8 +47,15 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeop_filter}},
   \code{\link{mlr_pipeop_impute}},
   \code{\link{mlr_pipeop_learner}},
+<<<<<<< HEAD
+=======
+  \code{\link{mlr_pipeop_majorityvote}},
+  \code{\link{mlr_pipeop_modelavg}},
+  \code{\link{mlr_pipeop_mutate}},
+>>>>>>> origin/master
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
+  \code{\link{mlr_pipeop_select}},
   \code{\link{mlr_pipeop_subsample}},
   \code{\link{mlr_pipeop_unbranch}}
 }

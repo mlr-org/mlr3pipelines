@@ -27,21 +27,21 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       self$learner = learner$clone(deep = TRUE)
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "NULL", predict = "PredictionData")
+        output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
       private$.param_set = NULL
     },
 
     train = function(inputs) {
       task = inputs[[1L]]
-      self$state = self$learner$train(task)$model
+      self$state = self$learner$train(task)$data
 
       list(NULL)
     },
 
     predict = function(inputs) {
       task = inputs[[1]]
-      self$learner$model = self$state
+      self$learner$data = self$state
       list(self$learner$predict(task))
     }
   ),

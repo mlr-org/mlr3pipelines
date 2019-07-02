@@ -43,7 +43,7 @@ test_that("PipeOp printer", {
     "Output channels.*odin \\[\\*,\\*\\], dva \\[\\*,\\*\\], tri \\[\\*,\\*\\]$")
 
   expect_output(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))),
-    "PipeOp.*<classif.debug>.*Input channels.*input \\[Task,Task\\]\nOutput channels.*output \\[NULL,PredictionData\\]$")
+    "PipeOp.*<classif.debug>.*Input channels.*input \\[Task,Task\\]\nOutput channels.*output \\[NULL,Prediction\\]$")
 })
 
 test_that("Prevent creation of PipeOps with no channels", {
