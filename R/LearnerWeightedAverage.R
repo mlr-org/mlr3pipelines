@@ -13,6 +13,10 @@
 #' For `weights.method`: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
 #' for a measure provided in `measure` (defaults to `classif.acc`).
 #' Learned weights can be obtained from `.$model`.
+#' Using non-linear optimization is implemented in the SuperLearner R package.
+#' For a more detailed analysis the reader is refered to
+#' *LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation*.
+#' 
 #'
 #'
 #' @section Parameter Set:
