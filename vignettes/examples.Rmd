@@ -168,32 +168,24 @@ pipeline we defined.
   graph_lrn = GraphLearner$new(linear_pipeline)
 ```
 
-We can now use this learner in order to create an [mlr3::Experiment].
-
-```{r}
-  task = mlr_tasks$get("iris")
-  e = Experiment$new(task = task, learner = graph_lrn)
-```
-
 For training:
 
 ```{r}
-  e$train(train.idx)
-  e$model
+  graph_lrn$train(task, train.idx)
+  graph_lrn$model
 ```
 
 testing:
 
 ```{r}
-  e$predict(test.idx)
-  e$prediction
+  pred = graph_lrn$predict(task, test.idx)
+  pred
 ```
 
 and scoring:
 
 ```{r}
-  e$score()
-  e$performance["classif.ce"]
+  pred$score()
 ```
 
 This allows us to seamlessly integrate pipelines with the
@@ -347,9 +339,8 @@ This pipeline can again be used in conjunction with
 
 ```{r}
   baglrn = GraphLearner$new(bagging)
-  e = Experiment$new(task = task, learner = baglrn)
-  e$train(train.idx)
-  e$predict(test.idx)
+  baglrn$train(task, train.idx)
+  baglrn$predict(task, test.idx)
 ```
 
 In conjunction with different `Backends`, this can be a very powerful tool, as in cases, where the data does not fully fit in memory, we can easily just obtain a fraction of the data for each learner from a `DataBaseBackend` and then aggregate predictions from all learners.
@@ -404,9 +395,8 @@ features.
 
 ```{r}
   stacklrn = GraphLearner$new(stack)
-  e = Experiment$new(task = task, learner = stacklrn)
-  e$train(train.idx)
-  e$predict(test.idx)
+  stacklrn$train(task, train.idx)
+  stacklrn$predict(task, test.idx)
 ```
 
 In this vignette, we only showcase a very simple usecase for stacking.
@@ -462,14 +452,13 @@ Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) an
   # Plot the resulting graph
   level_2$plot()
 
-  e = Experiment$new(
-    task = mlr_tasks$get("iris"),
-    learner = GraphLearner$new(level_2)
-    )
-  e$train(train.idx)
-  e$predict(test.idx)
-  e$score()
-  e$performance
+  task = mlr_tasks$get("iris"),
+  lrn = GraphLearner$new(level_2)
+
+  lrn$
+    train(task, train.idx)$
+    predict(task, test.idx)$
+    score()
 ```
 
 
@@ -499,8 +488,7 @@ We can now connect the different operators and visualize the full graph:
 
 ```{r}
   pipelrn = GraphLearner$new(pipeline)
-  e = Experiment$new(task = task, learner = pipelrn)
-  e$train(train.idx)
-  e$predict(test.idx)
-  e$score()
+  pipelrn$train(task, train.idx)$
+    predict(task, train.idx)$
+    score()
 ```

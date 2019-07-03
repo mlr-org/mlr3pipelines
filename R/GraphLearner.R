@@ -14,7 +14,6 @@
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
-    model = NULL,
     initialize = function(graph, task_type = "classif", id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]) {
 
       # Please don't `assert_r6(graph, "Graph")` here, we have assert_graph(coerce = TRUE) for that, graph can be a PipeOp too
@@ -50,7 +49,16 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
-      prediction$data[self$predict_type]
+      prediction[[1]]$data[self$predict_type]
+    },
+    new_prediction = function(row_ids, truth, response, ...) {
+      cal = match.call()
+      if (is.numeric(response)) {
+        cal[[1]] = quote(LearnerRegr$public_methods$new_prediction)
+      } else {
+        cal[[1]] = quote(LearnerClassif$public_methods$new_prediction)
+      }
+      eval(cal, parent.frame())
     }
   ),
   active = list(
