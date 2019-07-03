@@ -84,4 +84,4 @@ PipeOpBranch = R6Class("PipeOpBranch",
   )
 )
 
-register_pipeop("branch", PipeOpBranch, list("N"))
+register_dictionary("pipeop", "branch", PipeOpBranch, list("N"))

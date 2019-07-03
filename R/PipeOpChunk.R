@@ -68,4 +68,4 @@ PipeOpChunk = R6Class("PipeOpChunk",
   )
 )
 
-register_pipeop("chunk", PipeOpChunk, list("N"))
+register_dictionary("pipeop", "chunk", PipeOpChunk, list("N"))

@@ -42,4 +42,4 @@ PipeOpPCA = R6Class("PipeOpPCA",
   )
 )
 
-register_pipeop("pca", PipeOpPCA)
+register_dictionary("pipeop", "pca", PipeOpPCA)

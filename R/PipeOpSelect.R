@@ -47,4 +47,4 @@ PipeOpSelect = R6Class("PipeOpSelect",
   )
 )
 
-register_pipeop("select", PipeOpSelect)
+register_dictionary("pipeop", "select", PipeOpSelect)

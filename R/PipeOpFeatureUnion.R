@@ -45,7 +45,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
-register_pipeop("featureunion", PipeOpFeatureUnion, list("N"))
+register_dictionary("pipeop", "featureunion", PipeOpFeatureUnion, list("N"))
 
 cbind_tasks = function(inputs, assert_targets_equal) {
   task = inputs[[1L]]

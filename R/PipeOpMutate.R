@@ -49,4 +49,4 @@ PipeOpMutate = R6Class("PipeOpMutate",
   )
 )
 
-register_pipeop("mutate", PipeOpMutate)
+register_dictionary("pipeop", "mutate", PipeOpMutate)

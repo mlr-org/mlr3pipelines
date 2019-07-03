@@ -46,7 +46,7 @@ RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Remotes:
     mlr-org/mlr3,
-    mlr-org/mlr3misc,
+    mlr-org/mlr3misc@register_dictionary,
     mlr-org/paradox,
     mlr-org/mlr3featsel,
     mlr-org/mlr3tuning,

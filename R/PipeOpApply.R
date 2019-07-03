@@ -42,4 +42,4 @@ PipeOpApply = R6Class("PipeOpApply",
   )
 )
 
-register_pipeop("apply", PipeOpApply)
+register_dictionary("pipeop", "apply", PipeOpApply)

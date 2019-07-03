@@ -85,4 +85,4 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
   )
 )
 
-register_pipeop("backuplearner", PipeOpBackupLearner)
+register_dictionary("pipeop", "backuplearner", PipeOpBackupLearner)

@@ -74,4 +74,4 @@ PipeOpEncode = R6Class("PipeOpEncode",
   )
 )
 
-register_pipeop("encode", PipeOpEncode)
+register_dictionary("pipeop", "encode", PipeOpEncode)

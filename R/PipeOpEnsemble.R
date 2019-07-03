@@ -93,7 +93,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   )
 )
 
-register_pipeop("modelavg", PipeOpModelAvg, list("N"))
+register_dictionary("pipeop", "modelavg", PipeOpModelAvg, list("N"))
 
 
 #' @title PipeOpMajorityVote
@@ -185,5 +185,5 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-register_pipeop("majorityvote", PipeOpMajorityVote, list("N"))
+register_dictionary("pipeop", "majorityvote", PipeOpMajorityVote, list("N"))
 

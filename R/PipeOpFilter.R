@@ -115,4 +115,4 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
-register_pipeop("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+register_dictionary("pipeop", "filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))

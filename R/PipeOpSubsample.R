@@ -65,4 +65,4 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
   )
 )
 
-register_pipeop("subsample", PipeOpSubsample)
+register_dictionary("pipeop", "subsample", PipeOpSubsample)

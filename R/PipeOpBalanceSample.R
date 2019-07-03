@@ -98,4 +98,4 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
   )
 )
 
-register_pipeop("balancesample", PipeOpBalanceSample)
+register_dictionary("pipeop", "balancesample", PipeOpBalanceSample)

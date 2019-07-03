@@ -15,6 +15,9 @@
   # nocov start
   backports::import(pkgname)
 
-  publish_registered_pipeops()  # create and fill mlr_pipeops Dictionary
+  if (is.null(mlr_pipeops)) {
+    mlr_pipeops <<- DictionaryPipeOp$new()
+  }
+  publish_registered_dictionary("pipeop", mlr_pipeops$add) # fill mlr_pipeops Dictionary
 
 } # nocov end
