@@ -11,9 +11,7 @@ test_that("LearnerClassifWeightedAverage manual", {
   lrn$train(tsk)
   expect_list(lrn$model, names = "named")
   expect_numeric(lrn$model$weights, len = length(tsk$feature_names))
-  prd_data = lrn$predict(tsk)
-  expect_class(prd_data, "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data)
+  prd = lrn$predict(tsk)
   expect_prediction(prd)
 
   # Works for manually setting the weights
@@ -21,9 +19,7 @@ test_that("LearnerClassifWeightedAverage manual", {
   lrn$train(tsk)
   expect_list(lrn$model, names = "named")
   expect_numeric(lrn$model$weights, len = length(tsk$feature_names))
-  prd_data = lrn$predict(tsk)
-  expect_class(prd_data, "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data)
+  prd = lrn$predict(tsk)
   expect_prediction(prd)
 
   # Fails for wrong inputs
@@ -50,9 +46,7 @@ test_that("LearnerClassifWeightedAverage NLOPTR", {
   lrn$train(tsk)
   expect_list(lrn$model, names = "named")
   expect_numeric(lrn$model$weights, len = length(tsk$feature_names))
-  prd_data = lrn$predict(tsk)
-  expect_class(prd_data, "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data)
+  prd = lrn$predict(tsk)
   expect_prediction(prd)
 
 
@@ -63,9 +57,7 @@ test_that("LearnerClassifWeightedAverage NLOPTR", {
   lrn$train(tsk)
   expect_list(lrn$model, names = "named")
   expect_numeric(lrn$model$weights, len = length(tsk$feature_names))
-  prd_data = lrn$predict(tsk)
-  expect_class(prd_data, "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data)
+  prd = lrn$predict(tsk)
   expect_prediction(prd)
 
   # Works with response / prob mixed:
@@ -78,9 +70,7 @@ test_that("LearnerClassifWeightedAverage NLOPTR", {
   lrn$train(tsk)
   expect_list(lrn$model, names = "named")
   expect_numeric(lrn$model$weights, len = length(tsk$feature_names))
-  prd_data = lrn$predict(tsk)
-  expect_class(prd_data, "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data)
+  prd = lrn$predict(tsk)
   expect_prediction(prd)
 })
 
@@ -102,9 +92,7 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   pred_set$train(tsk)
   expect_true(pred_set$is_trained)
 
-  prd_data = pred_set$predict(tsk)
-  expect_class(prd_data[[1]], "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data[[1]])
+  prd = pred_set$predict(tsk)[[1]]
   expect_prediction(prd)
 
 
@@ -124,9 +112,7 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   pred_set$train(tsk)
   expect_true(pred_set$is_trained)
 
-  prd_data = pred_set$predict(tsk)
-  expect_class(prd_data[[1]], "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data[[1]])
+  prd = pred_set$predict(tsk)[[1]]
   expect_prediction(prd)
 })
 
@@ -135,7 +121,7 @@ test_that("LearnerClassifWeightedAverage Bagging Usecase", {
 
   # Bagging requires setting resampling to "nocv"
   subsampled_tree = PipeOpSubsample$new() %>>%
-    PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"), param_vals = list(resampling.resampling = "nocv"))
+    PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"))
   pred_set = greplicate(subsampled_tree, 3L) %>>%
     PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
     PipeOpLearner$new(LearnerClassifWeightedAverage$new())
@@ -144,9 +130,7 @@ test_that("LearnerClassifWeightedAverage Bagging Usecase", {
   pred_set$train(tsk)
   expect_true(pred_set$is_trained)
 
-  prd_data = pred_set$predict(tsk)
-  expect_class(prd_data[[1]], "PredictionDataClassif")
-  prd = new_prediction(tsk, prd_data[[1]])
+  prd = pred_set$predict(tsk)[[1]]
   expect_prediction(prd)
 })
 
@@ -175,9 +159,7 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   pred_set$train(tsk)
   expect_true(pred_set$is_trained)
 
-  prd_data = pred_set$predict(tsk)
-  expect_class(prd_data[[1]], "PredictionDataRegr")
-  prd = new_prediction(tsk, prd_data[[1]])
+  prd = pred_set$predict(tsk)[[1]]
   expect_prediction(prd)
 
 
@@ -197,8 +179,6 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   pred_set$train(tsk)
   expect_true(pred_set$is_trained)
 
-  prd_data = pred_set$predict(tsk)
-  expect_class(prd_data[[1]], "PredictionDataRegr")
-  prd = new_prediction(tsk, prd_data[[1]])
+  prd = pred_set$predict(tsk)[[1]]
   expect_prediction(prd)
 })
