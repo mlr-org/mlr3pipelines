@@ -68,6 +68,7 @@ If adding multiple `PipeOp`s of the same kind it becomes necessary to change the
 ```{r, error = TRUE}
 graph$add_pipeop(mlr_pipeops$get("pca"))
 ```
+
 ```{r}
 graph$add_pipeop(mlr_pipeops$get("pca", id = "pca2"))
 ```
@@ -89,6 +90,7 @@ graph = pca %>>% filter %>>%
   mlr_pipeops$get("learner",
     learner = mlr_learners$get("classif.rpart"))
 ```
+
 ```{r}
 graph$train(task)
 graph$predict(task$clone(deep = TRUE)$filter(1:3))

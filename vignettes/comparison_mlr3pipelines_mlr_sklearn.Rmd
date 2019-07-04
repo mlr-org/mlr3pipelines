@@ -5,7 +5,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Introduction to mlr3pipelines}
+  %\VignetteIndexEntry{Comparing mlr3 to other packages}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,6 +24,9 @@ library("mlr3pipelines")
 
 
 # Comparing mlr3pipelines to other frameworks
+
+Below, we collected some examples, where **mlr3pipelines** is compared to different other software packages,
+such as **mlr**, **recipes** and **sklearn**.
 
 ## mlr3pipelines vs. mlr
 
@@ -97,7 +100,6 @@ We compare functionality available in both `mlr3pipelines` and `sklearn.pipeline
 comparison.
 
 
-### Tuning Feature Selection and PCA before applying a SVM
 
 The following example obtained from the **sklearn** documentation showcases a **Pipeline**
 that first Selects a feature and performs PCA on the original data, concatenates the resulting datasets
@@ -105,7 +107,7 @@ and applies a Support Vector Machine.
 
 ### sklearn
 
-```{r, eval = FALSE}
+```{eval = FALSE}
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
@@ -128,7 +130,6 @@ combined_features = FeatureUnion([("pca", pca), ("univ_select", selection)])
 
 # Use combined features to transform dataset:
 X_features = combined_features.fit(X, y).transform(X)
-
 
 svm = SVC(kernel="linear")
 
@@ -194,31 +195,89 @@ optimize over. At the same time, experiments using `mlr3` can now be arbitrarily
 using `futures`.
 
 
-### Credit Data
+## mlr3pipelines vs recipies
 
+**recipies** is a new package, that covers some of the same applications steps as
+**mlr3pipelines**.
+Both pacakges feature the possiblility to connect different pre- and post-processing
+methods using a pipe-operator.
+As `recipies` package tightly integrates with the `tidymodels` ecosystem, much of the
+functionality integrated there can be used in `recipies`.
+We compare `recipies` to `mlr3pipelines` using an example from the `recipies` vignette.
+
+The aim of the analysis is to predict whether customers pay back their loans given some
+information on the customers. In order to do this, we build a model that does the following:
+1. It first imputes missing values using k-nearest neighbours
+1. All factor variables are converted to numerics using dummy encoding
+1. The data is first centered then scaled.
+
+In order to validate the algorithm, data is first split into a train and test set using
+`initial_split`, `training`, `testing`. The recipe trained on the train data (see steps above)
+is then applied to the test data.
 
 ### recipies
 
 ```{r, eval = FALSE}
-library(recipes)
+library(tidymodels)
 library(rsample)
 data("credit_data")
 
 set.seed(55)
-train_test_split <- initial_split(credit_data)
-credit_train <- training(train_test_split)
+train_test_split = initial_split(credit_data)
+credit_train = training(train_test_split)
+credit_test = testing(train_test_split)
 
-
-credit_test <- testing(train_test_split)
-rec <- recipe(Status ~ ., data = credit_train) %>%
+rec = recipe(Status ~ ., data = credit_train) %>%
   step_knnimpute(all_predictors()) %>%
   step_dummy(all_predictors(), -all_numeric()) %>%
   step_center(all_numeric()) %>%
   step_scale(all_numeric())
 
-prep(sonar_rec, training = credit_train)
+trained_rec = prep(rec, training = credit_train)
 
 # Apply to train and test set
 train_data <- bake(trained_rec, new_data = credit_train)
 test_data  <- bake(trained_rec, new_data = credit_test)
 ```
+
+Afterwards, the transformed data can be used during train and predict
+
+```{r, eval = FALSE}
+# Train
+rf = rand_forest(mtry = 12, trees = 200) %>%
+  set_engine("ranger", importance = 'impurity') %>%
+  fit(Status ~ ., data = train_data)
+
+# Predict
+prds = predict(rf, test_data)
+```
+
+### mlr3pipelines
+
+The same analysis can be performed in **mlr3pipelines**
+```{r, eval = FALSE}
+library(data.table)
+library(mlr3)
+library(mlr3learners)
+library(mlr3pipelines)
+data("credit_data", package = "recipes")
+set.seed(55)
+
+# Create the task
+tsk = TaskClassif$new(id = "credit_task", target = "Status",
+  backend = as_data_backend(data.table(credit_data)))
+
+# Build up the Pipeline:
+g = PipeOpImpute$new() %>>%
+  # PipeOpEncode$new() %>>%
+  # PipeOpScale$new() %>>%
+  PipeOpLearner$new(mlr_learners$get("classif.ranger"))
+
+# We can visualize what happens to the data using the `plot` function:
+g$plot()
+
+# And we can use `mlr3's` full functionality be wrapping the Graph into a GraphLearner.
+glrn = GraphLearner$new(g)
+resample(tsk, glrn, mlr_resamplings$get("holdout"))
+```
+
