@@ -16,18 +16,15 @@ test_that("basic graphlearn tests", {
     graphpred = glrn$predict(task)
   })
   expect_equal(graphpred,
-    Experiment$new(task, lrn)$train()$predict()$prediction)
+    lrn$train(task)$predict(task))
 
   expect_prediction_classif({
     graphpred = glrn$predict(task)
   })
-  expect_equal(graphpred, {
-    lrn$model = lrn$train(task)$model
-    lrn$predict(task)
-  })
+  expect_equal(graphpred, lrn$predict(task))
 
   set.seed(1)
-  lrn$model = NULL
+  lrn = mlr_learners$get("classif.rpart")
   resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
   set.seed(1)
   resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
