@@ -16,3 +16,5 @@
 ^README\.Rmd$
 ^README_files
 ^appveyor\.yml$
+^doc$
+^Meta$
