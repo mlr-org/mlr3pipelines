@@ -79,6 +79,10 @@ test_that("complex graph", {
   pdf(file = NULL) # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
+
+  p = biggraph$plot(TRUE)
+  expect_class(p, "htmlwidget")
+  expect_class(p, "visNetwork")
 })
 
 
@@ -145,6 +149,9 @@ test_that("input / output lists and naming", {
   gr$plot()
   dev.off()
 
+  p = gr$plot(TRUE)
+  expect_class(p, "htmlwidget")
+  expect_class(p, "visNetwork")
 
   # test output 1: debug.multi was already trained above
   expect_output(print(gr),

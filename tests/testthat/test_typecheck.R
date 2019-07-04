@@ -31,7 +31,8 @@ test_that("utility function works", {
   expect_equal(oldcache, class_hierarchy_cache)
 
   expect_true(are_types_compatible("PipeOp", "PipeOp"))
-  expect_true(are_types_compatible("LearnerClassifDebug", "LearnerClassifRpart"))
+  expect_true(are_types_compatible("LearnerClassif", "LearnerClassifRpart"))
+  expect_false(are_types_compatible("LearnerClassifDebug", "LearnerClassifRpart"))
   expect_false(are_types_compatible("PipeOpEncode", "LearnerClassifDebug"))
 
   expect_true(are_types_compatible("PipeOp", "*"))

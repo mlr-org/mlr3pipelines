@@ -297,11 +297,11 @@ PipeOpDropConst = R6::R6Class("PipeOpDropConst",
     get_state = function(task) {
       data = task$data(cols = task$feature_names)
       nonconst = sapply(data, function(column) length(unique(column)) > 1)
-      colnames(data)[nonconst]
+      list(cnames = colnames(data)[nonconst])
     },
 
     transform = function(task) {
-      task$select(self$state)
+      task$select(self$state$cnames)
     }
   )
 )

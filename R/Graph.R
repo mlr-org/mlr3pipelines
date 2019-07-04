@@ -27,6 +27,8 @@
 #' * `packages`     :: `character` \cr
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
+#' * `model`        :: named `list` \cr
+#'   Get / Set the `$state` of each of the members of `PipeOp`.
 #' * `param_set`    :: [`ParamSet`] \cr
 #'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
 #'   of all `PipeOp`s in the `Graph`. Parameter names
@@ -60,9 +62,10 @@
 #'   channel `dst_channel` (identified by its name or number as listed in the `PipeOp`'s `$input`).
 #'   If source or destination `PipeOp` have only one input / output channel and `src_channel` / `dst_channel`
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
-#' * `plot()` \cr
-#'   () -> `NULL` \cr
-#'   Plot the graph, using the [`igraph`][igraph::igraph-package] package.
+#' * `plot(html)` \cr
+#'   (`logical(1)`) -> `NULL` \cr
+#'   Plot the graph, using either the [`igraph`][igraph::igraph-package] package (for `html = FALSE`) or
+#'   the `visNetwork` package for `html = TRUE` producing a htmlWidget. Defaults to `FALSE`.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Print a representation of the graph on the console. Output is a table with one row for each contained `PipeOp` and
@@ -216,8 +219,8 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    plot = function(use_visNetwork = TRUE) {
-      assert_flag(use_visNetwork)
+    plot = function(html = FALSE) {
+      assert_flag(html)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
         return(invisible(NULL))
@@ -243,12 +246,20 @@ Graph = R6Class("Graph",
       if (!is.matrix(layout)) {
         layout = t(layout)
       } # bug in igraph, dimension is dropped
-      if (use_visNetwork) {
+      if (html) {
         require_namespaces("visNetwork")
         ig_data = visNetwork::toVisNetworkData(ig)
         ig_data$nodes$shape = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "database", "<OUTPUT>" = "ellipse", "box"))
-        ig_data$nodes$color = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "lightgreen", "<OUTPUT>" = "coral", "lightblue"))
-        ig_data$nodes$title = "<p>Some text here</p>"
+        ig_data$nodes$color = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "rgba(0,204,102,0.2)", "<OUTPUT>" = "rgba(255,51,51,0.2)", "lightblue"))
+        ig_data$nodes$value = map_dbl(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = .8, "<OUTPUT>" = .8, 5))
+        ig_data$nodes$title = map_chr(ig_data$nodes$id, function(node) {
+          null_str = function(x) {if (is.null(x)) x = "NULL"; return(x)}
+          if (node == "<INPUT>") txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
+          else if (node == "<OUTPUT>") txt = paste0("Output:<br>Name: ", self$output$name, "<br>Train: ", null_str(self$output$train), "<br>Predict: ", null_str(self$output$predict))
+          else txt = paste((gsub("<(.*)>", capture.output(self$pipeops[[node]]), replacement =  "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
+          return(txt)
+        })
+        ig_data$nodes$title =  paste0("<p>", ig_data$nodes$title, "</p>")
         ig_data$edges$color = "lightblue"
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
         if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) # Bug in visNetwork?
@@ -343,6 +354,16 @@ Graph = R6Class("Graph",
         self$param_set$values = val
       }
       self$param_set$values
+    },
+    model = function(val) {
+      if (!missing(val)) {
+        assert_list(val, names = "unique")
+        assert_subset(names(val), names(self$pipeops))
+        imap(self$pipeops, function(pipeop, pname) pipeop$state = val[[pname]])
+        val
+      } else {
+        map(self$pipeops, "state")
+      }
     }
   ),
 
@@ -504,4 +525,31 @@ graph_load_namespaces = function(self, info) {
   if (length(errors)) {
     stopf("Error during %s:\n  %s", info, str_collapse(errors, sep = "\n  "))
   }
+}
+
+
+#' @export
+predict.Graph = function(object, newdata, ...) {
+  if (!object$is_trained) {
+    stop("Graph is not trained.")
+  }
+  output = object$output
+  if (nrow(output) != 1) {
+    stop("Graph has more than one output channel")
+  }
+  if (!are_types_compatible(output$predict, "Prediction")) {
+    stop("Graph output type not 'Prediction' (or compatible with it)")
+  }
+  plain = "Task" %nin% class(newdata)
+  if (plain) {
+    assert_data_frame(newdata)
+    newdata = TaskRegr$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = NA_real_)), "...dummytarget...")
+  }
+  result = object$predict(newdata)
+  assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)
+  result = result[[1]]
+  if (plain) {
+    result = result$data$response %??% result$data$prob
+  }
+  result
 }

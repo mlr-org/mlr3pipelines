@@ -19,7 +19,7 @@ test_that("PipeOpFeatureUnion - train and predict", {
   t1 = tsk$clone()$set_col_role(c("Sepal.Length", "Sepal.Width"), character())
   t2 = tsk$clone()$set_col_role(c("Petal.Length", "Petal.Width"), character())
 
-  expect_task(cbind_tasks(inputs = list(t1, t2)))
+  expect_task(cbind_tasks(inputs = list(t1, t2), TRUE))
 
   po = PipeOpFeatureUnion$new(2)
 

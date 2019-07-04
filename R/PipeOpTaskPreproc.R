@@ -17,10 +17,10 @@
 #' a `character` as output, indicating what columns to choose.
 #'
 #' @section Public Members / Active Bindings:
-#' * `intasklayout`  :: [`data.table`] with columns `id`, `type` \cr
+#' * `state$intasklayout`  :: [`data.table`] with columns `id`, `type` \cr
 #'   Set during `$train()`: `$feature_types` of training `Task`, is used for verification
 #'   during `$predict()` that columns have not changed.
-#' * `outtasklayout` :: [`data.table`] with columns `id`, `type` \cr
+#' * `state$outtasklayout` :: [`data.table`] with columns `id`, `type` \cr
 #'   Set during `$train()`: `$feature_types` of transformed `Task`, is used for verification
 #'   during `$predict()` that the transformed `Task` is the same as during training.
 #' * `affect_columns` :: `NULL` | `function` \cr
@@ -30,7 +30,7 @@
 #'   columns that should be operated on. `$affect_columns()` is then called during training and
 #'   only features named in its return value are seen by the training / prediction function. \cr
 #'   This should not be changed if `can_subset_columns` is `FALSE`, and depends on the `PipeOpTaskPreproc` subclass.
-#' * `affected_cols` :: `character` \cr
+#' * `state$affected_cols` :: `character` \cr
 #'   Set during `$train()`: Indicating the names of features to operate on, if  parameter
 #'   `$affect_columns` is set.
 #' * `can_subset_columns` :: `logical(1)` \cr
@@ -87,13 +87,15 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   inherit = PipeOp,
 
   public = list(
-    intasklayout = NULL,
-    outtasklayout = NULL,
-    affected_cols = NULL,
-
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0)) {
-      private$.can_subset_cols = can_subset_cols
-      private$.affect_columns = NULL
+      if (can_subset_cols) {
+        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null)
+        if ("ParamSetCollection" %in% class(param_set)) {
+          param_set$add(ParamSet$new(list(acp)))
+        } else {
+          param_set$add(acp)
+        }
+      }
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task"),
@@ -104,18 +106,22 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     train = function(inputs) {
 
       intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = !is.null(self$affect_columns)
+      do_subset = !is.null(self$param_set$values$affect_columns)
+      affected_cols = intask$feature_names
       if (do_subset) {
-        self$affected_cols = self$affect_columns(intask)
+        affected_cols = self$param_set$values$affect_columns(intask)
         # FIXME: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, self$affected_cols)
+        remove_cols = setdiff(intask$feature_names, affected_cols)
         intask$set_col_role(remove_cols, character(0))
       }
-      self$intasklayout = copy(intask$feature_types)
+      intasklayout = copy(intask$feature_types)
+
       intask = self$train_task(intask)
 
-      # FIXME: setkey() next line can go when https://github.com/mlr-org/mlr3/issues/193 is fixed
-      self$outtasklayout = copy(setkey(intask$feature_types, "id"))
+      self$state$affected_cols = affected_cols
+      self$state$intasklayout = intasklayout
+      self$state$outtasklayout = copy(intask$feature_types)
+
       if (do_subset) {
         # FIXME: this fails if train_task added a column with the same name
         intask$set_col_role(remove_cols, "feature")
@@ -125,19 +131,19 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = !is.null(self$affect_columns)
+      do_subset = !is.null(self$param_set$values$affect_columns)
       if (do_subset) {
         # FIXME: see train fixme: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, self$affected_cols)
+        remove_cols = setdiff(intask$feature_names, self$state$affected_cols)
         intask$set_col_role(remove_cols, character(0))
       }
-      if (!isTRUE(all.equal(self$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
+      if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
       intask = self$predict_task(intask)
 
-      if (!isTRUE(all.equal(self$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
-        stop("Processed output task during prediction of %s does not match output task during training.", self$id)
+      if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
+        stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       if (do_subset) {
         # FIXME: see train fixme: this fails if train_task added a column with the same name
@@ -147,19 +153,20 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     },
 
     train_task = function(task) {
-      private$.dt_columns = self$select_cols(task)
-      cols = private$.dt_columns
+      dt_columns = self$select_cols(task)
+      cols = dt_columns
       if (!length(cols)) {
-        self$state = list()
+        self$state = list(dt_columns = dt_columns)
         return(task)
       }
       dt = task$data(cols = cols)
       dt = as.data.table(self$train_dt(dt, task_levels(task, cols)))
+      self$state$dt_columns = dt_columns
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
     predict_task = function(task) {
-      cols = private$.dt_columns
+      cols = self$state$dt_columns
       if (!length(cols)) {
         return(task)
       }
@@ -173,22 +180,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     predict_dt = function(dt, levels) stop("Abstract."),
 
     select_cols = function(task) task$feature_names
-  ),
-  active = list(
-    can_subset_cols = function() private$.can_subset_cols,
-    affect_columns = function(val) {
-      if (!missing(val)) {
-        assert_true(self$can_subset_cols)
-        assert_function(val, nargs = 1, null.ok = TRUE)
-        private$.affect_columns = val
-      }
-      private$.affect_columns
-    }
-  ),
-  private = list(
-    .can_subset_cols = NULL,
-    .affect_columns = NULL,
-    .dt_columns = NULL
   )
 )
 
@@ -262,17 +253,17 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
     predict_task = function(task) self$transform(task),
 
     get_state = function(task) {
-      private$.dt_columns = self$select_cols(task)
-      cols = private$.dt_columns
+      dt_columns = self$select_cols(task)
+      cols = dt_columns
       if (!length(cols)) {
-        return(list())
+        return(list(dt_columns = dt_columns))
       }
       dt = task$data(cols = cols)
-      self$get_state_dt(dt, task_levels(task, cols))
+      c(self$get_state_dt(dt, task_levels(task, cols)), list(dt_columns = dt_columns))
     },
 
     transform = function(task) {
-      cols = private$.dt_columns
+      cols = self$state$dt_columns
       if (!length(cols)) {
         return(task)
       }
@@ -286,3 +277,6 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
     transform_dt = function(dt, levels) stop("Abstract")
   )
 )
+
+# needs to be here because all.equal fails otherwise.
+check_function_or_null = function(x) assert_function(x, null.ok = TRUE)
