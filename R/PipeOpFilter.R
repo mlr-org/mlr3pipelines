@@ -41,9 +41,9 @@ PipeOpFilter = R6Class("PipeOpFilter",
   public = list(
     filter = NULL,
     initialize = function(filter, id = filter$id, param_vals = list()) {
-      assert_class(filter, "FilterResult")
+      assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
-      self$filter$param_set$set_id = filter$id
+      self$filter$param_set$set_id = ""
       private$.outer_param_set = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0),
         ParamDbl$new("frac", lower = 0, upper = 1),
@@ -115,4 +115,4 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
-register_pipeop("filter", PipeOpFilter, list(R6Class("FilterResult", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+register_pipeop("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))

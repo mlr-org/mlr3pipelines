@@ -24,9 +24,9 @@
 #'   Constructor. The given learner will be used for crossvalidation.
 #'
 #' @section Parameter Set:
-#' * `resampling` :: `character(1)` \cr
+#' * `resampling.method` :: `character(1)` \cr
 #'   Which resampling method do we want to use. Currently only supports 'cv'.
-#' * `folds`     :: `numeric(1)` \cr
+#' * `resampling.folds`     :: `numeric(1)` \cr
 #'   Number of cross validation folds.
 #' * `...` \cr
 #'   The [`ParamSet`] of `$learner` is also made available.
@@ -42,14 +42,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     initialize = function(learner, id = learner$id, param_vals = list()) {
       assert_learner(learner)
       self$learner = learner$clone(deep = TRUE)
-      self$learner$param_set$set_id = learner$id
+      self$learner$param_set$set_id = ""
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("resampling", levels = "cv", default = "cv", tags = "required"),
+        ParamFct$new("method", levels = "cv", default = "cv", tags = "required"),
         ParamInt$new("folds", lower = 2L, upper = Inf, default = 3L),
         ParamLgl$new("keep_response", default = FALSE, tags = "required")
       ))
-      private$.crossval_param_set$values = list(resampling = "cv", folds = 3, keep_response = FALSE)
+      private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
 
       super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = FALSE)
@@ -58,12 +58,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     train_task = function(task) {
 
       # Train a learner for predicting
-      self$state = self$learner$train(task)$model
+      self$state = self$learner$train(task)$data
 
       pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
-      rdesc = mlr_resamplings$get(pv[["resampling"]])
+      rdesc = mlr_resamplings$get(pv[["method"]])
       rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, self$learner, rdesc)
       prds = rbindlist(lapply(res$data$prediction, as.data.table))
@@ -72,7 +72,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
 
     predict_task = function(task) {
-      self$learner$model = self$state
+      self$learner$data = self$state
       prediction = as.data.table(self$learner$predict(task))
       private$pred_to_task(prediction, task)
     }

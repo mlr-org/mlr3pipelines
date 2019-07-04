@@ -36,6 +36,8 @@ Output channels of the \code{Graph}. For each channel lists the name, output typ
 \item \code{packages}     :: \code{character} \cr
 Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
 \code{\link{PipeOp}} objects.
+\item \code{model}        :: named \code{list} \cr
+Get / Set the \code{$state} of each of the members of \code{PipeOp}.
 \item \code{param_set}    :: \code{\link{ParamSet}} \cr
 Parameters and parameter constraints. Parameter values are in \code{$param_set$values}. These are the union of \code{$param_set}s
 of all \code{PipeOp}s in the \code{Graph}. Parameter names

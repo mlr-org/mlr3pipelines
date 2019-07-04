@@ -1,5 +1,5 @@
 ---
-title: "Introduction to mlr3pipelines"
+title: "Quick Introduction to mlr3pipelines"
 author: "Martin Binder"
 output:
   rmarkdown::html_vignette:
@@ -68,7 +68,7 @@ If adding multiple `PipeOp`s of the same kind it becomes necessary to change the
 ```{r, error = TRUE}
 graph$add_pipeop(mlr_pipeops$get("pca"))
 ```
-```{r, error = TRUE}
+```{r}
 graph$add_pipeop(mlr_pipeops$get("pca", id = "pca2"))
 ```
 
@@ -124,7 +124,7 @@ ps = ParamSet$new(list(
 ```
 ```{r}
 library("mlr3tuning")
-fitness = PerformanceEvaluator$new(task, glrn, cv10, ps)
+fitness = PerformanceEvaluator$new(task, glrn, cv10, "classif.ce", ps)
 tuner = TunerRandomSearch$new(fitness, TerminatorEvaluations$new(10))
 ```
 ```{r}

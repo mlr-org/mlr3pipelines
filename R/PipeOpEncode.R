@@ -53,17 +53,17 @@ PipeOpEncode = R6Class("PipeOpEncode",
         sum = stats::contr.sum,
         stop("Unknown 'method' parameter value.")
       )
-      lapply(levels, function(x) {
+      list(contrasts = lapply(levels, function(x) {
         con = contrasts(x)
         if (is.null(colnames(con))) {
           colnames(con) = as.character(seq_len(ncol(con)))
         }
         con
-      })
+      }))
     },
 
     transform_dt = function(dt, levels) {
-      cols = imap(self$state, function(contrasts, id) {
+      cols = imap(self$state$contrasts, function(contrasts, id) {
         x = dt[[id]]
         contrasts[as.character(x), , drop = FALSE]
       })

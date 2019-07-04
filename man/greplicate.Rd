@@ -2,11 +2,7 @@
 % Please edit documentation in R/greplicate.R
 \name{greplicate}
 \alias{greplicate}
-\title{Create Disjoint Graph Union of Copies of a Graph
-
-Create a new \code{\link{Graph}} containing \code{n} copies of the input \code{Graph} / \code{\link{PipeOp}}.
-To avoid ID collisions, PipeOp IDs are suffixed with \code{_i}
-where \code{i} ranges from 1 to \code{n}.}
+\title{Create Disjoint Graph Union of Copies of a Graph}
 \usage{
 greplicate(graph, n)
 }
@@ -21,8 +17,6 @@ Number of copies to create.}
 \code{\link{Graph}} containing \code{n} copies of input \code{graph}.
 }
 \description{
-Create Disjoint Graph Union of Copies of a Graph
-
 Create a new \code{\link{Graph}} containing \code{n} copies of the input \code{Graph} / \code{\link{PipeOp}}.
 To avoid ID collisions, PipeOp IDs are suffixed with \code{_i}
 where \code{i} ranges from 1 to \code{n}.
