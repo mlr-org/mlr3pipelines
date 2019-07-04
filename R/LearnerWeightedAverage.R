@@ -13,6 +13,10 @@
 #' For `weights.method`: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
 #' for a measure provided in `measure` (defaults to `classif.acc`).
 #' Learned weights can be obtained from `.$model`.
+#' Using non-linear optimization is implemented in the SuperLearner R package.
+#' For a more detailed analysis the reader is refered to
+#' *LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation*.
+#'
 #'
 #'
 #' @section Parameter Set:
@@ -63,27 +67,26 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
       )
     },
 
-    train = function(task) {
-      pars = self$params("train")
+    train_internal = function(task) {
+      pars = self$param_set$get_values(tags = "train")
       if (pars$weights.method == "manual") {
         assert_numeric(pars$weights, lower = 0L)
         # For "prob" we blow up the weights vector.
-        if (unique(task$feature_types$type) == "numeric" & task$class_n > 2)
+        if (unique(task$feature_types$type) == "numeric" & task$class_n > 2) {
           weights = rep(weights, each = task$class_n)
-        assert_true(length(pars$weights) == 1L | length(pars$weights) == length(task$feature_names))
+        }
+        if (length(pars$weights) == 1L) {
+          pars$weights = rep(pars$weights, length(task$feature_names))
+        }
+        assert_true(length(pars$weights) == length(task$feature_names))
         assert_true(sum(pars$weights) > 0)
-        if (length(pars$weights) == 1L) weights = rep(pars$weights, length(task$feature_names))
-        else weights = pars$weights
-        self$model = list("weights" = weights)
+        list("weights" = pars$weights)
       } else {
-        self$model = list("weights" = private$optimize_objfun_nlopt(task, pars))
+        list("weights" = private$optimize_objfun_nlopt(task, pars))
       }
-      invisible(self)
     },
 
-    predict = function(task) {
-      pars = self$params("predict")
-      # newdata = as.matrix(task$data(cols = task$feature_names))
+    predict_internal = function(task) {
       private$compute_weighted_average(task, self$model$weights)
     }
   ),
@@ -127,12 +130,12 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
       }
 
       colnames(prob) = task$class_names
-      as_prediction_data(task, prob = prob)
+      list(prob = prob)
     },
     objfun = function(weights, task, measure) {
       # This is the objective function we minimize using nlopt
-      prd = new_prediction(task, private$compute_weighted_average(task, weights))
-      res = measure$calculate(prediction = prd)
+      prd = invoke(self$new_prediction, row_ids = task$row_ids, truth = task$truth(), .args = private$compute_weighted_average(task, weights))
+      res = prd$score(measure)
       if (!measure$minimize) res = -res
       return(res)
     },
@@ -233,23 +236,26 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
       )
     },
 
-    train = function(task) {
-      pars = self$params("train")
+    train_internal = function(task) {
+      pars = self$param_set$get_values(tags = "train")
       if (pars$weights.method == "manual") {
         assert_numeric(pars$weights, lower = 0L)
-        assert_true(length(pars$weights) == 1L | length(pars$weights) == length(task$feature_names))
+        # For "prob" we blow up the weights vector.
+        if (unique(task$feature_types$type) == "numeric" & task$class_n > 2) {
+          weights = rep(weights, each = task$class_n)
+        }
+        if (length(pars$weights) == 1L) {
+          pars$weights = rep(pars$weights, length(task$feature_names))
+        }
+        assert_true(length(pars$weights) == length(task$feature_names))
         assert_true(sum(pars$weights) > 0)
-        if (length(pars$weights) == 1L) weights = rep(pars$weights, length(task$feature_names))
-        else weights = pars$weights
-        self$model = list("weights" = weights)
+        list("weights" = pars$weights)
       } else {
-        self$model = list("weights" = private$optimize_objfun_nlopt(task, pars))
+        list("weights" = private$optimize_objfun_nlopt(task, pars))
       }
-      invisible(self)
     },
 
-    predict = function(task) {
-      pars = self$params("predict")
+    predict_internal = function(task) {
       private$compute_weighted_average(task, self$model$weights)
     }
   ),
@@ -257,11 +263,11 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
   private = list(
     compute_weighted_average = function(task, weights) {
       wts = weights / sum(weights)
-      data_response = task$data(cols = stri_subset(task$feature_names, regex = ".*\\.response"))
+      data_response = task$data(cols = grep("\\.response$", task$feature_names, value = TRUE))
       wt_avg = as.matrix(data_response) %*% wts
 
       if (self$predict_type == "se") {
-        data_se = task$data(cols = stri_subset(task$feature_names, regex = ".*\\.se"))
+        data_se = task$data(cols = grep("\\.se$", task$feature_names, value = TRUE))
         if (ncol(data_se) == 0) {
           se = rep(0, nrow(data_response))
         } else {
@@ -272,12 +278,12 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
       } else {
         se = NULL
       }
-      as_prediction_data(task, response = wt_avg, se = se)
+      list(response = wt_avg, se = se)
     },
     objfun = function(weights, task, measure) {
       # This is the objective function we minimize using nlopt
-      prd = new_prediction(task, data = private$compute_weighted_average(task, weights))
-      res = measure$calculate(prediction = prd)
+      prd = invoke(self$new_prediction, row_ids = task$row_ids, truth = task$truth(), .args = private$compute_weighted_average(task, weights))
+      res = prd$score(measure)
       if (!measure$minimize) res = -res
       return(res)
     },
@@ -290,7 +296,7 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
       } else {
         measure = assert_measure(pars$measure)
       }
-      n_weights = length(stri_subset(task$feature_names, regex = ".*\\.response"))
+      n_weights = length(grep("\\.response$", task$feature_names, value = TRUE))
 
       opt = nloptr::nloptr(
         x0 = rep(1 / n_weights, n_weights),
@@ -305,3 +311,4 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
     }
   )
 )
+

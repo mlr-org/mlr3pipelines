@@ -8,8 +8,6 @@ test_that("PipeOpTaskPreproc - basic properties", {
   expect_pipeop(po)
   expect_data_table(po$input, nrow = 1)
   expect_data_table(po$output, nrow = 1)
-
-  expect_flag(po$can_subset_cols)
 })
 
 test_that("PipeOpTaskPreprocSimple - basic properties", {
@@ -19,6 +17,4 @@ test_that("PipeOpTaskPreprocSimple - basic properties", {
   expect_pipeop(po)
   expect_data_table(po$input, nrow = 1)
   expect_data_table(po$output, nrow = 1)
-
-  expect_flag(po$can_subset_cols)
 })
