@@ -10,7 +10,7 @@
 \usage{
 selector_all()
 
-selector_type(type)
+selector_type(types)
 
 selector_grep(pattern, ignore.case = FALSE, perl = FALSE,
   fixed = FALSE)
@@ -18,7 +18,7 @@ selector_grep(pattern, ignore.case = FALSE, perl = FALSE,
 selector_name(feature_names, assert_present = FALSE)
 }
 \arguments{
-\item{type}{(\code{character}) \cr
+\item{types}{(\code{character}) \cr
 Type of feature to select}
 
 \item{pattern}{(\code{character(1)}) \cr
