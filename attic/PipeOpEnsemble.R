@@ -1,3 +1,37 @@
+#' For `est.se = TRUE` additional uncertainties are estimated from the weighted standard deviation in the different responses
+#' and added to the standard error estimates of the underlying model.
+if (self$predict_type == "se") {
+  data_se = task$data(cols = grep("\\.se$", task$feature_names, value = TRUE))
+  if (ncol(data_se) == 0) {
+    se = rep(0, nrow(data_response))
+  } else {
+    se = sqrt(as.matrix(data_se)^2 %*% wts)
+  }
+  if (self$pars$est.se)
+    se = se + apply(data_response, 1, function(x, wt) {sqrt(sum(wt *(x-weighted.mean(x, wt))^2)*(sum(wt)/(sum(wt)^2-sum(wt^2))))}, wt = wts)
+} else {
+  se = NULL
+}
+
+# Works for "se"
+lrn = LearnerRegrWeightedAverage$new()
+lrn$param_set$values = list(weights.method = "nloptr", measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA", est.se = TRUE)
+
+ftless = mlr_learners$get("regr.featureless")
+ftless$predict_type = "se"
+single_pred = PipeOpSubsample$new() %>>%
+  PipeOpLearnerCV$new(ftless)
+pred_set = greplicate(single_pred, 3L) %>>%
+  PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
+  PipeOpLearner$new(lrn)
+expect_graph(pred_set)
+
+pred_set$train(tsk)
+expect_true(pred_set$is_trained)
+
+prd = pred_set$predict(tsk)[[1]]
+expect_prediction(prd)
+
 # INFO: The PipeOpEnsemble has been superseeded by
 #       LearnerClassifWeightedAverage and LearnerRegrWeightedAverage respectively.
 

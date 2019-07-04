@@ -5,7 +5,7 @@
 \alias{LearnerRegrWeightedAverage}
 \alias{mlr_learners_regr.weightedaverage}
 \title{Weighted Average of Features for Regression}
-\format{\code{\link[R6:R6Class]{R6::R6Class()}} inheriting from \link[mlr3:LearnerClassif]{mlr3::LearnerClassif}.}
+\format{\code{\link[R6:R6Class]{R6::R6Class()}} inheriting from \link[mlr3:LearnerRegr]{mlr3::LearnerRegr}.}
 \usage{
 LearnerRegrWeightedAverage
 }
@@ -16,11 +16,9 @@ Used in the context of computing weighted averages of predictions.
 If \code{weights.method} is "manual", the average is computed over weights provided by the user.
 Predictions are averaged using \code{weights} (in order of appearance in the data); \code{weights} defaults to equal
 weights for each feature.
-For \code{weights.method}: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
-for a measure provided in \code{measure} (defaults to \code{classif.acc}).
+For \code{weights.method}: "nloptr", nonlinear optimization from package "nloptr" is used to optimize weights
+for a measure provided as \code{measure} (defaults to \code{regr.mse}).
 Learned weights can be obtained from \code{.$model}.
-For \code{est.se = TRUE} additional uncertainties are estimated from the weighted standard deviation in the different responses
-and added to the standard error estimates of the underlying model.
 }
 \section{Parameter Set}{
 
@@ -39,7 +37,7 @@ The Measure is either obtained from \code{mlr_measures} or directly supplied. De
 Several nonlinear optimization methods from \code{nloptr} are available.
 See \code{nloptr::nloptr.print.options()} for a list of possible options.
 Note that we only allow for derivative free local or global algorithms, i.e.
-NLOPT_(G|L)N_.
+NLOPT_(G|L)N_*.
 }
 }
 

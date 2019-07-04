@@ -77,9 +77,7 @@ test_that("LearnerClassifWeightedAverage NLOPTR", {
 
 
 test_that("LearnerClassifWeightedAverage Pipeline", {
-
   tsk = mlr_tasks$get("iris")
-
   # Works for response
   lrn = LearnerClassifWeightedAverage$new()
   single_pred = PipeOpSubsample$new() %>>%
@@ -94,7 +92,6 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
   prd = pred_set$predict(tsk)[[1]]
   expect_prediction(prd)
-
 
   # Works for probabilities
   lrn = LearnerClassifWeightedAverage$new()
@@ -118,10 +115,9 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
 
 test_that("LearnerClassifWeightedAverage Bagging Usecase", {
-
-  # Bagging requires setting resampling to "nocv"
   subsampled_tree = PipeOpSubsample$new() %>>%
     PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"))
+  # subsampled_tree$pipeops$subsample$param_set$values$frac = 0.7
   pred_set = greplicate(subsampled_tree, 3L) %>>%
     PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
     PipeOpLearner$new(LearnerClassifWeightedAverage$new())
@@ -143,10 +139,8 @@ test_that("LearnerClassifWeightedAverage autotest", {
 })
 
 
-test_that("LearnerClassifWeightedAverage Pipeline", {
-
+test_that("LearnerRegrWeightedAverage Pipeline", {
   tsk = mlr_tasks$get("boston_housing")
-
   # Works for response
   lrn = LearnerRegrWeightedAverage$new()
   single_pred = PipeOpSubsample$new() %>>%
@@ -161,24 +155,12 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
   prd = pred_set$predict(tsk)[[1]]
   expect_prediction(prd)
+})
 
-
-  # Works for "se"
+test_that("LearnerRegrWeightedAverage autotest", {
   lrn = LearnerRegrWeightedAverage$new()
-  lrn$param_set$values = list(weights.method = "nloptr", measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA", est.se = TRUE)
-
-  ftless = mlr_learners$get("regr.featureless")
-  ftless$predict_type = "se"
-  single_pred = PipeOpSubsample$new() %>>%
-    PipeOpLearnerCV$new(ftless)
-  pred_set = greplicate(single_pred, 3L) %>>%
-    PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
-    PipeOpLearner$new(lrn)
-  expect_graph(pred_set)
-
-  pred_set$train(tsk)
-  expect_true(pred_set$is_trained)
-
-  prd = pred_set$predict(tsk)[[1]]
-  expect_prediction(prd)
+  expect_learner(lrn)
+  lrn$param_set$values = list(weights.method = "nloptr", measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA")
+  result = run_autotest(lrn, exclude = "(sanity|feat_single|feat_all|feat_all_multiclass)")
+  expect_true(result, info = result$error)
 })

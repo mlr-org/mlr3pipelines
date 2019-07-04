@@ -11,7 +11,7 @@ LearnerClassifWeightedAverage
 }
 \description{
 Computes a weighted average of inputs.
-Used in the context of computing weighted averages of predictions.
+Can be used in the context of computing weighted averages of predictions.
 
 If \code{weights.method} is "manual", the average is computed over weights provided by the user.
 Predictions are averaged using \code{weights} (in order of appearance in the data); \code{weights} defaults to equal
