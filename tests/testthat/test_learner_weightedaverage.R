@@ -115,6 +115,7 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
 
 test_that("LearnerClassifWeightedAverage Bagging Usecase", {
+  tsk = mlr_tasks$get("iris")
   subsampled_tree = PipeOpSubsample$new() %>>%
     PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"))
   # subsampled_tree$pipeops$subsample$param_set$values$frac = 0.7
