@@ -105,7 +105,7 @@ and applies a Support Vector Machine.
 
 ### sklearn
 
-```{python, eval = FALSE}
+```{r, eval = FALSE}
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
