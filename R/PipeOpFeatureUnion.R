@@ -57,6 +57,6 @@ cbind_tasks = function(inputs, assert_targets_equal) {
     stopf("All tasks must have the same target columns")
   }
 
-  new_cols = Reduce(function(x, y) ref_cbind(x, y$data(ids, y$feature_names)), tail(inputs, -1L), init = data.table())
+  new_cols = Reduce(function(x, y) rcbind(x, y$data(ids, y$feature_names)), tail(inputs, -1L), init = data.table())
   task$clone(deep = TRUE)$cbind(new_cols)
 }
