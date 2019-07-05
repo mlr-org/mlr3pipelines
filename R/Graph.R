@@ -245,8 +245,8 @@ Graph = R6Class("Graph",
       ig = igraph::add_vertices(ig, length(extra_vertices), name = extra_vertices)
       layout = igraph::layout_with_sugiyama(ig)$layout
       if (!is.matrix(layout)) {
-        layout = t(layout)
-      } # bug in igraph, dimension is dropped
+        layout = t(layout) # bug in igraph, dimension is dropped
+      }
       if (html) {
         require_namespaces("visNetwork")
         ig_data = visNetwork::toVisNetworkData(ig)

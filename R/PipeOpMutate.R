@@ -31,7 +31,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
       super$initialize(id, ps, param_vals = param_vals)
     },
 
-    transform= function(task) {
+    transform = function(task) {
       taskdata = task$data(cols = task$feature_names)
       newdata = as.data.table(lapply(self$param_set$values$mutation, function(expr) {
         eval(expr, envir = taskdata, enclos = self$param_set$values$env)
