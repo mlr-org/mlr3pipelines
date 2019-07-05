@@ -17,6 +17,7 @@ Adds features according to expressions.
 \itemize{
 \item \code{mutation} :: named \code{list} \cr
 Expressions for new features to create. Can be created with \code{alist()}.
+Can contain multiple expressions, that directly reference task features.
 \item \code{env} :: \code{environment} \cr
 Environment in which expressions are evaluated. This is the enclosing
 environment \emph{after} the \code{Task}'s features are considered.

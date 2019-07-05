@@ -9,6 +9,7 @@
 #' @section Parameter Set:
 #' * `mutation` :: named `list` \cr
 #'   Expressions for new features to create. Can be created with `alist()`.
+#'   Can contain multiple expressions, that directly reference task features.
 #' * `env` :: `environment` \cr
 #'   Environment in which expressions are evaluated. This is the enclosing
 #'   environment *after* the `Task`'s features are considered.

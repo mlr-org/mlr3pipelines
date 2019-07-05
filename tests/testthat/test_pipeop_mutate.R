@@ -23,6 +23,17 @@ test_that("mutate", {
   expect_equal(res2[[1]]$data("Sepal.Sum", rows = 1:10)$Sepal.Sum,
     (task$data("Sepal.Length", rows = 1:10) + task$data("Sepal.Width", rows = 1:10))$Sepal.Length)
 
+
+  # Name clashes
+  al = alist(Sepal.Width = Sepal.Width^2)
+  op$param_set$values$mutation = al
+  res_repl = op$train(list(task))
+  expect_true("Sepal.Width" %in% res_repl[[1]]$feature_names)
+  expect_equal(res_repl[[1]]$data("Sepal.Width", rows = 1:10)$Sepal.Width,
+    task$data("Sepal.Width", rows = 1:10)$Sepal.Width^2)
+
+
+  # Delete originals
   op$param_set$values$delete_originals = TRUE
   res = op$train(list(task))
   expect_true(op$is_trained)
