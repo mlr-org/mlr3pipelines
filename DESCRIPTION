@@ -9,7 +9,7 @@ Authors@R: c(
     person("Florian", "Pfisterer", email = "pfistererf@googlemail.com", role = "ctb"))
 URL: https://github.com/mlr-org/mlr3pipelines
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
-License: MIT + file LICENSE
+License: LGPL-3
 Depends:
     R (>= 3.0.2)
 Imports:
@@ -35,7 +35,8 @@ Suggests:
     mlr3learners,
     mlr3featsel,
     mlr3tuning,
-    glmnet
+    glmnet,
+    visNetwork
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
