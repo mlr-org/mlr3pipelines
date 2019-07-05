@@ -127,9 +127,11 @@ library("mlr3tuning")
 fitness = PerformanceEvaluator$new(task, glrn, cv10, "classif.ce", ps)
 tuner = TunerRandomSearch$new(fitness, TerminatorEvaluations$new(10))
 ```
+
 ```{r}
 tuner$tune()
 ```
+
 ```{r}
 tuner$tune_result()
 ```

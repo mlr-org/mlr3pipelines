@@ -62,9 +62,10 @@
 #'   channel `dst_channel` (identified by its name or number as listed in the `PipeOp`'s `$input`).
 #'   If source or destination `PipeOp` have only one input / output channel and `src_channel` / `dst_channel`
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
-#' * `plot()` \cr
-#'   () -> `NULL` \cr
-#'   Plot the graph, using the [`igraph`][igraph::igraph-package] package.
+#' * `plot(html)` \cr
+#'   (`logical(1)`) -> `NULL` \cr
+#'   Plot the graph, using either the [`igraph`][igraph::igraph-package] package (for `html = FALSE`) or
+#'   the `visNetwork` package for `html = TRUE` producing a htmlWidget. Defaults to `FALSE`.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Print a representation of the graph on the console. Output is a table with one row for each contained `PipeOp` and
@@ -218,7 +219,8 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    plot = function() {
+    plot = function(html = FALSE) {
+      assert_flag(html)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
         return(invisible(NULL))
@@ -244,7 +246,31 @@ Graph = R6Class("Graph",
       if (!is.matrix(layout)) {
         layout = t(layout)
       } # bug in igraph, dimension is dropped
-      plot(ig, layout = layout)
+      if (html) {
+        require_namespaces("visNetwork")
+        ig_data = visNetwork::toVisNetworkData(ig)
+        ig_data$nodes$shape = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "database", "<OUTPUT>" = "ellipse", "box"))
+        ig_data$nodes$color = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "rgba(0,204,102,0.2)", "<OUTPUT>" = "rgba(255,51,51,0.2)", "lightblue"))
+        ig_data$nodes$value = map_dbl(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = .8, "<OUTPUT>" = .8, 5))
+        ig_data$nodes$title = map_chr(ig_data$nodes$id, function(node) {
+          null_str = function(x) {if (is.null(x)) x = "NULL"; return(x)}
+          if (node == "<INPUT>") txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
+          else if (node == "<OUTPUT>") txt = paste0("Output:<br>Name: ", self$output$name, "<br>Train: ", null_str(self$output$train), "<br>Predict: ", null_str(self$output$predict))
+          else txt = paste((gsub("<(.*)>", capture.output(self$pipeops[[node]]), replacement =  "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
+          # Deal with special case: multiple edges between two pipeops
+          if (length(txt) > 1) txt = paste0(txt, collapse = "<br>")
+          return(txt)
+        })
+        ig_data$nodes$title =  paste0("<p>", ig_data$nodes$title, "</p>")
+        ig_data$edges$color = "lightblue"
+        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
+        if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) # Bug in visNetwork?
+          p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama")
+        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+        return(p)
+      } else {
+        plot(ig, layout = layout)
+      }
     },
 
     print = function() {
