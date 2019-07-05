@@ -453,7 +453,7 @@ Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) an
   # Plot the resulting graph
   level_2$plot(html = TRUE)
 
-  task = mlr_tasks$get("iris"),
+  task = mlr_tasks$get("iris")
   lrn = GraphLearner$new(level_2)
 
   lrn$

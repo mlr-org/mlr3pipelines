@@ -75,6 +75,21 @@ test_that("Test wrong inputs", {
   task = mlr_tasks$get("iris")
   expect_error(g$train(task), "Assertion on 'rows'")
 })
+
+# FIXME: Somewhat depends on https://github.com/mlr-org/mlr3/issues/268
+# test_that("Duplicate Features", {
+#   # Define PipeOp's
+#   tsk = mlr_tasks$get("iris")
+#   t1 = tsk$clone()$set_col_role("Sepal.Length", character())
+#   t2 = tsk$clone()$set_col_role(c("Petal.Length", "Petal.Width"), character())
+
+#   po = PipeOpFeatureUnion$new(2)
+
+#   tout = train_pipeop(po, list(t1, t2))
+#   expect_equivalent(tout[[1]]$feature_names, c())
+#   expect_equivalent(tout[[1]]$target_names, tsk$target_names)
+# })
+
 # FIXME: depends on mlr-org/mlr3#179
 ## test_that("PipeOpFeatureUnion - levels are preserved", {
 ##
