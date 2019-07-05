@@ -4,7 +4,7 @@
 \name{mlr3pipelines-package}
 \alias{mlr3pipelines}
 \alias{mlr3pipelines-package}
-\title{mlr3pipelines: Preprocessing Operators and Pipelines for mlr3}
+\title{mlr3pipelines: Preprocessing Operators and Pipelines for 'mlr3'}
 \description{
 \if{html}{\figure{logo.png}{options: align='right'}}
 
