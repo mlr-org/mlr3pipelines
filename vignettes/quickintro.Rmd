@@ -61,7 +61,7 @@ graph = pca %>>% filter
 
 Inspect the `Graph` using its **`$plot()`** function:
 ```{r}
-graph$plot()
+graph$plot(html = TRUE)
 ```
 
 If adding multiple `PipeOp`s of the same kind it becomes necessary to change the id to avoid name clashes; either by accessing the `$id` slot or during construction.
@@ -156,7 +156,7 @@ graph = mlr_pipeops$get("branch", c("null", "pca", "scale")) %>>%
       mlr_pipeops$get("scale")
   )) %>>%
   mlr_pipeops$get("unbranch", c("null", "pca", "scale"))
-graph$plot()
+graph$plot(html = TRUE)
 ```
 
 ### Concurrent Execution / Copying, with Feature Union or Ensembles
@@ -171,11 +171,11 @@ graph = mlr_pipeops$get("copy", outnum = 2) %>>%
       mlr_pipeops$get("pca")
   )) %>>%
   mlr_pipeops$get("featureunion", 2)
-graph$plot()
+graph$plot(html = TRUE)
 ```
 
 An example of simple bagging, using **`PipeOpSubsample`** and `greplicate()`:
-```{r}
+```{r, fig.height = 6, fig.width = 6}
 single_path = mlr_pipeops$get("subsample") %>>%
   mlr_pipeops$get("learner",
     learner = mlr_learners$get("classif.rpart"))
@@ -184,14 +184,14 @@ all_paths = greplicate(single_path, n = 5)
 
 graph = all_paths %>>% mlr_pipeops$get("majorityvote", innum = 5)
 
-graph$plot()
+graph$plot(html = TRUE)
 ```
 
 ### Stacking
 
 A powerful machine learning method is "stacking", where the prediction of one method is used as a feature for another method. This can be achieved with the **`PipeOpLearnerCV`** which uses a `Learner` to produce a prediction `Task`, both during training (combining the holdout samples from a cross-validation) and during prediction. The resulting `Task` contains the predictions *only*, so it is often used in combination with `PipeOpCopy`, `PipeOpNULL`, and `PipeOpFeatureUnion`:
 
-```{r}
+```{r, fig.width = 4, fig.height = 4}
 library("mlr3learners")
 graph = mlr_pipeops$get("copy", 3) %>>%
   gunion(list(
@@ -201,7 +201,7 @@ graph = mlr_pipeops$get("copy", 3) %>>%
   )) %>>%
   mlr_pipeops$get("featureunion", 3) %>>%
   mlr_pipeops$get("learner", mlr_learners$get("regr.glmnet"))
-graph$plot()
+graph$plot(html = TRUE)
 ```
 
 ## Feature Overview

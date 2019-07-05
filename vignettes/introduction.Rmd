@@ -160,8 +160,8 @@ gr$add_edge("scale", "subsample")
 ```{r}
 print(gr)
 ```
-```{r}
-gr$plot()
+```{r, fig.width = 8, fig.height = 8}
+gr$plot(html = TRUE)
 ```
 
 A `Graph` itself has a **`$train()`** and a **`$predict()`** method that accept some data and propagate this data through the network of `PipeOp`s. The return value corresponds to the output of the `PipeOp` output channels that are not connected to other `PipeOp`s.
@@ -195,7 +195,7 @@ gr$
   add_edge("scale", "featureunion", dst_channel = 1)$
   add_edge("pca", "featureunion", dst_channel = 2)
 
-gr$plot()
+gr$plot(html = TRUE)
 ```
 ```{r}
 gr$train(iris_first_half)[[1]]$data()
@@ -210,7 +210,7 @@ gr = mlr_pipeops$get("copy", outnum = 2) %>>%
   gunion(list(mlr_pipeops$get("scale"), mlr_pipeops$get("pca"))) %>>%
   mlr_pipeops$get("featureunion", innum = 2)
 
-gr$plot()
+gr$plot(html = TRUE)
 ```
 
 ### `PipeOp` IDs and ID Name Clashes
@@ -311,6 +311,3 @@ op_rpart$param_set
 glrn = GraphLearner$new(gr %>>% op_rpart)
 glrn$param_set
 ```
-
-### Parameter Tuning
-

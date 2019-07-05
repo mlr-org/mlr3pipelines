@@ -69,7 +69,7 @@ We can quickly visualize what we want to achieve:
 ```{r, echo = FALSE, fig.width = 7}
   linear_pipeline = op1 %>>% op2 %>>% op3
   # And visualize our pipleline
-  linear_pipeline$plot()
+  linear_pipeline$plot(html = TRUE)
 ```
 
 ### A quick glance into a PipeOp
@@ -101,7 +101,7 @@ We can do this using the `%>>%` operator.
 ```{r}
   linear_pipeline = op1 %>>% op2 %>>% op3
   # And visualize our pipleline
-  linear_pipeline$plot()
+  linear_pipeline$plot(html = TRUE)
 ```
 
 The result of this operation is a "`Graph`".
@@ -243,7 +243,7 @@ We can visualize the resulting graph before diving into a
 more detailed explanation.
 
 ```r
-g$plot()
+g$plot(html = TRUE)
 ```
 
 ## Ensembles
@@ -296,7 +296,7 @@ In order to visually inspect the resulting graph,
 we can plot it:
 
 ```{r, fig.width=7.5}
-  pred_set$plot()
+  pred_set$plot(html = TRUE)
 ```
 
 Afterwards we need to aggregate the 10 pipelines
@@ -310,7 +310,7 @@ to form a single model:
 and plot again to see what happens:
 
 ```{r, fig.width=7.5}
-  bagging$plot()
+  bagging$plot(html = TRUE)
 ```
 
 This pipeline can again be used in conjunction with
@@ -370,7 +370,7 @@ features.
 
 ```{r, fig.width=7.5}
   stack = combined %>>% PipeOpLearner$new(lrn$clone())
-  stack$plot()
+  stack$plot(html = TRUE)
 ```
 
 ```{r}
@@ -430,7 +430,7 @@ Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) an
       id = "rpart_l2")
 
   # Plot the resulting graph
-  level_2$plot()
+  level_2$plot(html = TRUE)
 
   task = mlr_tasks$get("iris"),
   lrn = GraphLearner$new(level_2)
@@ -461,9 +461,9 @@ Afterwards we can use `PipeOpMajorityVote` to aggregate the predictions from a t
 
 We can now connect the different operators and visualize the full graph:
 
-```{r, fig.width=7.5}
+```{r, fig.width=7.5, fig.height = 9}
   pipeline = chks %>>% lrns %>>% mjv
-  pipeline$plot()
+  pipeline$plot(html = TRUE)
 ```
 
 ```{r}
