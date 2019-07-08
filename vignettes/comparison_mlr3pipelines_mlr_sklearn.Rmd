@@ -65,10 +65,6 @@ rpart = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 pipeline = impute %>>% filter %>>% rpart
 # And convert to a 'GraphLearner'
 learner = GraphLearner$new(id = "Pipeline", pipeline)
-# We want to filter out all but 2 features
-
-e = Experiment$new(task = mlr_tasks$get("iris"), learner = learner)
-e$train()
 ```
 
 The fact that **mlr's** wrappers have to be applied inside-out, i.e. in the reverse order
@@ -147,12 +143,7 @@ grid_search.fit(X, y)
 ### mlr3pipelines
 
 ```{r, eval = FALSE}
-library(mlr3)
-library(mlr3pipelines)
-library(mlr3learners)
-library(mlr3featsel)
-library(mlr3tuning)
-
+library(mlr3verse)
 iris = mlr_tasks$get("iris")
 
 # Build the steps
@@ -160,23 +151,20 @@ copy = PipeOpCopy$new(2)
 pca = PipeOpPCA$new()
 selection = PipeOpFilter$new(filter = FilterVariance$new())
 union = PipeOpFeatureUnion$new(2)
-svm = PipeOpLearner$new(mlr_learners$get("classif.svm"))
-svm$learner$param_set$values$kernel = "linear"
+svm = PipeOpLearner$new(mlr_learners$get("classif.svm", param_vals = list(kernel = "linear")))
 
 # Assemble the Pipeline
 pipeline = copy %>>% gunion(list(pca, selection)) %>>% union %>>% svm
 learner = GraphLearner$new(id = "Pipeline", pipeline)
 
 # For tuning, we define the resampling and the Parameter Space
-resampling = mlr3::mlr_resamplings$get("cv")
-resampling$param_set$values$folds = 5
-param_set = paradox::ParamSet$new(
-  params = list(
-    paradox::ParamDbl$new("classif.svm.cost", lower = 0.1, upper = 1),
-    paradox::ParamInt$new("pca.rank.",  lower = 1, upper = 3),
-    paradox::ParamInt$new("variance.filter.nfeat",  lower = 1, upper = 2)
-  )
-)
+resampling = mlr3::mlr_resamplings$get("cv", param_vals = list(folds = 5L))
+
+param_set = paradox::ParamSet$new(params = list(
+  paradox::ParamDbl$new("classif.svm.cost", lower = 0.1, upper = 1),
+  paradox::ParamInt$new("pca.rank.",  lower = 1, upper = 3),
+  paradox::ParamInt$new("variance.filter.nfeat",  lower = 1, upper = 2)
+))
 
 pe = PerformanceEvaluator$new(iris, learner, resampling, param_set)
 terminator = TerminatorEvaluations$new(60)
@@ -184,9 +172,6 @@ tuner = TunerGridSearch$new(pe, terminator, resolution = 10)$tune()
 
 # Set the learner to the optimal values and train
 learner$param_set$values = tuner$tune_result()$values
-
-e = Experiment$new(task = iris, learner = learner)
-e$train()
 ```
 
 In summary, we can achieve similar results with a comparable number of lines, while at the
