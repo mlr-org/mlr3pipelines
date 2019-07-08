@@ -28,6 +28,116 @@ library("mlr3pipelines")
 Below, we collected some examples, where **mlr3pipelines** is compared to different other software packages,
 such as **mlr**, **recipes** and **sklearn**.
 
+Before diving deeper, we give a short introduction to PipeOps.
+
+## An introduction to "PipeOp"s
+
+In this example, we create a ĺinear Pipeline.
+After scaling all input features, we rotate our data using principal component analysis.
+After this transformation, we use a simple Decision Tree learner for classification.
+
+As exemplary data, we will use the "`iris`" classification task.
+This object contains the famous iris dataset and some meta-information, such as the target variable.
+
+```{r}
+  library(mlr3)
+  task = mlr_tasks$get("iris")
+```
+
+We quickly split our data into a train and a test set:
+```{r}
+  test.idx = sample(seq_len(task$nrow), 30)
+  train.idx = setdiff(seq_len(task$nrow), test.idx)
+  # Set task to only use train indexes
+  task$row_roles$use = train.idx
+```
+
+A Pipeline (or `Graph`) contains multiple pipeline operators ("`PipeOp`"s), where each `PipeOp`
+transforms the data when it flows through it. For this usecase, we require 3 transformations:
+
+- A `PipeOp` that scales the data
+- A `PipeOp` that performs PCA
+- A `PipeOp` that contains the **Decision Tree** learner
+
+A list of available `PipeOp`s can be obtained from
+
+```{r}
+  library(mlr3pipelines)
+  mlr_pipeops$keys()
+```
+
+First we define the required `PipeOp`s:
+
+```{r}
+  op1 = PipeOpScale$new()
+  op2 = PipeOpPCA$new()
+  op3 = PipeOpLearner$new(learner = mlr_learners$get("classif.rpart"))
+```
+
+### A quick glance into a PipeOp
+
+In order to get a better understanding of what the respective PipeOps do,
+we quickly look at one of them in detail:
+
+The most important slots in a PipeOp are:
+
+- `$train()`: A function used to train the PipeOp.
+- `$predict()`: A function used to predict with the PipeOp.
+
+The `$train()` and `$predict()` functions define the core functionality of our PipeOp.
+In many cases, in order to not leak information from the training set into the test set it is imperative to treat train and test data separately. For this we require a `$train()` function that learns the appropriate transformations from the training set and a `$test()` function that applies the transformation on future data.
+
+In the case of `PipeOpPCA` this means the following:
+
+- `$train()` learns a rotation matrix from its input and saves this matrix to
+  an additional slot, `$state`. It returns the rotated input data stored
+  in a new `Task`.
+- `$predict()` uses the rotation matrix stored in `$state` in order to rotate
+  future, unseen data. It returns those in a new `Task`.
+
+### Constructing the Pipeline
+
+We can now connect the `PipeOp`s constructed earlier to a **Pipeline**.
+We can do this using the `%>>%` operator.
+
+```{r}
+  linear_pipeline = op1 %>>% op2 %>>% op3
+```
+
+The result of this operation is a "`Graph`".
+A `Graph` connects the input and output of each `PipeOp` to the following `PipeOp`.
+This allows us to specify linear processing pipelines.
+In this case, we connect the output of the **scaling** PipeOp to the input of the **PCA** PipeOp
+and the output of the **PCA** PipeOp to the input of **PipeOpLearner**.
+
+We can now train the `Graph` using the `iris` **Task**.
+
+```{r}
+  linear_pipeline$train(task)
+```
+
+When we now train the graph, the data flows through the graph as follows:
+
+- The Task flows into the `PipeOpScale`. The `PipeOp` scales each column in the data
+  contained in the Task and returns a new Task that contains the scaled data to its output.
+- The scaled task flows into the `PipeOpPCA`. PCA transforms the data and returns a (possibly smaller)
+  Task, that contains the transformed data.
+- This transformed data then flows into the learner, in our case **classif.rpart**.
+  It is then used to train the learner, and as a result saves a model that can be
+  used to predict new data.
+
+In order to predict on new data, we need to save the relevant transformations our data went through
+while training. As a result, each `PipeOp` saves a state, where information requried to appropriately
+transform future data is stored. In our case, this is **mean** and **standard deviation** of each column for `PipeOpScale`, the PCA rotation matrix for `PipeOpPCA` and the learned model for `PipeOpLearner`.
+
+
+```{r}
+  # predict on test.idx
+  task$row_roles$use = test.idx
+  linear_pipeline$predict(task)
+```
+
+
 ## mlr3pipelines vs. mlr
 
 In order to showcase the benefits of **mlr3pipelines** over **mlr's** `Wrapper` mechanism,
