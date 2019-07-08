@@ -1,17 +1,17 @@
 Package: mlr3pipelines
-Title: Preprocessing Operators and Pipelines for mlr3
-Description: Pipelines for mlr3. Work in progress.
+Title: Preprocessing Operators and Pipelines for 'mlr3'
+Description: Pipelines for mlr3.
 Authors@R: c(
     person("Martin", "Binder", email = "martin.binder@mail.com", role = c("aut", "cre")),
     person("Bernd", "Bischl", email = "bernd_bischl@gmx.net", role = "ctb"),
     person("Michel", "Lang", email = "michellang@gmail.com", role = "ctb"),
     person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"),
     person("Florian", "Pfisterer", email = "pfistererf@googlemail.com", role = "ctb"))
-URL: https://github.com/mlr-org/mlr3pipelines
+URL: https://mlr3pipelines.mlr-org.com
 BugReports: https://github.com/mlr-org/mlr3pipelines/issues
-License: MIT + file LICENSE
+License: LGPL-3
 Depends:
-    R (>= 3.0.2)
+    R (>= 3.1.0)
 Imports:
     R6,
     backports,
@@ -35,7 +35,8 @@ Suggests:
     mlr3learners,
     mlr3featsel,
     mlr3tuning,
-    glmnet
+    glmnet,
+    visNetwork
 Encoding: UTF-8
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)

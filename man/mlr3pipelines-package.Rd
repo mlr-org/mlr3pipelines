@@ -4,16 +4,16 @@
 \name{mlr3pipelines-package}
 \alias{mlr3pipelines}
 \alias{mlr3pipelines-package}
-\title{mlr3pipelines: Preprocessing Operators and Pipelines for mlr3}
+\title{mlr3pipelines: Preprocessing Operators and Pipelines for 'mlr3'}
 \description{
 \if{html}{\figure{logo.png}{options: align='right'}}
 
-Pipelines for mlr3. Work in progress.
+Pipelines for mlr3.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/mlr-org/mlr3pipelines}
+  \item \url{https://mlr3pipelines.mlr-org.com}
   \item Report bugs at \url{https://github.com/mlr-org/mlr3pipelines/issues}
 }
 
