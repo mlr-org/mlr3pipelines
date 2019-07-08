@@ -246,6 +246,27 @@ more detailed explanation.
 g$plot(html = TRUE)
 ```
 
+
+### Feature Engineering
+
+New features can be added or computed from the task using `PipeOpMutate`.
+The operator evaluates one or multiple expressions provided in an `alist`.
+In this example, we compute some new features on top of the `iris` task and
+add the to the data.
+
+```r
+pom = PipeOpMutate$new()
+mutations = alist(
+  Sepal.Sum = Sepal.Length + Sepal.Width,
+  Petal.Sum = Petal.Length + Petal.Width,
+  Sepal.Petal.Ratio = (Sepal.Length / Petal.Length)
+)
+pom$param_set$values$mutation = mutations
+```
+
+If outside data is required, we can make use of the `env` parameter and additionally provide
+an environment, where the expressions should be evalutated (`env` defaults to `.GlobalEnv`).
+
 ## Ensembles
 
 Leveraging the different operations available to connect `PipeOps` to very powerfull graphs.

@@ -245,8 +245,8 @@ Graph = R6Class("Graph",
       ig = igraph::add_vertices(ig, length(extra_vertices), name = extra_vertices)
       layout = igraph::layout_with_sugiyama(ig)$layout
       if (!is.matrix(layout)) {
-        layout = t(layout)
-      } # bug in igraph, dimension is dropped
+        layout = t(layout) # bug in igraph, dimension is dropped
+      }
       if (html) {
         require_namespaces("visNetwork")
         ig_data = visNetwork::toVisNetworkData(ig)
@@ -259,7 +259,6 @@ Graph = R6Class("Graph",
         # Basically gets the print() output of the PipeOp.
         ig_data$nodes$title = map_chr(ig_data$nodes$id, function(node) {
           null_str = function(x) {if (is.null(x)) x = "NULL"; return(x)}
-          # if(grepl("<OUTPUT>", node)) browser()
           if (node == "<INPUT>") {
             txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
           } else if (grepl("<OUTPUT>", node)) {
@@ -278,7 +277,8 @@ Graph = R6Class("Graph",
         # Visualize the nodes
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
 
-        if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) # Bug in visNetwork?
+        if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to))))
+         # Bug in visNetwork? See: https://github.com/datastorm-open/visNetwork/issues/327
           p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
         else p = visNetwork::visIgraphLayout(p, type = "full")
 

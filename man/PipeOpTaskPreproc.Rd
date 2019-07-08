@@ -26,16 +26,17 @@ a \code{character} as output, indicating what columns to choose.
 
 \itemize{
 \item \code{state$intasklayout}  :: \code{\link{data.table}} with columns \code{id}, \code{type} \cr
-Set during \code{$train()}: \code{$feature_types} of training \code{Task}, is used for verification
-during \code{$predict()} that columns have not changed.
+Set during \code{$train()}: \code{$feature_types} of training \code{Task}, is used to verify
+that columns have not changed during \code{$predict()}.
 \item \code{state$outtasklayout} :: \code{\link{data.table}} with columns \code{id}, \code{type} \cr
-Set during \code{$train()}: \code{$feature_types} of transformed \code{Task}, is used for verification
-during \code{$predict()} that the transformed \code{Task} is the same as during training.
+Set during \code{$train()}: \code{$feature_types} of transformed \code{Task}, is is used to verify
+that the transformed \code{Task} is the same during \code{$train()} and \code{$predict()}.
 \item \code{affect_columns} :: \code{NULL} | \code{function} \cr
-Can be used to subset the columns that the \code{PipeOp} operates on. If \code{$affect_columns} is \code{NULL},
-then all columns are given to the \code{$train} / \code{$predict} function. If this is a \code{function}, it
-should take one argument (the input \code{Task}) and return a \code{character} indicating the feature
-columns that should be operated on. \code{$affect_columns()} is then called during training and
+Can be used to subset the columns that the \code{PipeOp} operates on.
+If \code{$affect_columns} is \code{NULL},  then all columns are given to the \code{$train} / \code{$predict} function.
+If this is a \code{function}, it should take one argument (the input \code{Task}) and return a
+\code{character} indicating the feature columns that should be operated on.
+\code{$affect_columns()} is then called during training and
 only features named in its return value are seen by the training / prediction function. \cr
 This should not be changed if \code{can_subset_columns} is \code{FALSE}, and depends on the \code{PipeOpTaskPreproc} subclass.
 \item \code{state$affected_cols} :: \code{character} \cr
