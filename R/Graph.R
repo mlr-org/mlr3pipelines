@@ -50,7 +50,7 @@
 #'   Get IDs of all PipeOps. This is in order that PipeOps were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `add_pipeop(op)` \cr
-#'   ([`PipeOp`]) -> `self` \cr
+#'   ([`PipeOp` | `character(1)`]) -> `self` \cr
 #'   Mutates `Graph` by adding a `PipeOp` to the `Graph`. This does not add any edges, so the new `PipeOp`
 #'   will not be connected within the `Graph` at first.
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
@@ -137,11 +137,11 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      assert_r6(op, "PipeOp")
+      op = assert_pipeop(op, TRUE, TRUE)
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }
-      self$pipeops[[op$id]] = op$clone(deep = TRUE)
+      self$pipeops[[op$id]] = op
 
       if (!is.null(private$.param_set)) {
         # param_set is built on-demand; if it has not been requested before, its value may be NULL

@@ -63,7 +63,7 @@ Constructs an empty Graph.
 Get IDs of all PipeOps. This is in order that PipeOps were added if
 \code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
 \item \code{add_pipeop(op)} \cr
-(\code{\link{PipeOp}}) -> \code{self} \cr
+(\link[=`PipeOp` | `character(1)`]{PipeOp | character(1)}) -> \code{self} \cr
 Mutates \code{Graph} by adding a \code{PipeOp} to the \code{Graph}. This does not add any edges, so the new \code{PipeOp}
 will not be connected within the \code{Graph} at first.
 \item \code{add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)} \cr
