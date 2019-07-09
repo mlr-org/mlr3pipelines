@@ -13,10 +13,12 @@
 #'
 #' @section Methods:
 #' * `PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
-#'   (`numeric(1)`, `character(1)`, named `list`, `logical(1)`) -> `self` \cr
+#'   (`numeric(1)` | `character`, `character(1)`, named `list`, `logical(1)`) -> `self` \cr
 #'   Constructor. `innum` determines the number of input channels. If `assert_targets_equal` is `TRUE` (Default),
 #'   task target column names are checked for agreement. Disagreeing target column names are usually a
-#'   bug, so this should often be left at the default.
+#'   bug, so this should often be left at the default.\cr
+#'   `innum` may be a `character` vector instead of a `numeric(1)`. In that case, the number of input channels
+#'   is the length of `innum`, and the resulting columns are prefixed with the values.
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
@@ -24,8 +26,18 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
     assert_targets_equal = NULL,
+    inprefix = NULL,
     initialize = function(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
-      assert_int(innum, lower = 1)
+      assert(
+        check_int(innum, lower = 1),
+        check_character(innum, min.len = 1, any.missing = FALSE)
+      )
+      if (is.numeric(innum)) {
+        self$inprefix = rep("", innum)
+      } else {
+        self$inprefix = innum
+        innum = length(innum)
+      }
       assert_flag(assert_targets_equal)
       self$assert_targets_equal = assert_targets_equal
       super$initialize(id, param_vals = param_vals,
@@ -36,20 +48,26 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 
     train = function(inputs) {
       self$state = list()
-      list(cbind_tasks(inputs, self$assert_targets_equal))
+      list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     },
 
     predict = function(inputs) {
-      list(cbind_tasks(inputs, self$assert_targets_equal))
+      list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     }
   )
 )
 
 register_pipeop("featureunion", PipeOpFeatureUnion, list("N"))
 
-cbind_tasks = function(inputs, assert_targets_equal) {
+cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   task = inputs[[1L]]
   ids = task$row_ids
+
+  if (inprefix[1] != "") {
+    stop("Renaming first task's column not supported yet")  # TODO / FIXME this needs https://github.com/mlr-org/mlr3/issues/268
+  }
+
+  names(inputs) = inprefix
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
@@ -57,6 +75,7 @@ cbind_tasks = function(inputs, assert_targets_equal) {
     stopf("All tasks must have the same target columns")
   }
 
-  new_cols = Reduce(function(x, y) rcbind(x, y$data(ids, y$feature_names)), tail(inputs, -1L), init = data.table())
+  new_cols = do.call(cbind, lapply(tail(inputs, -1), function(y) y$data(ids, y$feature_names)))
+
   task$clone(deep = TRUE)$cbind(new_cols)
 }

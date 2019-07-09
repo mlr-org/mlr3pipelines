@@ -19,7 +19,7 @@ test_that("PipeOpFeatureUnion - train and predict", {
   t1 = tsk$clone()$set_col_role(c("Sepal.Length", "Sepal.Width"), character())
   t2 = tsk$clone()$set_col_role(c("Petal.Length", "Petal.Width"), character())
 
-  expect_task(cbind_tasks(inputs = list(t1, t2), TRUE))
+  expect_task(cbind_tasks(inputs = list(t1, t2), TRUE, c("", "")))
 
   po = PipeOpFeatureUnion$new(2)
 
@@ -96,3 +96,59 @@ test_that("Test wrong inputs", {
 ##
 ##
 ## })
+
+test_that("feature renaming", {
+
+  expect_pipeop_class(PipeOpFeatureUnion, list(letters[1:3]))
+
+  expect_equal(nrow(PipeOpFeatureUnion$new(c("a", "b", "c"))$input), 3)
+  expect_equal(nrow(PipeOpFeatureUnion$new("a")$input), 1)
+
+  po = PipeOpFeatureUnion$new(c("", "a", "b"))
+
+  task = mlr_tasks$get("iris")
+
+  expect_equal(po$train(list(task, task, task))[[1]]$feature_names,
+    c(task$feature_names, paste0("a.", task$feature_names), paste0("b.", task$feature_names)))
+
+  po = PipeOpFeatureUnion$new(c("", "a", "a"))
+
+  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
+    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
+
+  # Define PipeOp's
+  scatter = PipeOpCopy$new(2)
+  op2a = PipeOpPCA$new()
+  op2b = PipeOpNULL$new()
+  op3 = PipeOpFeatureUnion$new(c("", "XX"))
+
+  task = mlr_tasks$get("iris")
+  lrn = mlr_learners$get("classif.rpart")
+  op4 = PipeOpLearner$new(learner = lrn)
+
+  #  FIXME: Check param_set
+  param_names_union = c(
+    "OpNULL.Petal.Width", "OpNULL.Petal.Length",
+    "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2",
+    "OpNULL.Sepal.Width", "pca.PC3")
+
+  graph = scatter %>>% gunion(list(op2a, op2b))
+  graph = graph %>>% op3
+  expect_false(graph$is_trained)
+  expect_graph(graph)
+  expect_true(length(graph$pipeops) == 4L)
+
+  result = graph$train(task)
+  expect_equal(names(result), "featureunion.output")
+  trained = result[[1]]
+  expect_set_equal(trained$feature_names, c("PC1", "PC2", "PC3", "PC4", "XX.Petal.Length",
+    "XX.Petal.Width", "XX.Sepal.Length", "XX.Sepal.Width"))
+  expect_true(graph$is_trained)
+
+  po = PipeOpFeatureUnion$new(c("z", "a", "a"))
+
+# FIXME: this needs https://github.com/mlr-org/mlr3/issues/268
+#  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
+#    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
+
+})
