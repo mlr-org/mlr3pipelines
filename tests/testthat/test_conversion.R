@@ -33,4 +33,7 @@ test_that("assertions work", {
   expect_error(assert_graph(Graph, coerce = TRUE))
   expect_class(assert_graph(PipeOpScale, coerce = TRUE), "Graph")
 
+  # proximity matching
+  expect_error("scule" %>>% "pca", "scale")
+
 })

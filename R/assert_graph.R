@@ -59,18 +59,12 @@ assert_graph = function(x, coerce = FALSE, deep_copy = FALSE) {
 #' @family Graph operators
 #' @export
 assert_pipeop = function(x, coerce = FALSE, deep_copy = FALSE) {
-  if (coerce && !inherits(x, "PipeOp")) {
+  if (!coerce) {
+    assert_r6(x, "PipeOp")
+  } else {
     if (inherits(x, "R6ClassGenerator")) {
       x = x$new()
-    } else if (is.character(x)) {
-      x = mlr_pipeops$get(x)
     }
-    # x was already copied if we went this route
-    deep_copy = FALSE
+    invisible(cast_from_dict(x, "PipeOp", mlr_pipeops, deep_copy, FALSE)[[1L]])
   }
-  assert_r6(x, "PipeOp")
-  if (deep_copy) {
-    x = x$clone(deep = TRUE)
-  }
-  invisible(x)
 }
