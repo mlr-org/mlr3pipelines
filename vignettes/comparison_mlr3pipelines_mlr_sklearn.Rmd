@@ -1,5 +1,5 @@
 ---
-title: "Comparing mlr3pipelines to mlr and Python"
+title: "Comparing mlr3pipelines to other frameworks"
 author: "Florian Pfisterer"
 output:
   rmarkdown::html_vignette:
