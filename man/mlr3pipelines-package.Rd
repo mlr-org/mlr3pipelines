@@ -8,12 +8,12 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right'}}
 
-Pipelines for mlr3. Work in progress.
+Pipelines for mlr3.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/mlr-org/mlr3pipelines}
+  \item \url{https://mlr3pipelines.mlr-org.com}
   \item Report bugs at \url{https://github.com/mlr-org/mlr3pipelines/issues}
 }
 
