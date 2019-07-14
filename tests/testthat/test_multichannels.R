@@ -32,7 +32,7 @@ test_that("multiple edges on output channel copies, as expected", {
 
   graph$add_edge("scale", "subsample")$add_edge("scale", "pca")
 
-  expect_list(graph$train(task), types = "Task", any.missing = FALSE, len = 2)
+  expect_list(graph$train(mlr_tasks$get("iris")), types = "Task", any.missing = FALSE, len = 2)
 
   nullgraph = mlr_pipeops$get("null", id = "null1") %>>%
     gunion(list(mlr_pipeops$get("null", id = "null2"), mlr_pipeops$get("null", id = "null3")))
