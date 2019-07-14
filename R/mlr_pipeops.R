@@ -103,3 +103,21 @@ publish_registered_pipeops = function() {
   rm("mlr_pipeop_register", envir = parent.env(environment()))
 }
 # nocov end
+
+
+#' @title Short Function to Construct a PipeOp
+#'
+#' @description
+#' This is a short form of `mlr_pipeops$get()`.
+#'
+#' @param key (`character(1)`)\cr
+#'   Key of `PipeOp` in `mlr_pipeops` dictionary to construct.
+#' @param ... (`any`)\cr
+#'   Further arguments of `PipeOp` constructor.
+#' @export
+po = function(key, ...) {
+  # we can't just do po = mlr_pipeops$get, because at time of
+  # building mlr_pipeops does not exist.
+  mlr_pipeops$get(key, ...)
+}
+

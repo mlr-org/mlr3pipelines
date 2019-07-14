@@ -62,8 +62,22 @@ assert_pipeop = function(x, coerce = FALSE, deep_copy = FALSE) {
   if (!coerce) {
     assert_r6(x, "PipeOp")
   } else {
+    if (is.character(x) && length(x) == 1) {
+      if (x %nin% c(mlr_pipeops$keys(), mlr_learners$keys())) {
+        stopf("'%s' is neither in mlr_pipeops nor in mlr_learners.%s%s",
+          x, did_you_mean(x, mlr_pipeops$keys()), did_you_mean(x, mlr_learners$keys()))
+      }
+      if (x %in% mlr_pipeops$keys()) {
+        x = mlr_pipeops$get(x)
+      } else {
+        x = mlr_learners$get(x)
+      }
+    }
     if (inherits(x, "R6ClassGenerator")) {
       x = x$new()
+    }
+    if (inherits(x, "Learner")) {
+      x = PipeOpLearner$new(x)
     }
     invisible(cast_from_dict(x, "PipeOp", mlr_pipeops, deep_copy, FALSE)[[1L]])
   }
