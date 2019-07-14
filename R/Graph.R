@@ -166,7 +166,7 @@ Graph = R6Class("Graph",
       }
       if (is.null(dst_channel)) {
         if (length(self$pipeops[[dst_id]]$input$name) > 1) {
-          stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
+          stopf("dst_channel must not be NULL if src_id pipeop has more than one input channel.")
         }
         dst_channel = 1L
       }
