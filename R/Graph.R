@@ -199,12 +199,11 @@ Graph = R6Class("Graph",
           src_id, types_src$predict, dst_id, types_dst$predict)
       }
 
-      bad_rows = (self$edges$src_id == src_id & self$edges$src_channel == src_channel) |
-        (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel)
+      bad_rows = (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel & self$edges$dst_channel != "...")
       if (any(bad_rows)) {
         prior_con = self$edges[bad_rows]
         stopf("Cannot add multiple edges to a channel.\n%s",
-          paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.",
+          paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.\nMultiple connections to input channels is only possible for vararg (i.e. '...') channels.",
             prior_con$src_channel, prior_con$src_id, prior_con$dst_channel, prior_con$dst_id), collapse = "\n"))
       }
       row = data.table(src_id, src_channel, dst_id, dst_channel)
@@ -496,11 +495,10 @@ graph_reduce = function(self, input, fun, single_input) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-    input_tbl = edges[get("dst_id") == id, c("dst_channel", "payload")]
+    input_tbl = edges[get("dst_id") == id, list(name = dst_channel, payload = payload)][op$input$name, , on = "name"]
     edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
-    names(input) = input_tbl$dst_channel
-    input = input[op$input$name]
+    names(input) = input_tbl$name
 
     output = op[[fun]](input)
     if (self$keep_results) {

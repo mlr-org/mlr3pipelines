@@ -4,7 +4,8 @@
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#'   Copies its input `outnum` times.
+#'   Copies its input `outnum` times. This should usually not be needed,
+#'   because copying happens automatically.
 #' @section Methods:
 #' * `PipeOpEnsemble$new(outnum, id)` \cr
 #'   (`numeric(1)`, `character(1)`) -> `self` \cr
