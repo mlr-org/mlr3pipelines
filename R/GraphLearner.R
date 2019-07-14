@@ -46,16 +46,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
-      prediction[[1]]$data[self$predict_type]
-    },
-    new_prediction = function(row_ids, truth, response, ...) {
-      cal = match.call()
-      if (is.numeric(response)) {
-        cal[[1]] = quote(LearnerRegr$public_methods$new_prediction)
-      } else {
-        cal[[1]] = quote(LearnerClassif$public_methods$new_prediction)
-      }
-      eval(cal, parent.frame())
+      prediction[[1]]
     }
   ),
   active = list(
