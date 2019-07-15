@@ -24,12 +24,13 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
     assert_targets_equal = NULL,
-    initialize = function(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
-      assert_int(innum, lower = 1)
+    initialize = function(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
+      assert_int(innum, lower = 0)
       assert_flag(assert_targets_equal)
       self$assert_targets_equal = assert_targets_equal
+      inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = rep_suffix("input", innum), train = "Task", predict = "Task"),
+        input = data.table(name = inname, train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
