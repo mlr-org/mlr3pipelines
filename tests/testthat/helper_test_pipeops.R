@@ -59,3 +59,26 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
         output = data.table(name = outputs, train = "*", predict = "*"))
     })
 )
+
+
+VarargPipeop = R6Class("VarargPipeop",
+  inherit = PipeOp,
+  public = list(
+    initialize = function(id = "vararg", innum = 0, param_vals = list()) {
+      super$initialize(id, param_vals = param_vals,
+        input = data.table(name = c("...", rep_suffix("input", innum)), train = "*", predict = "*"),
+        output = data.table(name = "output", train = "*", predict = "*")
+      )
+    },
+
+    train = function(inputs) {
+      self$state = inputs
+      list(inputs)
+    },
+
+    predict = function(inputs) {
+      self$state = inputs
+      list(inputs)
+    }
+  )
+)

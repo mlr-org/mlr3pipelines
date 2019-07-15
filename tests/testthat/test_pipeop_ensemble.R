@@ -5,12 +5,16 @@ test_that("PipeOpEnsemble - basic properties", {
   expect_pipeop(op)
   expect_pipeop_class(PipeOpEnsemble, list(3, "ensemble", param_vals = list()))
   expect_pipeop_class(PipeOpEnsemble, list(1, "ensemble", param_vals = list()))
-  expect_error(PipeOpEnsemble$new(0))
+  expect_pipeop_class(PipeOpEnsemble, list(0, "ensemble", param_vals = list()))
 
   truth = rnorm(70)
   prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))
   expect_list(train_pipeop(op, prds), len = 1)
   expect_error(predict_pipeop(op, prds))
+
+  op = PipeOpEnsemble$new(0, "ensemble", param_vals = list())
+  expect_pipeop(op)
+
 })
 
 test_that("PipeOpWeightedModelAvg - train and predict", {
@@ -29,6 +33,20 @@ test_that("PipeOpWeightedModelAvg - train and predict", {
   expect_list(train_pipeop(po, prds), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prds[[3]]))
+
+
+  po = PipeOpModelAvg$new()
+  expect_pipeop(po)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+
+  # Returns the same if weights are 1, rest 0
+  po = PipeOpModelAvg$new()
+  po$weights = c(0, 0, 1, 0)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_equal(out, list(prds[[3]]))
+
 })
 
 ## test_that("PipeOpNlOptModelAvg - response - train and predict", {
@@ -62,6 +80,21 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
   expect_equal(out[[1]]$data, prds[[4]]$data)
+
+
+  po = PipeOpMajorityVote$new()
+  expect_pipeop(po)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+
+  po = PipeOpMajorityVote$new()
+  po$weights = c(0, 0, 0, 1)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+  expect_equal(out[[1]]$data, prds[[4]]$data)
+
 })
 
 test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
@@ -83,6 +116,21 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
   expect_equivalent(out[[1]], prds[[4]])
+
+
+  po = PipeOpMajorityVote$new()
+  expect_pipeop(po)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+
+  po = PipeOpMajorityVote$new()
+  po$weights = c(0, 0, 0, 1)
+  expect_list(train_pipeop(po, prds), len = 1)
+  out = predict_pipeop(po, prds)
+  expect_class(out[[1]], "PredictionClassif")
+  expect_equivalent(out[[1]], prds[[4]])
+
 })
 
 ## test_that("PipeOpNlOptMajorityVote - response - train and predict", {

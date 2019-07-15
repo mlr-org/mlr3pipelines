@@ -36,8 +36,10 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  expect_error(g$add_edge("subsample", "classif.rpart"),
-    "Channel.*output.*of node.*subsample.*already connected to channel.*input.*of node pca")
+  g$add_edge("subsample", "classif.rpart")
+
+  expect_error(g$add_edge("pca", "classif.rpart"),
+    "Channel.*output.*of node.*subsample.*already connected to channel.*input.*of node classif.rpart")
 
   expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*rpart.*already in Graph")
 

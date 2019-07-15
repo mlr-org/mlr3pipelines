@@ -5,22 +5,25 @@
 #' @description
 #' Parent class for PipeOps that aggregate a list of predictions.
 #' @section Methods:
-#' * `PipeOpEnsemble$new(innum, id)` \cr
+#' * `PipeOpEnsemble$new(innum = 0, id)` \cr
 #'   (`numeric(1)`, `character(1)`) -> `self` \cr
 #'   Constructor. `innum` determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input
+#'   channel is created that can take an arbitrary number of inputs.
+#'
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
-      assert_integerish(innum, lower = 1)
-      param_set$add(ParamDbl$new("weight")$rep(innum))
-      weightids = param_set$ids(tags = "weight_rep")
-      param_set$values[weightids] = 1 / innum
+    initialize = function(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
+      assert_integerish(innum, lower = 0)
+      param_set$add(ParamUty$new("weights", custom_check = check_weights(innum)))
+      param_set$values$weights = 1
+      inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = prediction_type),
+        input = data.table(name = inname, train = "NULL", predict = prediction_type),
         output = data.table(name = "output", train = "NULL", predict = prediction_type))
     },
     train = function(inputs) {
@@ -31,15 +34,24 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   ),
   active = list(
     weights = function(val) {
-      weightids = self$param_set$ids(tags = "weight_rep")
       if (!missing(val)) {
-        assert_numeric(val, len = nrow(self$input), any.missing = FALSE)
-        self$param_set$values[weightids] = val
+        self$param_set$values$weights = val
       }
-      as.numeric(self$param_set$values[weightids])
+      self$param_set$values$weights
     }
   )
 )
+
+check_weights = function(innum) {
+  if (innum > 0) {
+    function(x) assert(
+      check_numeric(x, len = innum, any.missing = FALSE),
+      check_numeric(x, len = 1, any.missing = FALSE)
+    )
+  } else {
+    function(x) assert_numeric(x, min.len = 1, any.missing = FALSE)
+  }
+}
 
 #' @title PipeOpModelAvg
 #'
@@ -50,20 +62,20 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 #' Averages its input (a `list` of `PredictionRegr`).
 #' Only used for regression `Prediction`s.
 #' Weights can be set by the user, if none are provided, defaults to
-#' equal weights `rep(1/innum, innum)` for each prediction.
+#' equal weights for each prediction.
 #' Offers a `$weights` slot to set/get weights for each learner.
 #' Returns a single `PredictionRegr`.
 #' Defaults to equal weights for each model.
 #'
 #' @family PipeOps
 #' @examples
-#' op = PipeOpModelAvg$new(3)
+#' op = PipeOpModelAvg$new()
 #' @export
 PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "modelavg", param_vals = list(), ...) {
+    initialize = function(innum = 0, id = "modelavg", param_vals = list(), ...) {
       super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
     },
 
@@ -76,6 +88,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       row_ids = inputs[[1]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
       truth = inputs[[1]]$truth
+      if (length(weights) == 1) weights = rep(weights, length(inputs))
       weights = weights / sum(weights)
       responsematrix = simplify2array(map(inputs, "response"))
       response = c(responsematrix %*% weights)
@@ -93,7 +106,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   )
 )
 
-register_pipeop("modelavg", PipeOpModelAvg, list("N"))
+register_pipeop("modelavg", PipeOpModelAvg)
 
 
 #' @title PipeOpMajorityVote
@@ -109,7 +122,7 @@ register_pipeop("modelavg", PipeOpModelAvg, list("N"))
 #' or averages probabilities if `predict_type` is `"prob"`.
 #' Returns a single `PredictionClassif`.
 #' Weights can be set by the user, if none are provided, defaults to
-#' equal weights `rep(1/innum, innum)` for each prediction.
+#' equal weights for each prediction.
 #' Used for classification `Prediction`s.
 #' Defaults to equal weights for each model.
 #'
@@ -121,7 +134,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum, id = "majorityvote", param_vals = list(), ...) {
+    initialize = function(innum = 0, id = "majorityvote", param_vals = list(), ...) {
       super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionClassif", ...)
     },
 
@@ -134,7 +147,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       row_ids = inputs[[1]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
       truth = inputs[[1]]$truth
-
+      if (length(weights) == 1) weights = rep(weights, length(inputs))
       weights = weights / sum(weights)
 
       # Drop zero-weights for efficiency
@@ -185,5 +198,5 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-register_pipeop("majorityvote", PipeOpMajorityVote, list("N"))
+register_pipeop("majorityvote", PipeOpMajorityVote)
 
