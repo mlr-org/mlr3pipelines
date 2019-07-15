@@ -5,9 +5,12 @@
 #' @description
 #' Parent class for PipeOps that aggregate a list of predictions.
 #' @section Methods:
-#' * `PipeOpEnsemble$new(innum, id)` \cr
+#' * `PipeOpEnsemble$new(innum = 0, id)` \cr
 #'   (`numeric(1)`, `character(1)`) -> `self` \cr
 #'   Constructor. `innum` determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input
+#'   channel is created that can take an arbitrary number of inputs.
+#'
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
@@ -59,14 +62,14 @@ check_weights = function(innum) {
 #' Averages its input (a `list` of `PredictionRegr`).
 #' Only used for regression `Prediction`s.
 #' Weights can be set by the user, if none are provided, defaults to
-#' equal weights `rep(1/innum, innum)` for each prediction.
+#' equal weights for each prediction.
 #' Offers a `$weights` slot to set/get weights for each learner.
 #' Returns a single `PredictionRegr`.
 #' Defaults to equal weights for each model.
 #'
 #' @family PipeOps
 #' @examples
-#' op = PipeOpModelAvg$new(3)
+#' op = PipeOpModelAvg$new()
 #' @export
 PipeOpModelAvg = R6Class("PipeOpModelAvg",
   inherit = PipeOpEnsemble,
@@ -119,7 +122,7 @@ register_pipeop("modelavg", PipeOpModelAvg)
 #' or averages probabilities if `predict_type` is `"prob"`.
 #' Returns a single `PredictionClassif`.
 #' Weights can be set by the user, if none are provided, defaults to
-#' equal weights `rep(1/innum, innum)` for each prediction.
+#' equal weights for each prediction.
 #' Used for classification `Prediction`s.
 #' Defaults to equal weights for each model.
 #'

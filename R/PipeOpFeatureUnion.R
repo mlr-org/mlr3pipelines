@@ -12,9 +12,10 @@
 #'   disagree.
 #'
 #' @section Methods:
-#' * `PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
+#' * `PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
 #'   (`numeric(1)`, `character(1)`, named `list`, `logical(1)`) -> `self` \cr
-#'   Constructor. `innum` determines the number of input channels. If `assert_targets_equal` is `TRUE` (Default),
+#'   Constructor. `innum` determines the number of input channels. If `innum` is 0 (default), a vararg input
+#'   channel is created that can take an arbitrary number of inputs. If `assert_targets_equal` is `TRUE` (Default),
 #'   task target column names are checked for agreement. Disagreeing target column names are usually a
 #'   bug, so this should often be left at the default.
 #' @family PipeOps

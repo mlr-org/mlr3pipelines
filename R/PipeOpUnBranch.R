@@ -7,11 +7,12 @@
 #' Used to bring together different paths created by [`PipeOpBranch`].
 #'
 #' @section Methods:
-#' * `PipeOpUnbranch$new(options, id = "unbranch")` \cr
+#' * `PipeOpUnbranch$new(options = 0, id = "unbranch")` \cr
 #'   (`numeric(1)` | `character`, `character(1)`) -> `self` \cr
-#'   Constructor. If `options` is an integer number, it determines the number of
-#'   input channels that are created, named `input1`...`input<n>`. If `options` is a
-#'   `character`, it determines the names of channels directly.
+#'   Constructor. If `options` is 0, only one vararg input channel is created that can
+#'   be connected to an arbitrary number of branches. If `options` is a positive integer
+#'   number, it determines the number of input channels that are created, named
+#'   `input1`...`input<n>`. If `options` is a `character`, it determines the names of channels directly.
 #'
 #' @section Details:
 #' Creates a PipeOp with multiple input channels that can be used to
