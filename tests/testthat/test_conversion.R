@@ -65,6 +65,21 @@ test_that("assertions work", {
   # proximity matching
   expect_error("scule" %>>% "pca", "scale")
   expect_error("scale" %>>% "classif.rpurt", "classif.rpart")
+})
 
+
+test_that("auto-gunion", {
+
+  expect_equal(
+    list("pca", "scale") %>>% list("subsample", "null"),
+    gunion(list(mlr_pipeops$get("pca"), mlr_pipeops$get("scale"))) %>>%
+      gunion(list(mlr_pipeops$get("subsample"), mlr_pipeops$get("null")))
+  )
+
+  expect_equal(
+    list("pca", "scale") %>>% po("featureunion", 2),
+    gunion(list(mlr_pipeops$get("pca"), mlr_pipeops$get("scale"))) %>>%
+      PipeOpFeatureUnion$new(2)
+  )
 
 })

@@ -25,7 +25,11 @@ assert_graph = function(x, coerce = FALSE, deep_copy = FALSE) {
   assert_flag(deep_copy)
 
   if (coerce && !inherits(x, "Graph")) {
-    x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically
+    if (identical(class(x), "list")) {
+      x = gunion(x)
+    } else {
+      x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically
+    }
     # add_pipeop already copies, so no deep copy
     deep_copy = FALSE
   }
