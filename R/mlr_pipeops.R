@@ -55,7 +55,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
     } else {
       l1 = l2 = x$get(key)
     }
-    if (nrow(l1$input) == nrow(l2$input)) {
+    if (nrow(l1$input) == nrow(l2$input) && "..." %nin% l1$input$name) {
       innum = nrow(l1$input)
     } else {
       innum = NA

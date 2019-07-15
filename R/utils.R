@@ -1,6 +1,6 @@
 rep_suffix = function(x, n) {
   # priority here is "easy to enter by hand", not "can reasonably be sorted alphabetically" which NEVER happens
-  paste0(x, seq_len(n))
+  sprintf("%s%s", x, seq_len(n))
 }
 
 calculate_collimit = function(colwidths, outwidth) {

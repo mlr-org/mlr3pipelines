@@ -95,6 +95,28 @@ test_that("branching", {
   expect_equal(names(res), "unbranch.output")
 })
 
+test_that("branching with varargs", {
+  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new()
+  z = test_graph(g, n_nodes = 4L, n_edges = 4L)
+
+  expect_equal(z$g.trained$pipeops$classif.rpart$.result, list(NULL))
+  expect_equal(z$g.trained$pipeops$classif.featureless$.result, list(output = NO_OP))
+  expect_equal(z$g.trained$pipeops$unbranch$.result, list("..." = NULL))
+
+  expect_equal(z$g.predicted$pipeops$classif.rpart$.result[[1]], z$g.predicted$pipeops$unbranch$.result[[1]])
+  expect_equal(z$g.predicted$pipeops$classif.featureless$.result, list(output = NO_OP))
+
+  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new()
+  task = mlr_tasks$get("iris")
+  res = g$train(task)
+  expect_true(g$is_trained)
+  expect_equal(res, list(unbranch.output = NULL))
+  res = g$predict(task)
+  expect_list(res, types = "Prediction")
+  expect_equal(names(res), "unbranch.output")
+})
+
+
 
 test_that("task chunking", {
   g = PipeOpChunk$new(2L) %>>% greplicate(PipeOpLrnRP, 2L) %>>% PipeOpMajorityVote$new(2L)

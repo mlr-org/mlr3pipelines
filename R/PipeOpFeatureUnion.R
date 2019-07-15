@@ -12,9 +12,10 @@
 #'   disagree.
 #'
 #' @section Methods:
-#' * `PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
+#' * `PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
 #'   (`numeric(1)`, `character(1)`, named `list`, `logical(1)`) -> `self` \cr
-#'   Constructor. `innum` determines the number of input channels. If `assert_targets_equal` is `TRUE` (Default),
+#'   Constructor. `innum` determines the number of input channels. If `innum` is 0 (default), a vararg input
+#'   channel is created that can take an arbitrary number of inputs. If `assert_targets_equal` is `TRUE` (Default),
 #'   task target column names are checked for agreement. Disagreeing target column names are usually a
 #'   bug, so this should often be left at the default.
 #' @family PipeOps
@@ -24,12 +25,13 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
     assert_targets_equal = NULL,
-    initialize = function(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
-      assert_int(innum, lower = 1)
+    initialize = function(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
+      assert_int(innum, lower = 0)
       assert_flag(assert_targets_equal)
       self$assert_targets_equal = assert_targets_equal
+      inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = rep_suffix("input", innum), train = "Task", predict = "Task"),
+        input = data.table(name = inname, train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
@@ -45,7 +47,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
-register_pipeop("featureunion", PipeOpFeatureUnion, list("N"))
+register_pipeop("featureunion", PipeOpFeatureUnion)
 
 cbind_tasks = function(inputs, assert_targets_equal) {
   task = inputs[[1L]]
