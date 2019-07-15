@@ -9,7 +9,12 @@ test_that("featureunion - basic properties", {
 
   expect_pipeop_class(PipeOpFeatureUnion, list(1))
   expect_pipeop_class(PipeOpFeatureUnion, list(3))
-  expect_error(PipeOpFeatureUnion$new(0))
+
+  po = PipeOpFeatureUnion$new()
+  expect_pipeop(po)
+  expect_data_table(po$input, nrow = 1)
+  expect_data_table(po$output, nrow = 1)
+
 })
 
 
@@ -30,6 +35,17 @@ test_that("PipeOpFeatureUnion - train and predict", {
   pout = predict_pipeop(po, list(t1, t2))
   expect_equivalent(pout[[1]]$feature_names, tsk$feature_names)
   expect_equivalent(pout[[1]]$target_names, tsk$target_names)
+
+  po = PipeOpFeatureUnion$new()
+
+  tout = train_pipeop(po, list(t1, t2))
+  expect_equivalent(tout[[1]]$feature_names, tsk$feature_names)
+  expect_equivalent(tout[[1]]$target_names, tsk$target_names)
+
+  pout = predict_pipeop(po, list(t1, t2))
+  expect_equivalent(pout[[1]]$feature_names, tsk$feature_names)
+  expect_equivalent(pout[[1]]$target_names, tsk$target_names)
+
 })
 
 test_that("PipeOpFeatureUnion - train and predict II", {
@@ -39,6 +55,8 @@ test_that("PipeOpFeatureUnion - train and predict II", {
   op2a = PipeOpPCA$new()
   op2b = PipeOpNULL$new()
   op3 = PipeOpFeatureUnion$new(2)
+  opdot = PipeOpFeatureUnion$new()
+
 
   task = mlr_tasks$get("iris")
   lrn = mlr_learners$get("classif.rpart")
@@ -62,6 +80,20 @@ test_that("PipeOpFeatureUnion - train and predict II", {
   expect_set_equal(trained$feature_names, c("PC1", "PC2", "PC3", "PC4", "Petal.Length",
     "Petal.Width", "Sepal.Length", "Sepal.Width"))
   expect_true(graph$is_trained)
+
+  graph = scatter %>>% gunion(list(op2a, op2b))
+  graph = graph %>>% opdot
+  expect_false(graph$is_trained)
+  expect_graph(graph)
+  expect_true(length(graph$pipeops) == 4L)
+
+  result = graph$train(task)
+  expect_equal(names(result), "featureunion.output")
+  trained = result[[1]]
+  expect_set_equal(trained$feature_names, c("PC1", "PC2", "PC3", "PC4", "Petal.Length",
+    "Petal.Width", "Sepal.Length", "Sepal.Width"))
+  expect_true(graph$is_trained)
+
 })
 
 test_that("Test wrong inputs", {
