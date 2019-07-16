@@ -55,8 +55,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
       if (is.numeric(options)) {
         options = round(options)
         param = ParamInt$new("selection", lower = 1L, upper = options, default = 1L)
-        outnum = options
-        options = rep_suffix("output", outnum)
+        options = rep_suffix("output", options)
       } else {
         param = ParamFct$new("selection", levels = options, default = options[1L])
       }
@@ -85,3 +84,93 @@ PipeOpBranch = R6Class("PipeOpBranch",
 )
 
 register_pipeop("branch", PipeOpBranch, list("N"))
+
+#' @title Branch Between Alternative Paths
+#'
+#' @description
+#' Create a multiplexed graph.
+#'
+#' @param `...`:
+#'   Multiple graphs, possibly named. They all must have exactly
+#'   one output. If any of the arguments are named, then all must have
+#'   unique names.
+#' @param `.graphs` ([list of Graph]):
+#'   Named list of Graphs, additionally to the graphs given in `...`.
+#' @param `.prefix_branchops` (`[character(1)]`):
+#'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`] id. Their
+#'   resulting IDs will be `"[.prefix_branchops]branch"` and `"[.prefix_branchops]unbranch"`.
+#'   Default is `""`.
+#' @param `.prefix_names` (`[logical(1) | character(1)]`):
+#'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
+#'   avoid ID clashes in resulting graph. Default `FALSE`. If this is `TRUE`, the prefixes
+#'   are taken from the names of the input arguments if present or count up. If this is
+#'   a `character(1)`, it is a prefix that is added to the `PipeOp` IDs *additionally*
+#'   to the input argument list.
+#' @examples
+#' po_pca = PipeOpPCA$new()
+#' po_nop = PipeOpNULL$new()
+#'
+#' branch(pca = po_pca, nothing = po_nop)
+#' # gives the same as
+#' branches = c("pca", "nothing")
+#' PipeOpBranch$new(branches) %>>% gunion(po_pca, po_nop) %>>% PipeOpUnbranch$new(branches)
+#'
+#' branch(pca = po_pca, nothing = po_nop, .prefix_branchops = "br_", .prefix.paths = "xy_")
+#' #gives the same as
+#' PipeOpBranch$new(branches, id = "br_branch") %>>%
+#'   gunion(xy_pca = po_pca, xy_nothing = po_nop) %>>%
+#'   PipeOpUnbranch$new(branches, id = "br_unbranch")
+#'
+#' @export
+branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = FALSE) {
+  assert_list(.graphs, null.ok = TRUE)
+  assert_string(.prefix_branchops)
+  assert(check_flag(.prefix_paths), check_string(.prefix_paths))
+  graphs <- c(list(...), .graphs) ; rm(.graphs)
+  assert(
+    check_list(graphs, min.len = 1, any.missing = FALSE, names = "unique"),
+    check_list(graphs, min.len = 1, any.missing = FALSE, names = "unnamed")
+  )
+
+  graphs = lapply(graphs, assert_graph, coerce = TRUE)
+  imap(graphs, function(g, idx) {
+    if (nrow(g$output) != 1) {
+      stopf("Graph %s must have exactly one output channel", idx)
+    }
+  })
+
+  graphs_input = graphs
+
+  branches = if (is.null(names(graphs))) length(graphs) else names(graphs)
+  if (!isFALSE(.prefix_paths)) {
+    if (is.null(names(graphs))) {
+      names(graphs) = as.character(seq_along(graphs))
+    }
+    if (is.character(.prefix_paths)) {
+      names(graphs) = paste0(.prefix_paths, names(graphs))
+    }
+  } else {
+    names(graphs) = NULL
+  }
+  graph = gunion(list(graphs)) %>>%
+    PipeOpUnbranch$new(branches, id = paste0(.prefix_branchops, "unbranch"))
+
+  branch_id = paste0(.prefix_branchops, "branch")
+  graph$add_pipeop(PipeOpBranch$new(branches, id = branch_id))
+  imap(graphs_input, function(gr, i) {
+    gin = gr$input
+    if (!isFALSE(.prefix_paths) && nchar(i)) {
+      gin$op.id = sprintf("%s.%s", i, gin$op.id)
+    }
+    if (is.numeric(i)) {
+      branch_chan = branches[i]
+    } else {
+      branch_chan = i
+    }
+    pmap(list(
+        src_id = branch_id, dst_id = gin$op.id,
+        src_channel = branch_chan, dst_channel = gin$channel.name),
+      graph$add_edge)
+  })
+  graph
+}
