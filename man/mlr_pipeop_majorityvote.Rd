@@ -15,7 +15,7 @@ Either computes the mode, if \code{predict_type} is \code{"response"},
 or averages probabilities if \code{predict_type} is \code{"prob"}.
 Returns a single \code{PredictionClassif}.
 Weights can be set by the user, if none are provided, defaults to
-equal weights \code{rep(1/innum, innum)} for each prediction.
+equal weights for each prediction.
 Used for classification \code{Prediction}s.
 Defaults to equal weights for each model.
 }

@@ -4,14 +4,14 @@ test_that("PipeOpFilter", {
   task = mlr_tasks$get("boston_housing")
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3featsel::FilterVariance$new(), param_vals = list(filter.frac = 0.5, na.rm = TRUE)), task = task)
+    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5, na.rm = TRUE)), task = task)
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3featsel::FilterVariance$new(), param_vals = list(filter.frac = 0.5, na.rm = TRUE)), task = mlr_tasks$get("iris"))
+    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5, na.rm = TRUE)), task = mlr_tasks$get("iris"))
 
-  po = PipeOpFilter$new(mlr3featsel::FilterVariance$new())
+  po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
 
-  expect_equal(po$id, mlr3featsel::FilterVariance$new()$id)
+  expect_equal(po$id, mlr3filters::FilterVariance$new()$id)
 
   expect_error(po$train(list(task)), "Exactly one of 'nfeat', 'frac', 'cutoff' must be given.*none")
 

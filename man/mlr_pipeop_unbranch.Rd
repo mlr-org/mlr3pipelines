@@ -15,11 +15,12 @@ Used to bring together different paths created by \code{\link{PipeOpBranch}}.
 \section{Methods}{
 
 \itemize{
-\item \code{PipeOpUnbranch$new(options, id = "unbranch")} \cr
+\item \code{PipeOpUnbranch$new(options = 0, id = "unbranch")} \cr
 (\code{numeric(1)} | \code{character}, \code{character(1)}) -> \code{self} \cr
-Constructor. If \code{options} is an integer number, it determines the number of
-input channels that are created, named \code{input1}...\code{input<n>}. If \code{options} is a
-\code{character}, it determines the names of channels directly.
+Constructor. If \code{options} is 0, only one vararg input channel is created that can
+be connected to an arbitrary number of branches. If \code{options} is a positive integer
+number, it determines the number of input channels that are created, named
+\code{input1}...\code{input<n>}. If \code{options} is a \code{character}, it determines the names of channels directly.
 }
 }
 

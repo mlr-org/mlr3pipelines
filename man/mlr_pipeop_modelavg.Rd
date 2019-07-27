@@ -13,13 +13,13 @@ PipeOpModelAvg
 Averages its input (a \code{list} of \code{PredictionRegr}).
 Only used for regression \code{Prediction}s.
 Weights can be set by the user, if none are provided, defaults to
-equal weights \code{rep(1/innum, innum)} for each prediction.
+equal weights for each prediction.
 Offers a \code{$weights} slot to set/get weights for each learner.
 Returns a single \code{PredictionRegr}.
 Defaults to equal weights for each model.
 }
 \examples{
-op = PipeOpModelAvg$new(3)
+op = PipeOpModelAvg$new()
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

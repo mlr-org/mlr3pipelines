@@ -40,7 +40,7 @@ pca = mlr_pipeops$get("pca")
 Some pipeops require additional arguments for construction. Hyperparameters can also be set through the `param_vals` argument.
 ```{r}
 filter = mlr_pipeops$get("filter",
-  filter = mlr3featsel::FilterVariance$new(),
+  filter = mlr3filters::FilterVariance$new(),
   param_vals = list(filter.frac = 0.5))
 ```
 

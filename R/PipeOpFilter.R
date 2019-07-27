@@ -4,8 +4,8 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`].
 #'
 #' @description
-#' Feature filtering using a [`mlr3featsel::Filter`] object, see the
-#' [mlr3featsel][mlr3::mlr3-package] package.
+#' Feature filtering using a [`mlr3filters::Filter`] object, see the
+#' [mlr3filters][mlr3::mlr3-package] package.
 #'
 #' The `settings` of the filter are given as [`paradox::ParamUty`];
 #' when `Filter`s start supporting the `paradox` interface that could
@@ -19,7 +19,7 @@
 #'
 #' @section Methods:
 #' * `PipeOpFilter$new(filter, id = filter$id, param_vals = list())` \cr
-#'   ([`mlr3featsel::Filter`], `character(1)`, `list`) -> `self` \cr
+#'   ([`mlr3filters::Filter`], `character(1)`, `list`) -> `self` \cr
 #'   Constructor. `filter` gives the `Filter` to use.
 #' @section Parameter Set:
 #' * `settings` :: named `list` \cr
@@ -71,7 +71,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         self$filter$calculate(filtertask)
         scoretable = self$filter$scores[order(score, decreasing = TRUE), c("score", "feature")]
       } else {
-        scoretable = CJ(score = 0, feature = shuffle(filtertask$feature_names))  # workaround for mlr-org/mlr3featsel#39
+        scoretable = CJ(score = 0, feature = shuffle(filtertask$feature_names))  # workaround for mlr-org/mlr3filters#39
       }
       features = switch(filtercrit,
         cutoff = scoretable$feature[scoretable$score >= critvalue],

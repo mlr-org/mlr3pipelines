@@ -10,8 +10,8 @@
 PipeOpFilter
 }
 \description{
-Feature filtering using a \code{\link[mlr3featsel:Filter]{mlr3featsel::Filter}} object, see the
-\link[mlr3:mlr3-package]{mlr3featsel} package.
+Feature filtering using a \code{\link[mlr3filters:Filter]{mlr3filters::Filter}} object, see the
+\link[mlr3:mlr3-package]{mlr3filters} package.
 
 The \code{settings} of the filter are given as \code{\link[paradox:ParamUty]{paradox::ParamUty}};
 when \code{Filter}s start supporting the \code{paradox} interface that could
@@ -27,7 +27,7 @@ type that the \code{Filter} can work with.
 
 \itemize{
 \item \code{PipeOpFilter$new(filter, id = filter$id, param_vals = list())} \cr
-(\code{\link[mlr3featsel:Filter]{mlr3featsel::Filter}}, \code{character(1)}, \code{list}) -> \code{self} \cr
+(\code{\link[mlr3filters:Filter]{mlr3filters::Filter}}, \code{character(1)}, \code{list}) -> \code{self} \cr
 Constructor. \code{filter} gives the \code{Filter} to use.
 }
 }

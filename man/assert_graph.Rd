@@ -31,6 +31,7 @@ before returning.
 }
 \seealso{
 Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{greplicate}}, \code{\link{gunion}}
+  \code{\link{assert_pipeop}}, \code{\link{greplicate}},
+  \code{\link{gunion}}
 }
 \concept{Graph operators}

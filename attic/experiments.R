@@ -630,7 +630,7 @@ Graph
 
 
 
-graph = PipeOpScale$new() %>>% PipeOpFilter$new(mlr3featsel::FilterVariance$new(), param_vals = list(filter.frac = .5))
+graph = PipeOpScale$new() %>>% PipeOpFilter$new(mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = .5))
 
 graph$pipeops
 

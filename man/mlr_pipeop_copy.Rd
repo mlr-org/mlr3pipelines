@@ -10,7 +10,8 @@
 PipeOpCopy
 }
 \description{
-Copies its input \code{outnum} times.
+Copies its input \code{outnum} times. This should usually not be needed,
+because copying happens automatically.
 }
 \section{Methods}{
 

@@ -33,7 +33,7 @@ Suggests:
     testthat,
     ggplot2,
     mlr3learners,
-    mlr3featsel,
+    mlr3filters,
     mlr3tuning,
     glmnet,
     visNetwork
@@ -49,7 +49,7 @@ Remotes:
     mlr-org/mlr3,
     mlr-org/mlr3misc,
     mlr-org/paradox,
-    mlr-org/mlr3featsel,
+    mlr-org/mlr3filters,
     mlr-org/mlr3tuning,
     mlr-org/mlr3learners
 Collate:

@@ -14,9 +14,11 @@ Parent class for PipeOps that aggregate a list of predictions.
 \section{Methods}{
 
 \itemize{
-\item \code{PipeOpEnsemble$new(innum, id)} \cr
+\item \code{PipeOpEnsemble$new(innum = 0, id)} \cr
 (\code{numeric(1)}, \code{character(1)}) -> \code{self} \cr
 Constructor. \code{innum} determines the number of input channels.
+If \code{innum} is 0 (default), a vararg input
+channel is created that can take an arbitrary number of inputs.
 }
 }
 

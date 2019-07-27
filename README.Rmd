@@ -31,7 +31,7 @@ In principle, *mlr3pipelines* is about defining singular data and model manipula
 pca = mlr_pipeops$get("pca")
 
 filter = mlr_pipeops$get("filter",
-  filter = mlr3featsel::FilterVariance$new(),
+  filter = mlr3filters::FilterVariance$new(),
   param_vals = list(filter.frac = 0.5))
 
 learner_po =  mlr_pipeops$get("learner",

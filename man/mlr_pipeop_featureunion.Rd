@@ -20,9 +20,10 @@ disagree.
 \section{Methods}{
 
 \itemize{
-\item \code{PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)} \cr
+\item \code{PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)} \cr
 (\code{numeric(1)}, \code{character(1)}, named \code{list}, \code{logical(1)}) -> \code{self} \cr
-Constructor. \code{innum} determines the number of input channels. If \code{assert_targets_equal} is \code{TRUE} (Default),
+Constructor. \code{innum} determines the number of input channels. If \code{innum} is 0 (default), a vararg input
+channel is created that can take an arbitrary number of inputs. If \code{assert_targets_equal} is \code{TRUE} (Default),
 task target column names are checked for agreement. Disagreeing target column names are usually a
 bug, so this should often be left at the default.
 }
