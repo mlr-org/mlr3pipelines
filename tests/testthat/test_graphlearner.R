@@ -98,17 +98,17 @@ test_that("graphlearner parameters behave as they should", {
   expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
   dblrn = mlr_learners$get("classif.debug")
-  dblrn$param_set$values$message_train = TRUE
-  dblrn$param_set$values$message_predict = TRUE
-  dblrn$param_set$values$warning_train = TRUE
-  dblrn$param_set$values$warning_predict = TRUE
+  dblrn$param_set$values$message_train = 1
+  dblrn$param_set$values$message_predict = 1
+  dblrn$param_set$values$warning_train = 1
+  dblrn$param_set$values$warning_predict = 1
 
-  pol = PipeOpLearner$new(dblrn, param_vals = list(message_predict = FALSE, warning_train = FALSE, warning_predict = FALSE))
+  pol = PipeOpLearner$new(dblrn, param_vals = list(message_predict = 0, warning_train = 0, warning_predict = 0))
 
-  gl = GraphLearner$new(pol, param_vals = list(classif.debug.warning_train = TRUE, classif.debug.warning_predict = TRUE))
+  gl = GraphLearner$new(pol, param_vals = list(classif.debug.warning_train = 1, classif.debug.warning_predict = 1))
 
-  gl$param_set$values$classif.debug.warning_predict = FALSE
+  gl$param_set$values$classif.debug.warning_predict = 0
 
   expect_equal(gl$param_set$values,
-    list(classif.debug.message_train = TRUE, classif.debug.message_predict = FALSE, classif.debug.warning_train = TRUE, classif.debug.warning_predict = FALSE))
+    list(classif.debug.message_train = 1, classif.debug.message_predict = 0, classif.debug.warning_train = 1, classif.debug.warning_predict = 0))
 })
