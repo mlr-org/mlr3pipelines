@@ -11,11 +11,7 @@ PipeOpFilter
 }
 \description{
 Feature filtering using a \code{\link[mlr3filters:Filter]{mlr3filters::Filter}} object, see the
-\link[mlr3:mlr3-package]{mlr3filters} package.
-
-The \code{settings} of the filter are given as \code{\link[paradox:ParamUty]{paradox::ParamUty}};
-when \code{Filter}s start supporting the \code{paradox} interface that could
-be used instead.
+\link[mlr3filters:mlr3filters-package]{mlr3filters} package.
 
 If a \code{Filter} can only operate on a subset of columns based on column
 type, then only these features are considered. \code{nfeat} and \code{frac} will

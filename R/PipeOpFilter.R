@@ -5,11 +5,7 @@
 #'
 #' @description
 #' Feature filtering using a [`mlr3filters::Filter`] object, see the
-#' [mlr3filters][mlr3::mlr3-package] package.
-#'
-#' The `settings` of the filter are given as [`paradox::ParamUty`];
-#' when `Filter`s start supporting the `paradox` interface that could
-#' be used instead.
+#' [mlr3filters][mlr3filters::mlr3filters-package] package.
 #'
 #' If a `Filter` can only operate on a subset of columns based on column
 #' type, then only these features are considered. `nfeat` and `frac` will
@@ -44,11 +40,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
       self$filter$param_set$set_id = ""
-      private$.outer_param_set = ParamSet$new(list(
+      ps = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0),
         ParamDbl$new("frac", lower = 0, upper = 1),
         ParamDbl$new("cutoff")
       ))
+      private$.outer_param_set = ps$add(filter$param_set)
       private$.outer_param_set$set_id = "filter"
       super$initialize(id, self$param_set, param_vals = param_vals)
     },
@@ -65,23 +62,19 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
       filtertask = task$clone()
       filtertask$select(filtertask$feature_types[get("type") %in% self$filter$feature_types, get("id")])
-      maxfeat = length(filtertask$feature_names)
 
-      if (filtertask$nrow > 1 && length(filtertask$feature_names)) {
-        self$filter$calculate(filtertask)
-        scoretable = self$filter$scores[order(score, decreasing = TRUE), c("score", "feature")]
-      } else {
-        scoretable = CJ(score = 0, feature = shuffle(filtertask$feature_names))  # workaround for mlr-org/mlr3filters#39
-      }
+      self$filter$calculate(filtertask)
+      scores = self$filter$scores
+
       features = switch(filtercrit,
-        cutoff = scoretable$feature[scoretable$score >= critvalue],
-        nfeat = scoretable$feature[seq_len(min(maxfeat, critvalue))],
-        frac = scoretable$feature[seq_len(round(maxfeat * critvalue))],
+        cutoff = names(scores)[scores >= critvalue],
+        nfeat = head(names(scores), critvalue),
+        frac = names(scores)[seq_len(round(length(filtertask$feature_names) * critvalue))],
         stop("unknown filter criterion"))
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
 
-      list(scores = self$filter$scores, features = features) # we don't use 'scores', but maybe the user cares.
+      list(scores = scores, features = features) # we don't use 'scores', but maybe the user cares.
     },
 
     transform = function(task) {
