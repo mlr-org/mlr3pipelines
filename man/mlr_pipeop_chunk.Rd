@@ -35,7 +35,9 @@ Should the subsamples be stratified. Default \code{FALSE}.
 }
 
 \examples{
-op = PipeOpChunk$new(5)
+op = PipeOpChunk$new(3)
+task = mlr_tasks$get("wine")
+op$train(list(task = task))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

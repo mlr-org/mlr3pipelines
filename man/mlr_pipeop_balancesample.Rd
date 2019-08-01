@@ -10,8 +10,8 @@
 PipeOpBalanceSample
 }
 \description{
-Both undersamples (filters) a \code{\link{Task}} to keep only a fraction of the rows with majority class,
-as well as oversamples (repeats datapoints) minorit-class rows.
+Both undersamples (filters) a \code{\link{Task}} to keep only a fraction of the rows of the majority class,
+as well as oversamples (repeats datapoints) rows of the minority class.
 
 Possible parameters are \code{$ratio}, \code{$reference}, and \code{$adjust}.
 }
@@ -39,6 +39,17 @@ Default is \code{TRUE}.
 }
 }
 
+\examples{
+task = mlr_tasks$get("spam")
+op = mlr_pipeops$get("balancesample")
+
+# double the instances in the minority class (spam)
+op$param_set$values = list(ratio = 2, reference = "minor", adjust = "minor", shuffle = FALSE)
+new_task = op$train(list(task = task))[[1L]]
+
+table(task$truth())
+table(new_task$truth())
+}
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},

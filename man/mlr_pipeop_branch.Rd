@@ -26,7 +26,7 @@ The \code{$selection} parameter will then be a \code{\link{ParamFct}}.
 }
 }
 
-\section{Parameters}{
+\section{Parameter Set}{
 
 \itemize{
 \item \code{selection}: (\code{numeric(1)} | \code{character(1)}) \cr

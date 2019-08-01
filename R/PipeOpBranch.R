@@ -16,7 +16,7 @@
 #'   If `options` is a `character`, it determines the names of channels directly.
 #'   The `$selection` parameter will then be a [`ParamFct`].
 #'
-#' @section Parameters:
+#' @section Parameter Set:
 #' * `selection`: (`numeric(1)` | `character(1)`) \cr
 #'   Selection of branching path to take. Is a `ParamInt` if the `options` parameter
 #'   during construction was a `numeric(1)`, and ranges from 1 to `options`. Is a

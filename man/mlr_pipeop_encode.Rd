@@ -10,11 +10,11 @@
 PipeOpEncode
 }
 \description{
-Encodes \code{factor}, \code{character} and \code{ordered factor} columns.
+Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
 
 Possible encodings are \code{"one-hot"} encoding, as well as encoding according to \code{stats::contr.helmert()}, \code{stats::contr.poly()},
-\code{stats::contr.sum()} and \code{stats::contr.treatment()}. Newly created columns are named by factor levels in \code{"one-hot"} and
-\code{"treatment"} encoding, and numbered otherwise.
+\code{stats::contr.sum()} and \code{stats::contr.treatment()}.
+Newly created columns are named via pattern \code{[column-name].[x]} where \code{x} is the respective factor level for \code{"one-hot"} and \code{"treatment"} encoding, and an integer sequence otherwise.
 
 Use the \code{$affect_columns} functionality to only encode a subset of columns, or only encode columns of a certain type.
 }
@@ -22,12 +22,13 @@ Use the \code{$affect_columns} functionality to only encode a subset of columns,
 
 \itemize{
 \item \code{method}  :: \code{character(1)} \cr
-If set to \code{"one-hot"}, creates a new column for each factor level. If set to \code{"treatment"}, creates $n-1$ columns leaving
-out the first factor level of each factor variable (see \code{stats::contr.treatment()}). If set to \code{"helmert"}, creates
-columns according to Helmert contrasts (see \code{stats::contr.helmert()}). If set to \code{"poly"}, creates columns with
-contrasts based on orthogonal polynomials (see \code{stats::contr.poly()}). If set to \code{"sum"}, creates columns with contrasts
-summing to zero, (see \code{stats::contr.sum()}).
-`
+\itemize{
+\item \code{"one-hot"}: create a new column for each factor level.
+\item \code{"treatment"}: create $n-1$ columns leaving out the first factor level of each factor variable (see \code{stats::contr.treatment()}).
+\item \code{"helmert"}: create columns according to Helmert contrasts (see \code{stats::contr.helmert()}).
+\item \code{"poly"}: create columns with contrasts based on orthogonal polynomials (see \code{stats::contr.poly()}).
+\item \code{"sum"}: create columns with contrasts summing to zero, (see \code{stats::contr.sum()}).
+}
 }
 }
 

@@ -4,6 +4,7 @@
 #'
 #' @description
 #' Parent class for PipeOps that aggregate a list of predictions.
+#'
 #' @section Methods:
 #' * `PipeOpEnsemble$new(innum = 0, id)` \cr
 #'   (`numeric(1)`, `character(1)`) -> `self` \cr
@@ -154,12 +155,8 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       inputs = inputs[weights != 0]
       weights = weights[weights != 0]
 
-      has_probs = all(map_lgl(inputs, function(x) {
-        !is.null(x$prob)
-      }))
-      has_response = all(map_lgl(inputs, function(x) {
-        !is.null(x$response)
-      }))
+      has_probs = every(inputs, function(x) { !is.null(x$prob) })
+      has_response = every(inputs, function(x) { !is.null(x$response) })
       if (!(has_probs || has_response)) {
         stop("PipeOpMajorityVote input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
       }

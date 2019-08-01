@@ -110,11 +110,6 @@ Because `PipeOpFeatureUnion` effectively takes two input arguments here, we can 
 pofu$input
 ```
 
-Other `PipeOp`s may have channels that take different types during different phases. The `backuplearner` `PipeOp`, for example, takes a `NULL` and a `Task` during training, and a `Prediction` and a `Task` during prediction:
-```{r}
-mlr_pipeops$get("backuplearner")$input
-```
-
 ### Output Channels
 
 Unlike the typical notion of a function, `PipeOp`s can also have multiple **output channels**. `$train()` and `$predict()` always return a list, so certain `PipeOp`s may return lists with more than one element. Similar to input channels, the information about the number and type of outputs given by a `PipeOp` is available in the `$output` slot. The `chunk` PipeOp, for example, chunks a given `Task` into subsets and consequently returns multiple `Task` objects, both during training and prediction. The number of output channels must be given during construction through the `outnum` argument.
@@ -133,7 +128,7 @@ Most `PipeOp`s have only one input channel (so they take a list with a single el
 
 The default printer of a `PipeOp` gives information about channel names and types:
 ```{r}
-mlr_pipeops$get("backuplearner")
+# mlr_pipeops$get("backuplearner")
 ```
 
 ## `Graph`: Networks of `PipeOp`s
