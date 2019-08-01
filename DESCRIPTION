@@ -71,6 +71,8 @@ Collate:
     'PipeOpImpute.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
+    'PipeOpMajorityVote.R'
+    'PipeOpModelAvg.R'
     'PipeOpMutate.R'
     'PipeOpNULL.R'
     'PipeOpPCA.R'
