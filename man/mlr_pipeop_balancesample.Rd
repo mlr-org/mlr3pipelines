@@ -40,7 +40,7 @@ Default is \code{TRUE}.
 }
 
 \examples{
-task = mlr_tasks$get("spam")
+task = mlr3::mlr_tasks$get("spam")
 op = mlr_pipeops$get("balancesample")
 
 # double the instances in the minority class (spam)

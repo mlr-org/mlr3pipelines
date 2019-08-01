@@ -50,7 +50,7 @@
 #'   Get IDs of all PipeOps. This is in order that PipeOps were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `add_pipeop(op)` \cr
-#'   ([`PipeOp` | `character(1)`]) -> `self` \cr
+#'   ([`PipeOp`] | `character(1)`) -> `self` \cr
 #'   Mutates `Graph` by adding a `PipeOp` to the `Graph`. This does not add any edges, so the new `PipeOp`
 #'   will not be connected within the `Graph` at first.
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr

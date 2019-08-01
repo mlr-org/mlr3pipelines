@@ -35,15 +35,15 @@
 #'
 #' Not to be confused with [`PipeOpCopy`], the naming scheme is a bit unfortunate.
 #'
+#' @family PipeOps
+#' @family Path Branching
+#' @include PipeOp.R
+#' @export
 #' @examples
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
-#' @family PipeOps
-#' @family Path Branching
-#' @include PipeOp.R
-#' @export
 PipeOpBranch = R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(

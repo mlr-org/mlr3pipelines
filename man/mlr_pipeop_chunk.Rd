@@ -29,14 +29,12 @@ channels / chunks that are created.
 \itemize{
 \item \code{shuffle} :: \code{logical(1)} \cr
 Should the data be shuffled before chunking? Default \code{TRUE}
-\item \code{stratify} :: \code{logical(1)} \cr
-Should the subsamples be stratified. Default \code{FALSE}.
 }
 }
 
 \examples{
+task = mlr3::mlr_tasks$get("wine")
 op = PipeOpChunk$new(3)
-task = mlr_tasks$get("wine")
 op$train(list(task = task))
 }
 \seealso{
