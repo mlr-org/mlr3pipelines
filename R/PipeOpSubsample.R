@@ -4,14 +4,16 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
-#' Subsamples a [`Task`] to use a fraction of the rows. `frac`
-#' can be > 1 if `replace` is `TRUE`.
+#' Subsamples a [`Task`] to use a fraction of the rows.
+#' `frac` can be > 1 if `replace` is `TRUE`.
 #'
 #' @section Parameter Set:
 #' * `frac` :: `numeric(1)` \cr
 #'   Fraction of rows in the task to keep. Default 1.
+#'
 #' * `stratify` :: `logical(1)` \cr
 #'   Should the subsamples be stratified by target? Default `FALSE`.
+#'
 #' * `replace` :: `logical(1)` \cr
 #'   Sample with replacement? Default is `FALSE`.
 #'

@@ -397,10 +397,8 @@ make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "r
     prob = matrix(runif(n * nclasses), ncol = nclasses, nrow = n)
     prob = t(apply(prob, 1, function(x) x / sum(x)))
     colnames(prob) = unique(truth)
-    max.prob = max.col(prob, ties.method = "first")
-
-  }
-  if ("response" %in% predict_types) {
+    response = colnames(prob)[max.col(prob, ties.method = "first")]
+  } else if ("response" %in% predict_types) {
     response = sample(letters[seq_len(nclasses)], n, replace = TRUE)
   }
 

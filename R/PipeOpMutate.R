@@ -41,11 +41,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
       if (!self$param_set$values$delete_originals) {
         keep_feats = setdiff(task$feature_names, colnames(newdata))
       }
-      task = task$select(keep_feats)
-      if (ncol(newdata)) {
-        task$cbind(newdata)
-      }
-      task
+      task$select(keep_feats)$cbind(newdata)
     }
   )
 )

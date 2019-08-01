@@ -226,7 +226,7 @@ check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   if (direction == "input" && "..." %in% typetable$name) {
     assert_list(data, min.len = nrow(typetable) - 1)
-    typetable = typetable[rep(1:.N, ifelse(name == "...", length(data) - nrow(typetable) + 1, 1))]
+    typetable = typetable[rep(1:.N, ifelse(get("name") == "...", length(data) - nrow(typetable) + 1, 1))]
   } else {
     assert_list(data, len = nrow(typetable))
   }

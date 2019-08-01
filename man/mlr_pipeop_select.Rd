@@ -10,17 +10,17 @@
 PipeOpSelect
 }
 \description{
-Removes features from \code{Task} depending on a selector function. If \code{invert}
-is \code{FALSE} (default) then \code{selector} gives the features to keep, otherwise it gives
-the features to drop. See \code{\link{Selector}} for selectors that are provided.
+Removes features from \code{Task} depending on a selector function.
+If \code{invert} is \code{FALSE} (default) then \code{selector} gives the features to keep, otherwise it gives the features to drop.
+See \code{\link{Selector}} for selectors that are provided.
 }
 \section{Parameter Set}{
 
 \itemize{
 \item \code{selector} :: \code{function} \cr
 Selector function, takes a \code{Task} as argument and returns a \code{character}
-of features to keep. See \code{\link{Selector}} for example functions. Defaults to
-\code{selector_all()}.
+of features to keep.
+See \code{\link{Selector}} for example functions. Defaults to \code{selector_all()}.
 \item \code{invert}    :: \code{logical(1)} \cr
 Invert selection. If this is \code{TRUE}, the features selected by
 \code{selector} are \emph{removed} while the ones not selected remain.

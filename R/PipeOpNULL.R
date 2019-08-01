@@ -4,9 +4,8 @@
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Simply pushes the input forward unchanged.
-#' Can be usefull to keep the original task in conjunction with
-#' `gunion()`.
+#' Simply pushes the input forward.
+#' Can be useful during graph construction to keep the original task in conjunction with `gunion()`.
 #'
 #' @family PipeOps
 #' @include PipeOp.R

@@ -11,8 +11,7 @@ PipeOpPCA
 }
 \description{
 Extracts principle components from data.
-
-See \link[stats:prcomp]{stats::prcomp} for details  and parameters.
+See \code{\link[stats:prcomp]{stats::prcomp()}} for details  and parameters.
 }
 \examples{
 # Instantiate PipeOpPCA

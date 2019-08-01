@@ -11,12 +11,19 @@ PipeOpImpute
 }
 \description{
 Impute missing values with varying methods.
+\itemize{
+\item \code{numeric} or \code{integer} features are imputed by \code{method_num}.
+\item \code{factor}, \code{ordered}, and \code{character} features are imported by \code{method_fct}.
+\item \code{logical} features are always imputed by sampling from the training column.
+}
+}
+\examples{
+task = mlr3::mlr_tasks$get("pima")
+sum(complete.cases(task$data()))
 
-\code{numeric} or \code{integer} features are imputed by \code{method_num}.
-
-\code{factor}, \code{ordered}, and \code{character} features are imported by \code{method_fct}.
-
-\code{logical} features are always imputed by sampling from the training column.
+po = mlr_pipeops$get("impute")
+new_task = po$train(list(task = task))[[1]]
+sum(complete.cases(new_task$data()))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

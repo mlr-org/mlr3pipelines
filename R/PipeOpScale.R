@@ -7,7 +7,7 @@
 #' Scales the data to mean = 0 (if `$center` parameter is `TRUE`) and standard deviation 1
 #' (if `$scale` parameter is `TRUE`).
 #'
-#' See [base::scale] for details and parameters.
+#' See [base::scale()] for details and parameters.
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R

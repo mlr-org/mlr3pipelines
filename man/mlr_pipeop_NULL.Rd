@@ -10,9 +10,8 @@
 PipeOpNULL
 }
 \description{
-Simply pushes the input forward unchanged.
-Can be usefull to keep the original task in conjunction with
-\code{gunion()}.
+Simply pushes the input forward.
+Can be useful during graph construction to keep the original task in conjunction with \code{gunion()}.
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

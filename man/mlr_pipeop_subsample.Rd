@@ -10,8 +10,8 @@
 PipeOpSubsample
 }
 \description{
-Subsamples a \code{\link{Task}} to use a fraction of the rows. \code{frac}
-can be > 1 if \code{replace} is \code{TRUE}.
+Subsamples a \code{\link{Task}} to use a fraction of the rows.
+\code{frac} can be > 1 if \code{replace} is \code{TRUE}.
 }
 \section{Parameter Set}{
 

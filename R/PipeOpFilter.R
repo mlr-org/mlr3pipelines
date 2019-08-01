@@ -5,33 +5,50 @@
 #'
 #' @description
 #' Feature filtering using a [`mlr3filters::Filter`] object, see the
-#' [mlr3filters][mlr3filters::mlr3filters-package] package.
+#' \CRANpkg{mlr3filters} package.
 #'
-#' If a `Filter` can only operate on a subset of columns based on column
-#' type, then only these features are considered. `nfeat` and `frac` will
-#' count for the features of the type that the `Filter` can operate on;
-#' this means e.g. that setting `nfeat` to 0 will only remove features of the
-#' type that the `Filter` can work with.
+#' If a `Filter` can only operate on a subset of columns based on column type, then only these features are considered.
+#' `nfeat` and `frac` will count for the features of the type that the `Filter` can operate on;
+#' this means e.g. that setting `nfeat` to 0 will only remove features of the type that the `Filter` can work with.
 #'
 #' @section Methods:
 #' * `PipeOpFilter$new(filter, id = filter$id, param_vals = list())` \cr
 #'   ([`mlr3filters::Filter`], `character(1)`, `list`) -> `self` \cr
 #'   Constructor. `filter` gives the `Filter` to use.
+#'
 #' @section Parameter Set:
-#' * `settings` :: named `list` \cr
-#'   List of settings to be given to the `Filter`. Default `list()`.
+#' * `settings` :: named `list()` \cr
+#'   List of settings to be given to the `Filter`.
+#'
 #' * `nfeat`    :: `numeric(1)` \cr
-#'   Number of features to select. If this is set, `frac` and cutoff`
-#'   must not be set.
+#'   Number of features to select.
+#'   Mutually exclusive with `frac` and `cutoff`.
+#'
 #' * `frac`     :: `numeric(1)` \cr
-#'   Fraction of features to keep. If this is set, `nfeat` and `cutoff`
-#'   must not be set.
+#'   Fraction of features to keep.
+#'   Mutually exclusive with `nfeat` and `cutoff`.
+#'
 #' * `cutoff`   :: `numeric(1)` \cr
-#'   Minimum value of filter heuristic for which to keep features. If
-#'   this is set, `nfeat` and `frac` must not be set.
+#'   Minimum value of filter heuristic for which to keep features.
+#'   Mutually exclusive with `nfeat` and `frac`.
+#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
+#' @examples
+#' # setup PipeOpFilter to keep the 5 most important
+#' # features of the spam task w.r.t. their AUC
+#' filter = mlr3filters::mlr_filters$get("auc")
+#' po = mlr_pipeops$get("filter", filter = filter)
+#' po$param_set
+#' po$param_set$values = list(filter.nfeat = 5)
+#'
+#' # filter the task
+#' filtered_task = po$train(list(task = "spam"))[[1]]
+#'
+#' # filtered task + extracted AUC scores
+#' filtered_task$feature_names
+#' head(po$filter$scores, 10)
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -71,10 +88,11 @@ PipeOpFilter = R6Class("PipeOpFilter",
         nfeat = head(names(scores), critvalue),
         frac = names(scores)[seq_len(round(length(filtertask$feature_names) * critvalue))],
         stop("unknown filter criterion"))
+
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
 
-      list(scores = scores, features = features) # we don't use 'scores', but maybe the user cares.
+      list(features = features)
     },
 
     transform = function(task) {
