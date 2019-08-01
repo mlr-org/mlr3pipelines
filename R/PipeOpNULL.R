@@ -32,4 +32,4 @@ PipeOpNULL = R6Class("PipeOpNULL",
   )
 )
 
-register_pipeop("null", PipeOpNULL)
+mlr_pipeops$add("null", PipeOpNULL)

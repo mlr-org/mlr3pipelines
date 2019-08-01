@@ -107,7 +107,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
   )
 )
 
-register_pipeop("modelavg", PipeOpModelAvg)
+mlr_pipeops$add("modelavg", PipeOpModelAvg)
 
 
 #' @title PipeOpMajorityVote
@@ -195,5 +195,5 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-register_pipeop("majorityvote", PipeOpMajorityVote)
+mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
 

@@ -111,4 +111,4 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
   )
 )
 
-register_pipeop("balancesample", PipeOpBalanceSample)
+mlr_pipeops$add("balancesample", PipeOpBalanceSample)

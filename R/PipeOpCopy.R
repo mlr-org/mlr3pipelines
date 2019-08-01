@@ -36,4 +36,4 @@ PipeOpCopy = R6Class("PipeOpCopy",
   )
 )
 
-register_pipeop("copy", PipeOpCopy, list("N"))
+mlr_pipeops$add("copy", PipeOpCopy, list("N"))

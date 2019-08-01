@@ -45,4 +45,4 @@ PipeOpScale = R6Class("PipeOpScale",
   )
 )
 
-register_pipeop("scale", PipeOpScale)
+mlr_pipeops$add("scale", PipeOpScale)

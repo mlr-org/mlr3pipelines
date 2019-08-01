@@ -59,4 +59,4 @@ PipeOpChunk = R6Class("PipeOpChunk",
   )
 )
 
-register_pipeop("chunk", PipeOpChunk, list("N"))
+mlr_pipeops$add("chunk", PipeOpChunk, list("N"))

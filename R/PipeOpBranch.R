@@ -84,4 +84,4 @@ PipeOpBranch = R6Class("PipeOpBranch",
   )
 )
 
-register_pipeop("branch", PipeOpBranch, list("N"))
+mlr_pipeops$add("branch", PipeOpBranch, list("N"))

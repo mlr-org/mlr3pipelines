@@ -65,4 +65,4 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
   )
 )
 
-register_pipeop("subsample", PipeOpSubsample)
+mlr_pipeops$add("subsample", PipeOpSubsample)

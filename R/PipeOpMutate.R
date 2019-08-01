@@ -50,4 +50,4 @@ PipeOpMutate = R6Class("PipeOpMutate",
   )
 )
 
-register_pipeop("mutate", PipeOpMutate)
+mlr_pipeops$add("mutate", PipeOpMutate)

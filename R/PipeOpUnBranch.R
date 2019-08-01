@@ -61,4 +61,4 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
   )
 )
 
-register_pipeop("unbranch", PipeOpUnbranch)
+mlr_pipeops$add("unbranch", PipeOpUnbranch)

@@ -47,4 +47,4 @@ PipeOpSelect = R6Class("PipeOpSelect",
   )
 )
 
-register_pipeop("select", PipeOpSelect)
+mlr_pipeops$add("select", PipeOpSelect)

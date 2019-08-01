@@ -73,4 +73,4 @@ PipeOpEncode = R6Class("PipeOpEncode",
   )
 )
 
-register_pipeop("encode", PipeOpEncode)
+mlr_pipeops$add("encode", PipeOpEncode)
