@@ -104,7 +104,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
 
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
@@ -130,7 +130,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       list(intask)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
 
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)

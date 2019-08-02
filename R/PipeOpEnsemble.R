@@ -27,11 +27,11 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
         input = data.table(name = inname, train = "NULL", predict = prediction_type),
         output = data.table(name = "output", train = "NULL", predict = prediction_type))
     },
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       list(NULL)
     },
-    predict = function(inputs) stop("abstract")
+    predict_internal = function(inputs) stop("abstract")
   ),
   active = list(
     weights = function(val) {

@@ -36,14 +36,14 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
       private$.param_set = NULL
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       task = inputs[[2]]
       self$state = self$learner$train(task)
 
       list(NULL)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       prediction = inputs[[1]]
 
       badrows = is.na(prediction$data$response)
