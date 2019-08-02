@@ -60,6 +60,8 @@ Collate:
     'utils.R'
     'PipeOp.R'
     'PipeOpTaskPreproc.R'
+    'PipeOpApply.R'
+    'PipeOpBackupLearner.R'
     'PipeOpBalanceSample.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
