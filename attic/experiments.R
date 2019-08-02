@@ -26,6 +26,8 @@ testthat::test_package("mlr3pipelines", filter = "typecheck")
 
 testthat::test_package("mlr3pipelines", filter = "dictionary")
 
+testthat::test_package("mlr3pipelines", filter = "weightedaverage")
+
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
 

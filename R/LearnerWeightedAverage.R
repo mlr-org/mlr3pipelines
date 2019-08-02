@@ -47,8 +47,6 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
         id = id,
         param_set = ParamSet$new(
           params = list(
-            ParamFct$new(id = "weights.method", default = "manual", levels = c("manual", "nloptr"), tags = "train"),
-            ParamUty$new(id = "weights", default = 1L, tags = "train"),
             ParamUty$new(id = "measure", default = "classif.acc", tags = "train"),
             ParamFct$new(id = "algorithm", default = "NLOPT_LN_COBYLA", tags = "train",
               levels = c("NLOPT_GN_DIRECT", "NLOPT_GN_DIRECT_L", "NLOPT_GN_DIRECT_L_RAND",
@@ -60,7 +58,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
                          "NLOPT_LN_AUGLAG_EQ", "NLOPT_LN_BOBYQA", "NLOPT_GN_ISRES"))
           )
         ),
-        param_vals = list(weights.method = "manual", weights = 1L, measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA"),
+        param_vals = list(measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA"),
         predict_types = c("response", "prob"),
         feature_types = c("integer", "numeric", "factor"),
         properties = c("twoclass", "multiclass")
@@ -69,21 +67,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 
     train_internal = function(task) {
       pars = self$param_set$get_values(tags = "train")
-      if (pars$weights.method == "manual") {
-        assert_numeric(pars$weights, lower = 0L)
-        # For "prob" we blow up the weights vector.
-        if (unique(task$feature_types$type) == "numeric" & task$class_n > 2) {
-          weights = rep(weights, each = task$class_n)
-        }
-        if (length(pars$weights) == 1L) {
-          pars$weights = rep(pars$weights, length(task$feature_names))
-        }
-        assert_true(length(pars$weights) == length(task$feature_names))
-        assert_true(sum(pars$weights) > 0)
-        list("weights" = pars$weights)
-      } else {
-        list("weights" = private$optimize_objfun_nlopt(task, pars))
-      }
+      list("weights" = private$optimize_objfun_nlopt(task, pars))
     },
 
     predict_internal = function(task) {
@@ -216,8 +200,6 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
         id = id,
         param_set = ParamSet$new(
           params = list(
-            ParamFct$new(id = "weights.method", default = "manual", levels = c("manual", "nloptr"), tags = "train"),
-            ParamUty$new(id = "weights", default = 1L, tags = "train"),
             ParamLgl$new(id = "est.se", default = TRUE, tags = "train"),
             ParamUty$new(id = "measure", default = "classif.acc", tags = "train"),
             ParamFct$new(id = "algorithm", default = "NLOPT_LN_COBYLA", tags = "train",
@@ -230,7 +212,7 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
                          "NLOPT_LN_AUGLAG_EQ", "NLOPT_LN_BOBYQA", "NLOPT_GN_ISRES"))
           )
         ),
-        param_vals = list(weights.method = "nloptr", weights = 1L, measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA"),
+        param_vals = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA"),
         predict_types = c("response", "se"),
         feature_types = c("integer", "numeric")
       )
@@ -238,21 +220,7 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
 
     train_internal = function(task) {
       pars = self$param_set$get_values(tags = "train")
-      if (pars$weights.method == "manual") {
-        assert_numeric(pars$weights, lower = 0L)
-        # For "prob" we blow up the weights vector.
-        if (unique(task$feature_types$type) == "numeric" & task$class_n > 2) {
-          weights = rep(weights, each = task$class_n)
-        }
-        if (length(pars$weights) == 1L) {
-          pars$weights = rep(pars$weights, length(task$feature_names))
-        }
-        assert_true(length(pars$weights) == length(task$feature_names))
-        assert_true(sum(pars$weights) > 0)
-        list("weights" = pars$weights)
-      } else {
-        list("weights" = private$optimize_objfun_nlopt(task, pars))
-      }
+      list("weights" = private$optimize_objfun_nlopt(task, pars))
     },
 
     predict_internal = function(task) {
@@ -312,3 +280,82 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
   )
 )
 
+Ensemble = R6Class("Ensemble",
+  public = list(
+    initialize = function() {
+    },
+    weighted_avg_regression_from_predictions = function(inputs, weights) {
+      map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
+      row_ids = inputs[[1]]$row_ids
+      truth = inputs[[1]]$truth
+      weighted_avg_regression(row_ids, truth, inputs, weights)
+    },
+    weighted_avg_regression = function(row_ids, truth, inputs, weights) {
+      weights = weights / sum(weights)
+      responsematrix = simplify2array(map(inputs, "response"))
+      response = c(responsematrix %*% weights)
+      se = NULL
+      if (all(map_lgl(inputs, function(x) "se" %in% names(x$data)))) {
+        se = c(sqrt(
+          (
+            simplify2array(map(inputs, "se"))^2 +
+            (responsematrix - response)^2
+          ) %*% weights
+        ))
+      }
+      PredictionRegr$new(row_ids = row_ids, truth = truth, response = response, se = se)
+    },
+    weighted_avg_classification = function(inputs, weights) {
+      row_ids = inputs[[1]]$row_ids
+      map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
+      truth = inputs[[1]]$truth
+
+      weights = weights / sum(weights)
+
+      # Drop zero-weights for efficiency
+      inputs = inputs[weights != 0]
+      weights = weights[weights != 0]
+
+      has_probs = all(map_lgl(inputs, function(x) {
+        !is.null(x$prob)
+      }))
+      has_response = all(map_lgl(inputs, function(x) {
+        !is.null(x$response)
+      }))
+      if (!(has_probs || has_response)) {
+        stop("PipeOpMajorityVote input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
+      }
+      prob = response = NULL
+      if (has_probs) {
+        prob = private$weighted_prob_avg(inputs, weights)
+      }
+      if (has_response) {
+        response = private$weighted_majority_vote(inputs, weights)
+      }
+      PredictionClassif$new(row_ids = row_ids, truth = truth, response = response, prob = prob)
+    },
+    weighted_majority_vote = function(inputs, weights) {
+      alllevels = levels(inputs[[1]]$response)
+      map(inputs, function(x) assert_true(identical(sort(alllevels), sort(levels(x$response)))))
+
+      accmat = matrix(0, nrow = length(inputs[[1]]$response), ncol = length(alllevels))
+      for (idx in seq_along(inputs)) {
+        rdf = data.frame(x = factor(inputs[[idx]]$response, levels = alllevels))
+        curmat = model.matrix(~ 0 + x, rdf) * weights[idx]
+        accmat = accmat + curmat
+      }
+      factor(alllevels[max.col(accmat)], levels = alllevels)
+    },
+    weighted_prob_avg = function(inputs, weights) {
+      alllevels = colnames(inputs[[1]]$prob)
+      assert_character(alllevels, any.missing = FALSE)
+      map(inputs, function(x) assert_true(identical(sort(alllevels), sort(colnames(x$prob)))))
+
+      accmat = inputs[[1]]$prob * weights[1]
+      for (idx in seq_along(inputs)[-1]) {
+        accmat = accmat + inputs[[idx]]$prob[, alllevels, drop = FALSE] * weights[idx]
+      }
+      accmat
+    }
+  }
+}
