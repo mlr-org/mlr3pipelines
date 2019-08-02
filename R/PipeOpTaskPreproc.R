@@ -106,7 +106,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     train = function(inputs) {
 
-      intask = assert_task(inputs[[1]], clone = TRUE)
+      intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
       affected_cols = intask$feature_names
       if (do_subset) {
@@ -131,7 +131,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     },
 
     predict = function(inputs) {
-      intask = assert_task(inputs[[1]], clone = TRUE)
+
+      intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
       if (do_subset) {
         # FIXME: see train fixme: this fails when something is both a feature and something else

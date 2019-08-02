@@ -48,7 +48,7 @@
 #'
 #' # filtered task + extracted AUC scores
 #' filtered_task$feature_names
-#' head(po$filter$scores, 10)
+#' head(po$state$scores, 10)
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -92,7 +92,10 @@ PipeOpFilter = R6Class("PipeOpFilter",
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
 
-      list(features = features)
+      # we don't use 'scores', but maybe the user cares.
+      # In particular, the user can *not* rely on the self$filter object being set, because
+      # `$state` is the only place that the user may rely on being changed after `$traion()`.
+      list(scores = scores, features = features)
     },
 
     transform = function(task) {
