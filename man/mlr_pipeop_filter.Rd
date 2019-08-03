@@ -56,7 +56,7 @@ filtered_task = po$train(list(task = "spam"))[[1]]
 
 # filtered task + extracted AUC scores
 filtered_task$feature_names
-head(po$filter$scores, 10)
+head(po$state$scores, 10)
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

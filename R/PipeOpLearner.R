@@ -34,14 +34,14 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
     train_internal = function(inputs) {
       task = inputs[[1L]]
-      self$state = self$learner$train(task)$data
+      self$state = self$learner$train(task)$state
 
       list(NULL)
     },
 
     predict_internal = function(inputs) {
       task = inputs[[1]]
-      self$learner$data = self$state
+      self$learner$state = self$state
       list(self$learner$predict(task))
     }
   ),
