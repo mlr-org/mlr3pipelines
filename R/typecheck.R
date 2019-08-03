@@ -97,9 +97,7 @@ reset_class_hierarchy_cache = function() {
 }
 
 default_chc = list(
-  c("data.table", "data.frame"),
-  c("PredictionRegr", "Prediction"),
-  c("PredictionClassif", "Prediction")
+  c("data.table", "data.frame")
 )
 
 class_hierarchy_cache = new.env(parent = emptyenv())
