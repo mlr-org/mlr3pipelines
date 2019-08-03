@@ -20,12 +20,12 @@ PipeOpNULL = R6Class("PipeOpNULL",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       inputs
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       inputs
     }
   )

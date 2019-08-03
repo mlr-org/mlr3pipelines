@@ -26,7 +26,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionClassif", ...)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       list(weighted_avg_predictions(inputs, self$weights))
     }
   )

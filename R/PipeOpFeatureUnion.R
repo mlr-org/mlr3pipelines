@@ -47,12 +47,12 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     }
   )

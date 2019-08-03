@@ -1,11 +1,11 @@
 PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
   inherit = PipeOp,
   public = list(
-    train = function(inputs) {
+    train_internal = function(inputs) {
       catf("Training %s", self$id)
       self$state = inputs
     },
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       catf("Predicting %s", self$id)
       self$state = c(self$state, inputs)
     },
@@ -32,13 +32,13 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
   public = list(
     nin = NULL,
     nout = NULL,
-    train = function(inputs) {
+    train_internal = function(inputs) {
       catf("Training %s with input %s", self$id, deparse_list_safe(inputs))
       self$state = inputs
       iin = inputs[[1]]
       as.list(iin + seq_len(self$nout))
     },
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       catf("Predicting %s with input %s and state %s",
         self$id, deparse_list_safe(inputs), deparse_list_safe(self$state))
       iin = inputs[[1]]
@@ -71,12 +71,12 @@ VarargPipeop = R6Class("VarargPipeop",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = inputs
       list(inputs)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       self$state = inputs
       list(inputs)
     }
