@@ -123,17 +123,17 @@ ps = ParamSet$new(list(
 ))
 ```
 ```{r}
-library("mlr3tuning")
-fitness = PerformanceEvaluator$new(task, glrn, cv10, "classif.ce", ps)
-tuner = TunerRandomSearch$new(fitness, TerminatorEvaluations$new(10))
+# library("mlr3tuning")
+# fitness = PerformanceEvaluator$new(task, glrn, cv10, "classif.ce", ps)
+# tuner = TunerRandomSearch$new(fitness, TerminatorEvaluations$new(10))
 ```
 
 ```{r}
-tuner$tune()
+# tuner$tune()
 ```
 
 ```{r}
-tuner$tune_result()
+# tuner$tune_result()
 ```
 
 ## Non-Linear `Graph`s
