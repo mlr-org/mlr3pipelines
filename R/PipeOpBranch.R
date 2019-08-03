@@ -68,14 +68,14 @@ PipeOpBranch = R6Class("PipeOpBranch",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]
       ret
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]
