@@ -152,7 +152,7 @@ PipeOp = R6Class("PipeOp",
         return(named_list(self$output$name, NO_OP))
       }
       check_types(self, input, "input", "train")
-      output = self$train(input)
+      output = self$train_internal(input)
       check_types(self, output, "output", "train")
       output
     },
@@ -165,7 +165,7 @@ PipeOp = R6Class("PipeOp",
       }
 
       check_types(self, input, "input", "predict")
-      output = self$predict(input)
+      output = self$predict_internal(input)
       check_types(self, output, "output", "predict")
       output
     },

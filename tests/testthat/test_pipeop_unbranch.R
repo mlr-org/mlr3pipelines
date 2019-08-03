@@ -31,8 +31,8 @@ test_that("PipeOpUnbranch - train and predict", {
   expect_true(length(pout) == 1)
   expect_equal(pout[[1]], t2)
 
-  expect_error(ubranch$train_internal(list(t1, t2)))
-  expect_error(ubranch$train_internal(list(t1)))
+  expect_error(ubranch$train(list(t1, t2)))
+  expect_error(ubranch$train(list(t1)))
 
   ubranch = PipeOpUnbranch$new()
   expect_true(ubranch$innum == 1)

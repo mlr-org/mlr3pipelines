@@ -36,13 +36,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
     },
-    train = function(task) {
+    train_internal = function(task) {
       self$graph$train(task)
       state = self$graph$state
       self$graph$state = NULL
       state
     },
-    predict = function(task) {
+    predict_internal = function(task) {
       self$graph$state = self$model
       prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
