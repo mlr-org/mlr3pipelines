@@ -26,7 +26,7 @@ The \code{$selection} parameter will then be a \code{\link{ParamFct}}.
 }
 }
 
-\section{Parameters}{
+\section{Parameter Set}{
 
 \itemize{
 \item \code{selection}: (\code{numeric(1)} | \code{character(1)}) \cr
@@ -61,8 +61,6 @@ PipeOpBranch$new(choices) \%>>\% gunion(list(pca, nop)) \%>>\% PipeOpUnbranch$ne
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_chunk}},
   \code{\link{mlr_pipeop_copy}},

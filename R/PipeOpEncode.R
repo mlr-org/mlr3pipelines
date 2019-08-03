@@ -4,22 +4,21 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`].
 #'
 #' @description
-#' Encodes `factor`, `character` and `ordered factor` columns.
+#' Encodes columns of type `factor`, `character` and `ordered`.
 #'
 #' Possible encodings are `"one-hot"` encoding, as well as encoding according to `stats::contr.helmert()`, `stats::contr.poly()`,
-#' `stats::contr.sum()` and `stats::contr.treatment()`. Newly created columns are named by factor levels in `"one-hot"` and
-#' `"treatment"` encoding, and numbered otherwise.
+#' `stats::contr.sum()` and `stats::contr.treatment()`.
+#' Newly created columns are named via pattern `[column-name].[x]` where `x` is the respective factor level for `"one-hot"` and `"treatment"` encoding, and an integer sequence otherwise.
 #'
 #' Use the `$affect_columns` functionality to only encode a subset of columns, or only encode columns of a certain type.
 #'
 #' @section Parameter Set:
 #' * `method`  :: `character(1)` \cr
-#'   If set to `"one-hot"`, creates a new column for each factor level. If set to `"treatment"`, creates $n-1$ columns leaving
-#'   out the first factor level of each factor variable (see `stats::contr.treatment()`). If set to `"helmert"`, creates
-#'   columns according to Helmert contrasts (see `stats::contr.helmert()`). If set to `"poly"`, creates columns with
-#'   contrasts based on orthogonal polynomials (see `stats::contr.poly()`). If set to `"sum"`, creates columns with contrasts
-#'   summing to zero, (see `stats::contr.sum()`).
-#'   `
+#'   * `"one-hot"`: create a new column for each factor level.
+#'   * `"treatment"`: create $n-1$ columns leaving out the first factor level of each factor variable (see `stats::contr.treatment()`).
+#'   * `"helmert"`: create columns according to Helmert contrasts (see `stats::contr.helmert()`).
+#'   * `"poly"`: create columns with contrasts based on orthogonal polynomials (see `stats::contr.poly()`).
+#'   * `"sum"`: create columns with contrasts summing to zero, (see `stats::contr.sum()`).
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
@@ -68,10 +67,10 @@ PipeOpEncode = R6Class("PipeOpEncode",
         contrasts[as.character(x), , drop = FALSE]
       })
       cols = as.data.table(cols)
-      colnames(cols) = make.names(colnames(cols), unique = TRUE)
+      setnames(cols, names(cols), make.names(names(cols), unique = TRUE))
       cols
     }
   )
 )
 
-register_pipeop("encode", PipeOpEncode)
+mlr_pipeops$add("encode", PipeOpEncode)

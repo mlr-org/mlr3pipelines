@@ -17,14 +17,13 @@ devtools::load_all("mlr3pipelines")
 
 tools::buildVignettes(dir = "mlr3pipelines")
 
-
 testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "backup")
+testthat::test_package("mlr3pipelines", filter = "Graph")
 
-testthat::test_package("mlr3pipelines", filter = "typecheck")
+testthat::test_package("mlr3pipelines", filter = "doublearrow")
 
-testthat::test_package("mlr3pipelines", filter = "dictionary")
+testthat::test_package("mlr3pipelines", filter = "multichannel")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
@@ -631,7 +630,7 @@ Graph
 
 
 
-graph = PipeOpScale$new() %>>% PipeOpFilter$new(mlr3featsel::FilterVariance$new(), param_vals = list(filter.frac = .5))
+graph = PipeOpScale$new() %>>% PipeOpFilter$new(mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = .5))
 
 graph$pipeops
 

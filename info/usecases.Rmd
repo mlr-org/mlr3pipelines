@@ -255,7 +255,7 @@ This document contains a list of use-cases we want to contain.
 
   - **train**:
     - input: [[Task]]
-    - does: Filters features according to mlr3featsel. Featsel class is given as ParamVal. Selected features saved in 'state'
+    - does: Filters features according to mlr3filters. Featsel class is given as ParamVal. Selected features saved in 'state'
     - returns: [[Task]]
   - **state:**: Selected features
   - **predict**:

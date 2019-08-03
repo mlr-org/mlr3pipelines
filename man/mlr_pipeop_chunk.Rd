@@ -29,20 +29,18 @@ channels / chunks that are created.
 \itemize{
 \item \code{shuffle} :: \code{logical(1)} \cr
 Should the data be shuffled before chunking? Default \code{TRUE}
-\item \code{stratify} :: \code{logical(1)} \cr
-Should the subsamples be stratified. Default \code{FALSE}.
 }
 }
 
 \examples{
-op = PipeOpChunk$new(5)
+task = mlr3::mlr_tasks$get("wine")
+op = PipeOpChunk$new(3)
+op$train(list(task = task))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_copy}},

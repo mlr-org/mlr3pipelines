@@ -13,7 +13,8 @@ test_that("Simple ops do what we expect", {
   expect_class(g, "Graph")
   expect_equal(g$rhs[[1]], p3$id)
 
-  expect_error(p1 %>>% gunion(list(p2, p3)), "mismatching number of inputs / outputs")
+  expect_graph(p1 %>>% gunion(list(p2, p3)))
+  expect_error(gunion(list(p2, p3)) %>>% p1, "mismatching number of inputs / outputs")
 
   g = p1 %>>% PipeOpBranch$new(2) %>>% gunion(list(p2, p3))
   expect_class(g, "Graph")

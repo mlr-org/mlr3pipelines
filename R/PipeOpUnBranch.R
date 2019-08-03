@@ -7,11 +7,12 @@
 #' Used to bring together different paths created by [`PipeOpBranch`].
 #'
 #' @section Methods:
-#' * `PipeOpUnbranch$new(options, id = "unbranch")` \cr
+#' * `PipeOpUnbranch$new(options = 0, id = "unbranch")` \cr
 #'   (`numeric(1)` | `character`, `character(1)`) -> `self` \cr
-#'   Constructor. If `options` is an integer number, it determines the number of
-#'   input channels that are created, named `input1`...`input<n>`. If `options` is a
-#'   `character`, it determines the names of channels directly.
+#'   Constructor. If `options` is 0, only one vararg input channel is created that can
+#'   be connected to an arbitrary number of branches. If `options` is a positive integer
+#'   number, it determines the number of input channels that are created, named
+#'   `input1`...`input<n>`. If `options` is a `character`, it determines the names of channels directly.
 #'
 #' @section Details:
 #' Creates a PipeOp with multiple input channels that can be used to
@@ -31,38 +32,33 @@
 PipeOpUnbranch = R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(
-    initialize = function(options, id = "unbranch", param_vals = list()) {
+    initialize = function(options = 0, id = "unbranch", param_vals = list()) {
       assert(
-        check_int(options, lower = 1),
+        check_int(options, lower = 0),
         check_character(options, min.len = 1, any.missing = FALSE)
       )
       if (is.numeric(options)) {
-        options = round(options)
-        innum = options
-      } else {
-        innum = length(options)
+        if (options) {
+          options = rep_suffix("input", round(options))
+        } else {
+          options = "..."
+        }
       }
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = rep_suffix("input", innum), train = "*", predict = "*"),
+        input = data.table(name = options, train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
     },
 
     train = function(inputs) {
-      assert_list(inputs, len = self$innum)
       self$state = list()
-      result = filter_noop(inputs)
-      assert_list(result, len = 1)
-      return(result)
+      filter_noop(inputs)
     },
 
     predict = function(inputs) {
-      assert_list(inputs, len = self$innum)
-      result = filter_noop(inputs)
-      assert_list(result, len = 1)
-      return(result)
+      filter_noop(inputs)
     }
   )
 )
 
-register_pipeop("unbranch", PipeOpUnbranch, list("N"))
+mlr_pipeops$add("unbranch", PipeOpUnbranch)

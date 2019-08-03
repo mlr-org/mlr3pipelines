@@ -4,17 +4,17 @@
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#'   Aggregates features from all input tasks by cbinding them together
-#'   into a [`data.table`].
-#'   [`DataBackend`] primary keys and [`Task`] targets have to be equal across each
-#'   `Task`. Only the target column(s) of the first task are kept.
-#'   If `assert_targets_equal` is `TRUE`, then an error is thrown if target column name(s)
-#'   disagree.
+#' Aggregates features from all input tasks by `[cbind()]`ing them together into a [`data.table`].
+#' [`DataBackend`] primary keys and [`Task`] targets have to be equal across each `Task`.
+#' Only the target column(s) of the first task are kept.
+#' If `assert_targets_equal` is `TRUE`, then an error is thrown if target column name(s) disagree.
 #'
 #' @section Methods:
-#' * `PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
-#'   (`numeric(1)` | `character`, `character(1)`, named `list`, `logical(1)`) -> `self` \cr
-#'   Constructor. `innum` determines the number of input channels. If `assert_targets_equal` is `TRUE` (Default),
+#' * `PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
+#'   (`numeric(1)` | `character`, `character(1)`, named `list()`, `logical(1)`) -> `self` \cr
+#'   Constructor. `innum` determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#'   If `assert_targets_equal` is `TRUE` (Default),
 #'   task target column names are checked for agreement. Disagreeing target column names are usually a
 #'   bug, so this should often be left at the default.\cr
 #'   `innum` may be a `character` vector instead of a `numeric(1)`. In that case, the number of input channels
@@ -27,9 +27,9 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   public = list(
     assert_targets_equal = NULL,
     inprefix = NULL,
-    initialize = function(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
+    initialize = function(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
       assert(
-        check_int(innum, lower = 1),
+        check_int(innum, lower = 0),
         check_character(innum, min.len = 1, any.missing = FALSE)
       )
       if (is.numeric(innum)) {
@@ -40,8 +40,9 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       }
       assert_flag(assert_targets_equal)
       self$assert_targets_equal = assert_targets_equal
+      inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = rep_suffix("input", innum), train = "Task", predict = "Task"),
+        input = data.table(name = inname, train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
@@ -57,7 +58,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   )
 )
 
-register_pipeop("featureunion", PipeOpFeatureUnion, list("N"))
+mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
 
 cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   task = inputs[[1L]]

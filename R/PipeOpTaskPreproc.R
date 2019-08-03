@@ -131,6 +131,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     },
 
     predict = function(inputs) {
+
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
       if (do_subset) {

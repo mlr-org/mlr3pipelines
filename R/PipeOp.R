@@ -224,7 +224,12 @@ assert_connection_table = function(table) {
 # @param operation [character(1)] is either `"train"` or `"predict"`.
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
-  assert_list(data, len = nrow(typetable))
+  if (direction == "input" && "..." %in% typetable$name) {
+    assert_list(data, min.len = nrow(typetable) - 1)
+    typetable = typetable[rep(1:.N, ifelse(get("name") == "...", length(data) - nrow(typetable) + 1, 1))]
+  } else {
+    assert_list(data, len = nrow(typetable))
+  }
   for (idx in seq_along(data)) {
     typereq = typetable[[operation]][idx]
     if (typereq != "*") {
