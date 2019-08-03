@@ -38,7 +38,7 @@
 #' @examples
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC
-#' task = mlr_tasks$get("spam")
+#' task = mlr3::mlr_tasks$get("spam")
 #' filter = mlr3filters::mlr_filters$get("auc")
 #' po = mlr_pipeops$get("filter", filter = filter)
 #' po$param_set
