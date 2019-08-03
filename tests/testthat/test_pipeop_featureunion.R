@@ -107,27 +107,27 @@ test_that("Test wrong inputs", {
   task = mlr_tasks$get("iris")
   expect_error(g$train(task), "Assertion on 'rows'")
 })
-# FIXME: depends on mlr-org/mlr3#179
-## test_that("PipeOpFeatureUnion - levels are preserved", {
-##
-##   tbl1 = data.table(x1 = factor(letters[10:14], levels = letters), y1 = letters[1:5], target = 1:5)
-##   tbl2 = data.table(x2 = factor(letters[10:14], levels = letters), y2 = letters[1:5], target = 1:5)
-##
-##   tsk1 = TaskRegr$new("tsk1", as_data_backend(tbl1), "target")
-##   tsk2 = TaskRegr$new("tsk2", as_data_backend(tbl2), "target")
-##
-##   tsk1$col_info
-##   tsk2$col_info
-##
-##   pofu = PipeOpFeatureUnion$new(2)
-##
-##   pofu$train(list(tsk1, tsk2))[[1]]$col_info
-##
-##
-##   pofu$train(list(tsk1$filter(3:5), tsk2$filter(3:5)))[[1]]$col_info
-##
-##
-## })
+
+test_that("PipeOpFeatureUnion - levels are preserved", {
+
+  tbl1 = data.table(x1 = factor(letters[10:14], levels = letters), y1 = letters[1:5], target = 1:5)
+  tbl2 = data.table(x2 = factor(letters[10:14], levels = letters), y2 = letters[1:5], target = 1:5)
+
+  tsk1 = TaskRegr$new("tsk1", as_data_backend(tbl1), "target")
+  tsk2 = TaskRegr$new("tsk2", as_data_backend(tbl2), "target")
+
+  tsk1$col_info
+  tsk2$col_info
+
+  pofu = PipeOpFeatureUnion$new(2)
+
+  pofu$train(list(tsk1, tsk2))[[1]]$col_info
+
+
+  pofu$train(list(tsk1$filter(3:5), tsk2$filter(3:5)))[[1]]$col_info
+
+
+})
 
 test_that("feature renaming", {
 
