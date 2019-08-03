@@ -151,9 +151,9 @@ PipeOp = R6Class("PipeOp",
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
-      check_types(self, input, "input", "train")
+      input = check_types(self, input, "input", "train")
       output = self$train_internal(input)
-      check_types(self, output, "output", "train")
+      output = check_types(self, output, "output", "train")
       output
     },
     predict = function(input) {
@@ -164,9 +164,9 @@ PipeOp = R6Class("PipeOp",
         stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
       }
 
-      check_types(self, input, "input", "predict")
+      input = check_types(self, input, "input", "predict")
       output = self$predict_internal(input)
-      check_types(self, output, "output", "predict")
+      output = check_types(self, output, "output", "predict")
       output
     },
     train_internal = function(input) stop("abstract"),
@@ -245,4 +245,5 @@ check_types = function(self, data, direction, operation) {
       .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
         direction, idx, self$input$name[idx], self$id))
   }
+  data
 }

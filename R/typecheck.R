@@ -145,7 +145,7 @@ reset_autoconvert_register = function() {
 
 default_acr = list(
   # need to put mlr3::assert_X inside functions because we shouldn't refer to mlr3 funs directly at build time
-  list("Task", function(x) assert_tasks(x), packages = "mlr3"),
+  list("Task", function(x) assert_task(x), packages = "mlr3"),
   list("Measure", function(x) assert_measure(x), packages = "mlr3"),
   list("Learner", function(x) assert_learner(x), packages = "mlr3"),
   list("Resampling", function(x) assert_resampling(x), packages = "mlr3")
@@ -187,7 +187,7 @@ get_autoconverter = function(target) {
   if (length(superclass_hierarchies)) {
     # if we found a class hierarchy entry we determine the one where `target` is at the earliest position,
     # indicating the shortest class "distance" between conversion result and target
-    pathlengths = map_int(superclass_hierarchies, match, table = target)
+    pathlengths = map_int(superclass_hierarchies, match, x = target)
     return(autoconvert_register[[superclass_hierarchies[[which.min(pathlengths)]][1]]])
   }
 
