@@ -50,15 +50,15 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       filter_noop(inputs)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       filter_noop(inputs)
     }
   )
 )
 
-register_pipeop("unbranch", PipeOpUnbranch)
+mlr_pipeops$add("unbranch", PipeOpUnbranch)

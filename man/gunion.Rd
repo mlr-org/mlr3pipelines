@@ -23,6 +23,7 @@ The \code{PipeOp}s of the input \code{Graph}s are not joined with new edges acro
 }
 \seealso{
 Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{assert_graph}}, \code{\link{greplicate}}
+  \code{\link{assert_graph}}, \code{\link{assert_pipeop}},
+  \code{\link{greplicate}}
 }
 \concept{Graph operators}

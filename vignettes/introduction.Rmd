@@ -112,7 +112,8 @@ pofu$input
 
 Other `PipeOp`s may have channels that take different types during different phases. The `backuplearner` `PipeOp`, for example, takes a `NULL` and a `Task` during training, and a `Prediction` and a `Task` during prediction:
 ```{r}
-mlr_pipeops$get("backuplearner")$input
+# TODO this is an important case to handle here, do not delete unless there is a better example.
+# mlr_pipeops$get("backuplearner")$input
 ```
 
 ### Output Channels
@@ -133,7 +134,7 @@ Most `PipeOp`s have only one input channel (so they take a list with a single el
 
 The default printer of a `PipeOp` gives information about channel names and types:
 ```{r}
-mlr_pipeops$get("backuplearner")
+# mlr_pipeops$get("backuplearner")
 ```
 
 ## `Graph`: Networks of `PipeOp`s

@@ -3,9 +3,9 @@
 
 [![Travis build
 status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/mlr-org/mlr3pipelines?branch=master&svg=true)](https://ci.appveyor.com/project/mlr-org/mlr3pipelines)
+[![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
 [![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
+[![StackOverflow](https://img.shields.io/badge/stackoverflow-mlr3-orange.svg)](https://stackoverflow.com/questions/tagged/mlr3)
 
 ## What is `mlr3pipelines`?
 
@@ -27,7 +27,7 @@ manipulation steps as “PipeOps”:
 pca = mlr_pipeops$get("pca")
 
 filter = mlr_pipeops$get("filter",
-  filter = mlr3featsel::FilterVariance$new(),
+  filter = mlr3filters::FilterVariance$new(),
   param_vals = list(filter.frac = 0.5))
 
 learner_po =  mlr_pipeops$get("learner",
@@ -47,9 +47,12 @@ This learner can be used for resampling, benchmarking, and even tuning.
 
 ``` r
 resample("iris", glrn, "cv")
-#> <ResampleResult> of learner 'iris' on task 'pca.variance.classif.rpart' with 10 iterations
-#>     Measure Min. 1st Qu.  Median Mean 3rd Qu.   Max.      Sd
-#>  classif.ce    0       0 0.06667 0.06  0.1167 0.1333 0.05837
+#> <ResampleResult> of 10 iterations
+#> * Task: iris
+#> * Learner: pca.variance.classif.rpart
+#> * Performance: 0.053 [classif.ce]
+#> * Warnings: 0 in 0 iterations
+#> * Errors: 0 in 0 iterations
 ```
 
 ## Feature Overview

@@ -4,38 +4,52 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`].
 #'
 #' @description
-#' Feature filtering using a [`mlr3featsel::Filter`] object, see the
-#' [mlr3featsel][mlr3::mlr3-package] package.
+#' Feature filtering using a [`mlr3filters::Filter`] object, see the
+#' \CRANpkg{mlr3filters} package.
 #'
-#' The `settings` of the filter are given as [`paradox::ParamUty`];
-#' when `Filter`s start supporting the `paradox` interface that could
-#' be used instead.
-#'
-#' If a `Filter` can only operate on a subset of columns based on column
-#' type, then only these features are considered. `nfeat` and `frac` will
-#' count for the features of the type that the `Filter` can operate on;
-#' this means e.g. that setting `nfeat` to 0 will only remove features of the
-#' type that the `Filter` can work with.
+#' If a `Filter` can only operate on a subset of columns based on column type, then only these features are considered.
+#' `nfeat` and `frac` will count for the features of the type that the `Filter` can operate on;
+#' this means e.g. that setting `nfeat` to 0 will only remove features of the type that the `Filter` can work with.
 #'
 #' @section Methods:
 #' * `PipeOpFilter$new(filter, id = filter$id, param_vals = list())` \cr
-#'   ([`mlr3featsel::Filter`], `character(1)`, `list`) -> `self` \cr
+#'   ([`mlr3filters::Filter`], `character(1)`, `list`) -> `self` \cr
 #'   Constructor. `filter` gives the `Filter` to use.
+#'
 #' @section Parameter Set:
-#' * `settings` :: named `list` \cr
-#'   List of settings to be given to the `Filter`. Default `list()`.
+#' * `settings` :: named `list()` \cr
+#'   List of settings to be given to the `Filter`.
+#'
 #' * `nfeat`    :: `numeric(1)` \cr
-#'   Number of features to select. If this is set, `frac` and cutoff`
-#'   must not be set.
+#'   Number of features to select.
+#'   Mutually exclusive with `frac` and `cutoff`.
+#'
 #' * `frac`     :: `numeric(1)` \cr
-#'   Fraction of features to keep. If this is set, `nfeat` and `cutoff`
-#'   must not be set.
+#'   Fraction of features to keep.
+#'   Mutually exclusive with `nfeat` and `cutoff`.
+#'
 #' * `cutoff`   :: `numeric(1)` \cr
-#'   Minimum value of filter heuristic for which to keep features. If
-#'   this is set, `nfeat` and `frac` must not be set.
+#'   Minimum value of filter heuristic for which to keep features.
+#'   Mutually exclusive with `nfeat` and `frac`.
+#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
+#' @examples
+#' # setup PipeOpFilter to keep the 5 most important
+#' # features of the spam task w.r.t. their AUC
+#' task = mlr3::mlr_tasks$get("spam")
+#' filter = mlr3filters::mlr_filters$get("auc")
+#' po = mlr_pipeops$get("filter", filter = filter)
+#' po$param_set
+#' po$param_set$values = list(filter.nfeat = 5)
+#'
+#' # filter the task
+#' filtered_task = po$train(list(task = task))[[1]]
+#'
+#' # filtered task + extracted AUC scores
+#' filtered_task$feature_names
+#' head(po$state$scores, 10)
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -44,11 +58,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
       self$filter$param_set$set_id = ""
-      private$.outer_param_set = ParamSet$new(list(
+      ps = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0),
         ParamDbl$new("frac", lower = 0, upper = 1),
         ParamDbl$new("cutoff")
       ))
+      private$.outer_param_set = ps$add(filter$param_set)
       private$.outer_param_set$set_id = "filter"
       super$initialize(id, self$param_set, param_vals = param_vals)
     },
@@ -65,23 +80,23 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
       filtertask = task$clone()
       filtertask$select(filtertask$feature_types[get("type") %in% self$filter$feature_types, get("id")])
-      maxfeat = length(filtertask$feature_names)
 
-      if (filtertask$nrow > 1 && length(filtertask$feature_names)) {
-        self$filter$calculate(filtertask)
-        scoretable = self$filter$scores[order(score, decreasing = TRUE), c("score", "feature")]
-      } else {
-        scoretable = CJ(score = 0, feature = shuffle(filtertask$feature_names))  # workaround for mlr-org/mlr3featsel#39
-      }
+      self$filter$calculate(filtertask)
+      scores = self$filter$scores
+
       features = switch(filtercrit,
-        cutoff = scoretable$feature[scoretable$score >= critvalue],
-        nfeat = scoretable$feature[seq_len(min(maxfeat, critvalue))],
-        frac = scoretable$feature[seq_len(round(maxfeat * critvalue))],
+        cutoff = names(scores)[scores >= critvalue],
+        nfeat = head(names(scores), critvalue),
+        frac = names(scores)[seq_len(round(length(filtertask$feature_names) * critvalue))],
         stop("unknown filter criterion"))
+
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
       features = setdiff(task$feature_names, setdiff(filtertask$feature_names, features))
 
-      list(scores = self$filter$scores, features = features) # we don't use 'scores', but maybe the user cares.
+      # we don't use 'scores', but maybe the user cares.
+      # In particular, the user can *not* rely on the self$filter object being set, because
+      # `$state` is the only place that the user may rely on being changed after `$traion()`.
+      list(scores = scores, features = features)
     },
 
     transform = function(task) {
@@ -115,4 +130,4 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
-register_pipeop("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))

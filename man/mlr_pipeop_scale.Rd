@@ -13,14 +13,12 @@ PipeOpScale
 Scales the data to mean = 0 (if \code{$center} parameter is \code{TRUE}) and standard deviation 1
 (if \code{$scale} parameter is \code{TRUE}).
 
-See \link[base:scale]{base::scale} for details and parameters.
+See \code{\link[base:scale]{base::scale()}} for details and parameters.
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},

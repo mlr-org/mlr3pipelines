@@ -42,12 +42,10 @@ PipeOpMutate = R6Class("PipeOpMutate",
         keep_feats = setdiff(task$feature_names, colnames(newdata))
       }
       task = task$select(keep_feats)
-      if (ncol(newdata)) {
-        task$cbind(newdata)
-      }
+      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
       task
     }
   )
 )
 
-register_pipeop("mutate", PipeOpMutate)
+mlr_pipeops$add("mutate", PipeOpMutate)

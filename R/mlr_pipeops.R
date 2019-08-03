@@ -1,6 +1,7 @@
 #' @title Dictionary of PipeOps
 #'
 #' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`]
+#'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
 #' Each `PipeOp` has an associated help page, see `mlr_pipeop_[id]`.
@@ -16,10 +17,8 @@
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
-#' @name mlr_pipeops
-NULL
-
-DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
+#' @export
+mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(
     metainf = new.env(parent = emptyenv()),
@@ -38,10 +37,7 @@ DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
       obj$value$new(...)
     }
   )
-)
-
-#' @export
-mlr_pipeops = NULL
+)$new()
 
 #' @export
 as.data.table.DictionaryPipeOp = function(x, ...) {
@@ -77,7 +73,6 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
     )
   }), "key")[]
 }
-
 
 # We would like to have the pipeops in the "mlr_pipeops" Dictionary, but adding
 # them at build time is apparently not a good idea. On the other hand we would
@@ -120,4 +115,3 @@ po = function(key, ...) {
   # building mlr_pipeops does not exist.
   mlr_pipeops$get(key, ...)
 }
-

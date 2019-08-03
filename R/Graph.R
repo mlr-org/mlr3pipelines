@@ -50,7 +50,7 @@
 #'   Get IDs of all PipeOps. This is in order that PipeOps were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `add_pipeop(op)` \cr
-#'   ([`PipeOp` | `character(1)`]) -> `self` \cr
+#'   ([`PipeOp`] | `character(1)`) -> `self` \cr
 #'   Mutates `Graph` by adding a `PipeOp` to the `Graph`. This does not add any edges, so the new `PipeOp`
 #'   will not be connected within the `Graph` at first.
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
@@ -332,12 +332,12 @@ Graph = R6Class("Graph",
 
     train = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "train")
-      graph_reduce(self, input, "train_internal", single_input)
+      graph_reduce(self, input, "train", single_input)
     },
 
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
-      graph_reduce(self, input, "predict_internal", single_input)
+      graph_reduce(self, input, "predict", single_input)
     }
   ),
 
@@ -375,7 +375,7 @@ Graph = R6Class("Graph",
     },
     state = function(val) {
       if (!missing(val)) {
-        assert_list(val, names = "unique")
+        assert_list(val, names = "unique", null.ok = TRUE)
         assert_subset(names(val), names(self$pipeops))
         imap(self$pipeops, function(pipeop, pname) pipeop$state = val[[pname]])
         val
@@ -448,8 +448,8 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
 # input: as given by `$train`, `$predict`. single valued to be copied (if
 #   `single_input` is `TRUE`) or (possibly named) list of values for each
 #   incoming edge.
-# fun: function of each `PipeOp` to call; should be `train_internal` oder
-#   `predict_internal`.
+# fun: function of each `PipeOp` to call; should be `train` oder
+#   `predict`.
 # single_input: whether `input` is to be copied to all input channels
 #   (`TRUE`) or is a list with different input for each channel (`FALSE`).
 graph_reduce = function(self, input, fun, single_input) {

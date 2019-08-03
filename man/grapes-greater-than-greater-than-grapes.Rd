@@ -40,6 +40,7 @@ result2 = Graph$new()$
 }
 \seealso{
 Other Graph operators: \code{\link{assert_graph}},
-  \code{\link{greplicate}}, \code{\link{gunion}}
+  \code{\link{assert_pipeop}}, \code{\link{greplicate}},
+  \code{\link{gunion}}
 }
 \concept{Graph operators}

@@ -31,16 +31,16 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       private$.param_set = NULL
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       task = inputs[[1L]]
-      self$state = self$learner$train(task)$data
+      self$state = self$learner$train(task)$state
 
       list(NULL)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       task = inputs[[1]]
-      self$learner$data = self$state
+      self$learner$state = self$state
       list(self$learner$predict(task))
     }
   ),
@@ -61,4 +61,4 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-register_pipeop("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", param_set = ParamSet$new()))$new()))

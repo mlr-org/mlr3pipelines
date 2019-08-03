@@ -25,15 +25,15 @@ PipeOpCopy = R6Class("PipeOpCopy",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
-      rep(inputs, self$outnum)
+      rep_len(inputs, self$outnum)
     },
 
-    predict = function(inputs) {
-      rep(inputs, self$outnum)
+    predict_internal = function(inputs) {
+      rep_len(inputs, self$outnum)
     }
   )
 )
 
-register_pipeop("copy", PipeOpCopy, list("N"))
+mlr_pipeops$add("copy", PipeOpCopy, list("N"))

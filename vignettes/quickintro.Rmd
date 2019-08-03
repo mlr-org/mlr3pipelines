@@ -40,7 +40,7 @@ pca = mlr_pipeops$get("pca")
 Some pipeops require additional arguments for construction. Hyperparameters can also be set through the `param_vals` argument.
 ```{r}
 filter = mlr_pipeops$get("filter",
-  filter = mlr3featsel::FilterVariance$new(),
+  filter = mlr3filters::FilterVariance$new(),
   param_vals = list(filter.frac = 0.5))
 ```
 
@@ -123,17 +123,17 @@ ps = ParamSet$new(list(
 ))
 ```
 ```{r}
-library("mlr3tuning")
-fitness = PerformanceEvaluator$new(task, glrn, cv10, "classif.ce", ps)
-tuner = TunerRandomSearch$new(fitness, TerminatorEvaluations$new(10))
+# library("mlr3tuning")
+# fitness = PerformanceEvaluator$new(task, glrn, cv10, "classif.ce", ps)
+# tuner = TunerRandomSearch$new(fitness, TerminatorEvaluations$new(10))
 ```
 
 ```{r}
-tuner$tune()
+# tuner$tune()
 ```
 
 ```{r}
-tuner$tune_result()
+# tuner$tune_result()
 ```
 
 ## Non-Linear `Graph`s

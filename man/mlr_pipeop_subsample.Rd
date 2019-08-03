@@ -10,8 +10,8 @@
 PipeOpSubsample
 }
 \description{
-Subsamples a \code{\link{Task}} to use a fraction of the rows. \code{frac}
-can be > 1 if \code{replace} is \code{TRUE}.
+Subsamples a \code{\link{Task}} to use a fraction of the rows.
+\code{frac} can be > 1 if \code{replace} is \code{TRUE}.
 }
 \section{Parameter Set}{
 
@@ -29,8 +29,6 @@ Sample with replacement? Default is \code{FALSE}.
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},

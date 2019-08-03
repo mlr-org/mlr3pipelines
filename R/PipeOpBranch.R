@@ -16,7 +16,7 @@
 #'   If `options` is a `character`, it determines the names of channels directly.
 #'   The `$selection` parameter will then be a [`ParamFct`].
 #'
-#' @section Parameters:
+#' @section Parameter Set:
 #' * `selection`: (`numeric(1)` | `character(1)`) \cr
 #'   Selection of branching path to take. Is a `ParamInt` if the `options` parameter
 #'   during construction was a `numeric(1)`, and ranges from 1 to `options`. Is a
@@ -35,15 +35,15 @@
 #'
 #' Not to be confused with [`PipeOpCopy`], the naming scheme is a bit unfortunate.
 #'
+#' @family PipeOps
+#' @family Path Branching
+#' @include PipeOp.R
+#' @export
 #' @examples
 #' pca = PipeOpPCA$new()
 #' nop = PipeOpNULL$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
-#' @family PipeOps
-#' @family Path Branching
-#' @include PipeOp.R
-#' @export
 PipeOpBranch = R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
@@ -67,14 +67,14 @@ PipeOpBranch = R6Class("PipeOpBranch",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]
       ret
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]
@@ -83,7 +83,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
   )
 )
 
-register_pipeop("branch", PipeOpBranch, list("N"))
+mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 
 #' @title Branch Between Alternative Paths
 #'

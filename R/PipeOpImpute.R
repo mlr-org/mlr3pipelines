@@ -5,15 +5,20 @@
 #' @description
 #' Impute missing values with varying methods.
 #'
-#' `numeric` or `integer` features are imputed by `method_num`.
-#'
-#' `factor`, `ordered`, and `character` features are imported by `method_fct`.
-#'
-#' `logical` features are always imputed by sampling from the training column.
+#' * `numeric` or `integer` features are imputed by `method_num`.
+#' * `factor`, `ordered`, and `character` features are imported by `method_fct`.
+#' * `logical` features are always imputed by sampling from the training column.
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
+#' @examples
+#' task = mlr3::mlr_tasks$get("pima")
+#' sum(complete.cases(task$data()))
+#'
+#' po = mlr_pipeops$get("impute")
+#' new_task = po$train(list(task = task))[[1]]
+#' sum(complete.cases(new_task$data()))
 PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -136,4 +141,4 @@ PipeOpImpute = R6Class("PipeOpImpute",
   )
 )
 
-register_pipeop("impute", PipeOpImpute)
+mlr_pipeops$add("impute", PipeOpImpute)

@@ -11,8 +11,7 @@ PipeOpPCA
 }
 \description{
 Extracts principle components from data.
-
-See \link[stats:prcomp]{stats::prcomp} for details  and parameters.
+See \code{\link[stats:prcomp]{stats::prcomp()}} for details  and parameters.
 }
 \examples{
 # Instantiate PipeOpPCA
@@ -22,8 +21,6 @@ op1 = PipeOpPCA$new()
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},

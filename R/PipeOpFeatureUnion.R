@@ -4,20 +4,18 @@
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#'   Aggregates features from all input tasks by cbinding them together
-#'   into a [`data.table`].
-#'   [`DataBackend`] primary keys and [`Task`] targets have to be equal across each
-#'   `Task`. Only the target column(s) of the first task are kept.
-#'   If `assert_targets_equal` is `TRUE`, then an error is thrown if target column name(s)
-#'   disagree.
+#' Aggregates features from all input tasks by `[cbind()]`ing them together into a [`data.table`].
+#' [`DataBackend`] primary keys and [`Task`] targets have to be equal across each `Task`.
+#' Only the target column(s) of the first task are kept.
+#' If `assert_targets_equal` is `TRUE`, then an error is thrown if target column name(s) disagree.
 #'
 #' @section Methods:
 #' * `PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)` \cr
-#'   (`numeric(1)`, `character(1)`, named `list`, `logical(1)`) -> `self` \cr
-#'   Constructor. `innum` determines the number of input channels. If `innum` is 0 (default), a vararg input
-#'   channel is created that can take an arbitrary number of inputs. If `assert_targets_equal` is `TRUE` (Default),
-#'   task target column names are checked for agreement. Disagreeing target column names are usually a
-#'   bug, so this should often be left at the default.
+#'   (`numeric(1)`, `character(1)`, named `list()`, `logical(1)`) -> `self` \cr
+#'   Constructor. `innum` determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#'   If `assert_targets_equal` is `TRUE` (Default), task target column names are checked for agreement.
+#'   Disagreeing target column names are usually a bug, so this should often be left at the default.
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
@@ -36,18 +34,18 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       list(cbind_tasks(inputs, self$assert_targets_equal))
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       list(cbind_tasks(inputs, self$assert_targets_equal))
     }
   )
 )
 
-register_pipeop("featureunion", PipeOpFeatureUnion)
+mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
 
 cbind_tasks = function(inputs, assert_targets_equal) {
   task = inputs[[1L]]
