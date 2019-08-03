@@ -64,11 +64,14 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   task = inputs[[1L]]
   ids = task$row_ids
 
-  if (inprefix[1] != "") {
-    stop("Renaming first task's column not supported yet")  # TODO / FIXME this needs https://github.com/mlr-org/mlr3/issues/268
+  if (length(inprefix)) {  # inprefix has length 0 if innum is 0
+    names(inputs) = inprefix
+    if (inprefix[1] != "") {
+      task$rename(task$feature_names, sprintf("%s.%s", inprefix[1], task$feature_names))
+    }
+  } else {
+    names(inputs) = NULL
   }
-
-  names(inputs) = inprefix
   inputs = discard(inputs, is.null)
 
   targets = unique(unlist(map(inputs, function(x) x$target_names), use.names = FALSE))
@@ -77,6 +80,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   }
 
   new_cols = do.call(cbind, lapply(tail(inputs, -1), function(y) y$data(ids, y$feature_names)))
+
 
   task$clone(deep = TRUE)$cbind(new_cols)
 }
