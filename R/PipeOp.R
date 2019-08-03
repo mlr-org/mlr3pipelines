@@ -222,6 +222,7 @@ assert_connection_table = function(table) {
 #   and then to have the types as given by the `$input` or `$output` data.table.
 # @param direction [character(1)] is either `"input"` or `"output"`
 # @param operation [character(1)] is either `"train"` or `"predict"`.
+# @return an instance of 'self', possibly converted!
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   if (direction == "input" && "..." %in% typetable$name) {
@@ -232,10 +233,16 @@ check_types = function(self, data, direction, operation) {
   }
   for (idx in seq_along(data)) {
     typereq = typetable[[operation]][idx]
-    if (typereq != "*") {
-      assert_class(data[[idx]], typereq,
-        .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
-          direction, idx, self$input$name[idx], self$id))
+    if (typereq == "*") next
+    if (typereq %in% class(data[[idx]])) next
+    autoconverter = get_autoconverter(typereq)
+    if (!is.null(autoconverter)) {
+      mlr3misc::require_namespaces(autoconverter$packages,
+        sprintf("The following packages are required to convert object of class %s to class %s: %%s", class(data[[idx]])[1], typereq))
+      data[[idx]] = autoconverter$fun(data[[idx]])
     }
+    assert_class(data[[idx]], typereq,
+      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
+        direction, idx, self$input$name[idx], self$id))
   }
 }
