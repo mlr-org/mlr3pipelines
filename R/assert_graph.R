@@ -32,6 +32,7 @@ as_graph = function(x, deep_copy = FALSE) {
   UseMethod("as_graph")
 }
 
+#' @export
 as_graph.default = function(x, deep_copy = FALSE) {
   x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically for convertability
   if (deep_copy) {
@@ -40,10 +41,12 @@ as_graph.default = function(x, deep_copy = FALSE) {
   x
 }
 
+#' @export
 as_graph.list = function(x, deep_copy = FALSE) {
   gunion(x)  # gunion itself will convert individual members of x
 }
 
+#' @export
 as_graph.Graph = function(x, deep_copy = FALSE) {
   if (deep_copy) {
     x = x$clone(deep = TRUE)
@@ -86,10 +89,12 @@ as_pipeop = function(x, deep_copy = FALSE) {
   UseMethod("as_pipeop")
 }
 
+#' @export
 as_pipeop.default = function(x, deep_copy = FALSE) {
   stopf("%s can not be converted to PipeOp", deparse(substitute(x))[1])
 }
 
+#' @export
 as_pipeop.PipeOp = function(x, deep_copy = FALSE) {
   if (deep_copy) {
     x = x$clone(deep = TRUE)
@@ -97,6 +102,7 @@ as_pipeop.PipeOp = function(x, deep_copy = FALSE) {
   x
 }
 
+#' @export
 as_pipeop.character = function(x, deep_copy = FALSE) {
   assert_string(x)
   if (x %nin% c(mlr_pipeops$keys(), mlr_learners$keys())) {
@@ -110,6 +116,7 @@ as_pipeop.character = function(x, deep_copy = FALSE) {
   }
 }
 
+#' @export
 as_pipeop.Learner = function(x, deep_copy = FALSE) {
   PipeOpLearner$new(x)
 }
