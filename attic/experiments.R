@@ -177,7 +177,7 @@ opchoice = PipeOpChoice$new(3)
 opchoicenamed = PipeOpChoice$new(c("opscale", "oppca", "opnop"))
 opscale = PipeOpScale$new()
 oppca = PipeOpPCA$new()
-opnop = PipeOpNULL$new()
+opnop = PipeOpNOP$new()
 opunchoice = PipeOpUnchoice$new(3)
 
 graph1 = opchoice %>>% gunion(opscale, oppca, opnop) %>>% opunchoice
@@ -288,7 +288,7 @@ bpo3 = BasicPO$new("testid3")
 
 (bpo %>>% bpo2 %>>% bpo3)$plot()
 
-pon = PipeOpNULL$new()
+pon = PipeOpNOP$new()
 
 pon$train(list("test"))
 
@@ -745,7 +745,7 @@ llrn$param_set
 task$select
 
 
-gr = PipeOpBranch$new(2) %>>% gunion(list(PipeOpPCA$new(), PipeOpNULL$new())) %>>% PipeOpUnbranch$new(2)
+gr = PipeOpBranch$new(2) %>>% gunion(list(PipeOpPCA$new(), PipeOpNOP$new())) %>>% PipeOpUnbranch$new(2)
 
 gr$plot()
 

@@ -22,7 +22,7 @@ test_that("doublearrow with one output to many input works as expected", {
 
   expect_equal(g1, g2)
 
-  expect_error(gunion(list("scale", "pca")) %>>% gunion(list("null", "subsample", "select")),
+  expect_error(gunion(list("scale", "pca")) %>>% gunion(list("nop", "subsample", "select")),
     "mismatching number of inputs / outputs")
 
 })
@@ -34,8 +34,8 @@ test_that("multiple edges on output channel copies, as expected", {
 
   expect_list(graph$train(mlr_tasks$get("iris")), types = "Task", any.missing = FALSE, len = 2)
 
-  nullgraph = mlr_pipeops$get("null", id = "null1") %>>%
-    gunion(list(mlr_pipeops$get("null", id = "null2"), mlr_pipeops$get("null", id = "null3")))
+  nullgraph = mlr_pipeops$get("nop", id = "nop1") %>>%
+    gunion(list(mlr_pipeops$get("nop", id = "nop2"), mlr_pipeops$get("nop", id = "nop3")))
 
   tsk0 = mlr_tasks$get("iris")
   tsk_clone = tsk0$clone(deep = TRUE)
@@ -56,7 +56,7 @@ test_that("multiple edges on output channel copies, as expected", {
   expect_identical(tsk0, tsk1)
   expect_identical(tsk0, tsk2)
 
-  graph = "null" %>>% gunion(list(
+  graph = "nop" %>>% gunion(list(
     mlr_pipeops$get("scale", id = "s1", param_vals = list(scale = TRUE, center = FALSE)),
     mlr_pipeops$get("scale", id = "s2", param_vals = list(scale = FALSE, center = TRUE))))
 
@@ -142,7 +142,7 @@ test_that("doublearrow with many output to vararg input works as expected", {
 
 test_that("vararg passes args through as it should", {
 
-  nullgraph = gunion(list(mlr_pipeops$get("null", id = "null1"), mlr_pipeops$get("null", id = "null2"))) %>>% VarargPipeop$new()
+  nullgraph = gunion(list(mlr_pipeops$get("nop", id = "nop1"), mlr_pipeops$get("nop", id = "nop2"))) %>>% VarargPipeop$new()
 
   expect_equal(nullgraph$train(1)[[1]], list(`...` = 1, `...` = 1))
 
@@ -181,13 +181,13 @@ test_that("vararg passes args through as it should", {
 
 
   nullgraph = gunion(list(
-    mlr_pipeops$get("null", id = "null1"),
-    mlr_pipeops$get("null", id = "null2"),
-    mlr_pipeops$get("null", id = "null3")))$
+    mlr_pipeops$get("nop", id = "nop1"),
+    mlr_pipeops$get("nop", id = "nop2"),
+    mlr_pipeops$get("nop", id = "nop3")))$
     add_pipeop(VarargPipeop$new(innum = 1))$
-    add_edge("null1", "vararg", dst_channel = "...")$
-    add_edge("null3", "vararg", dst_channel = "...")$
-    add_edge("null2", "vararg", dst_channel = "input1")
+    add_edge("nop1", "vararg", dst_channel = "...")$
+    add_edge("nop3", "vararg", dst_channel = "...")$
+    add_edge("nop2", "vararg", dst_channel = "input1")
 
   expect_equal(nullgraph$train(list(1, 2, 3), single_input = FALSE)[[1]], list(`...` = 1, `...` = 3, input1 = 2))
 

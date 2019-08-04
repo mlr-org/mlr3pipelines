@@ -24,7 +24,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
       super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       list(private$weighted_avg_predictions(inputs, self$weights))
     }),
 

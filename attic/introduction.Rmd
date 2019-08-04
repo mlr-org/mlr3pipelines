@@ -279,17 +279,17 @@ gr$plot()
 
 We additionally want to detail some meta operators that can be useful in the process of building pipelines.
 
-### PipeOpNULL
+### PipeOpNOP
 
 It is often useful to simply pass on the data unchanged, while the data is transformed by some `PipeOp` in parallel.
 This can be done using `PipeOpNull`, which simply passes on its inputs unchanged, both during the training and the predict phase. An example for this can be seen in the vignette on **Stacking**.
 
 In order to, for example pass on the original data, and some transformed features, we can use `gunion()`
-to add a `PipeOpNULL` and a `PipeOpPCA` to the pipeline. We can later on use `PipeOpFeatureUnion` to
+to add a `PipeOpNOP` and a `PipeOpPCA` to the pipeline. We can later on use `PipeOpFeatureUnion` to
 concatenate the resulting transformed data together.
 
 ```{r}
-po_null = PipeOpNULL$new()
+po_null = PipeOpNOP$new()
 pop = PipeOpPCA$new()
 gunion(list(pop, po_null)) %>>% PipeOpFeatureUnion$new(2)
 ```

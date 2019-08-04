@@ -22,14 +22,14 @@
 #' functions.
 #'
 #' Input and output channels are defined in the `$input` and `$output` slots; each channel has a *name*, a required
-#' type during training, and a required type during prediction. When inheriting from a `PipeOp`, the `$train()` and
-#' `$predict()` functions must be overloaded. Each of these functions then receives a named `list` according to
+#' type during training, and a required type during prediction. When inheriting from a `PipeOp`, the `$train_internal()` and
+#' `$predict_internal()` functions must be overloaded. Each of these functions then receives a named `list` according to
 #' the `PipeOp`'s input channels, and must return a `list` (names are ignored) with values in the order of output
 #' channels in `$output`.
 #'
-#' The `$train()` and `$predict()` function should not be called by the user; instead, a `PipeOp` should be added
-#' to a `Graph` (possibly as singleton in that `Graph`), and the `Graph`'s `$train` / `$predict` methods should be
-#' called.
+#' The `$train_internal()` and `$predict_internal()` function should not be called by the user; instead, a `$train()` and `$predict()` should be used.
+#' The most convenient usage is to add the `PipeOp`
+#' to a `Graph` (possibly as singleton in that `Graph`), and using the `Graph`'s `$train()` / `$predict()` methods.
 #'
 #' This class is an abstract base class that all `PipeOp`s being used in a [`Graph`] should inherit from,  and
 #' is not intended to be instantiated.
@@ -97,13 +97,13 @@
 #'   not be checked. Input and output are specified by `$input` and `$output` in the same way as for `$train()`, except that
 #'   the `predict` column is used for type checking.\cr
 #'   Just as `$train()`, `$predict` should not be called by a user; instead a `Graph`'s `$predict()` method should be used.
-#' * `train_internal(input)` \cr
+#' * `train(input)` \cr
 #'   (named `list`) -> `list` \cr
 #'   Internal function used by a `Graph` to call `$train()`. Does type checking and possibly skips a function call if a
 #'   [`NO_OP`] is received. Should not be overloaded by inheriting classes.
-#' * `predict_internal(input)` \cr
+#' * `predict(input)` \cr
 #'   (named `list`) -> `list` \cr
-#'   Internal function used by a `Graph` to call `$predict()`, function analogous to `$train_internal()`.
+#'   Internal function used by a `Graph` to call `$predict()`, function analogous to `$train()`.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Prints the `PipeOp`s most salient information: `$id`, `$is_trained`, `$param_set$values`, `$input` and `$output`.
@@ -146,17 +146,17 @@ PipeOp = R6Class("PipeOp",
       catf("Output channels <name [train type, predict type]>:\n%s", type_table_printout(self$output))
     },
 
-    train_internal = function(input) {
+    train = function(input) {
       if (every(input, is_noop)) {
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
-      check_types(self, input, "input", "train")
-      output = self$train(input)
-      check_types(self, output, "output", "train")
+      input = check_types(self, input, "input", "train")
+      output = self$train_internal(input)
+      output = check_types(self, output, "output", "train")
       output
     },
-    predict_internal = function(input) {
+    predict = function(input) {
       if (every(input, is_noop)) {
         return(named_list(self$output$name, NO_OP))
       }
@@ -164,20 +164,23 @@ PipeOp = R6Class("PipeOp",
         stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
       }
 
-      check_types(self, input, "input", "predict")
-      output = self$predict(input)
-      check_types(self, output, "output", "predict")
+      input = check_types(self, input, "input", "predict")
+      output = self$predict_internal(input)
+      output = check_types(self, output, "output", "predict")
       output
     },
-    train = function(input) stop("abstract"),
-    predict = function(input) stop("abstract")
+    train_internal = function(input) stop("abstract"),
+    predict_internal = function(input) stop("abstract")
   ),
 
   active = list(
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        private$.param_set$set_id = val
+        if (!is.null(private$.param_set)) {
+          # private$.param_set may be NULL if it is constructed dynamically by active binding
+          private$.param_set$set_id = val
+        }
       }
       private$.id
     },
@@ -222,6 +225,7 @@ assert_connection_table = function(table) {
 #   and then to have the types as given by the `$input` or `$output` data.table.
 # @param direction [character(1)] is either `"input"` or `"output"`
 # @param operation [character(1)] is either `"train"` or `"predict"`.
+# @return an instance of 'self', possibly converted!
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   if (direction == "input" && "..." %in% typetable$name) {
@@ -232,10 +236,21 @@ check_types = function(self, data, direction, operation) {
   }
   for (idx in seq_along(data)) {
     typereq = typetable[[operation]][idx]
-    if (typereq != "*") {
-      assert_class(data[[idx]], typereq,
-        .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
-          direction, idx, self$input$name[idx], self$id))
+    if (typereq == "*") next
+    if (typereq %in% class(data[[idx]])) next
+    autoconverter = get_autoconverter(typereq)
+    msg = ""
+    if (!is.null(autoconverter)) {
+      mlr3misc::require_namespaces(autoconverter$packages,
+        sprintf("The following packages are required to convert object of class %s to class %s: %%s", class(data[[idx]])[1], typereq))
+      tryCatch(
+        { data[[idx]] = autoconverter$fun(data[[idx]]) },
+        error = function(e) msg <<- sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message)
+      )
     }
+    assert_class(data[[idx]], typereq,
+      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s%s",
+        direction, idx, self$input$name[idx], self$id, msg))
   }
+  data
 }

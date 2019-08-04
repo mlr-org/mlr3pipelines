@@ -29,7 +29,7 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
 
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       assert_list(inputs, len = 1L, type = "Task")
       task = inputs[[1L]]
       fn = task$feature_names
@@ -50,7 +50,7 @@ PipeOpSparsePCA = R6Class("PipeOpSparsePCA",
       list(TaskRegr$new(id = task$id, backend = db, target = tn))
     },
 
-    predict = function() {
+    predict_internal = function() {
       assert_list(self$inputs, len = 1L, type = "Task")
       task = self$inputs[[1L]]
       fn = task$feature_names
