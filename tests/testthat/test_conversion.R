@@ -78,7 +78,7 @@ test_that("auto-gunion", {
   )
 
   expect_equal(
-    list("pca", "scale") %>>% mlr_pipeops$get"featureunion", 2),
+    list("pca", "scale") %>>% mlr_pipeops$get("featureunion", 2),
     gunion(list(mlr_pipeops$get("pca"), mlr_pipeops$get("scale"))) %>>%
       PipeOpFeatureUnion$new(2)
   )
