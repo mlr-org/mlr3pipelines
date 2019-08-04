@@ -236,14 +236,18 @@ check_types = function(self, data, direction, operation) {
     if (typereq == "*") next
     if (typereq %in% class(data[[idx]])) next
     autoconverter = get_autoconverter(typereq)
+    msg = ""
     if (!is.null(autoconverter)) {
       mlr3misc::require_namespaces(autoconverter$packages,
         sprintf("The following packages are required to convert object of class %s to class %s: %%s", class(data[[idx]])[1], typereq))
-      data[[idx]] = autoconverter$fun(data[[idx]])
+      tryCatch(
+        { data[[idx]] = autoconverter$fun(data[[idx]]) },
+        error = function(e) msg <<- sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message)
+      )
     }
     assert_class(data[[idx]], typereq,
-      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s",
-        direction, idx, self$input$name[idx], self$id))
+      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s%s",
+        direction, idx, self$input$name[idx], self$id, msg))
   }
   data
 }
