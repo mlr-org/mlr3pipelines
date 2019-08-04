@@ -130,4 +130,6 @@ test_that("Autoconversion for pipeops works", {
 
   expect_error(po$predict(list("regr.mse")), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
 
+  expect_error(po$predict(list("regrmse")), "PipeOp copy.*Conversion from given data to MeasureClassif.*regrmse.*not found.*regr\\.mse")
+
 })
