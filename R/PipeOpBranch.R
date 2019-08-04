@@ -41,7 +41,7 @@
 #' @export
 #' @examples
 #' pca = PipeOpPCA$new()
-#' nop = PipeOpNULL$new()
+#' nop = PipeOpNOP$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 PipeOpBranch = R6Class("PipeOpBranch",
@@ -108,7 +108,7 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #'   to the input argument list.
 #' @examples
 #' po_pca = PipeOpPCA$new()
-#' po_nop = PipeOpNULL$new()
+#' po_nop = PipeOpNOP$new()
 #'
 #' branch(pca = po_pca, nothing = po_nop)
 #' # gives the same as

@@ -140,7 +140,7 @@ ps = ParamSet$new(list(
 
 The `Graph`s seen so far all have a linear structure. Some `PipeOp`s may have multiple input or output channels, usually given during construction from their **`innum`** or **`outnum`** parameter, that make it possible to create non-linear `Graph`s with alternative paths taken by the data.
 
-When using the `%>>%`-operator, it is necessary to always combine `PipeOp`s or `Graph`s with matching number of input / output channels. A quick way of putting different `PipeOp`s/`Graph`s "next to" each other to make them fit with a multi-input/output `Graph` is **`gunion()`**; to create parallel copies of the *same* `PipeOp`/`Graph` use **`greplicate()`**. Use the **`PipeOpNULL`** operator for paths that should not change the data.
+When using the `%>>%`-operator, it is necessary to always combine `PipeOp`s or `Graph`s with matching number of input / output channels. A quick way of putting different `PipeOp`s/`Graph`s "next to" each other to make them fit with a multi-input/output `Graph` is **`gunion()`**; to create parallel copies of the *same* `PipeOp`/`Graph` use **`greplicate()`**. Use the **`PipeOpNOP`** operator for paths that should not change the data.
 
 ### Conditional Execution / Branching
 
@@ -149,13 +149,13 @@ The **`PipeOpBranch`** and **`PipeOpUnbranch`** `PipeOp`s make it possible to sp
 `PipeOp(Un)Branch` is initialized either with the number of branches, or with a `character`-vector indicating the names of the branches. If names are given, the branch-choosing hyperparameter becomes more readable.
 
 ```{r}
-graph = mlr_pipeops$get("branch", c("null", "pca", "scale")) %>>%
+graph = mlr_pipeops$get("branch", c("nop", "pca", "scale")) %>>%
   gunion(list(
-      mlr_pipeops$get("null", id = "null1"),
+      mlr_pipeops$get("nop", id = "nop1"),
       mlr_pipeops$get("pca"),
       mlr_pipeops$get("scale")
   )) %>>%
-  mlr_pipeops$get("unbranch", c("null", "pca", "scale"))
+  mlr_pipeops$get("unbranch", c("nop", "pca", "scale"))
 graph$plot(html = TRUE)
 ```
 
@@ -167,7 +167,7 @@ An example of a preprocessing `Graph` that adds the principal components of a ta
 ```{r}
 graph = mlr_pipeops$get("copy", outnum = 2) %>>%
   gunion(list(
-      mlr_pipeops$get("null"),
+      mlr_pipeops$get("nop"),
       mlr_pipeops$get("pca")
   )) %>>%
   mlr_pipeops$get("featureunion", 2)
@@ -189,13 +189,13 @@ graph$plot(html = TRUE)
 
 ### Stacking
 
-A powerful machine learning method is "stacking", where the prediction of one method is used as a feature for another method. This can be achieved with the **`PipeOpLearnerCV`** which uses a `Learner` to produce a prediction `Task`, both during training (combining the holdout samples from a cross-validation) and during prediction. The resulting `Task` contains the predictions *only*, so it is often used in combination with `PipeOpCopy`, `PipeOpNULL`, and `PipeOpFeatureUnion`:
+A powerful machine learning method is "stacking", where the prediction of one method is used as a feature for another method. This can be achieved with the **`PipeOpLearnerCV`** which uses a `Learner` to produce a prediction `Task`, both during training (combining the holdout samples from a cross-validation) and during prediction. The resulting `Task` contains the predictions *only*, so it is often used in combination with `PipeOpCopy`, `PipeOpNOP`, and `PipeOpFeatureUnion`:
 
 ```{r, fig.width = 4, fig.height = 4}
 library("mlr3learners")
 graph = mlr_pipeops$get("copy", 3) %>>%
   gunion(list(
-      mlr_pipeops$get("null"),
+      mlr_pipeops$get("nop"),
       mlr_pipeops$get("learner_cv", mlr_learners$get("regr.rpart")),
       mlr_pipeops$get("learner_cv", mlr_learners$get("regr.lm"))
   )) %>>%
@@ -220,4 +220,4 @@ graph$plot(html = TRUE)
 * Simple ensemble methods on Predictions: *PipeOpMajorityVote*, *PipeOpModelAvg*.
 * Combination of data from alternative paths: *PipeOpFeatureUnion*.
 * Optional alternative paths, chosen by hyperparameter: *PipeOpBranch*, *PipeOpUnbranch*.
-* Non-Operation: *PipeOpNULL*
+* Non-Operation: *PipeOpNOP*

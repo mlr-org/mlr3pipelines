@@ -7,7 +7,7 @@ test_that("Usecase - Choice", {
   opchoicenamed = PipeOpChoice$new(c("opscale", "oppca", "opnop"))
   opscale = PipeOpScale$new()
   oppca = PipeOpPCA$new()
-  opnop = PipeOpNULL$new()
+  opnop = PipeOpNOP$new()
   opunchoice = PipeOpUnchoice$new(3)
 
   # mlr3 Objects

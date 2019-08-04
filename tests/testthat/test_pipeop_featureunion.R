@@ -53,7 +53,7 @@ test_that("PipeOpFeatureUnion - train and predict II", {
   # Define PipeOp's
   scatter = PipeOpCopy$new(2)
   op2a = PipeOpPCA$new()
-  op2b = PipeOpNULL$new()
+  op2b = PipeOpNOP$new()
   op3 = PipeOpFeatureUnion$new(2)
   opdot = PipeOpFeatureUnion$new()
 
@@ -151,7 +151,7 @@ test_that("feature renaming", {
   # Define PipeOp's
   scatter = PipeOpCopy$new(2)
   op2a = PipeOpPCA$new()
-  op2b = PipeOpNULL$new()
+  op2b = PipeOpNOP$new()
   op3 = PipeOpFeatureUnion$new(c("", "XX"))
 
   task = mlr_tasks$get("iris")

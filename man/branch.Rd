@@ -32,7 +32,7 @@ Create a multiplexed graph.
 }
 \examples{
 po_pca = PipeOpPCA$new()
-po_nop = PipeOpNULL$new()
+po_nop = PipeOpNOP$new()
 
 branch(pca = po_pca, nothing = po_nop)
 # gives the same as
