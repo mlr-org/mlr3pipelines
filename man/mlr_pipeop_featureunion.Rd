@@ -19,11 +19,14 @@ If \code{assert_targets_equal} is \code{TRUE}, then an error is thrown if target
 
 \itemize{
 \item \code{PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)} \cr
-(\code{numeric(1)}, \code{character(1)}, named \code{list()}, \code{logical(1)}) -> \code{self} \cr
+(\code{numeric(1)} | \code{character}, \code{character(1)}, named \code{list()}, \code{logical(1)}) -> \code{self} \cr
 Constructor. \code{innum} determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
-If \code{assert_targets_equal} is \code{TRUE} (Default), task target column names are checked for agreement.
-Disagreeing target column names are usually a bug, so this should often be left at the default.
+If \code{assert_targets_equal} is \code{TRUE} (Default),
+task target column names are checked for agreement. Disagreeing target column names are usually a
+bug, so this should often be left at the default.\cr
+\code{innum} may be a \code{character} vector instead of a \code{numeric(1)}. In that case, the number of input channels
+is the length of \code{innum}, and the resulting columns are prefixed with the values.
 }
 }
 

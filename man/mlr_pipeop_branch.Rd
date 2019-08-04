@@ -53,7 +53,7 @@ Not to be confused with \code{\link{PipeOpCopy}}, the naming scheme is a bit unf
 
 \examples{
 pca = PipeOpPCA$new()
-nop = PipeOpNULL$new()
+nop = PipeOpNOP$new()
 choices = c("pca", "nothing")
 PipeOpBranch$new(choices) \%>>\% gunion(list(pca, nop)) \%>>\% PipeOpUnbranch$new(choices)
 }

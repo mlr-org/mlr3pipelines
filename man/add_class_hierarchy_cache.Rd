@@ -13,6 +13,8 @@ add_class_hierarchy_cache(hierarchy)
 Add a class hierarchy to the class hierarchy cache.
 }
 \seealso{
-Other class hierarchy operations: \code{\link{reset_class_hierarchy_cache}}
+Other class hierarchy operations: \code{\link{register_autoconvert_function}},
+  \code{\link{reset_autoconvert_register}},
+  \code{\link{reset_class_hierarchy_cache}}
 }
 \concept{class hierarchy operations}

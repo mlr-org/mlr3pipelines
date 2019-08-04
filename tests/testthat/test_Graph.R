@@ -5,7 +5,7 @@ test_that("linear graph", {
   expect_equal(g$ids(sorted = TRUE), character(0))
 
   # FIXME: we should  "dummy" ops, so we can change properties of the ops at will
-  # we should NOT use PipeOpNULL, because we want to check that $train/$predict actually does something.
+  # we should NOT use PipeOpNOP, because we want to check that $train/$predict actually does something.
   # FIXME: we should packages of the graph
   op_ds = PipeOpSubsample$new()
   op_pca = PipeOpPCA$new()
@@ -192,8 +192,8 @@ test_that("input / output lists and naming", {
 
 test_that("edges that introduce loops cannot be added", {
   g = Graph$new()$
-    add_pipeop(PipeOpNULL$new("p1"))$
-    add_pipeop(PipeOpNULL$new("p2"))
+    add_pipeop(PipeOpNOP$new("p1"))$
+    add_pipeop(PipeOpNOP$new("p2"))
 
   gclone = g$clone(deep = TRUE)
   expect_deep_clone(g, gclone)
@@ -214,7 +214,7 @@ test_that("edges that introduce loops cannot be added", {
 
 
 test_that("assert_graph test", {
-  gr = PipeOpNULL$new() %>>% PipeOpDebugMulti$new(1, 1)
+  gr = PipeOpNOP$new() %>>% PipeOpDebugMulti$new(1, 1)
 
   gr2 = assert_graph(gr)
 
@@ -224,11 +224,11 @@ test_that("assert_graph test", {
 
   expect_deep_clone(gr, gr2)
 
-  expect_error(assert_graph(PipeOpNULL$new()), "inherit from class.*Graph")
+  expect_error(assert_graph(PipeOpNOP$new()), "inherit from class.*Graph")
 
-  assert_graph(assert_graph(PipeOpNULL$new(), coerce = TRUE))
+  assert_graph(assert_graph(PipeOpNOP$new(), coerce = TRUE))
 
-  po = PipeOpNULL$new()
+  po = PipeOpNOP$new()
 
   expect_error(expect_deep_clone(po, po), class = "error", "addresses differ.*isn't true")
 
@@ -290,7 +290,7 @@ test_that("Graph printer aux function calculates col widths well", {
 
 test_that("Intermediate results are saved to Graph if requested", {
   g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
-    gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
+    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
 
   task = mlr_tasks$get("iris")
 
@@ -310,24 +310,24 @@ test_that("Intermediate results are saved to Graph if requested", {
 
   expect_equal(g$pipeops$scale$.result, restask2)
 
-  expect_equal(unname(g$pipeops$null$.result), restask)
+  expect_equal(unname(g$pipeops$nop$.result), restask)
 })
 
 test_that("Namespaces get loaded", {
   g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
-    gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
+    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
 
   g$train(mlr_tasks$get("iris"))
 
   g$pipeops$scale$packages = c("4rfjfw", "324r32")
-  g$pipeops$null$packages = c("4rfjfw", "9422228u")
+  g$pipeops$nop$packages = c("4rfjfw", "9422228u")
 
   res = try(g$train(mlr_tasks$get("iris")), silent = TRUE)
 
   expect_class(res, "try-error")
   expect_subset(c(
-    "  Error loading package 9422228u (required by null):",
-    "  Error loading package 4rfjfw (required by scale, null):",
+    "  Error loading package 9422228u (required by nop):",
+    "  Error loading package 4rfjfw (required by scale, nop):",
     "  Error loading package 324r32 (required by scale):"),
   strsplit(res, "\n")[[1]])
 })

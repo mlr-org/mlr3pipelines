@@ -185,11 +185,11 @@ We will investigate the inner workings of such a Graph.
 In this example we consider three options for preprocessing our data before we train a model.
 
 In a first step we define the different preprocessing steps:
-We will consider scaling the data, transforming it using PCA, or not transforming the data at all (using `PipeOpNULL`).
+We will consider scaling the data, transforming it using PCA, or not transforming the data at all (using `PipeOpNOP`).
 ```r
 op1 = PipeOpScale$new()
 op2 = PipeOpPCA$new()
-op3 = PipeOpNULL$new()
+op3 = PipeOpNOP$new()
 opts = gunion(list(op1, op2, op3))
 ```
 Additionally, we create the learner `PipeOp`.
@@ -371,12 +371,12 @@ of the learner, and set a custom id for the `PipeOp`.
   lrn_0$id = "rpart_cv"
 ```
 
-Additionally, we use a `PipeOpNULL` in parallel to
+Additionally, we use a `PipeOpNOP` in parallel to
 the level 0 learner, in order to send the unchanged
 Task to the next level.
 
 ```{r}
-  level_0 = gunion(list(lrn_0, PipeOpNULL$new()))
+  level_0 = gunion(list(lrn_0, PipeOpNOP$new()))
 ```
 
 Afterwards, we want to concatenate the predictions from
@@ -430,8 +430,8 @@ Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) an
   lrn_1$values$maxdepth = 1L
   lrn_2 = PipeOpPCA$new(id = "pca2") %>>% PipeOpLearnerCV$new(glmn)
 
-  # Union them with a PipeOpNULL to keep original features
-  level_0 = gunion(list(lrn_0, lrn_1,lrn_2, PipeOpNULL$new(id = "NULL1")))
+  # Union them with a PipeOpNOP to keep original features
+  level_0 = gunion(list(lrn_0, lrn_1,lrn_2, PipeOpNOP$new(id = "NULL1")))
 
   # Cbind the output 3 times, train 2 learners but also keep level
   # 0 predictions
@@ -441,7 +441,7 @@ Additionally, we also keep a version of the level 0 output (via `PipeOpNull`) an
     gunion(list(
       PipeOpLearnerCV$new(rprt, id = "rpart_cv_l1"),
       PipeOpLearnerCV$new(glmn, id = "glmnt_cv_l1"),
-      PipeOpNULL$new(id = "NULL_l1")
+      PipeOpNOP$new(id = "NULL_l1")
     ))
 
   # Cbind predicitions, train a final learner.

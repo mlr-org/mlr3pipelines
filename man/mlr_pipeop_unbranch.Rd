@@ -34,7 +34,7 @@ and should probably be the same value as the \code{options} given to the corresp
 
 \examples{
 pca = PipeOpPCA$new()
-nop = PipeOpNULL$new()
+nop = PipeOpNOP$new()
 choices = c("pca", "nothing")
 PipeOpBranch$new(choices) \%>>\% gunion(list(pca, nop)) \%>>\% PipeOpUnbranch$new(choices)
 }

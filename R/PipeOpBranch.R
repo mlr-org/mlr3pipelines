@@ -41,7 +41,7 @@
 #' @export
 #' @examples
 #' pca = PipeOpPCA$new()
-#' nop = PipeOpNULL$new()
+#' nop = PipeOpNOP$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 PipeOpBranch = R6Class("PipeOpBranch",

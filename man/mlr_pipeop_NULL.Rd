@@ -3,11 +3,11 @@
 \docType{data}
 \name{mlr_pipeop_NULL}
 \alias{mlr_pipeop_NULL}
-\alias{PipeOpNULL}
-\title{PipeOpNULL}
+\alias{PipeOpNOP}
+\title{PipeOpNOP}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
 \usage{
-PipeOpNULL
+PipeOpNOP
 }
 \description{
 Simply pushes the input forward.
