@@ -115,7 +115,7 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #' branches = c("pca", "nothing")
 #' PipeOpBranch$new(branches) %>>% gunion(list(po_pca, po_nop)) %>>% PipeOpUnbranch$new(branches)
 #'
-#' branch(pca = po_pca, nothing = po_nop, .prefix_branchops = "br_", .prefix.paths = "xy_")
+#' branch(pca = po_pca, nothing = po_nop, .prefix_branchops = "br_", .prefix_paths = "xy_")
 #' #gives the same as
 #' PipeOpBranch$new(branches, id = "br_branch") %>>%
 #'   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) %>>%
