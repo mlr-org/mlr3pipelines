@@ -8,7 +8,7 @@
 #' or `applicator_single` may be non-`NULL`.
 #'
 #' @section Parameter Set:
-#' * `applicator` :: `function` \cr
+#' * `applicator_vector` :: `function` \cr
 #'   Function to apply to each column of the task. The return value must have the
 #'   same length as the input, i.e. vectorize over the input. A typical example would be `as.numeric`.
 #' * `applicator_single` :: `function` \cr
@@ -20,18 +20,36 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpApply = R6Class("PipeOpApply",
-  inherit = PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "apply", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("applicator", custom_check = check_function),
-        ParamUty$new("applicator_single", custom_check = check_function)
+        ParamUty$new("applicator_vector", custom_check = check_function_or_null),
+        ParamUty$new("applicator_single", custom_check = check_function_or_null)
       ))
       super$initialize(id, ps, param_vals = param_vals)
     },
 
+    # we can not inherit PipeOpTaskPreprocSimple here, because if `applicator_single` is given
+    # and a prediction data table has 0 rows, then the resulting data.table does not know
+    # what the column types should be. Here we enforce column type conformity in that case
+    # by simply saving a copy of an empty dt.
+    train_dt = function(dt, levels) {
+      dt = self$transform_dt(dt, levels)
+      self$state = list(emptydt = dt[integer(0)])
+      dt
+    },
+
+    predict_dt = function(dt, levels) {
+      dt = self$transform_dt(dt, levels)
+      if (!nrow(dt)) {
+        dt = self$state$emptydt
+      }
+      dt
+    },
+
     transform_dt= function(task, task_levels) {
-      applicator = self$param_set$values$applicator
+      applicator = self$param_set$values$applicator_vector
       applicator_single = self$param_set$values$applicator_single
       if (is.null(applicator) == is.null(applicator_single)) {
         stop("Exactly one of 'applicator' or 'applicator_single' must be given.")
@@ -42,4 +60,5 @@ PipeOpApply = R6Class("PipeOpApply",
   )
 )
 
-register_pipeop("apply", PipeOpApply)
+mlr_pipeops$add("apply", PipeOpApply)
+

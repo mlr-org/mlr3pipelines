@@ -52,3 +52,7 @@ task_filter_ex = function(task, row_ids) {
 
   task$filter(row_ids)
 }
+
+# these must be at the root and can not be anonymous functions because all.equal fails otherwise.
+check_function_or_null = function(x) assert_function(x, null.ok = TRUE)
+check_function = function(x) assert_function(x)
