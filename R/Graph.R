@@ -137,7 +137,7 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      op = assert_pipeop(op, TRUE, TRUE)
+      op = as_pipeop(op)
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }

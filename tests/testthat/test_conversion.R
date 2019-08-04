@@ -2,7 +2,7 @@ context("conversion")
 
 test_that("type conversions in graph creation", {
   gr1 = Graph$new()$add_pipeop("scale")
-  gr2 = Graph$new()$add_pipeop(PipeOpScale)
+  gr2 = Graph$new()$add_pipeop(PipeOpScale$new())
   gr3 = Graph$new()$add_pipeop(PipeOpScale$new())
   gr4 = Graph$new()$add_pipeop(po("scale"))
 
@@ -10,8 +10,8 @@ test_that("type conversions in graph creation", {
   expect_equal(gr1, gr3)
   expect_equal(gr1, gr4)
 
-  gr1 = "pca" %>>% PipeOpScale
-  gr2 = PipeOpPCA %>>% PipeOpScale$new()
+  gr1 = "pca" %>>% PipeOpScale$new()
+  gr2 = PipeOpPCA$new() %>>% PipeOpScale$new()
   gr3 = "pca" %>>% gr3
 
   expect_equal(gr1, gr2)
@@ -23,7 +23,7 @@ test_that("type conversions in graph creation", {
 
 test_that("learner conversion in graph creation", {
   gr1 = Graph$new()$add_pipeop("classif.rpart")
-  gr2 = Graph$new()$add_pipeop(LearnerClassifRpart)
+  gr2 = Graph$new()$add_pipeop(LearnerClassifRpart$new())
   gr3 = Graph$new()$add_pipeop(po("learner", "classif.rpart"))
   gr4 = Graph$new()$add_pipeop(PipeOpLearner$new(mlr_learners$get("classif.rpart")))
 
@@ -33,7 +33,7 @@ test_that("learner conversion in graph creation", {
 
   gr1 = "scale" %>>% "classif.rpart"
   gr2 = "scale" %>>% po("learner", "classif.rpart")
-  gr3 = "scale" %>>% LearnerClassifRpart
+  gr3 = "scale" %>>% LearnerClassifRpart$new()
   gr4 = "scale" %>>% PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 
   expect_equal(gr1, gr2)
@@ -47,20 +47,21 @@ test_that("learner conversion in graph creation", {
 
 test_that("assertions work", {
 
-  expect_error(assert_pipeop("test", coerce = TRUE))
-  expect_class(assert_pipeop("scale", coerce = TRUE), "PipeOp")
+  expect_error(as_pipeop("test"))
+  expect_error(assert_pipeop("scale"))
+  expect_class(as_pipeop("scale"), "PipeOp")
 
-  expect_error(assert_graph("test", coerce = TRUE))
-  expect_class(assert_graph("scale", coerce = TRUE), "Graph")
+  expect_error(as_graph("test"))
+  expect_class(as_graph("scale"), "Graph")
 
-  expect_class(assert_pipeop("classif.rpart", coerce = TRUE), "PipeOp")
-  expect_class(assert_graph("classif.rpart", coerce = TRUE), "Graph")
+  expect_class(as_pipeop("classif.rpart"), "PipeOp")
+  expect_class(as_graph("classif.rpart"), "Graph")
 
-  expect_error(assert_pipeop(Graph, coerce = TRUE))
-  expect_class(assert_pipeop(PipeOpScale, coerce = TRUE), "PipeOp")
+  expect_error(as_pipeop(Graph))
+  expect_class(as_pipeop(PipeOpScale$new()), "PipeOp")
 
-  expect_error(assert_graph(Graph, coerce = TRUE))
-  expect_class(assert_graph(PipeOpScale, coerce = TRUE), "Graph")
+  expect_error(as_graph(Graph))
+  expect_class(as_graph(PipeOpScale$new()), "Graph")
 
   # proximity matching
   expect_error("scule" %>>% "pca", "scale")

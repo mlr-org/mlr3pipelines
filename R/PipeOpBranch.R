@@ -135,7 +135,7 @@ branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = 
     check_list(graphs, min.len = 1, any.missing = FALSE, names = "unnamed")
   )
 
-  graphs = lapply(graphs, assert_graph, coerce = TRUE)
+  graphs = lapply(graphs, as_graph)
   imap(graphs, function(g, idx) {
     if (nrow(g$output) != 1) {
       stopf("Graph %s must have exactly one output channel", idx)
