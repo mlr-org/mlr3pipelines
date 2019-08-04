@@ -17,7 +17,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     initialize = function(graph, task_type = "classif", id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]) {
 
       assert_subset(task_type, mlr_reflections$task_types)
-      graph = assert_graph(graph, coerce = TRUE, deep_copy = TRUE)
+      graph = as_graph(graph, deep_copy = TRUE)
       self$graph = graph
       output = graph$output
       if (nrow(output) != 1) {
