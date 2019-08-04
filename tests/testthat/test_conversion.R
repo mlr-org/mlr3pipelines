@@ -72,9 +72,9 @@ test_that("assertions work", {
 test_that("auto-gunion", {
 
   expect_equal(
-    list("pca", "scale") %>>% list("subsample", "null"),
+    list("pca", "scale") %>>% list("subsample", "nop"),
     gunion(list(mlr_pipeops$get("pca"), mlr_pipeops$get("scale"))) %>>%
-      gunion(list(mlr_pipeops$get("subsample"), mlr_pipeops$get("null")))
+      gunion(list(mlr_pipeops$get("subsample"), mlr_pipeops$get("nop")))
   )
 
   expect_equal(
