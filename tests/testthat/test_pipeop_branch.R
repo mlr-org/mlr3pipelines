@@ -63,60 +63,116 @@ test_that("branch function", {
     graph$edges = graph$edges[chorder(graph$edges)]
     graph
   }
-
   expect_graph_equal = function(g1, g2) {
     expect_equal(canonical(g1), canonical(g2))
   }
 
+  # single input/output
   expect_graph_equal(
     branch(po1, po2),
     PipeOpBranch$new(2) %>>% gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(2)
   )
 
+  # single input/output, named
   expect_graph_equal(
     branch(a = po1, b = po2),
     PipeOpBranch$new(c("a", "b")) %>>% gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(c("a", "b"))
   )
 
+  # single input/output, using .graph
   expect_graph_equal(
     branch(.graphs = list(po1, po2)),
     PipeOpBranch$new(2) %>>% gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(2)
   )
 
+  # single input/output, using both .graph and argument
   expect_graph_equal(
     branch(po1, .graphs = list(po2)),
     PipeOpBranch$new(2) %>>% gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(2)
   )
 
+  # single input/output, using both .graph and argument, named
   expect_graph_equal(
     branch(a = po1, .graphs = list(b = po2)),
     PipeOpBranch$new(c("a", "b")) %>>% gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(c("a", "b"))
   )
 
+  # error if some args named, some not named
+  expect_error(branch(a = po1, .graphs = list(po2)), "One of the following")
+
+  # prefix branch operations
   expect_graph_equal(
     branch(po1, po2, .prefix_branchops = "xy_"),
     PipeOpBranch$new(2, id = "xy_branch") %>>% gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(2, id = "xy_unbranch")
   )
 
+  # prefix branch operations, named
   expect_graph_equal(
     branch(a = po1, b = po2, .prefix_branchops = "xy_"),
     PipeOpBranch$new(c("a", "b"), id = "xy_branch") %>>%
     gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")
   )
 
+  # prefix branch operations and paths
   expect_graph_equal(
     branch(po1, po2, .prefix_branchops = "xy_", .prefix_paths = TRUE),
     PipeOpBranch$new(2, id = "xy_branch") %>>%
     gunion(list(po1 = po1, po2 = po2)) %>>% PipeOpUnbranch$new(2, id = "xy_unbranch")
   )
 
+  # prefix branch operations and paths, named
   expect_graph_equal(
     branch(a = po1, b = po2, .prefix_branchops = "xy_", .prefix_paths = TRUE),
     PipeOpBranch$new(c("a", "b"), id = "xy_branch") %>>%
     gunion(list(a = po1, b = po2)) %>>% PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")
   )
 
+  # more than one input
+  expect_graph_equal(
+    branch(gunion(list(po1, po3)) %>>% pofu, po2),
+    gunion(list(
+        PipeOpBranch$new(2),
+        gunion(list(
+            gunion(list(po1, po3)) %>>% pofu,
+            po2)) %>>%
+        PipeOpUnbranch$new(2)))$
+    add_edge("branch", "scale", src_channel = "output1")$
+    add_edge("branch", "pca", src_channel = "output1")$
+    add_edge("branch", "scale2", src_channel = "output2")
+  )
 
+  # more than one input, named
+  expect_graph_equal(
+    branch(b = po2, a = gunion(list(po1, po3)) %>>% pofu),
+    gunion(list(
+        PipeOpBranch$new(c("b", "a")),
+        gunion(list(
+            po2,
+            gunion(list(po1, po3)) %>>% pofu)) %>>%
+        PipeOpUnbranch$new(c("b", "a"))))$
+    add_edge("branch", "scale", src_channel = "a")$
+    add_edge("branch", "pca", src_channel = "a")$
+    add_edge("branch", "scale2", src_channel = "b")
+  )
 
+  # more than one output: error
+  expect_error(branch(po1, poco), "Graph 2 must have exactly one output channel")
+  expect_error(branch(a = po1, b = poco), "Graph b must have exactly one output channel")
+
+  # more than one input, named, prefix branches and paths, named
+  expect_graph_equal(
+    branch(a = gunion(list(po1, po3)) %>>% pofu, b = pofu2, .prefix_branchops = "xy_", .prefix_paths = TRUE),
+    gunion(list(
+        PipeOpBranch$new(c("a", "b"), id = "xy_branch"),
+        gunion(list(
+            a = gunion(list(po1, po3)) %>>% pofu,
+            b = pofu2)) %>>%
+        PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")))$
+    add_edge("xy_branch", "a.scale", src_channel = "a")$
+    add_edge("xy_branch", "a.pca", src_channel = "a")$
+    add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input1")$
+    add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input2")$
+    add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input3")
+  )
 
 })
