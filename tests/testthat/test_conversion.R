@@ -4,7 +4,7 @@ test_that("type conversions in graph creation", {
   gr1 = Graph$new()$add_pipeop("scale")
   gr2 = Graph$new()$add_pipeop(PipeOpScale$new())
   gr3 = Graph$new()$add_pipeop(PipeOpScale$new())
-  gr4 = Graph$new()$add_pipeop(mlr_pipeops$get"scale"))
+  gr4 = Graph$new()$add_pipeop(mlr_pipeops$get("scale"))
 
   expect_equal(gr1, gr2)
   expect_equal(gr1, gr3)
@@ -24,7 +24,7 @@ test_that("type conversions in graph creation", {
 test_that("learner conversion in graph creation", {
   gr1 = Graph$new()$add_pipeop("classif.rpart")
   gr2 = Graph$new()$add_pipeop(LearnerClassifRpart$new())
-  gr3 = Graph$new()$add_pipeop(mlr_pipeops$get"learner", "classif.rpart"))
+  gr3 = Graph$new()$add_pipeop(mlr_pipeops$get("learner", "classif.rpart"))
   gr4 = Graph$new()$add_pipeop(PipeOpLearner$new(mlr_learners$get("classif.rpart")))
 
   expect_equal(gr1, gr2)
@@ -32,7 +32,7 @@ test_that("learner conversion in graph creation", {
   expect_equal(gr1, gr4)
 
   gr1 = "scale" %>>% "classif.rpart"
-  gr2 = "scale" %>>% mlr_pipeops$get"learner", "classif.rpart")
+  gr2 = "scale" %>>% mlr_pipeops$get("learner", "classif.rpart")
   gr3 = "scale" %>>% LearnerClassifRpart$new()
   gr4 = "scale" %>>% PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 
@@ -40,7 +40,7 @@ test_that("learner conversion in graph creation", {
   expect_equal(gr1, gr3)
   expect_equal(gr1, gr4)
 
-  expect_equal(mlr_pipeops$get"learner_cv", "classif.rpart"),
+  expect_equal(mlr_pipeops$get("learner_cv", "classif.rpart"),
     PipeOpLearnerCV$new(mlr_learners$get("classif.rpart")))
 
 })
