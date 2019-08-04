@@ -20,7 +20,7 @@ Optional id prefix to prepend to \code{\link{PipeOpBranch}} and \code{\link{Pipe
 resulting IDs will be \code{"[.prefix_branchops]branch"} and \code{"[.prefix_branchops]unbranch"}.
 Default is \code{""}.}
 
-\item{.prefix_names}{(\code{[logical(1) | character(1)]}):
+\item{.prefix_paths}{(\code{[logical(1) | character(1)]}):
 Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 avoid ID clashes in resulting graph. Default \code{FALSE}. If this is \code{TRUE}, the prefixes
 are taken from the names of the input arguments if present or \code{"poX"} where X counts up. If this is

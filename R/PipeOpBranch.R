@@ -100,7 +100,7 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`] id. Their
 #'   resulting IDs will be `"[.prefix_branchops]branch"` and `"[.prefix_branchops]unbranch"`.
 #'   Default is `""`.
-#' @param .prefix_names (`[logical(1) | character(1)]`):
+#' @param .prefix_paths (`[logical(1) | character(1)]`):
 #'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 #'   avoid ID clashes in resulting graph. Default `FALSE`. If this is `TRUE`, the prefixes
 #'   are taken from the names of the input arguments if present or `"poX"` where X counts up. If this is
