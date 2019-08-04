@@ -8,19 +8,19 @@ branch(..., .graphs = NULL, .prefix_branchops = "",
   .prefix_paths = FALSE)
 }
 \arguments{
-\item{`...`:}{Multiple graphs, possibly named. They all must have exactly
+\item{...}{Multiple graphs, possibly named. They all must have exactly
 one output. If any of the arguments are named, then all must have
 unique names.}
 
-\item{`.graphs`}{(\link{list of Graph}):
+\item{.graphs}{(\code{[list of Graph]}):
 Named list of Graphs, additionally to the graphs given in \code{...}.}
 
-\item{`.prefix_branchops`}{(\code{[character(1)]}):
+\item{.prefix_branchops}{(\code{[character(1)]}):
 Optional id prefix to prepend to \code{\link{PipeOpBranch}} and \code{\link{PipeOpUnbranch}} id. Their
 resulting IDs will be \code{"[.prefix_branchops]branch"} and \code{"[.prefix_branchops]unbranch"}.
 Default is \code{""}.}
 
-\item{`.prefix_names`}{(\code{[logical(1) | character(1)]}):
+\item{.prefix_names}{(\code{[logical(1) | character(1)]}):
 Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 avoid ID clashes in resulting graph. Default \code{FALSE}. If this is \code{TRUE}, the prefixes
 are taken from the names of the input arguments if present or \code{"poX"} where X counts up. If this is
@@ -37,12 +37,12 @@ po_nop = PipeOpNULL$new()
 branch(pca = po_pca, nothing = po_nop)
 # gives the same as
 branches = c("pca", "nothing")
-PipeOpBranch$new(branches) \%>>\% gunion(po_pca, po_nop) \%>>\% PipeOpUnbranch$new(branches)
+PipeOpBranch$new(branches) \%>>\% gunion(list(po_pca, po_nop)) \%>>\% PipeOpUnbranch$new(branches)
 
 branch(pca = po_pca, nothing = po_nop, .prefix_branchops = "br_", .prefix.paths = "xy_")
 #gives the same as
 PipeOpBranch$new(branches, id = "br_branch") \%>>\%
-  gunion(xy_pca = po_pca, xy_nothing = po_nop) \%>>\%
+  gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) \%>>\%
   PipeOpUnbranch$new(branches, id = "br_unbranch")
 
 }
