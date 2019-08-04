@@ -16,7 +16,7 @@
 #' @export
 gunion = function(graphs) {
   assert_list(graphs)
-  graphs = Filter(function(x) length(x$pipeops), map(graphs, assert_graph, coerce = TRUE))
+  graphs = Filter(function(x) length(x$pipeops), map(graphs, as_graph))
 
 
   g = Graph$new()
@@ -24,7 +24,15 @@ gunion = function(graphs) {
     g$pipeops = unlist(map(graphs, "pipeops"), recursive = FALSE)
     assert_names(names(g$pipeops), type = "unique", .var.name = "ids of pipe operators")
     g$pipeops = map(g$pipeops, function(x) x$clone(deep = TRUE))
-    g$edges = rbindlist(map(graphs, "edges"), use.names = TRUE)
+    imap(g$pipeops, function(p, i) p$id = i)
+    g$edges = rbindlist(imap(graphs, function(g, i) {
+      edges = copy(g$edges)
+      if (is.character(i) && nchar(i)) {
+        edges[, c("src_id", "dst_id") := lapply(.SD, function(x) sprintf("%s.%s", i, x)),
+          .SDcols = c("src_id", "dst_id")]
+      }
+      edges
+    }), use.names = TRUE)
   }
   g
 }
