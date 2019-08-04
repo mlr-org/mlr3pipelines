@@ -220,19 +220,19 @@ test_that("assert_graph test", {
 
   expect_error(expect_deep_clone(gr, gr2), class = "error", "addresses differ.*isn't true")
 
-  gr2 = assert_graph(gr, deep_copy = TRUE)
+  gr2 = as_graph(gr, deep_copy = TRUE)
 
   expect_deep_clone(gr, gr2)
 
   expect_error(assert_graph(PipeOpNOP$new()), "inherit from class.*Graph")
 
-  assert_graph(assert_graph(PipeOpNOP$new(), coerce = TRUE))
+  assert_graph(as_graph(PipeOpNOP$new()))
 
   po = PipeOpNOP$new()
 
   expect_error(expect_deep_clone(po, po), class = "error", "addresses differ.*isn't true")
 
-  po2 = assert_graph(po, coerce = TRUE, deep_copy = TRUE)$pipeops[[1]]
+  po2 = as_graph(po, deep_copy = TRUE)$pipeops[[1]]
 
   expect_deep_clone(po, po2)
 })

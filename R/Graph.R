@@ -137,7 +137,7 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      op = assert_pipeop(op, TRUE, TRUE)
+      op = as_pipeop(op)
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }
@@ -495,7 +495,7 @@ graph_reduce = function(self, input, fun, single_input) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-    input_tbl = edges[get("dst_id") == id, list(name = dst_channel, payload = payload)][op$input$name, , on = "name"]
+    input_tbl = edges[get("dst_id") == id, list(name = get("dst_channel"), payload = get("payload"))][op$input$name, , on = "name"]
     edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
     names(input) = input_tbl$name

@@ -13,7 +13,7 @@
 #' @family Graph operators
 #' @export
 greplicate = function(graph, n) {
-  graph = assert_graph(graph, coerce = TRUE)
+  graph = as_graph(graph)
   n = assert_count(n, positive = TRUE, coerce = TRUE)
   x = map(seq_len(n), function(i) {
     g = graph$clone(deep = TRUE)

@@ -4,33 +4,22 @@
 \alias{assert_pipeop}
 \title{Assertion for mlr3pipeline PipeOp}
 \usage{
-assert_pipeop(x, coerce = FALSE, deep_copy = FALSE)
+assert_pipeop(x)
 }
 \arguments{
 \item{x}{(\code{any}) \cr
 Object to check.}
-
-\item{coerce}{(\code{logical(1)}) \cr
-Whether to return a coerced object if possible instead
-of throwing an error.}
-
-\item{deep_copy}{(\code{logical(1)}) \cr
-Whether to return a deep copy.}
 }
 \value{
-\code{\link{Graph}} \code{x} or a deep clone of it.
+\code{\link{PipeOp}} \code{invisible(x)}
 }
 \description{
 Function that checks that a given object is a \code{PipeOp} and
 throws an error if not.
-
-If \code{coerce} is \code{TRUE}, the object is turned into a \code{PipeOp}
-if possible before checking and the coerced object is
-returned. If \code{deep_copy} is \code{TRUE}, a deep copy is made
-before returning.
 }
 \seealso{
 Other Graph operators: \code{\link{\%>>\%}},
+  \code{\link{as_graph}}, \code{\link{as_pipeop}},
   \code{\link{assert_graph}}, \code{\link{greplicate}},
   \code{\link{gunion}}
 }
