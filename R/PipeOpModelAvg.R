@@ -13,6 +13,7 @@
 #' Defaults to equal weights for each model.
 #'
 #' @family PipeOps
+#' @include PipeOpEnsemble.R
 #' @examples
 #' op = PipeOpModelAvg$new()
 #' @export
@@ -25,7 +26,7 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
     },
 
     predict_internal = function(inputs) {
-      list(weighted_avg_predictions(inputs, self$weights))
+      list(weighted_avg_predictions(inputs, self$param_set$values$weights))
     })
 )
 
