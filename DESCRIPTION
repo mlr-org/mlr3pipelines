@@ -55,7 +55,6 @@ Remotes:
 Collate:
     'Graph.R'
     'GraphLearner.R'
-    'LearnerWeightedAverage.R'
     'NO_OP.R'
     'mlr_pipeops.R'
     'utils.R'
