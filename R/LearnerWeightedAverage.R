@@ -154,7 +154,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #' @title Weighted Average of Features for Regression
 #'
 #' @aliases mlr_learners_regr.weightedaverage
-#' @format [R6::R6Class()] inheriting from [mlr3::LearnerClassif].
+#' @format [R6::R6Class()] inheriting from [mlr3::LearnerRegr].
 #'
 #' @description
 #' Computes a weighted average of inputs.
@@ -163,11 +163,9 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #' If `weights.method` is "manual", the average is computed over weights provided by the user.
 #' Predictions are averaged using `weights` (in order of appearance in the data); `weights` defaults to equal
 #' weights for each feature.
-#' For `weights.method`: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
-#' for a measure provided in `measure` (defaults to `classif.acc`).
+#' For `weights.method`: "nloptr", nonlinear optimization from package "nloptr" is used to optimize weights
+#' for a measure provided as `measure` (defaults to `regr.mse`).
 #' Learned weights can be obtained from `.$model`.
-#' For `est.se = TRUE` additional uncertainties are estimated from the weighted standard deviation in the different responses
-#' and added to the standard error estimates of the underlying model.
 #'
 #'
 #' @section Parameter Set:
@@ -185,7 +183,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #'   Several nonlinear optimization methods from `nloptr` are available.
 #'   See `nloptr::nloptr.print.options()` for a list of possible options.
 #'   Note that we only allow for derivative free local or global algorithms, i.e.
-#'   NLOPT_(G|L)N_.
+#'   NLOPT_(G|L)N_*.
 #'
 #' @section Methods:
 #' * `LearnerRegrWeightedAverage$new(), id = "regr.weightedavg")` \cr
@@ -359,3 +357,4 @@ Ensemble = R6Class("Ensemble",
     }
   }
 }
+
