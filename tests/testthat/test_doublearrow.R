@@ -1,19 +1,20 @@
 context("double-arrow")
 
 test_that("Simple ops do what we expect", {
-  p1 = PipeOpNULL$new("p1")
-  p2 = PipeOpNULL$new("p2")
-  p3 = PipeOpNULL$new("p3")
-  p4 = PipeOpNULL$new("p4")
-  p5 = PipeOpNULL$new("p5")
-  p6 = PipeOpNULL$new("p6")
-  p7 = PipeOpNULL$new("p7")
+  p1 = PipeOpNOP$new("p1")
+  p2 = PipeOpNOP$new("p2")
+  p3 = PipeOpNOP$new("p3")
+  p4 = PipeOpNOP$new("p4")
+  p5 = PipeOpNOP$new("p5")
+  p6 = PipeOpNOP$new("p6")
+  p7 = PipeOpNOP$new("p7")
 
   g = p1 %>>% p2 %>>% p3
   expect_class(g, "Graph")
   expect_equal(g$rhs[[1]], p3$id)
 
-  expect_error(p1 %>>% gunion(list(p2, p3)), "mismatching number of inputs / outputs")
+  expect_graph(p1 %>>% gunion(list(p2, p3)))
+  expect_error(gunion(list(p2, p3)) %>>% p1, "mismatching number of inputs / outputs")
 
   g = p1 %>>% PipeOpBranch$new(2) %>>% gunion(list(p2, p3))
   expect_class(g, "Graph")
@@ -47,11 +48,11 @@ test_that("Simple ops do what we expect", {
 })
 
 test_that("operations make deep copies", {
-  p1 = PipeOpNULL$new("p1")
-  p2 = PipeOpNULL$new("p2")
+  p1 = PipeOpNOP$new("p1")
+  p2 = PipeOpNOP$new("p2")
 
-  g3 = Graph$new()$add_pipeop(PipeOpNULL$new("p3"))
-  g4 = Graph$new()$add_pipeop(PipeOpNULL$new("p4"))
+  g3 = Graph$new()$add_pipeop(PipeOpNOP$new("p3"))
+  g4 = Graph$new()$add_pipeop(PipeOpNOP$new("p4"))
 
   g = p1 %>>% p2
   expect_deep_clone(g$pipeops$p1, p1)

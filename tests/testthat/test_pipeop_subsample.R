@@ -16,7 +16,7 @@ test_that("PipeOpSubsample works unstratified", {
   po = PipeOpSubsample$new()
 
   tnew = train_pipeop(po, list(task))
-  expect_true(tnew[[1]]$nrow == task$nrow)
+  expect_true(tnew[[1]]$nrow == ceiling(po$param_set$values$frac * task$nrow))
 
   po = PipeOpSubsample$new()
   po$param_set$values$frac = 0.7

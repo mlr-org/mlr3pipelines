@@ -4,8 +4,8 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
-#' Both undersamples (filters) a [`Task`] to keep only a fraction of the rows with majority class,
-#' as well as oversamples (repeats datapoints) minorit-class rows.
+#' Both undersamples (filters) a [`Task`] to keep only a fraction of the rows of the majority class,
+#' as well as oversamples (repeats datapoints) rows of the minority class.
 #'
 #' Possible parameters are `$ratio`, `$reference`, and `$adjust`.
 #'
@@ -13,6 +13,7 @@
 #' * `ratio` :: `numeric(1)` \cr
 #'   Ratio of number of rows of classes to keep, relative
 #'   to the `$reference` value.
+#'
 #' * `reference` :: `numeric(1)` \cr
 #'   What the `$ratio` value is measured against. Can be `"all"` (default, mean instance count of
 #'   all classes), `"major"` (instance count of class with most instances), `"minor"`
@@ -20,10 +21,12 @@
 #'   count of all classes except the major one), `"nonminor"` (average instance count
 #'   of all classes except the minor one), and `"one"` (`$ratio` determines the number of
 #'   instances to have, per class).
+#'
 #' * `adjust` :: `numeric(1)` \cr
 #'   Which classes to up / downsample. Can be `"all"` (default, up and downsample all to match required
 #'   instance count), `"major"`, `"minor"`, `"nonmajor"`, `"nonminor"` (see respective values
 #'   for `$reference`), `"upsample"` (only upsample), and `"downsample"`.
+#'
 #' * `shuffle` :: `logical(1)` \cr
 #'   Whether to shuffle the result. Otherwise, the resulting task will have the original items that
 #'   were not removed in downsampling in-order, followed by all newly sampled items ordered by target class.
@@ -32,6 +35,16 @@
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
+#' @examples
+#' task = mlr3::mlr_tasks$get("spam")
+#' op = mlr_pipeops$get("balancesample")
+#'
+#' # double the instances in the minority class (spam)
+#' op$param_set$values = list(ratio = 2, reference = "minor", adjust = "minor", shuffle = FALSE)
+#' new_task = op$train(list(task = task))[[1L]]
+#'
+#' table(task$truth())
+#' table(new_task$truth())
 PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
   inherit = PipeOpTaskPreproc,
 
@@ -98,4 +111,4 @@ PipeOpBalanceSample = R6Class("PipeOpBalanceSample",
   )
 )
 
-register_pipeop("balancesample", PipeOpBalanceSample)
+mlr_pipeops$add("balancesample", PipeOpBalanceSample)

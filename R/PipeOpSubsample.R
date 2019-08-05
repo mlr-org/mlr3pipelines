@@ -4,14 +4,16 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
-#' Subsamples a [`Task`] to use a fraction of the rows. `frac`
-#' can be > 1 if `replace` is `TRUE`.
+#' Subsamples a [`Task`] to use a fraction of the rows.
+#' `frac` can be > 1 if `replace` is `TRUE`.
 #'
 #' @section Parameter Set:
 #' * `frac` :: `numeric(1)` \cr
 #'   Fraction of rows in the task to keep. Default 1.
+#'
 #' * `stratify` :: `logical(1)` \cr
 #'   Should the subsamples be stratified by target? Default `FALSE`.
+#'
 #' * `replace` :: `logical(1)` \cr
 #'   Sample with replacement? Default is `FALSE`.
 #'
@@ -23,11 +25,11 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
   public = list(
     initialize = function(id = "subsample", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("frac", default = 1, lower = 0, upper = Inf),
+        ParamDbl$new("frac", default = 1 - exp(-1), lower = 0, upper = Inf),
         ParamLgl$new("stratify", default = FALSE),
         ParamLgl$new("replace", default = FALSE)
       ))
-      ps$values = list(frac = 1, stratify = FALSE, replace = FALSE)
+      ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
@@ -65,4 +67,4 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
   )
 )
 
-register_pipeop("subsample", PipeOpSubsample)
+mlr_pipeops$add("subsample", PipeOpSubsample)

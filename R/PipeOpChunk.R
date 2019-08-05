@@ -13,48 +13,39 @@
 #'   (`integer(1)`, `character(1)`) -> `self` \cr
 #'   Constructor. `outnum` gives the number of output
 #'   channels / chunks that are created.
+#'
 #' @section Parameter Set:
 #' * `shuffle` :: `logical(1)` \cr
 #'   Should the data be shuffled before chunking? Default `TRUE`
-#' * `stratify` :: `logical(1)` \cr
-#'   Should the subsamples be stratified. Default `FALSE`.
+#'
 #' @family PipeOps
-#' @examples
-#' op = PipeOpChunk$new(5)
 #' @include PipeOp.R
 #' @export
+#' @examples
+#' task = mlr3::mlr_tasks$get("wine")
+#' op = PipeOpChunk$new(3)
+#' op$train(list(task = task))
 PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "chunk", param_vals = list()) {
       outnum = assert_int(outnum, lower = 1L)
       ps = ParamSet$new(params = list(
-        ParamLgl$new("shuffle", default = TRUE),
-        ParamLgl$new("stratify", default = FALSE)
+        ParamLgl$new("shuffle", default = TRUE)
       ))
-      ps$values = list(shuffle = TRUE, stratify = FALSE)
+      ps$values = list(shuffle = TRUE)
       super$initialize(id,
         param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task")
       )
     },
-    train = function(inputs) {
+
+    train_internal = function(inputs) {
       self$state = list()
-
       task = inputs[[1L]]
-      colns = task$backend$colnames
 
-      if (self$param_set$values$stratify) {
-        row_ids = task$row_ids
-        stratify = task$target_names
-        split_row_ids = split(row_ids, task$data(rows = row_ids, cols = stratify))
-        double_split = map(split_row_ids, chunk_vector, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
-        row_ids = map(transpose_list(double_split), unlist, use.names = FALSE)
-      } else {
-        # FIXME: Implement stratification?
-        row_ids = chunk_vector(task$row_ids, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
-      }
+      row_ids = chunk_vector(task$row_ids, n_chunks = self$outnum, shuffle = isTRUE(self$param_set$values$shuffle))
 
       # Subset data, clone task and overwrite data in it.
       map(row_ids, function(x) {
@@ -62,10 +53,10 @@ PipeOpChunk = R6Class("PipeOpChunk",
       })
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       rep(inputs, self$outnum)
     }
   )
 )
 
-register_pipeop("chunk", PipeOpChunk, list("N"))
+mlr_pipeops$add("chunk", PipeOpChunk, list("N"))

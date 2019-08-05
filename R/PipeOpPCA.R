@@ -5,8 +5,8 @@
 #'
 #' @description
 #' Extracts principle components from data.
+#' See [stats::prcomp()] for details  and parameters.
 #'
-#' See [stats::prcomp] for details  and parameters.
 #' @examples
 #' # Instantiate PipeOpPCA
 #' op1 = PipeOpPCA$new()
@@ -42,4 +42,4 @@ PipeOpPCA = R6Class("PipeOpPCA",
   )
 )
 
-register_pipeop("pca", PipeOpPCA)
+mlr_pipeops$add("pca", PipeOpPCA)

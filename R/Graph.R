@@ -50,7 +50,7 @@
 #'   Get IDs of all PipeOps. This is in order that PipeOps were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `add_pipeop(op)` \cr
-#'   ([`PipeOp`]) -> `self` \cr
+#'   ([`PipeOp`] | `character(1)`) -> `self` \cr
 #'   Mutates `Graph` by adding a `PipeOp` to the `Graph`. This does not add any edges, so the new `PipeOp`
 #'   will not be connected within the `Graph` at first.
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
@@ -137,11 +137,11 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      assert_r6(op, "PipeOp")
+      op = as_pipeop(op)
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }
-      self$pipeops[[op$id]] = op$clone(deep = TRUE)
+      self$pipeops[[op$id]] = op
 
       if (!is.null(private$.param_set)) {
         # param_set is built on-demand; if it has not been requested before, its value may be NULL
@@ -166,7 +166,7 @@ Graph = R6Class("Graph",
       }
       if (is.null(dst_channel)) {
         if (length(self$pipeops[[dst_id]]$input$name) > 1) {
-          stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
+          stopf("dst_channel must not be NULL if src_id pipeop has more than one input channel.")
         }
         dst_channel = 1L
       }
@@ -199,12 +199,11 @@ Graph = R6Class("Graph",
           src_id, types_src$predict, dst_id, types_dst$predict)
       }
 
-      bad_rows = (self$edges$src_id == src_id & self$edges$src_channel == src_channel) |
-        (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel)
+      bad_rows = (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel & self$edges$dst_channel != "...")
       if (any(bad_rows)) {
         prior_con = self$edges[bad_rows]
         stopf("Cannot add multiple edges to a channel.\n%s",
-          paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.",
+          paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.\nMultiple connections to input channels is only possible for vararg (i.e. '...') channels.",
             prior_con$src_channel, prior_con$src_id, prior_con$dst_channel, prior_con$dst_id), collapse = "\n"))
       }
       row = data.table(src_id, src_channel, dst_id, dst_channel)
@@ -333,12 +332,12 @@ Graph = R6Class("Graph",
 
     train = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "train")
-      graph_reduce(self, input, "train_internal", single_input)
+      graph_reduce(self, input, "train", single_input)
     },
 
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
-      graph_reduce(self, input, "predict_internal", single_input)
+      graph_reduce(self, input, "predict", single_input)
     }
   ),
 
@@ -376,7 +375,7 @@ Graph = R6Class("Graph",
     },
     state = function(val) {
       if (!missing(val)) {
-        assert_list(val, names = "unique")
+        assert_list(val, names = "unique", null.ok = TRUE)
         assert_subset(names(val), names(self$pipeops))
         imap(self$pipeops, function(pipeop, pname) pipeop$state = val[[pname]])
         val
@@ -449,8 +448,8 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
 # input: as given by `$train`, `$predict`. single valued to be copied (if
 #   `single_input` is `TRUE`) or (possibly named) list of values for each
 #   incoming edge.
-# fun: function of each `PipeOp` to call; should be `train_internal` oder
-#   `predict_internal`.
+# fun: function of each `PipeOp` to call; should be `train` oder
+#   `predict`.
 # single_input: whether `input` is to be copied to all input channels
 #   (`TRUE`) or is a list with different input for each channel (`FALSE`).
 graph_reduce = function(self, input, fun, single_input) {
@@ -496,11 +495,10 @@ graph_reduce = function(self, input, fun, single_input) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-    input_tbl = edges[get("dst_id") == id, c("dst_channel", "payload")]
+    input_tbl = edges[get("dst_id") == id, list(name = get("dst_channel"), payload = get("payload"))][op$input$name, , on = "name"]
     edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
-    names(input) = input_tbl$dst_channel
-    input = input[op$input$name]
+    names(input) = input_tbl$name
 
     output = op[[fun]](input)
     if (self$keep_results) {

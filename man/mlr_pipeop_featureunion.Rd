@@ -10,21 +10,23 @@
 PipeOpFeatureUnion
 }
 \description{
-Aggregates features from all input tasks by cbinding them together
-into a \code{\link{data.table}}.
-\code{\link{DataBackend}} primary keys and \code{\link{Task}} targets have to be equal across each
-\code{Task}. Only the target column(s) of the first task are kept.
-If \code{assert_targets_equal} is \code{TRUE}, then an error is thrown if target column name(s)
-disagree.
+Aggregates features from all input tasks by \code{[cbind()]}ing them together into a \code{\link{data.table}}.
+\code{\link{DataBackend}} primary keys and \code{\link{Task}} targets have to be equal across each \code{Task}.
+Only the target column(s) of the first task are kept.
+If \code{assert_targets_equal} is \code{TRUE}, then an error is thrown if target column name(s) disagree.
 }
 \section{Methods}{
 
 \itemize{
-\item \code{PipeOpFeatureUnion$new(innum, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)} \cr
-(\code{numeric(1)}, \code{character(1)}, named \code{list}, \code{logical(1)}) -> \code{self} \cr
-Constructor. \code{innum} determines the number of input channels. If \code{assert_targets_equal} is \code{TRUE} (Default),
+\item \code{PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)} \cr
+(\code{numeric(1)} | \code{character}, \code{character(1)}, named \code{list()}, \code{logical(1)}) -> \code{self} \cr
+Constructor. \code{innum} determines the number of input channels.
+If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+If \code{assert_targets_equal} is \code{TRUE} (Default),
 task target column names are checked for agreement. Disagreeing target column names are usually a
-bug, so this should often be left at the default.
+bug, so this should often be left at the default.\cr
+\code{innum} may be a \code{character} vector instead of a \code{numeric(1)}. In that case, the number of input channels
+is the length of \code{innum}, and the resulting columns are prefixed with the values.
 }
 }
 
@@ -32,8 +34,6 @@ bug, so this should often be left at the default.
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},
