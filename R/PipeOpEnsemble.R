@@ -32,13 +32,15 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       list(NULL)
     },
     predict_internal = function(inputs) stop("abstract")
-  ),
-  active = list(
-    weights = function(val) {
-      if (!missing(val)) {
-        self$param_set$values$weights = val
-      }
-      self$param_set$values$weights
-    }
   )
 )
+
+check_weights = function(innum) {
+  if (innum == 0) {
+    function(x) assert_numeric(x, any.missing = FALSE)
+  } else {
+    function(x)
+      assert(check_numeric(x, len = innum, any.missing = FALSE),
+        check_numeric(x, len = 1, any.missing = FALSE))
+  }
+}
