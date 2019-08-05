@@ -18,16 +18,17 @@
 #'
 #' @section Public Members / Active Bindings:
 #' * `state$intasklayout`  :: [`data.table`] with columns `id`, `type` \cr
-#'   Set during `$train()`: `$feature_types` of training `Task`, is used for verification
-#'   during `$predict()` that columns have not changed.
+#'   Set during `$train()`: `$feature_types` of training `Task`, is used to verify
+#'   that columns have not changed during `$predict()`.
 #' * `state$outtasklayout` :: [`data.table`] with columns `id`, `type` \cr
-#'   Set during `$train()`: `$feature_types` of transformed `Task`, is used for verification
-#'   during `$predict()` that the transformed `Task` is the same as during training.
+#'   Set during `$train()`: `$feature_types` of transformed `Task`, is is used to verify
+#'   that the transformed `Task` is the same during `$train()` and `$predict()`.
 #' * `affect_columns` :: `NULL` | `function` \cr
-#'   Can be used to subset the columns that the `PipeOp` operates on. If `$affect_columns` is `NULL`,
-#'   then all columns are given to the `$train` / `$predict` function. If this is a `function`, it
-#'   should take one argument (the input `Task`) and return a `character` indicating the feature
-#'   columns that should be operated on. `$affect_columns()` is then called during training and
+#'   Can be used to subset the columns that the `PipeOp` operates on.
+#'   If `$affect_columns` is `NULL`,  then all columns are given to the `$train` / `$predict` function.
+#'   If this is a `function`, it should take one argument (the input `Task`) and return a
+#'   `character` indicating the feature columns that should be operated on.
+#'   `$affect_columns()` is then called during training and
 #'   only features named in its return value are seen by the training / prediction function. \cr
 #'   This should not be changed if `can_subset_columns` is `FALSE`, and depends on the `PipeOpTaskPreproc` subclass.
 #' * `state$affected_cols` :: `character` \cr
@@ -103,7 +104,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
 
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
@@ -129,7 +130,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       list(intask)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
+
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
       if (do_subset) {

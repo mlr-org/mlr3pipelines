@@ -112,7 +112,8 @@ pofu$input
 
 Other `PipeOp`s may have channels that take different types during different phases. The `backuplearner` `PipeOp`, for example, takes a `NULL` and a `Task` during training, and a `Prediction` and a `Task` during prediction:
 ```{r}
-mlr_pipeops$get("backuplearner")$input
+# TODO this is an important case to handle here, do not delete unless there is a better example.
+# mlr_pipeops$get("backuplearner")$input
 ```
 
 ### Output Channels
@@ -133,7 +134,7 @@ Most `PipeOp`s have only one input channel (so they take a list with a single el
 
 The default printer of a `PipeOp` gives information about channel names and types:
 ```{r}
-mlr_pipeops$get("backuplearner")
+# mlr_pipeops$get("backuplearner")
 ```
 
 ## `Graph`: Networks of `PipeOp`s
@@ -160,8 +161,8 @@ gr$add_edge("scale", "subsample")
 ```{r}
 print(gr)
 ```
-```{r}
-gr$plot()
+```{r, fig.width = 8, fig.height = 8}
+gr$plot(html = TRUE)
 ```
 
 A `Graph` itself has a **`$train()`** and a **`$predict()`** method that accept some data and propagate this data through the network of `PipeOp`s. The return value corresponds to the output of the `PipeOp` output channels that are not connected to other `PipeOp`s.
@@ -195,7 +196,7 @@ gr$
   add_edge("scale", "featureunion", dst_channel = 1)$
   add_edge("pca", "featureunion", dst_channel = 2)
 
-gr$plot()
+gr$plot(html = TRUE)
 ```
 ```{r}
 gr$train(iris_first_half)[[1]]$data()
@@ -210,7 +211,7 @@ gr = mlr_pipeops$get("copy", outnum = 2) %>>%
   gunion(list(mlr_pipeops$get("scale"), mlr_pipeops$get("pca"))) %>>%
   mlr_pipeops$get("featureunion", innum = 2)
 
-gr$plot()
+gr$plot(html = TRUE)
 ```
 
 ### `PipeOp` IDs and ID Name Clashes
@@ -278,7 +279,7 @@ resample(task, lrngrph, rsmp)
 
 ## Hyperparameters
 
-`mlr3pipelines` relies on the [`paradox`](https://github.com/mlr-org/paradox) package to provide parameters that can modify each `PipeOp`'s behaviour. `paradox` parameters provide information about the parameters that can be changed, as well as their types and ranges. They provide a unified interface for benchmarks and parameter optimization ("tuning"). For a deep dive into `paradox`, see the [`paradox` introduction tutorial](https://paradox.mlr-org.com/articles/paradox.html).
+`mlr3pipelines` relies on the [`paradox`](https://paradox.mlr-org.com) package to provide parameters that can modify each `PipeOp`'s behaviour. `paradox` parameters provide information about the parameters that can be changed, as well as their types and ranges. They provide a unified interface for benchmarks and parameter optimization ("tuning"). For a deep dive into `paradox`, see the the [mlr3book](https://mlr3book.mlr-org.com).
 
 The `ParamSet`, representing the space of possible parameter configurations of a `PipeOp`, can be inspected by accessing the **`$param_set`** slot of a `PipeOp` or a `Graph`.
 ```{r}
@@ -311,6 +312,3 @@ op_rpart$param_set
 glrn = GraphLearner$new(gr %>>% op_rpart)
 glrn$param_set
 ```
-
-### Parameter Tuning
-

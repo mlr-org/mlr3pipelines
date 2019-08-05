@@ -227,7 +227,7 @@ tune(gg, task, ps)
 ```
 op1 = PipeOpPCA$new()
 op2 = PipeOpICA$new()
-op3 = PipeOpNULL$new()
+op3 = PipeOpNOP$new()
 
 op = Multiplexer$new(op1, op2, op3)
 
@@ -248,7 +248,7 @@ oder machen wir den multiplexer über die graphstruktur?
 ```
 op1 = PipeOpScaler$new()
 op2a = PipeOpPCA$new()     # was machen wir hier mit den targets?
-op2b = PipeOpNULL$new()
+op2b = PipeOpNOP$new()
 op3 = PipeOpFeatureUnion$new()
 op4 = PipeOpLearner$new(learner = "classif.rpart")
 
@@ -267,7 +267,7 @@ g43$set_next(list(g3))
 ### Use case: Bagging
 ```
 k = 100
-op1 = PipeOpNULL$new()
+op1 = PipeOpNOP$new()
 op2 = PipeOpDownSample$new(rate = 0.6)
 ops2 = repop(k, op2) # Auto-set Ids? # replicate with s3?
 op3 = PipeOpLearner$new("classif.rpart")
@@ -287,7 +287,7 @@ g4$set_prev(gs3)
 #### can we write the above in a shorter, better way?
 
 ```
-op1 = PipeOpNULL$new()
+op1 = PipeOpNOP$new()
 op2 = PipeOpDownSample$new(rate = 0.6)
 op3 = PipeOpLearner$new("classif.rpart")
 op4 = PipeOpEnsembleAverage$new()
@@ -330,7 +330,7 @@ gg$get_group("rpart")[[3]]
 ### Use case: Stacking
 
 ```
-op1 = PipeOpNULL$new()
+op1 = PipeOpNOP$new()
 op2 = PipeOpLearner$new("regr.rpart") # das hier müsste dann model UND daten im training ausgeben
 op3 = PipeOpLearner$new("regr.svm") # Train: data -> list(model, data) # Predict: data -> prediction
 op4a = PipeOpGetTrainPreds$new()    # Train: predict(model, data)      # Predict: identity
@@ -374,7 +374,7 @@ PipeOPCrossvalLearner("rpart"):
 ------------------------------------------------------------------------------------------
 ## PipeOp Defintions Template
 
-PipeOpNULL
+PipeOpNOP
 paramset  : <none>
 behavior  : passes input without change to output
 train     : [any] --> [any]

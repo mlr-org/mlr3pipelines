@@ -34,8 +34,6 @@ Constructor. The given learner will be used for prediction.
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},
@@ -54,8 +52,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_unbranch}},
   \code{\link{mlr_pipeops}}
 
-Other Meta PipeOps: \code{\link{mlr_pipeop_backup_learner}},
-  \code{\link{mlr_pipeop_learner_cv}}
+Other Meta PipeOps: \code{\link{mlr_pipeop_learner_cv}}
 }
 \concept{Meta PipeOps}
 \concept{PipeOps}

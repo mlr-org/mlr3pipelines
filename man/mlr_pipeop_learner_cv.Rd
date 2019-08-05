@@ -52,8 +52,7 @@ The \code{\link{ParamSet}} of \code{$learner} is also made available.
 }
 
 \seealso{
-Other Meta PipeOps: \code{\link{mlr_pipeop_backup_learner}},
-  \code{\link{mlr_pipeop_learner}}
+Other Meta PipeOps: \code{\link{mlr_pipeop_learner}}
 }
 \concept{Meta PipeOps}
 \concept{Pipeops}

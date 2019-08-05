@@ -17,6 +17,7 @@ Adds features according to expressions.
 \itemize{
 \item \code{mutation} :: named \code{list} \cr
 Expressions for new features to create. Can be created with \code{alist()}.
+Can contain multiple expressions, that directly reference task features.
 \item \code{env} :: \code{environment} \cr
 Environment in which expressions are evaluated. This is the enclosing
 environment \emph{after} the \code{Task}'s features are considered.
@@ -30,8 +31,6 @@ then features may still be overwritten.
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},

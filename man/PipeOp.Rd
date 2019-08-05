@@ -26,14 +26,14 @@ return different objects, for example different subsets of a \code{\link{Task}},
 functions.
 
 Input and output channels are defined in the \code{$input} and \code{$output} slots; each channel has a \emph{name}, a required
-type during training, and a required type during prediction. When inheriting from a \code{PipeOp}, the \code{$train()} and
-\code{$predict()} functions must be overloaded. Each of these functions then receives a named \code{list} according to
+type during training, and a required type during prediction. When inheriting from a \code{PipeOp}, the \code{$train_internal()} and
+\code{$predict_internal()} functions must be overloaded. Each of these functions then receives a named \code{list} according to
 the \code{PipeOp}'s input channels, and must return a \code{list} (names are ignored) with values in the order of output
 channels in \code{$output}.
 
-The \code{$train()} and \code{$predict()} function should not be called by the user; instead, a \code{PipeOp} should be added
-to a \code{Graph} (possibly as singleton in that \code{Graph}), and the \code{Graph}'s \code{$train} / \code{$predict} methods should be
-called.
+The \code{$train_internal()} and \code{$predict_internal()} function should not be called by the user; instead, a \code{$train()} and \code{$predict()} should be used.
+The most convenient usage is to add the \code{PipeOp}
+to a \code{Graph} (possibly as singleton in that \code{Graph}), and using the \code{Graph}'s \code{$train()} / \code{$predict()} methods.
 
 This class is an abstract base class that all \code{PipeOp}s being used in a \code{\link{Graph}} should inherit from,  and
 is not intended to be instantiated.
@@ -107,13 +107,13 @@ the \code{PipeOp} in any way. \code{$predict()} will not be called by a \code{Gr
 not be checked. Input and output are specified by \code{$input} and \code{$output} in the same way as for \code{$train()}, except that
 the \code{predict} column is used for type checking.\cr
 Just as \code{$train()}, \code{$predict} should not be called by a user; instead a \code{Graph}'s \code{$predict()} method should be used.
-\item \code{train_internal(input)} \cr
+\item \code{train(input)} \cr
 (named \code{list}) -> \code{list} \cr
 Internal function used by a \code{Graph} to call \code{$train()}. Does type checking and possibly skips a function call if a
 \code{\link{NO_OP}} is received. Should not be overloaded by inheriting classes.
-\item \code{predict_internal(input)} \cr
+\item \code{predict(input)} \cr
 (named \code{list}) -> \code{list} \cr
-Internal function used by a \code{Graph} to call \code{$predict()}, function analogous to \code{$train_internal()}.
+Internal function used by a \code{Graph} to call \code{$predict()}, function analogous to \code{$train()}.
 \item \code{print()} \cr
 () -> \code{NULL} \cr
 Prints the \code{PipeOp}s most salient information: \code{$id}, \code{$is_trained}, \code{$param_set$values}, \code{$input} and \code{$output}.
@@ -129,8 +129,6 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},

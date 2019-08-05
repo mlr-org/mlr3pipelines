@@ -4,39 +4,41 @@
 #'
 #' @description
 #' Parent class for PipeOps that aggregate a list of predictions.
+#'
 #' @section Methods:
-#' * `PipeOpEnsemble$new(innum, id)` \cr
+#' * `PipeOpEnsemble$new(innum = 0, id)` \cr
 #'   (`numeric(1)`, `character(1)`) -> `self` \cr
 #'   Constructor. `innum` determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input
+#'   channel is created that can take an arbitrary number of inputs.
+#'
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
-      assert_integerish(innum, lower = 1)
-      param_set$add(ParamDbl$new("weight")$rep(innum))
-      weightids = param_set$ids(tags = "weight_rep")
-      param_set$values[weightids] = 1 / innum
+    initialize = function(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
+      assert_integerish(innum, lower = 0)
+      param_set$add(ParamUty$new("weights", custom_check = check_weights(innum)))
+      param_set$values$weights = 1
+      inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = prediction_type),
+        input = data.table(name = inname, train = "NULL", predict = prediction_type),
         output = data.table(name = "output", train = "NULL", predict = prediction_type))
     },
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       list(NULL)
     },
-    predict = function(inputs) stop("abstract")
+    predict_internal = function(inputs) stop("abstract")
   ),
   active = list(
     weights = function(val) {
-      weightids = self$param_set$ids(tags = "weight_rep")
       if (!missing(val)) {
-        assert_numeric(val, len = nrow(self$input), any.missing = FALSE)
-        self$param_set$values[weightids] = val
+        self$param_set$values$weights = val
       }
-      as.numeric(self$param_set$values[weightids])
+      self$param_set$values$weights
     }
   )
 )
@@ -113,5 +115,14 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-register_pipeop("majorityvote", PipeOpMajorityVote, list("N"))
+check_weights = function(innum) {
+  if (innum > 0) {
+    function(x) assert(
+      check_numeric(x, len = innum, any.missing = FALSE),
+      check_numeric(x, len = 1, any.missing = FALSE)
+    )
+  } else {
+    function(x) assert_numeric(x, min.len = 1, any.missing = FALSE)
+  }
+}
 

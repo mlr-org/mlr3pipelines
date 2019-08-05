@@ -31,24 +31,27 @@
 #' @export
 `%>>%` = function(g1, g2) {
 
-  g1 = assert_graph(g1, coerce = TRUE)
-  g2 = assert_graph(g2, coerce = TRUE)
+  g1 = as_graph(g1)
+  g2 = as_graph(g2)
   g1out = g1$output
   g2in = g2$input
-  if (nrow(g1out) != nrow(g2in)) {
+  if (nrow(g1out) != 1 && nrow(g1out) != nrow(g2in) && !(nrow(g2in) == 1 && g2in$channel.name == "...")) {
     stopf("Graphs / PipeOps to be connected have mismatching number of inputs / outputs.")
   }
   g = gunion(list(g1, g2))
 
+
   # check that types agree
-  for (row in seq_len(nrow(g1out))) {
-    if (!are_types_compatible(g1out$train[row], g2in$train[row])) {
+  for (row in seq_len(max(nrow(g1out), nrow(g2in)))) {
+    outrow = min(nrow(g1out), row)
+    inrow = min(nrow(g2in), row)
+    if (!are_types_compatible(g1out$train[outrow], g2in$train[inrow])) {
       stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
-        g1out$op.id[row], g1out$train[row], g2in$op.id[row], g2in$train[row])
+        g1out$op.id[outrow], g1out$train[outrow], g2in$op.id[inrow], g2in$train[inrow])
     }
-    if (!are_types_compatible(g1out$predict[row], g2in$predict[row])) {
+    if (!are_types_compatible(g1out$predict[outrow], g2in$predict[inrow])) {
       stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
-        g1out$op.id[row], g1out$predict[row], g2in$op.id[row], g2in$predict[row])
+        g1out$op.id[outrow], g1out$predict[outrow], g2in$op.id[inrow], g2in$predict[inrow])
     }
   }
 

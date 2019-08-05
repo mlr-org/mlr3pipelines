@@ -40,14 +40,14 @@ test_that("linear: scale + pca + learn", {
 })
 
 test_that("featureunion", {
-  g = gunion(list(PipeOpPCA$new(), PipeOpNULL$new())) %>>%
+  g = gunion(list(PipeOpPCA$new(), PipeOpNOP$new())) %>>%
     PipeOpFeatureUnion$new(2L) %>>% PipeOpLrnRP
   z = test_graph(g, n_nodes = 4L, n_edges = 3L)
 
   expect_equal(abs(as.matrix(z$g.trained$pipeops$pca$.result[[1]]$data(cols = paste0("PC", 1:4)))),
     abs(prcomp(iris[1:4])$x))
 
-  expect_equal(z$g.trained$pipeops$null$.result[[1]], mlr_tasks$get("iris"))
+  expect_equal(z$g.trained$pipeops$nop$.result[[1]], mlr_tasks$get("iris"))
 
   expect_equal(abs(as.matrix(z$g.trained$pipeops$featureunion$.result[[1]]$data(cols = c(paste0("PC", 1:4), colnames(iris)[1:4])))),
     as.matrix(cbind(abs(prcomp(iris[1:4])$x), iris[1:4])))
@@ -95,6 +95,28 @@ test_that("branching", {
   expect_equal(names(res), "unbranch.output")
 })
 
+test_that("branching with varargs", {
+  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new()
+  z = test_graph(g, n_nodes = 4L, n_edges = 4L)
+
+  expect_equal(z$g.trained$pipeops$classif.rpart$.result, list(NULL))
+  expect_equal(z$g.trained$pipeops$classif.featureless$.result, list(output = NO_OP))
+  expect_equal(z$g.trained$pipeops$unbranch$.result, list("..." = NULL))
+
+  expect_equal(z$g.predicted$pipeops$classif.rpart$.result[[1]], z$g.predicted$pipeops$unbranch$.result[[1]])
+  expect_equal(z$g.predicted$pipeops$classif.featureless$.result, list(output = NO_OP))
+
+  g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new()
+  task = mlr_tasks$get("iris")
+  res = g$train(task)
+  expect_true(g$is_trained)
+  expect_equal(res, list(unbranch.output = NULL))
+  res = g$predict(task)
+  expect_list(res, types = "Prediction")
+  expect_equal(names(res), "unbranch.output")
+})
+
+
 
 test_that("task chunking", {
   g = PipeOpChunk$new(2L) %>>% greplicate(PipeOpLrnRP, 2L) %>>% PipeOpMajorityVote$new(2L)
@@ -110,7 +132,7 @@ test_that("stacking", {
   pipe = gunion(list(
     PipeOpLearnerCV$new(lrn1),
     PipeOpLearnerCV$new(lrn2),
-    PipeOpNULL$new()))
+    PipeOpNOP$new()))
   pipe = pipe %>>% PipeOpFeatureUnion$new(3)
 
   result = pipe$train(task)[[1]]

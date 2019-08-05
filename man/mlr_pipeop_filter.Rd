@@ -10,24 +10,18 @@
 PipeOpFilter
 }
 \description{
-Feature filtering using a \code{\link[mlr3featsel:Filter]{mlr3featsel::Filter}} object, see the
-\link[mlr3:mlr3-package]{mlr3featsel} package.
+Feature filtering using a \code{\link[mlr3filters:Filter]{mlr3filters::Filter}} object, see the
+\CRANpkg{mlr3filters} package.
 
-The \code{settings} of the filter are given as \code{\link[paradox:ParamUty]{paradox::ParamUty}};
-when \code{Filter}s start supporting the \code{paradox} interface that could
-be used instead.
-
-If a \code{Filter} can only operate on a subset of columns based on column
-type, then only these features are considered. \code{nfeat} and \code{frac} will
-count for the features of the type that the \code{Filter} can operate on;
-this means e.g. that setting \code{nfeat} to 0 will only remove features of the
-type that the \code{Filter} can work with.
+If a \code{Filter} can only operate on a subset of columns based on column type, then only these features are considered.
+\code{nfeat} and \code{frac} will count for the features of the type that the \code{Filter} can operate on;
+this means e.g. that setting \code{nfeat} to 0 will only remove features of the type that the \code{Filter} can work with.
 }
 \section{Methods}{
 
 \itemize{
 \item \code{PipeOpFilter$new(filter, id = filter$id, param_vals = list())} \cr
-(\code{\link[mlr3featsel:Filter]{mlr3featsel::Filter}}, \code{character(1)}, \code{list}) -> \code{self} \cr
+(\code{\link[mlr3filters:Filter]{mlr3filters::Filter}}, \code{character(1)}, \code{list}) -> \code{self} \cr
 Constructor. \code{filter} gives the \code{Filter} to use.
 }
 }
@@ -35,26 +29,40 @@ Constructor. \code{filter} gives the \code{Filter} to use.
 \section{Parameter Set}{
 
 \itemize{
-\item \code{settings} :: named \code{list} \cr
-List of settings to be given to the \code{Filter}. Default \code{list()}.
+\item \code{settings} :: named \code{list()} \cr
+List of settings to be given to the \code{Filter}.
 \item \code{nfeat}    :: \code{numeric(1)} \cr
-Number of features to select. If this is set, \code{frac} and cutoff`
-must not be set.
+Number of features to select.
+Mutually exclusive with \code{frac} and \code{cutoff}.
 \item \code{frac}     :: \code{numeric(1)} \cr
-Fraction of features to keep. If this is set, \code{nfeat} and \code{cutoff}
-must not be set.
+Fraction of features to keep.
+Mutually exclusive with \code{nfeat} and \code{cutoff}.
 \item \code{cutoff}   :: \code{numeric(1)} \cr
-Minimum value of filter heuristic for which to keep features. If
-this is set, \code{nfeat} and \code{frac} must not be set.
+Minimum value of filter heuristic for which to keep features.
+Mutually exclusive with \code{nfeat} and \code{frac}.
 }
 }
 
+\examples{
+# setup PipeOpFilter to keep the 5 most important
+# features of the spam task w.r.t. their AUC
+task = mlr3::mlr_tasks$get("spam")
+filter = mlr3filters::mlr_filters$get("auc")
+po = mlr_pipeops$get("filter", filter = filter)
+po$param_set
+po$param_set$values = list(filter.nfeat = 5)
+
+# filter the task
+filtered_task = po$train(list(task = task))[[1]]
+
+# filtered task + extracted AUC scores
+filtered_task$feature_names
+head(po$state$scores, 10)
+}
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},

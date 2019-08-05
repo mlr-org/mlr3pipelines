@@ -9,6 +9,7 @@
 #' @section Parameter Set:
 #' * `mutation` :: named `list` \cr
 #'   Expressions for new features to create. Can be created with `alist()`.
+#'   Can contain multiple expressions, that directly reference task features.
 #' * `env` :: `environment` \cr
 #'   Environment in which expressions are evaluated. This is the enclosing
 #'   environment *after* the `Task`'s features are considered.
@@ -31,7 +32,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
       super$initialize(id, ps, param_vals = param_vals)
     },
 
-    transform= function(task) {
+    transform = function(task) {
       taskdata = task$data(cols = task$feature_names)
       newdata = as.data.table(lapply(self$param_set$values$mutation, function(expr) {
         eval(expr, envir = taskdata, enclos = self$param_set$values$env)
@@ -41,12 +42,10 @@ PipeOpMutate = R6Class("PipeOpMutate",
         keep_feats = setdiff(task$feature_names, colnames(newdata))
       }
       task = task$select(keep_feats)
-      if (ncol(newdata)) {
-        task$cbind(newdata)
-      }
+      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
       task
     }
   )
 )
 
-register_pipeop("mutate", PipeOpMutate)
+mlr_pipeops$add("mutate", PipeOpMutate)

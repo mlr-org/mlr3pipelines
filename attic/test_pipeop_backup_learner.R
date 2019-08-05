@@ -74,7 +74,7 @@ test_that("PipeOpBackupLearner usage", {
   graph = mlr_pipeops$get("copy", 2) %>>%
     gunion(list(
       mlr_pipeops$get("learner", lrn),
-      mlr_pipeops$get("null"))) %>>%
+      mlr_pipeops$get("nop"))) %>>%
     mlr_pipeops$get("backuplearner", mlr_learners$get("regr.featureless"))
 
   bh = mlr_tasks$get("boston_housing")

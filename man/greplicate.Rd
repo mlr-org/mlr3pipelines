@@ -23,6 +23,8 @@ where \code{i} ranges from 1 to \code{n}.
 }
 \seealso{
 Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{assert_graph}}, \code{\link{gunion}}
+  \code{\link{as_graph}}, \code{\link{as_pipeop}},
+  \code{\link{assert_graph}}, \code{\link{assert_pipeop}},
+  \code{\link{gunion}}
 }
 \concept{Graph operators}

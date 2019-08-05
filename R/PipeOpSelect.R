@@ -4,18 +4,20 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`].
 #'
 #' @description
-#' Removes features from `Task` depending on a selector function. If `invert`
-#' is `FALSE` (default) then `selector` gives the features to keep, otherwise it gives
-#' the features to drop. See [`Selector`] for selectors that are provided.
+#' Removes features from `Task` depending on a selector function.
+#' If `invert` is `FALSE` (default) then `selector` gives the features to keep, otherwise it gives the features to drop.
+#' See [`Selector`] for selectors that are provided.
 #'
 #' @section Parameter Set:
 #' * `selector` :: `function` \cr
 #'   Selector function, takes a `Task` as argument and returns a `character`
-#'   of features to keep. See [`Selector`] for example functions. Defaults to
-#'   `selector_all()`.
+#'   of features to keep.
+#'   See [`Selector`] for example functions. Defaults to `selector_all()`.
+#'
 #' * `invert`    :: `logical(1)` \cr
 #'   Invert selection. If this is `TRUE`, the features selected by
 #'   `selector` are *removed* while the ones not selected remain.
+#'
 #' @family PipeOps
 #' @family Selectors
 #' @include PipeOpTaskPreproc.R
@@ -47,4 +49,4 @@ PipeOpSelect = R6Class("PipeOpSelect",
   )
 )
 
-register_pipeop("select", PipeOpSelect)
+mlr_pipeops$add("select", PipeOpSelect)

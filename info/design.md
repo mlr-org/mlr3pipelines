@@ -6,7 +6,7 @@
   - [x] `PipeOpChunk`                           | broadcast
   - [x] `PipeOpUnbranch`                        | aggregate
   - [x] `PipeOpFeatureUnion`                    | aggregate
-  - [x] `PipeOpNULL`                            | linear
+  - [x] `PipeOpNOP`                            | linear
   - [x] `PipeOpCopy`                            | broadcast
 
                                               train: input --store-params--> output        predict: input --use-params--> output

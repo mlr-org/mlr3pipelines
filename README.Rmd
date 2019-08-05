@@ -5,8 +5,9 @@ output: github_document
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
 [![Travis build status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/mlr-org/mlr3pipelines?branch=master&svg=true)](https://ci.appveyor.com/project/mlr-org/mlr3pipelines)
+[![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
 [![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
+[![StackOverflow](https://img.shields.io/badge/stackoverflow-mlr3-orange.svg)](https://stackoverflow.com/questions/tagged/mlr3)
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -31,7 +32,7 @@ In principle, *mlr3pipelines* is about defining singular data and model manipula
 pca = mlr_pipeops$get("pca")
 
 filter = mlr_pipeops$get("filter",
-  filter = mlr3featsel::FilterVariance$new(),
+  filter = mlr3filters::FilterVariance$new(),
   param_vals = list(filter.frac = 0.5))
 
 learner_po =  mlr_pipeops$get("learner",

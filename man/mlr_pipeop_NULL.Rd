@@ -3,22 +3,19 @@
 \docType{data}
 \name{mlr_pipeop_NULL}
 \alias{mlr_pipeop_NULL}
-\alias{PipeOpNULL}
-\title{PipeOpNULL}
+\alias{PipeOpNOP}
+\title{PipeOpNOP}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
 \usage{
-PipeOpNULL
+PipeOpNOP
 }
 \description{
-Simply pushes the input forward unchanged.
-Can be usefull to keep the original task in conjunction with
-\code{gunion()}.
+Simply pushes the input forward.
+Can be useful during graph construction to keep the original task in conjunction with \code{gunion()}.
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},

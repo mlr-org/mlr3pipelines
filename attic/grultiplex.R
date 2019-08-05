@@ -17,10 +17,10 @@
 #'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 #'   avoid ID clashes in resulting graph. Default `FALSE`.
 #' @examples
-#' grultiplex(pca = PipeOpPCA$new(), nop = PipeOpNULL$new())
+#' grultiplex(pca = PipeOpPCA$new(), nop = PipeOpNOP$new())
 #' # gives the same as
 #' pca = PipeOpPCA$new()
-#' nop = PipeOpNULL$new()
+#' nop = PipeOpNOP$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(pca, nop) %>>% PipeOpUnbranch$new(choices)
 #' @export
