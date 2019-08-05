@@ -355,6 +355,6 @@ Ensemble = R6Class("Ensemble",
       }
       accmat
     }
-  }
-}
+  )
+)
 
