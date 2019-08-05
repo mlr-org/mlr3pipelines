@@ -278,8 +278,8 @@ Graph = R6Class("Graph",
 
         if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to))))
          # Bug in visNetwork? See: https://github.com/datastorm-open/visNetwork/issues/327
-          p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
-        else p = visNetwork::visIgraphLayout(p, type = "full")
+        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
+        else p = visNetwork::visIgraphLayout(p, layout = "layout_with_kk", type = "full")
 
         # Draw edges between points
         p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
