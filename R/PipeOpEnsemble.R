@@ -68,48 +68,66 @@ weighted_avg_predictions = function(inputs, weights) {
     if (has_probs) {
       alllevels = colnames(inputs[[1]]$prob)
       assert_character(alllevels, any.missing = FALSE, len = ncol(inputs[[1]]$prob))
-      map(inputs, function(x) assert_true(identical(sort(alllevels), sort(colnames(x$prob)))))
-
-      accmat = inputs[[1]]$prob * weights[1]
-      for (idx in seq_along(inputs)[-1]) {
-        accmat = accmat + inputs[[idx]]$prob[, alllevels, drop = FALSE] * weights[idx]
-      }
-      prob = accmat
+      matrices = map(inputs, function(x) {
+        mat = x$prob
+        assert_set_equal(alllevels, colnames(mat))
+        mat[, alllevels, drop = FALSE]
+      })
+      prob = weighted_matrix_sum(matrices, weights)
     }
 
     if (has_classif_response) {
       alllevels = levels(inputs[[1]]$response)
-      map(inputs, function(x) assert_true(identical(sort(alllevels), sort(levels(x$response)))))
-
-      accmat = matrix(0, nrow = length(inputs[[1]]$response), ncol = length(alllevels))
-      for (idx in seq_along(inputs)) {
-        rdf = data.frame(x = factor(inputs[[idx]]$response, levels = alllevels))
-        curmat = stats::model.matrix(~ 0 + x, rdf) * weights[idx]
-        accmat = accmat + curmat
-      }
-      response = factor(alllevels[max.col(accmat)], levels = alllevels)
+      map(inputs, function(x) assert_set_equal(alllevels, levels(x$response)))
+      response = weighted_factor_mean(map(inputs, "response"), weights, alllevels)
     }
 
     return(PredictionClassif$new(row_ids = row_ids, truth = truth, response = response, prob = prob))
   }
   if ("PredictionRegr" %in% class(inputs[[1]])) {
     has_se = every(inputs, function(x) "se" %in% names(x$data))
+    est_se = if (has_se) "both" else "between"
 
-    responsematrix = simplify2array(map(inputs, "response"))
-    response = c(responsematrix %*% weights)
-    se = NULL
-    if (has_se) {
-      # Weighted SE as done in
-      # https://www.gnu.org/software/gsl/doc/html/statistics.html#weighted-samples
-      se = c(sqrt(
-        (
-          simplify2array(map(inputs, "se"))^2 +
-          (responsematrix - response)^2
-        ) %*% weights /
-        (1 - sum(weights^2) / sum(weights)^2)
-      ))
-    }
+    response_matrix = simplify2array(map(inputs, "response"))
+    response = c(response_matrix %*% weights)
+
+    se = weighted_se(response_matrix, simplify2array(map(inputs, "se")), response, est_se)
+
     return(PredictionRegr$new(row_ids = row_ids, truth = truth, response = response, se = se))
   }
   stopf("Unsupported prediction type %s", class(inputs[[1]])[1])
+}
+
+weighted_matrix_sum = function(matrices, weights) {
+  accmat = matrices[[1]] * weights[1]
+  for (idx in seq_along(matrices)[-1]) {
+    accmat = accmat + matrices[[idx]] * weights[idx]
+  }
+  accmat
+}
+
+weighted_factor_mean = function(factors, weights, alllevels) {
+  accmat = matrix(0, nrow = length(factors), ncol = length(alllevels))
+  for (idx in seq_along(factors)) {
+    rdf = data.frame(x = factor(factors[[idx]], levels = alllevels))
+    curmat = stats::model.matrix(~ 0 + x, rdf) * weights[idx]
+    accmat = accmat + curmat
+  }
+  response = factor(alllevels[max.col(accmat)], levels = alllevels)
+}
+
+weighted_se = function(response_matrix, se_matrix, response, est_se) {
+  assert_choice(est_se, c("within", "between", "both"))
+  if (est_se != "between") {
+    within_var = se_matrix^2 %*% weights
+  }
+  if (est_se != "within") {
+    # Weighted SE calculated as in
+    # https://www.gnu.org/software/gsl/doc/html/statistics.html#weighted-samples
+    between_var = (response_matrix - response)^2 %*% weights / (1 - sum(weights^2) / sum(weights)^2)
+  }
+  c(sqrt(switch(est_se,
+    within = within_var,
+    between = between_var,
+    both = within_var + between_var)))
 }
