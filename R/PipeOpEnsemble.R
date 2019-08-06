@@ -61,7 +61,7 @@ weighted_avg_predictions = function(inputs, weights) {
   if ("PredictionClassif" %in% class(inputs[[1]])) {
     has_probs = every(inputs, function(x) !is.null(x$prob))
     has_classif_response = every(inputs, function(x) !is.null(x$response))
-    if (!(has_probs || has_response)) {
+    if (!(has_probs || has_classif_response)) {
       stop("PipeOpMajorityVote input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
     }
     prob = response = NULL
@@ -90,8 +90,14 @@ weighted_avg_predictions = function(inputs, weights) {
 
     response_matrix = simplify2array(map(inputs, "response"))
     response = c(response_matrix %*% weights)
-
-    se = weighted_se(response_matrix, simplify2array(map(inputs, "se")), response, est_se)
+    if (has_se || length(inputs) > 1) {
+      if (length(inputs) == 1) {
+        est_se = "within"
+      }
+      se = weighted_se(response_matrix, simplify2array(map(inputs, "se")), response, weights, est_se)
+    } else {
+      se = NULL
+    }
 
     return(PredictionRegr$new(row_ids = row_ids, truth = truth, response = response, se = se))
   }
@@ -107,7 +113,7 @@ weighted_matrix_sum = function(matrices, weights) {
 }
 
 weighted_factor_mean = function(factors, weights, alllevels) {
-  accmat = matrix(0, nrow = length(factors), ncol = length(alllevels))
+  accmat = matrix(0, nrow = length(factors[[1]]), ncol = length(alllevels))
   for (idx in seq_along(factors)) {
     rdf = data.frame(x = factor(factors[[idx]], levels = alllevels))
     curmat = stats::model.matrix(~ 0 + x, rdf) * weights[idx]
@@ -116,7 +122,7 @@ weighted_factor_mean = function(factors, weights, alllevels) {
   response = factor(alllevels[max.col(accmat)], levels = alllevels)
 }
 
-weighted_se = function(response_matrix, se_matrix, response, est_se) {
+weighted_se = function(response_matrix, se_matrix, response, weights, est_se) {
   assert_choice(est_se, c("within", "between", "both"))
   if (est_se != "between") {
     within_var = se_matrix^2 %*% weights
@@ -125,6 +131,7 @@ weighted_se = function(response_matrix, se_matrix, response, est_se) {
     # Weighted SE calculated as in
     # https://www.gnu.org/software/gsl/doc/html/statistics.html#weighted-samples
     between_var = (response_matrix - response)^2 %*% weights / (1 - sum(weights^2) / sum(weights)^2)
+    between_var[is.nan(between_var)] = 0
   }
   c(sqrt(switch(est_se,
     within = within_var,

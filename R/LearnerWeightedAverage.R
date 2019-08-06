@@ -50,7 +50,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
           params = list(
             ParamUty$new(id = "measure", tags = c("train", "required")),
             ParamFct$new(id = "algorithm", tags = c("train", "required"),
-              levels = nloptlevels)
+              levels = nlopt_levels)
           )
         ),
         param_vals = list(measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA"),
@@ -78,7 +78,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
       if (all(fcts) != (self$predict_type == "response")) {
         stopf("Trying to predict %s, but incoming data has %sfactors", self$predict_type, if (all(fcts)) "only " else "no ")
       }
-      if (all_fcts) {
+      if (self$predict_type == "response") {
         alllevels = task$class_names
         map(data, function(x) assert_set_equal(alllevels, levels(x)))
         data
@@ -163,11 +163,11 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
         param_set = ParamSet$new(
           params = list(
             ParamUty$new(id = "measure", tags = c("train", "required")),
-            ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nloptlevels),
+            ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nlopt_levels),
             ParamFct$new(id = "est_se", tags = c("train", "predict", "required"), levels = c("within", "between", "both"))
           )
         ),
-        param_vals = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA"),
+        param_vals = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA", est_se = "both"),
         predict_types = c("response", "se"),
         feature_types = c("integer", "numeric")
       )
@@ -181,19 +181,20 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
     },
 
     predict_internal = function(task) {
-      self$weighted_average_prediction(task, self$model$weights)
+      self$weighted_average_prediction(task, self$model$weights, self$prepare_data(task))
     },
     prepare_data = function(task) {
+      response_matrix = as.matrix(task$data(cols = grep("\\.response$", task$feature_names, value = TRUE)))
       est_se = self$param_set$values$est_se
       se_matrix = NULL
-      if (est_se != "between") {
+      if (self$predict_type == "se" && est_se != "between") {
         se_matrix = as.matrix(task$data(cols = grep("\\.se$", task$feature_names, value = TRUE)))
-        if (ncol(data$se_matrix) != ncol(response_matrix)) {
+        if (ncol(se_matrix) != ncol(response_matrix)) {
           stopf("est_se is '%s', but not all incoming Learners provided 'se'-prediction", est_se)
         }
       }
       list(
-        response_matrix = as.matrix(task$data(cols = grep("\\.response$", task$feature_names, value = TRUE))),
+        response_matrix = response_matrix,
         se_matrix = se_matrix
       )
     },
@@ -203,7 +204,7 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
       response = c(data$response_matrix %*% wts)
       se = NULL
       if (self$predict_type == "se") {
-        se = weighted_se(response_matrix, data$se_matrix, response, est_se)
+        se = weighted_se(data$response_matrix, data$se_matrix, response, weights, self$param_set$values$est_se)
       }
       PredictionRegr$new(row_ids = task$row_ids, truth = task$truth(), response = response, se = se)
     }
@@ -227,13 +228,13 @@ nlopt_objfun = function(weights, task, measure, avg_weight_fun, data) {
 
 optimize_objfun_nlopt = function(task, pars, avg_weight_fun, n_weights, data) {
   require_namespaces("nloptr")
-  measure = assert_measure(pars$measure, coerce = TRUE)
+  measure = assert_measure(pars$measure)
 
   opt = nloptr::nloptr(
     x0 = rep(1 / n_weights, n_weights),
     eval_f = nlopt_objfun,
     lb = rep(0, n_weights), ub = rep(1, n_weights),
-    eval_g_ineq = function(x, task, measure) max(x) - 1,
+    eval_g_ineq = function(x, task, measure, avg_weight_fun, data) max(x) - 1,
     opts = list(algorithm = pars$algorithm, xtol_rel = 1e-8),
     task = task,
     measure = measure,
