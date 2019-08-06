@@ -184,3 +184,21 @@ test_that("feature renaming", {
 #    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
 
 })
+
+# https://github.com/mlr-org/mlr3pipelines/issues/216
+## test_that("union with missing rows", {
+##
+##   tsk = mlr_tasks$get("iris")
+##
+##   posu = PipeOpSubsample$new()
+##
+##   t1 = posu$train(list(tsk))[[1]]
+##   t2 = posu$train(list(tsk))[[1]]
+##
+##   t1$row_ids
+##   t2$row_ids
+##
+##   pofu = PipeOpFeatureUnion$new()
+##
+##   pofu$train(list(t1, t2))
+## })

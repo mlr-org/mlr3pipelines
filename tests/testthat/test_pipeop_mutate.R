@@ -61,5 +61,5 @@ test_that("mutate", {
   # Errors if lengths don't match
   al = alist(Sepal.Sum = sum(Sepal.Length + Sepal.Width))
   op$param_set$values$mutation = al
-  expect_error(op$train(list(task)), "Must have exactly 150 rows")
+  expect_error(op$train(list(task)), "have 150 rows")
 })

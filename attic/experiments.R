@@ -21,9 +21,10 @@ testthat::test_package("mlr3pipelines")
 
 testthat::test_package("mlr3pipelines", filter = "Graph")
 
-testthat::test_package("mlr3pipelines", filter = "doublearrow")
+testthat::test_package("mlr3pipelines", filter = "graphlearner")
 
-testthat::test_package("mlr3pipelines", filter = "multichannel")
+testthat::test_package("mlr3pipelines", filter = "weightedaverage")
+testthat::test_package("mlr3pipelines", filter = "ensemble")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
@@ -763,3 +764,14 @@ PipeOpLearner$new(mlr_learners$get("classif.rpart")) %>>% PipeOpModelAvg$new(1)
 
 PipeOpScale$new() %>>% PipeOpModelAvg$new(1)
 
+
+
+task = mlr_tasks$get("iris")$
+  set_col_role("Sepal.Length", character(0))$
+  cbind(data.table(x = 1:150))$
+  set_col_role("Sepal.Length.xxx", "feature")
+
+
+task$data()
+
+cbind(mlr_tasks$get("iris")$data(), data.table(x = 1:150))

@@ -13,6 +13,7 @@
 #' Defaults to equal weights for each model.
 #'
 #' @family PipeOps
+#' @include PipeOpEnsemble.R
 #' @examples
 #' op = PipeOpModelAvg$new()
 #' @export
@@ -25,30 +26,8 @@ PipeOpModelAvg = R6Class("PipeOpModelAvg",
     },
 
     predict_internal = function(inputs) {
-      list(private$weighted_avg_predictions(inputs, self$weights))
-    }),
-
-  private = list(
-    weighted_avg_predictions = function(inputs, weights) {
-      row_ids = inputs[[1]]$row_ids
-      map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
-      truth = inputs[[1]]$truth
-      if (length(weights) == 1) weights = rep(weights, length(inputs))
-      weights = weights / sum(weights)
-      responsematrix = simplify2array(map(inputs, "response"))
-      response = c(responsematrix %*% weights)
-      se = NULL
-      if (all(map_lgl(inputs, function(x) "se" %in% names(x$data)))) {
-        se = c(sqrt(
-          (
-            simplify2array(map(inputs, "se"))^2 +
-            (responsematrix - response)^2
-          ) %*% weights
-        ))
-      }
-      PredictionRegr$new(row_ids = row_ids, truth = truth, response = response, se = se)
-    }
-  )
+      list(weighted_avg_predictions(inputs, self$param_set$values$weights))
+    })
 )
 
 mlr_pipeops$add("modelavg", PipeOpModelAvg)

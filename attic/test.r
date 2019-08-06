@@ -44,3 +44,10 @@ g = PipeOpChunk$new(3) %>>% PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 g$plot()
 g$channels
 }
+
+      if (pv[["resampling"]] == "nocv") {
+        rdesc = mlr_resamplings$get("custom")$instantiate(task, train_set = list(seq_len(task$nrow)), test_set = list(seq_len(task$nrow)))
+      } else {
+        rdesc = mlr_resamplings$get(pv[["resampling"]])
+        rdesc$param_set$values = list(folds = pv[["folds"]])
+      }
