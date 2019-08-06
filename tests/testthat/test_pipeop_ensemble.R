@@ -29,7 +29,7 @@ test_that("PipeOpWeightedModelAvg - train and predict", {
 
   # Returns the same if weights are 1, rest 0
   po = PipeOpModelAvg$new(4)
-  po$weights = c(0, 0, 1, 0)
+  po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prds[[3]]))
@@ -42,7 +42,7 @@ test_that("PipeOpWeightedModelAvg - train and predict", {
 
   # Returns the same if weights are 1, rest 0
   po = PipeOpModelAvg$new()
-  po$weights = c(0, 0, 1, 0)
+  po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prds[[3]]))
@@ -76,7 +76,7 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
   expect_class(out[[1]], "PredictionClassif")
 
   po = PipeOpMajorityVote$new(4)
-  po$weights = c(0, 0, 0, 1)
+  po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
@@ -90,7 +90,7 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
   expect_class(out[[1]], "PredictionClassif")
 
   po = PipeOpMajorityVote$new()
-  po$weights = c(0, 0, 0, 1)
+  po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
@@ -113,7 +113,7 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
   expect_class(out[[1]], "PredictionClassif")
 
   po = PipeOpMajorityVote$new(4)
-  po$weights = c(0, 0, 0, 1)
+  po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
@@ -127,7 +127,7 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
   expect_class(out[[1]], "PredictionClassif")
 
   po = PipeOpMajorityVote$new()
-  po$weights = c(0, 0, 0, 1)
+  po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
