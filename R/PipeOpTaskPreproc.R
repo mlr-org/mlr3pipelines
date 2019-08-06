@@ -279,6 +279,3 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
     transform_dt = function(dt, levels) stop("Abstract")
   )
 )
-
-# needs to be here because all.equal fails otherwise.
-check_function_or_null = function(x) assert_function(x, null.ok = TRUE)

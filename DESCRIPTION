@@ -62,6 +62,7 @@ Collate:
     'LearnerWeightedAverage.R'
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
+    'PipeOpApply.R'
     'PipeOpBalanceSample.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
