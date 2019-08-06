@@ -104,6 +104,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
         response = weighted_factor_mean(data, weights, task$class_names)
       } else {
         prob = weighted_matrix_sum(data, weights)
+        prob = pmin(pmax(prob, 0), 1)
       }
 
       PredictionClassif$new(row_ids = task$row_ids, truth = task$truth(), response = response, prob = prob)
