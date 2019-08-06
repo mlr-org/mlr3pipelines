@@ -104,24 +104,24 @@ test_that("apply results look as they should", {
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-    as.data.table(do.call(cbind, c(lapply(iris[1:2], as.character), iris[3:4])))
+    cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
 
   expect_equal(
     po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-    as.data.table(do.call(cbind, c(lapply(iris[1:2], as.character), iris[3:4])))
+    cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
 
   po$param_set$values = list(applicator_single = as.character, affect_columns = selector_grep("^Sepal"))
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-    as.data.table(do.call(cbind, c(lapply(iris[1:2], as.character), iris[3:4])))
+    cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
 
   expect_equal(
     po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-    as.data.table(do.call(cbind, c(lapply(iris[1:2], as.character), iris[3:4])))
+    cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
 
 
