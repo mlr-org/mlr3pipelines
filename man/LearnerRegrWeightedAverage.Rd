@@ -28,11 +28,14 @@ Learned weights can be obtained from \code{.$model}.
 Defaults to \code{manual}.
 \item \code{weights} :: \code{numeric(1)} \cr
 Numeric either of length 1 or the same length as the inputs. Defaults to 1.
-\item \code{est.se} :: \code{logical(1)} \cr
-Should the standard deviation between different models be estimated?
 \item \code{measure} :: \code{character(1) | MeasureClassif} \cr
 Only for \code{weights.method = "nloptr"}. Measure to optimized weights for.
 The Measure is either obtained from \code{mlr_measures} or directly supplied. Defaults to \code{classif.acc}.
+\item \code{est_se} :: \code{character(1)} \cr
+How to estimate standard error, if \code{predict_type} is \code{"se"}. Can be \code{"within"} (calculate SE from
+input SEs; input data must contain \code{"se"}-prediction), \code{"between"} (calculate SE from SE of
+predictions, does not need \code{"se"}-prediction of previous Learners), and \code{"both"} (square root of the sum
+of the squared \code{"within"} and \code{"between"} se estimates).
 \item \code{algorithm} :: \code{character(1)} \cr
 Several nonlinear optimization methods from \code{nloptr} are available.
 See \code{nloptr::nloptr.print.options()} for a list of possible options.
