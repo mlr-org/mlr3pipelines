@@ -94,5 +94,4 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   )
 )
 
-# FIXME This could work if mlr-org/mlr3#177 were addressed
-# mlr_learners$add("graph", GraphLearner)
+mlr_learners$add("graph", GraphLearner, required_args = "graph")
