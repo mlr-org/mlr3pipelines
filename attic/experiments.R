@@ -24,7 +24,7 @@ testthat::test_package("mlr3pipelines", filter = "Graph")
 testthat::test_package("mlr3pipelines", filter = "graphlearner")
 
 testthat::test_package("mlr3pipelines", filter = "weightedaverage")
-testthat::test_package("mlr3pipelines", filter = "ensemble")
+testthat::test_package("mlr3pipelines", filter = "apply")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
