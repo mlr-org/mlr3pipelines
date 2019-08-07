@@ -76,7 +76,7 @@ Collate:
     'PipeOpMajorityVote.R'
     'PipeOpModelAvg.R'
     'PipeOpMutate.R'
-    'PipeOpNULL.R'
+    'PipeOpNOP.R'
     'PipeOpPCA.R'
     'PipeOpScale.R'
     'PipeOpSelect.R'
