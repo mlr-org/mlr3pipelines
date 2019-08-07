@@ -16,7 +16,7 @@ or \code{applicator_single} may be non-\code{NULL}.
 \section{Parameter Set}{
 
 \itemize{
-\item \code{applicator} :: \code{function} \cr
+\item \code{applicator_vector} :: \code{function} \cr
 Function to apply to each column of the task. The return value must have the
 same length as the input, i.e. vectorize over the input. A typical example would be \code{as.numeric}.
 \item \code{applicator_single} :: \code{function} \cr
@@ -30,7 +30,6 @@ performance.
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_NULL}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
@@ -44,6 +43,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_mutate}},
+  \code{\link{mlr_pipeop_nop}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_select}},

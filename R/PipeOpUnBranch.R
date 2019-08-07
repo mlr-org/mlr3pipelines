@@ -22,7 +22,7 @@
 #'
 #' @examples
 #' pca = PipeOpPCA$new()
-#' nop = PipeOpNULL$new()
+#' nop = PipeOpNOP$new()
 #' choices = c("pca", "nothing")
 #' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 #' @family PipeOps
@@ -50,12 +50,12 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       filter_noop(inputs)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       filter_noop(inputs)
     }
   )

@@ -18,7 +18,7 @@ Pipeline = R6Class("Pipeline",
       names(self$ops) = BBmisc::extractSubList(ops, "id")
     },
 
-    train = function(task) {
+    train_internal = function(task) {
       input = task
       for (i in 1:length(self$ops)) {
         print(i)
@@ -30,7 +30,7 @@ Pipeline = R6Class("Pipeline",
 
     # FIXME: the "state" of the coded pipeline is now in self and model. that seems weird?
     # can we remove "ops" from pipeline
-    predict = function(task, model) {
+    predict_internal = function(task, model) {
       print("pred")
       input = task
       for (i in 1:length(self$ops)) {

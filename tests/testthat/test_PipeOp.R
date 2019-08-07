@@ -16,7 +16,7 @@ test_that("PipeOp - General functions", {
   expect_output(expect_equal(po_1$train(list(1)), list(1)), "Training debug.basic")
   expect_equal(po_1$state, list(1))
   expect_true(po_1$is_trained)
-  expect_output(expect_equal(po_1$predict(list(2)), list(1, 2)), "Predicting debug.basic")
+  expect_output(expect_equal(po_1$predict_internal(list(2)), list(1, 2)), "Predicting debug.basic")
 })
 
 
@@ -28,8 +28,8 @@ test_that("PipeOp - simple tests with PipeOpScale", {
 })
 
 test_that("PipeOp printer", {
-  expect_output(print(PipeOpNULL$new()),
-    "PipeOp.*<null>.*not trained.*values.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
+  expect_output(print(PipeOpNOP$new()),
+    "PipeOp.*<nop>.*not trained.*values.*list().*Input channels.*input \\[\\*,\\*\\]\n.*Output channels.*output \\[\\*,\\*\\]$")
 
 
   expect_output(print(PipeOpDebugMulti$new(3, 4)),
@@ -43,7 +43,7 @@ test_that("PipeOp printer", {
     "Output channels.*odin \\[\\*,\\*\\], dva \\[\\*,\\*\\], tri \\[\\*,\\*\\]$")
 
   expect_output(print(PipeOpLearner$new(mlr_learners$get("classif.debug"))),
-    "PipeOp.*<classif.debug>.*Input channels.*input \\[Task,Task\\]\nOutput channels.*output \\[NULL,Prediction\\]$")
+    "PipeOp.*<classif.debug>.*Input channels.*input \\[TaskClassif,TaskClassif\\]\nOutput channels.*output \\[NULL,PredictionClassif\\]$")
 })
 
 test_that("Prevent creation of PipeOps with no channels", {
@@ -60,9 +60,9 @@ test_that("Prevent creation of PipeOps with no channels", {
 test_that("Errors occur for inputs", {
   po = PipeOp$new("id", input = data.table(name = "input", train = "*", predict = "*"),
     output = data.table(name = "output", train = "*", predict = "*"))
-  expect_error(train_pipeop(po, mlr_tasks$get("iris")), "abstract")
+  expect_error(train_pipeop(po, list(mlr_tasks$get("iris"))), "abstract")
   po$state = list(NULL)
-  expect_error(predict_pipeop(po, mlr_tasks$get("iris")), "abstract")
+  expect_error(predict_pipeop(po, list(mlr_tasks$get("iris"))), "abstract")
   expect_error({
     po$param_set = ParamSet$new()
   }, "read-only")

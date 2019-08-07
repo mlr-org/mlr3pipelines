@@ -31,8 +31,8 @@
 #' @export
 `%>>%` = function(g1, g2) {
 
-  g1 = assert_graph(g1, coerce = TRUE)
-  g2 = assert_graph(g2, coerce = TRUE)
+  g1 = as_graph(g1)
+  g2 = as_graph(g2)
   g1out = g1$output
   g2in = g2$input
   if (nrow(g1out) != 1 && nrow(g1out) != nrow(g2in) && !(nrow(g2in) == 1 && g2in$channel.name == "...")) {

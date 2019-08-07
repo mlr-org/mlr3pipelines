@@ -41,7 +41,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
       )
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       task = inputs[[1L]]
 
@@ -53,7 +53,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
       })
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
       rep(inputs, self$outnum)
     }
   )

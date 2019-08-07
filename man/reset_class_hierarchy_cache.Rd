@@ -10,6 +10,8 @@ reset_class_hierarchy_cache()
 Reset the class hierarchy cache to factory default.
 }
 \seealso{
-Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}}
+Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},
+  \code{\link{register_autoconvert_function}},
+  \code{\link{reset_autoconvert_register}}
 }
 \concept{class hierarchy operations}

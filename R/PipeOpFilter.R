@@ -38,13 +38,14 @@
 #' @examples
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC
+#' task = mlr3::mlr_tasks$get("spam")
 #' filter = mlr3filters::mlr_filters$get("auc")
 #' po = mlr_pipeops$get("filter", filter = filter)
 #' po$param_set
 #' po$param_set$values = list(filter.nfeat = 5)
 #'
 #' # filter the task
-#' filtered_task = po$train(list(task = "spam"))[[1]]
+#' filtered_task = po$train(list(task = task))[[1]]
 #'
 #' # filtered task + extracted AUC scores
 #' filtered_task$feature_names
@@ -68,7 +69,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
     },
 
     get_state = function(task) {
-
+      on.exit({self$filter$scores = structure(numeric(0), .Names = character(0))})
       filtercrit = c("nfeat", "frac", "cutoff")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {

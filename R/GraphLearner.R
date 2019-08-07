@@ -14,10 +14,9 @@
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
-    initialize = function(graph, task_type = "classif", id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]) {
+    initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, predict_type = NULL) {
 
-      assert_subset(task_type, mlr_reflections$task_types)
-      graph = assert_graph(graph, coerce = TRUE, deep_copy = TRUE)
+      graph = as_graph(graph, deep_copy = TRUE)
       self$graph = graph
       output = graph$output
       if (nrow(output) != 1) {
@@ -26,6 +25,30 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (!are_types_compatible(output$predict, "Prediction")) {
         stop("'graph' output type not 'Prediction' (or compatible with it)")
       }
+
+      if (is.null(task_type)) {
+        class_table = mlr_reflections$constructors[, list(
+          task_type = get("task_type"),
+          task = map(get("Task"), "classname"),
+          prediction = map(get("Prediction"), "classname"))]
+        input = graph$input
+        inferred = c(
+          match(c(output$train, output$predict), class_table$prediction),
+          match(c(input$train, input$predict), class_table$task))
+        inferred = unique(class_table$task_type[na.omit(inferred)])
+        if (length(inferred) > 1) {
+          stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(inferred))
+        }
+        task_type = c(inferred, "classif")[1]
+      }
+      assert_subset(task_type, mlr_reflections$task_types)
+
+      if (is.null(predict_type)) {
+        predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
+      }
+
+      assert_subset(predict_type, names(mlr_reflections$learner_predict_types[[task_type]]))
+
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
@@ -37,12 +60,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       self$graph$param_set$values = param_vals
     },
     train_internal = function(task) {
+      on.exit({self$graph$state = NULL})
       self$graph$train(task)
-      self$graph$state
+      state = self$graph$state
+      state
     },
     predict_internal = function(task) {
+      on.exit({self$graph$state = NULL})
       self$graph$state = self$model
-      self$graph$param_set$values = self$param_set$values
       prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
@@ -70,5 +95,3 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   )
 )
 
-# FIXME This could work if mlr-org/mlr3#177 were addressed
-# mlr_learners$add("graph", GraphLearner)

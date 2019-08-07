@@ -19,11 +19,12 @@ tools::buildVignettes(dir = "mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "Graph")
+testthat::test_package("mlr3pipelines", filter = "dictionary")
 
-testthat::test_package("mlr3pipelines", filter = "doublearrow")
+testthat::test_package("mlr3pipelines", filter = "graphlearner")
 
-testthat::test_package("mlr3pipelines", filter = "multichannel")
+testthat::test_package("mlr3pipelines", filter = "weightedaverage")
+testthat::test_package("mlr3pipelines", filter = "apply")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
@@ -177,7 +178,7 @@ opchoice = PipeOpChoice$new(3)
 opchoicenamed = PipeOpChoice$new(c("opscale", "oppca", "opnop"))
 opscale = PipeOpScale$new()
 oppca = PipeOpPCA$new()
-opnop = PipeOpNULL$new()
+opnop = PipeOpNOP$new()
 opunchoice = PipeOpUnchoice$new(3)
 
 graph1 = opchoice %>>% gunion(opscale, oppca, opnop) %>>% opunchoice
@@ -288,7 +289,7 @@ bpo3 = BasicPO$new("testid3")
 
 (bpo %>>% bpo2 %>>% bpo3)$plot()
 
-pon = PipeOpNULL$new()
+pon = PipeOpNOP$new()
 
 pon$train(list("test"))
 
@@ -745,7 +746,7 @@ llrn$param_set
 task$select
 
 
-gr = PipeOpBranch$new(2) %>>% gunion(list(PipeOpPCA$new(), PipeOpNULL$new())) %>>% PipeOpUnbranch$new(2)
+gr = PipeOpBranch$new(2) %>>% gunion(list(PipeOpPCA$new(), PipeOpNOP$new())) %>>% PipeOpUnbranch$new(2)
 
 gr$plot()
 
@@ -763,3 +764,14 @@ PipeOpLearner$new(mlr_learners$get("classif.rpart")) %>>% PipeOpModelAvg$new(1)
 
 PipeOpScale$new() %>>% PipeOpModelAvg$new(1)
 
+
+
+task = mlr_tasks$get("iris")$
+  set_col_role("Sepal.Length", character(0))$
+  cbind(data.table(x = 1:150))$
+  set_col_role("Sepal.Length.xxx", "feature")
+
+
+task$data()
+
+cbind(mlr_tasks$get("iris")$data(), data.table(x = 1:150))

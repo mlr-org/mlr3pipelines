@@ -53,14 +53,13 @@ Not to be confused with \code{\link{PipeOpCopy}}, the naming scheme is a bit unf
 
 \examples{
 pca = PipeOpPCA$new()
-nop = PipeOpNULL$new()
+nop = PipeOpNOP$new()
 choices = c("pca", "nothing")
 PipeOpBranch$new(choices) \%>>\% gunion(list(pca, nop)) \%>>\% PipeOpUnbranch$new(choices)
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_NULL}},
   \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
@@ -74,6 +73,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_mutate}},
+  \code{\link{mlr_pipeop_nop}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_select}},

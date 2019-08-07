@@ -52,7 +52,7 @@ test_that("simple graph operations with stupid pipeops", {
 #test_that("Parallel graph", {
 #  task = mlr_tasks$get("iris")
 
-#  op1 = PipeOpNULL$new()
+#  op1 = PipeOpNOP$new()
 #  op2a = PipeOpScale$new()
 #  op2b = PipeOpPCA$new()
 #  lrn = mlr_learners$get("classif.rpart")
@@ -100,17 +100,17 @@ test_that("simple graph operations with stupid pipeops", {
 
 #test_that("graph_map_topo - map function and return the output in topological order", {
 
-#  n1 = GraphNode$new(PipeOpNULL$new("1"))
-#  n2 = GraphNode$new(PipeOpNULL$new("2"))
-#  n3 = GraphNode$new(PipeOpNULL$new("3"))
-#  n4 = GraphNode$new(PipeOpNULL$new("4"))
-#  n5 = GraphNode$new(PipeOpNULL$new("5"))
-#  n6 = GraphNode$new(PipeOpNULL$new("6"))
-#  n7 = GraphNode$new(PipeOpNULL$new("7"))
-#  n8 = GraphNode$new(PipeOpNULL$new("8"))
-#  n9 = GraphNode$new(PipeOpNULL$new("9"))
-#  n10 = GraphNode$new(PipeOpNULL$new("10"))
-#  n11 = GraphNode$new(PipeOpNULL$new("11"))
+#  n1 = GraphNode$new(PipeOpNOP$new("1"))
+#  n2 = GraphNode$new(PipeOpNOP$new("2"))
+#  n3 = GraphNode$new(PipeOpNOP$new("3"))
+#  n4 = GraphNode$new(PipeOpNOP$new("4"))
+#  n5 = GraphNode$new(PipeOpNOP$new("5"))
+#  n6 = GraphNode$new(PipeOpNOP$new("6"))
+#  n7 = GraphNode$new(PipeOpNOP$new("7"))
+#  n8 = GraphNode$new(PipeOpNOP$new("8"))
+#  n9 = GraphNode$new(PipeOpNOP$new("9"))
+#  n10 = GraphNode$new(PipeOpNOP$new("10"))
+#  n11 = GraphNode$new(PipeOpNOP$new("11"))
 
 #  n1$set_next(list(n2, n5, n9))
 

@@ -46,7 +46,7 @@ Version: 0.1
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Remotes:
-    mlr-org/mlr3,
+    mlr-org/mlr3@cbb4584,
     mlr-org/mlr3misc,
     mlr-org/paradox,
     mlr-org/mlr3filters,
@@ -55,10 +55,12 @@ Remotes:
 Collate:
     'Graph.R'
     'GraphLearner.R'
-    'NO_OP.R'
     'mlr_pipeops.R'
     'utils.R'
     'PipeOp.R'
+    'PipeOpEnsemble.R'
+    'LearnerWeightedAverage.R'
+    'NO_OP.R'
     'PipeOpTaskPreproc.R'
     'PipeOpApply.R'
     'PipeOpBackupLearner.R'
@@ -67,7 +69,6 @@ Collate:
     'PipeOpChunk.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
-    'PipeOpEnsemble.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpImpute.R'
@@ -76,7 +77,7 @@ Collate:
     'PipeOpMajorityVote.R'
     'PipeOpModelAvg.R'
     'PipeOpMutate.R'
-    'PipeOpNULL.R'
+    'PipeOpNOP.R'
     'PipeOpPCA.R'
     'PipeOpScale.R'
     'PipeOpSelect.R'
@@ -87,6 +88,7 @@ Collate:
     'greplicate.R'
     'gunion.R'
     'operators.R'
+    'po.R'
     'reexports.R'
     'typecheck.R'
     'zzz.R'

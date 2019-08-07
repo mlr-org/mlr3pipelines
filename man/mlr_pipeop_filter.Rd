@@ -46,22 +46,22 @@ Mutually exclusive with \code{nfeat} and \code{frac}.
 \examples{
 # setup PipeOpFilter to keep the 5 most important
 # features of the spam task w.r.t. their AUC
+task = mlr3::mlr_tasks$get("spam")
 filter = mlr3filters::mlr_filters$get("auc")
 po = mlr_pipeops$get("filter", filter = filter)
 po$param_set
 po$param_set$values = list(filter.nfeat = 5)
 
 # filter the task
-filtered_task = po$train(list(task = "spam"))[[1]]
+filtered_task = po$train(list(task = task))[[1]]
 
 # filtered task + extracted AUC scores
 filtered_task$feature_names
-head(po$filter$scores, 10)
+head(po$state$scores, 10)
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_NULL}},
   \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_backup_learner}},
   \code{\link{mlr_pipeop_balancesample}},
@@ -75,6 +75,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_mutate}},
+  \code{\link{mlr_pipeop_nop}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_select}},

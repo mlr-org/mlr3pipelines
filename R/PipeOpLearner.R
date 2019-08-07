@@ -22,26 +22,29 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     learner = NULL,
 
-    initialize = function(learner, id = learner$id, param_vals = list()) {
-      assert_learner(learner)
-      self$learner = learner$clone(deep = TRUE)
+    initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
+      self$learner = assert_learner(learner, clone = TRUE)
+      task_type = mlr_reflections$constructors[self$learner$task_type]$Task[[1]]$classname
+      out_type = mlr_reflections$constructors[self$learner$task_type]$Prediction[[1]]$classname
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction")
+        input = data.table(name = "input", train = task_type, predict = task_type),
+        output = data.table(name = "output", train = "NULL", predict = out_type)
       )
       private$.param_set = NULL
     },
 
-    train = function(inputs) {
+    train_internal = function(inputs) {
+      on.exit({self$learner$state = NULL})
       task = inputs[[1L]]
-      self$state = self$learner$train(task)$data
+      self$state = self$learner$train(task)$state
 
       list(NULL)
     },
 
-    predict = function(inputs) {
+    predict_internal = function(inputs) {
+      on.exit({self$learner$state = NULL})
       task = inputs[[1]]
-      self$learner$data = self$state
+      self$learner$state = self$state
       list(self$learner$predict(task))
     }
   ),
@@ -62,4 +65,4 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()))$new()))
