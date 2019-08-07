@@ -1,6 +1,6 @@
 #' @title PipeOpNOP
 #'
-#' @name mlr_pipeop_NULL
+#' @name mlr_pipeop_nop
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
