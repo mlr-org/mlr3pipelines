@@ -128,5 +128,5 @@ test_that("data.table of pipeops looks as it should", {
   expect_equal(potable["featureunion"]$input.type.train, list("Task"))
 
   expect_equal(potable["learner"]$output.type.train, list("NULL"))
-  expect_equal(potable["learner_cv"]$input.type.train, list("Task"))
+  expect_equal(potable["learner_cv"]$input.type.train, list("TaskClassif"))
 })

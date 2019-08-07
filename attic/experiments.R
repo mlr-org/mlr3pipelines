@@ -19,7 +19,7 @@ tools::buildVignettes(dir = "mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "Graph")
+testthat::test_package("mlr3pipelines", filter = "dictionary")
 
 testthat::test_package("mlr3pipelines", filter = "graphlearner")
 

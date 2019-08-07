@@ -42,6 +42,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
       self$learner = assert_learner(learner, clone = TRUE)
       self$learner$param_set$set_id = ""
+      task_type = mlr_reflections$constructors[self$learner$task_type]$Task[[1]]$classname
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = "cv", default = "cv", tags = "required"),
@@ -51,7 +52,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
 
-      super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = FALSE)
+      super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type)
     },
 
     train_task = function(task) {
@@ -107,10 +108,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       renaming = setdiff(colnames(prds), "row_id")
       setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))
       setnames(prds, "row_id", task$backend$primary_key)
-      task$clone()$select(character(0))$cbind(prds)
+      task$select(character(0))$cbind(prds)
     },
     .crossval_param_set = NULL
   )
 )
 
-mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ParamSet$new()))$new()))
