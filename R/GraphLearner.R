@@ -44,7 +44,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_subset(task_type, mlr_reflections$task_types)
 
       if (is.null(predict_type)) {
-        names(mlr_reflections$learner_predict_types[[task_type]])[1]
+        predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
       }
 
       assert_subset(predict_type, names(mlr_reflections$learner_predict_types[[task_type]]))
