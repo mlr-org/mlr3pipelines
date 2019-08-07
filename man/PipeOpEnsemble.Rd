@@ -24,8 +24,7 @@ channel is created that can take an arbitrary number of inputs.
 
 \seealso{
 Other PipeOps: \code{\link{PipeOpTaskPreproc}},
-  \code{\link{PipeOp}}, \code{\link{mlr_pipeop_NULL}},
-  \code{\link{mlr_pipeop_apply}},
+  \code{\link{PipeOp}}, \code{\link{mlr_pipeop_apply}},
   \code{\link{mlr_pipeop_balancesample}},
   \code{\link{mlr_pipeop_branch}},
   \code{\link{mlr_pipeop_chunk}},
@@ -38,6 +37,7 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeop_majorityvote}},
   \code{\link{mlr_pipeop_modelavg}},
   \code{\link{mlr_pipeop_mutate}},
+  \code{\link{mlr_pipeop_nop}},
   \code{\link{mlr_pipeop_pca}},
   \code{\link{mlr_pipeop_scale}},
   \code{\link{mlr_pipeop_select}},
