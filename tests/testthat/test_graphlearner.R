@@ -49,9 +49,14 @@ test_that("basic graphlearn tests", {
 
   expect_equal(dbgr$train(task), dbgr)
 
-  dbgr$predict(task)
+  # debuglearner predict() modifies model, but PipeOpLearner does not accept
+  # model changes in predict phase, so would ordinarily discard the change.
+  # Here we swap the debuglearner model by an environment, which gets updated
+  # by-reference, so we can get the $task_predict slot eventually.
+  dbmodels = as.environment(dbgr$model$classif.debug$model)
+  dbgr$state$model$classif.debug$model = dbmodels
 
-  dbmodels = dbgr$graph$pipeops$classif.debug$learner$model
+  dbgr$predict(task)
 
   expect_equal(dbmodels$task_train$data(), scalediris$data())
   expect_equal(dbmodels$task_predict$data(), scalediris$data())
