@@ -46,7 +46,7 @@ Version: 0.1
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Remotes:
-    mlr-org/mlr3,
+    mlr-org/mlr3@cbb4584,
     mlr-org/mlr3misc,
     mlr-org/paradox,
     mlr-org/mlr3filters,
