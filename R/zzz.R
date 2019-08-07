@@ -11,6 +11,9 @@
 
 
 .onLoad = function(libname, pkgname) { # nocov start
+
+  mlr_learners$add("graph", GraphLearner, required_args = "graph")
+
   backports::import(pkgname)
 
   mlr_reflections$constructors = rowwise_table(
