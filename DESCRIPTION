@@ -63,6 +63,7 @@ Collate:
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
     'PipeOpApply.R'
+    'PipeOpBackupLearner.R'
     'PipeOpBalanceSample.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
