@@ -55,10 +55,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
 
     train_task = function(task) {
+      on.exit({self$learner$state = NULL})
 
       # Train a learner for predicting
       self$state = self$learner$train(task)$state
-
       pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
@@ -71,6 +71,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
 
     predict_task = function(task) {
+      on.exit({self$learner$state = NULL})
       self$learner$state = self$state
       prediction = as.data.table(self$learner$predict(task))
       private$pred_to_task(prediction, task)

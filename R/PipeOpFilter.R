@@ -69,6 +69,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
     },
 
     get_state = function(task) {
+      on.exit({self$filter$scores = structure(numeric(0), .Names = character(0))})
       filtercrit = c("nfeat", "frac", "cutoff")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {
