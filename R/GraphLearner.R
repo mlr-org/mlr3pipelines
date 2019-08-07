@@ -94,4 +94,3 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   )
 )
 
-mlr_learners$add("graph", GraphLearner, required_args = "graph")
