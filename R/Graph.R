@@ -543,3 +543,30 @@ graph_load_namespaces = function(self, info) {
     stopf("Error during %s:\n  %s", info, str_collapse(errors, sep = "\n  "))
   }
 }
+
+
+#' @export
+predict.Graph = function(object, newdata, ...) {
+  if (!object$is_trained) {
+    stop("Graph is not trained.")
+  }
+  output = object$output
+  if (nrow(output) != 1) {
+    stop("Graph has more than one output channel")
+  }
+  if (!are_types_compatible(output$predict, "Prediction")) {
+    stop("Graph output type not 'Prediction' (or compatible with it)")
+  }
+  plain = "Task" %nin% class(newdata)
+  if (plain) {
+    assert_data_frame(newdata)
+    newdata = TaskRegr$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = NA_real_)), "...dummytarget...")
+  }
+  result = object$predict(newdata)
+  assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)
+  result = result[[1]]
+  if (plain) {
+    result = result$data$response %??% result$data$prob
+  }
+  result
+}
