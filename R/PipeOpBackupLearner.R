@@ -85,4 +85,4 @@ PipeOpBackupLearner = R6Class("PipeOpBackupLearner", inherit = PipeOp,
   )
 )
 
-register_pipeop("backuplearner", PipeOpBackupLearner)
+mlr_pipeops$add("backuplearner", PipeOpBackupLearner)
