@@ -14,6 +14,7 @@ Pipelines for mlr3.
 Useful links:
 \itemize{
   \item \url{https://mlr3pipelines.mlr-org.com}
+  \item \url{https://github.com/mlr-org/mlr3pipelines}
   \item Report bugs at \url{https://github.com/mlr-org/mlr3pipelines/issues}
 }
 
