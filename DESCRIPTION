@@ -1,57 +1,74 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
+Version: 0.1
+Authors@R: 
+    c(person(given = "Martin",
+             family = "Binder",
+             role = c("aut", "cre"),
+             email = "martin.binder@mail.com"),
+      person(given = "Bernd",
+             family = "Bischl",
+             role = "ctb",
+             email = "bernd_bischl@gmx.net"),
+      person(given = "Michel",
+             family = "Lang",
+             role = "ctb",
+             email = "michellang@gmail.com"),
+      person(given = "Lars",
+             family = "Kotthoff",
+             role = "ctb",
+             email = "larsko@cs.ubc.ca"),
+      person(given = "Florian",
+             family = "Pfisterer",
+             role = "ctb",
+             email = "pfistererf@googlemail.com"))
 Description: Pipelines for mlr3.
-Authors@R: c(
-    person("Martin", "Binder", email = "martin.binder@mail.com", role = c("aut", "cre")),
-    person("Bernd", "Bischl", email = "bernd_bischl@gmx.net", role = "ctb"),
-    person("Michel", "Lang", email = "michellang@gmail.com", role = "ctb"),
-    person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"),
-    person("Florian", "Pfisterer", email = "pfistererf@googlemail.com", role = "ctb"))
-URL: https://mlr3pipelines.mlr-org.com, https://github.com/mlr-org/mlr3pipelines
-BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 License: LGPL-3
+URL: https://mlr3pipelines.mlr-org.com,
+    https://github.com/mlr-org/mlr3pipelines
+BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 Depends:
     R (>= 3.1.0)
 Imports:
-    R6,
     backports,
     checkmate,
     data.table,
+    digest,
     mlr3,
     mlr3misc,
     paradox,
-    digest,
+    R6,
     withr
 Suggests:
+    ggplot2,
+    glmnet,
     igraph,
     knitr,
     lgr,
     mlbench,
+    mlr3filters,
+    mlr3learners,
+    mlr3tuning,
     nloptr,
     rmarkdown,
     rpart,
     testthat,
-    ggplot2,
-    mlr3learners,
-    mlr3filters,
-    mlr3tuning,
-    glmnet,
     visNetwork
-Encoding: UTF-8
-NeedsCompilation: no
-Roxygen: list(markdown = TRUE)
-LazyData: true
-ByteCompile: true
-Version: 0.1
-RoxygenNote: 6.1.1
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
 Remotes:
     mlr-org/mlr3@cbb4584,
-    mlr-org/mlr3misc,
-    mlr-org/paradox,
     mlr-org/mlr3filters,
+    mlr-org/mlr3learners,
+    mlr-org/mlr3misc,
     mlr-org/mlr3tuning,
-    mlr-org/mlr3learners
+    mlr-org/paradox
+ByteCompile: true
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: no
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
 Collate:
     'Graph.R'
     'GraphLearner.R'
