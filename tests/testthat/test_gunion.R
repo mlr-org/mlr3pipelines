@@ -14,7 +14,6 @@ test_that("empty gunion", {
 })
 
 test_that("named gunion", {
-
   expect_equal(
     gunion(list(a = "scale", b = "pca", "subsample")),
     Graph$new()$
@@ -29,7 +28,7 @@ test_that("named gunion", {
       b = "subsample" %>>% "pca",
       "subsample",
       z = gunion(list("pca", "scale")) %>>% "featureunion")) %>>%
-        PipeOpFeatureUnion$new(4),
+      PipeOpFeatureUnion$new(4),
     Graph$new()$
       add_pipeop(PipeOpScale$new(id = "a.scale"))$
       add_pipeop(PipeOpSubsample$new(id = "b.subsample"))$
@@ -45,7 +44,6 @@ test_that("named gunion", {
       add_edge("a.scale", "featureunion", dst_channel = "input1")$
       add_edge("b.pca", "featureunion", dst_channel = "input2")$
       add_edge("subsample", "featureunion", dst_channel = "input3")$
-    add_edge("z.featureunion", "featureunion", dst_channel = "input4")
+      add_edge("z.featureunion", "featureunion", dst_channel = "input4")
   )
-
 })

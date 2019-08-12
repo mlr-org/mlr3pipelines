@@ -116,20 +116,21 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #' PipeOpBranch$new(branches) %>>% gunion(list(po_pca, po_nop)) %>>% PipeOpUnbranch$new(branches)
 #'
 #' branch(pca = po_pca, nothing = po_nop, .prefix_branchops = "br_", .prefix_paths = "xy_")
-#' #gives the same as
+#' # gives the same as
 #' PipeOpBranch$new(branches, id = "br_branch") %>>%
 #'   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) %>>%
 #'   PipeOpUnbranch$new(branches, id = "br_unbranch")
-#'
 #' @export
 branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = FALSE) {
+
   assert_list(.graphs, null.ok = TRUE)
   assert_string(.prefix_branchops)
   assert(
     check_flag(.prefix_paths),
     check_string(.prefix_paths)
   )
-  graphs <- c(list(...), .graphs) ; rm(.graphs)
+  graphs <- c(list(...), .graphs)
+  rm(.graphs)
   assert(
     check_list(graphs, min.len = 1, any.missing = FALSE, names = "unique"),
     check_list(graphs, min.len = 1, any.missing = FALSE, names = "unnamed")
@@ -169,9 +170,9 @@ branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = 
     gin$op.id = paste0(pnp, gin$op.id)
 
     pmap(list(
-        src_id = branch_id, dst_id = gin$op.id,
-        src_channel = branch_chan, dst_channel = gin$channel.name),
-      graph$add_edge)
+      src_id = branch_id, dst_id = gin$op.id,
+      src_channel = branch_chan, dst_channel = gin$channel.name),
+    graph$add_edge)
   })
   graph
 }

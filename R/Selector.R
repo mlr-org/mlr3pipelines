@@ -11,8 +11,8 @@ NULL
 #' @export
 #' @rdname Selector
 selector_all = function() function(task) {
-  task$feature_names
-}
+    task$feature_names
+  }
 
 #' @export
 #' @rdname Selector

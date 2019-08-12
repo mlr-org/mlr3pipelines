@@ -73,7 +73,7 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
     prepare_data = function(task) {
       data = task$data(cols = task$feature_names)
       fcts = map_lgl(data, is.factor)
-      assert_true(all(fcts) || !any(fcts))  # TODO: nicer error message
+      assert_true(all(fcts) || !any(fcts)) # TODO: nicer error message
 
       if (all(fcts) != (self$predict_type == "response")) {
         stopf("Trying to predict %s, but incoming data has %sfactors", self$predict_type, if (all(fcts)) "only " else "no ")
@@ -243,4 +243,3 @@ optimize_objfun_nlopt = function(task, pars, avg_weight_fun, n_weights, data) {
     data = data
   )$solution
 }
-

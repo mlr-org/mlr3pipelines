@@ -27,7 +27,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
         ParamUty$new("mutation", custom_check = function(x) check_list(x, names = "unique"), tags = "required"),
         ParamUty$new("env", custom_check = function(x) check_environment, tags = "required"),
         ParamLgl$new("delete_originals", tags = "required")
-        ))
+      ))
       ps$values = list(mutation = named_list(), env = globalenv(), delete_originals = FALSE)
       super$initialize(id, ps, param_vals = param_vals)
     },
@@ -45,7 +45,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
       if (ncol(newdata) && nrow(newdata) != task$nrow) {
         stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
       }
-      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
+      if (ncol(newdata)) task$cbind(newdata) # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
       task
     }
   )

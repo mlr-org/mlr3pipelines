@@ -46,7 +46,6 @@ test_that("PipeOpBranch - train and predict", {
 })
 
 test_that("branch function", {
-
   po1 = PipeOpScale$new()
   po2 = PipeOpScale$new("scale2")
   po3 = PipeOpPCA$new()
@@ -110,49 +109,49 @@ test_that("branch function", {
   expect_graph_equal(
     branch(a = po1, b = po2, .prefix_branchops = "xy_"),
     PipeOpBranch$new(c("a", "b"), id = "xy_branch") %>>%
-    gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")
+      gunion(list(po1, po2)) %>>% PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")
   )
 
   # prefix branch operations and paths
   expect_graph_equal(
     branch(po1, po2, .prefix_branchops = "xy_", .prefix_paths = TRUE),
     PipeOpBranch$new(2, id = "xy_branch") %>>%
-    gunion(list(po1 = po1, po2 = po2)) %>>% PipeOpUnbranch$new(2, id = "xy_unbranch")
+      gunion(list(po1 = po1, po2 = po2)) %>>% PipeOpUnbranch$new(2, id = "xy_unbranch")
   )
 
   # prefix branch operations and paths, named
   expect_graph_equal(
     branch(a = po1, b = po2, .prefix_branchops = "xy_", .prefix_paths = TRUE),
     PipeOpBranch$new(c("a", "b"), id = "xy_branch") %>>%
-    gunion(list(a = po1, b = po2)) %>>% PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")
+      gunion(list(a = po1, b = po2)) %>>% PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")
   )
 
   # more than one input
   expect_graph_equal(
     branch(gunion(list(po1, po3)) %>>% pofu, po2),
     gunion(list(
-        PipeOpBranch$new(2),
-        gunion(list(
-            gunion(list(po1, po3)) %>>% pofu,
-            po2)) %>>%
+      PipeOpBranch$new(2),
+      gunion(list(
+        gunion(list(po1, po3)) %>>% pofu,
+        po2)) %>>%
         PipeOpUnbranch$new(2)))$
-    add_edge("branch", "scale", src_channel = "output1")$
-    add_edge("branch", "pca", src_channel = "output1")$
-    add_edge("branch", "scale2", src_channel = "output2")
+      add_edge("branch", "scale", src_channel = "output1")$
+      add_edge("branch", "pca", src_channel = "output1")$
+      add_edge("branch", "scale2", src_channel = "output2")
   )
 
   # more than one input, named
   expect_graph_equal(
     branch(b = po2, a = gunion(list(po1, po3)) %>>% pofu),
     gunion(list(
-        PipeOpBranch$new(c("b", "a")),
-        gunion(list(
-            po2,
-            gunion(list(po1, po3)) %>>% pofu)) %>>%
+      PipeOpBranch$new(c("b", "a")),
+      gunion(list(
+        po2,
+        gunion(list(po1, po3)) %>>% pofu)) %>>%
         PipeOpUnbranch$new(c("b", "a"))))$
-    add_edge("branch", "scale", src_channel = "a")$
-    add_edge("branch", "pca", src_channel = "a")$
-    add_edge("branch", "scale2", src_channel = "b")
+      add_edge("branch", "scale", src_channel = "a")$
+      add_edge("branch", "pca", src_channel = "a")$
+      add_edge("branch", "scale2", src_channel = "b")
   )
 
   # more than one output: error
@@ -163,16 +162,15 @@ test_that("branch function", {
   expect_graph_equal(
     branch(a = gunion(list(po1, po3)) %>>% pofu, b = pofu2, .prefix_branchops = "xy_", .prefix_paths = TRUE),
     gunion(list(
-        PipeOpBranch$new(c("a", "b"), id = "xy_branch"),
-        gunion(list(
-            a = gunion(list(po1, po3)) %>>% pofu,
-            b = pofu2)) %>>%
+      PipeOpBranch$new(c("a", "b"), id = "xy_branch"),
+      gunion(list(
+        a = gunion(list(po1, po3)) %>>% pofu,
+        b = pofu2)) %>>%
         PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")))$
-    add_edge("xy_branch", "a.scale", src_channel = "a")$
-    add_edge("xy_branch", "a.pca", src_channel = "a")$
-    add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input1")$
-    add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input2")$
-    add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input3")
+      add_edge("xy_branch", "a.scale", src_channel = "a")$
+      add_edge("xy_branch", "a.pca", src_channel = "a")$
+      add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input1")$
+      add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input2")$
+      add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input3")
   )
-
 })

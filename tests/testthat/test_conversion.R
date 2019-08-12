@@ -18,7 +18,6 @@ test_that("type conversions in graph creation", {
   expect_equal(gr1, gr3)
 
   expect_equal(gr1, gunion(list("pca", "scale"))$add_edge("pca", "scale"))
-
 })
 
 test_that("learner conversion in graph creation", {
@@ -42,11 +41,9 @@ test_that("learner conversion in graph creation", {
 
   expect_equal(mlr_pipeops$get("learner_cv", "classif.rpart"),
     PipeOpLearnerCV$new(mlr_learners$get("classif.rpart")))
-
 })
 
 test_that("assertions work", {
-
   expect_error(as_pipeop("test"))
   expect_error(assert_pipeop("scale"))
   expect_class(as_pipeop("scale"), "PipeOp")
@@ -70,7 +67,6 @@ test_that("assertions work", {
 
 
 test_that("auto-gunion", {
-
   expect_equal(
     list("pca", "scale") %>>% list("subsample", "nop"),
     gunion(list(mlr_pipeops$get("pca"), mlr_pipeops$get("scale"))) %>>%
@@ -82,5 +78,4 @@ test_that("auto-gunion", {
     gunion(list(mlr_pipeops$get("pca"), mlr_pipeops$get("scale"))) %>>%
       PipeOpFeatureUnion$new(2)
   )
-
 })

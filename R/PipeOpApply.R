@@ -48,7 +48,7 @@ PipeOpApply = R6Class("PipeOpApply",
       dt
     },
 
-    transform_dt= function(task, task_levels) {
+    transform_dt = function(task, task_levels) {
       applicator = self$param_set$values$applicator_vector
       applicator_single = self$param_set$values$applicator_single
       if (is.null(applicator) == is.null(applicator_single)) {
@@ -61,4 +61,3 @@ PipeOpApply = R6Class("PipeOpApply",
 )
 
 mlr_pipeops$add("apply", PipeOpApply)
-

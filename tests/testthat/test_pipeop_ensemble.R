@@ -14,7 +14,6 @@ test_that("PipeOpEnsemble - basic properties", {
 
   op = PipeOpEnsemble$new(0, "ensemble", param_vals = list())
   expect_pipeop(op)
-
 })
 
 test_that("PipeOpWeightedModelAvg - train and predict", {
@@ -46,7 +45,6 @@ test_that("PipeOpWeightedModelAvg - train and predict", {
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prds[[3]]))
-
 })
 
 ## test_that("PipeOpNlOptModelAvg - response - train and predict", {
@@ -68,7 +66,7 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
       predict_types = c("response"), nclasses = 3),
     simplify = FALSE
   )
-  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
+  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth) # works because of R6 reference semantics
   po = PipeOpMajorityVote$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
@@ -95,7 +93,6 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
   expect_equal(out[[1]]$data, prds[[4]]$data)
-
 })
 
 test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
@@ -105,7 +102,7 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
       predict_types = c("response", "prob"), nclasses = 3),
     simplify = FALSE
   )
-  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
+  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth) # works because of R6 reference semantics
   po = PipeOpMajorityVote$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
@@ -132,7 +129,6 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
   expect_equivalent(out[[1]], prds[[4]])
-
 })
 
 ## test_that("PipeOpNlOptMajorityVote - response - train and predict", {

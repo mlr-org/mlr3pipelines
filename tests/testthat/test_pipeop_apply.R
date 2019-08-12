@@ -2,7 +2,6 @@ context("apply")
 
 
 test_that("apply general tests", {
-
   op = PipeOpApply$new()
   expect_pipeop(op)
 
@@ -18,11 +17,9 @@ test_that("apply general tests", {
 
   expect_datapreproc_pipeop_class(PipeOpApply, task = mlr_tasks$get("pima"),
     constargs = list(param_vals = list(applicator_vector = as.numeric)))
-
 })
 
 test_that("apply results look as they should", {
-
   po = PipeOpApply$new()
   task = mlr_tasks$get("iris")
 
@@ -123,6 +120,4 @@ test_that("apply results look as they should", {
     po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
     cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
-
-
 })

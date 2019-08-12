@@ -132,12 +132,10 @@ test_that("data.table of pipeops looks as it should", {
 })
 
 test_that("GraphLearner is in mlr_learners", {
-
   expect_equal(
     mlr_learners$get("graph", graph = PipeOpLearner$new("classif.rpart")),
     GraphLearner$new(Graph$new()$add_pipeop(PipeOpLearner$new("classif.rpart")))
   )
 
-  expect_error(mlr_learners$get("graph"), "'graph'.*'graph'")  # Needs the argument 'graph' to construct 'graph'
-
+  expect_error(mlr_learners$get("graph"), "'graph'.*'graph'") # Needs the argument 'graph' to construct 'graph'
 })

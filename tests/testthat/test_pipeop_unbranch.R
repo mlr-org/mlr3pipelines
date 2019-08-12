@@ -53,5 +53,4 @@ test_that("PipeOpUnbranch - train and predict", {
   pout = predict_pipeop(ubranch, (list(t2)))
   expect_true(length(pout) == 1)
   expect_equal(pout[[1]], t2)
-
 })

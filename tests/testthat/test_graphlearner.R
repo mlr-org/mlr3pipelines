@@ -187,5 +187,4 @@ test_that("graphlearner type inference", {
   # input two mismatching types
   gr = gunion(list(mlr_pipeops$get("learner", "classif.rpart"), mlr_pipeops$get("learner", "regr.rpart"))) %>>% mlr_pipeops$get("unbranch")
   expect_error(GraphLearner$new(gr), "multiple possibilities")
-
 })

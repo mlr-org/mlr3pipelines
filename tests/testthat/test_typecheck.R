@@ -80,7 +80,6 @@ test_that("Graph is type-checking", {
 })
 
 test_that("Autoconversion utility functions work", {
-
   reset_class_hierarchy_cache()
   reset_autoconvert_register()
 
@@ -105,20 +104,17 @@ test_that("Autoconversion utility functions work", {
 
   register_autoconvert_function("test_hyperclass", bfun)
 
-  expect_identical(get_autoconverter("test_subclass")$fun, bfun)  # does the test_hyperclass conversion, because subclass before superclass
-  expect_identical(get_autoconverter("test_superclass")$fun, afun)  # converts to "test", because distance to "test_hyperclass" is larger
+  expect_identical(get_autoconverter("test_subclass")$fun, bfun) # does the test_hyperclass conversion, because subclass before superclass
+  expect_identical(get_autoconverter("test_superclass")$fun, afun) # converts to "test", because distance to "test_hyperclass" is larger
   expect_identical(get_autoconverter("test_hyperclass")$fun, bfun) # actually registered to bfun
-  expect_identical(get_autoconverter("test_megaclass")$fun, bfun)  # converts to "test_hyperclass" because distance to "test" is larger
+  expect_identical(get_autoconverter("test_megaclass")$fun, bfun) # converts to "test_hyperclass" because distance to "test" is larger
 
-  reset_autoconvert_register()  # check that reset actually empties the register to default
+  reset_autoconvert_register() # check that reset actually empties the register to default
 
   expect_set_equal(map_chr(default_acr, 1), names(autoconvert_register))
-
-
 })
 
 test_that("Autoconversion for pipeops works", {
-
   po = PipeOpCopy$new(1)
 
   po$input$train = "Task"
@@ -131,5 +127,4 @@ test_that("Autoconversion for pipeops works", {
   expect_error(po$predict(list("regr.mse")), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
 
   expect_error(po$predict(list("regrmse")), "PipeOp copy.*Conversion from given data to MeasureClassif.*regrmse.*not found.*regr\\.mse")
-
 })

@@ -34,7 +34,7 @@ as_graph = function(x, deep_copy = FALSE) {
 
 #' @export
 as_graph.default = function(x, deep_copy = FALSE) {
-  x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically for convertability
+  x = Graph$new()$add_pipeop(x) # add_pipeop checks automatically for convertability
   if (deep_copy) {
     x = x$clone(deep = TRUE)
   }
@@ -43,7 +43,7 @@ as_graph.default = function(x, deep_copy = FALSE) {
 
 #' @export
 as_graph.list = function(x, deep_copy = FALSE) {
-  gunion(x)  # gunion itself will convert individual members of x
+  gunion(x) # gunion itself will convert individual members of x
 }
 
 #' @export

@@ -14,7 +14,6 @@ test_that("featureunion - basic properties", {
   expect_pipeop(po)
   expect_data_table(po$input, nrow = 1)
   expect_data_table(po$output, nrow = 1)
-
 })
 
 
@@ -45,7 +44,6 @@ test_that("PipeOpFeatureUnion - train and predict", {
   pout = predict_pipeop(po, list(t1, t2))
   expect_equivalent(pout[[1]]$feature_names, tsk$feature_names)
   expect_equivalent(pout[[1]]$target_names, tsk$target_names)
-
 })
 
 test_that("PipeOpFeatureUnion - train and predict II", {
@@ -93,7 +91,6 @@ test_that("PipeOpFeatureUnion - train and predict II", {
   expect_set_equal(trained$feature_names, c("PC1", "PC2", "PC3", "PC4", "Petal.Length",
     "Petal.Width", "Sepal.Length", "Sepal.Width"))
   expect_true(graph$is_trained)
-
 })
 
 test_that("Test wrong inputs", {
@@ -109,7 +106,6 @@ test_that("Test wrong inputs", {
 })
 
 test_that("PipeOpFeatureUnion - levels are preserved", {
-
   tbl1 = data.table(x1 = factor(letters[10:14], levels = letters), y1 = letters[1:5], target = 1:5)
   tbl2 = data.table(x2 = factor(letters[10:14], levels = letters), y2 = letters[1:5], target = 1:5)
 
@@ -125,12 +121,9 @@ test_that("PipeOpFeatureUnion - levels are preserved", {
 
 
   pofu$train(list(tsk1$filter(3:5), tsk2$filter(3:5)))[[1]]$col_info
-
-
 })
 
 test_that("feature renaming", {
-
   expect_pipeop_class(PipeOpFeatureUnion, list(letters[1:3]))
 
   expect_equal(nrow(PipeOpFeatureUnion$new(c("a", "b", "c"))$input), 3)
@@ -179,10 +172,9 @@ test_that("feature renaming", {
 
   po = PipeOpFeatureUnion$new(c("z", "a", "a"))
 
-# FIXME: this needs https://github.com/mlr-org/mlr3/issues/268
-#  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
-#    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
-
+  # FIXME: this needs https://github.com/mlr-org/mlr3/issues/268
+  #  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
+  #    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
 })
 
 # https://github.com/mlr-org/mlr3pipelines/issues/216

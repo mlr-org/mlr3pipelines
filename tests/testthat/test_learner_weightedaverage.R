@@ -16,7 +16,7 @@ test_that("LearnerClassifWeightedAverage", {
   expect_prediction(prd)
 
 
-  df = data.frame(x = matrix(runif(100), nrow = 10), y = as.factor(sample(c(0,1), 10, replace = TRUE)))
+  df = data.frame(x = matrix(runif(100), nrow = 10), y = as.factor(sample(c(0, 1), 10, replace = TRUE)))
   tsk = TaskClassif$new(id = "tsk", backend = df, target = "y")
 
   for (predicttype in c("prob", "response")) {
@@ -49,7 +49,6 @@ test_that("LearnerClassifWeightedAverage", {
       expect_prediction(prd)
     }
   }
-
 })
 
 test_that("LearnerRegrWeightedAverage", {
@@ -106,7 +105,7 @@ test_that("LearnerRegrWeightedAverage", {
   semeas = R6Class("MeasureRegrScaledRMSE",
     inherit = MeasureRegr,
     public = list(
-        initialize = function() {
+      initialize = function() {
         super$initialize(
           id = "regr.srmse",
           range = c(0, Inf),
@@ -151,7 +150,6 @@ test_that("LearnerRegrWeightedAverage", {
     expect_prediction(prd)
     expect_numeric(prd$se, lower = 0, any.missing = FALSE)
   }
-
 })
 
 test_that("LearnerClassifWeightedAverage Pipeline", {
@@ -174,8 +172,8 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
   lrn = LearnerClassifWeightedAverage$new()
   graph = gunion(list(
-      PipeOpLearnerCV$new("classif.rpart"),
-      PipeOpLearnerCV$new("classif.featureless"))) %>>%
+    PipeOpLearnerCV$new("classif.rpart"),
+    PipeOpLearnerCV$new("classif.featureless"))) %>>%
     PipeOpFeatureUnion$new() %>>%
     PipeOpLearner$new(lrn)
   expect_graph(graph)
@@ -196,7 +194,6 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
   glrn = GraphLearner$new(graph)
   expect_prediction(glrn$train(tsk)$predict(tsk))
-
 })
 
 test_that("LearnerRegrWeightedAverage Pipeline", {
@@ -219,8 +216,8 @@ test_that("LearnerRegrWeightedAverage Pipeline", {
 
   lrn = LearnerRegrWeightedAverage$new()
   graph = gunion(list(
-      PipeOpLearnerCV$new("regr.rpart"),
-      PipeOpLearnerCV$new("regr.featureless"))) %>>%
+    PipeOpLearnerCV$new("regr.rpart"),
+    PipeOpLearnerCV$new("regr.featureless"))) %>>%
     PipeOpFeatureUnion$new() %>>%
     PipeOpLearner$new(lrn)
   expect_graph(graph)
@@ -241,5 +238,4 @@ test_that("LearnerRegrWeightedAverage Pipeline", {
 
   glrn = GraphLearner$new(graph, task_type = "regr")
   expect_prediction(glrn$train(tsk)$predict(tsk))
-
 })

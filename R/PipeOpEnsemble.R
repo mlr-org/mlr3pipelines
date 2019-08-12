@@ -46,6 +46,7 @@ check_weights = function(innum) {
 }
 
 weighted_avg_predictions = function(inputs, weights) {
+
   row_ids = inputs[[1]]$row_ids
   map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
   truth = inputs[[1]]$truth

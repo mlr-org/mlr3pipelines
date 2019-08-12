@@ -22,6 +22,7 @@
 #'   param_vals = list(cp = 0.3))
 #' @export
 po = function(.key, ...) {
+
   assert_string(.key)
 
   args = list(...)
@@ -32,7 +33,7 @@ po = function(.key, ...) {
 
   args_not_in_sig = which(
     !is.na(given_argnames) &
-    given_argnames %nin% signature_argnames
+      given_argnames %nin% signature_argnames
   )
 
   param_vals = args[args_not_in_sig]

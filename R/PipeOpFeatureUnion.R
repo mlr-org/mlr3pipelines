@@ -61,10 +61,11 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
 mlr_pipeops$add("featureunion", PipeOpFeatureUnion)
 
 cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
+
   task = inputs[[1L]]
   ids = task$row_ids
 
-  if (length(inprefix)) {  # inprefix has length 0 if innum is 0
+  if (length(inprefix)) { # inprefix has length 0 if innum is 0
     names(inputs) = inprefix
     if (inprefix[1] != "") {
       task$rename(task$feature_names, sprintf("%s.%s", inprefix[1], task$feature_names))

@@ -169,6 +169,7 @@ reset_autoconvert_register()
 # @return a function with one argument that converts an object to one of class `target`,
 #   a subclass, or a superclass, if possible. `NULL` if no such function is found.
 get_autoconverter = function(target) {
+
   # check first if 'target' is in the autoconvert register
   if (target %in% names(autoconvert_register)) {
     return(autoconvert_register[[target]])

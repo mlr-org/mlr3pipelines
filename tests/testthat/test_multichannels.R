@@ -1,7 +1,6 @@
 context("multichannels")
 
 test_that("adding multiple edges to output channels works", {
-
   graph = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop("subsample")
 
   graph$add_edge("scale", "subsample")$add_edge("scale", "pca")
@@ -11,11 +10,9 @@ test_that("adding multiple edges to output channels works", {
   pdf(file = NULL) # don't show plot. It is annoying.
   graph$plot()
   dev.off()
-
 })
 
 test_that("doublearrow with one output to many input works as expected", {
-
   g1 = "scale" %>>% gunion(list("pca", "subsample"))
   g2 = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop("subsample")$
     add_edge("scale", "pca")$add_edge("scale", "subsample")
@@ -24,7 +21,6 @@ test_that("doublearrow with one output to many input works as expected", {
 
   expect_error(gunion(list("scale", "pca")) %>>% gunion(list("nop", "subsample", "select")),
     "mismatching number of inputs / outputs")
-
 })
 
 test_that("multiple edges on output channel copies, as expected", {
@@ -82,14 +78,12 @@ test_that("multiple edges on output channel copies, as expected", {
   expect_equal(sapply(stsk$data(cols = stsk$feature_names), function(x) sum(x^2) / (length(x) - 1)),
     c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
-  expect_identical(tsk0, tsk1)  # input task not changed
+  expect_identical(tsk0, tsk1) # input task not changed
 
   expect_deep_clone(tsk0, tsk_clone)
-
 })
 
 test_that("adding multiple edges to vararg input channel works", {
-
   graph = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop(VarargPipeop$new())
 
   graph$add_edge("scale", "vararg")$add_edge("pca", "vararg")
@@ -118,11 +112,9 @@ test_that("adding multiple edges to vararg input channel works", {
   pdf(file = NULL) # don't show plot. It is annoying.
   graph$plot()
   dev.off()
-
 })
 
 test_that("doublearrow with many output to vararg input works as expected", {
-
   g1 = gunion(list("scale", "pca")) %>>% VarargPipeop$new()
   g2 = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop(VarargPipeop$new())$
     add_edge("scale", "vararg")$add_edge("pca", "vararg")
@@ -137,11 +129,9 @@ test_that("doublearrow with many output to vararg input works as expected", {
 
   expect_error(gunion(list("scale", "pca", "select", "subsample")) %>>% VarargPipeop$new(innum = 2),
     "mismatching number of inputs / outputs")
-
 })
 
 test_that("vararg passes args through as it should", {
-
   nullgraph = gunion(list(mlr_pipeops$get("nop", id = "nop1"), mlr_pipeops$get("nop", id = "nop2"))) %>>% VarargPipeop$new()
 
   expect_equal(nullgraph$train(1)[[1]], list(`...` = 1, `...` = 1))
@@ -176,7 +166,7 @@ test_that("vararg passes args through as it should", {
   expect_equal(sapply(stsk$data(cols = stsk$feature_names), function(x) sum(x^2) / (length(x) - 1)),
     c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
-  expect_identical(tsk0, tsk1)  # input task not changed
+  expect_identical(tsk0, tsk1) # input task not changed
   expect_deep_clone(tsk0, tsk_clone)
 
 
@@ -190,5 +180,4 @@ test_that("vararg passes args through as it should", {
     add_edge("nop2", "vararg", dst_channel = "input1")
 
   expect_equal(nullgraph$train(list(1, 2, 3), single_input = FALSE)[[1]], list(`...` = 1, `...` = 3, input1 = 2))
-
 })

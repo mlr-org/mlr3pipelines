@@ -1,7 +1,6 @@
 context("mlr_pipeops")
 
 test_that("mlr_pipeops access works", {
-
   expect_equal(
     po("scale"),
     mlr_pipeops$get("scale")
@@ -62,5 +61,4 @@ test_that("mlr_pipeops access works", {
     po("learner", dblrn$new(), key = 99),
     mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99))
   )
-
 })
