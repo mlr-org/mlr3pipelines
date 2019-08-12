@@ -10,8 +10,11 @@
 PipeOpCopy
 }
 \description{
-Copies its input \code{outnum} times. This should usually not be needed,
-because copying happens automatically.
+Copies its input \code{outnum} times. This is usually not needed,
+because copying happens automatically when one \code{PipeOp} is followed
+by multiple different \code{PipeOp}s. However, when constructing big
+Graphs using the \code{\%>>\%}-operator, \code{PipeOpCopy} can be helpful to
+specify which PipeOp gets connected to which.
 }
 \section{Methods}{
 
@@ -23,6 +26,37 @@ copies that will be made.
 }
 }
 
+\examples{
+# The following copies the output of 'scale' automatically to both
+# 'pca' and 'nop'
+mlr_pipeops$get("scale") \%>>\%
+  gunion(list(
+    mlr_pipeops$get("pca"),
+    mlr_pipeops$get("nop")
+  ))
+
+# The following would not work: the '\%>>\%'-operator does not know
+# which output to connect to which input
+# > gunion(list(
+# >   mlr_pipeops$get("scale"),
+# >   mlr_pipeops$get("select")
+# > )) \%>>\%
+# >   gunion(list(
+# >     mlr_pipeops$get("pca"),
+# >     mlr_pipeops$get("nop"),
+# >     mlr_pipeops$get("impute")
+# >   ))
+# Instead, the 'copy' operator makes clear which output gets copied.
+gunion(list(
+  mlr_pipeops$get("scale") \%>>\% mlr_pipeops$get("copy", outnum = 2),
+  mlr_pipeops$get("select")
+)) \%>>\%
+  gunion(list(
+    mlr_pipeops$get("pca"),
+    mlr_pipeops$get("nop"),
+    mlr_pipeops$get("impute")
+  ))
+}
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},

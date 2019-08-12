@@ -41,7 +41,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         }
         task_type = c(inferred, "classif")[1]
       }
-      assert_subset(task_type, mlr_reflections$task_types)
+      assert_subset(task_type, mlr_reflections$task_types$type)
 
       if (is.null(predict_type)) {
         predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
