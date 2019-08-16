@@ -12,6 +12,9 @@
 #' can be created using constructs like `~. ^ 2`.
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
+#' @examples
+#' # Instantiate PipeOpModelMatrix with higher order interactions
+#' op1 = PipeOpModelMatrix$new(param_vals = list(formula = ~ .  ^ 2))
 #' @export
 PipeOpModelMatrix = R6Class("PipeOpModelMatrix",
   inherit = PipeOpTaskPreprocSimple,

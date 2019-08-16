@@ -50,6 +50,17 @@ test_that("PipeOpModelMatrix - basic properties", {
   nt.dat = nt$data()
   expect_true(all(nt.dat[, "log(Sepal.Length)", with = TRUE] ==
       log(nt.dat[, Sepal.Length])))
+
+  # Interactions with factors
+  task = mlr_tasks$get("german_credit")
+  op = PipeOpModelMatrix$new(param_vals = list(formula = ~ 0 +
+      foreign_worker:other_installment_plans))
+  expect_pipeop(op)
+  nt = train_pipeop(op, inputs = list(task))[[1L]]
+  fn = nt$feature_names
+  expect_true("(Intercept)" %nin% fn)
+  expect_equal(length(grep("foreign_worker(yes:)|(no:)other_installment_plans(bank)|(stores)|(none)",
+    fn)), length(fn))
 }
 )
 
