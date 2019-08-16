@@ -39,6 +39,9 @@ test_that("PipeOpModelMatrix - basic properties", {
   expect_true("Sepal.Length" %in% fn)
 
   # other formula
+  expect_datapreproc_pipeop_class(PipeOpModelMatrix,
+    constargs = list(param_vals = list(formula = ~ 0 + Sepal.Length +
+        log(Sepal.Length))), task = task)
   op = PipeOpModelMatrix$new(param_vals = list(formula = ~ 0 + Sepal.Length +
       log(Sepal.Length)))
   expect_pipeop(op)
@@ -47,6 +50,7 @@ test_that("PipeOpModelMatrix - basic properties", {
   nt.dat = nt$data()
   expect_true(all(nt.dat[, "log(Sepal.Length)", with = TRUE] ==
       log(nt.dat[, Sepal.Length])))
+
 
 })
 
