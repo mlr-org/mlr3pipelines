@@ -21,7 +21,7 @@ test_that("PipeOpICA - compare to fastICA", {
   method = "C"
   set.seed(1234)
   fica = fastICA::fastICA(dt, n.comp = n.comp, method = method)
-  expect_true(all.equal(dim(fica$S), dim(result[[1]]$data()[, 2:5])))
+  expect_equal(dim(fica$S), dim(result[[1]]$data()[, 2:5]))
   expect_true(all(c("K", "W", "A", "center") %in% names(op$state)))
   expect_identical(op$state[c("K", "W", "A")], fica[c("K", "W", "A")])
   dtres = as.matrix(result[[1]]$data()[, 2:5])
@@ -34,9 +34,9 @@ test_that("PipeOpICA - compare to fastICA", {
   set.seed(1234)
   result2 = op2$train(list(task))
   set.seed(1234)
-  fica2 = fastICA::fastICA(dt, n.comp = n.comp, fun = fun,
+  fica2 = fastICA::fastICA(dt, n.comp = n.comp,
     alpha = 2, method = "R")
-  expect_true(all.equal(dim(fica2$S), dim(result2[[1]]$data()[, 2:5])))
+  expect_equal(dim(fica2$S), dim(result2[[1]]$data()[, 2:5]))
   expect_true(all(c("K", "W", "A", "center") %in% names(op2$state)))
   expect_identical(op2$state[c("K", "W", "A")], fica2[c("K", "W", "A")])
   dtres = as.matrix(result2[[1]]$data()[, 2:5])

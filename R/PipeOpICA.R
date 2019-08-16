@@ -61,4 +61,4 @@ PipeOpICA = R6Class("PipeOpICA",
   )
 )
 
-mlr_pipeops$add("pca", PipeOpPCA)
+mlr_pipeops$add("ica", PipeOpICA)
