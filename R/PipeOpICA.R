@@ -20,19 +20,19 @@ PipeOpICA = R6Class("PipeOpICA",
   public = list(
     initialize = function(id = "ica", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        # ParamLgl$new("center", default = TRUE),
-        # ParamLgl$new("scale.", default = FALSE),
-        # ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL))
-        ParamInt$new("n.comp", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL)),
+        ParamInt$new("n.comp", lower = 1, upper = Inf),
         ParamFct$new("alg.typ", levels = c("parallel", "deflation"),
           default = "parallel"),
         ParamFct$new("fun", default = "logcosh", levels = c("logcosh", "exp")),
         ParamDbl$new("alpha", default = 1.0, lower = 1, upper = 2),
-        ParamFct$new("method", default = "C", levels = c("C", "R")),
+        ParamFct$new("method", default = "R", levels = c("C", "R")),
+        ParamLgl$new("row.norm", default = FALSE),
         ParamInt$new("maxit", default = 200, lower = 1),
-        ParamDbl$new("tol", default = 1e-4, lower = 0),
-        ParamLgl$new("verbose", default = FALSE)
+        ParamDbl$new("tol", default = 1e-04, lower = 0),
+        ParamLgl$new("verbose", default = FALSE),
+        ParamUty$new("w.init", default = NULL)
       ))
+      ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "fastICA")
     },
@@ -43,27 +43,14 @@ PipeOpICA = R6Class("PipeOpICA",
 
     train_dt = function(dt, levels) {
 
-      if (!ncol(dt)) {
-        emat = matrix(data = numeric(0), nrow = 0, ncol = 0)
-        control = list(K = emat, W = emat, A = emat, center = numeric(0))
-        return(dt)
-      }
-      if (is.null(self$param_set$values$n.comp)) {
-        self$param_set$values$n.comp = ncol(dt)
-      }
-      ica = invoke(fastICA::fastICA, as.matrix(dt), .args = self$param_set$values)
-      ##mlrCPO
-      # control = fastICA::fastICA(dt, n.comp = n.comp, alg.typ = alg.typ, fun = fun, alpha = alpha,
-      #   method = method, maxit = maxit, tol = tol, verbose = verbose)
-      # ret = ica$S
-      # ica$S = NULL
-      # ica$X = NULL
-      # ica$center = vnapply(dt, mean)
-      # ret
+      params = insert_named(list(n.comp = ncol(dt)), self$param_set$values)
+
+      ica = invoke(fastICA::fastICA, as.matrix(dt), .args = params)
+
       self$state = ica
       self$state$S = NULL
       self$state$X = NULL
-      self$state$center = vnapply(dt, mean) #tsensemlber
+      self$state$center = map_dbl(dt, mean)
       ica$S
     },
 
