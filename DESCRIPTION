@@ -53,7 +53,9 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    visNetwork
+    visNetwork, 
+    fastICA, 
+    kernlab
 VignetteBuilder: 
     knitr
 Remotes:
@@ -92,6 +94,7 @@ Collate:
     'PipeOpLearnerCV.R'
     'PipeOpMajorityVote.R'
     'PipeOpModelAvg.R'
+    'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
