@@ -4,11 +4,11 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
 #'
 #' @description
-#' Extracts principle components from data.
-#' See [stats::prcomp()] for details  and parameters.
+#' Extracts kernel principle components from data.
+#' See [kernlab::kpca] for details  and parameters.
 #'
 #' @examples
-#' # Instantiate PipeOpPCA
+#' # Instantiate PipeOpKernelPCA
 #' op1 = PipeOpKernelPCA$new()
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
