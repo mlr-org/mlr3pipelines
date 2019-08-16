@@ -50,7 +50,6 @@ test_that("PipeOpModelMatrix - basic properties", {
   nt.dat = nt$data()
   expect_true(all(nt.dat[, "log(Sepal.Length)", with = TRUE] ==
       log(nt.dat[, Sepal.Length])))
-
-
-})
+}
+)
 
