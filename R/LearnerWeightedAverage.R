@@ -35,15 +35,15 @@
 #'   NLOPT_(G|L)N_.
 #'
 #' @section Methods:
-#' * `LearnerClassifWeightedAverage$new(), id = "classif.weightedavg")` \cr
+#' * `LearnerClassifAvg$new(), id = "classif.avg")` \cr
 #'   (`chr`) -> `self` \cr
 #'   Constructor.
 #' @family LearnerClassif
 #' @include PipeOpEnsemble.R
 #' @export
-LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit = LearnerClassif,
+LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
-    initialize = function(id = "classif.weightedavg") {
+    initialize = function(id = "classif.avg") {
       super$initialize(
         id = id,
         param_set = ParamSet$new(
@@ -144,15 +144,15 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #'   NLOPT_(G|L)N_*.
 #'
 #' @section Methods:
-#' * `LearnerRegrWeightedAverage$new(), id = "regr.weightedavg")` \cr
+#' * `LearnerRegrAvg$new(), id = "regr.avg")` \cr
 #'   (`chr`) -> `self` \cr
 #'   Constructor.
 #' @family LearnerRegr
 #' @include PipeOpEnsemble.R
 #' @export
-LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = LearnerRegr,
+LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
-    initialize = function(id = "regr.weightedavg") {
+    initialize = function(id = "regr.avg") {
       super$initialize(
         id = id,
         param_set = ParamSet$new(
