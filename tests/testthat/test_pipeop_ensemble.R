@@ -1,4 +1,4 @@
-context("PipeOpModelAvg")
+context("PipeOpEnsemble")
 
 test_that("PipeOpEnsemble - basic properties", {
   op = PipeOpEnsemble$new(4, "ensemble", param_vals = list())
@@ -17,31 +17,31 @@ test_that("PipeOpEnsemble - basic properties", {
 
 })
 
-test_that("PipeOpWeightedModelAvg - train and predict", {
+test_that("PipeOpWeightedRegravg - train and predict", {
   # Create 4 predictions
   truth = rnorm(70)
   prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)), simplify = FALSE)
 
-  po = PipeOpModelAvg$new(4)
+  po = PipeOpRegravg$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
 
   # Returns the same if weights are 1, rest 0
-  po = PipeOpModelAvg$new(4)
+  po = PipeOpRegravg$new(4)
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(prds[[3]]))
 
 
-  po = PipeOpModelAvg$new()
+  po = PipeOpRegravg$new()
   expect_pipeop(po)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
 
   # Returns the same if weights are 1, rest 0
-  po = PipeOpModelAvg$new()
+  po = PipeOpRegravg$new()
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
@@ -49,12 +49,12 @@ test_that("PipeOpWeightedModelAvg - train and predict", {
 
 })
 
-## test_that("PipeOpNlOptModelAvg - response - train and predict", {
+## test_that("PipeOpNlOptRegravg - response - train and predict", {
 ##   truth = rnorm(70)
 ##   prds = replicate(7, set_class(list(row_ids = seq_len(70), response = truth + rnorm(70, sd = 0.1)),
 ##     c("PredictionRegr", "Prediction")), simplify = FALSE)
 
-##   po = PipeOpNlOptModelAvg$new(7)
+##   po = PipeOpNlOptRegravg$new(7)
 ##   expect_pipeop(po)
 ##   expect_list(train_pipeop(po, prds), len = 1)
 ##   out = predict_pipeop(po, prds)
