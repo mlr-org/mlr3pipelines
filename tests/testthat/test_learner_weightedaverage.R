@@ -1,7 +1,7 @@
 context("WeighedAverage Learner")
 
-test_that("LearnerClassifWeightedAverage", {
-  lrn = LearnerClassifWeightedAverage$new()
+test_that("LearnerClassifAvg", {
+  lrn = LearnerClassifAvg$new()
   expect_learner(lrn)
   df = data.frame(x = matrix(sample(c("a", "b", "c"), 100, replace = TRUE), nrow = 10), y = as.factor(sample(c("a", "b", "c"), 10, replace = TRUE)))
   for (col in seq_along(df)) {
@@ -23,7 +23,7 @@ test_that("LearnerClassifWeightedAverage", {
     intask = (greplicate(PipeOpLearnerCV$new(mlr_learners$get("classif.rpart", predict_type = predicttype)), 3) %>>% PipeOpFeatureUnion$new())$train(tsk)[[1]]
 
     # Works for accuracy
-    lrn = LearnerClassifWeightedAverage$new()
+    lrn = LearnerClassifAvg$new()
     lrn$predict_type = predicttype
     expect_learner(lrn)
     lrn$param_set$values = list(measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA")
@@ -38,7 +38,7 @@ test_that("LearnerClassifWeightedAverage", {
 
     if (predicttype == "prob") {
       # Works for area under the curve
-      lrn = LearnerClassifWeightedAverage$new()
+      lrn = LearnerClassifAvg$new()
       lrn$predict_type = predicttype
       expect_learner(lrn)
       lrn$param_set$values = list(measure = "classif.auc", algorithm = "NLOPT_LN_COBYLA")
@@ -52,8 +52,8 @@ test_that("LearnerClassifWeightedAverage", {
 
 })
 
-test_that("LearnerRegrWeightedAverage", {
-  lrn = LearnerRegrWeightedAverage$new()
+test_that("LearnerRegrAvg", {
+  lrn = LearnerRegrAvg$new()
   expect_learner(lrn)
   df = data.frame(x = matrix(rnorm(100), nrow = 10), y = rnorm(100))
   colnames(df)[1:10] = paste0(letters[1:10], ".response")
@@ -125,7 +125,7 @@ test_that("LearnerRegrWeightedAverage", {
     intask = (greplicate(PipeOpLearnerCV$new(mlr_learners$get("regr.featureless", predict_type = predicttype)), 3) %>>% PipeOpFeatureUnion$new())$train("boston_housing")[[1]]
 
     # Works for accuracy
-    lrn = LearnerRegrWeightedAverage$new()
+    lrn = LearnerRegrAvg$new()
     lrn$predict_type = predicttype
     expect_learner(lrn)
     lrn$param_set$values = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA", est_se = "both")
@@ -154,11 +154,11 @@ test_that("LearnerRegrWeightedAverage", {
 
 })
 
-test_that("LearnerClassifWeightedAverage Pipeline", {
+test_that("LearnerClassifAvg Pipeline", {
   tsk = mlr_tasks$get("iris")
   # Works for response
   # TODO: this is a bit of a deep problem: https://github.com/mlr-org/mlr3pipelines/issues/216
-  ## lrn = LearnerClassifWeightedAverage$new()
+  ## lrn = LearnerClassifAvg$new()
   ## single_pred = PipeOpSubsample$new() %>>%
   ##   PipeOpLearnerCV$new(mlr_learners$get("classif.rpart"))
   ## pred_set = greplicate(single_pred, 3L) %>>%
@@ -172,7 +172,7 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
   ## prd = pred_set$predict(tsk)[[1]]
   ## expect_prediction(prd)
 
-  lrn = LearnerClassifWeightedAverage$new()
+  lrn = LearnerClassifAvg$new()
   graph = gunion(list(
       PipeOpLearnerCV$new("classif.rpart"),
       PipeOpLearnerCV$new("classif.featureless"))) %>>%
@@ -199,11 +199,11 @@ test_that("LearnerClassifWeightedAverage Pipeline", {
 
 })
 
-test_that("LearnerRegrWeightedAverage Pipeline", {
+test_that("LearnerRegrAvg Pipeline", {
   tsk = mlr_tasks$get("boston_housing")
   # Works for response
   # TODO: this is a bit of a deep problem: https://github.com/mlr-org/mlr3pipelines/issues/216
-  ## lrn = LearnerRegrWeightedAverage$new()
+  ## lrn = LearnerRegrAvg$new()
   ## single_pred = PipeOpSubsample$new() %>>%
   ##   PipeOpLearnerCV$new(mlr_learners$get("regr.rpart"))
   ## pred_set = greplicate(single_pred, 3L) %>>%
@@ -217,7 +217,7 @@ test_that("LearnerRegrWeightedAverage Pipeline", {
   ## prd = pred_set$predict(tsk)[[1]]
   ## expect_prediction(prd)
 
-  lrn = LearnerRegrWeightedAverage$new()
+  lrn = LearnerRegrAvg$new()
   graph = gunion(list(
       PipeOpLearnerCV$new("regr.rpart"),
       PipeOpLearnerCV$new("regr.featureless"))) %>>%
