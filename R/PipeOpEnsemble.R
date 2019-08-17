@@ -145,31 +145,3 @@ weighted_factor_mean = function(factors, weights, alllevels) {
   }
   factor(alllevels[max.col(accmat)], levels = alllevels)
 }
-
-
-# Weighted standard error. Depending on `est_se`, this is either
-# ("within") the square root mean square  of `se_matrix`,
-# ("between") the standard error of responses in `response_matrix`,
-# or ("both") the square root of the sum of the squares of both.
-# @param response_matrix [`matrix`] matrix of response values; not used for `est_se` == "within"
-# @param se_matrix [`matrix`] matrix of `se` values; not used for `est_se` == "between"
-# @param response [`numeric`] (weighted) mean of response values
-# @param weights [`numeric`] weights
-# @param est_se [`character(1)`] "within", "between", or "both"
-# TODO: find a justification for this
-weighted_se = function(response_matrix, se_matrix, response, weights, est_se) {
-  assert_choice(est_se, c("within", "between", "both"))
-  if (est_se != "between") {
-    within_var = se_matrix^2 %*% weights^2
-  }
-  if (est_se != "within") {
-    # Weighted SE calculated as in
-    # https://www.gnu.org/software/gsl/doc/html/statistics.html#weighted-samples
-    between_var = (response_matrix - response)^2 %*% weights^2 / (1 - sum(weights^2))
-    between_var[is.nan(between_var)] = 0
-  }
-  c(sqrt(switch(est_se,
-    within = within_var,
-    between = between_var,
-    both = within_var + between_var)))
-}

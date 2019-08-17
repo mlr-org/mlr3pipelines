@@ -128,7 +128,6 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #' for a measure provided as `measure` (defaults to `regr.mse`).
 #' Learned weights can be obtained from `.$model`.
 #'
-#'
 #' @section Parameter Set:
 #' * `weights.method` :: `character(1)` \cr
 #'   `manual` allows to supply weights, for `nloptr` weights are automatically determined using `nloptr`?
@@ -138,11 +137,6 @@ LearnerClassifWeightedAverage = R6Class("LearnerClassifWeightedAverage", inherit
 #' * `measure` :: `character(1) | MeasureClassif` \cr
 #'   Only for `weights.method = "nloptr"`. Measure to optimized weights for.
 #'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`.
-#' * `est_se` :: `character(1)` \cr
-#'   How to estimate standard error, if `predict_type` is `"se"`. Can be `"within"` (calculate SE from
-#'   input SEs; input data must contain `"se"`-prediction), `"between"` (calculate SE from SE of
-#'   predictions, does not need `"se"`-prediction of previous Learners), and `"both"` (square root of the sum
-#'   of the squared `"within"` and `"between"` se estimates).
 #' * `algorithm` :: `character(1)` \cr
 #'   Several nonlinear optimization methods from `nloptr` are available.
 #'   See `nloptr::nloptr.print.options()` for a list of possible options.
@@ -164,12 +158,11 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
         param_set = ParamSet$new(
           params = list(
             ParamUty$new(id = "measure", tags = c("train", "required")),
-            ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nlopt_levels),
-            ParamFct$new(id = "est_se", tags = c("train", "predict", "required"), levels = c("within", "between", "both"))
+            ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nlopt_levels)
           )
         ),
-        param_vals = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA", est_se = "both"),
-        predict_types = c("response", "se"),
+        param_vals = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA"),
+        predict_types = "response",
         feature_types = c("integer", "numeric")
       )
     },
@@ -186,27 +179,13 @@ LearnerRegrWeightedAverage = R6Class("LearnerRegrWeightedAverage", inherit = Lea
     },
     prepare_data = function(task) {
       response_matrix = as.matrix(task$data(cols = grep("\\.response$", task$feature_names, value = TRUE)))
-      est_se = self$param_set$values$est_se
-      se_matrix = NULL
-      if (self$predict_type == "se" && est_se != "between") {
-        se_matrix = as.matrix(task$data(cols = grep("\\.se$", task$feature_names, value = TRUE)))
-        if (ncol(se_matrix) != ncol(response_matrix)) {
-          stopf("est_se is '%s', but not all incoming Learners provided 'se'-prediction", est_se)
-        }
-      }
-      list(
-        response_matrix = response_matrix,
-        se_matrix = se_matrix
-      )
+      list(response_matrix = response_matrix)
     },
     weighted_average_prediction = function(task, weights, data) {
       wts = weights / sum(weights)
 
       response = c(data$response_matrix %*% wts)
       se = NULL
-      if (self$predict_type == "se") {
-        se = weighted_se(data$response_matrix, data$se_matrix, response, weights, self$param_set$values$est_se)
-      }
       PredictionRegr$new(row_ids = task$row_ids, truth = task$truth(), response = response, se = se)
     }
   )
