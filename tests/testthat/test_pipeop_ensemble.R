@@ -61,7 +61,7 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
 ##   expect_class(out[[1]], "PredictionRegr")
 ## })
 
-test_that("PipeOpWeightedMajorityVote - response -train and predict", {
+test_that("PipeOpWeightedClassifAvg - response -train and predict", {
   nulls = rep(list(NULL), 4)
   prds = replicate(4,
     make_prediction_obj_classif(n = 100, noise = TRUE,
@@ -69,13 +69,13 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
     simplify = FALSE
   )
   lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
-  po = PipeOpMajorityVote$new(4)
+  po = PipeOpClassifAvg$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
 
-  po = PipeOpMajorityVote$new(4)
+  po = PipeOpClassifAvg$new(4)
   po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
@@ -83,13 +83,13 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
   expect_equal(out[[1]]$data, prds[[4]]$data)
 
 
-  po = PipeOpMajorityVote$new()
+  po = PipeOpClassifAvg$new()
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
 
-  po = PipeOpMajorityVote$new()
+  po = PipeOpClassifAvg$new()
   po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
@@ -98,7 +98,7 @@ test_that("PipeOpWeightedMajorityVote - response -train and predict", {
 
 })
 
-test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
+test_that("PipeOpWeightedClassifAvg - prob - train and predict", {
   nulls = rep(list(NULL), 4)
   prds = replicate(4,
     make_prediction_obj_classif(n = 100, noise = TRUE,
@@ -106,13 +106,13 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
     simplify = FALSE
   )
   lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
-  po = PipeOpMajorityVote$new(4)
+  po = PipeOpClassifAvg$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
 
-  po = PipeOpMajorityVote$new(4)
+  po = PipeOpClassifAvg$new(4)
   po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
@@ -120,13 +120,13 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
   expect_equivalent(out[[1]], prds[[4]])
 
 
-  po = PipeOpMajorityVote$new()
+  po = PipeOpClassifAvg$new()
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
 
-  po = PipeOpMajorityVote$new()
+  po = PipeOpClassifAvg$new()
   po$param_set$values$weights = c(0, 0, 0, 1)
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
@@ -135,12 +135,12 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
 
 })
 
-## test_that("PipeOpNlOptMajorityVote - response - train and predict", {
+## test_that("PipeOpNlOptClassifAvg - response - train and predict", {
 ##   prds = replicate(5,
 ##     make_prediction_obj_classif(n = 100, noise = TRUE,
 ##       predict_types = c("response"), nclasses = 3)
 ##   )
-##   po = PipeOpNlOptMajorityVote$new(5)
+##   po = PipeOpNlOptClassifAvg$new(5)
 ##   expect_pipeop(po)
 ##   expect_list(train_pipeop(po, prds), len = 1)
 ##   out = predict_pipeop(po, prds)
@@ -148,19 +148,19 @@ test_that("PipeOpWeightedMajorityVote - prob - train and predict", {
 ## })
 
 
-## test_that("PipeOpNlOptMajorityVote - prob - train and predict", {
+## test_that("PipeOpNlOptClassifAvg - prob - train and predict", {
 ##   prds = replicate(3,
 ##     make_prediction_obj_classif(n = 100, noise = TRUE,
 ##       predict_types = c("response", "prob"), nclasses = 2)
 ##   )
-##   po = PipeOpNlOptMajorityVote$new(3)
+##   po = PipeOpNlOptClassifAvg$new(3)
 ##   expect_pipeop(po)
 ##   expect_list(train_pipeop(po, prds), len = 1)
 ##   out = predict_pipeop(po, prds)
 ##   expect_numeric(po$state$weights)
 ##   expect_class(out[[1]], "PredictionClassif")
 
-##   po = PipeOpNlOptMajorityVote$new(3)
+##   po = PipeOpNlOptClassifAvg$new(3)
 ##   expect_pipeop(po)
 ##   expect_list(train_pipeop(po, prds), len = 1)
 ##   out = predict_pipeop(po, prds)

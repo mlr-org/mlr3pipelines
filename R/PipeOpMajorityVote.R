@@ -1,12 +1,12 @@
-#' @title PipeOpMajorityVote
+#' @title PipeOpClassifAvg
 #'
 #' @usage NULL
-#' @name mlr_pipeops_majorityvote
+#' @name mlr_pipeops_classifavg
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
 #' Perform (weighted) majority vote prediction from classification [`Prediction`][mlr3::Prediction]s by connecting
-#' [`PipeOpMajorityVote`] to multiple [`PipeOpLearner`] outputs.
+#' [`PipeOpClassifAvg`] to multiple [`PipeOpLearner`] outputs.
 #'
 #' If the incoming [`Learner`][mlr3::Learner]'s
 #' `$predict_type` is set to `"response"`, the prediction obtained is also a `"response"` prediction
@@ -23,13 +23,13 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpMajorityVote$new(innum = 0, id = "majorityvote", param_vals = list())
+#' PipeOpClassifAvg$new(innum = 0, id = "classifavg", param_vals = list())
 #' ```
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, default `"majorityvote"`.
+#'   Identifier of the resulting  object, default `"classifavg"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -54,17 +54,17 @@
 #'   mlr_pipeops$get("subsample") %>>%
 #'   mlr_pipeops$get("learner", "classif.rpart")
 #' ) %>>%
-#'   mlr_pipeops$get("majorityvote")
+#'   mlr_pipeops$get("classifavg")
 #'
 #  mlr3::resample("iris", GraphLearner$new(gr), "cv")
 #'
 #' @family PipeOps
 #' @include PipeOpEnsemble.R
 #' @export
-PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
+PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(
-    initialize = function(innum = 0, id = "majorityvote", param_vals = list()) {
+    initialize = function(innum = 0, id = "classifavg", param_vals = list()) {
       super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionClassif", packages = "stats")
     }
   ),
@@ -73,7 +73,7 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
       has_probs = every(inputs, function(x) !is.null(x$prob))
       has_classif_response = every(inputs, function(x) !is.null(x$response))
       if (!(has_probs || has_classif_response)) {
-        stop("PipeOpMajorityVote input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
+        stop("PipeOpClassifAvg input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
       }
       prob = response = NULL
       if (has_probs) {
@@ -98,4 +98,4 @@ PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
   )
 )
 
-mlr_pipeops$add("majorityvote", PipeOpMajorityVote)
+mlr_pipeops$add("classifavg", PipeOpClassifAvg)
