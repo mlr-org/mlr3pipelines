@@ -27,15 +27,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
 
       if (is.null(task_type)) {
-        class_table = mlr_reflections$constructors[, list(
-          task_type = get("task_type"),
-          task = map(get("Task"), "classname"),
-          prediction = map(get("Prediction"), "classname"))]
+        class_table = mlr_reflections$task_types
         input = graph$input
         inferred = c(
           match(c(output$train, output$predict), class_table$prediction),
           match(c(input$train, input$predict), class_table$task))
-        inferred = unique(class_table$task_type[na.omit(inferred)])
+        inferred = unique(class_table$type[na.omit(inferred)])
         if (length(inferred) > 1) {
           stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(inferred))
         }

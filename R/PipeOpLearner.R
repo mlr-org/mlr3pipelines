@@ -80,8 +80,8 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
       private$.learner = assert_learner(learner, clone = TRUE)
-      task_type = mlr_reflections$constructors[private$.learner$task_type]$Task[[1]]$classname
-      out_type = mlr_reflections$constructors[private$.learner$task_type]$Prediction[[1]]$classname
+      task_type = mlr_reflections$task_types[private$.learner$task_type]$task
+      out_type = mlr_reflections$task_types[private$.learner$task_type]$prediction
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type)

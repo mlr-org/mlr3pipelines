@@ -107,7 +107,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
       private$.learner = assert_learner(learner, clone = TRUE)
       private$.learner$param_set$set_id = ""
-      task_type = mlr_reflections$constructors[private$.learner$task_type]$Task[[1]]$classname
+      task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = "cv", tags = "required"),
