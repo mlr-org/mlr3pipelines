@@ -1,32 +1,26 @@
-context("apply")
+context("colapply")
 
 
 test_that("apply general tests", {
 
-  op = PipeOpApply$new()
+  op = PipeOpColApply$new()
   expect_pipeop(op)
 
   task = mlr_tasks$get("iris")
-  expect_datapreproc_pipeop_class(PipeOpApply, task = task,
-    constargs = list(param_vals = list(applicator_vector = as.character)))
+  expect_datapreproc_pipeop_class(PipeOpColApply, task = task,
+    constargs = list(param_vals = list(applicator = as.character)))
 
-  expect_datapreproc_pipeop_class(PipeOpApply, task = task,
-    constargs = list(param_vals = list(applicator_single = as.character)))
-
-  expect_datapreproc_pipeop_class(PipeOpApply, task = mlr_tasks$get("pima"),
-    constargs = list(param_vals = list(applicator_single = as.numeric)))
-
-  expect_datapreproc_pipeop_class(PipeOpApply, task = mlr_tasks$get("pima"),
-    constargs = list(param_vals = list(applicator_vector = as.numeric)))
+  expect_datapreproc_pipeop_class(PipeOpColApply, task = mlr_tasks$get("pima"),
+    constargs = list(param_vals = list(applicator = as.numeric)))
 
 })
 
 test_that("apply results look as they should", {
 
-  po = PipeOpApply$new()
+  po = PipeOpColApply$new()
   task = mlr_tasks$get("iris")
 
-  po$param_set$values = list(applicator_vector = as.character)
+  po$param_set$values = list(applicator = as.character)
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
@@ -38,7 +32,7 @@ test_that("apply results look as they should", {
     as.data.table(do.call(cbind, lapply(iris[1:4], as.character)))
   )
 
-  po$param_set$values = list(applicator_single = as.character)
+  po$param_set$values = list(applicator = Vectorize(as.character))
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
@@ -50,7 +44,7 @@ test_that("apply results look as they should", {
     as.data.table(do.call(cbind, lapply(iris[1:4], as.character)))
   )
 
-  po$param_set$values = list(applicator_vector = function(x) x^2)
+  po$param_set$values = list(applicator = function(x) x^2)
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
@@ -62,7 +56,7 @@ test_that("apply results look as they should", {
     as.data.table(do.call(cbind, lapply(iris[1:4], function(x) x^2)))
   )
 
-  po$param_set$values = list(applicator_single = function(x) x^2)
+  po$param_set$values = list(applicator = Vectorize(function(x) x^2))
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
@@ -76,7 +70,7 @@ test_that("apply results look as they should", {
 
   tomean = function(x) rep(mean(x), length(x))
 
-  po$param_set$values = list(applicator_vector = tomean)
+  po$param_set$values = list(applicator = tomean)
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
@@ -88,7 +82,7 @@ test_that("apply results look as they should", {
     as.data.table(do.call(cbind, lapply(iris[1:4], tomean)))
   )
 
-  po$param_set$values = list(applicator_single = tomean)
+  po$param_set$values = list(applicator = Vectorize(tomean))
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
@@ -100,7 +94,7 @@ test_that("apply results look as they should", {
     as.data.table(iris[1:4])
   )
 
-  po$param_set$values = list(applicator_vector = as.character, affect_columns = selector_grep("^Sepal"))
+  po$param_set$values = list(applicator = as.character, affect_columns = selector_grep("^Sepal"))
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
@@ -112,7 +106,7 @@ test_that("apply results look as they should", {
     cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
 
-  po$param_set$values = list(applicator_single = as.character, affect_columns = selector_grep("^Sepal"))
+  po$param_set$values = list(applicator = Vectorize(as.character), affect_columns = selector_grep("^Sepal"))
 
   expect_equal(
     po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
