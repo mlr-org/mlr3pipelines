@@ -189,3 +189,28 @@ test_that("graphlearner type inference", {
   expect_error(GraphLearner$new(gr), "multiple possibilities")
 
 })
+
+test_that("graphlearner output check", {
+
+  TestGraphLearner = R6Class("TestGraphLearner",
+                      inherit = GraphLearner,
+                      public = list(
+                        check_output_called = FALSE,
+                        initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, predict_type = NULL) {
+                          super$initialize(graph)
+                        }),
+                      private = list(
+                        check_output = function(output) {
+                          self$check_output_called = TRUE
+                        }
+                      )
+                  )
+
+  task = mlr_tasks$get("iris")
+
+  lrn = mlr_learners$get("classif.rpart")
+  gr = PipeOpLearner$new(lrn)
+
+  glrn = TestGraphLearner$new(gr)
+  expect_true(glrn$check_output_called)
+})
