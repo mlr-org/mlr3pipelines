@@ -115,7 +115,7 @@ graph = gunion(list(
 
 graph$train("iris")
 
-graph$learner$predict_type = "prob"
+graph$pipeops$classif.rpart$learner$predict_type = "prob"
 
 graph$train("iris")
 
