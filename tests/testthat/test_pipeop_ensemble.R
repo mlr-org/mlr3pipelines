@@ -10,7 +10,7 @@ test_that("PipeOpEnsemble - basic properties", {
   truth = rnorm(70)
   prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))
   expect_list(train_pipeop(op, rep(list(NULL), 4)), len = 1)
-  expect_error(predict_pipeop(op, prds), "abstract")
+  expect_error(predict_pipeop(op, prds), "Abstract")
 
   op = PipeOpEnsemble$new(0, "ensemble", param_vals = list())
   expect_pipeop(op)

@@ -13,10 +13,8 @@ test_that("Dictionary contains all PipeOps", {
     PipeOpFeatureUnion = list(innum = 2),
     PipeOpLearner = list(learner = mlr_learners$get("classif.rpart")),
     PipeOpLearnerCV = list(learner = mlr_learners$get("classif.rpart")),
-    PipeOpMajorityVote = list(innum = 2),
-    PipeOpModelAvg = list(innum = 2),
-    PipeOpNlOptMajorityVote = list(innum = 2),
-    PipeOpNlOptModelAvg = list(innum = 2),
+    PipeOpClassifAvg = list(innum = 2),
+    PipeOpRegrAvg = list(innum = 2),
     PipeOpUnbranch = list(options = 2),
     PipeOpFilter = list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.nfeat = 1)))
 
@@ -79,7 +77,7 @@ test_that("Dictionary contains all PipeOps", {
     # check that ID can be changed
 
     args$id = "TESTID"
-    expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)))
+    expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
     test_obj$id = "TESTID"
     expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)
     expect_equal(do.call(pogen$new, args), test_obj)
@@ -93,15 +91,15 @@ test_that("Dictionary contains all PipeOps", {
       testingparam = eligibleparams[[which(!singletons)[1]]]
 
       if (testingparam$class %in% c("ParamLgl", "ParamFct")) {
-        val = setdiff(testingparam$levels, as.atomic(testingparam$default))[1]
+        val = setdiff(testingparam$levels, as.atomic(test_obj$param_set$values[[testingparam$id]]))[1]
       } else {
-        val = setdiff(c(testingparam$lower, testingparam$upper), as.atomic(testingparam$default))[1]
+        val = setdiff(c(testingparam$lower, testingparam$upper), as.atomic(test_obj$param_set$values[[testingparam$id]]))[1]
       }
 
       args$param_vals = list(val)
       names(args$param_vals) = testingparam$id
 
-      expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)))
+      expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
       test_obj$param_set$values[[testingparam$id]] = val
       expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)
       expect_equal(do.call(pogen$new, args), test_obj)
@@ -133,11 +131,14 @@ test_that("data.table of pipeops looks as it should", {
 
 test_that("GraphLearner is in mlr_learners", {
 
+  expect_data_table(as.data.table(mlr_learners))  # can construct mlr_learners table
+
   expect_equal(
     mlr_learners$get("graph", graph = PipeOpLearner$new("classif.rpart")),
     GraphLearner$new(Graph$new()$add_pipeop(PipeOpLearner$new("classif.rpart")))
   )
 
-  expect_error(mlr_learners$get("graph"), "'graph'.*'graph'")  # Needs the argument 'graph' to construct 'graph'
+  # FIXME: depends on mlr-org/mlr3#328
+  # expect_error(mlr_learners$get("graph"), "'graph'.*'graph'")  # Needs the argument 'graph' to construct 'graph'
 
 })

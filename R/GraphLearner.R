@@ -20,7 +20,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       self$graph = graph
       output = graph$output
       if (nrow(output) != 1) {
-        stop("'graph' has more than one output channel")
+        stop("'graph' must have exactly one output channel")
       }
       if (!are_types_compatible(output$predict, "Prediction")) {
         stop("'graph' output type not 'Prediction' (or compatible with it)")

@@ -54,29 +54,29 @@ test_that("utility function works", {
 })
 
 test_that("Graph is type-checking", {
-  expect_error(PipeOpScale$new() %>>% PipeOpModelAvg$new(1),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp modelavg \\(NULL\\)")
+  expect_error(PipeOpScale$new() %>>% PipeOpRegrAvg$new(1),
+    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
 
-  mavtest = PipeOpModelAvg$new(1)
+  mavtest = PipeOpRegrAvg$new(1)
   mavtest$input$train = "Task"
 
   expect_error(PipeOpScale$new() %>>% mavtest,
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionRegr\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 
 
   gr = Graph$new()$
     add_pipeop(PipeOpScale$new())$
-    add_pipeop(PipeOpModelAvg$new(1))
+    add_pipeop(PipeOpRegrAvg$new(1))
 
-  expect_error(gr$add_edge("scale", "modelavg"),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp modelavg \\(NULL\\)")
+  expect_error(gr$add_edge("scale", "regravg"),
+    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
 
   gr = Graph$new()$
     add_pipeop(PipeOpScale$new())$
     add_pipeop(mavtest)
 
-  expect_error(gr$add_edge("scale", "modelavg"),
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionRegr\\)")
+  expect_error(gr$add_edge("scale", "regravg"),
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 })
 
 test_that("Autoconversion utility functions work", {

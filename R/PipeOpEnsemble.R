@@ -107,7 +107,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
     }
   ),
   private = list(
-    weighted_avg_prediction = function(inputs, weights, row_ids, truth) stop("Abstract.")
+    weighted_avg_predictions = function(inputs, weights, row_ids, truth) stop("Abstract.")
   )
 )
 

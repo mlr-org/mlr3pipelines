@@ -12,7 +12,8 @@
 
 .onLoad = function(libname, pkgname) { # nocov start
 
-  mlr_learners$add("graph", GraphLearner, required_args = "graph")
+  # FIXME: remove nonsense graph default if mlr-org/mlr3#328 can be fixed
+  mlr_learners$add("graph", GraphLearner, graph = "classif.featureless")
 
   backports::import(pkgname)
 
