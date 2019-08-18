@@ -20,6 +20,9 @@ set.seed(8008135)
 compiler::enableJIT(0)
 library("mlr3")
 library("mlr3pipelines")
+options(warnPartialMatchArgs = TRUE)
+options(warnPartialMatchAttr = TRUE)
+options(warnPartialMatchDollar = TRUE)
 ```
 
 
