@@ -52,7 +52,7 @@
 #'
 #' pos$train(list("iris"))[[1]]$data()
 #'
-#' one_line_of_iris = mlr_tasks$get("iris")$filter(13)
+#' one_line_of_iris = mlr3::mlr_tasks$get("iris")$filter(13)
 #'
 #' one_line_of_iris$data()
 #'

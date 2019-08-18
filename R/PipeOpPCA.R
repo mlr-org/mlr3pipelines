@@ -52,7 +52,7 @@
 #' @examples
 #' pop = mlr_pipeops$get("pca")
 #'
-#' task = mlr_tasks$get("iris")
+#' task = mlr3::mlr_tasks$get("iris")
 #'
 #' task$data()
 #'
