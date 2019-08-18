@@ -54,5 +54,11 @@ task_filter_ex = function(task, row_ids) {
 }
 
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
-check_function_or_null = function(x) assert_function(x, null.ok = TRUE)
-check_function = function(x) assert_function(x)
+check_function_or_null = function(x) check_function(x, null.ok = TRUE)
+
+# 'and' operator for checkmate check_*-functions
+# example:
+# check_numeric(x) %&&% check_true(all(x < 0))
+`%&&%` = function(lhs, rhs) {
+  if (isTRUE(lhs)) rhs else lhs
+}
