@@ -75,7 +75,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 poe = mlr_pipeops$get("encode")
 
 task = mlr3::TaskClassif$new("task",
-  data.table(x = letters[1:3], y = letters[1:3]), "x")
+  data.table::data.table(x = letters[1:3], y = letters[1:3]), "x")
 
 # poe is initialized with encoding: "one-hot"
 poe$train(list(task))[[1]]$data()

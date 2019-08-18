@@ -67,11 +67,11 @@ Second \code{\link{Selector}} to query.}
 \code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
 }
 \description{
-A \code{\link{Selector}} function is used by different \code{\link{PipeOp}}s, most prominently \code{\link{PipeOpSelector}} and many \code{\link{PipeOp}}s inheriting
+A \code{\link{Selector}} function is used by different \code{\link{PipeOp}}s, most prominently \code{\link{PipeOpSelect}} and many \code{\link{PipeOp}}s inheriting
 from \code{\link{PipeOpTaskPreproc}}, to determine a subset of \code{\link[mlr3:Task]{Task}}s to operate on.
 
 Even though a \code{\link{Selector}} is a \code{function} that can be written itself, it is preferrable to use the \code{\link{Selector}} constructors
-shown here. Each of these can be called with its arguments to create a \code{\link{Selector}}, which can then be given to the \code{\link{PipeOpSelector}}
+shown here. Each of these can be called with its arguments to create a \code{\link{Selector}}, which can then be given to the \code{\link{PipeOpSelect}}
 \code{selector} parameter, or many \code{\link{PipeOpTaskPreproc}}s' \code{affect_columns} parameter. See there for examples of this usage.
 }
 \section{Details}{

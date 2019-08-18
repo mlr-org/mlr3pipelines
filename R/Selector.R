@@ -3,11 +3,11 @@
 #' @name Selector
 #'
 #' @description
-#' A [`Selector`] function is used by different [`PipeOp`]s, most prominently [`PipeOpSelector`] and many [`PipeOp`]s inheriting
+#' A [`Selector`] function is used by different [`PipeOp`]s, most prominently [`PipeOpSelect`] and many [`PipeOp`]s inheriting
 #' from [`PipeOpTaskPreproc`], to determine a subset of [`Task`][mlr3::Task]s to operate on.
 #'
 #' Even though a [`Selector`] is a `function` that can be written itself, it is preferrable to use the [`Selector`] constructors
-#' shown here. Each of these can be called with its arguments to create a [`Selector`], which can then be given to the [`PipeOpSelector`]
+#' shown here. Each of these can be called with its arguments to create a [`Selector`], which can then be given to the [`PipeOpSelect`]
 #' `selector` parameter, or many [`PipeOpTaskPreproc`]s' `affect_columns` parameter. See there for examples of this usage.
 #'
 #' @section Details:

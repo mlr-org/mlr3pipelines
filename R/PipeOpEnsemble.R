@@ -55,7 +55,7 @@
 #' Should it be necessary to use the output of preceding [`Learner`][mlr3::Learner]s
 #' during the "training" phase, then [`PipeOpEnsemble`] should not be used. In fact, if training time behaviour of a [`Learner`][mlr3::Learner] is important, then
 #' one should use a [`PipeOpLearnerCV`] instead of a [`PipeOpLearner`], and the ensembling can be done by a [`Learner`][mlr3::Learner] encapsuled by a [`PipeOpLearner`].
-#' See [`LearnerClassifWeightedAverage`] and [`LearnerRegrWeightedAverage`] for examples.
+#' See [`LearnerClassifAvg`] and [`LearnerRegrAvg`] for examples.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
