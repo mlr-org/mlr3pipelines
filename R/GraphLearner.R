@@ -19,12 +19,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       graph = as_graph(graph, deep_copy = TRUE)
       self$graph = graph
       output = graph$output
-      if (nrow(output) != 1) {
-        stop("'graph' has more than one output channel")
-      }
-      if (!are_types_compatible(output$predict, "Prediction")) {
-        stop("'graph' output type not 'Prediction' (or compatible with it)")
-      }
+
+      private$check_output(output)
 
       if (is.null(task_type)) {
         class_table = mlr_reflections$constructors[, list(
@@ -91,6 +87,16 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         stop("param_set is read-only.")
       }
       self$graph$param_set
+    }
+  ),
+  private = list(
+    check_output = function(output) {
+      if (nrow(output) != 1) {
+        stop("'graph' has more than one output channel")
+      }
+      if (!are_types_compatible(output$predict, "Prediction")) {
+        stop("'graph' output type not 'Prediction' (or compatible with it)")
+      }
     }
   )
 )
