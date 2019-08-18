@@ -58,8 +58,6 @@
 #'
 #' @family PipeOps
 #' @include PipeOpEnsemble.R
-#' @examples
-#' op = PipeOpRegrAvg$new()
 #' @export
 PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,

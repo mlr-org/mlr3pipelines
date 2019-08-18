@@ -71,7 +71,6 @@ gr = greplicate(n = 5,
   mlr_pipeops$get("classifavg")
 
 
-op = PipeOpRegrAvg$new()
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

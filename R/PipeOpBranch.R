@@ -143,19 +143,22 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #'   a `character(1)`, it is a prefix that is added to the `PipeOp` IDs *additionally*
 #'   to the input argument list.
 #' @examples
-#' po_pca = PipeOpPCA$new()
-#' po_nop = PipeOpNOP$new()
+#' po_pca = mlr_pipeops$get("pca")
+#' po_nop = mlr_pipeops$get("nop")
 #'
 #' branch(pca = po_pca, nothing = po_nop)
 #' # gives the same as
 #' branches = c("pca", "nothing")
-#' PipeOpBranch$new(branches) %>>% gunion(list(po_pca, po_nop)) %>>% PipeOpUnbranch$new(branches)
+#' mlr_pipeops$get("branch", branches) %>>%
+#'   gunion(list(po_pca, po_nop)) %>>%
+#'   mlr_pipeops$get("unbranch", branches)
 #'
-#' branch(pca = po_pca, nothing = po_nop, .prefix_branchops = "br_", .prefix_paths = "xy_")
+#' branch(pca = po_pca, nothing = po_nop,
+#'   .prefix_branchops = "br_", .prefix_paths = "xy_")
 #' #gives the same as
-#' PipeOpBranch$new(branches, id = "br_branch") %>>%
+#' mlr_pipeops$get("branch", branches, id = "br_branch") %>>%
 #'   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) %>>%
-#'   PipeOpUnbranch$new(branches, id = "br_unbranch")
+#'   mlr_pipeops$get("unbranch", branches, id = "br_unbranch")
 #'
 #' @export
 branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = FALSE) {

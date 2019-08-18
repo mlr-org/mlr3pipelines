@@ -82,7 +82,9 @@
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' lrncv_po = mlr_pipeops$get("learner_cv", "classif.rpart", predict_type = "response")
+#' lrncv_po = mlr_pipeops$get("learner_cv", "classif.rpart")
+#' lrncv_po$learner$predict_type = "response"
+#'
 #' nop = mlr_pipeops$get("nop")
 #'
 #' graph = gunion(list(
