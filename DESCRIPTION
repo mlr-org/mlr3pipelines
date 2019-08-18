@@ -57,7 +57,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
-    mlr-org/mlr3@cbb4584,
+    mlr-org/mlr3,
     mlr-org/mlr3filters,
     mlr-org/mlr3learners,
     mlr-org/mlr3misc,
