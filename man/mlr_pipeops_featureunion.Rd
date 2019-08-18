@@ -9,7 +9,7 @@
 \description{
 Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing them together into a single \code{\link[mlr3:Task]{Task}}.
 
-\code{\link[mlr:DataBackend]{DataBackend}} primary keys and \code{\link[mlr3:Task]{Task}} targets have to be equal across all \code{\link[mlr3:Task]{Task}}s.
+\code{\link[mlr3:DataBackend]{DataBackend}} primary keys and \code{\link[mlr3:Task]{Task}} targets have to be equal across all \code{\link[mlr3:Task]{Task}}s.
 Only the target column(s) of the first \code{\link[mlr3:Task]{Task}} are kept.
 
 If \code{assert_targets_equal} is \code{TRUE} then target column names are compared and an error is thrown if they differ across inputs.

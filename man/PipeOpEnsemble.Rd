@@ -11,7 +11,7 @@ for a \code{PipeOp} and requires deriving classes to create the \code{private$we
 }
 \section{Construction}{
 
-Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpMajorityVote}} or \code{\link{PipeOpModelAvg}}.\preformatted{PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpClassifAvg}} or \code{\link{PipeOpRegrAvg}}.\preformatted{PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 }
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
@@ -62,7 +62,7 @@ length equal to the number of connected inputs. Initialized to 1 (equal weights)
 
 The commonality of ensemble methods using \code{\link{PipeOpEnsemble}} is that they take a \code{NULL}-input during training and save an empty \code{$state}. They can be
 used following a set of \code{\link{PipeOpLearner}} \code{\link{PipeOp}}s to perform (possibly weighted) prediction averaging. See e.g.
-\code{\link{PipeOpMajorityVote}} and \code{\link{PipeOpModelAvg}} which both inherit from this class.
+\code{\link{PipeOpClassifAvg}} and \code{\link{PipeOpRegrAvg}} which both inherit from this class.
 
 Should it be necessary to use the output of preceding \code{\link[mlr3:Learner]{Learner}}s
 during the "training" phase, then \code{\link{PipeOpEnsemble}} should not be used. In fact, if training time behaviour of a \code{\link[mlr3:Learner]{Learner}} is important, then

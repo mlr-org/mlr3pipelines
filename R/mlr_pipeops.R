@@ -24,7 +24,7 @@
 #'
 #' @section S3 methods:
 #' * `as.data.table(dict)`\cr
-#'   [`Dictionary`][mlr3::Dictionary] -> [`data.table::data.table`]\cr
+#'   [`Dictionary`][mlr3misc::Dictionary] -> [`data.table::data.table`]\cr
 #'   Returns a `data.table` with columns `key` (`character`), `packages` (`character`),
 #'   `input.num` (`integer`), `output.num` (`integer`), `input.type.train` (`character`),
 #'   `input.type.predict` (`character`), `output.type.train` (`character`), `output.type.predict` (`character`).

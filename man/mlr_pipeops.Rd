@@ -36,7 +36,7 @@ when it needs to be constructed for \code{as.data.table} \code{\link{PipeOp}} li
 
 \itemize{
 \item \code{as.data.table(dict)}\cr
-\code{\link[mlr3:Dictionary]{Dictionary}} -> \code{\link[data.table:data.table]{data.table::data.table}}\cr
+\code{\link[mlr3misc:Dictionary]{Dictionary}} -> \code{\link[data.table:data.table]{data.table::data.table}}\cr
 Returns a \code{data.table} with columns \code{key} (\code{character}), \code{packages} (\code{character}),
 \code{input.num} (\code{integer}), \code{output.num} (\code{integer}), \code{input.type.train} (\code{character}),
 \code{input.type.predict} (\code{character}), \code{output.type.train} (\code{character}), \code{output.type.predict} (\code{character}).

@@ -7,7 +7,7 @@
 \title{PipeOpRegrAvg}
 \format{\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.}
 \description{
-Perform (weighted) prediction averaging from regression \code{\link[mlr3:prediction]{Prediction}}s by connecting
+Perform (weighted) prediction averaging from regression \code{\link[mlr3:Prediction]{Prediction}}s by connecting
 \code{\link{PipeOpRegrAvg}} to multiple \code{\link{PipeOpLearner}} outputs.
 
 The resulting \code{"response"} prediction is a weighted average of the incoming \code{"response"} predictions.

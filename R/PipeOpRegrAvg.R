@@ -5,7 +5,7 @@
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
-#' Perform (weighted) prediction averaging from regression [`Prediction`][mlr3::prediction]s by connecting
+#' Perform (weighted) prediction averaging from regression [`Prediction`][mlr3::Prediction]s by connecting
 #' [`PipeOpRegrAvg`] to multiple [`PipeOpLearner`] outputs.
 #'
 #' The resulting `"response"` prediction is a weighted average of the incoming `"response"` predictions.

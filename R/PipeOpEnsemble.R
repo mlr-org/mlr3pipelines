@@ -8,7 +8,7 @@
 #' for a `PipeOp` and requires deriving classes to create the `private$weighted_avg_predictions()` function.
 #'
 #' @section Construction:
-#' Note: This object is typically constructed via a derived class, e.g. [`PipeOpMajorityVote`] or [`PipeOpModelAvg`].
+#' Note: This object is typically constructed via a derived class, e.g. [`PipeOpClassifAvg`] or [`PipeOpRegrAvg`].
 #' ```
 #' PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 #' ```
@@ -50,7 +50,7 @@
 #' @section Internals:
 #' The commonality of ensemble methods using [`PipeOpEnsemble`] is that they take a `NULL`-input during training and save an empty `$state`. They can be
 #' used following a set of [`PipeOpLearner`] [`PipeOp`]s to perform (possibly weighted) prediction averaging. See e.g.
-#' [`PipeOpMajorityVote`] and [`PipeOpModelAvg`] which both inherit from this class.
+#' [`PipeOpClassifAvg`] and [`PipeOpRegrAvg`] which both inherit from this class.
 #'
 #' Should it be necessary to use the output of preceding [`Learner`][mlr3::Learner]s
 #' during the "training" phase, then [`PipeOpEnsemble`] should not be used. In fact, if training time behaviour of a [`Learner`][mlr3::Learner] is important, then

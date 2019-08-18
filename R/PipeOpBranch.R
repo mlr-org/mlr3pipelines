@@ -64,7 +64,9 @@
 #' pca = mlr_pipeops$get("pca")
 #' nop = mlr_pipeops$get("nop")
 #' choices = c("pca", "nothing")
-#' gr = mlr_pipeops$get("branch", choices) %>>% gunion(list(pca, nop)) %>>% mlr_pipeops$get("unbranch", choices)
+#' gr = mlr_pipeops$get("branch", choices) %>>%
+#'   gunion(list(pca, nop)) %>>%
+#'   mlr_pipeops$get("unbranch", choices)
 #'
 #' gr$param_set$values$branch.selection = "pca"
 #' gr$train(list("iris"))

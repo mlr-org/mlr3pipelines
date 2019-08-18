@@ -7,7 +7,7 @@
 #' @description
 #' Aggregates features from all input tasks by [cbind()]ing them together into a single [`Task`][mlr3::Task].
 #'
-#' [`DataBackend`][mlr::DataBackend] primary keys and [`Task`][mlr3::Task] targets have to be equal across all [`Task`][mlr3::Task]s.
+#' [`DataBackend`][mlr3::DataBackend] primary keys and [`Task`][mlr3::Task] targets have to be equal across all [`Task`][mlr3::Task]s.
 #' Only the target column(s) of the first [`Task`][mlr3::Task] are kept.
 #'
 #' If `assert_targets_equal` is `TRUE` then target column names are compared and an error is thrown if they differ across inputs.

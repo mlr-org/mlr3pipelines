@@ -64,10 +64,10 @@ Only methods inherited from \code{\link{PipeOp}}.
 opc = mlr_pipeops$get("chunk", 2)
 
 # watch the row number: 89 during training (task is chunked)...
-op$train(list("wine"))
+opc$train(list("wine"))
 
 # ... 178 during predict (task is copied)
-op$predict(list("wine"))
+opc$predict(list("wine"))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
