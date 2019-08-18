@@ -46,6 +46,7 @@
 #'   ordinarily only takes one element input.\cr
 #'   The `applicator` is not called during prediction if the input task has no rows; instead the
 #'   types of affected features are changed to the result types of the `applicator` call during training.
+#'   Initialized to the `identity()`-function.
 #'
 #' @section Internals:
 #' [`PipeOpColApply`] can not inherit from [`PipeOpTaskPreprocSimple`], because if `applicator` is given
@@ -60,7 +61,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' poca = PipeOpColApply$new()
+#' poca = mlr_pipeops$get("colapply")
 #'
 #' poca$param_set$values$applicator = as.character
 #' poca$train(list("iris"))[[1]]  # types are converted

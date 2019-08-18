@@ -11,13 +11,50 @@
 #' The resulting `"response"` prediction is a weighted average of the incoming `"response"` predictions.
 #' `"se"` prediction is currently not aggregated but discarded if present.
 #'
-#' Averages its input (a `list` of `PredictionRegr`).
-#' Only used for regression `Prediction`s.
-#' Weights can be set by the user, if none are provided, defaults to
+#' Weights can be set as a parameter; if none are provided, defaults to
 #' equal weights for each prediction.
-#' Offers a `$weights` slot to set/get weights for each learner.
-#' Returns a single `PredictionRegr`.
-#' Defaults to equal weights for each incoming prediction.
+#' Defaults to equal weights for each model.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpRegrAvg$new(innum = 0, id = "regravg", param_vals = list())
+#' ```
+#' * `innum` :: `numeric(1)`\cr
+#'   Determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#' * `id` :: `character(1)`
+#'   Identifier of the resulting  object, default `"regravg"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpEnsemble`]. Instead of a [`Prediction`][mlr3::Prediction], a [`PredictionRegr`][mlr3::PredictionRegr]
+#' is used as input and output during prediction.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' The parameters are the parameters inherited from the [`PipeOpEnsemble`].
+#'
+#' @section Internals:
+#' Inherits from [`PipeOpEnsemble`] by implementing the `private$weighted_avg_predictions()` method.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#'
+#' @examples
+#' # Simple Bagging
+#' gr = greplicate(n = 5,
+#'   mlr_pipeops$get("subsample") %>>%
+#'   mlr_pipeops$get("learner", "classif.rpart")
+#' ) %>>%
+#'   mlr_pipeops$get("classifavg")
+#'
+#  mlr3::resample("iris", GraphLearner$new(gr), "cv")
 #'
 #' @family PipeOps
 #' @include PipeOpEnsemble.R

@@ -37,7 +37,8 @@ If \code{$affect_columns} is \code{NULL},  then all columns are given to the \co
 If this is a \code{function}, it should take one argument (the input \code{Task}) and return a
 \code{character} indicating the feature columns that should be operated on.
 \code{$affect_columns()} is then called during training and
-only features named in its return value are seen by the training / prediction function. \cr
+only features named in its return value are seen by the training / prediction function.
+See \code{\link{Selector}} for example functions. Defaults to \code{selector_all()}. \cr
 This should not be changed if \code{can_subset_columns} is \code{FALSE}, and depends on the \code{PipeOpTaskPreproc} subclass.
 \item \code{state$affected_cols} :: \code{character} \cr
 Set during \code{$train()}: Indicating the names of features to operate on, if  parameter
@@ -100,25 +101,25 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOp}}, \code{\link{mlr_pipeops}}
 
 Other PipeOps: \code{\link{PipeOpEnsemble}},
-  \code{\link{PipeOp}}, \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_balancesample}},
-  \code{\link{mlr_pipeop_branch}},
-  \code{\link{mlr_pipeop_chunk}},
-  \code{\link{mlr_pipeop_copy}},
-  \code{\link{mlr_pipeop_encode}},
-  \code{\link{mlr_pipeop_featureunion}},
-  \code{\link{mlr_pipeop_filter}},
-  \code{\link{mlr_pipeop_impute}},
-  \code{\link{mlr_pipeop_learner}},
-  \code{\link{mlr_pipeop_majorityvote}},
-  \code{\link{mlr_pipeop_modelavg}},
-  \code{\link{mlr_pipeop_mutate}},
-  \code{\link{mlr_pipeop_nop}},
-  \code{\link{mlr_pipeop_pca}},
-  \code{\link{mlr_pipeop_scale}},
-  \code{\link{mlr_pipeop_select}},
-  \code{\link{mlr_pipeop_subsample}},
-  \code{\link{mlr_pipeop_unbranch}},
+  \code{\link{PipeOp}}, \code{\link{mlr_pipeops_branch}},
+  \code{\link{mlr_pipeops_chunk}},
+  \code{\link{mlr_pipeops_classbalancing}},
+  \code{\link{mlr_pipeops_classifavg}},
+  \code{\link{mlr_pipeops_colapply}},
+  \code{\link{mlr_pipeops_copy}},
+  \code{\link{mlr_pipeops_encode}},
+  \code{\link{mlr_pipeops_featureunion}},
+  \code{\link{mlr_pipeops_filter}},
+  \code{\link{mlr_pipeops_impute}},
+  \code{\link{mlr_pipeops_learner}},
+  \code{\link{mlr_pipeops_mutate}},
+  \code{\link{mlr_pipeops_nop}},
+  \code{\link{mlr_pipeops_pca}},
+  \code{\link{mlr_pipeops_regravg}},
+  \code{\link{mlr_pipeops_scale}},
+  \code{\link{mlr_pipeops_select}},
+  \code{\link{mlr_pipeops_subsample}},
+  \code{\link{mlr_pipeops_unbranch}},
   \code{\link{mlr_pipeops}}
 }
 \concept{PipeOps}

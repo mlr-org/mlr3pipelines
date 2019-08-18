@@ -1,37 +1,67 @@
 #' @title PipeOpChunk
 #'
-#' @name mlr_pipeop_chunk
+#' @usage NULL
+#' @name mlr_pipeops_chunk
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Chunks its input into `outnum` chunks.
-#' Returns a list of [`Task`]s during training, and
-#' simply passes on the input during prediction.
+#' Creates `outnum` [`Task`][mlr3::Task]s during training, and
+#' simply passes on the input during `outnum` times during prediction.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpChunk$new(outnum, id = "chunk", param_vals = list())
+#' ```
+#'
+#' * `outnum` :: `numeric(1)`\cr
+#'   Number of output channels, and therefore number of chunks created.
+#" * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"chunk"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output:
+#' [`PipeOpChunk`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] both during training and prediction.
+#'
+#' [`PipeOpChunk`] has multiple output channels depending on the `options` construction argument, named `"output1"`, `"output2"`, ...
+#' All output channels produce (respectively disjoint, random) subsets of the input [`Task`][mlr3::Task] during training, and
+#' pass on the original [`Task`][mlr3::Task] during prediction.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' * `shuffle` :: `logical(1)` \cr
+#'   Should the data be shuffled before chunking? Initialized to `TRUE`.
+#'
+#' @section Internals:
+#' Uses the [`mlr3misc::chunk_vector()`] function.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#' * `PipeOpChunk$new(outnum, id = "chunk")` \cr
-#'   (`integer(1)`, `character(1)`) -> `self` \cr
-#'   Constructor. `outnum` gives the number of output
-#'   channels / chunks that are created.
+#' Only methods inherited from [`PipeOp`].
 #'
-#' @section Parameter Set:
-#' * `shuffle` :: `logical(1)` \cr
-#'   Should the data be shuffled before chunking? Default `TRUE`
+#' @examples
+#' opc = mlr_pipeops$get("chunk", 2)
 #'
+#' # watch the row number: 89 during training (task is chunked)...
+#' op$train(list("wine"))
+#'
+#' # ... 178 during predict (task is copied)
+#' op$predict(list("wine"))
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
-#' @examples
-#' task = mlr3::mlr_tasks$get("wine")
-#' op = PipeOpChunk$new(3)
-#' op$train(list(task = task))
 PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "chunk", param_vals = list()) {
       outnum = assert_int(outnum, lower = 1L)
       ps = ParamSet$new(params = list(
-        ParamLgl$new("shuffle", default = TRUE)
+        ParamLgl$new("shuffle")
       ))
       ps$values = list(shuffle = TRUE)
       super$initialize(id,
@@ -45,7 +75,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
       self$state = list()
       task = inputs[[1L]]
 
-      row_ids = chunk_vector(task$row_ids, n_chunks = self$outnum, shuffle = isTRUE(self$param_set$values$shuffle))
+      row_ids = chunk_vector(task$row_ids, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
 
       # Subset data, clone task and overwrite data in it.
       map(row_ids, function(x) {

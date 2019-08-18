@@ -14,8 +14,8 @@ and distinction from unintentional \code{NULL} returns.
 }
 \seealso{
 Other Path Branching: \code{\link{filter_noop}},
-  \code{\link{is_noop}}, \code{\link{mlr_pipeop_branch}},
-  \code{\link{mlr_pipeop_unbranch}}
+  \code{\link{is_noop}}, \code{\link{mlr_pipeops_branch}},
+  \code{\link{mlr_pipeops_unbranch}}
 }
 \concept{Path Branching}
 \keyword{datasets}

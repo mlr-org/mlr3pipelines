@@ -29,26 +29,26 @@
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
 #'
-#' @section Parameter Set:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
+#' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`]; however, the `affect_columns` parameter is *not* present. Further parameters are:
 #' * `ratio` :: `numeric(1)` \cr
 #'   Ratio of number of rows of classes to keep, relative
-#'   to the `$reference` value.
+#'   to the `$reference` value. Initialized to 1.
 #' * `reference` :: `numeric(1)` \cr
-#'   What the `$ratio` value is measured against. Can be `"all"` (default, mean instance count of
+#'   What the `$ratio` value is measured against. Can be `"all"` (mean instance count of
 #'   all classes), `"major"` (instance count of class with most instances), `"minor"`
 #'   (instance count of class with fewest instances), `"nonmajor"` (average instance
 #'   count of all classes except the major one), `"nonminor"` (average instance count
 #'   of all classes except the minor one), and `"one"` (`$ratio` determines the number of
-#'   instances to have, per class).
+#'   instances to have, per class). Initialized to `"all"`.
 #' * `adjust` :: `numeric(1)` \cr
-#'   Which classes to up / downsample. Can be `"all"` (default, up and downsample all to match required
+#'   Which classes to up / downsample. Can be `"all"` (up and downsample all to match required
 #'   instance count), `"major"`, `"minor"`, `"nonmajor"`, `"nonminor"` (see respective values
-#'   for `$reference`), `"upsample"` (only upsample), and `"downsample"`.
+#'   for `$reference`), `"upsample"` (only upsample), and `"downsample"`. Initialized to `"all"`.
 #' * `shuffle` :: `logical(1)` \cr
 #'   Whether to shuffle the result. Otherwise, the resulting task will have the original items that
 #'   were not removed in downsampling in-order, followed by all newly sampled items ordered by target class.
-#'   Default is `TRUE`.
+#'   Initialized to `TRUE`.
 #'
 #' @section Internals:
 #' Up / downsampling happens as follows: At first, a "target class count" is calculated, by taking the mean
@@ -61,6 +61,10 @@
 #' each class that is not the class with the fewest samples), [`PipeOpClassBalancing`] either throws out
 #' samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
 #' until the number of samples for these classes equals the "target class count".
+#'
+#' Uses `task$filter()` to remove rows. When identical rows are added during upsampling, then the `task$row_roles$use` can *not* be used
+#' to duplicate rows because of \[inaudible\]; instead the `task$rbind()` function is used, and
+#' a new [`data.table`] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -103,7 +107,7 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
         ParamLgl$new("shuffle", default = TRUE)
       ))
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
     train_task = function(task) {

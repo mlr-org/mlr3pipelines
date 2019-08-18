@@ -6,8 +6,12 @@
 \usage{
 reset_autoconvert_register()
 }
+\value{
+\code{NULL}
+}
 \description{
-Reset autoconvert register.
+Reset autoconvert register to factory default, thereby undoing
+any calls to \code{\link[=register_autoconvert_function]{register_autoconvert_function()}} by the user.
 }
 \seealso{
 Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},

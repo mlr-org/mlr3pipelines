@@ -1,19 +1,51 @@
 #' @title PipeOpCopy
 #'
-#' @name mlr_pipeop_copy
+#' @usage NULL
+#' @name mlr_pipeops_copy
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#'   Copies its input `outnum` times. This is usually not needed,
-#'   because copying happens automatically when one `PipeOp` is followed
-#'   by multiple different `PipeOp`s. However, when constructing big
-#'   Graphs using the `%>>%`-operator, `PipeOpCopy` can be helpful to
-#'   specify which PipeOp gets connected to which.
+#' Copies its input `outnum` times. This PipeOp usually not needed,
+#' because copying happens automatically when one `PipeOp` is followed
+#' by multiple different `PipeOp`s. However, when constructing big
+#' Graphs using the [`%>>%`]-operator, `PipeOpCopy` can be helpful to
+#' specify which [`PipeOp`] gets connected to which.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpEnsemble$new(outnum, id = "copy", param_vals = list())
+#' ```
+#'
+#' * `outnum` :: `numeric(1)`\cr
+#'   Number of output channels, and therefore number of copies being made.
+#" * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"copy"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' [`PipeOpCopy`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
+#'
+#' [`PipeOpCopy`] has multiple output channels depending on the `outnum` construction argument, named `"output1"`, `"output2"`, ...
+#' All output channels produce the object given as input (`"*"`).
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' [`PipeOpCopy`] has no parameters.
+#'
+#' @section Internals:
+#' Note that copies are not clones, but only reference copies. This affects
+#' R6-objects: If R6 objects are copied using PipeOpCopy, they must be cloned
+#' before
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
-#' * `PipeOpEnsemble$new(outnum, id)` \cr
-#'   (`numeric(1)`, `character(1)`) -> `self` \cr
-#'   Constructor. `outnum` determines the number of output channels and
-#'   copies that will be made.
+#' Only methods inherited from [`PipeOp`].
+#'
 #' @examples
 #' # The following copies the output of 'scale' automatically to both
 #' # 'pca' and 'nop'
@@ -45,6 +77,7 @@
 #'     mlr_pipeops$get("impute")
 #'   ))
 #' @family PipeOps
+#' @family Placeholder Pipeops
 #' @include PipeOp.R
 #' @export
 PipeOpCopy = R6Class("PipeOpCopy",

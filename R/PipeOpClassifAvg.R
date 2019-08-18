@@ -33,6 +33,10 @@
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpEnsemble`]. Instead of a [`Prediction`][mlr3::Prediction], a [`PredictionClassif`][mlr3::PredictionClassif]
+#' is used as input and output during prediction.
+#'
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'

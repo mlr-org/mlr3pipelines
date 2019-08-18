@@ -4,29 +4,58 @@
 \name{mlr_pipeops}
 \alias{mlr_pipeops}
 \title{Dictionary of PipeOps}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}}
-\usage{
-mlr_pipeops
-}
+\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.}
 \description{
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
-Each \code{PipeOp} has an associated help page, see \code{mlr_pipeop_[id]}.
+Each \code{PipeOp} has an associated help page, see \code{mlr_pipeops_[id]}.
 }
-\section{Usage}{
+\section{Fields}{
 
+Fields inherited from \code{\link[mlr3misc:Dictionary]{Dictionary}}, as well as:
+\itemize{
+\item \code{metainf} :: \code{environment}\cr
+Environment that stores the \code{metainf} argument of the \code{$add()} method.
+Only for internal use.
+}
+}
 
-See \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
+\section{Methods}{
+
+Methods inherited from \code{\link[mlr3misc:Dictionary]{Dictionary}}, as well as:
+\itemize{
+\item \code{add(key, value, metainf = NULL)}\cr
+(\code{character(1)}, \code{R6ClassGenerator}, \code{NULL} | \code{list})\cr
+Adds constructor \code{value} to the dictionary with key \code{key}, potentially
+overwriting a previously stored item. If \code{metainf} is not \code{NULL} (the default),
+it must be a \code{list} of arguments that will be given to the \code{value} constructor (i.e. \code{value$new()})
+when it needs to be constructed for \code{as.data.table} \code{\link{PipeOp}} listing.
+}
 }
 
 \section{S3 methods}{
 
 \itemize{
 \item \code{as.data.table(dict)}\cr
-\link{Dictionary} -> \code{\link[data.table:data.table]{data.table::data.table()}}\cr
-Returns a \code{data.table()} with fields "key", "packages", and connectors.
+\code{\link[mlr3:Dictionary]{Dictionary}} -> \code{\link[data.table:data.table]{data.table::data.table}}\cr
+Returns a \code{data.table} with columns \code{key} (\code{character}), \code{packages} (\code{character}),
+\code{input.num} (\code{integer}), \code{output.num} (\code{integer}), \code{input.type.train} (\code{character}),
+\code{input.type.predict} (\code{character}), \code{output.type.train} (\code{character}), \code{output.type.predict} (\code{character}).
 }
 }
 
+\examples{
+mlr_pipeops$get("pca")
+
+mlr_pipeops$get("learner", learner = "classif.rpart")
+
+# equivalent:
+mlr_pipeops$get("learner", "classif.rpart")
+
+# unnecessary and silly:
+mlr_pipeops$add("nop2", PipeOpNOP)
+mlr_pipeops$get("nop2")
+
+}
 \seealso{
 Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOpTaskPreprocSimple}},
@@ -34,25 +63,25 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
 
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeop_apply}},
-  \code{\link{mlr_pipeop_balancesample}},
-  \code{\link{mlr_pipeop_branch}},
-  \code{\link{mlr_pipeop_chunk}},
-  \code{\link{mlr_pipeop_copy}},
-  \code{\link{mlr_pipeop_encode}},
-  \code{\link{mlr_pipeop_featureunion}},
-  \code{\link{mlr_pipeop_filter}},
-  \code{\link{mlr_pipeop_impute}},
-  \code{\link{mlr_pipeop_learner}},
-  \code{\link{mlr_pipeop_majorityvote}},
-  \code{\link{mlr_pipeop_modelavg}},
-  \code{\link{mlr_pipeop_mutate}},
-  \code{\link{mlr_pipeop_nop}},
-  \code{\link{mlr_pipeop_pca}},
-  \code{\link{mlr_pipeop_scale}},
-  \code{\link{mlr_pipeop_select}},
-  \code{\link{mlr_pipeop_subsample}},
-  \code{\link{mlr_pipeop_unbranch}}
+  \code{\link{mlr_pipeops_branch}},
+  \code{\link{mlr_pipeops_chunk}},
+  \code{\link{mlr_pipeops_classbalancing}},
+  \code{\link{mlr_pipeops_classifavg}},
+  \code{\link{mlr_pipeops_colapply}},
+  \code{\link{mlr_pipeops_copy}},
+  \code{\link{mlr_pipeops_encode}},
+  \code{\link{mlr_pipeops_featureunion}},
+  \code{\link{mlr_pipeops_filter}},
+  \code{\link{mlr_pipeops_impute}},
+  \code{\link{mlr_pipeops_learner}},
+  \code{\link{mlr_pipeops_mutate}},
+  \code{\link{mlr_pipeops_nop}},
+  \code{\link{mlr_pipeops_pca}},
+  \code{\link{mlr_pipeops_regravg}},
+  \code{\link{mlr_pipeops_scale}},
+  \code{\link{mlr_pipeops_select}},
+  \code{\link{mlr_pipeops_subsample}},
+  \code{\link{mlr_pipeops_unbranch}}
 }
 \concept{PipeOps}
 \concept{mlr3pipelines backend related}

@@ -69,9 +69,18 @@ get_class_hierarchy = function(classname) {
 #' @title Add a Class Hierarchy to the Cache
 #'
 #' @description
-#' Add a class hierarchy to the class hierarchy cache.
+#' Add a class hierarchy to the class hierarchy cache. This is necessary
+#' whenever an S3 class's class hierarchy is important when inferring
+#' compatibility between types.
 #'
-#' @param hierarchy `character(1)` the class hieararchy to add
+#' @param hierarchy `character` the class hieararchy to add; should
+#'   correspond to the `class()` of the lowest object in the hierarchy.
+#' @return `NULL`
+#' @examples
+#' # This lets mlr3pipelines handle "data.table" as "data.frame".
+#' # This is an example and not necessary, because mlr3pipelines adds it by default.
+#'
+#' add_class_hierarchy_cache(c("data.table", "data.frame"))
 #' @family class hierarchy operations
 #' @export
 add_class_hierarchy_cache = function(hierarchy) {
@@ -85,8 +94,10 @@ add_class_hierarchy_cache = function(hierarchy) {
 #' @title Reset the Class Hierarchy Cache
 #'
 #' @description
-#' Reset the class hierarchy cache to factory default.
+#' Reset the class hierarchy cache to factory default, thereby undoing
+#' any calls to [add_class_hierarchy_cache()] by the user.
 #'
+#' @return `NULL`
 #' @family class hierarchy operations
 #' @export
 reset_class_hierarchy_cache = function() {
@@ -111,11 +122,23 @@ default_chc = list(
 #'
 #' @description
 #' Add functions that perform conversion to a desired class.
+#'
+#' Whenever a [`Graph`] or a [`PipeOp`] is called with an object
+#' that does not conform to its declared input type, the "autoconvert
+#' register" is queried for functions that may turn the object into
+#' a desired type.
+#'
 #' @param cls `character(1)` The class that `fun` converts to.
 #' @param fun `function` The conversion function. Must take one
 #'   argument and return an object of class `cls`, or possibly
 #'   a sub-class as recognized by `are_types_compatible()`.
 #' @param packages `character` The packages required to be loaded for fun to operate.
+#' @return `NULL`.
+#' @examples
+#' # This lets mlr3pipelines automatically try to convert a string into
+#' # a `PipeOp` by querying the [`mlr_pipeops`] [`Dictionary`][mlr3misc::Dictionary].
+#' # This is an example and not necessary, because mlr3pipelines adds it by default.
+#' register_autoconvert_function("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
 #'
 #' @family class hierarchy operations
 #' @export
@@ -129,7 +152,10 @@ register_autoconvert_function = function(cls, fun, packages = character(0)) {
 #' @title Reset Autoconvert Register
 #'
 #' @description
-#' Reset autoconvert register.
+#' Reset autoconvert register to factory default, thereby undoing
+#' any calls to [register_autoconvert_function()] by the user.
+#'
+#' @return `NULL`
 #'
 #' @family class hierarchy operations
 #' @export
@@ -148,11 +174,16 @@ default_acr = list(
   list("Task", function(x) assert_task(x), packages = "mlr3"),
   list("Measure", function(x) assert_measure(x), packages = "mlr3"),
   list("Learner", function(x) assert_learner(x), packages = "mlr3"),
-  list("Resampling", function(x) assert_resampling(x), packages = "mlr3")
+  list("Resampling", function(x) assert_resampling(x), packages = "mlr3"),
+  list("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
 )
 
+# see add_class_hierarchy_cache()
 class_hierarchy_cache = new.env(parent = emptyenv())
+
+# see register_autoconvert_function()
 autoconvert_register = new.env(parent = emptyenv())
+
 # the following two must be called after *both* class_hierarchy_cache and autoconvert_register were created
 reset_class_hierarchy_cache()
 reset_autoconvert_register()

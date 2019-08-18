@@ -6,8 +6,12 @@
 \usage{
 reset_class_hierarchy_cache()
 }
+\value{
+\code{NULL}
+}
 \description{
-Reset the class hierarchy cache to factory default.
+Reset the class hierarchy cache to factory default, thereby undoing
+any calls to \code{\link[=add_class_hierarchy_cache]{add_class_hierarchy_cache()}} by the user.
 }
 \seealso{
 Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},

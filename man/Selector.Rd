@@ -3,12 +3,19 @@
 \name{Selector}
 \alias{Selector}
 \alias{selector_all}
+\alias{selector_none}
 \alias{selector_type}
 \alias{selector_grep}
 \alias{selector_name}
+\alias{selector_invert}
+\alias{selector_intersect}
+\alias{selector_union}
+\alias{selector_setdiff}
 \title{Selector Functions}
 \usage{
 selector_all()
+
+selector_none()
 
 selector_type(types)
 
@@ -16,6 +23,14 @@ selector_grep(pattern, ignore.case = FALSE, perl = FALSE,
   fixed = FALSE)
 
 selector_name(feature_names, assert_present = FALSE)
+
+selector_invert(selector)
+
+selector_intersect(selector_x, selector_y)
+
+selector_union(selector_x, selector_y)
+
+selector_setdiff(selector_x, selector_y)
 }
 \arguments{
 \item{types}{(\code{character}) \cr
@@ -33,16 +48,85 @@ perl regex}
 \item{fixed}{(\code{logical(1)}) \cr
 fixed pattern instead of regex}
 
-\item{feature_names}{(\code{character}) \cr
-select features by exact name match}
+\item{feature_names}{(\code{character})\cr
+Select features by exact name match.}
 
-\item{assert_present}{(\code{logical(1)}) \cr
-error if \code{feature_names} are not all present}
+\item{assert_present}{(\code{logical(1)})\cr
+Throw an error if \code{feature_names} are not all present in the task being operated on.}
+
+\item{selector}{(\code{\link{Selector}})\cr
+\code{\link{Selector}} to invert.}
+
+\item{selector_x}{(\code{\link{Selector}})\cr
+First \code{\link{Selector}} to query.}
+
+\item{selector_y}{(\code{\link{Selector}})\cr
+Second \code{\link{Selector}} to query.}
+}
+\value{
+\code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
 }
 \description{
-Selector functions.
+A \code{\link{Selector}} function is used by different \code{\link{PipeOp}}s, most prominently \code{\link{PipeOpSelector}} and many \code{\link{PipeOp}}s inheriting
+from \code{\link{PipeOpTaskPreproc}}, to determine a subset of \code{\link[mlr3:Task]{Task}}s to operate on.
+
+Even though a \code{\link{Selector}} is a \code{function} that can be written itself, it is preferrable to use the \code{\link{Selector}} constructors
+shown here. Each of these can be called with its arguments to create a \code{\link{Selector}}, which can then be given to the \code{\link{PipeOpSelector}}
+\code{selector} parameter, or many \code{\link{PipeOpTaskPreproc}}s' \code{affect_columns} parameter. See there for examples of this usage.
+}
+\section{Details}{
+
+A \code{\link{Selector}} is a \code{function}
+that has one input argument (commonly named \code{task}). The function is called with the \code{\link[mlr3:Task]{Task}} that a \code{\link{PipeOp}}
+is operating on. The return value of the function must be a \code{character} vector that is a subset of the feature names present
+in the \code{\link[mlr3:Task]{Task}}.
+
+For example, a \code{\link{Selector}} that selects all columns is\preformatted{function(task) {
+  task$feature_names
+}
+}
+
+(this is the \code{selector_all()}-\code{\link{Selector}}.) A \code{\link{Selector}} that selects
+all columns that have names shorter than four letters would be:\preformatted{function(task) {
+  task$feature_names[
+    nchar(task$feature_names) < 4
+  ]
+}
+}
+
+A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:::mlr_tasks_iris]{"iris"-Task}), if present, is\preformatted{function(task) {
+  intersect(task$feature_names, "Sepal.Length")
+}
+}
+
+It is preferrable to use the \code{\link{Selector}} construction functions like \code{select_type}, \code{select_grep} etc. if possible, instead of writing custom \code{\link{Selector}}s.
+}
+
+\examples{
+iris_task = mlr3::mlr_tasks$get("iris")
+bh_task = mlr3::mlr_tasks$get("boston_housing")
+
+sela = selector_all()
+sela(iris_task)
+sela(bh_task)
+
+self = selector_type("factor")
+self(iris_task)
+self(bh_task)
+
+selg = selector_grep("a.*i")
+selg(iris_task)
+selg(bh_task)
+
+selgi = selector_invert(selg)
+selgi(iris_task)
+selgi(bh_task)
+
+selgf = selector_union(selg, self)
+selgf(iris_task)
+selgf(bh_task)
 }
 \seealso{
-Other Selectors: \code{\link{mlr_pipeop_select}}
+Other Selectors: \code{\link{mlr_pipeops_select}}
 }
 \concept{Selectors}

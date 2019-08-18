@@ -26,7 +26,7 @@
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
-#' @section Input and Output
+#' @section Input and Output:
 #' [`PipeOpUnbranch`] has multiple input channels depending on the `options` construction argument, named `"input1"`, `"input2"`, ...
 #' if `options` is a nonzero integer and named after each `options` value if `options` is a `character`; if `options` is 0, there is only one
 #' *vararg* input channel named `"..."`.
@@ -52,9 +52,9 @@
 #'
 #' @examples
 #' # See PipeOpBranch for a complete branching example
-#' pob = PipeOpBranch$new()
+#' pou = mlr_pipeops$get("unbranch")
 #'
-#' pob$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
+#' pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 #' @family PipeOps
 #' @family Path Branching
 #' @include PipeOp.R

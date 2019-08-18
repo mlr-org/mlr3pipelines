@@ -30,13 +30,22 @@
 #'   Should be `"Prediction"` (default) or one of its subclasses, e.g. `"PredictionClassif"`, and correspond to the type accepted by
 #'   `$train_internal()` and `$predict_internal()`.
 #'
+#' @section Input and Output Channels:
+#' [`PipeOpEnsemble`] has multiple input channels depending on the `innum` construction argument, named `"input1"`, `"input2"`, ...
+#' if `innum` is nonzero; if `innum` is 0, there is only one *vararg* input channel named `"..."`.
+#' All input channels take only `NULL` during training and take a [`Prediction`][mlr3::Prediction] during prediction.
+#'
+#' [`PipeOpEnsemble`] has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] during prediction.
+#'
+#' The output during prediction is in some way a weighted averaged representation of the input.
+#'
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
 #' * `weights` :: `numeric`\cr
-#'   Relative weights of input predictions. If this has length 1 (default), it is ignored and weighs all inputs equally. Otherwise it must have
-#'   length equal to the number of connected inputs.
+#'   Relative weights of input predictions. If this has length 1, it is ignored and weighs all inputs equally. Otherwise it must have
+#'   length equal to the number of connected inputs. Initialized to 1 (equal weights).
 #'
 #' @section Internals:
 #' The commonality of ensemble methods using [`PipeOpEnsemble`] is that they take a `NULL`-input during training and save an empty `$state`. They can be
@@ -52,6 +61,7 @@
 #' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
+#' Methods inherited from [`PipeOp`] as well as:
 #' * `weighted_avg_prediction(inputs, weights, row_ids, truth)`\cr
 #'   (`list` of [`Prediction`][mlr3::Prediction], `numeric`, `integer` | `character`, `list`) -> `NULL`\cr
 #'   Create [`Prediction`][mlr3::Prediction]s that correspond to the weighted average of incoming [`Prediction`][mlr3::Prediction]s. This is

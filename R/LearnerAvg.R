@@ -17,8 +17,6 @@
 #' For a more detailed analysis the reader is refered to
 #' *LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation*.
 #'
-#'
-#'
 #' @section Parameter Set:
 #' * `weights.method` :: `character(1)` \cr
 #'   `manual` allows to supply weights, for `nloptr` weights are automatically determined using `nloptr`?
