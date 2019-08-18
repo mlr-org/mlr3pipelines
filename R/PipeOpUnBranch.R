@@ -1,30 +1,60 @@
 #' @title PipeOpUnbranch
 #'
-#' @name mlr_pipeop_unbranch
+#' @usage NULL
+#' @name mlr_pipeops_unbranch
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Used to bring together different paths created by [`PipeOpBranch`].
 #'
-#' @section Methods:
-#' * `PipeOpUnbranch$new(options = 0, id = "unbranch")` \cr
-#'   (`numeric(1)` | `character`, `character(1)`) -> `self` \cr
-#'   Constructor. If `options` is 0, only one vararg input channel is created that can
-#'   be connected to an arbitrary number of branches. If `options` is a positive integer
-#'   number, it determines the number of input channels that are created, named
-#'   `input1`...`input<n>`. If `options` is a `character`, it determines the names of channels directly.
+#' @section Construction:
+#' ```
+#' PipeOpUnbranch$new(options, id = "unbranch", param_vals = list())
+#' ```
+#' * `options` :: `numeric(1)` | `character`\cr
+#'   If `options` is 0, a vararg input channel is created that can take
+#'   any number of inputs.
+#'   If `options` is a nonzero integer number, it determines the number of
+#'   input channels / options that are created, named `input1`...`input<n>`. The
+#'   If `options` is a `character`, it determines the names of channels directly.
+#'   The difference between these three is purely cosmetic if the user chooses
+#'   to produce channel names matching with the corresponding [`PipeOpBranch`].
+#'   However, it is not necessary to have matching names and the *vararg* option
+#'   is always viable.
+#" * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"unbranch"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
-#' @section Details:
-#' Creates a PipeOp with multiple input channels that can be used to
-#' create a Graph network with alternative paths. `options` works as in [`PipeOpBranch`]
-#' and should probably be the same value as the `options` given to the corresponding
-#' [`PipeOpBranch`] instance.
+#' @section Input and Output
+#' [`PipeOpUnbranch`] has multiple input channels depending on the `options` construction argument, named `"input1"`, `"input2"`, ...
+#' if `options` is a nonzero integer and named after each `options` value if `options` is a `character`; if `options` is 0, there is only one
+#' *vararg* input channel named `"..."`.
+#' All input channels take any argument (`"*"`) both during training and prediction.
+#'
+#' [`PipeOpUnbranch`] has one output channel named `"output"`, producing the only [`NO_OP`] object received as input (`"*"`),
+#' both during training and prediction.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' [`PipeOpUnbranch`] has no parameters.
+#'
+#' @section Internals:
+#' See [`PipeOpBranch`] Internals on how alternative path branching works.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
-#' pca = PipeOpPCA$new()
-#' nop = PipeOpNOP$new()
-#' choices = c("pca", "nothing")
-#' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
+#' # See PipeOpBranch for a complete branching example
+#' pob = PipeOpBranch$new()
+#'
+#' pob$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 #' @family PipeOps
 #' @family Path Branching
 #' @include PipeOp.R
