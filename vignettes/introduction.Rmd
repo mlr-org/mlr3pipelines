@@ -276,6 +276,19 @@ gr$predict(task)
 Although a `Graph` has `$train()` and `$predict()` functions, it can not be used directly in places where `mlr3` `Learners` can be used like resampling or benchmarks. For this, it needs to be wrapped in a `GraphLearner` object, which is a thin wrapper that enables this functionality. The resulting `Learner` is extremely versatile, because every part of it can be modified, replaced, parameterized and optimized over. Resampling the graph above can be done the same way that resampling of the `Learner` was performed in the [introductory example](#whats-the-point).
 
 ```{r}
+options(keep.source = TRUE, error = 
+  quote({ 
+    cat("Environment:\n", file=stderr()); 
+    dump.frames();
+    n <- length(last.dump)
+    calls <- names(last.dump)
+    cat(paste("  ", 1L:n, ": ", calls, sep = ""), sep = "\n", file=stderr())
+    cat("\n", file=stderr())
+    if (!interactive()) {
+      q()
+    }
+  }))
+
 lrngrph = GraphLearner$new(gr)
 
 resample(task, lrngrph, rsmp)
