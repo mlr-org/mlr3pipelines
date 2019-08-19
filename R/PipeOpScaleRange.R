@@ -1,15 +1,54 @@
 #' @title PipeOpScaleRange
 #'
-#' @name mlr_pipeop_scalerange
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`].
+#' @usage NULL
+#' @name mlr_pipeops_scalerange
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Scales numeric data columns so their maximum absolute value
-#' is \code{maxabs}, see [mlrCPO::cpoScaleRange] for details.
+#' Linearily transforms numeric data columns so they are between `lower` and `upper`.
+#' The formula for this is \eqn{x' = a + x * b},
+#' where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
+#' \eqn{a} is \eqn{-min(x) * b + lower}.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpScaleRange$new(id = "scalerange", param_vals = list())
+#' ```
+#' * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"scalerange"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#'
+#' The output is the input [`Task`][mlr3::Task] with scaled numeric features.
+#'
+#' @section State:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`],
+#' as well as the two transformation parameters \eqn{a} and \eqn{b} for each numeric
+#' feature.
+#'
+#' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
+#' * `lower`  :: `numeric(1)` \cr
+#'   Target value of smallest item of input data. Default is 0.
+#' * `upper` :: `numeric(1)` \cr
+#'   Target value of greatest item of input data. Default is 1.
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' # Instantiate PipeOpScaleRange
-#' op1 = PipeOpScaleRange$new()
+#' pop = mlr_pipeops$get("scalerange")
+#'
+#' task = mlr3::mlr_tasks$get("iris")
+#'
+#' task$data()
+#'
+#' pop$train(list(task))[[1]]$data()
+#'
+#' pop$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
@@ -32,10 +71,6 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
     get_state_dt = function(dt, levels) {
       lapply(dt, function(x) {
         rng = range(x, na.rm = TRUE, finite = TRUE)
-        # linear transformation to get minimum to 'lower' and maximum to 'upper:
-        # x' = a + x * b
-        # where b is (upper - lower) / (max(x) - min(x))
-        # and   a is -min(x) * b + lower
         b = (self$param_set$values$upper - self$param_set$values$lower) / (rng[2] - rng[1])
         a = -rng[1] * b + self$param_set$values$lower
         c(a, b)

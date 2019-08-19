@@ -1,15 +1,50 @@
 #' @title PipeOpScaleMaxAbs
 #'
-#' @name mlr_pipeop_scalemaxabs
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`].
+#' @usage NULL
+#' @name mlr_pipeops_scalemaxabs
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Scales numeric data columns so their maximum absolute value
-#' is \code{maxabs}, see [mlrCPO::cpoScaleMaxAbs] for details.
+#' Scales the numeric data columns so their maximum absolute value is \code{maxabs},
+#' if possible. \code{NA}, \code{Inf} are ignored, and features that are constant 0
+#' are not scaled.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpScaleMaxAbs$new(id = "scalemaxabs", param_vals = list())
+#' ```
+#' * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"scalemaxabs"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#'
+#' The output is the input [`Task`][mlr3::Task] with scaled numeric features.
+#'
+#' @section State:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`],
+#' as well as the maximum absolute values of each numeric feature.
+#'
+#' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
+#' * `maxabs`  :: `numeric(1)` \cr
+#'   The maximum absolute value for each column after transformation. Default is 1.
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' # Instantiate PipeOpScaleMaxAbs
-#' op1 = PipeOpScaleMaxAbs$new()
+#' pop = mlr_pipeops$get("scalemaxabs", param_vals = list(formula = ~ .  ^ 2))
+#'
+#' task = mlr3::mlr_tasks$get("iris")
+#'
+#' task$data()
+#'
+#' pop$train(list(task))[[1]]$data()
+#'
+#' pop$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
