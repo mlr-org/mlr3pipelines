@@ -208,8 +208,8 @@ branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = 
     gin$op.id = paste0(pnp, gin$op.id)
 
     pmap(list(
-        src_id = branch_id, dst_id = gin$op.id,
-        src_channel = branch_chan, dst_channel = gin$channel.name),
+      src_id = branch_id, dst_id = gin$op.id,
+      src_channel = branch_chan, dst_channel = gin$channel.name),
       graph$add_edge)
   })
   graph

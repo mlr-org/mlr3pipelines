@@ -161,8 +161,9 @@ test_that("LearnerRegrAvg Pipeline", {
 
   lrn = LearnerRegrAvg$new()
   graph = gunion(list(
-      PipeOpLearnerCV$new("regr.rpart"),
-      PipeOpLearnerCV$new("regr.featureless"))) %>>%
+    PipeOpLearnerCV$new("regr.rpart"),
+    PipeOpLearnerCV$new("regr.featureless")
+  )) %>>%
     PipeOpFeatureUnion$new() %>>%
     PipeOpLearner$new(lrn)
   expect_graph(graph)
