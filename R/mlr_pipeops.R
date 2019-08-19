@@ -1,19 +1,45 @@
 #' @title Dictionary of PipeOps
 #'
-#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`]
+#' @usage NULL
+#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`].
 #'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
-#' Each `PipeOp` has an associated help page, see `mlr_pipeop_[id]`.
+#' Each `PipeOp` has an associated help page, see `mlr_pipeops_[id]`.
 #'
-#' @section Usage:
+#' @section Fields:
+#' Fields inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
+#' * `metainf` :: `environment`\cr
+#'   Environment that stores the `metainf` argument of the `$add()` method.
+#'   Only for internal use.
 #'
-#' See [`mlr3misc::Dictionary`].
+#' @section Methods:
+#' Methods inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
+#' * `add(key, value, metainf = NULL)`\cr
+#'   (`character(1)`, `R6ClassGenerator`, `NULL` | `list`)\cr
+#'   Adds constructor `value` to the dictionary with key `key`, potentially
+#'   overwriting a previously stored item. If `metainf` is not `NULL` (the default),
+#'   it must be a `list` of arguments that will be given to the `value` constructor (i.e. `value$new()`)
+#'   when it needs to be constructed for `as.data.table` [`PipeOp`] listing.
 #'
 #' @section S3 methods:
 #' * `as.data.table(dict)`\cr
-#'   [Dictionary] -> [data.table::data.table()]\cr
-#'   Returns a `data.table()` with fields "key", "packages", and connectors.
+#'   [`Dictionary`][mlr3misc::Dictionary] -> [`data.table::data.table`]\cr
+#'   Returns a `data.table` with columns `key` (`character`), `packages` (`character`),
+#'   `input.num` (`integer`), `output.num` (`integer`), `input.type.train` (`character`),
+#'   `input.type.predict` (`character`), `output.type.train` (`character`), `output.type.predict` (`character`).
+#'
+#' @examples
+#' mlr_pipeops$get("pca")
+#'
+#' mlr_pipeops$get("learner", learner = "classif.rpart")
+#'
+#' # equivalent:
+#' mlr_pipeops$get("learner", "classif.rpart")
+#'
+#' # unnecessary and silly:
+#' mlr_pipeops$add("nop2", PipeOpNOP)
+#' mlr_pipeops$get("nop2")
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps

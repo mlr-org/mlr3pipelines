@@ -10,7 +10,7 @@ po(.key, ...)
 \item{.key}{\code{[character(1)]}\cr
 The pipeop to construct}
 
-\item{...}{\cr
+\item{...}{\code{any}\cr
 Additional parameters to give to constructed object.
 This may be an argument of the constructor of the
 \code{PipeOp}, in which case it is given to this constructor;

@@ -9,7 +9,7 @@
 #'
 #' @param .key `[character(1)]`\cr
 #'   The pipeop to construct
-#' @param ... \cr
+#' @param ... `any`\cr
 #'   Additional parameters to give to constructed object.
 #'   This may be an argument of the constructor of the
 #'   `PipeOp`, in which case it is given to this constructor;
@@ -32,7 +32,7 @@ po = function(.key, ...) {
 
   args_not_in_sig = which(
     !is.na(given_argnames) &
-    given_argnames %nin% signature_argnames
+      given_argnames %nin% signature_argnames
   )
 
   param_vals = args[args_not_in_sig]

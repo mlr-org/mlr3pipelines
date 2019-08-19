@@ -1,7 +1,7 @@
-context("PipeOpBalanceSample")
+context("PipeOpClassBalancing")
 
-test_that("PipeOpBalanceSample - basic properties", {
-  op = PipeOpBalanceSample$new()
+test_that("PipeOpClassBalancing - basic properties", {
+  op = PipeOpClassBalancing$new()
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
   train_pipeop(op, inputs = list(task))
@@ -11,8 +11,8 @@ test_that("PipeOpBalanceSample - basic properties", {
     predict_like_train = FALSE, deterministic_train = FALSE)
 })
 
-test_that("PipeOpBalanceSample", {
-  op = PipeOpBalanceSample$new()
+test_that("PipeOpClassBalancing", {
+  op = PipeOpClassBalancing$new()
   task = mlr_tasks$get("pima")
 
   op$param_set$values = list(ratio = 0.5, reference = "major", adjust = "major", shuffle = TRUE)
@@ -32,9 +32,9 @@ test_that("PipeOpBalanceSample", {
 })
 
 
-test_that("PipeOpBalanceSample: rate and multiple classes", {
+test_that("PipeOpClassBalancing: rate and multiple classes", {
   task = mlr_tasks$get("zoo")
-  op = PipeOpBalanceSample$new()
+  op = PipeOpClassBalancing$new()
   intbl = table(task$truth())
 
   op$param_set$values$reference = "nonmajor"
