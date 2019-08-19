@@ -110,7 +110,7 @@ PipeOpColApply = R6Class("PipeOpColApply",
       dt
     },
 
-    transform_dt= function(task, task_levels) {
+    transform_dt = function(task, task_levels) {
       applicator = self$param_set$values$applicator
       task[, names(task) := lapply(task, applicator)]
     }

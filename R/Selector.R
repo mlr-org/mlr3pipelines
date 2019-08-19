@@ -108,8 +108,8 @@ print.Selector = function(x, ...) {
 #' @export
 #' @rdname Selector
 selector_all = function() make_selector(function(task) {
-  task$feature_names
-}, "selector_all()")
+    task$feature_names
+  }, "selector_all()")
 
 #' `selector_none` selects none of the  features.
 #' @export

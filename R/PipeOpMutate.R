@@ -66,7 +66,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
       ps = ParamSet$new(params = list(
         ParamUty$new("mutation", custom_check = check_mutation_formulae, tags = "required"),
         ParamLgl$new("delete_originals", tags = "required")
-        ))
+      ))
       ps$values = list(mutation = list(), delete_originals = FALSE)
       super$initialize(id, ps, param_vals = param_vals)
     },

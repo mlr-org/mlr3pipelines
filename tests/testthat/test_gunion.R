@@ -29,7 +29,7 @@ test_that("named gunion", {
       b = "subsample" %>>% "pca",
       "subsample",
       z = gunion(list("pca", "scale")) %>>% "featureunion")) %>>%
-        PipeOpFeatureUnion$new(4),
+      PipeOpFeatureUnion$new(4),
     Graph$new()$
       add_pipeop(PipeOpScale$new(id = "a.scale"))$
       add_pipeop(PipeOpSubsample$new(id = "b.subsample"))$

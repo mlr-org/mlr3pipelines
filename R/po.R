@@ -32,7 +32,7 @@ po = function(.key, ...) {
 
   args_not_in_sig = which(
     !is.na(given_argnames) &
-    given_argnames %nin% signature_argnames
+      given_argnames %nin% signature_argnames
   )
 
   param_vals = args[args_not_in_sig]

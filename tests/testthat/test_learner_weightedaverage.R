@@ -16,7 +16,7 @@ test_that("LearnerClassifAvg", {
   expect_prediction(prd)
 
 
-  df = data.frame(x = matrix(runif(100), nrow = 10), y = as.factor(sample(c(0,1), 10, replace = TRUE)))
+  df = data.frame(x = matrix(runif(100), nrow = 10), y = as.factor(sample(c(0, 1), 10, replace = TRUE)))
   tsk = TaskClassif$new(id = "tsk", backend = df, target = "y")
 
   for (predicttype in c("prob", "response")) {
