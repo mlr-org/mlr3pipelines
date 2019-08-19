@@ -152,7 +152,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
           private$.crossval_param_set,
           private$.learner$param_set
         ))
-        private$.param_set$set_id = self$id %??% private$.learner$id # self$id may be NULL during initialize() call
+        private$.param_set$set_id = self$id %??% private$.learner$id  # self$id may be NULL during initialize() call
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
@@ -170,7 +170,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   ),
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }

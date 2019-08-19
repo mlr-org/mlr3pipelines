@@ -107,7 +107,7 @@ test_that("Autoconversion utility functions work", {
 
   expect_identical(get_autoconverter("test_subclass")$fun, bfun)  # does the test_hyperclass conversion, because subclass before superclass
   expect_identical(get_autoconverter("test_superclass")$fun, afun)  # converts to "test", because distance to "test_hyperclass" is larger
-  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun) # actually registered to bfun
+  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun)  # actually registered to bfun
   expect_identical(get_autoconverter("test_megaclass")$fun, bfun)  # converts to "test_hyperclass" because distance to "test" is larger
 
   reset_autoconvert_register()  # check that reset actually empties the register to default

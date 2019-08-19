@@ -153,7 +153,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
           private$.outer_param_set,
           self$filter$param_set
         ))
-        private$.param_set$set_id = self$id %??% self$filter$id # self$id may be NULL during initialize() call
+        private$.param_set$set_id = self$id %??% self$filter$id  # self$id may be NULL during initialize() call
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
@@ -163,7 +163,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
   ),
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }

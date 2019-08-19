@@ -36,7 +36,7 @@ expect_deep_clone = function(one, two) {
         return(invisible(NULL))
       }
       if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
-        return(invisible(NULL)) # don't check if smth is not cloneable
+        return(invisible(NULL))  # don't check if smth is not cloneable
       }
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
@@ -317,7 +317,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
       predicted.targetless$data(cols = predicted.targetless$feature_names))
   }
 
-  expect_shallow_clone(task, original_clone) # test that task was not changed by all the training / prediction
+  expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
 
 }
 
