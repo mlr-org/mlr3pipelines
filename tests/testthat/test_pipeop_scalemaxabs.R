@@ -6,7 +6,7 @@ set.seed(1234)
 result = op$train(list(task))
 resdt = result[[1]]$data()
 
-test_that("PipeOpICA - basic properties", {
+test_that("PipeOpScaleMaxAbs - basic properties", {
   expect_pipeop(op)
   expect_datapreproc_pipeop_class(PipeOpScaleMaxAbs, task = task)
   expect_task(result[[1]])
