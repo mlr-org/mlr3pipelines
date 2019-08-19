@@ -6,9 +6,6 @@
 \alias{PipeOpSubsample}
 \title{PipeOpSubsample}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
-\usage{
-PipeOpSubsample
-}
 \description{
 Subsamples a \code{\link[mlr3:Task]{Task}} to use a fraction of the rows.
 

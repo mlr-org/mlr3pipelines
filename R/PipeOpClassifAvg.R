@@ -63,6 +63,7 @@
 #  mlr3::resample("iris", GraphLearner$new(gr), "cv")
 #'
 #' @family PipeOps
+#' @family Ensembles
 #' @include PipeOpEnsemble.R
 #' @export
 PipeOpClassifAvg = R6Class("PipeOpClassifAvg",

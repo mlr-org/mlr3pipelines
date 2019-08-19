@@ -70,6 +70,7 @@
 #'   This method is abstract, it must be implemented by deriving classes.
 #'
 #' @family PipeOps
+#' @family Ensembles
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",

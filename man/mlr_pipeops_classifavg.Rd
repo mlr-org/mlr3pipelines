@@ -100,6 +100,11 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
   \code{\link{mlr_pipeops}}
+
+Other Ensembles: \code{\link{PipeOpEnsemble}},
+  \code{\link{mlr_learners_classif.avg}},
+  \code{\link{mlr_pipeops_regravg}}
 }
+\concept{Ensembles}
 \concept{PipeOps}
 \keyword{datasets}

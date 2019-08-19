@@ -1,31 +1,27 @@
-#' @title Weighted Average of Features for Classification
+#' @title Optimized Weighted Average of Features for Classification and Regression
 #'
-#' @aliases mlr_learners_classif.weightedaverage
-#' @format [R6::R6Class()] inheriting from [mlr3::LearnerClassif].
+#' @usage NULL
+#' @name mlr_learners_classif.avg
+#' @aliases Algorithm
+#' @format [`R6Class`] object inheriting from [`mlr3::LearnerClassif`]/[`mlr3::Learner`].
 #'
 #' @description
 #' Computes a weighted average of inputs.
 #' Used in the context of computing weighted averages of predictions.
 #'
-#' If `weights.method` is "manual", the average is computed over weights provided by the user.
-#' Predictions are averaged using `weights` (in order of appearance in the data); `weights` defaults to equal
-#' weights for each feature.
-#' For `weights.method`: "nloptr", nonlinear optimization from the package "nloptr" is used to optimize weights
-#' for a measure provided in `measure` (defaults to `classif.acc`).
-#' Learned weights can be obtained from `.$model`.
+#' Predictions are averaged using `weights` (in order of appearance in the data) which are optimized using
+#' nonlinear optimization from the package "nloptr" for a measure provided in `measure` (defaults to `classif.acc`
+#' for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`).
+#' Learned weights can be obtained from `$model`.
 #' Using non-linear optimization is implemented in the SuperLearner R package.
 #' For a more detailed analysis the reader is refered to
 #' *LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation*.
 #'
 #' @section Parameter Set:
-#' * `weights.method` :: `character(1)` \cr
-#'   `manual` allows to supply weights, for `nloptr` weights are automatically determined using `nloptr`?
-#'   Defaults to `manual`.
-#' * `weights` :: `numeric(1)` \cr
-#'   Numeric either of length 1 or the same length as the inputs. Defaults to 1.
-#' * `measure` :: `character(1) | MeasureClassif` \cr
-#'   Only for `weights.method = "nloptr"`. Measure to optimized weights for.
-#'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`.
+#' * `measure` :: `character(1)` | `Measure` \cr
+#'   Measure to optimized weights for.
+#'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`
+#'   for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`
 #' * `algorithm` :: `character(1)` \cr
 #'   Several nonlinear optimization methods from `nloptr` are available.
 #'   See `nloptr::nloptr.print.options()` for a list of possible options.
@@ -36,7 +32,11 @@
 #' * `LearnerClassifAvg$new(), id = "classif.avg")` \cr
 #'   (`chr`) -> `self` \cr
 #'   Constructor.
-#' @family LearnerClassif
+#' * `LearnerRegrAvg$new(), id = "regr.avg")` \cr
+#'   (`chr`) -> `self` \cr
+#'   Constructor.
+#' @family Learners
+#' @family Ensembles
 #' @include PipeOpEnsemble.R
 #' @export
 LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
@@ -110,43 +110,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   )
 )
 
-#' @title Weighted Average of Features for Regression
-#'
-#' @aliases mlr_learners_regr.weightedaverage
-#' @format [R6::R6Class()] inheriting from [mlr3::LearnerRegr].
-#'
-#' @description
-#' Computes a weighted average of inputs.
-#' Used in the context of computing weighted averages of predictions.
-#'
-#' If `weights.method` is "manual", the average is computed over weights provided by the user.
-#' Predictions are averaged using `weights` (in order of appearance in the data); `weights` defaults to equal
-#' weights for each feature.
-#' For `weights.method`: "nloptr", nonlinear optimization from package "nloptr" is used to optimize weights
-#' for a measure provided as `measure` (defaults to `regr.mse`).
-#' Learned weights can be obtained from `.$model`.
-#'
-#' @section Parameter Set:
-#' * `weights.method` :: `character(1)` \cr
-#'   `manual` allows to supply weights, for `nloptr` weights are automatically determined using `nloptr`?
-#'   Defaults to `manual`.
-#' * `weights` :: `numeric(1)` \cr
-#'   Numeric either of length 1 or the same length as the inputs. Defaults to 1.
-#' * `measure` :: `character(1) | MeasureClassif` \cr
-#'   Only for `weights.method = "nloptr"`. Measure to optimized weights for.
-#'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`.
-#' * `algorithm` :: `character(1)` \cr
-#'   Several nonlinear optimization methods from `nloptr` are available.
-#'   See `nloptr::nloptr.print.options()` for a list of possible options.
-#'   Note that we only allow for derivative free local or global algorithms, i.e.
-#'   NLOPT_(G|L)N_*.
-#'
-#' @section Methods:
-#' * `LearnerRegrAvg$new(), id = "regr.avg")` \cr
-#'   (`chr`) -> `self` \cr
-#'   Constructor.
-#' @family LearnerRegr
-#' @include PipeOpEnsemble.R
+#' @rdname mlr_learners_classif.avg
 #' @export
 LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(

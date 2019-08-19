@@ -65,7 +65,7 @@ reference:
   - title: PipeOps
     contents:
       - mlr_pipeops
-      - starts_with("mlr_pipeop_")
+      - starts_with("mlr_pipeops_")
   - title: Helpers
     contents:
       - assert_graph
