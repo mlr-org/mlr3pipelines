@@ -48,5 +48,3 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
 )
 
 mlr_pipeops$add("scalemaxabs", PipeOpScaleMaxAbs)
-
-
