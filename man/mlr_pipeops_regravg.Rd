@@ -96,7 +96,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops}}
 
 Other Ensembles: \code{\link{PipeOpEnsemble}},
-  \code{\link{mlr_learners_classif.avg}},
+  \code{\link{mlr_learners_avg}},
   \code{\link{mlr_pipeops_classifavg}}
 }
 \concept{Ensembles}

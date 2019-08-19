@@ -18,7 +18,7 @@ call. The result of the \code{$train()} call is discarded, only the
 internal state changes during training are used.
 }
 \seealso{
-Other Learners: \code{\link{mlr_learners_classif.avg}}
+Other Learners: \code{\link{mlr_learners_avg}}
 }
 \concept{Learners}
 \keyword{datasets}

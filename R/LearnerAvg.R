@@ -1,8 +1,8 @@
 #' @title Optimized Weighted Average of Features for Classification and Regression
 #'
-#' @usage NULL
-#' @name mlr_learners_classif.avg
-#' @aliases Algorithm
+#' @usage mlr_learners_classif.avg
+#' @name mlr_learners_avg
+#' @aliases mlr_learners_classif.avg
 #' @format [`R6Class`] object inheriting from [`mlr3::LearnerClassif`]/[`mlr3::Learner`].
 #'
 #' @description
@@ -110,7 +110,9 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   )
 )
 
-#' @rdname mlr_learners_classif.avg
+#' @aliases mlr_learners_regr.avg
+#' @usage mlr_learners_regr.avg
+#' @rdname mlr_learners_avg
 #' @export
 LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
