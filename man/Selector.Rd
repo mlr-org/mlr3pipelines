@@ -74,6 +74,33 @@ Even though a \code{\link{Selector}} is a \code{function} that can be written it
 shown here. Each of these can be called with its arguments to create a \code{\link{Selector}}, which can then be given to the \code{\link{PipeOpSelect}}
 \code{selector} parameter, or many \code{\link{PipeOpTaskPreproc}}s' \code{affect_columns} parameter. See there for examples of this usage.
 }
+\section{Functions}{
+\itemize{
+\item \code{selector_all}: \code{selector_all} selects all features.
+
+\item \code{selector_none}: \code{selector_none} selects none of the  features.
+
+\item \code{selector_type}: \code{selector_type} selects features according to type. Legal types are listed in \code{mlr_reflections$task_feature_types}.
+
+\item \code{selector_grep}: \code{selector_grep} selects features with names matching the \code{grep()} pattern.
+
+\item \code{selector_name}: \code{selector_name} selects features with names matching exactly the names listed.
+
+\item \code{selector_invert}: \code{selector_invert} inverts a given \code{\link{Selector}}: It always selects the features
+that would be \emph{dropped} by the other \code{\link{Selector}}, and drops the features that
+would be kept.
+
+\item \code{selector_intersect}: \code{selector_intersect} selects the intersection of two \code{\link{Selector}}s: Only features
+selected by both \code{\link{Selector}}s are selected in the end.
+
+\item \code{selector_union}: \code{selector_union} selects the union of two \code{\link{Selector}}s: Features
+selected by either \code{\link{Selector}} are selected in the end.
+
+\item \code{selector_setdiff}: \code{selector_setdiff} selects the setdiff of two \code{\link{Selector}}s: Features
+selected by \code{selector_x} are selected, unless they are also selected
+by \code{selector_y}.
+}}
+
 \section{Details}{
 
 A \code{\link{Selector}} is a \code{function}

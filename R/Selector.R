@@ -104,25 +104,22 @@ print.Selector = function(x, ...) {
   cat(paste0(attr(x, "repr"), "\n"))
 }
 
-#' `selector_all` selects all features.
+#' @describeIn Selector `selector_all` selects all features.
 #' @export
-#' @rdname Selector
 selector_all = function() make_selector(function(task) {
     task$feature_names
   }, "selector_all()")
 
-#' `selector_none` selects none of the  features.
+#' @describeIn Selector `selector_none` selects none of the  features.
 #' @export
-#' @rdname Selector
 selector_none = function() make_selector(function(task) {
   character(0)
 }, "selector_none()")
 
-#' `selector_type` selects features according to type. Legal types are listed in `mlr_reflections$task_feature_types`.
+#' @describeIn Selector `selector_type` selects features according to type. Legal types are listed in `mlr_reflections$task_feature_types`.
 #' @param types (`character`) \cr
 #'   Type of feature to select
 #' @export
-#' @rdname Selector
 selector_type = function(types) {
   assert_character(types, any.missing = FALSE)
   assert_subset(types, mlr_reflections$task_feature_types)
@@ -131,7 +128,7 @@ selector_type = function(types) {
   }, "selector_type(%s)", char_repr(types))
 }
 
-#' `selector_grep` selects features with names matching the `grep()` pattern.
+#' @describeIn Selector `selector_grep` selects features with names matching the `grep()` pattern.
 #' @param pattern (`character(1)`) \cr
 #'   grep pattern
 #' @param ignore.case (`logical(1)`) \cr
@@ -141,7 +138,6 @@ selector_type = function(types) {
 #' @param fixed (`logical(1)`) \cr
 #'   fixed pattern instead of regex
 #' @export
-#' @rdname Selector
 selector_grep = function(pattern, ignore.case = FALSE, perl = FALSE, fixed = FALSE) {
   assert_string(pattern)
   assert_flag(ignore.case)
@@ -155,13 +151,12 @@ selector_grep = function(pattern, ignore.case = FALSE, perl = FALSE, fixed = FAL
   }, "selector_grep(%s%s%s%s)", pattern, str_ignore_case, str_perl, str_fixed)
 }
 
-#' `selector_name` selects features with names matching exactly the names listed.
+#' @describeIn Selector `selector_name` selects features with names matching exactly the names listed.
 #' @param feature_names (`character`)\cr
 #'   Select features by exact name match.
 #' @param assert_present (`logical(1)`)\cr
 #'   Throw an error if `feature_names` are not all present in the task being operated on.
 #' @export
-#' @rdname Selector
 selector_name = function(feature_names, assert_present = FALSE) {
   assert_character(feature_names, any.missing = FALSE)
   assert_flag(assert_present)
@@ -174,13 +169,12 @@ selector_name = function(feature_names, assert_present = FALSE) {
   }, "selector_name(%s%s)", char_repr(feature_names), str_assert_present)
 }
 
-#' `selector_invert` inverts a given [`Selector`]: It always selects the features
+#' @describeIn Selector `selector_invert` inverts a given [`Selector`]: It always selects the features
 #' that would be *dropped* by the other [`Selector`], and drops the features that
 #' would be kept.
 #' @param selector ([`Selector`])\cr
 #'   [`Selector`] to invert.
 #' @export
-#' @rdname Selector
 selector_invert = function(selector) {
   assert_function(selector)
   make_selector(function(task) {
@@ -188,14 +182,13 @@ selector_invert = function(selector) {
   }, "selector_invert(%s)", selector_repr(selector))
 }
 
-#' `selector_intersect` selects the intersection of two [`Selector`]s: Only features
+#' @describeIn Selector `selector_intersect` selects the intersection of two [`Selector`]s: Only features
 #' selected by both [`Selector`]s are selected in the end.
 #' @param selector_x ([`Selector`])\cr
 #'   First [`Selector`] to query.
 #' @param selector_y ([`Selector`])\cr
 #'   Second [`Selector`] to query.
 #' @export
-#' @rdname Selector
 selector_intersect = function(selector_x, selector_y) {
   assert_function(selector_x)
   assert_function(selector_y)
@@ -204,10 +197,9 @@ selector_intersect = function(selector_x, selector_y) {
   }, "selector_intersect(%s, %s)", selector_repr(selector_x), selector_repr(selector_y))
 }
 
-#' `selector_union` selects the union of two [`Selector`]s: Features
+#' @describeIn Selector `selector_union` selects the union of two [`Selector`]s: Features
 #' selected by either [`Selector`] are selected in the end.
 #' @export
-#' @rdname Selector
 selector_union = function(selector_x, selector_y) {
   assert_function(selector_x)
   assert_function(selector_y)
@@ -216,11 +208,10 @@ selector_union = function(selector_x, selector_y) {
   }, "selector_union(%s, %s)", selector_repr(selector_x), selector_repr(selector_y))
 }
 
-#' `selector_setdiff` selects the setdiff of two [`Selector`]s: Features
+#' @describeIn Selector `selector_setdiff` selects the setdiff of two [`Selector`]s: Features
 #' selected by `selector_x` are selected, unless they are also selected
 #' by `selector_y`.
 #' @export
-#' @rdname Selector
 selector_setdiff = function(selector_x, selector_y) {
   assert_function(selector_x)
   assert_function(selector_y)
