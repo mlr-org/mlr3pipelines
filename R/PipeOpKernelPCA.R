@@ -1,24 +1,5 @@
 #' @title PipeOpKernelPCA
 #'
-#' @name mlr_pipeop_kernelpca
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
-#'
-#' @description
-
-#'
-#' @examples
-#' # Instantiate PipeOpKernelPCA
-#' op1 = PipeOpKernelPCA$new()
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
-#'
-#'
-
-
-
-#' @title PipeOpKernelPCA
-#'
 #' @usage NULL
 #' @name mlr_pipeops_kernelpca
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -47,14 +28,14 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `kernel` :: `character`\cr
+#' * `kernel` :: `character(1)`\cr
 #'   The standard deviations of the principal components. See [`kpca()`][kernlab::kpca].
 #' * `kpar` :: `list`\cr
 #'   List of hyper-parameters that are used with the kernel function. See [`kpca()`][kernlab::kpca].
-#' * `features` :: `numeric`\cr
+#' * `features` :: `numeric(1)`\cr
 #'   Number of principal components to return. Default 0 means that all
 #'   principal components are returned. See [`kpca()`][kernlab::kpca].
-#' * `th` :: `numeric` | `logical(1)`\cr
+#' * `th` :: `numeric(1)`\cr
 #'   The value of eigenvalue under which principal components are ignored. Default is 0.0001. See [`kpca()`][kernlab::kpca].
 #' * `na.action` :: `function`\cr
 #'   Function to specify NA action. Default is [`na.omit`]. See [`kpca()`][kernlab::kpca].

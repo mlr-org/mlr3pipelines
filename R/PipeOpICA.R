@@ -1,17 +1,83 @@
 #' @title PipeOpICA
 #'
-#' @name mlr_pipeop_ica
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`].
+#' @usage NULL
+#' @name mlr_pipeops_ica
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Extract statistically independent components from data by
-#' a linear representation of nongaussian data.
-#' Use the \code{\link[fastICA]{fastICA}} function implementing the
-#' \dQuote{FastICA algorithm}. See the documentation there.
+#' Extract statistically independent components from data.  Only affects numerical features.
+#' See [fastICA::fastICA] for details.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpICA$new(id = "ica", param_vals = list())
+#' ```
+#" * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"pca"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#'
+#' The output is the input [`Task`][mlr3::Task] with all affected numeric parameters replaced by independent components.
+#'
+#' @section State:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the [`"fastICA"` function][fastICA::fastICA],
+#' with the exception of the `$X` and `$S` slots. These are in particular:
+#' * `K` :: `matrix`\cr
+#'   Matrix that projects data onto the first `n.comp` principal components.
+#'   See [`fastICA()`][fastICA::fastICA].
+#' * `W` :: `matrix`\cr
+#'   Estimated un-mixing matrix. See [`fastICA()`][fastICA::fastICA].
+#' * `A` :: `matrix`\cr
+#'   Estimated mixing matrix. See [`fastICA()`][fastICA::fastICA].
+#' * `center` :: `numeric`\cr
+#'   The mean of each numeric feature during training.
+#'
+#' @section Parameters:
+#' * `n.comp` :: `numeric(1)`\cr
+#'   Number of components to extract. Default is \code{NULL}, which sets it
+#'   to the number of available numeric columns.
+#' * `alg.typ`:: `character(1)`\cr
+#'   Algorithm type. One of \dQuote{parallel} (default) or \dQuote{deflation}.
+#' * `fun` :: `character(1)`\cr
+#'   One of \dQuote{logcosh} (default) or \dQuote{exp}.
+#' * `alpha` :: `numeric(1)`\cr
+#'   In range `[1, 2]`, Used for negentropy calculation when \code{fun} is \dQuote{logcosh}.
+#'   Default is 1.0.
+#' * `method` :: `character(1)`\cr
+#'   Internal calculation method. \dQuote{C} (default) or \dQuote{R}.
+#'   See [`fastICA()`][fastICA::fastICA].
+#' * `row.norm` :: `logical(1)`\cr
+#'   Logical value indicating whether rows should be standardized beforehand.
+#'   Default is \code{FALSE}.
+#' * `maxit` :: `numeric(1)`\cr
+#'   Maximum number of iterations. Default is 200.
+#' * `tol` :: `numeric(1)`\cr
+#'   Tolerance for convergence, default is \code{1e-4}.
+#' * `verbose` `logical(1)`\cr
+#'   Logical value indicating the level of output during the run of the algorithm.
+#'   Default is \code{FALSE}.
+#' * `w.init`:: `matrix`\cr
+#'   Initial un-mixing matrix. See [`fastICA()`][fastICA::fastICA].
+#'   Default is \code{NULL}.
+#' @section Internals:
+#' Uses the [`fastICA()`][fastICA::fastICA] function.
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' # Instantiate PipeOpICA
-#' op1 = PipeOpICA$new()
+#' pop = mlr_pipeops$get("ica")
+#'
+#' task = mlr3::mlr_tasks$get("iris")
+#'
+#' task$data()
+#'
+#' pop$train(list(task))[[1]]$data()
+#'
+#' pop$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
