@@ -76,7 +76,7 @@ pos = mlr_pipeops$get("subsample")
 pos$train(list("iris"))
 
 # simple bagging:
-gr = greplicate(pos \%>>\% mlr_pipeops$get("learner", "classif.rpart")) \%>>\%
+gr = greplicate(pos \%>>\% mlr_pipeops$get("learner", "classif.rpart"), 5) \%>>\%
   mlr_pipeops$get("classifavg")
 
 }
