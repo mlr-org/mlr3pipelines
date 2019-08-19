@@ -127,7 +127,6 @@ PipeOp = R6Class("PipeOp",
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
-      require_namespaces(self$packages)
     },
 
     print = function(...) {
@@ -147,6 +146,8 @@ PipeOp = R6Class("PipeOp",
     },
 
     train = function(input) {
+      require_namespaces(self$packages)
+
       if (every(input, is_noop)) {
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
