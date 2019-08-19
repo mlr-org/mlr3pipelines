@@ -6,9 +6,6 @@
 \alias{PipeOpClassBalancing}
 \title{PipeOpClassBalancing}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
-\usage{
-PipeOpClassBalancing
-}
 \description{
 Both undersamples a \code{\link[mlr3:Task]{Task}} to keep only a fraction of the rows of the majority class,
 as well as oversamples (repeats datapoints) rows of the minority class.

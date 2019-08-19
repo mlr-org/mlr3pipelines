@@ -1,5 +1,6 @@
 #' @title PipeOpClassBalancing
 #'
+#' @usage NULL
 #' @name mlr_pipeops_classbalancing
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
