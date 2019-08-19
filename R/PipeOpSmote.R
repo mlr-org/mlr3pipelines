@@ -60,55 +60,28 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpSmote = R6Class("PipeOpSmote",
-  inherit = PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "smote", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("mutation", custom_check = check_mutation_formulae, tags = "required"),
-        ParamLgl$new("delete_originals", tags = "required")
+        ParamUty$new("form", tags = "required"),
+        ParamInt$new("perc.over", default = 200),
+        ParamInt$new("k", default = 5),
+        ParamInt$new("perc.under", default = 200),
+        ParamUty$new("learner", default = NULL)
       ))
-      ps$values = list(mutation = list(), delete_originals = FALSE)
-      super$initialize(id, ps, param_vals = param_vals)
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "DMwR")
     },
 
-    transform = function(task) {
-      taskdata = task$data(cols = task$feature_names)
-      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
-        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
-      }))
-      keep_feats = character(0)
-      if (!self$param_set$values$delete_originals) {
-        keep_feats = setdiff(task$feature_names, colnames(newdata))
-      }
-      task = task$select(keep_feats)
-      if (nrow(newdata) == 1) {
-        # if the user gave us something like "one = ~1" to introduce a constant column, we will only
-        # have a single row here and need to copy that.
-        newdata = newdata[rep(1, task$nrow)]
-      }
-      if (ncol(newdata) && nrow(newdata) != task$nrow) {
-        stopf("PipeOpSmote expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
-      }
-      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
-      task
+    train_task = function(task) {
+      ps = self$param_set$values
+      dt_old = task$data()
+      ps$data = dt_old
+      dt = as.data.table(invoke(DMwR::SMOTE, .args = ps))
+      ###### TO DO: Add new data to task########
+      return(task)
     }
   )
 )
-
-# check the `mutation` parameter of PipeOpSmote
-# @param x [list] whatever `mutation` is being set to
-# checks that `mutation` is
-# * a named list of `formula`
-# * that each element has only a lhs
-check_mutation_formulae = function(x) {
-  check_list(x, types = "formula", names = "unique") %&&%
-    Reduce(`%&&%`, lapply(x, function(xel) {
-      if (length(xel) != 2) {
-        return(sprintf("formula %s must not have a left hand side.",
-          deparse(xel, nlines = 1, width.cutoff = 500)))
-      }
-      TRUE
-    }), TRUE)
-}
 
 mlr_pipeops$add("smote", PipeOpSmote)
