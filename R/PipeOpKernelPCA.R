@@ -12,7 +12,7 @@
 #' ```
 #' PipeOpKernelPCA$new(id = "kernelpca", param_vals = list())
 #' ```
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"kernelpca"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
