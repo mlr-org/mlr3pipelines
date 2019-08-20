@@ -22,21 +22,5 @@
 #'   param_vals = list(cp = 0.3))
 #' @export
 po = function(.key, ...) {
-  assert_string(.key)
-
-  args = list(...)
-  given_argnames = names2(args)
-
-  resulting_constructor = get0(.key, mlr_pipeops$items, ifnotfound = NULL)$value$public_methods$initialize
-  signature_argnames = setdiff(names2(suppressWarnings(formals(args(resulting_constructor)))), ".key")
-
-  args_not_in_sig = which(
-    !is.na(given_argnames) &
-      given_argnames %nin% signature_argnames
-  )
-
-  param_vals = args[args_not_in_sig]
-  args[args_not_in_sig] = NULL
-  args[["param_vals"]] = c(param_vals, args[["param_vals"]])
-  do.call(mlr_pipeops$get, c(key = .key, args))
+  dictionary_sugar(mlr_pipeops, .key, ...)
 }

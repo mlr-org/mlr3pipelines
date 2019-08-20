@@ -80,7 +80,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
   public = list(
     initialize = function(id = "encode", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("one-hot", "treatment", "helmert", "poly", "sum"))
+        ParamFct$new("method", levels = c("one-hot", "treatment", "helmert", "poly", "sum"), tags = c("train", "predict"))
       ))
       ps$values = list(method = "one-hot")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")

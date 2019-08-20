@@ -65,8 +65,8 @@ PipeOpScale = R6Class("PipeOpScale",
   public = list(
     initialize = function(id = "scale", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE),
-        ParamLgl$new("scale", default = TRUE)
+        ParamLgl$new("center", default = TRUE, tags = "train"),
+        ParamLgl$new("scale", default = TRUE, tags = "train")
       ))
       super$initialize(id = id, param_set = ps, param_vals = param_vals)
     },

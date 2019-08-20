@@ -255,6 +255,9 @@ test_that("Empty Graph", {
   expect_equal(greplicate(Graph$new(), 100), Graph$new())
 
   expect_error(Graph$new()$add_edge("a", "b"), "Cannot add edge to empty Graph")
+
+  expect_equal(Graph$new()$state, list())
+
 })
 
 test_that("Graph printer aux function calculates col widths well", {
@@ -330,4 +333,20 @@ test_that("Namespaces get loaded", {
     "  Error loading package 4rfjfw (required by scale, nop):",
     "  Error loading package 324r32 (required by scale):"),
   strsplit(res, "\n")[[1]])
+})
+
+test_that("Graph State", {
+  g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
+    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
+
+  g_clone = g$clone(deep = TRUE)
+  task = mlr_tasks$get("iris")
+
+  res = g$train(task)
+
+  g_clone$state = g$state
+  expect_deep_clone(g_clone, g$clone(deep = TRUE))
+
+  expect_equal(g$predict(task), g_clone$predict(task))
+
 })

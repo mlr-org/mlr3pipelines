@@ -101,6 +101,8 @@ expect_pipeop = function(po) {
   expect_names(names(po$output), permutation.of = c("name", "train", "predict"))
   expect_int(po$innum, lower = 1)
   expect_int(po$outnum, lower = 1)
+  # at least one of "train" or "predict" must be in every parameter's tag
+  testthat::expect_true(every(po$param_set$tags, function(x) length(intersect(c("train", "predict"), x)) > 0))
 
 }
 
@@ -163,6 +165,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE) {
+
 
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)

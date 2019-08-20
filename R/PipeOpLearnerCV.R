@@ -112,9 +112,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = "cv", tags = "required"),
-        ParamInt$new("folds", lower = 2L, upper = Inf, tags = "required"),
-        ParamLgl$new("keep_response", tags = "required")
+        ParamFct$new("method", levels = "cv", tags = c("train", "required")),
+        ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
+        ParamLgl$new("keep_response", tags = c("train", "required"))
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"

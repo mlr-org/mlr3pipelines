@@ -66,9 +66,9 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
   public = list(
     initialize = function(id = "subsample", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("frac", lower = 0, upper = Inf),
-        ParamLgl$new("stratify"),
-        ParamLgl$new("replace")
+        ParamDbl$new("frac", lower = 0, upper = Inf, tags = "train"),
+        ParamLgl$new("stratify", tags = "train"),
+        ParamLgl$new("replace", tags = "train")
       ))
       ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
