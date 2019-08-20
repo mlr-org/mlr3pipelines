@@ -33,10 +33,10 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `K` :: `numeric(1)` \cr
 #'   The number of nearest neighbors used for sampling new values.
-#'   See [`SMOTE`][`smotefamily::SMOTE`].
+#'   See [`SMOTE()`][`smotefamily::SMOTE`].
 #' * `dup_size` :: `numeric` \cr
 #'   Desired times of synthetic minority instances over the original number of
-#'   majority instances. See [`SMOTE`][`smotefamily::SMOTE`].
+#'   majority instances. See [`SMOTE()`][`smotefamily::SMOTE`].
 #'
 #' @section Internals:
 #' For details see: \cr
@@ -79,13 +79,15 @@ PipeOpSmote = R6Class("PipeOpSmote",
         packages = "smotefamily")
     },
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric"), get("id")]
-    },
-
     train_task = function(task) {
       assert_true(all(task$feature_types$type == "numeric"))
-      dt = task$data(cols = task$feature_names)
+      dt_columns = self$select_cols(task)
+      cols = dt_columns
+      if (!length(cols)) {
+        self$state = list(dt_columns = dt_columns)
+        return(task)
+      }
+      dt = task$data(cols = cols)
 
       # extract info to use smotefamily::SMOTE
       ps = self$param_set$values
