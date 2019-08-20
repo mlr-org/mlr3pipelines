@@ -68,7 +68,10 @@ test_that("LearnerRegrAvg", {
   df = data.frame(x = matrix(rnorm(200), nrow = 10), y = rnorm(100))
   colnames(df)[1:10] = paste0(letters[1:10], ".response")
   colnames(df)[11:20] = paste0(letters[1:10], ".se")
-  df[11:20] = abs(df[11:20])
+  for (i in 11:20) {
+    # the shorter df[11:20] = abs(df[11:20]) gives a partial match warning :-/
+    df[[i]] = abs(df[[i]])
+  }
   tsk = TaskRegr$new(id = "tsk", backend = df, target = "y")
 
   lrn$predict_type = "response"
