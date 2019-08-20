@@ -289,7 +289,7 @@ Graph = R6Class("Graph",
         # Draw edges between points
         visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
       } else {
-        plot(ig, layout = layout)
+        suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
       }
     },
 
