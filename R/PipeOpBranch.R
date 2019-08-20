@@ -88,11 +88,11 @@ PipeOpBranch = R6Class("PipeOpBranch",
       )
       if (is.numeric(options)) {
         options = round(options)
-        param = ParamInt$new("selection", lower = 1L, upper = options, tags = "required")
+        param = ParamInt$new("selection", lower = 1L, upper = options, tags = c("train", "predict", "required"))
         options = rep_suffix("output", options)
         initval = 1
       } else {
-        param = ParamFct$new("selection", levels = options, tags = "required")
+        param = ParamFct$new("selection", levels = options, tags = c("train", "predict", "required"))
         initval = options[1]
       }
       ps = ParamSet$new(params = list(param))

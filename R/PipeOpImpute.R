@@ -54,9 +54,9 @@ PipeOpImpute = R6Class("PipeOpImpute",
   public = list(
     initialize = function(id = "impute", param_vals = list()) {
       ps = ParamSet$new(list(
-        ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median"),
-        ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl"),
-        ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train")
+        ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median", tags = c("train", "predict")),
+        ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl", tags = c("train", "predict")),
+        ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict"))
       ))
       ps$values = list(method_num = "median", method_fct = "newlvl", add_dummy = "missing_train")
       super$initialize(id, ps, param_vals = param_vals)

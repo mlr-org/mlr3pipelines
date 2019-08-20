@@ -93,9 +93,9 @@ PipeOpFilter = R6Class("PipeOpFilter",
       self$filter = filter$clone(deep = TRUE)
       self$filter$param_set$set_id = ""
       private$.outer_param_set = ParamSet$new(list(
-        ParamInt$new("nfeat", lower = 0),
-        ParamDbl$new("frac", lower = 0, upper = 1),
-        ParamDbl$new("cutoff")
+        ParamInt$new("nfeat", lower = 0, tags = "train"),
+        ParamDbl$new("frac", lower = 0, upper = 1, tags = "train"),
+        ParamDbl$new("cutoff", tags = "train")
       ))
       private$.outer_param_set$set_id = "filter"
       super$initialize(id, self$param_set, param_vals = param_vals)

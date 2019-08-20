@@ -78,7 +78,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   public = list(
     initialize = function(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
       assert_integerish(innum, lower = 0)
-      param_set$add(ParamUty$new("weights", custom_check = check_weights(innum)))
+      param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
       param_set$values$weights = 1
       inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,

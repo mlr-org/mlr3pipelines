@@ -21,8 +21,9 @@ testthat::test_package("mlr3pipelines")
 
 testthat::test_package("mlr3pipelines", filter = "dictionary")
 testthat::test_package("mlr3pipelines", filter = "typecheck")
-testthat::test_package("mlr3pipelines", filter = "usecases")
+testthat::test_package("mlr3pipelines", filter = "multichannels")
 
+devtools::test("mlr3pipelines", stop_on_warning = TRUE)
 
 
 testthat::test_package("mlr3pipelines", filter = "apply")

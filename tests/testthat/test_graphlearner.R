@@ -10,6 +10,7 @@ test_that("basic graphlearn tests", {
   expect_true(run_experiment(task, glrn)$ok)
 
   glrn = GraphLearner$new(gr)
+  expect_learner(glrn)
   glrn$train(task)
 
   expect_prediction_classif({
@@ -32,6 +33,7 @@ test_that("basic graphlearn tests", {
 
   gr2 = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
   glrn2 = GraphLearner$new(gr2)
+  expect_learner(glrn2)
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
   expect_prediction_classif({
