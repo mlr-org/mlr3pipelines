@@ -92,6 +92,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
       self$filter$param_set$set_id = ""
+      map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
       private$.outer_param_set = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0, tags = "train"),
         ParamDbl$new("frac", lower = 0, upper = 1, tags = "train"),
