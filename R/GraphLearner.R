@@ -10,6 +10,7 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#' @family Learners
 #' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
@@ -20,18 +21,20 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       self$graph = graph
       output = graph$output
 
-      private$check_output(output)
+      if (nrow(output) != 1) {
+        stop("'graph' must have exactly one output channel")
+      }
+      if (!are_types_compatible(output$predict, "Prediction")) {
+        stop("'graph' output type not 'Prediction' (or compatible with it)")
+      }
 
       if (is.null(task_type)) {
-        class_table = mlr_reflections$constructors[, list(
-          task_type = get("task_type"),
-          task = map(get("Task"), "classname"),
-          prediction = map(get("Prediction"), "classname"))]
+        class_table = mlr_reflections$task_types
         input = graph$input
         inferred = c(
           match(c(output$train, output$predict), class_table$prediction),
           match(c(input$train, input$predict), class_table$task))
-        inferred = unique(class_table$task_type[na.omit(inferred)])
+        inferred = unique(class_table$type[na.omit(inferred)])
         if (length(inferred) > 1) {
           stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(inferred))
         }
@@ -87,16 +90,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         stop("param_set is read-only.")
       }
       self$graph$param_set
-    }
-  ),
-  private = list(
-    check_output = function(output) {
-      if (nrow(output) != 1) {
-        stop("'graph' has more than one output channel")
-      }
-      if (!are_types_compatible(output$predict, "Prediction")) {
-        stop("'graph' output type not 'Prediction' (or compatible with it)")
-      }
     }
   )
 )

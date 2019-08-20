@@ -1,49 +1,83 @@
 #' @title PipeOpBranch
 #'
-#' @name mlr_pipeop_branch
+#' @usage NULL
+#' @name mlr_pipeops_branch
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' This pipeop is used for multiplexing between different possible paths and
-#' should be used in conjunction with [`PipeOpUnbranch`].
+#' Perform alternative path branching: [`PipeOpBranch`] has multiple output channels
+#' that connect to different paths in a [`Graph`]. At any time, only one of these
+#' paths will be taken for execution. At the end of the different paths, the
+#' [`PipeOpUnbranch`] `PipeOp` must be used to indicate the end of alternative paths.
 #'
-#' @section Methods:
-#' * `PipeOpBranch$new(options, id = "branch")` \cr
-#'   (`numeric(1)` | `character`, `character(1)`) -> `self` \cr
-#'   Constructor. If `options` is an integer number, it determines the number of
+#' Not to be confused with [`PipeOpCopy`], the naming scheme is a bit unfortunate.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpBranch$new(options, id = "branch", param_vals = list())
+#' ```
+#' * `options` :: `numeric(1)` | `character`\cr
+#'   If `options` is an integer number, it determines the number of
 #'   output channels / options that are created, named `output1`...`output<n>`. The
 #'   `$selection` parameter will then be a [`ParamInt`].
 #'   If `options` is a `character`, it determines the names of channels directly.
 #'   The `$selection` parameter will then be a [`ParamFct`].
+#" * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"branch"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
-#' @section Parameter Set:
-#' * `selection`: (`numeric(1)` | `character(1)`) \cr
+#' @section Input and Output:
+#' [`PipeOpBranch`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
+#'
+#' [`PipeOpBranch`] has multiple output channels depending on the `options` construction argument, named `"output1"`, `"output2"`, ...
+#' if `options` is `numeric`, and named after each `options` value if `options` is a `character`.
+#' All output channels produce the object given as input (`"*"`) or [`NO_OP`], both during training and prediction.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' * `selection` :: `numeric(1)` | `character(1)`\cr
 #'   Selection of branching path to take. Is a `ParamInt` if the `options` parameter
 #'   during construction was a `numeric(1)`, and ranges from 1 to `options`. Is a
 #'   `ParamFct` if the `options` parameter was a `character` and its possible values
-#'   are the `options` values.
+#'   are the `options` values. Initialized to either 1 (if the `options` construction argument is `numeric(1)`)
+#'   or the first element of `options` (if it is `character`).
 #'
-#' @section Details:
-#' Creates a PipeOp with multiple output channels that can be used to
-#' create a Graph network with alternative paths. If `options` is an `integer(1)`,
-#' it determines the number of out-paths and `selection` is an integer parameter
-#' choosing between these paths. If `options` is a `character`, then `length(options)`
-#' out channels are created, each named according to `options`.
+#' @section Internals:
+#' Alternative path branching is handled by the [`PipeOp`] backend. To indicate that
+#' a path should not be taken, [`PipeOpBranch`] returns the [`NO_OP`] object on its
+#' output channel. The [`PipeOp`] handles each [`NO_OP`] input by automatically
+#' returning a [`NO_OP`] output without calling `$train_internal()` or `$predict_internal()`,
+#' until [`PipeOpUnbranch`] is reached. [`PipeOpUnbranch`] will then take multiple inputs,
+#' all except one of which must be a [`NO_OP`], and forward the only non-[`NO_OP`]
+#' object on its output.
 #'
-#' To create a usable graph, the branching paths need to be brought together
-#' using [`PipeOpUnbranch`].
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
 #'
-#' Not to be confused with [`PipeOpCopy`], the naming scheme is a bit unfortunate.
+#' @section Methods:
+#' Only methods inherited from [`PipeOp`].
+#'
+#' @examples
+#' pca = mlr_pipeops$get("pca")
+#' nop = mlr_pipeops$get("nop")
+#' choices = c("pca", "nothing")
+#' gr = mlr_pipeops$get("branch", choices) %>>%
+#'   gunion(list(pca, nop)) %>>%
+#'   mlr_pipeops$get("unbranch", choices)
+#'
+#' gr$param_set$values$branch.selection = "pca"
+#' gr$train(list("iris"))
+#'
+#' gr$param_set$values$branch.selection = "nothing"
+#' gr$train(list("iris"))
 #'
 #' @family PipeOps
 #' @family Path Branching
 #' @include PipeOp.R
 #' @export
-#' @examples
-#' pca = PipeOpPCA$new()
-#' nop = PipeOpNOP$new()
-#' choices = c("pca", "nothing")
-#' PipeOpBranch$new(choices) %>>% gunion(list(pca, nop)) %>>% PipeOpUnbranch$new(choices)
 PipeOpBranch = R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
@@ -54,13 +88,15 @@ PipeOpBranch = R6Class("PipeOpBranch",
       )
       if (is.numeric(options)) {
         options = round(options)
-        param = ParamInt$new("selection", lower = 1L, upper = options, default = 1L)
+        param = ParamInt$new("selection", lower = 1L, upper = options, tags = c("train", "predict", "required"))
         options = rep_suffix("output", options)
+        initval = 1
       } else {
-        param = ParamFct$new("selection", levels = options, default = options[1L])
+        param = ParamFct$new("selection", levels = options, tags = c("train", "predict", "required"))
+        initval = options[1]
       }
       ps = ParamSet$new(params = list(param))
-      ps$values$selection = ps$params$selection$default
+      ps$values$selection = initval
       super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*")
@@ -107,19 +143,22 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #'   a `character(1)`, it is a prefix that is added to the `PipeOp` IDs *additionally*
 #'   to the input argument list.
 #' @examples
-#' po_pca = PipeOpPCA$new()
-#' po_nop = PipeOpNOP$new()
+#' po_pca = mlr_pipeops$get("pca")
+#' po_nop = mlr_pipeops$get("nop")
 #'
 #' branch(pca = po_pca, nothing = po_nop)
 #' # gives the same as
 #' branches = c("pca", "nothing")
-#' PipeOpBranch$new(branches) %>>% gunion(list(po_pca, po_nop)) %>>% PipeOpUnbranch$new(branches)
+#' mlr_pipeops$get("branch", branches) %>>%
+#'   gunion(list(po_pca, po_nop)) %>>%
+#'   mlr_pipeops$get("unbranch", branches)
 #'
-#' branch(pca = po_pca, nothing = po_nop, .prefix_branchops = "br_", .prefix_paths = "xy_")
+#' branch(pca = po_pca, nothing = po_nop,
+#'   .prefix_branchops = "br_", .prefix_paths = "xy_")
 #' #gives the same as
-#' PipeOpBranch$new(branches, id = "br_branch") %>>%
+#' mlr_pipeops$get("branch", branches, id = "br_branch") %>>%
 #'   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) %>>%
-#'   PipeOpUnbranch$new(branches, id = "br_unbranch")
+#'   mlr_pipeops$get("unbranch", branches, id = "br_unbranch")
 #'
 #' @export
 branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = FALSE) {
@@ -169,8 +208,8 @@ branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = 
     gin$op.id = paste0(pnp, gin$op.id)
 
     pmap(list(
-        src_id = branch_id, dst_id = gin$op.id,
-        src_channel = branch_chan, dst_channel = gin$channel.name),
+      src_id = branch_id, dst_id = gin$op.id,
+      src_channel = branch_chan, dst_channel = gin$channel.name),
       graph$add_edge)
   })
   graph

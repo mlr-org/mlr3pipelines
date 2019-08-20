@@ -8,8 +8,8 @@ test_that("PipeOpCopy - basic properties", {
 
   po = PipeOpCopy$new(3)
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 1)
-  expect_data_table(po$output, nrow = 3)
+  expect_data_table(po$input, nrows = 1)
+  expect_data_table(po$output, nrows = 3)
 })
 
 

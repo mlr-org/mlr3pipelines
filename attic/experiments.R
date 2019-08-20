@@ -19,11 +19,13 @@ tools::buildVignettes(dir = "mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "dictionary")
+testthat::test_package("mlr3pipelines", filter = "chunk")
+testthat::test_package("mlr3pipelines", filter = "mutate")
+testthat::test_package("mlr3pipelines", filter = "filter")
 
-testthat::test_package("mlr3pipelines", filter = "graphlearner")
+devtools::test("mlr3pipelines", stop_on_warning = TRUE)
 
-testthat::test_package("mlr3pipelines", filter = "weightedaverage")
+
 testthat::test_package("mlr3pipelines", filter = "apply")
 
 

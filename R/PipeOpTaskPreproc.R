@@ -29,7 +29,8 @@
 #'   If this is a `function`, it should take one argument (the input `Task`) and return a
 #'   `character` indicating the feature columns that should be operated on.
 #'   `$affect_columns()` is then called during training and
-#'   only features named in its return value are seen by the training / prediction function. \cr
+#'   only features named in its return value are seen by the training / prediction function.
+#'   See [`Selector`] for example functions. Defaults to `selector_all()`. \cr
 #'   This should not be changed if `can_subset_columns` is `FALSE`, and depends on the `PipeOpTaskPreproc` subclass.
 #' * `state$affected_cols` :: `character` \cr
 #'   Set during `$train()`: Indicating the names of features to operate on, if  parameter
@@ -90,7 +91,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   public = list(
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task") {
       if (can_subset_cols) {
-        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null)
+        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train")
         if ("ParamSetCollection" %in% class(param_set)) {
           param_set$add(ParamSet$new(list(acp)))
         } else {

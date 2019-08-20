@@ -25,14 +25,10 @@ navbar:
   #  href: index.html
   - text: Vignettes
     menu:
-    - text: First Look
-      href: articles/quickintro.html
     - text: Introduction
       href: articles/introduction.html
-    - text: "Example Graphs"
-      href: articles/examples.html
-    - text: Custom PipeOps
-      href: articles/create_a_custom_pipeop.html
+    - text: Comparison to Other Packages
+      href: articles/comparison_mlr3pipelines_mlr_sklearn.html
 
   - text: Function Reference
     href: reference/index.html
@@ -57,26 +53,39 @@ reference:
     contents:
       - PipeOp
       - Graph
+      - PipeOpTaskPreproc
+      - PipeOpTaskPreprocSimple
   - title: Graph Tools
     contents:
       - "%>>%"
       - gunion
       - greplicate
+      - branch
   - title: PipeOps
     contents:
       - mlr_pipeops
-      - starts_with("mlr_pipeop_")
+      - po
+      - starts_with("mlr_pipeops_")
+  - title: Learners
+    contents:
+      - mlr_learners_graph
+      - mlr_learners_avg
   - title: Helpers
     contents:
+      - Selector
+      - as_graph
       - assert_graph
+      - as_pipeop
+      - assert_pipeop
       - is_noop
       - NO_OP
       - filter_noop
-      - reset_class_hierarchy_cache
-      - add_class_hierarchy_cache
-      - reset_class_hierarchy_cache
   - title: Abstract PipeOps
     contents:
-      - PipeOpTaskPreproc
-      - PipeOpTaskPreprocSimple
       - PipeOpEnsemble
+  - title: PipeOp Type Inference
+    contents:
+      - add_class_hierarchy_cache
+      - reset_class_hierarchy_cache
+      - register_autoconvert_function
+      - reset_autoconvert_register

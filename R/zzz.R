@@ -10,15 +10,11 @@
 "_PACKAGE"
 
 
-.onLoad = function(libname, pkgname) { # nocov start
+.onLoad = function(libname, pkgname) {  # nocov start
 
-  mlr_learners$add("graph", GraphLearner, required_args = "graph")
+  # FIXME: remove nonsense graph default if mlr-org/mlr3#328 can be fixed
+  mlr_learners$add("graph", GraphLearner, graph = "classif.featureless")
 
   backports::import(pkgname)
 
-  mlr_reflections$constructors = rowwise_table(
-      ~task_type, ~Task            , ~Learner            , ~Prediction            , ~Measure            ,
-      "regr"    , mlr3::TaskRegr   , mlr3::LearnerRegr   , mlr3::PredictionRegr   , mlr3::MeasureRegr   ,
-      "classif" , mlr3::TaskClassif, mlr3::LearnerClassif, mlr3::PredictionClassif, mlr3::MeasureClassif)
-  setkey(mlr_reflections$constructors, "task_type")
-} # nocov end
+}  # nocov end

@@ -123,11 +123,10 @@ PipeOp = R6Class("PipeOp",
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0)) {
       private$.param_set = assert_param_set(param_set)
       self$param_set$values = insert_named(self$param_set$values, param_vals)
-      self$id = assert_string(id) # also sets the .param_set$set_id
+      self$id = assert_string(id)  # also sets the .param_set$set_id
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
-      require_namespaces(self$packages)
     },
 
     print = function(...) {
@@ -147,6 +146,8 @@ PipeOp = R6Class("PipeOp",
     },
 
     train = function(input) {
+      require_namespaces(self$packages)
+
       if (every(input, is_noop)) {
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
@@ -243,10 +244,9 @@ check_types = function(self, data, direction, operation) {
     if (!is.null(autoconverter)) {
       mlr3misc::require_namespaces(autoconverter$packages,
         sprintf("The following packages are required to convert object of class %s to class %s: %%s", class(data[[idx]])[1], typereq))
-      tryCatch(
-        { data[[idx]] = autoconverter$fun(data[[idx]]) },
-        error = function(e) msg <<- sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message)
-      )
+      tryCatch({
+        data[[idx]] = autoconverter$fun(data[[idx]])
+      }, error = function(e) msg <<- sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message))
     }
     assert_class(data[[idx]], typereq,
       .var.name = sprintf("%s %s (\"%s\") of PipeOp %s%s",

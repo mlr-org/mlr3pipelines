@@ -57,7 +57,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
-    mlr-org/mlr3@cbb4584,
+    mlr-org/mlr3,
     mlr-org/mlr3filters,
     mlr-org/mlr3learners,
     mlr-org/mlr3misc,
@@ -76,13 +76,14 @@ Collate:
     'utils.R'
     'PipeOp.R'
     'PipeOpEnsemble.R'
-    'LearnerWeightedAverage.R'
+    'LearnerAvg.R'
     'NO_OP.R'
-    'PipeOpTaskPreproc.R'
-    'PipeOpApply.R'
-    'PipeOpBalanceSample.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
+    'PipeOpTaskPreproc.R'
+    'PipeOpClassBalancing.R'
+    'PipeOpClassifAvg.R'
+    'PipeOpColApply.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
     'PipeOpFeatureUnion.R'
@@ -90,15 +91,14 @@ Collate:
     'PipeOpImpute.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
-    'PipeOpMajorityVote.R'
-    'PipeOpModelAvg.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpRegrAvg.R'
     'PipeOpScale.R'
     'PipeOpSelect.R'
     'PipeOpSubsample.R'
-    'PipeOpUnBranch.R'
+    'PipeOpUnbranch.R'
     'Selector.R'
     'assert_graph.R'
     'greplicate.R'
