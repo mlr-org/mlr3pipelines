@@ -33,12 +33,17 @@ test_that("basic graphlearn tests", {
 
   gr2 = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
   glrn2 = GraphLearner$new(gr2)
+  glrn2_clone = glrn2$clone(deep = TRUE)
   expect_learner(glrn2)
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
+  glrn2_clone$state = glrn2$state
+  expect_deep_clone(glrn2_clone, glrn2$clone(deep = TRUE))
   expect_prediction_classif({
     graphpred2 = glrn2$predict(task)
   })
+
+  expect_equal(glrn2$predict(task), glrn2_clone$predict(task))
 
   scidf = cbind(scale(iris[1:4]), iris[5])
   scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
