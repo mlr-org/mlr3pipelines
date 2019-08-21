@@ -172,7 +172,7 @@ nlopt_objfun = function(weights, task, measure, avg_weight_fun, data) {
 
 optimize_objfun_nlopt = function(task, pars, avg_weight_fun, n_weights, data) {
   require_namespaces("nloptr")
-  measure = assert_measure(pars$measure)
+  measure = assert_measure(as_measure(pars$measure, task_type = task$task_type))
 
   opt = nloptr::nloptr(
     x0 = rep(1 / n_weights, n_weights),

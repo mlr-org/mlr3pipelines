@@ -171,10 +171,10 @@ reset_autoconvert_register = function() {
 
 default_acr = list(
   # need to put mlr3::assert_X inside functions because we shouldn't refer to mlr3 funs directly at build time
-  list("Task", function(x) assert_task(x), packages = "mlr3"),
-  list("Measure", function(x) assert_measure(x), packages = "mlr3"),
-  list("Learner", function(x) assert_learner(x), packages = "mlr3"),
-  list("Resampling", function(x) assert_resampling(x), packages = "mlr3"),
+  list("Task", function(x) assert_task(as_task(x)), packages = "mlr3"),
+  list("Measure", function(x) assert_measure(as_measure(x)), packages = "mlr3"),
+  list("Learner", function(x) assert_learner(as_learner(x)), packages = "mlr3"),
+  list("Resampling", function(x) assert_resampling(as_resampling(x)), packages = "mlr3"),
   list("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
 )
 

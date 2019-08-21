@@ -107,7 +107,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      private$.learner = assert_learner(learner, clone = TRUE)
+      private$.learner = assert_learner(as_learner(learner, clone = TRUE))
       private$.learner$param_set$set_id = ""
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
