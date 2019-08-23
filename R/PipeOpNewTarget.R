@@ -28,13 +28,13 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
     },
-    train = function(inputs) {
-      outputs = private$convert_task(inputs)
+    train_internal = function(inputs) {
+      outputs = private$convert_task_type(inputs)
       self$state = list()
       return(outputs)
     },
-    predict = function(inputs) {
-      private$convert_task(inputs)
+    predict_internal = function(inputs) {
+      private$convert_task_type(inputs)
     }
   ),
   active = list(
@@ -47,7 +47,7 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
     },
     new_task_type = function(val) {
       if (!missing(val)) {
-        assert_choice(val, mlr3::mlr_reflections$task_types)
+        assert_choice(val, mlr3::mlr_reflections$task_types$type)
         private$.new_task_type = val
       }
       private$.new_task_type
@@ -56,28 +56,38 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
   private = list(
     .new_target = NULL,
     .new_task_type = NULL,
-    convert_task = function(inputs) {
+    get_task_type = function(new_target_type) {
+      # FIXME: This is currently not extensible. Would require changing mlr_reflections.
+      ifelse(new_target_type %in% c("factor", "character"), "classif", "regr")
+    },
+    convert_task_type = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       assert_choice(private$.new_target, intask$col_info$id)
       if (is.null(private$.new_task_type)) {
         new_target_type = intask$col_info$type[intask$col_info$id == private$.new_target]
-        private$.new_task_type = ifelse(new_target_type %in% c("factor", "character"), "classif", "regr")
+        private$.new_task_type = private$get_task_type(new_target_type)
       }
-      assert_choice(private$.new_task_type, mlr3::mlr_reflections$task_types)
-      intask$set_col_role(intask$col_roles$target, "unused")
-      intask$set_col_role(self$new_target, "target")
-
-      if (private$.new_task_type != intask$task_type) {
-        if (private$.new_task_type == "regr") {
-          intask = TaskRegr$new(intask$id, backend = intask$backend, target = private$.new_target)
-        } else {
-          intask = TaskClassif$new(intask$id, backend = intask$backend, target = private$.new_target)
-        }
-      }
-      list(intask)
+      task = convert_task(intask, private$.new_task_type, private$.new_target)
+      task$set_col_role(intask$col_roles$target, "unused")
+      list(task)
     }
   )
 )
 
 #' @include mlr_pipeops.R
 mlr_pipeops$add("new_target", PipeOpNewTarget)
+
+
+#' Convert a task from one type to another.
+#' Requires for the task type to be in `mlr_reflections$task_types`.
+convert_task = function(intask, new_type, new_target = NULL) {
+  assert_task(intask)
+  assert_choice(new_target, intask$col_info$id, null.ok = TRUE)
+  assert_choice(new_type, mlr_reflections$task_types$type)
+  if (is.null(new_target)) new_target = intask$target_names
+  if (new_type == intask$task_type & intask$target_names == new_target) return(intask)
+  # Get task_type from mlr_reflections and call constructor.
+  encapsulate("none",
+    .f = eval(parse(text = paste0(mlr_reflections$task_types[type == new_type, task], "$new"))),
+    list(id = intask$id, backend = intask$backend, target = new_target))$result
+}

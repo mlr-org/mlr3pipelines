@@ -10,34 +10,62 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#' @family Learners
 #' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
-    model = NULL,
-    initialize = function(graph, task_type = "classif", id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), predict_type = mlr_reflections$learner_predict_types[[task_type]][1]) {
-      # Please don't `assert_r6(graph, "Graph")` here, we have assert_graph(coerce = TRUE) for that, graph can be a PipeOp too
-      assert_choice(task_type, c("classif", "regr"))
-      # FIXME: drop task_type and allow all task types, as soon as mlr3 allows that
-      assert_subset(task_type, mlr_reflections$task_types)
-      graph = assert_graph(graph, coerce = TRUE, deep_copy = TRUE)
+    initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, predict_type = NULL) {
+
+      graph = as_graph(graph, deep_copy = TRUE)
       self$graph = graph
+      output = graph$output
+      if (nrow(output) != 1) {
+        stop("'graph' must have exactly one output channel")
+      }
+      if (!are_types_compatible(output$predict, "Prediction")) {
+        stop("'graph' output type not 'Prediction' (or compatible with it)")
+      }
+
+      if (is.null(task_type)) {
+        class_table = mlr_reflections$task_types
+        input = graph$input
+        inferred = c(
+          match(c(output$train, output$predict), class_table$prediction),
+          match(c(input$train, input$predict), class_table$task))
+        inferred = unique(class_table$type[na.omit(inferred)])
+        if (length(inferred) > 1) {
+          stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(inferred))
+        }
+        task_type = c(inferred, "classif")[1]
+      }
+      assert_subset(task_type, mlr_reflections$task_types$type)
+
+      if (is.null(predict_type)) {
+        predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
+      }
+
+      assert_subset(predict_type, names(mlr_reflections$learner_predict_types[[task_type]]))
+
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
-        predict_types = mlr_reflections$learner_predict_types[[task_type]],
+        predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
         properties = mlr_reflections$learner_properties[[task_type]],
         param_vals = param_vals)
       private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
     },
-    train = function(task) {
+    train_internal = function(task) {
+      on.exit({self$graph$state = NULL})
       self$graph$train(task)
-      self$model = self$graph
-      invisible(self)
+      state = self$graph$state
+      state
     },
-    predict = function(task) {
+    predict_internal = function(task) {
+      on.exit({self$graph$state = NULL})
+      self$graph$state = self$model
       prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
@@ -65,5 +93,3 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   )
 )
 
-# FIXME This could work if mlr-org/mlr3#177 were addressed
-# mlr_learners$add("graph", GraphLearner)

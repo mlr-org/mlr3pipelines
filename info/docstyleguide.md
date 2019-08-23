@@ -31,7 +31,7 @@ Describes parameters in `$param_set` / `$param_vals`. Format is the same as for 
   
   `` `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr``
   
-* **method type description in `@section Methods`**: classes in backticks (linked if not default R package classes; possibly with length given in parentheses if vector type), alternative classes separated by vertical bars (`|`), different arguments comma-separated, all surrounded by parentheses. Spaces before and after `|`, after `,`, but not after `(` or before `)` or `,`. Followed by arrow (` -> ` with spaces), followed by return type, followed by `\cr`. Functions without input ("nullary functions") have `()` in-type, functions with `invisible(NULL)` (e.g. `print`, `plot`) have `` `NULL` `` return type.
+* **method type description in `@section Methods`**: classes in backticks (linked if not default R package classes; possibly with length given in parentheses if vector type), alternative classes separated by vertical bars (`|`), different arguments comma-separated, all surrounded by parentheses. Spaces before and after `|`, after `,`, but not after `(` or before `)` or `,`. Followed by arrow (` -> ` with spaces), followed by return type, followed by `\cr`. Functions without input ("nopary functions") have `()` in-type, functions with `invisible(NULL)` (e.g. `print`, `plot`) have `` `NULL` `` return type.
 
   ``() -> `NULL` \cr``
   

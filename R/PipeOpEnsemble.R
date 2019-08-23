@@ -1,338 +1,158 @@
 #' @title PipeOpEnsemble
 #'
+#' @usage NULL
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
-#' Parent class for PipeOps that aggregate a list of predictions.
-#' Offers the private method `$merge_predictions()` which does exactly that.
+#' Parent class for [`PipeOp`]s that aggregate predictions. Implements the `$train_internal()` and `$predict_internal()` methods necessary
+#' for a `PipeOp` and requires deriving classes to create the `private$weighted_avg_predictions()` function.
+#'
+#' @section Construction:
+#' Note: This object is typically constructed via a derived class, e.g. [`PipeOpClassifAvg`] or [`PipeOpRegrAvg`].
+#' ```
+#' PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+#' ```
+#'
+#' * `innum` :: `numeric(1)`\cr
+#'   Determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#' * `id` :: `character(1)`\cr
+#'   Identifier of the resulting  object.
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
+#'   ("Hyper"-)Parameters in form of a [`ParamSet`][paradox::ParamSet] for the resulting [`PipeOp`].
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#' * `packages` :: `character`\cr
+#'   Set of packages required for this `PipeOp`. These packages are loaded during `$train()` and `$predict()`, but not attached.
+#'   Default `character(0)`.
+#' * `prediction_type` :: `character(1)`\cr
+#'   The `predict` entry of the `$input` and `$output` type specifications.
+#'   Should be `"Prediction"` (default) or one of its subclasses, e.g. `"PredictionClassif"`, and correspond to the type accepted by
+#'   `$train_internal()` and `$predict_internal()`.
+#'
+#' @section Input and Output Channels:
+#' [`PipeOpEnsemble`] has multiple input channels depending on the `innum` construction argument, named `"input1"`, `"input2"`, ...
+#' if `innum` is nonzero; if `innum` is 0, there is only one *vararg* input channel named `"..."`.
+#' All input channels take only `NULL` during training and take a [`Prediction`][mlr3::Prediction] during prediction.
+#'
+#' [`PipeOpEnsemble`] has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] during prediction.
+#'
+#' The output during prediction is in some way a weighted averaged representation of the input.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' * `weights` :: `numeric`\cr
+#'   Relative weights of input predictions. If this has length 1, it is ignored and weighs all inputs equally. Otherwise it must have
+#'   length equal to the number of connected inputs. Initialized to 1 (equal weights).
+#'
+#' @section Internals:
+#' The commonality of ensemble methods using [`PipeOpEnsemble`] is that they take a `NULL`-input during training and save an empty `$state`. They can be
+#' used following a set of [`PipeOpLearner`] [`PipeOp`]s to perform (possibly weighted) prediction averaging. See e.g.
+#' [`PipeOpClassifAvg`] and [`PipeOpRegrAvg`] which both inherit from this class.
+#'
+#' Should it be necessary to use the output of preceding [`Learner`][mlr3::Learner]s
+#' during the "training" phase, then [`PipeOpEnsemble`] should not be used. In fact, if training time behaviour of a [`Learner`][mlr3::Learner] is important, then
+#' one should use a [`PipeOpLearnerCV`] instead of a [`PipeOpLearner`], and the ensembling can be done by a [`Learner`][mlr3::Learner] encapsuled by a [`PipeOpLearner`].
+#' See [`LearnerClassifAvg`] and [`LearnerRegrAvg`] for examples.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
 #' @section Methods:
-#' * `PipeOpEnsemble$new(innum, id)` \cr
-#'   (`numeric(1)`, `character(1)`) -> `self` \cr
-#'   Constructor. `innum` determines the number of input channels.
+#' Methods inherited from [`PipeOp`] as well as:
+#' * `weighted_avg_prediction(inputs, weights, row_ids, truth)`\cr
+#'   (`list` of [`Prediction`][mlr3::Prediction], `numeric`, `integer` | `character`, `list`) -> `NULL`\cr
+#'   Create [`Prediction`][mlr3::Prediction]s that correspond to the weighted average of incoming [`Prediction`][mlr3::Prediction]s. This is
+#'   called by `$predict_internal()` with cleaned and sanity-checked values: `inputs` are guaranteed to fit together,
+#'   `row_ids` and `truth` are guaranteed to be the same as each one in `inputs`, and `weights` is guaranteed to have the same length as `inputs`.\cr
+#'   This method is abstract, it must be implemented by deriving classes.
+#'
 #' @family PipeOps
+#' @family Ensembles
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
-
   public = list(
-    weights = NULL,
-    measure = NULL,
-    initialize = function(innum, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
-      assert_integerish(innum, lower = 1)
+    initialize = function(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
+      assert_integerish(innum, lower = 0)
+      param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
+      param_set$values$weights = 1
+      inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = rep_suffix("input", innum), train = "NULL", predict = "Prediction"),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction")
-      )
+        input = data.table(name = inname, train = "NULL", predict = prediction_type),
+        output = data.table(name = "output", train = "NULL", predict = prediction_type))
     },
-    train = function(inputs) {
+    train_internal = function(inputs) {
       self$state = list()
       list(NULL)
     },
-    predict = function(inputs) stop("abstract")
-  ),
-  private = list(
-    merge_predictions = function(inputs) {
-      do.call("rbind", map(inputs, function(x) as.data.table(x)))
-    },
-    objfun = function(wts, inputs) {
-      prd = private$weighted_avg_predictions(inputs, wts)
-      e = list("prediction" = prd)
-      res = self$measure$calculate(e)
-      if (!self$measure$minimize) res = -res
-      res
-    },
-    optimize_objfun_nlopt = function(inputs) {
-      requireNamespace("nloptr")
-      init_weights = rep(1 / length(inputs), length(inputs))
-      pv = self$param_set$values
-      eval_g_ineq =
-      opts = pv[which(!(names(pv) %in% c("measure", "eval_g_ineq", "lb", "ub")))]
-      opt = nloptr::nloptr(
-        x0 = init_weights,
-        eval_f = private$objfun,
-        lb = rep(pv$lb, length(inputs)),
-        ub = rep(pv$ub, length(inputs)),
-        eval_g_ineq = pv$eval_g_ineq,
-        opts = opts,
-        inputs = inputs
-      )
-      return(opt$solution)
-    }
-  )
-)
+    predict_internal = function(inputs) {
+      weights = self$param_set$values$weights
+      row_ids = inputs[[1]]$row_ids
+      map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
+      truth = inputs[[1]]$truth
+      if (length(weights) == 1) weights = rep(1, length(inputs))
+      weights = weights / sum(weights)
+      assert_numeric(weights, any.missing = FALSE, len = length(inputs))
 
-#' @title PipeOpModelAvg
-#'
-#' @name mlr_pipeop_modelavg
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`].
-#'
-#' @description
-#' Averages its input (a `list` of [`PredictionRegr`]).
-#' Only used for regression `Prediction`s.
-#' Weights can be set by the user, if none are provided, defaults to
-#' equal weights `rep(1/innum, innum)` for each prediction.
-#' Offers a `$weights` slot to set/get weights for each learner.
-#' Returns a single [`PredictionRegr`].
-#' Defaults to equal weights for each model.
-#'
-#' @family PipeOps
-#' @examples
-#' op = PipeOpModelAvg$new(3)
-#' @export
-PipeOpModelAvg = R6Class("PipeOpModelAvg",
-  inherit = PipeOpEnsemble,
-
-  public = list(
-    initialize = function(innum, weights = NULL, id = "modelavg", param_vals = list(),
-      param_set = ParamSet$new(), packages = character(0)) {
-      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
-      if (is.null(weights)) weights = rep(1/innum, innum)
-      assert_numeric(weights, len = innum)
-      self$weights = weights
-    },
-    predict = function(inputs) {
-      assert_true(unique(map_chr(inputs, "task_type")) == "regr")
-      prds = private$weighted_avg_predictions(inputs, self$weights)
-      list(private$make_prediction_regr(prds))
-    }
-  ),
-  private = list(
-    weighted_avg_predictions = function(inputs, weights) {
-      assert_numeric(weights, len = length(inputs))
-      df = map_dtr(inputs, function(x) data.frame("row_id" = x$row_ids, "response" = x$response))
-      df = unique(df[, lapply(.SD, weighted.mean, w = weights), by = "row_id"])
-      merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
-    },
-    make_prediction_regr = function(prds) {
-      p = PredictionRegr$new()
-      p$row_ids = prds$row_id
-      p$response = prds$response
-      p$truth = prds$truth
-      p$predict_types = "response"
-      return(p)
-    }
-  )
-)
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("modelavg", PipeOpModelAvg, list("N"))
-
-
-#' @title PipeOpNlOptModelAvg
-#'
-#' @format [R6Class] PipeOpNlOptModelAvg
-#'
-#' @name mlr_pipeop_nloptmajorityvote
-#' @format [`R6Class`] inheriting from [`PipeOpModelAvg`].
-#'
-#' @description
-#' Aggregates over different [`PredictionRegr`]s.
-#' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
-#' For help with nloptr see [`nloptr::nloptr.print.options()`].
-#' Returns a single [`PredictionRegr`].
-#' By default, optimizes [`MeasureRegrMSE`] and only allows weights between 0 and 1.
-#' Used for regression [`Prediction`]s.
-#'
-#' @family PipeOps
-#' @examples
-#' op = PipeOpNlOptModelAvg$new(3)
-#' @export
-PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
-  inherit = PipeOpModelAvg,
-
-  public = list(
-    measure = NULL,
-    initialize = function(innum, id = "nloptmodelavg", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("measure", default = NULL),
-        ParamFct$new("algorithm", default = "NLOPT_LN_COBYLA",
-          levels = strsplit(nloptr::nloptr.get.default.options()[1, "possible_values"], ", ")[[1]]),
-        ParamUty$new("eval_g_ineq", default = function(x) max(x) - 1),
-        ParamDbl$new("xtol_rel", default = 10^-4, lower = 0, upper = Inf),
-        ParamDbl$new("xtol_abs", default = 0, lower = 0, upper = Inf),
-        ParamDbl$new("ftol_rel", default = 0, lower = 0, upper = Inf),
-        ParamDbl$new("ftol_abs", default = 0, lower = 0, upper = Inf),
-        ParamDbl$new("stopval", default = -Inf, lower = -Inf, upper = Inf),
-        ParamInt$new("maxeval", default = 100, lower = 1L, upper = Inf),
-        ParamInt$new("maxtime", default = -1L, lower = 0L, upper = Inf, special_vals = list(-1L)),
-        ParamDbl$new("lb", default = 0, lower = -Inf, upper = Inf),
-        ParamDbl$new("ub", default = 1, lower = -Inf, upper = Inf)
-        # FIXME: Possibly implement more aprams, currently not important
-      ))
-      ps$values = list(measure = NULL, algorithm = "NLOPT_LN_BOBYQA", xtol_rel = 10^-8, lb = 0, ub = 1)
-      super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
-    },
-    train = function(inputs) {
-      assert_list(inputs, "PredictionRegr")
-      self$measure = self$param_set$values$measure
-      if (is.null(self$measure)) self$measure = mlr_measures$get("regr.mse")
-      assert_measure(self$measure)
-      assert_true(self$measure$task_type == "regr")
-      wts = private$optimize_objfun_nlopt(inputs)
-      self$weights = wts
-      self$state = list("weights" = wts)
-    }
-  )
-)
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("nloptmodelavg", PipeOpNlOptModelAvg, list("N"))
-
-
-
-#' @title PipeOpMajorityVote
-#'
-#' @format [R6Class] PipeOpMajorityVote
-#'
-#' @name mlr_pipeop_majorityvote
-#' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
-#'
-#' @description
-#' Aggregates over different [`PredictionClassif`]s.
-#' Either computes the mode, if `predict_type` is `"response"`,
-#' or averages probabilities if `predict_type` is `"prob"`.
-#' Returns a single [`PredictionClassif`].
-#' Weights can be set by the user, if none are provided, defaults to
-#' equal weights `rep(1/innum, innum)` for each prediction.
-#' Used for classification `Prediction`s.
-#' Defaults to equal weights for each model.
-#'
-#' @family PipeOps
-#' @examples
-#' op = PipeOpMajorityVote$new(3)
-#' @export
-PipeOpMajorityVote = R6Class("PipeOpMajorityVote",
-  inherit = PipeOpEnsemble,
-
-  public = list(
-    weights = NULL,
-    initialize = function(innum, weights = NULL, id = "majorityvote", param_vals = list(),
-      param_set = ParamSet$new(), packages = character(0)) {
-      super$initialize(innum, id, param_vals = param_vals, param_set = param_set, packages = packages)
-      if(is.null(weights)) weights = rep(1/innum, innum)
-      assert_numeric(weights, len = innum)
-      self$weights = setNames(weights, self$input$name)
-    },
-    predict = function(inputs) {
-      assert_list(inputs, "PredictionClassif")
-      prds = private$weighted_avg_predictions(inputs, self$weights)
-      p = private$make_prediction_classif(prds, inputs[[1]]$predict_types)
-      list(p)
-    }
-  ),
-  private = list(
-    weighted_avg_predictions = function(inputs, wts) {
-      assert_numeric(wts, len = length(inputs))
-      assert_true(sum(wts) != 0)
       # Drop zero-weights for efficiency
-      inputs = inputs[!(wts == 0)]
-      wts = wts[!(wts == 0)]
+      # FIXME: this is not numerically stable
+      # Note: this is the behaviour of stats:::weighted.mean.default
+      inputs = inputs[weights != 0]
+      weights = weights[weights != 0]
 
-      has_probs = all(map_lgl(inputs, function(x) {"prob" %in% x$predict_types}))
-        if (has_probs) {
-          private$weighted_prob_avg(inputs, wts)
-        } else {
-          private$weighted_majority_vote(inputs, wts)
-        }
-    },
-    weighted_majority_vote = function(inputs, wts) {
-      # Unpack predictions, add weights
-      df = imap_dtr(inputs, function(x, i) {
-        data.table("row_id" = x$row_ids, "response" = x$response, "weight" = wts[i])
-      })
-      # Sum weights over response, keep max row.
-      df[, weight := sum(weight), by = list(response, row_id)]
-      df = unique(df[, maxwt := max(weight), by = "row_id"])[weight == maxwt]
-      merge(df[, c("row_id", "response")], as.data.table(inputs[[1]])[, c("row_id", "truth")],
-        by = "row_id")
-    },
-    weighted_prob_avg = function(inputs, wts) {
-      df = map_dtr(inputs, function(x) {data.frame("row_id" = x$row_ids, x$prob)})
-      df = unique(df[, lapply(.SD, weighted.mean, w = wts), by = row_id])
-      max.prob = max.col(df[, -"row_id"], ties.method='first')
-      df$response = factor(max.prob, labels = colnames(df[, -"row_id"])[unique(max.prob)])
-      levels(df$response) = colnames(df[, -c("row_id", "response")])
-      merge(df, as.data.table(inputs[[1]])[, c("row_id", "truth")], by = "row_id")
-    },
-    # FIXME This is ugly, but currently the best way
-    make_prediction_classif = function(prds, type) {
-      p = PredictionClassif$new()
-      p$row_ids = prds$row_id
-      p$truth = prds$truth
-      p$predict_types = type
-      if ("prob" %in% type) {
-        p$prob = as.matrix(prds[, -c("row_id", "response", "truth")])
-      }
-      if ("response" %in% type) p$response = prds$response
-      return(p)
+      list(private$weighted_avg_predictions(inputs, weights, row_ids, truth))
     }
+  ),
+  private = list(
+    weighted_avg_predictions = function(inputs, weights, row_ids, truth) stop("Abstract.")
   )
 )
 
-#' @include mlr_pipeops.R
-mlr_pipeops$add("majorityvote", PipeOpMajorityVote, list("N"))
+# Check function for ParamUty: Check that "weight" parameter
+# is a numeric vector and
+# has either length 1 or length `innum`. `innum` can be 0 (vararg),
+# in which case any length is accepted.
+#
+# It is necessary to put this function in top level because ParamUty does not
+# handle function environments well.
+check_weights = function(innum) {
+  if (innum == 0) {
+    function(x) assert_numeric(x, any.missing = FALSE)
+  } else {
+    function(x)
+      assert(check_numeric(x, len = innum, any.missing = FALSE),
+        check_numeric(x, len = 1, any.missing = FALSE))
+  }
+}
 
+# Weighted sum of `matrices`
+# @param matrices [`list` of `matrix`]: matrices to sum up, must be the same shape
+# @param weights [`numeric`]: weights, same length as `matrices`
+# @return `matrix`
+weighted_matrix_sum = function(matrices, weights) {
+  accmat = matrices[[1]] * weights[1]
+  for (idx in seq_along(matrices)[-1]) {
+    accmat = accmat + matrices[[idx]] * weights[idx]
+  }
+  accmat
+}
 
-#' @title PipeOpNlOptMajorityVote
-#'
-#' @format [R6Class] PipeOpNlOptMajorityVote
-#'
-#' @name mlr_pipeop_nloptmajorityvote
-#' @format [`R6Class`] inheriting from [`PipeOpMajorityVote`].
-#'
-#' @description
-#' Aggregates over different [`PredictionClassif`]s.
-#' Either computes the mode, if `predict_type` is `"response"`,
-#' or averages probabilities if `predict_type` is `"prob"`.
-#' Weights for each learner are learned using (nloptr)[nloptr::nloptr].
-#' For help with nloptr see [`nloptr::nloptr.print.options()`].
-#' Returns a single [`PredictionClassif`].
-#' As a default, optimizes [`MeasureClassifMMCE`] and only allows weights between 0 and 1.
-#' Used for classification [`Prediction`]s.
-#'
-#' @family PipeOps
-#' @examples
-#' op = PipeOpNlOptMajorityVote$new(3)
-#' @export
-PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
-  inherit = PipeOpMajorityVote,
-
-  public = list(
-    measure = NULL,
-
-    initialize = function(innum, id = "nloptmajorityvote", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("measure", default = NULL),
-        ParamFct$new("algorithm", default = "NLOPT_LN_COBYLA",
-          levels = strsplit(nloptr::nloptr.get.default.options()[1, "possible_values"], ", ")[[1]]),
-        ParamUty$new("eval_g_ineq", default = function(x) max(x) - 1),
-        ParamDbl$new("xtol_rel", default = 10^-4, lower = 0, upper = Inf),
-        ParamDbl$new("xtol_abs", default = 0, lower = 0, upper = Inf),
-        ParamDbl$new("ftol_rel", default = 0, lower = 0, upper = Inf),
-        ParamDbl$new("ftol_abs", default = 0, lower = 0, upper = Inf),
-        ParamDbl$new("stopval", default = -Inf, lower = -Inf, upper = Inf),
-        ParamInt$new("maxeval", default = 100, lower = 1L, upper = Inf),
-        ParamInt$new("maxtime", default = -1L, lower = 0L, upper = Inf, special_vals = list(-1L)),
-        ParamDbl$new("lb", default = 0, lower = -Inf, upper = Inf),
-        ParamDbl$new("ub", default = 1, lower = -Inf, upper = Inf)
-        # FIXME: Possibly implement more aprams, currently not important
-      ))
-      ps$values = list(measure = NULL, algorithm = "NLOPT_LN_BOBYQA", xtol_rel = 10^-8, lb = 0, ub = 1)
-      super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
-    },
-    train = function(inputs) {
-      assert_list(inputs, "PredictionClassif")
-      self$measure = self$param_set$values$measure
-      if (is.null(self$measure)) self$measure = mlr_measures$get("classif.mmce")
-      assert_measure(self$measure)
-      assert_true(self$measure$task_type == "classif")
-      wts = private$optimize_objfun_nlopt(inputs)
-      self$weights = wts
-      self$state = list("weights" = wts)
-    }
-  )
-)
-
-#' @include mlr_pipeops.R
-mlr_pipeops$add("nloptmajorityvote", PipeOpNlOptMajorityVote, list("N"))
+# Weighted mode of factors: For a set of `factor` vectors, gives
+# a vector with the same length, for each position the level with
+# the highest total weight, ties broken at random.
+# @param factors [`list` of `factor`]: must have the same length and levels
+# @param weights [`numeric`]: weights, same length as `factors`
+# @return `factor`
+weighted_factor_mean = function(factors, weights, alllevels) {
+  accmat = matrix(0, nrow = length(factors[[1]]), ncol = length(alllevels))
+  for (idx in seq_along(factors)) {
+    rdf = data.frame(x = factor(factors[[idx]], levels = alllevels))
+    curmat = stats::model.matrix(~ 0 + x, rdf) * weights[idx]
+    accmat = accmat + curmat
+  }
+  factor(alllevels[max.col(accmat)], levels = alllevels)
+}

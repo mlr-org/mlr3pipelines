@@ -1,7 +1,6 @@
 context("GraphLearn")
 
 test_that("basic graphlearn tests", {
-
   task = mlr_tasks$get("iris")
 
   lrn = mlr_learners$get("classif.rpart")
@@ -11,12 +10,22 @@ test_that("basic graphlearn tests", {
   expect_true(run_experiment(task, glrn)$ok)
 
   glrn = GraphLearner$new(gr)
+  expect_learner(glrn)
   glrn$train(task)
-  expect_prediction_classif({graphpred = glrn$predict(task)})
+
+  expect_prediction_classif({
+    graphpred = glrn$predict(task)
+  })
   expect_equal(graphpred,
     lrn$train(task)$predict(task))
 
+  expect_prediction_classif({
+    graphpred = glrn$predict(task)
+  })
+  expect_equal(graphpred, lrn$predict(task))
+
   set.seed(1)
+  lrn = mlr_learners$get("classif.rpart")
   resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
   set.seed(1)
   resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
@@ -24,9 +33,17 @@ test_that("basic graphlearn tests", {
 
   gr2 = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
   glrn2 = GraphLearner$new(gr2)
+  glrn2_clone = glrn2$clone(deep = TRUE)
+  expect_learner(glrn2)
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
-  expect_prediction_classif({graphpred2 = glrn2$predict(task)})
+  glrn2_clone$state = glrn2$state
+  expect_deep_clone(glrn2_clone, glrn2$clone(deep = TRUE))
+  expect_prediction_classif({
+    graphpred2 = glrn2$predict(task)
+  })
+
+  expect_equal(glrn2$predict(task), glrn2_clone$predict(task))
 
   scidf = cbind(scale(iris[1:4]), iris[5])
   scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
@@ -39,64 +56,147 @@ test_that("basic graphlearn tests", {
 
   expect_equal(dbgr$train(task), dbgr)
 
+  # debuglearner predict() modifies model, but PipeOpLearner does not accept
+  # model changes in predict phase, so would ordinarily discard the change.
+  # Here we swap the debuglearner model by an environment, which gets updated
+  # by-reference, so we can get the $task_predict slot eventually.
+  dbmodels = as.environment(dbgr$model$classif.debug$model)
+  dbgr$state$model$classif.debug$model = dbmodels
+
   dbgr$predict(task)
 
-  dbmodels = dbgr$graph$pipeops$debug$state$model
-
-  expect_equal(dbmodels[[1]]$data(), scalediris$data())
-  expect_equal(dbmodels[[2]]$data(), scalediris$data())
-
+  expect_equal(dbmodels$task_train$data(), scalediris$data())
+  expect_equal(dbmodels$task_predict$data(), scalediris$data())
 })
 
 test_that("graphlearner parameters behave as they should", {
-
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
 
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
-  expect_subset(c("scale.center", "scale.scale", "debug.x"), names(dbgr$param_set$params))
+  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
 
-  dbgr$param_set$values$debug.x = 1
+  dbgr$param_set$values$classif.debug.x = 1
 
-  expect_equal(dbgr$param_set$values$debug.x, 1)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 1)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 1)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 1)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 1)
 
-  dbgr$pipeops$debug$param_set$values$x = 0
+  dbgr$pipeops$classif.debug$param_set$values$x = 0
 
-  expect_equal(dbgr$param_set$values$debug.x, 0)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 0)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 0)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0)
 
-  dbgr$pipeops$debug$learner$param_set$values$x = 0.5
+  dbgr$pipeops$classif.debug$learner$param_set$values$x = 0.5
 
-  expect_equal(dbgr$param_set$values$debug.x, 0.5)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 0.5)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 0.5)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
-  expect_error({dbgr$param_set$values$debug.x = "a"})
-  expect_error({dbgr$pipeops$debug$param_set$values$x = "a"})
-  expect_error({dbgr$pipeops$debug$learner$param_set$values$x = "a"})
+  expect_error({
+    dbgr$param_set$values$classif.debug.x = "a"
+  })
+  expect_error({
+    dbgr$pipeops$classif.debug$param_set$values$x = "a"
+  })
+  expect_error({
+    dbgr$pipeops$classif.debug$learner$param_set$values$x = "a"
+  })
 
-  expect_equal(dbgr$param_set$values$debug.x, 0.5)
-  expect_equal(dbgr$pipeops$debug$param_set$values$x, 0.5)
-  expect_equal(dbgr$pipeops$debug$learner$param_set$values$x, 0.5)
+  expect_equal(dbgr$param_set$values$classif.debug.x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$param_set$values$x, 0.5)
+  expect_equal(dbgr$pipeops$classif.debug$learner$param_set$values$x, 0.5)
 
   dblrn = mlr_learners$get("classif.debug")
-  dblrn$param_set$values$message_train = TRUE
-  dblrn$param_set$values$message_predict = TRUE
-  dblrn$param_set$values$warning_train = TRUE
-  dblrn$param_set$values$warning_predict = TRUE
+  dblrn$param_set$values$message_train = 1
+  dblrn$param_set$values$message_predict = 1
+  dblrn$param_set$values$warning_train = 1
+  dblrn$param_set$values$warning_predict = 1
 
-  pol = PipeOpLearner$new(dblrn, param_vals = list(message_predict = FALSE, warning_train = FALSE, warning_predict = FALSE))
+  pol = PipeOpLearner$new(dblrn, param_vals = list(message_predict = 0, warning_train = 0, warning_predict = 0))
 
-  gl = GraphLearner$new(pol, param_vals = list(debug.warning_train = TRUE, debug.warning_predict = TRUE))
+  gl = GraphLearner$new(pol, param_vals = list(classif.debug.warning_train = 1, classif.debug.warning_predict = 1))
 
-  gl$param_set$values$debug.warning_predict = FALSE
+  gl$param_set$values$classif.debug.warning_predict = 0
 
   expect_equal(gl$param_set$values,
-    list(debug.message_train = TRUE, debug.message_predict = FALSE, debug.warning_train = TRUE, debug.warning_predict = FALSE))
-
+    list(classif.debug.message_train = 1, classif.debug.message_predict = 0, classif.debug.warning_train = 1, classif.debug.warning_predict = 0))
 })
 
+test_that("graphlearner type inference", {
+
+  # default: classif
+  lrn = GraphLearner$new(mlr_pipeops$get("nop"))
+  expect_equal(lrn$task_type, "classif")
+  expect_equal(lrn$predict_type, "response")
+
+  ###########
+  # classif #
+  ###########
+
+  # inference from pipeoplearner
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", "classif.rpart"))
+  expect_equal(lrn$task_type, "classif")
+  expect_equal(lrn$predict_type, "response")
+
+  # inference from output only
+  lrn = GraphLearner$new(mlr_pipeops$get("copy", 1) %>>% mlr_pipeops$get("learner", "classif.rpart"))
+  expect_equal(lrn$task_type, "classif")
+  expect_equal(lrn$predict_type, "response")
+
+  # inference from input only
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", "classif.rpart") %>>% mlr_pipeops$get("copy", 1))
+  expect_equal(lrn$task_type, "classif")
+  expect_equal(lrn$predict_type, "response")
+
+  # inference when multiple input, but one is a Task
+  lrn = GraphLearner$new(gunion(list(mlr_pipeops$get("learner", "classif.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch"))
+  expect_equal(lrn$task_type, "classif")
+  expect_equal(lrn$predict_type, "response")
+
+  ###########
+  # regr    #
+  ###########
+
+  # inference from pipeoplearner
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", "regr.rpart"))
+  expect_equal(lrn$task_type, "regr")
+  expect_equal(lrn$predict_type, "response")
+
+  # inference from output only
+  lrn = GraphLearner$new(mlr_pipeops$get("copy", 1) %>>% mlr_pipeops$get("learner", "regr.rpart"))
+  expect_equal(lrn$task_type, "regr")
+  expect_equal(lrn$predict_type, "response")
+
+  # inference from input only
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", "regr.rpart") %>>% mlr_pipeops$get("copy", 1))
+  expect_equal(lrn$task_type, "regr")
+  expect_equal(lrn$predict_type, "response")
+
+  # inference when multiple input, but one is a Task
+  lrn = GraphLearner$new(gunion(list(mlr_pipeops$get("learner", "regr.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch"))
+  expect_equal(lrn$task_type, "regr")
+  expect_equal(lrn$predict_type, "response")
+
+  ###########
+  # Errors  #
+  ###########
+
+  # input, output mismatching types
+  gr = gunion(list(mlr_pipeops$get("learner", "regr.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch") %>>% mlr_pipeops$get("learner", "classif.rpart")
+  expect_error(GraphLearner$new(gr), "multiple possibilities")
+
+  gr = gunion(list(mlr_pipeops$get("learner", "classif.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch") %>>% mlr_pipeops$get("learner", "regr.rpart")
+  expect_error(GraphLearner$new(gr), "multiple possibilities")
+
+  # input two mismatching types
+  gr = gunion(list(mlr_pipeops$get("learner", "classif.rpart"), mlr_pipeops$get("learner", "regr.rpart"))) %>>% mlr_pipeops$get("unbranch")
+  expect_error(GraphLearner$new(gr), "multiple possibilities")
+
+  # input two mismatching types
+  expect_error(GraphLearner$new(PipeOpScale$new()), "output type not.*Prediction.*or compatible")
+
+
+})

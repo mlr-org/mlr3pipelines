@@ -4,8 +4,8 @@ test_that("PipeOpLearner - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearner$new(lrn)
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 1)
-  expect_data_table(po$output, nrow = 1)
+  expect_data_table(po$input, nrows = 1)
+  expect_data_table(po$output, nrows = 1)
 
   task = mlr_tasks$get("iris")
   result = train_pipeop(po, list(task = task))
@@ -16,7 +16,6 @@ test_that("PipeOpLearner - basic properties", {
 
   expect_pipeop_class(PipeOpLearner, list(lrn))
   expect_error(PipeOpLearner$new())
-
 })
 
 
@@ -30,14 +29,20 @@ test_that("PipeOLearner - param_set and values", {
 
 
   expect_equal(po$param_set$values, po$learner$param_set$values)
-  expect_error({po$param_set$values$minsplit = "foo"})
+  expect_error({
+    po$param_set$values$minsplit = "foo"
+  })
   po$param_set$values$minsplit = 2L
   expect_equal(po$param_set$values, po$learner$param_set$values)
-  expect_equal(po$param_set$values, list(minsplit = 2L))
+  expect_equal(po$param_set$values, list(xval = 0L, minsplit = 2L))
   po$param_set$values$maxdepth = 1L
-  expect_equal(po$param_set$values, list(minsplit = 2L, maxdepth = 1L))
+  expect_equal(po$param_set$values, list(xval = 0L, minsplit = 2L, maxdepth = 1L))
   po$param_set$values = list(minsplit = 1L)
   expect_equal(po$param_set$values, list(minsplit = 1L))
-  expect_error({po$param_set$values = list(minsplit = "foo")})
-  expect_error({po$param_set$values = list(foo = "foo")})
+  expect_error({
+    po$param_set$values = list(minsplit = "foo")
+  })
+  expect_error({
+    po$param_set$values = list(foo = "foo")
+  })
 })

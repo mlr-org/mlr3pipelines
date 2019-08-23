@@ -1,15 +1,50 @@
 #' @title PipeOpImpute
 #'
-#' @name mlr_pipeop_impute
+#' @usage NULL
+#' @name mlr_pipeops_impute
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Impute missing values with varying methods.
+#' Impute missing values using varying methods.
 #'
-#' `numeric` or `integer` features are imputed by `method_num`.
+#' * `numeric` or `integer` features are imputed by `method_num`.
+#' * `factor`, `ordered`, and `character` features are imported by `method_fct`.
+#' * `logical` features are always imputed by sampling from the training column.
 #'
-#' `factor`, `ordered`, and `character` features are imported by `method_fct`.
+#' @section Construction:
+#' ```
+#' PipeOpImpute$new(id = "impute", param_vals = list())
+#' ```
 #'
-#' `logical` features are always imputed by sampling from the training column.
+#' * `id` :: `character(1)`
+#'   Identifier of the resulting  object, defaulting to `"impute"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section State:
+#' `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
+#' * TO BE DESCRIBED ( PipeOp will be changed shortly )
+#'
+#' @section Parameters:
+#' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as:
+#' * TO BE DESCRIBED ( PipeOp will be changed shortly )
+#'
+#' @section Internals:
+#' Will be refactored shortly.
+#'
+#' @section Fields:
+#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @section Methods:
+#' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @examples
+#' task = mlr3::mlr_tasks$get("pima")
+#' sum(complete.cases(task$data()))
+#'
+#' po = mlr_pipeops$get("impute")
+#' new_task = po$train(list(task = task))[[1]]
+#' sum(complete.cases(new_task$data()))
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
@@ -19,9 +54,9 @@ PipeOpImpute = R6Class("PipeOpImpute",
   public = list(
     initialize = function(id = "impute", param_vals = list()) {
       ps = ParamSet$new(list(
-        ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median"),
-        ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl"),
-        ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train")
+        ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median", tags = c("train", "predict")),
+        ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl", tags = c("train", "predict")),
+        ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict"))
       ))
       ps$values = list(method_num = "median", method_fct = "newlvl", add_dummy = "missing_train")
       super$initialize(id, ps, param_vals = param_vals)
@@ -58,6 +93,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
     },
 
     transform = function(task) {
+
       num_model = self$state$num_model
       fct_model = self$state$fct_model
       lgl_feats = self$state$lgl_feats
@@ -88,7 +124,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
               breaks = num_model[[colname]]$breaks
               which.bins = sample.int(length(counts), sum(is.na(col)), replace = TRUE, prob = counts)
               runif(length(which.bins), breaks[which.bins], breaks[which.bins + 1L])
-            })
+          })
           if (task$feature_types[colname, get("type")] == "integer") {
             num = as.integer(round(num))
           }
@@ -100,8 +136,9 @@ PipeOpImpute = R6Class("PipeOpImpute",
           }
           switch(method,
             newlvl = {
-              if (is.factor(col))
+              if (is.factor(col)) {
                 levels(col) = c(levels(col), ".MISSING")
+              }
               ".MISSING"
             },
             sample = sample(fct_model[[colname]], sum(is.na(col)), replace = TRUE)
@@ -134,6 +171,4 @@ PipeOpImpute = R6Class("PipeOpImpute",
   )
 )
 
-#' @include mlr_pipeops.R
 mlr_pipeops$add("impute", PipeOpImpute)
-

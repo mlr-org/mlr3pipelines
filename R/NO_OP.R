@@ -10,7 +10,8 @@
 #' @export
 NO_OP = R6Class("NO_OP",
   public = list(
-    initialize = function() {},
+    initialize = function() {
+    },
     print = function() cat("mlr3pipelines NO_OP indicator\n")
   ),
 )$new()

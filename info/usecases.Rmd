@@ -16,7 +16,7 @@ This document contains a list of use-cases we want to contain.
   - `PipeOpChunk`                           | broadcast
   - `PipeOpUnbranch`                        | aggregate
   - `PipeOpFeatureUnion`                    | aggregate
-  - `PipeOpNULL`                            | linear
+  - `PipeOpNOP`                            | linear
   - `PipeOpCopy`                            | broadcast
 
                                               train: input --store-params--> output        predict: input --use-params--> output
@@ -255,7 +255,7 @@ This document contains a list of use-cases we want to contain.
 
   - **train**:
     - input: [[Task]]
-    - does: Filters features according to mlr3featsel. Featsel class is given as ParamVal. Selected features saved in 'state'
+    - does: Filters features according to mlr3filters. Featsel class is given as ParamVal. Selected features saved in 'state'
     - returns: [[Task]]
   - **state:**: Selected features
   - **predict**:
@@ -334,7 +334,7 @@ tr = rs$tune()$tune_result()
 ```r
 op1 = PipeOpScale$new()
 op2a = PipeOpPCA$new()
-op2b = PipeOpNULL$new()
+op2b = PipeOpNOP$new()
 op3 = PipeOpFeatureUnion$new()
 op4 = PipeOpLearner$new(learner = "classif.rpart")
 
@@ -460,7 +460,7 @@ g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpUnbranch(agg
 
 ```r
 op1 = PipeOpLearnerPCA$new()
-op2 = PipeOpNULL$new()
+op2 = PipeOpNOP$new()
 op3 = PipeOpLearner$new("classif.rpart")
 
 g = PipeOpBranch$new(selected = 1) %>>% gunion(op1, op2) %>>% PipeOpUnbranch(aggrFun = NULL) %>>% op3

@@ -1,0 +1,10 @@
+
+
+
+- opt ensemble stuff does not work the way it is supposed to, because input is not PredictionData -- it is a Task (created by LearnerCV).
+- learners should probably already create an S3 prediction
+- ensemble stuff was never tested inside a graph
+- what is the point of creating the dict at load time?
+- prediction s3-object should be factor, not character
+- typechecks should not happen in train() or predict() if they are already in in/output channel spec0
+- pipeops dont handle prediction, only predictiondata

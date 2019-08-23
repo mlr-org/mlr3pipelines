@@ -36,6 +36,8 @@ Output channels of the \code{Graph}. For each channel lists the name, output typ
 \item \code{packages}     :: \code{character} \cr
 Set of all required packages for the various methods in the \code{Graph}, a set union of all required packages of all contained
 \code{\link{PipeOp}} objects.
+\item \code{model}        :: named \code{list} \cr
+Get / Set the \code{$state} of each of the members of \code{PipeOp}.
 \item \code{param_set}    :: \code{\link{ParamSet}} \cr
 Parameters and parameter constraints. Parameter values are in \code{$param_set$values}. These are the union of \code{$param_set}s
 of all \code{PipeOp}s in the \code{Graph}. Parameter names
@@ -61,7 +63,7 @@ Constructs an empty Graph.
 Get IDs of all PipeOps. This is in order that PipeOps were added if
 \code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
 \item \code{add_pipeop(op)} \cr
-(\code{\link{PipeOp}}) -> \code{self} \cr
+(\code{\link{PipeOp}} | \code{character(1)}) -> \code{self} \cr
 Mutates \code{Graph} by adding a \code{PipeOp} to the \code{Graph}. This does not add any edges, so the new \code{PipeOp}
 will not be connected within the \code{Graph} at first.
 \item \code{add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)} \cr
@@ -73,9 +75,10 @@ Add an edge from \code{PipeOp} \code{src_id}, and its channel \code{src_channel}
 channel \code{dst_channel} (identified by its name or number as listed in the \code{PipeOp}'s \code{$input}).
 If source or destination \code{PipeOp} have only one input / output channel and \code{src_channel} / \code{dst_channel}
 are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
-\item \code{plot()} \cr
-() -> \code{NULL} \cr
-Plot the graph, using the \code{\link[igraph:igraph-package]{igraph}} package.
+\item \code{plot(html)} \cr
+(\code{logical(1)}) -> \code{NULL} \cr
+Plot the graph, using either the \code{\link[igraph:igraph-package]{igraph}} package (for \code{html = FALSE}) or
+the \code{visNetwork} package for \code{html = TRUE} producing a htmlWidget. Defaults to \code{FALSE}.
 \item \code{print()} \cr
 () -> \code{NULL} \cr
 Print a representation of the graph on the console. Output is a table with one row for each contained \code{PipeOp} and
@@ -118,7 +121,6 @@ trained[[1]]$data()
 task$filter(1:10)
 predicted = g$predict(task)
 predicted[[1]]$data()
-
 }
 \seealso{
 Other mlr3pipelines backend related: \code{\link{PipeOpTaskPreprocSimple}},

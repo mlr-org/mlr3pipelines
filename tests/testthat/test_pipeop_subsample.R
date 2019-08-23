@@ -16,7 +16,7 @@ test_that("PipeOpSubsample works unstratified", {
   po = PipeOpSubsample$new()
 
   tnew = train_pipeop(po, list(task))
-  expect_true(tnew[[1]]$nrow == task$nrow)
+  expect_true(tnew[[1]]$nrow == ceiling(po$param_set$values$frac * task$nrow))
 
   po = PipeOpSubsample$new()
   po$param_set$values$frac = 0.7
@@ -33,11 +33,10 @@ test_that("PipeOpSubsample works unstratified", {
   po = PipeOpSubsample$new()
   tnew = train_pipeop(po, list(task))
 
-  task = mlr_tasks$get("bh")$filter(1L)  # actually has to be an int m(
+  task = mlr_tasks$get("boston_housing")$filter(1L)  # actually has to be an int m(
   po = PipeOpSubsample$new()
   po$param_set$values = list(stratify = TRUE, frac = 0.6)
   expect_error(train_pipeop(po, list(task)))
-
 })
 
 test_that("PipeOpSubsample works stratified", {
@@ -72,7 +71,6 @@ test_that("PipeOpSubsample works stratified", {
   # Proportions as expected
   expect_equal(table(tnew[[1]]$data(cols = tnew[[1]]$target_names)),
     table(rep(c("setosa", "versicolor", "virginica"), 100)))
-
 })
 
 
@@ -91,5 +89,4 @@ test_that("task filter utility function", {
   tfiltered = task_filter_ex(task$clone(), rowidx)
 
   expect_equal(tfiltered$data(), task$data(rows = rowidx))
-
 })

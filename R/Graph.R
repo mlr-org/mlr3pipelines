@@ -27,6 +27,8 @@
 #' * `packages`     :: `character` \cr
 #'   Set of all required packages for the various methods in the `Graph`, a set union of all required packages of all contained
 #'   [`PipeOp`] objects.
+#' * `model`        :: named `list` \cr
+#'   Get / Set the `$state` of each of the members of `PipeOp`.
 #' * `param_set`    :: [`ParamSet`] \cr
 #'   Parameters and parameter constraints. Parameter values are in `$param_set$values`. These are the union of `$param_set`s
 #'   of all `PipeOp`s in the `Graph`. Parameter names
@@ -48,7 +50,7 @@
 #'   Get IDs of all PipeOps. This is in order that PipeOps were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
 #' * `add_pipeop(op)` \cr
-#'   ([`PipeOp`]) -> `self` \cr
+#'   ([`PipeOp`] | `character(1)`) -> `self` \cr
 #'   Mutates `Graph` by adding a `PipeOp` to the `Graph`. This does not add any edges, so the new `PipeOp`
 #'   will not be connected within the `Graph` at first.
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
@@ -60,9 +62,10 @@
 #'   channel `dst_channel` (identified by its name or number as listed in the `PipeOp`'s `$input`).
 #'   If source or destination `PipeOp` have only one input / output channel and `src_channel` / `dst_channel`
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
-#' * `plot()` \cr
-#'   () -> `NULL` \cr
-#'   Plot the graph, using the [`igraph`][igraph::igraph-package] package.
+#' * `plot(html)` \cr
+#'   (`logical(1)`) -> `NULL` \cr
+#'   Plot the graph, using either the [`igraph`][igraph::igraph-package] package (for `html = FALSE`) or
+#'   the `visNetwork` package for `html = TRUE` producing a htmlWidget. Defaults to `FALSE`.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Print a representation of the graph on the console. Output is a table with one row for each contained `PipeOp` and
@@ -103,7 +106,6 @@
 #' task$filter(1:10)
 #' predicted = g$predict(task)
 #' predicted[[1]]$data()
-#'
 #' @name Graph
 #' @family mlr3pipelines backend related
 #' @export
@@ -120,8 +122,9 @@ Graph = R6Class("Graph",
 
     ids = function(sorted = FALSE) {
       assert_flag(sorted)
-      if (!sorted || nrow(self$edges) == 0L)
+      if (!sorted || nrow(self$edges) == 0L) {
         return(names2(self$pipeops))
+      }
 
       tmp = self$edges[, list(parents = list(unique(src_id))), by = list(id = dst_id)]
       orphans = setdiff(names(self$pipeops), self$edges$dst_id)  # the ones without parents
@@ -134,10 +137,11 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      assert_r6(op, "PipeOp")
-      if (op$id %in% names(self$pipeops))
+      op = as_pipeop(op)
+      if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
-      self$pipeops[[op$id]] = op$clone(deep = TRUE)
+      }
+      self$pipeops[[op$id]] = op
 
       if (!is.null(private$.param_set)) {
         # param_set is built on-demand; if it has not been requested before, its value may be NULL
@@ -148,6 +152,7 @@ Graph = R6Class("Graph",
     },
 
     add_edge = function(src_id, dst_id, src_channel = NULL, dst_channel = NULL) {
+
       if (!length(self$pipeops)) {
         stop("Cannot add edge to empty Graph.")
       }
@@ -161,24 +166,26 @@ Graph = R6Class("Graph",
       }
       if (is.null(dst_channel)) {
         if (length(self$pipeops[[dst_id]]$input$name) > 1) {
-          stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
+          stopf("dst_channel must not be NULL if src_id pipeop has more than one input channel.")
         }
         dst_channel = 1L
       }
       assert(
-          check_integerish(src_channel, lower = 1L,
-            upper = nrow(self$pipeops[[src_id]]$output), any.missing = FALSE),
-          check_choice(src_channel, self$pipeops[[src_id]]$output$name)
+        check_integerish(src_channel, lower = 1L,
+          upper = nrow(self$pipeops[[src_id]]$output), any.missing = FALSE),
+        check_choice(src_channel, self$pipeops[[src_id]]$output$name)
       )
-      if (is.numeric(src_channel))
+      if (is.numeric(src_channel)) {
         src_channel = self$pipeops[[src_id]]$output$name[src_channel]
+      }
       assert(
-          check_integerish(dst_channel, lower = 1,
-            upper = nrow(self$pipeops[[dst_id]]$input), any.missing = FALSE),
-          check_choice(dst_channel, self$pipeops[[dst_id]]$input$name)
+        check_integerish(dst_channel, lower = 1,
+          upper = nrow(self$pipeops[[dst_id]]$input), any.missing = FALSE),
+        check_choice(dst_channel, self$pipeops[[dst_id]]$input$name)
       )
-      if (is.numeric(dst_channel))
+      if (is.numeric(dst_channel)) {
         dst_channel = self$pipeops[[dst_id]]$input$name[dst_channel]
+      }
 
       types_src = self$pipeops[[src_id]]$output[get("name") == src_channel, c("train", "predict")]
       types_dst = self$pipeops[[dst_id]]$input[get("name") == dst_channel, c("train", "predict")]
@@ -192,25 +199,27 @@ Graph = R6Class("Graph",
           src_id, types_src$predict, dst_id, types_dst$predict)
       }
 
-      bad_rows = (self$edges$src_id == src_id & self$edges$src_channel == src_channel) |
-        (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel)
+      bad_rows = (self$edges$dst_id == dst_id & self$edges$dst_channel == dst_channel & self$edges$dst_channel != "...")
       if (any(bad_rows)) {
         prior_con = self$edges[bad_rows]
         stopf("Cannot add multiple edges to a channel.\n%s",
-          paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.",
+          paste(sprintf("Channel %s of node %s already connected to channel %s of node %s.\nMultiple connections to input channels is only possible for vararg (i.e. '...') channels.",
             prior_con$src_channel, prior_con$src_id, prior_con$dst_channel, prior_con$dst_id), collapse = "\n"))
       }
       row = data.table(src_id, src_channel, dst_id, dst_channel)
       old_edges = self$edges
       self$edges = rbind(self$edges, row)
       # check for loops
-      on.exit({self$edges = old_edges})
+      on.exit({
+        self$edges = old_edges
+      })
       self$ids(sorted = TRUE)  # if we fail here, edges get reset.
       on.exit()
       invisible(self)
     },
 
-    plot = function() {
+    plot = function(html = FALSE) {
+      assert_flag(html)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
         return(invisible(NULL))
@@ -224,6 +233,7 @@ Graph = R6Class("Graph",
         df = rbind(df, self$input[, list(from = "<INPUT>", to = op.id)])
         output = self$output
         if (nrow(output) > 1) {
+          # In case we have multiple outputs, we add an output for every final node
           df = rbind(df, output[, list(from = op.id, to = paste0("<OUTPUT>\n", name))])
         } else {
           df = rbind(df, output[, list(from = op.id, to = "<OUTPUT>")])
@@ -233,9 +243,54 @@ Graph = R6Class("Graph",
       }
       ig = igraph::add_vertices(ig, length(extra_vertices), name = extra_vertices)
       layout = igraph::layout_with_sugiyama(ig)$layout
-      if (!is.matrix(layout))
-        layout = t(layout) # bug in igraph, dimension is dropped
-      plot(ig, layout = layout)
+      if (!is.matrix(layout)) {
+        layout = t(layout)  # bug in igraph, dimension is dropped
+      }
+      if (html) {
+        require_namespaces("visNetwork")
+        ig_data = visNetwork::toVisNetworkData(ig)
+        # Map color / shape of the nodes depending on the node type (input, output, actual node)
+        ig_data$nodes$shape = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "database", "<OUTPUT>" = "ellipse", "box"))
+        ig_data$nodes$color = map_chr(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = "rgba(0,204,102,0.2)", "<OUTPUT>" = "rgba(255,51,51,0.2)", "lightblue"))
+        ig_data$nodes$value = map_dbl(ig_data$nodes$id, function(x) switch(x, "<INPUT>" = .8, "<OUTPUT>" = .8, 1))
+
+        # This constructs the info displayed when hovering over the node in html:
+        # Basically gets the print() output of the PipeOp.
+        ig_data$nodes$title = map_chr(ig_data$nodes$id, function(node) {
+          null_str = function(x) x %??% "NULL"
+          if (node == "<INPUT>") {
+            txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
+          } else if (grepl("<OUTPUT>", node)) {
+            if (nrow(self$output) > 1) {
+              out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node), ]  # Deal with multiple outputs
+            } else {
+              out = self$output  # Standard case, single output
+            }
+            txt = paste0("Output:<br>Name: ", out$name, "<br>Train: ", null_str(out$train), "<br>Predict: ", null_str(out$predict))
+          } else {
+            txt = paste((gsub("<(.*)>", capture.output(self$pipeops[[node]]), replacement = "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
+          }
+          # Deal with special case: multiple edges between two pipeops
+          if (length(txt) > 1) txt = paste0(txt, collapse = "<br>")
+          return(txt)
+        })
+        ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
+        ig_data$edges$color = "lightblue"
+        # Visualize the nodes
+        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
+
+        if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) {
+         # Bug in visNetwork? See: https://github.com/datastorm-open/visNetwork/issues/327
+          p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
+        } else {
+          p = visNetwork::visIgraphLayout(p, layout = "layout_with_kk", type = "full")
+        }
+
+        # Draw edges between points
+        visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+      } else {
+        suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
+      }
     },
 
     print = function() {
@@ -243,7 +298,7 @@ Graph = R6Class("Graph",
       lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
         data.table(ID = pipeop$id, State = sprintf("<%s>",
           map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
-      }))
+      }), use.names = TRUE)
       if (nrow(lines)) {
         prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
         scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
@@ -281,12 +336,12 @@ Graph = R6Class("Graph",
 
     train = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "train")
-      graph_reduce(self, input, "train_internal", single_input)
+      graph_reduce(self, input, "train", single_input)
     },
 
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
-      graph_reduce(self, input, "predict_internal", single_input)
+      graph_reduce(self, input, "predict", single_input)
     }
   ),
 
@@ -312,7 +367,7 @@ Graph = R6Class("Graph",
         private$.param_set = ParamSetCollection$new(map(self$pipeops, "param_set"))
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
-          stop("param_set is read-only.")
+        stop("param_set is read-only.")
       }
       private$.param_set
     },
@@ -321,6 +376,16 @@ Graph = R6Class("Graph",
         self$param_set$values = val
       }
       self$param_set$values
+    },
+    state = function(val) {
+      if (!missing(val)) {
+        assert_list(val, names = "unique", null.ok = TRUE)
+        assert_subset(names(val), names(self$pipeops))
+        imap(self$pipeops, function(pipeop, pname) pipeop$state = val[[pname]])
+        val
+      } else {
+        map(self$pipeops, "state")
+      }
     }
   ),
 
@@ -346,7 +411,8 @@ graph_channels = function(ids, channels, pipeops, direction) {
     return(data.table(name = character(), train = character(),
       predict = character(), op.id = character(), channel.name = character()))
   }
-  rbindlist(lapply(pipeops, function(po) {
+  map_dtr(pipeops, function(po) {
+
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
     # (and factor 2 faster than a naive data.table implementation below).
     # $input and $output is actually a bottleneck for %>>%, so we want this to be fast.
@@ -365,7 +431,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df[[1]] = paste0(po$id, ".", df[[1]])
     names(df)[5] = "channel.name"
     df
-  }))
+  })
 }
 
 graph_channels_dt = function(ids, channels, pipeops, direction) {
@@ -374,11 +440,11 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
     return(data.table(name = character(), train = character(),
       predict = character(), op.id = character(), channel.name = character()))
   }
-  rbindlist(lapply(pipeops, function(po) {
+  map_dtr(pipeops, function(po) {
     po[[direction]][get("name") %nin% channels[ids == po$id],
       list(name = paste0(po$id, ".", get("name")),
         train = get("train"), predict = get("predict"), op.id = po$id, channel.name = get("name"))]
-  }))
+  })
 }
 
 # walk along Graph edges, evaluate [[fun]](), return named list of output
@@ -386,11 +452,12 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
 # input: as given by `$train`, `$predict`. single valued to be copied (if
 #   `single_input` is `TRUE`) or (possibly named) list of values for each
 #   incoming edge.
-# fun: function of each `PipeOp` to call; should be `train_internal` oder
-#   `predict_internal`.
+# fun: function of each `PipeOp` to call; should be `train` oder
+#   `predict`.
 # single_input: whether `input` is to be copied to all input channels
 #   (`TRUE`) or is a list with different input for each channel (`FALSE`).
 graph_reduce = function(self, input, fun, single_input) {
+
   assert_flag(single_input)
 
   graph_input = self$input
@@ -432,11 +499,10 @@ graph_reduce = function(self, input, fun, single_input) {
   # walk over ids, learning each operator
   for (id in ids) {
     op = self$pipeops[[id]]
-    input_tbl = edges[get("dst_id") == id, c("dst_channel", "payload")]
+    input_tbl = edges[get("dst_id") == id, list(name = get("dst_channel"), payload = get("payload"))][op$input$name, , on = "name"]
     edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
-    names(input) = input_tbl$dst_channel
-    input = input[op$input$name]
+    names(input) = input_tbl$name
 
     output = op[[fun]](input)
     if (self$keep_results) {

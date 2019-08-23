@@ -39,7 +39,9 @@ result2 = Graph$new()$
   add_edge(o1$id, o2$id)
 }
 \seealso{
-Other Graph operators: \code{\link{assert_graph}},
-  \code{\link{greplicate}}, \code{\link{gunion}}
+Other Graph operators: \code{\link{as_graph}},
+  \code{\link{as_pipeop}}, \code{\link{assert_graph}},
+  \code{\link{assert_pipeop}}, \code{\link{greplicate}},
+  \code{\link{gunion}}
 }
 \concept{Graph operators}
