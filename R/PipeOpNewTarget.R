@@ -4,12 +4,13 @@
 #'
 #' @description
 #' Substitutes the current target with a new target.
-#' Changes Task class if required.
+#' The new target must exist as a column in the Task.
+#' The previous target is set to row_role: `unused'.
 #'
 #'
 #' @section Public Members / Active Bindings:
 #' * `new_target` :: `character` \cr
-#' New target variable for the task. The previous target variable is set to 'unused'.
+#' New target variable name for the task. The previous target variable is set to 'unused'.
 #' * `new_task_type` :: `NULL` | `character` \cr
 #' New task type for the resulting task. Defaults to 'classif' if `new_target`is `character` | `factor`,
 #' else `regr`.
@@ -22,11 +23,13 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id = "new_target") {
+    initialize = function(id = "new_target", new_target = NULL, new_task_type = NULL) {
       super$initialize(id = id, param_set = ParamSet$new(), param_vals = list(),
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
+      if (!is.null(new_target)) self$new_target = new_target
+      if (!is.null(new_task_type)) self$new_task_type = new_task_type
     },
     train_internal = function(inputs) {
       outputs = private$convert_task_type(inputs)

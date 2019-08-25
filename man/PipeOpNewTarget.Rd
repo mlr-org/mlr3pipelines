@@ -10,13 +10,14 @@ PipeOpNewTarget
 }
 \description{
 Substitutes the current target with a new target.
-Changes Task class if required.
+The new target must exist as a column in the Task.
+The previous target is set to row_role: `unused'.
 }
 \section{Public Members / Active Bindings}{
 
 \itemize{
 \item \code{new_target} :: \code{character} \cr
-New target variable for the task. The previous target variable is set to 'unused'.
+New target variable name for the task. The previous target variable is set to 'unused'.
 \item \code{new_task_type} :: \code{NULL} | \code{character} \cr
 New task type for the resulting task. Defaults to 'classif' if \code{new_target}is \code{character} | \code{factor},
 else \code{regr}.
