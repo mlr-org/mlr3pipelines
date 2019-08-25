@@ -7,6 +7,20 @@ Requires for the task type to be in \code{mlr_reflections$task_types}.}
 \usage{
 convert_task(intask, new_type, new_target = NULL)
 }
+\arguments{
+\item{intask}{\code{\link{Task}}\cr
+A \code{\link{Task}} to be converted.}
+
+\item{new_type}{\code{character(1)}\cr
+The new task type. Must be in  \code{mlr_reflections$task_types}.}
+
+\item{new_target}{\code{character(1)|NULL}\cr
+New target to be set, must be a column in the \code{intask} data.
+If NULL, no new target is set.}
+}
+\value{
+\code{\link{Task}}
+}
 \description{
 Convert a task from one type to another.
 Requires for the task type to be in \code{mlr_reflections$task_types}.

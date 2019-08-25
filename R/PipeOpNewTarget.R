@@ -80,6 +80,14 @@ mlr_pipeops$add("new_target", PipeOpNewTarget)
 
 #' Convert a task from one type to another.
 #' Requires for the task type to be in `mlr_reflections$task_types`.
+#' @param intask [`Task`]\cr
+#'   A [`Task`] to be converted.
+#' @param new_type `character(1)`\cr
+#'   The new task type. Must be in  `mlr_reflections$task_types`.
+#' @param new_target `character(1)|NULL`\cr
+#'   New target to be set, must be a column in the `intask` data.
+#'   If NULL, no new target is set.
+#' @return [`Task`]
 convert_task = function(intask, new_type, new_target = NULL) {
   assert_task(intask)
   assert_choice(new_target, intask$col_info$id, null.ok = TRUE)
@@ -87,7 +95,6 @@ convert_task = function(intask, new_type, new_target = NULL) {
   if (is.null(new_target)) new_target = intask$target_names
   if (new_type == intask$task_type & intask$target_names == new_target) return(intask)
   # Get task_type from mlr_reflections and call constructor.
-  encapsulate("none",
-    .f = eval(parse(text = paste0(mlr_reflections$task_types[type == new_type, task], "$new"))),
-    list(id = intask$id, backend = intask$backend, target = new_target))$result
+  tsk = get(mlr_reflections$task_types[mlr_reflections$task_types$type == new_type,]$task)
+  tsk$new(id = intask$id, backend = intask$backend, target = new_target)
 }
