@@ -8,7 +8,7 @@ Authors@R:
              email = "martin.binder@mail.com"),
       person(given = "Florian",
              family = "Pfisterer",
-             role = "ctb",
+             role = "aut",
              email = "pfistererf@googlemail.com"),
       person(given = "Bernd",
              family = "Bischl",
@@ -17,7 +17,7 @@ Authors@R:
              comment = c(ORCID = "0000-0001-6002-6980")),
       person(given = "Michel",
              family = "Lang",
-             role = c("cre", "aut"),
+             role = "aut",
              email = "michellang@gmail.com",
              comment = c(ORCID = "0000-0001-9754-0393")))
 Description: Pipelines for mlr3.
