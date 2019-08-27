@@ -91,7 +91,12 @@
 #'   Predict with the `Graph` by calling all the `PipeOp`'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
 #'
+#' @name Graph
+#' @family mlr3pipelines backend related
+#' @export
 #' @examples
+#' library(mlr3)
+#'
 #' g = Graph$new()$
 #'   add_pipeop(PipeOpScale$new(id = "scale"))$
 #'   add_pipeop(PipeOpPCA$new(id = "pca"))$
@@ -99,16 +104,13 @@
 #' g$input
 #' g$output
 #'
-#' task = mlr3::mlr_tasks$get("iris")
+#' task = tsk("iris")
 #' trained = g$train(task)
 #' trained[[1]]$data()
 #'
 #' task$filter(1:10)
 #' predicted = g$predict(task)
 #' predicted[[1]]$data()
-#' @name Graph
-#' @family mlr3pipelines backend related
-#' @export
 Graph = R6Class("Graph",
   public = list(
     pipeops = NULL,

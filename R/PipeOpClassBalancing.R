@@ -73,9 +73,14 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
-#' opb = mlr_pipeops$get("classbalancing")
-#' task = mlr3::mlr_tasks$get("spam")
+#' library(mlr3)
+#'
+#' task = tsk("spam")
+#' opb = po("classbalancing")
 #'
 #' # target class counts
 #' table(task$truth())
@@ -91,9 +96,6 @@
 #'   adjust = "all", shuffle = FALSE)
 #' result = opb$train(list(task))[[1]]
 #' table(result$truth())
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
 PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
   inherit = PipeOpTaskPreproc,
 

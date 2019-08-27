@@ -63,19 +63,19 @@
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' lrn_po = mlr_pipeops$get("learner", "classif.rpart")
-#'
-#' lrn_po$param_set$values$cp = 0.7
-#'
-#' lrn_po$train(list("iris"))
-#'
-#' lrn_po$predict(list("iris"))
-#'
 #' @family PipeOps
 #' @family Meta PipeOps
 #' @include PipeOp.R
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' task = tsk("iris")
+#' learner = lrn("classif.rpart", cp = 0.1)
+#' lrn_po = mlr_pipeops$get("learner", learner)
+#'
+#' lrn_po$train(list(task))
+#' lrn_po$predict(list(task))
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {

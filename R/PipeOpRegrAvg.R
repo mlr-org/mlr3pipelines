@@ -46,20 +46,21 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
-#' @examples
-#' # Simple Bagging
-#' gr = greplicate(n = 5,
-#'   mlr_pipeops$get("subsample") %>>%
-#'   mlr_pipeops$get("learner", "classif.rpart")
-#' ) %>>%
-#'   mlr_pipeops$get("classifavg")
-#'
-#  mlr3::resample("iris", GraphLearner$new(gr), "cv")
-#'
 #' @family PipeOps
 #' @family Ensembles
 #' @include PipeOpEnsemble.R
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' # Simple Bagging
+#' gr = greplicate(n = 5,
+#'   po("subsample") %>>%
+#'   po("learner", lrn("classif.rpart"))
+#' ) %>>%
+#'   po("classifavg")
+#'
+#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("cv", folds = 3))
 PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 

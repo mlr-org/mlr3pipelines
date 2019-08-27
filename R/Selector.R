@@ -41,9 +41,13 @@
 #' It is preferrable to use the [`Selector`] construction functions like `select_type`, `select_grep` etc. if possible, instead of writing custom [`Selector`]s.
 #'
 #' @return `function`: A [`Selector`] function that takes a [`Task`][mlr3::Task] and returns the feature names to be processed.
+#'
+#' @family Selectors
 #' @examples
-#' iris_task = mlr3::mlr_tasks$get("iris")
-#' bh_task = mlr3::mlr_tasks$get("boston_housing")
+#' library(mlr3)
+#'
+#' iris_task = tsk("iris")
+#' bh_task = tsk("boston_housing")
 #'
 #' sela = selector_all()
 #' sela(iris_task)
@@ -64,7 +68,6 @@
 #' selgf = selector_union(selg, self)
 #' selgf(iris_task)
 #' selgf(bh_task)
-#' @family Selectors
 NULL
 
 make_selector = function(fun, description, ...) {

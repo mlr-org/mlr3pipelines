@@ -46,12 +46,12 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
         id = id,
         param_set = ParamSet$new(
           params = list(
-            ParamUty$new(id = "measure", tags = c("train", "required")),
+            ParamUty$new(id = "measure", tags = "train"),
             ParamFct$new(id = "algorithm", tags = c("train", "required"),
               levels = nlopt_levels)
           )
         ),
-        param_vals = list(measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA"),
+        param_vals = list(algorithm = "NLOPT_LN_COBYLA"),
         predict_types = c("response", "prob"),
         feature_types = c("integer", "numeric", "factor"),
         properties = c("twoclass", "multiclass")
@@ -121,11 +121,11 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
         id = id,
         param_set = ParamSet$new(
           params = list(
-            ParamUty$new(id = "measure", tags = c("train", "required")),
+            ParamUty$new(id = "measure", tags = "train"),
             ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nlopt_levels)
           )
         ),
-        param_vals = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA"),
+        param_vals = list(algorithm = "NLOPT_LN_COBYLA"),
         predict_types = "response",
         feature_types = c("integer", "numeric")
       )

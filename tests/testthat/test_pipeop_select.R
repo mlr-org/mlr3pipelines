@@ -14,19 +14,19 @@ test_that("select", {
 
   # Selects the columns we expect it to select
   po = PipeOpSelect$new()
-  expect_equal(po$train(list("iris"))[[1]]$data(), mlr_tasks$get("iris")$data())
+  expect_equal(po$train(list(tsk("iris")))[[1]]$data(), mlr_tasks$get("iris")$data())
 
   po$param_set$values$selector = selector_grep("^Petal")
-  expect_set_equal(po$train(list("iris"))[[1]]$feature_names, c("Petal.Width", "Petal.Length"))
+  expect_set_equal(po$train(list(tsk("iris")))[[1]]$feature_names, c("Petal.Width", "Petal.Length"))
 
   po$param_set$values$selector = selector_name("Petal.Length")
-  expect_equal(po$train(list("iris"))[[1]]$feature_names, "Petal.Length")
+  expect_equal(po$train(list(tsk("iris")))[[1]]$feature_names, "Petal.Length")
 
   po$param_set$values$selector = selector_invert(selector_name("Petal.Length"))
-  expect_set_equal(po$train(list("iris"))[[1]]$feature_names, c("Sepal.Length", "Sepal.Width", "Petal.Width"))
+  expect_set_equal(po$train(list(tsk("iris")))[[1]]$feature_names, c("Sepal.Length", "Sepal.Width", "Petal.Width"))
 
   po$param_set$values$selector = selector_type("factor")
-  expect_set_equal(po$train(list("boston_housing"))[[1]]$feature_names, c("chas", "town"))
+  expect_set_equal(po$train(list(tsk("boston_housing")))[[1]]$feature_names, c("chas", "town"))
 
 })
 

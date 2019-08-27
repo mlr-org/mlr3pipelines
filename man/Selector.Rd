@@ -130,8 +130,10 @@ It is preferrable to use the \code{\link{Selector}} construction functions like 
 }
 
 \examples{
-iris_task = mlr3::mlr_tasks$get("iris")
-bh_task = mlr3::mlr_tasks$get("boston_housing")
+library(mlr3)
+
+iris_task = tsk("iris")
+bh_task = tsk("boston_housing")
 
 sela = selector_all()
 sela(iris_task)
