@@ -58,21 +58,23 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' gr = gunion(list(
-#'   mlr_pipeops$get("nop"),
-#'   mlr_pipeops$get("pca")
-#' )) %>>% mlr_pipeops$get("featureunion")
-#'
-#' gr$train("iris")
-#'
-#' po = mlr_pipeops$get("featureunion", innum = c("a", "b"))
-#'
-#' po$train(list("iris", "iris"))
-#'
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' task = tsk("iris")
+#' gr = gunion(list(
+#'   po("nop"),
+#'   po("pca")
+#' )) %>>% po("featureunion")
+#'
+#' gr$train(task)
+#'
+#' po = po("featureunion", innum = c("a", "b"))
+#'
+#' po$train(list(task, task))
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(

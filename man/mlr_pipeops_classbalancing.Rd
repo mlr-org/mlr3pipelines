@@ -92,8 +92,10 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-opb = mlr_pipeops$get("classbalancing")
-task = mlr3::mlr_tasks$get("spam")
+library(mlr3)
+
+task = tsk("spam")
+opb = po("classbalancing")
 
 # target class counts
 table(task$truth())

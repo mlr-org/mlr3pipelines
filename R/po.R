@@ -15,12 +15,15 @@
 #'   `PipeOp`, in which case it is given to this constructor;
 #'   or it may be a parameter value, in which case it is
 #'   given to the `param_vals` argument of the constructor.
-#' @examples
-#' po("learner", "classif.rpart", cp = 0.3)
-#' # is equivalent with:
-#' mlr3pipelines::mlr_pipeops$get("learner", "classif.rpart",
-#'   param_vals = list(cp = 0.3))
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' po("learner", lrn("classif.rpart"), cp = 0.3)
+#'
+#' # is equivalent with:
+#' mlr_pipeops$get("learner", lrn("classif.rpart"),
+#'   param_vals = list(cp = 0.3))
 po = function(.key, ...) {
   dictionary_sugar(mlr_pipeops, .key, ...)
 }

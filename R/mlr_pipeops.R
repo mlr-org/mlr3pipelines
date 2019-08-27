@@ -29,21 +29,16 @@
 #'   `input.num` (`integer`), `output.num` (`integer`), `input.type.train` (`character`),
 #'   `input.type.predict` (`character`), `output.type.train` (`character`), `output.type.predict` (`character`).
 #'
-#' @examples
-#' mlr_pipeops$get("pca")
-#'
-#' mlr_pipeops$get("learner", learner = "classif.rpart")
-#'
-#' # equivalent:
-#' mlr_pipeops$get("learner", "classif.rpart")
-#'
-#' # unnecessary and silly:
-#' mlr_pipeops$add("nop2", PipeOpNOP)
-#' mlr_pipeops$get("nop2")
-#'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' mlr_pipeops$get("learner", lrn("classif.rpart"))
+#'
+#' # equivalent:
+#' po("learner", learner = lrn("classif.rpart"))
 mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(

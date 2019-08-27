@@ -16,9 +16,9 @@ is \code{TRUE}, this corresponds to the \code{\link[stats:sd]{sd()}}.
 \section{Construction}{
 \preformatted{PipeOpScale$new(id = "scale", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"scale"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"scale"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -66,11 +66,14 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-pos = mlr_pipeops$get("scale")
+library(mlr3)
 
-pos$train(list("iris"))[[1]]$data()
+task = tsk("iris")
+pos = po("scale")
 
-one_line_of_iris = mlr3::mlr_tasks$get("iris")$filter(13)
+pos$train(list(task))[[1]]$data()
+
+one_line_of_iris = task$filter(13)
 
 one_line_of_iris$data()
 

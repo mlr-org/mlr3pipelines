@@ -81,8 +81,18 @@
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family Pipeops
+#' @family Meta PipeOps
+#' @export
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
-#' lrncv_po = mlr_pipeops$get("learner_cv", "classif.rpart")
+#' library(mlr3)
+#'
+#' task = tsk("iris")
+#' learner = lrn("classif.rpart")
+#'
+#' lrncv_po = po("learner_cv", learner)
 #' lrncv_po$learner$predict_type = "response"
 #'
 #' nop = mlr_pipeops$get("nop")
@@ -90,19 +100,13 @@
 #' graph = gunion(list(
 #'   lrncv_po,
 #'   nop
-#' )) %>>% mlr_pipeops$get("featureunion")
+#' )) %>>% po("featureunion")
 #'
-#' graph$train("iris")
+#' graph$train(task)
 #'
 #' graph$pipeops$classif.rpart$learner$predict_type = "prob"
 #'
-#' graph$train("iris")
-#'
-#' @family Pipeops
-#' @family Meta PipeOps
-#' @export
-#' @include PipeOpTaskPreproc.R
-#' @export
+#' graph$train(task)
 PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(

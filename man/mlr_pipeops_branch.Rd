@@ -24,6 +24,7 @@ output channels / options that are created, named \code{output1}...\code{output<
 \code{$selection} parameter will then be a \code{\link{ParamInt}}.
 If \code{options} is a \code{character}, it determines the names of channels directly.
 The \code{$selection} parameter will then be a \code{\link{ParamFct}}.
+\item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"branch"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -78,19 +79,20 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-pca = mlr_pipeops$get("pca")
-nop = mlr_pipeops$get("nop")
+library(mlr3)
+
+pca = po("pca")
+nop = po("nop")
 choices = c("pca", "nothing")
-gr = mlr_pipeops$get("branch", choices) \%>>\%
+gr = po("branch", choices) \%>>\%
   gunion(list(pca, nop)) \%>>\%
-  mlr_pipeops$get("unbranch", choices)
+  po("unbranch", choices)
 
 gr$param_set$values$branch.selection = "pca"
-gr$train(list("iris"))
+gr$train(tsk("iris"))
 
 gr$param_set$values$branch.selection = "nothing"
-gr$train(list("iris"))
-
+gr$train(tsk("iris"))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

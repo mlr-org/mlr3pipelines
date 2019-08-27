@@ -69,14 +69,16 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+library(mlr3)
+
 # Simple Bagging
 gr = greplicate(n = 5,
-  mlr_pipeops$get("subsample") \%>>\%
-  mlr_pipeops$get("learner", "classif.rpart")
+  po("subsample") \%>>\%
+  po("learner", lrn("classif.rpart"))
 ) \%>>\%
-  mlr_pipeops$get("classifavg")
+  po("classifavg")
 
-
+ mlr3::resample(tsk("iris"), GraphLearner$new(gr), rsmp("cv"))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

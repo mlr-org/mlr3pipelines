@@ -50,12 +50,14 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' library(mlr3)
+#'
 #' pos = mlr_pipeops$get("subsample")
 #'
-#' pos$train(list("iris"))
+#' pos$train(list(tsk("iris")))
 #'
 #' # simple bagging:
-#' gr = greplicate(pos %>>% mlr_pipeops$get("learner", "classif.rpart"), 5) %>>%
+#' gr = greplicate(pos %>>% mlr_pipeops$get("learner", lrn("classif.rpart")), 5) %>>%
 #'   mlr_pipeops$get("classifavg")
 #'
 #' @family PipeOps
@@ -75,18 +77,8 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
     },
 
     train_task = function(task) {
-      sample_safe = function(x, size, replace) {
-        if (length(x) == 1) {
-          if (!replace && size > 1) {
-            stop("cannot take a sample larger than the population when 'replace = FALSE'")
-          }
-          rep_len(x, size)
-        } else {
-          sample(x, size, replace)
-        }
-      }
       if (!self$param_set$values$stratify) {
-        keep = sample_safe(task$row_roles$use,
+        keep = shuffle(task$row_roles$use,
           ceiling(self$param_set$values$frac * task$nrow),
           replace = self$param_set$values$replace)
       } else {
@@ -95,7 +87,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         }
         splt = split(task$row_roles$use, task$data(cols = task$target_names))
         keep = unlist(map(splt, function(x) {
-          sample_safe(x,
+          shuffle(x,
             ceiling(self$param_set$values$frac * length(x)),
             replace = self$param_set$values$replace)
         }))
