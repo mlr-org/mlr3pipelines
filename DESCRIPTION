@@ -1,7 +1,7 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
 Version: 0.1
-Authors@R: 
+Authors@R:
     c(person(given = "Martin",
              family = "Binder",
              role = c("aut", "cre"),
@@ -34,7 +34,7 @@ Imports:
     checkmate,
     data.table,
     digest,
-    mlr3,
+    mlr3 (>= 0.1.2),
     mlr3misc,
     paradox,
     R6,
@@ -54,7 +54,7 @@ Suggests:
     rpart,
     testthat,
     visNetwork
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Remotes:
     mlr-org/mlr3,
