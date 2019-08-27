@@ -4,14 +4,14 @@
 \alias{as_pipeop}
 \title{Conversion to mlr3pipeline PipeOp}
 \usage{
-as_pipeop(x, deep_copy = FALSE)
+as_pipeop(x, clone = FALSE)
 }
 \arguments{
 \item{x}{(\code{any}) \cr
 Object to convert.}
 
-\item{deep_copy}{(\code{logical(1)}) \cr
-Whether to return a deep copy if \code{x} is a PipeOp.}
+\item{clone}{(\code{logical(1)}) \cr
+Whether to return a (deep copied) clone if \code{x} is a PipeOp.}
 }
 \value{
 \code{\link{PipeOp}} \code{x} or a deep clone of it.
@@ -19,7 +19,7 @@ Whether to return a deep copy if \code{x} is a PipeOp.}
 \description{
 The object is turned into a \code{PipeOp}
 if possible.
-If \code{deep_copy} is \code{TRUE}, a deep copy is made
+If \code{clone} is \code{TRUE}, a deep copy is made
 if the incoming object is a \code{PipeOp} to ensure the resulting
 object is a different reference from the incoming object.
 }

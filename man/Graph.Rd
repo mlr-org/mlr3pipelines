@@ -107,6 +107,8 @@ of the \code{single_input} argument, are analogous to \code{$train()}.
 }
 
 \examples{
+library(mlr3)
+
 g = Graph$new()$
   add_pipeop(PipeOpScale$new(id = "scale"))$
   add_pipeop(PipeOpPCA$new(id = "pca"))$
@@ -114,7 +116,7 @@ g = Graph$new()$
 g$input
 g$output
 
-task = mlr3::mlr_tasks$get("iris")
+task = tsk("iris")
 trained = g$train(task)
 trained[[1]]$data()
 

@@ -38,17 +38,20 @@
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' task = mlr3::mlr_tasks$get("pima")
-#' sum(complete.cases(task$data()))
-#'
-#' po = mlr_pipeops$get("impute")
-#' new_task = po$train(list(task = task))[[1]]
-#' sum(complete.cases(new_task$data()))
-#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' task = tsk("pima")
+#' sum(complete.cases(task$data()))
+#' task$missings()
+#'
+#' po = po("impute")
+#' new_task = po$train(list(task = task))[[1]]
+#' sum(complete.cases(new_task$data()))
+#' new_task$missings()
 PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOpTaskPreprocSimple,
   public = list(

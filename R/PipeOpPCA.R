@@ -12,7 +12,8 @@
 #' ```
 #' PipeOpPCA$new(id = "pca", param_vals = list())
 #' ```
-#" * `id` :: `character(1)`\cr
+#'
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"pca"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -50,12 +51,12 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' pop = mlr_pipeops$get("pca")
+#' library(mlr3)
 #'
-#' task = mlr3::mlr_tasks$get("iris")
+#' task = tsk("iris")
+#' pop = po("pca")
 #'
 #' task$data()
-#'
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state

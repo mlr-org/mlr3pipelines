@@ -13,9 +13,9 @@ This can add new features, or can change existing features.
 \section{Construction}{
 \preformatted{PipeOpMutate$new(id = "mutate", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"mutate"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"mutate"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -67,13 +67,15 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 }
 
 \examples{
-pom = mlr_pipeops$get("mutate")
+library(mlr3)
+
+pom = po("mutate")
 pom$param_set$values$mutation = list(
   Sepal.Area = ~ Sepal.Width * Sepal.Length,
   Petal.Area = ~ Petal.Width * Petal.Length
 )
 
-pom$train(list("iris"))[[1]]$data()
+pom$train(list(tsk("iris")))[[1]]$data()
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

@@ -18,7 +18,7 @@
 #' ```
 #' PipeOpEncode$new(id = "encode", param_vals = list())
 #' ```
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encode"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -51,11 +51,16 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
-#' poe = mlr_pipeops$get("encode")
+#' library(mlr3)
 #'
-#' task = mlr3::TaskClassif$new("task",
+#' task = TaskClassif$new("task",
 #'   data.table::data.table(x = letters[1:3], y = letters[1:3]), "x")
+#'
+#' poe = po("encode")
 #'
 #' # poe is initialized with encoding: "one-hot"
 #' poe$train(list(task))[[1]]$data()
@@ -72,9 +77,6 @@
 #'
 #' poe$param_set$values$method = "sum"
 #' poe$train(list(task))[[1]]$data()
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
 PipeOpEncode = R6Class("PipeOpEncode",
   inherit = PipeOpTaskPreprocSimple,
   public = list(

@@ -103,7 +103,12 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-lrncv_po = mlr_pipeops$get("learner_cv", "classif.rpart")
+library(mlr3)
+
+task = tsk("iris")
+learner = lrn("classif.rpart")
+
+lrncv_po = po("learner_cv", learner)
 lrncv_po$learner$predict_type = "response"
 
 nop = mlr_pipeops$get("nop")
@@ -111,14 +116,13 @@ nop = mlr_pipeops$get("nop")
 graph = gunion(list(
   lrncv_po,
   nop
-)) \%>>\% mlr_pipeops$get("featureunion")
+)) \%>>\% po("featureunion")
 
-graph$train("iris")
+graph$train(task)
 
 graph$pipeops$classif.rpart$learner$predict_type = "prob"
 
-graph$train("iris")
-
+graph$train(task)
 }
 \seealso{
 Other Meta PipeOps: \code{\link{mlr_pipeops_learner}}

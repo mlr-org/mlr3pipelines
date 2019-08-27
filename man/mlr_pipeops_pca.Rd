@@ -13,9 +13,9 @@ See \code{\link[stats:prcomp]{stats::prcomp()}} for details.
 \section{Construction}{
 \preformatted{PipeOpPCA$new(id = "pca", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"pca"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"pca"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -68,12 +68,12 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-pop = mlr_pipeops$get("pca")
+library(mlr3)
 
-task = mlr3::mlr_tasks$get("iris")
+task = tsk("iris")
+pop = po("pca")
 
 task$data()
-
 pop$train(list(task))[[1]]$data()
 
 pop$state

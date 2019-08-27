@@ -4,21 +4,21 @@
 \alias{as_graph}
 \title{Conversion to mlr3pipeline Graph}
 \usage{
-as_graph(x, deep_copy = FALSE)
+as_graph(x, clone = FALSE)
 }
 \arguments{
 \item{x}{(\code{any}) \cr
 Object to convert.}
 
-\item{deep_copy}{(\code{logical(1)}) \cr
-Whether to return a deep copy if \code{x} is a Graph.}
+\item{clone}{(\code{logical(1)}) \cr
+Whether to return a (deep copied) clone if \code{x} is a Graph.}
 }
 \value{
 \code{\link{Graph}} \code{x} or a deep clone of it.
 }
 \description{
 The object is turned into a \code{Graph} if possible.
-If \code{deep_copy} is \code{TRUE}, a deep copy is made
+If \code{clone} is \code{TRUE}, a deep copy is made
 if the incoming object is a \code{Graph} to ensure the resulting
 object is a different reference from the incoming object.
 }

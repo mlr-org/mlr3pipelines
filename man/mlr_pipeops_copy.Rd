@@ -19,6 +19,7 @@ specify which \code{\link{PipeOp}} gets connected to which.
 \itemize{
 \item \code{outnum} :: \code{numeric(1)}\cr
 Number of output channels, and therefore number of copies being made.
+\item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"copy"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -63,32 +64,32 @@ Only methods inherited from \code{\link{PipeOp}}.
 \examples{
 # The following copies the output of 'scale' automatically to both
 # 'pca' and 'nop'
-mlr_pipeops$get("scale") \%>>\%
+po("scale") \%>>\%
   gunion(list(
-    mlr_pipeops$get("pca"),
-    mlr_pipeops$get("nop")
+    po("pca"),
+    po("nop")
   ))
 
 # The following would not work: the '\%>>\%'-operator does not know
 # which output to connect to which input
 # > gunion(list(
-# >   mlr_pipeops$get("scale"),
-# >   mlr_pipeops$get("select")
+# >   po("scale"),
+# >   po("select")
 # > )) \%>>\%
 # >   gunion(list(
-# >     mlr_pipeops$get("pca"),
-# >     mlr_pipeops$get("nop"),
-# >     mlr_pipeops$get("impute")
+# >     po("pca"),
+# >     po("nop"),
+# >     po("impute")
 # >   ))
 # Instead, the 'copy' operator makes clear which output gets copied.
 gunion(list(
-  mlr_pipeops$get("scale") \%>>\% mlr_pipeops$get("copy", outnum = 2),
-  mlr_pipeops$get("select")
+  po("scale") \%>>\% mlr_pipeops$get("copy", outnum = 2),
+  po("select")
 )) \%>>\%
   gunion(list(
-    mlr_pipeops$get("pca"),
-    mlr_pipeops$get("nop"),
-    mlr_pipeops$get("impute")
+    po("pca"),
+    po("nop"),
+    po("impute")
   ))
 }
 \seealso{

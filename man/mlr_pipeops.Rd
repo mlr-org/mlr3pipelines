@@ -44,17 +44,12 @@ Returns a \code{data.table} with columns \code{key} (\code{character}), \code{pa
 }
 
 \examples{
-mlr_pipeops$get("pca")
+library(mlr3)
 
-mlr_pipeops$get("learner", learner = "classif.rpart")
+mlr_pipeops$get("learner", lrn("classif.rpart"))
 
 # equivalent:
-mlr_pipeops$get("learner", "classif.rpart")
-
-# unnecessary and silly:
-mlr_pipeops$add("nop2", PipeOpNOP)
-mlr_pipeops$get("nop2")
-
+po("learner", learner = lrn("classif.rpart"))
 }
 \seealso{
 Other mlr3pipelines backend related: \code{\link{Graph}},

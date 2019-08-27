@@ -26,7 +26,7 @@ test_that("LearnerClassifAvg", {
     lrn = LearnerClassifAvg$new()
     lrn$predict_type = predicttype
     expect_learner(lrn)
-    lrn$param_set$values = list(measure = "classif.acc", algorithm = "NLOPT_LN_COBYLA")
+    lrn$param_set$values = list(measure = msr("classif.acc"), algorithm = "NLOPT_LN_COBYLA")
     lrn$train(intask)
     expect_list(lrn$model, names = "named")
     expect_numeric(lrn$model$weights, len = 3)
@@ -41,7 +41,7 @@ test_that("LearnerClassifAvg", {
       lrn = LearnerClassifAvg$new()
       lrn$predict_type = predicttype
       expect_learner(lrn)
-      lrn$param_set$values = list(measure = "classif.auc", algorithm = "NLOPT_LN_COBYLA")
+      lrn$param_set$values = list(measure = msr("classif.auc"), algorithm = "NLOPT_LN_COBYLA")
       lrn$train(intask)
       expect_list(lrn$model, names = "named")
       expect_numeric(lrn$model$weights, len = 3)
@@ -82,13 +82,13 @@ test_that("LearnerRegrAvg", {
   expect_prediction(prd)
   expect_true(all(is.na(prd$se)))
 
-  intask = (greplicate(PipeOpLearnerCV$new(lrn("regr.featureless", predict_type = "response")), 3) %>>% PipeOpFeatureUnion$new())$train("boston_housing")[[1]]
+  intask = (greplicate(PipeOpLearnerCV$new(lrn("regr.featureless", predict_type = "response")), 3) %>>% PipeOpFeatureUnion$new())$train(tsk("boston_housing"))[[1]]
 
   # Works for accuracy
   lrn = LearnerRegrAvg$new()
   lrn$predict_type = "response"
   expect_learner(lrn)
-  lrn$param_set$values = list(measure = "regr.mse", algorithm = "NLOPT_LN_COBYLA")
+  lrn$param_set$values = list(measure = msr("regr.mse"), algorithm = "NLOPT_LN_COBYLA")
   lrn$train(intask)
   expect_list(lrn$model, names = "named")
   expect_numeric(lrn$model$weights, len = 3)
@@ -119,8 +119,8 @@ test_that("LearnerClassifAvg Pipeline", {
 
   lrn = LearnerClassifAvg$new()
   graph = gunion(list(
-      PipeOpLearnerCV$new("classif.rpart"),
-      PipeOpLearnerCV$new("classif.featureless"))) %>>%
+      PipeOpLearnerCV$new(lrn("classif.rpart")),
+      PipeOpLearnerCV$new(lrn("classif.featureless")))) %>>%
     PipeOpFeatureUnion$new() %>>%
     PipeOpLearner$new(lrn)
   expect_graph(graph)
@@ -164,8 +164,8 @@ test_that("LearnerRegrAvg Pipeline", {
 
   lrn = LearnerRegrAvg$new()
   graph = gunion(list(
-    PipeOpLearnerCV$new("regr.rpart"),
-    PipeOpLearnerCV$new("regr.featureless")
+    PipeOpLearnerCV$new(lrn("regr.rpart")),
+    PipeOpLearnerCV$new(lrn("regr.featureless"))
   )) %>>%
     PipeOpFeatureUnion$new() %>>%
     PipeOpLearner$new(lrn)

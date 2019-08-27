@@ -19,9 +19,9 @@ Use the \code{\link{PipeOpTaskPreproc}} \code{$affect_columns} functionality to 
 \section{Construction}{
 \preformatted{PipeOpEncode$new(id = "encode", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"encode"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"encode"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -72,10 +72,12 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 }
 
 \examples{
-poe = mlr_pipeops$get("encode")
+library(mlr3)
 
-task = mlr3::TaskClassif$new("task",
+task = TaskClassif$new("task",
   data.table::data.table(x = letters[1:3], y = letters[1:3]), "x")
+
+poe = po("encode")
 
 # poe is initialized with encoding: "one-hot"
 poe$train(list(task))[[1]]$data()
