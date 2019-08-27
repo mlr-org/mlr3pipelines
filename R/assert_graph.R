@@ -10,7 +10,6 @@
 #' @export
 assert_graph = function(x) {
   assert_r6(x, "Graph")
-  invisible(x)
 }
 
 #' @title Conversion to mlr3pipeline Graph
