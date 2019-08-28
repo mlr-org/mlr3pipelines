@@ -118,7 +118,7 @@ test_that("PipeOpEncodeLmer regr", {
 })
 
 
-test_that("PipeOpEncodeLmer", {
+test_that("PipeOpEncodeLmer multi and binaryclass", {
 
   sample_n_letters = function(n, l = 3) {sample(letters[1:l], n, replace = TRUE)}
 
@@ -168,8 +168,6 @@ test_that("PipeOpEncodeLmer", {
   expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
 
 })
-
-
 
 test_that("PipeOpEncodeLmer Edge Cases", {
   task = mlr3::TaskClassif$new("task",

@@ -44,6 +44,7 @@ Suggests:
     igraph,
     knitr,
     lgr,
+    lme4,
     mlbench,
     mlr3filters,
     mlr3learners,
@@ -85,6 +86,7 @@ Collate:
     'PipeOpColApply.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
+    'PipeOpEncodeImpact.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpImpute.R'

@@ -85,7 +85,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         ParamLgl$new("fast.optim", tags = c("train"))
       ))
       ps$values = list(fast.optim = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "lme4")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"))
     },
 
     select_cols = function(task) {
