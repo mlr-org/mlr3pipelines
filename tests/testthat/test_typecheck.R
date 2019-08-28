@@ -124,12 +124,10 @@ test_that("Autoconversion for pipeops works", {
   po$input$train = "Task"
   po$output$predict = "MeasureClassif"
 
-  expect_equal(po$train(list("iris"))[[1]], mlr_tasks$get("iris"))
+  expect_equal(po$train(list(tsk("iris")))[[1]], mlr_tasks$get("iris"))
 
-  expect_equal(po$predict(list("classif.fn"))[[1]], mlr_measures$get("classif.fn"))
+  expect_equal(po$predict(list(msr("classif.fn")))[[1]], mlr_measures$get("classif.fn"))
 
-  expect_error(po$predict(list("regr.mse")), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
-
-  expect_error(po$predict(list("regrmse")), "PipeOp copy.*Conversion from given data to MeasureClassif.*regrmse.*not found.*regr\\.mse")
+  expect_error(po$predict(list(msr("regr.mse"))), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
 
 })

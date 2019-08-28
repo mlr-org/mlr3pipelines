@@ -31,21 +31,22 @@ to the input argument list.}
 Create a multiplexed graph.
 }
 \examples{
-po_pca = mlr_pipeops$get("pca")
-po_nop = mlr_pipeops$get("nop")
+library(mlr3)
 
-branch(pca = po_pca, nothing = po_nop)
+po_pca = po("pca")
+po_nop = po("nop")
+
+branches = branch(pca = po_pca, nothing = po_nop)
 # gives the same as
 branches = c("pca", "nothing")
-mlr_pipeops$get("branch", branches) \%>>\%
+po("branch", branches) \%>>\%
   gunion(list(po_pca, po_nop)) \%>>\%
-  mlr_pipeops$get("unbranch", branches)
+  po("unbranch", branches)
 
 branch(pca = po_pca, nothing = po_nop,
   .prefix_branchops = "br_", .prefix_paths = "xy_")
-#gives the same as
-mlr_pipeops$get("branch", branches, id = "br_branch") \%>>\%
+# gives the same as
+po("branch", branches, id = "br_branch") \%>>\%
   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) \%>>\%
-  mlr_pipeops$get("unbranch", branches, id = "br_unbranch")
-
+  po("unbranch", branches, id = "br_unbranch")
 }

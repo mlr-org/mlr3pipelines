@@ -22,7 +22,7 @@
 #'   `$selection` parameter will then be a [`ParamInt`].
 #'   If `options` is a `character`, it determines the names of channels directly.
 #'   The `$selection` parameter will then be a [`ParamFct`].
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"branch"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -60,24 +60,25 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' pca = mlr_pipeops$get("pca")
-#' nop = mlr_pipeops$get("nop")
-#' choices = c("pca", "nothing")
-#' gr = mlr_pipeops$get("branch", choices) %>>%
-#'   gunion(list(pca, nop)) %>>%
-#'   mlr_pipeops$get("unbranch", choices)
-#'
-#' gr$param_set$values$branch.selection = "pca"
-#' gr$train(list("iris"))
-#'
-#' gr$param_set$values$branch.selection = "nothing"
-#' gr$train(list("iris"))
-#'
 #' @family PipeOps
 #' @family Path Branching
 #' @include PipeOp.R
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' pca = po("pca")
+#' nop = po("nop")
+#' choices = c("pca", "nothing")
+#' gr = po("branch", choices) %>>%
+#'   gunion(list(pca, nop)) %>>%
+#'   po("unbranch", choices)
+#'
+#' gr$param_set$values$branch.selection = "pca"
+#' gr$train(tsk("iris"))
+#'
+#' gr$param_set$values$branch.selection = "nothing"
+#' gr$train(tsk("iris"))
 PipeOpBranch = R6Class("PipeOpBranch",
   inherit = PipeOp,
   public = list(
@@ -142,25 +143,27 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #'   are taken from the names of the input arguments if present or `"poX"` where X counts up. If this is
 #'   a `character(1)`, it is a prefix that is added to the `PipeOp` IDs *additionally*
 #'   to the input argument list.
-#' @examples
-#' po_pca = mlr_pipeops$get("pca")
-#' po_nop = mlr_pipeops$get("nop")
 #'
-#' branch(pca = po_pca, nothing = po_nop)
+#' @export
+#' @examples
+#' library(mlr3)
+#'
+#' po_pca = po("pca")
+#' po_nop = po("nop")
+#'
+#' branches = branch(pca = po_pca, nothing = po_nop)
 #' # gives the same as
 #' branches = c("pca", "nothing")
-#' mlr_pipeops$get("branch", branches) %>>%
+#' po("branch", branches) %>>%
 #'   gunion(list(po_pca, po_nop)) %>>%
-#'   mlr_pipeops$get("unbranch", branches)
+#'   po("unbranch", branches)
 #'
 #' branch(pca = po_pca, nothing = po_nop,
 #'   .prefix_branchops = "br_", .prefix_paths = "xy_")
-#' #gives the same as
-#' mlr_pipeops$get("branch", branches, id = "br_branch") %>>%
+#' # gives the same as
+#' po("branch", branches, id = "br_branch") %>>%
 #'   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) %>>%
-#'   mlr_pipeops$get("unbranch", branches, id = "br_unbranch")
-#'
-#' @export
+#'   po("unbranch", branches, id = "br_unbranch")
 branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = FALSE) {
   assert_list(.graphs, null.ok = TRUE)
   assert_string(.prefix_branchops)

@@ -10,45 +10,44 @@
 #' @export
 assert_graph = function(x) {
   assert_r6(x, "Graph")
-  invisible(x)
 }
 
 #' @title Conversion to mlr3pipeline Graph
 #'
 #' @description
 #' The object is turned into a `Graph` if possible.
-#' If `deep_copy` is `TRUE`, a deep copy is made
+#' If `clone` is `TRUE`, a deep copy is made
 #' if the incoming object is a `Graph` to ensure the resulting
 #' object is a different reference from the incoming object.
 #'
 #' @param x (`any`) \cr
 #'   Object to convert.
-#' @param deep_copy (`logical(1)`) \cr
-#'   Whether to return a deep copy if `x` is a Graph.
+#' @param clone (`logical(1)`) \cr
+#'   Whether to return a (deep copied) clone if `x` is a Graph.
 #' @return [`Graph`] `x` or a deep clone of it.
 #' @family Graph operators
 #' @export
-as_graph = function(x, deep_copy = FALSE) {
+as_graph = function(x, clone = FALSE) {
   UseMethod("as_graph")
 }
 
 #' @export
-as_graph.default = function(x, deep_copy = FALSE) {
+as_graph.default = function(x, clone = FALSE) {
   x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically for convertability
-  if (deep_copy) {
+  if (clone) {
     x = x$clone(deep = TRUE)
   }
   x
 }
 
 #' @export
-as_graph.list = function(x, deep_copy = FALSE) {
+as_graph.list = function(x, clone = FALSE) {
   gunion(x)  # gunion itself will convert individual members of x
 }
 
 #' @export
-as_graph.Graph = function(x, deep_copy = FALSE) {
-  if (deep_copy) {
+as_graph.Graph = function(x, clone = FALSE) {
+  if (clone) {
     x = x$clone(deep = TRUE)
   }
   x
@@ -74,36 +73,36 @@ assert_pipeop = function(x) {
 #' @description
 #' The object is turned into a `PipeOp`
 #' if possible.
-#' If `deep_copy` is `TRUE`, a deep copy is made
+#' If `clone` is `TRUE`, a deep copy is made
 #' if the incoming object is a `PipeOp` to ensure the resulting
 #' object is a different reference from the incoming object.
 #'
 #' @param x (`any`) \cr
 #'   Object to convert.
-#' @param deep_copy (`logical(1)`) \cr
-#'   Whether to return a deep copy if `x` is a PipeOp.
+#' @param clone (`logical(1)`) \cr
+#'   Whether to return a (deep copied) clone if `x` is a PipeOp.
 #' @return [`PipeOp`] `x` or a deep clone of it.
 #' @family Graph operators
 #' @export
-as_pipeop = function(x, deep_copy = FALSE) {
+as_pipeop = function(x, clone = FALSE) {
   UseMethod("as_pipeop")
 }
 
 #' @export
-as_pipeop.default = function(x, deep_copy = FALSE) {
+as_pipeop.default = function(x, clone = FALSE) {
   stopf("%s can not be converted to PipeOp", deparse(substitute(x))[1])
 }
 
 #' @export
-as_pipeop.PipeOp = function(x, deep_copy = FALSE) {
-  if (deep_copy) {
+as_pipeop.PipeOp = function(x, clone = FALSE) {
+  if (clone) {
     x = x$clone(deep = TRUE)
   }
   x
 }
 
 #' @export
-as_pipeop.character = function(x, deep_copy = FALSE) {
+as_pipeop.character = function(x, clone = FALSE) {
   assert_string(x)
   if (x %nin% c(mlr_pipeops$keys(), mlr_learners$keys())) {
     stopf("'%s' is neither in mlr_pipeops nor in mlr_learners.%s%s",
@@ -117,6 +116,6 @@ as_pipeop.character = function(x, deep_copy = FALSE) {
 }
 
 #' @export
-as_pipeop.Learner = function(x, deep_copy = FALSE) {
+as_pipeop.Learner = function(x, clone = FALSE) {
   PipeOpLearner$new(x)
 }

@@ -76,13 +76,13 @@ get_class_hierarchy = function(classname) {
 #' @param hierarchy `character` the class hieararchy to add; should
 #'   correspond to the `class()` of the lowest object in the hierarchy.
 #' @return `NULL`
+#' @family class hierarchy operations
+#' @export
 #' @examples
 #' # This lets mlr3pipelines handle "data.table" as "data.frame".
 #' # This is an example and not necessary, because mlr3pipelines adds it by default.
 #'
 #' add_class_hierarchy_cache(c("data.table", "data.frame"))
-#' @family class hierarchy operations
-#' @export
 add_class_hierarchy_cache = function(hierarchy) {
   assert_character(hierarchy, any.missing = FALSE, min.len = 1)
   class_hierarchy_cache[[hierarchy[1]]] = hierarchy
@@ -134,14 +134,13 @@ default_chc = list(
 #'   a sub-class as recognized by `are_types_compatible()`.
 #' @param packages `character` The packages required to be loaded for fun to operate.
 #' @return `NULL`.
+#' @family class hierarchy operations
+#' @export
 #' @examples
 #' # This lets mlr3pipelines automatically try to convert a string into
 #' # a `PipeOp` by querying the [`mlr_pipeops`] [`Dictionary`][mlr3misc::Dictionary].
 #' # This is an example and not necessary, because mlr3pipelines adds it by default.
 #' register_autoconvert_function("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
-#'
-#' @family class hierarchy operations
-#' @export
 register_autoconvert_function = function(cls, fun, packages = character(0)) {
   assert_string(cls)
   assert_function(fun)

@@ -21,7 +21,7 @@
 #'   to produce channel names matching with the corresponding [`PipeOpBranch`].
 #'   However, it is not necessary to have matching names and the *vararg* option
 #'   is always viable.
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"unbranch"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -50,15 +50,15 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' # See PipeOpBranch for a complete branching example
-#' pou = mlr_pipeops$get("unbranch")
-#'
-#' pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 #' @family PipeOps
 #' @family Path Branching
 #' @include PipeOp.R
 #' @export
+#' @examples
+#' # See PipeOpBranch for a complete branching example
+#' pou = po("unbranch")
+#'
+#' pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 PipeOpUnbranch = R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(

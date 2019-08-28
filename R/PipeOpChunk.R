@@ -16,7 +16,7 @@
 #'
 #' * `outnum` :: `numeric(1)`\cr
 #'   Number of output channels, and therefore number of chunks created.
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"chunk"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -44,17 +44,20 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @examples
-#' opc = mlr_pipeops$get("chunk", 2)
-#'
-#' # watch the row number: 89 during training (task is chunked)...
-#' opc$train(list("wine"))
-#'
-#' # ... 178 during predict (task is copied)
-#' opc$predict(list("wine"))
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' task = tsk("wine")
+#' opc = mlr_pipeops$get("chunk", 2)
+#'
+#' # watch the row number: 89 during training (task is chunked)...
+#' opc$train(list(task))
+#'
+#' # ... 178 during predict (task is copied)
+#' opc$predict(list(task))
 PipeOpChunk = R6Class("PipeOpChunk",
   inherit = PipeOp,
   public = list(

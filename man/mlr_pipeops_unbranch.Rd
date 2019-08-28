@@ -23,6 +23,7 @@ The difference between these three is purely cosmetic if the user chooses
 to produce channel names matching with the corresponding \code{\link{PipeOpBranch}}.
 However, it is not necessary to have matching names and the \emph{vararg} option
 is always viable.
+\item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"unbranch"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -67,7 +68,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 
 \examples{
 # See PipeOpBranch for a complete branching example
-pou = mlr_pipeops$get("unbranch")
+pou = po("unbranch")
 
 pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 }

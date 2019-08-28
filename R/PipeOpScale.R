@@ -15,7 +15,7 @@
 #' ```
 #' PipeOpScale$new(id = "scale", param_vals = list())
 #' ```
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"scale"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -48,11 +48,14 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' pos = mlr_pipeops$get("scale")
+#' library(mlr3)
 #'
-#' pos$train(list("iris"))[[1]]$data()
+#' task = tsk("iris")
+#' pos = po("scale")
 #'
-#' one_line_of_iris = mlr3::mlr_tasks$get("iris")$filter(13)
+#' pos$train(list(task))[[1]]$data()
+#'
+#' one_line_of_iris = task$filter(13)
 #'
 #' one_line_of_iris$data()
 #'

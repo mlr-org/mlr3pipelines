@@ -12,7 +12,7 @@
 #' ```
 #' PipeOpNOP$new(id = "nop", param_vals = list())
 #' ```
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"nop"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -38,18 +38,20 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
-#' nop = mlr_pipeops$get("nop")
+#' library(mlr3)
+#'
+#' nop = po("nop")
 #'
 #' nop$train(list(1))
 #'
 #' # use `gunion` and `%>>%` to create a "bypass"
 #' # next to "pca"
 #' gr = gunion(list(
-#'   mlr_pipeops$get("pca"),
+#'   po("pca"),
 #'   nop
-#' )) %>>% mlr_pipeops$get("featureunion")
+#' )) %>>% po("featureunion")
 #'
-#' gr$train(list("iris"))[[1]]$data()
+#' gr$train(tsk("iris"))[[1]]$data()
 #' @family PipeOps
 #' @family Placeholder Pipeops
 #' @include PipeOp.R
