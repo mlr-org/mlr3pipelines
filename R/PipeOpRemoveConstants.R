@@ -57,10 +57,10 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
     initialize = function(id = "remove_constants") {
       ps = ParamSet$new(list(
           ParamDbl$new("ratio", lower = 0, upper = 1, default = 0, tags = c("train", "predict", "required")),
-          ParamInt$new("digits", lower = 0, tags = "train"),
+          ParamInt$new("digits", lower = 0L, default = 8L, tags = c("required", "train")),
           ParamLgl$new("na_ignore", default = FALSE, tags = c("train", "required"))
       ))
-      ps$values = list(ratio = 0, na_ignore = TRUE)
+      ps$values = list(ratio = 0, digits = 8, na_ignore = TRUE)
       super$initialize(id, ps)
     },
 
@@ -80,8 +80,8 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
 
 mlr_pipeops$add("remove_constants", PipeOpRemoveConstants)
 
-calculate_constness = function(x, digits = NULL, na_ignore = FALSE) {
-  if (is.double(x) && !is.null(digits)) {
+calculate_constness = function(x, digits, na_ignore) {
+  if (is.double(x)) {
     x = round(x, digits)
   }
 
