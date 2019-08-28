@@ -92,6 +92,7 @@ Collate:
     'PipeOpLearnerCV.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
+    'PipeOpNewTarget.R'
     'PipeOpPCA.R'
     'PipeOpRegrAvg.R'
     'PipeOpScale.R'

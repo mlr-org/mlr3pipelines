@@ -127,6 +127,7 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{mlr_pipeops}}
 
 Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpNewTarget}},
   \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},

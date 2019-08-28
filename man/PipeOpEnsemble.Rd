@@ -89,8 +89,9 @@ This method is abstract, it must be implemented by deriving classes.
 }
 
 \seealso{
-Other PipeOps: \code{\link{PipeOpTaskPreproc}},
-  \code{\link{PipeOp}}, \code{\link{mlr_pipeops_branch}},
+Other PipeOps: \code{\link{PipeOpNewTarget}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},
   \code{\link{mlr_pipeops_classbalancing}},
   \code{\link{mlr_pipeops_classifavg}},

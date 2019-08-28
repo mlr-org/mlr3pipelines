@@ -118,6 +118,7 @@ rr$learners[[1]]$model$auc$scores
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpNewTarget}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},
