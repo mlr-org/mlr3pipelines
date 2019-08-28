@@ -10,8 +10,8 @@ test_that("PipeOpBranch - basic properties", {
   expect_pipeop(po)
 
 
-  expect_data_table(po$input, nrow = 1)
-  expect_data_table(po$output, nrow = 3)
+  expect_data_table(po$input, nrows = 1)
+  expect_data_table(po$output, nrows = 3)
 })
 
 
@@ -145,11 +145,12 @@ test_that("branch function", {
   expect_graph_equal(
     branch(b = po2, a = gunion(list(po1, po3)) %>>% pofu),
     gunion(list(
-        PipeOpBranch$new(c("b", "a")),
-        gunion(list(
-            po2,
-            gunion(list(po1, po3)) %>>% pofu)) %>>%
-          PipeOpUnbranch$new(c("b", "a"))))$
+      PipeOpBranch$new(c("b", "a")),
+      gunion(list(
+        po2,
+        gunion(list(po1, po3)) %>>% pofu
+      )) %>>%
+        PipeOpUnbranch$new(c("b", "a"))))$
       add_edge("branch", "scale", src_channel = "a")$
       add_edge("branch", "pca", src_channel = "a")$
       add_edge("branch", "scale2", src_channel = "b")
@@ -163,11 +164,12 @@ test_that("branch function", {
   expect_graph_equal(
     branch(a = gunion(list(po1, po3)) %>>% pofu, b = pofu2, .prefix_branchops = "xy_", .prefix_paths = TRUE),
     gunion(list(
-        PipeOpBranch$new(c("a", "b"), id = "xy_branch"),
-        gunion(list(
-            a = gunion(list(po1, po3)) %>>% pofu,
-            b = pofu2)) %>>%
-          PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")))$
+      PipeOpBranch$new(c("a", "b"), id = "xy_branch"),
+      gunion(list(
+        a = gunion(list(po1, po3)) %>>% pofu,
+        b = pofu2
+      )) %>>%
+        PipeOpUnbranch$new(c("a", "b"), id = "xy_unbranch")))$
       add_edge("xy_branch", "a.scale", src_channel = "a")$
       add_edge("xy_branch", "a.pca", src_channel = "a")$
       add_edge("xy_branch", "b.featureunion", src_channel = "b", dst_channel = "input1")$

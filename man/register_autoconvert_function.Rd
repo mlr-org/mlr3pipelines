@@ -31,7 +31,6 @@ a desired type.
 # a `PipeOp` by querying the [`mlr_pipeops`] [`Dictionary`][mlr3misc::Dictionary].
 # This is an example and not necessary, because mlr3pipelines adds it by default.
 register_autoconvert_function("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
-
 }
 \seealso{
 Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},

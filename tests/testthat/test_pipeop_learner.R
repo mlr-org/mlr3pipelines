@@ -4,8 +4,8 @@ test_that("PipeOpLearner - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearner$new(lrn)
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 1)
-  expect_data_table(po$output, nrow = 1)
+  expect_data_table(po$input, nrows = 1)
+  expect_data_table(po$output, nrows = 1)
 
   task = mlr_tasks$get("iris")
   result = train_pipeop(po, list(task = task))

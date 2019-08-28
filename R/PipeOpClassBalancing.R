@@ -1,5 +1,6 @@
 #' @title PipeOpClassBalancing
 #'
+#' @usage NULL
 #' @name mlr_pipeops_classbalancing
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -72,9 +73,14 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
-#' opb = mlr_pipeops$get("classbalancing")
-#' task = mlr3::mlr_tasks$get("spam")
+#' library(mlr3)
+#'
+#' task = tsk("spam")
+#' opb = po("classbalancing")
 #'
 #' # target class counts
 #' table(task$truth())
@@ -90,21 +96,18 @@
 #'   adjust = "all", shuffle = FALSE)
 #' result = opb$train(list(task))[[1]]
 #' table(result$truth())
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
 PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
   inherit = PipeOpTaskPreproc,
 
   public = list(
     initialize = function(id = "classbalancing", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("ratio", lower = 0, upper = Inf),
+        ParamDbl$new("ratio", lower = 0, upper = Inf, tags = "train"),
         ParamFct$new("reference",
-          levels = c("all", "major", "minor", "nonmajor", "nonminor", "one")),
+          levels = c("all", "major", "minor", "nonmajor", "nonminor", "one"), tags = "train"),
         ParamFct$new("adjust",
-          levels = c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample")),
-        ParamLgl$new("shuffle", default = TRUE)
+          levels = c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample"), tags = "train"),
+        ParamLgl$new("shuffle", default = TRUE, tags = "train")
       ))
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)

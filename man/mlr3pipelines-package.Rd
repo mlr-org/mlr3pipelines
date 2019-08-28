@@ -22,11 +22,13 @@ Useful links:
 \author{
 \strong{Maintainer}: Martin Binder \email{martin.binder@mail.com}
 
+Authors:
+\itemize{
+  \item Bernd Bischl \email{bernd_bischl@gmx.net} (0000-0001-6002-6980)
+}
+
 Other contributors:
 \itemize{
-  \item Bernd Bischl \email{bernd_bischl@gmx.net} [contributor]
-  \item Michel Lang \email{michellang@gmail.com} [contributor]
-  \item Lars Kotthoff \email{larsko@cs.ubc.ca} [contributor]
   \item Florian Pfisterer \email{pfistererf@googlemail.com} [contributor]
 }
 

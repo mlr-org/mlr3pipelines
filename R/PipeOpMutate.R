@@ -12,7 +12,7 @@
 #' ```
 #' PipeOpMutate$new(id = "mutate", param_vals = list())
 #' ```
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"mutate"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -48,24 +48,26 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
-#' pom = mlr_pipeops$get("mutate")
+#' library(mlr3)
+#'
+#' pom = po("mutate")
 #' pom$param_set$values$mutation = list(
 #'   Sepal.Area = ~ Sepal.Width * Sepal.Length,
 #'   Petal.Area = ~ Petal.Width * Petal.Length
 #' )
 #'
-#' pom$train(list("iris"))[[1]]$data()
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
+#' pom$train(list(tsk("iris")))[[1]]$data()
 PipeOpMutate = R6Class("PipeOpMutate",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "mutate", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("mutation", custom_check = check_mutation_formulae, tags = "required"),
-        ParamLgl$new("delete_originals", tags = "required")
+        ParamUty$new("mutation", custom_check = check_mutation_formulae, tags = c("train", "predict", "required")),
+        ParamLgl$new("delete_originals", tags = c("train", "predict", "required"))
       ))
       ps$values = list(mutation = list(), delete_originals = FALSE)
       super$initialize(id, ps, param_vals = param_vals)

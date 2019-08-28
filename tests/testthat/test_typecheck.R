@@ -107,7 +107,7 @@ test_that("Autoconversion utility functions work", {
 
   expect_identical(get_autoconverter("test_subclass")$fun, bfun)  # does the test_hyperclass conversion, because subclass before superclass
   expect_identical(get_autoconverter("test_superclass")$fun, afun)  # converts to "test", because distance to "test_hyperclass" is larger
-  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun) # actually registered to bfun
+  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun)  # actually registered to bfun
   expect_identical(get_autoconverter("test_megaclass")$fun, bfun)  # converts to "test_hyperclass" because distance to "test" is larger
 
   reset_autoconvert_register()  # check that reset actually empties the register to default
@@ -124,12 +124,10 @@ test_that("Autoconversion for pipeops works", {
   po$input$train = "Task"
   po$output$predict = "MeasureClassif"
 
-  expect_equal(po$train(list("iris"))[[1]], mlr_tasks$get("iris"))
+  expect_equal(po$train(list(tsk("iris")))[[1]], mlr_tasks$get("iris"))
 
-  expect_equal(po$predict(list("classif.fn"))[[1]], mlr_measures$get("classif.fn"))
+  expect_equal(po$predict(list(msr("classif.fn")))[[1]], mlr_measures$get("classif.fn"))
 
-  expect_error(po$predict(list("regr.mse")), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
-
-  expect_error(po$predict(list("regrmse")), "PipeOp copy.*Conversion from given data to MeasureClassif.*regrmse.*not found.*regr\\.mse")
+  expect_error(po$predict(list(msr("regr.mse"))), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
 
 })

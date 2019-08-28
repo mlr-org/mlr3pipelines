@@ -10,13 +10,14 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#' @family Learners
 #' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
     initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, predict_type = NULL) {
 
-      graph = as_graph(graph, deep_copy = TRUE)
+      graph = as_graph(graph, clone = TRUE)
       self$graph = graph
       output = graph$output
       if (nrow(output) != 1) {

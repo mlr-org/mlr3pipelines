@@ -8,7 +8,7 @@ test_that("adding multiple edges to output channels works", {
 
   expect_output(print(graph), c("scale.*subsample,pca.*\n.*subsample.*scale.*\n.*pca.*scale"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
@@ -96,7 +96,7 @@ test_that("adding multiple edges to vararg input channel works", {
 
   expect_output(print(graph), c("scale.*vararg.*\n.*pca.*vararg.*\n.*vararg.*scale,pca"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
@@ -115,7 +115,7 @@ test_that("adding multiple edges to vararg input channel works", {
 
   expect_output(print(graph), c("scale.*vararg.*\n.*pca.*vararg.*\n.*subsample.*vararg.*\n.*select.*vararg.*\n.*vararg.*scale,pca,subsample,select"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 

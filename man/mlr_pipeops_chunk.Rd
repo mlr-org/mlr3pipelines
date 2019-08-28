@@ -17,6 +17,7 @@ simply passes on the input during \code{outnum} times during prediction.
 \itemize{
 \item \code{outnum} :: \code{numeric(1)}\cr
 Number of output channels, and therefore number of chunks created.
+\item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"chunk"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -61,13 +62,16 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+library(mlr3)
+
+task = tsk("wine")
 opc = mlr_pipeops$get("chunk", 2)
 
 # watch the row number: 89 during training (task is chunked)...
-opc$train(list("wine"))
+opc$train(list(task))
 
 # ... 178 during predict (task is copied)
-opc$predict(list("wine"))
+opc$predict(list(task))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

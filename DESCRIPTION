@@ -1,27 +1,26 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
 Version: 0.1
-Authors@R: 
+Authors@R:
     c(person(given = "Martin",
              family = "Binder",
              role = c("aut", "cre"),
              email = "martin.binder@mail.com"),
-      person(given = "Bernd",
-             family = "Bischl",
-             role = "ctb",
-             email = "bernd_bischl@gmx.net"),
-      person(given = "Michel",
-             family = "Lang",
-             role = "ctb",
-             email = "michellang@gmail.com"),
-      person(given = "Lars",
-             family = "Kotthoff",
-             role = "ctb",
-             email = "larsko@cs.ubc.ca"),
       person(given = "Florian",
              family = "Pfisterer",
-             role = "ctb",
-             email = "pfistererf@googlemail.com"))
+             role = "aut",
+             email = "pfistererf@googlemail.com",
+             comment = c(ORCID = "0000-0001-8867-762X")),
+      person(given = "Bernd",
+             family = "Bischl",
+             role = "aut",
+             email = "bernd_bischl@gmx.net",
+             comment = c(ORCID = "0000-0001-6002-6980")),
+      person(given = "Michel",
+             family = "Lang",
+             role = "aut",
+             email = "michellang@gmail.com",
+             comment = c(ORCID = "0000-0001-9754-0393")))
 Description: Pipelines for mlr3.
 License: LGPL-3
 URL: https://mlr3pipelines.mlr-org.com,
@@ -34,7 +33,7 @@ Imports:
     checkmate,
     data.table,
     digest,
-    mlr3,
+    mlr3 (>= 0.1.2),
     mlr3misc,
     paradox,
     R6,
@@ -56,6 +55,7 @@ Suggests:
     visNetwork, 
     smotefamily
 VignetteBuilder: 
+    visNetwork
     knitr
 Remotes:
     mlr-org/mlr3,

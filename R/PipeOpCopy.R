@@ -18,7 +18,7 @@
 #'
 #' * `outnum` :: `numeric(1)`\cr
 #'   Number of output channels, and therefore number of copies being made.
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"copy"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -49,32 +49,32 @@
 #' @examples
 #' # The following copies the output of 'scale' automatically to both
 #' # 'pca' and 'nop'
-#' mlr_pipeops$get("scale") %>>%
+#' po("scale") %>>%
 #'   gunion(list(
-#'     mlr_pipeops$get("pca"),
-#'     mlr_pipeops$get("nop")
+#'     po("pca"),
+#'     po("nop")
 #'   ))
 #'
 #' # The following would not work: the '%>>%'-operator does not know
 #' # which output to connect to which input
 #' # > gunion(list(
-#' # >   mlr_pipeops$get("scale"),
-#' # >   mlr_pipeops$get("select")
+#' # >   po("scale"),
+#' # >   po("select")
 #' # > )) %>>%
 #' # >   gunion(list(
-#' # >     mlr_pipeops$get("pca"),
-#' # >     mlr_pipeops$get("nop"),
-#' # >     mlr_pipeops$get("impute")
+#' # >     po("pca"),
+#' # >     po("nop"),
+#' # >     po("impute")
 #' # >   ))
 #' # Instead, the 'copy' operator makes clear which output gets copied.
 #' gunion(list(
-#'   mlr_pipeops$get("scale") %>>% mlr_pipeops$get("copy", outnum = 2),
-#'   mlr_pipeops$get("select")
+#'   po("scale") %>>% mlr_pipeops$get("copy", outnum = 2),
+#'   po("select")
 #' )) %>>%
 #'   gunion(list(
-#'     mlr_pipeops$get("pca"),
-#'     mlr_pipeops$get("nop"),
-#'     mlr_pipeops$get("impute")
+#'     po("pca"),
+#'     po("nop"),
+#'     po("impute")
 #'   ))
 #' @family PipeOps
 #' @family Placeholder Pipeops

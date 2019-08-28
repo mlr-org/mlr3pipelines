@@ -110,6 +110,11 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
   \code{\link{mlr_pipeops}}
+
+Other Ensembles: \code{\link{mlr_learners_avg}},
+  \code{\link{mlr_pipeops_classifavg}},
+  \code{\link{mlr_pipeops_regravg}}
 }
+\concept{Ensembles}
 \concept{PipeOps}
 \keyword{datasets}
