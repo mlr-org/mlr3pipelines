@@ -8,7 +8,8 @@
 #' @description
 #' Remove constant features from a [mlr3::Task].
 #' For each feature, calculates the ratio of features which differ from their mode value.
-#' Numeric features are optionally rounded first.
+#' All features which a ratio below a settable threshold are removed from the task.
+#' Numeric features are rounded first.
 #' Missing values can be ignored or treated as a regular value.
 #'
 #' @section Construction:
@@ -21,7 +22,7 @@
 #'
 #' @section State:
 #' `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `removed`: names of removed features
+#' * `ratios`: Named numeric vector of calculated ratios.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as:
