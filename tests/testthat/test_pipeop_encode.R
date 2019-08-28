@@ -91,7 +91,7 @@ test_that("PipeOpEncode", {
 })
 
 
-test_that("PipeOpEncodeLmer", {
+test_that("PipeOpEncodeLmer regr", {
   task = mlr_tasks$get("boston_housing")
 
   chaslevels = task$levels()$chas
@@ -122,32 +122,75 @@ test_that("PipeOpEncodeLmer", {
 
   sample_n_letters = function(n, l = 3) {sample(letters[1:l], n, replace = TRUE)}
 
- task = mlr3::TaskClassif$new("task",
-   data.table::data.table(x = sample_n_letters(10), y = sample_n_letters(10), z = 1:10), "x")
+  task = mlr3::TaskClassif$new("task",
+    data.table::data.table(x = sample_n_letters(10), y = sample_n_letters(10), z = 1:10), "x")
 
   expect_datapreproc_pipeop_class(PipeOpEncodeLmer, task = task)
-
   op = PipeOpEncodeLmer$new()
   expect_pipeop(op)
-
   nt = train_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
 
   # factor cols are removed
   expect_true(all(c("y") %nin% fn))
   expect_true("factor" %nin% nt$feature_types$type)
-
   # y is encoded
   expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
-
-
   nt = predict_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
   # factor cols are removed
   expect_true(all(c("y") %nin% fn))
   expect_true("factor" %nin% nt$feature_types$type)
-
   # y is encoded
   expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
 
+
+  task = mlr3::TaskClassif$new("task",
+    data.table::data.table(x = sample_n_letters(10, 2), y = sample_n_letters(10, 3), z = 1:10), "x")
+
+  expect_datapreproc_pipeop_class(PipeOpEncodeLmer, task = task)
+  op = PipeOpEncodeLmer$new()
+  expect_pipeop(op)
+  nt = train_pipeop(op, inputs = list(task))[[1L]]
+  fn = nt$feature_names
+
+  # factor cols are removed
+  expect_true(all(c("y") %nin% fn))
+  expect_true("factor" %nin% nt$feature_types$type)
+  # y is encoded
+  expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
+  nt = predict_pipeop(op, inputs = list(task))[[1L]]
+  fn = nt$feature_names
+  # factor cols are removed
+  expect_true(all(c("y") %nin% fn))
+  expect_true("factor" %nin% nt$feature_types$type)
+  # y is encoded
+  expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
+
+})
+
+
+
+test_that("PipeOpEncodeLmer Edge Cases", {
+  task = mlr3::TaskClassif$new("task",
+    data.table::data.table(x = sample_n_letters(10, 2), y = 1:10, z = 1:10), "x")
+
+  expect_datapreproc_pipeop_class(PipeOpEncodeLmer, task = task)
+  op = PipeOpEncodeLmer$new()
+  expect_pipeop(op)
+  nt = train_pipeop(op, inputs = list(task))[[1L]]
+  fn = nt$feature_names
+
+  # factor cols are removed
+  expect_true(all(c("y") %nin% fn))
+  expect_true("factor" %nin% nt$feature_types$type)
+  # y is encoded
+  expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
+  nt = predict_pipeop(op, inputs = list(task))[[1L]]
+  fn = nt$feature_names
+  # factor cols are removed
+  expect_true(all(c("y") %nin% fn))
+  expect_true("factor" %nin% nt$feature_types$type)
+  # y is encoded
+  expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
 })
