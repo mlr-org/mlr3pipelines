@@ -1,19 +1,20 @@
 #' @title PipeOpNewTarget
 #'
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Substitutes the current target with a new target.
-#' The new target must exist as a column in the Task.
-#' The previous target is set to row_role: `unused'.
-#'
+#' The new target must already exist as a column in the [`Backend`].
+#' The Task is also automatically converted to a Task of a different type, see
+#' `new_task_type` below.
+#' The previous target is set to row_role: `unused`.
 #'
 #' @section Public Members / Active Bindings:
 #' * `new_target` :: `character` \cr
 #' New target variable name for the task. The previous target variable is set to 'unused'.
 #' * `new_task_type` :: `NULL` | `character` \cr
 #' New task type for the resulting task. Defaults to 'classif' if `new_target`is `character` | `factor`,
-#' else `regr`.
+#' else `regr`. Uses constructors from `mlr_reflections` to instantiate the new Task.
 #'
 #' @family PipeOps
 #' @include PipeOp.R
@@ -70,6 +71,7 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
         new_target_type = intask$col_info$type[intask$col_info$id == private$.new_target]
         private$.new_task_type = private$get_task_type(new_target_type)
       }
+      if (private$.new_task_type == intask$task_type & intask$target_names == private$.new_target) return(list(intask))
       task = convert_task(intask, private$.new_task_type, private$.new_target)
       task$set_col_role(intask$col_roles$target, "unused")
       list(task)
@@ -95,8 +97,6 @@ convert_task = function(intask, new_type, new_target = NULL) {
   assert_task(intask)
   assert_choice(new_target, intask$col_info$id, null.ok = TRUE)
   assert_choice(new_type, mlr_reflections$task_types$type)
-  if (is.null(new_target)) new_target = intask$target_names
-  if (new_type == intask$task_type & intask$target_names == new_target) return(intask)
   # Get task_type from mlr_reflections and call constructor.
   tsk = get(mlr_reflections$task_types[mlr_reflections$task_types$type == new_type,]$task)
   tsk$new(id = intask$id, backend = intask$backend, target = new_target)

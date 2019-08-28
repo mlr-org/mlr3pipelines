@@ -34,6 +34,7 @@ test_that("PipeOpNewTarget - Classif -> Regr", {
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
   op$new_target = "Sepal.Width"
+  op$new_task_type = "regr"
   result = train_pipeop(op, inputs = list(task))[[1]]
   expect_task(result)
   expect_true(result$col_roles$target == "Sepal.Width")
@@ -45,12 +46,28 @@ test_that("PipeOpNewTarget - Classif -> Regr", {
 })
 
 
+test_that("PipeOpNewTarget - Edge cases", {
+  op = PipeOpNewTarget$new()
+  task = mlr_tasks$get("iris")
+  op$new_target = "Species"
+  op$new_task_type = "classif"
+  expect_pipeop(op)
+  result = train_pipeop(op, inputs = list(task))[[1]]
+  expect_task(result)
+  expect_true(result$col_roles$target == "Species")
+  expect_class(result, "TaskClassif")
+  result = predict_pipeop(op, inputs = list(task))[[1]]
+  expect_task(result)
+  expect_true(result$col_roles$target == "Species")
+  expect_class(result, "TaskClassif")
+})
+
 test_that("UseCase - Hurdle Model", {
 
   xtmp = rnorm(200)
   dt = data.table("x1" = rnorm(200), "x2" = rnorm(200))
   # We have a process where y = 0
-  dt[, y := ifelse(x1 * 0.2 + x2 * 0.4 - 0.3 > 0, 0, 2 + x1 * x2 + 0.5 * x2)]
+  dt[, y := ifelse(x1 * 0.2 + x2 * 0.4 - 0.3 > 0, 0, 2 + x1 * x2 + 0.5 * x2)][, y := ifelse(y < 1, 0, y)]
   dt[, y_tmp := as.factor(y > 0)]
   dt[, ..row_id := seq_len(nrow(dt))]
   tsk = TaskRegr$new("hurdle", DataBackendDataTable$new(dt, "..row_id"), target = "y")
@@ -76,6 +93,35 @@ test_that("UseCase - Hurdle Model", {
   expect_class(e, "ResampleResult")
   expect_true(e$performance()$regr.mse < 1)
 })
+
+
+## This test currently does not work, as PipeOpMutate currently does not allow to modify the target.
+#  FIXME: Decide whether this should work.
+# test_that("UseCase - Hurdle Model II", {
+
+#   xtmp = rnorm(200)
+#   dt = data.table("x1" = rnorm(200), "x2" = rnorm(200))
+#   dt[, y := ifelse(x1 * 0.2 + x2 * 0.4 - 0.3 > 0, 0, 2 + x1 * x2 + 0.5 * x2)][, y := ifelse(y < 2, 0, y)]
+#   dt[, ..row_id := seq_len(nrow(dt))]
+#   tsk = TaskRegr$new("hurdle", DataBackendDataTable$new(dt, "..row_id"), target = "y")
+#   tsk$set_row_role(151:200, "validation")
+
+#   pom = PipeOpMutate$new("fct_y", list(mutation = list(y_tmp = ~ y > 0)))
+#   po_set_ytmp = PipeOpNewTarget$new("set_ytmp", "y_tmp", "classif")
+#   op_cvlrn = PipeOpLearnerCV$new(id = "cvlrn", mlr_learners$get("classif.rpart"))
+#   op_lrn = PipeOpLearner$new(mlr_learners$get("regr.rpart"))
+#   po_set_y = PipeOpNewTarget$new("set_y", "y", "regr")
+
+#   pipe = pom %>>% po_set_ytmp %>>%
+#     PipeOpCopy$new(2) %>>% gunion(list(PipeOpNOP$new(), op_cvlrn)) %>>% PipeOpFeatureUnion$new(2) %>>%
+#     po_set_y %>>% op_lrn
+
+#   pom$train(list(tsk))
+
+#   e = resample(task = tsk, learner = GraphLearner$new(pipe, task_type = "regr"), resampling = "holdout")
+#   expect_class(e, "ResampleResult")
+#   expect_true(e$performance()$regr.mse < 1)
+# })
 
 
 test_that("UseCase - MultiOutput - Chained", {

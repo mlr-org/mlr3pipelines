@@ -4,14 +4,16 @@
 \name{PipeOpNewTarget}
 \alias{PipeOpNewTarget}
 \title{PipeOpNewTarget}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
+\format{\code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
 \usage{
 PipeOpNewTarget
 }
 \description{
 Substitutes the current target with a new target.
-The new target must exist as a column in the Task.
-The previous target is set to row_role: `unused'.
+The new target must already exist as a column in the \code{\link{Backend}}.
+The Task is also automatically converted to a Task of a different type, see
+\code{new_task_type} below.
+The previous target is set to row_role: \code{unused}.
 }
 \section{Public Members / Active Bindings}{
 
@@ -20,7 +22,7 @@ The previous target is set to row_role: `unused'.
 New target variable name for the task. The previous target variable is set to 'unused'.
 \item \code{new_task_type} :: \code{NULL} | \code{character} \cr
 New task type for the resulting task. Defaults to 'classif' if \code{new_target}is \code{character} | \code{factor},
-else \code{regr}.
+else \code{regr}. Uses constructors from \code{mlr_reflections} to instantiate the new Task.
 }
 }
 
