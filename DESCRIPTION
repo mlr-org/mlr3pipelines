@@ -94,6 +94,7 @@ Collate:
     'PipeOpNOP.R'
     'PipeOpPCA.R'
     'PipeOpRegrAvg.R'
+    'PipeOpRemoveConstants.R'
     'PipeOpScale.R'
     'PipeOpSelect.R'
     'PipeOpSubsample.R'
