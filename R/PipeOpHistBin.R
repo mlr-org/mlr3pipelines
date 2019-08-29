@@ -5,7 +5,8 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Splits numeric features into hist bins.
+#' Splits numeric features into equally spaced bins.
+#' See [graphics::hist()] for details.
 #'
 #' @section Construction:
 #' ```
@@ -28,11 +29,16 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `numsplits`  :: `numeric(1)` \cr
-#'   Number of bins to create. Default is \code{2}.
+#' * `bins`  :: `character(1)|numeric|function` \cr
+#'   Either a character string naming an algorithm to compute the number of cells,
+#'   a single number giving the number of breaks for the histogram,
+#'   a vector of numbers giving the breakpoints between the histogram cells or
+#'   a function to compute the vector of breakpoints or to compute the number
+#'   of cells. Default is algorithm "Sturges" (see grDevices::nclass.Sturges()])
+#'   For details see [`hist()`][graphics::hist].
 #'
 #' @section Internals:
-#' Uses the [`stats::hist`] function.
+#' Uses the [`graphics::hist`] function.
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -54,8 +60,9 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
   public = list(
     initialize = function(id = "histbin", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("breaks", default = "Sturges")
+        ParamUty$new("breaks", default = "Sturges", tags = "train")
       ))
+      ps$values = list(breaks = "Sturges")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics")
     },
 
@@ -64,12 +71,14 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
     },
 
     get_state_dt = function(dt, levels) {
-      bins = hist(dt, breaks = self$param_set$values$breaks, plot = FALSE, plot = FALSE)
+      bins =lapply(seq_col(dt), function(i)
+        hist(dt[[i]], breaks = self$param_set$values$breaks, plot = FALSE)$breaks)
       list(bins = bins)
     },
 
     transform_dt = function(dt, levels) {
-      .bincode(dt, breaks = self$state$bins)
+      as.data.frame(mapply(function(d, b) ordered(cut(d, breaks = b,include.lowest = TRUE)),
+        d = dt, b = self$state$bins, SIMPLIFY = FALSE), row.names = rownames(dt))
     }
   )
 )
