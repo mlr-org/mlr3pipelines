@@ -47,6 +47,12 @@ This learner can be used for resampling, benchmarking, and even tuning.
 
 ``` r
 resample("iris", glrn, "cv")
+#> Warning: 'Automatic object creation from strings in `mlr3`' is deprecated.
+#> Use 'tsk' instead.
+#> See help("Deprecated")
+#> Warning: 'Automatic object creation from strings in `mlr3`' is deprecated.
+#> Use 'rsmp' instead.
+#> See help("Deprecated")
 #> <ResampleResult> of 10 iterations
 #> * Task: iris
 #> * Learner: pca.variance.classif.rpart
@@ -76,12 +82,12 @@ are:
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
 
-  - [Quick
-    Introduction](https://mlr3book.mlr-org.com/pipelines.html),
+  - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
   - [Detailed
     Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html),
-    diving into concepts and describing the objects involved
+    diving into concepts and describing the objects
+    involved
   - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
     of `mlr3pipelines` with other packages (not yet authoritative)
   - [Writing Custom
@@ -99,7 +105,7 @@ In case of problems / bugs, it is often helpful if you provide a
 “minimum working example” that showcases the behaviour (but don’t
 worry about this if the bug is obvious).
 
-Please understand that the ressources of the project are limited:
+Please understand that the resources of the project are limited:
 response may sometimes be delayed by a few days, and some feature
 suggestions may be rejected if they are deemed too tangential to the
 vision behind the project.
@@ -113,3 +119,10 @@ preprocessing functionality or machine learning domain specific
 language, are the *[caret](https://github.com/topepo/caret)* package and
 the related *[recipes](https://tidymodels.github.io/recipes/)* project,
 and the *[dplyr](https://github.com/tidyverse/dplyr)* package.
+
+## Outreach
+
+mlr3pipelines talk at useR\! 2019 conference in Toulouse, France:
+
+[![Watch the
+video](https://img.youtube.com/vi/gEW5RxkbQuQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ&feature=youtu.be)

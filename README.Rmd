@@ -79,3 +79,10 @@ Please understand that the resources of the project are limited: response may so
 ## Similar Projects
 
 A predecessor to this package is the [*mlrCPO*-package](https://github.com/mlr-org/mlrCPO), which works with *mlr* 2.x. Other packages that provide, to varying degree, some preprocessing functionality or machine learning domain specific language, are the *[caret](https://github.com/topepo/caret)* package and the related *[recipes](https://tidymodels.github.io/recipes/)* project, and the *[dplyr](https://github.com/tidyverse/dplyr)* package.
+
+
+## Outreach
+
+mlr3pipelines talk at useR! 2019 conference in Toulouse, France:
+
+[![Watch the video](https://img.youtube.com/vi/gEW5RxkbQuQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ&feature=youtu.be)
