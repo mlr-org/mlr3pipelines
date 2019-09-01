@@ -70,7 +70,7 @@ test_that("Errors occur for inputs", {
 
 test_that("Raises error when predicting without being trained", {
   mock_check_types = function(self, data, direction, operation) TRUE
-  local_mock(check_types = mock_check_types)
+  local_mock(check_types = mock_check_types, .env=environment(check_types))
 
   MockPipeOp = R6Class("MockPipeOp",
                          inherit = PipeOp,
