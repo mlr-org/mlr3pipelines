@@ -9,6 +9,10 @@ status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://
 
 ## What is `mlr3pipelines`?
 
+Watch our UseR 2019 Presentation on Youtube for a 15 minute introduction:
+
+[![UseR 2019 mlr3pipelines](https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ)
+
 **`mlr3pipelines`** is a [dataflow
 programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit
 for machine learning in R utilising the
@@ -119,10 +123,3 @@ preprocessing functionality or machine learning domain specific
 language, are the *[caret](https://github.com/topepo/caret)* package and
 the related *[recipes](https://tidymodels.github.io/recipes/)* project,
 and the *[dplyr](https://github.com/tidyverse/dplyr)* package.
-
-## Outreach
-
-mlr3pipelines talk at useR\! 2019 conference in Toulouse, France:
-
-[![Watch the
-video](https://img.youtube.com/vi/gEW5RxkbQuQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ&feature=youtu.be)
