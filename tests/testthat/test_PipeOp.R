@@ -67,3 +67,27 @@ test_that("Errors occur for inputs", {
     po$param_set = ParamSet$new()
   }, "read-only")
 })
+
+test_that("Raises error when predicting without being trained", {
+  mock_check_types = function(self, data, direction, operation) TRUE
+  local_mock(check_types = mock_check_types)
+
+  MockPipeOp = R6Class("MockPipeOp",
+                         inherit = PipeOp,
+                         public = list(
+                           train_internal = function(input) self$state = TRUE,
+                           predict_internal = function(input) TRUE
+                         )
+                      )
+  po = MockPipeOp$new("id",
+                  input = data.table(name = "input", train = "*", predict = "*"),
+                  output = data.table(name = "output", train = "*", predict = "*")
+  )
+
+  expect_error(po$predict(list(1)), "PipeOp should be trained before predicting")
+
+  po$train(list(1))
+  expect_true(po$predict(list(1)))
+}
+
+)
