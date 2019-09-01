@@ -147,29 +147,14 @@ PipeOp = R6Class("PipeOp",
 
     train = function(input) {
       require_namespaces(self$packages)
+      private$.process_preconditions(input, "train")
 
-      if (every(input, is_noop)) {
-        self$state = NO_OP
-        return(named_list(self$output$name, NO_OP))
-      }
-      input = check_types(self, input, "input", "train")
-      output = self$train_internal(input)
-      output = check_types(self, output, "output", "train")
-      output
+      return(private$.perform_train_or_predict(input, "train"))
     },
     predict = function(input) {
-      private$.check_trained()
-      if (every(input, is_noop)) {
-        return(named_list(self$output$name, NO_OP))
-      }
-      if (is_noop(self$state)) {
-        stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
-      }
+      private$.process_preconditions(input, "predict")
 
-      input = check_types(self, input, "input", "predict")
-      output = self$predict_internal(input)
-      output = check_types(self, output, "output", "predict")
-      output
+      return(private$.perform_train_or_predict(input, "predict"))
     },
     train_internal = function(input) stop("abstract"),
     predict_internal = function(input) stop("abstract")
@@ -210,9 +195,28 @@ PipeOp = R6Class("PipeOp",
   private = list(
     .param_set = NULL,
     .id = NULL,
-    .check_trained = function () {
+    .process_preconditions = function(input, call.mode) {
+      if (every(input, is_noop)) {
+        if (call.mode == "train") self$state = NO_OP
+        do.call(return, list(output = named_list(self$output$name, NO_OP)), envir = sys.frame(-1))
+      }
+      if (call.mode == "predict") {
+        private$.check_trained()
+        if (is_noop(self$state)) {
+          stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
+        }
+      }
+    },
+    .perform_train_or_predict = function(input, call.mode) {
+      input = check_types(self, input, "input", call.mode)
+      method = self[[paste(call.mode, "internal", sep = "_")]]
+      output = method(input)
+      output = check_types(self, output, "output", call.mode)
+      output
+    },
+    .check_trained = function() {
       if (!self$is_trained) {
-        stop("PipeOp should be trained before predicting")
+        stopf("PipeOp should be trained before predicting", self$id)
       }
     }
   )
