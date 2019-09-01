@@ -158,6 +158,7 @@ PipeOp = R6Class("PipeOp",
       output
     },
     predict = function(input) {
+      private$.check_trained()
       if (every(input, is_noop)) {
         return(named_list(self$output$name, NO_OP))
       }
@@ -208,7 +209,12 @@ PipeOp = R6Class("PipeOp",
 
   private = list(
     .param_set = NULL,
-    .id = NULL
+    .id = NULL,
+    .check_trained = function () {
+      if (!self$is_trained) {
+        stop("PipeOp should be trained before predicting")
+      }
+    }
   )
 )
 
