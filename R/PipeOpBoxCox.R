@@ -3,11 +3,12 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_boxcox
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Splits numeric features into equally spaced bins.
-#' See [graphics::hist()] for details.
+#' Conducts a Box-Cox transformation on numeric features. It therefore estimates
+#' the optimal value of lambda for the transformation.
+#' See [bestNormalize::boxcox()] for details.
 #'
 #' @section Construction:
 #' ```
@@ -24,24 +25,19 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their binded versions.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `bins` :: `list` \cr
-#'   List of intervals representing the bins for each numeric feature.
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`],
+#' as well as a list of class `boxcox` for each column, which is transformed.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `bins`  :: `character(1)|numeric|function` \cr
-#'   Either a character string naming an algorithm to compute the number of cells,
-#'   a single number giving the number of breaks for the histogram,
-#'   a vector of numbers giving the breakpoints between the histogram cells or
-#'   a function to compute the vector of breakpoints or to compute the number
-#'   of cells. Default is algorithm "Sturges" (see grDevices::nclass.Sturges()])
-#'   For details see [`hist()`][graphics::hist].
+#' * `standardize` :: `logical` \cr
+#'   Whether to center and scale the transformed values to attempt a standard
+#'   normal distribution. For details see [`boxcox()`][bestNormalize::boxcox].
 #'
 #' @section Internals:
-#' Uses the [`graphics::hist`] function.
+#' Uses the [`bestNormalize::boxcox`] function.
 #' @section Methods:
-#' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
 #' library(mlr3)
@@ -61,42 +57,27 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
   public = list(
     initialize = function(id = "boxcox", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("formula"),
-        ParamUty$new("lambda", default = seq(-2, 2, 0.1), tags = "train"),
-        ParamLgl$new("interp", default = TRUE),
-        ParamDbl$new("eps", default = 0.02)
+        ParamLgl$new("standardize", default = TRUE, tags = "train")
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "smotefamily")
+        packages = "bestNormalize")
     },
-    train_task = function(task) {
-      #assert_true(all(task$feature_types$type == "numeric"))
-      dt_columns = self$select_cols(task)
-      cols = c(task$target_names, dt_columns)
-      if (!length(cols)) {
-        self$state = list(dt_columns = dt_columns)
-        return(task)
-      }
-      dt = task$data(cols = cols)
 
-      # extract info to use in MASS::boxcox
-      ps = self$param_set$values
-      formula = ps$formula
-      ps$formula = NULL
-      ps$object = formula
-      ps$data = as.data.frame(dt)
-      ps$plotit = FALSE
+    train_dt = function(dt, levels) {
+      bc = lapply(dt, FUN = function(x) {
+        invoke(bestNormalize::boxcox, x, .args = self$param_set$values)
+      })
+      self$state = bc
+      cols = names(bc)
+      for (j in cols) set(dt, j = j, value = bc[[j]]$x.t)
+      return(dt)
+    },
 
-      # Get best lambda
-      bc = invoke(MASS::boxcox, .args = ps)
-      max.id = which.max(bc$y)
-      lambda = bc$x[max.id]
-
-      # add synthetic data to task data
-      target = dt[[1]]
-      target = (target ^ lambda - 1)/lambda
-      dt[[1]] = target
-      task$select(setdiff(c(task$feature_names, task$target_names), cols))$cbind(dt)
+    predict_dt = function(dt, levels) {
+      cols = colnames(dt)
+      for (j in cols) set(dt, j = j,
+        value = predict(self$state[[j]], newdata = dt[[j]]))
+      return(dt)
     }
   )
 )
