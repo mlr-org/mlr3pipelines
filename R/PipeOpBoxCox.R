@@ -33,6 +33,13 @@
 #' * `standardize` :: `logical` \cr
 #'   Whether to center and scale the transformed values to attempt a standard
 #'   normal distribution. For details see [`boxcox()`][bestNormalize::boxcox].
+#' * `eps` :: `numeric(1)` \cr
+#'   Tolerance parameter to identify the lambda parameter as zero.
+#'   For details see [`boxcox()`][bestNormalize::boxcox].
+#' * `lower` :: `numeric(1)` \cr
+#'   Lower value for estimation of lambda parameter. For details see [`boxcox()`][bestNormalize::boxcox].
+#' * `upper` :: `numeric(1)` \cr
+#'   Upper value for estimation of lambda parameter. For details see [`boxcox()`][bestNormalize::boxcox].
 #'
 #' @section Internals:
 #' Uses the [`bestNormalize::boxcox`] function.
@@ -57,7 +64,10 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
   public = list(
     initialize = function(id = "boxcox", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("standardize", default = TRUE, tags = "train")
+        ParamLgl$new("standardize", default = TRUE, tags = "train"),
+        ParamDbl$new("eps", default = 0.001, lower = 0, tags = "train"),
+        ParamDbl$new("lower", tags = "train"),
+        ParamDbl$new("upper", tags = "train")
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize")

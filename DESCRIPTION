@@ -52,7 +52,8 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    visNetwork
+    visNetwork, 
+    bestNormalize
 VignetteBuilder:
     knitr
 Remotes:
