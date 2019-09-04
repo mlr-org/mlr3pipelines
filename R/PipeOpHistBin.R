@@ -20,7 +20,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their binded versions.
+#' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their binned versions.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
@@ -62,7 +62,6 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
       ps = ParamSet$new(params = list(
         ParamUty$new("breaks", default = "Sturges", tags = "train")
       ))
-      ps$values = list(breaks = "Sturges")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics")
     },
 
@@ -71,13 +70,15 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
     },
 
     get_state_dt = function(dt, levels) {
-      bins =lapply(seq_col(dt), function(i)
-        hist(dt[[i]], breaks = self$param_set$values$breaks, plot = FALSE)$breaks)
+      ps = self$param_set$values
+      ps$plot = FALSE
+      bins = lapply(seq_col(dt), function(i) invoke(graphics::hist, dt[[i]], .args = ps)$breaks)
+       # hist(dt[[i]], breaks = self$param_set$values$breaks, plot = FALSE)$breaks)
       list(bins = bins)
     },
 
     transform_dt = function(dt, levels) {
-      as.data.frame(mapply(function(d, b) ordered(cut(d, breaks = b,include.lowest = TRUE)),
+      as.data.frame(mapply(function(d, b) ordered(cut(d, breaks = b, include.lowest = TRUE)),
         d = dt, b = self$state$bins, SIMPLIFY = FALSE), row.names = rownames(dt))
     }
   )
