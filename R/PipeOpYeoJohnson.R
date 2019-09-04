@@ -37,8 +37,10 @@
 #'   normal distribution. For details see [`yeojohnson()`][bestNormalize::yeojohnson].
 #' * `lower` :: `numeric(1)` \cr
 #'   Lower value for estimation of lambda parameter.
+#'   For details see [`yeojohnson()`][bestNormalize::yeojohnson].
 #' * `upper` :: `numeric(1)` \cr
 #'   Upper value for estimation of lambda parameter.
+#'   For details see [`yeojohnson()`][bestNormalize::yeojohnson].
 #'
 #' @section Internals:
 #' Uses the [`bestNormalize::yeojohnson`] function.
