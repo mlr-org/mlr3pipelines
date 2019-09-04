@@ -96,6 +96,7 @@ Collate:
     'PipeOpRegrAvg.R'
     'PipeOpScale.R'
     'PipeOpSelect.R'
+    'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpUnbranch.R'
     'Selector.R'
