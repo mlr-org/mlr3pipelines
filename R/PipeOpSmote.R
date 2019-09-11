@@ -51,19 +51,19 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' pop = mlr_pipeops$get("smote")
+#' library(mlr3)
+#' library(smotefamily)
 #'
 #' # Create example task
-#' library(smotefamily)
 #' data_example = sample_generator(1000,ratio = 0.80)
 #' task = TaskClassif$new(id = "example", backend = data_example, target = "result")
 #' task$data()
 #' table(task$data()$result)
 #'
 #' # Generate synthetic data for minority class
+#' #' pop = po("smote")
 #' smotedata = pop$train(list(task))[[1]]$data()
 #' table(smotedata$result)
-#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
