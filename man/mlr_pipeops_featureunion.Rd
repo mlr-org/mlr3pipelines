@@ -74,17 +74,19 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+library(mlr3)
+
+task = tsk("iris")
 gr = gunion(list(
-  mlr_pipeops$get("nop"),
-  mlr_pipeops$get("pca")
-)) \%>>\% mlr_pipeops$get("featureunion")
+  po("nop"),
+  po("pca")
+)) \%>>\% po("featureunion")
 
-gr$train("iris")
+gr$train(task)
 
-po = mlr_pipeops$get("featureunion", innum = c("a", "b"))
+po = po("featureunion", innum = c("a", "b"))
 
-po$train(list("iris", "iris"))
-
+po$train(list(task, task))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

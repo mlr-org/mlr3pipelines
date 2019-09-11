@@ -66,12 +66,18 @@
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
+#' library(mlr3)
+#' library(mlr3filters)
+#'
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC
-#' task = mlr3::mlr_tasks$get("spam")
-#' filter = mlr3filters::mlr_filters$get("auc")
-#' po = mlr_pipeops$get("filter", filter = filter)
+#' task = tsk("spam")
+#' filter = flt("auc")
+#' po = po("filter", filter = filter)
 #' po$param_set
 #' po$param_set$values$filter.nfeat = 5
 #'
@@ -81,9 +87,15 @@
 #' # filtered task + extracted AUC scores
 #' filtered_task$feature_names
 #' head(po$state$scores, 10)
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
+#'
+#' # feature selection embedded in a 3-fold cross validation
+#' # keep 30% of features based on their AUC score
+#' task = tsk("spam")
+#' gr = po("filter", filter = flt("auc"), filter.frac = 0.5) %>>%
+#'   po("learner", lrn("classif.rpart"))
+#' learner = GraphLearner$new(gr)
+#' rr = resample(task, learner, rsmp("cv", folds = 3), store_models = TRUE)
+#' rr$learners[[1]]$model$auc$scores
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -92,12 +104,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
       self$filter$param_set$set_id = ""
-      ps = ParamSet$new(list(
-        ParamInt$new("nfeat", lower = 0),
-        ParamDbl$new("frac", lower = 0, upper = 1),
-        ParamDbl$new("cutoff")
+      map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
+      private$.outer_param_set = ParamSet$new(list(
+        ParamInt$new("nfeat", lower = 0, tags = "train"),
+        ParamDbl$new("frac", lower = 0, upper = 1, tags = "train"),
+        ParamDbl$new("cutoff", tags = "train")
       ))
-      private$.outer_param_set = ps$add(filter$param_set)
       private$.outer_param_set$set_id = "filter"
       super$initialize(id, self$param_set, param_vals = param_vals)
     },
@@ -153,7 +165,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
           private$.outer_param_set,
           self$filter$param_set
         ))
-        private$.param_set$set_id = self$id %??% self$filter$id # self$id may be NULL during initialize() call
+        private$.param_set$set_id = self$id %??% self$filter$id  # self$id may be NULL during initialize() call
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
@@ -163,7 +175,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
   ),
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }

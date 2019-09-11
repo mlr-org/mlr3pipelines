@@ -14,9 +14,9 @@ See \code{\link{Selector}} for selectors that are provided and how to write cust
 \section{Construction}{
 \preformatted{PipeOpSelect$new(id = "select", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"select"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"select"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -64,20 +64,22 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 }
 
 \examples{
-pos = mlr_pipeops$get("select")
+library(mlr3)
+
+task = tsk("boston_housing")
+pos = po("select")
 
 pos$param_set$values$selector = selector_all()
-pos$train(list("boston_housing"))[[1]]$feature_names
+pos$train(list(task))[[1]]$feature_names
 
 pos$param_set$values$selector = selector_type("factor")
-pos$train(list("boston_housing"))[[1]]$feature_names
+pos$train(list(task))[[1]]$feature_names
 
 pos$param_set$values$selector = selector_invert(selector_type("factor"))
-pos$train(list("boston_housing"))[[1]]$feature_names
+pos$train(list(task))[[1]]$feature_names
 
-pos$param_set$values$selector = selector_grep("^Petal")
-pos$train(list("iris"))[[1]]$feature_names
-
+pos$param_set$values$selector = selector_grep("^r")
+pos$train(list(task))[[1]]$feature_names
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

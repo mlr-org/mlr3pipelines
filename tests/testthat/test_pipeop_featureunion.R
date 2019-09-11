@@ -4,16 +4,16 @@ context("PipeOpFeatureUnion")
 test_that("featureunion - basic properties", {
   po = PipeOpFeatureUnion$new(3)
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 3)
-  expect_data_table(po$output, nrow = 1)
+  expect_data_table(po$input, nrows = 3)
+  expect_data_table(po$output, nrows = 1)
 
   expect_pipeop_class(PipeOpFeatureUnion, list(1))
   expect_pipeop_class(PipeOpFeatureUnion, list(3))
 
   po = PipeOpFeatureUnion$new()
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 1)
-  expect_data_table(po$output, nrow = 1)
+  expect_data_table(po$input, nrows = 1)
+  expect_data_table(po$output, nrows = 1)
 
 })
 

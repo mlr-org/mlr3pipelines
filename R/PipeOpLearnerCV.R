@@ -81,8 +81,18 @@
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family Pipeops
+#' @family Meta PipeOps
+#' @export
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
-#' lrncv_po = mlr_pipeops$get("learner_cv", "classif.rpart")
+#' library(mlr3)
+#'
+#' task = tsk("iris")
+#' learner = lrn("classif.rpart")
+#'
+#' lrncv_po = po("learner_cv", learner)
 #' lrncv_po$learner$predict_type = "response"
 #'
 #' nop = mlr_pipeops$get("nop")
@@ -90,31 +100,25 @@
 #' graph = gunion(list(
 #'   lrncv_po,
 #'   nop
-#' )) %>>% mlr_pipeops$get("featureunion")
+#' )) %>>% po("featureunion")
 #'
-#' graph$train("iris")
+#' graph$train(task)
 #'
 #' graph$pipeops$classif.rpart$learner$predict_type = "prob"
 #'
-#' graph$train("iris")
-#'
-#' @family Pipeops
-#' @family Meta PipeOps
-#' @export
-#' @include PipeOpTaskPreproc.R
-#' @export
+#' graph$train(task)
 PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      private$.learner = assert_learner(learner, clone = TRUE)
+      private$.learner = assert_learner(as_learner(learner, clone = TRUE))
       private$.learner$param_set$set_id = ""
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = "cv", tags = "required"),
-        ParamInt$new("folds", lower = 2L, upper = Inf, tags = "required"),
-        ParamLgl$new("keep_response", tags = "required")
+        ParamFct$new("method", levels = "cv", tags = c("train", "required")),
+        ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
+        ParamLgl$new("keep_response", tags = c("train", "required"))
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
@@ -152,7 +156,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
           private$.crossval_param_set,
           private$.learner$param_set
         ))
-        private$.param_set$set_id = self$id %??% private$.learner$id # self$id may be NULL during initialize() call
+        private$.param_set$set_id = self$id %??% private$.learner$id  # self$id may be NULL during initialize() call
       }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
@@ -170,7 +174,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   ),
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }

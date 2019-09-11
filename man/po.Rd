@@ -22,8 +22,11 @@ Create a \code{PipeOp} from \code{mlr_pipeops} from given ID, with
 given parameters and \code{param_vals}.
 }
 \examples{
-po("learner", "classif.rpart", cp = 0.3)
+library(mlr3)
+
+po("learner", lrn("classif.rpart"), cp = 0.3)
+
 # is equivalent with:
-mlr3pipelines::mlr_pipeops$get("learner", "classif.rpart",
+mlr_pipeops$get("learner", lrn("classif.rpart"),
   param_vals = list(cp = 0.3))
 }

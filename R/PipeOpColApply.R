@@ -20,7 +20,7 @@
 #' ```
 #' PipeOpColApply$new(id = "colapply", param_vals = list())
 #' ```
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"colapply"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -60,11 +60,15 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
-#' poca = mlr_pipeops$get("colapply")
+#' library(mlr3)
 #'
-#' poca$param_set$values$applicator = as.character
-#' poca$train(list("iris"))[[1]]  # types are converted
+#' task = tsk("iris")
+#' poca = po("colapply", applicator = as.character)
+#' poca$train(list(task))[[1]]  # types are converted
 #'
 #' # function that does not vectorize
 #' f = function(x) {
@@ -76,21 +80,17 @@
 #'   }
 #' }
 #' poca$param_set$values$applicator = Vectorize(f)
-#' poca$train(list("iris"))[[1]]$data()
+#' poca$train(list(task))[[1]]$data()
 #'
 #' # only affect Petal.* columns:
 #' poca$param_set$values$affect_columns = selector_grep("^Petal")
-#' poca$train(list("iris"))[[1]]$data()
-#'
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
+#' poca$train(list(task))[[1]]$data()
 PipeOpColApply = R6Class("PipeOpColApply",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "colapply", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("applicator", custom_check = check_function)
+        ParamUty$new("applicator", custom_check = check_function, tags = c("train", "predict"))
       ))
       ps$values = list(applicator = identity)
       super$initialize(id, ps, param_vals = param_vals)
@@ -118,4 +118,3 @@ PipeOpColApply = R6Class("PipeOpColApply",
 )
 
 mlr_pipeops$add("colapply", PipeOpColApply)
-

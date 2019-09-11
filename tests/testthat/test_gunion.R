@@ -45,7 +45,7 @@ test_that("named gunion", {
       add_edge("a.scale", "featureunion", dst_channel = "input1")$
       add_edge("b.pca", "featureunion", dst_channel = "input2")$
       add_edge("subsample", "featureunion", dst_channel = "input3")$
-    add_edge("z.featureunion", "featureunion", dst_channel = "input4")
+      add_edge("z.featureunion", "featureunion", dst_channel = "input4")
   )
 
 })

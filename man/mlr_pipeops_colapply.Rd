@@ -21,9 +21,9 @@ from \code{Vectorize(f)}, it is not a function that should be used for \code{app
 \section{Construction}{
 \preformatted{PipeOpColApply$new(id = "colapply", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"colapply"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"colapply"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -81,10 +81,11 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 }
 
 \examples{
-poca = mlr_pipeops$get("colapply")
+library(mlr3)
 
-poca$param_set$values$applicator = as.character
-poca$train(list("iris"))[[1]]  # types are converted
+task = tsk("iris")
+poca = po("colapply", applicator = as.character)
+poca$train(list(task))[[1]]  # types are converted
 
 # function that does not vectorize
 f = function(x) {
@@ -96,12 +97,11 @@ f = function(x) {
   }
 }
 poca$param_set$values$applicator = Vectorize(f)
-poca$train(list("iris"))[[1]]$data()
+poca$train(list(task))[[1]]$data()
 
 # only affect Petal.* columns:
 poca$param_set$values$affect_columns = selector_grep("^Petal")
-poca$train(list("iris"))[[1]]$data()
-
+poca$train(list(task))[[1]]$data()
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

@@ -6,8 +6,8 @@ test_that("PipeOpTaskPreproc - basic properties", {
   po = PipeOpTaskPreproc$new("potask")
 
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 1)
-  expect_data_table(po$output, nrow = 1)
+  expect_data_table(po$input, nrows = 1)
+  expect_data_table(po$output, nrows = 1)
 })
 
 test_that("PipeOpTaskPreprocSimple - basic properties", {
@@ -15,6 +15,6 @@ test_that("PipeOpTaskPreprocSimple - basic properties", {
 
   po = PipeOpTaskPreprocSimple$new(id = "posimple")
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 1)
-  expect_data_table(po$output, nrow = 1)
+  expect_data_table(po$input, nrows = 1)
+  expect_data_table(po$output, nrows = 1)
 })

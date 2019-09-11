@@ -1,5 +1,6 @@
 #' @title PipeOpSubsample
 #'
+#' @usage NULL
 #' @name mlr_pipeops_subsample
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -49,12 +50,14 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' library(mlr3)
+#'
 #' pos = mlr_pipeops$get("subsample")
 #'
-#' pos$train(list("iris"))
+#' pos$train(list(tsk("iris")))
 #'
 #' # simple bagging:
-#' gr = greplicate(pos %>>% mlr_pipeops$get("learner", "classif.rpart"), 5) %>>%
+#' gr = greplicate(pos %>>% mlr_pipeops$get("learner", lrn("classif.rpart")), 5) %>>%
 #'   mlr_pipeops$get("classifavg")
 #'
 #' @family PipeOps
@@ -65,27 +68,17 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
   public = list(
     initialize = function(id = "subsample", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("frac", lower = 0, upper = Inf),
-        ParamLgl$new("stratify"),
-        ParamLgl$new("replace")
+        ParamDbl$new("frac", lower = 0, upper = Inf, tags = "train"),
+        ParamLgl$new("stratify", tags = "train"),
+        ParamLgl$new("replace", tags = "train")
       ))
       ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
     train_task = function(task) {
-      sample_safe = function(x, size, replace) {
-        if (length(x) == 1) {
-          if (!replace && size > 1) {
-            stop("cannot take a sample larger than the population when 'replace = FALSE'")
-          }
-          rep_len(x, size)
-        } else {
-          sample(x, size, replace)
-        }
-      }
       if (!self$param_set$values$stratify) {
-        keep = sample_safe(task$row_roles$use,
+        keep = shuffle(task$row_roles$use,
           ceiling(self$param_set$values$frac * task$nrow),
           replace = self$param_set$values$replace)
       } else {
@@ -94,7 +87,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         }
         splt = split(task$row_roles$use, task$data(cols = task$target_names))
         keep = unlist(map(splt, function(x) {
-          sample_safe(x,
+          shuffle(x,
             ceiling(self$param_set$values$frac * length(x)),
             replace = self$param_set$values$replace)
         }))

@@ -15,28 +15,15 @@
 #'   `PipeOp`, in which case it is given to this constructor;
 #'   or it may be a parameter value, in which case it is
 #'   given to the `param_vals` argument of the constructor.
-#' @examples
-#' po("learner", "classif.rpart", cp = 0.3)
-#' # is equivalent with:
-#' mlr3pipelines::mlr_pipeops$get("learner", "classif.rpart",
-#'   param_vals = list(cp = 0.3))
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' po("learner", lrn("classif.rpart"), cp = 0.3)
+#'
+#' # is equivalent with:
+#' mlr_pipeops$get("learner", lrn("classif.rpart"),
+#'   param_vals = list(cp = 0.3))
 po = function(.key, ...) {
-  assert_string(.key)
-
-  args = list(...)
-  given_argnames = names2(args)
-
-  resulting_constructor = get0(.key, mlr_pipeops$items, ifnotfound = NULL)$value$public_methods$initialize
-  signature_argnames = setdiff(names2(suppressWarnings(formals(args(resulting_constructor)))), ".key")
-
-  args_not_in_sig = which(
-    !is.na(given_argnames) &
-      given_argnames %nin% signature_argnames
-  )
-
-  param_vals = args[args_not_in_sig]
-  args[args_not_in_sig] = NULL
-  args[["param_vals"]] = c(param_vals, args[["param_vals"]])
-  do.call(mlr_pipeops$get, c(key = .key, args))
+  dictionary_sugar(mlr_pipeops, .key, ...)
 }

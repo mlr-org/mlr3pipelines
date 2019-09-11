@@ -4,8 +4,8 @@ rep_suffix = function(x, n) {
 }
 
 calculate_collimit = function(colwidths, outwidth) {
-  margin = length(colwidths) + 4 # columns are separated by one space, with some breathing room
-  numcols = length(colwidths) # number of columns that we expect to limit
+  margin = length(colwidths) + 4  # columns are separated by one space, with some breathing room
+  numcols = length(colwidths)  # number of columns that we expect to limit
   repeat {
     # collimit: the width at which we limit data.table column output. If some columns are very
     # small, we can be more generous for other columns.
@@ -21,7 +21,7 @@ calculate_collimit = function(colwidths, outwidth) {
       break
     }
   }
-  collimit - 3 # subtracting 3 here because data.table adds "..." whenever it truncates a string
+  collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
 # Get 'levels' of task columns as named list [feature name] -> [levels]

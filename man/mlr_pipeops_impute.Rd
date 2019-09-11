@@ -57,13 +57,16 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-task = mlr3::mlr_tasks$get("pima")
-sum(complete.cases(task$data()))
+library(mlr3)
 
-po = mlr_pipeops$get("impute")
+task = tsk("pima")
+sum(complete.cases(task$data()))
+task$missings()
+
+po = po("impute")
 new_task = po$train(list(task = task))[[1]]
 sum(complete.cases(new_task$data()))
-
+new_task$missings()
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

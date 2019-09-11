@@ -38,25 +38,28 @@
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
-#' @examples
-#' task = mlr3::mlr_tasks$get("pima")
-#' sum(complete.cases(task$data()))
-#'
-#' po = mlr_pipeops$get("impute")
-#' new_task = po$train(list(task = task))[[1]]
-#' sum(complete.cases(new_task$data()))
-#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
+#' @examples
+#' library(mlr3)
+#'
+#' task = tsk("pima")
+#' sum(complete.cases(task$data()))
+#' task$missings()
+#'
+#' po = po("impute")
+#' new_task = po$train(list(task = task))[[1]]
+#' sum(complete.cases(new_task$data()))
+#' new_task$missings()
 PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "impute", param_vals = list()) {
       ps = ParamSet$new(list(
-        ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median"),
-        ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl"),
-        ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train")
+        ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median", tags = c("train", "predict")),
+        ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl", tags = c("train", "predict")),
+        ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict"))
       ))
       ps$values = list(method_num = "median", method_fct = "newlvl", add_dummy = "missing_train")
       super$initialize(id, ps, param_vals = param_vals)

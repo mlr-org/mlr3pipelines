@@ -83,14 +83,14 @@ Methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-lrn_po = mlr_pipeops$get("learner", "classif.rpart")
+library(mlr3)
 
-lrn_po$param_set$values$cp = 0.7
+task = tsk("iris")
+learner = lrn("classif.rpart", cp = 0.1)
+lrn_po = mlr_pipeops$get("learner", learner)
 
-lrn_po$train(list("iris"))
-
-lrn_po$predict(list("iris"))
-
+lrn_po$train(list(task))
+lrn_po$predict(list(task))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
