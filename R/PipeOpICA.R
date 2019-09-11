@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Extract statistically independent components from data.  Only affects numerical features.
+#' Extracts statistically independent components from data.  Only affects numerical features.
 #' See [fastICA::fastICA] for details.
 #'
 #' @section Construction:
@@ -36,6 +36,8 @@
 #'   The mean of each numeric feature during training.
 #'
 #' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as the following parameters
+#' based on [`fastICA()`][fastICA::fastICA]:
 #' * `n.comp` :: `numeric(1)`\cr
 #'   Number of components to extract. Default is \code{NULL}, which sets it
 #'   to the number of available numeric columns.
@@ -62,6 +64,7 @@
 #' * `w.init`:: `matrix`\cr
 #'   Initial un-mixing matrix. See [`fastICA()`][fastICA::fastICA].
 #'   Default is \code{NULL}.
+#'
 #' @section Internals:
 #' Uses the [`fastICA()`][fastICA::fastICA] function.
 #'
@@ -69,12 +72,12 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' pop = mlr_pipeops$get("ica")
+#' library(mlr3)
 #'
-#' task = mlr3::mlr_tasks$get("iris")
+#' task = tsk("iris")
+#' pop = po("ica")
 #'
 #' task$data()
-#'
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state

@@ -47,12 +47,12 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' pop = mlr_pipeops$get("kernelpca")
+#' library(mlr3)
 #'
-#' task = mlr3::mlr_tasks$get("iris")
+#' task = tsk("iris")
+#' pop = po("kernelpca")
 #'
 #' task$data()
-#'
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state

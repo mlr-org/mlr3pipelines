@@ -12,7 +12,6 @@
 #' ```
 #' PipeOpPCA$new(id = "pca", param_vals = list())
 #' ```
-#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"pca"`.
 #' * `param_vals` :: named `list`\cr

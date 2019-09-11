@@ -36,12 +36,12 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' pop = mlr_pipeops$get("scalemaxabs", param_vals = list(formula = ~ .  ^ 2))
+#' library(mlr3)
 #'
-#' task = mlr3::mlr_tasks$get("iris")
+#' task = tsk("iris")
+#' pop = po("scalemaxabs")
 #'
 #' task$data()
-#'
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state

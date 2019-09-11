@@ -40,12 +40,12 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' pop = mlr_pipeops$get("scalerange")
+#' library(mlr3)
 #'
-#' task = mlr3::mlr_tasks$get("iris")
+#' task = tsk("iris")
+#' pop = po("scalerange", param_vals = list(lower = -1, upper = 1))
 #'
 #' task$data()
-#'
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
