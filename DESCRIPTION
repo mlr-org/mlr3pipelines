@@ -87,6 +87,7 @@ Collate:
     'PipeOpEncode.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
+    'PipeOpHistBin.R'
     'PipeOpImpute.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'

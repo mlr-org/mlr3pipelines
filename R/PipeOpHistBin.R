@@ -34,7 +34,7 @@
 #'   a single number giving the number of breaks for the histogram,
 #'   a vector of numbers giving the breakpoints between the histogram cells or
 #'   a function to compute the vector of breakpoints or to compute the number
-#'   of cells. Default is algorithm "Sturges" (see grDevices::nclass.Sturges()])
+#'   of cells. Default is algorithm "Sturges" (see [grDevices::nclass.Sturges()]).
 #'   For details see [`hist()`][graphics::hist].
 #'
 #' @section Internals:
