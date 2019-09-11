@@ -34,7 +34,7 @@
 #'   Whether to center and scale the transformed values to attempt a standard
 #'   normal distribution. For details see [`boxcox()`][bestNormalize::boxcox].
 #' * `eps` :: `numeric(1)` \cr
-#'   Tolerance parameter to identify the lambda parameter as zero.
+#'   Tolerance parameter to identify if lambda parameter is equal to zero.
 #'   For details see [`boxcox()`][bestNormalize::boxcox].
 #' * `lower` :: `numeric(1)` \cr
 #'   Lower value for estimation of lambda parameter. For details see [`boxcox()`][bestNormalize::boxcox].
