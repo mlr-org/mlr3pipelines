@@ -19,6 +19,7 @@ test_that("PipeOpScaleRange - basic properties", {
 )
 
 test_that("Other maxabs", {
+  task = mlr_tasks$get("iris")
   op = PipeOpScaleRange$new(param_vals = list(upper = 0.6, lower = 0.2))
   set.seed(1234)
   result = op$train(list(task))
