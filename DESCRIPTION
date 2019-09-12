@@ -55,7 +55,6 @@ Suggests:
     visNetwork, 
     smotefamily
 VignetteBuilder: 
-    visNetwork
     knitr
 Remotes:
     mlr-org/mlr3,
