@@ -12,6 +12,7 @@
 #' ```
 #' PipeOpHistBin$new(id = "histbin", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"histbin"`.
 #' * `param_vals` :: named `list`\cr
@@ -29,16 +30,17 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `bins`  :: `character(1)|numeric|function` \cr
-#'   Either a character string naming an algorithm to compute the number of cells,
-#'   a single number giving the number of breaks for the histogram,
-#'   a vector of numbers giving the breakpoints between the histogram cells or
-#'   a function to compute the vector of breakpoints or to compute the number
-#'   of cells. Default is algorithm "Sturges" (see [grDevices::nclass.Sturges()]).
+#' * `bins` :: `character(1)` | `numeric` | `function` \cr
+#'   Either a `character(1)` string naming an algorithm to compute the number of cells,
+#'   a `numeric(1)` giving the number of breaks for the histogram,
+#'   a vector `numeric` giving the breakpoints between the histogram cells, or
+#'   a `function` to compute the vector of breakpoints or to compute the number
+#'   of cells. Default is algorithm `"Sturges"` (see [`grDevices::nclass.Sturges()`]).
 #'   For details see [`hist()`][graphics::hist].
 #'
 #' @section Internals:
 #' Uses the [`graphics::hist`] function.
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -70,10 +72,9 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
     },
 
     get_state_dt = function(dt, levels) {
-      ps = self$param_set$values
-      ps$plot = FALSE
-      bins = lapply(seq_col(dt), function(i) invoke(graphics::hist, dt[[i]], .args = ps)$breaks)
-       # hist(dt[[i]], breaks = self$param_set$values$breaks, plot = FALSE)$breaks)
+      bins = lapply(seq_col(dt), function(i) {
+        invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$values)$breaks
+      })
       list(bins = bins)
     },
 
