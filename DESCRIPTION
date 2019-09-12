@@ -52,8 +52,9 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    visNetwork
-VignetteBuilder:
+    visNetwork, 
+    smotefamily
+VignetteBuilder: 
     knitr
 Remotes:
     mlr-org/mlr3,
@@ -97,6 +98,7 @@ Collate:
     'PipeOpRegrAvg.R'
     'PipeOpScale.R'
     'PipeOpSelect.R'
+    'PipeOpSmote.R'
     'PipeOpSubsample.R'
     'PipeOpUnbranch.R'
     'Selector.R'
