@@ -14,6 +14,7 @@
 #' ```
 #' PipeOpScaleRange$new(id = "scalerange", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"scalerange"`.
 #' * `param_vals` :: named `list`\cr
@@ -57,8 +58,8 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
   public = list(
     initialize = function(id = "scalerange", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("lower", default = 1),
-        ParamDbl$new("upper", default = 1)
+        ParamDbl$new("lower", tags = c("required", "train", "predict")),
+        ParamDbl$new("upper", tags = c("required", "train", "predict"))
       ))
       ps$values = list(lower = 0, upper = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals)
