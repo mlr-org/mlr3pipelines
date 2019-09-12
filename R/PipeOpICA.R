@@ -12,6 +12,7 @@
 #' ```
 #' PipeOpICA$new(id = "ica", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"ica"`.
 #' * `param_vals` :: named `list`\cr
@@ -39,31 +40,31 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as the following parameters
 #' based on [`fastICA()`][fastICA::fastICA]:
 #' * `n.comp` :: `numeric(1)`\cr
-#'   Number of components to extract. Default is \code{NULL}, which sets it
+#'   Number of components to extract. Default is `NULL`, which sets it
 #'   to the number of available numeric columns.
 #' * `alg.typ`:: `character(1)`\cr
 #'   Algorithm type. One of \dQuote{parallel} (default) or \dQuote{deflation}.
 #' * `fun` :: `character(1)`\cr
 #'   One of \dQuote{logcosh} (default) or \dQuote{exp}.
 #' * `alpha` :: `numeric(1)`\cr
-#'   In range `[1, 2]`, Used for negentropy calculation when \code{fun} is \dQuote{logcosh}.
+#'   In range `[1, 2]`, Used for negentropy calculation when `fun` is \dQuote{logcosh}.
 #'   Default is 1.0.
 #' * `method` :: `character(1)`\cr
 #'   Internal calculation method. \dQuote{C} (default) or \dQuote{R}.
 #'   See [`fastICA()`][fastICA::fastICA].
 #' * `row.norm` :: `logical(1)`\cr
 #'   Logical value indicating whether rows should be standardized beforehand.
-#'   Default is \code{FALSE}.
+#'   Default is `FALSE`.
 #' * `maxit` :: `numeric(1)`\cr
 #'   Maximum number of iterations. Default is 200.
 #' * `tol` :: `numeric(1)`\cr
-#'   Tolerance for convergence, default is \code{1e-4}.
+#'   Tolerance for convergence, default is `1e-4`.
 #' * `verbose` `logical(1)`\cr
 #'   Logical value indicating the level of output during the run of the algorithm.
-#'   Default is \code{FALSE}.
+#'   Default is `FALSE`.
 #' * `w.init`:: `matrix`\cr
 #'   Initial un-mixing matrix. See [`fastICA()`][fastICA::fastICA].
-#'   Default is \code{NULL}.
+#'   Default is `NULL`.
 #'
 #' @section Internals:
 #' Uses the [`fastICA()`][fastICA::fastICA] function.
@@ -89,17 +90,17 @@ PipeOpICA = R6Class("PipeOpICA",
   public = list(
     initialize = function(id = "ica", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamInt$new("n.comp", lower = 1, upper = Inf),
+        ParamInt$new("n.comp", lower = 1, upper = Inf, tags = "train"),
         ParamFct$new("alg.typ", levels = c("parallel", "deflation"),
-          default = "parallel"),
-        ParamFct$new("fun", default = "logcosh", levels = c("logcosh", "exp")),
-        ParamDbl$new("alpha", default = 1.0, lower = 1, upper = 2),
-        ParamFct$new("method", default = "R", levels = c("C", "R")),
-        ParamLgl$new("row.norm", default = FALSE),
-        ParamInt$new("maxit", default = 200, lower = 1),
-        ParamDbl$new("tol", default = 1e-04, lower = 0),
-        ParamLgl$new("verbose", default = FALSE),
-        ParamUty$new("w.init", default = NULL)
+          default = "parallel", tags = "train"),
+        ParamFct$new("fun", default = "logcosh", levels = c("logcosh", "exp"), tags = "train"),
+        ParamDbl$new("alpha", default = 1.0, lower = 1, upper = 2, tags = "train"),
+        ParamFct$new("method", default = "R", levels = c("C", "R"), tags = "train"),
+        ParamLgl$new("row.norm", default = FALSE, tags = "train"),
+        ParamInt$new("maxit", default = 200, lower = 1, tags = "train"),
+        ParamDbl$new("tol", default = 1e-04, lower = 0, tags = "train"),
+        ParamLgl$new("verbose", default = FALSE, tags = "train"),
+        ParamUty$new("w.init", default = NULL, tags = "train")
       ))
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,

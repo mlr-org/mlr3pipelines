@@ -1,21 +1,28 @@
 context("PipeOpICA")
 
-task = mlr_tasks$get("iris")
-op = PipeOpICA$new()
-expect_pipeop(op)
-set.seed(1234)
-result = op$train(list(task))
-
 test_that("PipeOpICA - basic properties", {
+  task = mlr_tasks$get("iris")
+
   expect_datapreproc_pipeop_class(PipeOpICA, task = task,
     deterministic_train = FALSE)
+
+  op = PipeOpICA$new()
+  expect_pipeop(op)
+  set.seed(1234)
+  result = op$train(list(task))
+
   expect_task(result[[1]])
   expect_equal(result[[1]]$data(), op$predict(list(task))[[1]]$data())
-}
-)
+})
 
 test_that("PipeOpICA - compare to fastICA", {
   # Default parameters
+  task = mlr_tasks$get("iris")
+  op = PipeOpICA$new()
+  expect_pipeop(op)
+  set.seed(1234)
+  result = op$train(list(task))
+
   dt = task$data()[, 2:5]
   n.comp = ncol(dt)
   method = "C"
