@@ -181,7 +181,11 @@ PipeOpSumLetter = R6::R6Class("sumletter",
 )
 posum = PipeOpSumLetter$new()
 
+print(posum)
+
 posum$train(list(1, 2))
+# note the name 'output' is the name of the output channel specified
+# in the $output data.table.
 
 posum$predict(list(NULL, NULL))
 }

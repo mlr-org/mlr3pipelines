@@ -92,3 +92,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   )
 )
 
+#' @export
+as_learner.Graph = function(x, clone = FALSE) {
+  GraphLearner$new(x)
+}

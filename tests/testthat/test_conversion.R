@@ -113,3 +113,25 @@ test_that("po for Learner", {
   expect_equal(lpo1, lpo3)
 
 })
+
+test_that("Graph to GraphLearner", {
+
+  grph = po("pca") %>>% po(lrn("classif.rpart"))
+
+  glrn1 = GraphLearner$new(grph)
+
+  glrn2 = as_learner(grph)
+
+  expect_equal(glrn1, glrn2)
+
+  task = tsk("iris")
+
+  cv = rsmp("holdout")$instantiate(task)
+
+  # test that the graph can be given to `resample()` directly
+  r1 = resample(task, glrn1, cv)$predictions()
+  r3 = resample(task, grph, cv)$predictions()
+
+  expect_equal(r1, r3)
+
+})

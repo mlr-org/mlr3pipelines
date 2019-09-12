@@ -18,10 +18,12 @@ devtools::load_all("mlr3pipelines")
 tools::buildVignettes(dir = "mlr3pipelines")
 
 testthat::test_package("mlr3pipelines")
+devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "chunk")
-testthat::test_package("mlr3pipelines", filter = "mutate")
-testthat::test_package("mlr3pipelines", filter = "multichannels")
+testthat::test_package("mlr3pipelines", filter = "usecases")
+testthat::test_package("mlr3pipelines", filter = "ensemble")
+testthat::test_package("mlr3pipelines", filter = "Graph")
+testthat::test_package("mlr3pipelines", filter = "conversion")
 
 devtools::test("mlr3pipelines", stop_on_warning = TRUE)
 
