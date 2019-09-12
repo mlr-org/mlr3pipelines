@@ -53,6 +53,8 @@ Suggests:
     rpart,
     testthat,
     visNetwork, 
+    fastICA, 
+    kernlab,
     smotefamily
 VignetteBuilder: 
     knitr
@@ -89,14 +91,19 @@ Collate:
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpHistBin.R'
+    'PipeOpICA.R'
     'PipeOpImpute.R'
+    'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
+    'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
     'PipeOpRegrAvg.R'
     'PipeOpScale.R'
+    'PipeOpScaleMaxAbs.R'
+    'PipeOpScaleRange.R'
     'PipeOpSelect.R'
     'PipeOpSmote.R'
     'PipeOpSubsample.R'

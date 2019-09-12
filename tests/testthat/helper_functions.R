@@ -60,7 +60,7 @@ expect_deep_clone = function(one, two) {
       }
     }
     for (i in index) {
-      if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile")) next
+      if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile", ".Environment")) next
       expect_references_differ(base::`[[`(a, i), base::`[[`(b, i), c(path, sprintf("[element %s]%s", i,
         if (!is.null(objnames)) sprintf(" '%s'", if (is.character(index)) i else objnames[[i]]) else "")))
     }
@@ -164,7 +164,11 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 # `task` must have at least two feature columns and at least two rows.
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
-  deterministic_train = TRUE, deterministic_predict = TRUE) {
+  deterministic_train = TRUE, deterministic_predict = TRUE,
+  tolerance = sqrt(.Machine$double.eps)) {
+  # NOTE
+  # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
+  # 'tolerance = tolerance' argument to `expect_equal`.
 
 
   original_clone = task$clone(deep = TRUE)
@@ -305,7 +309,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   if (predict_rows_independent) {
     expect_equal(predicted$nrow, 1)
     if (deterministic_predict) {
-      expect_equal(predicted$data(), po$predict(list(task))[[1]]$filter(whichrow)$data(), ignore.col.order = TRUE)
+      expect_equal(predicted$data(), po$predict(list(task))[[1]]$filter(whichrow)$data(), ignore.col.order = TRUE, tolerance = tolerance)
     }
   }
 
