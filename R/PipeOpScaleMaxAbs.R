@@ -13,6 +13,7 @@
 #' ```
 #' PipeOpScaleMaxAbs$new(id = "scalemaxabs", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"scalemaxabs"`.
 #' * `param_vals` :: named `list`\cr
@@ -53,7 +54,7 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
   public = list(
     initialize = function(id = "scalemaxabs", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("maxabs", lower = 0, default = 1)
+        ParamDbl$new("maxabs", lower = 0, tags = c("required", "train", "predict"))
       ))
       ps$values = list(maxabs = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals)
