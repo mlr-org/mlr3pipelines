@@ -16,6 +16,7 @@
 #' ```
 #' PipeOpSmote$new(id = "smote", param_vals = list())
 #' ```
+#'
 #" * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"smote"`.
 #' * `param_vals` :: named `list`\cr
@@ -24,7 +25,8 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with added synthetic rows for the minority class.
+#' The output during training is the input [`Task`][mlr3::Task] with added synthetic rows for the minority class.
+#' The output during prediction is the unchanged input.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
@@ -40,8 +42,8 @@
 #'
 #' @section Internals:
 #' For details see: \cr
-#' Chawla, N., Bowyer, K., Hall, L. and Kegelmeyer, W. 2002.
-#' SMOTE: Synthetic minority oversampling technique.
+#' Chawla, N., Bowyer, K., Hall, L. and Kegelmeyer, W. 2002.\cr
+#' SMOTE: Synthetic minority oversampling technique.\cr
 #' Journal of Artificial Intelligence Research. 16, 321-357.
 #'
 #' @section Fields:
@@ -52,16 +54,15 @@
 #'
 #' @examples
 #' library(mlr3)
-#' library(smotefamily)
 #'
 #' # Create example task
-#' data_example = sample_generator(1000,ratio = 0.80)
+#' data_example = smotefamily::sample_generator(1000, ratio = 0.80)
 #' task = TaskClassif$new(id = "example", backend = data_example, target = "result")
 #' task$data()
 #' table(task$data()$result)
 #'
 #' # Generate synthetic data for minority class
-#' #' pop = po("smote")
+#' pop = po("smote")
 #' smotedata = pop$train(list(task))[[1]]$data()
 #' table(smotedata$result)
 #' @family PipeOps
@@ -72,11 +73,11 @@ PipeOpSmote = R6Class("PipeOpSmote",
   public = list(
     initialize = function(id = "smote", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamInt$new("K", default = 5),
-        ParamInt$new("dup_size", default = 0)
+        ParamInt$new("K", default = 5, tags = "train"),
+        ParamInt$new("dup_size", default = 0, tags = "train")
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "smotefamily")
+        packages = "smotefamily", can_subset_cols = FALSE)
     },
 
     train_task = function(task) {
@@ -87,15 +88,11 @@ PipeOpSmote = R6Class("PipeOpSmote",
         self$state = list(dt_columns = dt_columns)
         return(task)
       }
-      dt = task$data(cols = cols)
-
-      # extract info to use smotefamily::SMOTE
-      ps = self$param_set$values
-      ps$X = as.data.frame(dt)
-      ps$target = c(task$data(cols = task$target_names))[[1]]
+      dt = as.data.frame(task$data(cols = cols))
 
       # calculate synthetic data
-      st = invoke(smotefamily::SMOTE, .args = ps)$syn_data
+      st = invoke(smotefamily::SMOTE, X = dt, target = task$data(cols = task$target_names)[[1]],
+        .args = self$param_set$values)$syn_data
 
       # add synthetic data to task data
       target.id = which(names(st) == "class")
