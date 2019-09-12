@@ -83,3 +83,33 @@ test_that("auto-gunion", {
   )
 
 })
+
+test_that("po for Filter", {
+  flt = mlr3filters::FilterVariance$new()
+  flt$param_set$values$na.rm = TRUE
+
+  fpo1 = PipeOpFilter$new(flt, param_vals = list(na.rm = FALSE))
+
+  fpo2 = po("filter", flt, na.rm = FALSE)
+
+  fpo3 = po(flt, na.rm = FALSE)
+
+  expect_equal(fpo1, fpo2)
+  expect_equal(fpo1, fpo3)
+
+})
+
+test_that("po for Learner", {
+  lrn = LearnerClassifRpart$new()
+  lrn$param_set$values$xval = 9
+
+  lpo1 = PipeOpLearner$new(lrn, param_vals = list(xval = 1))
+
+  lpo2 = po("learner", lrn, xval = 1)
+
+  lpo3 = po(lrn, xval = 1)
+
+  expect_equal(lpo1, lpo2)
+  expect_equal(lpo1, lpo3)
+
+})

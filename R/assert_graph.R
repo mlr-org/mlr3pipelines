@@ -105,3 +105,9 @@ as_pipeop.PipeOp = function(x, clone = FALSE) {
 as_pipeop.Learner = function(x, clone = FALSE) {
   PipeOpLearner$new(x)
 }
+
+#' @export
+as_pipeop.Filter = function(x, clone = FALSE) {
+  PipeOpFilter$new(x)
+}
+
