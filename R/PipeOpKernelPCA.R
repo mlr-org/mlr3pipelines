@@ -12,6 +12,7 @@
 #' ```
 #' PipeOpKernelPCA$new(id = "kernelpca", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"kernelpca"`.
 #' * `param_vals` :: named `list`\cr
@@ -23,7 +24,11 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric parameters replaced by their principal components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the returned [`S4`] object of the [`"kpca"` function][kernlab::kpca].
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`],
+#' as well as the returned [`S4`] object of the [`"kpca"` function][kernlab::kpca].
+#'
+#' The `@rotated` slot of the `"kpca"` object is overwritten with an empty matrix for memory efficiency.
+#'
 #' The slots of the [`S4`] object can be accessed by accessor function. See [kernlab::kpca].
 #'
 #' @section Parameters:
@@ -50,26 +55,24 @@
 #' library(mlr3)
 #'
 #' task = tsk("iris")
-#' pop = po("kernelpca")
+#' pop = po("kernelpca", features = 3)  # only keep top 3 components
 #'
 #' task$data()
 #' pop$train(list(task))[[1]]$data()
-#'
-#' pop$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "pca", param_vals = list()) {
+    initialize = function(id = "kernelpca", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamFct$new("kernel", default = "rbfdot", levels = c("rbfdot", "polydot",
-          "vanilladot", "tanhdot", "laplacedot", "besseldot", "anovadot", "splinedot")),
-        ParamUty$new("kpar"),
-        ParamInt$new("features", default = 0, lower = 0),
-        ParamDbl$new("th", default = 1e-04, lower = 0),
-        ParamUty$new("na.action", default = na.omit)
+          "vanilladot", "tanhdot", "laplacedot", "besseldot", "anovadot", "splinedot"), tags = "train"),
+        ParamUty$new("kpar", tags = "train"),
+        ParamInt$new("features", default = 0, lower = 0, tags = "train"),
+        ParamDbl$new("th", default = 1e-04, lower = 0, tags = "train"),
+        ParamUty$new("na.action", default = na.omit, tags = "train")
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "kernlab")
@@ -79,14 +82,16 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
+
     train_dt = function(dt, levels) {
       pcr = invoke(kernlab::kpca, as.matrix(dt), .args = self$param_set$values)
       self$state$pcr = pcr
+      self$state$pcr@rotated = matrix(numeric(0))
       kernlab::rotated(pcr)
     },
 
     predict_dt = function(dt, levels) {
-      predict(self$state$pcr, as.matrix(dt))
+      kernlab::predict(self$state$pcr, as.matrix(dt))
     }
   )
 )

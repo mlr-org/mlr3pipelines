@@ -30,7 +30,11 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 
 \section{State}{
 
-The \code{$state} is a named \code{list} with the \code{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the returned \code{\link{S4}} object of the \link[kernlab:kpca]{"kpca" function}.
+The \code{$state} is a named \code{list} with the \code{$state} elements inherited from \code{\link{PipeOpTaskPreproc}},
+as well as the returned \code{\link{S4}} object of the \link[kernlab:kpca]{"kpca" function}.
+
+The \code{@rotated} slot of the \code{"kpca"} object is overwritten with an empty matrix for memory efficiency.
+
 The slots of the \code{\link{S4}} object can be accessed by accessor function. See \link[kernlab:kpca]{kernlab::kpca}.
 }
 
@@ -66,12 +70,10 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 library(mlr3)
 
 task = tsk("iris")
-pop = po("kernelpca")
+pop = po("kernelpca", features = 3)  # only keep top 3 components
 
 task$data()
 pop$train(list(task))[[1]]$data()
-
-pop$state
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
