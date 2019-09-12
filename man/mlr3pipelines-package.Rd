@@ -24,12 +24,9 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Florian Pfisterer \email{pfistererf@googlemail.com} (0000-0001-8867-762X)
   \item Bernd Bischl \email{bernd_bischl@gmx.net} (0000-0001-6002-6980)
-}
-
-Other contributors:
-\itemize{
-  \item Florian Pfisterer \email{pfistererf@googlemail.com} [contributor]
+  \item Michel Lang \email{michellang@gmail.com} (0000-0001-9754-0393)
 }
 
 }

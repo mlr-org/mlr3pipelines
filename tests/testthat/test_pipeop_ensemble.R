@@ -32,7 +32,7 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
-  expect_equal(out, list(prds[[3]]))
+  expect_equal(out, list(output = prds[[3]]))
 
 
   po = PipeOpRegrAvg$new()
@@ -45,7 +45,7 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
-  expect_equal(out, list(prds[[3]]))
+  expect_equal(out, list(output = prds[[3]]))
 
 })
 
@@ -68,7 +68,7 @@ test_that("PipeOpWeightedClassifAvg - response -train and predict", {
       predict_types = c("response"), nclasses = 3),
     simplify = FALSE
   )
-  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
+  lapply(prds, function(x) x$data$tab$truth = prds[[1]]$data$tab$truth)  # works because of R6 reference semantics
   po = PipeOpClassifAvg$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)
@@ -105,7 +105,7 @@ test_that("PipeOpWeightedClassifAvg - prob - train and predict", {
       predict_types = c("response", "prob"), nclasses = 3),
     simplify = FALSE
   )
-  lapply(prds, function(x) x$data$truth = prds[[1]]$data$truth)  # works because of R6 reference semantics
+  lapply(prds, function(x) x$data$tab$truth = prds[[1]]$data$tab$truth)  # works because of R6 reference semantics
   po = PipeOpClassifAvg$new(4)
   expect_pipeop(po)
   expect_list(train_pipeop(po, nulls), len = 1)

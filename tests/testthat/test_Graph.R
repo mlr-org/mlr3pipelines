@@ -313,7 +313,7 @@ test_that("Intermediate results are saved to Graph if requested", {
 
   expect_equal(g$pipeops$scale$.result, restask2)
 
-  expect_equal(unname(g$pipeops$nop$.result), restask)
+  expect_equal(g$pipeops$nop$.result, restask)
 })
 
 test_that("Namespaces get loaded", {
