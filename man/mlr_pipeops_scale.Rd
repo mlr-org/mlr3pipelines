@@ -104,6 +104,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_scalemaxabs}},
   \code{\link{mlr_pipeops_scalerange}},
   \code{\link{mlr_pipeops_select}},
+  \code{\link{mlr_pipeops_smote}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
   \code{\link{mlr_pipeops}}

@@ -54,7 +54,8 @@ Suggests:
     testthat,
     visNetwork, 
     fastICA, 
-    kernlab
+    kernlab,
+    smotefamily
 VignetteBuilder: 
     knitr
 Remotes:
@@ -104,6 +105,7 @@ Collate:
     'PipeOpScaleMaxAbs.R'
     'PipeOpScaleRange.R'
     'PipeOpSelect.R'
+    'PipeOpSmote.R'
     'PipeOpSubsample.R'
     'PipeOpUnbranch.R'
     'Selector.R'
