@@ -276,8 +276,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     selector = function(data) rep(FALSE, length(data$feature_names))
     po2$param_set$values$affect_columns = selector
 
-    # FIXME: the following should ensure that data has not changed
-    # but number of rows or row indices could change in theory change, so the tests will need to be adapted if that is ever the case
+    # NOTE: the following should ensure that data has not changed
+    # but number of rows or row indices could change in theory, so the tests will need to be adapted if that is ever the case
     trained = po2$train(list(task))[[1]]
     expect_equal(trained$data(cols = trained$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE)
 
