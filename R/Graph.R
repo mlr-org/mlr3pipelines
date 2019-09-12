@@ -338,7 +338,7 @@ Graph = R6Class("Graph",
 
     train = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "train")
-      graph_reduce(self, input, "train", single_input)
+      invisible(graph_reduce(self, input, "train", single_input))
     },
 
     predict = function(input, single_input = TRUE) {
