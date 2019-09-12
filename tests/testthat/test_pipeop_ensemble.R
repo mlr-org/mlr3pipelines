@@ -32,7 +32,7 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
-  expect_equal(out, list(prds[[3]]))
+  expect_equal(out, list(output = prds[[3]]))
 
 
   po = PipeOpRegrAvg$new()
@@ -45,7 +45,7 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
   po$param_set$values$weights = c(0, 0, 1, 0)
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
-  expect_equal(out, list(prds[[3]]))
+  expect_equal(out, list(output = prds[[3]]))
 
 })
 
