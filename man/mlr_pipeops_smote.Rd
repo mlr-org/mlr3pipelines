@@ -73,7 +73,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 library(mlr3)
 
 # Create example task
-data_example = sample_generator(1000, ratio = 0.80)
+data_example = smotefamily::sample_generator(1000, ratio = 0.80)
 task = TaskClassif$new(id = "example", backend = data_example, target = "result")
 task$data()
 table(task$data()$result)
