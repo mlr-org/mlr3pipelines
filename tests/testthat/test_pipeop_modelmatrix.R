@@ -61,6 +61,5 @@ test_that("PipeOpModelMatrix - basic properties", {
   expect_true("(Intercept)" %nin% fn)
   expect_equal(length(grep("foreign_worker(yes:)|(no:)other_installment_plans(bank)|(stores)|(none)",
     fn)), length(fn))
-}
-)
+})
 

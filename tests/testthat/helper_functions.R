@@ -60,7 +60,7 @@ expect_deep_clone = function(one, two) {
       }
     }
     for (i in index) {
-      if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile")) next
+      if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile", ".Environment")) next
       expect_references_differ(base::`[[`(a, i), base::`[[`(b, i), c(path, sprintf("[element %s]%s", i,
         if (!is.null(objnames)) sprintf(" '%s'", if (is.character(index)) i else objnames[[i]]) else "")))
     }

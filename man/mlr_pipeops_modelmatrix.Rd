@@ -7,8 +7,7 @@
 \title{PipeOpModelMatrix}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
-Transforms columns using a given \code{formula}.
-It therefore uses the \code{\link[stats:model.matrix]{stats::model.matrix()}} function.
+Transforms columns using a given \code{formula} using the \code{\link[stats:model.matrix]{stats::model.matrix()}} function.
 }
 \section{Construction}{
 \preformatted{PipeOpModelMatrix$new(id = "modelmatrix", param_vals = list())
@@ -39,6 +38,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{formula}  :: \code{formula} \cr
 Formula to use. Higher order interactions can be created using constructs like \code{~. ^ 2}.
+By default, an \code{(Intercept)} column of all \code{1}s is created, which can be avoided by adding \code{0 +} to the term.
 See \code{\link[stats:model.matrix]{model.matrix()}}.
 }
 }
@@ -57,12 +57,14 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 library(mlr3)
 
 task = tsk("iris")
-pop = po("modelmatrix", param_vals = list(formula = ~ .  ^ 2))
+pop = po("modelmatrix", formula = ~ .  ^ 2)
 
 task$data()
 pop$train(list(task))[[1]]$data()
 
-pop$state
+pop$param_set$values$formula = ~ 0 + . ^ 2
+
+pop$train(list(task))[[1]]$data()
 
 }
 \seealso{
