@@ -110,6 +110,7 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSubsample.R'
     'PipeOpUnbranch.R'
+    'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
     'greplicate.R'

@@ -117,6 +117,7 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeops_smote}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
+  \code{\link{mlr_pipeops_yeojohnson}},
   \code{\link{mlr_pipeops}}
 
 Other Ensembles: \code{\link{mlr_learners_avg}},
