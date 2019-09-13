@@ -9,6 +9,10 @@ status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://
 
 ## What is `mlr3pipelines`?
 
+Watch our UseR 2019 Presentation on Youtube for a 15 minute introduction:
+
+[![UseR 2019 mlr3pipelines](https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ)
+
 **`mlr3pipelines`** is a [dataflow
 programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit
 for machine learning in R utilising the
@@ -47,6 +51,12 @@ This learner can be used for resampling, benchmarking, and even tuning.
 
 ``` r
 resample("iris", glrn, "cv")
+#> Warning: 'Automatic object creation from strings in `mlr3`' is deprecated.
+#> Use 'tsk' instead.
+#> See help("Deprecated")
+#> Warning: 'Automatic object creation from strings in `mlr3`' is deprecated.
+#> Use 'rsmp' instead.
+#> See help("Deprecated")
 #> <ResampleResult> of 10 iterations
 #> * Task: iris
 #> * Learner: pca.variance.classif.rpart
@@ -76,12 +86,12 @@ are:
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
 
-  - [Quick
-    Introduction](https://mlr3book.mlr-org.com/pipelines.html),
+  - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
   - [Detailed
     Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html),
-    diving into concepts and describing the objects involved
+    diving into concepts and describing the objects
+    involved
   - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
     of `mlr3pipelines` with other packages (not yet authoritative)
   - [Writing Custom
@@ -99,7 +109,7 @@ In case of problems / bugs, it is often helpful if you provide a
 “minimum working example” that showcases the behaviour (but don’t
 worry about this if the bug is obvious).
 
-Please understand that the ressources of the project are limited:
+Please understand that the resources of the project are limited:
 response may sometimes be delayed by a few days, and some feature
 suggestions may be rejected if they are deemed too tangential to the
 vision behind the project.

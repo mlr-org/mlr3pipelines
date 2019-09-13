@@ -52,8 +52,12 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    visNetwork
-VignetteBuilder:
+    visNetwork, 
+    bestNormalize,
+    fastICA, 
+    kernlab,
+    smotefamily
+VignetteBuilder: 
     knitr
 Remotes:
     mlr-org/mlr3,
@@ -77,9 +81,10 @@ Collate:
     'PipeOpEnsemble.R'
     'LearnerAvg.R'
     'NO_OP.R'
+    'PipeOpTaskPreproc.R'
+    'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
-    'PipeOpTaskPreproc.R'
     'PipeOpClassBalancing.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
@@ -87,16 +92,23 @@ Collate:
     'PipeOpEncode.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
+    'PipeOpHistBin.R'
+    'PipeOpICA.R'
     'PipeOpImpute.R'
+    'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
+    'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
     'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'
     'PipeOpScale.R'
+    'PipeOpScaleMaxAbs.R'
+    'PipeOpScaleRange.R'
     'PipeOpSelect.R'
+    'PipeOpSmote.R'
     'PipeOpSubsample.R'
     'PipeOpUnbranch.R'
     'Selector.R'
