@@ -113,9 +113,9 @@ Initialized to \code{"one-hot"}. One of:
 
 
 \itemize{
-\item \code{fast.optim}  :: \code{logical(1)} \cr
+\item \code{fast_optim}  :: \code{logical(1)} \cr
 Initialized to \code{TRUE}.
-If \dQuote{fast.optim} is \code{TRUE} (default), a faster (up to 50 percent)
+If \dQuote{fast_optim} is \code{TRUE} (default), a faster (up to 50 percent)
 optimizer from the nloptr package is used when fitting the lmer models.
 This uses additional stopping criteria which can give suboptimal results.
 }
@@ -208,14 +208,21 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_copy}},
   \code{\link{mlr_pipeops_featureunion}},
   \code{\link{mlr_pipeops_filter}},
+  \code{\link{mlr_pipeops_histbin}},
+  \code{\link{mlr_pipeops_ica}},
   \code{\link{mlr_pipeops_impute}},
+  \code{\link{mlr_pipeops_kernelpca}},
   \code{\link{mlr_pipeops_learner}},
+  \code{\link{mlr_pipeops_modelmatrix}},
   \code{\link{mlr_pipeops_mutate}},
   \code{\link{mlr_pipeops_nop}},
   \code{\link{mlr_pipeops_pca}},
   \code{\link{mlr_pipeops_regravg}},
+  \code{\link{mlr_pipeops_scalemaxabs}},
+  \code{\link{mlr_pipeops_scalerange}},
   \code{\link{mlr_pipeops_scale}},
   \code{\link{mlr_pipeops_select}},
+  \code{\link{mlr_pipeops_smote}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
   \code{\link{mlr_pipeops}}

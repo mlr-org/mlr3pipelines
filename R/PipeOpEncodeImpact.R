@@ -54,9 +54,9 @@
 #'   List of coefficients learned via `glmer`
 #'
 #' @section Parameters:
-#' * `fast.optim`  :: `logical(1)` \cr
+#' * `fast_optim`  :: `logical(1)` \cr
 #'   Initialized to `TRUE`.
-#'   If \dQuote{fast.optim} is \code{TRUE} (default), a faster (up to 50 percent)
+#'   If \dQuote{fast_optim} is \code{TRUE} (default), a faster (up to 50 percent)
 #'   optimizer from the nloptr package is used when fitting the lmer models.
 #'   This uses additional stopping criteria which can give suboptimal results.
 #'
@@ -82,9 +82,9 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
   public = list(
     initialize = function(id = "encodeLmer", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("fast.optim", tags = c("train"))
+        ParamLgl$new("fast_optim", tags = c("train"))
       ))
-      ps$values = list(fast.optim = TRUE)
+      ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"))
     },
 
@@ -121,11 +121,10 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       # different funs depending on task.type / multi/binaryclass
       self$state$target_levels = levels(target)
 
-      # --- fit lmer models ---
-      fit_lmer = self$get_fit_lmer_fun(target, task_type)
+      # one vs rest for multiclass.
       if (length(self$state$target_levels) <= 2) {
         self$state$control = lapply(dt, function(col) {
-          fit_lmer(col, target, self$param_set$values$fast.optim)
+          private$fit_lmer(col, target, self$param_set$values$fast_optim, task_type)
         })
       } else {
         # create list with binary "one vs. rest" target variables
@@ -134,7 +133,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         # for prediction, use complete encoding model
         self$state$control = sapply(colnames(dt), function(cname) {
           sapply(self$state$target_levels, function(lvl) {
-            fit_lmer(dt[[cname]], bin_targets[[lvl]], self$param_set$values$fast.optim)
+            private$fit_lmer(dt[[cname]], bin_targets[[lvl]], self$param_set$values$fast_optim, task_type)
             }, simplify = FALSE)
           }, simplify = FALSE)
       }
@@ -160,120 +159,58 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         dt_new = as.data.frame(num_vals_list, row.names = rownames(dt))
       }
       return(dt_new)
-    },
+    }), 
 
-    get_fit_lmer_fun = function(target, task_type) {
-      if (task_type == "regr") return(fit_lmer_regr)
-      else if (task_type == "classif") {
-        if (length(levels(target)) == 2) return(fit_lmer_binaryclass)
-        else return(fit_lmer_multiclass)
-      } else {
-        stopf("Not implemented for task type %s!", task_type)
-      }
+
+  private = list(
+    fit_lmer = function(feature, target, fast_optim, task_type) {
+      args = private$get_args_nlopt_lmer(feature, target, fast_optim, task_type)
+      if (task_type == "classif") args$family = stats::binomial
+      # lmer for regr, glmer for classif
+      if (task_type == "regr") mod = do.call(lme4::lmer, args)
+      else mod = do.call(lme4::glmer, args)
+      private$get_coefs(mod)
+    },
+    get_args_nlopt_lmer = function(feature, target, fast_optim, task_type) {
+
+      # lmer for regr, glmer for classif
+      if (task_type == "regr") control = lme4::lmerControl
+      else control = lme4::glmerControl
+
+      # nloptwrap for fast optim
+      if (fast_optim) control = control()
+      else control = control(optimizer = "nloptwrap", calc.derivs = FALSE)
+
+      list(formula = y ~ 1 + (1 | lvl),
+        data = data.frame(lvl = feature, y = target),
+        na.action = na.omit, control = control)
+    },
+    get_coefs = function(mod) {
+      coefs = coef(mod)$lvl
+      lvls = rownames(coefs)
+      coefs = coefs[,1]
+      names(coefs) = lvls
+      intercept = unname(lme4::fixef(mod))
+      # replace missing coefs with intercept value
+      coefs[is.na(coefs)] = intercept
+      # save intercept value for new levels during prediction
+      coefs = c(coefs, ..new..level.. = intercept)
+      coefs
     }
+
   )
 )
 
 mlr_pipeops$add("encodeLmer", PipeOpEncodeLmer)
 
 
-# heavily influenced by the embed package
-fit_lmer_regr = function(feature, target, fast.optim) {
-  # performance tips from https://cran.r-project.org/web/packages/lme4/vignettes/lmerperf.html
-  nlopt <- function(par, fn, lower, upper, control) {
-  .nloptr <<- res <- nloptr::nloptr(par, fn, lb = lower, ub = upper,
-    opts = list(algorithm = "NLOPT_LN_BOBYQA", print_level = 1,
-    maxeval = 1000, xtol_abs = 1e-6, ftol_abs = 1e-6))
-  list(par = res$solution,
-    fval = res$objective,
-    conv = if (res$status > 0) 0 else res$status,
-    message = res$message)
-  }
-  args = list(formula = y ~ 1 + (1 | lvl),
-    data = data.frame(lvl = feature, y = target),
-    na.action = na.omit,
-    control = if (fast.optim) {
-      lme4::lmerControl(optimizer = "nloptwrap", calc.derivs = FALSE)
-    } else {
-      lme4::lmerControl()
-    })
-  mod = do.call(lme4::lmer, args)
-  coefs = coef(mod)$lvl
-  lvls = rownames(coefs)
-  coefs = coefs[,1]
-  names(coefs) = lvls
-  intercept = unname(lme4::fixef(mod))
-  # replace missing coefs with intercept value
-  coefs[is.na(coefs)] = intercept
-  # save intercept value for new levels during prediction
-  coefs = c(coefs, ..new..level.. = intercept)
-  coefs
-}
 
-# heavily influenced by the embed package
-fit_lmer_binaryclass = function(feature, target, fast.optim) {
-  # performance tips from https://cran.r-project.org/web/packages/lme4/vignettes/lmerperf.html
-  nlopt <- function(par, fn, lower, upper, control) {
-  .nloptr <<- res <- nloptr::nloptr(par, fn, lb = lower, ub = upper,
-    opts = list(algorithm = "NLOPT_LN_BOBYQA", print_level = 1,
-    maxeval = 1000, xtol_abs = 1e-6, ftol_abs = 1e-6))
-  list(par = res$solution,
-    fval = res$objective,
-    conv = if (res$status > 0) 0 else res$status,
-    message = res$message)
-  }
-  args = list(formula = y ~ 1 + (1 | lvl),
-    data = data.frame(lvl = feature, y = target),
-    family = stats::binomial,
-    na.action = na.omit,
-    control = if (fast.optim) {
-      lme4::glmerControl(optimizer = "nloptwrap", calc.derivs = FALSE)
-    } else {
-      lme4::glmerControl()
-    })
-  mod = do.call(lme4::glmer, args)
-  coefs = coef(mod)$lvl
-  lvls = rownames(coefs)
-  coefs = coefs[,1]
-  names(coefs) = lvls
-  intercept = unname(lme4::fixef(mod))
-  # replace missing coefs with intercept value
-  coefs[is.na(coefs)] = intercept
-  # save intercept value for new levels during prediction
-  coefs = c(coefs, ..new..level.. = intercept)
-  coefs
-}
 
-# heavily influenced by the embed package
-fit_lmer_multiclass = function(feature, target, fast.optim) {
-  # performance tips from https://cran.r-project.org/web/packages/lme4/vignettes/lmerperf.html
-  nlopt <- function(par, fn, lower, upper, control) {
-  .nloptr <<- res <- nloptr::nloptr(par, fn, lb = lower, ub = upper,
-    opts = list(algorithm = "NLOPT_LN_BOBYQA", print_level = 1,
-    maxeval = 1000, xtol_abs = 1e-6, ftol_abs = 1e-6))
-  list(par = res$solution,
-    fval = res$objective,
-    conv = if (res$status > 0) 0 else res$status,
-    message = res$message)
-  }
-  args = list(formula = y ~ 1 + (1 | lvl),
-    data = data.frame(lvl = feature, y = target),
-    family = stats::binomial,
-    na.action = na.omit,
-    control = if (fast.optim) {
-      lme4::glmerControl(optimizer = "nloptwrap", calc.derivs = FALSE)
-    } else {
-      lme4::glmerControl()
-    })
-  mod = do.call(lme4::glmer, args)
-  coefs = coef(mod)$lvl
-  lvls = rownames(coefs)
-  coefs = coefs[,1]
-  names(coefs) = lvls
-  intercept = unname(lme4::fixef(mod))
-  # replace missing coefs with intercept value
-  coefs[is.na(coefs)] = intercept
-  # save intercept value for new levels during prediction
-  coefs = c(coefs, ..new..level.. = intercept)
-  coefs
-}
+# # performance tips from https://cran.r-project.org/web/packages/lme4/vignettes/lmerperf.html
+# nlopt <- function(par, fn, lower, upper, control) {
+# .nloptr <<- res <- nloptr::nloptr(par, fn, lb = lower, ub = upper,
+#     opts = list(algorithm = "NLOPT_LN_BOBYQA", print_level = 1,
+#     maxeval = 1000, xtol_abs = 1e-6, ftol_abs = 1e-6))
+#   list(par = res$solution, fval = res$objective,
+#    conv = if (res$status > 0) 0 else res$status, message = res$message)
+# }
