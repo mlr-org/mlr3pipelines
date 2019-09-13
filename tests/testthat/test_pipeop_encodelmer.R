@@ -121,7 +121,9 @@ test_that("Confirms to sensible values", {
   expect_true(cor(data$x, yh) > 0.9)
   expect_true("factor" %nin% nt$feature_types$type)
 
-  nt = predict_pipeop(op, inputs = list(task))[[1L]]
+  nt1 = predict_pipeop(op, inputs = list(task))[[1L]]
+  yh = nt1$data()$y
   expect_true(cor(data$x, yh) > 0.9)
-  expect_true("factor" %nin% nt$feature_types$type)
+  expect_true("factor" %nin% nt1$feature_types$type)
+  expect_equal(nt1, nt)
 })
