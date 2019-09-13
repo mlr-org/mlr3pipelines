@@ -89,3 +89,5 @@ test_that("PipeOpEncode", {
     make.names(sprintf("chas.%s", seq_len(length(chaslevels) - 1)), unique = TRUE),
     make.names(sprintf("town.%s", seq_len(length(townlevels) - 1L)), unique = TRUE)))
 })
+
+

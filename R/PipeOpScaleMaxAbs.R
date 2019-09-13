@@ -64,7 +64,7 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    get_state_dt = function(dt, levels) {
+    get_state_dt = function(dt, levels, target) {
       lapply(dt, function(x){
         s = max(abs(range(x, na.rm = TRUE, finite = TRUE)))
         if (s == 0) {

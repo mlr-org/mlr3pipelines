@@ -69,7 +69,7 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    get_state_dt = function(dt, levels) {
+    get_state_dt = function(dt, levels, target) {
       lapply(dt, function(x) {
         rng = range(x, na.rm = TRUE, finite = TRUE)
         b = (self$param_set$values$upper - self$param_set$values$lower) / (rng[2] - rng[1])

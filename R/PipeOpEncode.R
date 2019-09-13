@@ -92,7 +92,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
       task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
     },
 
-    get_state_dt = function(dt, levels) {
+    get_state_dt = function(dt, levels, target) {
       contrasts = switch(self$param_set$values$method,
         "one-hot" = function(x) stats::contr.treatment(x, contrasts = FALSE),
         treatment = stats::contr.treatment,

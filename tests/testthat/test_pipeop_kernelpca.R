@@ -5,7 +5,7 @@ test_that("PipeOpKernelPCA - basic properties", {
   task = mlr_tasks$get("iris")
 
   expect_datapreproc_pipeop_class(PipeOpKernelPCA, task = task,
-    deterministic_train = TRUE, deterministic_predict = TRUE, tolerance = 1e-7)
+    deterministic_train = TRUE, deterministic_predict = TRUE, tolerance = 1e-4)
 
   op = PipeOpKernelPCA$new()
   expect_pipeop(op)
