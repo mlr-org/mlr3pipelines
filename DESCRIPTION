@@ -91,7 +91,7 @@ Collate:
     'PipeOpColApply.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
-    'PipeOpEncodeImpact.R'
+    'PipeOpEncodeLmer.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
     'PipeOpHistBin.R'
