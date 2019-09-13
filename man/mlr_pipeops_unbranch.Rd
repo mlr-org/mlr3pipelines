@@ -100,6 +100,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_select}},
   \code{\link{mlr_pipeops_smote}},
   \code{\link{mlr_pipeops_subsample}},
+  \code{\link{mlr_pipeops_yeojohnson}},
   \code{\link{mlr_pipeops}}
 
 Other Path Branching: \code{\link{NO_OP}},

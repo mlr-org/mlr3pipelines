@@ -28,6 +28,6 @@ test_that("PipeOpYeoJohnson - receive expected result", {
   # Set lower and upper value for lambda estimation
   op = PipeOpYeoJohnson$new(param_vals = list(upper = 0.5, lower = 0))
   result = train_pipeop(op, inputs = list(task))
-  lambda.new = unlist(lapply(op$state[1:4], function(x) x$lambda))
+  lambda.new = unlist(lapply(op$state$bc[1:4], function(x) x$lambda))
   expect_true(all(lambda.new <= 0.5 & lambda.new >= 0))
 })

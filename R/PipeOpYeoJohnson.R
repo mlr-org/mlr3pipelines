@@ -7,12 +7,13 @@
 #' @description
 #' Conducts a Yeo-Johnson transformation on numeric features. It therefore estimates
 #' the optimal value of lambda for the transformation.
-#' See [bestNormalize::yeojohnson()] for details.
+#' See [`bestNormalize::yeojohnson()`] for details.
 #'
 #' @section Construction:
 #' ```
 #' PipeOpYeoJohnson$new(id = "yeojohnson", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"yeojohnson"`.
 #' * `param_vals` :: named `list`\cr
@@ -44,6 +45,7 @@
 #'
 #' @section Internals:
 #' Uses the [`bestNormalize::yeojohnson`] function.
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -82,17 +84,21 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
       bc = lapply(dt, FUN = function(x) {
         invoke(bestNormalize::yeojohnson, x, .args = self$param_set$values)
       })
-      self$state = bc
-      cols = names(bc)
-      for (j in cols) set(dt, j = j, value = bc[[j]]$x.t)
-      return(dt)
+      for (j in names(bc)) {
+        set(dt, j = j, value = bc[[j]]$x.t)
+        bc[[j]]$x.t = NULL
+        bc[[j]]$x = NULL
+      }
+      self$state = list(bc = bc)
+      dt
     },
 
     predict_dt = function(dt, levels) {
-      cols = colnames(dt)
-      for (j in cols) set(dt, j = j,
-        value = predict(self$state[[j]], newdata = dt[[j]]))
-      return(dt)
+      for (j in colnames(dt)) {
+        set(dt, j = j,
+          value = predict(self$state$bc[[j]], newdata = dt[[j]]))
+      }
+      dt
     }
   )
 )
