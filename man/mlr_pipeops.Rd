@@ -44,7 +44,7 @@ Returns a \code{data.table} with columns \code{key} (\code{character}), \code{pa
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 mlr_pipeops$get("learner", lrn("classif.rpart"))
 

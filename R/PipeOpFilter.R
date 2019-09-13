@@ -70,8 +70,8 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
-#' library(mlr3filters)
+#' library("mlr3")
+#' library("mlr3filters")
 #'
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC

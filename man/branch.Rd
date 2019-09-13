@@ -31,7 +31,7 @@ to the input argument list.}
 Create a multiplexed graph.
 }
 \examples{
-library(mlr3)
+library("mlr3")
 
 po_pca = po("pca")
 po_nop = po("nop")

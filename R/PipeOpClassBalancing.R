@@ -77,7 +77,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("spam")
 #' opb = po("classbalancing")

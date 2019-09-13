@@ -63,7 +63,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 # Simple Bagging
 gr = greplicate(n = 5,

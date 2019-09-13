@@ -62,7 +62,7 @@
 #' @include PipeOp.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("iris")
 #' gr = gunion(list(

@@ -33,7 +33,7 @@
 #' @family PipeOps
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' mlr_pipeops$get("learner", lrn("classif.rpart"))
 #'

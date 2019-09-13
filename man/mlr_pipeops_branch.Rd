@@ -79,7 +79,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 pca = po("pca")
 nop = po("nop")

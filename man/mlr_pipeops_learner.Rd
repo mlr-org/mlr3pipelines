@@ -83,7 +83,7 @@ Methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 task = tsk("iris")
 learner = lrn("classif.rpart", cp = 0.1)

@@ -42,7 +42,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("pima")
 #' sum(complete.cases(task$data()))

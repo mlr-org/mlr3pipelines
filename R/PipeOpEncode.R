@@ -55,7 +55,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = TaskClassif$new("task",
 #'   data.table::data.table(x = letters[1:3], y = letters[1:3]), "x")

@@ -95,7 +95,7 @@
 #' @family mlr3pipelines backend related
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' g = Graph$new()$
 #'   add_pipeop(PipeOpScale$new(id = "scale"))$

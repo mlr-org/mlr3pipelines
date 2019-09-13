@@ -52,7 +52,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' pom = po("mutate")
 #' pom$param_set$values$mutation = list(

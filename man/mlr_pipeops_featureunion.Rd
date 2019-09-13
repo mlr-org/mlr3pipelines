@@ -74,7 +74,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 task = tsk("iris")
 gr = gunion(list(

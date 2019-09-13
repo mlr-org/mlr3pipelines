@@ -64,7 +64,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 task = tsk("boston_housing")
 pos = po("select")

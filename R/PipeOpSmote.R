@@ -53,7 +53,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' # Create example task
 #' data_example = smotefamily::sample_generator(1000, ratio = 0.80)

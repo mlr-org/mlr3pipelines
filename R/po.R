@@ -23,7 +23,7 @@
 #'   given to the `param_vals` argument of the constructor.
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' po("learner", lrn("classif.rpart"), cp = 0.3)
 #'

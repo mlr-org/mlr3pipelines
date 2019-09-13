@@ -54,7 +54,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 task = tsk("iris")
 pop = po("scalerange", param_vals = list(lower = -1, upper = 1))

@@ -57,7 +57,7 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 task = tsk("pima")
 sum(complete.cases(task$data()))

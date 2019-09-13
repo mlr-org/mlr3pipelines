@@ -30,7 +30,7 @@ Create
 The object is initialized with given parameters and \code{param_vals}.
 }
 \examples{
-library(mlr3)
+library("mlr3")
 
 po("learner", lrn("classif.rpart"), cp = 0.3)
 

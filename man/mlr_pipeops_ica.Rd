@@ -90,7 +90,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 task = tsk("iris")
 pop = po("ica")

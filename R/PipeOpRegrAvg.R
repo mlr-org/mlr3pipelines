@@ -51,7 +51,7 @@
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' # Simple Bagging
 #' gr = greplicate(n = 5,

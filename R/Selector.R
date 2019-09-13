@@ -44,7 +44,7 @@
 #'
 #' @family Selectors
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' iris_task = tsk("iris")
 #' bh_task = tsk("boston_housing")

@@ -48,7 +48,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("boston_housing")
 #' pos = po("select")

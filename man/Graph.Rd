@@ -107,7 +107,7 @@ of the \code{single_input} argument, are analogous to \code{$train()}.
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 g = Graph$new()$
   add_pipeop(PipeOpScale$new(id = "scale"))$

@@ -73,7 +73,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("iris")
 #' pop = po("ica")

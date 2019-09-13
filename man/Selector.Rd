@@ -130,7 +130,7 @@ It is preferrable to use the \code{\link{Selector}} construction functions like 
 }
 
 \examples{
-library(mlr3)
+library("mlr3")
 
 iris_task = tsk("iris")
 bh_task = tsk("boston_housing")
