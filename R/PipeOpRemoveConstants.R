@@ -2,42 +2,48 @@
 #' @title PipeOpRemoveConstants
 #'
 #' @usage NULL
-#' @name mlr_pipeops_remove_constants
+#' @name mlr_pipeops_removeconstants
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Remove constant features from a [mlr3::Task].
 #' For each feature, calculates the ratio of features which differ from their mode value.
 #' All features which a ratio below a settable threshold are removed from the task.
-#' Numeric features are rounded first.
-#' Missing values can be ignored or treated as a regular value.
+#' Missing values can be ignored or treated as a regular value distinct from non-missing values.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpRemoveConstants$new(id = "remove_constants")
+#' PipeOpRemoveConstants$new(id = "removeconstants")
 #' ```
 #'
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, defaulting to `"remove_constants"`.
+#'   Identifier of the resulting  object, defaulting to `"removeconstants"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section State:
 #' `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `ratios`: Named numeric vector of calculated ratios.
+#' * `features` :: `character`\cr
+#'   Names of features that are being kept. Features of types that the [`Filter`][mlr3filters::Filter] can not operate on are always being kept.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as:
-#' * `ratio`: Ratio of values which must be different from the mode value in order to keep a feature in the task.
+#' * `ratio` :: `numeric(1)`\cr
+#'   Ratio of values which must be different from the mode value in order to keep a feature in the task.
 #'   Default is 0, which means only constant features with exactly one observed level are removed.
-#' * `digits`: Number of digits used to round numeric values before comparing them.
-#'   Default is 8, which approximately corresponds to a tolerance of `sqrt(.Machine$double.eps)`.
-#' * `na_ignore`: If `TRUE`, the ratio is calculated after removing all missing values first.
+#' * `rel_tol` :: `numeric(1)`\cr
+#'   Relative tolerance within which to consider a numeric feature constant. Set to 0 to disregard relative tolerance. Default is `1e-8`.
+#' * `abs_tol` :: `numeric(1)`\cr
+#'   Absolute tolerance within which to consider a numeric feature constant. Set to 0 to disregard absolute tolerance. Default is `1e-8`.
+#' * `na_ignore` :: `logical(1)`\cr
+#'   If `TRUE`, the ratio is calculated after removing all missing values first.
 #'   Default is `FALSE`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @section Methods:
-#' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
@@ -48,55 +54,71 @@
 #'
 #' task = TaskRegr$new("example", data, target = "y")
 #'
-#' po = po("remove_constants")
-#' new_task = po$train(list(task = task))[[1]]
-#' new_task$feature_names
+#' po = po("removeconstants")
+#'
+#' po$train(list(task = task))[[1]]$data()
+#'
+#' po$state
 PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
-    initialize = function(id = "remove_constants") {
+    initialize = function(id = "removeconstants", param_vals = list()) {
       ps = ParamSet$new(list(
-          ParamDbl$new("ratio", lower = 0, upper = 1, default = 0, tags = c("train", "predict", "required")),
-          ParamInt$new("digits", lower = 0L, default = 8L, tags = c("required", "train")),
-          ParamLgl$new("na_ignore", default = FALSE, tags = c("train", "required"))
+          ParamDbl$new("ratio", lower = 0, upper = 1, tags = c("train", "required")),
+          ParamDbl$new("rel_tol", lower = 0, tags = c("required", "train")),
+          ParamDbl$new("abs_tol", lower = 0, tags = c("required", "train")),
+          ParamLgl$new("na_ignore", tags = c("train", "required"))
       ))
-      ps$values = list(ratio = 0, digits = 8, na_ignore = TRUE)
-      super$initialize(id, ps)
+      ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
+      super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
     get_state = function(task) {
       pv = self$param_set$values
-      ratios = map_dbl(task$data(), calculate_constness, digits = pv$digits, na_ignore = pv$na_ignore)
-      list(ratios = ratios)
+      list(features = names(invoke(discard, as.list(task$data(cols = task$feature_names)),
+        is_constant_enough, .args = pv)))
     },
 
     transform = function(task) {
-      thresh = self$param_set$values$ratio
-      drop = names(which(self$state$ratios <= thresh))
-      task$select(setdiff(task$feature_names, drop))
+      task$select(self$state$features)
     }
   )
 )
 
-mlr_pipeops$add("remove_constants", PipeOpRemoveConstants)
+mlr_pipeops$add("removeconstants", PipeOpRemoveConstants)
 
-calculate_constness = function(x, digits, na_ignore) {
-  if (is.double(x)) {
-    x = round(x, digits)
-  }
-
+is_constant_enough = function(x, ratio, rel_tol, abs_tol, na_ignore) {
+  x[is.nan(x)] = NA
   if (na_ignore) {
     x = x[!is.na(x)]
-    if (length(x) == 0L) {
-      return(0)
+  }
+  if (!length(x)) return(TRUE)
+  required_size = length(x) - floor(length(x) * ratio)
+  if (required_size <= 1) return(TRUE)
+
+  if (is.numeric(x)) {
+    # consider non-finite values first (as if they are distinct)
+    # note that 'NA' is not 'finite' and not 'infinite'.
+    x_nonf = x[!is.finite(x)]
+    if (length(x_nonf)) {
+      tbl = as.data.table(x_nonf)[, .N, by = list(x_nonf)]
+      if (max(tbl$N) >= required_size) return(TRUE)
     }
-    return(mean(x != compute_mode(x, ties_method = "first")))
-  }
 
-  is_equal = function(x, y) {
-    tmp = (x == y | (is.na(x) & is.na(y)))
-    replace(tmp, is.na(tmp), FALSE)
-  }
+    # now consider finite values: sort them and see if items that are
+    # 'required_size - 1' steps away from each other differ by at most 'abs_tol' or 'rel_tol'
+    x = sort(x[is.finite(x)])
+    if (length(x) < required_size) {
+      return(FALSE)
+    }
+    first_x = x[seq.int(1, length(x) - required_size + 1)]
+    last_x = x[seq.int(required_size, length(x))]
 
-  mean(!is_equal(x, compute_mode(x, ties_method = "first", na_rm = FALSE)))
+    # check both abs and rel difference
+    any(abs(first_x - last_x) <= abs_tol) || any(2 * abs(first_x - last_x) / (abs(first_x) + abs(last_x)) <= rel_tol)
+  } else {
+    tbl = as.data.table(x)[, .N, by = list(x)]
+    # just check if any category is larger than the required category size
+    max(tbl$N) >= required_size
+  }
 }
