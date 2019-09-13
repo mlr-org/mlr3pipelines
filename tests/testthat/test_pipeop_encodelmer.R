@@ -1,4 +1,5 @@
 test_that("PipeOpEncodeLmer regr", {
+  set.seed(8008135)
   task = mlr_tasks$get("boston_housing")
   chaslevels = task$levels()$chas
   townlevels = task$levels()$town
@@ -18,8 +19,8 @@ test_that("PipeOpEncodeLmer regr", {
 
 
 test_that("PipeOpEncodeLmer multi and binaryclass", {
-
-  sample_n_letters = function(n, l = 3) {sample(letters[1:l], n, replace = TRUE)}
+  set.seed(8008135)
+  sample_n_letters = function(n, l = 3) sample(head(letters, l), n, replace = TRUE)
 
   # Multiclass
   task = mlr3::TaskClassif$new("task",
@@ -32,14 +33,14 @@ test_that("PipeOpEncodeLmer multi and binaryclass", {
   fn = nt$feature_names
 
   # factor cols are removed
-  expect_true(all(c("y") %nin% fn))
+  expect_true("y" %nin% fn)
   expect_true("factor" %nin% nt$feature_types$type)
   # y is encoded
   expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
   nt = predict_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
   # factor cols are removed
-  expect_true(all(c("y") %nin% fn))
+  expect_true("y" %nin% fn)
   expect_true("factor" %nin% nt$feature_types$type)
   # y is encoded
   expect_true(all(sprintf("y.%s", task$levels()$x) %in% fn))
@@ -62,6 +63,7 @@ test_that("PipeOpEncodeLmer multi and binaryclass", {
 })
 
 test_that("PipeOpEncodeLmer Edge Cases", {
+  set.seed(8008135)
   sample_n_letters = function(n, l = 3) {sample(letters[1:l], n, replace = TRUE)}
   task = mlr3::TaskClassif$new("task",
     data.table::data.table(x = sample_n_letters(10, 2), y = 1:10, z = 1:10), "x")
@@ -120,7 +122,6 @@ test_that("Confirms to sensible values", {
   expect_true("factor" %nin% nt$feature_types$type)
 
   nt = predict_pipeop(op, inputs = list(task))[[1L]]
-  yh = logit(nt$data()$y)
   expect_true(cor(data$x, yh) > 0.9)
   expect_true("factor" %nin% nt$feature_types$type)
 })

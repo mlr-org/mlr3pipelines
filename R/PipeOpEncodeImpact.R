@@ -1,7 +1,7 @@
 #' @title Impact Encoding with Random Intercept Models
 #'
 #' @usage NULL
-#' @name mlr_pipeops_encode
+#' @name mlr_pipeops_encodelmer
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
@@ -34,6 +34,7 @@
 #' ```
 #' PipeOpEncodeLmer$new(id = "encode", param_vals = list())
 #' ```
+#'
 #" * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encode"`.
 #' * `param_vals` :: named `list`\cr
@@ -78,11 +79,11 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
-  inherit = PipeOpTaskPreproc,
+  inherit = PipeOpTaskPreprocSimple,
   public = list(
-    initialize = function(id = "encodeLmer", param_vals = list()) {
+    initialize = function(id = "encodelmer", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("fast_optim", tags = c("train"))
+        ParamLgl$new("fast_optim", tags = c("train", "required"))
       ))
       ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"))
@@ -92,38 +93,17 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
     },
 
-    train_task = function(task) {
-      dt_columns = self$select_cols(task)
-      cols = dt_columns
-      if (!length(cols)) {
-        self$state = list(dt_columns = dt_columns)
-        return(task)
-      }
-      dt = task$data(cols = cols)
-      dt = as.data.table(self$get_state_dt(dt, task$truth(), task$task_type))
-      self$state$dt_columns = dt_columns
-      task$select(setdiff(task$feature_names, cols))$cbind(dt)
-    },
-
-    predict_task = function(task) {
-      cols = self$state$dt_columns
-      if (!length(cols)) {
-        return(task)
-      }
-      dt = task$data(cols = cols)
-      dt = as.data.table(self$transform_dt(dt))
-      task$select(setdiff(task$feature_names, cols))$cbind(dt)
-    },
-
-    get_state_dt = function(dt, target, task_type) {
-
+    get_state_dt = function(dt, levels, target) {
+      task_type = if (is.numeric(target)) "regr" else "classif"
+      state = list()
       # for prediction, use complete encoding model
       # different funs depending on task.type / multi/binaryclass
-      self$state$target_levels = levels(target)
+
+      state$target_levels = levels(target)
 
       # one vs rest for multiclass.
-      if (length(self$state$target_levels) <= 2) {
-        self$state$control = lapply(dt, function(col) {
+      if (length(state$target_levels) <= 2) {
+        state$control = lapply(dt, function(col) {
           private$fit_lmer(col, target, self$param_set$values$fast_optim, task_type)
         })
       } else {
@@ -131,17 +111,17 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         bin_targets = sapply(levels(target), function(x) factor(x == target),
           simplify = FALSE)
         # for prediction, use complete encoding model
-        self$state$control = sapply(colnames(dt), function(cname) {
-          sapply(self$state$target_levels, function(lvl) {
+        state$control = sapply(colnames(dt), function(cname) {
+          sapply(state$target_levels, function(lvl) {
             private$fit_lmer(dt[[cname]], bin_targets[[lvl]], self$param_set$values$fast_optim, task_type)
             }, simplify = FALSE)
           }, simplify = FALSE)
       }
       # FIXME: We currently do not implement cross-validated encodings
-      self$transform_dt(dt)
+      state
     },
 
-    transform_dt = function(dt) {
+    transform_dt = function(dt, levels) {
       if (length(self$state$target_levels) <= 2) {
         dt_new = map_dtc(colnames(dt), function(cname) {
           as.numeric(self$state$control[[cname]][as.character(dt[[cname]])])
@@ -158,8 +138,8 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         # by as.data.frame to allign with naming rules for data.frame columns
         dt_new = as.data.frame(num_vals_list, row.names = rownames(dt))
       }
-      return(dt_new)
-    }), 
+      dt_new
+    }),
 
 
   private = list(
@@ -167,26 +147,35 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       args = private$get_args_nlopt_lmer(feature, target, fast_optim, task_type)
       if (task_type == "classif") args$family = stats::binomial
       # lmer for regr, glmer for classif
-      if (task_type == "regr") mod = do.call(lme4::lmer, args)
-      else mod = do.call(lme4::glmer, args)
+      if (task_type == "regr") {
+        mod = invoke(lme4::lmer, .args = args, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))
+      } else {
+        mod = invoke(lme4::glmer, .args = args, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))
+      }
       private$get_coefs(mod)
     },
     get_args_nlopt_lmer = function(feature, target, fast_optim, task_type) {
 
       # lmer for regr, glmer for classif
-      if (task_type == "regr") control = lme4::lmerControl
-      else control = lme4::glmerControl
+      if (task_type == "regr") {
+        control_fun = lme4::lmerControl
+      } else {
+        control_fun = lme4::glmerControl
+      }
 
       # nloptwrap for fast optim
-      if (fast_optim) control = control()
-      else control = control(optimizer = "nloptwrap", calc.derivs = FALSE)
+      if (fast_optim) {
+        control = control_fun()
+      } else {
+        control = control_fun(optimizer = "nloptwrap", calc.derivs = FALSE)
+      }
 
       list(formula = y ~ 1 + (1 | lvl),
         data = data.frame(lvl = feature, y = target),
         na.action = na.omit, control = control)
     },
     get_coefs = function(mod) {
-      coefs = coef(mod)$lvl
+      coefs = invoke(coef, mod, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))$lvl
       lvls = rownames(coefs)
       coefs = coefs[,1]
       names(coefs) = lvls
@@ -194,17 +183,12 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       # replace missing coefs with intercept value
       coefs[is.na(coefs)] = intercept
       # save intercept value for new levels during prediction
-      coefs = c(coefs, ..new..level.. = intercept)
-      coefs
+      c(coefs, ..new..level.. = intercept)
     }
-
   )
 )
 
-mlr_pipeops$add("encodeLmer", PipeOpEncodeLmer)
-
-
-
+mlr_pipeops$add("encodelmer", PipeOpEncodeLmer)
 
 # # performance tips from https://cran.r-project.org/web/packages/lme4/vignettes/lmerperf.html
 # nlopt <- function(par, fn, lower, upper, control) {
