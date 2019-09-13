@@ -38,6 +38,9 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{length}  :: \code{numeric(1)} \cr
 Length to scale rows to. Default is 1.
+\item \code{norm} :: \code{numeric(1)} \cr
+Norm to use. Rows are scaled to \code{sum(x^norm)^(1/norm) == length} for finite \code{norm}, or to \code{max(abs(x)) == length}
+if \code{norm} is \code{Inf}. Default is 2.
 }
 }
 
@@ -60,12 +63,14 @@ pop$train(list(task))[[1]]$data()
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeops_boxcox}},
   \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},
   \code{\link{mlr_pipeops_classbalancing}},
   \code{\link{mlr_pipeops_classifavg}},
   \code{\link{mlr_pipeops_colapply}},
   \code{\link{mlr_pipeops_copy}},
+  \code{\link{mlr_pipeops_encodelmer}},
   \code{\link{mlr_pipeops_encode}},
   \code{\link{mlr_pipeops_featureunion}},
   \code{\link{mlr_pipeops_filter}},
@@ -86,6 +91,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_smote}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
+  \code{\link{mlr_pipeops_yeojohnson}},
   \code{\link{mlr_pipeops}}
 }
 \concept{PipeOps}
