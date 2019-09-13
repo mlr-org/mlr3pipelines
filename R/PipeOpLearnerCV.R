@@ -111,7 +111,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      private$.learner = assert_learner(as_learner(learner, clone = TRUE))
+      private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
       private$.learner$param_set$set_id = ""
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
@@ -137,7 +137,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       rdesc = mlr_resamplings$get(pv[["method"]])
       rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, private$.learner, rdesc)
-      prds = rbindlist(lapply(res$data$prediction, as.data.table))
+      prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
 
       private$pred_to_task(prds, task)
     },

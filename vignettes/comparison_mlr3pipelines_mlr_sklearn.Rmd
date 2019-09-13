@@ -53,7 +53,7 @@ We quickly split our data into a train and a test set:
 ```
 
 A Pipeline (or `Graph`) contains multiple pipeline operators ("`PipeOp`"s), where each `PipeOp`
-transforms the data when it flows through it. For this usecase, we require 3 transformations:
+transforms the data when it flows through it. For this use case, we require 3 transformations:
 
 - A `PipeOp` that scales the data
 - A `PipeOp` that performs PCA
@@ -85,7 +85,7 @@ The most important slots in a PipeOp are:
 - `$predict()`: A function used to predict with the PipeOp.
 
 The `$train()` and `$predict()` functions define the core functionality of our PipeOp.
-In many cases, in order to not leak information from the training set into the test set it is imperative to treat train and test data separately. For this we require a `$train()` function that learns the appropriate transformations from the training set and a `$test()` function that applies the transformation on future data.
+In many cases, in order to not leak information from the training set into the test set it is imperative to treat train and test data separately. For this we require a `$train()` function that learns the appropriate transformations from the training set and a `$predict()` function that applies the transformation on future data.
 
 In the case of `PipeOpPCA` this means the following:
 
@@ -120,7 +120,7 @@ When we now train the graph, the data flows through the graph as follows:
 
 - The Task flows into the `PipeOpScale`. The `PipeOp` scales each column in the data
   contained in the Task and returns a new Task that contains the scaled data to its output.
-- The scaled task flows into the `PipeOpPCA`. PCA transforms the data and returns a (possibly smaller)
+- The scaled Task flows into the `PipeOpPCA`. PCA transforms the data and returns a (possibly smaller)
   Task, that contains the transformed data.
 - This transformed data then flows into the learner, in our case **classif.rpart**.
   It is then used to train the learner, and as a result saves a model that can be
@@ -145,6 +145,7 @@ we compare the case of imputing missing values before filtering the top 2 featur
 
 While **mlr** wrappers are generally less verbose and require a little fewer code, this heavily inhibits flexibility.
 Wrappers can generally not process data in parallel, i.e.
+
 ### mlr
 
 ```{r, eval = FALSE}
@@ -179,7 +180,7 @@ learner = GraphLearner$new(id = "Pipeline", pipeline)
 
 The fact that **mlr's** wrappers have to be applied inside-out, i.e. in the reverse order
 is often confusing. This is way more straight-forward in `mlr3pipelines`, where
-we simply chaing the different methods using `%>>%`. Additionally, `mlr3pipelines`
+we simply chain the different methods using `%>>%`. Additionally, `mlr3pipelines`
 offers way greater possibilities with respect to the kinds of Pipelines that can be constructed.
 In `mlr3pipelines`, we allow for the construction of parallel and conditional pipelines.
 This was previously not possible.
@@ -290,27 +291,27 @@ optimize over. At the same time, experiments using `mlr3` can now be arbitrarily
 using `futures`.
 
 
-## mlr3pipelines vs recipies
+## mlr3pipelines vs recipes
 
-**recipies** is a new package, that covers some of the same applications steps as
+**recipes** is a new package, that covers some of the same applications steps as
 **mlr3pipelines**.
-Both pacakges feature the possiblility to connect different pre- and post-processing
+Both packages feature the possiblility to connect different pre- and post-processing
 methods using a pipe-operator.
-As `recipies` package tightly integrates with the `tidymodels` ecosystem, much of the
-functionality integrated there can be used in `recipies`.
-We compare `recipies` to `mlr3pipelines` using an example from the `recipies` vignette.
+As `recipes` package tightly integrates with the `tidymodels` ecosystem, much of the
+functionality integrated there can be used in `recipes`.
+We compare `recipes` to `mlr3pipelines` using an example from the `recipes` vignette.
 
 The aim of the analysis is to predict whether customers pay back their loans given some
 information on the customers. In order to do this, we build a model that does the following:
 1. It first imputes missing values using k-nearest neighbours
-1. All factor variables are converted to numerics using dummy encoding
-1. The data is first centered then scaled.
+2. All factor variables are converted to numerics using dummy encoding
+3. The data is first centered then scaled.
 
 In order to validate the algorithm, data is first split into a train and test set using
 `initial_split`, `training`, `testing`. The recipe trained on the train data (see steps above)
 is then applied to the test data.
 
-### recipies
+### recipes
 
 ```{r, eval = FALSE}
 library(tidymodels)

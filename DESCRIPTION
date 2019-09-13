@@ -5,7 +5,7 @@ Authors@R:
     c(person(given = "Martin",
              family = "Binder",
              role = c("aut", "cre"),
-             email = "martin.binder@mail.com"),
+             email = "mlr.developer@mb706.com"),
       person(given = "Florian",
              family = "Pfisterer",
              role = "aut",
@@ -20,7 +20,11 @@ Authors@R:
              family = "Lang",
              role = "aut",
              email = "michellang@gmail.com",
-             comment = c(ORCID = "0000-0001-9754-0393")))
+             comment = c(ORCID = "0000-0001-9754-0393")),
+      person(given = "Susanne",
+             family = "Dandl",
+             role = "aut",
+             email = "dandl.susanne@googlemail.com"))
 Description: Pipelines for mlr3.
 License: LGPL-3
 URL: https://mlr3pipelines.mlr-org.com,
@@ -44,6 +48,7 @@ Suggests:
     igraph,
     knitr,
     lgr,
+    lme4,
     mlbench,
     mlr3filters,
     mlr3learners,
@@ -52,8 +57,12 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    visNetwork
-VignetteBuilder:
+    visNetwork, 
+    bestNormalize,
+    fastICA, 
+    kernlab,
+    smotefamily
+VignetteBuilder: 
     knitr
 Remotes:
     mlr-org/mlr3,
@@ -77,28 +86,40 @@ Collate:
     'PipeOpEnsemble.R'
     'LearnerAvg.R'
     'NO_OP.R'
+    'PipeOpTaskPreproc.R'
+    'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
-    'PipeOpTaskPreproc.R'
     'PipeOpClassBalancing.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
+    'PipeOpEncodeLmer.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
+    'PipeOpHistBin.R'
+    'PipeOpICA.R'
     'PipeOpImpute.R'
+    'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
+    'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
     'PipeOpScale.R'
+    'PipeOpScaleMaxAbs.R'
+    'PipeOpScaleRange.R'
     'PipeOpSelect.R'
+    'PipeOpSmote.R'
+    'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpUnbranch.R'
+    'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
     'greplicate.R'

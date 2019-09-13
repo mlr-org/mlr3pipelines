@@ -96,7 +96,7 @@ mlr_pipeops$get("pca", param_vals = list(rank. = 3))
 
 ### Input Channels
 
-Just like functions, `PipeOp`s can take multiple inputs. These multiple inputs are always given as elements in the input list. For example, there is a `PipeOpFeatureUnion` that combines multiple tasks with different features and "`cbind()`s" them together, creating one combined task. When it is given two halves of the `iris` task, for example, it recreates the original task:
+Just like functions, `PipeOp`s can take multiple inputs. These multiple inputs are always given as elements in the input list. For example, there is a `PipeOpFeatureUnion` that combines multiple tasks with different features and "`cbind()`s" them together, creating one combined task. When two halves of the `iris` task are given, for example, it recreates the original task:
 ```{r}
 iris_first_half = task$clone()$select(c("Petal.Length", "Petal.Width"))
 iris_second_half = task$clone()$select(c("Sepal.Length", "Sepal.Width"))
@@ -106,7 +106,7 @@ pofu = mlr_pipeops$get("featureunion", innum = 2)
 pofu$train(list(iris_first_half, iris_second_half))[[1]]$data()
 ```
 
-Because `PipeOpFeatureUnion` effectively takes two input arguments here, we can say it has two **input channels**. An input channel also carries information about the *type* of input that is acceptable. The input channels of the `pofu` object constructed above, for examplel, each accept a `Task` during training and prediction. This information can be queried from the `$input` slot:
+Because `PipeOpFeatureUnion` effectively takes two input arguments here, we can say it has two **input channels**. An input channel also carries information about the *type* of input that is acceptable. The input channels of the `pofu` object constructed above, for example, each accept a `Task` during training and prediction. This information can be queried from the `$input` slot:
 ```{r}
 pofu$input
 ```
@@ -176,11 +176,11 @@ gr$train(task)[[1]]$data()
 gr$predict(single_line_task)[[1]]$data()
 ```
 
-The collection of `PipeOp`s inside a `Graph` can beaccessed through the **`$pipeops`** slot. The set of edges in the Graph can be inspected through the **`$edges`** slot. It is possible to modify individual `PipeOps` and edges in a Graph through these slots, but this is not recommended because no error checking is performed and it may put the `Graph` in an unsupported state.
+The collection of `PipeOp`s inside a `Graph` can be accessed through the **`$pipeops`** slot. The set of edges in the Graph can be inspected through the **`$edges`** slot. It is possible to modify individual `PipeOps` and edges in a Graph through these slots, but this is not recommended because no error checking is performed and it may put the `Graph` in an unsupported state.
 
 ### Networks
 
-The example above showed a linear preprocessing pipeline, but it is in fact possible to build true "graphs" of operations, as long as no loops are introduced^[It is tempting to denote this as a "directed acyclic graph", but this would not be entirely correct because edges run between channels of `PipeOp`s, not `PipeOp`s themselves.]. `PipeOp`s with multiple output channels can feed their data to multiple different subsequent `PipeOp`s, and `PipeOp`s with multiple input channels can take results from different `PipeOp`s. When a `PipeOp` has more than one input / output channel, then the `Graph`'s `$add_edge()` method needs an additional arguments that indicate which channel to connect to. This argument can be given in the form of an integer, or as the name of the channel.
+The example above showed a linear preprocessing pipeline, but it is in fact possible to build true "graphs" of operations, as long as no loops are introduced^[It is tempting to denote this as a "directed acyclic graph", but this would not be entirely correct because edges run between channels of `PipeOp`s, not `PipeOp`s themselves.]. `PipeOp`s with multiple output channels can feed their data to multiple different subsequent `PipeOp`s, and `PipeOp`s with multiple input channels can take results from different `PipeOp`s. When a `PipeOp` has more than one input / output channel, then the `Graph`'s `$add_edge()` method needs an additional argument that indicates which channel to connect to. This argument can be given in the form of an integer, or as the name of the channel.
 
 The following constructs a `Graph` that copies the input and gives one copy each to a "scale" and a "pca" `PipeOp`. The resulting columns of each operation are put next to each other by "featureunion".
 
@@ -248,14 +248,14 @@ gr %>>% gr2
 
 The true power of `mlr3pipelines` derives from the fact that it can be integrated seamlessly with `mlr3`. Two components are mainly responsible for this:
 
-- **`PipeOpLearner`**, a `PipeOp` that encapsulates an `mlr3` `Learner` and creates a `PredictionData` object in its `$predict()` phase
-- **`GraphLearner`**, an `mlr3` `Learner` that can be used in place of any other `mlr3` `Learner`, but which does prediction using a `Graph` given to it
+- **`PipeOpLearner`**, a `PipeOp` that encapsulates a `mlr3` `Learner` and creates a `PredictionData` object in its `$predict()` phase
+- **`GraphLearner`**, a `mlr3` `Learner` that can be used in place of any other `mlr3` `Learner`, but which does prediction using a `Graph` given to it
 
 Note that these are dual to each other: One takes a `Learner` and produces a `PipeOp` (and by extension a `Graph`); the other takes a `Graph` and produces a `Learner`.
 
 ### `PipeOpLearner`
 
-The `PipeOpLearner` is constructed using an `mlr3` `Learner` and will use it to create `PredictionData` in the `$predict()` phase. The output during `$train()` is `NULL`. It can be used after a preprocessing pipeline, and it is even possible to perform operations on the `PredictionData`, for example by averaging multiple predictions or by using the "`PipeOpBackupLearner`" operator to impute predictions that a given model failed to create.
+The `PipeOpLearner` is constructed using a `mlr3` `Learner` and will use it to create `PredictionData` in the `$predict()` phase. The output during `$train()` is `NULL`. It can be used after a preprocessing pipeline, and it is even possible to perform operations on the `PredictionData`, for example by averaging multiple predictions or by using the "`PipeOpBackupLearner`" operator to impute predictions that a given model failed to create.
 
 The following is a very simple `Graph` that performs training and prediction on data after performing principal component analysis.
 

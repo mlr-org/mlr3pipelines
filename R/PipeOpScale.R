@@ -78,7 +78,7 @@ PipeOpScale = R6Class("PipeOpScale",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    train_dt = function(dt, levels) {
+    train_dt = function(dt, levels, target) {
       sc = invoke(scale, as.matrix(dt), .args = self$param_set$values)
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
