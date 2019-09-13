@@ -99,8 +99,7 @@ test_that("Dictionary contains all PipeOps", {
       args$param_vals = list(val)
       names(args$param_vals) = testingparam$id
 
-      # FIXME: whatever this did, it was broken -> #243
-      # expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
+      expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
       test_obj$param_set$values[[testingparam$id]] = val
       expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)
       expect_equal(do.call(pogen$new, args), test_obj)
