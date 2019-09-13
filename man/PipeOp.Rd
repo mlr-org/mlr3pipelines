@@ -197,6 +197,7 @@ Other mlr3pipelines backend related: \code{\link{Graph}},
 
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}},
+  \code{\link{mlr_pipeops_boxcox}},
   \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},
   \code{\link{mlr_pipeops_classbalancing}},
@@ -221,8 +222,10 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_scale}},
   \code{\link{mlr_pipeops_select}},
   \code{\link{mlr_pipeops_smote}},
+  \code{\link{mlr_pipeops_spatialsign}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
+  \code{\link{mlr_pipeops_yeojohnson}},
   \code{\link{mlr_pipeops}}
 }
 \concept{PipeOps}

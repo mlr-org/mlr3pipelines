@@ -90,7 +90,8 @@ This method is abstract, it must be implemented by deriving classes.
 
 \seealso{
 Other PipeOps: \code{\link{PipeOpTaskPreproc}},
-  \code{\link{PipeOp}}, \code{\link{mlr_pipeops_branch}},
+  \code{\link{PipeOp}}, \code{\link{mlr_pipeops_boxcox}},
+  \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},
   \code{\link{mlr_pipeops_classbalancing}},
   \code{\link{mlr_pipeops_classifavg}},
@@ -114,8 +115,10 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeops_scale}},
   \code{\link{mlr_pipeops_select}},
   \code{\link{mlr_pipeops_smote}},
+  \code{\link{mlr_pipeops_spatialsign}},
   \code{\link{mlr_pipeops_subsample}},
   \code{\link{mlr_pipeops_unbranch}},
+  \code{\link{mlr_pipeops_yeojohnson}},
   \code{\link{mlr_pipeops}}
 
 Other Ensembles: \code{\link{mlr_learners_avg}},
