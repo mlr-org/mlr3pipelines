@@ -20,13 +20,14 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Martin Binder \email{martin.binder@mail.com}
+\strong{Maintainer}: Martin Binder \email{mlr.developer@mb706.com}
 
 Authors:
 \itemize{
   \item Florian Pfisterer \email{pfistererf@googlemail.com} (0000-0001-8867-762X)
   \item Bernd Bischl \email{bernd_bischl@gmx.net} (0000-0001-6002-6980)
   \item Michel Lang \email{michellang@gmail.com} (0000-0001-9754-0393)
+  \item Susanne Dandl \email{dandl.susanne@googlemail.com}
 }
 
 }
