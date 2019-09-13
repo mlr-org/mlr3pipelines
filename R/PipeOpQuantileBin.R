@@ -66,7 +66,7 @@ PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    get_state_dt = function(dt, levels) {
+    get_state_dt = function(dt, levels, target) {
       bins = lapply(dt, function(d)
         unique(c(-Inf, quantile(d, (1:(self$param_set$values$numsplits - 1)) /
             self$param_set$values$numsplits, na.rm = TRUE), Inf)))
