@@ -108,6 +108,7 @@ Collate:
     'PipeOpScaleRange.R'
     'PipeOpSelect.R'
     'PipeOpSmote.R'
+    'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
