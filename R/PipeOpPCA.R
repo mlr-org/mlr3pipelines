@@ -79,7 +79,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    train_dt = function(dt, levels) {
+    train_dt = function(dt, levels, target) {
       pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$values)
       self$state = pcr
       self$state$x = NULL

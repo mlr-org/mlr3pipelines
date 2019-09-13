@@ -71,7 +71,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    get_state_dt = function(dt, levels) {
+    get_state_dt = function(dt, levels, target) {
       bins = lapply(seq_col(dt), function(i) {
         invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$values)$breaks
       })

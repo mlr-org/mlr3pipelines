@@ -111,7 +111,7 @@ PipeOpICA = R6Class("PipeOpICA",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    train_dt = function(dt, levels) {
+    train_dt = function(dt, levels, target) {
 
       params = insert_named(list(n.comp = ncol(dt)), self$param_set$values)
 
