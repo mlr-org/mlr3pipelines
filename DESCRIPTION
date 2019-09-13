@@ -5,7 +5,7 @@ Authors@R:
     c(person(given = "Martin",
              family = "Binder",
              role = c("aut", "cre"),
-             email = "martin.binder@mail.com"),
+             email = "mlr.developer@mb706.com"),
       person(given = "Florian",
              family = "Pfisterer",
              role = "aut",
@@ -20,7 +20,11 @@ Authors@R:
              family = "Lang",
              role = "aut",
              email = "michellang@gmail.com",
-             comment = c(ORCID = "0000-0001-9754-0393")))
+             comment = c(ORCID = "0000-0001-9754-0393")),
+      person(given = "Susanne",
+             family = "Dandl",
+             role = "aut",
+             email = "dandl.susanne@googlemail.com"))
 Description: Pipelines for mlr3.
 License: LGPL-3
 URL: https://mlr3pipelines.mlr-org.com,
