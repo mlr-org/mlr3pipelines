@@ -70,6 +70,7 @@ pop$train(list(task))[[1]]$data()
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeops_boxcox}},
   \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},
   \code{\link{mlr_pipeops_classbalancing}},

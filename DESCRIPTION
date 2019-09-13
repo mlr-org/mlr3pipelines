@@ -53,6 +53,7 @@ Suggests:
     rpart,
     testthat,
     visNetwork, 
+    bestNormalize,
     fastICA, 
     kernlab,
     smotefamily
@@ -80,9 +81,10 @@ Collate:
     'PipeOpEnsemble.R'
     'LearnerAvg.R'
     'NO_OP.R'
+    'PipeOpTaskPreproc.R'
+    'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
-    'PipeOpTaskPreproc.R'
     'PipeOpClassBalancing.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
