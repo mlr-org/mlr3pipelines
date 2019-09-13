@@ -51,11 +51,11 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
               levels = nlopt_levels)
           )
         ),
-        param_vals = list(algorithm = "NLOPT_LN_COBYLA"),
         predict_types = c("response", "prob"),
         feature_types = c("integer", "numeric", "factor"),
         properties = c("twoclass", "multiclass")
       )
+      self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
 
     train_internal = function(task) {
@@ -125,10 +125,10 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
             ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nlopt_levels)
           )
         ),
-        param_vals = list(algorithm = "NLOPT_LN_COBYLA"),
         predict_types = "response",
         feature_types = c("integer", "numeric")
       )
+      self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
 
     train_internal = function(task) {
