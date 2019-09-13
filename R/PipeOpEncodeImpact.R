@@ -68,13 +68,18 @@
 #' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' poe = mlr_pipeops$get("encodeLmer")
+#' library("mlr3")
+#' poe = po("encodelmer")
 #'
-#' task = mlr3::TaskClassif$new("task",
-#'   data.table::data.table(x = letters[1:3], y = letters[1:3]), "x")
+#' task = TaskClassif$new("task",
+#'   data.table::data.table(
+#'     x = c("a", "a", "a", "b", "b"),
+#'     y = c("a", "a", "b", "b", "b")),
+#'   "x")
 #'
 #' poe$train(list(task))[[1]]$data()
 #'
+#' poe$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
