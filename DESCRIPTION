@@ -102,6 +102,7 @@ Collate:
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'
     'PipeOpScale.R'
     'PipeOpScaleMaxAbs.R'
