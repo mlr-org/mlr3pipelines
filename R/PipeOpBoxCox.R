@@ -1,4 +1,3 @@
-
 #' @title PipeOpBoxCox
 #'
 #' @usage NULL
@@ -6,14 +5,16 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Conducts a Box-Cox transformation on numeric features. It therefore estimates
-#' the optimal value of lambda for the transformation.
+#' Conducts a Box-Cox transformation on numeric features. The lambda parameter
+#' of the transformation is estimated during training and used for both training
+#' and prediction transformation.
 #' See [bestNormalize::boxcox()] for details.
 #'
 #' @section Construction:
 #' ```
 #' PipeOpBoxCox$new(id = "boxcox", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"boxcox"`.
 #' * `param_vals` :: named `list`\cr
@@ -30,7 +31,7 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `standardize` :: `logical` \cr
+#' * `standardize` :: `logical(1)` \cr
 #'   Whether to center and scale the transformed values to attempt a standard
 #'   normal distribution. For details see [`boxcox()`][bestNormalize::boxcox].
 #' * `eps` :: `numeric(1)` \cr
@@ -81,17 +82,22 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
       bc = lapply(dt, FUN = function(x) {
         invoke(bestNormalize::boxcox, x, .args = self$param_set$values)
       })
-      self$state = bc
-      cols = names(bc)
-      for (j in cols) set(dt, j = j, value = bc[[j]]$x.t)
-      return(dt)
+      for (j in names(bc)) {
+        set(dt, j = j, value = bc[[j]]$x.t)
+        bc[[j]]$x.t = NULL
+        bc[[j]]$x = NULL
+      }
+      self$state = list(bc = bc)
+      dt
     },
 
     predict_dt = function(dt, levels) {
       cols = colnames(dt)
-      for (j in cols) set(dt, j = j,
-        value = predict(self$state[[j]], newdata = dt[[j]]))
-      return(dt)
+      for (j in colnames(dt)) {
+        set(dt, j = j,
+          value = predict(self$state$bc[[j]], newdata = dt[[j]]))
+      }
+      dt
     }
   )
 )

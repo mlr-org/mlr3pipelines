@@ -20,7 +20,7 @@ test_that("PipeOpBoxCox - receive expected result", {
   result = train_pipeop(op, inputs = list(task))
   result.pred = predict_pipeop(op, inputs = list(task))
 
-  lambda = op$state$Petal.Length$lambda
+  lambda = op$state$bc$Petal.Length$lambda
   lambda.id = lambda != 0
 
   x = task$data()[[2]]
@@ -31,7 +31,7 @@ test_that("PipeOpBoxCox - receive expected result", {
   # Set lower and upper value for lambda estimation
   op = PipeOpBoxCox$new(param_vals = list(upper = 0.5, lower = 0))
   result = train_pipeop(op, inputs = list(task))
-  lambda.new = unlist(lapply(op$state[1:4], function(x) x$lambda))
+  lambda.new = unlist(lapply(op$state$bc[1:4], function(x) x$lambda))
   expect_true(all(lambda.new <= 0.5 & lambda.new >= 0))
 
 })
