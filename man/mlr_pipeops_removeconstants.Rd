@@ -61,7 +61,7 @@ Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpT
 
 \examples{
 library(mlr3)
-data = data.table(y = runif(10), a = 1:10, b = rep(1, 10), c = rep(1:2, each = 5))
+data = data.table::data.table(y = runif(10), a = 1:10, b = rep(1, 10), c = rep(1:2, each = 5))
 
 task = TaskRegr$new("example", data, target = "y")
 
