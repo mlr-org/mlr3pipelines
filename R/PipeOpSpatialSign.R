@@ -11,6 +11,7 @@
 #' ```
 #' PipeOpSpatialSign$new(id = "spatialsign", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"spatialsign"`.
 #' * `param_vals` :: named `list`\cr
@@ -29,6 +30,9 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `length`  :: `numeric(1)` \cr
 #'  Length to scale rows to. Default is 1.
+#' * `norm` :: `numeric(1)` \cr
+#'  Norm to use. Rows are scaled to `sum(x^norm)^(1/norm) == length` for finite `norm`, or to `max(abs(x)) == length`
+#'  if `norm` is `Inf`. Default is 2.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -51,9 +55,10 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
   public = list(
     initialize = function(id = "spatialsign", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("length", tags = c("train", "predict"), default = 1)
+        ParamDbl$new("length", tags = c("train", "predict"), lower = 0),
+        ParamDbl$new("norm", tags = c("train", "predict"), lower = 0)
       ))
-      ps$values = list(length = 1)
+      ps$values = list(norm = 2, length = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
@@ -62,18 +67,22 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
     },
 
     transform_dt = function(dt, levels) {
-      if (nrow(dt) == 0) {
-        return(dt)
+      if (!nrow(dt)) {
+        # if dt has no rows then we still have to convert columns to numeric.
+        return(dt[, lapply(.SD, as.numeric)])
       }
-      res = t(apply(dt, 1, function(x) {
-        len = sqrt(sum(x ^ 2))
-        if (!identical(len, 0)) {
+      norm = self$param_set$values$norm
+      t(apply(dt, 1, function(x) {
+        if (is.finite(norm)) {
+          len = sum(abs(x) ^ norm) ^ (1 / norm)
+        } else {
+          len = max(abs(x))
+        }
+        if (len != 0) {
           x = x / len * self$param_set$values$length
         }
         x
       }))
-      res = as.data.table(res)
-      res
     }
   )
 )
