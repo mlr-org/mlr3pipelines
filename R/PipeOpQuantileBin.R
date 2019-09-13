@@ -11,6 +11,7 @@
 #' ```
 #' PipeOpQuantileBin$new(id = "quantilebin", param_vals = list())
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"quantilebin"`.
 #' * `param_vals` :: named `list`\cr
@@ -33,6 +34,7 @@
 #'
 #' @section Internals:
 #' Uses the [`stats::quantile`] function.
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

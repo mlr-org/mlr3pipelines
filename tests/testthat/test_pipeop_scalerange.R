@@ -15,8 +15,7 @@ test_that("PipeOpScaleRange - basic properties", {
   expect_equal(resdt, op$predict(list(task))[[1]]$data())
   expect_true(all(sapply(resdt[, 2:5], max) == 1L))
   expect_true(all(sapply(resdt[, 2:5], min) == 0L))
-}
-)
+})
 
 test_that("Other maxabs", {
   task = mlr_tasks$get("iris")
