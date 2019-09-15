@@ -4,7 +4,7 @@
 \name{PipeOp}
 \alias{PipeOp}
 \title{PipeOp}
-\format{\code{\link{R6Class}} object}
+\format{Abstract \code{\link{R6Class}}.}
 \description{
 A \code{\link{PipeOp}} represents a tranformation of a given "input" into a given "output", with two stages: "training"
 and "prediction". It can be understood as a generalized function that not only has multiple inputs, but
@@ -19,7 +19,7 @@ of the new data.
 A \code{\link{PipeOp}} is usually used in a \code{\link{Graph}} object, a representation of a computational graph. It can have
 multiple \strong{input channels}---think of these as multiple arguments to a function, for example when averaging
 different models---, and multiple \strong{output channels}---a transformation may
-return different objects, for example different subsets of a \code{\link{Task}}. The purpose of the \code{\link{Graph}} is to
+return different objects, for example different subsets of a \code{\link[mlr3:Task]{Task}}. The purpose of the \code{\link{Graph}} is to
 connect different outputs of some \code{\link{PipeOp}}s to inputs of other \code{\link{PipeOp}}s.
 
 Input and output channel information of a \code{\link{PipeOp}} is defined in the \code{$input} and \code{$output} slots; each channel has a \emph{name}, a required
@@ -42,7 +42,7 @@ is not intended to be instantiated.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \code{$id} slot.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
-Parameter space description. This should be created by the subclass and given to its \code{super$initialize()}.
+Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.

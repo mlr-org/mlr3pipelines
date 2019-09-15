@@ -4,61 +4,122 @@
 \name{PipeOpTaskPreprocSimple}
 \alias{PipeOpTaskPreprocSimple}
 \title{PipeOpTaskPreprocSimple}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}.}
-\usage{
-PipeOpTaskPreprocSimple
-}
+\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
-Base class for handling many "preprocessing" operations that
+Base class for handling many "preprocessing" operations
 that perform essentially the same operation during training and prediction.
-Instead implementing a train_task and a predict_task operation, only
-a \code{get_state()} and a \code{transform()} operation needs to be defined,
-both of which take one argument: a Task.
+Instead implementing a \code{$train_task()} and a \code{$predict_task()} operation, only
+a \code{$get_state()} and a \code{$transform()} operation needs to be defined,
+both of which take one argument: a \code{\link[mlr3:Task]{Task}}.
 
-\code{get_state} must not change its input value in-place and must return
+Alternatively, analogously to the \code{\link{PipeOpTaskPreproc}} approach of offering \code{$train_dt()}/\code{$predict_dt()},
+the \code{$get_state_dt()} and \code{$transform_dt()} functions may be implemented.
+
+\code{$get_state} must not change its input value in-place and must return
 something that will be written into \code{$state}
-(which must not be NULL), \code{transform()} must modify its argument in-state;
+(which must not be NULL), \code{transform()} should modify its argument in-place;
 it is called both during training and prediction.
 
 This inherits from \code{\link{PipeOpTaskPreproc}} and behaves essentially the same.
 }
+\section{Construction}{
+\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+}
+
+(Construction is identical to \code{\link{PipeOpTaskPreproc}}.)
+\itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object. See \code{$id} slot of \code{\link{PipeOp}}.
+\item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
+Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
+\item \code{param_vals} :: named \code{list}\cr
+List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
+subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
+\item \code{can_subset_cols} :: \code{logical(1)}\cr
+Whether the \code{affect_columns} parameter should be added which lets the user limit the columns that are
+modified by the \code{\link{PipeOpTaskPreprocSimple}}. This should generally be \code{FALSE} if the operation adds or removes
+rows from the \code{\link[mlr3:Task]{Task}}, and \code{TRUE} otherwise. Default is \code{TRUE}.
+\item packages :: \code{character}\cr
+Set of all required packages for the \code{\link{PipeOp}}'s \code{$train} and \code{$predict} methods. See \code{$packages} slot.
+Default is \code{character(0)}.
+\item \code{task_type} :: \code{character(1)}\cr
+The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input and will be returned as output. This
+should generally be a \code{character(1)} identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or
+\code{"TaskRegr"} (or another subclass introduced by other packages). Default is \code{"Task"}.
+}
+}
+
+\section{Input and Output Channels}{
+
+Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+
+The output during training and prediction is the \code{\link[mlr3:Task]{Task}}, modified by \code{$transform()} or \code{$transform_dt()}.
+}
+
+\section{State}{
+
+The \code{$state} is a named \code{list} with the \code{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}.
+}
+
+\section{Parameters}{
+
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}.
+}
+
+\section{Internals}{
+
+\code{\link{PipeOpTaskPreprocSimple}} is an abstract class inheriting from \code{\link{PipeOpTaskPreproc}} and implementing the
+\code{$train_task()} and \code{$predict_task()} functions. A subclass of \code{\link{PipeOpTaskPreprocSimple}} may implement the
+functions \code{$get_state()} and \code{$transform()}, or alternatively the functions \code{$get_state_dt()} and \code{$transform_dt()}
+(as well as \code{$select_cols()}, in the latter case). This works by having the default implementations of
+\code{$get_state()} and \code{$transform()} call \code{$get_state_dt()} and \code{$transform_dt()}.
+}
+
+\section{Fields}{
+
+Fields inherited from \code{\link{PipeOp}}.
+}
+
 \section{Methods}{
 
+Methods inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{get_state(task)} \cr
-(\code{\link{Task}}) -> \code{any} \cr
+(\code{\link[mlr3:Task]{Task}}) -> named \code{list}\cr
 Store create something that will be stored in \code{$state} during training phase of \code{PipeOpTaskPreprocSimple}.
 The state can then influence the \code{$transform()} function. Note that \code{$get_state()} must \emph{return} the state, and
-should not store it in \code{$state}. If neither \code{$get_state()} nor \code{$get_state_dt()} are overloaded, the state will
-be stored as \code{list()}. \cr
-This method can optionally be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, together with \code{$transform()};
+should not store it in \code{$state}. It is not strictly necessary to implement either \code{$get_state()} or \code{$get_state_dt()};
+if they are not implemented, the state will be stored as \code{list()}. \cr
+This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{$transform()};
 alternatively, \code{$get_state_dt()} (optional) and \code{$transform_dt()} (and possibly \code{$select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
 \item \code{transform(task)} \cr
-(\code{\link{Task}}) -> \code{\link{Task}} \cr
+(\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
 Predict on new data in \code{task}, possibly using the stored \code{$state}. \code{task} should not be cloned, instead it should be
 changed in-place. This method is called both during training and prediction phase, and should essentially behave the
-same independently of phase. (If this is incongruent with the design of the \code{PipeOp}, then it should inherit from
-\code{PipeOpTaskPreproc}, not from \code{PipeOpTaskPreprocSimple}.) \cr
-This method can be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, optionally with \code{$get_state()};
+same independently of phase. (If this is incongruent with the functionality to be implemented, then it should inherit from
+\code{\link{PipeOpTaskPreproc}}, not from \code{\link{PipeOpTaskPreprocSimple}}.) \cr
+This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, optionally with \code{$get_state()};
 alternatively, \code{$get_state_dt()} (optional) and \code{$transform_dt()} (and possibly \code{$select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
 \item \code{get_state_dt(dt)} \cr
-Store create something that will be stored in \code{$state} during training phase of \code{PipeOpTaskPreprocSimple}.
+(\code{\link{data.table}}) -> named \code{list}\cr
+Create something that will be stored in \code{$state} during training phase of \code{PipeOpTaskPreprocSimple}.
 The state can then influence the \code{$transform_dt()} function. Note that \code{$get_state_dt()} must \emph{return} the state, and
 should not store it in \code{$state}. If neither \code{$get_state()} nor \code{$get_state_dt()} are overloaded, the state will
 be stored as \code{list()}. \cr
-This method can optionally be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, together with \code{$transform_dt()}
+This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{$transform_dt()}
 (and optionally \code{$select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{$get_state()} (optional) and \code{$transform()}
 can be overloaded.
 \item \code{transform_dt(dt)} \cr
-(\code{\link{data.table}}) -> \code{any} \cr
-Predict on new data in \code{dt}, possibly using the stored \code{$state}.  A transformed object must be returned
+(\code{\link{data.table}}) -> \code{\link{data.table}} | \code{data.frame} | \code{matrix} \cr
+Predict on new data in \code{dt}, possibly using the stored \code{$state}. A transformed object must be returned
 that can be converted to a \code{data.table} using \code{\link{as.data.table}}. \code{dt} does not need to be copied deliberately, it
 is possible and encouraged to change it in-place. This method is called both during training and prediction phase,
-and should essentially behave the same independently of phase. (If this is incongruent with the design of the
-\code{PipeOp}, then it should inherit from \code{PipeOpTaskPreproc}, not from \code{PipeOpTaskPreprocSimple}.) \cr
-This method can optionally be overloaded when inheriting from \code{PipeOpTaskPreprocSimple}, together with \code{$transform_dt()}
+and should essentially behave the same independently of phase.
+(If this is incongruent with the functionality to be implemented, then it should inherit from
+\code{\link{PipeOpTaskPreproc}}, not from \code{\link{PipeOpTaskPreprocSimple}}.) \cr
+This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{$transform_dt()}
 (and optionally \code{$select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{$get_state()} (optional) and \code{$transform()}
 can be overloaded.
 }

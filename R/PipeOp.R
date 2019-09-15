@@ -4,7 +4,7 @@
 #' @title PipeOp
 #'
 #' @usage NULL
-#' @format [`R6Class`] object
+#' @format Abstract [`R6Class`].
 #'
 #' @description
 #' A [`PipeOp`] represents a tranformation of a given "input" into a given "output", with two stages: "training"
@@ -20,7 +20,7 @@
 #' A [`PipeOp`] is usually used in a [`Graph`] object, a representation of a computational graph. It can have
 #' multiple **input channels**---think of these as multiple arguments to a function, for example when averaging
 #' different models---, and multiple **output channels**---a transformation may
-#' return different objects, for example different subsets of a [`Task`]. The purpose of the [`Graph`] is to
+#' return different objects, for example different subsets of a [`Task`][mlr3::Task]. The purpose of the [`Graph`] is to
 #' connect different outputs of some [`PipeOp`]s to inputs of other [`PipeOp`]s.
 #'
 #' Input and output channel information of a [`PipeOp`] is defined in the `$input` and `$output` slots; each channel has a *name*, a required
@@ -44,7 +44,7 @@
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
-#'   Parameter space description. This should be created by the subclass and given to its `super$initialize()`.
+#'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
