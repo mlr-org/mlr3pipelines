@@ -64,17 +64,17 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
   public = list(
     initialize = function(id = "removeconstants", param_vals = list()) {
       ps = ParamSet$new(list(
-          ParamDbl$new("ratio", lower = 0, upper = 1, tags = c("train", "required")),
-          ParamDbl$new("rel_tol", lower = 0, tags = c("required", "train")),
-          ParamDbl$new("abs_tol", lower = 0, tags = c("required", "train")),
-          ParamLgl$new("na_ignore", tags = c("train", "required"))
+          ParamDbl$new("ratio", lower = 0, upper = 1, tags = c("train", "required", "constant_check")),
+          ParamDbl$new("rel_tol", lower = 0, tags = c("required", "constant_check", "train")),
+          ParamDbl$new("abs_tol", lower = 0, tags = c("required", "constant_check", "train")),
+          ParamLgl$new("na_ignore", tags = c("train", "required", "constant_check"))
       ))
       ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
     get_state = function(task) {
-      pv = self$param_set$values
+      pv = self$param_set$get_values(tags = "constant_check")
       list(features = names(invoke(discard, as.list(task$data(cols = task$feature_names)),
         is_constant_enough, .args = pv)))
     },

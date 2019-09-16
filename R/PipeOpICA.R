@@ -90,17 +90,17 @@ PipeOpICA = R6Class("PipeOpICA",
   public = list(
     initialize = function(id = "ica", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamInt$new("n.comp", lower = 1, upper = Inf, tags = "train"),
+        ParamInt$new("n.comp", lower = 1, upper = Inf, tags = c("train", "ica")),
         ParamFct$new("alg.typ", levels = c("parallel", "deflation"),
-          default = "parallel", tags = "train"),
-        ParamFct$new("fun", default = "logcosh", levels = c("logcosh", "exp"), tags = "train"),
-        ParamDbl$new("alpha", default = 1.0, lower = 1, upper = 2, tags = "train"),
-        ParamFct$new("method", default = "R", levels = c("C", "R"), tags = "train"),
-        ParamLgl$new("row.norm", default = FALSE, tags = "train"),
-        ParamInt$new("maxit", default = 200, lower = 1, tags = "train"),
-        ParamDbl$new("tol", default = 1e-04, lower = 0, tags = "train"),
-        ParamLgl$new("verbose", default = FALSE, tags = "train"),
-        ParamUty$new("w.init", default = NULL, tags = "train")
+          default = "parallel", tags = c("train", "ica")),
+        ParamFct$new("fun", default = "logcosh", levels = c("logcosh", "exp"), tags = c("train", "ica")),
+        ParamDbl$new("alpha", default = 1.0, lower = 1, upper = 2, tags = c("train", "ica")),
+        ParamFct$new("method", default = "R", levels = c("C", "R"), tags = c("train", "ica")),
+        ParamLgl$new("row.norm", default = FALSE, tags = c("train", "ica")),
+        ParamInt$new("maxit", default = 200, lower = 1, tags = c("train", "ica")),
+        ParamDbl$new("tol", default = 1e-04, lower = 0, tags = c("train", "ica")),
+        ParamLgl$new("verbose", default = FALSE, tags = c("train", "ica")),
+        ParamUty$new("w.init", default = NULL, tags = c("train", "ica"))
       ))
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
@@ -113,7 +113,7 @@ PipeOpICA = R6Class("PipeOpICA",
 
     train_dt = function(dt, levels, target) {
 
-      params = insert_named(list(n.comp = ncol(dt)), self$param_set$values)
+      params = insert_named(list(n.comp = ncol(dt)), self$param_set$get_values(tags = "ica"))
 
       ica = invoke(fastICA::fastICA, as.matrix(dt), .args = params)
 

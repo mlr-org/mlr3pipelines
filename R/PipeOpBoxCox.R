@@ -65,10 +65,10 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
   public = list(
     initialize = function(id = "boxcox", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("standardize", default = TRUE, tags = "train"),
-        ParamDbl$new("eps", default = 0.001, lower = 0, tags = "train"),
-        ParamDbl$new("lower", tags = "train"),
-        ParamDbl$new("upper", tags = "train")
+        ParamLgl$new("standardize", default = TRUE, tags = c("train", "boxcox")),
+        ParamDbl$new("eps", default = 0.001, lower = 0, tags = c("train", "boxcox")),
+        ParamDbl$new("lower", tags = c("train", "boxcox")),
+        ParamDbl$new("upper", tags = c("train", "boxcox"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize")
@@ -80,7 +80,7 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
 
     train_dt = function(dt, levels, target) {
       bc = lapply(dt, FUN = function(x) {
-        invoke(bestNormalize::boxcox, x, .args = self$param_set$values)
+        invoke(bestNormalize::boxcox, x, .args = self$param_set$get_values(tags = "boxcox"))
       })
       for (j in names(bc)) {
         set(dt, j = j, value = bc[[j]]$x.t)

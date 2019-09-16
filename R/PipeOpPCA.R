@@ -68,9 +68,9 @@ PipeOpPCA = R6Class("PipeOpPCA",
   public = list(
     initialize = function(id = "pca", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE, tags = "train"),
-        ParamLgl$new("scale.", default = FALSE, tags = "train"),
-        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = "train")
+        ParamLgl$new("center", default = TRUE, tags = c("train", "pca")),
+        ParamLgl$new("scale.", default = FALSE, tags = c("train", "pca")),
+        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals)
     },
@@ -80,7 +80,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
     },
 
     train_dt = function(dt, levels, target) {
-      pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$values)
+      pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$get_values(tags = "pca"))
       self$state = pcr
       self$state$x = NULL
       pcr$x

@@ -68,8 +68,8 @@ PipeOpScale = R6Class("PipeOpScale",
   public = list(
     initialize = function(id = "scale", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE, tags = "train"),
-        ParamLgl$new("scale", default = TRUE, tags = "train")
+        ParamLgl$new("center", default = TRUE, tags = c("train", "scale")),
+        ParamLgl$new("scale", default = TRUE, tags = c("train", "scale"))
       ))
       super$initialize(id = id, param_set = ps, param_vals = param_vals)
     },
@@ -79,7 +79,7 @@ PipeOpScale = R6Class("PipeOpScale",
     },
 
     train_dt = function(dt, levels, target) {
-      sc = invoke(scale, as.matrix(dt), .args = self$param_set$values)
+      sc = invoke(scale, as.matrix(dt), .args = self$param_set$get_values(tags = "scale"))
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1

@@ -68,11 +68,11 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
     initialize = function(id = "kernelpca", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamFct$new("kernel", default = "rbfdot", levels = c("rbfdot", "polydot",
-          "vanilladot", "tanhdot", "laplacedot", "besseldot", "anovadot", "splinedot"), tags = "train"),
-        ParamUty$new("kpar", tags = "train"),
-        ParamInt$new("features", default = 0, lower = 0, tags = "train"),
-        ParamDbl$new("th", default = 1e-04, lower = 0, tags = "train"),
-        ParamUty$new("na.action", default = na.omit, tags = "train")
+          "vanilladot", "tanhdot", "laplacedot", "besseldot", "anovadot", "splinedot"), tags = c("train", "kpca")),
+        ParamUty$new("kpar", tags = c("train", "kpca")),
+        ParamInt$new("features", default = 0, lower = 0, tags = c("train", "kpca")),
+        ParamDbl$new("th", default = 1e-04, lower = 0, tags = c("train", "kpca")),
+        ParamUty$new("na.action", default = na.omit, tags = c("train", "kpca"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "kernlab")
@@ -84,7 +84,7 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
 
 
     train_dt = function(dt, levels, target) {
-      pcr = invoke(kernlab::kpca, as.matrix(dt), .args = self$param_set$values)
+      pcr = invoke(kernlab::kpca, as.matrix(dt), .args = self$param_set$get_values(tags = "kpca"))
       self$state$pcr = pcr
       self$state$pcr@rotated = matrix(numeric(0))
       kernlab::rotated(pcr)

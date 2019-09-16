@@ -26,7 +26,7 @@ test_that("compare to smotefamily::SMOT", {
   result = train_pipeop(op, inputs = list(task))
 
   set.seed(1234)
-  st = smotefamily::SMOTE(X = data[, -3], target = data[, 3], K = 3)
+  st = invoke(smotefamily::SMOTE, X = data[, -3], target = data[, 3], K = 3, .opts = list(warnPartialMatchArgs = FALSE))
   expect_equal(result[[1]]$data()[1001:nrow(st$data), c(2:3)], as.data.table(st$syn_data)[, 1:2])
   expect_equal(result[[1]]$data()[1001:nrow(st$data), result], st$syn_data[, 3])
 })

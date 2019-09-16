@@ -62,7 +62,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
   public = list(
     initialize = function(id = "histbin", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("breaks", default = "Sturges", tags = "train")
+        ParamUty$new("breaks", default = "Sturges", tags = c("train", "hist"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics")
     },
@@ -73,7 +73,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
 
     get_state_dt = function(dt, levels, target) {
       bins = lapply(seq_col(dt), function(i) {
-        invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$values)$breaks
+        invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$get_values(tags = "hist"))$breaks
       })
       list(bins = bins)
     },

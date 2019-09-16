@@ -67,10 +67,10 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
   public = list(
     initialize = function(id = "yeojohnson", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("eps", default = 0.001, lower = 0, tags = "train"),
-        ParamLgl$new("standardize", default = TRUE, tags = "train"),
-        ParamDbl$new("lower", tags = "train"),
-        ParamDbl$new("upper", tags = "train")
+        ParamDbl$new("eps", default = 0.001, lower = 0, tags = c("train", "yj")),
+        ParamLgl$new("standardize", default = TRUE, tags = c("train", "yj")),
+        ParamDbl$new("lower", tags = c("train", "yj")),
+        ParamDbl$new("upper", tags = c("train", "yj"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize")
@@ -82,7 +82,7 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
 
     train_dt = function(dt, levels, target) {
       bc = lapply(dt, FUN = function(x) {
-        invoke(bestNormalize::yeojohnson, x, .args = self$param_set$values)
+        invoke(bestNormalize::yeojohnson, x, .args = self$param_set$get_values(tags = "yj"))
       })
       for (j in names(bc)) {
         set(dt, j = j, value = bc[[j]]$x.t)
