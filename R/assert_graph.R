@@ -15,10 +15,17 @@ assert_graph = function(x) {
 #' @title Conversion to mlr3pipeline Graph
 #'
 #' @description
-#' The object is turned into a `Graph` if possible.
+#' The argument is turned into a [`Graph`] if possible.
 #' If `clone` is `TRUE`, a deep copy is made
-#' if the incoming object is a `Graph` to ensure the resulting
+#' if the incoming object is a [`Graph`] to ensure the resulting
 #' object is a different reference from the incoming object.
+#'
+#' [`as_graph()`] is an S3 method and can therefore be implemented
+#' by other packages that may add objects that can naturally be converted to [`Graph`]s.
+#'
+#' By default, [`as_graph()`] tries to
+#' * apply [`gunion()`] to `x` if it is a `list`, which recursively applies [`as_graph()`] to all list elements first
+#' * create a [`Graph`] with only one element if `x` is a [`PipeOp`] or can be converted to one using [`as_pipeop()`].
 #'
 #' @param x (`any`) \cr
 #'   Object to convert.

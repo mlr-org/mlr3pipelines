@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This operator "pipes" data from the source `g1` into the sink `g2`. Both source and sink can either be
-#' a [`Graph`] or a [`PipeOp`] (or an object that can be automatically converted into a [`PipeOp`], see [`as_pipeop()`]).
+#' a [`Graph`] or a [`PipeOp`] (or an object that can be automatically converted into a [`Graph`] or [`PipeOp`], see [`as_graph()`] and [`as_pipeop()`]).
 #'
 #' `%>>%` tries to automatically match output channels of `g1` to input channels of `g2`; this is only possible if either
 #' * the number of output channels of `g1` (as given by `g1$output`) is equal to the
@@ -17,10 +17,14 @@
 #' This operator always created deep copies of its input arguments, so they cannot be modified by reference afterwards.
 #' To access individual [`PipeOp`]s after composition, use the resulting [`Graph`]'s `$pipeops` list.
 #'
+#' Both arguments of `%>>%` are automatically converted to [`Graph`]s using [`as_graph()`]; this means that objects on either side may be objects
+#' that can be automatically converted to [`PipeOp`]s (such as [`Learner`][mlr3::Learner]s or [`Filter`][mlr3filters::Filter]s), or that can
+#' be converted to [`Graph`]s. This means, in particular, `list`s of [`Graph`]s, [`PipeOp`]s or objects convertable to that, because
+#' [`as_graph()`] automatically applies [`gunion()`] to `list`s. See examples.
 #'
-#' @param g1 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) \cr
+#' @param g1 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
 #'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put in front of `g2`.
-#' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) \cr
+#' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
 #'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put after  `g1`.
 #'
 #' @return [`Graph`]: the constructed [`Graph`].
@@ -29,14 +33,28 @@
 #' @examples
 #' o1 = PipeOpScale$new()
 #' o2 = PipeOpPCA$new()
+#' o3 = PipeOpFeatureUnion$new(2)
 #'
 #' # The following two are equivalent:
-#' result1 = o1 %>>% o2
+#' pipe1 = o1 %>>% o2
 #'
-#' result2 = Graph$new()$
+#' pipe2 = Graph$new()$
 #'   add_pipeop(o1$clone(deep = TRUE))$
 #'   add_pipeop(o2$clone(deep = TRUE))$
 #'   add_edge(o1$id, o2$id)
+#'
+#' # Note automatical gunion() of lists.
+#' # The following three are equivalent:
+#' graph1 = list(o1, o2) %>>% o3
+#'
+#' graph2 = gunion(list(o1, o2)) %>>% o3
+#'
+#' graph3 = Graph$new()$
+#'   add_pipeop(o1$clone(deep = TRUE))$
+#'   add_pipeop(o2$clone(deep = TRUE))$
+#'   add_pipeop(o3$clone(deep = TRUE))$
+#'   add_edge(o1$id, o3$id, dst_channel = 1)$
+#'   add_edge(o2$id, o3$id, dst_channel = 2)
 `%>>%` = function(g1, g2) {
 
   g1 = as_graph(g1)
