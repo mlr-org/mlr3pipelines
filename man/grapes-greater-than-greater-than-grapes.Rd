@@ -7,24 +7,33 @@
 g1 \%>>\% g2
 }
 \arguments{
-\item{g1}{(\code{\link{Graph}} | \code{\link{PipeOp}}) \cr
-\code{Graph} / \code{PipeOp} to put in front of \code{g2}.}
+\item{g1}{(\code{\link{Graph}} | \code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}) \cr
+\code{\link{Graph}} / \code{\link{PipeOp}} / object-convertible-to-\code{\link{PipeOp}} to put in front of \code{g2}.}
 
-\item{g2}{(\code{\link{Graph}} | \code{\link{PipeOp}}) \cr
-\code{Graph} / \code{PipeOp} to put after  \code{g1}.}
+\item{g2}{(\code{\link{Graph}} | \code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}) \cr
+\code{\link{Graph}} / \code{\link{PipeOp}} / object-convertible-to-\code{\link{PipeOp}} to put after  \code{g1}.}
 }
 \value{
-\code{\link{Graph}} the constructed \code{Graph}.
+\code{\link{Graph}}: the constructed \code{\link{Graph}}.
 }
 \description{
-This operator \dQuote{pipes} data from the source \code{g1} into the sink \code{g2}. Both source and sink can either be
-a \code{\link{Graph}} or a \code{\link{PipeOp}}. The number of output channels of \code{g1} (as given by \code{g1$output}) must equal the
-number of input channels of \code{g2} (as given by \code{g2$input}). Connections between channels are created in the
+This operator "pipes" data from the source \code{g1} into the sink \code{g2}. Both source and sink can either be
+a \code{\link{Graph}} or a \code{\link{PipeOp}} (or an object that can be automatically converted into a \code{\link{PipeOp}}, see \code{\link[=as_pipeop]{as_pipeop()}}).
+
+\code{\%>>\%} tries to automatically match output channels of \code{g1} to input channels of \code{g2}; this is only possible if either
+\itemize{
+\item the number of output channels of \code{g1} (as given by \code{g1$output}) is equal to the
+number of input channels of \code{g2} (as given by \code{g2$input}), or
+\item \code{g1} has only one output channel (i.e. \code{g1$output} has one line), or
+\item \code{g2} has only one input channel, which is a \emph{vararg} channel (i.e. \code{g2$input} has one line, with \code{name} entry \code{"..."}).
+}
+
+Connections between channels are created in the
 order in which they occur in \code{g1} and \code{g2}, respectively: \code{g1}'s output channel 1 is connected to \code{g2}'s input
 channel 1, channel 2 to 2 etc.
 
-This operator always created deep copies of its input arguments, so they cannot be modified by reference.
-To access individual \code{PipeOp}s after composition, use the resulting \code{Graph}'s \code{$pipeops} list.
+This operator always created deep copies of its input arguments, so they cannot be modified by reference afterwards.
+To access individual \code{\link{PipeOp}}s after composition, use the resulting \code{\link{Graph}}'s \code{$pipeops} list.
 }
 \examples{
 o1 = PipeOpScale$new()

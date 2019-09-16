@@ -1,22 +1,29 @@
 #' @title PipeOp Composition Operator
 #'
 #' @description
-#' This operator \dQuote{pipes} data from the source `g1` into the sink `g2`. Both source and sink can either be
-#' a [`Graph`] or a [`PipeOp`]. The number of output channels of `g1` (as given by `g1$output`) must equal the
-#' number of input channels of `g2` (as given by `g2$input`). Connections between channels are created in the
+#' This operator "pipes" data from the source `g1` into the sink `g2`. Both source and sink can either be
+#' a [`Graph`] or a [`PipeOp`] (or an object that can be automatically converted into a [`PipeOp`], see [`as_pipeop()`]).
+#'
+#' `%>>%` tries to automatically match output channels of `g1` to input channels of `g2`; this is only possible if either
+#' * the number of output channels of `g1` (as given by `g1$output`) is equal to the
+#' number of input channels of `g2` (as given by `g2$input`), or
+#' * `g1` has only one output channel (i.e. `g1$output` has one line), or
+#' * `g2` has only one input channel, which is a *vararg* channel (i.e. `g2$input` has one line, with `name` entry `"..."`).
+#'
+#' Connections between channels are created in the
 #' order in which they occur in `g1` and `g2`, respectively: `g1`'s output channel 1 is connected to `g2`'s input
 #' channel 1, channel 2 to 2 etc.
 #'
-#' This operator always created deep copies of its input arguments, so they cannot be modified by reference.
-#' To access individual `PipeOp`s after composition, use the resulting `Graph`'s `$pipeops` list.
+#' This operator always created deep copies of its input arguments, so they cannot be modified by reference afterwards.
+#' To access individual [`PipeOp`]s after composition, use the resulting [`Graph`]'s `$pipeops` list.
 #'
 #'
-#' @param g1 ([`Graph`] | [`PipeOp`]) \cr
-#'   `Graph` / `PipeOp` to put in front of `g2`.
-#' @param g2 ([`Graph`] | [`PipeOp`]) \cr
-#'   `Graph` / `PipeOp` to put after  `g1`.
+#' @param g1 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) \cr
+#'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put in front of `g2`.
+#' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) \cr
+#'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put after  `g1`.
 #'
-#' @return [`Graph`] the constructed `Graph`.
+#' @return [`Graph`]: the constructed [`Graph`].
 #' @family Graph operators
 #' @export
 #' @examples
