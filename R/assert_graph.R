@@ -71,11 +71,16 @@ assert_pipeop = function(x) {
 #' @title Conversion to mlr3pipeline PipeOp
 #'
 #' @description
-#' The object is turned into a `PipeOp`
+#' The argument is turned into a [`PipeOp`]
 #' if possible.
 #' If `clone` is `TRUE`, a deep copy is made
-#' if the incoming object is a `PipeOp` to ensure the resulting
+#' if the incoming object is a [`PipeOp`] to ensure the resulting
 #' object is a different reference from the incoming object.
+#'
+#' [`as_pipeop()`] is an S3 method and can therefore be implemented by other packages
+#' that may add objects that can naturally be converted to [`PipeOp`]s. Objects that
+#' can be converted are for example [`Learner`][mlr3::Learner] (using [`PipeOpLearner`]) or
+#' [`Filter`][mlr3filters::Filter] (using [`PipeOpFilter`]).
 #'
 #' @param x (`any`) \cr
 #'   Object to convert.
