@@ -9,9 +9,11 @@ status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://
 
 ## What is `mlr3pipelines`?
 
-Watch our UseR 2019 Presentation on Youtube for a 15 minute introduction:
+Watch our UseR 2019 Presentation on Youtube for a 15 minute
+introduction:
 
-[![UseR 2019 mlr3pipelines](https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ)
+[![UseR 2019
+mlr3pipelines](https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ)
 
 **`mlr3pipelines`** is a [dataflow
 programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit
@@ -28,14 +30,11 @@ In principle, *mlr3pipelines* is about defining singular data and model
 manipulation steps as “PipeOps”:
 
 ``` r
-pca = mlr_pipeops$get("pca")
+pca        = po("pca")
 
-filter = mlr_pipeops$get("filter",
-  filter = mlr3filters::FilterVariance$new(),
-  param_vals = list(filter.frac = 0.5))
+filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
 
-learner_po =  mlr_pipeops$get("learner",
-  learner = mlr_learners$get("classif.rpart"))
+learner_po = po("learner", learner = lrn("classif.rpart"))
 ```
 
 These pipeops can then be combined together to define machine learning
@@ -50,17 +49,11 @@ glrn = GraphLearner$new(graph)
 This learner can be used for resampling, benchmarking, and even tuning.
 
 ``` r
-resample("iris", glrn, "cv")
-#> Warning: 'Automatic object creation from strings in `mlr3`' is deprecated.
-#> Use 'tsk' instead.
-#> See help("Deprecated")
-#> Warning: 'Automatic object creation from strings in `mlr3`' is deprecated.
-#> Use 'rsmp' instead.
-#> See help("Deprecated")
+resample(tsk("iris"), glrn, rsmp("cv"))
 #> <ResampleResult> of 10 iterations
 #> * Task: iris
 #> * Learner: pca.variance.classif.rpart
-#> * Performance: 0.053 [classif.ce]
+#> * Performance: 0.060 [classif.ce]
 #> * Warnings: 0 in 0 iterations
 #> * Errors: 0 in 0 iterations
 ```

@@ -25,18 +25,19 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 
 ## What is `mlr3pipelines`?
 
+Watch our UseR 2019 Presentation on Youtube for a 15 minute introduction:
+
+[![UseR 2019 mlr3pipelines](https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ)
+
 **`mlr3pipelines`** is a [dataflow programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit for machine learning in R utilising the **[mlr3](https://github.com/mlr-org/mlr3)** package. Machine learning workflows can be written as directed "Graphs" that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the **[mlr3tuning](https://github.com/mlr-org/mlr3tuning)** package, it is even possible to simultaneously optimize parameters of multiple processing units.
 
 In principle, *mlr3pipelines* is about defining singular data and model manipulation steps as "PipeOps":
 ```{r}
-pca = mlr_pipeops$get("pca")
+pca        = po("pca")
 
-filter = mlr_pipeops$get("filter",
-  filter = mlr3filters::FilterVariance$new(),
-  param_vals = list(filter.frac = 0.5))
+filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
 
-learner_po =  mlr_pipeops$get("learner",
-  learner = mlr_learners$get("classif.rpart"))
+learner_po = po("learner", learner = lrn("classif.rpart"))
 ```
 
 These pipeops can then be combined together to define machine learning pipelines. These can be wrapped in a `GraphLearner` that behave like any other `Learner` in `mlr3`.
@@ -46,7 +47,7 @@ glrn = GraphLearner$new(graph)
 ```
 This learner can be used for resampling, benchmarking, and even tuning.
 ```{r}
-resample("iris", glrn, "cv")
+resample(tsk("iris"), glrn, rsmp("cv"))
 ```
 ## Feature Overview
 
@@ -79,10 +80,3 @@ Please understand that the resources of the project are limited: response may so
 ## Similar Projects
 
 A predecessor to this package is the [*mlrCPO*-package](https://github.com/mlr-org/mlrCPO), which works with *mlr* 2.x. Other packages that provide, to varying degree, some preprocessing functionality or machine learning domain specific language, are the *[caret](https://github.com/topepo/caret)* package and the related *[recipes](https://tidymodels.github.io/recipes/)* project, and the *[dplyr](https://github.com/tidyverse/dplyr)* package.
-
-
-## Outreach
-
-mlr3pipelines talk at useR! 2019 conference in Toulouse, France:
-
-[![Watch the video](https://img.youtube.com/vi/gEW5RxkbQuQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ&feature=youtu.be)
