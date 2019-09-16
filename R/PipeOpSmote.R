@@ -73,7 +73,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
   public = list(
     initialize = function(id = "smote", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamInt$new("K", lower = 1, default = 5, tags = "train"),
+        ParamInt$new("K", lower = 1, default = 5, tags = c("train", "smote")),
         # dup_size = 0 leads to behaviour different from 1, 2, 3, ..., because it means "autodetect",
         # so it is a 'special_vals'.
         ParamInt$new("dup_size", lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
