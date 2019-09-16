@@ -27,18 +27,11 @@ even possible to simultaneously optimize parameters of multiple
 processing units.
 
 In principle, *mlr3pipelines* is about defining singular data and model
-manipulation steps as
-“PipeOps”:
+manipulation steps as “PipeOps”:
 
 ``` r
 pca        = po("pca")
-```
-
-``` r
 filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
-```
-
-``` r
 learner_po = po("learner", learner = lrn("classif.rpart"))
 ```
 
