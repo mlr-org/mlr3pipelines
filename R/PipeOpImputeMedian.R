@@ -64,6 +64,9 @@ PipeOpImputeMedian = R6Class("PipeOpImputeMedian",
       if (is.na(med)) {
         med = 0
       }
+      if (type == "integer") {
+        med = as.integer(round(med))
+      }
       med
     },
 

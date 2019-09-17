@@ -60,7 +60,7 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
     select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
 
     train_imputer = function(feature, type, context) {
-      hist(col, plot = FALSE)[c("counts", "breaks")]
+      hist(feature, plot = FALSE)[c("counts", "breaks")]
     },
 
     impute = function(feature, type, model, context) {

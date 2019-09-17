@@ -140,7 +140,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         }
         model = self$train_imputer(col, type, context)
         if (colname %in% names(imputanda)) {
-          ..col = self$impute(col, type, model, context)
+          col = self$impute(col, type, model, context)
           imputanda[, (colname) := ..col]
         }
         model
@@ -177,7 +177,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
           context = NULL
         }
         model = self$state$model[[colname]]
-        ..col = self$impute(col, type, model, context)
+        col = self$impute(col, type, model, context)
         imputanda[, (colname) := ..col]
       })
 

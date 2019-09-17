@@ -65,9 +65,9 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
       filldata = if (!length(model)) {
         vector(type, outlen)
       } else if (length(model) == 1) {
-        rep_len(choices, outlen)
+        rep_len(model, outlen)
       } else {
-        sample(choices, outlen, replace = TRUE)
+        sample(model, outlen, replace = TRUE)
       }
       feature[is.na(feature)] = filldata
       feature

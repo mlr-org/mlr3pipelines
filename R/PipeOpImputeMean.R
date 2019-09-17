@@ -64,6 +64,9 @@ PipeOpImputeMean = R6Class("PipeOpImputeMean",
       if (is.nan(men)) {
         men = 0
       }
+      if (type == "integer") {
+        men = as.integer(round(men))
+      }
       men
     },
 

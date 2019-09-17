@@ -64,7 +64,7 @@
 #' # >   gunion(list(
 #' # >     po("pca"),
 #' # >     po("nop"),
-#' # >     po("impute")
+#' # >     po("imputemean")
 #' # >   ))
 #' # Instead, the 'copy' operator makes clear which output gets copied.
 #' gunion(list(
@@ -74,7 +74,7 @@
 #'   gunion(list(
 #'     po("pca"),
 #'     po("nop"),
-#'     po("impute")
+#'     po("imputemean")
 #'   ))
 #' @family PipeOps
 #' @family Placeholder Pipeops
