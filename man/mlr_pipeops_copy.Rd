@@ -79,7 +79,7 @@ po("scale") \%>>\%
 # >   gunion(list(
 # >     po("pca"),
 # >     po("nop"),
-# >     po("impute")
+# >     po("imputemean")
 # >   ))
 # Instead, the 'copy' operator makes clear which output gets copied.
 gunion(list(
@@ -89,7 +89,7 @@ gunion(list(
   gunion(list(
     po("pca"),
     po("nop"),
-    po("impute")
+    po("imputemean")
   ))
 }
 \seealso{
