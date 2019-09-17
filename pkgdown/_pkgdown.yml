@@ -47,7 +47,7 @@ navbar:
 
 reference:
   - title: Package
-    content:
+    contents:
       - mlr3pipelines
   - title: Building Blocks
     contents:
