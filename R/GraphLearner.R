@@ -89,6 +89,15 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       self$graph$param_set
     }
+  ),
+  private = list(
+    deep_clone = function(name, value) {
+      # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
+      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
+        return(value$clone(deep = TRUE))
+      }
+      value
+    }
   )
 )
 

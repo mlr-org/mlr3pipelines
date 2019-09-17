@@ -151,10 +151,11 @@ test_that("GraphLearner is in mlr_learners", {
 
   expect_data_table(as.data.table(mlr_learners))  # can construct mlr_learners table
 
-  expect_equal(
-    mlr_learners$get("graph", graph = PipeOpLearner$new(lrn("classif.rpart"))),
-    GraphLearner$new(Graph$new()$add_pipeop(PipeOpLearner$new(lrn("classif.rpart"))))
-  )
+  # unfortunately we don't add GraphLearner to mlr_learners
+  #expect_equal(
+  #  mlr_learners$get("graph", graph = PipeOpLearner$new(lrn("classif.rpart"))),
+  #  GraphLearner$new(Graph$new()$add_pipeop(PipeOpLearner$new(lrn("classif.rpart"))))
+  #)
 
   # FIXME: depends on mlr-org/mlr3#328
   # expect_error(mlr_learners$get("graph"), "'graph'.*'graph'")  # Needs the argument 'graph' to construct 'graph'
