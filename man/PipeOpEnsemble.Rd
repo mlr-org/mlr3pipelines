@@ -89,8 +89,9 @@ This method is abstract, it must be implemented by deriving classes.
 }
 
 \seealso{
-Other PipeOps: \code{\link{PipeOpTaskPreproc}},
-  \code{\link{PipeOp}}, \code{\link{mlr_pipeops_boxcox}},
+Other PipeOps: \code{\link{PipeOpImpute}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeops_boxcox}},
   \code{\link{mlr_pipeops_branch}},
   \code{\link{mlr_pipeops_chunk}},
   \code{\link{mlr_pipeops_classbalancing}},
@@ -103,6 +104,11 @@ Other PipeOps: \code{\link{PipeOpTaskPreproc}},
   \code{\link{mlr_pipeops_filter}},
   \code{\link{mlr_pipeops_histbin}},
   \code{\link{mlr_pipeops_ica}},
+  \code{\link{mlr_pipeops_imputehist}},
+  \code{\link{mlr_pipeops_imputemean}},
+  \code{\link{mlr_pipeops_imputemedian}},
+  \code{\link{mlr_pipeops_imputenewlvl}},
+  \code{\link{mlr_pipeops_imputesample}},
   \code{\link{mlr_pipeops_kernelpca}},
   \code{\link{mlr_pipeops_learner}},
   \code{\link{mlr_pipeops_missind}},

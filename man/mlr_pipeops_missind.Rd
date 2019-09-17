@@ -39,6 +39,8 @@ Determines for which features the indicator columns are added. Can either be \co
 for each feature that actually has missing values, or \code{"all"}, adding indicator columns for all features.
 \item \code{type} :: \code{character(1)}\cr
 Determines the type of the newly created columns. Can be one of \code{"numeric"}, \code{"factor"} (default), \code{"logical"}.
+\item \code{drop_original} :: \code{logical(1)}\cr
+Whether to drop original features and only keep missing indicator features. Default \code{FALSE}.
 }
 }
 
@@ -72,10 +74,13 @@ sum(complete.cases(task$data()))
 task$missings()
 
 po = po("missind")
-new_task = po$train(list(task = task))[[1]]
+new_task = po$train(list(task))[[1]]
+
+new_task$feature_names
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpImpute}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeops_boxcox}},
   \code{\link{mlr_pipeops_branch}},
@@ -90,6 +95,11 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_filter}},
   \code{\link{mlr_pipeops_histbin}},
   \code{\link{mlr_pipeops_ica}},
+  \code{\link{mlr_pipeops_imputehist}},
+  \code{\link{mlr_pipeops_imputemean}},
+  \code{\link{mlr_pipeops_imputemedian}},
+  \code{\link{mlr_pipeops_imputenewlvl}},
+  \code{\link{mlr_pipeops_imputesample}},
   \code{\link{mlr_pipeops_kernelpca}},
   \code{\link{mlr_pipeops_learner}},
   \code{\link{mlr_pipeops_modelmatrix}},

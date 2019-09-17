@@ -25,7 +25,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric parameters replaced by their principal components.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features replaced by their principal components.
 }
 
 \section{State}{
@@ -80,6 +80,7 @@ pop$state
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpImpute}},
   \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
   \code{\link{mlr_pipeops_boxcox}},
   \code{\link{mlr_pipeops_branch}},
@@ -94,6 +95,11 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_filter}},
   \code{\link{mlr_pipeops_histbin}},
   \code{\link{mlr_pipeops_ica}},
+  \code{\link{mlr_pipeops_imputehist}},
+  \code{\link{mlr_pipeops_imputemean}},
+  \code{\link{mlr_pipeops_imputemedian}},
+  \code{\link{mlr_pipeops_imputenewlvl}},
+  \code{\link{mlr_pipeops_imputesample}},
   \code{\link{mlr_pipeops_kernelpca}},
   \code{\link{mlr_pipeops_learner}},
   \code{\link{mlr_pipeops_missind}},
