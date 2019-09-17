@@ -81,10 +81,10 @@
 #'   the `affect_columns` parameter. `select_cols` is for the *ineriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.
-#' * `train_imputer(feature, type, context)\cr
+#' * `train_imputer(feature, type, context)`\cr
 #'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
 #'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `$impute()`.
-#' * `impute(feature, type, model, context)\cr
+#' * `impute(feature, type, model, context)`\cr
 #'   (`atomic`, `character(1)`, `any`, [`data.table`]) -> `atomic`\cr
 #'   Imputes the features. `model` is the model created by `$train_imputer()`
 #'
