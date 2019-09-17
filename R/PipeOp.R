@@ -43,8 +43,11 @@
 #'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot.
-#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet] | `list` of `expression`\cr
 #'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
+#'   If this is a [`ParamSet`][paradox::ParamSet], it is used as the [`PipeOp`]'s [`ParamSet`][paradox::ParamSet]
+#'   directly. Otherwise it must be a `list` of expressions e.g. created by `alist()` that evaluate to [`ParamSet`][paradox::ParamSet]s.
+#'   These [`ParamSet`][paradox::ParamSet] are combined using a [`ParamSetCollection`][paradox::ParamSetCollection].
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
@@ -190,9 +193,16 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
 
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0)) {
-      private$.param_set = assert_param_set(param_set)
+      if (inherits(param_set, "ParamSet")) {
+        private$.param_set = assert_param_set(param_set)
+        private$.param_set_source = NULL
+      } else {
+        lapply(param_set, function(x) assert_param_set(eval(x)))
+        private$.param_set_source = param_set
+      }
+      self$id = assert_string(id)
+
       self$param_set$values = insert_named(self$param_set$values, param_vals)
-      self$id = assert_string(id)  # also sets the .param_set$set_id
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
@@ -258,6 +268,17 @@ PipeOp = R6Class("PipeOp",
       private$.id
     },
     param_set = function(val) {
+      if (is.null(private$.param_set)) {
+        sourcelist = lapply(private$.param_set_source, function(x) eval(x))
+        if (length(sourcelist) > 1) {
+          private$.param_set = ParamSetCollection$new(sourcelist)
+        } else {
+          private$.param_set = sourcelist[[1]]
+        }
+        if (!is.null(self$id)) {
+          private$.param_set$set_id = self$id
+        }
+      }
       if (!missing(val) && !identical(val, private$.param_set)) {
         stop("param_set is read-only.")
       }
@@ -273,7 +294,22 @@ PipeOp = R6Class("PipeOp",
   ),
 
   private = list(
+    deep_clone = function(name, value) {
+      if (!is.null(private$.param_set_source)) {
+        private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+        if (name == ".param_set_source") {
+          value = lapply(value, function(x) {
+            if (inherits(x, "R6")) x$clone(deep = TRUE) else x
+          })
+        }
+      }
+      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
+        return(value$clone(deep = TRUE))
+      }
+      value
+    },
     .param_set = NULL,
+    .param_set_source = NULL,
     .id = NULL
   )
 )

@@ -82,11 +82,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
       out_type = mlr_reflections$task_types[private$.learner$task_type]$prediction
-      super$initialize(id, param_vals = param_vals,
+      super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type)
       )
-      private$.param_set = NULL
     },
 
     train_internal = function(inputs) {
@@ -105,12 +104,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     }
   ),
   active = list(
-    param_set = function(rhs) {
-      if (!missing(rhs) && !identical(rhs, private$.learner$param_set)) {
-        stop("$param_set is read-only.")
-      }
-      private$.learner$param_set
-    },
     id = function(val) {
       if (!missing(val)) {
         private$.id = val

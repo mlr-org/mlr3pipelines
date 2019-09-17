@@ -155,10 +155,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task") {
       if (can_subset_cols) {
         acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train")
-        if ("ParamSetCollection" %in% class(param_set)) {
-          param_set$add(ParamSet$new(list(acp)))
-        } else {
+        if (inherits(param_set, "ParamSet")) {
           param_set$add(acp)
+        } else {
+          private$.affectcols_ps = ParamSet$new(list(acp))
+          param_set = c(param_set, alist(private$.affectcols_ps))
         }
       }
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
@@ -247,6 +248,9 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     predict_dt = function(dt, levels) stop("Abstract."),
 
     select_cols = function(task) task$feature_names
+  ),
+  private = list(
+    .affectcols_ps = NULL
   )
 )
 

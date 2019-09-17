@@ -103,7 +103,7 @@ test_that("po for Learner", {
   lrn = LearnerClassifRpart$new()
   lrn$param_set$values$xval = 9
 
-  lpo1 = PipeOpLearner$new(lrn, param_vals = list(xval = 1))
+  lpo1 = touch(PipeOpLearner$new(lrn, param_vals = list(xval = 1)))
 
   lpo2 = po("learner", lrn, xval = 1)
 

@@ -4,7 +4,7 @@ context("Dictionary")
 test_that("Dictionary contains all PipeOps", {
 
   # abstract pipeops that don't need to be in mlr_pipeops
-  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple")
+  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute")
 
   # constructor-args that have no defaults
   initargs = list(
@@ -119,8 +119,8 @@ test_that("Dictionary contains all PipeOps", {
       gen_constructed = do.call(pogen$new, args)
       expect_false(isTRUE(all.equal(dict_constructed, test_obj)), dictname)
       test_obj$param_set$values[[testingparam$id]] = val
-      expect_equal(dict_constructed, test_obj)
-      expect_equal(gen_constructed, test_obj)
+      expect_equal(touch(dict_constructed), test_obj)
+      expect_equal(touch(gen_constructed), test_obj)
     }
   }
 })

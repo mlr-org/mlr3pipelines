@@ -111,7 +111,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         ParamDbl$new("cutoff", tags = "train")
       ))
       private$.outer_param_set$set_id = "filter"
-      super$initialize(id, self$param_set, param_vals = param_vals)
+      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals)
     },
 
     get_state = function(task) {
@@ -158,29 +158,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
       task$select(self$state$features)
     }
   ),
-  active = list(
-    param_set = function(val) {
-      if (is.null(private$.param_set)) {
-        private$.param_set = ParamSetCollection$new(list(
-          private$.outer_param_set,
-          self$filter$param_set
-        ))
-        private$.param_set$set_id = self$id %??% self$filter$id  # self$id may be NULL during initialize() call
-      }
-      if (!missing(val) && !identical(val, private$.param_set)) {
-        stop("param_set is read-only.")
-      }
-      private$.param_set
-    }
-  ),
   private = list(
-    deep_clone = function(name, value) {
-      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
-      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
-        return(value$clone(deep = TRUE))
-      }
-      value
-    },
     .outer_param_set = NULL
   )
 )
