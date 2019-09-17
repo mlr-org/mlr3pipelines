@@ -74,7 +74,19 @@
 #' Fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#'
+#' Methods inherited from [`PipeOp`], as well as:
+#' * `select_cols(task)` \cr
+#'   ([`Task`][mlr3::Task]) -> `character` \cr
+#'   Selects which columns the [`PipeOp`] operates on. In contrast to
+#'   the `affect_columns` parameter. `select_cols` is for the *ineriting class* to determine which columns
+#'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
+#'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.
+#' * `train_imputer(feature, type, context)\cr
+#'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
+#'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `$impute()`.
+#' * `impute(feature, type, model, context)\cr
+#'   (`atomic`, `character(1)`, `any`, [`data.table`]) -> `atomic`\cr
+#'   Imputes the features. `model` is the model created by `$train_imputer()`
 #'
 #' @family PipeOps
 #' @include PipeOp.R

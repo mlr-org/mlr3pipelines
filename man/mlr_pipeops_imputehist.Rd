@@ -41,7 +41,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
 
 \section{Internals}{
 
-Uses the \code{\link[stats:hist]{stats::hist()}} function. Features that are entirely \code{NA} are imputed as \code{0}.
+Uses the \code{\link[graphics:hist]{graphics::hist()}} function. Features that are entirely \code{NA} are imputed as \code{0}.
 }
 
 \section{Methods}{

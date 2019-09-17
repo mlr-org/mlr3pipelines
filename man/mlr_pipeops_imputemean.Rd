@@ -41,7 +41,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
 
 \section{Internals}{
 
-Uses the \code{\link[stats:mean]{stats::mean()}} function. Features that are entirely \code{NA} are imputed as \code{0}.
+Uses the \code{mean()} function. Features that are entirely \code{NA} are imputed as \code{0}.
 }
 
 \section{Methods}{

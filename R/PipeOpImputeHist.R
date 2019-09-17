@@ -31,7 +31,7 @@
 #' The parameters are the parameters inherited from [`PipeOpImpute`].
 #'
 #' @section Internals:
-#' Uses the [`stats::hist()`] function. Features that are entirely `NA` are imputed as `0`.
+#' Uses the [`graphics::hist()`] function. Features that are entirely `NA` are imputed as `0`.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -54,13 +54,13 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputehist", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals)
+      super$initialize(id, param_vals = param_vals, packages = "graphics")
     },
 
     select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
 
     train_imputer = function(feature, type, context) {
-      hist(feature, plot = FALSE)[c("counts", "breaks")]
+      graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]
     },
 
     impute = function(feature, type, model, context) {

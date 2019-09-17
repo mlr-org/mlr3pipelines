@@ -151,9 +151,9 @@ is possible and encouraged to change it in-place.\cr
 The \code{levels} argument is a named list of factor levels for factorial or character features.\cr
 This method can be overloaded when inheriting \code{PipeOpTaskPreproc}, together with \code{$train_dt()} and optionally
 \code{$select_cols()}; alternatively, \code{$train_task()} and \code{$predict_task()} can be overloaded.
-\item \code{select_cols(dt)} \cr
-(\code{\link{data.table}}) -> \code{character} \cr
-Selects which columns the \code{PipeOp} operates on, if \code{$train_dt()} and \code{$predict_dt()} are overloaded. This function
+\item \code{select_cols(task)} \cr
+(\code{\link[mlr3:Task]{Task}}) -> \code{character} \cr
+Selects which columns the \code{\link{PipeOp}} operates on, if \code{$train_dt()} and \code{$predict_dt()} are overloaded. This function
 is not called if \code{$train_task()} and \code{$predict_task()} are overloaded. In contrast to
 the \code{affect_columns} parameter. \code{select_cols} is for the \emph{ineriting class} to determine which columns
 the operator should function on, e.g. based on feature type, while \code{affect_columns} is a way for the \emph{user}

@@ -31,7 +31,7 @@
 #' The parameters are the parameters inherited from [`PipeOpImpute`].
 #'
 #' @section Internals:
-#' Uses the [`stats::mean()`] function. Features that are entirely `NA` are imputed as `0`.
+#' Uses the `mean()` function. Features that are entirely `NA` are imputed as `0`.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].

@@ -41,7 +41,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
 
 \section{Internals}{
 
-Uses the \code{\link[stats:sample]{stats::sample()}} function. Features that are entirely \code{NA} are imputed as the values given by \code{vector()} of their type.
+Uses the \code{sample()} function. Features that are entirely \code{NA} are imputed as the values given by \code{vector()} of their type.
 }
 
 \section{Methods}{

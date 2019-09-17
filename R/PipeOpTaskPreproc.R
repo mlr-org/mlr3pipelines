@@ -132,9 +132,9 @@
 #'   The `levels` argument is a named list of factor levels for factorial or character features.\cr
 #'   This method can be overloaded when inheriting `PipeOpTaskPreproc`, together with `$train_dt()` and optionally
 #'   `$select_cols()`; alternatively, `$train_task()` and `$predict_task()` can be overloaded.
-#' * `select_cols(dt)` \cr
-#'   ([`data.table`]) -> `character` \cr
-#'   Selects which columns the `PipeOp` operates on, if `$train_dt()` and `$predict_dt()` are overloaded. This function
+#' * `select_cols(task)` \cr
+#'   ([`Task`][mlr3::Task]) -> `character` \cr
+#'   Selects which columns the [`PipeOp`] operates on, if `$train_dt()` and `$predict_dt()` are overloaded. This function
 #'   is not called if `$train_task()` and `$predict_task()` are overloaded. In contrast to
 #'   the `affect_columns` parameter. `select_cols` is for the *ineriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*

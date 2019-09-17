@@ -92,6 +92,17 @@ Fields inherited from \code{\link{PipeOp}}.
 
 \section{Methods}{
 
+Methods inherited from \code{\link{PipeOp}}, as well as:
+\itemize{
+\item \code{select_cols(task)} \cr
+(\code{\link[mlr3:Task]{Task}}) -> \code{character} \cr
+Selects which columns the \code{\link{PipeOp}} operates on. In contrast to
+the \code{affect_columns} parameter. \code{select_cols} is for the \emph{ineriting class} to determine which columns
+the operator should function on, e.g. based on feature type, while \code{affect_columns} is a way for the \emph{user}
+to limit the columns that a \code{\link{PipeOpTaskPreproc}} should operate on.
+\item \code{train_imputer(feature, type, context)\cr (}atomic\code{, }character(1)\code{, [}data.table\code{]) -> }any\code{\cr Called once for each feature selected by }affect_columns\code{to create the model entry to be used for}$impute()`.
+\item \code{impute(feature, type, model, context)\cr (}atomic\code{, }character(1)\code{, }any\code{, [}data.table\code{]) -> }atomic\code{\cr Imputes the features. }model\code{is the model created by}$train_imputer()`
+}
 }
 
 \seealso{

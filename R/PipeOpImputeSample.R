@@ -31,7 +31,7 @@
 #' The parameters are the parameters inherited from [`PipeOpImpute`].
 #'
 #' @section Internals:
-#' Uses the [`stats::sample()`] function. Features that are entirely `NA` are imputed as the values given by `vector()` of their type.
+#' Uses the `sample()` function. Features that are entirely `NA` are imputed as the values given by `vector()` of their type.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
