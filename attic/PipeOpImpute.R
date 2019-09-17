@@ -116,7 +116,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
             mean = num_model[[colname]],
             sample = {
               choices = num_model[[colname]]
-              if (length(choices == 1)) {
+              if (length(choices) == 1) {
                 rep_len(choices, sum(is.na(col)))
               } else {
                 sample(choices, sum(is.na(col)), replace = TRUE)
