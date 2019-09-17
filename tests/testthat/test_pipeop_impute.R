@@ -38,7 +38,7 @@ test_that("PipeOpImpute", {
           po("select", id = "num_select", selector = selector_type(c("integer", "numeric"))) %>>% numimputer,
           po("select", id = "fct_select", selector = selector_type(c("factor", "ordered", "character"))) %>>% fctimputer,
           po("select", id = "lgl_select", selector = selector_type(c("logical"))) %>>% po("imputesample", id = "lgl_sample"),
-          po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical", drop_original = TRUE,
+          po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% po("featureunion")
       },

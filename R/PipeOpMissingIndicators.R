@@ -6,6 +6,7 @@
 #'
 #' @description
 #' Add missing indicator columns ("dummy columns") to the [`Task`][mlr3::Task].
+#' Drops original features; should probably be used in combination with [`PipeOpFeatureUnion`] and imputation [`PipeOp`]s (see examples).
 #'
 #' @section Construction:
 #' ```
@@ -30,8 +31,6 @@
 #'   for each feature that actually has missing values, or `"all"`, adding indicator columns for all features.
 #' * `type` :: `character(1)`\cr
 #'   Determines the type of the newly created columns. Can be one of `"numeric"`, `"factor"` (default), `"logical"`.
-#' * `drop_original` :: `logical(1)`\cr
-#'   Whether to drop original features and only keep missing indicator features. Default `FALSE`.
 #'
 #' @section Internals:
 #' This [`PipeOp`] should cover most cases where "dummy columns" or "missing indicators" are desired. Some edge cases:
@@ -53,24 +52,33 @@
 #' @examples
 #' library("mlr3")
 #'
-#' task = tsk("pima")
+#' task = tsk("pima")$select(c("insulin", "triceps"))
 #' sum(complete.cases(task$data()))
 #' task$missings()
+#' tail(task$data())
 #'
 #' po = po("missind")
 #' new_task = po$train(list(task))[[1]]
 #'
-#' new_task$feature_names
+#' tail(new_task$data())
+#'
+#' # proper imputation + missing indicators
+#'
+#' impgraph = list(
+#'   po("imputesample"),
+#'   po("missind")
+#' ) %>>% po("featureunion")
+#'
+#' tail(impgraph$train(task)[[1]]$data())
 PipeOpMissInd = R6Class("PipeOpMissInd",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "missind", param_vals = list()) {
       ps = ParamSet$new(list(
         ParamFct$new("which", levels = c("missing_train", "all"), tags = c("train", "required")),
-        ParamFct$new("type", levels = c("numeric", "factor", "logical"), tags = c("train", "predict", "required")),
-        ParamLgl$new("drop_original", tags = c("train", "predict", "required"))
+        ParamFct$new("type", levels = c("numeric", "factor", "logical"), tags = c("train", "predict", "required"))
       ))
-      ps$values = list(which = "missing_train", type = "factor", drop_original = FALSE)
+      ps$values = list(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals)
     },
 
@@ -98,10 +106,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         logical = data_dummy,
         stop("Invalid value of 'type' parameter"))
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
-      if (self$param_set$values$drop_original) {
-        task$select(character(0))
-      }
-      task$cbind(data_dummy)
+      task$select(character(0))$cbind(data_dummy)
     }
   )
 )

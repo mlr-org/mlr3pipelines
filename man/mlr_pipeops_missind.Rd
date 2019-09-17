@@ -8,6 +8,7 @@
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
 Add missing indicator columns ("dummy columns") to the \code{\link[mlr3:Task]{Task}}.
+Drops original features; should probably be used in combination with \code{\link{PipeOpFeatureUnion}} and imputation \code{\link{PipeOp}}s (see examples).
 }
 \section{Construction}{
 \preformatted{PipeOpMissInd$new(id = "missind", param_vals = list())
@@ -39,8 +40,6 @@ Determines for which features the indicator columns are added. Can either be \co
 for each feature that actually has missing values, or \code{"all"}, adding indicator columns for all features.
 \item \code{type} :: \code{character(1)}\cr
 Determines the type of the newly created columns. Can be one of \code{"numeric"}, \code{"factor"} (default), \code{"logical"}.
-\item \code{drop_original} :: \code{logical(1)}\cr
-Whether to drop original features and only keep missing indicator features. Default \code{FALSE}.
 }
 }
 
@@ -69,14 +68,24 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 \examples{
 library("mlr3")
 
-task = tsk("pima")
+task = tsk("pima")$select(c("insulin", "triceps"))
 sum(complete.cases(task$data()))
 task$missings()
+tail(task$data())
 
 po = po("missind")
 new_task = po$train(list(task))[[1]]
 
-new_task$feature_names
+tail(new_task$data())
+
+# proper imputation + missing indicators
+
+impgraph = list(
+  po("imputesample"),
+  po("missind")
+) \%>>\% po("featureunion")
+
+tail(impgraph$train(task)[[1]]$data())
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

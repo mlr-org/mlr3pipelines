@@ -50,6 +50,9 @@ mlr_pipeops$get("learner", lrn("classif.rpart"))
 
 # equivalent:
 po("learner", learner = lrn("classif.rpart"))
+
+# all PipeOps currently in the dictionary:
+as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 }
 \seealso{
 Other mlr3pipelines backend related: \code{\link{Graph}},
