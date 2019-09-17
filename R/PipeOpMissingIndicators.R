@@ -30,6 +30,8 @@
 #'   for each feature that actually has missing values, or `"all"`, adding indicator columns for all features.
 #' * `type` :: `character(1)`\cr
 #'   Determines the type of the newly created columns. Can be one of `"numeric"`, `"factor"` (default), `"logical"`.
+#' * `drop_original` :: `logical(1)`\cr
+#'   Whether to drop original features and only keep missing indicator features. Default `FALSE`.
 #'
 #' @section Internals:
 #' This [`PipeOp`] should cover most cases where "dummy columns" or "missing indicators" are desired. Some edge cases:
@@ -56,16 +58,19 @@
 #' task$missings()
 #'
 #' po = po("missind")
-#' new_task = po$train(list(task = task))[[1]]
+#' new_task = po$train(list(task))[[1]]
+#'
+#' new_task$feature_names
 PipeOpMissInd = R6Class("PipeOpMissInd",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "missind", param_vals = list()) {
       ps = ParamSet$new(list(
         ParamFct$new("which", levels = c("missing_train", "all"), tags = c("train", "required")),
-        ParamFct$new("type", levels = c("numeric", "factor", "logical"), tags = c("train", "predict", "required"))
+        ParamFct$new("type", levels = c("numeric", "factor", "logical"), tags = c("train", "predict", "required")),
+        ParamLgl$new("drop_original", tags = c("train", "predict", "required"))
       ))
-      ps$values = list(which = "missing_train", type = "factor")
+      ps$values = list(which = "missing_train", type = "factor", drop_original = FALSE)
       super$initialize(id, ps, param_vals = param_vals)
     },
 
@@ -93,6 +98,9 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         logical = data_dummy,
         stop("Invalid value of 'type' parameter"))
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
+      if (self$param_set$values$drop_original) {
+        task$select(character(0))
+      }
       task$cbind(data_dummy)
     }
   )
