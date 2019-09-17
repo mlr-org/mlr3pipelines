@@ -48,7 +48,8 @@
 #'
 #' po$state$model
 #' @family PipeOps
-#' @include PipeOpTaskPreproc.R
+#' @family Imputation PipeOps
+#' @include PipeOpImpute.R
 #' @export
 PipeOpImputeMean = R6Class("PipeOpImputeMean",
   inherit = PipeOpImpute,

@@ -48,7 +48,8 @@
 #'
 #' po$state$model
 #' @family PipeOps
-#' @include PipeOpTaskPreproc.R
+#' @family Imputation PipeOps
+#' @include PipeOpImpute.R
 #' @export
 PipeOpImputeHist = R6Class("PipeOpImputeHist",
   inherit = PipeOpImpute,

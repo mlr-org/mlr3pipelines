@@ -89,6 +89,7 @@
 #'   Imputes the features. `model` is the model created by `$train_imputer()`
 #'
 #' @family PipeOps
+#' @family Imputation PipeOps
 #' @include PipeOp.R
 #' @export
 PipeOpImpute = R6Class("PipeOpImpute",

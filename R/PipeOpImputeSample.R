@@ -47,7 +47,8 @@
 #' new_task$missings()
 #'
 #' @family PipeOps
-#' @include PipeOpTaskPreproc.R
+#' @family Imputation PipeOps
+#' @include PipeOpImpute.R
 #' @export
 PipeOpImputeSample = R6Class("PipeOpImputeSample",
   inherit = PipeOpImpute,

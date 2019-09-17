@@ -150,6 +150,13 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_unbranch}},
   \code{\link{mlr_pipeops_yeojohnson}},
   \code{\link{mlr_pipeops}}
+
+Other Imputation PipeOps: \code{\link{mlr_pipeops_imputehist}},
+  \code{\link{mlr_pipeops_imputemean}},
+  \code{\link{mlr_pipeops_imputemedian}},
+  \code{\link{mlr_pipeops_imputenewlvl}},
+  \code{\link{mlr_pipeops_imputesample}}
 }
+\concept{Imputation PipeOps}
 \concept{PipeOps}
 \keyword{datasets}

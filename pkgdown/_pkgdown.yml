@@ -48,13 +48,14 @@ navbar:
 reference:
   - title: Package
     content:
-      - mlr3pipelines-package
+      - mlr3pipelines
   - title: Building Blocks
     contents:
       - PipeOp
       - Graph
       - PipeOpTaskPreproc
       - PipeOpTaskPreprocSimple
+      - PipeOpImpute
   - title: Graph Tools
     contents:
       - "%>>%"
