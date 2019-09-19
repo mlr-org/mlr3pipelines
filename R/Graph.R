@@ -81,7 +81,7 @@
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
 #' * `plot(html)` \cr
 #'   (`logical(1)`) -> `NULL` \cr
-#'   Plot the [`Graph`], using either the [`igraph`][igraph::igraph-package] package (for `html = FALSE`, default) or
+#'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
 #' * `print()` \cr
 #'   () -> `NULL` \cr

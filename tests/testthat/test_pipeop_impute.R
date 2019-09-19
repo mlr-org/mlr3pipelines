@@ -1,7 +1,7 @@
 context("PipeOpImpute")
 
 test_that("PipeOpImpute", {
-
+  skip_on_cran()  # slow test, so we don't do it on cran
   # create bogus impute pipeop that behaves like the old impute pipeop. This lets us do tests quickly. FIXME needs to be cleaned up. a lot.
 
   PipeOpTestImpute = R6Class("PipeOpTestImpute", inherit = PipeOpTaskPreprocSimple,

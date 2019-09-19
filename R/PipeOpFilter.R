@@ -94,7 +94,7 @@
 #' gr = po("filter", filter = flt("auc"), filter.frac = 0.5) %>>%
 #'   po("learner", lrn("classif.rpart"))
 #' learner = GraphLearner$new(gr)
-#' rr = resample(task, learner, rsmp("cv", folds = 3), store_models = TRUE)
+#' rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 #' rr$learners[[1]]$model$auc$scores
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,

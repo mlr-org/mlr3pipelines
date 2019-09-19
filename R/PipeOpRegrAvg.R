@@ -60,7 +60,7 @@
 #' ) %>>%
 #'   po("classifavg")
 #'
-#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("cv", folds = 3))
+#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 

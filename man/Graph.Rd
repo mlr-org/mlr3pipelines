@@ -90,7 +90,7 @@ If source or destination \code{\link{PipeOp}} have only one input / output chann
 are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
 \item \code{plot(html)} \cr
 (\code{logical(1)}) -> \code{NULL} \cr
-Plot the \code{\link{Graph}}, using either the \code{\link[igraph:igraph-package]{igraph}} package (for \code{html = FALSE}, default) or
+Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
 the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}}.
 \item \code{print()} \cr
 () -> \code{NULL} \cr

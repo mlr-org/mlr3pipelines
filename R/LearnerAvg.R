@@ -155,6 +155,11 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   )
 )
 
+# the following to avoid static checker warnings. This is because the '@usage' above checks for this.
+# In fact we set usage only so that `pkgdown` shows the name correctly.
+mlr_learners_regr.avg = NULL
+mlr_learners_classif.avg = NULL
+
 nlopt_levels = c("NLOPT_GN_DIRECT", "NLOPT_GN_DIRECT_L", "NLOPT_GN_DIRECT_L_RAND",
   "NLOPT_GN_DIRECT_NOSCAL", "NLOPT_GN_DIRECT_L_NOSCAL", "NLOPT_GN_DIRECT_L_RAND_NOSCAL",
   "NLOPT_GN_ORIG_DIRECT", "NLOPT_GN_ORIG_DIRECT_L", "NLOPT_LN_PRAXIS",

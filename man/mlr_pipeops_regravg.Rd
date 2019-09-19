@@ -72,7 +72,7 @@ gr = greplicate(n = 5,
 ) \%>>\%
   po("classifavg")
 
-resample(tsk("iris"), GraphLearner$new(gr), rsmp("cv", folds = 3))
+resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},
