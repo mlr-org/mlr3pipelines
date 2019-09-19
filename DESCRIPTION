@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.1
+Version: 0.1.0
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -25,7 +25,11 @@ Authors@R:
              family = "Dandl",
              role = "aut",
              email = "dandl.susanne@googlemail.com"))
-Description: Pipelines for mlr3.
+Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
+  set of pipelining operators ('PipeOps') that can be composed into graphs.
+  Operations exist for data preprocessing, model fitting, and ensemble
+  learning. Graphs can themselves be treated as 'mlr3' 'Learners' and can
+  therefore be resampled, benchmarked, and tuned.
 License: LGPL-3
 URL: https://mlr3pipelines.mlr-org.com,
     https://github.com/mlr-org/mlr3pipelines
@@ -37,8 +41,8 @@ Imports:
     checkmate,
     data.table,
     digest,
-    mlr3 (>= 0.1.2),
-    mlr3misc,
+    mlr3 (>= 0.1.3),
+    mlr3misc (>= 0.1.4),
     paradox,
     R6,
     withr
@@ -52,7 +56,6 @@ Suggests:
     mlbench,
     mlr3filters,
     mlr3learners,
-    mlr3tuning,
     nloptr,
     rmarkdown,
     rpart,
@@ -64,13 +67,6 @@ Suggests:
     smotefamily
 VignetteBuilder: 
     knitr
-Remotes:
-    mlr-org/mlr3,
-    mlr-org/mlr3filters,
-    mlr-org/mlr3learners,
-    mlr-org/mlr3misc,
-    mlr-org/mlr3tuning,
-    mlr-org/paradox
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
