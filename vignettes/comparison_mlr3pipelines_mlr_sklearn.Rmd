@@ -166,7 +166,7 @@ train(lrn, iris.task)
 ```{r, eval = FALSE}
 library("mlr3")
 library("mlr3pipelines")
-library("mlr3featsel")
+library("mlr3filters")
 
 impute = PipeOpImpute$new()
 filter = PipeOpFilter$new(filter = FilterVariance$new(), param_vals = list(filter.nfeat = 2L))
