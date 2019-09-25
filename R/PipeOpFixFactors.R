@@ -5,8 +5,9 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Fixes factors of type `factor`, `ordered`: Removes empty factor levels and/or makes sure the factor levels
-#' during prediction are the same as during training.
+#' Fixes factors of type `factor`, `ordered`: Makes sure the factor levels
+#' during prediction are the same as during training; possibly dropping empty
+#' training factor levels before.
 #'
 #' Note this may introduce *missing values* during prediction if unseen factor levels are found.
 #'
@@ -32,10 +33,7 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `droplevels``  :: `logical(1)` \cr
-#'   Whether to drop empty factor levels. Default `TRUE`
-#' * `fix_predict_levels` :: `logical(1)` \cr
-#'   Whether to make sure the same factor levels are present during prediction as during training.
-#'   This may introduce missing values during training if unseen factor levels are found. Default `TRUE`.
+#'   Whether to drop empty factor levels of the training task. Default `TRUE`
 #'
 #' @section Internals:
 #' Uses the [`mlr3::Task`] functionality of handling factor levels.
@@ -64,24 +62,22 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
       task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
     },
 
-    get_state = function(task) {
+    get_state_dt = function(dt, levels, target) {
       if (self$param_set$values$droplevels) {
-        lvls = task$backend$distinct(rows = task$row_ids, cols = task$feature_names)
-      } else {
-        lvls = task$levels()
+        dt = droplevels(dt)
       }
-      list(levels = lvls)
+      list(levels = lapply(dt, function(x) levels(x)))  # explicitly access the "levels" function
     },
 
-    transform = function(task) {
-      vals = self$param_set$values
-      if (!vals$droplevels && !fix_predict_levels) {
-        # nothing changes --> don't need to clone
-        return(task)
-      }
-      task = task$clone(deep = TRUE)
-      task$col_info = ujoin(task$col_info, enframe(self$state$levels, "id", "levels"), key = "id")
-      task
+    transform_dt = function(dt, levels) {
+      imap(self$state$levels, function(levels, id) {
+        x = dt[[id]]
+        if (is.ordered(x)) {
+          ordered(x, levels = levels)
+        } else {
+          factor(x, levels = levels)
+        }
+      })
     }
   )
 )
