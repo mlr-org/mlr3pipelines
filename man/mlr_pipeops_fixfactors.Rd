@@ -7,13 +7,14 @@
 \title{PipeOpFixFactors}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
-Fixes factors of type \code{factor}, \code{ordered}: Removes empty factor levels and/or makes sure the factor levels
-during prediction are the same as during training.
+Fixes factors of type \code{factor}, \code{ordered}: Makes sure the factor levels
+during prediction are the same as during training; possibly dropping empty
+training factor levels before.
 
 Note this may introduce \emph{missing values} during prediction if unseen factor levels are found.
 }
 \section{Construction}{
-\preformatted{PipeOpFixFactors$new(id = "encode", param_vals = list())
+\preformatted{PipeOpFixFactors$new(id = "fixfactors", param_vals = list())
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -43,16 +44,14 @@ List of factor levels of each affected \code{factor} or \code{ordered} feature t
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{droplevels``  :: }logical(1)\code{\cr Whether to drop empty factor levels. Default}TRUE`
-\item \code{fix_predict_levels} :: \code{logical(1)} \cr
-Whether to make sure the same factor levels are present during prediction as during training.
-This may introduce missing values during training if unseen factor levels are found. Default \code{TRUE}.
+\item \code{droplevels}  :: \code{logical(1)} \cr
+Whether to drop empty factor levels of the training task. Default \code{TRUE}
 }
 }
 
 \section{Internals}{
 
-Uses the \code{\link[mlr3:Task]{mlr3::Task}} functionality of handling factor levels.
+Changes factor levels of columns and attaches them with a new \code{data.table} backend and the virtual \code{cbind()} backend.
 }
 
 \section{Methods}{
@@ -73,6 +72,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_classbalancing}},
   \code{\link{mlr_pipeops_classifavg}},
   \code{\link{mlr_pipeops_colapply}},
+  \code{\link{mlr_pipeops_collapsefactors}},
   \code{\link{mlr_pipeops_copy}},
   \code{\link{mlr_pipeops_encodelmer}},
   \code{\link{mlr_pipeops_encode}},

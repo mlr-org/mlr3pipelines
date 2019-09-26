@@ -89,6 +89,7 @@ Collate:
     'PipeOpClassBalancing.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
+    'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
     'PipeOpEncodeLmer.R'

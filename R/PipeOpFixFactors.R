@@ -13,7 +13,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpFixFactors$new(id = "encode", param_vals = list())
+#' PipeOpFixFactors$new(id = "fixfactors", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"fixfactors"`.
@@ -32,11 +32,11 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `droplevels``  :: `logical(1)` \cr
+#' * `droplevels`  :: `logical(1)` \cr
 #'   Whether to drop empty factor levels of the training task. Default `TRUE`
 #'
 #' @section Internals:
-#' Uses the [`mlr3::Task`] functionality of handling factor levels.
+#' Changes factor levels of columns and attaches them with a new `data.table` backend and the virtual `cbind()` backend.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -51,10 +51,9 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
   public = list(
     initialize = function(id = "fixfactors", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("droplevels", tags = c("train", "predict")),
-        ParamLgl$new("fix_predict_levels", tags = c("train", "predict"))
+        ParamLgl$new("droplevels", tags = c("train", "predict"))
       ))
-      ps$values = list(droplevels = TRUE, fix_predict_levels = TRUE)
+      ps$values = list(droplevels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals)
     },
 
@@ -62,22 +61,36 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
       task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
     },
 
-    get_state_dt = function(dt, levels, target) {
+    get_state = function(task) {
+      # get the levels of the training task
+      dt = task$data(cols = self$select_cols(task))
       if (self$param_set$values$droplevels) {
         dt = droplevels(dt)
       }
       list(levels = lapply(dt, function(x) levels(x)))  # explicitly access the "levels" function
     },
 
-    transform_dt = function(dt, levels) {
-      imap(self$state$levels, function(levels, id) {
+    transform = function(task) {
+      dt = task$data(cols = names(self$state$levels))
+
+      # check which levels are actually different during training and prediction
+      needs_adjustment = as.logical(imap(self$state$levels, function(lvx, id) {
+        !identical(lvx, levels(dt[[id]]))
+      }))
+
+      if (!any(needs_adjustment)) {
+        return(task)
+      }
+
+      changed_cols = as.data.table(imap(self$state$levels[needs_adjustment], function(lvx, id) {
         x = dt[[id]]
         if (is.ordered(x)) {
-          ordered(x, levels = levels)
+          ordered(x, levels = lvx)
         } else {
-          factor(x, levels = levels)
+          factor(x, levels = lvx)
         }
-      })
+      }))
+      task$select(setdiff(task$feature_names, colnames(changed_cols)))$cbind(changed_cols)
     }
   )
 )
