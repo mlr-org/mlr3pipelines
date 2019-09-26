@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -89,11 +89,13 @@ Collate:
     'PipeOpClassBalancing.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
+    'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
     'PipeOpEncodeLmer.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
+    'PipeOpFixFactors.R'
     'PipeOpHistBin.R'
     'PipeOpICA.R'
     'PipeOpImpute.R'
