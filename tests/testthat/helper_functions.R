@@ -112,7 +112,7 @@ expect_pipeop = function(po) {
 # - *_internal checks for classes
 # - *_internal handles NO_OP as it should
 expect_pipeop_class = function(poclass, constargs = list()) {
-
+  skip_on_cran()
   po = do.call(poclass$new, constargs)
 
   expect_pipeop(po)

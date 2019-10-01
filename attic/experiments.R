@@ -39,6 +39,10 @@ testthat::test_package("mlr3pipelines", filter = "^_[n-s].*")
 testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 
 
+pofi = PipeOpFixFactors$new()
+
+
+
 pom = PipeOpMutate$new()
 
 pom$train(list(task))
