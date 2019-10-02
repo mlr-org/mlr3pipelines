@@ -45,7 +45,7 @@ The \code{$state} is a named \code{list} with the \code{$state} elements inherit
 \itemize{
 \item \code{impact} :: a named \code{list}\cr
 A list with an element for each affected feature:\cr
-For regression each element is a vector of impact values for each level of that feature.\cr
+For regression each element is a single column matrix of impact values for each level of that feature.\cr
 For classification, it is a list with an element for each \emph{feature level}, which is a vector giving the impact of
 this feature level on each \emph{outcome level}.
 }
@@ -58,6 +58,8 @@ this feature level on each \emph{outcome level}.
 A finite positive value used for smoothing. Mostly relevant for \link[mlr3:TaskClassif]{classification Tasks} if
 a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
 Initialized to \code{1e-4}.
+\item \code{impute_zero} :: \code{logical(1)}\cr
+If \code{TRUE}, impute missing values as impact 0; otherwise the respective impact is coded as \code{NA}. Default \code{FALSE}.
 }
 }
 

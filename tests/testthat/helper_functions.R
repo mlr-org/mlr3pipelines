@@ -143,7 +143,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 # check that a do.call(poclass$new, constargs) behaves as a preprocessing pipeop should.
 # This entails
 #  - expect_pipeop_class
-#  - input / output both have length 1, type "Task"
+#  - input / output both have length 1, type "Task" or a subclass
 #  - training on non-task gives error
 #  - predicting on non-task gives error
 #  - training twice gives the same result (if `deterministic_train`)
@@ -182,10 +182,10 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_equal(po$innum, 1)
   expect_equal(po$outnum, 1)
 
-  expect_equal(po$input$train, "Task")
-  expect_equal(po$input$predict, "Task")
-  expect_equal(po$output$train, "Task")
-  expect_equal(po$output$predict, "Task")
+  expect_true(are_types_compatible(po$input$train, "Task"))
+  expect_true(are_types_compatible(po$input$predict, "Task"))
+  expect_true(are_types_compatible(po$output$train, "Task"))
+  expect_true(are_types_compatible(po$output$predict, "Task"))
 
   expect_error(po$train(list(NULL)), "class.*Task.*but has class")
 
