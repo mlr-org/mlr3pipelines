@@ -79,8 +79,8 @@ poe = po("encodeimpact")
 
 task = TaskClassif$new("task",
   data.table::data.table(
-    x = c("a", "a", "a", "b", "b"),
-    y = c("a", "a", "b", "b", "b")),
+    x = factor(c("a", "a", "a", "b", "b")),
+    y = factor(c("a", "a", "b", "b", "b"))),
   "x")
 
 poe$train(list(task))[[1]]$data()
