@@ -51,9 +51,13 @@ poe$get_state(t2)
 poe$param_set$values$impute_zero = FALSE
 
 
-poe$train(list(tsk("boston_housing")))[[1]]$data()$town
+poe$train(list(tsk("boston_housing")))[[1]]$data()
+
+poe$predict(list(tsk("boston_housing")$clone()$filter(1)))[[1]]$data()
+
 poe$train(list(tsk("boston_housing")))[[1]]$data()
 poe$train(list(t2))[[1]]$data()
+poe$predict(list(t2$clone()$filter(1))[[1]]$data()
 
 poe$param_set$values$smoothing = 1e10
 
