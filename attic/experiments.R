@@ -20,7 +20,7 @@ tools::buildVignettes(dir = "mlr3pipelines")
 testthat::test_package("mlr3pipelines")
 devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "graphlearner")
+testthat::test_package("mlr3pipelines", filter = "classbalancing")
 testthat::test_package("mlr3pipelines", filter = "impute")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
@@ -57,7 +57,7 @@ poe$predict(list(tsk("boston_housing")$clone()$filter(1)))[[1]]$data()
 
 poe$train(list(tsk("boston_housing")))[[1]]$data()
 poe$train(list(t2))[[1]]$data()
-poe$predict(list(t2$clone()$filter(1))[[1]]$data()
+poe$predict(list(t2$clone()$filter(1)))[[1]]$data()
 
 poe$param_set$values$smoothing = 1e10
 
