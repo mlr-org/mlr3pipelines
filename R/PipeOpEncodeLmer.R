@@ -32,11 +32,11 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpEncodeLmer$new(id = "encode", param_vals = list())
+#' PipeOpEncodeLmer$new(id = "encodelmer", param_vals = list())
 #' ```
 #'
 #" * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"encode"`.
+#'   Identifier of resulting object, default `"encodelmer"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
 #'   otherwise be set during construction. Default `list()`.

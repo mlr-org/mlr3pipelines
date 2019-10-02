@@ -42,6 +42,20 @@ testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 pofi = PipeOpFixFactors$new()
 
 
+poe = PipeOpEncodeImpact$new()
+
+t2 = po("histbin")$train(list(tsk("iris")))[[1]]
+
+poe$get_state(tsk("boston_housing"))
+poe$get_state(t2)
+poe$param_set$values$impute_zero = FALSE
+
+
+poe$train(list(tsk("boston_housing")))[[1]]$data()$town
+poe$train(list(tsk("boston_housing")))[[1]]$data()
+poe$train(list(t2))[[1]]$data()
+
+poe$param_set$values$smoothing = 1e10
 
 pom = PipeOpMutate$new()
 
