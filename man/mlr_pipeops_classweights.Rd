@@ -75,12 +75,12 @@ task = tsk("spam")
 opb = po("classweights")
 
 # task weights
-task$weights()
+task$weights
 
 # double the instances in the minority class (spam)
 opb$param_set$values$minor_weight = 2
 result = opb$train(list(task))[[1L]]
-result$weights()
+result$weights
 
 }
 \seealso{
