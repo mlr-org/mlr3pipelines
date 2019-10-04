@@ -28,7 +28,6 @@ sudo: false
 dist: xenial
 cache: packages
 latex: true
-pandoc_version: 2.5
 
 env:
   global:
