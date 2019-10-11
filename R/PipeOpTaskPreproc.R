@@ -173,12 +173,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
-      affected_cols = intask$feature_names
+      feature_names = affected_cols = intask$feature_names
       if (do_subset) {
+        on.exit({ intask$feature_names = feature_names })
         affected_cols = self$param_set$values$affect_columns(intask)
-        # FIXME: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, affected_cols)
-        intask$set_col_role(remove_cols, character(0))
+        intask$select(affected_cols)
       }
       intasklayout = copy(intask$feature_types)
 
@@ -188,10 +187,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$intasklayout = intasklayout
       self$state$outtasklayout = copy(intask$feature_types)
 
-      if (do_subset) {
-        # FIXME: this fails if train_task added a column with the same name
-        intask$set_col_role(remove_cols, "feature")
-      }
       list(intask)
     },
 
@@ -199,10 +194,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
+
       if (do_subset) {
-        # FIXME: see train fixme: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, self$state$affected_cols)
-        intask$set_col_role(remove_cols, character(0))
+        feature_names = intask$feature_names
+        on.exit({ intask$feature_names = feature_names })
+        intask$select(self$state$affected_cols)
       }
       if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
@@ -211,10 +207,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
       if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
-      }
-      if (do_subset) {
-        # FIXME: see train fixme: this fails if train_task added a column with the same name
-        intask$set_col_role(remove_cols, "feature")
       }
       list(intask)
     },

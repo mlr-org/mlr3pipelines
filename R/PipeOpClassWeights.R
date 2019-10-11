@@ -80,25 +80,24 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
     train_task = function(task) {
 
-      if (length(levels(task$truth())) > 2) {
+      if ("twoclass" %nin% task$properties) {
         stop("Only binary classification Tasks are supported.")
       }
 
-      prior_weights = task$col_roles$weights
-      if (length(prior_weights)) {
-        task$set_col_role(prior_weights, character(0))
-      }
       weightcolname = ".WEIGHTS"
       if (weightcolname %in% unlist(task$col_roles)) {
-        stopf("Column '%s' is already in the Task and not a weight column; '.WEIGHTS' can therefore not be added.", weightcolname)
+        stopf("Weight column '%s' is already in the Task", weightcolname)
       }
 
       truth = task$truth()
       minor = names(which.min(table(task$truth())))
 
-      wcol = setNames(data.table(ifelse(truth == minor, self$param_set$values$minor_weight, 1)), weightcolname)
+      wcol = setnames(data.table(fifelse(truth == minor, self$param_set$values$minor_weight, 1)), weightcolname)
 
-      task$cbind(wcol)$set_col_role(weightcolname, "weights")
+      task$cbind(wcol)
+      task$col_roles$features = setdiff(task$col_roles$features, weightcolname)
+      task$col_roles$weights = weightcolname
+      task
     },
 
     predict_task = identity
