@@ -118,8 +118,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
     transform_dt = function(dt, levels) {
       cols = imap(self$state$contrasts, function(contrasts, id) {
         x = as.character(dt[[id]])
-        x[x %nin% rownames(contrasts)] = NA
-        contrasts[as.character(x), , drop = FALSE]
+        contrasts[match(x, rownames(contrasts)), , drop = FALSE]
       })
       cols = as.data.table(cols)
       setnames(cols, names(cols), make.names(names(cols), unique = TRUE))
