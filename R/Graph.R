@@ -300,12 +300,12 @@ Graph = R6Class("Graph",
         ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
         ig_data$edges$color = "lightblue"
         # Visualize the nodes
-        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "500px", width = "40%")
+        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "400px", width = "50%")
         p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full") 
 
         # Draw edges between points
         p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"), length = 400)
-        p
+        p 
       } else {
         suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
       }
