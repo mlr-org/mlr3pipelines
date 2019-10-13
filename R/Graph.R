@@ -305,7 +305,7 @@ Graph = R6Class("Graph",
         p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full") 
 
         # Draw edges between points
-        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"), length = 400)
+        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
         p 
       } else {
         suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
