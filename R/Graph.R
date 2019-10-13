@@ -83,6 +83,7 @@
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
+#'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Print a representation of the [`Graph`] on the console. Output is a table with one row for each contained [`PipeOp`] and
