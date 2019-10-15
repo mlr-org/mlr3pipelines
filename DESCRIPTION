@@ -65,6 +65,9 @@ Suggests:
     fastICA, 
     kernlab,
     smotefamily
+Remotes:
+    mlr-org/mlr3misc@repr,
+    mlr-org/mlr3@repr
 VignetteBuilder: 
     knitr
 ByteCompile: true
