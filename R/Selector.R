@@ -77,34 +77,9 @@ make_selector = function(fun, description, ...) {
   )
 }
 
-# Representation of character vector
-# letters[1]   --> '"a"'
-# letters[1:2] --> 'c("a", "b")'
-char_repr = function(x) {
-  output = str_collapse(x, sep = ", ", quote = '"')
-  if (length(x) == 0) {
-    "character(0)"
-  } else if (length(x) == 1) {
-    output
-  } else {
-    sprintf("c(%s)", output)
-  }
-}
-
-# Representation for a function that may or may not be a `Selector`.
-# If it is not, we just use deparse(), otherwise we use the repr as
-# reported by that selector.
-selector_repr = function(selector) {
-  if (test_string(attr(selector, "repr"))) {
-    attr(selector, "repr")
-  } else {
-    str_collapse(deparse(selector), sep = "\n")
-  }
-}
-
 #' @export
 print.Selector = function(x, ...) {
-  cat(paste0(attr(x, "repr"), "\n"))
+  cat(paste0(repr(x), "\n"))
 }
 
 #' @describeIn Selector `selector_all` selects all features.
@@ -128,7 +103,7 @@ selector_type = function(types) {
   assert_subset(types, mlr_reflections$task_feature_types)
   make_selector(function(task) {
     task$feature_types[get("type") %in% types, get("id")]
-  }, "selector_type(%s)", char_repr(types))
+  }, "selector_type(%s)", repr(types))
 }
 
 #' @describeIn Selector `selector_grep` selects features with names matching the `grep()` pattern.
@@ -169,7 +144,7 @@ selector_name = function(feature_names, assert_present = FALSE) {
       assert_subset(feature_names, task$feature_names)
     }
     intersect(task$feature_names, feature_names)
-  }, "selector_name(%s%s)", char_repr(feature_names), str_assert_present)
+  }, "selector_name(%s%s)", repr(feature_names), str_assert_present)
 }
 
 #' @describeIn Selector `selector_invert` inverts a given [`Selector`]: It always selects the features

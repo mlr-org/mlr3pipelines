@@ -185,6 +185,7 @@
 #' @family PipeOps
 #' @export
 PipeOp = R6Class("PipeOp",
+  inherits = "Representable_In_Dict",
   public = list(
     packages = NULL,
     state = NULL,
@@ -206,6 +207,7 @@ PipeOp = R6Class("PipeOp",
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
+      super$initialize()
     },
 
     print = function(...) {
