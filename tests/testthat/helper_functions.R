@@ -38,6 +38,9 @@ expect_deep_clone = function(one, two) {
       if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
         return(invisible(NULL))  # don't check if smth is not cloneable
       }
+      if (identical(utils::tail(path, 1), c("[element train_task] 'train_task'"))) {
+        return(invisible(NULL))  # workaround for https://github.com/mlr-org/mlr3/issues/382
+      }
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
       expect_null(visited_b[[addr_a]], label = label)
