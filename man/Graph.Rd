@@ -92,6 +92,7 @@ are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
 (\code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
 the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}}.
+The \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
 \item \code{print()} \cr
 () -> \code{NULL} \cr
 Print a representation of the \code{\link{Graph}} on the console. Output is a table with one row for each contained \code{\link{PipeOp}} and

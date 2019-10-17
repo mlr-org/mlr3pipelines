@@ -83,6 +83,7 @@
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
+#'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Print a representation of the [`Graph`] on the console. Output is a table with one row for each contained [`PipeOp`] and
@@ -300,17 +301,12 @@ Graph = R6Class("Graph",
         ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
         ig_data$edges$color = "lightblue"
         # Visualize the nodes
-        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
-
-        if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) {
-         # Bug in visNetwork? See: https://github.com/datastorm-open/visNetwork/issues/327
-          p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
-        } else {
-          p = visNetwork::visIgraphLayout(p, layout = "layout_with_kk", type = "full")
-        }
+        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "400px", width = "50%")
+        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full") 
 
         # Draw edges between points
-        visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+        p 
       } else {
         suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
       }
