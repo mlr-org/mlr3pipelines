@@ -21,7 +21,7 @@ testthat::test_package("mlr3pipelines")
 devtools::run_examples("mlr3pipelines")
 
 testthat::test_package("mlr3pipelines", filter = "classbalancing")
-testthat::test_package("mlr3pipelines", filter = "impute")
+testthat::test_package("mlr3pipelines", filter = "encode")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
 testthat::test_package("mlr3pipelines", filter = "conversion")

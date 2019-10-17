@@ -69,7 +69,9 @@ This shows the most important primitives incorporated in a `PipeOp`:
 - **`$state`**, the "model" trained with `$train()` and utilised during `$predict()`.
 
 Schematically we can represent the `PipeOp` like so:
-![PipeOp](figures/po_viz.png){ width=70% }
+```{r,echo=FALSE}
+knitr::include_graphics("figures/po_viz.png")
+```
 
 ### Why the `$state`
 
@@ -126,7 +128,9 @@ mlr_pipeops$get("chunk", outnum = 3)$output
 ```
 
 Note that the number of output channels during training and prediction is the same. A schema of a `PipeOp` with two output channels:
-![PipeOp with two output channels](figures/po_multi_alone.png){ width=90% }
+```{r,echo=FALSE}
+knitr::include_graphics("figures/po_multi_alone.png")
+```
 
 
 ### Channel Configuration
@@ -145,7 +149,9 @@ The default printer of a `PipeOp` gives information about channel names and type
 What is the advantage of this tedious way of declaring input and output channels and handling in/output through lists? Because each `PipeOp` has a known number of input and output channels that always produce or accept data of a known type, it is possible to network them together in **`Graph`**s. A `Graph` is a collection of `PipeOp`s with "edges" that mandate that data should be flowing along them. Edges always pass between `PipeOp` *channels*, so it is not only possible to explicitly prescribe which position of an input or output list an edge refers to, it makes it possible to make different components of a `PipeOp`'s output flow to multiple different other `PipeOp`s, as well as to have a `PipeOp` gather its input from multiple other `PipeOp`s.
 
 A schema of a simple graph of `PipeOp`s:
-![Simple network of pipeops](figures/po_multi_viz.png){ width=100% }
+```{r,echo=FALSE}
+knitr::include_graphics("figures/po_multi_viz.png")
+```
 
 
 A `Graph` is empty when first created, and `PipeOp`s can be added using the **`$add_pipeop()`** method. The **`$add_edge()`** method is used to create connections between them. While the printer of a `Graph` gives some information about its layout, the most intuitive way of visualizing it is using the `$plot()` function.
