@@ -60,12 +60,14 @@ Suggests:
     rmarkdown,
     rpart,
     testthat,
-    visNetwork, 
+    visNetwork,
     bestNormalize,
-    fastICA, 
+    fastICA,
     kernlab,
     smotefamily
-VignetteBuilder: 
+Remotes:
+    mlr-org/mlr3
+VignetteBuilder:
     knitr
 ByteCompile: true
 Encoding: UTF-8
