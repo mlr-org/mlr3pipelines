@@ -1,6 +1,8 @@
 
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
+Dataflow Programming for Machine Learning in R.
+
 [![Travis build
 status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
 [![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
@@ -51,7 +53,6 @@ resample(tsk("iris"), glrn, rsmp("cv"))
 #> <ResampleResult> of 10 iterations
 #> * Task: iris
 #> * Learner: pca.variance.classif.rpart
-#> * Performance: 0.060 [classif.ce]
 #> * Warnings: 0 in 0 iterations
 #> * Errors: 0 in 0 iterations
 ```
@@ -81,8 +82,7 @@ shipped with the package, which can also be viewed online:
     with short examples to get started
   - [Detailed
     Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html),
-    diving into concepts and describing the objects
-    involved
+    diving into concepts and describing the objects involved
   - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
     of `mlr3pipelines` with other packages (not yet authoritative)
   - [Writing Custom
