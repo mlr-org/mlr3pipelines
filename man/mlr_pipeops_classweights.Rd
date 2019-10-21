@@ -81,7 +81,6 @@ task$weights
 opb$param_set$values$minor_weight = 2
 result = opb$train(list(task))[[1L]]
 result$weights
-
 }
 \seealso{
 Other PipeOps: \code{\link{PipeOpEnsemble}},

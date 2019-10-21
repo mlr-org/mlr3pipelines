@@ -65,7 +65,6 @@
 #' opb$param_set$values$minor_weight = 2
 #' result = opb$train(list(task))[[1L]]
 #' result$weights
-#'
 PipeOpClassWeights = R6Class("PipeOpClassWeights",
   inherit = PipeOpTaskPreproc,
 
@@ -84,7 +83,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
         stop("Only binary classification Tasks are supported.")
       }
 
-      prior_weights = task$col_roles$weights
+      prior_weights = task$col_roles$weight
       if (length(prior_weights)) {
         task$set_col_role(prior_weights, character(0))
       }
@@ -98,7 +97,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
       wcol = setNames(data.table(ifelse(truth == minor, self$param_set$values$minor_weight, 1)), weightcolname)
 
-      task$cbind(wcol)$set_col_role(weightcolname, "weights")
+      task$cbind(wcol)$set_col_role(weightcolname, "weight")
     },
 
     predict_task = identity
