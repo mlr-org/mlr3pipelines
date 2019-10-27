@@ -123,4 +123,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
                            )
 )
 
-mlr_pipeops$add("imputelearner", PipeOpImputeLearner)
+mlr_pipeops$add("imputelearner", PipeOpImputeLearner,
+                list(learner = R6Class("Learner", public = list(id = "learner",
+                                                                task_type = "regr",
+                                                                param_set = ParamSet$new()))$new()))
