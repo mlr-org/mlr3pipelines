@@ -9,7 +9,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImputeLearner$new(id = "imputelearner", param_vals = list())
+#' PipeOpImputeLearner$new(id = "imputelearner", learner,  param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -58,41 +58,68 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
                            public = list(
                              initialize = function(id = "imputelearner", learner, param_vals = list()) {
                                private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
+                               private$.imp_tsk = if(private$.learner$task_type == "regr") TaskRegr else TaskClassif
 
                                super$initialize(id, param_vals = param_vals, whole_task_dependent = TRUE)
                              },
 
-                             select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
+                             select_cols = function(task) {
+                               # Choose columns to impute based on the supplied learner
+                               if(private$.learner$task_type == "regr"){
+                                 task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+                               } else {
+                                 task$feature_types[get("type") %in% c("logical", "character", "factor", "ordered"), get("id")]
+                               }
+                             },
 
                              train_imputer = function(feature, type, context) {
+                               # TODO deal with fully missing feature
 
-                               if (all(is.na(feature))) {
-                                 pred = rep(0, length(feature))
-                               } else {
-                                 # TODO add check for missing variables in the imputation predictors
-                                 context$impute_col = feature
-                                 task = TaskRegr$new(id = "taskimpute", backend = context, target = "impute_col")
-                                 private$.learner$train(task)
-
-                                 pred = private$.learner$predict(task)
-                               }
-
-                               if (type == "integer") {
-                                 pred = as.integer(round(pred))
-                               }
-
-                               pred
+                               task = private$.create_imputation_task(feature, context)
+                               private$.learner$train(task, row_ids = which(!is.na(feature)))
                              },
 
                              impute = function(feature, type, model, context) {
-                               feature[is.na(feature)] = model$response[is.na(feature)]
+                               # Use the trained learner to perform the imputation
+                               task = private$.create_imputation_task(feature, context)
+                               pred = model$predict(task)
+
+                               # Replace the missing values with imputed values of the correct format
+                               imp_vals = pred$response[is.na(feature)]
+                               imp_vals = private$.convert_to_target(imp_vals, type)
+
+                               feature[is.na(feature)] = imp_vals
                                feature
                              }
                            ),
 
                            private = list(
-                             .affectcols_ps = NULL,
-                             .learner = NULL
+                             .learner = NULL,
+                             .imp_tsk = NULL,
+                             .create_imputation_task = function(feature, context){
+                               # Create a task that can be used by the learner based on imputation context
+                               context[['impute_col']] = private$.convert_to_predictable(feature)
+                               private$.imp_tsk$new(id = "taskimpute",
+                                                    backend = context,
+                                                    target = "impute_col")
+                             },
+                             .convert_to_predictable = function(feature){
+                               # Convert non-factor imputation targets to a factor
+                               if(is.numeric(feature)){
+                                 feature
+                               } else {
+                                 factor(feature, ordered = FALSE)
+                               }
+                             },
+                             .convert_to_target = function(feature, type){
+                               # Convert an imputed feature to its original type
+                               if(type == "integer"){
+                                 feature = round(feature)
+                               }
+
+                               func = paste0("as.", type)
+                               do.call(func, args = list(feature))
+                             }
                            )
 )
 

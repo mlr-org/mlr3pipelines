@@ -102,6 +102,7 @@ Collate:
     'PipeOpICA.R'
     'PipeOpImpute.R'
     'PipeOpImputeHist.R'
+    'PipeOpImputeLearner.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
     'PipeOpImputeNewlvl.R'
