@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Linearily transforms numeric data columns so they are between `lower` and `upper`.
+#' Linearly transforms numeric data columns so they are between `lower` and `upper`.
 #' The formula for this is \eqn{x' = a + x * b},
 #' where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
 #' \eqn{a} is \eqn{-min(x) * b + lower}.

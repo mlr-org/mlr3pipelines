@@ -66,7 +66,7 @@ used following a set of \code{\link{PipeOpLearner}} \code{\link{PipeOp}}s to per
 
 Should it be necessary to use the output of preceding \code{\link[mlr3:Learner]{Learner}}s
 during the "training" phase, then \code{\link{PipeOpEnsemble}} should not be used. In fact, if training time behaviour of a \code{\link[mlr3:Learner]{Learner}} is important, then
-one should use a \code{\link{PipeOpLearnerCV}} instead of a \code{\link{PipeOpLearner}}, and the ensembling can be done by a \code{\link[mlr3:Learner]{Learner}} encapsuled by a \code{\link{PipeOpLearner}}.
+one should use a \code{\link{PipeOpLearnerCV}} instead of a \code{\link{PipeOpLearner}}, and the ensemble can be created with a \code{\link[mlr3:Learner]{Learner}} encapsulated by a \code{\link{PipeOpLearner}}.
 See \code{\link{LearnerClassifAvg}} and \code{\link{LearnerRegrAvg}} for examples.
 }
 

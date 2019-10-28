@@ -31,7 +31,7 @@
 #'   The mean of each numeric feature during training, or 0 if `center` is `FALSE`. Will be subtracted during the predict phase.
 #' * `scale` :: `numeric`\cr
 #'   The root mean square, defined as `sqrt(sum(x^2)/(length(x)-1))`, of each feature during training, or 1 if `scale` is FALSE.
-#'   During predict phase, feaatures are divided by this.\cr
+#'   During predict phase, features are divided by this.\cr
 #'   This is 1 for features that are constant during training if `center` is `TRUE`, to avoid division-by-zero.
 #'
 #' @section Parameters:

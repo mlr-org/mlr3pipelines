@@ -24,7 +24,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features replaced by their binded versions.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features replaced by their binned versions.
 }
 
 \section{State}{

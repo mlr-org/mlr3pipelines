@@ -14,7 +14,7 @@
 #' for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`).
 #' Learned weights can be obtained from `$model`.
 #' Using non-linear optimization is implemented in the SuperLearner R package.
-#' For a more detailed analysis the reader is refered to
+#' For a more detailed analysis the reader is referred to
 #' *LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation*.
 #'
 #' @section Parameter Set:

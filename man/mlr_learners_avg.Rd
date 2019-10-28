@@ -23,7 +23,7 @@ nonlinear optimization from the package "nloptr" for a measure provided in \code
 for \code{LearnerClassifAvg} and \code{regr.mse} for \code{LearnerRegrAvg}).
 Learned weights can be obtained from \code{$model}.
 Using non-linear optimization is implemented in the SuperLearner R package.
-For a more detailed analysis the reader is refered to
+For a more detailed analysis the reader is referred to
 \emph{LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation}.
 }
 \section{Parameter Set}{

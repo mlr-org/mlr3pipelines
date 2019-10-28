@@ -78,7 +78,7 @@
 #' * `select_cols(task)` \cr
 #'   ([`Task`][mlr3::Task]) -> `character` \cr
 #'   Selects which columns the [`PipeOp`] operates on. In contrast to
-#'   the `affect_columns` parameter. `select_cols` is for the *ineriting class* to determine which columns
+#'   the `affect_columns` parameter. `select_cols` is for the *inheriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.
 #' * `train_imputer(feature, type, context)`\cr

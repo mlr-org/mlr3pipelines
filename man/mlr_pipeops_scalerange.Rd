@@ -7,7 +7,7 @@
 \title{PipeOpScaleRange}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
-Linearily transforms numeric data columns so they are between \code{lower} and \code{upper}.
+Linearly transforms numeric data columns so they are between \code{lower} and \code{upper}.
 The formula for this is \eqn{x' = a + x * b},
 where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
 \eqn{a} is \eqn{-min(x) * b + lower}.

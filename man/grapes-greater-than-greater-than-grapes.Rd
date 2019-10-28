@@ -37,7 +37,7 @@ To access individual \code{\link{PipeOp}}s after composition, use the resulting 
 
 Both arguments of \code{\%>>\%} are automatically converted to \code{\link{Graph}}s using \code{\link[=as_graph]{as_graph()}}; this means that objects on either side may be objects
 that can be automatically converted to \code{\link{PipeOp}}s (such as \code{\link[mlr3:Learner]{Learner}}s or \code{\link[mlr3filters:Filter]{Filter}}s), or that can
-be converted to \code{\link{Graph}}s. This means, in particular, \code{list}s of \code{\link{Graph}}s, \code{\link{PipeOp}}s or objects convertable to that, because
+be converted to \code{\link{Graph}}s. This means, in particular, \code{list}s of \code{\link{Graph}}s, \code{\link{PipeOp}}s or objects convertible to that, because
 \code{\link[=as_graph]{as_graph()}} automatically applies \code{\link[=gunion]{gunion()}} to \code{list}s. See examples.
 }
 \examples{

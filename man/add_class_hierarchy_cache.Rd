@@ -7,7 +7,7 @@
 add_class_hierarchy_cache(hierarchy)
 }
 \arguments{
-\item{hierarchy}{\code{character} the class hieararchy to add; should
+\item{hierarchy}{\code{character} the class hierarchy to add; should
 correspond to the \code{class()} of the lowest object in the hierarchy.}
 }
 \value{

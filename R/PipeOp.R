@@ -7,13 +7,13 @@
 #' @format Abstract [`R6Class`].
 #'
 #' @description
-#' A [`PipeOp`] represents a tranformation of a given "input" into a given "output", with two stages: "training"
+#' A [`PipeOp`] represents a transformation of a given "input" into a given "output", with two stages: "training"
 #' and "prediction". It can be understood as a generalized function that not only has multiple inputs, but
 #' also multiple outputs (as well as two stages). The "training" stage is used when training a machine learning pipeline or
 #' fitting a statistical model, and the "predicting" stage is then used for making predictions
 #' on new data.
 #'
-#' To perform training, the `$train()` function is called which takes inputs and tranforms them, while simultaneously storing information
+#' To perform training, the `$train()` function is called which takes inputs and transforms them, while simultaneously storing information
 #' in its `$state` slot. For prediction, the `$predict()` function is called, where the `$state` information can be used to influence the transformation
 #' of the new data.
 #'

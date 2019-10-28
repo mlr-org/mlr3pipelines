@@ -136,7 +136,7 @@
 #'   ([`Task`][mlr3::Task]) -> `character` \cr
 #'   Selects which columns the [`PipeOp`] operates on, if `$train_dt()` and `$predict_dt()` are overloaded. This function
 #'   is not called if `$train_task()` and `$predict_task()` are overloaded. In contrast to
-#'   the `affect_columns` parameter. `select_cols` is for the *ineriting class* to determine which columns
+#'   the `affect_columns` parameter. `select_cols` is for the *inheriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.\cr
 #'   This method can optionally be overloaded when inheriting [`PipeOpTaskPreproc`], together with `$train_dt()` and

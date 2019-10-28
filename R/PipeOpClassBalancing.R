@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Both undersamples a [`Task`][mlr3::Task] to keep only a fraction of the rows of the majority class,
-#' as well as oversamples (repeats datapoints) rows of the minority class.
+#' as well as oversamples (repeats data points) rows of the minority class.
 #'
 #' Sampling happens only during training phase. Class-balancing a [`Task`][mlr3::Task] by sampling may be
 #' beneficial for classification with imbalanced training data.

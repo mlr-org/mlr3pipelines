@@ -8,7 +8,7 @@
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
 Both undersamples a \code{\link[mlr3:Task]{Task}} to keep only a fraction of the rows of the majority class,
-as well as oversamples (repeats datapoints) rows of the minority class.
+as well as oversamples (repeats data points) rows of the minority class.
 
 Sampling happens only during training phase. Class-balancing a \code{\link[mlr3:Task]{Task}} by sampling may be
 beneficial for classification with imbalanced training data.

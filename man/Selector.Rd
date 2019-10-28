@@ -70,7 +70,7 @@ Second \code{\link{Selector}} to query.}
 A \code{\link{Selector}} function is used by different \code{\link{PipeOp}}s, most prominently \code{\link{PipeOpSelect}} and many \code{\link{PipeOp}}s inheriting
 from \code{\link{PipeOpTaskPreproc}}, to determine a subset of \code{\link[mlr3:Task]{Task}}s to operate on.
 
-Even though a \code{\link{Selector}} is a \code{function} that can be written itself, it is preferrable to use the \code{\link{Selector}} constructors
+Even though a \code{\link{Selector}} is a \code{function} that can be written itself, it is preferable to use the \code{\link{Selector}} constructors
 shown here. Each of these can be called with its arguments to create a \code{\link{Selector}}, which can then be given to the \code{\link{PipeOpSelect}}
 \code{selector} parameter, or many \code{\link{PipeOpTaskPreproc}}s' \code{affect_columns} parameter. See there for examples of this usage.
 }
@@ -126,7 +126,7 @@ A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as 
 }
 }
 
-It is preferrable to use the \code{\link{Selector}} construction functions like \code{select_type}, \code{select_grep} etc. if possible, instead of writing custom \code{\link{Selector}}s.
+It is preferable to use the \code{\link{Selector}} construction functions like \code{select_type}, \code{select_grep} etc. if possible, instead of writing custom \code{\link{Selector}}s.
 }
 
 \examples{
