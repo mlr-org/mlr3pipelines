@@ -19,8 +19,7 @@ selector_none()
 
 selector_type(types)
 
-selector_grep(pattern, ignore.case = FALSE, perl = FALSE,
-  fixed = FALSE)
+selector_grep(pattern, ignore.case = FALSE, perl = FALSE, fixed = FALSE)
 
 selector_name(feature_names, assert_present = FALSE)
 
@@ -64,13 +63,13 @@ First \code{\link{Selector}} to query.}
 Second \code{\link{Selector}} to query.}
 }
 \value{
-\code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
+\verb{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
 }
 \description{
 A \code{\link{Selector}} function is used by different \code{\link{PipeOp}}s, most prominently \code{\link{PipeOpSelect}} and many \code{\link{PipeOp}}s inheriting
 from \code{\link{PipeOpTaskPreproc}}, to determine a subset of \code{\link[mlr3:Task]{Task}}s to operate on.
 
-Even though a \code{\link{Selector}} is a \code{function} that can be written itself, it is preferable to use the \code{\link{Selector}} constructors
+Even though a \code{\link{Selector}} is a \verb{function} that can be written itself, it is preferable to use the \code{\link{Selector}} constructors
 shown here. Each of these can be called with its arguments to create a \code{\link{Selector}}, which can then be given to the \code{\link{PipeOpSelect}}
 \code{selector} parameter, or many \code{\link{PipeOpTaskPreproc}}s' \code{affect_columns} parameter. See there for examples of this usage.
 }
@@ -103,27 +102,27 @@ by \code{selector_y}.
 
 \section{Details}{
 
-A \code{\link{Selector}} is a \code{function}
+A \code{\link{Selector}} is a \verb{function}
 that has one input argument (commonly named \code{task}). The function is called with the \code{\link[mlr3:Task]{Task}} that a \code{\link{PipeOp}}
 is operating on. The return value of the function must be a \code{character} vector that is a subset of the feature names present
 in the \code{\link[mlr3:Task]{Task}}.
 
-For example, a \code{\link{Selector}} that selects all columns is\preformatted{function(task) {
+For example, a \code{\link{Selector}} that selects all columns is\preformatted{function(task) \{
   task$feature_names
-}
+\}
 }
 
 (this is the \code{selector_all()}-\code{\link{Selector}}.) A \code{\link{Selector}} that selects
-all columns that have names shorter than four letters would be:\preformatted{function(task) {
+all columns that have names shorter than four letters would be:\preformatted{function(task) \{
   task$feature_names[
     nchar(task$feature_names) < 4
   ]
-}
+\}
 }
 
-A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:mlr_tasks_iris]{"iris"-Task}), if present, is\preformatted{function(task) {
+A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:mlr_tasks_iris]{\code{"iris"}-Task}), if present, is\preformatted{function(task) \{
   intersect(task$feature_names, "Sepal.Length")
-}
+\}
 }
 
 It is preferable to use the \code{\link{Selector}} construction functions like \code{select_type}, \code{select_grep} etc. if possible, instead of writing custom \code{\link{Selector}}s.
@@ -156,6 +155,7 @@ selgf(iris_task)
 selgf(bh_task)
 }
 \seealso{
-Other Selectors: \code{\link{mlr_pipeops_select}}
+Other Selectors: 
+\code{\link{mlr_pipeops_select}}
 }
 \concept{Selectors}

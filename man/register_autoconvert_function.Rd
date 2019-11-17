@@ -9,7 +9,7 @@ register_autoconvert_function(cls, fun, packages = character(0))
 \arguments{
 \item{cls}{\code{character(1)} The class that \code{fun} converts to.}
 
-\item{fun}{\code{function} The conversion function. Must take one
+\item{fun}{\verb{function} The conversion function. Must take one
 argument and return an object of class \code{cls}, or possibly
 a sub-class as recognized by \code{are_types_compatible()}.}
 
@@ -33,8 +33,9 @@ a desired type.
 register_autoconvert_function("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
 }
 \seealso{
-Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},
-  \code{\link{reset_autoconvert_register}},
-  \code{\link{reset_class_hierarchy_cache}}
+Other class hierarchy operations: 
+\code{\link{add_class_hierarchy_cache}()},
+\code{\link{reset_autoconvert_register}()},
+\code{\link{reset_class_hierarchy_cache}()}
 }
 \concept{class hierarchy operations}
