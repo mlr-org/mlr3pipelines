@@ -25,7 +25,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with features removed that were not selected by the \code{\link{Selector}}/\verb{function} in \code{selector}.
+The output is the input \code{\link[mlr3:Task]{Task}} with features removed that were not selected by the \code{\link{Selector}}/\code{function} in \code{selector}.
 }
 
 \section{State}{
@@ -40,7 +40,7 @@ A vector of all feature names that are kept (i.e. not dropped) in the \code{\lin
 \section{Parameters}{
 
 \itemize{
-\item \code{selector} :: \verb{function} | \code{\link{Selector}} \cr
+\item \code{selector} :: \code{function} | \code{\link{Selector}} \cr
 \code{\link{Selector}} function, takes a \code{Task} as argument and returns a \code{character}
 of features to keep.\cr
 See \code{\link{Selector}} for example functions. Defaults to \code{selector_all()}.

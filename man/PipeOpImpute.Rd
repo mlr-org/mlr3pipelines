@@ -65,12 +65,12 @@ Model used for imputation. This is a list named by \code{\link[mlr3:Task]{Task}}
 \section{Parameters}{
 
 \itemize{
-\item \code{affect_columns} :: \verb{function} | \code{\link{Selector}} | \code{NULL} \cr
+\item \code{affect_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
 What columns the \code{\link{PipeOpImpute}} should operate on.
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}
 of features to use.\cr
 See \code{\link{Selector}} for example functions. Defaults to \code{NULL}, which selects all features.
-\item \code{context_columns} :: \verb{function} | \code{\link{Selector}} | \code{NULL} \cr
+\item \code{context_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
 What columns the \code{\link{PipeOpImpute}} imputation may depend on. This parameter is only present if the constructor is called with
 the \code{whole_task_dependent} argument set to \code{TRUE}.\cr
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}

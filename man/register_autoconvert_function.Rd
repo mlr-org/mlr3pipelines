@@ -9,7 +9,7 @@ register_autoconvert_function(cls, fun, packages = character(0))
 \arguments{
 \item{cls}{\code{character(1)} The class that \code{fun} converts to.}
 
-\item{fun}{\verb{function} The conversion function. Must take one
+\item{fun}{\code{function} The conversion function. Must take one
 argument and return an object of class \code{cls}, or possibly
 a sub-class as recognized by \code{are_types_compatible()}.}
 

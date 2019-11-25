@@ -50,7 +50,7 @@ Number of principal components to return. Default 0 means that all
 principal components are returned. See \code{\link[kernlab:kpca]{kpca()}}.
 \item \code{th} :: \code{numeric(1)}\cr
 The value of eigenvalue under which principal components are ignored. Default is 0.0001. See \code{\link[kernlab:kpca]{kpca()}}.
-\item \code{na.action} :: \verb{function}\cr
+\item \code{na.action} :: \code{function}\cr
 Function to specify NA action. Default is \code{\link{na.omit}}. See \code{\link[kernlab:kpca]{kpca()}}.
 }
 }

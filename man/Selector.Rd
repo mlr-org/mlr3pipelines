@@ -63,13 +63,13 @@ First \code{\link{Selector}} to query.}
 Second \code{\link{Selector}} to query.}
 }
 \value{
-\verb{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
+\code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
 }
 \description{
 A \code{\link{Selector}} function is used by different \code{\link{PipeOp}}s, most prominently \code{\link{PipeOpSelect}} and many \code{\link{PipeOp}}s inheriting
 from \code{\link{PipeOpTaskPreproc}}, to determine a subset of \code{\link[mlr3:Task]{Task}}s to operate on.
 
-Even though a \code{\link{Selector}} is a \verb{function} that can be written itself, it is preferable to use the \code{\link{Selector}} constructors
+Even though a \code{\link{Selector}} is a \code{function} that can be written itself, it is preferable to use the \code{\link{Selector}} constructors
 shown here. Each of these can be called with its arguments to create a \code{\link{Selector}}, which can then be given to the \code{\link{PipeOpSelect}}
 \code{selector} parameter, or many \code{\link{PipeOpTaskPreproc}}s' \code{affect_columns} parameter. See there for examples of this usage.
 }
@@ -102,7 +102,7 @@ by \code{selector_y}.
 
 \section{Details}{
 
-A \code{\link{Selector}} is a \verb{function}
+A \code{\link{Selector}} is a \code{function}
 that has one input argument (commonly named \code{task}). The function is called with the \code{\link[mlr3:Task]{Task}} that a \code{\link{PipeOp}}
 is operating on. The return value of the function must be a \code{character} vector that is a subset of the feature names present
 in the \code{\link[mlr3:Task]{Task}}.

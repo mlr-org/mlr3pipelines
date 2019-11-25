@@ -50,7 +50,7 @@ to produce a correct type conversion during prediction, even when the input has 
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{applicator} :: \verb{function}\cr
+\item \code{applicator} :: \code{function}\cr
 Function to apply to each column of the task. The return value must have the
 same length as the input, i.e. vectorize over the input. A typical example would be \code{as.numeric}.
 Use \code{\link[base:Vectorize]{Vectorize}} to create a vectorizing function from any function that

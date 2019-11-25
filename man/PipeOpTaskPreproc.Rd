@@ -87,7 +87,7 @@ and not present if the \verb{$train_task()} function is overloaded instead.
 \section{Parameters}{
 
 \itemize{
-\item \code{affect_columns} :: \verb{function} | \code{\link{Selector}} | \code{NULL} \cr
+\item \code{affect_columns} :: \code{function} | \code{\link{Selector}} | \code{NULL} \cr
 What columns the \code{\link{PipeOpTaskPreproc}} should operate on. This parameter is only present if the constructor is called with
 the \code{can_subset_cols} argument set to \code{TRUE} (the default).\cr
 The parameter must be a \code{\link{Selector}} function, which takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character}

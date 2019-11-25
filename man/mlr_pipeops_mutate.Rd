@@ -50,8 +50,8 @@ present features may still be overwritten. Initialized to \code{FALSE}.
 
 \section{Internals}{
 
-A \code{formula} created using the \verb{~} operator always contains a reference to the \code{environment} in which
-the \code{formula} is created. This makes it possible to use variables in the \verb{~}-expressions that both
+A \code{formula} created using the \code{~} operator always contains a reference to the \code{environment} in which
+the \code{formula} is created. This makes it possible to use variables in the \code{~}-expressions that both
 reference either column names or variable names.
 }
 

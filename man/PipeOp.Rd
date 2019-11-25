@@ -76,7 +76,7 @@ ID of the \code{\link{PipeOp}}. IDs are user-configurable, and IDs of \code{\lin
 \code{\link{PipeOp}}s must not be changed once they are part of a \code{\link{Graph}}, instead the \code{\link{Graph}}'s \verb{$set_names()} method
 should be used.
 \item \code{packages} :: \code{character}\cr
-Packages required for the \code{\link{PipeOp}}. Functions that are not in base R should still be called using \verb{::}
+Packages required for the \code{\link{PipeOp}}. Functions that are not in base R should still be called using \code{::}
 (or explicitly attached using \code{require()}) in \verb{$train_internal()} \emph{and} \verb{$predict_internal()}, but
 packages declared here are checked before any (possibly expensive) processing has started within a \code{\link{Graph}}.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr

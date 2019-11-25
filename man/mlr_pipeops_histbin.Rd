@@ -40,11 +40,11 @@ List of intervals representing the bins for each numeric feature.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{bins} :: \code{character(1)} | \code{numeric} | \verb{function} \cr
+\item \code{bins} :: \code{character(1)} | \code{numeric} | \code{function} \cr
 Either a \code{character(1)} string naming an algorithm to compute the number of cells,
 a \code{numeric(1)} giving the number of breaks for the histogram,
 a vector \code{numeric} giving the breakpoints between the histogram cells, or
-a \verb{function} to compute the vector of breakpoints or to compute the number
+a \code{function} to compute the vector of breakpoints or to compute the number
 of cells. Default is algorithm \code{"Sturges"} (see \code{\link[grDevices:nclass.Sturges]{grDevices::nclass.Sturges()}}).
 For details see \code{\link[graphics:hist]{hist()}}.
 }
