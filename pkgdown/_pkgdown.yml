@@ -7,16 +7,16 @@ template:
   default_assets: false
 
 development:
-  destination: dev
+  mode: auto
   version_label: default
-  version_tooltip: "Development version"
+  version_tooltip: "Version"
 
 toc:
   depth: 3
 
 navbar:
   structure:
-    left:  [articles, reference, news]
+    left:  [articles, reference, news, book]
     right: [github, slack, stackoverflow, rss]
   components:
     home: ~
@@ -30,6 +30,10 @@ navbar:
     slack:
       icon: fab fa-slack
       href: https://mlr-org.slack.com
+    book:
+      text: mlr3book
+      icon: fa fa-link
+      href: https://mlr3book.mlr-org.com
     stackoverflow:
       icon: fab fa-stack-overflow
       href: https://stackoverflow.com/questions/tagged/mlr
