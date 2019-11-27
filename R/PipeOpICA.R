@@ -24,7 +24,7 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric parameters replaced by independent components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the [`"fastICA"` function][fastICA::fastICA],
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the function [fastICA::fastICA()],
 #' with the exception of the `$X` and `$S` slots. These are in particular:
 #' * `K` :: `matrix`\cr
 #'   Matrix that projects data onto the first `n.comp` principal components.

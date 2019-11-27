@@ -30,7 +30,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}},
-as well as the returned \code{\link{S4}} object of the \link[kernlab:kpca]{\code{"kpca"} function}.
+as well as the returned \code{\link{S4}} object of the function \code{\link[kernlab:kpca]{kernlab::kpca()}}.
 
 The \verb{@rotated} slot of the \code{"kpca"} object is overwritten with an empty matrix for memory efficiency.
 

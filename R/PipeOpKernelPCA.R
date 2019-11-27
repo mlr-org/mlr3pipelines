@@ -25,7 +25,7 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`],
-#' as well as the returned [`S4`] object of the [`"kpca"` function][kernlab::kpca].
+#' as well as the returned [`S4`] object of the function [kernlab::kpca()].
 #'
 #' The `@rotated` slot of the `"kpca"` object is overwritten with an empty matrix for memory efficiency.
 #'

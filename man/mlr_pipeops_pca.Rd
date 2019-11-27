@@ -29,7 +29,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the \link[stats:prcomp]{\code{"prcomp"} class},
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the class \link[stats:prcomp]{stats::prcomp},
 with the exception of the \verb{$x} slot. These are in particular:
 \itemize{
 \item \code{sdev} :: \code{numeric}\cr

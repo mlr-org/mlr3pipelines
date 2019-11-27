@@ -29,7 +29,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the \link[fastICA:fastICA]{\code{"fastICA"} function},
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the function \code{\link[fastICA:fastICA]{fastICA::fastICA()}},
 with the exception of the \verb{$X} and \verb{$S} slots. These are in particular:
 \itemize{
 \item \code{K} :: \code{matrix}\cr

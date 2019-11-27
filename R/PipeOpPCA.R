@@ -24,7 +24,7 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their principal components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the [`"prcomp"` class][stats::prcomp],
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [stats::prcomp],
 #' with the exception of the `$x` slot. These are in particular:
 #' * `sdev` :: `numeric`\cr
 #'   The standard deviations of the principal components.

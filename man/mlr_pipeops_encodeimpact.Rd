@@ -8,11 +8,11 @@
 \description{
 Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
 
-Impact coding for \link[mlr3:TaskClassif]{classification \code{Task}s} converts factor levels of each (factorial) column
+Impact coding for \link[mlr3:TaskClassif]{classification tasks} converts factor levels of each (factorial) column
 to the difference between each target level's conditional log-likelihood
 given this level, and the target level's global log-likelihood.
 
-Impact coding for \link[mlr3:TaskRegr]{Regression \code{Task}s} converts factor levels of each (factorial) column
+Impact coding for \link[mlr3:TaskRegr]{Regression Tasks} converts factor levels of each (factorial) column
 to the difference between the target's conditional mean given
 this level, and the target's global mean.
 
@@ -54,7 +54,7 @@ this feature level on each \emph{outcome level}.
 
 \itemize{
 \item \code{smoothing}  :: \code{numeric(1)} \cr
-A finite positive value used for smoothing. Mostly relevant for \link[mlr3:TaskClassif]{classification \code{Task}s} if
+A finite positive value used for smoothing. Mostly relevant for \link[mlr3:TaskClassif]{classification tasks} if
 a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
 Initialized to \code{1e-4}.
 \item \code{impute_zero} :: \code{logical(1)}\cr
@@ -64,7 +64,7 @@ If \code{TRUE}, impute missing values as impact 0; otherwise the respective impa
 
 \section{Internals}{
 
-Uses laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification \code{Task}s}.
+Uses laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification task}.
 }
 
 \section{Methods}{

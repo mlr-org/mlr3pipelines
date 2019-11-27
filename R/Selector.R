@@ -31,7 +31,7 @@
 #'   ]
 #' }
 #' ```
-#' A [`Selector`] that selects only the column `"Sepal.Length"` (as in the [`"iris"`-Task][mlr3::mlr_tasks_iris]), if present, is
+#' A [`Selector`] that selects only the column `"Sepal.Length"` (as in the [iris task][mlr3::mlr_tasks_iris]), if present, is
 #' ```
 #' function(task) {
 #'   intersect(task$feature_names, "Sepal.Length")

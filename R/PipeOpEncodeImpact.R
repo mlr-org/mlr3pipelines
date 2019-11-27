@@ -7,11 +7,11 @@
 #' @description
 #' Encodes columns of type `factor`, `character` and `ordered`.
 #'
-#' Impact coding for [classification `Task`s][mlr3::TaskClassif] converts factor levels of each (factorial) column
+#' Impact coding for [classification tasks][mlr3::TaskClassif] converts factor levels of each (factorial) column
 #' to the difference between each target level's conditional log-likelihood
 #' given this level, and the target level's global log-likelihood.
 #'
-#' Impact coding for [Regression `Task`s][mlr3::TaskRegr] converts factor levels of each (factorial) column
+#' Impact coding for [Regression Tasks][mlr3::TaskRegr] converts factor levels of each (factorial) column
 #' to the difference between the target's conditional mean given
 #' this level, and the target's global mean.
 #'
@@ -44,14 +44,14 @@
 #'
 #' @section Parameters:
 #' * `smoothing`  :: `numeric(1)` \cr
-#'   A finite positive value used for smoothing. Mostly relevant for [classification `Task`s][mlr3::TaskClassif] if
+#'   A finite positive value used for smoothing. Mostly relevant for [classification tasks][mlr3::TaskClassif] if
 #'   a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
 #'   Initialized to `1e-4`.
 #' * `impute_zero` :: `logical(1)`\cr
 #'   If `TRUE`, impute missing values as impact 0; otherwise the respective impact is coded as `NA`. Default `FALSE`.
 #'
 #' @section Internals:
-#' Uses laplace smoothing, mostly to avoid infinite values for [classification `Task`s][mlr3::TaskClassif].
+#' Uses laplace smoothing, mostly to avoid infinite values for [classification task][mlr3::TaskClassif].
 #'
 #' @section Methods:
 #' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
