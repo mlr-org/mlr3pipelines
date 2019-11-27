@@ -24,11 +24,11 @@ The \code{\link{PipeOp}}s of the input \code{\link{Graph}}s are not joined with 
 }
 \seealso{
 Other Graph operators: 
-\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
-\code{\link{greplicate}()}
+\code{\link{greplicate}()},
+\code{\link{po_compose}}
 }
 \concept{Graph operators}

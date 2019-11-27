@@ -57,8 +57,8 @@ Other Learners:
 \code{\link{mlr_learners_graph}}
 
 Other Ensembles: 
-\code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_ensemble}},
 \code{\link{mlr_pipeops_regravg}}
 }
 \concept{Ensembles}
