@@ -1,3 +1,5 @@
+context("PipeOpEncodeLmer")
+
 test_that("PipeOpEncodeLmer regr", {
   set.seed(8008135)
   task = mlr_tasks$get("boston_housing")

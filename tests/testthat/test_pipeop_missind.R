@@ -1,4 +1,4 @@
-context("missind")
+context("PipeOpMissInd")
 
 test_that("PipeOpMissInd", {
   task = mlr_tasks$get("pima")

@@ -1,5 +1,4 @@
-context("colapply")
-
+context("PipeOpColApply")
 
 test_that("apply general tests", {
 
@@ -117,6 +116,4 @@ test_that("apply results look as they should", {
     po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
     cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
-
-
 })
