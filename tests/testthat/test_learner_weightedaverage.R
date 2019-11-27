@@ -1,4 +1,4 @@
-context("WeighedAverage Learner")
+context("WeightedAverage Learner")
 
 test_that("LearnerClassifAvg", {
   lrn = LearnerClassifAvg$new()
