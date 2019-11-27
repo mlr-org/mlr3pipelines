@@ -77,7 +77,8 @@ test_that("PipeOpImpute", {
     i = letters[1:6],
     j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
     k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
-    l = letters[rep(1:2, 3)])
+    l = factor(letters[rep(1:2, 3)])
+  )
 
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
   mdata$j = NULL

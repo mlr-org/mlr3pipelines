@@ -84,22 +84,24 @@ PipeOpSmote = R6Class("PipeOpSmote",
 
     train_task = function(task) {
       assert_true(all(task$feature_types$type == "numeric"))
-      dt_columns = self$select_cols(task)
-      cols = dt_columns
+      cols = self$select_cols(task)
+
       if (!length(cols)) {
-        self$state = list(dt_columns = dt_columns)
+        self$state = list(dt_columns = cols)
         return(task)
       }
-      dt = as.data.frame(task$data(cols = cols))
+      dt = task$data(cols = cols)
 
       # calculate synthetic data
-      st = invoke(smotefamily::SMOTE, X = dt, target = task$data(cols = task$target_names)[[1]],
+      st = setDT(invoke(smotefamily::SMOTE, X = dt, target = task$truth(),
         .args = self$param_set$get_values(tags = "smote"),
-        .opts = list(warnPartialMatchArgs = FALSE))$syn_data
+        .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
 
-      # add synthetic data to task data
-      target.id = which(names(st) == "class")
-      colnames(st)[target.id] = task$target_names
+      # rename target column and fix character conversion for TaskClassif
+      if (task$task_type == "classif") {
+        st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
+      }
+      setnames(st, "class", task$target_names)
       task$rbind(st)
     }
   )
