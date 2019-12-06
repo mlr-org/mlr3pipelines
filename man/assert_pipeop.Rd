@@ -19,11 +19,11 @@ throws an error if not.
 }
 \seealso{
 Other Graph operators: 
+\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{greplicate}()},
-\code{\link{gunion}()},
-\code{\link{po_compose}}
+\code{\link{gunion}()}
 }
 \concept{Graph operators}

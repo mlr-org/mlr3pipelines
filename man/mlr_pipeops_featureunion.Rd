@@ -89,6 +89,8 @@ po$train(list(task, task))
 }
 \seealso{
 Other PipeOps: 
+\code{\link{PipeOpEnsemble}},
+\code{\link{PipeOpImpute}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -103,7 +105,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
-\code{\link{mlr_pipeops_ensemble}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
@@ -113,7 +114,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
-\code{\link{mlr_pipeops_impute}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},

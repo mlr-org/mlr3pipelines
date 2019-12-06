@@ -1,6 +1,5 @@
 #' @title PipeOp Composition Operator
 #'
-#' @name po_compose
 #' @description
 #' This operator "pipes" data from the source `g1` into the sink `g2`. Both source and sink can either be
 #' a [`Graph`] or a [`PipeOp`] (or an object that can be automatically converted into a [`Graph`] or [`PipeOp`], see [`as_graph()`] and [`as_pipeop()`]).

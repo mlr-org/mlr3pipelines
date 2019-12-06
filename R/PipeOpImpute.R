@@ -1,7 +1,6 @@
 #' @title PipeOpImpute
 #'
 #' @usage NULL
-#' @name mlr_pipeops_impute
 #' @format Abstract [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description

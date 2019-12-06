@@ -1,7 +1,6 @@
 #' @title PipeOpEnsemble
 #'
 #' @usage NULL
-#' @name mlr_pipeops_ensemble
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
