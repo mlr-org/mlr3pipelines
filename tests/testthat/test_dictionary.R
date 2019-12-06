@@ -59,7 +59,7 @@ test_that("Dictionary contains all PipeOps", {
 
   expect("__NOT_FOUND__" %nin% dictnames, "Not all exported non-abstract PipeOps are in mlr_pipeops")
   tmp = setdiff(mlr_pipeops$keys(), dictnames)
-  expect(length(tmp) == 0, sprintf("PipeOps in mlr_pipeops are exported: %s", paste(tmp, collapse = ",")))
+  expect(length(tmp) == 0, sprintf("PipeOps in mlr_pipeops that are not exported: %s", paste(tmp, collapse = ",")))
 
   # as.atomic: converts non-atomic things to NULL
   as.atomic = function(x) if (is.atomic(x)) x
