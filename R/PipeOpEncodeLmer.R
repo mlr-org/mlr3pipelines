@@ -35,7 +35,7 @@
 #' PipeOpEncodeLmer$new(id = "encodelmer", param_vals = list())
 #' ```
 #'
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodelmer"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
@@ -67,22 +67,22 @@
 #' @section Methods:
 #' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
 #' library("mlr3")
 #' poe = po("encodelmer")
 #'
 #' task = TaskClassif$new("task",
 #'   data.table::data.table(
-#'     x = c("a", "a", "a", "b", "b"),
-#'     y = c("a", "a", "b", "b", "b")),
+#'     x = factor(c("a", "a", "a", "b", "b")),
+#'     y = factor(c("a", "a", "b", "b", "b"))),
 #'   "x")
 #'
 #' poe$train(list(task))[[1]]$data()
 #'
 #' poe$state
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
 PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -95,7 +95,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
     },
 
     select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
+      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
     },
 
     get_state_dt = function(dt, levels, target) {

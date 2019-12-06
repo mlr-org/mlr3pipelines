@@ -22,7 +22,7 @@
 #' PipeOpEncodeImpact$new(id = "encodeimpact", param_vals = list())
 #' ```
 #'
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodeimpact"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
@@ -85,7 +85,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
     },
 
     select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
+      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
     },
 
     get_state_dt = function(dt, levels, target) {

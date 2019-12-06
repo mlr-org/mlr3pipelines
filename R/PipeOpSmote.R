@@ -17,7 +17,7 @@
 #' PipeOpSmote$new(id = "smote", param_vals = list())
 #' ```
 #'
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"smote"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -52,12 +52,16 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
 #' library("mlr3")
 #'
 #' # Create example task
-#' data_example = smotefamily::sample_generator(1000, ratio = 0.80)
-#' task = TaskClassif$new(id = "example", backend = data_example, target = "result")
+#' data = smotefamily::sample_generator(1000, ratio = 0.80)
+#' data$result = factor(data$result)
+#' task = TaskClassif$new(id = "example", backend = data, target = "result")
 #' task$data()
 #' table(task$data()$result)
 #'
@@ -65,9 +69,6 @@
 #' pop = po("smote")
 #' smotedata = pop$train(list(task))[[1]]$data()
 #' table(smotedata$result)
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
 PipeOpSmote = R6Class("PipeOpSmote",
   inherit = PipeOpTaskPreproc,
   public = list(

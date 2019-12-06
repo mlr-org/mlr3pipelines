@@ -16,9 +16,9 @@ See \code{\link[smotefamily:SMOTE]{smotefamily::SMOTE}} for details.
 \section{Construction}{
 \preformatted{PipeOpSmote$new(id = "smote", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"smote"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"smote"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -72,8 +72,9 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 library("mlr3")
 
 # Create example task
-data_example = smotefamily::sample_generator(1000, ratio = 0.80)
-task = TaskClassif$new(id = "example", backend = data_example, target = "result")
+data = smotefamily::sample_generator(1000, ratio = 0.80)
+data$result = factor(data$result)
+task = TaskClassif$new(id = "example", backend = data, target = "result")
 task$data()
 table(task$data()$result)
 

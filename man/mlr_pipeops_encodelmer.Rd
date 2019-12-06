@@ -34,9 +34,9 @@ columns, or only encode columns of a certain type.
 \section{Construction}{
 \preformatted{PipeOpEncodeLmer$new(id = "encodelmer", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"encodelmer"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"encodelmer"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would
 otherwise be set during construction. Default \code{list()}.
@@ -89,8 +89,8 @@ poe = po("encodelmer")
 
 task = TaskClassif$new("task",
   data.table::data.table(
-    x = c("a", "a", "a", "b", "b"),
-    y = c("a", "a", "b", "b", "b")),
+    x = factor(c("a", "a", "a", "b", "b")),
+    y = factor(c("a", "a", "b", "b", "b"))),
   "x")
 
 poe$train(list(task))[[1]]$data()
