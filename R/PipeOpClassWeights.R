@@ -8,7 +8,7 @@
 #' Adds a class weight column to the [`Task`][mlr3::Task] that different [`Learner`][mlr3::Learner]s may be
 #' able to use for sample weighting. Sample weights are added to each sample according to the target class.
 #'
-#' Only binary [classification tasks][mlr3::TaskClassif] are supported.
+#' Only binary [classification `Task`s][mlr3::TaskClassif] are supported.
 #'
 #' Caution: when constructed naively without parameter, the weights are all set to 1. The `minor_weight` parameter
 #' must be adjusted for this [`PipeOp`] to be useful.
