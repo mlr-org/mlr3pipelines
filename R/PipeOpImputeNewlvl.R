@@ -57,7 +57,7 @@ PipeOpImputeNewlvl = R6Class("PipeOpImputeNewlvl",
       super$initialize(id, param_vals = param_vals)
     },
 
-    select_cols = function(task) task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")],
+    select_cols = function(task) task$feature_types[get("type") %in% c("factor", "ordered"), get("id")],
 
     train_imputer = function(feature, type, context) {
       NULL

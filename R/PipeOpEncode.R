@@ -57,7 +57,7 @@
 #' @examples
 #' library("mlr3")
 #'
-#' data = data.table::data.table(x = factor(letters[1:3]), y = letters[1:3])
+#' data = data.table::data.table(x = factor(letters[1:3]), y = factor(letters[1:3]))
 #' task = TaskClassif$new("task", data, "x")
 #'
 #' poe = po("encode")
@@ -89,7 +89,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
     },
 
     select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
+      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
     },
 
     get_state_dt = function(dt, levels, target) {

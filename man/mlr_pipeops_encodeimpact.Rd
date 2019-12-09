@@ -21,9 +21,9 @@ Treats new levels during prediction like missing values.
 \section{Construction}{
 \preformatted{PipeOpEncodeImpact$new(id = "encodeimpact", param_vals = list())
 }
-
-Identifier of resulting object, default \code{"encodeimpact"}.
 \itemize{
+\item \code{id} :: \code{character(1)}\cr
+Identifier of resulting object, default \code{"encodeimpact"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would
 otherwise be set during construction. Default \code{list()}.

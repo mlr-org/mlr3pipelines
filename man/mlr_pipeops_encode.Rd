@@ -73,7 +73,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 \examples{
 library("mlr3")
 
-data = data.table::data.table(x = factor(letters[1:3]), y = letters[1:3])
+data = data.table::data.table(x = factor(letters[1:3]), y = factor(letters[1:3]))
 task = TaskClassif$new("task", data, "x")
 
 poe = po("encode")
