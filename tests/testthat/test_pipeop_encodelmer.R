@@ -119,7 +119,7 @@ test_that("Confirms to sensible values", {
   op = PipeOpEncodeLmer$new()
   expect_pipeop(op)
 
-  nt = train_pipeop(op, inputs = list(task))[[1L]]
+  nt = suppressWarnings(train_pipeop(op, inputs = list(task))[[1L]])  # suppress warnings about failures to converge
   yh = nt$data()$y
   expect_true(cor(data$x, yh) > 0.9)
   expect_true("factor" %nin% nt$feature_types$type)
