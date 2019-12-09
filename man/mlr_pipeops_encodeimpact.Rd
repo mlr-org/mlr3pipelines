@@ -8,7 +8,7 @@
 \description{
 Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
 
-Impact coding for \link[mlr3:TaskClassif]{classification \code{Task}s} converts factor levels of each (factorial) column
+Impact coding for \link[mlr3:TaskClassif]{classification tasks} converts factor levels of each (factorial) column
 to the difference between each target level's conditional log-likelihood
 given this level, and the target level's global log-likelihood.
 
