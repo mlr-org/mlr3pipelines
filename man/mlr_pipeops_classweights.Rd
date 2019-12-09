@@ -9,7 +9,7 @@
 Adds a class weight column to the \code{\link[mlr3:Task]{Task}} that different \code{\link[mlr3:Learner]{Learner}}s may be
 able to use for sample weighting. Sample weights are added to each sample according to the target class.
 
-Only binary \link[mlr3:TaskClassif]{classification tasks} are supported.
+Only binary \link[mlr3:TaskClassif]{classification \code{Task}s} are supported.
 
 Caution: when constructed naively without parameter, the weights are all set to 1. The \code{minor_weight} parameter
 must be adjusted for this \code{\link{PipeOp}} to be useful.

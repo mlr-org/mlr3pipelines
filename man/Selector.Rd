@@ -120,7 +120,7 @@ all columns that have names shorter than four letters would be:\preformatted{fun
 \}
 }
 
-A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:mlr_tasks_iris]{iris task}), if present, is\preformatted{function(task) \{
+A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:mlr_tasks_iris]{iris \code{Task}}), if present, is\preformatted{function(task) \{
   intersect(task$feature_names, "Sepal.Length")
 \}
 }
