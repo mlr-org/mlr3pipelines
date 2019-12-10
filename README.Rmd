@@ -4,8 +4,6 @@ output: github_document
 
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
-Package website: [release](https://mlr3pipelines.mlr-org.com/) | [dev](https://mlr3pipelines.mlr-org.com/dev)
-
 Dataflow Programming for Machine Learning in R.
 
 [![Travis build status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)

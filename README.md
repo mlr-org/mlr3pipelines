@@ -1,9 +1,6 @@
 
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
-Package website: [release](https://mlr3pipelines.mlr-org.com/) |
-[dev](https://mlr3pipelines.mlr-org.com/dev)
-
 Dataflow Programming for Machine Learning in R.
 
 [![Travis build
