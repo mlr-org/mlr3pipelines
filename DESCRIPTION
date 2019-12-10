@@ -54,7 +54,7 @@ Suggests:
     lgr,
     lme4,
     mlbench,
-    mlr3filters,
+    mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
     nloptr,
