@@ -29,14 +29,14 @@ test_that("PipeOpImpute", {
         if (self$param_set$values$add_dummy == "none") {
           dummyselector = selector_none()
         } else if (self$param_set$values$method_fct == "newlvl") {
-          dummyselector = selector_invert(selector_type(c("factor", "ordered")))
+          dummyselector = selector_invert(selector_type(c("factor", "ordered", "character")))
         } else {
           dummyselector = selector_all()
         }
 
         graph = list(
           po("select", id = "num_select", selector = selector_type(c("integer", "numeric"))) %>>% numimputer,
-          po("select", id = "fct_select", selector = selector_type(c("factor", "ordered"))) %>>% fctimputer,
+          po("select", id = "fct_select", selector = selector_type(c("factor", "ordered", "character"))) %>>% fctimputer,
           po("select", id = "lgl_select", selector = selector_type(c("logical"))) %>>% po("imputesample", id = "lgl_sample"),
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
