@@ -1,0 +1,10 @@
+pandoc: '2.2'
+pkgdown: 1.4.1
+pkgdown_sha: ~
+articles:
+  comparison_mlr3pipelines_mlr_sklearn: comparison_mlr3pipelines_mlr_sklearn.html
+  introduction: introduction.html
+urls:
+  reference: https://mlr3pipelines.mlr-org.com//reference
+  article: https://mlr3pipelines.mlr-org.com//articles
+
