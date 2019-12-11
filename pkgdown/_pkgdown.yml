@@ -6,6 +6,11 @@ template:
     bootswatch: journal
   default_assets: false
 
+development:
+  mode: auto
+  version_label: default
+  version_tooltip: "Version"
+
 navbar:
   structure:
     left: [articles, reference, news, book]
