@@ -83,7 +83,7 @@ See smotefamily::SMOTE for details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
       </span>
     </div>
 
@@ -105,39 +105,28 @@ See smotefamily::SMOTE for details." />
   </ul>
 </li>
 <li>
-  <a href="../reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
-     
-    Reference
-  </a>
+  <a href="../reference/index.html">Function Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
-</li>
-<li>
-  <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
-     
-    mlr3book
-  </a>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://mlr-org.slack.com">
-    <span class="fab fa fab fa-slack"></span>
+    <span class="fa fa-slack"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://stackoverflow.com/questions/tagged/mlr">
-    <span class="fab fa fab fa-stack-overflow"></span>
+  <a href="https://stackoverflow.com/questions/tagged/mlr3">
+    <span class="fa fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -171,7 +160,7 @@ synthetic instances of the minority class using the SMOTE algorithm.
 The algorithm samples for each minority instance a new data point based on the <code>K</code> nearest
 neighbors of that data point.
 It can only be applied to tasks with numeric features.
-See <code><a href='https://rdrr.io/pkg/smotefamily/man/SMOTE.html'>smotefamily::SMOTE</a></code> for details.</p>
+See <code>smotefamily::SMOTE</code> for details.</p>
     </div>
 
 
@@ -184,9 +173,8 @@ See <code><a href='https://rdrr.io/pkg/smotefamily/man/SMOTE.html'>smotefamily::
     
 <pre>PipeOpSmote$new(id = "smote", param_vals = list())
 </pre>
-<ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"smote"</code>.</p></li>
+
+<p>Identifier of resulting object, default <code>"smote"</code>.</p><ul>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -210,10 +198,10 @@ The output during prediction is the unchanged input.</p>
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
 <li><p><code>K</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
 The number of nearest neighbors used for sampling new values.
-See <code><a href='https://rdrr.io/pkg/smotefamily/man/SMOTE.html'>SMOTE()</a></code>.</p></li>
+See <code>SMOTE()</code>.</p></li>
 <li><p><code>dup_size</code> :: <code>numeric</code> <br />
 Desired times of synthetic minority instances over the original number of
-majority instances. See <code><a href='https://rdrr.io/pkg/smotefamily/man/SMOTE.html'>SMOTE()</a></code>.</p></li>
+majority instances. See <code>SMOTE()</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -236,80 +224,59 @@ Journal of Artificial Intelligence Research. 16, 321-357.</p>
 <p>Only methods inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: 
-<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
-<code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
-<code><a href='PipeOp.html'>PipeOp</a></code>,
-<code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
-<code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
-<code><a href='mlr_pipeops_chunk.html'>mlr_pipeops_chunk</a></code>,
-<code><a href='mlr_pipeops_classbalancing.html'>mlr_pipeops_classbalancing</a></code>,
-<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
-<code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
-<code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
-<code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
-<code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
-<code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
-<code><a href='mlr_pipeops_encodelmer.html'>mlr_pipeops_encodelmer</a></code>,
-<code><a href='mlr_pipeops_encode.html'>mlr_pipeops_encode</a></code>,
-<code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
-<code><a href='mlr_pipeops_filter.html'>mlr_pipeops_filter</a></code>,
-<code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
-<code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
-<code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
-<code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
-<code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
-<code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
-<code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
-<code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
-<code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
-<code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
-<code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
-<code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
-<code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
-<code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
-<code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
-<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
-<code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
-<code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
-<code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
-<code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
-<code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
-<code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
-<code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-<code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
-<code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+    <div class='dont-index'><p>Other PipeOps: <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+  <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
+  <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, <code><a href='PipeOp.html'>PipeOp</a></code>,
+  <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
+  <code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
+  <code><a href='mlr_pipeops_chunk.html'>mlr_pipeops_chunk</a></code>,
+  <code><a href='mlr_pipeops_classbalancing.html'>mlr_pipeops_classbalancing</a></code>,
+  <code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
+  <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
+  <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
+  <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+  <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
+  <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
+  <code><a href='mlr_pipeops_encodelmer.html'>mlr_pipeops_encodelmer</a></code>,
+  <code><a href='mlr_pipeops_encode.html'>mlr_pipeops_encode</a></code>,
+  <code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
+  <code><a href='mlr_pipeops_filter.html'>mlr_pipeops_filter</a></code>,
+  <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
+  <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
+  <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+  <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+  <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
+  <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
+  <code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+  <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
+  <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
+  <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
+  <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
+  <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+  <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+  <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+  <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+  <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+  <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
+  <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+  <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
+  <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
+  <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
+  <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
+  <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
+  <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
+  <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
+  <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
+  <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
 
 <span class='co'># Create example task</span>
-<span class='no'>data</span> <span class='kw'>=</span> <span class='kw pkg'>smotefamily</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/smotefamily/man/sample_generator.html'>sample_generator</a></span>(<span class='fl'>1000</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>0.80</span>)
-<span class='no'>data</span>$<span class='no'>result</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>data</span>$<span class='no'>result</span>)
-<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"example"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"result"</span>)
-<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;       result        X1         X2
-#&gt;    1:      n 0.2866815 0.45899585
-#&gt;    2:      n 0.2682259 0.20055563
-#&gt;    3:      n 0.8959587 0.28225572
-#&gt;    4:      p 0.5282639 0.33736117
-#&gt;    5:      n 0.9983724 0.13857375
-#&gt;   ---                            
-#&gt;  996:      n 0.2099023 0.88892125
-#&gt;  997:      p 0.6939768 0.49183863
-#&gt;  998:      n 0.9204687 0.05490594
-#&gt;  999:      n 0.8816077 0.30730362
-#&gt; 1000:      n 0.8660524 0.59036143</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()$<span class='no'>result</span>)</div><div class='output co'>#&gt; 
-#&gt;   n   p 
-#&gt; 768 232 </div><div class='input'>
+<span class='no'>data_example</span> <span class='kw'>=</span> <span class='kw pkg'>smotefamily</span><span class='kw ns'>::</span><span class='fu'>sample_generator</span>(<span class='fl'>1000</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>0.80</span>)</div><div class='output co'>#&gt; <span class='error'>Error in loadNamespace(name): there is no package called ‘smotefamily’</span></div><div class='input'><span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"example"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>data_example</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"result"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inherits(backend, "DataBackend"): object 'data_example' not found</span></div><div class='input'><span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'task' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()$<span class='no'>result</span>)</div><div class='output co'>#&gt; <span class='error'>Error in table(task$data()$result): object 'task' not found</span></div><div class='input'>
 <span class='co'># Generate synthetic data for minority class</span>
 <span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"smote"</span>)
-<span class='no'>smotedata</span> <span class='kw'>=</span> <span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>smotedata</span>$<span class='no'>result</span>)</div><div class='output co'>#&gt; 
-#&gt;   n   p 
-#&gt; 768 696 </div></pre>
+<span class='no'>smotedata</span> <span class='kw'>=</span> <span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt; <span class='error'>Error: The following packages could not be loaded: smotefamily</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>smotedata</span>$<span class='no'>result</span>)</div><div class='output co'>#&gt; <span class='error'>Error in table(smotedata$result): object 'smotedata' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

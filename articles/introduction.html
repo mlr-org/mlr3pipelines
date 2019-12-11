@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
       </span>
     </div>
 
@@ -61,39 +61,28 @@
   </ul>
 </li>
 <li>
-  <a href="../reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
-     
-    Reference
-  </a>
+  <a href="../reference/index.html">Function Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
-</li>
-<li>
-  <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
-     
-    mlr3book
-  </a>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://mlr-org.slack.com">
-    <span class="fab fa fab fa-slack"></span>
+    <span class="fa fa-slack"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://stackoverflow.com/questions/tagged/mlr">
-    <span class="fab fa fab fa-stack-overflow"></span>
+  <a href="https://stackoverflow.com/questions/tagged/mlr3">
+    <span class="fa fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -133,18 +122,18 @@
 <h2 class="hasAnchor">
 <a href="#whats-the-point" class="anchor"></a>What’s the Point</h2>
 <p>Machine learning toolkits often try to abstract away the processes happening inside machine learning algorithms. This makes it easy for the user to switch out one algorithm for another without having to worry about what is happening inside it, what kind of data it is able to operate on etc. The benefit of using <code>mlr3</code>, for example, is that one can create a <code>Learner</code>, a <code>Task</code>, a <code>Resampling</code> etc. and use them for typical machine learning operations. It is trivial to exchange individual components and therefore use, for example, a different <code>Learner</code> in the same experiment for comparison.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">task =<span class="st"> </span>TaskClassif<span class="op">$</span><span class="kw">new</span>(<span class="st">"iris"</span>, <span class="kw">as_data_backend</span>(iris), <span class="st">"Species"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">lrn =<span class="st"> </span>mlr_learners<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"classif.rpart"</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">rsmp =<span class="st"> </span>mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"holdout"</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">resample</span>(task, lrn, rsmp)</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; &lt;ResampleResult&gt; of 1 iterations</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; * Task: iris</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; * Learner: classif.rpart</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; * Errors: 0 in 0 iterations</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>task =<span class="st"> </span>TaskClassif<span class="op">$</span><span class="kw">new</span>(<span class="st">"iris"</span>, <span class="kw">as_data_backend</span>(iris), <span class="st">"Species"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>lrn =<span class="st"> </span>mlr_learners<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"classif.rpart"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>rsmp =<span class="st"> </span>mlr_resamplings<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"holdout"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">resample</span>(task, lrn, rsmp)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt; &lt;ResampleResult&gt; of 1 iterations</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt; * Task: iris</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt; * Learner: classif.rpart</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt; * Errors: 0 in 0 iterations</span></span></code></pre></div>
 <p>However, this modularity breaks down as soon as the learning algorithm encompasses more than just model fitting, like data preprocessing, ensembles or other meta models. <code>mlr3pipelines</code> takes modularity one step further than <code>mlr3</code>: it makes it possible to build individual steps within a “<code>Learner</code>” out of building blocks called <strong><code>PipeOp</code>s</strong>.</p>
 </div>
 <div id="pipeop-pipeline-operators" class="section level2">
@@ -152,36 +141,36 @@
 <a href="#pipeop-pipeline-operators" class="anchor"></a><code>PipeOp</code>: Pipeline Operators</h2>
 <p>The most basic unit of functionality within <code>mlr3pipelines</code> is the <strong><code>PipeOp</code></strong>, short for “pipeline operator”, which represents a transformative operation on input (for example a training dataset) leading to output. It can therefore be seen as a generalised notion of a function, with a certain twist: <code>PipeOp</code>s behave differently during a “training phase” and a “prediction phase”. The training phase will typically generate a certain model of the data that is saved as internal state. The prediction phase will then operate on the input data depending on the trained model.</p>
 <p>An example of this behaviour is the <em>principal component analysis</em> operation (“<code>PipeOpPCA</code>”): During training, it will transform incoming data by rotating it in a way that leads to uncorrelated features ordered by their contribution to total variance. It will <em>also</em> save the rotation matrix to be used during for new data. This makes it possible to perform “prediction” with single rows of new data, where a row’s scores on each of the principal components (the components of the training data!) is computed.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">po =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">po<span class="op">$</span><span class="kw">train</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(task))[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;        Species       PC1         PC2         PC3          PC4</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;   1:    setosa -2.684126  0.31939725 -0.02791483 -0.002262437</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;   2:    setosa -2.714142 -0.17700123 -0.21046427 -0.099026550</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;   3:    setosa -2.888991 -0.14494943  0.01790026 -0.019968390</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt;   4:    setosa -2.745343 -0.31829898  0.03155937  0.075575817</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt;   5:    setosa -2.728717  0.32675451  0.09007924  0.061258593</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt;  ---                                                         </span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; 146: virginica  1.944110  0.18753230  0.17782509 -0.426195940</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; 147: virginica  1.527167 -0.37531698 -0.12189817 -0.254367442</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; 148: virginica  1.764346  0.07885885  0.13048163 -0.137001274</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; 149: virginica  1.900942  0.11662796  0.72325156 -0.044595305</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; 150: virginica  1.390189 -0.28266094  0.36290965  0.155038628</span></a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">single_line_task =<span class="st"> </span>task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">po<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(single_line_task))[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;    Species       PC1       PC2         PC3          PC4</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 1:  setosa -2.684126 0.3193972 -0.02791483 -0.002262437</span></a></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">po<span class="op">$</span>state</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; Standard deviations (1, .., p=4):</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; [1] 2.0562689 0.4926162 0.2796596 0.1543862</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; Rotation (n x k) = (4 x 4):</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;                      PC1         PC2         PC3        PC4</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; Petal.Length  0.85667061 -0.17337266  0.07623608  0.4798390</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; Petal.Width   0.35828920 -0.07548102  0.54583143 -0.7536574</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; Sepal.Length  0.36138659  0.65658877 -0.58202985 -0.3154872</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; Sepal.Width  -0.08452251  0.73016143  0.59791083  0.3197231</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>po =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>po<span class="op">$</span><span class="kw">train</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(task))[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;        Species       PC1         PC2         PC3          PC4</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   1:    setosa -2.684126  0.31939725 -0.02791483 -0.002262437</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;   2:    setosa -2.714142 -0.17700123 -0.21046427 -0.099026550</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;   3:    setosa -2.888991 -0.14494943  0.01790026 -0.019968390</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;   4:    setosa -2.745343 -0.31829898  0.03155937  0.075575817</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt;   5:    setosa -2.728717  0.32675451  0.09007924  0.061258593</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;  ---                                                         </span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 146: virginica  1.944110  0.18753230  0.17782509 -0.426195940</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; 147: virginica  1.527167 -0.37531698 -0.12189817 -0.254367442</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; 148: virginica  1.764346  0.07885885  0.13048163 -0.137001274</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; 149: virginica  1.900942  0.11662796  0.72325156 -0.044595305</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; 150: virginica  1.390189 -0.28266094  0.36290965  0.155038628</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>single_line_task =<span class="st"> </span>task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a>po<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(single_line_task))[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt;    Species       PC1       PC2         PC3          PC4</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; 1:  setosa -2.684126 0.3193972 -0.02791483 -0.002262437</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>po<span class="op">$</span>state</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; Standard deviations (1, .., p=4):</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; [1] 2.0562689 0.4926162 0.2796596 0.1543862</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; </span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; Rotation (n x k) = (4 x 4):</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt;                      PC1         PC2         PC3        PC4</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; Petal.Length  0.85667061 -0.17337266  0.07623608  0.4798390</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; Petal.Width   0.35828920 -0.07548102  0.54583143 -0.7536574</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; Sepal.Length  0.36138659  0.65658877 -0.58202985 -0.3154872</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; Sepal.Width  -0.08452251  0.73016143  0.59791083  0.3197231</span></span></code></pre></div>
 <p>This shows the most important primitives incorporated in a <code>PipeOp</code>:</p>
 <ul>
 <li>
@@ -193,7 +182,7 @@
 <li>
 <strong><code>$state</code></strong>, the “model” trained with <code>$train()</code> and utilised during <code>$predict()</code>.</li>
 </ul>
-<p>Schematically we can represent the <code>PipeOp</code> like so: <img src="figures/po_viz.png"><!-- --></p>
+<p>Schematically we can represent the <code>PipeOp</code> like so: <img src="figures/po_viz.png" width="480"></p>
 <div id="why-the-state" class="section level3">
 <h3 class="hasAnchor">
 <a href="#why-the-state" class="anchor"></a>Why the <code>$state</code>
@@ -208,59 +197,59 @@
 <h3 class="hasAnchor">
 <a href="#where-to-get-pipeops" class="anchor"></a>Where to Get <code>PipeOp</code>s</h3>
 <p>Each <code>PipeOp</code> is an instance of an “<code>R6</code>” class, many of which are provided by the <code>mlr3pipelines</code> package itself. They can be constructed explicitly (“<code>PipeOpPCA$new()</code>”) or retrieved from the <code>mlr_pipelines</code> collection: <code>mlr_pipeops$get("pca")</code>. The entire list of available <code>PipeOp</code>s, and some meta-information, can be retrieved using <code><a href="../reference/as.data.table.html">as.data.table()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/as.data.table.html">as.data.table</a></span>(mlr_pipeops)[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"key"</span>, <span class="st">"input.num"</span>, <span class="st">"output.num"</span>)]</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt;                 key input.num output.num</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;  1:          boxcox         1          1</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;  2:          branch         1         NA</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;  3:           chunk         1         NA</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;  4:  classbalancing         1          1</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;  5:      classifavg        NA          1</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  6:    classweights         1          1</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  7:        colapply         1          1</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  8: collapsefactors         1          1</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  9:            copy         1         NA</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 10:          encode         1          1</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 11:    encodeimpact         1          1</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 12:      encodelmer         1          1</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 13:    featureunion        NA          1</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; 14:          filter         1          1</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; 15:      fixfactors         1          1</span></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; 16:         histbin         1          1</span></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; 17:             ica         1          1</span></a>
-<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; 18:      imputehist         1          1</span></a>
-<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; 19:      imputemean         1          1</span></a>
-<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; 20:    imputemedian         1          1</span></a>
-<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; 21:    imputenewlvl         1          1</span></a>
-<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; 22:    imputesample         1          1</span></a>
-<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt; 23:       kernelpca         1          1</span></a>
-<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt; 24:         learner         1          1</span></a>
-<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt; 25:      learner_cv         1          1</span></a>
-<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt; 26:         missind         1          1</span></a>
-<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt; 27:     modelmatrix         1          1</span></a>
-<a class="sourceLine" id="cb5-30" data-line-number="30"><span class="co">#&gt; 28:          mutate         1          1</span></a>
-<a class="sourceLine" id="cb5-31" data-line-number="31"><span class="co">#&gt; 29:             nop         1          1</span></a>
-<a class="sourceLine" id="cb5-32" data-line-number="32"><span class="co">#&gt; 30:             pca         1          1</span></a>
-<a class="sourceLine" id="cb5-33" data-line-number="33"><span class="co">#&gt; 31:     quantilebin         1          1</span></a>
-<a class="sourceLine" id="cb5-34" data-line-number="34"><span class="co">#&gt; 32:         regravg        NA          1</span></a>
-<a class="sourceLine" id="cb5-35" data-line-number="35"><span class="co">#&gt; 33: removeconstants         1          1</span></a>
-<a class="sourceLine" id="cb5-36" data-line-number="36"><span class="co">#&gt; 34:           scale         1          1</span></a>
-<a class="sourceLine" id="cb5-37" data-line-number="37"><span class="co">#&gt; 35:     scalemaxabs         1          1</span></a>
-<a class="sourceLine" id="cb5-38" data-line-number="38"><span class="co">#&gt; 36:      scalerange         1          1</span></a>
-<a class="sourceLine" id="cb5-39" data-line-number="39"><span class="co">#&gt; 37:          select         1          1</span></a>
-<a class="sourceLine" id="cb5-40" data-line-number="40"><span class="co">#&gt; 38:           smote         1          1</span></a>
-<a class="sourceLine" id="cb5-41" data-line-number="41"><span class="co">#&gt; 39:     spatialsign         1          1</span></a>
-<a class="sourceLine" id="cb5-42" data-line-number="42"><span class="co">#&gt; 40:       subsample         1          1</span></a>
-<a class="sourceLine" id="cb5-43" data-line-number="43"><span class="co">#&gt; 41:        unbranch        NA          1</span></a>
-<a class="sourceLine" id="cb5-44" data-line-number="44"><span class="co">#&gt; 42:      yeojohnson         1          1</span></a>
-<a class="sourceLine" id="cb5-45" data-line-number="45"><span class="co">#&gt;                 key input.num output.num</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="../reference/as.data.table.html">as.data.table</a></span>(mlr_pipeops)[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"key"</span>, <span class="st">"input.num"</span>, <span class="st">"output.num"</span>)]</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt;                 key input.num output.num</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;  1:          boxcox         1          1</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;  2:          branch         1         NA</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt;  3:           chunk         1         NA</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt;  4:  classbalancing         1          1</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt;  5:      classifavg        NA          1</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt;  6:    classweights         1          1</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt;  7:        colapply         1          1</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt;  8: collapsefactors         1          1</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt;  9:            copy         1         NA</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; 10:          encode         1          1</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt; 11:    encodeimpact         1          1</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt; 12:      encodelmer         1          1</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt; 13:    featureunion        NA          1</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; 14:          filter         1          1</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; 15:      fixfactors         1          1</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">#&gt; 16:         histbin         1          1</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">#&gt; 17:             ica         1          1</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">#&gt; 18:      imputehist         1          1</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">#&gt; 19:      imputemean         1          1</span></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="co">#&gt; 20:    imputemedian         1          1</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="co">#&gt; 21:    imputenewlvl         1          1</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="co">#&gt; 22:    imputesample         1          1</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="co">#&gt; 23:       kernelpca         1          1</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a><span class="co">#&gt; 24:         learner         1          1</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="co">#&gt; 25:      learner_cv         1          1</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="co">#&gt; 26:         missind         1          1</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="co">#&gt; 27:     modelmatrix         1          1</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="co">#&gt; 28:          mutate         1          1</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a><span class="co">#&gt; 29:             nop         1          1</span></span>
+<span id="cb5-32"><a href="#cb5-32"></a><span class="co">#&gt; 30:             pca         1          1</span></span>
+<span id="cb5-33"><a href="#cb5-33"></a><span class="co">#&gt; 31:     quantilebin         1          1</span></span>
+<span id="cb5-34"><a href="#cb5-34"></a><span class="co">#&gt; 32:         regravg        NA          1</span></span>
+<span id="cb5-35"><a href="#cb5-35"></a><span class="co">#&gt; 33: removeconstants         1          1</span></span>
+<span id="cb5-36"><a href="#cb5-36"></a><span class="co">#&gt; 34:           scale         1          1</span></span>
+<span id="cb5-37"><a href="#cb5-37"></a><span class="co">#&gt; 35:     scalemaxabs         1          1</span></span>
+<span id="cb5-38"><a href="#cb5-38"></a><span class="co">#&gt; 36:      scalerange         1          1</span></span>
+<span id="cb5-39"><a href="#cb5-39"></a><span class="co">#&gt; 37:          select         1          1</span></span>
+<span id="cb5-40"><a href="#cb5-40"></a><span class="co">#&gt; 38:           smote         1          1</span></span>
+<span id="cb5-41"><a href="#cb5-41"></a><span class="co">#&gt; 39:     spatialsign         1          1</span></span>
+<span id="cb5-42"><a href="#cb5-42"></a><span class="co">#&gt; 40:       subsample         1          1</span></span>
+<span id="cb5-43"><a href="#cb5-43"></a><span class="co">#&gt; 41:        unbranch        NA          1</span></span>
+<span id="cb5-44"><a href="#cb5-44"></a><span class="co">#&gt; 42:      yeojohnson         1          1</span></span>
+<span id="cb5-45"><a href="#cb5-45"></a><span class="co">#&gt;                 key input.num output.num</span></span></code></pre></div>
 <p>When retrieving <code>PipeOp</code>s from the <code>mlr_pipeops</code> dictionary, it is also possible to give additional constructor arguments, such as an <a href="#pipeop-ids-and-id-name-clashes">id</a> or <a href="#hyperparameters">parameter values</a>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">rank. =</span> <span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; PipeOp: &lt;pca&gt; (not trained)</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; values: &lt;rank.=3&gt;</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Input channels &lt;name [train type, predict type]&gt;:</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;   input [Task,Task]</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Output channels &lt;name [train type, predict type]&gt;:</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;   output [Task,Task]</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">rank. =</span> <span class="dv">3</span>))</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; PipeOp: &lt;pca&gt; (not trained)</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; values: &lt;rank.=3&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; Input channels &lt;name [train type, predict type]&gt;:</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;   input [Task,Task]</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; Output channels &lt;name [train type, predict type]&gt;:</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt;   output [Task,Task]</span></span></code></pre></div>
 </div>
 </div>
 <div id="pipeop-channels" class="section level2">
@@ -270,50 +259,50 @@
 <h3 class="hasAnchor">
 <a href="#input-channels" class="anchor"></a>Input Channels</h3>
 <p>Just like functions, <code>PipeOp</code>s can take multiple inputs. These multiple inputs are always given as elements in the input list. For example, there is a <code>PipeOpFeatureUnion</code> that combines multiple tasks with different features and “<code><a href="https://rdrr.io/r/base/cbind.html">cbind()</a></code>s” them together, creating one combined task. When two halves of the <code>iris</code> task are given, for example, it recreates the original task:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">iris_first_half =<span class="st"> </span>task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>))</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">iris_second_half =<span class="st"> </span>task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>))</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">pofu =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"featureunion"</span>, <span class="dt">innum =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">pofu<span class="op">$</span><span class="kw">train</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(iris_first_half, iris_second_half))[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;   1:    setosa          1.4         0.2          5.1         3.5</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;   2:    setosa          1.4         0.2          4.9         3.0</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;   3:    setosa          1.3         0.2          4.7         3.2</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;   4:    setosa          1.5         0.2          4.6         3.1</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;   5:    setosa          1.4         0.2          5.0         3.6</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;  ---                                                            </span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; 146: virginica          5.2         2.3          6.7         3.0</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; 147: virginica          5.0         1.9          6.3         2.5</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; 148: virginica          5.2         2.0          6.5         3.0</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; 149: virginica          5.4         2.3          6.2         3.4</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; 150: virginica          5.1         1.8          5.9         3.0</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>iris_first_half =<span class="st"> </span>task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>))</span>
+<span id="cb7-2"><a href="#cb7-2"></a>iris_second_half =<span class="st"> </span>task<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>))</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>pofu =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"featureunion"</span>, <span class="dt">innum =</span> <span class="dv">2</span>)</span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a>pofu<span class="op">$</span><span class="kw">train</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(iris_first_half, iris_second_half))[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;   1:    setosa          1.4         0.2          5.1         3.5</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt;   2:    setosa          1.4         0.2          4.9         3.0</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt;   3:    setosa          1.3         0.2          4.7         3.2</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt;   4:    setosa          1.5         0.2          4.6         3.1</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt;   5:    setosa          1.4         0.2          5.0         3.6</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt;  ---                                                            </span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; 146: virginica          5.2         2.3          6.7         3.0</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt; 147: virginica          5.0         1.9          6.3         2.5</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt; 148: virginica          5.2         2.0          6.5         3.0</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt; 149: virginica          5.4         2.3          6.2         3.4</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt; 150: virginica          5.1         1.8          5.9         3.0</span></span></code></pre></div>
 <p>Because <code>PipeOpFeatureUnion</code> effectively takes two input arguments here, we can say it has two <strong>input channels</strong>. An input channel also carries information about the <em>type</em> of input that is acceptable. The input channels of the <code>pofu</code> object constructed above, for example, each accept a <code>Task</code> during training and prediction. This information can be queried from the <code>$input</code> slot:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">pofu<span class="op">$</span>input</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt;      name train predict</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 1: input1  Task    Task</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 2: input2  Task    Task</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>pofu<span class="op">$</span>input</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt;      name train predict</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; 1: input1  Task    Task</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; 2: input2  Task    Task</span></span></code></pre></div>
 <p>Other <code>PipeOp</code>s may have channels that take different types during different phases. The <code>backuplearner</code> <code>PipeOp</code>, for example, takes a <code>NULL</code> and a <code>Task</code> during training, and a <code>Prediction</code> and a <code>Task</code> during prediction:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># </span><span class="al">TODO</span><span class="co"> this is an important case to handle here, do not delete unless there is a better example.</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co"># mlr_pipeops$get("backuplearner")$input</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> this is an important case to handle here, do not delete unless there is a better example.</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># mlr_pipeops$get("backuplearner")$input</span></span></code></pre></div>
 </div>
 <div id="output-channels" class="section level3">
 <h3 class="hasAnchor">
 <a href="#output-channels" class="anchor"></a>Output Channels</h3>
 <p>Unlike the typical notion of a function, <code>PipeOp</code>s can also have multiple <strong>output channels</strong>. <code>$train()</code> and <code>$predict()</code> always return a list, so certain <code>PipeOp</code>s may return lists with more than one element. Similar to input channels, the information about the number and type of outputs given by a <code>PipeOp</code> is available in the <code>$output</code> slot. The <code>chunk</code> PipeOp, for example, chunks a given <code>Task</code> into subsets and consequently returns multiple <code>Task</code> objects, both during training and prediction. The number of output channels must be given during construction through the <code>outnum</code> argument.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"chunk"</span>, <span class="dt">outnum =</span> <span class="dv">3</span>)<span class="op">$</span>output</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;       name train predict</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; 1: output1  Task    Task</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; 2: output2  Task    Task</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; 3: output3  Task    Task</span></a></code></pre></div>
-<p>Note that the number of output channels during training and prediction is the same. A schema of a <code>PipeOp</code> with two output channels: <img src="figures/po_multi_alone.png"><!-- --></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"chunk"</span>, <span class="dt">outnum =</span> <span class="dv">3</span>)<span class="op">$</span>output</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt;       name train predict</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; 1: output1  Task    Task</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; 2: output2  Task    Task</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; 3: output3  Task    Task</span></span></code></pre></div>
+<p>Note that the number of output channels during training and prediction is the same. A schema of a <code>PipeOp</code> with two output channels: <img src="figures/po_multi_alone.png" width="304"></p>
 </div>
 <div id="channel-configuration" class="section level3">
 <h3 class="hasAnchor">
 <a href="#channel-configuration" class="anchor"></a>Channel Configuration</h3>
 <p>Most <code>PipeOp</code>s have only one input channel (so they take a list with a single element), but there are a few with more than one; in many cases, the number of input or output channels is determined during construction, e.g. through the <code>innum</code> / <code>outnum</code> arguments. The <code>input.num</code> and <code>output.num</code> columns of the <code>mlr_pipeops</code>-table <a href="#where-to-get-pipeops">above</a> show the default number of channels, and <code>NA</code> if the number depends on a construction argument.</p>
 <p>The default printer of a <code>PipeOp</code> gives information about channel names and types:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># mlr_pipeops$get("backuplearner")</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># mlr_pipeops$get("backuplearner")</span></span></code></pre></div>
 </div>
 </div>
 <div id="graph-networks-of-pipeops" class="section level2">
@@ -323,43 +312,43 @@
 <h3 class="hasAnchor">
 <a href="#basics" class="anchor"></a>Basics</h3>
 <p>What is the advantage of this tedious way of declaring input and output channels and handling in/output through lists? Because each <code>PipeOp</code> has a known number of input and output channels that always produce or accept data of a known type, it is possible to network them together in <strong><code>Graph</code></strong>s. A <code>Graph</code> is a collection of <code>PipeOp</code>s with “edges” that mandate that data should be flowing along them. Edges always pass between <code>PipeOp</code> <em>channels</em>, so it is not only possible to explicitly prescribe which position of an input or output list an edge refers to, it makes it possible to make different components of a <code>PipeOp</code>’s output flow to multiple different other <code>PipeOp</code>s, as well as to have a <code>PipeOp</code> gather its input from multiple other <code>PipeOp</code>s.</p>
-<p>A schema of a simple graph of <code>PipeOp</code>s: <img src="figures/po_multi_viz.png"><!-- --></p>
+<p>A schema of a simple graph of <code>PipeOp</code>s: <img src="figures/po_multi_viz.png" width="480"></p>
 <p>A <code>Graph</code> is empty when first created, and <code>PipeOp</code>s can be added using the <strong><code>$add_pipeop()</code></strong> method. The <strong><code>$add_edge()</code></strong> method is used to create connections between them. While the printer of a <code>Graph</code> gives some information about its layout, the most intuitive way of visualizing it is using the <code>$plot()</code> function.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">gr =<span class="st"> </span>Graph<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">gr<span class="op">$</span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>))</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">gr<span class="op">$</span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"subsample"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">frac =</span> <span class="fl">0.1</span>)))</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">gr<span class="op">$</span><span class="kw">add_edge</span>(<span class="st">"scale"</span>, <span class="st">"subsample"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(gr)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt; Graph with 2 PipeOps:</span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt;         ID         State  sccssors prdcssors</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt;      scale &lt;&lt;UNTRAINED&gt;&gt; subsample          </span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;  subsample &lt;&lt;UNTRAINED&gt;&gt;               scale</span></a></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="dt">html =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>gr =<span class="st"> </span>Graph<span class="op">$</span><span class="kw">new</span>()</span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a>gr<span class="op">$</span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>))</span>
+<span id="cb12-4"><a href="#cb12-4"></a></span>
+<span id="cb12-5"><a href="#cb12-5"></a>gr<span class="op">$</span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"subsample"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">frac =</span> <span class="fl">0.1</span>)))</span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a>gr<span class="op">$</span><span class="kw">add_edge</span>(<span class="st">"scale"</span>, <span class="st">"subsample"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(gr)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; Graph with 2 PipeOps:</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt;         ID         State  sccssors prdcssors</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt;      scale &lt;&lt;UNTRAINED&gt;&gt; subsample          </span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt;  subsample &lt;&lt;UNTRAINED&gt;&gt;               scale</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="dt">html =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div id="htmlwidget-118ecc1583913df636f7" style="width:50%;height:400px;" class="visNetwork html-widget"></div>
 <script type="application/json" data-for="htmlwidget-118ecc1583913df636f7">{"x":{"nodes":{"id":["scale","<INPUT>","subsample","<OUTPUT>"],"label":["scale","<INPUT>","subsample","<OUTPUT>"],"shape":["box","database","box","ellipse"],"color":["lightblue","rgba(0,204,102,0.2)","lightblue","rgba(255,51,51,0.2)"],"value":[1,0.8,1,0.8],"title":["<p>PipeOp: <b>scale<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Input:<br>Name: scale.input<br>Train: Task<br>Predict: Task<\/p>","<p>PipeOp: <b>subsample<\/b> (not trained)<br>values: <b>frac=0.1, stratify=FALSE, replace=FALSE<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Output:<br>Name: subsample.output<br>Train: Task<br>Predict: Task<\/p>"],"x":[0,0,0,0],"y":[-0.333333333333333,-1,0.333333333333333,1]},"edges":{"from":["scale","<INPUT>","subsample"],"to":["subsample","scale","<OUTPUT>"],"color":["lightblue","lightblue","lightblue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"arrows":"to","smooth":{"enabled":false,"forceDirection":"vertical"}},"physics":{"stabilization":false}},"groups":null,"width":"50%","height":"400px","idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"full"}},"evals":[],"jsHooks":[]}</script><p>A <code>Graph</code> itself has a <strong><code>$train()</code></strong> and a <strong><code>$predict()</code></strong> method that accept some data and propagate this data through the network of <code>PipeOp</code>s. The return value corresponds to the output of the <code>PipeOp</code> output channels that are not connected to other <code>PipeOp</code>s.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">gr<span class="op">$</span><span class="kw">train</span>(task)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt;        Species Petal.Length   Petal.Width Sepal.Length Sepal.Width</span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt;  1:     setosa   -1.2791040 -1.4422448248  -1.13920048  0.09788935</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt;  2:     setosa   -1.3357516 -1.1798594716  -0.89767388  1.01560199</span></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt;  3:     setosa   -1.2791040 -1.0486667950  -0.89767388  1.47445831</span></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt;  4: versicolor    0.4769732  0.3944526477   0.79301235 -0.59039513</span></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt;  5: versicolor    0.2503826  0.3944526477   0.06843254 -0.13153881</span></a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt;  6: versicolor   -0.1461509 -0.2615107354  -0.17309407 -1.04925145</span></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;  7: versicolor    0.4203256  0.5256453243   0.18919584  0.78617383</span></a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt;  8: versicolor    0.4769732  0.2632599711   0.30995914 -0.13153881</span></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt;  9: versicolor    0.2503826  0.0008746178  -0.17309407 -0.13153881</span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt; 10:  virginica    1.7798692  1.4439940605   2.24217198 -1.04925145</span></a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt; 11:  virginica    0.7035638  0.3944526477   0.18919584 -1.96696410</span></a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; 12:  virginica    0.6469162  0.7880306775   0.30995914 -0.13153881</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 13:  virginica    1.4966310  1.0504160307   2.48369858  1.70388647</span></a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 14:  virginica    0.7602115  0.9192233541  -0.05233076 -0.81982329</span></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 15:  virginica    0.8168591  1.4439940605   1.03453895 -0.13153881</span></a></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(single_line_task)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt; 1:  setosa    -1.335752   -1.311052   -0.8976739    1.015602</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>gr<span class="op">$</span><span class="kw">train</span>(task)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt;        Species Petal.Length   Petal.Width Sepal.Length Sepal.Width</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt;  1:     setosa   -1.2791040 -1.4422448248  -1.13920048  0.09788935</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt;  2:     setosa   -1.3357516 -1.1798594716  -0.89767388  1.01560199</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt;  3:     setosa   -1.2791040 -1.0486667950  -0.89767388  1.47445831</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt;  4: versicolor    0.4769732  0.3944526477   0.79301235 -0.59039513</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt;  5: versicolor    0.2503826  0.3944526477   0.06843254 -0.13153881</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt;  6: versicolor   -0.1461509 -0.2615107354  -0.17309407 -1.04925145</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt;  7: versicolor    0.4203256  0.5256453243   0.18919584  0.78617383</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt;  8: versicolor    0.4769732  0.2632599711   0.30995914 -0.13153881</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt;  9: versicolor    0.2503826  0.0008746178  -0.17309407 -0.13153881</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt; 10:  virginica    1.7798692  1.4439940605   2.24217198 -1.04925145</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#&gt; 11:  virginica    0.7035638  0.3944526477   0.18919584 -1.96696410</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co">#&gt; 12:  virginica    0.6469162  0.7880306775   0.30995914 -0.13153881</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="co">#&gt; 13:  virginica    1.4966310  1.0504160307   2.48369858  1.70388647</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a><span class="co">#&gt; 14:  virginica    0.7602115  0.9192233541  -0.05233076 -0.81982329</span></span>
+<span id="cb15-17"><a href="#cb15-17"></a><span class="co">#&gt; 15:  virginica    0.8168591  1.4439940605   1.03453895 -0.13153881</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(single_line_task)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co">#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#&gt; 1:  setosa    -1.335752   -1.311052   -0.8976739    1.015602</span></span></code></pre></div>
 <p>The collection of <code>PipeOp</code>s inside a <code>Graph</code> can be accessed through the <strong><code>$pipeops</code></strong> slot. The set of edges in the Graph can be inspected through the <strong><code>$edges</code></strong> slot. It is possible to modify individual <code>PipeOps</code> and edges in a Graph through these slots, but this is not recommended because no error checking is performed and it may put the <code>Graph</code> in an unsupported state.</p>
 </div>
 <div id="networks" class="section level3">
@@ -367,43 +356,43 @@
 <a href="#networks" class="anchor"></a>Networks</h3>
 <p>The example above showed a linear preprocessing pipeline, but it is in fact possible to build true “graphs” of operations, as long as no loops are introduced<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. <code>PipeOp</code>s with multiple output channels can feed their data to multiple different subsequent <code>PipeOp</code>s, and <code>PipeOp</code>s with multiple input channels can take results from different <code>PipeOp</code>s. When a <code>PipeOp</code> has more than one input / output channel, then the <code>Graph</code>’s <code>$add_edge()</code> method needs an additional argument that indicates which channel to connect to. This argument can be given in the form of an integer, or as the name of the channel.</p>
 <p>The following constructs a <code>Graph</code> that copies the input and gives one copy each to a “scale” and a “pca” <code>PipeOp</code>. The resulting columns of each operation are put next to each other by “featureunion”.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">gr =<span class="st"> </span>Graph<span class="op">$</span><span class="kw">new</span>()<span class="op">$</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"copy"</span>, <span class="dt">outnum =</span> <span class="dv">2</span>))<span class="op">$</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>))<span class="op">$</span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>))<span class="op">$</span></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"featureunion"</span>, <span class="dt">innum =</span> <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb17-7" data-line-number="7">gr<span class="op">$</span></a>
-<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"copy"</span>, <span class="st">"scale"</span>, <span class="dt">src_channel =</span> <span class="dv">1</span>)<span class="op">$</span><span class="st">        </span><span class="co"># designating channel by index</span></a>
-<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"copy"</span>, <span class="st">"pca"</span>, <span class="dt">src_channel =</span> <span class="st">"output2"</span>)<span class="op">$</span><span class="st">  </span><span class="co"># designating channel by name</span></a>
-<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"scale"</span>, <span class="st">"featureunion"</span>, <span class="dt">dst_channel =</span> <span class="dv">1</span>)<span class="op">$</span></a>
-<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"pca"</span>, <span class="st">"featureunion"</span>, <span class="dt">dst_channel =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb17-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb17-13" data-line-number="13">gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="dt">html =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>gr =<span class="st"> </span>Graph<span class="op">$</span><span class="kw">new</span>()<span class="op">$</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"copy"</span>, <span class="dt">outnum =</span> <span class="dv">2</span>))<span class="op">$</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>))<span class="op">$</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>))<span class="op">$</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="st">  </span><span class="kw">add_pipeop</span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"featureunion"</span>, <span class="dt">innum =</span> <span class="dv">2</span>))</span>
+<span id="cb17-6"><a href="#cb17-6"></a></span>
+<span id="cb17-7"><a href="#cb17-7"></a>gr<span class="op">$</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"copy"</span>, <span class="st">"scale"</span>, <span class="dt">src_channel =</span> <span class="dv">1</span>)<span class="op">$</span><span class="st">        </span><span class="co"># designating channel by index</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"copy"</span>, <span class="st">"pca"</span>, <span class="dt">src_channel =</span> <span class="st">"output2"</span>)<span class="op">$</span><span class="st">  </span><span class="co"># designating channel by name</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"scale"</span>, <span class="st">"featureunion"</span>, <span class="dt">dst_channel =</span> <span class="dv">1</span>)<span class="op">$</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="st">  </span><span class="kw">add_edge</span>(<span class="st">"pca"</span>, <span class="st">"featureunion"</span>, <span class="dt">dst_channel =</span> <span class="dv">2</span>)</span>
+<span id="cb17-12"><a href="#cb17-12"></a></span>
+<span id="cb17-13"><a href="#cb17-13"></a>gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="dt">html =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div id="htmlwidget-5fff4f5b77fd097fcc76" style="width:50%;height:400px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5fff4f5b77fd097fcc76">{"x":{"nodes":{"id":["copy","scale","pca","<INPUT>","featureunion","<OUTPUT>"],"label":["copy","scale","pca","<INPUT>","featureunion","<OUTPUT>"],"shape":["box","box","box","database","box","ellipse"],"color":["lightblue","lightblue","lightblue","rgba(0,204,102,0.2)","lightblue","rgba(255,51,51,0.2)"],"value":[1,1,1,0.8,1,0.8],"title":["<p>PipeOp: <b>copy<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [*,*]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output1 [*,*], output2 [*,*]<\/p>","<p>PipeOp: <b>scale<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>PipeOp: <b>pca<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Input:<br>Name: copy.input<br>Train: *<br>Predict: *<\/p>","<p>PipeOp: <b>featureunion<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input1 [Task,Task], input2 [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Output:<br>Name: featureunion.output<br>Train: Task<br>Predict: Task<\/p>"],"x":[0,-1,1,0,0,0],"y":[-0.5,0,0,-1,0.5,1]},"edges":{"from":["copy","copy","scale","pca","<INPUT>","featureunion"],"to":["scale","pca","featureunion","featureunion","copy","<OUTPUT>"],"color":["lightblue","lightblue","lightblue","lightblue","lightblue","lightblue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"arrows":"to","smooth":{"enabled":false,"forceDirection":"vertical"}},"physics":{"stabilization":false}},"groups":null,"width":"50%","height":"400px","idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"full"}},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">gr<span class="op">$</span><span class="kw">train</span>(iris_first_half)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#&gt;        Species Petal.Length Petal.Width       PC1          PC2</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#&gt;   1:    setosa   -1.3357516  -1.3110521 -2.561012 -0.006922191</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#&gt;   2:    setosa   -1.3357516  -1.3110521 -2.561012 -0.006922191</span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">#&gt;   3:    setosa   -1.3923993  -1.3110521 -2.653190  0.031849692</span></a>
-<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#&gt;   4:    setosa   -1.2791040  -1.3110521 -2.468834 -0.045694073</span></a>
-<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt;   5:    setosa   -1.3357516  -1.3110521 -2.561012 -0.006922191</span></a>
-<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt;  ---                                                          </span></a>
-<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt; 146: virginica    0.8168591   1.4439941  1.755953  0.455479438</span></a>
-<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt; 147: virginica    0.7035638   0.9192234  1.416510  0.164312126</span></a>
-<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt; 148: virginica    0.8168591   1.0504160  1.639637  0.178946130</span></a>
-<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt; 149: virginica    0.9301544   1.4439941  1.940308  0.377935674</span></a>
-<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt; 150: virginica    0.7602115   0.7880307  1.469915  0.033362474</span></a></code></pre></div>
+<script type="application/json" data-for="htmlwidget-5fff4f5b77fd097fcc76">{"x":{"nodes":{"id":["copy","scale","pca","<INPUT>","featureunion","<OUTPUT>"],"label":["copy","scale","pca","<INPUT>","featureunion","<OUTPUT>"],"shape":["box","box","box","database","box","ellipse"],"color":["lightblue","lightblue","lightblue","rgba(0,204,102,0.2)","lightblue","rgba(255,51,51,0.2)"],"value":[1,1,1,0.8,1,0.8],"title":["<p>PipeOp: <b>copy<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [*,*]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output1 [*,*], output2 [*,*]<\/p>","<p>PipeOp: <b>scale<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>PipeOp: <b>pca<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Input:<br>Name: copy.input<br>Train: *<br>Predict: *<\/p>","<p>PipeOp: <b>featureunion<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input1 [Task,Task], input2 [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Output:<br>Name: featureunion.output<br>Train: Task<br>Predict: Task<\/p>"],"x":[0,-1,1,0,0,0],"y":[-0.5,0,0,-1,0.5,1]},"edges":{"from":["copy","copy","scale","pca","<INPUT>","featureunion"],"to":["scale","pca","featureunion","featureunion","copy","<OUTPUT>"],"color":["lightblue","lightblue","lightblue","lightblue","lightblue","lightblue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"arrows":"to","smooth":{"enabled":false,"forceDirection":"vertical"}},"physics":{"stabilization":false}},"groups":null,"width":"50%","height":"400px","idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"full"}},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>gr<span class="op">$</span><span class="kw">train</span>(iris_first_half)[[<span class="dv">1</span>]]<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>()</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="co">#&gt;        Species Petal.Length Petal.Width       PC1          PC2</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt;   1:    setosa   -1.3357516  -1.3110521 -2.561012 -0.006922191</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt;   2:    setosa   -1.3357516  -1.3110521 -2.561012 -0.006922191</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt;   3:    setosa   -1.3923993  -1.3110521 -2.653190  0.031849692</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt;   4:    setosa   -1.2791040  -1.3110521 -2.468834 -0.045694073</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt;   5:    setosa   -1.3357516  -1.3110521 -2.561012 -0.006922191</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt;  ---                                                          </span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt; 146: virginica    0.8168591   1.4439941  1.755953  0.455479438</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt; 147: virginica    0.7035638   0.9192234  1.416510  0.164312126</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt; 148: virginica    0.8168591   1.0504160  1.639637  0.178946130</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt; 149: virginica    0.9301544   1.4439941  1.940308  0.377935674</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#&gt; 150: virginica    0.7602115   0.7880307  1.469915  0.033362474</span></span></code></pre></div>
 </div>
 <div id="syntactic-sugar" class="section level3">
 <h3 class="hasAnchor">
 <a href="#syntactic-sugar" class="anchor"></a>Syntactic Sugar</h3>
 <p>Although it is possible to create intricate <code>Graphs</code> with edges going all over the place (as long as no loops are introduced), there is usually a clear direction of flow between “layers” in the <code>Graph</code>. It is therefore convenient to build up a <code>Graph</code> from layers, which can be done using the <strong><code><a href="../reference/grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></code></strong> (“double-arrow”) operator. It takes either a <code>PipeOp</code> or a <code>Graph</code> on each of its sides and connects all of the outputs of its left-hand side to one of the inputs each of its right-hand side–the number of inputs therefore must match the number of outputs. Together with the <strong><code><a href="../reference/gunion.html">gunion()</a></code></strong> operation, which takes <code>PipeOp</code>s or <code>Graph</code>s and arranges them next to each other akin to a (disjoint) graph union, the above network can more easily be constructed as follows:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">gr =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"copy"</span>, <span class="dt">outnum =</span> <span class="dv">2</span>) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/gunion.html">gunion</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>), mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>))) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"featureunion"</span>, <span class="dt">innum =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="dt">html =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>gr =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"copy"</span>, <span class="dt">outnum =</span> <span class="dv">2</span>) <span class="op">%&gt;&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="st">  </span><span class="kw"><a href="../reference/gunion.html">gunion</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>), mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>))) <span class="op">%&gt;&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="st">  </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"featureunion"</span>, <span class="dt">innum =</span> <span class="dv">2</span>)</span>
+<span id="cb19-4"><a href="#cb19-4"></a></span>
+<span id="cb19-5"><a href="#cb19-5"></a>gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="dt">html =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div id="htmlwidget-98e855f3cff1fe55edb8" style="width:50%;height:400px;" class="visNetwork html-widget"></div>
 <script type="application/json" data-for="htmlwidget-98e855f3cff1fe55edb8">{"x":{"nodes":{"id":["copy","scale","pca","<INPUT>","featureunion","<OUTPUT>"],"label":["copy","scale","pca","<INPUT>","featureunion","<OUTPUT>"],"shape":["box","box","box","database","box","ellipse"],"color":["lightblue","lightblue","lightblue","rgba(0,204,102,0.2)","lightblue","rgba(255,51,51,0.2)"],"value":[1,1,1,0.8,1,0.8],"title":["<p>PipeOp: <b>copy<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [*,*]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output1 [*,*], output2 [*,*]<\/p>","<p>PipeOp: <b>scale<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>PipeOp: <b>pca<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Input:<br>Name: copy.input<br>Train: *<br>Predict: *<\/p>","<p>PipeOp: <b>featureunion<\/b> (not trained)<br>values: <b>list()<\/b><br>Input channels <b>name [train type, predict type]<\/b>:<br>  input1 [Task,Task], input2 [Task,Task]<br>Output channels <b>name [train type, predict type]<\/b>:<br>  output [Task,Task]<\/p>","<p>Output:<br>Name: featureunion.output<br>Train: Task<br>Predict: Task<\/p>"],"x":[0,-1,1,0,0,0],"y":[-0.5,0,0,-1,0.5,1]},"edges":{"from":["copy","copy","scale","pca","<INPUT>","featureunion"],"to":["scale","pca","featureunion","featureunion","copy","<OUTPUT>"],"color":["lightblue","lightblue","lightblue","lightblue","lightblue","lightblue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"arrows":"to","smooth":{"enabled":false,"forceDirection":"vertical"}},"physics":{"stabilization":false}},"groups":null,"width":"50%","height":"400px","idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"full"}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -411,44 +400,44 @@
 <h3 class="hasAnchor">
 <a href="#pipeop-ids-and-id-name-clashes" class="anchor"></a><code>PipeOp</code> IDs and ID Name Clashes</h3>
 <p><code>PipeOp</code>s within a graph are addressed by their <strong><code>$id</code></strong>-slot. It is therefore necessary for all <code>PipeOp</code>s within a <code>Graph</code> to have a unique <code>$id</code>. The <code>$id</code> can be set during or after construction, but it should not directly be changed after a <code>PipeOp</code> was inserted in a <code>Graph</code>. At that point, the <strong><code>$set_names()</code></strong>-method can be used to change <code>PipeOp</code> ids.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">po1 =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>)</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">po2 =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">po1 <span class="op">%&gt;&gt;%</span><span class="st"> </span>po2  <span class="co"># name clash</span></a>
-<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="co">#&gt; Error in gunion(list(g1, g2)): Assertion on 'ids of pipe operators' failed: Must have unique names, but element 2 is duplicated.</span></a></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">po2<span class="op">$</span>id =<span class="st"> "scale2"</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">gr =<span class="st"> </span>po1 <span class="op">%&gt;&gt;%</span><span class="st"> </span>po2</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">gr</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="co">#&gt; Graph with 2 PipeOps:</span></a>
-<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="co">#&gt;      ID         State sccssors prdcssors</span></a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">#&gt;   scale &lt;&lt;UNTRAINED&gt;&gt;   scale2          </span></a>
-<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="co">#&gt;  scale2 &lt;&lt;UNTRAINED&gt;&gt;              scale</span></a></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># Alternative ways of getting new ids:</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>, <span class="dt">id =</span> <span class="st">"scale2"</span>)</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co">#&gt; PipeOp: &lt;scale2&gt; (not trained)</span></a>
-<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="co">#&gt; values: &lt;list()&gt;</span></a>
-<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="co">#&gt; Input channels &lt;name [train type, predict type]&gt;:</span></a>
-<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="co">#&gt;   input [Task,Task]</span></a>
-<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="co">#&gt; Output channels &lt;name [train type, predict type]&gt;:</span></a>
-<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="co">#&gt;   output [Task,Task]</span></a>
-<a class="sourceLine" id="cb22-9" data-line-number="9">PipeOpScale<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">"scale2"</span>)</a>
-<a class="sourceLine" id="cb22-10" data-line-number="10"><span class="co">#&gt; PipeOp: &lt;scale2&gt; (not trained)</span></a>
-<a class="sourceLine" id="cb22-11" data-line-number="11"><span class="co">#&gt; values: &lt;list()&gt;</span></a>
-<a class="sourceLine" id="cb22-12" data-line-number="12"><span class="co">#&gt; Input channels &lt;name [train type, predict type]&gt;:</span></a>
-<a class="sourceLine" id="cb22-13" data-line-number="13"><span class="co">#&gt;   input [Task,Task]</span></a>
-<a class="sourceLine" id="cb22-14" data-line-number="14"><span class="co">#&gt; Output channels &lt;name [train type, predict type]&gt;:</span></a>
-<a class="sourceLine" id="cb22-15" data-line-number="15"><span class="co">#&gt;   output [Task,Task]</span></a></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># sometimes names of PipeOps within a Graph need to be changed</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">gr2 =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>gr2</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="co">#&gt; Error in gunion(list(g1, g2)): Assertion on 'ids of pipe operators' failed: Must have unique names, but element 3 is duplicated.</span></a></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">gr2<span class="op">$</span><span class="kw">set_names</span>(<span class="st">"scale"</span>, <span class="st">"scale3"</span>)</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>gr2</a>
-<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="co">#&gt; Graph with 4 PipeOps:</span></a>
-<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">#&gt;      ID         State sccssors prdcssors</span></a>
-<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="co">#&gt;   scale &lt;&lt;UNTRAINED&gt;&gt;   scale2          </span></a>
-<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="co">#&gt;  scale2 &lt;&lt;UNTRAINED&gt;&gt;   scale3     scale</span></a>
-<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="co">#&gt;  scale3 &lt;&lt;UNTRAINED&gt;&gt;      pca    scale2</span></a>
-<a class="sourceLine" id="cb24-8" data-line-number="8"><span class="co">#&gt;     pca &lt;&lt;UNTRAINED&gt;&gt;             scale3</span></a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>po1 =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2"></a>po2 =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a>po1 <span class="op">%&gt;&gt;%</span><span class="st"> </span>po2  <span class="co"># name clash</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">#&gt; Error in gunion(list(g1, g2)): Assertion on 'ids of pipe operators' failed: Must have unique names, but element 2 is duplicated.</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>po2<span class="op">$</span>id =<span class="st"> "scale2"</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>gr =<span class="st"> </span>po1 <span class="op">%&gt;&gt;%</span><span class="st"> </span>po2</span>
+<span id="cb21-3"><a href="#cb21-3"></a>gr</span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#&gt; Graph with 2 PipeOps:</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="co">#&gt;      ID         State sccssors prdcssors</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="co">#&gt;   scale &lt;&lt;UNTRAINED&gt;&gt;   scale2          </span></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="co">#&gt;  scale2 &lt;&lt;UNTRAINED&gt;&gt;              scale</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Alternative ways of getting new ids:</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>, <span class="dt">id =</span> <span class="st">"scale2"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="co">#&gt; PipeOp: &lt;scale2&gt; (not trained)</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co">#&gt; values: &lt;list()&gt;</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co">#&gt; Input channels &lt;name [train type, predict type]&gt;:</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="co">#&gt;   input [Task,Task]</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="co">#&gt; Output channels &lt;name [train type, predict type]&gt;:</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="co">#&gt;   output [Task,Task]</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a>PipeOpScale<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">"scale2"</span>)</span>
+<span id="cb22-10"><a href="#cb22-10"></a><span class="co">#&gt; PipeOp: &lt;scale2&gt; (not trained)</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="co">#&gt; values: &lt;list()&gt;</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="co">#&gt; Input channels &lt;name [train type, predict type]&gt;:</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a><span class="co">#&gt;   input [Task,Task]</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a><span class="co">#&gt; Output channels &lt;name [train type, predict type]&gt;:</span></span>
+<span id="cb22-15"><a href="#cb22-15"></a><span class="co">#&gt;   output [Task,Task]</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># sometimes names of PipeOps within a Graph need to be changed</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>gr2 =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3"></a>gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>gr2</span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#&gt; Error in gunion(list(g1, g2)): Assertion on 'ids of pipe operators' failed: Must have unique names, but element 3 is duplicated.</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>gr2<span class="op">$</span><span class="kw">set_names</span>(<span class="st">"scale"</span>, <span class="st">"scale3"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>gr2</span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#&gt; Graph with 4 PipeOps:</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co">#&gt;      ID         State sccssors prdcssors</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="co">#&gt;   scale &lt;&lt;UNTRAINED&gt;&gt;   scale2          </span></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="co">#&gt;  scale2 &lt;&lt;UNTRAINED&gt;&gt;   scale3     scale</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a><span class="co">#&gt;  scale3 &lt;&lt;UNTRAINED&gt;&gt;      pca    scale2</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="co">#&gt;     pca &lt;&lt;UNTRAINED&gt;&gt;             scale3</span></span></code></pre></div>
 </div>
 </div>
 <div id="learners-in-graphs-graphs-in-learners" class="section level2">
@@ -468,36 +457,36 @@
 </h3>
 <p>The <code>PipeOpLearner</code> is constructed using a <code>mlr3</code> <code>Learner</code> and will use it to create <code>PredictionData</code> in the <code>$predict()</code> phase. The output during <code>$train()</code> is <code>NULL</code>. It can be used after a preprocessing pipeline, and it is even possible to perform operations on the <code>PredictionData</code>, for example by averaging multiple predictions or by using the “<code>PipeOpBackupLearner</code>” operator to impute predictions that a given model failed to create.</p>
 <p>The following is a very simple <code>Graph</code> that performs training and prediction on data after performing principal component analysis.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">gr =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"learner"</span>,</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">  mlr_learners<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"classif.rpart"</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">gr<span class="op">$</span><span class="kw">train</span>(task)</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="co">#&gt; $classif.rpart.output</span></a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(task)</a>
-<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="co">#&gt; $classif.rpart.output</span></a>
-<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="co">#&gt; &lt;PredictionClassif&gt; for 150 observations:</span></a>
-<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="co">#&gt;     row_id     truth  response</span></a>
-<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="co">#&gt;          1    setosa    setosa</span></a>
-<a class="sourceLine" id="cb26-9" data-line-number="9"><span class="co">#&gt;          2    setosa    setosa</span></a>
-<a class="sourceLine" id="cb26-10" data-line-number="10"><span class="co">#&gt;          3    setosa    setosa</span></a>
-<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="co">#&gt; ---                           </span></a>
-<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="co">#&gt;        148 virginica virginica</span></a>
-<a class="sourceLine" id="cb26-13" data-line-number="13"><span class="co">#&gt;        149 virginica virginica</span></a>
-<a class="sourceLine" id="cb26-14" data-line-number="14"><span class="co">#&gt;        150 virginica virginica</span></a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>gr =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"learner"</span>,</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  mlr_learners<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"classif.rpart"</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>gr<span class="op">$</span><span class="kw">train</span>(task)</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co">#&gt; $classif.rpart.output</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a>gr<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(task)</span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="co">#&gt; $classif.rpart.output</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="co">#&gt; &lt;PredictionClassif&gt; for 150 observations:</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="co">#&gt;     row_id     truth  response</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="co">#&gt;          1    setosa    setosa</span></span>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="co">#&gt;          2    setosa    setosa</span></span>
+<span id="cb26-10"><a href="#cb26-10"></a><span class="co">#&gt;          3    setosa    setosa</span></span>
+<span id="cb26-11"><a href="#cb26-11"></a><span class="co">#&gt; ---                           </span></span>
+<span id="cb26-12"><a href="#cb26-12"></a><span class="co">#&gt;        148 virginica virginica</span></span>
+<span id="cb26-13"><a href="#cb26-13"></a><span class="co">#&gt;        149 virginica virginica</span></span>
+<span id="cb26-14"><a href="#cb26-14"></a><span class="co">#&gt;        150 virginica virginica</span></span></code></pre></div>
 </div>
 <div id="graphlearner" class="section level3">
 <h3 class="hasAnchor">
 <a href="#graphlearner" class="anchor"></a><code>GraphLearner</code>
 </h3>
 <p>Although a <code>Graph</code> has <code>$train()</code> and <code>$predict()</code> functions, it can not be used directly in places where <code>mlr3</code> <code>Learners</code> can be used like resampling or benchmarks. For this, it needs to be wrapped in a <code>GraphLearner</code> object, which is a thin wrapper that enables this functionality. The resulting <code>Learner</code> is extremely versatile, because every part of it can be modified, replaced, parameterized and optimized over. Resampling the graph above can be done the same way that resampling of the <code>Learner</code> was performed in the <a href="#whats-the-point">introductory example</a>.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">lrngrph =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(gr)</a>
-<a class="sourceLine" id="cb27-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="kw">resample</span>(task, lrngrph, rsmp)</a>
-<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="co">#&gt; &lt;ResampleResult&gt; of 1 iterations</span></a>
-<a class="sourceLine" id="cb27-5" data-line-number="5"><span class="co">#&gt; * Task: iris</span></a>
-<a class="sourceLine" id="cb27-6" data-line-number="6"><span class="co">#&gt; * Learner: pca.classif.rpart</span></a>
-<a class="sourceLine" id="cb27-7" data-line-number="7"><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></a>
-<a class="sourceLine" id="cb27-8" data-line-number="8"><span class="co">#&gt; * Errors: 0 in 0 iterations</span></a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>lrngrph =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(gr)</span>
+<span id="cb27-2"><a href="#cb27-2"></a></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="kw">resample</span>(task, lrngrph, rsmp)</span>
+<span id="cb27-4"><a href="#cb27-4"></a><span class="co">#&gt; &lt;ResampleResult&gt; of 1 iterations</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="co">#&gt; * Task: iris</span></span>
+<span id="cb27-6"><a href="#cb27-6"></a><span class="co">#&gt; * Learner: pca.classif.rpart</span></span>
+<span id="cb27-7"><a href="#cb27-7"></a><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></span>
+<span id="cb27-8"><a href="#cb27-8"></a><span class="co">#&gt; * Errors: 0 in 0 iterations</span></span></code></pre></div>
 </div>
 </div>
 <div id="hyperparameters" class="section level2">
@@ -505,85 +494,85 @@
 <a href="#hyperparameters" class="anchor"></a>Hyperparameters</h2>
 <p><code>mlr3pipelines</code> relies on the <a href="https://paradox.mlr-org.com"><code>paradox</code></a> package to provide parameters that can modify each <code>PipeOp</code>’s behaviour. <code>paradox</code> parameters provide information about the parameters that can be changed, as well as their types and ranges. They provide a unified interface for benchmarks and parameter optimization (“tuning”). For a deep dive into <code>paradox</code>, see the <a href="https://mlr3book.mlr-org.com">mlr3book</a>.</p>
 <p>The <code>ParamSet</code>, representing the space of possible parameter configurations of a <code>PipeOp</code>, can be inspected by accessing the <strong><code>$param_set</code></strong> slot of a <code>PipeOp</code> or a <code>Graph</code>.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">op_pca =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">op_pca<span class="op">$</span>param_set</a>
-<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="co">#&gt; ParamSet: pca</span></a>
-<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="co">#&gt;                id    class lower upper      levels     default value</span></a>
-<a class="sourceLine" id="cb28-5" data-line-number="5"><span class="co">#&gt; 1:         center ParamLgl    NA    NA  TRUE,FALSE        TRUE      </span></a>
-<a class="sourceLine" id="cb28-6" data-line-number="6"><span class="co">#&gt; 2:         scale. ParamLgl    NA    NA  TRUE,FALSE       FALSE      </span></a>
-<a class="sourceLine" id="cb28-7" data-line-number="7"><span class="co">#&gt; 3:          rank. ParamInt     1   Inf                              </span></a>
-<a class="sourceLine" id="cb28-8" data-line-number="8"><span class="co">#&gt; 4: affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>op_pca =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2"></a>op_pca<span class="op">$</span>param_set</span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="co">#&gt; ParamSet: pca</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="co">#&gt;                id    class lower upper      levels     default value</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="co">#&gt; 1:         center ParamLgl    NA    NA  TRUE,FALSE        TRUE      </span></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="co">#&gt; 2:         scale. ParamLgl    NA    NA  TRUE,FALSE       FALSE      </span></span>
+<span id="cb28-7"><a href="#cb28-7"></a><span class="co">#&gt; 3:          rank. ParamInt     1   Inf                              </span></span>
+<span id="cb28-8"><a href="#cb28-8"></a><span class="co">#&gt; 4: affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></span></code></pre></div>
 <p>To set or retrieve a parameter, the <strong><code>$param_set$values</code></strong> slot can be accessed. Alternatively, the <code>param_vals</code> value can be given during construction.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">op_pca<span class="op">$</span>param_set<span class="op">$</span>values<span class="op">$</span>center =<span class="st"> </span><span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">op_pca<span class="op">$</span>param_set<span class="op">$</span>values</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="co">#&gt; $center</span></a>
-<a class="sourceLine" id="cb29-4" data-line-number="4"><span class="co">#&gt; [1] FALSE</span></a></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">op_pca =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">center =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb30-2" data-line-number="2">op_pca<span class="op">$</span>param_set<span class="op">$</span>values</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="co">#&gt; $center</span></a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>op_pca<span class="op">$</span>param_set<span class="op">$</span>values<span class="op">$</span>center =<span class="st"> </span><span class="ot">FALSE</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>op_pca<span class="op">$</span>param_set<span class="op">$</span>values</span>
+<span id="cb29-3"><a href="#cb29-3"></a><span class="co">#&gt; $center</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>op_pca =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"pca"</span>, <span class="dt">param_vals =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">center =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb30-2"><a href="#cb30-2"></a>op_pca<span class="op">$</span>param_set<span class="op">$</span>values</span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="co">#&gt; $center</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>Each <code>PipeOp</code> can bring its own individual parameters which are collected together in the <code>Graph</code>’s <code>$param_set</code>. A <code>PipeOp</code>’s parameter names are prefixed with its <code>$id</code> to prevent parameter name clashes.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">gr =<span class="st"> </span>op_pca <span class="op">%&gt;&gt;%</span><span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">gr<span class="op">$</span>param_set</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="co">#&gt; ParamSet: </span></a>
-<a class="sourceLine" id="cb31-4" data-line-number="4"><span class="co">#&gt;                      id    class lower upper      levels     default value</span></a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="co">#&gt; 1:           pca.center ParamLgl    NA    NA  TRUE,FALSE        TRUE  TRUE</span></a>
-<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="co">#&gt; 2:           pca.scale. ParamLgl    NA    NA  TRUE,FALSE       FALSE      </span></a>
-<a class="sourceLine" id="cb31-7" data-line-number="7"><span class="co">#&gt; 3:            pca.rank. ParamInt     1   Inf                              </span></a>
-<a class="sourceLine" id="cb31-8" data-line-number="8"><span class="co">#&gt; 4:   pca.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;      </span></a>
-<a class="sourceLine" id="cb31-9" data-line-number="9"><span class="co">#&gt; 5:         scale.center ParamLgl    NA    NA  TRUE,FALSE        TRUE      </span></a>
-<a class="sourceLine" id="cb31-10" data-line-number="10"><span class="co">#&gt; 6:          scale.scale ParamLgl    NA    NA  TRUE,FALSE        TRUE      </span></a>
-<a class="sourceLine" id="cb31-11" data-line-number="11"><span class="co">#&gt; 7: scale.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></a></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">gr<span class="op">$</span>param_set<span class="op">$</span>values</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="co">#&gt; $pca.center</span></a>
-<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>gr =<span class="st"> </span>op_pca <span class="op">%&gt;&gt;%</span><span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"scale"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2"></a>gr<span class="op">$</span>param_set</span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="co">#&gt; ParamSet: </span></span>
+<span id="cb31-4"><a href="#cb31-4"></a><span class="co">#&gt;                      id    class lower upper      levels     default value</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a><span class="co">#&gt; 1:           pca.center ParamLgl    NA    NA  TRUE,FALSE        TRUE  TRUE</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a><span class="co">#&gt; 2:           pca.scale. ParamLgl    NA    NA  TRUE,FALSE       FALSE      </span></span>
+<span id="cb31-7"><a href="#cb31-7"></a><span class="co">#&gt; 3:            pca.rank. ParamInt     1   Inf                              </span></span>
+<span id="cb31-8"><a href="#cb31-8"></a><span class="co">#&gt; 4:   pca.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;      </span></span>
+<span id="cb31-9"><a href="#cb31-9"></a><span class="co">#&gt; 5:         scale.center ParamLgl    NA    NA  TRUE,FALSE        TRUE      </span></span>
+<span id="cb31-10"><a href="#cb31-10"></a><span class="co">#&gt; 6:          scale.scale ParamLgl    NA    NA  TRUE,FALSE        TRUE      </span></span>
+<span id="cb31-11"><a href="#cb31-11"></a><span class="co">#&gt; 7: scale.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>gr<span class="op">$</span>param_set<span class="op">$</span>values</span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="co">#&gt; $pca.center</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>Both <code>PipeOpLearner</code> and <code>GraphLearner</code> preserve parameters of the objects they encapsulate.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">op_rpart =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"learner"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"classif.rpart"</span>))</a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">op_rpart<span class="op">$</span>param_set</a>
-<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="co">#&gt; ParamSet: classif.rpart</span></a>
-<a class="sourceLine" id="cb33-4" data-line-number="4"><span class="co">#&gt;              id    class lower upper levels default value</span></a>
-<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="co">#&gt; 1:     minsplit ParamInt     1   Inf             20      </span></a>
-<a class="sourceLine" id="cb33-6" data-line-number="6"><span class="co">#&gt; 2:           cp ParamDbl     0     1           0.01      </span></a>
-<a class="sourceLine" id="cb33-7" data-line-number="7"><span class="co">#&gt; 3:   maxcompete ParamInt     0   Inf              4      </span></a>
-<a class="sourceLine" id="cb33-8" data-line-number="8"><span class="co">#&gt; 4: maxsurrogate ParamInt     0   Inf              5      </span></a>
-<a class="sourceLine" id="cb33-9" data-line-number="9"><span class="co">#&gt; 5:     maxdepth ParamInt     1    30             30      </span></a>
-<a class="sourceLine" id="cb33-10" data-line-number="10"><span class="co">#&gt; 6:         xval ParamInt     0   Inf             10     0</span></a></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>op_rpart)</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">glrn<span class="op">$</span>param_set</a>
-<a class="sourceLine" id="cb34-3" data-line-number="3"><span class="co">#&gt; ParamSet: </span></a>
-<a class="sourceLine" id="cb34-4" data-line-number="4"><span class="co">#&gt;                             id    class lower upper      levels     default</span></a>
-<a class="sourceLine" id="cb34-5" data-line-number="5"><span class="co">#&gt;  1:                 pca.center ParamLgl    NA    NA  TRUE,FALSE        TRUE</span></a>
-<a class="sourceLine" id="cb34-6" data-line-number="6"><span class="co">#&gt;  2:                 pca.scale. ParamLgl    NA    NA  TRUE,FALSE       FALSE</span></a>
-<a class="sourceLine" id="cb34-7" data-line-number="7"><span class="co">#&gt;  3:                  pca.rank. ParamInt     1   Inf                        </span></a>
-<a class="sourceLine" id="cb34-8" data-line-number="8"><span class="co">#&gt;  4:         pca.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></a>
-<a class="sourceLine" id="cb34-9" data-line-number="9"><span class="co">#&gt;  5:               scale.center ParamLgl    NA    NA  TRUE,FALSE        TRUE</span></a>
-<a class="sourceLine" id="cb34-10" data-line-number="10"><span class="co">#&gt;  6:                scale.scale ParamLgl    NA    NA  TRUE,FALSE        TRUE</span></a>
-<a class="sourceLine" id="cb34-11" data-line-number="11"><span class="co">#&gt;  7:       scale.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></a>
-<a class="sourceLine" id="cb34-12" data-line-number="12"><span class="co">#&gt;  8:     classif.rpart.minsplit ParamInt     1   Inf                      20</span></a>
-<a class="sourceLine" id="cb34-13" data-line-number="13"><span class="co">#&gt;  9:           classif.rpart.cp ParamDbl     0     1                    0.01</span></a>
-<a class="sourceLine" id="cb34-14" data-line-number="14"><span class="co">#&gt; 10:   classif.rpart.maxcompete ParamInt     0   Inf                       4</span></a>
-<a class="sourceLine" id="cb34-15" data-line-number="15"><span class="co">#&gt; 11: classif.rpart.maxsurrogate ParamInt     0   Inf                       5</span></a>
-<a class="sourceLine" id="cb34-16" data-line-number="16"><span class="co">#&gt; 12:     classif.rpart.maxdepth ParamInt     1    30                      30</span></a>
-<a class="sourceLine" id="cb34-17" data-line-number="17"><span class="co">#&gt; 13:         classif.rpart.xval ParamInt     0   Inf                      10</span></a>
-<a class="sourceLine" id="cb34-18" data-line-number="18"><span class="co">#&gt;     value</span></a>
-<a class="sourceLine" id="cb34-19" data-line-number="19"><span class="co">#&gt;  1:  TRUE</span></a>
-<a class="sourceLine" id="cb34-20" data-line-number="20"><span class="co">#&gt;  2:      </span></a>
-<a class="sourceLine" id="cb34-21" data-line-number="21"><span class="co">#&gt;  3:      </span></a>
-<a class="sourceLine" id="cb34-22" data-line-number="22"><span class="co">#&gt;  4:      </span></a>
-<a class="sourceLine" id="cb34-23" data-line-number="23"><span class="co">#&gt;  5:      </span></a>
-<a class="sourceLine" id="cb34-24" data-line-number="24"><span class="co">#&gt;  6:      </span></a>
-<a class="sourceLine" id="cb34-25" data-line-number="25"><span class="co">#&gt;  7:      </span></a>
-<a class="sourceLine" id="cb34-26" data-line-number="26"><span class="co">#&gt;  8:      </span></a>
-<a class="sourceLine" id="cb34-27" data-line-number="27"><span class="co">#&gt;  9:      </span></a>
-<a class="sourceLine" id="cb34-28" data-line-number="28"><span class="co">#&gt; 10:      </span></a>
-<a class="sourceLine" id="cb34-29" data-line-number="29"><span class="co">#&gt; 11:      </span></a>
-<a class="sourceLine" id="cb34-30" data-line-number="30"><span class="co">#&gt; 12:      </span></a>
-<a class="sourceLine" id="cb34-31" data-line-number="31"><span class="co">#&gt; 13:     0</span></a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>op_rpart =<span class="st"> </span>mlr_pipeops<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"learner"</span>, mlr_learners<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"classif.rpart"</span>))</span>
+<span id="cb33-2"><a href="#cb33-2"></a>op_rpart<span class="op">$</span>param_set</span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="co">#&gt; ParamSet: classif.rpart</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a><span class="co">#&gt;              id    class lower upper levels default value</span></span>
+<span id="cb33-5"><a href="#cb33-5"></a><span class="co">#&gt; 1:     minsplit ParamInt     1   Inf             20      </span></span>
+<span id="cb33-6"><a href="#cb33-6"></a><span class="co">#&gt; 2:           cp ParamDbl     0     1           0.01      </span></span>
+<span id="cb33-7"><a href="#cb33-7"></a><span class="co">#&gt; 3:   maxcompete ParamInt     0   Inf              4      </span></span>
+<span id="cb33-8"><a href="#cb33-8"></a><span class="co">#&gt; 4: maxsurrogate ParamInt     0   Inf              5      </span></span>
+<span id="cb33-9"><a href="#cb33-9"></a><span class="co">#&gt; 5:     maxdepth ParamInt     1    30             30      </span></span>
+<span id="cb33-10"><a href="#cb33-10"></a><span class="co">#&gt; 6:         xval ParamInt     0   Inf             10     0</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(gr <span class="op">%&gt;&gt;%</span><span class="st"> </span>op_rpart)</span>
+<span id="cb34-2"><a href="#cb34-2"></a>glrn<span class="op">$</span>param_set</span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co">#&gt; ParamSet: </span></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="co">#&gt;                             id    class lower upper      levels     default</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a><span class="co">#&gt;  1:                 pca.center ParamLgl    NA    NA  TRUE,FALSE        TRUE</span></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="co">#&gt;  2:                 pca.scale. ParamLgl    NA    NA  TRUE,FALSE       FALSE</span></span>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="co">#&gt;  3:                  pca.rank. ParamInt     1   Inf                        </span></span>
+<span id="cb34-8"><a href="#cb34-8"></a><span class="co">#&gt;  4:         pca.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></span>
+<span id="cb34-9"><a href="#cb34-9"></a><span class="co">#&gt;  5:               scale.center ParamLgl    NA    NA  TRUE,FALSE        TRUE</span></span>
+<span id="cb34-10"><a href="#cb34-10"></a><span class="co">#&gt;  6:                scale.scale ParamLgl    NA    NA  TRUE,FALSE        TRUE</span></span>
+<span id="cb34-11"><a href="#cb34-11"></a><span class="co">#&gt;  7:       scale.affect_columns ParamUty    NA    NA             &lt;NoDefault&gt;</span></span>
+<span id="cb34-12"><a href="#cb34-12"></a><span class="co">#&gt;  8:     classif.rpart.minsplit ParamInt     1   Inf                      20</span></span>
+<span id="cb34-13"><a href="#cb34-13"></a><span class="co">#&gt;  9:           classif.rpart.cp ParamDbl     0     1                    0.01</span></span>
+<span id="cb34-14"><a href="#cb34-14"></a><span class="co">#&gt; 10:   classif.rpart.maxcompete ParamInt     0   Inf                       4</span></span>
+<span id="cb34-15"><a href="#cb34-15"></a><span class="co">#&gt; 11: classif.rpart.maxsurrogate ParamInt     0   Inf                       5</span></span>
+<span id="cb34-16"><a href="#cb34-16"></a><span class="co">#&gt; 12:     classif.rpart.maxdepth ParamInt     1    30                      30</span></span>
+<span id="cb34-17"><a href="#cb34-17"></a><span class="co">#&gt; 13:         classif.rpart.xval ParamInt     0   Inf                      10</span></span>
+<span id="cb34-18"><a href="#cb34-18"></a><span class="co">#&gt;     value</span></span>
+<span id="cb34-19"><a href="#cb34-19"></a><span class="co">#&gt;  1:  TRUE</span></span>
+<span id="cb34-20"><a href="#cb34-20"></a><span class="co">#&gt;  2:      </span></span>
+<span id="cb34-21"><a href="#cb34-21"></a><span class="co">#&gt;  3:      </span></span>
+<span id="cb34-22"><a href="#cb34-22"></a><span class="co">#&gt;  4:      </span></span>
+<span id="cb34-23"><a href="#cb34-23"></a><span class="co">#&gt;  5:      </span></span>
+<span id="cb34-24"><a href="#cb34-24"></a><span class="co">#&gt;  6:      </span></span>
+<span id="cb34-25"><a href="#cb34-25"></a><span class="co">#&gt;  7:      </span></span>
+<span id="cb34-26"><a href="#cb34-26"></a><span class="co">#&gt;  8:      </span></span>
+<span id="cb34-27"><a href="#cb34-27"></a><span class="co">#&gt;  9:      </span></span>
+<span id="cb34-28"><a href="#cb34-28"></a><span class="co">#&gt; 10:      </span></span>
+<span id="cb34-29"><a href="#cb34-29"></a><span class="co">#&gt; 11:      </span></span>
+<span id="cb34-30"><a href="#cb34-30"></a><span class="co">#&gt; 12:      </span></span>
+<span id="cb34-31"><a href="#cb34-31"></a><span class="co">#&gt; 13:     0</span></span></code></pre></div>
 </div>
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>It is tempting to denote this as a “directed acyclic graph”, but this would not be entirely correct because edges run between channels of <code>PipeOp</code>s, not <code>PipeOp</code>s themselves.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>It is tempting to denote this as a “directed acyclic graph”, but this would not be entirely correct because edges run between channels of <code>PipeOp</code>s, not <code>PipeOp</code>s themselves.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
@@ -595,10 +584,37 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#whats-the-point">What’s the Point</a></li>
-      <li><a href="#pipeop-pipeline-operators"><code>PipeOp</code>: Pipeline Operators</a></li>
-      <li><a href="#pipeop-channels">PipeOp Channels</a></li>
-      <li><a href="#graph-networks-of-pipeops"><code>Graph</code>: Networks of <code>PipeOp</code>s</a></li>
-      <li><a href="#learners-in-graphs-graphs-in-learners">Learners in Graphs, Graphs in Learners</a></li>
+      <li>
+<a href="#pipeop-pipeline-operators"><code>PipeOp</code>: Pipeline Operators</a>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#why-the-state">Why the <code>$state</code></a></li>
+      <li><a href="#where-to-get-pipeops">Where to Get <code>PipeOp</code>s</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#pipeop-channels">PipeOp Channels</a>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#input-channels">Input Channels</a></li>
+      <li><a href="#output-channels">Output Channels</a></li>
+      <li><a href="#channel-configuration">Channel Configuration</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#graph-networks-of-pipeops"><code>Graph</code>: Networks of <code>PipeOp</code>s</a>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#basics">Basics</a></li>
+      <li><a href="#networks">Networks</a></li>
+      <li><a href="#syntactic-sugar">Syntactic Sugar</a></li>
+      <li><a href="#pipeop-ids-and-id-name-clashes"><code>PipeOp</code> IDs and ID Name Clashes</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#learners-in-graphs-graphs-in-learners">Learners in Graphs, Graphs in Learners</a>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#pipeoplearner"><code>PipeOpLearner</code></a></li>
+      <li><a href="#graphlearner"><code>GraphLearner</code></a></li>
+      </ul>
+</li>
       <li><a href="#hyperparameters">Hyperparameters</a></li>
       </ul>
 </div>

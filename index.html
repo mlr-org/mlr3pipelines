@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
       </span>
     </div>
 
@@ -65,39 +65,28 @@
   </ul>
 </li>
 <li>
-  <a href="reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
-     
-    Reference
-  </a>
+  <a href="reference/index.html">Function Reference</a>
 </li>
 <li>
-  <a href="news/index.html">Changelog</a>
-</li>
-<li>
-  <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
-     
-    mlr3book
-  </a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://mlr-org.slack.com">
-    <span class="fab fa fab fa-slack"></span>
+    <span class="fa fa-slack"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://stackoverflow.com/questions/tagged/mlr">
-    <span class="fab fa fab fa-stack-overflow"></span>
+  <a href="https://stackoverflow.com/questions/tagged/mlr3">
+    <span class="fa fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -119,10 +108,8 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="mlr3pipelines" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#mlr3pipelines" class="anchor"></a>mlr3pipelines <img src="reference/figures/logo.png" align="right">
-</h1></div>
+<div id="mlr3pipelines-" class="section level1">
+
 <p>Package website: <a href="https://mlr3pipelines.mlr-org.com/">release</a> | <a href="https://mlr3pipelines.mlr-org.com/dev">dev</a></p>
 <p>Dataflow Programming for Machine Learning in R.</p>
 <p><a href="https://travis-ci.org/mlr-org/mlr3pipelines"><img src="https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master" alt="Travis build status"></a> <a href="https://cran.r-project.org/package=mlr3pipelines"><img src="https://www.r-pkg.org/badges/version/mlr3pipelines" alt="CRAN"></a> <a href="https://codecov.io/github/mlr-org/mlr3pipelines"><img src="https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg" alt="Coverage"></a> <a href="https://stackoverflow.com/questions/tagged/mlr3"><img src="https://img.shields.io/badge/stackoverflow-mlr3-orange.svg" alt="StackOverflow"></a></p>
@@ -133,19 +120,19 @@
 <p><a href="https://www.youtube.com/watch?v=gEW5RxkbQuQ"><img src="https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg" alt="UseR 2019 mlr3pipelines"></a></p>
 <p><strong><code>mlr3pipelines</code></strong> is a <a href="https://en.wikipedia.org/wiki/Dataflow_programming">dataflow programming</a> toolkit for machine learning in R utilising the <strong><a href="https://github.com/mlr-org/mlr3">mlr3</a></strong> package. Machine learning workflows can be written as directed “Graphs” that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the <strong><a href="https://github.com/mlr-org/mlr3tuning">mlr3tuning</a></strong> package, it is even possible to simultaneously optimize parameters of multiple processing units.</p>
 <p>In principle, <em>mlr3pipelines</em> is about defining singular data and model manipulation steps as “PipeOps”:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">pca        =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"pca"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">filter     =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"filter"</span>, <span class="dt">filter =</span> mlr3filters<span class="op">::</span><span class="kw"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span>(<span class="st">"variance"</span>), <span class="dt">filter.frac =</span> <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">learner_po =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"learner"</span>, <span class="dt">learner =</span> <span class="kw">lrn</span>(<span class="st">"classif.rpart"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pca        =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"pca"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>filter     =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"filter"</span>, <span class="dt">filter =</span> mlr3filters<span class="op">::</span><span class="kw"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span>(<span class="st">"variance"</span>), <span class="dt">filter.frac =</span> <span class="fl">0.5</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>learner_po =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"learner"</span>, <span class="dt">learner =</span> <span class="kw">lrn</span>(<span class="st">"classif.rpart"</span>))</span></code></pre></div>
 <p>These pipeops can then be combined together to define machine learning pipelines. These can be wrapped in a <code>GraphLearner</code> that behave like any other <code>Learner</code> in <code>mlr3</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">graph =<span class="st"> </span>pca <span class="op">%&gt;&gt;%</span><span class="st"> </span>filter <span class="op">%&gt;&gt;%</span><span class="st"> </span>learner_po</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>graph =<span class="st"> </span>pca <span class="op">%&gt;&gt;%</span><span class="st"> </span>filter <span class="op">%&gt;&gt;%</span><span class="st"> </span>learner_po</span>
+<span id="cb2-2"><a href="#cb2-2"></a>glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph)</span></code></pre></div>
 <p>This learner can be used for resampling, benchmarking, and even tuning.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">resample</span>(<span class="kw">tsk</span>(<span class="st">"iris"</span>), glrn, <span class="kw">rsmp</span>(<span class="st">"cv"</span>))</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; * Task: iris</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; * Learner: pca.variance.classif.rpart</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; * Errors: 0 in 0 iterations</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">resample</span>(<span class="kw">tsk</span>(<span class="st">"iris"</span>), glrn, <span class="kw">rsmp</span>(<span class="st">"cv"</span>))</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; * Task: iris</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; * Learner: pca.variance.classif.rpart</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; * Errors: 0 in 0 iterations</span></span></code></pre></div>
 </div>
 <div id="feature-overview" class="section level2">
 <h2 class="hasAnchor">
