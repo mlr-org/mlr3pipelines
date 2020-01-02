@@ -1,0 +1,137 @@
+---
+title: "mlr3pipelines Pipeline Gallery"
+author: "Florian Pfisterer"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{mlr3pipelines Pipeline Gallery}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  cache = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+set.seed(8008135)
+compiler::enableJIT(0)
+library("mlr3")
+library("mlr3pipelines")
+```
+
+
+# mlr3pipelines Pipeline Gallery
+
+The purpose of this vignette is to showcase a series of `Pipelines` that can be constructed using `mlr3pipelines`. 
+The goal here is to show the powerful models and processing pipelines that can be built using the relatively simple underlying building blocks `mlr3pipelines` offer.
+
+## Robust Learners
+
+A relatively widespread problem in many machine learning applications is, 
+that `Learner`s can often not be used interchangeably because they sometimes for example can not deal with missing data, allow only numeric inputs or in a classification setting can only deal with binary target variables.
+A number of different remedies are often available. 
+
+The following `Pipeline` solves a series of such problems.
+It will:
+- Add an indicator of whether a value was missing or not
+- Impute numerics from a histogram and factors with a new level
+- Balance classes in case they are inbalanced
+- Remove constant features 
+
+```{r}
+impute = po("missind") %>>% po("imputenewlvl") %>>% po("imputehist")
+encode = po("fixfactors") %>>% po("encodeimpact")
+balance  = po("classbalancing")
+fixup    = po("removeconstants")
+learner = po("learner", lrn("classif.rpart"))
+pipe = impute %>>% encode %>>% balance %>>% fixup %>>% learner
+```
+
+```{r, fig.height=8}
+pipe$plot()
+```
+
+## Feature Unions
+
+In some cases, we also might want to simply compute new features from
+our data and add those before handing the data on to the model.
+
+In this example we will compute new datapoints from all higher order interactions of the features and additionally add values from the result of a principal component transform of the data.
+
+```{r}
+copy = po("copy", 3L)
+transforms = gunion(list(
+  po("modelmatrix", formula = ~. ^ 2),
+  po("pca")
+))
+union = po("featureunion")
+learner = po("learner", lrn("classif.rpart"))
+
+pipe = copy %>>% transforms %>>% union %>>% learner
+```
+
+```{r}
+pipe$plot()
+```
+
+## Ensembles and Stacking
+
+This example from the `mlr3` book showcases how to do stacking:
+
+```{r}
+library(mlr3learners) # for classif.glmnet
+rprt = lrn("classif.rpart", predict_type = "prob")
+glmn = lrn("classif.glmnet", predict_type = "prob")
+
+#  Create Learner CV Operators
+lrn_0 = PipeOpLearnerCV$new(rprt, id = "rpart_cv_1")
+lrn_0$values$maxdepth = 5L
+lrn_1 = PipeOpPCA$new(id = "pca1") %>>% PipeOpLearnerCV$new(rprt, id = "rpart_cv_2")
+lrn_1$values$rpart_cv_2.maxdepth = 1L
+lrn_2 = PipeOpPCA$new(id = "pca2") %>>% PipeOpLearnerCV$new(glmn)
+
+# Union them with a PipeOpNULL to keep original features
+level_0 = gunion(list(lrn_0, lrn_1,lrn_2, PipeOpNOP$new(id = "NOP1")))
+
+# Cbind the output 3 times, train 2 learners but also keep level
+# 0 predictions
+level_1 = level_0 %>>%
+  PipeOpFeatureUnion$new(4) %>>%
+  PipeOpCopy$new(3) %>>%
+  gunion(list(
+    PipeOpLearnerCV$new(rprt, id = "rpart_cv_l1"),
+    PipeOpLearnerCV$new(glmn, id = "glmnt_cv_l1"),
+    PipeOpNOP$new(id = "NOP_l1")
+  ))
+
+# Cbind predictions, train a final learner
+level_2 = level_1 %>>%
+  PipeOpFeatureUnion$new(3, id = "u2") %>>%
+  PipeOpLearner$new(rprt,
+    id = "rpart_l2")
+
+# Plot the resulting graph
+level_2$plot(html = TRUE)
+```
+
+## Hurdle Models
+
+
+## Ordinal Regression
+
+```{r}
+library(mlr3ordinal)
+task = tsk("winerating")
+learner = lrn("regr.rpart")
+pipe = PipelineOrdinal(learner)
+pipe$plot()
+```
+
+## Multi-output Classification
+
+Under development, currently not available.
+
+
