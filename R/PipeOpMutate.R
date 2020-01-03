@@ -114,3 +114,50 @@ check_mutation_formulae = function(x) {
 }
 
 mlr_pipeops$add("mutate", PipeOpMutate)
+
+
+#' @title PipeOpMutateTarget
+#'
+#' @format Abstract [`R6Class`] inheriting from [`PipeOpMutate`].
+#'
+#' @description
+#' Computes a new feature from the target.
+#' The new feature must be a function of the old target and ensure that factor levels etc.
+#' are consistent across train and test set.
+#'
+#' @family PipeOps
+#' @include PipeOpMutate.R
+#' @export
+PipeOpMutateTarget = R6Class("PipeOpMutateTarget",
+  inherit = PipeOpMutate,
+  public = list(
+    initialize = function(id = "mutate_target", param_vals = list()) {
+      super$initialize(id = id, param_vals = param_vals)
+    },
+    transform = function(task) {
+      taskdata = task$data(cols = task$target_names)
+      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
+        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
+      }))
+      if (ncol(newdata) && nrow(newdata) != task$nrow) {
+        stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
+      }
+      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
+      task
+    },
+    predict_task = function(task) {
+      taskdata = task$data(cols = task$target_names)[, (task$target_names):= NA]
+      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
+        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
+      }))
+      if (ncol(newdata) && nrow(newdata) != task$nrow) {
+        stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
+      }
+      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
+      task
+    }
+  )
+)
+
+#' @include mlr_pipeops.R
+mlr_pipeops$add("mutate_target", PipeOpMutateTarget)
