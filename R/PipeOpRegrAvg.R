@@ -51,7 +51,7 @@
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' # Simple Bagging
 #' gr = greplicate(n = 5,
@@ -60,7 +60,7 @@
 #' ) %>>%
 #'   po("classifavg")
 #'
-#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("cv", folds = 3))
+#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 

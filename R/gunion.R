@@ -1,16 +1,17 @@
 #' @title Disjoint Union of Graphs
 #'
 #' @description
-#' Takes an arbitrary amount of [`Graph`]s and/or [`PipeOp`]s as inputs and joins
-#' them in a new `Graph`.
+#' Takes an arbitrary amount of [`Graph`]s or [`PipeOp`]s (or objects that can be automatically
+#' converted into [`Graph`]s or [`PipeOp`]s, see [`as_graph()`] and [`as_pipeop()`]) as inputs and joins
+#' them in a new [`Graph`].
 #'
-#' The `PipeOp`s of the input `Graph`s are not joined with new edges across
-#' `Graph`s, so if `length(graphs) > 1` the resulting `Graph` will be disconnected.
+#' The [`PipeOp`]s of the input [`Graph`]s are not joined with new edges across
+#' [`Graph`]s, so if `length(graphs) > 1` the resulting [`Graph`] will be disconnected.
 #'
-#' @param graphs `list` of ([`Graph`] | [`PipeOp`]) \cr
+#' @param graphs `list` of ([`Graph`] | [`PipeOp`])\cr
 #'   List of elements with one of the types defined above, which are the
-#'   graphs to be joined.
-#' @return [`Graph`] the resulting `Graph`.
+#'   [`Graph`]s to be joined.
+#' @return [`Graph`] the resulting [`Graph`].
 #'
 #' @family Graph operators
 #' @export

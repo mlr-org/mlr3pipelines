@@ -1,6 +1,5 @@
 context("Selector")
 
-
 test_that("Selectors work", {
   iris_task = mlr3::mlr_tasks$get("iris")
   bh_task = mlr3::mlr_tasks$get("boston_housing")

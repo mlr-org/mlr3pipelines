@@ -14,7 +14,7 @@
 #' for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`).
 #' Learned weights can be obtained from `$model`.
 #' Using non-linear optimization is implemented in the SuperLearner R package.
-#' For a more detailed analysis the reader is refered to
+#' For a more detailed analysis the reader is referred to
 #' *LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation*.
 #'
 #' @section Parameter Set:
@@ -51,11 +51,11 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
               levels = nlopt_levels)
           )
         ),
-        param_vals = list(algorithm = "NLOPT_LN_COBYLA"),
         predict_types = c("response", "prob"),
         feature_types = c("integer", "numeric", "factor"),
         properties = c("twoclass", "multiclass")
       )
+      self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
 
     train_internal = function(task) {
@@ -125,10 +125,10 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
             ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nlopt_levels)
           )
         ),
-        param_vals = list(algorithm = "NLOPT_LN_COBYLA"),
         predict_types = "response",
         feature_types = c("integer", "numeric")
       )
+      self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
 
     train_internal = function(task) {
@@ -154,6 +154,11 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
     }
   )
 )
+
+# the following to avoid static checker warnings. This is because the '@usage' above checks for this.
+# In fact we set usage only so that `pkgdown` shows the name correctly.
+mlr_learners_regr.avg = NULL
+mlr_learners_classif.avg = NULL
 
 nlopt_levels = c("NLOPT_GN_DIRECT", "NLOPT_GN_DIRECT_L", "NLOPT_GN_DIRECT_L_RAND",
   "NLOPT_GN_DIRECT_NOSCAL", "NLOPT_GN_DIRECT_L_NOSCAL", "NLOPT_GN_DIRECT_L_RAND_NOSCAL",

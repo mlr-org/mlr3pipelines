@@ -1,7 +1,7 @@
-do_package_checks(error_on = "error")
+do_package_checks(error_on = "warning")
 
 if (ci_has_env("BUILD_PKGDOWN")) {
-  do_pkgdown(orphan = TRUE)
+  do_pkgdown()
 }
 
 get_stage("after_success") %>%

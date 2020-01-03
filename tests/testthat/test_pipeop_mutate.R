@@ -1,4 +1,4 @@
-context("mutate")
+context("PipeOpMutate")
 
 test_that("mutate", {
   op = PipeOpMutate$new()

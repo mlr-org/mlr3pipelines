@@ -48,7 +48,7 @@
 #' @include PipeOp.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("wine")
 #' opc = mlr_pipeops$get("chunk", 2)

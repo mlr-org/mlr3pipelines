@@ -64,7 +64,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("iris")
 #' poca = po("colapply", applicator = as.character)
@@ -96,7 +96,7 @@ PipeOpColApply = R6Class("PipeOpColApply",
       super$initialize(id, ps, param_vals = param_vals)
     },
 
-    train_dt = function(dt, levels) {
+    train_dt = function(dt, levels, target) {
       dt = self$transform_dt(dt, levels)
       self$state = list(emptydt = dt[integer(0)])
       dt

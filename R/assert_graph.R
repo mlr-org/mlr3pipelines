@@ -15,10 +15,17 @@ assert_graph = function(x) {
 #' @title Conversion to mlr3pipeline Graph
 #'
 #' @description
-#' The object is turned into a `Graph` if possible.
+#' The argument is turned into a [`Graph`] if possible.
 #' If `clone` is `TRUE`, a deep copy is made
-#' if the incoming object is a `Graph` to ensure the resulting
+#' if the incoming object is a [`Graph`] to ensure the resulting
 #' object is a different reference from the incoming object.
+#'
+#' [`as_graph()`] is an S3 method and can therefore be implemented
+#' by other packages that may add objects that can naturally be converted to [`Graph`]s.
+#'
+#' By default, [`as_graph()`] tries to
+#' * apply [`gunion()`] to `x` if it is a `list`, which recursively applies [`as_graph()`] to all list elements first
+#' * create a [`Graph`] with only one element if `x` is a [`PipeOp`] or can be converted to one using [`as_pipeop()`].
 #'
 #' @param x (`any`) \cr
 #'   Object to convert.
@@ -71,11 +78,16 @@ assert_pipeop = function(x) {
 #' @title Conversion to mlr3pipeline PipeOp
 #'
 #' @description
-#' The object is turned into a `PipeOp`
+#' The argument is turned into a [`PipeOp`]
 #' if possible.
 #' If `clone` is `TRUE`, a deep copy is made
-#' if the incoming object is a `PipeOp` to ensure the resulting
+#' if the incoming object is a [`PipeOp`] to ensure the resulting
 #' object is a different reference from the incoming object.
+#'
+#' [`as_pipeop()`] is an S3 method and can therefore be implemented by other packages
+#' that may add objects that can naturally be converted to [`PipeOp`]s. Objects that
+#' can be converted are for example [`Learner`][mlr3::Learner] (using [`PipeOpLearner`]) or
+#' [`Filter`][mlr3filters::Filter] (using [`PipeOpFilter`]).
 #'
 #' @param x (`any`) \cr
 #'   Object to convert.
@@ -102,20 +114,12 @@ as_pipeop.PipeOp = function(x, clone = FALSE) {
 }
 
 #' @export
-as_pipeop.character = function(x, clone = FALSE) {
-  assert_string(x)
-  if (x %nin% c(mlr_pipeops$keys(), mlr_learners$keys())) {
-    stopf("'%s' is neither in mlr_pipeops nor in mlr_learners.%s%s",
-      x, did_you_mean(x, mlr_pipeops$keys()), did_you_mean(x, mlr_learners$keys()))
-  }
-  if (x %in% mlr_pipeops$keys()) {
-    x = mlr_pipeops$get(x)
-  } else {
-    as_pipeop(mlr_learners$get(x))
-  }
-}
-
-#' @export
 as_pipeop.Learner = function(x, clone = FALSE) {
   PipeOpLearner$new(x)
 }
+
+#' @export
+as_pipeop.Filter = function(x, clone = FALSE) {
+  PipeOpFilter$new(x)
+}
+

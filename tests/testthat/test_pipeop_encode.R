@@ -3,10 +3,24 @@ context("PipeOpEncode")
 test_that("PipeOpEncode", {
   task = mlr_tasks$get("boston_housing")
 
+  td = task$data()
+  td$town[1] = NA
+  td$chas[2] = NA
+  natask = TaskRegr$new("boston_housing_na", td, task$target_names)
+
+  check_dat = function(dat) {
+    expect_true(all(is.na(dat[1, grep("^town\\.", colnames(dat), value = TRUE), with = FALSE])))
+    expect_true(!any(is.na(dat[-1, grep("^town\\.", colnames(dat), value = TRUE), with = FALSE])))
+    expect_true(all(is.na(dat[2, grep("^chas\\.", colnames(dat), value = TRUE), with = FALSE])))
+    expect_true(!any(is.na(dat[-2, grep("^chas\\.", colnames(dat), value = TRUE), with = FALSE])))
+  }
+
   chaslevels = task$levels()$chas
   townlevels = task$levels()$town
 
   expect_datapreproc_pipeop_class(PipeOpEncode, task = task)
+
+  expect_datapreproc_pipeop_class(PipeOpEncode, task = natask)
 
   expect_datapreproc_pipeop_class(PipeOpEncode, task = mlr_tasks$get("iris"))
 
@@ -25,6 +39,11 @@ test_that("PipeOpEncode", {
 
   # town is one-hot encoded
   expect_true(all(make.names(sprintf("town.%s", townlevels), unique = TRUE) %in% fn))
+
+  # NAs are handled well
+  check_dat(op$predict(list(natask))[[1]]$data())
+  check_dat(op$train(list(natask))[[1]]$data())
+  check_dat(op$predict(list(natask))[[1]]$data())
 
   nt = predict_pipeop(op, inputs = list(task))[[1L]]
   fn = nt$feature_names
@@ -68,6 +87,9 @@ test_that("PipeOpEncode", {
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
     make.names(sprintf("chas.%s", seq_len(length(chaslevels) - 1)), unique = TRUE),
     make.names(sprintf("town.%s", seq_len(length(townlevels) - 1L)), unique = TRUE)))
+  check_dat(op$predict(list(natask))[[1]]$data())
+  check_dat(op$train(list(natask))[[1]]$data())
+  check_dat(op$predict(list(natask))[[1]]$data())
 
   op = PipeOpEncode$new()
   op$param_set$values$method = "sum"
@@ -78,6 +100,9 @@ test_that("PipeOpEncode", {
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
     make.names(sprintf("chas.%s", seq_len(length(chaslevels) - 1)), unique = TRUE),
     make.names(sprintf("town.%s", seq_len(length(townlevels) - 1L)), unique = TRUE)))
+  check_dat(op$predict(list(natask))[[1]]$data())
+  check_dat(op$train(list(natask))[[1]]$data())
+  check_dat(op$predict(list(natask))[[1]]$data())
 
   op = PipeOpEncode$new()
   op$param_set$values$method = "poly"
@@ -88,4 +113,11 @@ test_that("PipeOpEncode", {
   expect_set_equal(fn, c(setdiff(task$feature_names, c("chas", "town")),
     make.names(sprintf("chas.%s", seq_len(length(chaslevels) - 1)), unique = TRUE),
     make.names(sprintf("town.%s", seq_len(length(townlevels) - 1L)), unique = TRUE)))
+  check_dat(op$predict(list(natask))[[1]]$data())
+  check_dat(op$train(list(natask))[[1]]$data())
+  check_dat(op$predict(list(natask))[[1]]$data())
+
+
 })
+
+

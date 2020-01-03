@@ -4,10 +4,16 @@ output: github_document
 
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
+Package website: [release](https://mlr3pipelines.mlr-org.com/) | [dev](https://mlr3pipelines.mlr-org.com/dev)
+
+Dataflow Programming for Machine Learning in R.
+
+<!-- badges: start -->
 [![Travis build status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
 [![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
 [![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
 [![StackOverflow](https://img.shields.io/badge/stackoverflow-mlr3-orange.svg)](https://stackoverflow.com/questions/tagged/mlr3)
+<!-- badges: end -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -25,18 +31,17 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 
 ## What is `mlr3pipelines`?
 
+Watch our UseR 2019 Presentation on Youtube for a 15 minute introduction:
+
+[![UseR 2019 mlr3pipelines](https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg)](https://www.youtube.com/watch?v=gEW5RxkbQuQ)
+
 **`mlr3pipelines`** is a [dataflow programming](https://en.wikipedia.org/wiki/Dataflow_programming) toolkit for machine learning in R utilising the **[mlr3](https://github.com/mlr-org/mlr3)** package. Machine learning workflows can be written as directed "Graphs" that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the **[mlr3tuning](https://github.com/mlr-org/mlr3tuning)** package, it is even possible to simultaneously optimize parameters of multiple processing units.
 
 In principle, *mlr3pipelines* is about defining singular data and model manipulation steps as "PipeOps":
 ```{r}
-pca = mlr_pipeops$get("pca")
-
-filter = mlr_pipeops$get("filter",
-  filter = mlr3filters::FilterVariance$new(),
-  param_vals = list(filter.frac = 0.5))
-
-learner_po =  mlr_pipeops$get("learner",
-  learner = mlr_learners$get("classif.rpart"))
+pca        = po("pca")
+filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
+learner_po = po("learner", learner = lrn("classif.rpart"))
 ```
 
 These pipeops can then be combined together to define machine learning pipelines. These can be wrapped in a `GraphLearner` that behave like any other `Learner` in `mlr3`.
@@ -46,7 +51,7 @@ glrn = GraphLearner$new(graph)
 ```
 This learner can be used for resampling, benchmarking, and even tuning.
 ```{r}
-resample("iris", glrn, "cv")
+resample(tsk("iris"), glrn, rsmp("cv"))
 ```
 ## Feature Overview
 
@@ -74,7 +79,7 @@ The easiest way to get started is reading some of the vignettes that are shipped
 
 In case of problems / bugs, it is often helpful if you provide a "minimum working example" that showcases the behaviour (but don't worry about this if the bug is obvious).
 
-Please understand that the ressources of the project are limited: response may sometimes be delayed by a few days, and some feature suggestions may be rejected if they are deemed too tangential to the vision behind the project.
+Please understand that the resources of the project are limited: response may sometimes be delayed by a few days, and some feature suggestions may be rejected if they are deemed too tangential to the vision behind the project.
 
 ## Similar Projects
 

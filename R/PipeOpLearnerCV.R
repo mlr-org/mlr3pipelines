@@ -87,7 +87,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("iris")
 #' learner = lrn("classif.rpart")
@@ -111,7 +111,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      private$.learner = assert_learner(as_learner(learner, clone = TRUE))
+      private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
       private$.learner$param_set$set_id = ""
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
@@ -123,7 +123,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
 
-      super$initialize(id, self$param_set, param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type)
+      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type)
     },
 
     train_task = function(task) {
@@ -137,7 +137,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       rdesc = mlr_resamplings$get(pv[["method"]])
       rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, private$.learner, rdesc)
-      prds = rbindlist(lapply(res$data$prediction, as.data.table))
+      prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
 
       private$pred_to_task(prds, task)
     },
@@ -150,19 +150,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   active = list(
-    param_set = function(val) {
-      if (is.null(private$.param_set)) {
-        private$.param_set = ParamSetCollection$new(list(
-          private$.crossval_param_set,
-          private$.learner$param_set
-        ))
-        private$.param_set$set_id = self$id %??% private$.learner$id  # self$id may be NULL during initialize() call
-      }
-      if (!missing(val) && !identical(val, private$.param_set)) {
-        stop("param_set is read-only.")
-      }
-      private$.param_set
-    },
     learner = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
@@ -173,13 +160,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   private = list(
-    deep_clone = function(name, value) {
-      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
-      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
-        return(value$clone(deep = TRUE))
-      }
-      value
-    },
     pred_to_task = function(prds, task) {
       if (!is.null(prds$truth)) prds[, truth := NULL]
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {

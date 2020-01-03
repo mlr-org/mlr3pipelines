@@ -70,8 +70,8 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
-#' library(mlr3filters)
+#' library("mlr3")
+#' library("mlr3filters")
 #'
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC
@@ -94,7 +94,7 @@
 #' gr = po("filter", filter = flt("auc"), filter.frac = 0.5) %>>%
 #'   po("learner", lrn("classif.rpart"))
 #' learner = GraphLearner$new(gr)
-#' rr = resample(task, learner, rsmp("cv", folds = 3), store_models = TRUE)
+#' rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 #' rr$learners[[1]]$model$auc$scores
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
@@ -111,7 +111,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         ParamDbl$new("cutoff", tags = "train")
       ))
       private$.outer_param_set$set_id = "filter"
-      super$initialize(id, self$param_set, param_vals = param_vals)
+      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals)
     },
 
     get_state = function(task) {
@@ -158,29 +158,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
       task$select(self$state$features)
     }
   ),
-  active = list(
-    param_set = function(val) {
-      if (is.null(private$.param_set)) {
-        private$.param_set = ParamSetCollection$new(list(
-          private$.outer_param_set,
-          self$filter$param_set
-        ))
-        private$.param_set$set_id = self$id %??% self$filter$id  # self$id may be NULL during initialize() call
-      }
-      if (!missing(val) && !identical(val, private$.param_set)) {
-        stop("param_set is read-only.")
-      }
-      private$.param_set
-    }
-  ),
   private = list(
-    deep_clone = function(name, value) {
-      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
-      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
-        return(value$clone(deep = TRUE))
-      }
-      value
-    },
     .outer_param_set = NULL
   )
 )

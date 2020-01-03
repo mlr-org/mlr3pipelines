@@ -33,12 +33,15 @@
 #' @family PipeOps
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' mlr_pipeops$get("learner", lrn("classif.rpart"))
 #'
 #' # equivalent:
 #' po("learner", learner = lrn("classif.rpart"))
+#'
+#' # all PipeOps currently in the dictionary:
+#' as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(

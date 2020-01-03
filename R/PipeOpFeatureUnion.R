@@ -62,7 +62,7 @@
 #' @include PipeOp.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("iris")
 #' gr = gunion(list(
@@ -132,7 +132,9 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
     stopf("All tasks must have the same target columns")
   }
 
-  new_cols = do.call(cbind, lapply(tail(inputs, -1), function(y) y$data(ids, y$feature_names)))
+  # cbind() with only empty data.tables is problematic, so we have to do voodoo magic here:
+  # cbind at least one data.table that is guaranteed not to be empty and subtract that column later.
+  new_cols = do.call(cbind, c(list(data.table(x = vector(length = task$nrow))), lapply(tail(inputs, -1), function(y) y$data(ids, y$feature_names))))[, -1, with = FALSE]
 
 
   task$clone(deep = TRUE)$cbind(new_cols)

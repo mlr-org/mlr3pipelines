@@ -9,7 +9,7 @@
 #'
 #'
 #' @section Public Members / Active Bindings:
-#' * `new_target` :: `character` \cr
+#' * `new_target` :: `character`| `function` \cr
 #' New target variable name for the task. The previous target variable is set to 'unused'.
 #' * `new_task_type` :: `NULL` | `character` \cr
 #' New task type for the resulting task. Defaults to 'classif' if `new_target`is `character` | `factor`,
@@ -19,17 +19,17 @@
 #' @include PipeOp.R
 #' @export
 PipeOpNewTarget = R6Class("PipeOpNewTarget",
-
   inherit = PipeOp,
-
   public = list(
-    initialize = function(id = "new_target", new_target = NULL, new_task_type = NULL) {
-      super$initialize(id = id, param_set = ParamSet$new(), param_vals = list(),
+    initialize = function(id = "new_target", param_vals = list()) {
+      ps = ParamSet$new(params = list(
+        ParamUty$new("new_target", tags = c("train", "predict", "required"), custom_check = check_string),
+        ParamUty$new("new_task_type", tags = c("train", "predict", "required"), custom_check = function(x) {check_choice(x, mlr_reflections$task_types$type)})
+      ))
+      super$initialize(id = id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
-      if (!is.null(new_target)) self$new_target = new_target
-      if (!is.null(new_task_type)) self$new_task_type = new_task_type
     },
     train_internal = function(inputs) {
       outputs = private$convert_task_type(inputs)
@@ -40,37 +40,11 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
       private$convert_task_type(inputs)
     }
   ),
-  active = list(
-    new_target = function(val) {
-      if (!missing(val)) {
-        assert_string(val)
-        private$.new_target = val
-      }
-      private$.new_target
-    },
-    new_task_type = function(val) {
-      if (!missing(val)) {
-        assert_choice(val, mlr3::mlr_reflections$task_types$type)
-        private$.new_task_type = val
-      }
-      private$.new_task_type
-    }
-  ),
   private = list(
-    .new_target = NULL,
-    .new_task_type = NULL,
-    get_task_type = function(new_target_type) {
-      # FIXME: This is currently not extensible. Would require changing mlr_reflections.
-      ifelse(new_target_type %in% c("factor", "character"), "classif", "regr")
-    },
     convert_task_type = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-      assert_choice(private$.new_target, intask$col_info$id)
-      if (is.null(private$.new_task_type)) {
-        new_target_type = intask$col_info$type[intask$col_info$id == private$.new_target]
-        private$.new_task_type = private$get_task_type(new_target_type)
-      }
-      task = convert_task(intask, private$.new_task_type, private$.new_target)
+      assert_choice(self$param_set$values$new_target, intask$col_info$id)
+      task = convert_task(intask, self$param_set$values$new_task_type, self$param_set$values$new_target)
       task$set_col_role(intask$col_roles$target, "unused")
       list(task)
     }
@@ -99,5 +73,49 @@ convert_task = function(intask, new_type, new_target = NULL) {
   if (new_type == intask$task_type & intask$target_names == new_target) return(intask)
   # Get task_type from mlr_reflections and call constructor.
   tsk = get(mlr_reflections$task_types[mlr_reflections$task_types$type == new_type,]$task)
-  tsk$new(id = intask$id, backend = intask$backend, target = new_target)
+  newtsk = tsk$new(id = intask$id, backend = intask$backend, target = new_target)
+  newtsk$row_roles = intask$row_roles
+  return(newtsk)
 }
+
+#' @title PipeOpNewTarget
+#'
+#' @format Abstract [`R6Class`] inheriting from [`PipeOpMutate`].
+#'
+#' @description
+#' Computes a new feature from the target.
+#' The new feature must be a function of the old target or data.
+#'
+#' @family PipeOps
+#' @include PipeOpMutate.R
+#' @export
+PipeOpMutateTarget = R6Class("PipeOpMutateTarget",
+  inherit = PipeOpMutate,
+  public = list(
+    initialize = function(id = "mutate_target", param_vals = list()) {
+      super$initialize(id = id, param_vals = param_vals)
+    },
+    transform = function(task) {
+      taskdata = task$data(cols = task$target_names)
+      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
+        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
+      }))
+      if (ncol(newdata) && nrow(newdata) != task$nrow) {
+        stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
+      }
+      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
+      task
+    },
+    predict_task = function(task) {
+      taskdata = task$data(cols = task$target_names)[, (task$target_names):= NA]
+      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
+        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
+      }))
+      if (ncol(newdata) && nrow(newdata) != task$nrow) {
+        stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
+      }
+      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
+      task
+    }
+  )
+)

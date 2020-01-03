@@ -38,6 +38,8 @@ test_that("basic graphlearn tests", {
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
   glrn2_clone$state = glrn2$state
+#  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
+#  glrn2_clone$state$model$classif.rpart$log = glrn2_clone$state$model$classif.rpart$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
   expect_deep_clone(glrn2_clone, glrn2$clone(deep = TRUE))
   expect_prediction_classif({
     graphpred2 = glrn2$predict(task)

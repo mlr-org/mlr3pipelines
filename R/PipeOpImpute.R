@@ -1,177 +1,214 @@
 #' @title PipeOpImpute
 #'
 #' @usage NULL
-#' @name mlr_pipeops_impute
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format Abstract [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Impute missing values using varying methods.
-#'
-#' * `numeric` or `integer` features are imputed by `method_num`.
-#' * `factor`, `ordered`, and `character` features are imported by `method_fct`.
-#' * `logical` features are always imputed by sampling from the training column.
+#' Abstract base class for feature imputation.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImpute$new(id = "impute", param_vals = list())
+#' PipeOpImpute$$new(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
 #' ```
 #'
-#' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, defaulting to `"impute"`.
+#' * `id` :: `character(1)`\cr
+#'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
+#'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
+#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#' * `whole_task_dependent` :: `logical(1)`\cr
+#'   Whether the `context_columns` parameter should be added which lets the user limit the columns that are
+#'   used for imputation inference. This should generally be `FALSE` if imputation depends only on individual features
+#'   (e.g. mode imputation), and `TRUE` if imputation depends on other features as well (e.g. kNN-imputation).
+#' * packages :: `character`\cr
+#'   Set of all required packages for the [`PipeOp`]'s `$train` and `$predict` methods. See `$packages` slot.
+#'   Default is `character(0)`.
+#' * `task_type` :: `character(1)`\cr
+#'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
+#'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
+#'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
+#'
+#' @section Input and Output Channels:
+#' [`PipeOpImpute`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task], or a subclass of
+#' [`Task`][mlr3::Task] if the `task_type` construction argument is given as such; both during training and prediction.
+#'
+#' [`PipeOpImpute`] has one output channel named `"output"`, producing a [`Task`][mlr3::Task], or a subclass;
+#' the [`Task`][mlr3::Task] type is the same as for input; both during training and prediction.
+#'
+#' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] with features imputed according to the `$impute()` function.
 #'
 #' @section State:
-#' `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * TO BE DESCRIBED ( PipeOp will be changed shortly )
+#' The `$state` is a named `list`; besides members added by inheriting classes, the members are:
+#' * `affect_cols` :: `character`\cr
+#'   Names of features being selected by the `affect_columns` parameter.
+#' * `inference_cols` :: `character`\cr
+#'   Names of features being selected by the `context_columns` parameter.
+#' * `intasklayout` :: [`data.table`]\cr
+#'   Copy of the training [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
+#'   the prediction [`Task`][mlr3::Task] has the same features, feature layout, and feature types as during training.
+#' * `outtasklayout` :: [`data.table`]\cr
+#'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
+#'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
+#' * `model` :: named `list`\cr
+#'   Model used for imputation. This is a list named by [`Task`][mlr3::Task] features, containing the result of the `$train_imputer()` function for each one.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as:
-#' * TO BE DESCRIBED ( PipeOp will be changed shortly )
+#' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
+#'   What columns the [`PipeOpImpute`] should operate on.
+#'   The parameter must be a [`Selector`] function, which takes a [`Task`][mlr3::Task] as argument and returns a `character`
+#'   of features to use.\cr
+#'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
+#' * `context_columns` :: `function` | [`Selector`] | `NULL` \cr
+#'   What columns the [`PipeOpImpute`] imputation may depend on. This parameter is only present if the constructor is called with
+#'   the `whole_task_dependent` argument set to `TRUE`.\cr
+#'   The parameter must be a [`Selector`] function, which takes a [`Task`][mlr3::Task] as argument and returns a `character`
+#'   of features to use.\cr
+#'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
 #'
 #' @section Internals:
-#' Will be refactored shortly.
+#' [`PipeOpImpute`] is an abstract class inheriting from [`PipeOp`] that makes implementing imputer [`PipeOp`]s simple.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
-#' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' Methods inherited from [`PipeOp`], as well as:
+#' * `select_cols(task)` \cr
+#'   ([`Task`][mlr3::Task]) -> `character` \cr
+#'   Selects which columns the [`PipeOp`] operates on. In contrast to
+#'   the `affect_columns` parameter. `select_cols` is for the *inheriting class* to determine which columns
+#'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
+#'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.
+#' * `train_imputer(feature, type, context)`\cr
+#'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
+#'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `$impute()`.
+#' * `impute(feature, type, model, context)`\cr
+#'   (`atomic`, `character(1)`, `any`, [`data.table`]) -> `atomic`\cr
+#'   Imputes the features. `model` is the model created by `$train_imputer()`
 #'
 #' @family PipeOps
-#' @include PipeOpTaskPreproc.R
+#' @family Imputation PipeOps
+#' @include PipeOp.R
 #' @export
-#' @examples
-#' library(mlr3)
-#'
-#' task = tsk("pima")
-#' sum(complete.cases(task$data()))
-#' task$missings()
-#'
-#' po = po("impute")
-#' new_task = po$train(list(task = task))[[1]]
-#' sum(complete.cases(new_task$data()))
-#' new_task$missings()
 PipeOpImpute = R6Class("PipeOpImpute",
-  inherit = PipeOpTaskPreprocSimple,
+  inherit = PipeOp,
   public = list(
-    initialize = function(id = "impute", param_vals = list()) {
-      ps = ParamSet$new(list(
-        ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median", tags = c("train", "predict")),
-        ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl", tags = c("train", "predict")),
-        ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict"))
-      ))
-      ps$values = list(method_num = "median", method_fct = "newlvl", add_dummy = "missing_train")
-      super$initialize(id, ps, param_vals = param_vals)
+    whole_task_dependent = NULL,
+
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task") {
+      # add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
+      addparams = list(ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train"))
+      if (whole_task_dependent) {
+        addparams = c(addparams, list(ParamUty$new("context_columns", custom_check = check_function_or_null, tags = "train")))
+      }
+
+      # ParamSetCollection handles adding of new parameters differently
+      if (inherits(param_set, "ParamSet")) {
+        lapply(addparams, param_set$add)
+      } else {
+        private$.affectcols_ps = ParamSet$new(addparams)
+        param_set = c(param_set, alist(private$.affectcols_ps))
+      }
+
+      self$whole_task_dependent = whole_task_dependent
+
+      super$initialize(id = id, param_set = param_set, param_vals = param_vals,
+        input = data.table(name = "input", train = task_type, predict = task_type),
+        output = data.table(name = "output", train = task_type, predict = task_type),
+        packages = packages
+      )
     },
 
-    get_state = function(task) {
-      num_feats = task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-      fct_feats = task$feature_types[get("type") %nin% c("numeric", "integer"), get("id")]
-      lgl_feats = task$feature_types[get("type") == "logical", get("id")]
-      num_model = map(task$data(cols = num_feats), function(col) {
-        if (all(is.na(col))) {
-          col = 0L
-        }
-        switch(self$param_set$values$method_num,
-          median = median(col, na.rm = TRUE),
-          mean = mean(col, na.rm = TRUE),
-          sample = col[!is.na(col)],
-          hist = hist(col, plot = FALSE)[c("counts", "breaks")])
-      })
-      fct_model = imap(task$data(cols = fct_feats), function(col, colname) {
-        method = self$param_set$values$method_fct
-        if (colname %in% lgl_feats) {
-          method = "sample"
-        }
-        switch(method,
-          newlvl = NULL,
-          sample = col[!is.na(col)])
-      })
-      feats_with_missings = task$feature_names[map_lgl(task$data(cols = task$feature_names),
-        function(x) any(is.na(x)))]
+    train_internal = function(inputs) {
+      intask = inputs[[1]]$clone(deep = TRUE)
 
-      list(num_model = num_model, fct_model = fct_model,
-        lgl_feats = lgl_feats, feats_with_missings = feats_with_missings)
+      affected_cols = (self$param_set$values$affect_columns %??% selector_all())(intask)
+      affected_cols = intersect(affected_cols, self$select_cols(intask))
+
+      self$state = list(
+        affected_cols = affected_cols,
+        intasklayout = copy(intask$feature_types)
+      )
+
+      if (self$whole_task_dependent) {
+        context_cols = (self$param_set$values$context_columns %??% selector_all())(intask)
+        context_data = intask$data(cols = context_cols)
+        self$state$context_cols = context_cols
+      }
+
+      ..col = NULL  # avoid static checker complaints
+
+      imputanda = intask$data(cols = affected_cols)
+      imputanda = imputanda[, map_lgl(imputanda, function(x) any(is.na(x))), with = FALSE]
+
+      self$state$model = imap(intask$data(cols = affected_cols), function(col, colname) {
+        type = intask$feature_types[colname, get("type")]
+        if (self$whole_task_dependent) {
+          context = copy(context_data)
+          context[[colname]] = NULL
+        } else {
+          context = NULL
+        }
+        model = self$train_imputer(col, type, context)
+        if (colname %in% names(imputanda)) {
+          col = self$impute(col, type, model, context)
+          imputanda[, (colname) := ..col]
+        }
+        model
+      })
+
+      intask$select(setdiff(intask$feature_names, colnames(imputanda)))$cbind(imputanda)
+
+      self$state$outtasklayout = copy(intask$feature_types)
+
+      list(intask)
     },
 
-    transform = function(task) {
+    predict_internal = function(inputs) {
+      intask = inputs[[1]]$clone(deep = TRUE)
+      if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
+        stopf("Input task during prediction of %s does not match input task during training.", self$id)
+      }
 
-      num_model = self$state$num_model
-      fct_model = self$state$fct_model
-      lgl_feats = self$state$lgl_feats
-      data = task$data(cols = task$feature_names)
-      data_dummy = as.data.table(is.na(data))
-      predict_missings = task$feature_names[map_lgl(data_dummy, any)]
-      # even if nothing is missing we still go through with everything,
-      # because we may need to add dummies
-      data = data[, predict_missings, with = FALSE]
+      if (self$whole_task_dependent) {
+        context_data = intask$data(cols = self$state$context_cols)
+      }
 
+      ..col = NULL  # avoid static checker complaints
 
-      ..col = NULL
-      imap(data, function(col, colname) {
-        col[is.na(col)] = if (colname %in% names(num_model)) {
-          num = switch(self$param_set$values$method_num,
-            median = num_model[[colname]],
-            mean = num_model[[colname]],
-            sample = {
-              choices = num_model[[colname]]
-              if (length(choices == 1)) {
-                rep_len(choices, sum(is.na(col)))
-              } else {
-                sample(choices, sum(is.na(col)), replace = TRUE)
-              }
-            },
-            hist = {
-              counts = num_model[[colname]]$counts
-              breaks = num_model[[colname]]$breaks
-              which.bins = sample.int(length(counts), sum(is.na(col)), replace = TRUE, prob = counts)
-              runif(length(which.bins), breaks[which.bins], breaks[which.bins + 1L])
-          })
-          if (task$feature_types[colname, get("type")] == "integer") {
-            num = as.integer(round(num))
-          }
-          num
+      imputanda = intask$data(cols = self$state$affected_cols)
+      imputanda = imputanda[, map_lgl(imputanda, function(x) any(is.na(x))), with = FALSE]
+
+      imap(imputanda, function(col, colname) {
+        type = intask$feature_types[colname, get("type")]
+        if (self$whole_task_dependent) {
+          context = copy(context_data)
+          context[[colname]] = NULL
         } else {
-          method = self$param_set$values$method_fct
-          if (colname %in% lgl_feats) {
-            method = "sample"
-          }
-          switch(method,
-            newlvl = {
-              if (is.factor(col)) {
-                levels(col) = c(levels(col), ".MISSING")
-              }
-              ".MISSING"
-            },
-            sample = sample(fct_model[[colname]], sum(is.na(col)), replace = TRUE)
-          )
+          context = NULL
         }
-        data[, (colname) := ..col]
+        model = self$state$model[[colname]]
+        col = self$impute(col, type, model, context)
+        imputanda[, (colname) := ..col]
       })
-      if (self$param_set$values$add_dummy == "missing_train") {
-        data_dummy = data_dummy[, self$state$feats_with_missings, with = FALSE]
+
+      intask$select(setdiff(intask$feature_names, colnames(imputanda)))$cbind(imputanda)
+
+      if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
+        stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
-      # don't add dummy cols for factors or ordereds if they get the '.MISSING' level
-      if (self$param_set$values$method_fct == "newlvl") {
-        data_dummy = data_dummy[,
-          setdiff(colnames(data_dummy), setdiff(names(fct_model), lgl_feats)),
-          with = FALSE]
-      }
-      if (self$param_set$values$add_dummy != "none" && ncol(data_dummy)) {
-        colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
-        if (ncol(data)) {
-          data = cbind(data, data_dummy)
-        } else {
-          data = data_dummy
-        }
-      }
-      if (!ncol(data)) {
-        return(task)
-      }
-      task$select(setdiff(task$feature_names, colnames(data)))$cbind(data)
-    }
+      list(intask)
+    },
+
+    select_cols = function(task) task$feature_names,
+
+    train_imputer = function(feature, type, context) stop("Abstract."),
+
+    impute = function(feature, type, model, context) stop("Abstract.")
+  ),
+  private = list(
+    .affectcols_ps = NULL
   )
 )
-
-mlr_pipeops$add("impute", PipeOpImpute)

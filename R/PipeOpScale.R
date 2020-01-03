@@ -31,7 +31,7 @@
 #'   The mean of each numeric feature during training, or 0 if `center` is `FALSE`. Will be subtracted during the predict phase.
 #' * `scale` :: `numeric`\cr
 #'   The root mean square, defined as `sqrt(sum(x^2)/(length(x)-1))`, of each feature during training, or 1 if `scale` is FALSE.
-#'   During predict phase, feaatures are divided by this.\cr
+#'   During predict phase, features are divided by this.\cr
 #'   This is 1 for features that are constant during training if `center` is `TRUE`, to avoid division-by-zero.
 #'
 #' @section Parameters:
@@ -48,7 +48,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("iris")
 #' pos = po("scale")
@@ -68,8 +68,8 @@ PipeOpScale = R6Class("PipeOpScale",
   public = list(
     initialize = function(id = "scale", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE, tags = "train"),
-        ParamLgl$new("scale", default = TRUE, tags = "train")
+        ParamLgl$new("center", default = TRUE, tags = c("train", "scale")),
+        ParamLgl$new("scale", default = TRUE, tags = c("train", "scale"))
       ))
       super$initialize(id = id, param_set = ps, param_vals = param_vals)
     },
@@ -78,8 +78,8 @@ PipeOpScale = R6Class("PipeOpScale",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    train_dt = function(dt, levels) {
-      sc = invoke(scale, as.matrix(dt), .args = self$param_set$values)
+    train_dt = function(dt, levels, target) {
+      sc = invoke(scale, as.matrix(dt), .args = self$param_set$get_values(tags = "scale"))
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1

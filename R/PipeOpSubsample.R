@@ -50,7 +50,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' pos = mlr_pipeops$get("subsample")
 #'

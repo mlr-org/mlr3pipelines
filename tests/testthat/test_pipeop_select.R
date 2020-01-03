@@ -1,4 +1,4 @@
-context("select")
+context("PipeOpSelect")
 
 test_that("select", {
   op = PipeOpSelect$new()
@@ -29,5 +29,3 @@ test_that("select", {
   expect_set_equal(po$train(list(tsk("boston_housing")))[[1]]$feature_names, c("chas", "town"))
 
 })
-
-

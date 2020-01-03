@@ -6,7 +6,7 @@
 #' A [`Selector`] function is used by different [`PipeOp`]s, most prominently [`PipeOpSelect`] and many [`PipeOp`]s inheriting
 #' from [`PipeOpTaskPreproc`], to determine a subset of [`Task`][mlr3::Task]s to operate on.
 #'
-#' Even though a [`Selector`] is a `function` that can be written itself, it is preferrable to use the [`Selector`] constructors
+#' Even though a [`Selector`] is a `function` that can be written itself, it is preferable to use the [`Selector`] constructors
 #' shown here. Each of these can be called with its arguments to create a [`Selector`], which can then be given to the [`PipeOpSelect`]
 #' `selector` parameter, or many [`PipeOpTaskPreproc`]s' `affect_columns` parameter. See there for examples of this usage.
 #'
@@ -31,20 +31,20 @@
 #'   ]
 #' }
 #' ```
-#' A [`Selector`] that selects only the column `"Sepal.Length"` (as in the [`"iris"`-Task][mlr3::mlr_tasks_iris]), if present, is
+#' A [`Selector`] that selects only the column `"Sepal.Length"` (as in the [iris task][mlr3::mlr_tasks_iris]), if present, is
 #' ```
 #' function(task) {
 #'   intersect(task$feature_names, "Sepal.Length")
 #' }
 #' ```
 #'
-#' It is preferrable to use the [`Selector`] construction functions like `select_type`, `select_grep` etc. if possible, instead of writing custom [`Selector`]s.
+#' It is preferable to use the [`Selector`] construction functions like `select_type`, `select_grep` etc. if possible, instead of writing custom [`Selector`]s.
 #'
 #' @return `function`: A [`Selector`] function that takes a [`Task`][mlr3::Task] and returns the feature names to be processed.
 #'
 #' @family Selectors
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' iris_task = tsk("iris")
 #' bh_task = tsk("boston_housing")

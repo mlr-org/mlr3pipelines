@@ -38,7 +38,7 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' nop = po("nop")
 #'

@@ -55,10 +55,10 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
-#' task = TaskClassif$new("task",
-#'   data.table::data.table(x = letters[1:3], y = letters[1:3]), "x")
+#' data = data.table::data.table(x = factor(letters[1:3]), y = factor(letters[1:3]))
+#' task = TaskClassif$new("task", data, "x")
 #'
 #' poe = po("encode")
 #'
@@ -89,10 +89,10 @@ PipeOpEncode = R6Class("PipeOpEncode",
     },
 
     select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
+      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
     },
 
-    get_state_dt = function(dt, levels) {
+    get_state_dt = function(dt, levels, target) {
       contrasts = switch(self$param_set$values$method,
         "one-hot" = function(x) stats::contr.treatment(x, contrasts = FALSE),
         treatment = stats::contr.treatment,
@@ -117,8 +117,8 @@ PipeOpEncode = R6Class("PipeOpEncode",
 
     transform_dt = function(dt, levels) {
       cols = imap(self$state$contrasts, function(contrasts, id) {
-        x = dt[[id]]
-        contrasts[as.character(x), , drop = FALSE]
+        x = as.character(dt[[id]])
+        contrasts[match(x, rownames(contrasts)), , drop = FALSE]
       })
       cols = as.data.table(cols)
       setnames(cols, names(cols), make.names(names(cols), unique = TRUE))

@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Both undersamples a [`Task`][mlr3::Task] to keep only a fraction of the rows of the majority class,
-#' as well as oversamples (repeats datapoints) rows of the minority class.
+#' as well as oversamples (repeats data points) rows of the minority class.
 #'
 #' Sampling happens only during training phase. Class-balancing a [`Task`][mlr3::Task] by sampling may be
 #' beneficial for classification with imbalanced training data.
@@ -77,7 +77,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("spam")
 #' opb = po("classbalancing")
@@ -110,7 +110,7 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
         ParamLgl$new("shuffle", default = TRUE, tags = "train")
       ))
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif")
     },
 
     train_task = function(task) {

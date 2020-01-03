@@ -8,6 +8,7 @@ options(error=recover)
 options(error=dump.frames)
 data.table::setDTthreads(0)
 data.table::setDTthreads(1)
+Sys.setenv(NOT_CRAN = "true")
 
 devtools::document("mlr3pipelines")
 
@@ -17,13 +18,17 @@ devtools::load_all("mlr3pipelines")
 
 tools::buildVignettes(dir = "mlr3pipelines")
 
-testthat::test_package("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "chunk")
-testthat::test_package("mlr3pipelines", filter = "mutate")
-testthat::test_package("mlr3pipelines", filter = "filter")
+system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
+devtools::run_examples("mlr3pipelines")
 
-devtools::test("mlr3pipelines", stop_on_warning = TRUE)
+testthat::test_package("mlr3pipelines", filter = "classbalancing")
+testthat::test_package("mlr3pipelines", filter = "encode")
+
+testthat::test_package("mlr3pipelines", filter = "removeconstants")
+testthat::test_package("mlr3pipelines", filter = "conversion")
+
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "pipeop_impute")
 
 
 testthat::test_package("mlr3pipelines", filter = "apply")
@@ -35,6 +40,28 @@ testthat::test_package("mlr3pipelines", filter = "^_[a-m].*")
 testthat::test_package("mlr3pipelines", filter = "^_[n-s].*")
 testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 
+
+pofi = PipeOpFixFactors$new()
+
+
+poe = PipeOpEncodeImpact$new()
+
+t2 = po("histbin")$train(list(tsk("iris")))[[1]]
+
+poe$get_state(tsk("boston_housing"))
+poe$get_state(t2)
+poe$param_set$values$impute_zero = FALSE
+
+
+poe$train(list(tsk("boston_housing")))[[1]]$data()
+
+poe$predict(list(tsk("boston_housing")$clone()$filter(1)))[[1]]$data()
+
+poe$train(list(tsk("boston_housing")))[[1]]$data()
+poe$train(list(t2))[[1]]$data()
+poe$predict(list(t2$clone()$filter(1)))[[1]]$data()
+
+poe$param_set$values$smoothing = 1e10
 
 pom = PipeOpMutate$new()
 

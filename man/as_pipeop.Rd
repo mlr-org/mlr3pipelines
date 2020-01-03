@@ -17,16 +17,24 @@ Whether to return a (deep copied) clone if \code{x} is a PipeOp.}
 \code{\link{PipeOp}} \code{x} or a deep clone of it.
 }
 \description{
-The object is turned into a \code{PipeOp}
+The argument is turned into a \code{\link{PipeOp}}
 if possible.
 If \code{clone} is \code{TRUE}, a deep copy is made
-if the incoming object is a \code{PipeOp} to ensure the resulting
+if the incoming object is a \code{\link{PipeOp}} to ensure the resulting
 object is a different reference from the incoming object.
+
+\code{\link[=as_pipeop]{as_pipeop()}} is an S3 method and can therefore be implemented by other packages
+that may add objects that can naturally be converted to \code{\link{PipeOp}}s. Objects that
+can be converted are for example \code{\link[mlr3:Learner]{Learner}} (using \code{\link{PipeOpLearner}}) or
+\code{\link[mlr3filters:Filter]{Filter}} (using \code{\link{PipeOpFilter}}).
 }
 \seealso{
-Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{as_graph}}, \code{\link{assert_graph}},
-  \code{\link{assert_pipeop}}, \code{\link{greplicate}},
-  \code{\link{gunion}}
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_graph}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{greplicate}()},
+\code{\link{gunion}()}
 }
 \concept{Graph operators}

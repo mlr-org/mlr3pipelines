@@ -21,10 +21,10 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric parameters replaced by their principal components.
+#' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their principal components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the [`"prcomp"` class][stats::prcomp],
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [stats::prcomp],
 #' with the exception of the `$x` slot. These are in particular:
 #' * `sdev` :: `numeric`\cr
 #'   The standard deviations of the principal components.
@@ -51,7 +51,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' task = tsk("iris")
 #' pop = po("pca")
@@ -68,9 +68,9 @@ PipeOpPCA = R6Class("PipeOpPCA",
   public = list(
     initialize = function(id = "pca", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE, tags = "train"),
-        ParamLgl$new("scale.", default = FALSE, tags = "train"),
-        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = "train")
+        ParamLgl$new("center", default = TRUE, tags = c("train", "pca")),
+        ParamLgl$new("scale.", default = FALSE, tags = c("train", "pca")),
+        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals)
     },
@@ -79,8 +79,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
       task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
     },
 
-    train_dt = function(dt, levels) {
-      pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$values)
+    train_dt = function(dt, levels, target) {
+      pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$get_values(tags = "pca"))
       self$state = pcr
       self$state$x = NULL
       pcr$x

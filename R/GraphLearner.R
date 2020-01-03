@@ -52,8 +52,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = mlr_reflections$learner_properties[[task_type]],
-        param_vals = param_vals)
+        properties = mlr_reflections$learner_properties[[task_type]])
       private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
     },
@@ -90,6 +89,19 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       self$graph$param_set
     }
+  ),
+  private = list(
+    deep_clone = function(name, value) {
+      # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
+      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
+        return(value$clone(deep = TRUE))
+      }
+      value
+    }
   )
 )
 
+#' @export
+as_learner.Graph = function(x, clone = FALSE) {
+  GraphLearner$new(x)
+}

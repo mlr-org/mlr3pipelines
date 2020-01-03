@@ -65,7 +65,7 @@
 #' @include PipeOp.R
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' pca = po("pca")
 #' nop = po("nop")
@@ -146,7 +146,7 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #'
 #' @export
 #' @examples
-#' library(mlr3)
+#' library("mlr3")
 #'
 #' po_pca = po("pca")
 #' po_nop = po("nop")

@@ -7,7 +7,7 @@
 add_class_hierarchy_cache(hierarchy)
 }
 \arguments{
-\item{hierarchy}{\code{character} the class hieararchy to add; should
+\item{hierarchy}{\code{character} the class hierarchy to add; should
 correspond to the \code{class()} of the lowest object in the hierarchy.}
 }
 \value{
@@ -25,8 +25,9 @@ compatibility between types.
 add_class_hierarchy_cache(c("data.table", "data.frame"))
 }
 \seealso{
-Other class hierarchy operations: \code{\link{register_autoconvert_function}},
-  \code{\link{reset_autoconvert_register}},
-  \code{\link{reset_class_hierarchy_cache}}
+Other class hierarchy operations: 
+\code{\link{register_autoconvert_function}()},
+\code{\link{reset_autoconvert_register}()},
+\code{\link{reset_class_hierarchy_cache}()}
 }
 \concept{class hierarchy operations}
