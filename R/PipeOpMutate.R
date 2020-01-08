@@ -121,13 +121,28 @@ mlr_pipeops$add("mutate", PipeOpMutate)
 #' @format Abstract [`R6Class`] inheriting from [`PipeOpMutate`].
 #'
 #' @description
-#' Computes a new feature from the target.
-#' The new feature must be a function of the old target and ensure that factor levels etc.
-#' are consistent across train and test set.
+#' * During training: Computes a new feature from the task's target.
+#'   The new feature must be a function of the old target and ensure that factor levels etc.
+#'   are consistent across train and test set.
+#'
+#' * During prediction: Sets all target values to `NA` and computes the new feature
+#'   according to the transformation specified in param_vals$mutation.
+#'
+#' If name clashes between old features/targets and to-be-added features occur,
+#' the older ones are overwritten.
 #'
 #' @family PipeOps
 #' @include PipeOpMutate.R
 #' @export
+#' @examples
+#' library("mlr3")
+#'
+#' pom = po("mutate_target")
+#' pom$param_set$values$mutation = list(
+#'   y_tmp = ~ factor(Species == "virginica", levels = c(TRUE, FALSE))
+#' )
+#'
+#' pom$train(list(tsk("iris")))[[1]]$data()
 PipeOpMutateTarget = R6Class("PipeOpMutateTarget",
   inherit = PipeOpMutate,
   public = list(

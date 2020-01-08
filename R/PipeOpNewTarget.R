@@ -45,7 +45,8 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
       intask = inputs[[1]]$clone(deep = TRUE)
       assert_choice(self$param_set$values$new_target, intask$col_info$id)
       task = convert_task(intask, self$param_set$values$new_task_type, self$param_set$values$new_target)
-      task$set_col_role(intask$col_roles$target, "unused")
+      if (all(self$param_set$values$new_target != intask$target_names))
+        task$set_col_role(intask$col_roles$target, "unused")
       list(task)
     }
   )
@@ -57,6 +58,8 @@ mlr_pipeops$add("new_target", PipeOpNewTarget)
 
 #' Convert a task from one type to another.
 #' Requires for the task type to be in `mlr_reflections$task_types`.
+#' The new target is set as a new target, while the previous target is added
+#' as a feature.
 #' @param intask [`Task`]\cr
 #'   A [`Task`] to be converted.
 #' @param new_type `character(1)`\cr
@@ -74,6 +77,13 @@ convert_task = function(intask, new_type, new_target = NULL) {
   # Get task_type from mlr_reflections and call constructor.
   tsk = get(mlr_reflections$task_types[mlr_reflections$task_types$type == new_type,]$task)
   newtsk = tsk$new(id = intask$id, backend = intask$backend, target = new_target)
+  # Copy row_roles
   newtsk$row_roles = intask$row_roles
+  # Copy col_roles
+  props = intersect(mlr_reflections$task_col_roles[[intask$task_type]],
+    mlr_reflections$task_col_roles[[new_type]])
+  newtsk$col_roles[props] = intask$col_roles[props]
+  newtsk$set_col_role(new_target, "target")
+  newtsk$set_col_role(intask$col_roles$target, "feature")
   return(newtsk)
 }

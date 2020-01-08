@@ -1,47 +1,75 @@
 test_that("PipeOpNewTarget -  Regr -> Regr", {
-  op = PipeOpNewTarget$new()
+  check_result_regr = function(result) {
+    expect_class(result, "TaskRegr")
+    expect_task(result)
+    expect_true(result$col_roles$target == "age")
+    expect_true(all(result$feature_names != "age"))
+    expect_true(all(result$feature_names != "medv"))
+    expect_true(all(unlist(imap(result$row_roles,
+      .f = function(z, x) {all(result$row_roles[[x]] == task$row_roles[[x]])}))
+    ))
+    expect_true(
+      all(map_lgl(c("weights", "groups", "strata", "nrow"), function(x) {
+        all(result[[x]] == task[[x]])
+    })))
+  }
+  op = PipeOpNewTarget$new(param_vals = list(new_target = "age", new_task_type = "regr"))
   task = mlr_tasks$get("boston_housing")
   expect_pipeop(op)
-  op$new_target = "age"
-  result = train_pipeop(op, inputs = list(task))[[1]]
-  expect_class(result, "TaskRegr")
-  expect_task(result)
-  expect_true(result$col_roles$target == "age")
-  expect_true(all(result$feature_names != "age"))
-  expect_true(all(result$feature_names != "medv"))
-  result = predict_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
+  tresult = train_pipeop(op, inputs = list(task))[[1]]
+  check_result_regr(tresult)
+  presult = predict_pipeop(op, inputs = list(task))[[1]]
+  check_result_regr(presult)
 })
 
 test_that("PipeOpNewTarget - Regr -> Classif", {
-  op = PipeOpNewTarget$new()
+    check_result_classif = function(result) {
+    expect_class(result, "TaskClassif")
+    expect_task(result)
+    expect_true(result$col_roles$target == "chas")
+    expect_true(all(result$feature_names != "chas"))
+    expect_true(all(result$feature_names != "medv"))
+    expect_true(all(unlist(imap(result$row_roles,
+      .f = function(z, x) {all(result$row_roles[[x]] == task$row_roles[[x]])}))
+    ))
+    expect_true(
+      all(map_lgl(c("weights", "groups", "strata", "nrow"), function(x) {
+        all(result[[x]] == task[[x]])
+    })))
+  }
+  op = PipeOpNewTarget$new(param_vals = list(new_target = "chas", new_task_type = "classif"))
   task = mlr_tasks$get("boston_housing")
   expect_pipeop(op)
-  op$new_target = "chas"
-  result = train_pipeop(op, inputs = list(task))[[1]]
-  expect_task(result)
-  expect_true(result$col_roles$target == "chas")
-  expect_true(all(result$feature_names != "chas"))
-  expect_true(all(result$feature_names != "medv"))
-  expect_class(result, "TaskClassif")
-  result = predict_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
+
+  tresult = train_pipeop(op, inputs = list(task))[[1]]
+  check_result_classif(tresult)
+  presult = predict_pipeop(op, inputs = list(task))[[1]]
+  check_result_classif(presult)
 })
 
 
 test_that("PipeOpNewTarget - Classif -> Regr", {
-  op = PipeOpNewTarget$new()
+    check_result_regr = function(result) {
+    expect_class(result, "TaskRegr")
+    expect_task(result)
+    expect_true(result$col_roles$target == "Sepal.Width")
+    expect_true(all(result$feature_names != "Sepal.Width"))
+    expect_true(all(result$feature_names != "Species"))
+    expect_true(all(unlist(imap(result$row_roles,
+      .f = function(z, x) {all(result$row_roles[[x]] == task$row_roles[[x]])}))
+    ))
+    expect_true(
+      all(map_lgl(c("weights", "groups", "strata", "nrow"), function(x) {
+        all(result[[x]] == task[[x]])
+    })))
+  }
+  op = PipeOpNewTarget$new(param_vals = list(new_target = "Sepal.Width", new_task_type = "regr"))
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
-  op$new_target = "Sepal.Width"
-  result = train_pipeop(op, inputs = list(task))[[1]]
-  expect_task(result)
-  expect_true(result$col_roles$target == "Sepal.Width")
-  expect_true(all(result$feature_names != "Sepal.Width"))
-  expect_true(all(result$feature_names != "Species"))
-  expect_class(result, "TaskRegr")
-  result = predict_pipeop(op, inputs = list(task))
-  expect_task(result[[1]])
+  tresult = train_pipeop(op, inputs = list(task))[[1]]
+  check_result_regr(tresult)
+  presult = predict_pipeop(op, inputs = list(task))[[1]]
+  check_result_regr(presult)
 })
 
 
@@ -52,7 +80,6 @@ test_that("UseCase - Hurdle Model", {
   dt[, y := ifelse(x1 * 0.2 + x2 * 0.4 - 0.3 > 0, 0, 2 + x1 * x2 + 0.5 * x2)]
   dt[, ..row_id := seq_len(nrow(dt))]
   tsk = TaskRegr$new("hurdle", DataBackendDataTable$new(dt, "..row_id"), target = "y")
-  # tsk$set_row_role(151:200, "validation")
 
   op_ntgt = PipeOpMutateTarget$new("ytmp", list(mutation = list(y_tmp = ~ factor(y > 0, levels = c(TRUE, FALSE)))))
   expect_pipeop(op_ntgt)
@@ -72,6 +99,7 @@ test_that("UseCase - Hurdle Model", {
     gunion(list(PipeOpNOP$new(), hurdle)) %>>%
     PipeOpFeatureUnion$new(2) %>>%
     op_lrn
+  expect_graph(pipe)
 
   e = resample(task = tsk, learner = GraphLearner$new(pipe, task_type = "regr"), resampling = rsmp("holdout"))
   expect_class(e, "ResampleResult")
