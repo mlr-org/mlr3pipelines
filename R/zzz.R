@@ -10,6 +10,7 @@
 "_PACKAGE"
 
 .onLoad = function(libname, pkgname) {  # nocov start
+  backports::import(pkgname)
   mlr_reflections$task_col_roles$regr = union(mlr_reflections$task_col_roles$regr, "unused")
   mlr_reflections$task_col_roles$classif = union(mlr_reflections$task_col_roles$classif, "unused")
 }  # nocov end

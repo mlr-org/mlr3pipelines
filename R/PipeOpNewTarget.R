@@ -72,6 +72,8 @@ convert_task = function(intask, new_type, new_target = NULL) {
   assert_task(intask)
   assert_choice(new_target, intask$col_info$id, null.ok = TRUE)
   assert_choice(new_type, mlr_reflections$task_types$type)
+  # type could be inferred from target, decided against this for now,
+  # as it might be less extensible.
   if (is.null(new_target)) new_target = intask$target_names
   if (new_type == intask$task_type & intask$target_names == new_target) return(intask)
   # Get task_type from mlr_reflections and call constructor.
