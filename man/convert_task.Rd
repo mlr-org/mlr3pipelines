@@ -2,10 +2,7 @@
 % Please edit documentation in R/PipeOpNewTarget.R
 \name{convert_task}
 \alias{convert_task}
-\title{Convert a task from one type to another.
-Requires for the task type to be in \code{mlr_reflections$task_types}.
-The new target is set as a new target, while the previous target is added
-as a feature.}
+\title{Convert a task from its type to another.}
 \usage{
 convert_task(intask, new_type, new_target = NULL)
 }
@@ -24,8 +21,6 @@ If NULL, no new target is set.}
 \code{\link{Task}}
 }
 \description{
-Convert a task from one type to another.
-Requires for the task type to be in \code{mlr_reflections$task_types}.
-The new target is set as a new target, while the previous target is added
-as a feature.
+The task's target is replaced by a different column from the data.
+The previous target is added as a feature.
 }

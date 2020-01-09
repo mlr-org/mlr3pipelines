@@ -1,4 +1,4 @@
-test_that("PipeOpNewTarget -  Regr -> Regr", {
+test_that("PipeOpNewTarget - Regr -> Regr", {
   check_result_regr = function(result) {
     expect_class(result, "TaskRegr")
     expect_task(result)
@@ -40,7 +40,6 @@ test_that("PipeOpNewTarget - Regr -> Classif", {
   op = PipeOpNewTarget$new(param_vals = list(new_target = "chas", new_task_type = "classif"))
   task = mlr_tasks$get("boston_housing")
   expect_pipeop(op)
-
   tresult = train_pipeop(op, inputs = list(task))[[1]]
   check_result_classif(tresult)
   presult = predict_pipeop(op, inputs = list(task))[[1]]
@@ -72,6 +71,45 @@ test_that("PipeOpNewTarget - Classif -> Regr", {
   check_result_regr(presult)
 })
 
+test_that("PipeOpNewTarget - Same target", {
+  check_result_regr = function(task, result) {
+    expect_class(result, "TaskRegr")
+    expect_task(result)
+    expect_true(result$col_roles$target == "medv")
+    expect_true(all(unlist(imap(result$row_roles,
+      .f = function(z, x) {all(result$row_roles[[x]] == task$row_roles[[x]])}))
+    ))
+    expect_true(
+      all(map_lgl(
+        c("weights", "groups", "strata", "nrow", "ncol", "feature_names", "target_names",
+          "task_type"),
+        function(x) {all(result[[x]] == task[[x]])}
+      )))
+  }
+  op = PipeOpNewTarget$new(param_vals = list(new_target = "medv", new_task_type = "regr"))
+  task = mlr_tasks$get("boston_housing")
+  task$set_row_role(1:40, "validation")
+  task$set_col_role("lat", "unused")
+  tresult = train_pipeop(op, inputs = list(task))[[1]]
+  check_result_regr(task, tresult)
+  presult = predict_pipeop(op, inputs = list(task))[[1]]
+  check_result_regr(task, presult)
+})
+
+test_that("PipeOpNewTarget general checks", {
+  btask = mlr_tasks$get("boston_housing")
+  itask = mlr_tasks$get("iris")
+
+  # Target does not exist
+  op = PipeOpNewTarget$new(param_vals = list(new_target = "medv2", new_task_type = "regr"))
+  expect_error(train_pipeop(op, inputs = list(btask))[[1]])
+
+  # Target class does not match
+  op = PipeOpNewTarget$new(param_vals = list(new_target = "medv", new_task_type = "classif"))
+  expect_error(train_pipeop(op, inputs = list(btask))[[1]])
+  op = PipeOpNewTarget$new(param_vals = list(new_target = "Sepal.Length", new_task_type = "classif"))
+  expect_error(train_pipeop(op, inputs = list(itask))[[1]])
+})
 
 test_that("UseCase - Hurdle Model", {
   xtmp = rnorm(200)

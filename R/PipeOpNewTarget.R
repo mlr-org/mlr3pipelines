@@ -56,10 +56,10 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
 mlr_pipeops$add("new_target", PipeOpNewTarget)
 
 
-#' Convert a task from one type to another.
-#' Requires for the task type to be in `mlr_reflections$task_types`.
-#' The new target is set as a new target, while the previous target is added
-#' as a feature.
+#' Convert a task from its type to another.
+#'
+#' The task's target is replaced by a different column from the data.
+#' The previous target is added as a feature.
 #' @param intask [`Task`]\cr
 #'   A [`Task`] to be converted.
 #' @param new_type `character(1)`\cr
@@ -84,6 +84,7 @@ convert_task = function(intask, new_type, new_target = NULL) {
     mlr_reflections$task_col_roles[[new_type]])
   newtsk$col_roles[props] = intask$col_roles[props]
   newtsk$set_col_role(new_target, "target")
-  newtsk$set_col_role(intask$col_roles$target, "feature")
+  if (!all(intask$target_names == new_target))
+    newtsk$set_col_role(intask$col_roles$target, "feature")
   return(newtsk)
 }

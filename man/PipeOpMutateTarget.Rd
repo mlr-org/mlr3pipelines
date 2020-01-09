@@ -12,6 +12,9 @@ are consistent across train and test set.
 \item During prediction: Sets all target values to \code{NA} and computes the new feature
 according to the transformation specified in param_vals$mutation.
 }
+
+If name clashes between old features/targets and to-be-added features occur,
+the older ones are overwritten.
 }
 \examples{
 library("mlr3")
