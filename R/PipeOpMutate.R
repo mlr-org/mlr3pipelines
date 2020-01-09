@@ -125,7 +125,7 @@ mlr_pipeops$add("mutate", PipeOpMutate)
 #'   The new feature must be a function of the old target and ensure that factor levels etc.
 #'   are consistent across train and test set.
 #'
-#' * During prediction: Sets all target values to `NA` and computes the new feature
+#' * During prediction: Sets all target values to `NA` (if existing) and computes the new feature
 #'   according to the transformation specified in param_vals$mutation.
 #'
 #' If name clashes between old features/targets and to-be-added features occur,
@@ -151,25 +151,24 @@ PipeOpMutateTarget = R6Class("PipeOpMutateTarget",
     },
     transform = function(task) {
       taskdata = task$data(cols = task$target_names)
-      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
-        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
-      }))
-      if (ncol(newdata) && nrow(newdata) != task$nrow) {
-        stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
-      }
-      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
-      task
+      self$transform_target(taskdata)
     },
     predict_task = function(task) {
+      # Enforce that target is NA
       taskdata = task$data(cols = task$target_names)[, (task$target_names):= NA]
+      self$transform_target(taskdata)
+    }
+  ),
+  private = list(
+    transform_target = function(taskdata) {
       newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
         eval(frm[[2]], envir = taskdata, enclos = environment(frm))
       }))
       if (ncol(newdata) && nrow(newdata) != task$nrow) {
         stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
       }
-      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
-      task
+      if (ncol(newdata)) task$cbind(newdata)
+      return(task)
     }
   )
 )

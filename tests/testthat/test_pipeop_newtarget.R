@@ -111,7 +111,7 @@ test_that("PipeOpNewTarget general checks", {
   expect_error(train_pipeop(op, inputs = list(itask))[[1]])
 })
 
-test_that("UseCase - Hurdle Model", {
+test_that("UseCase - Zero-Inflated Model", {
   xtmp = rnorm(200)
   dt = data.table("x1" = rnorm(200), "x2" = rnorm(200))
   # We have a process where y = 0
@@ -142,4 +142,44 @@ test_that("UseCase - Hurdle Model", {
   e = resample(task = tsk, learner = GraphLearner$new(pipe, task_type = "regr"), resampling = rsmp("holdout"))
   expect_class(e, "ResampleResult")
   expect_true(e$score()$regr.mse < 1)
+})
+
+test_that("UseCase - Intermediate Target - Chained", {
+  # Example task
+  xtmp = rnorm(100)
+  dt = data.table("x1" = rnorm(100), "x2" = rnorm(100))
+  dt[, m_tgt := x2 + xtmp]
+  dt[, c_tgt := factor(xtmp + x1 > 0)]
+  dt[, x_tgt := m_tgt * x1]
+  dt[, ..row_id := seq_len(nrow(dt))]
+  tsk = TaskRegr$new("multiout", DataBackendDataTable$new(dt, "..row_id"), target = "x_tgt")
+  tsk$set_col_role(c("m_tgt", "c_tgt"), "unused")
+  # c is classif, m and x are regr targets; x_class is the final output we want to predict
+
+  # We create PipeOp's that set a new intermediate target
+  op_c = PipeOpNewTarget$new("op_c", param_vals = list(new_target = "c_tgt", new_task_type = "classif"))
+  op_m = PipeOpNewTarget$new("op_m", param_vals = list(new_target = "m_tgt", new_task_type = "regr"))
+  op_x = PipeOpNewTarget$new("op_x", param_vals = list(new_target = "x_tgt", new_task_type = "regr"))
+  op_cvlrn_c = PipeOpLearnerCV$new(id = "c_cvlrn", mlr_learners$get("classif.rpart"))
+  op_cvlrn_m = PipeOpLearnerCV$new(id = "m_cvlrn", mlr_learners$get("regr.rpart"))
+  op_lrn_x =   PipeOpLearner$new(mlr_learners$get("regr.rpart"))
+
+
+  prd_c = gunion(list(po("nop", "nop1"), op_c %>>% op_cvlrn_c)) %>>% po("featureunion", id = "union1", assert_targets_equal = FALSE)
+  prd_m = gunion(list(po("nop", "nop2"), op_m %>>% op_cvlrn_m)) %>>% po("featureunion", id = "union2", assert_targets_equal = FALSE)
+  prd_x = op_x %>>% op_lrn_x
+
+  pipe = po("copy", id = "cp1", 2) %>>%
+    prd_c %>>% po("copy", id = "cp2", 2) %>>%
+    prd_m %>>%
+    prd_x
+
+  e = resample(task = tsk, learner = GraphLearner$new(pipe, task_type = "regr"), resampling = rsmp("holdout"))
+  expect_class(e, "ResampleResult")
+  expect_numeric(e$score()$regr.mse, lower = 0, upper = 10)
+
+  # Compare to no intermediate targets
+  e2 = resample(task = tsk, learner = lrn("regr.rpart"), resampling = rsmp("holdout"))
+  expect_class(e2, "ResampleResult")
+  expect_numeric(e2$score()$regr.mse, lower = 0, upper = 10)
 })
