@@ -109,6 +109,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_filterrows}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
@@ -140,6 +141,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops}}
 
 Other Placeholder Pipeops: 
+\code{\link{mlr_pipeops_filterrows}},
 \code{\link{mlr_pipeops_nop}}
 }
 \concept{PipeOps}

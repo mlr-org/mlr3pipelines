@@ -99,6 +99,7 @@ Collate:
     'PipeOpEncodeLmer.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
+    'PipeOpFilterRows.R'
     'PipeOpFixFactors.R'
     'PipeOpHistBin.R'
     'PipeOpICA.R'
