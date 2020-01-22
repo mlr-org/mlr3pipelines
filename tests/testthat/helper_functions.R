@@ -448,20 +448,20 @@ make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "r
   seed = 1444L, nclasses = 3L) {
   if (!noise) set.seed(seed)
   response = prob = NULL
-  truth = sample(letters[seq_len(nclasses)], n, replace = TRUE)
+  lvls = letters[seq_len(nclasses)]
+  truth = sample(lvls, n, replace = TRUE)
 
   if ("prob" %in% predict_types) {
     prob = matrix(runif(n * nclasses), ncol = nclasses, nrow = n)
     prob = t(apply(prob, 1, function(x) x / sum(x)))
-    colnames(prob) = unique(truth)
+    colnames(prob) = lvls
     response = colnames(prob)[max.col(prob, ties.method = "first")]
   } else if ("response" %in% predict_types) {
     response = sample(letters[seq_len(nclasses)], n, replace = TRUE)
   }
 
-  PredictionClassif$new(row_ids = seq_len(n), truth = factor(truth, levels = letters[seq_len(nclasses)]),
-    response = factor(response, levels = letters),
-    prob = prob)
+  PredictionClassif$new(row_ids = seq_len(n), truth = factor(truth, levels = lvls),
+    response = factor(response, levels = lvls), prob = prob)
 }
 
 PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
