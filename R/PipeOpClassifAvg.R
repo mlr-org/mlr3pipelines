@@ -83,6 +83,9 @@ PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
       }
 
       prob = response = NULL
+
+      # PredictionClassif makes sure that matrix column names and response levels are identical to levels(x$truth).
+      # We therefore only check that truth levels are identical.
       lvls = map(inputs, function(x) levels(x$truth))
       lvls = Reduce(function(x, y) if (identical(x, y)) x else FALSE, lvls)
       if (isFALSE(lvls)) {
