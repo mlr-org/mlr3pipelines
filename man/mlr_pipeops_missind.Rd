@@ -90,8 +90,6 @@ tail(impgraph$train(task)[[1]]$data())
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpMutateTarget}},
-\code{\link{PipeOpNewTarget}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -119,7 +117,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_mutatetarget}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_newtarget}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},

@@ -10,7 +10,7 @@ test_that("mutate", {
   )
   newtsk = pom$train(list(tsk("iris")))[[1]]
   expect_task(newtsk)
-  expect_true("y_tmp" %in% newtsk2$feature_names)
+  expect_true("y_tmp" %in% newtsk$feature_names)
   expect_true(all(newtsk$data()$y_tmp == (newtsk$data()$Species == "virginica")))
   expect_true(pom$is_trained)
 
@@ -30,7 +30,8 @@ test_that("mutate", {
   newtsk = pom$train(list(tsk("iris")))[[1]]
   expect_task(newtsk)
   expect_true("Species" %in% newtsk2$target_names)
-  expect_true(all(newtsk$data()$Species == (newtsk$data()$Species == "virginica")))
+  expect_true(
+    all(newtsk$data()$Species == factor(mlr_tasks$get("iris")$data()$Species == "virginica", levels = c(TRUE, FALSE))))
   expect_true(pom$is_trained)
 
   newtsk2 = pom$predict(list(tsk("iris")))[[1]]

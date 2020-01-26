@@ -23,7 +23,7 @@ test_that("PipeOpNewTarget - Regr -> Regr", {
 })
 
 test_that("PipeOpNewTarget - Regr -> Classif", {
-    check_result_classif = function(result) {
+  check_result_classif = function(result) {
     expect_class(result, "TaskClassif")
     expect_task(result)
     expect_true(result$col_roles$target == "chas")
@@ -48,7 +48,7 @@ test_that("PipeOpNewTarget - Regr -> Classif", {
 
 
 test_that("PipeOpNewTarget - Classif -> Regr", {
-    check_result_regr = function(result) {
+  check_result_regr = function(result) {
     expect_class(result, "TaskRegr")
     expect_task(result)
     expect_true(result$col_roles$target == "Sepal.Width")

@@ -15,7 +15,7 @@ The new task type. Must be in  \code{mlr_reflections$task_types}.}
 
 \item{new_target}{\code{character(1)|NULL}\cr
 New target to be set, must be a column in the \code{intask} data.
-If NULL, no new target is set.}
+If NULL, no new target is set, and task is converted as-is.}
 }
 \value{
 \code{\link{Task}}
