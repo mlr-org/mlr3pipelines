@@ -316,7 +316,7 @@ is then applied to the test data.
 ```{r, eval = FALSE}
 library("tidymodels")
 library("rsample")
-data("credit_data")
+data("credit_data", package = "modeldata")
 
 set.seed(55)
 train_test_split = initial_split(credit_data)
@@ -340,7 +340,7 @@ Afterwards, the transformed data can be used during train and predict
 
 ```{r, eval = FALSE}
 # Train
-rf = rand_forest(mtry = 12, trees = 200) %>%
+rf = rand_forest(mtry = 12, trees = 200, mode = "classification") %>%
   set_engine("ranger", importance = 'impurity') %>%
   fit(Status ~ ., data = train_data)
 
@@ -356,7 +356,7 @@ library("data.table")
 library("mlr3")
 library("mlr3learners")
 library("mlr3pipelines")
-data("credit_data", package = "recipes")
+data("credit_data", package = "modeldata")
 set.seed(55)
 
 # Create the task
@@ -364,7 +364,7 @@ tsk = TaskClassif$new(id = "credit_task", target = "Status",
   backend = as_data_backend(data.table(credit_data)))
 
 # Build up the Pipeline:
-g = PipeOpImpute$new() %>>%
+g = PipeOpImpute$new(id = "impute") %>>%
   # PipeOpEncode$new() %>>%
   # PipeOpScale$new() %>>%
   PipeOpLearner$new(mlr_learners$get("classif.ranger"))
@@ -376,4 +376,3 @@ g$plot()
 glrn = GraphLearner$new(g)
 resample(tsk, glrn, mlr_resamplings$get("holdout"))
 ```
-
