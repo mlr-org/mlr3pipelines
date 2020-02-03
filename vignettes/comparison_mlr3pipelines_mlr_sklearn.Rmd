@@ -364,10 +364,11 @@ tsk = TaskClassif$new(id = "credit_task", target = "Status",
   backend = as_data_backend(data.table(credit_data)))
 
 # Build up the Pipeline:
-g = PipeOpImpute$new(id = "impute") %>>%
-  # PipeOpEncode$new() %>>%
-  # PipeOpScale$new() %>>%
-  PipeOpLearner$new(mlr_learners$get("classif.ranger"))
+g = PipeOpImputeSample$new(id = "impute") %>>%
+  PipeOpEncode$new(param_vals = list(method = "one-hot")) %>>%
+  PipeOpScale$new() %>>%
+  PipeOpLearner$new(mlr_learners$get("classif.ranger", 
+    param_vals = list(num.trees = 200, mtry = 12))
 
 # We can visualize what happens to the data using the `plot` function:
 g$plot()
