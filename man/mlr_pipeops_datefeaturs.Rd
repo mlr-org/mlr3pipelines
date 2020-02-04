@@ -7,7 +7,8 @@
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.}
 \description{
 Based on a specified \code{POSIXct} column of the data, a set of date related features is computed and
-added to the feature set of the output task.
+added to the feature set of the output task. This functionality is based on the \code{add_datepart()}
+and \code{add_cyclic_datepart()} functions from the \code{fastai} library.
 }
 \section{Construction}{
 \preformatted{PipeOpDateFeatures$new(id = "datefeatures", param_vals = list())
@@ -35,9 +36,9 @@ feature set.
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from
 \code{\link{PipeOpTaskPreprocSimple}}, as well as:
 \itemize{
-\item \code{date_variable} the name of the \code{POSIXct} column that was used for the feature engineering.
-\item \code{cyclic} logical value indicating whether cyclic features were computed.
-\item \code{features} a vector of the feature names that were computed.
+\item \code{date_var} the name of the \code{POSIXct} column that was used for the feature engineering.
+\item \code{cyclic} logical value indicating whether cyclic features should be computed.
+\item \code{features} vector of computed feature names.
 }
 }
 
@@ -45,9 +46,10 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
 \itemize{
-\item \code{date_variable} :: \code{character(1)}\cr
+\item \code{date_var} :: \code{character(1)}\cr
 The name of the \code{POSIXct} column of the data that should be used for the feature engineering.
 Must be specified during construction.
+\item \code{keep_date_var} :: logical(1)\verb{\\cr Whether the }date_var` column should be kept as a feature. Default FALSE.
 \item \code{cyclic} :: logical(1)`\cr
 Whether cyclic features should be computed. See Internals. Default FALSE.
 \item \code{year} :: \code{logical(1)}\cr
@@ -78,8 +80,8 @@ Default TRUE.
 
 If \code{cyclic = TRUE}, cyclic features are computed for the features \code{"month"}, \code{"week_of_year"},
 \code{"day_of_year"}, \code{"day_of_month"}, \code{"day_of_week"}, \code{"hour"}, \code{"minute"} and \code{"second"}. This
-means that each feature, \code{x}, is replaced by two features, namely the sinus and cosinus
-transformation of \code{2 * pi * x / max(x)}. This is useful to respect the cyclical nature of
+means that for each feature, \code{x}, two additional features are computed, namely the sinus and
+cosinus transformation of \code{2 * pi * x / max(x)}. This is useful to respect the cyclical nature of
 features such as seconds, i.e., second 21 and second 22 are one second apart, but so are second
 60 and second 01. The transformation always assumes that \code{min(x) = 0}, therefore prior shifting
 the values internally by minus one may occurr if necessary.
@@ -94,10 +96,10 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 library("mlr3")
 dat = iris
 set.seed(1)
-dat$date = sample(seq(from = as.POSIXct("2020-01-29"), to = as.POSIXct("2020-02-28"), by = "hour"),
+dat$date = sample(seq(as.POSIXct("2020-01-29"), to = as.POSIXct("2020-02-29"), by = "hour"),
   size = 150L)
 task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-pop = po("datefeatures", param_vals = list(date_variable = "date", cyclic = FALSE, minute = FALSE,
+pop = po("datefeatures", param_vals = list(date_var = "date", cyclic = FALSE, minute = FALSE,
   second = FALSE))
 pop$train(list(task))
 pop$state
