@@ -7,8 +7,10 @@
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.}
 \description{
 Based on a specified \code{POSIXct} column of the data, a set of date related features is computed and
-added to the feature set of the output task. This functionality is based on the \code{add_datepart()}
-and \code{add_cyclic_datepart()} functions from the \code{fastai} library.
+added to the feature set of the output task. If no \code{POSIXct} column is specified, the first
+\code{POSIXct} column found in the data is used. If none is found, the original task is returned
+unaltered. This functionality is based on the \code{add_datepart()} and \code{add_cyclic_datepart()}
+functions from the \code{fastai} library.
 }
 \section{Construction}{
 \preformatted{PipeOpDateFeatures$new(id = "datefeatures", param_vals = list())
@@ -28,7 +30,7 @@ Input and output channels are inherited from \code{\link{PipeOpTaskPreprocSimple
 
 The output is the input \code{\link[mlr3:Task]{Task}} with date-related features computed and added to the
 feature set of the output task and the specified \code{POSIXct} column of the data removed from the
-feature set.
+feature set (depending on the value of \code{keep_date_var}).
 }
 
 \section{State}{
@@ -37,6 +39,8 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 \code{\link{PipeOpTaskPreprocSimple}}, as well as:
 \itemize{
 \item \code{date_var} the name of the \code{POSIXct} column that was used for the feature engineering.
+\item \code{keep_date_var} logical value indicating whether the \code{date_var} column of the data should be
+removed from the feature set.
 \item \code{cyclic} logical value indicating whether cyclic features should be computed.
 \item \code{features} vector of computed feature names.
 }
@@ -48,9 +52,10 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSi
 \itemize{
 \item \code{date_var} :: \code{character(1)}\cr
 The name of the \code{POSIXct} column of the data that should be used for the feature engineering.
-Must be specified during construction.
-\item \code{keep_date_var} :: logical(1)\verb{\\cr Whether the }date_var` column should be kept as a feature. Default FALSE.
-\item \code{cyclic} :: logical(1)`\cr
+If not specified, the first \code{POSIXct} column found in the data wll be used.
+\item \code{keep_date_var} :: \code{logical(1)}\cr
+Whether the \code{date_var} column should be kept as a feature. Default FALSE.
+\item \code{cyclic} :: \code{logical(1)}\cr
 Whether cyclic features should be computed. See Internals. Default FALSE.
 \item \code{year} :: \code{logical(1)}\cr
 Whether the year should be extracted as a feature. Default TRUE.
@@ -96,7 +101,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 library("mlr3")
 dat = iris
 set.seed(1)
-dat$date = sample(seq(as.POSIXct("2020-01-29"), to = as.POSIXct("2020-02-29"), by = "hour"),
+dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
   size = 150L)
 task = TaskClassif$new("iris_date", backend = dat, target = "Species")
 pop = po("datefeatures", param_vals = list(date_var = "date", cyclic = FALSE, minute = FALSE,

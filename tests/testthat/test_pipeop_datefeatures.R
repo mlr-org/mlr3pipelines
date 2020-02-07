@@ -2,20 +2,43 @@ context("PipeOpDateFeatures")
 
 dat = iris
 set.seed(1)
-dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "sec"),
+dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
   size = 150L)
-task = TaskClassif$new("iris_date", backend = dat, target = "Species")
 
 test_that("PipeOpDateFeatures - basic properties", {
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new(param_vals = list(date_var = "date"))
   expect_pipeop(po)
   train_pipeop(po, inputs = list(task))
   predict_pipeop(po, inputs = list(task))
-  # FIXME: this needs date_var to be initialized sensible
-  #expect_datapreproc_pipeop_class(PipeOpDateFeatures, task = task)
+  suppressWarnings(expect_datapreproc_pipeop_class(PipeOpDateFeatures, task = task)) # due to no POSIXct column
+})
+
+test_that("PipeOpDateFeatures - finds POSIXct column", {
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
+  po = PipeOpDateFeatures$new()
+  train_pipeop(po, inputs = list(task))
+  expect_true(po$state$date_var == "date")
+})
+
+test_that("PipeOpDateFeatures - unaltered if no POSIXct column", {
+  task = TaskClassif$new("iris_date", backend = iris, target = "Species")
+  po = PipeOpDateFeatures$new()
+  expect_warning(train_pipeop(po, inputs = list(task)))
+  expect_identical(po$state$intasklayout, po$state$outtasklayout)
+})
+
+test_that("PipeOpDateFeatures - unaltered if no features specified", {
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
+  po = PipeOpDateFeatures$new(param_vals = list(date_var = "date", cyclic = TRUE, year = FALSE,
+    month = FALSE, week_of_year = FALSE, day_of_year = FALSE, day_of_month = FALSE,
+    day_of_week = FALSE, hour = FALSE, minute = FALSE, second = FALSE, is_day = FALSE))
+  expect_warning(train_pipeop(po, inputs = list(task)))
+  expect_identical(po$state$intasklayout, po$state$outtasklayout)
 })
 
 test_that("PipeOpDateFeatures - correct basic features", {
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new(param_vals = list(date_var = "date"))
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
   expect_true(all(trained_data$year == as.numeric(format(dat$date, "%Y"))))
@@ -32,6 +55,11 @@ test_that("PipeOpDateFeatures - correct basic features", {
 })
 
 test_that("PipeOpDateFeatures - correct cyclic features", {
+  set.seed(1)
+  dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "sec"),
+    size = 150L)
+
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new(param_vals = list(date_var = "date", cyclic = TRUE))
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
 
@@ -69,6 +97,7 @@ test_that("PipeOpDateFeatures - correct cyclic features", {
 })
 
 test_that("PipeOpDateFeatures - feature selection works", {
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new(param_vals = list(date_var = "date", cyclic = TRUE, year = FALSE,
     second = FALSE))
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
@@ -82,7 +111,17 @@ test_that("PipeOpDateFeatures - feature selection works", {
 })
 
 test_that("PipeOpDateFeatures - keep_date_var works", {
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new(param_vals = list(date_var = "date", keep_date_var = TRUE))
   trained_task = train_pipeop(po, inputs = list(task))$output
   expect_true("date" %in% trained_task$feature_names)
+})
+
+test_that("PipeOpDateFeatures - automatic NA handling", {
+  dat$date[1L] = NA
+  task = TaskClassif$new("iris_date", backend = dat, target = "Species")
+  po = PipeOpDateFeatures$new(param_vals = list(date_var = "date"))
+  output = train_pipeop(po, inputs = list(task))$output
+  expect_true(all(is.na(output$data(rows = 1L, cols = c("year", "month", "week_of_year",
+    "day_of_year", "day_of_month", "day_of_week", "hour", "minute", "second", "is_day")))))
 })
