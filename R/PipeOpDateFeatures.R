@@ -41,7 +41,7 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
 #' * `date_var` :: `character(1)`\cr
 #'   The name of the `POSIXct` column of the data that should be used for the feature engineering.
-#'   If not specified, the first `POSIXct` column found in the data wll be used.
+#'   If not specified, the first `POSIXct` column found in the data will be used.
 #' * `keep_date_var` :: `logical(1)`\cr
 #'   Whether the `date_var` column should be kept as a feature. Default FALSE.
 #' * `cyclic` :: `logical(1)`\cr
@@ -65,17 +65,17 @@
 #' * `second` :: `logical(1)`\cr
 #'   Whether the second should be extracted as a feature. Default TRUE.
 #' * `is_day` :: `logical(1)`\cr
-#'   Whether a feature should be extracted indicating whether it is day time (06:00 am - 08:00pm).
+#'   Whether a feature should be extracted indicating whether it is day time (06:00am - 08:00pm).
 #'   Default TRUE.
 #'
 #' @section Internals:
 #' If `cyclic = TRUE`, cyclic features are computed for the features `"month"`, `"week_of_year"`,
 #' `"day_of_year"`, `"day_of_month"`, `"day_of_week"`, `"hour"`, `"minute"` and `"second"`. This
 #' means that for each feature, `x`, two additional features are computed, namely the sinus and
-#' cosinus transformation of `2 * pi * x / max(x)`. This is useful to respect the cyclical nature of
+#' cosinus transformation of `2 * pi * x / max_x`. This is useful to respect the cyclical nature of
 #' features such as seconds, i.e., second 21 and second 22 are one second apart, but so are second
-#' 60 and second 01. The transformation always assumes that `min(x) = 0`, therefore prior shifting
-#' the values internally by minus one may occurr if necessary.
+#' 60 and second 01. The transformation always assumes that `min_x = 0`, therefore prior shifting
+#' the values internally by minus one may occur if necessary.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
@@ -123,8 +123,8 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       date_var = self$param_set$values$date_var
       # if no POSIXct column was specified use the first POSIXct column found
       if (length(date_var) == 0L) {
-        # NA if no POSIXct column was found
         date_var = task$feature_names[task$feature_types$type == "POSIXct"][1L]
+        # this is NA if no POSIXct column was found
       }
       list(
         date_var = date_var,
@@ -145,18 +145,13 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       }
       dates = task$data(cols = self$state$date_var)
       assert_posixct(dates[[1L]])
-      features = self$state$features
-      drop_year = FALSE
-      if (any(c("day_of_year", "days_of_month") %in% features) && ("year" %nin% features)) {
-        # this requires year to be computed and later to be dropped
-        features = c(features, "year")
-        drop_year = TRUE
-      }
+      # special handling of year because this is needed for day_of_year and day_of_month
+      features = unique(c("year", self$state$features))
 
       dates[, (features) := compute_date_features(get(self$state$date_var), features = features)]
       # if cyclic = TRUE for month, week_of_year, day_of_year, day_of_month, day_of_week, hour,
       # minute and second two columns are additionally added, each consisting of their sinus and
-      # cosinus transformation of in general 2 * pi * x / max(x) (x starting from 0)
+      # cosinus transformation of in general 2 * pi * x / max_x (x starting from 0)
       if (self$state$cyclic) {
         cyclic_features = features[features %in%
           c("month", "week_of_year", "day_of_year", "day_of_month", "day_of_week",
@@ -166,15 +161,12 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
         #dates[, (cyclic_features) := NULL] # drop the original features
       }
 
-      if (drop_year) {
-        dates[, "year" := NULL]
-      }
-
       task$cbind(dates)
       if (self$state$keep_date_var) {
-        task
+        task$select(setdiff(task$feature_names, setdiff(features, self$state$features)))
       } else {
-        task$select(setdiff(task$feature_names, self$state$date_var))
+        task$select(setdiff(task$feature_names,
+           c(setdiff(features, self$state$features), self$state$date_var)))
       }
     }
   )
@@ -198,14 +190,14 @@ compute_date_features = function(dates, features) {
       is_day = "%H")
     if (feature == "is_day") {
       hours = as.numeric(format(dates, formatting))
-      return((6 <= hours) & (hours <= 20)) # early exit
+      return((6L <= hours) & (hours <= 20L)) # early exit
     }
     as.numeric(format(dates, formatting))
   })
 }
 
 # helper function to compute cyclic date features of date features, i.e.,
-# sinus and cosinus transformations of 2 * pi * x / max(x)
+# sinus and cosinus transformations of 2 * pi * x / max_x
 compute_cyclic_date_features = function(date_features, features) {
   do.call(c, args = lapply(features, FUN = function(feature) {
     # all values are expected to start at 0 and therefore may be shifted by - 1
@@ -237,6 +229,9 @@ get_days_per_month = function(year, month) {
     mapply(get_days_per_month, year = year, month = month)
   } else {
     days_per_month = c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)
+    if (is.na(year)) {
+      return(NA) # early exit if NA
+    }
     if (((year %% 4L == 0L && year %% 100L != 0L) || (year %% 400L == 0L)) && month == 2) {
       return(29L) # early exit if leap year and February
     }

@@ -52,7 +52,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSi
 \itemize{
 \item \code{date_var} :: \code{character(1)}\cr
 The name of the \code{POSIXct} column of the data that should be used for the feature engineering.
-If not specified, the first \code{POSIXct} column found in the data wll be used.
+If not specified, the first \code{POSIXct} column found in the data will be used.
 \item \code{keep_date_var} :: \code{logical(1)}\cr
 Whether the \code{date_var} column should be kept as a feature. Default FALSE.
 \item \code{cyclic} :: \code{logical(1)}\cr
@@ -76,7 +76,7 @@ Whether the minute should be extracted as a feature. Default TRUE.
 \item \code{second} :: \code{logical(1)}\cr
 Whether the second should be extracted as a feature. Default TRUE.
 \item \code{is_day} :: \code{logical(1)}\cr
-Whether a feature should be extracted indicating whether it is day time (06:00 am - 08:00pm).
+Whether a feature should be extracted indicating whether it is day time (06:00am - 08:00pm).
 Default TRUE.
 }
 }
@@ -86,10 +86,10 @@ Default TRUE.
 If \code{cyclic = TRUE}, cyclic features are computed for the features \code{"month"}, \code{"week_of_year"},
 \code{"day_of_year"}, \code{"day_of_month"}, \code{"day_of_week"}, \code{"hour"}, \code{"minute"} and \code{"second"}. This
 means that for each feature, \code{x}, two additional features are computed, namely the sinus and
-cosinus transformation of \code{2 * pi * x / max(x)}. This is useful to respect the cyclical nature of
+cosinus transformation of \code{2 * pi * x / max_x}. This is useful to respect the cyclical nature of
 features such as seconds, i.e., second 21 and second 22 are one second apart, but so are second
-60 and second 01. The transformation always assumes that \code{min(x) = 0}, therefore prior shifting
-the values internally by minus one may occurr if necessary.
+60 and second 01. The transformation always assumes that \code{min_x = 0}, therefore prior shifting
+the values internally by minus one may occur if necessary.
 }
 
 \section{Methods}{
