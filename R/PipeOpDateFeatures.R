@@ -207,16 +207,16 @@ compute_cyclic_date_features = function(date_features, features) {
       date_features[[feature]]
     }
     maximum = switch(feature,
-      month = 11L,
-      week_of_year = 51L,
-      day_of_year = (364L + as.integer((date_features[["year"]] %% 400L == 0L) |
+      month = 12L,
+      week_of_year = 52L,
+      day_of_year = (365L + as.integer((date_features[["year"]] %% 400L == 0L) |
         (date_features[["year"]] %% 4L == 0L & date_features[["year"]] %% 100L != 0L))),
       day_of_month = get_days_per_month(date_features[["year"]],
-        month = date_features[["month"]]) - 1L,
-      day_of_week = 6L,
-      hour = 23L,
-      minute = 59L,
-      second = 59L)
+        month = date_features[["month"]]),
+      day_of_week = 7L,
+      hour = 24L,
+      minute = 60L,
+      second = 60L)
     value_scaled = 2L * pi * value / maximum
     list(sin(value_scaled), cos(value_scaled))
   }))

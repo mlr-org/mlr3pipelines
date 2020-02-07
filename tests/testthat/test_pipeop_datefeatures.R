@@ -80,35 +80,35 @@ test_that("PipeOpDateFeatures - correct cyclic features", {
   trained_data = train_pipeop(po, inputs = list(task))$output$data()
 
   month = as.numeric(format(dat$date, "%m")) - 1L
-  value_scaled_month = 2L * pi * month / 11L
+  value_scaled_month = 2L * pi * month / 12L
   expect_identical(trained_data$month_sin, sin(value_scaled_month))
 
   week_of_year = as.numeric(format(dat$date, "%U")) - 1L
-  value_scaled_woy = 2L * pi * week_of_year / 51L
+  value_scaled_woy = 2L * pi * week_of_year / 52L
   expect_identical(trained_data$week_of_year_sin, sin(value_scaled_woy))
 
   day_of_year = as.numeric(format(dat$date, "%j")) - 1L
-  value_scaled_doy = 2L * pi * day_of_year / (364L + 1L)
+  value_scaled_doy = 2L * pi * day_of_year / (365L + 1L)
   expect_identical(trained_data$day_of_year_sin, sin(value_scaled_doy))
 
   day_of_month = as.numeric(format(dat$date, "%d")) - 1L
-  value_scaled_dom = 2L * pi * day_of_month / 28L
+  value_scaled_dom = 2L * pi * day_of_month / 29L
   expect_identical(trained_data$day_of_month_sin, sin(value_scaled_dom))
 
   day_of_week = as.numeric(format(dat$date, "%w"))
-  value_scaled_dow = 2L * pi * day_of_week / 6L
+  value_scaled_dow = 2L * pi * day_of_week / 7L
   expect_identical(trained_data$day_of_week_sin, sin(value_scaled_dow))
 
   hour = as.numeric(format(dat$date, "%H"))
-  value_scaled_hour = 2L * pi * hour / 23L
+  value_scaled_hour = 2L * pi * hour / 24L
   expect_identical(trained_data$hour_sin, sin(value_scaled_hour))
 
   minute = as.numeric(format(dat$date, "%M"))
-  value_scaled_minute = 2L * pi * minute / 59L
+  value_scaled_minute = 2L * pi * minute / 60L
   expect_identical(trained_data$minute_sin, sin(value_scaled_minute))
 
   second = as.numeric(format(dat$date, "%S"))
-  value_scaled_second = 2L * pi * second / 59L
+  value_scaled_second = 2L * pi * second / 60L
   expect_identical(trained_data$second_sin, sin(value_scaled_second))
 })
 
