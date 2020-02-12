@@ -165,8 +165,8 @@ test_that("GraphLearner is in mlr_learners", {
 
 
 test_that("mlr_graphs dictionary", {
-  assert_r6(mlr_graphs)
-  dt = as.data.table(mlr_graphs, )
-  assert_data_table(dt, col.names = "unique")
-  assert_true("key" %in% colnames(dt))
+  expect_r6(mlr_graphs)
+  dt = as.data.table(mlr_graphs)
+  expect_data_table(dt, col.names = "unique")
+  expect_true("key" %in% colnames(dt))
 })

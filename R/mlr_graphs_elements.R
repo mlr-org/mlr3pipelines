@@ -40,7 +40,7 @@ robustify_pipeline = function(task, learner = NULL, scaling = TRUE, max_cardinal
 
   cols_by_type = function(types) {
     assert_character(types)
-    task$feature_types[get(type) %in% types,]
+    task$feature_types[get("type") %in% types,]
   }
   pos = list()
 
