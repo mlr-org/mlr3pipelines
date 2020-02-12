@@ -48,7 +48,11 @@
 mlr3 resampling and benchmarks.
 The Graph must return a single Prediction on its $predict()
 call. The result of the $train() call is discarded, only the
-internal state changes during training are used." />
+internal state changes during training are used.
+Note the predict_type of a GraphLearner does currently not track the predict_type
+of any Learner encapsulated within the Graph. Therefore, when requesting
+e.g. &quot;prob&quot; predictions, the predict_type of both the encapsulated Learner
+and the wrapping GraphLearner need to be set to &quot;prob&quot;." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -153,6 +157,10 @@ internal state changes during training are used." />
 <p>The Graph must return a single <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> on its <code>$predict()</code>
 call. The result of the <code>$train()</code> call is discarded, only the
 internal state changes during training are used.</p>
+<p>Note the <code>predict_type</code> of a <code>GraphLearner</code> does currently not track the <code>predict_type</code>
+of any <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> encapsulated within the <code><a href='Graph.html'>Graph</a></code>. Therefore, when requesting
+e.g. <code>"prob"</code> predictions, the <code>predict_type</code> of <em>both</em> the encapsulated <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>
+and the wrapping <code>GraphLearner</code> need to be set to <code>"prob"</code>.</p>
     </div>
 
 
