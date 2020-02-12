@@ -86,6 +86,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
       ))
       ps$values = list(method = "one-hot")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
+      private$add_tags(c("feature type: factor", "feature type: ordered"))
     },
 
     select_cols = function(task) {

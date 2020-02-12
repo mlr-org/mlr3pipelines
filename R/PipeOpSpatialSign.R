@@ -60,6 +60,7 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
       ))
       ps$values = list(norm = 2, length = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals)
+      private$add_tags("feature type: numeric")
     },
 
     select_cols = function(task) {

@@ -78,6 +78,7 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
         input = data.table(name = options, train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
+      private$add_tags("meta", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

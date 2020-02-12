@@ -65,6 +65,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
         ParamUty$new("breaks", default = "Sturges", tags = c("train", "hist"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics")
+      private$add_tags("feature_type: numeric")
     },
 
     select_cols = function(task) {

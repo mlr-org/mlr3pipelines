@@ -72,6 +72,7 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize")
+      private$add_tags("feature type: numeric")
     },
 
     select_cols = function(task) {

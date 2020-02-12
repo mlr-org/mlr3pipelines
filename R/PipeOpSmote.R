@@ -81,6 +81,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "smotefamily", can_subset_cols = FALSE)
+      private$add_tags("imbalanced data")
     },
 
     train_task = function(task) {

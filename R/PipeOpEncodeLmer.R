@@ -92,6 +92,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       ))
       ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"))
+      private$add_tags(c("feature type: factor", "feature type: ordered"))
     },
 
     select_cols = function(task) {

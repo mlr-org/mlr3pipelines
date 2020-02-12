@@ -98,6 +98,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
         input = data.table(name = inname, train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
+      private$add_tags("ensemble", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

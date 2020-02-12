@@ -89,6 +89,7 @@ PipeOpCopy = R6Class("PipeOpCopy",
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*")
       )
+      private$add_tags("meta", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

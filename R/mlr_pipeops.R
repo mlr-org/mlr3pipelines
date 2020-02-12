@@ -85,9 +85,11 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
     } else {
       outnum = NA
     }
+
     list(
       key = key,
       packages = list(l1$packages),
+      tags = list(l1$tags),
       input.num = innum,
       output.num = outnum,
       input.type.train = list(l1$input$train),

@@ -80,6 +80,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       ))
       ps$values = list(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals)
+      private$add_tags("imbalanced data", overwrite = TRUE)
     },
 
     get_state = function(task) {

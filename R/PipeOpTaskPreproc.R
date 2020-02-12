@@ -167,6 +167,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         output = data.table(name = "output", train = task_type, predict = task_type),
         packages = packages
       )
+      private$add_tags("data transform", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

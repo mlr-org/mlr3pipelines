@@ -86,6 +86,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type)
       )
+      private$add_tags("learner", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

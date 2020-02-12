@@ -119,6 +119,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         output = data.table(name = "output", train = task_type, predict = task_type),
         packages = packages
       )
+      private$add_tags("imbalanced data", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

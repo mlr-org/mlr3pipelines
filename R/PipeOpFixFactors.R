@@ -55,6 +55,7 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
       ))
       ps$values = list(droplevels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals)
+      private$add_tags("feature type: factor")
     },
 
     select_cols = function(task) {

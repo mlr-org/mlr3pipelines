@@ -124,6 +124,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set$set_id = "resampling"
 
       super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type)
+      private$add_tags("ensemble")
     },
 
     train_task = function(task) {

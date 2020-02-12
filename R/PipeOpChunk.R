@@ -72,6 +72,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task")
       )
+      private$add_tags("meta", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

@@ -73,6 +73,7 @@ PipeOpSelect = R6Class("PipeOpSelect",
       ))
       ps$values = list(selector = selector_all())
       super$initialize(id, ps, param_vals = param_vals)
+      private$add_tags("feature selection")
     },
 
     get_state = function(task) {

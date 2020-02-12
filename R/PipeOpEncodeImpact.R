@@ -82,6 +82,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
       ))
       ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals)
+      private$add_tags(c("feature type: factor", "feature type: ordered"))
     },
 
     select_cols = function(task) {
