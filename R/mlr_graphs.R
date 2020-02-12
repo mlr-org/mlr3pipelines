@@ -25,7 +25,7 @@
 #' @family Graph
 #' @export
 #' @examples
-#'
+#' library(mlr3)
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
 #'
