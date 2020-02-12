@@ -99,19 +99,19 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
   public = list(
     initialize = function(id = "datefeatures", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("date_var", custom_check = check_character, tags = c("train")),
+        ParamUty$new("date_var", custom_check = check_character, tags = "train"),
         ParamLgl$new("keep_date_var", default = FALSE, tags = "train"),
         ParamLgl$new("cyclic", default = FALSE, tags = "train"),
-        ParamLgl$new("year", default = TRUE, tags = c("train")),
-        ParamLgl$new("month", default = TRUE, tags = c("train")),
-        ParamLgl$new("week_of_year", default = TRUE, tags = c("train")),
-        ParamLgl$new("day_of_year", default = TRUE, tags = c("train")),
-        ParamLgl$new("day_of_month", default = TRUE, tags = c("train")),
-        ParamLgl$new("day_of_week", default = TRUE, tags = c("train")),
-        ParamLgl$new("hour", default = TRUE, tags = c("train")),
-        ParamLgl$new("minute", default = TRUE, tags = c("train")),
-        ParamLgl$new("second", default = TRUE, tags = c("train")),
-        ParamLgl$new("is_day", default = TRUE, tags = c("train"))
+        ParamLgl$new("year", default = TRUE, tags = "train"),
+        ParamLgl$new("month", default = TRUE, tags = "train"),
+        ParamLgl$new("week_of_year", default = TRUE, tags = "train"),
+        ParamLgl$new("day_of_year", default = TRUE, tags = "train"),
+        ParamLgl$new("day_of_month", default = TRUE, tags = "train"),
+        ParamLgl$new("day_of_week", default = TRUE, tags = "train"),
+        ParamLgl$new("hour", default = TRUE, tags = "train"),
+        ParamLgl$new("minute", default = TRUE, tags = "train"),
+        ParamLgl$new("second", default = TRUE, tags = "train"),
+        ParamLgl$new("is_day", default = TRUE, tags = "train")
       ))
       ps$values = list(date_var = character(0L), keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
         month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,
