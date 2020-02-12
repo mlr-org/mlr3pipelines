@@ -12,6 +12,11 @@ A \code{\link[mlr3:Learner]{Learner}} that encapsulates a \code{\link{Graph}} to
 The Graph must return a single \code{\link[mlr3:Prediction]{Prediction}} on its \verb{$predict()}
 call. The result of the \verb{$train()} call is discarded, only the
 internal state changes during training are used.
+
+Note the \code{predict_type} of a \code{\link{GraphLearner}} does currently not track the \code{predict_type}
+of any \code{\link[mlr3:Learner]{Learner}} encapsulated within the \code{\link{Graph}}. Therefore, when requesting
+e.g. \code{"prob"} predictions, the \code{predict_type} of \emph{both} the encapsulated \code{\link[mlr3:Learner]{Learner}}
+and the wrapping \code{\link{GraphLearner}} need to be set to \code{"prob"}.
 }
 \seealso{
 Other Learners: 
