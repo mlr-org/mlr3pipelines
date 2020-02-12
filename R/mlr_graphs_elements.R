@@ -28,6 +28,7 @@
 #' @return Returns a [`Graph`]
 #' @export
 #' @examples
+#' library(mlr3)
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
 #' gr = robustify_pipeline(task, lrn) %>>% po("learner", lrn)
@@ -79,12 +80,12 @@ mlr_graphs$add("robustify_pipeline", robustify_pipeline)
 #' @description
 #' Creates a [`Graph`] that performs bagging on the supplied graph.
 #'
-#' @param `graph` [`PipeOp`]|[`Graph`] \cr
+#' @param graph [`PipeOp`]|[`Graph`] \cr
 #'   A learner to create a robustifying pipeline for. Optional, if omitted,
 #'   a more conservative pipeline is built.
-#' @param `iterations` [`integer`] \cr
+#' @param iterations [`integer`] \cr
 #'   Number of bagging iterations. Defaults to 10.
-#' @param `averager` [`PipeOp`]|[`Graph`] \cr
+#' @param averager [`PipeOp`]|[`Graph`] \cr
 #'   A [`PipeOp`] or [`Graph`] that averages the predictions from the
 #'   replicated and subsampled graph's.
 #'   In the simplest case, `po("classifavg")` and `po("regravg")` can be used
@@ -93,6 +94,7 @@ mlr_graphs$add("robustify_pipeline", robustify_pipeline)
 #' @return Returns a [`Graph`]
 #' @export
 #' @examples
+#' library(mlr3)
 #' lrn_po = po("learner", lrn("regr.rpart"))
 #' task = mlr_tasks$get("boston_housing")
 #' gr = bagging_pipeline(lrn_po, 3, averager = po("regravg"))
