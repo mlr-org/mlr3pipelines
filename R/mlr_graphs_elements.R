@@ -8,7 +8,7 @@
 #' * Drops empty factor levels using [`PipeOpFixFactors`]
 #' * Imputes `numeric` features using [`PipeOpImputeHist`] and [`PipeOpMissInd`]
 #' * Imputes `factor` features using [`PipeOpImputeNewlvl`]
-#' * Encodes `factors` using `one-hot-encoding`. Factors with a cardinality > `ḿax_cardinality` are
+#' * Encodes `factors` using `one-hot-encoding`. Factors with a cardinality > max_cardinality` are
 #'   collapsed using [`PipeOpCollapseFactors`].
 #' * If `scaling`, numeric features are scaled to mean 0 and standard deviation 1.
 #'
@@ -40,7 +40,7 @@ robustify_pipeline = function(task, learner = NULL, scaling = TRUE, max_cardinal
 
   cols_by_type = function(types) {
     assert_character(types)
-    task$feature_types[type %in% types,]
+    task$feature_types[get(type) %in% types,]
   }
   pos = list()
 
@@ -77,15 +77,19 @@ mlr_graphs$add("robustify_pipeline", robustify_pipeline)
 #' @title Create a bagging learner
 #'
 #' @description
-#' Creates a [`Graph`] that performs bagging on the inputted Graph
+#' Creates a [`Graph`] that performs bagging on the supplied graph.
 #'
-#' @param `graph` [`PipeOp`|`Graph`] \cr
+#' @param `graph` [`PipeOp`]|[`Graph`] \cr
 #'   A learner to create a robustifying pipeline for. Optional, if omitted,
 #'   a more conservative pipeline is built.
 #' @param `iterations` [`integer`] \cr
 #'   Number of bagging iterations. Defaults to 10.
-#' @param `averager` [`PipeOp`|`Graph`] \cr
-#'
+#' @param `averager` [`PipeOp`]|[`Graph`] \cr
+#'   A [`PipeOp`] or [`Graph`] that averages the predictions from the
+#'   replicated and subsampled graph's.
+#'   In the simplest case, `po("classifavg")` and `po("regravg")` can be used
+#'   in order to perform simple averaging of classification and regression
+#'   predictions respectively.`
 #' @return Returns a [`Graph`]
 #' @export
 #' @examples

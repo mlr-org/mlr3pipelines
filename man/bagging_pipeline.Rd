@@ -7,20 +7,25 @@
 bagging_pipeline(graph, iterations = 10, averager = NULL)
 }
 \arguments{
-\item{`graph`}{\link[=`PipeOp`|`Graph`]{\code{PipeOp}|\code{Graph}} \cr
+\item{`graph`}{\code{\link{PipeOp}}|\code{\link{Graph}} \cr
 A learner to create a robustifying pipeline for. Optional, if omitted,
 a more conservative pipeline is built.}
 
 \item{`iterations`}{\code{\link{integer}} \cr
 Number of bagging iterations. Defaults to 10.}
 
-\item{`averager`}{\link[=`PipeOp`|`Graph`]{\code{PipeOp}|\code{Graph}} \cr}
+\item{`averager`}{\code{\link{PipeOp}}|\code{\link{Graph}} \cr
+A \code{\link{PipeOp}} or \code{\link{Graph}} that averages the predictions from the
+replicated and subsampled graph's.
+In the simplest case, \code{po("classifavg")} and \code{po("regravg")} can be used
+in order to perform simple averaging of classification and regression
+predictions respectively.`}
 }
 \value{
 Returns a \code{\link{Graph}}
 }
 \description{
-Creates a \code{\link{Graph}} that performs bagging on the inputted Graph
+Creates a \code{\link{Graph}} that performs bagging on the supplied graph.
 }
 \examples{
 lrn_po = po("learner", lrn("regr.rpart"))

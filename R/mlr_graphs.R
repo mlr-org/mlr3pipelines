@@ -29,6 +29,7 @@
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
 #'
+#' # Robustify the learner for the task.
 #' gr = robustify_pipeline(task, lrn) %>>% po("learner", lrn)
 #' # or equivalently
 #' gr = mlr_graphs$get("robustify_pipeline", task = task, learner = lrn) %>>% po(lrn)
