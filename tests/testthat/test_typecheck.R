@@ -54,29 +54,29 @@ test_that("utility function works", {
 })
 
 test_that("Graph is type-checking", {
-  expect_error(PipeOpScale$new() %>>% PipeOpModelAvg$new(1),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp modelavg \\(NULL\\)")
+  expect_error(PipeOpScale$new() %>>% PipeOpRegrAvg$new(1),
+    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
 
-  mavtest = PipeOpModelAvg$new(1)
+  mavtest = PipeOpRegrAvg$new(1)
   mavtest$input$train = "Task"
 
   expect_error(PipeOpScale$new() %>>% mavtest,
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionRegr\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 
 
   gr = Graph$new()$
     add_pipeop(PipeOpScale$new())$
-    add_pipeop(PipeOpModelAvg$new(1))
+    add_pipeop(PipeOpRegrAvg$new(1))
 
-  expect_error(gr$add_edge("scale", "modelavg"),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp modelavg \\(NULL\\)")
+  expect_error(gr$add_edge("scale", "regravg"),
+    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
 
   gr = Graph$new()$
     add_pipeop(PipeOpScale$new())$
     add_pipeop(mavtest)
 
-  expect_error(gr$add_edge("scale", "modelavg"),
-    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp modelavg \\(PredictionRegr\\)")
+  expect_error(gr$add_edge("scale", "regravg"),
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 })
 
 test_that("Autoconversion utility functions work", {
@@ -107,7 +107,7 @@ test_that("Autoconversion utility functions work", {
 
   expect_identical(get_autoconverter("test_subclass")$fun, bfun)  # does the test_hyperclass conversion, because subclass before superclass
   expect_identical(get_autoconverter("test_superclass")$fun, afun)  # converts to "test", because distance to "test_hyperclass" is larger
-  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun) # actually registered to bfun
+  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun)  # actually registered to bfun
   expect_identical(get_autoconverter("test_megaclass")$fun, bfun)  # converts to "test_hyperclass" because distance to "test" is larger
 
   reset_autoconvert_register()  # check that reset actually empties the register to default
@@ -124,12 +124,10 @@ test_that("Autoconversion for pipeops works", {
   po$input$train = "Task"
   po$output$predict = "MeasureClassif"
 
-  expect_equal(po$train(list("iris"))[[1]], mlr_tasks$get("iris"))
+  expect_equal(po$train(list(tsk("iris")))[[1]], mlr_tasks$get("iris"))
 
-  expect_equal(po$predict(list("classif.fn"))[[1]], mlr_measures$get("classif.fn"))
+  expect_equal(po$predict(list(msr("classif.fn")))[[1]], mlr_measures$get("classif.fn"))
 
-  expect_error(po$predict(list("regr.mse")), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
-
-  expect_error(po$predict(list("regrmse")), "PipeOp copy.*Conversion from given data to MeasureClassif.*regrmse.*not found.*regr\\.mse")
+  expect_error(po$predict(list(msr("regr.mse"))), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
 
 })

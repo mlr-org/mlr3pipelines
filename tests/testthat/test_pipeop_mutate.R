@@ -1,4 +1,4 @@
-context("mutate")
+context("PipeOpMutate")
 
 test_that("mutate", {
   op = PipeOpMutate$new()
@@ -9,7 +9,7 @@ test_that("mutate", {
   expect_datapreproc_pipeop_class(PipeOpMutate, task = mlr_tasks$get("iris"))
 
   # Works with Task features
-  al = alist(Sepal.Sum = Sepal.Length + Sepal.Width)
+  al = list(Sepal.Sum = ~ Sepal.Length + Sepal.Width)
   op$param_set$values$mutation = al
   res = op$train(list(task))
   expect_true(op$is_trained)
@@ -25,7 +25,7 @@ test_that("mutate", {
 
 
   # Name clashes
-  al = alist(Sepal.Width = Sepal.Width^2)
+  al = list(Sepal.Width = ~ Sepal.Width^2)
   op$param_set$values$mutation = al
   res_repl = op$train(list(task))
   expect_true("Sepal.Width" %in% res_repl[[1]]$feature_names)
@@ -43,8 +43,9 @@ test_that("mutate", {
   # Works with variables from an env
   env = new.env()
   assign("some_test_val", 7, envir = env)
-  op$param_set$values$env = env
-  al = alist(Sepal.PlusVal = Sepal.Length + some_test_val)
+  some_test_val = -100  # this should not be taken!
+  al = list(Sepal.PlusVal = ~ Sepal.Length + some_test_val)
+  environment(al[[1]]) = env
   op$param_set$values$mutation = al
   res3 = op$train(list(task))
   expect_task(res3[[1]])
@@ -58,8 +59,14 @@ test_that("mutate", {
     (task$data("Sepal.Length", rows = 1:10) + env$some_test_val)$Sepal.Length)
 
 
-  # Errors if lengths don't match
-  al = alist(Sepal.Sum = sum(Sepal.Length + Sepal.Width))
+  # Constant column
+  al = list(Sepal.Sum = ~ sum(Sepal.Length + Sepal.Width))
+  op$param_set$values$mutation = al
+  expect_equal(op$train(list(task))[[1]]$data()$Sepal.Sum,
+    rep(sum(iris[c("Sepal.Length", "Sepal.Width")]), 150))
+
+  # non-constant column, mismatching number of rows
+  al = list(Sepal.Sum = ~ c(0, sum(Sepal.Length + Sepal.Width)))
   op$param_set$values$mutation = al
   expect_error(op$train(list(task)), "have 150 rows")
 })

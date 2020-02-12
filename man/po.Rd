@@ -2,15 +2,17 @@
 % Please edit documentation in R/po.R
 \name{po}
 \alias{po}
-\title{Shorthand for mlr3pipelines::mlr_pipeops$get}
+\title{Shorthand PipeOp Constructor}
 \usage{
-po(.key, ...)
+po(.obj, ...)
 }
 \arguments{
-\item{.key}{\code{[character(1)]}\cr
-The pipeop to construct}
+\item{.obj}{\verb{[any]}\cr
+The object from which to construct a \code{PipeOp}. If this is a
+\code{character(1)}, it is looked up in the \code{\link{mlr_pipeops}} dictionary.
+Otherwise, it is converted to a \code{PipeOp}.}
 
-\item{...}{\cr
+\item{...}{\code{any}\cr
 Additional parameters to give to constructed object.
 This may be an argument of the constructor of the
 \code{PipeOp}, in which case it is given to this constructor;
@@ -18,12 +20,23 @@ or it may be a parameter value, in which case it is
 given to the \code{param_vals} argument of the constructor.}
 }
 \description{
-Create a \code{PipeOp} from \code{mlr_pipeops} from given ID, with
-given parameters and \code{param_vals}.
+Create
+\itemize{
+\item a \code{PipeOp} from \code{mlr_pipeops} from given ID
+\item a \code{PipeOpLearner} from a \code{Learner} object
+\item a \code{PipeOpFilter} from a \code{Filter} object
+}
+
+The object is initialized with given parameters and \code{param_vals}.
 }
 \examples{
-po("learner", "classif.rpart", cp = 0.3)
+library("mlr3")
+
+po("learner", lrn("classif.rpart"), cp = 0.3)
+
+po(lrn("classif.rpart"), cp = 0.3)
+
 # is equivalent with:
-mlr3pipelines::mlr_pipeops$get("learner", "classif.rpart",
+mlr_pipeops$get("learner", lrn("classif.rpart"),
   param_vals = list(cp = 0.3))
 }

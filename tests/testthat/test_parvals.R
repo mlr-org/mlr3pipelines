@@ -30,7 +30,7 @@ test_that("graph param vals", {
 
   expect_error({
     gr$pipeops$pca$param_set$values$center = 1
-  }) # type mismatch
+  })  # type mismatch
   expect_error({
     gr$param_set$values$pca.center = 1
   })

@@ -2,13 +2,13 @@ context("multichannels")
 
 test_that("adding multiple edges to output channels works", {
 
-  graph = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop("subsample")
+  graph = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(po("subsample"))
 
   graph$add_edge("scale", "subsample")$add_edge("scale", "pca")
 
   expect_output(print(graph), c("scale.*subsample,pca.*\n.*subsample.*scale.*\n.*pca.*scale"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
@@ -16,19 +16,19 @@ test_that("adding multiple edges to output channels works", {
 
 test_that("doublearrow with one output to many input works as expected", {
 
-  g1 = "scale" %>>% gunion(list("pca", "subsample"))
-  g2 = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop("subsample")$
+  g1 = po("scale") %>>% gunion(list(po("pca"), po("subsample")))
+  g2 = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(po("subsample"))$
     add_edge("scale", "pca")$add_edge("scale", "subsample")
 
   expect_equal(g1, g2)
 
-  expect_error(gunion(list("scale", "pca")) %>>% gunion(list("nop", "subsample", "select")),
+  expect_error(gunion(list(po("scale"), po("pca"))) %>>% gunion(list(po("nop"), po("subsample"), po("select"))),
     "mismatching number of inputs / outputs")
 
 })
 
 test_that("multiple edges on output channel copies, as expected", {
-  graph = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop("subsample")
+  graph = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(po("subsample"))
 
   graph$add_edge("scale", "subsample")$add_edge("scale", "pca")
 
@@ -56,7 +56,7 @@ test_that("multiple edges on output channel copies, as expected", {
   expect_identical(tsk0, tsk1)
   expect_identical(tsk0, tsk2)
 
-  graph = "nop" %>>% gunion(list(
+  graph = po("nop") %>>% gunion(list(
     mlr_pipeops$get("scale", id = "s1", param_vals = list(scale = TRUE, center = FALSE)),
     mlr_pipeops$get("scale", id = "s2", param_vals = list(scale = FALSE, center = TRUE))))
 
@@ -90,19 +90,19 @@ test_that("multiple edges on output channel copies, as expected", {
 
 test_that("adding multiple edges to vararg input channel works", {
 
-  graph = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop(VarargPipeop$new())
+  graph = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(VarargPipeop$new())
 
   graph$add_edge("scale", "vararg")$add_edge("pca", "vararg")
 
   expect_output(print(graph), c("scale.*vararg.*\n.*pca.*vararg.*\n.*vararg.*scale,pca"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
   graph = Graph$new()$
-    add_pipeop("scale")$add_pipeop("pca")$
-    add_pipeop("subsample")$add_pipeop("select")$
+    add_pipeop(po("scale"))$add_pipeop(po("pca"))$
+    add_pipeop(po("subsample"))$add_pipeop(po("select"))$
     add_pipeop(VarargPipeop$new(innum = 2))
 
   expect_error(graph$add_edge("scale", "vararg"), "dst_channel must not be NULL")
@@ -115,7 +115,7 @@ test_that("adding multiple edges to vararg input channel works", {
 
   expect_output(print(graph), c("scale.*vararg.*\n.*pca.*vararg.*\n.*subsample.*vararg.*\n.*select.*vararg.*\n.*vararg.*scale,pca,subsample,select"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
@@ -123,19 +123,19 @@ test_that("adding multiple edges to vararg input channel works", {
 
 test_that("doublearrow with many output to vararg input works as expected", {
 
-  g1 = gunion(list("scale", "pca")) %>>% VarargPipeop$new()
-  g2 = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop(VarargPipeop$new())$
+  g1 = gunion(list(po("scale"), po("pca"))) %>>% VarargPipeop$new()
+  g2 = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(VarargPipeop$new())$
     add_edge("scale", "vararg")$add_edge("pca", "vararg")
 
   expect_equal(g1, g2)
 
-  g1 = gunion(list("scale", "pca")) %>>% VarargPipeop$new(innum = 1)
-  g2 = Graph$new()$add_pipeop("scale")$add_pipeop("pca")$add_pipeop(VarargPipeop$new(innum = 1))$
+  g1 = gunion(list(po("scale"), po("pca"))) %>>% VarargPipeop$new(innum = 1)
+  g2 = Graph$new()$add_pipeop(po("scale"))$add_pipeop(po("pca"))$add_pipeop(VarargPipeop$new(innum = 1))$
     add_edge("scale", "vararg", dst_channel = "...")$add_edge("pca", "vararg", dst_channel = "input1")
 
   expect_equal(g1, g2)
 
-  expect_error(gunion(list("scale", "pca", "select", "subsample")) %>>% VarargPipeop$new(innum = 2),
+  expect_error(gunion(list(po("scale"), po("pca"), po("select"), po("subsample"))) %>>% VarargPipeop$new(innum = 2),
     "mismatching number of inputs / outputs")
 
 })

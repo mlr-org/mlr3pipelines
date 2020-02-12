@@ -51,7 +51,7 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       if (is.numeric(outputs)) {
         outputs = paste0("output_", seq_len(outputs))
       }
-      p = ParamInt$new(id = "par", lower = 0, upper = 10, default = 0)
+      p = ParamInt$new(id = "par", lower = 0, upper = 10, default = 0, tags = c("train", "predict"))
       self$nin = length(inputs)
       self$nout = length(outputs)
       super$initialize(id, ParamSet$new(list(p)),

@@ -18,13 +18,16 @@ Number of copies to create.}
 }
 \description{
 Create a new \code{\link{Graph}} containing \code{n} copies of the input \code{Graph} / \code{\link{PipeOp}}.
-To avoid ID collisions, PipeOp IDs are suffixed with \code{_i}
+To avoid ID collisions, PipeOp IDs are suffixed with \verb{_i}
 where \code{i} ranges from 1 to \code{n}.
 }
 \seealso{
-Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{as_graph}}, \code{\link{as_pipeop}},
-  \code{\link{assert_graph}}, \code{\link{assert_pipeop}},
-  \code{\link{gunion}}
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_graph}()},
+\code{\link{as_pipeop}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{gunion}()}
 }
 \concept{Graph operators}

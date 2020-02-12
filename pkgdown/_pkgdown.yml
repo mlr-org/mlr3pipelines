@@ -1,82 +1,82 @@
 url: https://mlr3pipelines.mlr-org.com/
 
-
 template:
+  package: mlr3pkgdowntemplate
   params:
-    bootswatch: cosmo
-  path: pkgdown/templates
-  assets: pkgdown/assets
+    bootswatch: journal
   default_assets: false
 
 development:
-  mode: unreleased
-  destination: devel
+  mode: auto
   version_label: default
-  version_tooltip: "Github version"
-
-toc:
-  depth: 3
+  version_tooltip: "Version"
 
 navbar:
-  title:
-  type: default
-  left:
-  #- icon: fa-home
-  #  href: index.html
-  - text: Vignettes
-    menu:
-    - text: First Look
-      href: articles/quickintro.html
-    - text: Introduction
-      href: articles/introduction.html
-    - text: "Example Graphs"
-      href: articles/examples.html
-    - text: Custom PipeOps
-      href: articles/create_a_custom_pipeop.html
-
-  - text: Function Reference
-    href: reference/index.html
-  - text: News
-    href: news/index.html
-
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/mlr-org/mlr3pipelines
-  - icon: fa-slack
-    href: https://mlr-org.slack.com
-  - icon: fa-stack-overflow
-    href: https://stackoverflow.com/questions/tagged/mlr3
-  - icon: fa-rss
-    href: https://mlr-org.com/
+  structure:
+    left: [reference, news, book]
+    right: [github, slack, stackoverflow, rss]
+  components:
+    home: ~
+    reference:
+      icon: fa fa-file-alt
+      text: Reference
+      href: reference/index.html
+    slack:
+      icon: fab fa-slack
+      href: https://mlr-org.slack.com
+    book:
+      text: mlr3book
+      icon: fa fa-link
+      href: https://mlr3book.mlr-org.com
+    stackoverflow:
+      icon: fab fa-stack-overflow
+      href: https://stackoverflow.com/questions/tagged/mlr
+    rss:
+      icon: fa-rss
+      href: https://mlr-org.com/
 
 reference:
   - title: Package
-    content:
-      - mlr3pipelines-package
+    contents:
+      - mlr3pipelines
   - title: Building Blocks
     contents:
       - PipeOp
       - Graph
+      - PipeOpTaskPreproc
+      - PipeOpTaskPreprocSimple
+      - PipeOpImpute
   - title: Graph Tools
     contents:
       - "%>>%"
       - gunion
       - greplicate
+      - branch
   - title: PipeOps
     contents:
       - mlr_pipeops
-      - starts_with("mlr_pipeop_")
+      - po
+      - starts_with("mlr_pipeops_")
+  - title: Learners
+    contents:
+      - mlr_learners_graph
+      - mlr_learners_avg
   - title: Helpers
     contents:
+      - Selector
+      - as_graph
       - assert_graph
+      - as_pipeop
+      - assert_pipeop
       - is_noop
       - NO_OP
       - filter_noop
-      - reset_class_hierarchy_cache
-      - add_class_hierarchy_cache
-      - reset_class_hierarchy_cache
   - title: Abstract PipeOps
     contents:
-      - PipeOpTaskPreproc
-      - PipeOpTaskPreprocSimple
       - PipeOpEnsemble
+  - title: PipeOp Type Inference
+    contents:
+      - add_class_hierarchy_cache
+      - reset_class_hierarchy_cache
+      - register_autoconvert_function
+      - reset_autoconvert_register

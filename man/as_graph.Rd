@@ -4,28 +4,40 @@
 \alias{as_graph}
 \title{Conversion to mlr3pipeline Graph}
 \usage{
-as_graph(x, deep_copy = FALSE)
+as_graph(x, clone = FALSE)
 }
 \arguments{
 \item{x}{(\code{any}) \cr
 Object to convert.}
 
-\item{deep_copy}{(\code{logical(1)}) \cr
-Whether to return a deep copy if \code{x} is a Graph.}
+\item{clone}{(\code{logical(1)}) \cr
+Whether to return a (deep copied) clone if \code{x} is a Graph.}
 }
 \value{
 \code{\link{Graph}} \code{x} or a deep clone of it.
 }
 \description{
-The object is turned into a \code{Graph} if possible.
-If \code{deep_copy} is \code{TRUE}, a deep copy is made
-if the incoming object is a \code{Graph} to ensure the resulting
+The argument is turned into a \code{\link{Graph}} if possible.
+If \code{clone} is \code{TRUE}, a deep copy is made
+if the incoming object is a \code{\link{Graph}} to ensure the resulting
 object is a different reference from the incoming object.
+
+\code{\link[=as_graph]{as_graph()}} is an S3 method and can therefore be implemented
+by other packages that may add objects that can naturally be converted to \code{\link{Graph}}s.
+
+By default, \code{\link[=as_graph]{as_graph()}} tries to
+\itemize{
+\item apply \code{\link[=gunion]{gunion()}} to \code{x} if it is a \code{list}, which recursively applies \code{\link[=as_graph]{as_graph()}} to all list elements first
+\item create a \code{\link{Graph}} with only one element if \code{x} is a \code{\link{PipeOp}} or can be converted to one using \code{\link[=as_pipeop]{as_pipeop()}}.
+}
 }
 \seealso{
-Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{as_pipeop}}, \code{\link{assert_graph}},
-  \code{\link{assert_pipeop}}, \code{\link{greplicate}},
-  \code{\link{gunion}}
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_pipeop}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{greplicate}()},
+\code{\link{gunion}()}
 }
 \concept{Graph operators}

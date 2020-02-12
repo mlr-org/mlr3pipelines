@@ -1,57 +1,80 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Description: Pipelines for mlr3.
-Authors@R: c(
-    person("Martin", "Binder", email = "martin.binder@mail.com", role = c("aut", "cre")),
-    person("Bernd", "Bischl", email = "bernd_bischl@gmx.net", role = "ctb"),
-    person("Michel", "Lang", email = "michellang@gmail.com", role = "ctb"),
-    person("Lars", "Kotthoff", email = "larsko@cs.ubc.ca", role = "ctb"),
-    person("Florian", "Pfisterer", email = "pfistererf@googlemail.com", role = "ctb"))
-URL: https://mlr3pipelines.mlr-org.com
-BugReports: https://github.com/mlr-org/mlr3pipelines/issues
+Version: 0.1.2.9000
+Authors@R:
+    c(person(given = "Martin",
+             family = "Binder",
+             role = c("aut", "cre"),
+             email = "mlr.developer@mb706.com"),
+      person(given = "Florian",
+             family = "Pfisterer",
+             role = "aut",
+             email = "pfistererf@googlemail.com",
+             comment = c(ORCID = "0000-0001-8867-762X")),
+      person(given = "Bernd",
+             family = "Bischl",
+             role = "aut",
+             email = "bernd_bischl@gmx.net",
+             comment = c(ORCID = "0000-0001-6002-6980")),
+      person(given = "Michel",
+             family = "Lang",
+             role = "aut",
+             email = "michellang@gmail.com",
+             comment = c(ORCID = "0000-0001-9754-0393")),
+      person(given = "Susanne",
+             family = "Dandl",
+             role = "aut",
+             email = "dandl.susanne@googlemail.com"))
+Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
+  set of pipelining operators ('PipeOps') that can be composed into graphs.
+  Operations exist for data preprocessing, model fitting, and ensemble
+  learning. Graphs can themselves be treated as 'mlr3' 'Learners' and can
+  therefore be resampled, benchmarked, and tuned.
 License: LGPL-3
+URL: https://mlr3pipelines.mlr-org.com,
+    https://github.com/mlr-org/mlr3pipelines
+BugReports: https://github.com/mlr-org/mlr3pipelines/issues
 Depends:
     R (>= 3.1.0)
 Imports:
-    R6,
     backports,
     checkmate,
     data.table,
-    mlr3,
-    mlr3misc,
-    paradox,
     digest,
+    mlr3 (>= 0.1.4),
+    mlr3misc (>= 0.1.4),
+    paradox,
+    R6,
     withr
 Suggests:
+    ggplot2,
+    glmnet,
     igraph,
     knitr,
     lgr,
+    lme4,
     mlbench,
+    mlr3filters (>= 0.1.1),
+    mlr3learners,
+    mlr3measures,
     nloptr,
     rmarkdown,
     rpart,
     testthat,
-    ggplot2,
-    mlr3learners,
-    mlr3filters,
-    mlr3tuning,
-    glmnet,
-    visNetwork
-Encoding: UTF-8
-NeedsCompilation: no
-Roxygen: list(markdown = TRUE)
-LazyData: true
+    visNetwork,
+    bestNormalize,
+    fastICA,
+    kernlab,
+    smotefamily,
+    evaluate
+VignetteBuilder:
+    knitr
 ByteCompile: true
-Version: 0.1
-RoxygenNote: 6.1.1
-VignetteBuilder: knitr
-Remotes:
-    mlr-org/mlr3@cbb4584,
-    mlr-org/mlr3misc,
-    mlr-org/paradox,
-    mlr-org/mlr3filters,
-    mlr-org/mlr3tuning,
-    mlr-org/mlr3learners
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: no
+Roxygen: list(markdown = TRUE, r6 = FALSE)
+RoxygenNote: 7.0.2
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -59,29 +82,52 @@ Collate:
     'utils.R'
     'PipeOp.R'
     'PipeOpEnsemble.R'
-    'LearnerWeightedAverage.R'
+    'LearnerAvg.R'
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
-    'PipeOpApply.R'
-    'PipeOpBalanceSample.R'
+    'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
+    'PipeOpClassBalancing.R'
+    'PipeOpClassWeights.R'
+    'PipeOpClassifAvg.R'
+    'PipeOpColApply.R'
+    'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
+    'PipeOpEncodeImpact.R'
+    'PipeOpEncodeLmer.R'
     'PipeOpFeatureUnion.R'
     'PipeOpFilter.R'
+    'PipeOpFixFactors.R'
+    'PipeOpHistBin.R'
+    'PipeOpICA.R'
     'PipeOpImpute.R'
+    'PipeOpImputeHist.R'
+    'PipeOpImputeMean.R'
+    'PipeOpImputeMedian.R'
+    'PipeOpImputeNewlvl.R'
+    'PipeOpImputeSample.R'
+    'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
-    'PipeOpMajorityVote.R'
-    'PipeOpModelAvg.R'
+    'PipeOpMissingIndicators.R'
+    'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpQuantileBin.R'
+    'PipeOpRegrAvg.R'
+    'PipeOpRemoveConstants.R'
     'PipeOpScale.R'
+    'PipeOpScaleMaxAbs.R'
+    'PipeOpScaleRange.R'
     'PipeOpSelect.R'
+    'PipeOpSmote.R'
+    'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
-    'PipeOpUnBranch.R'
+    'PipeOpUnbranch.R'
+    'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
     'greplicate.R'

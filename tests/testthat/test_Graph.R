@@ -78,7 +78,7 @@ test_that("complex graph", {
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"),
     info = paste0("'", lines, "'", collapse = "', '"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
 
@@ -147,7 +147,7 @@ test_that("input / output lists and naming", {
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   gr$plot()
   dev.off()
 
@@ -200,7 +200,7 @@ test_that("edges that introduce loops cannot be added", {
 
   expect_error(g$add_edge("p1", "p1", 1, 1), "Cycle detected")
 
-  expect_deep_clone(g, gclone) # check that edges did not change
+  expect_deep_clone(g, gclone)  # check that edges did not change
 
   g$add_edge("p1", "p2")
 
@@ -209,7 +209,7 @@ test_that("edges that introduce loops cannot be added", {
 
   expect_error(g$add_edge("p2", "p1", 1, 1), "Cycle detected")
 
-  expect_deep_clone(g, gclone) # check that edges did not change
+  expect_deep_clone(g, gclone)  # check that edges did not change
 })
 
 
@@ -220,7 +220,7 @@ test_that("assert_graph test", {
 
   expect_error(expect_deep_clone(gr, gr2), class = "error", "addresses differ.*isn't true")
 
-  gr2 = as_graph(gr, deep_copy = TRUE)
+  gr2 = as_graph(gr, clone = TRUE)
 
   expect_deep_clone(gr, gr2)
 
@@ -232,7 +232,7 @@ test_that("assert_graph test", {
 
   expect_error(expect_deep_clone(po, po), class = "error", "addresses differ.*isn't true")
 
-  po2 = as_graph(po, deep_copy = TRUE)$pipeops[[1]]
+  po2 = as_graph(po, clone = TRUE)$pipeops[[1]]
 
   expect_deep_clone(po, po2)
 })
@@ -255,6 +255,9 @@ test_that("Empty Graph", {
   expect_equal(greplicate(Graph$new(), 100), Graph$new())
 
   expect_error(Graph$new()$add_edge("a", "b"), "Cannot add edge to empty Graph")
+
+  expect_equal(Graph$new()$state, list())
+
 })
 
 test_that("Graph printer aux function calculates col widths well", {
@@ -262,8 +265,8 @@ test_that("Graph printer aux function calculates col widths well", {
   set.seed(8008135)
 
   effective_outwidth = function(colwidths, collimit) {
-    colwidths[colwidths > collimit] = collimit + 3 # this is how data.table does it
-    sum(colwidths + 1) + 4 # add 1 spacer between columns, and an extra margin of 4
+    colwidths[colwidths > collimit] = collimit + 3  # this is how data.table does it
+    sum(colwidths + 1) + 4  # add 1 spacer between columns, and an extra margin of 4
   }
 
   test_outlimit = function(colwidths, outwidth) {
@@ -310,7 +313,7 @@ test_that("Intermediate results are saved to Graph if requested", {
 
   expect_equal(g$pipeops$scale$.result, restask2)
 
-  expect_equal(unname(g$pipeops$nop$.result), restask)
+  expect_equal(g$pipeops$nop$.result, restask)
 })
 
 test_that("Namespaces get loaded", {
@@ -330,4 +333,20 @@ test_that("Namespaces get loaded", {
     "  Error loading package 4rfjfw (required by scale, nop):",
     "  Error loading package 324r32 (required by scale):"),
   strsplit(res, "\n")[[1]])
+})
+
+test_that("Graph State", {
+  g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
+    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
+
+  g_clone = g$clone(deep = TRUE)
+  task = mlr_tasks$get("iris")
+
+  res = g$train(task)
+
+  g_clone$state = g$state
+  expect_deep_clone(g_clone, g$clone(deep = TRUE))
+
+  expect_equal(g$predict(task), g_clone$predict(task))
+
 })

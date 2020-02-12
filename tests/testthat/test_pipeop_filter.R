@@ -20,7 +20,11 @@ test_that("PipeOpFilter", {
 
   po$param_set$values = list(filter.nfeat = 1, na.rm = TRUE)
 
+  orig_filter = po$filter$clone(deep = TRUE)
+
   tt = po$train(list(task))[[1]]
+
+  expect_deep_clone(po$filter, orig_filter)  # po$filter not changed by train
 
   expect_set_equal(tt$feature_names, c("chas", "town", "tract"))
 
@@ -36,4 +40,22 @@ test_that("PipeOpFilter", {
   tt = po$train(list(task))[[1]]
 
   expect_set_equal(tt$feature_names, c(setdiff(task$feature_names, po$param_set$values$affect_columns(task)), "chas", "b", "age"))
+})
+
+
+test_that("PipeOpFilter parameters", {
+
+  po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
+
+  expect_set_equal(c("filter.nfeat", "filter.frac", "filter.cutoff"),
+    grep("^filter\\.", names(po$param_set$params), value = TRUE))
+
+  po = po$clone(deep = TRUE)  # cloning often breaks param connection
+
+  po$param_set$values$na.rm = FALSE
+  expect_equal(po$filter$param_set$values$na.rm, FALSE)
+
+  po$param_set$values$na.rm = TRUE
+  expect_equal(po$filter$param_set$values$na.rm, TRUE)
+
 })

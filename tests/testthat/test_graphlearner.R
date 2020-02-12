@@ -10,6 +10,7 @@ test_that("basic graphlearn tests", {
   expect_true(run_experiment(task, glrn)$ok)
 
   glrn = GraphLearner$new(gr)
+  expect_learner(glrn)
   glrn$train(task)
 
   expect_prediction_classif({
@@ -32,11 +33,19 @@ test_that("basic graphlearn tests", {
 
   gr2 = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
   glrn2 = GraphLearner$new(gr2)
+  glrn2_clone = glrn2$clone(deep = TRUE)
+  expect_learner(glrn2)
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
+  glrn2_clone$state = glrn2$state
+#  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
+#  glrn2_clone$state$model$classif.rpart$log = glrn2_clone$state$model$classif.rpart$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
+  expect_deep_clone(glrn2_clone, glrn2$clone(deep = TRUE))
   expect_prediction_classif({
     graphpred2 = glrn2$predict(task)
   })
+
+  expect_equal(glrn2$predict(task), glrn2_clone$predict(task))
 
   scidf = cbind(scale(iris[1:4]), iris[5])
   scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
@@ -130,22 +139,22 @@ test_that("graphlearner type inference", {
   ###########
 
   # inference from pipeoplearner
-  lrn = GraphLearner$new(mlr_pipeops$get("learner", "classif.rpart"))
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", lrn("classif.rpart")))
   expect_equal(lrn$task_type, "classif")
   expect_equal(lrn$predict_type, "response")
 
   # inference from output only
-  lrn = GraphLearner$new(mlr_pipeops$get("copy", 1) %>>% mlr_pipeops$get("learner", "classif.rpart"))
+  lrn = GraphLearner$new(mlr_pipeops$get("copy", 1) %>>% mlr_pipeops$get("learner", lrn("classif.rpart")))
   expect_equal(lrn$task_type, "classif")
   expect_equal(lrn$predict_type, "response")
 
   # inference from input only
-  lrn = GraphLearner$new(mlr_pipeops$get("learner", "classif.rpart") %>>% mlr_pipeops$get("copy", 1))
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", lrn("classif.rpart")) %>>% mlr_pipeops$get("copy", 1))
   expect_equal(lrn$task_type, "classif")
   expect_equal(lrn$predict_type, "response")
 
   # inference when multiple input, but one is a Task
-  lrn = GraphLearner$new(gunion(list(mlr_pipeops$get("learner", "classif.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch"))
+  lrn = GraphLearner$new(gunion(list(mlr_pipeops$get("learner", lrn("classif.rpart")), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch"))
   expect_equal(lrn$task_type, "classif")
   expect_equal(lrn$predict_type, "response")
 
@@ -154,22 +163,22 @@ test_that("graphlearner type inference", {
   ###########
 
   # inference from pipeoplearner
-  lrn = GraphLearner$new(mlr_pipeops$get("learner", "regr.rpart"))
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", lrn("regr.rpart")))
   expect_equal(lrn$task_type, "regr")
   expect_equal(lrn$predict_type, "response")
 
   # inference from output only
-  lrn = GraphLearner$new(mlr_pipeops$get("copy", 1) %>>% mlr_pipeops$get("learner", "regr.rpart"))
+  lrn = GraphLearner$new(mlr_pipeops$get("copy", 1) %>>% mlr_pipeops$get("learner", lrn("regr.rpart")))
   expect_equal(lrn$task_type, "regr")
   expect_equal(lrn$predict_type, "response")
 
   # inference from input only
-  lrn = GraphLearner$new(mlr_pipeops$get("learner", "regr.rpart") %>>% mlr_pipeops$get("copy", 1))
+  lrn = GraphLearner$new(mlr_pipeops$get("learner", lrn("regr.rpart")) %>>% mlr_pipeops$get("copy", 1))
   expect_equal(lrn$task_type, "regr")
   expect_equal(lrn$predict_type, "response")
 
   # inference when multiple input, but one is a Task
-  lrn = GraphLearner$new(gunion(list(mlr_pipeops$get("learner", "regr.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch"))
+  lrn = GraphLearner$new(gunion(list(mlr_pipeops$get("learner", lrn("regr.rpart")), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch"))
   expect_equal(lrn$task_type, "regr")
   expect_equal(lrn$predict_type, "response")
 
@@ -178,14 +187,18 @@ test_that("graphlearner type inference", {
   ###########
 
   # input, output mismatching types
-  gr = gunion(list(mlr_pipeops$get("learner", "regr.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch") %>>% mlr_pipeops$get("learner", "classif.rpart")
+  gr = gunion(list(mlr_pipeops$get("learner", lrn("regr.rpart")), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch") %>>% mlr_pipeops$get("learner", lrn("classif.rpart"))
   expect_error(GraphLearner$new(gr), "multiple possibilities")
 
-  gr = gunion(list(mlr_pipeops$get("learner", "classif.rpart"), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch") %>>% mlr_pipeops$get("learner", "regr.rpart")
+  gr = gunion(list(mlr_pipeops$get("learner", lrn("classif.rpart")), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch") %>>% mlr_pipeops$get("learner", lrn("regr.rpart"))
   expect_error(GraphLearner$new(gr), "multiple possibilities")
 
   # input two mismatching types
-  gr = gunion(list(mlr_pipeops$get("learner", "classif.rpart"), mlr_pipeops$get("learner", "regr.rpart"))) %>>% mlr_pipeops$get("unbranch")
+  gr = gunion(list(mlr_pipeops$get("learner", lrn("classif.rpart")), mlr_pipeops$get("learner", lrn("regr.rpart")))) %>>% mlr_pipeops$get("unbranch")
   expect_error(GraphLearner$new(gr), "multiple possibilities")
+
+  # input two mismatching types
+  expect_error(GraphLearner$new(PipeOpScale$new()), "output type not.*Prediction.*or compatible")
+
 
 })

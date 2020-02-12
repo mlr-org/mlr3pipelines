@@ -4,15 +4,15 @@ context("PipeOpUnbranch")
 test_that("PipeOpUnbranch - basic properties", {
   po = PipeOpUnbranch$new(3)
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 3)
-  expect_data_table(po$output, nrow = 1)
+  expect_data_table(po$input, nrows = 3)
+  expect_data_table(po$output, nrows = 1)
 
   expect_pipeop_class(PipeOpUnbranch, list(1))
   expect_pipeop_class(PipeOpUnbranch, list(3))
 
   po = PipeOpUnbranch$new()
   expect_pipeop(po)
-  expect_data_table(po$input, nrow = 1)
+  expect_data_table(po$input, nrows = 1)
 })
 
 

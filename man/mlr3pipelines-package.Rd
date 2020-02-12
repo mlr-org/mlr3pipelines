@@ -6,27 +6,32 @@
 \alias{mlr3pipelines-package}
 \title{mlr3pipelines: Preprocessing Operators and Pipelines for 'mlr3'}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Pipelines for mlr3.
+Dataflow programming toolkit that enriches 'mlr3' with a diverse
+  set of pipelining operators ('PipeOps') that can be composed into graphs.
+  Operations exist for data preprocessing, model fitting, and ensemble
+  learning. Graphs can themselves be treated as 'mlr3' 'Learners' and can
+  therefore be resampled, benchmarked, and tuned.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://mlr3pipelines.mlr-org.com}
+  \item \url{https://github.com/mlr-org/mlr3pipelines}
   \item Report bugs at \url{https://github.com/mlr-org/mlr3pipelines/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Martin Binder \email{martin.binder@mail.com}
+\strong{Maintainer}: Martin Binder \email{mlr.developer@mb706.com}
 
-Other contributors:
+Authors:
 \itemize{
-  \item Bernd Bischl \email{bernd_bischl@gmx.net} [contributor]
-  \item Michel Lang \email{michellang@gmail.com} [contributor]
-  \item Lars Kotthoff \email{larsko@cs.ubc.ca} [contributor]
-  \item Florian Pfisterer \email{pfistererf@googlemail.com} [contributor]
+  \item Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
+  \item Bernd Bischl \email{bernd_bischl@gmx.net} (\href{https://orcid.org/0000-0001-6002-6980}{ORCID})
+  \item Michel Lang \email{michellang@gmail.com} (\href{https://orcid.org/0000-0001-9754-0393}{ORCID})
+  \item Susanne Dandl \email{dandl.susanne@googlemail.com}
 }
 
 }

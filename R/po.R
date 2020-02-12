@@ -1,42 +1,54 @@
 
 
 
-#' @title Shorthand for mlr3pipelines::mlr_pipeops$get
+#' @title Shorthand PipeOp Constructor
 #'
 #' @description
-#' Create a `PipeOp` from `mlr_pipeops` from given ID, with
-#' given parameters and `param_vals`.
+#' Create
+#'  - a `PipeOp` from `mlr_pipeops` from given ID
+#'  - a `PipeOpLearner` from a `Learner` object
+#'  - a `PipeOpFilter` from a `Filter` object
 #'
-#' @param .key `[character(1)]`\cr
-#'   The pipeop to construct
-#' @param ... \cr
+#' The object is initialized with given parameters and `param_vals`.
+#'
+#' @param .obj `[any]`\cr
+#'   The object from which to construct a `PipeOp`. If this is a
+#'   `character(1)`, it is looked up in the [`mlr_pipeops`] dictionary.
+#'   Otherwise, it is converted to a `PipeOp`.
+#' @param ... `any`\cr
 #'   Additional parameters to give to constructed object.
 #'   This may be an argument of the constructor of the
 #'   `PipeOp`, in which case it is given to this constructor;
 #'   or it may be a parameter value, in which case it is
 #'   given to the `param_vals` argument of the constructor.
-#' @examples
-#' po("learner", "classif.rpart", cp = 0.3)
-#' # is equivalent with:
-#' mlr3pipelines::mlr_pipeops$get("learner", "classif.rpart",
-#'   param_vals = list(cp = 0.3))
 #' @export
-po = function(.key, ...) {
-  assert_string(.key)
+#' @examples
+#' library("mlr3")
+#'
+#' po("learner", lrn("classif.rpart"), cp = 0.3)
+#'
+#' po(lrn("classif.rpart"), cp = 0.3)
+#'
+#' # is equivalent with:
+#' mlr_pipeops$get("learner", lrn("classif.rpart"),
+#'   param_vals = list(cp = 0.3))
+po = function(.obj, ...) {
+  UseMethod("po")
+}
 
-  args = list(...)
-  given_argnames = names2(args)
+#' @export
+po.character = function(.obj, ...) {
+  dictionary_sugar(dict = mlr_pipeops, .key = .obj, ...)
+}
 
-  resulting_constructor = get0(.key, mlr_pipeops$items, ifnotfound = NULL)$value$public_methods$initialize
-  signature_argnames = setdiff(names2(suppressWarnings(formals(args(resulting_constructor)))), ".key")
+#' @export
+po.Learner = function(.obj, ...) {
+  # we use po() because that makes it possible to set hyperpars via `...`
+  po(.obj = "learner", learner = .obj, ...)
+}
 
-  args_not_in_sig = which(
-    !is.na(given_argnames) &
-    given_argnames %nin% signature_argnames
-  )
-
-  param_vals = args[args_not_in_sig]
-  args[args_not_in_sig] = NULL
-  args[["param_vals"]] = c(param_vals, args[["param_vals"]])
-  do.call(mlr_pipeops$get, c(key = .key, args))
+#' @export
+po.Filter = function(.obj, ...) {
+  # we use po() because that makes it possible to set hyperpars via `...`
+  po(.obj = "filter", filter = .obj, ...)
 }

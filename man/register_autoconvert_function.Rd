@@ -15,12 +15,27 @@ a sub-class as recognized by \code{are_types_compatible()}.}
 
 \item{packages}{\code{character} The packages required to be loaded for fun to operate.}
 }
+\value{
+\code{NULL}.
+}
 \description{
 Add functions that perform conversion to a desired class.
+
+Whenever a \code{\link{Graph}} or a \code{\link{PipeOp}} is called with an object
+that does not conform to its declared input type, the "autoconvert
+register" is queried for functions that may turn the object into
+a desired type.
+}
+\examples{
+# This lets mlr3pipelines automatically try to convert a string into
+# a `PipeOp` by querying the [`mlr_pipeops`] [`Dictionary`][mlr3misc::Dictionary].
+# This is an example and not necessary, because mlr3pipelines adds it by default.
+register_autoconvert_function("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
 }
 \seealso{
-Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},
-  \code{\link{reset_autoconvert_register}},
-  \code{\link{reset_class_hierarchy_cache}}
+Other class hierarchy operations: 
+\code{\link{add_class_hierarchy_cache}()},
+\code{\link{reset_autoconvert_register}()},
+\code{\link{reset_class_hierarchy_cache}()}
 }
 \concept{class hierarchy operations}
