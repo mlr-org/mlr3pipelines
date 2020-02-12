@@ -196,6 +196,7 @@ Other mlr3pipelines backend related:
 \code{\link{Graph}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
+\code{\link{mlr_graphs}},
 \code{\link{mlr_pipeops}}
 
 Other PipeOps: 

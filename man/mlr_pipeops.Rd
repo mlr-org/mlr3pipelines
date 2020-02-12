@@ -59,7 +59,8 @@ Other mlr3pipelines backend related:
 \code{\link{Graph}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}}
+\code{\link{PipeOp}},
+\code{\link{mlr_graphs}}
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
