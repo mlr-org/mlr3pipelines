@@ -26,5 +26,5 @@ Creates a \code{Graph} from \code{mlr_graphs} from given ID
 \examples{
 library("mlr3")
 
-gr = pipe("bagging_pipeline", graph = po(lrn("regr.rpart")), averager = po("regravg"))
+gr = pipe("bagging", graph = po(lrn("regr.rpart")), averager = po("regravg"))
 }

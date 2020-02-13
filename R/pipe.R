@@ -16,7 +16,7 @@
 #' @examples
 #' library("mlr3")
 #'
-#' gr = pipe("bagging_pipeline", graph = po(lrn("regr.rpart")), averager = po("regravg"))
+#' gr = pipe("bagging", graph = po(lrn("regr.rpart")), averager = po("regravg"))
 pipe = function(key, ...) {
   dictionary_sugar(dict = mlr_graphs, .key = key, ...)
 }
