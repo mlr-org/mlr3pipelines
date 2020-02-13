@@ -55,7 +55,11 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   assert_flag(scaling)
   assert_count(max_cardinality)
 
-
+  # FIXME:
+  # This should additionally do the following thins:
+  # - Convert posixct to numeric using new pipeop
+  # - Auto-convert character to factor? Perhaps improve later with text po's
+  # - Logical to integer conversion
   if (!is.null(task)) {
     pos = list()
     if ("factor" %in% learner$feature_types && nrow(cols_by_type("factor")) > 0)
@@ -66,12 +70,12 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
       if (nrow(cols_by_type(c("numeric", "integer"))) > 0)
         pos = c(pos, po("copy", 2) %>>%
           gunion(list(
-            po("imputehist", param_vals = list(affect_columns = is.numeric)),
-            po("missind"))) %>>%
+            po("imputehist", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))),
+            po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
            po("featureunion"))
       # Impute factors
       if (nrow(cols_by_type(c("factor", "ordered"))) > 0)
-        pos = c(pos, po("imputenewlvl", param_vals = list(affect_columns = is.factor)))
+        pos = c(pos, po("imputenewlvl", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
     }
 
     if (factors_to_numeric) {
@@ -82,15 +86,15 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
       pos = c(pos, po("encode"))
     }
   } else {
-    pos = list(po("fixfactors", param_vals = list(affect_columns = is.factor)))
+    pos = list(po("fixfactors", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
     if (impute_missings) {
       pos = c(pos,
         po("copy", 2) %>>%
           gunion(list(
-            po("imputehist", param_vals = list(affect_columns = is.numeric)),
-            po("missind"))) %>>%
+            po("imputehist", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))),
+            po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
            po("featureunion"),
-        po("imputenewlvl", param_vals = list(affect_columns = is.factor)))
+        po("imputenewlvl", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
     }
     pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
     if (factors_to_numeric) pos = c(pos, po("encode"))
