@@ -12,6 +12,7 @@ test_that("PipeOp - General functions", {
   expect_output(print(po_1), "PipeOp:")
   expect_equal(po_1$packages, character(0))
   expect_null(po_1$state)
+  expect_character(assert_tag(po_1$tags))
 
   expect_output(expect_equal(po_1$train(list(1)), list(output = 1)), "Training debug.basic")
   expect_equal(po_1$state, list(input = 1))

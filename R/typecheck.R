@@ -246,7 +246,7 @@ get_autoconverter = function(target) {
 # @return a character vector of tasks
 assert_tag = function(tags) {
   tags = assert_character(tolower(tags))
-  valid_tags = c("meta", "missings", "feature selection", "imbalanced data",
+  valid_tags = c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner",
     paste0("feature type: ", mlr_reflections$task_feature_types))
   assert_true(all(tags %in% valid_tags))

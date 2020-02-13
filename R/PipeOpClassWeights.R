@@ -75,6 +75,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       ))
       ps$values = list(minor_weight = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif")
+      private$add_tags("imbalanced data")
     },
 
     train_task = function(task) {
