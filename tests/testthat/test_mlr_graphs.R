@@ -17,10 +17,26 @@ test_that("Robustify Pipeline", {
   expect_true(length(p$pipeops) == 2)
 
   tsk = tsk("pima")
-  # missings with scaling
+  # missings with scaling (rpart can do scaling)
   p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "scale") %in% names(p$pipeops)))
+  expect_true("scale" %in% names(p$pipeops))
+
+  # with fct, assuming rpart can not do fct
+  dt = data.table("fct" = factor(rep_len(letters[1:3], tsk$nrow)))
+  tsk$cbind(dt)
+  lrn$feature_types = c("integer", "numeric")
+  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
+  expect_graph(p)
+  expect_true(all(c("scale", "encode") %in% names(p$pipeops)))
+
+  # missing fcts, assuming rpart can not do missings
+  lrn$properties = c("multiclass", "twoclass")
+  dt =  data.table("fct2" = factor(rep_len(c(letters[1:3], NA), tsk$nrow)))
+  tsk$cbind(dt)
+  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
+  expect_graph(p)
+  expect_true(all(c("imputehist", "missind", "scale", "encode", "imputenewlvl") %in% names(p$pipeops)))
 
   # no scaling
   p = pipe("robustify", task = tsk, learner = lrn, scaling = FALSE) %>>% po(lrn)
@@ -28,28 +44,19 @@ test_that("Robustify Pipeline", {
   expect_true(all(c("imputehist", "missind") %in% names(p$pipeops)))
   expect_true(!("scale" %in% names(p$pipeops)))
 
-  # with fct, assuming rpart can not do fct
-  dt =  data.table("fct" = factor(rep_len(letters[1:3], tsk$nrow)))
-  tsk$cbind(dt)
-  lrn$feature_types = c("integer", "numeric")
-  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
-  expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "scale", "encode") %in% names(p$pipeops)))
-
-  # missing fcts
-  dt =  data.table("fct2" = factor(rep_len(c(letters[1:3], NA), tsk$nrow)))
-  tsk$cbind(dt)
-  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
-  expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "scale", "encode", "imputenewlvl") %in% names(p$pipeops)))
-
   # test on mixed, no missings
   tsk = tsk("boston_housing")
+  lrn = lrn("regr.rpart")
   p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("encode", "scale") %in% names(p$pipeops)))
   expect_true(!("missind" %in% names(p$pipeops)))
   expect_true(!("imputenewlvl" %in% names(p$pipeops)))
+
+  # logical impute_missings
+  p = pipe("robustify", task = tsk, learner = lrn, impute_missings = TRUE) %>>% po(lrn)
+  expect_graph(p)
+  expect_true(all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
 
   # no task
   p = pipe("robustify") %>>% po(lrn)
@@ -61,6 +68,18 @@ test_that("Robustify Pipeline", {
   expect_graph(p)
   expect_true(all(c("fixfactors", "collapsefactors", "scale", "encode") %in% names(p$pipeops)))
   expect_true(!all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
+
+  # missings during predict
+  # dt = tsk$data()
+  # dt[2, 3] = NA
+  # tsk2 = TaskRegr$new(id = "bh", dt, target = "medv")
+  # lrn$properties = c("multiclass", "twoclass")
+  # p = pipe("robustify", impute_missings = TRUE) %>>% po(lrn)
+  # g = GraphLearner$new(p)
+  # g$train(tsk)
+  # g$predict(tsk2)
+  # FIXME: This should be possible
+
 })
 
 

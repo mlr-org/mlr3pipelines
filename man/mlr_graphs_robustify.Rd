@@ -8,8 +8,8 @@
 robustify_pipeline(
   task = NULL,
   learner = NULL,
-  impute_missings = TRUE,
-  factors_to_numeric = TRUE,
+  impute_missings = NULL,
+  factors_to_numeric = NULL,
   scaling = TRUE,
   max_cardinality = 1000
 )
@@ -24,11 +24,11 @@ A learner to create a robustifying pipeline for. Optional, if omitted,
 a more conservative pipeline is built.}
 
 \item{impute_missings}{\code{\link{logical}} | \code{\link{NULL}} \cr
-Should missing values be imputed? Defaults to TRUE, i.e imputes if the task has
+Should missing values be imputed? Defaults to \code{NULL}, i.e imputes if the task has
 missing values and the learner can not handle them.}
 
 \item{factors_to_numeric}{\code{\link{logical}} | \code{\link{NULL}} \cr
-Should factors be encoded? Defaults to TRUE, i.e encodes if the task has factors
+Should factors be encoded? Defaults to \code{NULL}, i.e encodes if the task has factors
 and the learner can not handle factors.}
 
 \item{scaling}{\code{\link{logical}} \cr
