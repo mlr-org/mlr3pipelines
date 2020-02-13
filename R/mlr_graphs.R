@@ -7,13 +7,13 @@
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`Graph`].
 #' The dictionary contains a collection of often-used graph structures, and it's aim
 #' is solely to make often-used functions more accessible.
-#' Each `Graph` has an associated help page, which can be accessed via `?<key>`, i.e.
-#' `?bagging_pipeline`.
+#' Each `Graph` has an associated help page, which can be accessed via `?mlr_graphs_<key>`, i.e.
+#' `?mlr_graphs_bagging`.
 #'
 #' @section Methods:
 #' Methods inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
 #' * `add(key, value)`\cr
-#'   (`character(1)`, `R6ClassGenerator`, `NULL` | `list`)\cr
+#'   (`character(1)`, `function`)\cr
 #'   Adds constructor `value` to the dictionary with key `key`, potentially
 #'   overwriting a previously stored item.
 #'
@@ -22,7 +22,7 @@
 #'   [`Dictionary`][mlr3misc::Dictionary] -> [`data.table::data.table`]\cr
 #'   Returns a `data.table` with column `key` (`character`).
 #' @family mlr3pipelines backend related
-#' @family Graph
+#' @family Dictionaries
 #' @export
 #' @examples
 #' library(mlr3)
@@ -32,9 +32,9 @@
 #' # Robustify the learner for the task.
 #' gr = robustify_pipeline(task, lrn) %>>% po("learner", lrn)
 #' # or equivalently
-#' gr = mlr_graphs$get("robustify_pipeline", task = task, learner = lrn) %>>% po(lrn)
+#' gr = mlr_graphs$get("robustify", task = task, learner = lrn) %>>% po(lrn)
 #' # or equivalently
-#' gr = pipe("robustify_pipeline", task, lrn) %>>% po("learner", lrn)
+#' gr = pipe("robustify", task, lrn) %>>% po("learner", lrn)
 #'
 #' # all Graphs currently in the dictionary:
 #' as.data.table(mlr_graphs)

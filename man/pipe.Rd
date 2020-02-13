@@ -4,10 +4,10 @@
 \alias{pipe}
 \title{Shorthand Graph Constructor}
 \usage{
-pipe(.obj, ...)
+pipe(key, ...)
 }
 \arguments{
-\item{.obj}{\verb{[any]}\cr
+\item{key}{\verb{[character]}\cr
 The object from which to construct a \code{PipeOp}. If this is a
 \code{character(1)}, it is looked up in the \code{\link{mlr_pipeops}} dictionary.
 Otherwise, it is converted to a \code{PipeOp}.}
@@ -15,9 +15,10 @@ Otherwise, it is converted to a \code{PipeOp}.}
 \item{...}{\code{any}\cr
 Additional parameters to give to constructed object.
 This may be an argument of the constructor of the
-\code{PipeOp}, in which case it is given to this constructor;
-or it may be a parameter value, in which case it is
-given to the \code{param_vals} argument of the constructor.}
+\verb{underlying function}.}
+}
+\value{
+\code{\link{Graph}}
 }
 \description{
 Creates a \code{Graph} from \code{mlr_graphs} from given ID

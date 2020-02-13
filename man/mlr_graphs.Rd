@@ -9,15 +9,15 @@
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{Graph}}.
 The dictionary contains a collection of often-used graph structures, and it's aim
 is solely to make often-used functions more accessible.
-Each \code{Graph} has an associated help page, which can be accessed via \verb{?<key>}, i.e.
-\code{?bagging_pipeline}.
+Each \code{Graph} has an associated help page, which can be accessed via \verb{?mlr_graphs_<key>}, i.e.
+\code{?mlr_graphs_bagging}.
 }
 \section{Methods}{
 
 Methods inherited from \code{\link[mlr3misc:Dictionary]{Dictionary}}, as well as:
 \itemize{
 \item \code{add(key, value)}\cr
-(\code{character(1)}, \code{R6ClassGenerator}, \code{NULL} | \code{list})\cr
+(\code{character(1)}, \code{function})\cr
 Adds constructor \code{value} to the dictionary with key \code{key}, potentially
 overwriting a previously stored item.
 }
@@ -33,16 +33,16 @@ Returns a \code{data.table} with column \code{key} (\code{character}).
 }
 
 \examples{
-
+library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
 
 # Robustify the learner for the task.
 gr = robustify_pipeline(task, lrn) \%>>\% po("learner", lrn)
 # or equivalently
-gr = mlr_graphs$get("robustify_pipeline", task = task, learner = lrn) \%>>\% po(lrn)
+gr = mlr_graphs$get("robustify", task = task, learner = lrn) \%>>\% po(lrn)
 # or equivalently
-gr = pipe("robustify_pipeline", task, lrn) \%>>\% po("learner", lrn)
+gr = pipe("robustify", task, lrn) \%>>\% po("learner", lrn)
 
 # all Graphs currently in the dictionary:
 as.data.table(mlr_graphs)
@@ -54,7 +54,10 @@ Other mlr3pipelines backend related:
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops}}
+
+Other Dictionaries: 
+\code{\link{mlr_pipeops}}
 }
-\concept{Graph}
+\concept{Dictionaries}
 \concept{mlr3pipelines backend related}
 \keyword{datasets}

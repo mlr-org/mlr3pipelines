@@ -108,7 +108,11 @@ Other PipeOps:
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}}
+
+Other Dictionaries: 
+\code{\link{mlr_graphs}}
 }
+\concept{Dictionaries}
 \concept{PipeOps}
 \concept{mlr3pipelines backend related}
 \keyword{datasets}
