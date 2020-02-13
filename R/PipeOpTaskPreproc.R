@@ -154,7 +154,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   public = list(
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task") {
       if (can_subset_cols) {
-        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train")
+        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, default = selector_all(), tags = "train")
         if (inherits(param_set, "ParamSet")) {
           param_set$add(acp)
         } else {
