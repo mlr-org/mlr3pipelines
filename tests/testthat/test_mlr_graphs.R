@@ -65,7 +65,6 @@ test_that("Robustify Pipeline", {
 
 
 test_that("Bagging Pipeline", {
-
   # classif
   tsk = tsk("iris")
   lrn = lrn("classif.rpart")
