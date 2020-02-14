@@ -70,15 +70,15 @@ test_that("Robustify Pipeline", {
   expect_true(!all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
 
   # missings during predict
-  # dt = tsk$data()
-  # dt[2, 3] = NA
-  # tsk2 = TaskRegr$new(id = "bh", dt, target = "medv")
-  # lrn$properties = c("multiclass", "twoclass")
-  # p = pipe("robustify", impute_missings = TRUE) %>>% po(lrn)
-  # g = GraphLearner$new(p)
-  # g$train(tsk)
-  # g$predict(tsk2)
-  # FIXME: This should be possible
+  dt = tsk$data()
+  dt[2, 3] = NA
+  tsk2 = TaskRegr$new(id = "bh", dt, target = "medv")
+  lrn$properties = c("multiclass", "twoclass")
+  p = pipe("robustify", impute_missings = TRUE) %>>% po(lrn)
+  g = GraphLearner$new(p)
+  g$train(tsk)
+  prd = g$predict(tsk2)
+  expect_prediction(prd)
 
 })
 

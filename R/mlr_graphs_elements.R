@@ -55,7 +55,7 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   assert_flag(scaling)
   assert_count(max_cardinality)
 
-  # FIXME:
+  # FIXME
   # This should additionally do the following thins:
   # - Convert posixct to numeric using new pipeop
   # - Auto-convert character to factor? Perhaps improve later with text po's
