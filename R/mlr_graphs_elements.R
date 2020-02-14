@@ -60,11 +60,12 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   # - Convert posixct to numeric using new pipeop
   # - Auto-convert character to factor? Perhaps improve later with text po's
   # - Logical to integer conversion
+
+  # If given a task, only treat actually existing column types
   if (!is.null(task)) {
     pos = list()
     if ("factor" %in% learner$feature_types && nrow(cols_by_type("factor")) > 0)
       pos = c(pos, po("fixfactors", param_vals = list(affect_columns = is.factor)))
-
     if (impute_missings) {
       # Impute numerics
       if (nrow(cols_by_type(c("numeric", "integer"))) > 0)
@@ -72,7 +73,7 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
           gunion(list(
             po("imputehist", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))),
             po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
-           po("featureunion"))
+          po("featureunion"))
       # Impute factors
       if (nrow(cols_by_type(c("factor", "ordered"))) > 0)
         pos = c(pos, po("imputenewlvl", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
@@ -85,6 +86,7 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
       # Encode factors
       pos = c(pos, po("encode"))
     }
+  # If no task is provided, be conservative
   } else {
     pos = list(po("fixfactors", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
     if (impute_missings) {
@@ -93,7 +95,7 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
           gunion(list(
             po("imputehist", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))),
             po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
-           po("featureunion"),
+          po("featureunion"),
         po("imputenewlvl", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
     }
     pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
@@ -112,19 +114,27 @@ mlr_graphs$add("robustify", robustify_pipeline)
 #' @title Create a bagging learner
 #' @name mlr_graphs_bagging
 #' @description
-#' Creates a [`Graph`] that performs bagging on the supplied graph.
+#' Creates a [`Graph`] that performs bagging for a supplied graph.
+#' This is done as follows:
+#' * `Subsample` the data in each step using [`PipeOpSubsample`]
+#' * Replicate this step `iterations` times (in parallel)
+#' * Average resulting predictions using the `averager`.
 #'
 #' @param graph [`PipeOp`] | [`Graph`] \cr
 #'   A learner to create a robustifying pipeline for. Optional, if omitted,
 #'   a more conservative pipeline is built.
 #' @param iterations [`integer`] \cr
 #'   Number of bagging iterations. Defaults to 10.
+#' @param frac [`numeric`] \cr
+#'   Percentage of rows to keep during subsampling. See [`PipeOpSubsample`] for
+#'   more information. Defaults to 0.7.
 #' @param averager [`PipeOp`] | [`Graph`] \cr
 #'   A [`PipeOp`] or [`Graph`] that averages the predictions from the
 #'   replicated and subsampled graph's.
 #'   In the simplest case, `po("classifavg")` and `po("regravg")` can be used
 #'   in order to perform simple averaging of classification and regression
 #'   predictions respectively.`
+#'   If `NULL` (default), no averager is added to the end of the graph.
 #' @return [`Graph`]
 #' @export
 #' @examples
@@ -133,13 +143,20 @@ mlr_graphs$add("robustify", robustify_pipeline)
 #' task = mlr_tasks$get("boston_housing")
 #' gr = bagging_pipeline(lrn_po, 3, averager = po("regravg"))
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
-bagging_pipeline = function(graph, iterations = 10, averager = NULL) {
+bagging_pipeline = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
   assert_count(iterations)
+  assert_number(frac, lower = 0, upper = 1)
+  graph = as_graph(graph)
+  if (!is.null(averager)) {
+    averager = as_graph(averager)
+    assert_true(graph$output$train == averager$input$train | averager$input$train == "NULL")
+    assert_true(graph$output$predict == averager$input$predict)
+  }
 
-  subs = po("subsample", param_vals = list(frac = 0.7)) %>>% as_graph(graph)
+  subs = po("subsample", param_vals = list(frac = frac)) %>>% graph
   subs_repls = greplicate(subs, iterations)
 
-  if (!is.null(averager)) subs_repls %>>% as_graph(averager)
+  if (!is.null(averager)) subs_repls %>>% averager
   else subs_repls
 }
 
