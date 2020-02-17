@@ -60,5 +60,5 @@ library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
 gr = robustify_pipeline(task, lrn) \%>>\% po("learner", lrn)
-resample(task,GraphLearner$new(gr), rsmp("holdout"))
+resample(task, GraphLearner$new(gr), rsmp("holdout"))
 }

@@ -5,7 +5,7 @@ test_that("Robustify Pipeline", {
 
   # complete data, numeric
   tsk = tsk("iris")
-  p = pipe("robustify", task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
+  p = robustify_pipeline(task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
   expect_graph(p)
   expect_true("scale" %in% names(p$pipeops))
   expect_true("removeconstants" %in% names(p$pipeops))
@@ -13,7 +13,7 @@ test_that("Robustify Pipeline", {
   expect_true(length(p$pipeops) == 3)
 
   # complete data no scaling
-  p = pipe("robustify", task = tsk, learner = lrn, scaling = FALSE) %>>% po(lrn)
+  p = robustify_pipeline(task = tsk, learner = lrn, scaling = FALSE) %>>% po(lrn)
   expect_graph(p)
   expect_true(length(p$pipeops) == 2)
 
@@ -60,7 +60,7 @@ test_that("Robustify Pipeline", {
   expect_true(all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
 
   # no task
-  p = pipe("robustify") %>>% po(lrn)
+  p = robustify_pipeline() %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("fixfactors", "imputehist", "missind", "imputenewlvl",
     "collapsefactors", "encode") %in% names(p$pipeops)))
@@ -81,7 +81,6 @@ test_that("Robustify Pipeline", {
   prd = g$predict(tsk2)
   expect_prediction(prd)
 })
-
 
 test_that("Bagging Pipeline", {
   # classif
@@ -109,7 +108,7 @@ test_that("Bagging Pipeline", {
   # no averager
   tsk = tsk("iris")
   lrn = lrn("classif.rpart")
-  p = pipe("bagging", graph = po(lrn))
+  p = bagging_pipeline(graph = po(lrn))
   expect_graph(p)
   expect_true(length(p$pipeops) == 10 + 10)
   expect_data_table(p$output, nrows = 10)
