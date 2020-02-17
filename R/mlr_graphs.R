@@ -41,7 +41,7 @@
 mlr_graphs = R6Class("DictionaryGraph", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(
-    add = function(key, value, info) {
+    add = function(key, value) {
       assert_function(value)
       ret = super$add(key, value)
       invisible(self)

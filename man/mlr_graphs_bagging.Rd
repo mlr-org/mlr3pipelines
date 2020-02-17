@@ -5,7 +5,7 @@
 \alias{bagging_pipeline}
 \title{Create a bagging learner}
 \usage{
-bagging_pipeline(graph, iterations = 10, averager = NULL)
+bagging_pipeline(graph, iterations = 10, frac = 0.7, averager = NULL)
 }
 \arguments{
 \item{graph}{\code{\link{PipeOp}} | \code{\link{Graph}} \cr
@@ -15,18 +15,28 @@ a more conservative pipeline is built.}
 \item{iterations}{\code{\link{integer}} \cr
 Number of bagging iterations. Defaults to 10.}
 
+\item{frac}{\code{\link{numeric}} \cr
+Percentage of rows to keep during subsampling. See \code{\link{PipeOpSubsample}} for
+more information. Defaults to 0.7.}
+
 \item{averager}{\code{\link{PipeOp}} | \code{\link{Graph}} \cr
 A \code{\link{PipeOp}} or \code{\link{Graph}} that averages the predictions from the
 replicated and subsampled graph's.
 In the simplest case, \code{po("classifavg")} and \code{po("regravg")} can be used
 in order to perform simple averaging of classification and regression
-predictions respectively.`}
+predictions respectively.\code{If}NULL` (default), no averager is added to the end of the graph.}
 }
 \value{
 \code{\link{Graph}}
 }
 \description{
-Creates a \code{\link{Graph}} that performs bagging on the supplied graph.
+Creates a \code{\link{Graph}} that performs bagging for a supplied graph.
+This is done as follows:
+\itemize{
+\item \code{Subsample} the data in each step using \code{\link{PipeOpSubsample}}
+\item Replicate this step \code{iterations} times (in parallel)
+\item Average resulting predictions using the \code{averager}.
+}
 }
 \examples{
 library(mlr3)

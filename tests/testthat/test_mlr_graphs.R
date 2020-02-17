@@ -111,5 +111,5 @@ test_that("Bagging Pipeline", {
   p = pipe("bagging", graph = po(lrn))
   expect_graph(p)
   expect_true(length(p$pipeops) == 10 + 10)
-  expect_data_table(p$output, nrow = 10)
+  expect_data_table(p$output, nrows = 10)
 })

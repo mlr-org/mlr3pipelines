@@ -49,9 +49,9 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   if (!is.null(task)) assert_task(task)
   if (!is.null(learner)) assert_learner(learner)
   if (is.null(impute_missings)) impute_missings = (is.null(task) || any(task$missings())) && (is.null(learner) || !"missings" %in% learner$properties)
-  else assert_flag(impute_missings)
+  assert_flag(impute_missings)
   if (is.null(factors_to_numeric)) factors_to_numeric = (is.null(task) || nrow(cols_by_type("factor")) > 0) && (is.null(learner) || !"factors" %in% learner$properties)
-  else assert_flag(impute_missings)
+  assert_flag(impute_missings)
   assert_flag(scaling)
   assert_count(max_cardinality)
 
@@ -64,23 +64,29 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   # If given a task, only treat actually existing column types
   if (!is.null(task)) {
     pos = list()
-    if ("factor" %in% learner$feature_types && nrow(cols_by_type("factor")) > 0)
-      pos = c(pos, po("fixfactors", param_vals = list(affect_columns = is.factor)))
+
     if (impute_missings) {
       # Impute numerics
       if (nrow(cols_by_type(c("numeric", "integer"))) > 0)
         pos = c(pos, po("copy", 2) %>>%
           gunion(list(
-            po("imputehist", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))),
-            po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
+            po("imputehist"),
+            po("missind", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
           po("featureunion"))
       # Impute factors
       if (nrow(cols_by_type(c("factor", "ordered"))) > 0)
-        pos = c(pos, po("imputenewlvl", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
+        pos = c(pos, po("imputenewlvl"))
     }
+    if (is.null(task) || nrow(cols_by_type("factor")) > 0)
+      pos = c(pos, po("fixfactors"))
+
+    # Ensure all factor levels are encoded during predict.
+    if (impute_missings && nrow(cols_by_type(c("factor", "ordered"))) > 0)
+      pos = c(pos, po("imputesample", affect_columns = selector_type(c("factor", "ordered"))))
 
     if (factors_to_numeric) {
       # Collapse factors over 1000 levels
+      # FIXME: Can be improved after #330 is merged
       if (any(map_lgl(task$levels(cols_by_type("factor")$id), function(x) length(x) > max_cardinality)))
         pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
       # Encode factors
@@ -88,24 +94,28 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
     }
   # If no task is provided, be conservative
   } else {
-    pos = list(po("fixfactors", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
     if (impute_missings) {
       pos = c(pos,
         po("copy", 2) %>>%
           gunion(list(
-            po("imputehist", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))),
-            po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
+            po("imputehist"),
+            po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))
+          ) %>>%
           po("featureunion"),
-        po("imputenewlvl", param_vals = list(affect_columns = selector_type(c("factor", "ordered")))))
+        po("imputenewlvl"))
     }
+    pos = c(pos, po("fixfactors"))
+    if (impute_missings) po("imputesample", affect_columns = selector_type(c("factor", "ordered")))
+
     pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
     if (factors_to_numeric) pos = c(pos, po("encode"))
   }
 
+  pos = c(pos, po("removeconstants"))
   if (scaling) pos = c(pos, po("scale"))
 
-  if (length(pos) == 0) as_graph(po("nop"))
-  else Reduce(`%>>%`, pos)
+  if (!length(pos)) pos = list(po("nop"))
+  as_graph(Reduce(`%>>%`, pos))
 }
 
 mlr_graphs$add("robustify", robustify_pipeline)
@@ -156,8 +166,7 @@ bagging_pipeline = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   subs = po("subsample", param_vals = list(frac = frac)) %>>% graph
   subs_repls = greplicate(subs, iterations)
 
-  if (!is.null(averager)) subs_repls %>>% averager
-  else subs_repls
+  if (!is.null(averager)) subs_repls %>>% averager else subs_repls
 }
 
 mlr_graphs$add("bagging", bagging_pipeline)
