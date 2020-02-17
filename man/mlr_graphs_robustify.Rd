@@ -10,7 +10,7 @@ robustify_pipeline(
   learner = NULL,
   impute_missings = NULL,
   factors_to_numeric = NULL,
-  scaling = TRUE,
+  scaling = FALSE,
   max_cardinality = 1000
 )
 }
@@ -32,7 +32,7 @@ Should factors be encoded? Defaults to \code{NULL}, i.e encodes if the task has 
 and the learner can not handle factors.}
 
 \item{scaling}{\code{\link{logical}} \cr
-Should the data be scaled? Defaults to true.}
+Should the data be scaled? Defaults to \code{FALSE}.}
 
 \item{max_cardinality}{\code{\link{integer}} \cr
 Maximum number of factor levels allowed. See above. Default: 1000.}

@@ -5,9 +5,11 @@ test_that("Robustify Pipeline", {
 
   # complete data, numeric
   tsk = tsk("iris")
-  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
+  p = pipe("robustify", task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
   expect_graph(p)
   expect_true("scale" %in% names(p$pipeops))
+  expect_true("removeconstants" %in% names(p$pipeops))
+  expect_true("fixfactors" %nin% names(p$pipeops))
   expect_true(length(p$pipeops) == 3)
 
   # complete data no scaling
@@ -17,15 +19,15 @@ test_that("Robustify Pipeline", {
 
   tsk = tsk("pima")
   # missings with scaling (rpart can do missings)
-  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
+  p = pipe("robustify", task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
   expect_graph(p)
-  expect_true("scale" %in% names(p$pipeops))
+  expect_true(all(c("removeconstants", "scale") %in% names(p$pipeops)))
 
   # with fct, assuming rpart can not do fct
   dt = data.table("fct" = factor(rep_len(letters[1:3], tsk$nrow)))
   tsk$cbind(dt)
   lrn$feature_types = c("integer", "numeric")
-  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
+  p = pipe("robustify", task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("scale", "encode") %in% names(p$pipeops)))
 
@@ -35,20 +37,20 @@ test_that("Robustify Pipeline", {
   tsk$cbind(dt)
   p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "scale", "encode", "imputenewlvl") %in% names(p$pipeops)))
+  expect_true(all(c("imputehist", "missind", "encode", "imputenewlvl") %in% names(p$pipeops)))
 
   # no scaling
   p = pipe("robustify", task = tsk, learner = lrn, scaling = FALSE) %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("imputehist", "missind") %in% names(p$pipeops)))
-  expect_true(!("scale" %in% names(p$pipeops)))
+  expect_true("scale" %nin% names(p$pipeops))
 
   # test on mixed, no missings
   tsk = tsk("boston_housing")
   lrn = lrn("regr.rpart")
   p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("encode", "scale") %in% names(p$pipeops)))
+  expect_true("encode" %in% names(p$pipeops))
   expect_true(!("missind" %in% names(p$pipeops)))
   expect_true(!("imputenewlvl" %in% names(p$pipeops)))
 
@@ -61,11 +63,11 @@ test_that("Robustify Pipeline", {
   p = pipe("robustify") %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("fixfactors", "imputehist", "missind", "imputenewlvl",
-    "collapsefactors", "scale", "encode") %in% names(p$pipeops)))
+    "collapsefactors", "encode") %in% names(p$pipeops)))
 
   p = pipe("robustify", impute_missings = FALSE) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("fixfactors", "collapsefactors", "scale", "encode") %in% names(p$pipeops)))
+  expect_true(all(c("fixfactors", "collapsefactors", "encode") %in% names(p$pipeops)))
   expect_true(!all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
 
   # missings during predict
@@ -98,9 +100,9 @@ test_that("Bagging Pipeline", {
 
   # graph instead of po(lrn)
   gr = po("pca") %>>% po(lrn)
-  p = pipe("bagging", graph = gr, iterations = 5L, averager = po("regravg"))
+  p = pipe("bagging", graph = gr, iterations = 2L, averager = po("regravg"))
   expect_graph(p)
-  expect_true(length(p$pipeops) == 5 + (2*5) + 1)
+  expect_true(length(p$pipeops) == 2 + (2*2) + 1)
   res = resample(tsk$filter(1:50), GraphLearner$new(p), rsmp("holdout"))
   expect_resample_result(res)
 

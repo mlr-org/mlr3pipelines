@@ -29,7 +29,7 @@
 #'   Should factors be encoded? Defaults to `NULL`, i.e encodes if the task has factors
 #'   and the learner can not handle factors.
 #' @param scaling [`logical`] \cr
-#'   Should the data be scaled? Defaults to true.
+#'   Should the data be scaled? Defaults to `FALSE`.
 #' @param max_cardinality [`integer`] \cr
 #'   Maximum number of factor levels allowed. See above. Default: 1000.
 #' @return [`Graph`]
@@ -39,11 +39,12 @@
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
 #' gr = robustify_pipeline(task, lrn) %>>% po("learner", lrn)
-#' resample(task,GraphLearner$new(gr), rsmp("holdout"))
+#' resample(task, GraphLearner$new(gr), rsmp("holdout"))
 robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NULL,
-  factors_to_numeric = NULL, scaling = TRUE, max_cardinality = 1000) {
+  factors_to_numeric = NULL, scaling = FALSE, max_cardinality = 1000) {
 
   cols_by_type = function(types) {
+    if (is.null(task)) return(data.table("id" = character(), "type" = character()))
     task$feature_types[get("type") %in% types,]
   }
   if (!is.null(task)) assert_task(task)
@@ -63,57 +64,41 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
 
   # If given a task, only treat actually existing column types
   pos = list()
-  if (!is.null(task)) {
-    if (impute_missings) {
-      # Impute numerics
-      if (nrow(cols_by_type(c("numeric", "integer"))) > 0)
-        pos = c(pos, po("copy", 2) %>>%
-          gunion(list(
-            po("imputehist"),
-            po("missind", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
-          po("featureunion"))
-      # Impute factors
-      if (nrow(cols_by_type(c("factor", "ordered"))) > 0)
-        pos = c(pos, po("imputenewlvl"))
-    }
-    if (is.null(task) || nrow(cols_by_type("factor")) > 0)
-      pos = c(pos, po("fixfactors"))
 
-    # Ensure all factor levels are encoded during predict.
-    if (impute_missings && nrow(cols_by_type(c("factor", "ordered"))) > 0)
-      pos = c(pos, po("imputesample", affect_columns = selector_type(c("factor", "ordered"))))
-
-    if (factors_to_numeric) {
-      # Collapse factors over 1000 levels
-      # FIXME: Can be improved after #330 is solved
-      if (any(map_lgl(task$levels(cols_by_type("factor")$id), function(x) length(x) > max_cardinality)))
-        pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
-      # Encode factors
-      pos = c(pos, po("encode"))
-    }
-  # If no task is provided, be conservative
-  } else {
-    if (impute_missings) {
+  if (impute_missings) {
+    # Impute numerics
+    if (is.null(task) || nrow(cols_by_type(c("numeric", "integer"))) > 0)
       pos = c(pos,
-        po("copy", 2) %>>%
-          gunion(list(
-            po("imputehist"),
-            po("missind",  param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))
-          ) %>>%
-          po("featureunion"),
-        po("imputenewlvl"))
-    }
-    pos = c(pos, po("fixfactors"))
-    if (impute_missings) po("imputesample", affect_columns = selector_type(c("factor", "ordered")))
-
-    pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
-    if (factors_to_numeric) pos = c(pos, po("encode"))
+        gunion(list(
+          po("imputehist"),
+          po("missind", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
+        po("featureunion"))
+    # Impute factors
+    if (is.null(task) || nrow(cols_by_type(c("factor", "ordered", "character"))) > 0)
+      pos = c(pos, po("imputenewlvl"))
   }
+
+  if (is.null(task) || nrow(cols_by_type(c("factor", "ordered", "character"))) > 0)
+    pos = c(pos, po("fixfactors"))
+
+  # Ensure all factor levels are encoded during predict.
+  if (impute_missings && (is.null(task) || nrow(cols_by_type(c("factor", "ordered"))) > 0))
+    pos = c(pos, po("imputesample", affect_columns = selector_type(c("factor", "ordered"))))
+
+  # Collapse factors over 1000 levels
+  # FIXME: Can be improved after #330 is solved
+  if (is.null(task)) {
+    pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
+  } else {
+    if (any(map_lgl(task$levels(cols_by_type("factor")$id), function(x) length(x) > max_cardinality)))
+      pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
+  }
+
+  if (factors_to_numeric) pos = c(pos, po("encode"))
 
   pos = c(pos, po("removeconstants"))
   if (scaling) pos = c(pos, po("scale"))
 
-  if (!length(pos)) pos = list(po("nop"))
   as_graph(Reduce(`%>>%`, pos))
 }
 
