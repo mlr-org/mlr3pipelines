@@ -19,7 +19,7 @@ test_that("PipeOpTaskPreprocSimple - basic properties", {
   expect_data_table(po$output, nrows = 1)
 })
 
-test_that("Error + message", {
+test_that("Wrong affect_columns errors", {
   POPP = R6Class("POPP",
     inherit = PipeOpTaskPreproc,
     public = list(
@@ -27,8 +27,11 @@ test_that("Error + message", {
       predict_dt = function(dt, levels) dt
     )
   )
+  tsk = tsk("boston_housing")
   po = POPP$new("foo", param_vals = list(affect_columns = is.factor))
   expect_pipeop(po)
-  tsk = tsk("boston_housing")
-  expect_error(po$train(list(tsk)))
+  expect_error(po$train(list(tsk)), "affected_cols")
+
+  po = POPP$new("foo", param_vals = list(affect_columns = function(x) x$target_names))
+  expect_error(po$train(list(tsk)), "affected_cols")
 })

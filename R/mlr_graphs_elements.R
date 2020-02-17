@@ -62,9 +62,8 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   # - Logical to integer conversion
 
   # If given a task, only treat actually existing column types
+  pos = list()
   if (!is.null(task)) {
-    pos = list()
-
     if (impute_missings) {
       # Impute numerics
       if (nrow(cols_by_type(c("numeric", "integer"))) > 0)
@@ -86,7 +85,7 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
 
     if (factors_to_numeric) {
       # Collapse factors over 1000 levels
-      # FIXME: Can be improved after #330 is merged
+      # FIXME: Can be improved after #330 is solved
       if (any(map_lgl(task$levels(cols_by_type("factor")$id), function(x) length(x) > max_cardinality)))
         pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
       # Encode factors

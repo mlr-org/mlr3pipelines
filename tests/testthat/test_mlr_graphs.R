@@ -8,16 +8,15 @@ test_that("Robustify Pipeline", {
   p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
   expect_true("scale" %in% names(p$pipeops))
-  expect_true(length(p$pipeops) == 2)
+  expect_true(length(p$pipeops) == 3)
 
   # complete data no scaling
   p = pipe("robustify", task = tsk, learner = lrn, scaling = FALSE) %>>% po(lrn)
   expect_graph(p)
-  expect_true("nop" %in% names(p$pipeops))
   expect_true(length(p$pipeops) == 2)
 
   tsk = tsk("pima")
-  # missings with scaling (rpart can do scaling)
+  # missings with scaling (rpart can do missings)
   p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
   expect_true("scale" %in% names(p$pipeops))
