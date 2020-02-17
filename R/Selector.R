@@ -226,5 +226,6 @@ selector_setdiff = function(selector_x, selector_y) {
 #' @describeIn Selector `selector_missing` selects features with missing values.
 #' @export
 selector_missing = function() make_selector(function(task) {
-  names(Filter(identity, task$missings()))
+  missings = task$missings()
+  names(missings)[missings != 0]
 }, "selector_missing()")
