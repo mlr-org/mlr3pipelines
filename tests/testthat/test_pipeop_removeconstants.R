@@ -42,7 +42,7 @@ test_that("PipeOpRemoveConstants removes expected cols", {
   expect_set_equal(cn, setdiff(task$feature_names, c("xx", "yy", "xx1", "lat", "lon", "nox")))
 
   test_dropping = function(data, expected_data, params) {
-    intask = TaskClassif$new("iris", cbind(data, target = c("x", rep("y", nrow(data) - 1))), "target")
+    intask = TaskClassif$new("iris", cbind(data, target = factor(c("x", rep("y", nrow(data) - 1)))), "target")
     resulttask = PipeOpRemoveConstants$new(param_vals = params)$train(list(intask))[[1]]
     expect_equal(resulttask$data(cols = resulttask$feature_names), as.data.table(expected_data),
       ignore.col.order = TRUE)
