@@ -222,3 +222,10 @@ selector_setdiff = function(selector_x, selector_y) {
     setdiff(selector_x(task), selector_y(task))
   }, "selector_setdiff(%s, %s)", selector_repr(selector_x), selector_repr(selector_y))
 }
+
+#' @describeIn Selector `selector_missing` selects features with missing values.
+#' @export
+selector_missing = function() make_selector(function(task) {
+  missings = task$missings()
+  names(missings)[missings != 0]
+}, "selector_missing()")
