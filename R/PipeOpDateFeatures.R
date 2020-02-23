@@ -63,11 +63,11 @@
 #' @section Internals:
 #' If `cyclic = TRUE`, cyclic features are computed for the features `"month"`, `"week_of_year"`,
 #' `"day_of_year"`, `"day_of_month"`, `"day_of_week"`, `"hour"`, `"minute"` and `"second"`. This
-#' means that for each feature, `x`, two additional features are computed, namely the sinus and
-#' cosinus transformation of `2 * pi * x / max_x`. This is useful to respect the cyclical nature of
-#' features such as seconds, i.e., second 21 and second 22 are one second apart, but so are second
-#' 60 and second 01. The transformation always assumes that `min_x = 0`, therefore prior shifting
-#' the values internally by minus one may occur if necessary.
+#' means that for each feature, `x`, two additional features are computed, namely the sine and
+#' cosine transformation of `2 * pi * x / max_x + 1`. This is useful to respect the cyclical nature
+#' of features such as seconds, i.e., second 21 and second 22 are one second apart, but so are
+#' second 60 and second 01. The transformation always assumes that `min_x = 0`, therefore prior
+#' shifting the values internally by minus one may occur if necessary.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
@@ -135,8 +135,8 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       }
 
       # if cyclic = TRUE for month, week_of_year, day_of_year, day_of_month, day_of_week, hour,
-      # minute and second, two columns are additionally added, each consisting of their sinus and
-      # cosinus transformation of in general 2 * pi * x / max_x (x starting from 0)
+      # minute and second, two columns are additionally added, each consisting of their sine and
+      # cosine transformation of in general 2 * pi * x / max_x + 1 (x starting from 0)
       if (self$param_set$values$cyclic && (length(cyclic_features) > 0L)) {
         for (date_var in date_vars) {
           dt[, paste0(date_var, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos")) :=
@@ -182,7 +182,7 @@ compute_date_features = function(dates, features) {
 }
 
 # helper function to compute cyclic date features of date features, i.e.,
-# sinus and cosinus transformations of 2 * pi * x / max_x
+# sine and cosine transformations of 2 * pi * x / max_x + 1
 compute_cyclic_date_features = function(date_features, features, date_var) {
   do.call(c, args = lapply(features, FUN = function(feature) {
     # all values are expected to start at 0 and therefore may be shifted by - 1

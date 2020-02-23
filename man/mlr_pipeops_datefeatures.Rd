@@ -75,11 +75,11 @@ Default TRUE.
 
 If \code{cyclic = TRUE}, cyclic features are computed for the features \code{"month"}, \code{"week_of_year"},
 \code{"day_of_year"}, \code{"day_of_month"}, \code{"day_of_week"}, \code{"hour"}, \code{"minute"} and \code{"second"}. This
-means that for each feature, \code{x}, two additional features are computed, namely the sinus and
-cosinus transformation of \code{2 * pi * x / max_x}. This is useful to respect the cyclical nature of
-features such as seconds, i.e., second 21 and second 22 are one second apart, but so are second
-60 and second 01. The transformation always assumes that \code{min_x = 0}, therefore prior shifting
-the values internally by minus one may occur if necessary.
+means that for each feature, \code{x}, two additional features are computed, namely the sine and
+cosine transformation of \code{2 * pi * x / max_x + 1}. This is useful to respect the cyclical nature
+of features such as seconds, i.e., second 21 and second 22 are one second apart, but so are
+second 60 and second 01. The transformation always assumes that \code{min_x = 0}, therefore prior
+shifting the values internally by minus one may occur if necessary.
 }
 
 \section{Methods}{
