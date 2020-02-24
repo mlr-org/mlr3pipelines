@@ -116,6 +116,7 @@ Collate:
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
