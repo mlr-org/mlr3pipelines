@@ -5,31 +5,25 @@ test_that("Robustify Pipeline", {
 
   # complete data, numeric
   tsk = tsk("iris")
-  p = robustify_pipeline(task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
+  p = robustify_pipeline(task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true("scale" %in% names(p$pipeops))
   expect_true("removeconstants" %in% names(p$pipeops))
   expect_true("fixfactors" %nin% names(p$pipeops))
-  expect_true(length(p$pipeops) == 3)
-
-  # complete data no scaling
-  p = robustify_pipeline(task = tsk, learner = lrn, scaling = FALSE) %>>% po(lrn)
-  expect_graph(p)
   expect_true(length(p$pipeops) == 2)
 
   tsk = tsk("pima")
   # missings with scaling (rpart can do missings)
-  p = pipe("robustify", task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
+  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("removeconstants", "scale") %in% names(p$pipeops)))
+  expect_true(all(c("removeconstants") %in% names(p$pipeops)))
 
   # with fct, assuming rpart can not do fct
   dt = data.table("fct" = factor(rep_len(letters[1:3], tsk$nrow)))
   tsk$cbind(dt)
   lrn$feature_types = c("integer", "numeric")
-  p = pipe("robustify", task = tsk, learner = lrn, scaling = TRUE) %>>% po(lrn)
+  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("scale", "encode") %in% names(p$pipeops)))
+  expect_true("encode" %in% names(p$pipeops))
 
   # missing fcts, assuming rpart can not do missings
   lrn$properties = c("multiclass", "twoclass")
@@ -40,10 +34,9 @@ test_that("Robustify Pipeline", {
   expect_true(all(c("imputehist", "missind", "encode", "imputenewlvl") %in% names(p$pipeops)))
 
   # no scaling
-  p = pipe("robustify", task = tsk, learner = lrn, scaling = FALSE) %>>% po(lrn)
+  p = pipe("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("imputehist", "missind") %in% names(p$pipeops)))
-  expect_true("scale" %nin% names(p$pipeops))
 
   # test on mixed, no missings
   tsk = tsk("boston_housing")
@@ -99,7 +92,7 @@ test_that("Bagging Pipeline", {
 
   # graph instead of po(lrn)
   gr = po("pca") %>>% po(lrn)
-  p = pipe("bagging", graph = gr, iterations = 2L, averager = po("regravg"))
+  p = bagging_pipeline(graph = gr, iterations = 2L, averager = po("regravg"))
   expect_graph(p)
   expect_true(length(p$pipeops) == 2 + (2*2) + 1)
   res = resample(tsk$filter(1:50), GraphLearner$new(p), rsmp("holdout"))
