@@ -22,17 +22,16 @@
 #' [`PipeOpProxy`] has one input channel named `"input"`, taking any input (`"*"`) both during
 #' training and prediction.
 #'
-#' [`PipeOpProxy`] can have multiple output channels depending on the `outnum` construction argument
-#' of the `content` [`PipeOp`], named `"output1"`, `"output2"`, ... (one output channel if `content`
-#' is a [`Graph`], named `"output"`). The output is determined by the output of the `content`
-#' [`PipeOp`] or [`Graph`].
+#' [`PipeOpProxy`] has one output channel named `"output"` and the output is determined by the
+#' output of the `content` [`PipeOp`] or [`Graph`].
 #'
 #' @section State:
 #' The `$state` is the `content` [`PipeOp`] or [`Graph`].
 #'
 #' @section Parameters:
 #' * `content` :: [`PipeOp`] or [`Graph`] \cr
-#'   The [`PipeOp`] or [`Graph`] that is being proxied. Defaults to [`PipeOpNOP`] (simply pushes the
+#'   The [`PipeOp`] or [`Graph`] that is being proxied (more precisely an object that can be
+#'   converted to a [`Graph`] with a single output). Defaults to [`PipeOpNOP`] (simply pushes the
 #'   input forward).
 #'
 #' @section Internals:
@@ -66,17 +65,14 @@ PipeOpProxy = R6Class("PipeOpProxy",
     initialize = function(id = "proxy", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("content", tags = c("train", "predidct", "required"), custom_check = function(x) {
-          cl = class(x)
-          ifelse(test_r6(x, classes = "PipeOp") || test_r6(x, classes = "Graph"), yes = TRUE,
-            no =  sprintf("Must inherit from class 'PipeOp' or 'Graph', but has class%s '%s'",
-              ifelse(length(cl) > 1L, yes = "es", no = ""), paste0(cl, collapse = "','")))
+          tryCatch({ graph = as_graph(x); if (NROW(graph$output) != 1L) "Graph must have only one output" else TRUE },
+            error = function(error_condition) stop("`content` must be an object that can be converted to a Graph", call. = FALSE))
         })
       ))
       ps$values = list(content = PipeOpNOP$new())
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = ifelse(test_r6(ps$values$content, classes = "PipeOp"),
-          yes = rep_suffix("output", n = ps$values$content$outnum), no = "output"), train = "*", predict = "*")
+        output = data.table(name = "output", train = "*", predict = "*")
       )
     },
     train_internal = function(input) {

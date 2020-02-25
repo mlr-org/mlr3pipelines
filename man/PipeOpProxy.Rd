@@ -26,10 +26,8 @@ be set during construction. Default \code{list()}.
 \code{\link{PipeOpProxy}} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during
 training and prediction.
 
-\code{\link{PipeOpProxy}} can have multiple output channels depending on the \code{outnum} construction argument
-of the \code{content} \code{\link{PipeOp}}, named \code{"output1"}, \code{"output2"}, ... (one output channel if \code{content}
-is a \code{\link{Graph}}, named \code{"output"}). The output is determined by the output of the \code{content}
-\code{\link{PipeOp}} or \code{\link{Graph}}.
+\code{\link{PipeOpProxy}} has one output channel named \code{"output"} and the output is determined by the
+output of the \code{content} \code{\link{PipeOp}} or \code{\link{Graph}}.
 }
 
 \section{State}{
@@ -41,7 +39,8 @@ The \verb{$state} is the \code{content} \code{\link{PipeOp}} or \code{\link{Grap
 
 \itemize{
 \item \code{content} :: \code{\link{PipeOp}} or \code{\link{Graph}} \cr
-The \code{\link{PipeOp}} or \code{\link{Graph}} that is being proxied. Defaults to \code{\link{PipeOpNOP}} (simply pushes the
+The \code{\link{PipeOp}} or \code{\link{Graph}} that is being proxied (more precisely an object that can be
+converted to a \code{\link{Graph}} with a single output). Defaults to \code{\link{PipeOpNOP}} (simply pushes the
 input forward).
 }
 }

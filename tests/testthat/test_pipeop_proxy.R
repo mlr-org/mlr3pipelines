@@ -7,7 +7,7 @@ test_that("PipeOpProxy - basic properties", {
   train_pipeop(pop, inputs = list(task))
   expect_pipeop(pop$state)
   predict_pipeop(pop, inputs = list(task))
-  expect_error(PipeOpProxy$new(param_vals = list(content = mlr_learners$get("classif.featureless"))))
+  expect_error(PipeOpProxy$new(param_vals = list(content = "error")))
 })
 
 test_that("PipeOpProxy - PCA proxied", {
