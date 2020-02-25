@@ -10,8 +10,13 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpProxy$new(id, param_vals = list())
+#' PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
 #' ```
+#' * `innum` :: `numeric(1)\cr
+#'   Determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#' * `outnum` :: `numeric(1)\cr
+#'   Determines the number of output channels.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object. See `$id` slot of [`PipeOp`].
 #' * `param_vals` :: named `list`\cr
@@ -19,11 +24,13 @@
 #'   be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpProxy`] has one input channel named `"input"`, taking any input (`"*"`) both during
-#' training and prediction.
+#' [`PipeOpProxy`] has multiple input channels depending on the `innum` construction argument, named
+#' `"input1"`, `"input2"`, ... if `innum` is nonzero; if `innum` is 0, there is only one *vararg*
+#' input channel named `"..."`.
 #'
-#' [`PipeOpProxy`] has one output channel named `"output"` and the output is determined by the
-#' output of the `content` [`PipeOp`] or [`Graph`].
+#' [`PipeOpProxy`] has multiple output channels depending on the `outnum` construction argument,
+#' named `"output1"`, `"output2"`, ...
+#' The output is determined by the output of the `content` [`PipeOp`] or [`Graph`].
 #'
 #' @section State:
 #' The `$state` is the `content` [`PipeOp`] or [`Graph`].
@@ -31,8 +38,7 @@
 #' @section Parameters:
 #' * `content` :: [`PipeOp`] or [`Graph`] \cr
 #'   The [`PipeOp`] or [`Graph`] that is being proxied (more precisely an object that can be
-#'   converted to a [`Graph`] with a single output). Defaults to [`PipeOpNOP`] (simply pushes the
-#'   input forward).
+#'   converted to a [`Graph`]). Defaults to an instance of [`PipeOpCopy`] (simply copies the input).
 #'
 #' @section Internals:
 #' [`PipeOpProxy`] inherits from [`PipeOp`].
@@ -53,7 +59,8 @@
 #' pop$train(list(task1))
 #' pop$state
 #'
-#' proxy = po("proxy", param_vals = list(content = po("pca", param_vals = list(scale. = TRUE))))
+#' proxy = po("proxy", innum = 1, outnum = 1,
+#'   param_vals = list(content = po("pca", param_vals = list(scale. = TRUE))))
 #' proxy$train(list(task2))
 #' proxy$state$state
 #' @family PipeOps
@@ -62,22 +69,33 @@
 PipeOpProxy = R6Class("PipeOpProxy",
   inherit = PipeOp,
   public = list(
-    initialize = function(id = "proxy", param_vals = list()) {
+    initialize = function(innum = 0L, outnum = 1L, id = "proxy", param_vals = list()) {
+      assert_int(innum, lower = 0L)
+      assert_int(outnum, lower = 1L)
+      # input can be a vararg input channel
+      inname = if (innum) rep_suffix("input", innum) else "..."
       ps = ParamSet$new(params = list(
         ParamUty$new("content", tags = c("train", "predidct", "required"), custom_check = function(x) {
-          tryCatch({ graph = as_graph(x); if (NROW(graph$output) != 1L) "Graph must have only one output" else TRUE },
-            error = function(error_condition) stop("`content` must be an object that can be converted to a Graph", call. = FALSE))
+          # content must be an object that COULD be coerced to a Graph and the output number must match
+          tryCatch({
+            graph = as_graph(x)
+            if (NROW(graph$output) != outnum) "Graph's output number must match `outnum`" else TRUE
+          },
+          error = function(error_condition) "`content` must be an object that can be converted to a Graph")
         })
       ))
-      ps$values = list(content = PipeOpNOP$new())
+      ps$values = list(content = PipeOpCopy$new(outnum = outnum))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = "output", train = "*", predict = "*")
+        input = data.table(name = inname, train = "*", predict = "*"),
+        output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
       )
     },
     train_internal = function(input) {
-      content = self$param_set$values$content$clone(deep = TRUE)
-      if (inherits(content, "Graph")) {
+      # distinguishing between a Graph and a PipeOp is necessary because if the PipeOp has a vararg
+      # input channel itself, then coercing to a Graph will cause training and predicting to fail
+      # FIXME: Learner etc. must then be appropriately coerced?
+      content = self$param_set$values$content
+      if (inherits(content, what = "Graph")) {
         output = content$train(unname(input), single_input = FALSE)
       } else {
         output = content$train(input)
@@ -87,7 +105,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
     },
     predict_internal = function(input) {
       content = self$state
-      if (inherits(content, "Graph")) {
+      if (inherits(content, what = "Graph")) {
         output = content$predict(unname(input), single_input = FALSE)
       } else {
         output = content$predict(input)

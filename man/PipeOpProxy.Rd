@@ -10,9 +10,12 @@ Input is routed through the \code{content} and the \code{content}s' output is re
 \code{content} hyperparameter can be changed, this is useful as an alternative to branching.
 }
 \section{Construction}{
-\preformatted{PipeOpProxy$new(id, param_vals = list())
+\preformatted{PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
 }
 \itemize{
+\item \code{innum} :: \verb{numeric(1)\\cr Determines the number of input channels. If }innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+\item \code{outnum} :: `numeric(1)\cr
+Determines the number of output channels.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
 \item \code{param_vals} :: named \code{list}\cr
@@ -23,11 +26,13 @@ be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpProxy}} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during
-training and prediction.
+\code{\link{PipeOpProxy}} has multiple input channels depending on the \code{innum} construction argument, named
+\code{"input1"}, \code{"input2"}, ... if \code{innum} is nonzero; if \code{innum} is 0, there is only one \emph{vararg}
+input channel named \code{"..."}.
 
-\code{\link{PipeOpProxy}} has one output channel named \code{"output"} and the output is determined by the
-output of the \code{content} \code{\link{PipeOp}} or \code{\link{Graph}}.
+\code{\link{PipeOpProxy}} has multiple output channels depending on the \code{outnum} construction argument,
+named \code{"output1"}, \code{"output2"}, ...
+The output is determined by the output of the \code{content} \code{\link{PipeOp}} or \code{\link{Graph}}.
 }
 
 \section{State}{
@@ -40,8 +45,7 @@ The \verb{$state} is the \code{content} \code{\link{PipeOp}} or \code{\link{Grap
 \itemize{
 \item \code{content} :: \code{\link{PipeOp}} or \code{\link{Graph}} \cr
 The \code{\link{PipeOp}} or \code{\link{Graph}} that is being proxied (more precisely an object that can be
-converted to a \code{\link{Graph}} with a single output). Defaults to \code{\link{PipeOpNOP}} (simply pushes the
-input forward).
+converted to a \code{\link{Graph}}). Defaults to an instance of \code{\link{PipeOpCopy}} (simply copies the input).
 }
 }
 
@@ -70,7 +74,8 @@ pop = po("pca", param_vals = list(scale. = TRUE))
 pop$train(list(task1))
 pop$state
 
-proxy = po("proxy", param_vals = list(content = po("pca", param_vals = list(scale. = TRUE))))
+proxy = po("proxy", innum = 1, outnum = 1,
+  param_vals = list(content = po("pca", param_vals = list(scale. = TRUE))))
 proxy$train(list(task2))
 proxy$state$state
 }
