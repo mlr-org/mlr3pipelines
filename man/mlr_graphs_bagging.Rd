@@ -9,8 +9,8 @@ bagging_pipeline(graph, iterations = 10, frac = 0.7, averager = NULL)
 }
 \arguments{
 \item{graph}{\code{\link{PipeOp}} | \code{\link{Graph}} \cr
-A learner to create a robustifying pipeline for. Optional, if omitted,
-a more conservative pipeline is built.}
+A \code{PipeOpLearner} or \code{Graph} to create a robustifying pipeline for.
+Outputs from the replicated \code{graph}s are connected with the \code{averager}}
 
 \item{iterations}{\code{\link{integer}} \cr
 Number of bagging iterations. Defaults to 10.}
@@ -33,9 +33,9 @@ predictions respectively.\code{If}NULL` (default), no averager is added to the e
 Creates a \code{\link{Graph}} that performs bagging for a supplied graph.
 This is done as follows:
 \itemize{
-\item \code{Subsample} the data in each step using \code{\link{PipeOpSubsample}}
+\item \code{Subsample} the data in each step using \code{\link{PipeOpSubsample}}, afterwards apply \code{graph}.
 \item Replicate this step \code{iterations} times (in parallel)
-\item Average resulting predictions using the \code{averager}.
+\item Average outputs of replicated \code{graph}s predictions using the \code{averager}.
 }
 }
 \examples{
