@@ -13,7 +13,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpSubsample$new(id = "classbalancing", param_vals = list())
+#' PipeOpSubsample$new(id = "subsample", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"subsample"`
