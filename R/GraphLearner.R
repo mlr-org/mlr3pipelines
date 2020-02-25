@@ -10,6 +10,11 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#'
+#' Note the `predict_type` of a [`GraphLearner`] does currently not track the `predict_type`
+#' of any [`Learner`][mlr3::Learner] encapsulated within the [`Graph`]. Therefore, when requesting
+#' e.g. `"prob"` predictions, the `predict_type` of *both* the encapsulated [`Learner`][mlr3::Learner]
+#' and the wrapping [`GraphLearner`] need to be set to `"prob"`.
 #' @family Learners
 #' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,

@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute factorial features by adding a new feature.
+#' Impute factorial features by adding a new level `".MISSING"`.
 #'
 #' @section Construction:
 #' ```

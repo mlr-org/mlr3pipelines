@@ -13,17 +13,10 @@ development:
 
 navbar:
   structure:
-    left: [articles, reference, news, book]
+    left: [reference, news, book]
     right: [github, slack, stackoverflow, rss]
   components:
     home: ~
-    articles:
-      text: Vignettes
-      menu:
-        - text: Introduction
-          href: articles/introduction.html
-        - text: Comparison to Other Packages
-          href: articles/comparison_mlr3pipelines_mlr_sklearn.html
     reference:
       icon: fa fa-file-alt
       text: Reference

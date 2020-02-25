@@ -6,7 +6,7 @@
 \title{PipeOpImputeNewlvl}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.}
 \description{
-Impute factorial features by adding a new feature.
+Impute factorial features by adding a new level \code{".MISSING"}.
 }
 \section{Construction}{
 \preformatted{PipeOpImputeNewlvl$new(id = "imputenewlvl", param_vals = list())
