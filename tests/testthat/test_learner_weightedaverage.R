@@ -3,7 +3,7 @@ context("WeightedAverage Learner")
 test_that("LearnerClassifAvg", {
   lrn = LearnerClassifAvg$new()
   expect_learner(lrn)
-  df = data.frame(x = matrix(sample(c("a", "b", "c"), 100, replace = TRUE), nrow = 10), y = as.factor(sample(c("a", "b", "c"), 10, replace = TRUE)))
+  df = data.frame(x = matrix(sample(c("a", "b", "c"), 100, replace = TRUE), nrow = 10), y = as.factor(sample(c("a", "b", "c"), 10, replace = TRUE)), stringsAsFactors = TRUE)
   for (col in seq_along(df)) {
     levels(df[[col]]) = c("a", "b", "c")
   }
