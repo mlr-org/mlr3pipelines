@@ -62,9 +62,9 @@ PipeOpNOP = R6Class("PipeOpNOP",
     initialize = function(id = "nop", param_vals = list()) {
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = "output", train = "*", predict = "*")
+        output = data.table(name = "output", train = "*", predict = "*"),
+        tags = "meta"
       )
-      private$add_tags("meta", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

@@ -193,7 +193,7 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
     tags = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0)) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character()) {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -207,7 +207,7 @@ PipeOp = R6Class("PipeOp",
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
-      self$tags = "abstract"
+      self$tags = assert_tag(tags)
     },
 
     print = function(...) {
@@ -309,14 +309,6 @@ PipeOp = R6Class("PipeOp",
         return(value$clone(deep = TRUE))
       }
       value
-    },
-    add_tags = function(tags, overwrite = FALSE) {
-      tags = assert_tag(tags)
-      assert_flag(overwrite)
-      if (!overwrite)
-        self$tags = c(self$tags, tags)
-      else
-        self$tags = tags
     },
     .param_set = NULL,
     .param_set_source = NULL,

@@ -111,8 +111,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         ParamDbl$new("cutoff", tags = "train")
       ))
       private$.outer_param_set$set_id = "filter"
-      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals)
-      private$add_tags("feature selection", overwrite = TRUE)
+      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
     },
 
     get_state = function(task) {

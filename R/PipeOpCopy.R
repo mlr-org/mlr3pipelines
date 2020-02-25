@@ -87,9 +87,9 @@ PipeOpCopy = R6Class("PipeOpCopy",
       assert_int(outnum, lower = 1)
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*")
+        output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
+        tags = "meta"
       )
-      private$add_tags("meta", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

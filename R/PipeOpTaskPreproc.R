@@ -152,7 +152,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task") {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+      packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types) {
       if (can_subset_cols) {
         acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, default = selector_all(), tags = "train")
         if (inherits(param_set, "ParamSet")) {
@@ -162,12 +163,12 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
           param_set = c(param_set, alist(private$.affectcols_ps))
         }
       }
+      private$.feature_types = feature_types
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = task_type, predict = task_type),
-        packages = packages
+        packages = packages, tags = c(tags, "data transform")
       )
-      private$add_tags("data transform", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {
@@ -248,10 +249,21 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     predict_dt = function(dt, levels) stop("Abstract."),
 
-    select_cols = function(task) task$feature_names
+    select_cols = function(task) {
+      task$feature_types[get("type") %in% self$feature_types, get("id")]
+    }
+  ),
+  active = list(
+    feature_types = function(types) {
+      if (!missing(types)) {
+        private$.feature_types = assert_subset(types, mlr_reflections$task_feature_types)
+      }
+      private$.feature_types
+    }
   ),
   private = list(
-    .affectcols_ps = NULL
+    .affectcols_ps = NULL,
+    .feature_types = NULL
   )
 )
 

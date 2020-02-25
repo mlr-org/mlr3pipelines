@@ -85,12 +85,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
         ParamFct$new("method", levels = c("one-hot", "treatment", "helmert", "poly", "sum"), tags = c("train", "predict"))
       ))
       ps$values = list(method = "one-hot")
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
-      private$add_tags(c("feature type: factor", "feature type: ordered"))
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", tags = "encode", feature_types = c("factor", "ordered"))
     },
 
     get_state_dt = function(dt, levels, target) {

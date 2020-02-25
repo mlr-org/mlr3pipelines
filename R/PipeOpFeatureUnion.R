@@ -96,9 +96,9 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = inname, train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "Task", predict = "Task")
+        output = data.table(name = "output", train = "Task", predict = "Task"),
+        tags = "ensemble"
       )
-      private$add_tags("ensemble", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

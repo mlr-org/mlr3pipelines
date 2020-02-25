@@ -59,12 +59,7 @@ PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
         ParamInt$new("numsplits",  default = 2, lower = 2, special_vals = list(NULL), tags = "train")
         ))
       ps$values = list(numsplits = 2L)
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
-      private$add_tags("feature type: numeric")
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
     },
 
     get_state_dt = function(dt, levels, target) {

@@ -100,9 +100,9 @@ PipeOpBranch = R6Class("PipeOpBranch",
       ps$values$selection = initval
       super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
-        output = data.table(name = options, train = "*", predict = "*")
+        output = data.table(name = options, train = "*", predict = "*"),
+        tags = "meta"
       )
-      private$add_tags("meta", overwrite = TRUE)
     },
 
     train_internal = function(inputs) {

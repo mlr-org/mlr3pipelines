@@ -71,14 +71,8 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
         ParamDbl$new("upper", tags = c("train", "boxcox"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "bestNormalize")
-      private$add_tags("feature type: numeric")
+        packages = "bestNormalize", feature_types = c("numeric", "integer"))
     },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
     train_dt = function(dt, levels, target) {
       bc = lapply(dt, FUN = function(x) {
         invoke(bestNormalize::boxcox, x, .args = self$param_set$get_values(tags = "boxcox"))

@@ -59,12 +59,7 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
         ParamDbl$new("norm", tags = c("train", "predict"), lower = 0)
       ))
       ps$values = list(norm = 2, length = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-      private$add_tags("feature type: numeric")
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     },
 
     transform_dt = function(dt, levels) {

@@ -75,13 +75,8 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
         ParamUty$new("na.action", default = na.omit, tags = c("train", "kpca"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "kernlab")
+        packages = "kernlab", feature_types = c("numeric", "integer"))
     },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
 
     train_dt = function(dt, levels, target) {
       pcr = invoke(kernlab::kpca, as.matrix(dt), .args = self$param_set$get_values(tags = "kpca"))
