@@ -111,7 +111,7 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
       ))
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif")
-      private$add_tags("imbalanced data")
+      private$add_tags("imbalanced data", overwrite = TRUE)
     },
 
     train_task = function(task) {
