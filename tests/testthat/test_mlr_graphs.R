@@ -62,12 +62,12 @@ test_that("Robustify Pipeline", {
   # no task
   p = robustify_pipeline() %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("fixfactors", "imputehist", "missind", "imputenewlvl",
+  expect_true(all(c("char_to_fct", "imputehist", "missind", "imputenewlvl",
     "collapsefactors", "encode") %in% names(p$pipeops)))
 
   p = pipe("robustify", impute_missings = FALSE) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("fixfactors", "collapsefactors", "encode") %in% names(p$pipeops)))
+  expect_true(all(c("char_to_fct", "fixfactors", "collapsefactors", "encode") %in% names(p$pipeops)))
   expect_true(!all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
 
   # missings during predict

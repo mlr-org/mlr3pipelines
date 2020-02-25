@@ -56,14 +56,16 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   assert_flag(scaling)
   assert_count(max_cardinality)
 
-  # FIXME
-  # This should additionally do the following thins:
-  # - Convert posixct to numeric using new pipeop
-  # - Auto-convert character to factor? Perhaps improve later with text po's
-  # - Logical to integer conversion
-
   # If given a task, only treat actually existing column types
   pos = list()
+
+  # FIXME: Improve this when text-processors are available. See #332 and friends
+  if (is.null(task) || (nrow(cols_by_type(c("character"))) > 0 && "character" %nin% lrn$feature_types))
+    pos = c(pos, po("colapply", id = "char_to_fct", param_vals = list(affect_columns = selector_type("character"), applicator = function(x) as.factor(x))))
+
+  # FIXME: Uncomment once #308 is merged
+  # if (is.null(task) || (nrow(cols_by_type(c("POSIXct"))) > 0 && "POSIXct" %nin% lrn$feature_types))
+  #   pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
 
   if (impute_missings) {
     # Impute numerics
@@ -78,6 +80,7 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
       pos = c(pos, po("imputenewlvl"))
   }
 
+  # Fix extra factor levels
   if (is.null(task) || nrow(cols_by_type(c("factor", "ordered", "character"))) > 0)
     pos = c(pos, po("fixfactors"))
 
