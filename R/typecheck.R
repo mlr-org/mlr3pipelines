@@ -240,14 +240,3 @@ get_autoconverter = function(target) {
 
   NULL
 }
-
-# Check that a vector of tags are valid tags for `PipeOp's`.
-# See `mlr_reflections$pipeops$valid_tags` for a list of valid tags.
-# @param tags [`character`]: A list of tags.
-# @return a character vector of tasks
-assert_tag = function(tags) {
-  if (length(tags) == 0) tags = "abstract" else tags = assert_character(tolower(tags))
-  valid_tags = c(mlr_reflections$pipeops$valid_tags, paste0("feature type: ", mlr_reflections$task_feature_types))
-  assert_true(all(tags %in% valid_tags))
-  invisible(tags)
-}
