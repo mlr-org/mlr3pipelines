@@ -12,6 +12,8 @@ Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing the
 Only the target column(s) of the first \code{\link[mlr3:Task]{Task}} are kept.
 
 If \code{assert_targets_equal} is \code{TRUE} then target column names are compared and an error is thrown if they differ across inputs.
+
+If input tasks share the same feature names for some features, an error is thrown.
 }
 \section{Construction}{
 \preformatted{PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)

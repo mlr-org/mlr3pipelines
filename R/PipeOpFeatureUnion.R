@@ -12,6 +12,8 @@
 #'
 #' If `assert_targets_equal` is `TRUE` then target column names are compared and an error is thrown if they differ across inputs.
 #'
+#' If input tasks share the same feature names for some features, an error is thrown.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)
@@ -117,7 +119,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   task = inputs[[1L]]
   ids = task$row_ids
 
-  if (length(inprefix)) {  # inprefix has length 0 if innum is 0
+  if (length(inprefix)) { # inprefix has length 0 if innum is 0
     names(inputs) = inprefix
     if (inprefix[1] != "") {
       task$rename(task$feature_names, sprintf("%s.%s", inprefix[1], task$feature_names))
@@ -132,10 +134,22 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
     stopf("All tasks must have the same target columns")
   }
 
+  # check for duplicates in column names
+  # FIXME: does mlr3misc have a map function or s.l.t to replace mapply?
+  feature_names = if (length(inprefix)) {
+    inprefix = ifelse(inprefix == "", yes = "", no = paste0(".", inprefix))
+    unlist(mapply(function(prefix, x) paste0(prefix, x$feature_names), inprefix, inputs, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+  } else {
+    unlist(map(inputs, function(x) x$feature_names))
+  }
+  duplicates = unique(feature_names[which(duplicated(feature_names))])
+  if (length(duplicates)) {
+    stopf(sprintf("PipeOpFeatureUnion cannot aggregate features sharing the same feature name. The following feature names are duplicates: '%s'", paste0(duplicates, collapse = "', '")))
+  }
+
   # cbind() with only empty data.tables is problematic, so we have to do voodoo magic here:
   # cbind at least one data.table that is guaranteed not to be empty and subtract that column later.
   new_cols = do.call(cbind, c(list(data.table(x = vector(length = task$nrow))), lapply(tail(inputs, -1), function(y) y$data(ids, y$feature_names))))[, -1, with = FALSE]
-
 
   task$clone(deep = TRUE)$cbind(new_cols)
 }

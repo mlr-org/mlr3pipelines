@@ -62,7 +62,7 @@ test_that("PipeOpFeatureUnion - train and predict II", {
   lrn = mlr_learners$get("classif.rpart")
   op4 = PipeOpLearner$new(learner = lrn)
 
-  #  FIXME: Check param_set
+  # FIXME: Check param_set
   param_names_union = c(
     "OpNULL.Petal.Width", "OpNULL.Petal.Length",
     "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2",
@@ -103,7 +103,7 @@ test_that("Test wrong inputs", {
   g = greplicate(
     pos %>>% PipeOpPCA$new(),
     2
-  ) %>>% PipeOpFeatureUnion$new(2)
+  ) %>>% PipeOpFeatureUnion$new(c("a", "b"))
   task = mlr_tasks$get("iris")
   expect_error(g$train(task), "Assertion on 'rows'")
 })
@@ -202,3 +202,11 @@ test_that("feature renaming", {
 ##
 ##   pofu$train(list(t1, t2))
 ## })
+
+test_that("featureunion - error if duplicates in feature names", {
+  tsk = mlr_tasks$get("iris")
+
+  g = greplicate(PipeOpPCA$new(), 2) %>>% PipeOpFeatureUnion$new(2)
+
+  expect_error(g$train(tsk), "PipeOpFeatureUnion cannot aggregate features sharing the same feature name")
+})

@@ -11,6 +11,7 @@
 \alias{selector_intersect}
 \alias{selector_union}
 \alias{selector_setdiff}
+\alias{selector_missing}
 \title{Selector Functions}
 \usage{
 selector_all()
@@ -30,6 +31,8 @@ selector_intersect(selector_x, selector_y)
 selector_union(selector_x, selector_y)
 
 selector_setdiff(selector_x, selector_y)
+
+selector_missing()
 }
 \arguments{
 \item{types}{(\code{character}) \cr
@@ -98,6 +101,8 @@ selected by either \code{\link{Selector}} are selected in the end.
 \item \code{selector_setdiff}: \code{selector_setdiff} selects the setdiff of two \code{\link{Selector}}s: Features
 selected by \code{selector_x} are selected, unless they are also selected
 by \code{selector_y}.
+
+\item \code{selector_missing}: \code{selector_missing} selects features with missing values.
 }}
 
 \section{Details}{
