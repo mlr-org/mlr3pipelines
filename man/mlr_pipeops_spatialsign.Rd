@@ -103,6 +103,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
