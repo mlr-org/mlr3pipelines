@@ -55,7 +55,7 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
     initialize = function(id = "new_target", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("new_target", tags = c("train", "predict", "required"),
-          custom_check = function(x) assert_character(x, null.ok = TRUE)),
+          custom_check = function(x) check_character(x, null.ok = TRUE)),
         ParamUty$new("new_task_type", tags = c("train", "predict", "required"),
           custom_check = function(x) check_choice(x, mlr_reflections$task_types$type, null.ok = TRUE))
       ))

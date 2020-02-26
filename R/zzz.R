@@ -8,3 +8,9 @@
 #' @importFrom digest digest
 #' @importFrom withr with_options
 "_PACKAGE"
+
+.onLoad = function(libname, pkgname) {  # nocov start
+
+  backports::import(pkgname)
+
+}  # nocov end
