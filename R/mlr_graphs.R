@@ -34,7 +34,7 @@
 #' # or equivalently
 #' gr = mlr_graphs$get("robustify", task = task, learner = lrn) %>>% po(lrn)
 #' # or equivalently
-#' gr = pipe("robustify", task, lrn) %>>% po("learner", lrn)
+#' gr = ppl("robustify", task, lrn) %>>% po("learner", lrn)
 #'
 #' # all Graphs currently in the dictionary:
 #' as.data.table(mlr_graphs)
