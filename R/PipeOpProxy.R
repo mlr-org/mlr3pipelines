@@ -38,10 +38,12 @@
 #' @section Parameters:
 #' * `content` :: [`PipeOp`] or [`Graph`] \cr
 #'   The [`PipeOp`] or [`Graph`] that is being proxied (more precisely an object that can be
-#'   converted to a [`Graph`]). Defaults to an instance of [`PipeOpCopy`] (simply copies the input).
+#'   converted to a [`Graph`], because this is done internally). Defaults to an instance of
+#'   [`PipeOpCopy`] (simply copies the input).
 #'
 #' @section Internals:
-#' [`PipeOpProxy`] inherits from [`PipeOp`].
+#' [`PipeOpProxy`] inherits from [`PipeOp`]. The `content` will internally be coerced to a graph via
+#' `as_graph` prior to train and predict.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
@@ -76,7 +78,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
       inname = if (innum) rep_suffix("input", innum) else "..."
       ps = ParamSet$new(params = list(
         ParamUty$new("content", tags = c("train", "predidct", "required"), custom_check = function(x) {
-          # content must be an object that COULD be coerced to a Graph and the output number must match
+          # content must be an object that can be coerced to a Graph and the output number must match
           tryCatch({
             graph = as_graph(x)
             if (NROW(graph$output) != outnum) "Graph's output number must match `outnum`" else TRUE
@@ -91,25 +93,14 @@ PipeOpProxy = R6Class("PipeOpProxy",
       )
     },
     train_internal = function(input) {
-      # distinguishing between a Graph and a PipeOp is necessary because if the PipeOp has a vararg
-      # input channel itself, then coercing to a Graph will cause training and predicting to fail
-      # FIXME: Learner etc. must then be appropriately coerced?
-      content = self$param_set$values$content
-      if (inherits(content, what = "Graph")) {
-        output = content$train(unname(input), single_input = FALSE)
-      } else {
-        output = content$train(input)
-      }
+      content = as_graph(self$param_set$values$content, clone = TRUE)
+      output = content$train(unname(input), single_input = FALSE)
       self$state = content
       output
     },
     predict_internal = function(input) {
       content = self$state
-      if (inherits(content, what = "Graph")) {
-        output = content$predict(unname(input), single_input = FALSE)
-      } else {
-        output = content$predict(input)
-      }
+      output = content$predict(unname(input), single_input = FALSE)
       self$state = content
       output
     }

@@ -4,9 +4,9 @@ test_that("PipeOpProxy - basic properties", {
   task = mlr_tasks$get("iris")
   pop = PipeOpProxy$new(param_vals = list(content = PipeOpNOP$new()))
   expect_pipeop(pop)
-  train_pipeop(pop, inputs = list(task))
-  expect_pipeop(pop$state)
-  predict_pipeop(pop, inputs = list(task))
+  expect_equal(train_pipeop(pop, inputs = list(task))[[1L]], task)
+  expect_graph(pop$state)
+  expect_equal(predict_pipeop(pop, inputs = list(task))[[1L]], task)
 })
 
 test_that("PipeOpProxy - datapreproc", {
@@ -16,7 +16,7 @@ test_that("PipeOpProxy - datapreproc", {
 })
 
 test_that("PipeOpProxy - content error handling", {
-  expect_error(PipeOpProxy$new(param_vals = list(content = "error")), regexp = "`content` must be an object that can be converted to a Graph.")
+  expect_error(PipeOpProxy$new(param_vals = list(content = "error")), regexp = "`content` must be an object that can be converted to a Graph")
   expect_error(PipeOpProxy$new(param_vals = list(content = PipeOpCopy$new(outnum = 2L))), regexp = "Graph's output number must match `outnum`")
 })
 

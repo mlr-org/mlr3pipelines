@@ -45,13 +45,15 @@ The \verb{$state} is the \code{content} \code{\link{PipeOp}} or \code{\link{Grap
 \itemize{
 \item \code{content} :: \code{\link{PipeOp}} or \code{\link{Graph}} \cr
 The \code{\link{PipeOp}} or \code{\link{Graph}} that is being proxied (more precisely an object that can be
-converted to a \code{\link{Graph}}). Defaults to an instance of \code{\link{PipeOpCopy}} (simply copies the input).
+converted to a \code{\link{Graph}}, because this is done internally). Defaults to an instance of
+\code{\link{PipeOpCopy}} (simply copies the input).
 }
 }
 
 \section{Internals}{
 
-\code{\link{PipeOpProxy}} inherits from \code{\link{PipeOp}}.
+\code{\link{PipeOpProxy}} inherits from \code{\link{PipeOp}}. The \code{content} will internally be coerced to a graph via
+\code{as_graph} prior to train and predict.
 }
 
 \section{Fields}{
