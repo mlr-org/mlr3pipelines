@@ -67,6 +67,15 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr3pipelines-package.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_graphs.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_graphs_bagging.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_graphs_robustify.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_learners_avg.html</loc>
   </url>
   <url>
@@ -203,6 +212,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/po.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/ppl.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/register_autoconvert_function.html</loc>

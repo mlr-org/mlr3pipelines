@@ -171,7 +171,9 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
 
 <span class='fu'>selector_union</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
 
-<span class='fu'>selector_setdiff</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)</pre>
+<span class='fu'>selector_setdiff</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
+
+<span class='fu'>selector_missing</span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -250,6 +252,7 @@ selected by either <code>Selector</code> are selected in the end.</p></li>
 <li><p><code>selector_setdiff</code>: <code>selector_setdiff</code> selects the setdiff of two <code>Selector</code>s: Features
 selected by <code>selector_x</code> are selected, unless they are also selected
 by <code>selector_y</code>.</p></li>
+<li><p><code>selector_missing</code>: <code>selector_missing</code> selects features with missing values.</p></li>
 </ul>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
