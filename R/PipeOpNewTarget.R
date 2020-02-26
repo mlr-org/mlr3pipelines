@@ -5,7 +5,7 @@
 #' @description
 #'   Substitutes the current target with a new target.
 #'   The new target must be an existing column in the Task.
-#'   The previous target is set to row_role: `unused'.
+#'   The previous target is set to row_role: `character(0)'.
 #'
 #' @section Construction:
 #'   ```
@@ -19,22 +19,23 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOp`].
 #'
-#' The output is the input [`Task`][mlr3::Task] of task_type specified in `new_task_type` and 
+#' The output is the input [`Task`][mlr3::Task] of task_type specified in `new_task_type` and
 #' new target specified in `new_target`.
-#' 
+#'
 #' @section Parameters:
 #' The parameters are:
 #'   * `new_target` :: `character` \cr
-#'   New target variable name for the task. The previous target variable is set to 'unused'.
+#'   New target variable name for the task. The previous target variable's col_role is set to
+#'   `character(0)`.
 #'   * `new_task_type` :: `character` \cr
 #'   New task type for the resulting task.
-#' 
+#'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`]. Internally calls `convert_task` for task conversion.
-#' 
+#'
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
@@ -54,9 +55,9 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
     initialize = function(id = "new_target", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("new_target", tags = c("train", "predict", "required"),
-          custom_check = function(x) {check_string(x, null.ok = TRUE)}),
+          custom_check = function(x) assert_character(x, null.ok = TRUE)),
         ParamUty$new("new_task_type", tags = c("train", "predict", "required"),
-          custom_check = function(x) {check_choice(x, mlr_reflections$task_types$type, null.ok = TRUE)})
+          custom_check = function(x) check_choice(x, mlr_reflections$task_types$type, null.ok = TRUE))
       ))
       ps$values = list(new_target = NULL, new_task_type = NULL)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
@@ -65,9 +66,8 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
       )
     },
     train_internal = function(inputs) {
-      outputs = private$convert_task_type(inputs)
       self$state = list()
-      return(outputs)
+      private$convert_task_type(inputs)
     },
     predict_internal = function(inputs) {
       private$convert_task_type(inputs)
@@ -79,7 +79,7 @@ PipeOpNewTarget = R6Class("PipeOpNewTarget",
       assert_choice(self$param_set$values$new_target, intask$col_info$id)
       task = convert_task(intask, self$param_set$values$new_task_type, self$param_set$values$new_target)
       if (all(self$param_set$values$new_target != intask$target_names))
-        task$set_col_role(intask$col_roles$target, "unused")
+        task$set_col_role(intask$col_roles$target, character(0))
       list(task)
     }
   )
@@ -107,7 +107,6 @@ convert_task = function(intask, new_type, new_target = NULL) {
   assert_choice(new_type, mlr_reflections$task_types$type)
 
   if (is.null(new_target)) new_target = intask$target_names
-  if (new_type == intask$task_type & intask$target_names == new_target) return(intask)
   # Get task_type from mlr_reflections and call constructor.
   tsk = get(mlr_reflections$task_types[mlr_reflections$task_types$type == new_type,]$task)
   newtsk = tsk$new(id = intask$id, backend = intask$backend, target = new_target)

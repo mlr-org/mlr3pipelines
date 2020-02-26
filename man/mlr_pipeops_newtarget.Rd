@@ -8,7 +8,7 @@
 \description{
 Substitutes the current target with a new target.
 The new target must be an existing column in the Task.
-The previous target is set to row_role: `unused'.
+The previous target is set to row_role: `character(0)'.
 }
 \section{Construction}{
 \preformatted{PipeOpNewTarget$new(id = "mutate", param_vals = list(...))
@@ -34,7 +34,8 @@ new target specified in \code{new_target}.
 The parameters are:
 \itemize{
 \item \code{new_target} :: \code{character} \cr
-New target variable name for the task. The previous target variable is set to 'unused'.
+New target variable name for the task. The previous target variable's col_role is set to
+\code{character(0)}.
 \item \code{new_task_type} :: \code{character} \cr
 New task type for the resulting task.
 }

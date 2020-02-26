@@ -89,7 +89,7 @@ test_that("PipeOpNewTarget - Same target", {
   op = PipeOpNewTarget$new(param_vals = list(new_target = "medv", new_task_type = "regr"))
   task = mlr_tasks$get("boston_housing")
   task$set_row_role(1:40, "validation")
-  task$set_col_role("lat", "unused")
+  task$set_col_role("lat", character(0))
   tresult = train_pipeop(op, inputs = list(task))[[1]]
   check_result_regr(task, tresult)
   presult = predict_pipeop(op, inputs = list(task))[[1]]
@@ -153,7 +153,7 @@ test_that("UseCase - Intermediate Target - Chained", {
   dt[, x_tgt := m_tgt * x1]
   dt[, ..row_id := seq_len(nrow(dt))]
   tsk = TaskRegr$new("multiout", DataBackendDataTable$new(dt, "..row_id"), target = "x_tgt")
-  tsk$set_col_role(c("m_tgt", "c_tgt"), "unused")
+  tsk$set_col_role(c("m_tgt", "c_tgt"), character(0))
   # c is classif, m and x are regr targets; x_class is the final output we want to predict
 
   # We create PipeOp's that set a new intermediate target
