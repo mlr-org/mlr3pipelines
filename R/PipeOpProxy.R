@@ -104,6 +104,25 @@ PipeOpProxy = R6Class("PipeOpProxy",
       self$state = content
       output
     }
+  ),
+  private = list(
+    deep_clone = function(name, value) {
+      if (name == "state" && !is.null(value)) {
+        value$clone(deep = TRUE)
+      } else if (name == ".param_set" && !is.null(value)) {
+        content = value$values$content$clone(deep = TRUE)
+        value = value$clone(deep = TRUE)
+        value$values$content = content
+        value
+      } else if (name == "content" && !is.null(value)) {
+        value$clone(deep = TRUE)
+      } else {
+       super$deep_clone(name, value)
+      }
+    },
+    .param_set = NULL,
+    .param_set_source = NULL,
+    .id = NULL
   )
 )
 
