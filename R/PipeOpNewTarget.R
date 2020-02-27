@@ -97,16 +97,19 @@ mlr_pipeops$add("new_target", PipeOpNewTarget)
 #'   A [`Task`] to be converted.
 #' @param new_type `character(1)`\cr
 #'   The new task type. Must be in  `mlr_reflections$task_types`.
+#'   If `NULL` (default), a new task with the same task_type is created.
 #' @param new_target `character(1)|NULL`\cr
 #'   New target to be set, must be a column in the `intask` data.
-#'   If NULL, no new target is set, and task is converted as-is.
+#'   If `NULL`, no new target is set, and task is converted as-is.
 #' @return [`Task`]
-convert_task = function(intask, new_type, new_target = NULL) {
+convert_task = function(intask, new_type = NULL, new_target = NULL) {
   assert_task(intask)
   assert_subset(new_target, intask$col_info$id)
-  assert_choice(new_type, mlr_reflections$task_types$type)
+  assert_choice(new_type, mlr_reflections$task_types$type, null.ok = TRUE)
 
   if (is.null(new_target)) new_target = intask$target_names
+  if (is.null(new_type)) new_type = intask$task_type
+
   # Get task_type from mlr_reflections and call constructor.
   tsk = get(mlr_reflections$task_types[mlr_reflections$task_types$type == new_type,]$task)
   newtsk = tsk$new(id = intask$id, backend = intask$backend, target = new_target)

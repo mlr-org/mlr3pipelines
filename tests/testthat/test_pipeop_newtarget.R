@@ -183,3 +183,17 @@ test_that("UseCase - Intermediate Target - Chained", {
   expect_class(e2, "ResampleResult")
   expect_numeric(e2$score()$regr.mse, lower = 0, upper = 10)
 })
+
+
+test_that("convert_task reconstructs task", {
+  task = tsk("iris")
+  tsk = convert_task(task)
+  tsk$man = "mlr3::mlr_tasks_iris"
+  expect_equal(task, tsk)
+
+  task2 = task$filter(1:100)
+  tsk2 = convert_task(task2)
+  expect_equal(task2$nrow, tsk2$nrow)
+  expect_equal(task2$ncol, tsk2$ncol)
+  # expect_true("binary" %in% tsk2$properties)
+})
