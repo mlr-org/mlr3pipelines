@@ -138,7 +138,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   # FIXME: does mlr3misc have a map function or s.l.t to replace mapply?
   feature_names = if (length(inprefix)) {
     inprefix = ifelse(inprefix == "", yes = "", no = paste0(".", inprefix))
-    unlist(mapply(function(prefix, x) paste0(prefix, x$feature_names), inprefix, inputs, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+    unlist(mapply(function(prefix, x) paste0(prefix, x$feature_names), prefix = inprefix, x = inputs, SIMPLIFY = FALSE, USE.NAMES = FALSE))
   } else {
     unlist(map(inputs, function(x) x$feature_names))
   }
