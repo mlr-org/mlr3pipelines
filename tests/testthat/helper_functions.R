@@ -1,5 +1,3 @@
-
-
 # expect that 'one' is a deep clone of 'two'
 expect_deep_clone = function(one, two) {
   # is equal
@@ -36,7 +34,10 @@ expect_deep_clone = function(one, two) {
         return(invisible(NULL))
       }
       if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
-        return(invisible(NULL)) # don't check if smth is not cloneable
+        return(invisible(NULL))  # don't check if smth is not cloneable
+      }
+      if (identical(utils::tail(path, 1), c("[element train_task] 'train_task'"))) {
+        return(invisible(NULL))  # workaround for https://github.com/mlr-org/mlr3/issues/382
       }
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
@@ -60,7 +61,7 @@ expect_deep_clone = function(one, two) {
       }
     }
     for (i in index) {
-      if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile")) next
+      if (utils::tail(path, 1) == "[attributes]" && i %in% c("srcref", "srcfile", ".Environment")) next
       expect_references_differ(base::`[[`(a, i), base::`[[`(b, i), c(path, sprintf("[element %s]%s", i,
         if (!is.null(objnames)) sprintf(" '%s'", if (is.character(index)) i else objnames[[i]]) else "")))
     }
@@ -101,6 +102,8 @@ expect_pipeop = function(po) {
   expect_names(names(po$output), permutation.of = c("name", "train", "predict"))
   expect_int(po$innum, lower = 1)
   expect_int(po$outnum, lower = 1)
+  # at least one of "train" or "predict" must be in every parameter's tag
+  testthat::expect_true(every(po$param_set$tags, function(x) length(intersect(c("train", "predict"), x)) > 0))
 
 }
 
@@ -110,7 +113,7 @@ expect_pipeop = function(po) {
 # - *_internal checks for classes
 # - *_internal handles NO_OP as it should
 expect_pipeop_class = function(poclass, constargs = list()) {
-
+  skip_on_cran()
   po = do.call(poclass$new, constargs)
 
   expect_pipeop(po)
@@ -124,12 +127,12 @@ expect_pipeop_class = function(poclass, constargs = list()) {
   names(out_nop) = po$output$name
 
   expect_false(po$is_trained)
-  expect_equal(po$train_internal(in_nop), out_nop)
-  expect_equal(po$predict_internal(in_nop), out_nop)
+  expect_equal(po$train(in_nop), out_nop)
+  expect_equal(po$predict(in_nop), out_nop)
   expect_true(is_noop(po$state))
   expect_true(po$is_trained)
 
-  expect_error(po$predict_internal(in_nonnop), "Pipeop .* got NO_OP during train")
+  expect_error(po$predict(in_nonnop), "Pipeop .* got NO_OP during train")
 
   # check again with no_op-trained PO
   expect_pipeop(po)
@@ -141,7 +144,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 # check that a do.call(poclass$new, constargs) behaves as a preprocessing pipeop should.
 # This entails
 #  - expect_pipeop_class
-#  - input / output both have length 1, type "Task"
+#  - input / output both have length 1, type "Task" or a subclass
 #  - training on non-task gives error
 #  - predicting on non-task gives error
 #  - training twice gives the same result (if `deterministic_train`)
@@ -162,7 +165,12 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 # `task` must have at least two feature columns and at least two rows.
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
-  deterministic_train = TRUE, deterministic_predict = TRUE) {
+  deterministic_train = TRUE, deterministic_predict = TRUE,
+  tolerance = sqrt(.Machine$double.eps)) {
+  # NOTE
+  # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
+  # 'tolerance = tolerance' argument to `expect_equal`.
+
 
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)
@@ -175,17 +183,16 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_equal(po$innum, 1)
   expect_equal(po$outnum, 1)
 
-  expect_equal(po$input$train, "Task")
-  expect_equal(po$input$predict, "Task")
-  expect_equal(po$output$train, "Task")
-  expect_equal(po$output$predict, "Task")
+  expect_true(are_types_compatible(po$input$train, "Task"))
+  expect_true(are_types_compatible(po$input$predict, "Task"))
+  expect_true(are_types_compatible(po$output$train, "Task"))
+  expect_true(are_types_compatible(po$output$predict, "Task"))
 
-  expect_error(po$train_internal(list(NULL)), "class.*Task.*but has class")
+  expect_error(po$train(list(NULL)), "class.*Task.*but has class")
 
   expect_false(po$is_trained)
 
-  trained = po$train_internal(list(task))
-
+  trained = po$train(list(task))
   trained2 = po$train(list(task))
   trained3 = po2$train(list(task))
   expect_list(trained, types = "Task", any.missing = FALSE, len = 1)
@@ -206,9 +213,9 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
   expect_deep_clone(po, po$clone(deep = TRUE))
 
-  expect_error(po$predict_internal(list(NULL)), "class.*Task.*but has class")
+  expect_error(po$predict(list(NULL)), "class.*Task.*but has class")
 
-  predicted = po$predict_internal(list(task))
+  predicted = po$predict(list(task))
   predicted2 = po$predict(list(task))
   predicted3 = po2$predict(list(task))
   expect_list(predicted, types = "Task", any.missing = FALSE, len = 1)
@@ -232,8 +239,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     }
     if (predict_like_train) {
       # if deterministic_train is FALSE then `trained` may be different from `predicted`!
-      expect_equal(trained2$data(), predicted2$data(), ignore.col.order = TRUE)
-      expect_equal(trained3$data(), predicted3$data(), ignore.col.order = TRUE)
+      expect_equal(trained2$data(), predicted2$data(), ignore.col.order = TRUE, tolerance = tolerance)
+      expect_equal(trained3$data(), predicted3$data(), ignore.col.order = TRUE, tolerance = tolerance)
     }
   }
   if (predict_rows_independent) {
@@ -246,78 +253,128 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
   emptytask = task$clone(deep = TRUE)$select(character(0))
 
-  expect_equal(length(po$train_internal(list(emptytask))[[1]]$feature_names), 0)
-  expect_equal(length(po$predict_internal(list(emptytask))[[1]]$feature_names), 0)
+  expect_equal(length(po$train(list(emptytask))[[1]]$feature_names), 0)
+  expect_equal(length(po$predict(list(emptytask))[[1]]$feature_names), 0)
 
-  if (isTRUE(get0("can_subset", po))) {
-    selector = function(data) data$feature_names != data$feature_names[1]
+  if ("affect_columns" %in% names(po$param_set$params)) {
+    selector = function(data) data$feature_names[-1]
     po2$param_set$values$affect_columns = selector
-    trained.subset = po$train_internal(list(task2))[[1]]
-    trained2.subset = po2$train_internal(list(task))[[1]]
+    trained.subset = po$train(list(task2))[[1]]
+    trained2.subset = po2$train(list(task))[[1]]
     if (deterministic_train) {
       expect_equal(trained.subset$data(cols = c(trained.subset$target_names, trained.subset$feature_names)),
         trained2.subset$data(cols = setdiff(c(trained2.subset$target_names, trained2.subset$feature_names), task$feature_names[1])))
     }
-    predicted.subset = po$predict_internal(list(task2))[[1]]
-    predicted2.subset = po2$predict_internal(list(task2))[[1]]
+    predicted.subset = po$predict(list(task2))[[1]]
+    predicted2.subset = po2$predict(list(task2))[[1]]
     if (deterministic_train && deterministic_predict) {
       expect_equal(predicted.subset$data(), predicted2.subset$data())
     }
-    predicted2.subset2 = po2$predict_internal(list(task))[[1]]
+    predicted2.subset2 = po2$predict(list(task))[[1]]
     if (deterministic_predict) {
-      expect_equal(predicted.subset$data(cols = c(predicted.subset$target_names, predicted.subset$feature_names)),
+      expect_equal(predicted2.subset$data(cols = c(predicted.subset$target_names, predicted.subset$feature_names)),
         predicted2.subset2$data(cols = setdiff(c(predicted2.subset2$target_names, predicted2.subset2$feature_names),
           task$feature_names[1])))
     }
 
-    selector = function(data) rep(FALSE, length(data$feature_names))
+    selector = function(data) character(0)
     po2$param_set$values$affect_columns = selector
 
-    # FIXME: the following should ensure that data has not changed
-    # but number of rows or row indices could change in theory change, so the tests will need to be adapted if that is ever the case
-    trained = po2$train_internal(list(task))[[1]]
-    expect_equal(trained$data(cols = trained$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE)
+    # NOTE: the following should ensure that data has not changed
+    # but number of rows or row indices could change in theory, so the tests will need to be adapted if that is ever the case
+    trained = po2$train(list(task))[[1]]
+    expect_equal(trained$data(cols = trained$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
 
-    predicted = po2$predict_internal(list(task))[[1]]
-    expect_equal(predicted$data(cols = predicted$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE)
+    predicted = po2$predict(list(task))[[1]]
+    expect_equal(predicted$data(cols = predicted$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
 
-    predicted2 = po2$predict_internal(list(emptytask))[[1]]
+    predicted2 = po2$predict(list(emptytask))[[1]]
     expect_equal(predicted2$feature_names, character(0))
+
+
+    # test affect_columns
+    po_orig = po$clone(deep = TRUE)
+
+    # selecting no columns leaves task unchanged
+    po$param_set$values$affect_columns = selector_none()
+    expect_equal(task$data(), po$train(list(task))[[1]]$data())
+    expect_equal(task$data(), po$predict(list(task))[[1]]$data())
+
+    # names of every second task column
+    halftasknames = task$feature_names[c(TRUE, FALSE)]
+
+    # PO has affect_columns set to every other task column
+    po$param_set$values$affect_columns = selector_name(halftasknames)
+
+    halftrainres = po$train(list(task))[[1]]$data()
+    halfpredres = po$predict(list(task))[[1]]$data()
+    halfpredresL1 = po$predict(list(task$clone()$filter(task$row_ids[1])))[[1]]$data()
+    halfpredresL0 = po$predict(list(task$clone()$filter(task$row_ids[0])))[[1]]$data()
+
+    # for comparison, we run PO on a task with half the features missing and re-construct the result afterwards
+    halftask = task$clone()$select(halftasknames)
+    otherhalf = task$clone()$data(cols = setdiff(task$feature_names, halftasknames))
+
+    explicittrainres = cbind(po_orig$train(list(halftask))[[1]]$data(), otherhalf)
+    explicitpredres = cbind(po_orig$predict(list(halftask))[[1]]$data(), otherhalf)
+    explicitpredresL1 = cbind(po_orig$predict(list(halftask$clone()$filter(task$row_ids[1])))[[1]]$data(), otherhalf[1, ])
+    explicitpredresL0 = cbind(po_orig$predict(list(halftask$clone()$filter(task$row_ids[0])))[[1]]$data(), otherhalf[integer(0), ])
+
+    if (deterministic_train) {
+      expect_equal(halftrainres, explicittrainres, ignore.col.order = TRUE, tolerance = tolerance)
+    }
+    if (deterministic_predict) {
+      if (deterministic_train) {
+        expect_equal(halfpredres, explicitpredres, ignore.col.order = TRUE, tolerance = tolerance)
+        expect_equal(halfpredresL1, explicitpredresL1, ignore.col.order = TRUE, tolerance = tolerance)
+      }
+      expect_equal(halfpredresL1, halfpredres[1, ], ignore.col.order = TRUE, tolerance = tolerance)
+      if (predict_like_train) {
+        expect_equal(halfpredres, halftrainres, ignore.col.order = TRUE, tolerance = tolerance)
+        expect_equal(explicitpredres, explicittrainres, ignore.col.order = TRUE, tolerance = tolerance)
+      }
+    }
+    expect_equal(halfpredresL0, explicitpredresL0, ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal(halfpredresL0, halfpredres[integer(0), ], ignore.col.order = TRUE, tolerance = tolerance)
 
   }
 
-  po$train_internal(list(task))
+  po$train(list(task))
 
   norowtask = task$clone(deep = TRUE)$filter(integer(0))
   whichrow = sample(task$nrow, 1)
   onerowtask = task$clone(deep = TRUE)$filter(whichrow)
 
 
-  predicted = po$predict_internal(list(norowtask))[[1]]
+  predicted = po$predict(list(norowtask))[[1]]
   if (predict_rows_independent) {
     expect_equal(predicted$nrow, 0)
   }
 
-  predicted = po$predict_internal(list(onerowtask))[[1]]
+  predicted = po$predict(list(onerowtask))[[1]]
   if (predict_rows_independent) {
     expect_equal(predicted$nrow, 1)
     if (deterministic_predict) {
-      expect_equal(predicted$data(), po$predict_internal(list(task))[[1]]$filter(whichrow)$data(), ignore.col.order = TRUE)
+      expect_equal(predicted$data(), po$predict(list(task))[[1]]$filter(whichrow)$data(), ignore.col.order = TRUE, tolerance = tolerance)
     }
   }
 
-  targetless = task$clone(deep = TRUE)$set_col_role(task$target_names, character(0))
+  ## ## The following becomes relevant when mlr3 gets unsupervised tasks. We then want
+  ## ## to test them automatically here by creating the unsupervised tasks.
+  ##
+  ## targetless = task$clone(deep = TRUE)$set_col_role(task$target_names, character(0))
+  ##
+  ## po$train(list(task))
+  ## predicted = po$predict(list(task))[[1]]
+  ## predicted.targetless = po$predict(list(targetless))[[1]]
+  ##
+  ## if (deterministic_predict) {
+  ##   expect_equal(predicted$data(cols = predicted$feature_names),
+  ##     predicted.targetless$data(cols = predicted.targetless$feature_names))
+  ## }
 
-  po$train_internal(list(task))
-  predicted = po$predict_internal(list(task))[[1]]
-  predicted.targetless = po$predict_internal(list(targetless))[[1]]
 
-  if (deterministic_predict) {
-    expect_equal(predicted$data(cols = predicted$feature_names),
-      predicted.targetless$data(cols = predicted.targetless$feature_names))
-  }
-
-  expect_shallow_clone(task, original_clone) # test that task was not changed by all the training / prediction
+  expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
 
 }
 
@@ -351,11 +408,11 @@ predict_pipeop = function(po, inputs) {
 expect_pipeop_result_features = function(po, traintask, trainresult,
   predicttask = NULL, predictresult = NULL) {
   result = train_pipeop(po, list(traintask))
-  expect_equal(result$data(cols = result$feature_names), trainresult, ignore.col.order = TRUE)
+  expect_equal(result$data(cols = result$feature_names), trainresult, ignore.col.order = TRUE, tolerance = tolerance)
   assert(is.null(predicttask) == is.null(predictresult))
   if (!is.null(predicttask)) {
     result = predict_pipeop(po, list(traintask))
-    expect_equal(result$data(cols = result$feature_names), predicttask, ignore.col.order = TRUE)
+    expect_equal(result$data(cols = result$feature_names), predicttask, ignore.col.order = TRUE, tolerance = tolerance)
   }
 }
 
@@ -391,22 +448,20 @@ make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "r
   seed = 1444L, nclasses = 3L) {
   if (!noise) set.seed(seed)
   response = prob = NULL
-  truth = sample(letters[seq_len(nclasses)], n, replace = TRUE)
+  lvls = letters[seq_len(nclasses)]
+  truth = sample(lvls, n, replace = TRUE)
 
   if ("prob" %in% predict_types) {
     prob = matrix(runif(n * nclasses), ncol = nclasses, nrow = n)
     prob = t(apply(prob, 1, function(x) x / sum(x)))
-    colnames(prob) = unique(truth)
-    max.prob = max.col(prob, ties.method = "first")
-
-  }
-  if ("response" %in% predict_types) {
+    colnames(prob) = lvls
+    response = colnames(prob)[max.col(prob, ties.method = "first")]
+  } else if ("response" %in% predict_types) {
     response = sample(letters[seq_len(nclasses)], n, replace = TRUE)
   }
 
-  PredictionClassif$new(row_ids = seq_len(n), truth = factor(truth, levels = letters[seq_len(nclasses)]),
-    response = factor(response, levels = letters),
-    prob = prob)
+  PredictionClassif$new(row_ids = seq_len(n), truth = factor(truth, levels = lvls),
+    response = factor(response, levels = lvls), prob = prob)
 }
 
 PipeOpLrnRP = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
@@ -416,4 +471,10 @@ PipeOpLrnFL = PipeOpLearner$new(mlr_learners$get("classif.featureless"))
 # be checked easily with expect_equal and expect_set_equal
 csvify = function(table) {
   apply(table, 1, paste, collapse = ",")
+}
+
+# canonicise param_set by calling the active binding
+touch = function(x) {
+  x$param_set
+  x
 }

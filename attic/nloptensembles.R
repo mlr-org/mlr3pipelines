@@ -71,7 +71,7 @@ PipeOpNlOptModelAvg = R6Class("nloptmodelavg",
       ps$values = list(measure = NULL, algorithm = "NLOPT_LN_BOBYQA", xtol_rel = 10^-8, lb = 0, ub = 1)
       super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
     },
-    train = function(inputs) {
+    train_internal = function(inputs) {
       assert_list(inputs, "PredictionRegr")
       self$measure = self$param_set$values$measure
       if (is.null(self$measure)) self$measure = mlr_measures$get("regr.mse")
@@ -133,7 +133,7 @@ PipeOpNlOptMajorityVote = R6Class("PipeOpNlOptMajorityVote",
       ps$values = list(measure = NULL, algorithm = "NLOPT_LN_BOBYQA", xtol_rel = 10^-8, lb = 0, ub = 1)
       super$initialize(innum, id, weights = NULL, param_vals = param_vals, param_set = ps, packages = "nloptr")
     },
-    train = function(inputs) {
+    train_internal = function(inputs) {
       assert_list(inputs, "PredictionClassif")
       self$measure = self$param_set$values$measure
       if (is.null(self$measure)) self$measure = mlr_measures$get("classif.ce")

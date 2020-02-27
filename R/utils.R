@@ -1,11 +1,11 @@
 rep_suffix = function(x, n) {
   # priority here is "easy to enter by hand", not "can reasonably be sorted alphabetically" which NEVER happens
-  paste0(x, seq_len(n))
+  sprintf("%s%s", x, seq_len(n))
 }
 
 calculate_collimit = function(colwidths, outwidth) {
-  margin = length(colwidths) + 4 # columns are separated by one space, with some breathing room
-  numcols = length(colwidths) # number of columns that we expect to limit
+  margin = length(colwidths) + 4  # columns are separated by one space, with some breathing room
+  numcols = length(colwidths)  # number of columns that we expect to limit
   repeat {
     # collimit: the width at which we limit data.table column output. If some columns are very
     # small, we can be more generous for other columns.
@@ -21,7 +21,7 @@ calculate_collimit = function(colwidths, outwidth) {
       break
     }
   }
-  collimit - 3 # subtracting 3 here because data.table adds "..." whenever it truncates a string
+  collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
 # Get 'levels' of task columns as named list [feature name] -> [levels]
@@ -51,4 +51,14 @@ task_filter_ex = function(task, row_ids) {
   row_ids[duplicated(row_ids)] = task$row_ids[newrows]
 
   task$filter(row_ids)
+}
+
+# these must be at the root and can not be anonymous functions because all.equal fails otherwise.
+check_function_or_null = function(x) check_function(x, null.ok = TRUE)
+
+# 'and' operator for checkmate check_*-functions
+# example:
+# check_numeric(x) %&&% check_true(all(x < 0))
+`%&&%` = function(lhs, rhs) {
+  if (isTRUE(lhs)) rhs else lhs
 }

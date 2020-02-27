@@ -7,22 +7,28 @@
 gunion(graphs)
 }
 \arguments{
-\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}}) \cr
+\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}})\cr
 List of elements with one of the types defined above, which are the
-graphs to be joined.}
+\code{\link{Graph}}s to be joined.}
 }
 \value{
-\code{\link{Graph}} the resulting \code{Graph}.
+\code{\link{Graph}} the resulting \code{\link{Graph}}.
 }
 \description{
-Takes an arbitrary amount of \code{\link{Graph}}s and/or \code{\link{PipeOp}}s as inputs and joins
-them in a new \code{Graph}.
+Takes an arbitrary amount of \code{\link{Graph}}s or \code{\link{PipeOp}}s (or objects that can be automatically
+converted into \code{\link{Graph}}s or \code{\link{PipeOp}}s, see \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}) as inputs and joins
+them in a new \code{\link{Graph}}.
 
-The \code{PipeOp}s of the input \code{Graph}s are not joined with new edges across
-\code{Graph}s, so if \code{length(graphs) > 1} the resulting \code{Graph} will be disconnected.
+The \code{\link{PipeOp}}s of the input \code{\link{Graph}}s are not joined with new edges across
+\code{\link{Graph}}s, so if \code{length(graphs) > 1} the resulting \code{\link{Graph}} will be disconnected.
 }
 \seealso{
-Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{assert_graph}}, \code{\link{greplicate}}
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_graph}()},
+\code{\link{as_pipeop}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{greplicate}()}
 }
 \concept{Graph operators}

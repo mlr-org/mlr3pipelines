@@ -5,7 +5,7 @@ test_that("linear graph", {
   expect_equal(g$ids(sorted = TRUE), character(0))
 
   # FIXME: we should  "dummy" ops, so we can change properties of the ops at will
-  # we should NOT use PipeOpNULL, because we want to check that $train/$predict actually does something.
+  # we should NOT use PipeOpNOP, because we want to check that $train/$predict actually does something.
   # FIXME: we should packages of the graph
   op_ds = PipeOpSubsample$new()
   op_pca = PipeOpPCA$new()
@@ -36,8 +36,10 @@ test_that("linear graph", {
 
   expect_graph(g)
 
-  expect_error(g$add_edge("subsample", "classif.rpart"),
-    "Channel.*output.*of node.*subsample.*already connected to channel.*input.*of node pca")
+  g$add_edge("subsample", "classif.rpart")
+
+  expect_error(g$add_edge("pca", "classif.rpart"),
+    "Channel.*output.*of node.*subsample.*already connected to channel.*input.*of node classif.rpart")
 
   expect_error(g$add_pipeop(op_lrn), "PipeOp with id.*rpart.*already in Graph")
 
@@ -76,9 +78,13 @@ test_that("complex graph", {
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"),
     info = paste0("'", lines, "'", collapse = "', '"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
+
+  p = biggraph$plot(TRUE)
+  expect_class(p, "htmlwidget")
+  expect_class(p, "visNetwork")
 })
 
 
@@ -141,10 +147,13 @@ test_that("input / output lists and naming", {
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   gr$plot()
   dev.off()
 
+  p = gr$plot(TRUE)
+  expect_class(p, "htmlwidget")
+  expect_class(p, "visNetwork")
 
   # test output 1: debug.multi was already trained above
   expect_output(print(gr),
@@ -183,15 +192,15 @@ test_that("input / output lists and naming", {
 
 test_that("edges that introduce loops cannot be added", {
   g = Graph$new()$
-    add_pipeop(PipeOpNULL$new("p1"))$
-    add_pipeop(PipeOpNULL$new("p2"))
+    add_pipeop(PipeOpNOP$new("p1"))$
+    add_pipeop(PipeOpNOP$new("p2"))
 
   gclone = g$clone(deep = TRUE)
   expect_deep_clone(g, gclone)
 
   expect_error(g$add_edge("p1", "p1", 1, 1), "Cycle detected")
 
-  expect_deep_clone(g, gclone) # check that edges did not change
+  expect_deep_clone(g, gclone)  # check that edges did not change
 
   g$add_edge("p1", "p2")
 
@@ -200,30 +209,30 @@ test_that("edges that introduce loops cannot be added", {
 
   expect_error(g$add_edge("p2", "p1", 1, 1), "Cycle detected")
 
-  expect_deep_clone(g, gclone) # check that edges did not change
+  expect_deep_clone(g, gclone)  # check that edges did not change
 })
 
 
 test_that("assert_graph test", {
-  gr = PipeOpNULL$new() %>>% PipeOpDebugMulti$new(1, 1)
+  gr = PipeOpNOP$new() %>>% PipeOpDebugMulti$new(1, 1)
 
   gr2 = assert_graph(gr)
 
   expect_error(expect_deep_clone(gr, gr2), class = "error", "addresses differ.*isn't true")
 
-  gr2 = assert_graph(gr, deep_copy = TRUE)
+  gr2 = as_graph(gr, clone = TRUE)
 
   expect_deep_clone(gr, gr2)
 
-  expect_error(assert_graph(PipeOpNULL$new()), "inherit from class.*Graph")
+  expect_error(assert_graph(PipeOpNOP$new()), "inherit from class.*Graph")
 
-  assert_graph(assert_graph(PipeOpNULL$new(), coerce = TRUE))
+  assert_graph(as_graph(PipeOpNOP$new()))
 
-  po = PipeOpNULL$new()
+  po = PipeOpNOP$new()
 
   expect_error(expect_deep_clone(po, po), class = "error", "addresses differ.*isn't true")
 
-  po2 = assert_graph(po, coerce = TRUE, deep_copy = TRUE)$pipeops[[1]]
+  po2 = as_graph(po, clone = TRUE)$pipeops[[1]]
 
   expect_deep_clone(po, po2)
 })
@@ -246,6 +255,9 @@ test_that("Empty Graph", {
   expect_equal(greplicate(Graph$new(), 100), Graph$new())
 
   expect_error(Graph$new()$add_edge("a", "b"), "Cannot add edge to empty Graph")
+
+  expect_equal(Graph$new()$state, list())
+
 })
 
 test_that("Graph printer aux function calculates col widths well", {
@@ -253,8 +265,8 @@ test_that("Graph printer aux function calculates col widths well", {
   set.seed(8008135)
 
   effective_outwidth = function(colwidths, collimit) {
-    colwidths[colwidths > collimit] = collimit + 3 # this is how data.table does it
-    sum(colwidths + 1) + 4 # add 1 spacer between columns, and an extra margin of 4
+    colwidths[colwidths > collimit] = collimit + 3  # this is how data.table does it
+    sum(colwidths + 1) + 4  # add 1 spacer between columns, and an extra margin of 4
   }
 
   test_outlimit = function(colwidths, outwidth) {
@@ -281,7 +293,7 @@ test_that("Graph printer aux function calculates col widths well", {
 
 test_that("Intermediate results are saved to Graph if requested", {
   g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
-    gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
+    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
 
   task = mlr_tasks$get("iris")
 
@@ -301,24 +313,55 @@ test_that("Intermediate results are saved to Graph if requested", {
 
   expect_equal(g$pipeops$scale$.result, restask2)
 
-  expect_equal(unname(g$pipeops$null$.result), restask)
+  expect_equal(g$pipeops$nop$.result, restask)
 })
 
 test_that("Namespaces get loaded", {
   g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
-    gunion(list(PipeOpScale$new(), PipeOpNULL$new()))
+    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
 
   g$train(mlr_tasks$get("iris"))
 
   g$pipeops$scale$packages = c("4rfjfw", "324r32")
-  g$pipeops$null$packages = c("4rfjfw", "9422228u")
+  g$pipeops$nop$packages = c("4rfjfw", "9422228u")
 
   res = try(g$train(mlr_tasks$get("iris")), silent = TRUE)
 
   expect_class(res, "try-error")
   expect_subset(c(
-    "  Error loading package 9422228u (required by null):",
-    "  Error loading package 4rfjfw (required by scale, null):",
+    "  Error loading package 9422228u (required by nop):",
+    "  Error loading package 4rfjfw (required by scale, nop):",
     "  Error loading package 324r32 (required by scale):"),
   strsplit(res, "\n")[[1]])
+})
+
+test_that("Graph State", {
+  g = PipeOpPCA$new() %>>% PipeOpCopy$new(2) %>>%
+    gunion(list(PipeOpScale$new(), PipeOpNOP$new()))
+
+  g_clone = g$clone(deep = TRUE)
+  task = mlr_tasks$get("iris")
+
+  res = g$train(task)
+
+  g_clone$state = g$state
+  expect_deep_clone(g_clone, g$clone(deep = TRUE))
+
+  expect_equal(g$predict(task), g_clone$predict(task))
+
+})
+
+test_that("Graph with vararg input", {
+  t1 = tsk("iris")
+  t2 = PipeOpPCA$new()$train(list(t1))[[1]]
+  tcombined = PipeOpFeatureUnion$new()$train(list(t1, t2))[[1]]
+  gr = as_graph(PipeOpFeatureUnion$new())
+  expect_equal(tcombined, gr$train(list(t1, t2), single_input = FALSE)[[1]])
+  expect_equal(tcombined, gr$predict(list(t1, t2), single_input = FALSE)[[1]])
+
+  gr = gunion(list(PipeOpNOP$new(), gr, PipeOpNOP$new(id = "nop2"), PipeOpNOP$new(id = "nop3")))
+
+  expect_equal(list(nop.output = 1, featureunion.output = tcombined, nop2.output = 2, nop3.output = 3),
+               gr$train(list(1, t1, t2, 2, 3), single_input = FALSE))
+
 })

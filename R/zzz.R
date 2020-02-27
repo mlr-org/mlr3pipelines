@@ -10,11 +10,8 @@
 "_PACKAGE"
 
 
-.onLoad = function(libname, pkgname) {
+.onLoad = function(libname, pkgname) {  # nocov start
 
-  # nocov start
   backports::import(pkgname)
 
-  publish_registered_pipeops()  # create and fill mlr_pipeops Dictionary
-
-} # nocov end
+}  # nocov end

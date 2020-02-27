@@ -3,34 +3,123 @@
 #' @description
 #' Function that checks that a given object is a `Graph` and
 #' throws an error if not.
-#'
-#' If `coerce` is `TRUE`, the object is turned into a `Graph`
-#' if possible before checking and the coerced object is
-#' returned. If `deep_copy` is `TRUE`, a deep copy is made
-#' before returning.
-#'
-#'
 #' @param x (`any`) \cr
 #'   Object to check.
-#' @param coerce (`logical(1)`) \cr
-#'   Whether to return a coerced object if possible instead
-#'   of throwing an error.
-#' @param deep_copy (`logical(1)`) \cr
-#'   Whether to return a deep copy.
+#' @return [`Graph`] `invisible(x)`
+#' @family Graph operators
+#' @export
+assert_graph = function(x) {
+  assert_r6(x, "Graph")
+}
+
+#' @title Conversion to mlr3pipeline Graph
+#'
+#' @description
+#' The argument is turned into a [`Graph`] if possible.
+#' If `clone` is `TRUE`, a deep copy is made
+#' if the incoming object is a [`Graph`] to ensure the resulting
+#' object is a different reference from the incoming object.
+#'
+#' [`as_graph()`] is an S3 method and can therefore be implemented
+#' by other packages that may add objects that can naturally be converted to [`Graph`]s.
+#'
+#' By default, [`as_graph()`] tries to
+#' * apply [`gunion()`] to `x` if it is a `list`, which recursively applies [`as_graph()`] to all list elements first
+#' * create a [`Graph`] with only one element if `x` is a [`PipeOp`] or can be converted to one using [`as_pipeop()`].
+#'
+#' @param x (`any`) \cr
+#'   Object to convert.
+#' @param clone (`logical(1)`) \cr
+#'   Whether to return a (deep copied) clone if `x` is a Graph.
 #' @return [`Graph`] `x` or a deep clone of it.
 #' @family Graph operators
 #' @export
-assert_graph = function(x, coerce = FALSE, deep_copy = FALSE) {
-  assert_flag(coerce)
-  assert_flag(deep_copy)
+as_graph = function(x, clone = FALSE) {
+  UseMethod("as_graph")
+}
 
-  if (coerce && inherits(x, "PipeOp")) {
-    x = Graph$new()$add_pipeop(x)
-    deep_copy = FALSE # add_pipeop already copies
-  }
-  assert_r6(x, "Graph")
-  if (deep_copy) {
+#' @export
+as_graph.default = function(x, clone = FALSE) {
+  x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically for convertability
+  if (clone) {
     x = x$clone(deep = TRUE)
   }
+  x
+}
+
+#' @export
+as_graph.list = function(x, clone = FALSE) {
+  gunion(x)  # gunion itself will convert individual members of x
+}
+
+#' @export
+as_graph.Graph = function(x, clone = FALSE) {
+  if (clone) {
+    x = x$clone(deep = TRUE)
+  }
+  x
+}
+
+#' @title Assertion for mlr3pipeline PipeOp
+#'
+#' @description
+#' Function that checks that a given object is a `PipeOp` and
+#' throws an error if not.
+#' @param x (`any`) \cr
+#'   Object to check.
+#' @return [`PipeOp`] `invisible(x)`
+#' @family Graph operators
+#' @export
+assert_pipeop = function(x) {
+  assert_r6(x, "PipeOp")
   invisible(x)
 }
+
+#' @title Conversion to mlr3pipeline PipeOp
+#'
+#' @description
+#' The argument is turned into a [`PipeOp`]
+#' if possible.
+#' If `clone` is `TRUE`, a deep copy is made
+#' if the incoming object is a [`PipeOp`] to ensure the resulting
+#' object is a different reference from the incoming object.
+#'
+#' [`as_pipeop()`] is an S3 method and can therefore be implemented by other packages
+#' that may add objects that can naturally be converted to [`PipeOp`]s. Objects that
+#' can be converted are for example [`Learner`][mlr3::Learner] (using [`PipeOpLearner`]) or
+#' [`Filter`][mlr3filters::Filter] (using [`PipeOpFilter`]).
+#'
+#' @param x (`any`) \cr
+#'   Object to convert.
+#' @param clone (`logical(1)`) \cr
+#'   Whether to return a (deep copied) clone if `x` is a PipeOp.
+#' @return [`PipeOp`] `x` or a deep clone of it.
+#' @family Graph operators
+#' @export
+as_pipeop = function(x, clone = FALSE) {
+  UseMethod("as_pipeop")
+}
+
+#' @export
+as_pipeop.default = function(x, clone = FALSE) {
+  stopf("%s can not be converted to PipeOp", deparse(substitute(x))[1])
+}
+
+#' @export
+as_pipeop.PipeOp = function(x, clone = FALSE) {
+  if (clone) {
+    x = x$clone(deep = TRUE)
+  }
+  x
+}
+
+#' @export
+as_pipeop.Learner = function(x, clone = FALSE) {
+  PipeOpLearner$new(x)
+}
+
+#' @export
+as_pipeop.Filter = function(x, clone = FALSE) {
+  PipeOpFilter$new(x)
+}
+

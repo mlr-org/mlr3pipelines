@@ -7,12 +7,27 @@
 add_class_hierarchy_cache(hierarchy)
 }
 \arguments{
-\item{hierarchy}{\code{character(1)} the class hieararchy to add}
+\item{hierarchy}{\code{character} the class hierarchy to add; should
+correspond to the \code{class()} of the lowest object in the hierarchy.}
+}
+\value{
+\code{NULL}
 }
 \description{
-Add a class hierarchy to the class hierarchy cache.
+Add a class hierarchy to the class hierarchy cache. This is necessary
+whenever an S3 class's class hierarchy is important when inferring
+compatibility between types.
+}
+\examples{
+# This lets mlr3pipelines handle "data.table" as "data.frame".
+# This is an example and not necessary, because mlr3pipelines adds it by default.
+
+add_class_hierarchy_cache(c("data.table", "data.frame"))
 }
 \seealso{
-Other class hierarchy operations: \code{\link{reset_class_hierarchy_cache}}
+Other class hierarchy operations: 
+\code{\link{register_autoconvert_function}()},
+\code{\link{reset_autoconvert_register}()},
+\code{\link{reset_class_hierarchy_cache}()}
 }
 \concept{class hierarchy operations}

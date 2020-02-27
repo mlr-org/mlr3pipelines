@@ -3,7 +3,7 @@
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
-#' Base class for handling most "postprocessing" operations on predictions.
+#' Abstract base class for handling most 'postprocessing' operations on predictions.
 #' These are operations that have exactly one prediction object as input and one
 #' prediction object as output.
 #'
@@ -11,10 +11,36 @@
 #' input and should return that `Prediction`. The `Prediction` should, if possible, be
 #' manipulated in-place, and should not be cloned.
 #'
-#' @section Methods:
+#' @section Construction:
+#' ```
 #' * `PipeOpPredPostproc$new(id, param_set = ParamSet$new())` \cr
 #'   (`character(1)`, `ParamSet`, `logical(1)`) -> `self` \cr
-#'   Constructor.
+#' ```
+#' * `id` :: `character(1)`\cr
+#'   Identifier of resulting object.
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet] | `list` of `expression`\cr
+#'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
+#'   If this is a [`ParamSet`][paradox::ParamSet], it is used as the [`PipeOp`]'s [`ParamSet`][paradox::ParamSet]
+#'   directly. Otherwise it must be a `list` of expressions e.g. created by `alist()` that evaluate to [`ParamSet`][paradox::ParamSet]s.
+#'   These [`ParamSet`][paradox::ParamSet] are combined using a [`ParamSetCollection`][paradox::ParamSetCollection].
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Inputs are of type [`Task`] during train and predict.
+#' Outputs are `NULL` during train and [`Prediction`] during predict.
+#'
+#' @section State:
+#' The `$state` is a named `list` with elements
+#' * `thresholds` :: `character` learned thresholds
+#'
+#' @section Parameters:
+#'  Parameters inherited by [`PipeOp`]
+#'
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOp`].
+#'
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export

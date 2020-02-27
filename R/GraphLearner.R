@@ -10,46 +10,70 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#'
+#' Note the `predict_type` of a [`GraphLearner`] does currently not track the `predict_type`
+#' of any [`Learner`][mlr3::Learner] encapsulated within the [`Graph`]. Therefore, when requesting
+#' e.g. `"prob"` predictions, the `predict_type` of *both* the encapsulated [`Learner`][mlr3::Learner]
+#' and the wrapping [`GraphLearner`] need to be set to `"prob"`.
+#' @family Learners
 #' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
-    initialize = function(graph, task_type = "classif", id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]) {
+    initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, predict_type = NULL) {
 
-      # Please don't `assert_r6(graph, "Graph")` here, we have assert_graph(coerce = TRUE) for that, graph can be a PipeOp too
-      assert_choice(task_type, c("classif", "regr"))
-      # FIXME: drop task_type and allow all task types, as soon as mlr3 allows that
-      assert_subset(task_type, mlr_reflections$task_types)
-      graph = assert_graph(graph, coerce = TRUE, deep_copy = TRUE)
+      graph = as_graph(graph, clone = TRUE)
       self$graph = graph
       output = graph$output
       if (nrow(output) != 1) {
-        stop("'graph' has more than one output channel")
+        stop("'graph' must have exactly one output channel")
       }
       if (!are_types_compatible(output$predict, "Prediction")) {
         stop("'graph' output type not 'Prediction' (or compatible with it)")
       }
+
+      if (is.null(task_type)) {
+        class_table = mlr_reflections$task_types
+        input = graph$input
+        inferred = c(
+          match(c(output$train, output$predict), class_table$prediction),
+          match(c(input$train, input$predict), class_table$task))
+        inferred = unique(class_table$type[na.omit(inferred)])
+        if (length(inferred) > 1) {
+          stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(inferred))
+        }
+        task_type = c(inferred, "classif")[1]
+      }
+      assert_subset(task_type, mlr_reflections$task_types$type)
+
+      if (is.null(predict_type)) {
+        predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
+      }
+
+      assert_subset(predict_type, names(mlr_reflections$learner_predict_types[[task_type]]))
+
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = mlr_reflections$learner_properties[[task_type]],
-        param_vals = param_vals)
+        properties = mlr_reflections$learner_properties[[task_type]])
       private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
     },
     train_internal = function(task) {
+      on.exit({self$graph$state = NULL})
       self$graph$train(task)
-      self$graph$state
+      state = self$graph$state
+      state
     },
     predict_internal = function(task) {
+      on.exit({self$graph$state = NULL})
       self$graph$state = self$model
-      self$graph$param_set$values = self$param_set$values
       prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
-      prediction$data[self$predict_type]
+      prediction[[1]]
     }
   ),
   active = list(
@@ -70,8 +94,19 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       self$graph$param_set
     }
+  ),
+  private = list(
+    deep_clone = function(name, value) {
+      # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
+      if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
+        return(value$clone(deep = TRUE))
+      }
+      value
+    }
   )
 )
 
-# FIXME This could work if mlr-org/mlr3#177 were addressed
-# mlr_learners$add("graph", GraphLearner)
+#' @export
+as_learner.Graph = function(x, clone = FALSE) {
+  GraphLearner$new(x)
+}

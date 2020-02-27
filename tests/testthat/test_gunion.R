@@ -12,3 +12,40 @@ test_that("gunion", {
 test_that("empty gunion", {
   expect_equal(gunion(list()), Graph$new())
 })
+
+test_that("named gunion", {
+
+  expect_equal(
+    touch(gunion(list(a = po("scale"), b = po("pca"), po("subsample")))),
+    touch(Graph$new()$
+      add_pipeop(PipeOpScale$new(id = "a.scale"))$
+      add_pipeop(PipeOpPCA$new(id = "b.pca"))$
+      add_pipeop(PipeOpSubsample$new()))
+  )
+
+  expect_equal(
+    touch(gunion(list(
+      a = po("scale"),
+      b = po("subsample") %>>% po("pca"),
+      po("subsample"),
+      z = gunion(list(po("pca"), po("scale"))) %>>% po("featureunion"))) %>>%
+      PipeOpFeatureUnion$new(4)),
+    touch(Graph$new()$
+      add_pipeop(PipeOpScale$new(id = "a.scale"))$
+      add_pipeop(PipeOpSubsample$new(id = "b.subsample"))$
+      add_pipeop(PipeOpPCA$new(id = "b.pca"))$
+      add_edge("b.subsample", "b.pca")$
+      add_pipeop(PipeOpSubsample$new())$
+      add_pipeop(PipeOpPCA$new(id = "z.pca"))$
+      add_pipeop(PipeOpScale$new(id = "z.scale"))$
+      add_pipeop(PipeOpFeatureUnion$new(id = "z.featureunion"))$
+      add_edge("z.pca", "z.featureunion")$
+      add_edge("z.scale", "z.featureunion")$
+      add_pipeop(PipeOpFeatureUnion$new(innum = 4))$
+      add_edge("a.scale", "featureunion", dst_channel = "input1")$
+      add_edge("b.pca", "featureunion", dst_channel = "input2")$
+      add_edge("subsample", "featureunion", dst_channel = "input3")$
+      add_edge("z.featureunion", "featureunion", dst_channel = "input4"))
+  )
+
+})

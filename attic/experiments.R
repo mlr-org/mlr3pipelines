@@ -8,6 +8,7 @@ options(error=recover)
 options(error=dump.frames)
 data.table::setDTthreads(0)
 data.table::setDTthreads(1)
+Sys.setenv(NOT_CRAN = "true")
 
 devtools::document("mlr3pipelines")
 
@@ -18,13 +19,19 @@ devtools::load_all("mlr3pipelines")
 tools::buildVignettes(dir = "mlr3pipelines")
 
 
-testthat::test_package("mlr3pipelines")
+system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
+devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "backup")
+testthat::test_package("mlr3pipelines", filter = "classbalancing")
+testthat::test_package("mlr3pipelines", filter = "encode")
 
-testthat::test_package("mlr3pipelines", filter = "typecheck")
+testthat::test_package("mlr3pipelines", filter = "removeconstants")
+testthat::test_package("mlr3pipelines", filter = "conversion")
 
-testthat::test_package("mlr3pipelines", filter = "dictionary")
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "pipeop_impute")
+
+
+testthat::test_package("mlr3pipelines", filter = "apply")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
@@ -33,6 +40,28 @@ testthat::test_package("mlr3pipelines", filter = "^_[a-m].*")
 testthat::test_package("mlr3pipelines", filter = "^_[n-s].*")
 testthat::test_package("mlr3pipelines", filter = "^_[^a-s].*")
 
+
+pofi = PipeOpFixFactors$new()
+
+
+poe = PipeOpEncodeImpact$new()
+
+t2 = po("histbin")$train(list(tsk("iris")))[[1]]
+
+poe$get_state(tsk("boston_housing"))
+poe$get_state(t2)
+poe$param_set$values$impute_zero = FALSE
+
+
+poe$train(list(tsk("boston_housing")))[[1]]$data()
+
+poe$predict(list(tsk("boston_housing")$clone()$filter(1)))[[1]]$data()
+
+poe$train(list(tsk("boston_housing")))[[1]]$data()
+poe$train(list(t2))[[1]]$data()
+poe$predict(list(t2$clone()$filter(1)))[[1]]$data()
+
+poe$param_set$values$smoothing = 1e10
 
 pom = PipeOpMutate$new()
 
@@ -73,12 +102,17 @@ str(g$train(task)[[1]]$data())
 str(task$data())
 
 g = PipeOpScale$new() %>>% PipeOpSelect$new()
-str(g$train(task)[[1]]$data())
+
+
+g$train(task)[[1]]$data()
 g$param_set$values$select.invert = TRUE
-str(g$train(task)[[1]]$data())
+g$train(task)[[1]]$data()
 g$param_set$values$select.invert = FALSE
 g$param_set$values$select.selector = selector_grep("^Petal\\.")
-str(g$train(task)[[1]]$data())
+g$train(task)[[1]]$data()
+g$param_set$values$select.invert = TRUE
+g$train(task)[[1]]$data()
+
 
 g = PipeOpScale$new() %>>% PipeOpPCA$new()
 
@@ -173,7 +207,7 @@ opchoice = PipeOpChoice$new(3)
 opchoicenamed = PipeOpChoice$new(c("opscale", "oppca", "opnop"))
 opscale = PipeOpScale$new()
 oppca = PipeOpPCA$new()
-opnop = PipeOpNULL$new()
+opnop = PipeOpNOP$new()
 opunchoice = PipeOpUnchoice$new(3)
 
 graph1 = opchoice %>>% gunion(opscale, oppca, opnop) %>>% opunchoice
@@ -284,7 +318,7 @@ bpo3 = BasicPO$new("testid3")
 
 (bpo %>>% bpo2 %>>% bpo3)$plot()
 
-pon = PipeOpNULL$new()
+pon = PipeOpNOP$new()
 
 pon$train(list("test"))
 
@@ -465,3 +499,308 @@ g = PipeOpPCA() %>>% PipeOpLearner(lrn_rp)
 g1 = tune(g)
 g1 >> g
 
+
+
+
+)
+
+
+
+
+dfa = data.frame( a = 1:5, b = 2:6)
+dfb = data.frame( x = c("a", "b", "c", "x", "y"), y = rnorm(5))
+dba = as_data_backend(dfa)
+dbb = as_data_backend(dfb)
+dbx = DataBackendCbind$new(dba, dbb, colnames(dfa), colnames(dfb))
+
+dbx
+
+dbx$data(cols = c("a", "x"), rows = c(3, 4))
+
+
+dbi = as_data_backend(iris)
+
+task_regr_iris = TaskRegr$new(id = "iris.regr", backend = dbi, target = "Sepal.Length")
+
+task_regr_iris$filter(1:10)
+
+task_regr_iris$data()
+
+task_regr_iris$select(c("Petal.Length", "Species"))
+
+
+task_regr_iris$data()
+
+
+task_regr_iris_2 = TaskRegr$new(id = "iris.regr", backend = dbi, target = "Sepal.Length")
+
+task_regr_iris_2$select(c("Petal.Length", "Species"))
+
+task_regr_iris$data()
+task_regr_iris_2$data()
+
+task_regr_iris$rbind(task_regr_iris_2$data())
+
+task_regr_iris$data()
+
+mlr_tasks$get("iris")
+
+
+lrn = mlr_learners$get("classif.rpart")
+
+lrn$train(task)
+
+lrn$data$model
+
+
+lrn$predict(task)
+
+pred
+
+library("mlr3learners")
+
+
+lrnsvm = mlr_learners$get("classif.svm")
+
+lrnsvm$train(task)
+
+lrnsvm$predict(task)
+
+
+pred$score(MeasureClassifACC$new())
+
+cv = mlr_resamplings$get("cv")
+
+resres = resample(task, lrn, cv)
+
+resres$aggregate(MeasureClassifACC$new())
+
+
+resres = resample(task, lrnsvm , cv)
+resres$aggregate(MeasureClassifACC$new())
+
+design = data.table::data.table(
+  task = mlr_tasks$mget(c("iris", "sonar")),
+  learner = mlr_learners$mget(c("classif.featureless", "classif.rpart")),
+  resampling = mlr_resamplings$mget(c("cv3", "holdout"))
+)
+design$resampling = Map(
+  function(task, resampling) resampling$clone()$instantiate(task),
+  task = design$task, resampling = design$resampling
+)
+
+
+design
+
+bmr = benchmark(design)
+
+bmr$aggregate()
+
+names(bmr)
+
+
+mlr_resamplings$get("holdout")
+mlr_measures$get("classif.acc")
+mlr_tasks$get("iris")
+mlr_learners$get("classif.rpart")
+
+mlr_control
+
+rpart = LearnerClassifRpart$new()
+
+rpart$param_set
+
+rpart$param_set$values$cp = 0.4
+
+rpart$param_set$values$cp = 1.1
+
+
+lrn$param_set$values$cp = 0.2
+resample(task, lrn, cv)$aggregate()
+
+scaling = PipeOpScale$new()
+
+transformed_data = scaling$train(list(task))[[1]]
+
+plot(transformed_data$data()$Petal.Length)
+
+
+
+scaling$state
+
+task2 =task$clone(deep=TRUE)
+
+
+task2$filter(1)
+
+task2$data()
+
+scaling$predict(list(task2))[[1]]$data()
+
+scaling$train
+scaling$predict
+scaling$state
+scaling$param_set$values$center = FALSE
+
+transformed_data = scaling$train(list(task))[[1]]
+
+transformed_data$data()
+
+scaling$state
+
+
+
+
+
+PipeOp
+
+
+Graph
+
+
+
+
+graph = PipeOpScale$new() %>>% PipeOpFilter$new(mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = .5))
+
+graph$pipeops
+
+graph$edges
+
+graph$plot()
+
+task_out = graph$train(task)[[1]]
+task_out$data()
+
+graph$predict(task)[[1]]$data()
+
+graph$plot()
+
+graph$add_pipeop(PipeOpPCA$new())
+
+graph$plot()
+
+graph$ids()
+graph$edges
+
+graph$add_edge("variance", "pca")
+
+graph$plot()
+
+graph$edges
+
+
+graph$add_pipeop(PipeOpCopy$new(3))
+
+graph$plot()
+
+graph$add_edge("copy", "scale", src_channel = "output2")
+
+graph$plot()
+
+graph$add_pipeop(PipeOpApply$new())
+
+graph$plot()
+
+
+graph$add_edge("copy", src_channel = "output1", "apply")
+
+graph$plot()
+
+graph$add_pipeop(PipeOpFeatureUnion$new(3))
+
+graph$plot()
+
+graph$add_edge("copy", "featureunion", src_channel = "output3", dst_channel = "input1")
+
+graph$plot()
+
+
+graph$add_edge("apply", "featureunion", dst_channel = "input2")
+
+graph$add_edge("pca", "featureunion", dst_channel = "input3")
+
+graph$param_set
+graph$param_set$values$apply.applicator = as.numeric
+
+graph$train(task)
+
+g1 = Graph$new()$add_pipeop(PipeOpCopy$new(2))
+g2 = Graph$new()$add_pipeop(PipeOpPCA$new())$add_pipeop(PipeOpScale$new())
+
+
+g1$output
+
+g2$input
+
+gsum = g1 %>>% g2 %>>% PipeOpFeatureUnion$new(2)
+gsum$plot()
+gsum$train(task)[[1]]$data()
+
+gsum$predict(task)[[1]]$data()
+
+
+ghalf = g1 %>>% g2
+
+str(ghalf$train(task))
+
+gsum = PipeOpCopy$new(2) %>>%
+  gunion(list(PipeOpPCA$new(), PipeOpScale$new())) %>>%
+  PipeOpFeatureUnion$new(2)
+gsum$plot()
+
+gsum$state
+
+
+gsum$add_edge("featureunion", "copy")
+
+PipeOpPCA$new()$train(list(task))
+
+por = PipeOpLearner$new(mlr_learners$get("classif.rpart"))
+
+glrn = gsum %>>% por
+
+glrn$plot()
+
+glrn$train(task)
+
+glrn$predict(task)
+
+llrn = GraphLearner$new(glrn)
+glrn$plot()
+llrn
+
+resample(task, llrn, cv)
+
+llrn$param_set
+task$select
+
+
+gr = PipeOpBranch$new(2) %>>% gunion(list(PipeOpPCA$new(), PipeOpNOP$new())) %>>% PipeOpUnbranch$new(2)
+
+gr$plot()
+
+gr$param_set$values$branch.selection = 1
+
+gr$train(task)[[1]]$data()
+
+
+PipeOpScale$new()$input
+PipeOpScale$new()$output
+
+PipeOpLearner$new(mlr_learners$get("classif.rpart"))$output
+
+PipeOpLearner$new(mlr_learners$get("classif.rpart")) %>>% PipeOpModelAvg$new(1)
+
+PipeOpScale$new() %>>% PipeOpModelAvg$new(1)
+
+
+
+task = mlr_tasks$get("iris")$
+  set_col_role("Sepal.Length", character(0))$
+  cbind(data.table(x = 1:150))$
+  set_col_role("Sepal.Length.xxx", "feature")
+
+
+task$data()
+
+cbind(mlr_tasks$get("iris")$data(), data.table(x = 1:150))

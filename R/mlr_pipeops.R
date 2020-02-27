@@ -1,25 +1,49 @@
 #' @title Dictionary of PipeOps
 #'
-#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`]
+#' @usage NULL
+#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`].
+#'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
-#' Each `PipeOp` has an associated help page, see `mlr_pipeop_[id]`.
+#' Each `PipeOp` has an associated help page, see `mlr_pipeops_[id]`.
 #'
-#' @section Usage:
+#' @section Fields:
+#' Fields inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
+#' * `metainf` :: `environment`\cr
+#'   Environment that stores the `metainf` argument of the `$add()` method.
+#'   Only for internal use.
 #'
-#' See [`mlr3misc::Dictionary`].
+#' @section Methods:
+#' Methods inherited from [`Dictionary`][mlr3misc::Dictionary], as well as:
+#' * `add(key, value, metainf = NULL)`\cr
+#'   (`character(1)`, `R6ClassGenerator`, `NULL` | `list`)\cr
+#'   Adds constructor `value` to the dictionary with key `key`, potentially
+#'   overwriting a previously stored item. If `metainf` is not `NULL` (the default),
+#'   it must be a `list` of arguments that will be given to the `value` constructor (i.e. `value$new()`)
+#'   when it needs to be constructed for `as.data.table` [`PipeOp`] listing.
 #'
 #' @section S3 methods:
 #' * `as.data.table(dict)`\cr
-#'   [Dictionary] -> [data.table::data.table()]\cr
-#'   Returns a `data.table()` with fields "key", "packages", and connectors.
+#'   [`Dictionary`][mlr3misc::Dictionary] -> [`data.table::data.table`]\cr
+#'   Returns a `data.table` with columns `key` (`character`), `packages` (`character`),
+#'   `input.num` (`integer`), `output.num` (`integer`), `input.type.train` (`character`),
+#'   `input.type.predict` (`character`), `output.type.train` (`character`), `output.type.predict` (`character`).
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
-#' @name mlr_pipeops
-NULL
-
-DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
+#' @family Dictionaries
+#' @export
+#' @examples
+#' library("mlr3")
+#'
+#' mlr_pipeops$get("learner", lrn("classif.rpart"))
+#'
+#' # equivalent:
+#' po("learner", learner = lrn("classif.rpart"))
+#'
+#' # all PipeOps currently in the dictionary:
+#' as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
+mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(
     metainf = new.env(parent = emptyenv()),
@@ -38,10 +62,7 @@ DictionaryPipeOp = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
       obj$value$new(...)
     }
   )
-)
-
-#' @export
-mlr_pipeops = NULL
+)$new()
 
 #' @export
 as.data.table.DictionaryPipeOp = function(x, ...) {
@@ -55,7 +76,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
     } else {
       l1 = l2 = x$get(key)
     }
-    if (nrow(l1$input) == nrow(l2$input)) {
+    if (nrow(l1$input) == nrow(l2$input) && "..." %nin% l1$input$name) {
       innum = nrow(l1$input)
     } else {
       innum = NA
@@ -77,29 +98,3 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
     )
   }), "key")[]
 }
-
-
-# We would like to have the pipeops in the "mlr_pipeops" Dictionary, but adding
-# them at build time is apparently not a good idea. On the other hand we would
-# like to register pipeops near their deefinition to prevent confusing
-# dependencies throughout the codebase. Therefore we register the pipeops using
-# "register_pipeop()" below their definition and call
-# "publish_registered_pipeops()" in .onLoad.
-mlr_pipeop_register = new.env(parent = emptyenv())
-
-# nocov start
-register_pipeop = function(key, value, metainf) {
-  m = match.call(expand.dots = FALSE)
-  mlr_pipeop_register[[key]] = m
-}
-
-publish_registered_pipeops = function() {
-  mlr_pipeops <<- DictionaryPipeOp$new()
-
-  for (registercall in as.list(mlr_pipeop_register)) {
-    registercall[[1]] = quote(mlr_pipeops$add)
-    eval(registercall, envir = parent.env(environment()))
-  }
-  rm("mlr_pipeop_register", envir = parent.env(environment()))
-}
-# nocov end
