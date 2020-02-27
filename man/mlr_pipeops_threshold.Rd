@@ -16,14 +16,15 @@ The incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} needs to
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"classifavg"}.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
+Default \code{numeric(0)}.
 }
 }
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOp}}. Instead of a \code{\link[mlr3:Prediction]{Prediction}}, a \code{\link[mlr3:PredictionClassif]{PredictionClassif}}
-is used as input and output during prediction.
+Input and output channels are inherited from \code{\link{PipeOp}}. A \code{\link[mlr3:PredictionClassif]{PredictionClassif}}
+is required as input and returned as output during prediction.
 }
 
 \section{State}{
@@ -36,8 +37,8 @@ The \verb{$state} is left empty (\code{list()}).
 \itemize{
 \item \code{thresholds} :: \code{numeric}\cr
 A numeric vector of thresholds for the different class levels.
-For binary tasks, this can be a single number, else a vector
-with the same length as number of class levels is expected.
+For binary tasks, this can be a single number, else a vector.
+Has to have the same length as number of class levels.
 Defaults to \code{numeric(0)}, i.e. no threshold adjustment is performed.
 }
 }
