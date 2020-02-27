@@ -62,6 +62,7 @@ Suggests:
     rpart,
     testthat,
     GenSA,
+    nloptr,
     visNetwork,
     bestNormalize,
     fastICA,
