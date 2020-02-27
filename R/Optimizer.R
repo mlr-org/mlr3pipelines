@@ -1,3 +1,4 @@
+#' @export
 Optimizer = R6Class("Optimizer",
   public = list(
     measure = NULL,
@@ -40,6 +41,7 @@ Optimizer = R6Class("Optimizer",
   )
 )
 
+#' @export
 OptimizerNloptr = R6Class("OptimizerNloptr",
   inherit = Optimizer,
   public = list(
@@ -80,6 +82,7 @@ OptimizerNloptr = R6Class("OptimizerNloptr",
   )
 )
 
+#' @export
 OptimizerGenSA = R6Class("OptimizerGenSA",
   inherit = Optimizer,
   public = list(

@@ -9,8 +9,9 @@
 #' Learner's `predict_type` `"prob"` is required.
 #' Thresholds for each learner are optimized using (GenSA)[GenSA::GenSA].
 #' Returns a single [`PredictionClassif`].
-#' As a default, optimizes [`MeasureClassifMMCE`].
-#' Used for classification [`Prediction`]s.
+#' As a default, optimizes the miss-classification error [`MeasureClassif`].
+#' This PipeOp should be used in conjunction with [`PipeOpLearnerCV`] in order to
+#' optimize thresholds of predictions.
 #'
 #' @section Construction:
 #' ```
@@ -40,7 +41,7 @@
 #' @section Internals:
 #' Uses the provided optimizer in order to
 #' @section Methods:
-#' Only methods inherited from [`PipeOpPredPostProc`].
+#' Only methods inherited from [`PipeOpPredPostproc`].
 #'
 #' @family PipeOps
 #' @include PipeOpPredPostproc.R

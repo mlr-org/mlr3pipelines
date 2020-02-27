@@ -10,8 +10,9 @@ Tunes optimal probability thresholds over different \code{\link{PredictionClassi
 Learner's \code{predict_type} \code{"prob"} is required.
 Thresholds for each learner are optimized using (GenSA)\link[GenSA:GenSA]{GenSA::GenSA}.
 Returns a single \code{\link{PredictionClassif}}.
-As a default, optimizes \code{\link{MeasureClassifMMCE}}.
-Used for classification \code{\link{Prediction}}s.
+As a default, optimizes the miss-classification error \code{\link{MeasureClassif}}.
+This PipeOp should be used in conjunction with \code{\link{PipeOpLearnerCV}} in order to
+optimize thresholds of predictions.
 }
 \section{Construction}{
 \preformatted{* `PipeOpTuneThreshold$new(id, param_vals = list)` \\cr
@@ -58,7 +59,7 @@ Uses the provided optimizer in order to
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOpPredPostProc}}.
+Only methods inherited from \code{\link{PipeOpPredPostproc}}.
 }
 
 \seealso{

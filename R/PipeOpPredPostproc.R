@@ -50,7 +50,7 @@ PipeOpPredPostproc = R6Class("PipeOpPredPostproc",
   public = list(
     threshold = NULL,
     measure = NULL,
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
+    initialize = function(id = "predpostproc", param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
@@ -65,6 +65,6 @@ PipeOpPredPostproc = R6Class("PipeOpPredPostproc",
 )
 
 #' @include mlr_pipeops.R
-mlr_pipeops$add("PipeOpPredPostproc", PipeOpPredPostproc)
+mlr_pipeops$add("predpostproc", PipeOpPredPostproc)
 
 
