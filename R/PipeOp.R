@@ -38,7 +38,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0))
+#' PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -58,6 +58,9 @@
 #' * packages :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `$train` and `$predict` methods. See `$packages` slot.
 #'   Default is `character(0)`.
+#' * `tags` ::`character`\cr
+#'   A set of tags associated with the `PipeOp`. Tags describe a PipeOp's purpose.
+#'   Can be used to filter `as.data.table(mlr_pipeops)`.
 #'
 #' @section Internals:
 #' [`PipeOp`] is an abstract class with abstract functions `$train_internal()` and `$predict_internal()`. To create a functional
@@ -100,6 +103,10 @@
 #'   Number of output channels. This equals `nrow($output)`.
 #' * `is_trained` :: `logical(1)` \cr
 #'   Indicate whether the [`PipeOp`] was already trained and can therefore be used for prediction.
+#' * `tags` ::`character`\cr
+#'   A set of tags associated with the `PipeOp`. Tags describe a PipeOp's purpose.
+#'   Can be used to filter `as.data.table(mlr_pipeops)`.
+#'   PipeOp tags are inherited and child classes can introduce additional tags.
 #' * `hash` :: `character(1)` \cr
 #'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set`
 #'   (and therefore also `$param_set$values`). If a

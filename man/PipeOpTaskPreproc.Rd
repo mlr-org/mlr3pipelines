@@ -51,6 +51,9 @@ Default is \code{character(0)}.
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input and will be returned as output. This
 should generally be a \code{character(1)} identifying a type of \code{\link[mlr3:Task]{Task}}, e.g. \code{"Task"}, \code{"TaskClassif"} or
 \code{"TaskRegr"} (or another subclass introduced by other packages). Default is \code{"Task"}.
+\item \code{feature_types} :: \code{character}\cr
+Feature types affected by the \code{PipeOp}. See \verb{$select_cols()} for more information.
+Defaults to all available feature types.
 }
 }
 
@@ -81,6 +84,8 @@ the \code{\link[mlr3:Task]{Task}} resulting from the prediction operation has th
 \item \code{dt_columns} :: \code{character}\cr
 Names of features selected by the \verb{$select_cols()} call during training. This is only present if the \verb{$train_dt()} functionality is used,
 and not present if the \verb{$train_task()} function is overloaded instead.
+\item \code{feature_types} :: \code{character}\cr
+Feature types affected by the \code{PipeOp}. See \verb{$select_cols()} for more information.
 }
 }
 
