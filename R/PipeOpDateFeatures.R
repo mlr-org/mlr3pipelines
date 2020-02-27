@@ -6,10 +6,11 @@
 #'
 #' @description
 #' Based on `POSIXct` columns of the data, a set of date related features is computed and added to
-#' the feature set of the output task. If no `POSIXct` column is found, the original task is returned
-#' unaltered. This functionality is based on the `add_datepart()` and `add_cyclic_datepart()`
-#' functions from the `fastai` library. If operation on only particular `POSIXct` columns is
-#' requested, use the `affect_columns` parameter inherited from [`PipeOpTaskPreprocSimple`].
+#' the feature set of the output task. If no `POSIXct` column is found, the original task is
+#' returned unaltered. This functionality is based on the `add_datepart()` and
+#' `add_cyclic_datepart()` functions from the `fastai` library. If operation on only particular
+#' `POSIXct` columns is requested, use the `affect_columns` parameter inherited from
+#' [`PipeOpTaskPreprocSimple`].
 #'
 #' @section Construction:
 #' ```
@@ -64,13 +65,12 @@
 #' If `cyclic = TRUE`, cyclic features are computed for the features `"month"`, `"week_of_year"`,
 #' `"day_of_year"`, `"day_of_month"`, `"day_of_week"`, `"hour"`, `"minute"` and `"second"`. This
 #' means that for each feature `x`, two additional features are computed, namely the sine and cosine
-#' transformation of `2 * pi * x / max_x + 1` (here `max_x` is the largest possible value the
-#' feature could take on, assuming the lowest possible value is given by 0, e.g., for hours from 0
-#' to 23, this is 23; finally, to then get the total number of possible values `+ 1` is needed).
-#' This is useful to respect the cyclical nature of features such as seconds, i.e., second 21 and
-#' second 22 are one second apart, but so are second 60 and second 1 of the next minute. The
-#' transformation always assumes that `min_x = 0`, therefore prior shifting the values internally by
-#' minus one may occur if necessary.
+#' transformation of `2 * pi * x / max_x` (here `max_x` is the largest possible value the feature
+#' could take on `+ 1`, assuming the lowest possible value is given by 0, e.g., for hours from 0 to
+#' 23, this is 24). This is useful to respect the cyclical nature of features such as seconds, i.e.,
+#' second 21 and second 22 are one second apart, but so are second 60 and second 1 of the next
+#' minute. The transformation always assumes that `min_x = 0`, therefore prior shifting the values
+#' internally by minus one may occur if necessary.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
@@ -231,11 +231,9 @@ get_days_per_month = function(year, month) {
   } else {
     days_per_month = c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)
     if (is.na(year)) {
-      return(NA) # early exit if NA
+      return(NA) # early exit if year is NA
     }
-    if (is_leap_year(year) && month == 2L) {
-      return(29L) # early exit if leap year and February
-    }
+    if (is_leap_year(year)) days_per_month[2L] = 29L
     days_per_month[month]
   }
 }

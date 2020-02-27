@@ -7,10 +7,11 @@
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
 Based on \code{POSIXct} columns of the data, a set of date related features is computed and added to
-the feature set of the output task. If no \code{POSIXct} column is found, the original task is returned
-unaltered. This functionality is based on the \code{add_datepart()} and \code{add_cyclic_datepart()}
-functions from the \code{fastai} library. If operation on only particular \code{POSIXct} columns is
-requested, use the \code{affect_columns} parameter inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+the feature set of the output task. If no \code{POSIXct} column is found, the original task is
+returned unaltered. This functionality is based on the \code{add_datepart()} and
+\code{add_cyclic_datepart()} functions from the \code{fastai} library. If operation on only particular
+\code{POSIXct} columns is requested, use the \code{affect_columns} parameter inherited from
+\code{\link{PipeOpTaskPreprocSimple}}.
 }
 \section{Construction}{
 \preformatted{PipeOpDateFeatures$new(id = "datefeatures", param_vals = list())
@@ -76,13 +77,12 @@ Default TRUE.
 If \code{cyclic = TRUE}, cyclic features are computed for the features \code{"month"}, \code{"week_of_year"},
 \code{"day_of_year"}, \code{"day_of_month"}, \code{"day_of_week"}, \code{"hour"}, \code{"minute"} and \code{"second"}. This
 means that for each feature \code{x}, two additional features are computed, namely the sine and cosine
-transformation of \code{2 * pi * x / max_x + 1} (here \code{max_x} is the largest possible value the
-feature could take on, assuming the lowest possible value is given by 0, e.g., for hours from 0
-to 23, this is 23; finally, to then get the total number of possible values \code{+ 1} is needed).
-This is useful to respect the cyclical nature of features such as seconds, i.e., second 21 and
-second 22 are one second apart, but so are second 60 and second 1 of the next minute. The
-transformation always assumes that \code{min_x = 0}, therefore prior shifting the values internally by
-minus one may occur if necessary.
+transformation of \code{2 * pi * x / max_x} (here \code{max_x} is the largest possible value the feature
+could take on \code{+ 1}, assuming the lowest possible value is given by 0, e.g., for hours from 0 to
+23, this is 24). This is useful to respect the cyclical nature of features such as seconds, i.e.,
+second 21 and second 22 are one second apart, but so are second 60 and second 1 of the next
+minute. The transformation always assumes that \code{min_x = 0}, therefore prior shifting the values
+internally by minus one may occur if necessary.
 }
 
 \section{Methods}{
