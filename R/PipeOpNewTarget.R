@@ -121,5 +121,6 @@ convert_task = function(intask, new_type = NULL, new_target = NULL) {
   newtsk$set_col_role(new_target, "target")
   if (!all(intask$target_names == new_target))
     newtsk$set_col_role(intask$col_roles$target, "feature")
+  newtsk$droplevels()
   return(newtsk)
 }
