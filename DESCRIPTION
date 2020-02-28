@@ -57,7 +57,6 @@ Suggests:
     mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
-    nloptr,
     rmarkdown,
     rpart,
     testthat,

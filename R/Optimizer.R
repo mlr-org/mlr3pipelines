@@ -1,9 +1,48 @@
+#' @title Optimizer Base class
+#' @usage NULL
+#' @format Abstract [`R6Class`].
+#'
+#' @description
+#'   Abstract base class for Optimizers. Exposes a `$optimize` method
+#'   that can be used for optimization.
+#' @section Construction:
+#' ```
+#' Optimizer$new(param_set = ParamSet$new(), param_vals = list(), packages = character(0))
+#' ```
+#'
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet] | `list` of `expression`\cr
+#'   Parameter space description. This should be created by the subclass and given to `super$initialize()`.
+#'   If this is a [`ParamSet`][paradox::ParamSet], it is used as the [`PipeOp`]'s [`ParamSet`][paradox::ParamSet]
+#'   directly. Otherwise it must be a `list` of expressions e.g. created by `alist()` that evaluate to [`ParamSet`][paradox::ParamSet]s.
+#'   These [`ParamSet`][paradox::ParamSet] are combined using a [`ParamSetCollection`][paradox::ParamSetCollection].
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
+#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#' * packages :: `character`\cr
+#'   Set of all required packages for the [`PipeOp`]'s `$train` and `$predict` methods. See `$packages` slot.
+#'   Default is `character(0)`.
+#'
+#'@section Fields:
+#' * `packages` :: `character`\cr
+#'   Packages required for the [`Optimizer`]. Functions that are not in base R should still be called using `::`.
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
+#'   Parameters and parameter constraints. Parameter values that influence the functioning of `$optimize`.
+#'
+#' @section Methods:
+#' * `optimize(objfun, init_weights = NULL, ...)`\cr
+#'   (`function`, `numeric`, `any`) -> `numeric`\cr
+#'   Runs the optimization and returns optimal values.
+#'   `...` is passed on to the optimizer.
+#'   Some optimizers might require `init_weights`, the starting values for the optimization.
+#'
+#' @name Optimizer
+#' @family Optimizer
 #' @export
 Optimizer = R6Class("Optimizer",
   public = list(
     measure = NULL,
     packages = NULL,
-    initialize = function(param_vals = list(), param_set = ParamSet$new(), packages = character(0)) {
+    initialize = function(param_set = ParamSet$new(), param_vals = list(),  packages = character(0)) {
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
@@ -41,6 +80,32 @@ Optimizer = R6Class("Optimizer",
   )
 )
 
+#' @title Optimizer from nloptr
+#' @usage NULL
+#' @format Abstract [`R6Class`].
+#'
+#' @description
+#'   Non-linear optimization using `nloptr::nloptr`, called with parameters specified in
+#'   param_vals`.
+#'
+#' @section Construction:
+#' ```
+#' Optimizer$new(param_vals = list())
+#' ```
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
+#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'
+#'@section Fields:
+#' * `packages` :: `character`\cr
+#'   Packages required for the [`Optimizer`]. Functions that are not in base R should still be called using `::`.
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
+#'   Parameters and parameter constraints. Parameter values that influence the functioning of `$optimize`.
+#'
+#' @section Methods:
+#' * `optimize`, see [`Optimizer`] for details.
+#' @name OptimizerNloptr
+#' @family Optimizer
 #' @export
 OptimizerNloptr = R6Class("OptimizerNloptr",
   inherit = Optimizer,
@@ -82,6 +147,32 @@ OptimizerNloptr = R6Class("OptimizerNloptr",
   )
 )
 
+#' @title Optimizer from GenSA
+#' @usage NULL
+#' @format Abstract [`R6Class`].
+#'
+#' @description
+#'   Optimizer GenSA, internally calls `GenSA::GenSA` with parameters specified in
+#'   `param_vals`.
+#'
+#' @section Construction:
+#' ```
+#' Optimizer$new(param_vals = list())
+#' ```
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
+#'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
+#'
+#'@section Fields:
+#' * `packages` :: `character`\cr
+#'   Packages required for the [`Optimizer`]. Functions that are not in base R should still be called using `::`.
+#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
+#'   Parameters and parameter constraints. Parameter values that influence the functioning of `$optimize`.
+#'
+#' @section Methods:
+#' * `optimize`, see [`Optimizer`] for details.
+#' @name OptimizerGenSA
+#' @family Optimizer
 #' @export
 OptimizerGenSA = R6Class("OptimizerGenSA",
   inherit = Optimizer,
