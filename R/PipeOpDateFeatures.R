@@ -76,15 +76,15 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
 #'
 #' @examples
-#' library("mlr3")
-#' dat = iris
-#' set.seed(1)
-#' dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
-#'   size = 150L)
-#' task = TaskClassif$new("iris_date", backend = dat, target = "Species")
-#' pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
-#' pop$train(list(task))
-#' pop$state
+#'library("mlr3")
+#'dat = iris
+#'set.seed(1)
+#'dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
+#'  size = 150L)
+#'task = TaskClassif$new("iris_date", backend = dat, target = "Species")
+#'pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
+#'pop$train(list(task))
+#'pop$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
@@ -139,7 +139,7 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
 
       # if cyclic = TRUE for month, week_of_year, day_of_year, day_of_month, day_of_week, hour,
       # minute and second, two columns are additionally added, each consisting of their sine and
-      # cosine transformation of in general 2 * pi * x / max_x + 1 (x starting from 0)
+      # cosine transformation of in general 2 * pi * x / max_x (x starting from 0)
       if (self$param_set$values$cyclic && (length(cyclic_features) > 0L)) {
         for (date_var in date_vars) {
           dt[, paste0(date_var, ".", rep(cyclic_features, each = 2L), "_", c("sin", "cos")) :=
@@ -185,7 +185,7 @@ compute_date_features = function(dates, features) {
 }
 
 # helper function to compute cyclic date features of date features, i.e.,
-# sine and cosine transformations of 2 * pi * x / max_x + 1
+# sine and cosine transformations of 2 * pi * x / max_x
 compute_cyclic_date_features = function(date_features, features, date_var) {
   # drop the date_var-specific colnames here, this makes it easier in lapply
   column_names = colnames(date_features)
@@ -225,15 +225,6 @@ is_leap_year = function(year) {
 
 # helper function to get the number of days per month respecting leap years
 get_days_per_month = function(year, month) {
-  stopifnot(length(year) == length(month))
-  if (length(year) > 1L) {
-    mapply(get_days_per_month, year = year, month = month)
-  } else {
-    days_per_month = c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)
-    if (is.na(year)) {
-      return(NA) # early exit if year is NA
-    }
-    if (is_leap_year(year)) days_per_month[2L] = 29L
-    days_per_month[month]
-  }
+    c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)[month] +
+      ((month == 2L) & is_leap_year(year))
 }

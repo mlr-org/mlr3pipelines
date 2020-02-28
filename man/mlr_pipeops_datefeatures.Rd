@@ -95,7 +95,7 @@ library("mlr3")
 dat = iris
 set.seed(1)
 dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
-  size = 150L)
+ size = 150L)
 task = TaskClassif$new("iris_date", backend = dat, target = "Species")
 pop = po("datefeatures", param_vals = list(cyclic = FALSE, minute = FALSE, second = FALSE))
 pop$train(list(task))
