@@ -13,14 +13,14 @@
 #' PipeOpThreshold$new(id = "threshold", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, default `"classifavg"`.
+#'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
 #'   Default `numeric(0)`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOp`]. A [`PredictionClassif`][mlr3::PredictionClassif]
-#' is required as input and returned as output during prediction.
+#' During training, the input and output is `NULL`.
+#' A [`PredictionClassif`][mlr3::PredictionClassif] is required as input and returned as output during prediction.
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).
@@ -30,7 +30,8 @@
 #' A numeric vector of thresholds for the different class levels.
 #' For binary tasks, this can be a single number, else a vector.
 #' Has to have the same length as number of class levels.
-#' Defaults to `numeric(0)`, i.e. no threshold adjustment is performed.
+#' Defaults to `numeric(0)`, i.e. no threshold adjustment is performed,
+#' and the prediction is passed on unchanged.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -39,7 +40,6 @@
 #' Only methods inherited from [`PipeOp`].
 #' @family PipeOps
 #' @export
-#'
 #' @examples
 #' library("mlr3")
 #' t = tsk("german_credit")
@@ -50,10 +50,11 @@
 PipeOpThreshold = R6Class("PipeOpThreshold",
   inherit = PipeOp,
   public = list(
-    initialize = function(id = "threshold", param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
+    initialize = function(id = "threshold", param_vals = list()) {
+      param_set = ParamSet$new()
       param_set$add(ParamUty$new("thresholds", custom_check = check_numeric, tags = "predict"))
       param_set$values$thresholds = numeric(0)
-      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
+      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),
         output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"))
     },
