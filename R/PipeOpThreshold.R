@@ -67,6 +67,7 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       thr = self$param_set$values$thresholds
       if (length(thr) == 0) return(list(prds))
       assert_subset("prob", prds$predict_types)
+      assert_true(length(thr) == ncol(prds$prob))
       # Set names in case none are set.
       if (is.null(names(thr)) && length(thr) > 1) thr = set_names(thr, colnames(prds$prob))
       list(prds$set_threshold(thr))

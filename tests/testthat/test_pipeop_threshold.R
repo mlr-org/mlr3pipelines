@@ -4,7 +4,7 @@ test_that("threshold", {
   po_thr = po("threshold")
   expect_pipeop(po_thr)
   expect_true(po_thr$id == "threshold")
-  expect_true(gr$param_set$values$threshold.thresholds == numeric(0))
+  expect_true(!length(po_thr$param_set$values$thresholds))
 
   po_thr = po("threshold", param_vals = list(thresholds = c(0.3, 0.5)))
   expect_pipeop(po_thr)
@@ -26,7 +26,7 @@ test_that("threshold", {
   gr$train(t)
   prd = gr$predict(t)
   expect_prediction(prd[[1]])
-  expect_true(gr$param_set$values$threshold.thresholds == numeric(0))
+  expect_true(!length(gr$param_set$values$threshold.thresholds))
 
   # Same as setting threshold at 0.5
   gr = po_lrn %>>% po_thr
@@ -54,5 +54,27 @@ test_that("threshold", {
   gr$train(t)
   prd = gr$predict(t)
   expect_prediction(prd[[1]])
-  expect_true(all(gr$param_set$values$threshold.thresholds == c(0.3, 0.4, 0.4))
+  expect_true(all(gr$param_set$values$threshold.thresholds == c(0.3, 0.4, 0.3)))
+
+  # works with named args
+  po_thr = PipeOpThreshold$new(param_vals =
+    list(thresholds = c("virginica" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))
+  expect_pipeop(po_thr)
+  gr = po_lrn %>>% po_thr
+  gr$train(t)
+  prd = gr$predict(t)
+  expect_prediction(prd[[1]])
+  expect_true(all(gr$param_set$values$threshold.thresholds == c(0.3, 0.4, 0.3)))
+
+  # errors with wrong args
+  po_thr = PipeOpThreshold$new(param_vals = list(thresholds = c(0.3, 0.4)))
+  gr = po_lrn %>>% po_thr
+  gr$train(t)
+  expect_error(gr$predict(t))
+
+  po_thr = PipeOpThreshold$new(param_vals =
+    list(thresholds = c("foo" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))
+  gr = po_lrn %>>% po_thr
+  gr$train(t)
+  expect_error(gr$predict(t))
 })
