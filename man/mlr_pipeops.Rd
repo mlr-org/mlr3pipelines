@@ -59,7 +59,8 @@ Other mlr3pipelines backend related:
 \code{\link{Graph}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}}
+\code{\link{PipeOp}},
+\code{\link{mlr_graphs}}
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
@@ -108,7 +109,11 @@ Other PipeOps:
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}}
+
+Other Dictionaries: 
+\code{\link{mlr_graphs}}
 }
+\concept{Dictionaries}
 \concept{PipeOps}
 \concept{mlr3pipelines backend related}
 \keyword{datasets}

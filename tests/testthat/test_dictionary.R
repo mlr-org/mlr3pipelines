@@ -162,3 +162,11 @@ test_that("GraphLearner is in mlr_learners", {
   # expect_error(mlr_learners$get("graph"), "'graph'.*'graph'")  # Needs the argument 'graph' to construct 'graph'
 
 })
+
+
+test_that("mlr_graphs dictionary", {
+  expect_r6(mlr_graphs)
+  dt = as.data.table(mlr_graphs)
+  expect_data_table(dt, col.names = "unique")
+  expect_true("key" %in% colnames(dt))
+})

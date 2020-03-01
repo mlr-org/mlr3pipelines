@@ -13,7 +13,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpSubsample$new(id = "classbalancing", param_vals = list())
+#' PipeOpSubsample$new(id = "subsample", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"subsample"`
@@ -52,13 +52,9 @@
 #' @examples
 #' library("mlr3")
 #'
-#' pos = mlr_pipeops$get("subsample")
+#' pos = mlr_pipeops$get("subsample", param_vals = list(frac = 0.7, stratify = TRUE))
 #'
 #' pos$train(list(tsk("iris")))
-#'
-#' # simple bagging:
-#' gr = greplicate(pos %>>% mlr_pipeops$get("learner", lrn("classif.rpart")), 5) %>>%
-#'   mlr_pipeops$get("classifavg")
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
