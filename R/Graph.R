@@ -479,6 +479,17 @@ graph_reduce = function(self, input, fun, single_input) {
   edges = copy(self$edges)
 
   # create virtual "__initial__" and "__terminal__" nodes with edges to inputs / outputs of graph.
+  # if we have `single_input == FALSE` and one(!) vararg channel, we widen the vararg input
+  # appropriately.
+  if (!single_input && length(assert_list(input)) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
+    if (sum("..." == graph_input$channel.name) != 1) {
+      stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.")
+    }
+    # repeat the "..." as often as necessary
+    repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1, 1)
+    graph_input = graph_input[rep(graph_input$name, repeats), , on = "name"]
+  }
+
   edges = rbind(edges,
     data.table(src_id = "__initial__", src_channel = graph_input$name,
       dst_id = graph_input$op.id, dst_channel = graph_input$channel.name),
@@ -489,11 +500,14 @@ graph_reduce = function(self, input, fun, single_input) {
   edges$payload = list()
 
   if (!single_input) {
+    # we need the input list length to be equal to the number of channels. This number was
+    # already increased appropriately if there is a single vararg channel.
+    assert_list(input, len = nrow(graph_input))
     # input can be a named list (will be distributed to respective edges) or unnamed.
     # if it is named, we check that names are unambiguous.
-    assert_list(input, len = nrow(graph_input))
     if (!is.null(names(input))) {
       if (anyDuplicated(graph_input$name)) {
+        # FIXME this will unfortunately trigger if there is more than one named input for a vararg channel.
         stopf("'input' must not be a named list because Graph %s input channels have duplicated names.", self$id)
       }
       assert_names(names(input), subset.of = graph_input$name)
