@@ -132,13 +132,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # Train a learner for predicting
       self$state = private$.learner$train(task)$state
       pv = private$.crossval_param_set$values
-
       # Compute CV Predictions
       rdesc = mlr_resamplings$get(pv[["method"]])
       rdesc$param_set$values = list(folds = pv[["folds"]])
       res = resample(task, private$.learner, rdesc)
       prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
-
+      setkey(prds, "row_id")
       private$pred_to_task(prds, task)
     },
 

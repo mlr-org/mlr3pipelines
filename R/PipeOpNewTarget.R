@@ -121,6 +121,8 @@ convert_task = function(intask, new_type = NULL, new_target = NULL) {
   newtsk$set_col_role(new_target, "target")
   if (!all(intask$target_names == new_target))
     newtsk$set_col_role(intask$col_roles$target, "feature")
-  newtsk$droplevels()
+  # During prediction, when target is NA, we do not call droplevels.
+  if (!all(is.na(newtsk$data()[, newtsk$target_names, with = FALSE])))
+    newtsk$droplevels()
   return(newtsk)
 }

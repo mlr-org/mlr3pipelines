@@ -113,3 +113,26 @@ PipeOpEnsembleBinaryToMultiClass = R6Class("PipeOpEnsembleBinaryToMultiClass",
 )
 
 mlr_pipeops$add("ensemble_bin2multiclass", PipeOpEnsembleBinaryToMultiClass)
+
+test_that("one-vs-all", {
+  mutations = list(
+    virginica = ~ factor(Species == "virginica", levels = c(TRUE, FALSE)),
+    versicolor = ~ factor(Species == "versicolor", levels = c(TRUE, FALSE)),
+    setosa = ~ factor(Species == "setosa", levels = c(TRUE, FALSE))
+  )
+
+  tgt1 = po("mutate_target", id = "m1", param_vals = list(mutation = mutations[1])) %>>%
+    po("new_target", id = "n1", param_vals = list(new_target = "virginica", new_task_type = "classif")) %>>%
+    po("learner", lrn("classif.rpart", id = "l1", predict_type = "prob"))
+
+  tgt2 = po("mutate_target", id = "m2", param_vals = list(mutation = mutations[2])) %>>%
+    po("new_target", id = "n2", param_vals = list(new_target = "versicolor", new_task_type = "classif")) %>>%
+    po("learner", lrn("classif.rpart", id = "l2", predict_type = "prob"))
+
+  tgt3 = po("mutate_target", id = "m3", param_vals = list(mutation = mutations[3])) %>>%
+    po("new_target", id = "n3", param_vals = list(new_target = "setosa", new_task_type = "classif")) %>>%
+    po("learner", lrn("classif.rpart", id = "l3", predict_type = "prob"))
+  pipe = gunion(list(tgt1, tgt2, tgt3)) %>>% po("classifavg")
+  pipe$train(tsk("iris"))
+  pipe$predict(tsk("iris"))
+})

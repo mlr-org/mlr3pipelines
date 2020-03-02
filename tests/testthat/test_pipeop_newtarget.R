@@ -116,8 +116,7 @@ test_that("UseCase - Zero-Inflated Model", {
   dt = data.table("x1" = rnorm(200), "x2" = rnorm(200))
   # We have a process where y = 0
   dt[, y := ifelse(x1 * 0.2 + x2 * 0.4 - 0.3 > 0, 0, 2 + x1 * x2 + 0.5 * x2)]
-  dt[, ..row_id := seq_len(nrow(dt))]
-  tsk = TaskRegr$new("hurdle", DataBackendDataTable$new(dt, "..row_id"), target = "y")
+  tsk = TaskRegr$new("hurdle", backend = dt, target = "y")
 
   op_ntgt = PipeOpMutateTarget$new("ytmp", list(mutation = list(y_tmp = ~ factor(y > 0, levels = c(TRUE, FALSE)))))
   expect_pipeop(op_ntgt)

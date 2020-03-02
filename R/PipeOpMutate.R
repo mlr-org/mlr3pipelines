@@ -129,7 +129,7 @@ check_mutation_formulae = function(x) {
 #'
 #' If name clashes between old features/targets and to-be-added features occur,
 #' the older ones are overwritten.
-#' 
+#'
 #'@section Construction:
 #' ```
 #' PipeOpMutateTarget$new(id = "mutate", param_vals = list())
@@ -158,7 +158,7 @@ check_mutation_formulae = function(x) {
 #' * `delete_originals` :: `logical(1)` \cr
 #'   Whether to delete original features. Even when this is `FALSE`,
 #'   present features may still be overwritten. Initialized to `FALSE`.
-#' 
+#'
 #' @section Internals:
 #' A `formula` created using the `~` operator always contains a reference to the `environment` in which
 #' the `formula` is created. This makes it possible to use variables in the `~`-expressions that both
@@ -169,7 +169,7 @@ check_mutation_formulae = function(x) {
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
-#' 
+#'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
 #' @export
