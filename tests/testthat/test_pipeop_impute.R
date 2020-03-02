@@ -10,7 +10,8 @@ test_that("PipeOpImpute", {
         ps = ParamSet$new(list(
           ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median", tags = c("train", "predict")),
           ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl", tags = c("train", "predict")),
-          ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict"))
+          ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict")),
+          ParamUty$new("innum", tags = c("train", "predict"))
         ))
         ps$values = list(method_num = "median", method_fct = "newlvl", add_dummy = "missing_train")
         super$initialize(id, ps, param_vals = param_vals)
@@ -40,7 +41,7 @@ test_that("PipeOpImpute", {
           po("select", id = "lgl_select", selector = selector_type(c("logical"))) %>>% po("imputesample", id = "lgl_sample"),
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
-        ) %>>% po("featureunion")
+        ) %>>% if (is.null(self$param_set$values$innum)) po("featureunion") else po("featureunion", innum = self$param_set$values$innum)
       },
 
       get_state = function(task) {
@@ -61,9 +62,9 @@ test_that("PipeOpImpute", {
 
   task = mlr_tasks$get("pima")
 
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task)
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d"))), task = task)
 
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, task = mlr_tasks$get("iris"))
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d"))), task = mlr_tasks$get("iris"))
 
   mdata = data.frame(stringsAsFactors = FALSE,
     a = c(1, 2, 3, 4, 5, NA),

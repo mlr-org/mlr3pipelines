@@ -66,17 +66,19 @@
 #' @examples
 #' library("mlr3")
 #'
-#' task = tsk("iris")
+#' task1 = tsk("iris")
 #' gr = gunion(list(
 #'   po("nop"),
 #'   po("pca")
 #' )) %>>% po("featureunion")
 #'
-#' gr$train(task)
+#' gr$train(task1)
 #'
+#' task2 = tsk("iris")
+#' task3 = tsk("iris")
 #' po = po("featureunion", innum = c("a", "b"))
 #'
-#' po$train(list(task, task))
+#' po$train(list(task2, task3))
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
@@ -135,10 +137,9 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   }
 
   # check for duplicates in column names
-  # FIXME: does mlr3misc have a map function or s.l.t to replace mapply?
   feature_names = if (length(inprefix)) {
-    inprefix = ifelse(inprefix == "", yes = "", no = paste0(".", inprefix))
-    unlist(mapply(function(prefix, x) paste0(prefix, x$feature_names), prefix = inprefix, x = inputs, SIMPLIFY = FALSE, USE.NAMES = FALSE))
+    inprefix = ifelse(inprefix == "", yes = "", no = paste0(inprefix, "."))
+    c(task$feature_names, unlist(pmap(list(as.list(inprefix[-1]), tail(inputs, -1)), function(prefix, x) sprintf("%s%s", prefix, x$feature_names))))
   } else {
     unlist(map(inputs, function(x) x$feature_names))
   }
@@ -149,7 +150,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
 
   # cbind() with only empty data.tables is problematic, so we have to do voodoo magic here:
   # cbind at least one data.table that is guaranteed not to be empty and subtract that column later.
-  new_cols = do.call(cbind, c(list(data.table(x = vector(length = task$nrow))), lapply(tail(inputs, -1), function(y) y$data(ids, y$feature_names))))[, -1, with = FALSE]
+  new_cols = do.call(cbind, c(list(data.table(x = vector(length = task$nrow))), map(tail(inputs, -1), function(y) y$data(ids, y$feature_names))))[, -1, with = FALSE]
 
   task$clone(deep = TRUE)$cbind(new_cols)
 }
