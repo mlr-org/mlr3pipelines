@@ -106,7 +106,6 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         logical = data_dummy,
         stop("Invalid value of 'type' parameter"))
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
-      browser()
       task$select(character(0))$cbind(data_dummy)
     }
   )
