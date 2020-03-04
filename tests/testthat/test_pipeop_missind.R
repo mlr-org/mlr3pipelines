@@ -128,5 +128,5 @@ test_that("missind on full data returns empty task", {
   imp_missind$train(list(task))
   out = imp_missind$predict(list(task))$output
   expect_task(out)
-  expect_data_table(out$data(), ncol = 1L)
+  expect_data_table(out$data(), ncols = 1L)
 })
