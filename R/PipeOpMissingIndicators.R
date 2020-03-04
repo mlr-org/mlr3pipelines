@@ -97,7 +97,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
     transform = function(task) {
       if (!length(self$state$indicand_cols)) {
         # need to handle this as special case because cbind for empty tasks is broken
-        return(task)
+        return(task$select(character(0)))
       }
       data_dummy = as.data.table(is.na(task$data(cols = self$state$indicand_cols)))
       data_dummy = switch(self$param_set$values$type,

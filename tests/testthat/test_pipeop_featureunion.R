@@ -120,12 +120,11 @@ test_that("PipeOpFeatureUnion - levels are preserved", {
   tsk2$col_info
 
   pofu = PipeOpFeatureUnion$new(2)
-
+  expect_true(!pofu$is_trained)
   pofu$train(list(tsk1, tsk2))[[1]]$col_info
-
-
+  expect_true(pofu$is_trained)
   pofu$train(list(tsk1$filter(3:5), tsk2$filter(3:5)))[[1]]$col_info
-
+  expect_true(pofu$is_trained)
 
 })
 
@@ -179,9 +178,8 @@ test_that("feature renaming", {
 
   po = PipeOpFeatureUnion$new(c("z", "a", "a"))
 
-# FIXME: this needs https://github.com/mlr-org/mlr3/issues/268
-#  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
-#    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
+  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
+    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
 
 })
 
