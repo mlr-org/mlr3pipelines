@@ -93,3 +93,50 @@ test_that("PipeOpMissInd", {
   expect_null(task_predicted$missing_i)
   expect_null(task_predicted$missing_j)
 })
+
+
+# https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
+test_that("union with missing rows", {
+  library(mlr3learners)
+  data("mtcars", package = "datasets")
+  data = mtcars[, 1:3]
+  # Train task
+  task_mtcars = TaskRegr$new(id="cars", backend = data, target = "mpg")
+  # Prediction
+  data2 = task_mtcars$data()[12:12,]
+  data2[1:1, cyl:=NA]
+
+  imp_missind = po("missind")
+  imp_num =  po("imputehist", param_vals = list(affect_columns = selector_type("numeric")))
+  learner = lrn("regr.ranger")
+
+  g1 = gunion(list(imp_num,imp_missind)) %>>%
+    po("featureunion") %>>% po(learner)
+
+  gl = GraphLearner$new(g1)
+  gl$train(task_mtcars)
+  out = gl$predict_newdata(data2)
+  expect_prediction(out)
+
+
+  g2 = gunion(list(imp_missind, imp_num)) %>>%
+    po("featureunion") %>>% po(learner)
+
+  data = task_mtcars$data()[12:12,]
+  data[1:1, cyl:=NA]
+  gl = GraphLearner$new(g2)
+  gl$train(task_mtcars)
+  out = gl$predict_newdata(data2)
+  expect_prediction(out)
+})
+
+# https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
+test_that("missind on full data returns empty task", {
+  library(mlr3learners)
+  task = tsk("iris")
+  imp_missind = po("missind")
+  imp_missind$train(list(task))
+  out = imp_missind$predict(list(task))$output
+  expect_task(out)
+  expect_data_table(out$data(), ncol = 1L)
+})
