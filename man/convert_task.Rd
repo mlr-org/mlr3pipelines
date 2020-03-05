@@ -4,18 +4,19 @@
 \alias{convert_task}
 \title{Convert a task from its type to another.}
 \usage{
-convert_task(intask, new_type, new_target = NULL)
+convert_task(intask, new_type = NULL, new_target = NULL)
 }
 \arguments{
 \item{intask}{\code{\link{Task}}\cr
 A \code{\link{Task}} to be converted.}
 
 \item{new_type}{\code{character(1)}\cr
-The new task type. Must be in  \code{mlr_reflections$task_types}.}
+The new task type. Must be in  \code{mlr_reflections$task_types}.
+If \code{NULL} (default), a new task with the same task_type is created.}
 
 \item{new_target}{\code{character(1)|NULL}\cr
 New target to be set, must be a column in the \code{intask} data.
-If NULL, no new target is set, and task is converted as-is.}
+If \code{NULL}, no new target is set, and task is converted as-is.}
 }
 \value{
 \code{\link{Task}}
