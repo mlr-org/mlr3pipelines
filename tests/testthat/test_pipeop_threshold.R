@@ -1,6 +1,6 @@
 context("PipeOpThreshold")
 
-test_that("threshold", {
+test_that("threshold general", {
   po_thr = po("threshold")
   expect_pipeop(po_thr)
   expect_true(po_thr$id == "threshold")
@@ -13,11 +13,11 @@ test_that("threshold", {
 })
 
 
-test_that("threshold", {
+test_that("thresholding works for binary", {
   po_lrn = po(lrn("classif.rpart", predict_type = "prob"))
 
   # binary
-  t = tsk("german_credit")
+  t = tsk("german_credit")$filter(rows = 1:100)
 
   # works with no args
   po_thr = PipeOpThreshold$new()
@@ -35,6 +35,35 @@ test_that("threshold", {
   prd2 = gr$predict(t)
   expect_equal(prd, prd2)
   expect_true(gr$param_set$values$threshold.thresholds == 0.5)
+
+  # converges to prop.table for 0,1
+  pt = prop.table(table(t$truth()))
+
+  gr = po_lrn %>>% po_thr
+  gr$param_set$values$threshold.thresholds = 1
+  gr$train(t)
+  prd2 = gr$predict(t)
+  expect_true(gr$param_set$values$threshold.thresholds == 1)
+  expect_true(prd2$threshold.output$score() == pt[1])
+
+  gr = po_lrn %>>% po_thr
+  gr$param_set$values$threshold.thresholds = 0
+  gr$train(t)
+  prd2 = gr$predict(t)
+  expect_true(gr$param_set$values$threshold.thresholds == 0)
+  expect_true(prd2$threshold.output$score() == pt[2])
+
+  gr = po_lrn %>>% po_thr
+  gr$param_set$values$threshold.thresholds = c(1, 0)
+  gr$train(t)
+  prd2 = gr$predict(t)
+  expect_true(all(gr$param_set$values$threshold.thresholds == c(1, 0)))
+  expect_true(prd2$threshold.output$score() == pt[1])
+})
+
+
+test_that("thresholding works for multiclass", {
+  po_lrn = po(lrn("classif.rpart", predict_type = "prob"))
 
   # multiclass
   t = tsk("iris")

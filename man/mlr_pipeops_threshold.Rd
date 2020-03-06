@@ -8,6 +8,7 @@
 \description{
 Change the threshold of a \code{Prediction} during the \code{predict} step.
 The incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} needs to be \code{"prob"}.
+Internally calls \code{PredictionClassif$set_threshold}.
 }
 \section{Construction}{
 \preformatted{PipeOpThreshold$new(id = "threshold", param_vals = list())
@@ -17,7 +18,7 @@ The incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} needs to
 Identifier of the resulting  object, default \code{"threshold"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-Default \code{numeric(0)}.
+Defaults to \code{numeric(0)}.
 }
 }
 

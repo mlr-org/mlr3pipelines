@@ -7,6 +7,7 @@
 #' @description
 #' Change the threshold of a `Prediction` during the `predict` step.
 #' The incoming [`Learner`][mlr3::Learner]'s `$predict_type` needs to be `"prob"`.
+#' Internally calls `PredictionClassif$set_threshold`.
 #'
 #' @section Construction:
 #' ```
@@ -16,7 +17,7 @@
 #'   Identifier of the resulting  object, default `"threshold"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-#'   Default `numeric(0)`.
+#'   Defaults to `numeric(0)`.
 #'
 #' @section Input and Output Channels:
 #' During training, the input and output is `NULL`.
@@ -63,14 +64,14 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       list(NULL)
     },
     predict_internal = function(inputs) {
-      prds = inputs[[1]]$clone()
+      prd = inputs[[1]]$clone()
       thr = self$param_set$values$thresholds
-      if (length(thr) == 0) return(list(prds))
-      assert_subset("prob", prds$predict_types)
-      assert_true(length(thr) == ncol(prds$prob) || (length(thr) == 1 &&ncol(prds$prob) == 2))
+      if (length(thr) == 0) return(list(prd))
+      assert_subset("prob", prd$predict_types)
+      assert_true(length(thr) == ncol(prd$prob) || (length(thr) == 1 && ncol(prd$prob) == 2))
       # Set names in case none are set.
-      if (is.null(names(thr)) && length(thr) > 1) thr = set_names(thr, colnames(prds$prob))
-      list(prds$set_threshold(thr))
+      if (is.null(names(thr)) && length(thr) > 1) thr = set_names(thr, colnames(prd$prob))
+      list(prd$set_threshold(thr))
     }
   )
 )
