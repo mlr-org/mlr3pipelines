@@ -22,6 +22,13 @@ test_that("For rpart", {
   expect_true(l$ncol == 2)
   expect_true(l$nrow == task$nrow)
   expect_factor(l$data(cols = l$feature_names)[[1]])
+
+  l2 = predict_pipeop(po, list(task = task))[[1]]
+  expect_task(l)
+  expect_true(l$ncol == 2)
+  expect_true(l$nrow == task$nrow)
+  expect_factor(l$data(cols = l$feature_names)[[1]])
+
 })
 
 test_that("For xgboost", {
@@ -33,7 +40,6 @@ test_that("For xgboost", {
   task = mlr_tasks$get("iris")
   l = train_pipeop(po, list(task = task))[[1]]
   expect_task(l)
-  expect_true(l$ncol == 2)
   expect_true(l$nrow == task$nrow)
   expect_data_table(l$data(cols = l$feature_names))
 })

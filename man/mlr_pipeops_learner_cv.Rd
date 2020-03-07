@@ -125,6 +125,7 @@ graph$train(task)
 }
 \seealso{
 Other Meta PipeOps: 
+\code{\link{mlr_pipeops_learner_representation}},
 \code{\link{mlr_pipeops_learner}}
 }
 \concept{Meta PipeOps}

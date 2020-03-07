@@ -1,18 +1,22 @@
 #' @title PipeOpLearnerRepresentation
 #'
 #' @usage NULL
-#' @name mlr_pipeops_learner
+#' @name mlr_pipeops_learner_representation
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Wraps an [`mlr3::Learner`] into a [`PipeOp`].
-#'
+#' Extracts a representation from an [`mlr3::Learner`].
+#' 
 #' Inherits the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] it is constructed from.
 #'
-#' Using [`PipeOpLearnerRepresentation`], it is possible to embed [`mlr3::Learner`]s into [`Graph`]s, which themselves can be
-#' turned into Learners using [`GraphLearner`]. This way, preprocessing and ensemble methods can be included
-#' into a machine learning pipeline which then can be handled as singular object for resampling, benchmarking
-#' and tuning.
+#' Using [`PipeOpLearnerRepresentation`], it is possible to extract a representation (i.e. intermediate features)
+#' from a [`mlr3::Learner`], in order to use them for subsequent modeling steps.
+#' 
+#' Currently implemented for the following models:
+#' * xgboost
+#' * rpart
+#' 
+#' See [`learner_repr`] for details.
 #'
 #' @section Construction:
 #' ```
@@ -27,14 +31,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpLearnerRepresentation`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
-#' type given to `learner` during construction; both during training and prediction.
-#'
-#' [`PipeOpLearnerRepresentation`] has one output channel named `"output"`, producing `NULL` during training and a [`Prediction`][mlr3::Prediction] subclass
-#' during prediction; this subclass is specific to the [`Learner`][mlr3::Learner] type given to `learner` during construction.
-#'
-#' The output during prediction is the [`Prediction`][mlr3::Prediction] on the prediction input data, produced by the [`Learner`][mlr3::Learner]
-#' trained on the training input data.
+#'   Same as {`PipeOpTaskPreproc`].
 #'
 #' @section State:
 #' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object. It is a named `list` with members:
@@ -72,7 +69,7 @@
 #'
 #' task = tsk("iris")
 #' learner = lrn("classif.rpart", cp = 0.1)
-#' lrn_po = mlr_pipeops$get("learner", learner)
+#' lrn_po = mlr_pipeops$get("learner_repr", learner)
 #'
 #' lrn_po$train(list(task))
 #' lrn_po$predict(list(task))
@@ -84,8 +81,6 @@ PipeOpLearnerRepresentation = R6Class(
       private$.learner = as_learner(learner)$clone(deep = TRUE) 
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals)
     },
-
-
     train_task = function(task) {
       on.exit({private$.learner$state = NULL}) 
       cols = self$select_cols(task)
@@ -93,19 +88,21 @@ PipeOpLearnerRepresentation = R6Class(
         self$state = list(dt_columns = dt_columns)
         return(task)
       }   
+      task = task$select(cols)
       self$state = private$.learner$train(task)$state
-      dt = learner_repr(self$state$model, task, cols)
+      dt = learner_repr(self$state$model, task)
       self$state$dt_columns = cols
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
     predict_task = function(task) {
-      cols = dt_columns
+      cols = self$state$dt_columns
       if (!length(cols)) {
         self$state = list(dt_columns = dt_columns)
         return(task)
       }
-      dt = learner_repr(self$state$model, task, cols)
+      task = task$select(cols)
+      dt = learner_repr(self$state$model, task)
       task$select(setdiff(task$feature_names, cols))$cbind(dt)    }
   ),
   active = list(
@@ -134,24 +131,43 @@ mlr_pipeops$add("learner_repr", PipeOpLearnerRepresentation, list(R6Class("Learn
 
 
 
-learner_repr = function(x, task, cols, ...) {
+#' Extract a representation from a learner
+#' 
+#' @rdname learner_repr
+#' 
+#' @param x [`Learner`] \cr
+#'   A trained learner (in the pipeop's state)
+#' @param task [`Task`] \cr
+#'   A task, the learner was trained on.
+#' @param ... [`any`] \cr
+#'   Further arguments
+#' @return [`data.table`] containing extracted features.
+#' @export
+learner_repr = function(x, task, ...) {
   UseMethod("learner_repr")
 }
 
-learner_repr.default = function(x, task, cols, ...) {
+learner_repr.default = function(x, task, ...) {
   stopf("Not implemented for Learner of class %s!", class(x)[[1]])
 }
 
-# xgboost
-learner_repr.xgb.Booster = function(x, task, cols, ...) {
-  data = data.matrix(task$data(cols = cols))
+
+#' @rdname learner_repr
+#' 
+#' @details 
+#'   for ' xgb.Booster' (xgboost), internally uses xgboost::xgb.create.features.
+learner_repr.xgb.Booster = function(x, task, ...) {
+  data = data.matrix(task$data())
   fts  = data.table(as.matrix(xgboost::xgb.create.features(x, data)))
   fts[, task$feature_names := NULL]
 }
 
-# rpart
-learner_repr.rpart = function(x, task, cols, ...) {
-  data = task$data(cols = cols)
+#' @rdname learner_repr
+#' 
+#' @details 
+#'   for 'rpart',  treeClust::rpart.predict.leaves is used.
+learner_repr.rpart = function(x, task, ...) {
+  data = task$data()
   fts  = treeClust::rpart.predict.leaves(x, data)
   data.table("leaf" = as.factor(fts))
 }
