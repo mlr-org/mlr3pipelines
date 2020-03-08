@@ -183,7 +183,6 @@ test_that("UseCase - Intermediate Target - Chained", {
   expect_numeric(e2$score()$regr.mse, lower = 0, upper = 10)
 })
 
-
 test_that("convert_task reconstructs task", {
   task = tsk("iris")
   tsk = convert_task(task)
