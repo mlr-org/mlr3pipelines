@@ -106,3 +106,22 @@ test_that("Bagging Pipeline", {
   expect_true(length(p$pipeops) == 10 + 10)
   expect_data_table(p$output, nrows = 10)
 })
+
+test_that("Branching Pipeline", {
+  lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
+  task = mlr_tasks$get("boston_housing")
+  gr = branch_pipeline(lrns)
+
+  expect_graph(gr)
+  expect_data_table(gr$param_set$deps)
+  par_ids = unlist(map(lrns, function(x) as_graph(x)$param_set$ids()))
+  expect_subset(par_ids, gr$param_set$ids())
+
+  # FIXME: Check that this allows to change parameters
+  # change parameters
+  # gr$param_set$values$branch.selection = "classif.featureless"
+
+  gr$train(tsk("iris"))
+  out = gr$predict(tsk("iris"))$unbranch.output
+  assert_prediction(out)
+})

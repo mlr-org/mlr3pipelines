@@ -146,3 +146,45 @@ bagging_pipeline = function(graph, iterations = 10, frac = 0.7, averager = NULL)
 }
 
 mlr_graphs$add("bagging", bagging_pipeline)
+
+
+#' @title Create a branch - unbranch pipeline
+#' @name mlr_graphs_branching
+#' @description
+#' Creates a [`Graph`] that provides branching and unbranching 
+#' (using [`PipeOpBranch`] and [`PipeOpBranch`]) 
+#' for a list of supplied [`PipeOp`]s or [`Graph`]s. 
+#' Takes either the names of the list elements, or the graph's ids 
+#' as 'option' for [`PipeOpBranch`].
+#'
+#' @param graphs List of [`PipeOp`] | [`Graph`] \cr
+#'   A (possibly named) list of [`PipeOp`]s or [`Graph`]s.
+#'
+#' @return [`Graph`]
+#' @export
+#' @examples
+#' library(mlr3)
+#' lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
+#' task = mlr_tasks$get("boston_housing")
+#' gr = branch_pipeline(lrns)
+#' # change parameters
+#' # gr$param_set$values$branch.selection = "classif.featureless"
+branch_pipeline = function(graphs) {
+  graphs = map(graphs, as_graph)
+  nms = names(graphs)
+  if (is.null(nms)) 
+    nms = map_chr(graphs, function(x) str_collapse(map_chr(x$pipeops, "id"), sep = "."))
+  gr = po("branch", nms) %>>% gunion(graphs) %>>% po("unbranch")
+  # Iterate over all graphs and add dependencies on branch.selection
+  # FIXME: This forbids to set some values, see example.
+  #        Changes to paradox might be required here.
+  pmap(list(graphs, nms), function(graph, id) {
+    map(graph$param_set$ids(), function(par) {
+      gr$param_set$add_dep(par, "branch.selection", CondEqual$new(id))
+    })
+  })
+  return(gr)
+}
+
+mlr_graphs$add("branch", branch_pipeline)
+
