@@ -62,6 +62,7 @@ test_that("PipeOpNewTarget - Classif -> Regr", {
         all(result[[x]] == task[[x]])
     })))
   }
+  
   op = PipeOpNewTarget$new(param_vals = list(new_target = "Sepal.Width", new_task_type = "regr"))
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
@@ -86,6 +87,7 @@ test_that("PipeOpNewTarget - Same target", {
         function(x) {all(result[[x]] == task[[x]])}
       )))
   }
+
   op = PipeOpNewTarget$new(param_vals = list(new_target = "medv", new_task_type = "regr"))
   task = mlr_tasks$get("boston_housing")
   task$set_row_role(1:40, "validation")
