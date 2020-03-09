@@ -5,11 +5,14 @@
 \alias{branch_pipeline}
 \title{Create a branch - unbranch pipeline}
 \usage{
-branch_pipeline(graphs)
+branch_pipeline(graphs, add_deps = TRUE)
 }
 \arguments{
 \item{graphs}{List of \code{\link{PipeOp}} | \code{\link{Graph}} \cr
 A (possibly named) list of \code{\link{PipeOp}}s or \code{\link{Graph}}s.}
+
+\item{add_deps}{\code{\link{logical}} \cr
+Whether parameter dependencies should be added. Default to  TRUE`.}
 }
 \value{
 \code{\link{Graph}}
@@ -23,6 +26,7 @@ as 'option' for \code{\link{PipeOpBranch}}.
 }
 \examples{
 library(mlr3)
+library(mlr3misc)
 lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
 task = mlr_tasks$get("boston_housing")
 gr = branch_pipeline(lrns)

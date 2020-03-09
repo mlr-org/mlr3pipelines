@@ -159,30 +159,33 @@ mlr_graphs$add("bagging", bagging_pipeline)
 #'
 #' @param graphs List of [`PipeOp`] | [`Graph`] \cr
 #'   A (possibly named) list of [`PipeOp`]s or [`Graph`]s.
-#'
+#' @param add_deps [`logical`] \cr
+#'   Whether parameter dependencies should be added. Default to  TRUE`.
 #' @return [`Graph`]
 #' @export
 #' @examples
 #' library(mlr3)
+#' library(mlr3misc)
 #' lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
 #' task = mlr_tasks$get("boston_housing")
 #' gr = branch_pipeline(lrns)
 #' # change parameters
 #' # gr$param_set$values$branch.selection = "classif.featureless"
-branch_pipeline = function(graphs) {
+branch_pipeline = function(graphs, add_deps = TRUE) {
   graphs = map(graphs, as_graph)
   nms = names(graphs)
   if (is.null(nms)) 
     nms = map_chr(graphs, function(x) str_collapse(map_chr(x$pipeops, "id"), sep = "."))
   gr = po("branch", nms) %>>% gunion(graphs) %>>% po("unbranch")
   # Iterate over all graphs and add dependencies on branch.selection
-  # FIXME: This forbids to set some values, see example.
+  # FIXME: This forbids to set some values, see example above.
   #        Changes to paradox might be required here.
-  pmap(list(graphs, nms), function(graph, id) {
-    map(graph$param_set$ids(), function(par) {
-      gr$param_set$add_dep(par, "branch.selection", CondEqual$new(id))
+  if (assert_flag(add_deps))
+    pmap(list(graphs, nms), function(graph, id) {
+      map(graph$param_set$ids(), function(par) {
+        gr$param_set$add_dep(par, "branch.selection", CondEqual$new(id))
+      })
     })
-  })
   return(gr)
 }
 
