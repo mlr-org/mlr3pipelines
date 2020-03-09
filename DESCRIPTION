@@ -75,7 +75,7 @@ LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.0.2
-Collate:
+Collate: 
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
@@ -92,6 +92,7 @@ Collate:
     'PipeOpClassWeights.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
+    'PipeOpColRoles.R'
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpEncode.R'
