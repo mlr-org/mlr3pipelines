@@ -30,11 +30,11 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `new_role`  :: `list` \cr
 #'   Named list of new column roles. The names must match the column names of the input task that
-#'   will later be trained on. Each entry of the list must contain a character vector with possible
-#'   values of `feature`, `name`, `order`, `group`, `stratum`,  and `weight`. If the value is given
-#'   as `character()`, the column will be dropped from the input task. Changing the role of a column
-#'   results in this column loosing its previous role(s). Setting a new target variable or changing
-#'   the role of an existing target variable is not supported. 
+#'   will later be trained/predicted on. Each entry of the list must contain a character vector with
+#'   possible values of [`mlr_reflections$task_col_roles`][mlr3::mlr_reflections]. If the value is
+#'   given as `character()`, the column will be dropped from the input task. Changing the role of a
+#'   column results in this column loosing its previous role(s). Setting a new target variable or
+#'   changing the role of an existing target variable is not supported. 
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -58,38 +58,41 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
       ps = ParamSet$new(params = list(
         # named list, each entry with a vector of roles
         ParamUty$new("new_role", tags = c("train", "predict"), custom_check = function(x) {
-          first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
+          first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L,
+            names = "named")
           if (is.character(first_check)) {
             return(first_check)
           }
           # for changing the target use PipeOpNewTarget
           # a value of "character()" will lead to this column being dropped
-          check_subset(unlist(x), c("feature", "name", "order", "group", "stratum", "weight"))
+          all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
+          check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
         })
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     },
 
     transform = function(task) {
+      new_role = self$param_set$values$new_role
       # names of "new_role" must be a subset of the column names of the task
-      assert_subset(names(self$param_set$values$new_role), choices = task$col_info$id)
+      assert_subset(names(new_role), choices = task$col_info$id)
       # changing the role of a target is not supported
-      if (any(task$col_roles$target %in% names(self$param_set$values$new_role))) {
+      if (any(task$col_roles$target %in% names(new_role))) {
         stop("Cannot change the role of a target.")
       }
       col_roles = unlist(task$col_roles)
       indices = rep.int(seq_along(task$col_roles), times = unlist(map(task$col_roles, length)))
-      for(i in seq_along(self$param_set$values$new_role)) {
-        column = names(self$param_set$values$new_role)[i]
-        old_role = indices[match(column, col_roles)]
+      for(i in seq_along(new_role)) {
+        column = names(new_role)[i]
+        old = indices[match(column, col_roles)]
         # first remove any old role
-        for(role in old_role) {
+        for(role in old) {
           task$col_roles[[role]] = setdiff(task$col_roles[[role]], column)
         }
         # then add the new role(s)
-        if (length(self$param_set$values$new_role[[i]])) {
-          new_role = match(self$param_set$values$new_role[[i]], names(task$col_roles))
-          for(role in new_role) {
+        if (length(new_role[[i]])) {
+          new = match(new_role[[i]], names(task$col_roles))
+          for(role in new) {
             task$col_roles[[role]] = union(task$col_roles[[role]], column)
           }
         }

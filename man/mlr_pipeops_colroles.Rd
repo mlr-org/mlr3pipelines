@@ -38,11 +38,11 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{new_role}  :: \code{list} \cr
 Named list of new column roles. The names must match the column names of the input task that
-will later be trained on. Each entry of the list must contain a character vector with possible
-values of \code{feature}, \code{name}, \code{order}, \code{group}, \code{stratum},  and \code{weight}. If the value is given
-as \code{character()}, the column will be dropped from the input task. Changing the role of a column
-results in this column loosing its previous role(s). Setting a new target variable or changing
-the role of an existing target variable is not supported.
+will later be trained/predicted on. Each entry of the list must contain a character vector with
+possible values of \code{\link[mlr3:mlr_reflections]{mlr_reflections$task_col_roles}}. If the value is
+given as \code{character()}, the column will be dropped from the input task. Changing the role of a
+column results in this column loosing its previous role(s). Setting a new target variable or
+changing the role of an existing target variable is not supported.
 }
 }
 
