@@ -87,6 +87,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 
 \examples{
 library("mlr3")
+library("data.table")
 # create some text data
 dt = data.table(
   txt = replicate(150, paste0(sample(letters, 3), collapse = " "))

@@ -72,6 +72,7 @@
 #'
 #' @examples
 #' library("mlr3")
+#' library("data.table")
 #' # create some text data
 #' dt = data.table(
 #'   txt = replicate(150, paste0(sample(letters, 3), collapse = " "))
