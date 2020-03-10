@@ -58,8 +58,10 @@ Suggests:
     mlr3learners,
     mlr3measures,
     nloptr,
+    quanteda,
     rmarkdown,
     rpart,
+    stopwords,
     testthat,
     visNetwork,
     bestNormalize,
@@ -126,6 +128,7 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+    'PipeOpTextVectorizer.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
