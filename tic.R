@@ -3,6 +3,8 @@ do_package_checks()
 
 if (ci_on_travis()) {
   # creates pkgdown site and pushes to gh-pages branch
+  get_stage("install") %>%
+    add_step(step_install_github("mlr-org/mlr3pkgdowntemplate"))
   do_pkgdown()
 }
 
