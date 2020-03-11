@@ -350,3 +350,18 @@ test_that("Graph State", {
   expect_equal(g$predict(task), g_clone$predict(task))
 
 })
+
+test_that("Graph with vararg input", {
+  t1 = tsk("iris")
+  t2 = PipeOpPCA$new()$train(list(t1))[[1]]
+  tcombined = PipeOpFeatureUnion$new()$train(list(t1, t2))[[1]]
+  gr = as_graph(PipeOpFeatureUnion$new())
+  expect_equal(tcombined, gr$train(list(t1, t2), single_input = FALSE)[[1]])
+  expect_equal(tcombined, gr$predict(list(t1, t2), single_input = FALSE)[[1]])
+
+  gr = gunion(list(PipeOpNOP$new(), gr, PipeOpNOP$new(id = "nop2"), PipeOpNOP$new(id = "nop3")))
+
+  expect_equal(list(nop.output = 1, featureunion.output = tcombined, nop2.output = 2, nop3.output = 3),
+               gr$train(list(1, t1, t2, 2, 3), single_input = FALSE))
+
+})
