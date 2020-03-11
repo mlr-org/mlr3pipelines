@@ -8,14 +8,17 @@
 #' Computes a bag-of-word representation from a (set of) columns.
 #' Columns of type `character` are split up into words.
 #' Uses the [`quanteda::dfm()`][quanteda::dfm],
-#' [`quanteda::dfm_trim()`][quanteda::dfm_trim] and
-#' [`quanteda::dfm_tfidf()`][quanteda::dfm_tfidf] from the
-#' 'quanteda' package.
-#' Parameters specify arguments to 'dfm' and 'dfm_trim', i.e. how to
-#' tokenize the data and how to trim the bag-of-words matrix.
+#' [`quanteda::dfm_trim()`][quanteda::dfm_trim] from the 'quanteda' package.
+#' TF-IDF computation works similarly to [`quanteda::dfm_tfidf()`][quanteda::dfm_tfidf]
+#' but has been adjusted for train/test data split using [`quanteda::docfreq()`][quanteda::docfreq] 
+#' and [`quanteda::dfm_weight()`][quanteda::dfm_weight]
+#' 
+#' Parameters specify arguments to quanteda's dfm', 'dfm_trim', 'docfreq' and 'dfm_weight'.
+#' What belongs to what can be obtained from each params `tags` where `tokenizer` are
+#' arguments passed on to [`quanteda::dfm()`][quanteda::dfm].
 #' Defaults to a bag-of-words representation with token counts as matrix entries.
 #' 
-#' In order to do `tf_idf` weighting, set the 'scheme_df' parameter to 'inverse'.
+#' In order to do `tf_idf` weighting, set the 'scheme' parameter to 'inverse*'.
 #'
 #' @section Construction:
 #' ```
@@ -66,8 +69,8 @@
 #'   How to asess term frequency. See [`quanteda::dfm_trim`]. Default: 'count'.
 #' * `scheme_tf` :: `character` \cr
 #'   Weighting scheme for term frequency: See [`quanteda::dfm_weight`]. Default: 'count'.
-#' * `scheme_df` :: `character` \cr
-#'   Weighting scheme for document frequency: See [`quanteda::docfreq`]. Default: 'unary' = 1.
+#' * `scheme` :: `character` \cr
+#'   Weighting scheme for document frequency: See [`quanteda::docfreq`]. Default: 'unary' (1 for each document).
 #' * `smoothing` :: `numeric`\cr
 #'   See [`quanteda::docfreq`]. Default: 0.
 #' * `k` :: `numeric`\cr
@@ -130,22 +133,25 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
           tags = c("train", "predict", "dfm_trim"), special_vals = list(NULL)),
         ParamDbl$new("max_termfreq", lower = 0, upper = Inf, default = NULL,
           tags = c("train", "predict", "dfm_trim"), special_vals = list(NULL)),
-        ParamFct$new("scheme_tf", default = "count", tags = c("train", "predict"),
-          levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
         ParamFct$new("scheme", default = "unary", tags = c("train", "predict", "docfreq"),
           levels = c("count", "inverse", "inversemax", "inverseprob", "unary")),
+        ParamFct$new("scheme_tf", default = "count", tags = c("train", "predict"),
+          levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
         ParamDbl$new("smoothing", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq")),
         ParamDbl$new("k", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),       
         ParamDbl$new("threshold", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),
         ParamDbl$new("base", lower = 0, upper = Inf, default = 10, tags = c("train", "predict", "docfreq"))
       ))
+      ps$add_dep("language", "remove_stopwords", CondEqual$new(TRUE))
+      ps$add_dep("k", "scheme_tf", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
       ps$add_dep("base", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
       ps$add_dep("smoothing", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
       ps$add_dep("k", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
-
+      ps$add_dep("base", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
+      ps$add_dep("threshold", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
       ps$values = list("remove_stopwords" = TRUE, language = "smart", scheme = "unary", scheme_tf = "count")
-      super$initialize(id = id, param_set = ps, param_vals = param_vals,
-        packages = c("quanteda", "stopwords"))
+
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"))
     },
 
     select_cols = function(task) {
@@ -153,7 +159,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
     },
 
     train_dt = function(dt, levels, target) {
-      tdm = private$transform_bow(dt)                     # transform to bow, return doc-freq matrix
+      tdm = private$transform_bow(dt)                     # transform to BOW, return doc-freq matrix
       self$state = list(tdm = dfm_subset(tdm, FALSE))     # empty tdm so we have vocab of training data
       # tf-idf
       if (self$param_set$get_values()$scheme != "unary") {
@@ -166,9 +172,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         tdm = private$transform_bow(dt)
         tdm = rbind(tdm, self$state$tdm) # make sure all columns occur
         # tf-idf
-        if (self$param_set$get_values()$scheme != "unary") {
-            tdm = private$transform_tfidf(tdm)
-        }
+        if (self$param_set$get_values()$scheme != "unary") tdm = private$transform_tfidf(tdm)
         tdm = tdm[, colnames(self$state$tdm)]   # Ensure only train-time features are pased on
         quanteda::convert(tdm, "matrix")
     }

@@ -8,11 +8,18 @@
 \description{
 Computes a bag-of-word representation from a (set of) columns.
 Columns of type \code{character} are split up into words.
-Uses the \code{\link[quanteda:dfm]{quanteda::dfm()}} and
-\code{\link[quanteda:dfm_trim]{quanteda::dfm_trim()}} functions from the
-'quanteda' package.
-Parameters specify arguments to 'dfm' and 'dfm_trim', i.e. how to
-tokenize the data and how to trim the bag-of-words matrix.
+Uses the \code{\link[quanteda:dfm]{quanteda::dfm()}},
+\code{\link[quanteda:dfm_trim]{quanteda::dfm_trim()}} from the 'quanteda' package.
+TF-IDF computation works similarly to \code{\link[quanteda:dfm_tfidf]{quanteda::dfm_tfidf()}}
+but has been adjusted for train/test data split using \code{\link[quanteda:docfreq]{quanteda::docfreq()}}
+and \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight()}}
+
+Parameters specify arguments to quanteda's dfm', 'dfm_trim', 'docfreq' and 'dfm_weight'.
+What belongs to what can be obtained from each params \code{tags} where \code{tokenizer} are
+arguments passed on to \code{\link[quanteda:dfm]{quanteda::dfm()}}.
+Defaults to a bag-of-words representation with token counts as matrix entries.
+
+In order to do \code{tf_idf} weighting, set the 'scheme' parameter to 'inverse*'.
 }
 \section{Construction}{
 \preformatted{PipeOpTextVectorizer$new(id = "text_vectorizer", param_vals = list())
@@ -52,32 +59,43 @@ Remove stopwords according to 'language'? Default: \code{TRUE}.
 \item \code{tolower} :: \code{logical(1)}\cr
 Convert to lower case? Default: \code{TRUE}.
 \item \code{remove_punct} :: \code{logical(1)}\cr
-See \code{quanteda::tokens}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_punct} :: \code{logical(1)}\cr
-See \code{quanteda::tokens}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_symbols} :: \code{logical(1)}\cr
-See \code{quanteda::tokens}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_numbers} :: \code{logical(1)}\cr
-See \code{quanteda::tokens}. Default: \code{FALSE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_separators} :: \code{logical(1)}\cr
-See \code{quanteda::tokens}. Default: \code{TRUE}.
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{TRUE}.
 \item \code{sparsity} :: \code{numeric(1)}\cr
-Desired sparsity of the 'tfm' matrix. See \code{quanteda::dfm_trim}. Default: \code{NULL}.
+Desired sparsity of the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
 \item \code{max_termfreq} :: \code{numeric(1)}\cr
-Maximum term frequency in the 'tfm' matrix. See \code{quanteda::dfm_trim}. Default: \code{NULL}.
+Maximum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
 \item \code{min_termfreq} :: \code{numeric(1)}\cr
-Minimum term frequency in the 'tfm' matrix. See \code{quanteda::dfm_trim}. Default: \code{NULL}.
+Minimum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
 \item \code{termfreq_type} :: \code{character}\cr
-How to asess term frequency. See \code{quanteda::dfm_trim}. Default: 'count'.
+How to asess term frequency. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: 'count'.
+\item \code{scheme_tf} :: \code{character} \cr
+Weighting scheme for term frequency: See \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}}. Default: 'count'.
+\item \code{scheme} :: \code{character} \cr
+Weighting scheme for document frequency: See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 'unary' (1 for each document).
+\item \code{smoothing} :: \code{numeric}\cr
+See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0.
+\item \code{k} :: \code{numeric}\cr
+See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0.
+\item \code{threshold} :: \code{numeric}\cr
+See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0.
+\item \code{base} :: \code{numeric}\cr
+See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 10.
 }
 }
 
 \section{Internals}{
 
-Uses the \code{\link[quanteda:dfm]{quanteda::dfm()}} and
-\code{\link[quanteda:dfm_trim]{quanteda::dfm_trim()}} functions from the
-'quanteda' package.
+See Description. Internally uses the 'quanteda' package.
 All columns selected via \code{affect_columns} are concatenated before computing the bag of words.
+Tokens not seen during training are silently dropped.
 }
 
 \section{Methods}{

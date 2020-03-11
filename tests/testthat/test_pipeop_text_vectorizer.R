@@ -86,7 +86,6 @@ test_that("PipeOpTextVectorizer - tfidf works", {
 
   task$rbind(df)
   result3 = op$predict(list(task))[[1]]
-  dt3 = result2$data()
-    expect_true(all(dt2[1, strs, with = FALSE] == dt3[1, strs, with = FALSE]))
-  # expect_datapreproc_pipeop_class(PipeOpTextVectorizer, task = task)
+  dt4 = result3$data()
+  expect_true(all(dt4[1, strs, with = FALSE] == dt3[1, strs, with = FALSE]))
 })
