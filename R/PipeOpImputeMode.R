@@ -18,7 +18,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpImputeMode`].
+#' Input and output channels are inherited from [`PipeOpImpute`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) mode.
 #'
@@ -28,8 +28,8 @@
 #' The `$state$model` is a named `list` of `numeric(1)` indicating the mode of the respective feature.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpImpute`], as well as the following parameters
-#' based on [`compute_mode()`][mlr3misc::compute_mode]:
+#' The parameters are the parameters inherited from [`PipeOpImpute`], as well as the following
+#' parameters based on [`compute_mode()`][mlr3misc::compute_mode]:
 #' * `ties_method` :: `character(1)`\cr
 #'   Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{last}.
 #'

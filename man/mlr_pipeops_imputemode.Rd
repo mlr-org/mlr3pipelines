@@ -21,7 +21,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpImputeMode}}.
+Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) mode.
 }
@@ -35,8 +35,8 @@ The \verb{$state$model} is a named \code{list} of \code{numeric(1)} indicating t
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as the following parameters
-based on \code{\link[mlr3misc:compute_mode]{compute_mode()}}:
+The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as the following
+parameters based on \code{\link[mlr3misc:compute_mode]{compute_mode()}}:
 \itemize{
 \item \code{ties_method} :: \code{character(1)}\cr
 Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{last}.
