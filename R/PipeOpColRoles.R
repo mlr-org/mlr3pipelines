@@ -80,17 +80,14 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
       if (any(task$col_roles$target %in% names(new_role))) {
         stop("Cannot change the role of a target.")
       }
+      # drop (all) old role(s)
+      task$col_roles = map(task$col_roles, .f = function(x) x[x %nin% names(new_role)])
       col_roles = unlist(task$col_roles)
+      # add the new role(s)
       indices = rep.int(seq_along(task$col_roles), times = unlist(map(task$col_roles, length)))
       for(i in seq_along(new_role)) {
-        column = names(new_role)[i]
-        old = indices[match(column, col_roles)]
-        # first remove any old role
-        for(role in old) {
-          task$col_roles[[role]] = setdiff(task$col_roles[[role]], column)
-        }
-        # then add the new role(s)
         if (length(new_role[[i]])) {
+          column = names(new_role)[i]
           new = match(new_role[[i]], names(task$col_roles))
           for(role in new) {
             task$col_roles[[role]] = union(task$col_roles[[role]], column)
