@@ -226,18 +226,29 @@ test_that("More tests for PipeOpImputeMode", {
 
  po = PipeOpImputeMode$new(param_vals = list(ties_method = "first"))
  task_trained = po$train(list(task))[[1L]]$data()
+ # check class of features
  expect_equivalent(sapply(po$state$model, FUN = function(x) class(x)[1L]),
    c("numeric", "factor", "ordered", "integer", "logical"))
  task_predicted = po$predict(list(task))[[1L]]$data()
+ # train and predict equal if "ties_method" not "random"
  expect_equal(task_trained, task_predicted)
 
  task_NA = task
  task_NA$filter(c(1L, 10L))
 
+ # works for complete NA
  po_NA = PipeOpImputeMode$new(param_vals = list(ties_method = "first"))
  task_NA_trained = po_NA$train(list(task_NA))[[1L]]$data()
+ expect_equal(task_NA_trained[[4L]], factor(c(1, 1), levels = 1:2))
  expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
    c("numeric", "factor", "ordered", "integer", "logical"))
  task_NA_predicted = po_NA$predict(list(task_NA))[[1L]]$data()
  expect_equal(task_NA_trained, task_NA_predicted)
+
+ # factors depend here also on "ties_method"
+ po_NA = PipeOpImputeMode$new(param_vals = list(ties_method = "last"))
+ expect_equal(po_NA$train(list(task_NA))[[1L]]$data()[[4L]], factor(c(2, 2), levels = 1:2))
+
+ po_NA = PipeOpImputeMode$new() # "random" is default
+ expect_equal(levels(po_NA$train(list(task_NA))[[1L]]$data()[[4L]]), c("1", "2"))
 })

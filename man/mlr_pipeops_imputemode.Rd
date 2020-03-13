@@ -44,9 +44,11 @@ Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{
 
 \section{Internals}{
 
-Uses the \code{\link[mlr3misc:compute_mode]{mlr3misc::compute_mode()}} function. Features that are entirely \code{NA} are imputed as the following:
-For factors (also ordered factors) a random factor level is sampled. Numerics and integers are imputed as \code{0}.
-For logicals, \code{TRUE} or \code{FALSE} is sampled.
+Uses the \code{\link[mlr3misc:compute_mode]{mlr3misc::compute_mode()}} function. Features that are entirely \code{NA} are imputed as
+the following: For factors (also ordered factors) this depends on \code{ties_method}. If
+\dQuote{random}, a random factor level is sampled, if \dQuote{first}, the first factor level is
+used, and if \dQuote{last}, the last factor level is used. Numerics and integers are imputed as
+\code{0}. For logicals, \code{TRUE} or \code{FALSE} is randomly sampled.
 }
 
 \section{Methods}{

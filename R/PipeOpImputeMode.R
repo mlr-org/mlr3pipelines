@@ -33,9 +33,11 @@
 #'   Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{last}.
 #'
 #' @section Internals:
-#' Uses the [`mlr3misc::compute_mode()`] function. Features that are entirely `NA` are imputed as the following:
-#' For factors (also ordered factors) a random factor level is sampled. Numerics and integers are imputed as `0`.
-#' For logicals, `TRUE` or `FALSE` is sampled.
+#' Uses the [`mlr3misc::compute_mode()`] function. Features that are entirely `NA` are imputed as
+#' the following: For factors (also ordered factors) this depends on `ties_method`. If
+#' \dQuote{random}, a random factor level is sampled, if \dQuote{first}, the first factor level is
+#' used, and if \dQuote{last}, the last factor level is used. Numerics and integers are imputed as
+#' `0`. For logicals, `TRUE` or `FALSE` is randomly sampled.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -73,11 +75,19 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
       # mod can be of zero length if all elements of "feature" are NA
       if (length(mod) == 0L) {
         mod = switch(type,
-          "factor" = factor(sample(levels(feature), size = 1L), levels = levels(feature)),
+          "factor" = switch(self$param_set$values$ties_method,
+            "random" = factor(sample(levels(feature), size = 1L), levels = levels(feature)),
+            "first" = factor(levels(feature)[1L], levels = levels(feature)),
+            "last" = factor(levels(feature)[length(levels(feature))], levels = levels(feature))
+          ),
           "integer" = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
           "logical" = sample(c(TRUE, FALSE), 1L),
           "numeric" = 0, # see PipeOpImputeMean and PipeOpImputeMedian
-          "ordered" = factor(sample(levels(feature), size = 1L), levels = levels(feature), ordered = TRUE)
+          "ordered" = switch(self$param_set$values$ties_method,
+            "random" = factor(sample(levels(feature), size = 1L), levels = levels(feature), ordered = TRUE),
+            "first" = factor(levels(feature)[1L], levels = levels(feature), ordered = TRUE),
+            "last" = factor(levels(feature)[length(levels(feature))], levels = levels(feature), ordered = TRUE)
+          ),
         )
       }
       mod
