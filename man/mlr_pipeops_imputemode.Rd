@@ -6,7 +6,7 @@
 \title{PipeOpImputeMode}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.}
 \description{
-Impute numerical features by their mode.
+Impute features by their mode. Supports factors as well as logical and numerical features.
 }
 \section{Construction}{
 \preformatted{PipeOpImputeMode$new(id = "imputemode", param_vals = list())
@@ -23,20 +23,19 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) mode.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected features missing values imputed by (column-wise) mode.
 }
 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpImpute}}.
 
-The \verb{$state$model} is a named \code{list} of \code{numeric(1)} indicating the mode of the respective feature.
+The \verb{$state$model} is a named \code{list} of a vector of length one of the type of the feature, indicating the mode of the respective feature.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as the following
-parameters based on \code{\link[mlr3misc:compute_mode]{compute_mode()}}:
+The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as the following parameters based on \code{\link[mlr3misc:compute_mode]{compute_mode()}}:
 \itemize{
 \item \code{ties_method} :: \code{character(1)}\cr
 Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{last}.
@@ -45,7 +44,9 @@ Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{
 
 \section{Internals}{
 
-Uses the \code{\link[mlr3misc:compute_mode]{mlr3misc::compute_mode()}} function. Features that are entirely \code{NA} are imputed as \code{0}.
+Uses the \code{\link[mlr3misc:compute_mode]{mlr3misc::compute_mode()}} function. Features that are entirely \code{NA} are imputed as the following:
+For factors (also ordered factors) a random factor level is sampled. Numerics and integers are imputed as \code{0}.
+For logicals, \code{TRUE} or \code{FALSE} is sampled.
 }
 
 \section{Methods}{

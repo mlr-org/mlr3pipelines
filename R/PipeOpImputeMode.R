@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute numerical features by their mode.
+#' Impute features by their mode. Supports factors as well as logical and numerical features.
 #'
 #' @section Construction:
 #' ```
@@ -20,21 +20,22 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) mode.
+#' The output is the input [`Task`][mlr3::Task] with all affected features missing values imputed by (column-wise) mode.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
 #'
-#' The `$state$model` is a named `list` of `numeric(1)` indicating the mode of the respective feature.
+#' The `$state$model` is a named `list` of a vector of length one of the type of the feature, indicating the mode of the respective feature.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpImpute`], as well as the following
-#' parameters based on [`compute_mode()`][mlr3misc::compute_mode]:
+#' The parameters are the parameters inherited from [`PipeOpImpute`], as well as the following parameters based on [`compute_mode()`][mlr3misc::compute_mode]:
 #' * `ties_method` :: `character(1)`\cr
 #'   Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{last}.
 #'
 #' @section Internals:
-#' Uses the [`mlr3misc::compute_mode()`] function. Features that are entirely `NA` are imputed as `0`.
+#' Uses the [`mlr3misc::compute_mode()`] function. Features that are entirely `NA` are imputed as the following:
+#' For factors (also ordered factors) a random factor level is sampled. Numerics and integers are imputed as `0`.
+#' For logicals, `TRUE` or `FALSE` is sampled.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -65,15 +66,19 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "mlr3misc")
     },
 
-    select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
+    select_cols = function(task) task$feature_types[get("type") %in% c("factor", "integer", "logical", "numeric", "ordered"), get("id")],
 
     train_imputer = function(feature, type, context) {
-      mod = mlr3misc::compute_mode(feature, ties_method = self$param_set$values$ties_method)
-      if (is.na(mod)) {
-        mod = 0
-      }
-      if (type == "integer") {
-        mod = as.integer(round(mod))
+      mod = mlr3misc::compute_mode(feature, ties_method = self$param_set$values$ties_method, na_rm = TRUE)
+      # mod can be of zero length if all elements of "feature" are NA
+      if (length(mod) == 0L) {
+        mod = switch(type,
+          "factor" = factor(sample(levels(feature), size = 1L), levels = levels(feature)),
+          "integer" = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
+          "logical" = sample(c(TRUE, FALSE), 1L),
+          "numeric" = 0, # see PipeOpImputeMean and PipeOpImputeMedian
+          "ordered" = factor(sample(levels(feature), size = 1L), levels = levels(feature), ordered = TRUE)
+        )
       }
       mod
     },

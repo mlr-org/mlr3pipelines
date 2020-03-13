@@ -9,7 +9,7 @@ test_that("PipeOpImpute", {
       initialize = function(id = "impute", param_vals = list()) {
         ps = ParamSet$new(list(
           ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist"), default = "median", tags = c("train", "predict")),
-          ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl", tags = c("train", "predict")),
+          ParamFct$new("method_fct", levels = c("newlvl", "sample", "mode"), default = "newlvl", tags = c("train", "predict")),
           ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict"))
         ))
         ps$values = list(method_num = "median", method_fct = "newlvl", add_dummy = "missing_train")
@@ -20,12 +20,13 @@ test_that("PipeOpImpute", {
         numimputer = switch(self$param_set$values$method_num,
           median = po("imputemedian"),
           mean = po("imputemean"),
-          mode = po("imputemode", param_vals = list(ties_method = "first")),
+          mode = po("imputemode", id = "num_mode", param_vals = list(ties_method = "first")),
           sample = po("imputesample", id = "num_sample"),
           hist = po("imputehist"))
         fctimputer = switch(self$param_set$values$method_fct,
           newlvl = po("imputenewlvl"),
-          sample = po("imputesample", id = "fct_sample"))
+          sample = po("imputesample", id = "fct_sample"),
+          mode = po("imputemode", id = "fct_mode", param_vals = list(ties_method = "first")))
 
         if (self$param_set$values$add_dummy == "none") {
           dummyselector = selector_none()
@@ -113,13 +114,13 @@ test_that("PipeOpImpute", {
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
     constargs = list(param_vals = list(
       method_num = "mode",
-      method_fct = "newlvl",
+      method_fct = "mode",
       add_dummy = "missing_train")))
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
       method_num = "mode",
-      method_fct = "newlvl",
+      method_fct = "mode",
       add_dummy = "missing_train")))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
@@ -214,4 +215,29 @@ test_that("PipeOpImpute", {
     expect_true(task_predicted$a[6] <= 5 && task_trained$a[6] >= 1)
     expect_true(task_predicted$c[6] <= 5 && task_trained$c[6] >= 1)
   }
+})
+
+test_that("More tests for PipeOpImputeMode", {
+ set.seed(1)
+ dat <- data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
+   x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
+ dat[c(1L, 10L), ] <- NA
+ task = TaskRegr$new("task", backend = dat, target = "y")
+
+ po = PipeOpImputeMode$new(param_vals = list(ties_method = "first"))
+ task_trained = po$train(list(task))[[1L]]$data()
+ expect_equivalent(sapply(po$state$model, FUN = function(x) class(x)[1L]),
+   c("numeric", "factor", "ordered", "integer", "logical"))
+ task_predicted = po$predict(list(task))[[1L]]$data()
+ expect_equal(task_trained, task_predicted)
+
+ task_NA = task
+ task_NA$filter(c(1L, 10L))
+
+ po_NA = PipeOpImputeMode$new(param_vals = list(ties_method = "first"))
+ task_NA_trained = po_NA$train(list(task_NA))[[1L]]$data()
+ expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
+   c("numeric", "factor", "ordered", "integer", "logical"))
+ task_NA_predicted = po_NA$predict(list(task_NA))[[1L]]$data()
+ expect_equal(task_NA_trained, task_NA_predicted)
 })
