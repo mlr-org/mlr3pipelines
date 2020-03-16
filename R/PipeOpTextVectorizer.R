@@ -228,7 +228,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       invoke(quanteda::dfm_trim, .args = c(tdm, self$param_set$get_values(tags = "dfm_trim")))
     },
     transform_tfidf = function(tdm) {
-      if (!nfeat(tdm) || !ndoc(tdm)) return(tdm)
+      if (!quanteda::nfeat(tdm) || !quanteda::ndoc(tdm)) return(tdm)
       # code copied from quanteda:::dfm_tfidf.dfm (adapting here to avoid train/test leakage)
       x = invoke(quanteda::dfm_weight, .args = c(x = tdm, scheme = self$param_set$get_values()$scheme_tf, self$param_set$get_values("dfm_weight")))
       v = self$state$docfreq
