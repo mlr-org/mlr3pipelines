@@ -19,7 +19,7 @@ test_that("PipeOpTextVectorizer - basic properties", {
   }))
   task$cbind(dt)
 
-  op = PipeOpTextVectorizer$new(param_vals = list("language" = "en"))
+  op = PipeOpTextVectorizer$new(param_vals = list(remove_stopwords = FALSE))
   expect_pipeop(op)
   result = op$train(list(task))[[1]]
   expect_task(result)

@@ -20,6 +20,15 @@ arguments passed on to \code{\link[quanteda:dfm]{quanteda::dfm()}}.
 Defaults to a bag-of-words representation with token counts as matrix entries.
 
 In order to do \code{tf_idf} weighting, set the 'scheme' parameter to 'inverse*'.
+
+The pipeop works as follows:
+\enumerate{
+\item Words are tokenized using \code{\link[quanteda:tokens]{quanteda::tokens}}.
+\item Ngrams are computed using \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}
+\item A document-frequency matrix is computed using \code{\link[quanteda:dfm]{quanteda::dfm}}
+\item The document-frequency matrix is trimmed using \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}
+\item The document-frequency matrix is re-weighted (e.g. tfidf) using \code{\link[quanteda:dfm_tfidf]{quanteda::dfm_tfidf}}
+}
 }
 \section{Construction}{
 \preformatted{PipeOpTextVectorizer$new(id = "text_vectorizer", param_vals = list())
@@ -57,7 +66,11 @@ also removes one-character strings. Default: 'smart'.
 \item \code{remove_stopwords} :: \code{logical(1)}\cr
 Remove stopwords according to 'language'? Default: \code{TRUE}.
 \item \code{tolower} :: \code{logical(1)}\cr
-Convert to lower case? Default: \code{TRUE}.
+Convert to lower case? See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default: \code{TRUE}.
+\item \code{stem} :: \code{logical(1)}\cr
+Stemming? See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default: \code{TRUE}.
+\item \code{what} :: \code{character(1)}\cr
+Tokenization splitter. See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{word}.
 \item \code{remove_punct} :: \code{logical(1)}\cr
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_punct} :: \code{logical(1)}\cr
@@ -68,7 +81,12 @@ See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_separators} :: \code{logical(1)}\cr
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{TRUE}.
+\item \code{n} :: \code{integer}\cr
+Ngram length. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 1.
+\item \code{skip} :: \code{integer}\cr
+Ngram skip. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 0.
 \item \code{sparsity} :: \code{numeric(1)}\cr
+
 Desired sparsity of the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
 \item \code{max_termfreq} :: \code{numeric(1)}\cr
 Maximum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
