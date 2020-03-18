@@ -19,3 +19,6 @@
 ^appveyor\.yml$
 ^doc$
 ^Meta$
+^\.ccache$
+^\.github$
+^clang-.*
