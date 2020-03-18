@@ -32,6 +32,7 @@ test_that("PipeOpTextVectorizer - basic properties", {
   dt2 = result$data()
   expect_true(all(dt2[1, strs, with = FALSE] == 1))
 
+  # allowed after https://github.com/mlr-org/paradox/issues/271
   # expect_datapreproc_pipeop_class(PipeOpTextVectorizer, task = task)
 })
 
@@ -79,7 +80,6 @@ test_that("PipeOpTextVectorizer - tfidf works", {
   dt3 = result2$data()
   expect_true(all(dt2[1, strs, with = FALSE] == dt3[1, strs, with = FALSE]))
 
-
   # out-of-bag tokens during prediction:
   df = task$data(rows = 1)
   df$txt = paste0(df$txt, " foobar")
@@ -121,6 +121,4 @@ test_that("PipeOpTextVectorizer - bigrams", {
   strs = unlist(strsplit(dt[1, ][["txt"]], fixed = TRUE, split = " "))
   dt2 = result$data()
   expect_true(all(dt2[1, strs, with = FALSE] == 1))
-
-  # expect_datapreproc_pipeop_class(PipeOpTextVectorizer, task = task)
 })

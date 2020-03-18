@@ -13,6 +13,12 @@
 #' but has been adjusted for train/test data split using [`quanteda::docfreq()`][quanteda::docfreq] 
 #' and [`quanteda::dfm_weight()`][quanteda::dfm_weight]
 #' 
+#' In short:
+#' * Per default, produces a bag-of-words representation 
+#' * If 'n' is set to values > 1 ngrams are computed
+#' * If 'df_trim' parameters are set, the bag-of-words is trimmed.
+#' * If 'scheme' parameters are set, term frequence - inverse document frequency is computed.
+#' 
 #' Parameters specify arguments to quanteda's dfm', 'dfm_trim', 'docfreq' and 'dfm_weight'.
 #' What belongs to what can be obtained from each params `tags` where `tokenizer` are
 #' arguments passed on to [`quanteda::dfm()`][quanteda::dfm].
@@ -75,9 +81,9 @@
 #'   See [`quanteda::tokens`]. Default: `TRUE`.
 #' 
 #' * `n` :: `integer`\cr
-#'   Ngram length. See [`quanteda::tokens_ngrams`]. Default: 1.
+#'   Vector of ngram lengths. See [`quanteda::tokens_ngrams`]. Default: 1.
 #' * `skip` :: `integer`\cr
-#'   Ngram skip. See [`quanteda::tokens_ngrams`]. Default: 0.
+#'   Vector of skips. See [`quanteda::tokens_ngrams`]. Default: 0.
 #' * `sparsity` :: `numeric(1)`\cr
 #' 
 #'   Desired sparsity of the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
@@ -85,19 +91,19 @@
 #'   Maximum term frequency in the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
 #' * `min_termfreq` :: `numeric(1)`\cr
 #'   Minimum term frequency in the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
-#' * `termfreq_type` :: `character`\cr
+#' * `termfreq_type` :: `character(1)`\cr
 #'   How to asess term frequency. See [`quanteda::dfm_trim`]. Default: 'count'.
-#' * `scheme_tf` :: `character` \cr
+#' * `scheme_tf` :: `character(1)` \cr
 #'   Weighting scheme for term frequency: See [`quanteda::dfm_weight`]. Default: 'count'.
-#' * `scheme` :: `character` \cr
+#' * `scheme` :: `character(1)` \cr
 #'   Weighting scheme for document frequency: See [`quanteda::docfreq`]. Default: 'unary' (1 for each document).
-#' * `smoothing` :: `numeric`\cr
+#' * `smoothing` :: `numeric(1)`\cr
 #'   See [`quanteda::docfreq`]. Default: 0.
-#' * `k` :: `numeric`\cr
+#' * `k` :: `numeric(1)`\cr
 #'   See [`quanteda::docfreq`]. Default: 0.
-#' * `threshold` :: `numeric`\cr
+#' * `threshold` :: `numeric(1)`\cr
 #'   See [`quanteda::docfreq`]. Default: 0.
-#' * `base` :: `numeric`\cr
+#' * `base` :: `numeric(1)`\cr
 #'   See [`quanteda::docfreq`]. Default: 10.
 #' 
 #' @section Internals:
@@ -150,8 +156,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamLgl$new("remove_separators", default = TRUE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("split_hyphens", default = FALSE, tags = c("train", "predict", "tokenizer")),
 
-        ParamInt$new("n", default = 1, tags = c("train", "predict", "ngrams")),
-        ParamInt$new("skip", default = 0, tags = c("train", "predict", "ngrams")),
+        ParamUty$new("n", default = 1, tags = c("train", "predict", "ngrams"), custom_check = check_integer),
+        ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = check_integer),
 
         ParamDbl$new("sparsity", lower = 0, upper = 1, default = NULL,
           tags = c("train", "predict", "dfm_trim"), special_vals = list(NULL)),
@@ -171,7 +177,6 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamDbl$new("threshold", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),
         ParamDbl$new("base", lower = 0, upper = Inf, default = 10, tags = c("train", "predict", "docfreq"))
       ))
-      # ps$add_dep("k", "scheme_tf", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
       ps$add_dep("base", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
       ps$add_dep("smoothing", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
       ps$add_dep("k", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
@@ -196,12 +201,16 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       quanteda::convert(tdm, "matrix")
     },
     predict_dt = function(dt, levels, target) {
+      if (nrow(dt)) {
         tdm = private$transform_bow(dt)
         tdm = rbind(tdm, self$state$tdm) # make sure all columns occur
         # tf-idf
         if (self$param_set$get_values()$scheme != "unary") tdm = private$transform_tfidf(tdm)
         tdm = tdm[, colnames(self$state$tdm)]   # Ensure only train-time features are pased on
-        quanteda::convert(tdm, "matrix")
+      } else {
+        tdm = self$state$tdm
+      }
+      quanteda::convert(tdm, "matrix")
     }
   ),
   private = list(

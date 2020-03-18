@@ -14,6 +14,14 @@ TF-IDF computation works similarly to \code{\link[quanteda:dfm_tfidf]{quanteda::
 but has been adjusted for train/test data split using \code{\link[quanteda:docfreq]{quanteda::docfreq()}}
 and \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight()}}
 
+In short:
+\itemize{
+\item Per default, produces a bag-of-words representation
+\item If 'n' is set to values > 1 ngrams are computed
+\item If 'df_trim' parameters are set, the bag-of-words is trimmed.
+\item If 'scheme' parameters are set, term frequence - inverse document frequency is computed.
+}
+
 Parameters specify arguments to quanteda's dfm', 'dfm_trim', 'docfreq' and 'dfm_weight'.
 What belongs to what can be obtained from each params \code{tags} where \code{tokenizer} are
 arguments passed on to \code{\link[quanteda:dfm]{quanteda::dfm()}}.
@@ -82,9 +90,9 @@ See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_separators} :: \code{logical(1)}\cr
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{TRUE}.
 \item \code{n} :: \code{integer}\cr
-Ngram length. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 1.
+Vector of ngram lengths. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 1.
 \item \code{skip} :: \code{integer}\cr
-Ngram skip. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 0.
+Vector of skips. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 0.
 \item \code{sparsity} :: \code{numeric(1)}\cr
 
 Desired sparsity of the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
@@ -92,19 +100,19 @@ Desired sparsity of the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanted
 Maximum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
 \item \code{min_termfreq} :: \code{numeric(1)}\cr
 Minimum term frequency in the 'tfm' matrix. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: \code{NULL}.
-\item \code{termfreq_type} :: \code{character}\cr
+\item \code{termfreq_type} :: \code{character(1)}\cr
 How to asess term frequency. See \code{\link[quanteda:dfm_trim]{quanteda::dfm_trim}}. Default: 'count'.
-\item \code{scheme_tf} :: \code{character} \cr
+\item \code{scheme_tf} :: \code{character(1)} \cr
 Weighting scheme for term frequency: See \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}}. Default: 'count'.
-\item \code{scheme} :: \code{character} \cr
+\item \code{scheme} :: \code{character(1)} \cr
 Weighting scheme for document frequency: See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 'unary' (1 for each document).
-\item \code{smoothing} :: \code{numeric}\cr
+\item \code{smoothing} :: \code{numeric(1)}\cr
 See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0.
-\item \code{k} :: \code{numeric}\cr
+\item \code{k} :: \code{numeric(1)}\cr
 See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0.
-\item \code{threshold} :: \code{numeric}\cr
+\item \code{threshold} :: \code{numeric(1)}\cr
 See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 0.
-\item \code{base} :: \code{numeric}\cr
+\item \code{base} :: \code{numeric(1)}\cr
 See \code{\link[quanteda:docfreq]{quanteda::docfreq}}. Default: 10.
 }
 }
