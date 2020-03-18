@@ -156,8 +156,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamLgl$new("remove_separators", default = TRUE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("split_hyphens", default = FALSE, tags = c("train", "predict", "tokenizer")),
 
-        ParamUty$new("n", default = 1, tags = c("train", "predict", "ngrams"), custom_check = check_integer),
-        ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = check_integer),
+        ParamUty$new("n", default = 1, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
+        ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
 
         ParamDbl$new("sparsity", lower = 0, upper = 1, default = NULL,
           tags = c("train", "predict", "dfm_trim"), special_vals = list(NULL)),
