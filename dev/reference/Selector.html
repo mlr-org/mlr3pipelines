@@ -68,7 +68,7 @@ selector parameter, or many PipeOpTaskPreprocs' affect_columns parameter. See th
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -106,7 +106,7 @@ selector parameter, or many PipeOpTaskPreprocs' affect_columns parameter. See th
   </a>
 </li>
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -262,10 +262,9 @@ by <code>selector_y</code>.</p></li>
 that has one input argument (commonly named <code>task</code>). The function is called with the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that a <code><a href='PipeOp.html'>PipeOp</a></code>
 is operating on. The return value of the function must be a <code>character</code> vector that is a subset of the feature names present
 in the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
-<p>For example, a <code>Selector</code> that selects all columns is</p><pre>function(task) {
-  task$feature_names
-}
-</pre>
+<p>For example, a <code>Selector</code> that selects all columns is</p><pre><span class='kw'>function</span>(<span class='no'>task</span>) {
+  <span class='no'>task</span>$<span class='no'>feature_names</span>
+}</pre>
 
 <p>(this is the <code>selector_all()</code>-<code>Selector</code>.) A <code>Selector</code> that selects
 all columns that have names shorter than four letters would be:</p><pre>function(task) {
@@ -275,10 +274,9 @@ all columns that have names shorter than four letters would be:</p><pre>function
 }
 </pre>
 
-<p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href='https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html'>iris task</a>), if present, is</p><pre>function(task) {
-  intersect(task$feature_names, "Sepal.Length")
-}
-</pre>
+<p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href='https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html'>iris task</a>), if present, is</p><pre><span class='kw'>function</span>(<span class='no'>task</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>intersect</a></span>(<span class='no'>task</span>$<span class='no'>feature_names</span>, <span class='st'>"Sepal.Length"</span>)
+}</pre>
 
 <p>It is preferable to use the <code>Selector</code> construction functions like <code>select_type</code>, <code>select_grep</code> etc. if possible, instead of writing custom <code>Selector</code>s.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -306,17 +304,10 @@ all columns that have names shorter than four letters would be:</p><pre>function
 <span class='no'>selgf</span> <span class='kw'>=</span> <span class='fu'>selector_union</span>(<span class='no'>selg</span>, <span class='no'>self</span>)
 <span class='fu'>selgf</span>(<span class='no'>iris_task</span>)</div><div class='output co'>#&gt; [1] "Petal.Width" "Sepal.Width"</div><div class='input'><span class='fu'>selgf</span>(<span class='no'>bh_task</span>)</div><div class='output co'>#&gt; [1] "ptratio" "chas"    "town"   </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#functions">Functions</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -327,7 +318,7 @@ all columns that have names shorter than four letters would be:</p><pre>function
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

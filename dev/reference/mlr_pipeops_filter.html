@@ -68,7 +68,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -106,7 +106,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
   </a>
 </li>
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -163,8 +163,7 @@ this means e.g. that setting <code>nfeat</code> to 0 will only remove features o
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOpFilter$new(filter, id = filter$id, param_vals = list())
-</pre>
+<pre><span class='no'>PipeOpFilter</span>$<span class='fu'>new</span>(<span class='no'>filter</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>filter</span>$<span class='no'>id</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>filter</code> :: <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code><br />
 <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> used for feature filtering.</p></li>
@@ -345,21 +344,10 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 #&gt;             parts 
 #&gt;       0.001079553 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#construction">Construction</a></li>
-      <li><a href="#input-and-output-channels">Input and Output Channels</a></li>
-      <li><a href="#state">State</a></li>
-      <li><a href="#parameters">Parameters</a></li>
-      <li><a href="#internals">Internals</a></li>
-      <li><a href="#fields">Fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -370,7 +358,7 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

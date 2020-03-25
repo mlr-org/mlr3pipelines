@@ -66,7 +66,7 @@ simply passes on the input during outnum times during prediction." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -104,7 +104,7 @@ simply passes on the input during outnum times during prediction." />
   </a>
 </li>
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -159,8 +159,7 @@ simply passes on the input during <code>outnum</code> times during prediction.</
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOpChunk$new(outnum, id = "chunk", param_vals = list())
-</pre>
+<pre><span class='no'>PipeOpChunk</span>$<span class='fu'>new</span>(<span class='no'>outnum</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"chunk"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>outnum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
 Number of output channels, and therefore number of chunks created.</p></li>
@@ -301,21 +300,10 @@ Should the data be shuffled before chunking? Initialized to <code>TRUE</code>.</
 #&gt;   - int (2): magnesium, proline
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#construction">Construction</a></li>
-      <li><a href="#input-and-output">Input and Output</a></li>
-      <li><a href="#state">State</a></li>
-      <li><a href="#parameters">Parameters</a></li>
-      <li><a href="#internals">Internals</a></li>
-      <li><a href="#fields">Fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -326,7 +314,7 @@ Should the data be shuffled before chunking? Initialized to <code>TRUE</code>.</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

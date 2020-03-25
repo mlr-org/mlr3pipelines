@@ -75,7 +75,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -113,7 +113,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
   </a>
 </li>
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -177,8 +177,7 @@ useful to use <code><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOpLearnerCV$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())
-</pre>
+<pre><span class='no'>PipeOpLearnerCV</span>$<span class='fu'>new</span>(<span class='no'>learner</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span>(<span class='no'>learner</span>)) <span class='no'>learner</span> <span class='kw'>else</span> <span class='no'>learner</span>$<span class='no'>id</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> <br />
 <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> to use for cross validation / prediction, or a string identifying a
@@ -292,21 +291,10 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 #&gt;     classif.rpart.prob.virginica
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#construction">Construction</a></li>
-      <li><a href="#input-and-output-channels">Input and Output Channels</a></li>
-      <li><a href="#state">State</a></li>
-      <li><a href="#parameters">Parameters</a></li>
-      <li><a href="#internals">Internals</a></li>
-      <li><a href="#fields">Fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -317,7 +305,7 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

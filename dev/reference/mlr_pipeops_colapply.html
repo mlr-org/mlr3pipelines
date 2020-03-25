@@ -72,7 +72,7 @@ from Vectorize(f), it is not a function that should be used for applicator." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -110,7 +110,7 @@ from Vectorize(f), it is not a function that should be used for applicator." />
   </a>
 </li>
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -171,8 +171,7 @@ from <code><a href='https://rdrr.io/r/base/Vectorize.html'>Vectorize(f)</a></cod
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOpColApply$new(id = "colapply", param_vals = list())
-</pre>
+<pre><span class='no'>PipeOpColApply</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"colapply"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"colapply"</code>.</p></li>
@@ -326,21 +325,10 @@ by simply saving a copy of an empty <code>data.table</code> in the <code>$state$
 #&gt; 149: virginica            a           a          6.2         3.4
 #&gt; 150: virginica            a           a          5.9         3.0</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#construction">Construction</a></li>
-      <li><a href="#input-and-output-channels">Input and Output Channels</a></li>
-      <li><a href="#state">State</a></li>
-      <li><a href="#parameters">Parameters</a></li>
-      <li><a href="#internals">Internals</a></li>
-      <li><a href="#fields">Fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -351,7 +339,7 @@ by simply saving a copy of an empty <code>data.table</code> in the <code>$state$
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

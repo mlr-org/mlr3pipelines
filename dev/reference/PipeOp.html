@@ -86,7 +86,7 @@ is not intended to be instantiated." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -124,7 +124,7 @@ is not intended to be instantiated." />
   </a>
 </li>
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -199,8 +199,7 @@ is not intended to be instantiated.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0))
-</pre>
+<pre><span class='no'>PipeOp</span>$<span class='fu'>new</span>(<span class='no'>id</span>, <span class='kw'>param_set</span> <span class='kw'>=</span> <span class='no'>ParamSet</span>$<span class='fu'>new</span>(), <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='no'>input</span>, <span class='no'>output</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object. See <code>$id</code> slot.</p></li>
@@ -242,7 +241,7 @@ ID of the <code>PipeOp</code>. IDs are user-configurable, and IDs of <code>PipeO
 should be used.</p></li>
 <li><p><code>packages</code> :: <code>character</code><br />
 Packages required for the <code>PipeOp</code>. Functions that are not in base R should still be called using <code>::</code>
-(or explicitly attached using <code><a href='https://rdrr.io/r/base/library.html'>require()</a></code>) in <code>$train_internal()</code> <em>and</em> <code>$predict_internal()</code>, but
+(or explicitly attached using <code>require()</code>) in <code>$train_internal()</code> <em>and</em> <code>$predict_internal()</code>, but
 packages declared here are checked before any (possibly expensive) processing has started within a <code><a href='Graph.html'>Graph</a></code>.</p></li>
 <li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
 Parameters and parameter constraints. Parameter values that influence the functioning of <code>$train</code> and / or <code>$predict</code> are
@@ -418,18 +417,10 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 #&gt; [1] "c"
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#construction">Construction</a></li>
-      <li><a href="#internals">Internals</a></li>
-      <li><a href="#fields">Fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -440,7 +431,7 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

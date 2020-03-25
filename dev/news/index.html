@@ -63,7 +63,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -101,7 +101,7 @@
   </a>
 </li>
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -137,26 +137,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div id="mlr3pipelines-development-version" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="development version">
 <a href="#mlr3pipelines-development-version" class="anchor"></a>mlr3pipelines (development version)<small> Unreleased </small>
 </h1>
 </div>
-    <div id="mlr3pipelines-0-1-2" class="section level1">
-<h1 class="page-header">
-<a href="#mlr3pipelines-0-1-2" class="anchor"></a>mlr3pipelines 0.1.2<small> 2019-12-10 </small>
+    <div id="mlr3pipelines-012" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.2">
+<a href="#mlr3pipelines-012" class="anchor"></a>mlr3pipelines 0.1.2<small> 2019-12-10 </small>
 </h1>
 <ul>
 <li>Work with new mlr3 version 0.1.5 (handling of character columns changed)</li>
 </ul>
 </div>
-    <div id="mlr3pipelines-0-1-1" class="section level1">
-<h1 class="page-header">
-<a href="#mlr3pipelines-0-1-1" class="anchor"></a>mlr3pipelines 0.1.1<small> 2019-10-29 </small>
+    <div id="mlr3pipelines-011" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.1">
+<a href="#mlr3pipelines-011" class="anchor"></a>mlr3pipelines 0.1.1<small> 2019-10-29 </small>
 </h1>
 <ul>
 <li>Better html graphics for linear Graphs</li>
@@ -172,9 +172,9 @@
 </li>
 </ul>
 </div>
-    <div id="mlr3pipelines-0-1-0" class="section level1">
-<h1 class="page-header">
-<a href="#mlr3pipelines-0-1-0" class="anchor"></a>mlr3pipelines 0.1.0<small> 2019-10-06 </small>
+    <div id="mlr3pipelines-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#mlr3pipelines-010" class="anchor"></a>mlr3pipelines 0.1.0<small> 2019-10-06 </small>
 </h1>
 <ul>
 <li>Initial upload to CRAN.</li>
@@ -182,16 +182,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#mlr3pipelines-development-version">development version</a></li>
-        <li><a href="#mlr3pipelines-0-1-2">0.1.2</a></li>
-        <li><a href="#mlr3pipelines-0-1-1">0.1.1</a></li>
-        <li><a href="#mlr3pipelines-0-1-0">0.1.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -203,7 +197,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>
