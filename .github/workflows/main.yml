@@ -20,7 +20,7 @@ jobs:
         config:
           # comment out lines if you do not want to build on certain platforms
           - { os: windows-latest, r: "release" }
-          - { os: macOS-latest, r: "release" }
+          - { os: macOS-latest, r: "release", pkgdown: "true" }
           - { os: macOS-latest, r: "devel" }
           - { os: ubuntu-latest, r: "release" }
 
@@ -38,6 +38,9 @@ jobs:
       TIC_DEPLOY_KEY: ${{ secrets.TIC_DEPLOY_KEY }}
       # prevent rgl issues because no X11 display is available
       RGL_USE_NULL: true
+      # if you use bookdown or blogdown, replace "PKGDOWN" by the respective
+      # capitalized term. This also might need to be done in tic.R
+      BUILD_PKGDOWN: ${{ matrix.config.pkgdown }} 
 
     steps:
       - uses: actions/checkout@v2
@@ -102,7 +105,6 @@ jobs:
           wget https://cran.r-project.org/bin/macosx/tools/clang-7.0.0.pkg
           sudo installer -package clang-7.0.0.pkg -target /
           mkdir -p ~/.R && echo -e 'CXX_STD = CXX14\n\nCC=ccache /usr/local/clang7/bin/clang\nCC11=ccache /usr/local/clang7/bin/clang\nCC14=ccache /usr/local/clang7/bin/clang\nCXX=ccache /usr/local/clang7/bin/clang++\nCXX11=ccache /usr/local/clang7/bin/clang++\nCXX14=ccache /usr/local/clang7/bin/clang++\nC11=ccache /usr/local/clang7/bin/clang++\nC14=ccache /usr/local/clang7/bin/clang++\nF77=ccache gfortran/nCFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\nCXXFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\nCCFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\nCFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' > $HOME/.R/Makevars
-          R CMD javareconf
 
       # install ccache and write config file
       # mirror the setup described in https://github.com/rmacoslib/r-macos-rtools
@@ -113,7 +115,6 @@ jobs:
           wget https://cran.r-project.org/bin/macosx/tools/clang-8.0.0.pkg
           sudo installer -package clang-8.0.0.pkg -target /
           mkdir -p ~/.R && echo -e 'CXX_STD = CXX14\n\nCC=ccache /usr/local/clang8/bin/clang\nCC11=ccache /usr/local/clang8/bin/clang\nCC14=ccache /usr/local/clang8/bin/clang\nCXX=ccache /usr/local/clang8/bin/clang++\nCXX11=ccache /usr/local/clang8/bin/clang++\nCXX14=ccache /usr/local/clang8/bin/clang++\nC11=ccache /usr/local/clang8/bin/clang++\nC14=ccache /usr/local/clang8/bin/clang++\nF88=ccache gfortran/nCFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\nCXXFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\nCCFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk\nCFLAGS=-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' > $HOME/.R/Makevars
-          R CMD javareconf
 
       # for some strange Windows reason this step and the next one need to be decoupled
       - name: "[Stage] Prepare"
@@ -146,15 +147,12 @@ jobs:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
       - name: "[Stage] Before Deploy"
-        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
         run: |
           Rscript -e "tic::before_deploy()"
 
       - name: "[Stage] Deploy"
-        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
         run: Rscript -e "tic::deploy()"
 
       - name: "[Stage] After Deploy"
-        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
         run: Rscript -e "tic::after_deploy()"
 
