@@ -83,7 +83,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = inname, train = "NULL", predict = prediction_type),
-        output = data.table(name = "output", train = "NULL", predict = prediction_type))
+        output = data.table(name = "output", train = "NULL", predict = prediction_type),
+        tags = "ensemble"
+      )
     },
     train_internal = function(inputs) {
       self$state = list()

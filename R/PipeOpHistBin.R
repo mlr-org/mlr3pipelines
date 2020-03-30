@@ -64,11 +64,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
       ps = ParamSet$new(params = list(
         ParamUty$new("breaks", default = "Sturges", tags = c("train", "hist"))
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics")
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"))
     },
 
     get_state_dt = function(dt, levels, target) {

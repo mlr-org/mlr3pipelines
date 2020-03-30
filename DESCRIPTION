@@ -70,6 +70,8 @@ Suggests:
     evaluate
 VignetteBuilder:
     knitr
+Remotes:
+    mlr-org/mlr3
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -96,6 +98,7 @@ Collate:
     'PipeOpColApply.R'
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
+    'PipeOpDateFeatures.R'
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
