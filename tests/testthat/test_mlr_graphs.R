@@ -117,11 +117,13 @@ test_that("Branching Pipeline", {
   par_ids = unlist(map(lrns, function(x) as_graph(x)$param_set$ids()))
   expect_subset(par_ids, gr$param_set$ids())
 
-  # FIXME: Check that this allows to change parameters
-  # change parameters
-  # gr$param_set$values$branch.selection = "classif.featureless"
-
   gr$train(tsk("iris"))
   out = gr$predict(tsk("iris"))$unbranch.output
   assert_prediction(out)
+  
+
+  gr = branch_pipeline(lrns, id_prefix = "foo_", prefix_branches = TRUE)
+  assert_true(gr$input$name == "foo_branch.input")
+  assert_true(gr$output$name == "foo_unbranch.output")
+  assert_true(all(grepl("foo", gr$param_set$params[["foo_branch.selection"]]$levels)))
 })

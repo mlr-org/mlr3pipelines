@@ -163,7 +163,7 @@ mlr_graphs$add("bagging", bagging_pipeline)
 #'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`].
 #'   IDs will be `"branch"` and `"unbranch"`, prefixed by `id_prefix`. Default is `""`.
 #' @param `prefix_branches` [`logical(1)`] \cr
-#'   Whether to add `id_prefix` as prefix to graph IDs when performing `gunion`. 
+#'   Whether to add `id_prefix` as prefix to the `branch.selection` when performing `gunion`. 
 #'   Can be helpful to avoid ID clashes in resulting graph. Default `FALSE`.
 #' @return [`Graph`]
 #' @export
