@@ -18,12 +18,9 @@ Function that checks that a given object is a \code{PipeOp} and
 throws an error if not.
 }
 \seealso{
-Other Graph operators: 
-\code{\link{\%>>\%}()},
-\code{\link{as_graph}()},
-\code{\link{as_pipeop}()},
-\code{\link{assert_graph}()},
-\code{\link{greplicate}()},
-\code{\link{gunion}()}
+Other Graph operators: \code{\link{\%>>\%}},
+  \code{\link{as_graph}}, \code{\link{as_pipeop}},
+  \code{\link{assert_graph}}, \code{\link{greplicate}},
+  \code{\link{gunion}}
 }
 \concept{Graph operators}
