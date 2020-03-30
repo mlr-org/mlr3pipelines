@@ -36,7 +36,7 @@ This class is an abstract base class that all \code{\link{PipeOp}}s being used i
 is not intended to be instantiated.
 }
 \section{Construction}{
-\preformatted{PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0))
+\preformatted{PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -56,6 +56,9 @@ Sets the \code{$output} slot of the resulting object; see description there.
 \item packages :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \code{$train} and \code{$predict} methods. See \code{$packages} slot.
 Default is \code{character(0)}.
+\item \code{tags} ::\code{character}\cr
+A set of tags associated with the \code{PipeOp}. Tags describe a PipeOp's purpose.
+Can be used to filter \code{as.data.table(mlr_pipeops)}. Default is \code{"abstract"}, indicating an abstract \code{PipeOp}.
 }
 }
 
@@ -104,6 +107,10 @@ Number of input channels. This equals \code{nrow($input)}.
 Number of output channels. This equals \code{nrow($output)}.
 \item \code{is_trained} :: \code{logical(1)} \cr
 Indicate whether the \code{\link{PipeOp}} was already trained and can therefore be used for prediction.
+\item \code{tags} ::\code{character}\cr
+A set of tags associated with the \code{PipeOp}. Tags describe a PipeOp's purpose.
+Can be used to filter \code{as.data.table(mlr_pipeops)}.
+PipeOp tags are inherited and child classes can introduce additional tags.
 \item \code{hash} :: \code{character(1)} \cr
 Checksum calculated on the \code{\link{PipeOp}}, depending on the \code{\link{PipeOp}}'s \code{class} and the slots \code{$id} and \code{$param_set}
 (and therefore also \code{$param_set$values}). If a
