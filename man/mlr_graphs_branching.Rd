@@ -2,17 +2,22 @@
 % Please edit documentation in R/mlr_graphs_elements.R
 \name{mlr_graphs_branching}
 \alias{mlr_graphs_branching}
-\alias{branch_pipeline}
+\alias{pipeline_branch}
 \title{Create a branch - unbranch pipeline}
 \usage{
-branch_pipeline(graphs, add_deps = TRUE)
+pipeline_branch(graphs, id_prefix = "", prefix_branches = FALSE)
 }
 \arguments{
 \item{graphs}{List of \code{\link{PipeOp}} | \code{\link{Graph}} \cr
 A (possibly named) list of \code{\link{PipeOp}}s or \code{\link{Graph}}s.}
 
-\item{add_deps}{\code{\link{logical}} \cr
-Whether parameter dependencies should be added. Default to  TRUE`.}
+\item{id_prefix}{\code{\link{character(1)}} \cr
+Optional id prefix to prepend to \code{\link{PipeOpBranch}} and \code{\link{PipeOpUnbranch}}.
+IDs will be \code{"branch"} and \code{"unbranch"}, prefixed by \code{id_prefix}. Default is \code{""}.}
+
+\item{`prefix_branches`}{\code{\link{logical(1)}} \cr
+Whether to add \code{id_prefix} as prefix to the \code{branch.selection} when performing \code{gunion}.
+Can be helpful to avoid ID clashes in resulting graph. Default \code{FALSE}.}
 }
 \value{
 \code{\link{Graph}}
@@ -29,7 +34,7 @@ library(mlr3)
 library(mlr3misc)
 lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
 task = mlr_tasks$get("boston_housing")
-gr = branch_pipeline(lrns)
+gr = pipeline_branch(lrns)
 # change parameters
 # gr$param_set$values$branch.selection = "classif.featureless"
 }

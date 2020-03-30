@@ -2,10 +2,10 @@
 % Please edit documentation in R/mlr_graphs_elements.R
 \name{mlr_graphs_robustify}
 \alias{mlr_graphs_robustify}
-\alias{robustify_pipeline}
+\alias{pipeline_robustify}
 \title{Robustify a learner}
 \usage{
-robustify_pipeline(
+pipeline_robustify(
   task = NULL,
   learner = NULL,
   impute_missings = NULL,
@@ -55,6 +55,6 @@ factor variables, no encoding is performed.
 library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
-gr = robustify_pipeline(task, lrn) \%>>\% po("learner", lrn)
+gr = pipeline_robustify(task, lrn) \%>>\% po("learner", lrn)
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
 }

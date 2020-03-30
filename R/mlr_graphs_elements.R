@@ -36,9 +36,9 @@
 #' library(mlr3)
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
-#' gr = robustify_pipeline(task, lrn) %>>% po("learner", lrn)
+#' gr = pipeline_robustify(task, lrn) %>>% po("learner", lrn)
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
-robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NULL,
+pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NULL,
   factors_to_numeric = NULL, max_cardinality = 1000) {
 
   has_type_feats = function(types, if_null = TRUE) {
@@ -98,7 +98,7 @@ robustify_pipeline = function(task = NULL, learner = NULL, impute_missings = NUL
   as_graph(Reduce(`%>>%`, pos))
 }
 
-mlr_graphs$add("robustify", robustify_pipeline)
+mlr_graphs$add("robustify", pipeline_robustify)
 
 
 #' @title Create a bagging learner
@@ -131,9 +131,9 @@ mlr_graphs$add("robustify", robustify_pipeline)
 #' library(mlr3)
 #' lrn_po = po("learner", lrn("regr.rpart"))
 #' task = mlr_tasks$get("boston_housing")
-#' gr = bagging_pipeline(lrn_po, 3, averager = po("regravg"))
+#' gr = pipeline_bagging(lrn_po, 3, averager = po("regravg"))
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
-bagging_pipeline = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
+pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)
   graph = as_graph(graph)
@@ -145,7 +145,7 @@ bagging_pipeline = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   if (!is.null(averager)) subs_repls %>>% averager else subs_repls
 }
 
-mlr_graphs$add("bagging", bagging_pipeline)
+mlr_graphs$add("bagging", pipeline_bagging)
 
 
 #' @title Create a branch - unbranch pipeline
@@ -172,10 +172,10 @@ mlr_graphs$add("bagging", bagging_pipeline)
 #' library(mlr3misc)
 #' lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
 #' task = mlr_tasks$get("boston_housing")
-#' gr = branch_pipeline(lrns)
+#' gr = pipeline_branch(lrns)
 #' # change parameters
 #' # gr$param_set$values$branch.selection = "classif.featureless"
-branch_pipeline = function(graphs, id_prefix = "", prefix_branches = FALSE) {
+pipeline_branch = function(graphs, id_prefix = "", prefix_branches = FALSE) {
   graphs = map(graphs, as_graph)
   nms = names(graphs)
   if (is.null(nms)) 
@@ -187,5 +187,5 @@ branch_pipeline = function(graphs, id_prefix = "", prefix_branches = FALSE) {
   return(gr)
 }
 
-mlr_graphs$add("branch", branch_pipeline)
+mlr_graphs$add("branch", pipeline_branch)
 
