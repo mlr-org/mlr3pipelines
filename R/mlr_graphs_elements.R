@@ -159,8 +159,12 @@ mlr_graphs$add("bagging", bagging_pipeline)
 #'
 #' @param graphs List of [`PipeOp`] | [`Graph`] \cr
 #'   A (possibly named) list of [`PipeOp`]s or [`Graph`]s.
-#' @param add_deps [`logical`] \cr
-#'   Whether parameter dependencies should be added. Default to  TRUE`.
+#' @param id_prefix [`character(1)`] \cr
+#'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`].
+#'   IDs will be `"branch"` and `"unbranch"`, prefixed by `id_prefix`. Default is `""`.
+#' @param `prefix_branches` [`logical(1)`] \cr
+#'   Whether to add `id_prefix` as prefix to graph IDs when performing `gunion`. 
+#'   Can be helpful to avoid ID clashes in resulting graph. Default `FALSE`.
 #' @return [`Graph`]
 #' @export
 #' @examples
@@ -171,21 +175,15 @@ mlr_graphs$add("bagging", bagging_pipeline)
 #' gr = branch_pipeline(lrns)
 #' # change parameters
 #' # gr$param_set$values$branch.selection = "classif.featureless"
-branch_pipeline = function(graphs, add_deps = TRUE) {
+branch_pipeline = function(graphs, id_prefix = "", prefix_branches = FALSE) {
   graphs = map(graphs, as_graph)
   nms = names(graphs)
   if (is.null(nms)) 
     nms = map_chr(graphs, function(x) str_collapse(map_chr(x$pipeops, "id"), sep = "."))
-  gr = po("branch", nms) %>>% gunion(graphs) %>>% po("unbranch")
-  # Iterate over all graphs and add dependencies on branch.selection
-  # FIXME: This forbids to set some values, see example above.
-  #        Changes to paradox might be required here.
-  if (assert_flag(add_deps))
-    pmap(list(graphs, nms), function(graph, id) {
-      map(graph$param_set$ids(), function(par) {
-        gr$param_set$add_dep(par, "branch.selection", CondEqual$new(id))
-      })
-    })
+    if (prefix_branches) nms = paste0(id_prefix, nms)
+  gr = po(id = paste0(id_prefix, "branch"), "branch", nms) %>>%
+    gunion(graphs) %>>%
+    po(id = paste0(id_prefix, "unbranch"), "unbranch")
   return(gr)
 }
 
