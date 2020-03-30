@@ -284,6 +284,14 @@ PipeOp = R6Class("PipeOp",
       }
       private$.param_set
     },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$predict_type is read-only.")
+        }
+      }
+      return(NULL)
+    },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),

@@ -465,7 +465,7 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
 # input: as given by `$train`, `$predict`. single valued to be copied (if
 #   `single_input` is `TRUE`) or (possibly named) list of values for each
 #   incoming edge.
-# fun: function of each `PipeOp` to call; should be `train` oder
+# fun: function of each `PipeOp` to call; should be `train` or
 #   `predict`.
 # single_input: whether `input` is to be copied to all input channels
 #   (`TRUE`) or is a list with different input for each channel (`FALSE`).

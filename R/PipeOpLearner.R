@@ -76,7 +76,8 @@
 #'
 #' lrn_po$train(list(task))
 #' lrn_po$predict(list(task))
-PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
+PipeOpLearner = R6Class("PipeOpLearner",
+  inherit = PipeOp,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
       private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
@@ -118,6 +119,13 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         }
       }
       private$.learner
+    },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, names(mlr_reflections$learner_predict_types[[private$.learner$task_type]]))
+        private$.learner$predict_type = val
+      }
+      private$.learner$predict_type
     }
   ),
   private = list(
