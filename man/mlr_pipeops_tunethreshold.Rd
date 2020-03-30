@@ -6,21 +6,21 @@
 \title{PipeOpTuneThreshold}
 \format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
 \description{
-Tunes optimal probability thresholds over different \code{\link{PredictionClassif}}s.
+Tunes optimal probability thresholds over different \code{\link[mlr3:PredictionClassif]{PredictionClassif}}s.
 Learner's \code{predict_type} \code{"prob"} is required.
 Thresholds for each learner are optimized using (GenSA)\link[GenSA:GenSA]{GenSA::GenSA}.
-Returns a single \code{\link{PredictionClassif}}.
+Returns a single \code{\link[mlr3:PredictionClassif]{PredictionClassif}}.
 As a default, optimizes the miss-classification error \code{\link{MeasureClassif}}.
 This PipeOp should be used in conjunction with \code{\link{PipeOpLearnerCV}} in order to
 optimize thresholds of predictions.
 }
 \section{Construction}{
-\preformatted{* `PipeOpTuneThreshold$new(id, param_vals = list)` \\cr
+\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
   (`character(1)`, `list`) -> `self` \\cr
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
-Identifier of resulting object.
+Identifier of resulting object. Default: "tunethreshold".
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings
 that would otherwise be set during construction. Default \code{list()}.
@@ -42,6 +42,7 @@ The \verb{$state} is a named \code{list} with elements
 
 \section{Parameters}{
 
+The parameters are the parameters inherited from \code{\link{PipeOpPredPostproc}}, as well as:
 \itemize{
 \item \code{measure} :: \code{\link{Measure}}\cr
 \code{\link{Measure}} to optimize.
@@ -54,7 +55,8 @@ Defaults to \code{OptimizerGenSA$new()}
 
 \section{Internals}{
 
-Uses the provided optimizer in order to
+Uses the \code{optimizer} provided as a \code{param_val} in order to find an optimal threshold.
+See the \code{optimizer} parameter for more info.
 }
 
 \section{Methods}{
@@ -62,6 +64,18 @@ Uses the provided optimizer in order to
 Only methods inherited from \code{\link{PipeOpPredPostproc}}.
 }
 
+\examples{
+library("mlr3")
+
+task = tsk("iris")
+pop = po("learner_cv", lrn("classif.rpart")) \%>>\% 
+  po("tunethreshold")
+
+task$data()
+pop$train(task)
+
+pop$state
+}
 \seealso{
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

@@ -3,28 +3,30 @@
 \name{PipeOpPredPostproc}
 \alias{PipeOpPredPostproc}
 \title{PipeOpPredPostproc}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
+\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpPredPostproc}}/\code{\link{PipeOp}}.}
 \description{
 Abstract base class for handling most 'postprocessing' operations on predictions.
 These are operations that have exactly one prediction object as input and one
 prediction object as output.
 
-Users must implement \verb{$train()} and \verb{$predict()}, which have a \code{\link{Prediction}}
-input and should return that \code{Prediction}. The \code{Prediction} should, if possible, be
-manipulated in-place, and should not be cloned.
+Users must implement \verb{$train()} and \verb{$predict()}, which have a \code{\link[mlr3:Prediction]{Prediction}}
+input and should return that \code{\link[mlr3:Prediction]{Prediction}}.
+The \code{\link[mlr3:Prediction]{Prediction}} should, if possible, be manipulated in-place,
+and should not be cloned.
 }
 \section{Construction}{
-\preformatted{* `PipeOpPredPostproc$new(id, param_set = ParamSet$new())` \\cr
+\preformatted{* `PipeOpPredPostproc$new(id = "predpostproc", param_set = ParamSet$new())` \\cr
   (`character(1)`, `ParamSet`, `logical(1)`) -> `self` \\cr
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
-Identifier of resulting object.
+Identifier of resulting object. Default: "predpostproc".
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}} | \code{list} of \code{expression}\cr
 Parameter space description. This should be created by the subclass and given to \code{super$initialize()}.
 If this is a \code{\link[paradox:ParamSet]{ParamSet}}, it is used as the \code{\link{PipeOp}}'s \code{\link[paradox:ParamSet]{ParamSet}}
 directly. Otherwise it must be a \code{list} of expressions e.g. created by \code{alist()} that evaluate to \code{\link[paradox:ParamSet]{ParamSet}}s.
 These \code{\link[paradox:ParamSet]{ParamSet}} are combined using a \code{\link[paradox:ParamSetCollection]{ParamSetCollection}}.
+Default: ParamSet$new()
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -32,8 +34,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Inputs are of type \code{\link{Task}} during train and predict.
-Outputs are \code{NULL} during train and \code{\link{Prediction}} during predict.
+Inputs are of type \code{\link[mlr3:Task]{Task}} during train and predict.
+Outputs are \code{NULL} during train and \code{\link[mlr3:Prediction]{Prediction}} during predict.
 }
 
 \section{State}{
@@ -46,7 +48,12 @@ The \verb{$state} is a named \code{list} with elements
 
 \section{Parameters}{
 
-Parameters inherited by \code{\link{PipeOp}}
+Parameters inherited by \code{\link{PipeOp}}.
+}
+
+\section{Fields}{
+
+Fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{

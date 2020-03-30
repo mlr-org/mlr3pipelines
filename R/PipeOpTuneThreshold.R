@@ -5,21 +5,21 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Tunes optimal probability thresholds over different [`PredictionClassif`]s.
+#' Tunes optimal probability thresholds over different [`PredictionClassif`][mlr3::PredictionClassif]s.
 #' Learner's `predict_type` `"prob"` is required.
 #' Thresholds for each learner are optimized using (GenSA)[GenSA::GenSA].
-#' Returns a single [`PredictionClassif`].
+#' Returns a single [`PredictionClassif`][mlr3::PredictionClassif].
 #' As a default, optimizes the miss-classification error [`MeasureClassif`].
 #' This PipeOp should be used in conjunction with [`PipeOpLearnerCV`] in order to
 #' optimize thresholds of predictions.
 #'
 #' @section Construction:
 #' ```
-#' * `PipeOpTuneThreshold$new(id, param_vals = list)` \cr
+#' * `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \cr
 #'   (`character(1)`, `list`) -> `self` \cr
 #' ```
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object.
+#'   Identifier of resulting object. Default: "tunethreshold".
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings
 #'   that would otherwise be set during construction. Default `list()`.
@@ -32,20 +32,35 @@
 #' * `thresholds` :: `character` learned thresholds
 #'
 #' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpPredPostproc`], as well as:
 #'  * `measure` :: [`Measure`]\cr
 #'    [`Measure`] to optimize.
 #'    Defaults to `msr("classif.ce")`, i.e. misclassification error.
 #'  * `optimizer` :: [`Optimizer`]\cr
 #'    [`Optimizer`] used to find optimal thresholds.
 #'    Defaults to `OptimizerGenSA$new()`
+#' 
 #' @section Internals:
-#' Uses the provided optimizer in order to
+#' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
+#' See the `optimizer` parameter for more info.
+#' 
 #' @section Methods:
 #' Only methods inherited from [`PipeOpPredPostproc`].
 #'
 #' @family PipeOps
 #' @include PipeOpPredPostproc.R
 #' @export
+#' @examples
+#' library("mlr3")
+#'
+#' task = tsk("iris")
+#' pop = po("learner_cv", lrn("classif.rpart")) %>>% 
+#'   po("tunethreshold")
+#'
+#' task$data()
+#' pop$train(task)
+#'
+#' pop$state
 PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   inherit = PipeOpPredPostproc,
 
@@ -59,6 +74,8 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       super$initialize(id, param_vals = param_vals, param_set = ps, packages = "GenSA")
     },
     train = function(input) {
+      if(!all(input[[1]]$feature_types$type == "numeric"))
+        stop("PipeOpTuneThreshold requires predicted probabilities! Set learner predict_type to 'prob'")
       pred = private$task_to_prediction(input[[1]])
       th = private$optimize_objfun(pred)
       self$state = list("threshold" = th)
