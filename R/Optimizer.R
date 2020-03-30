@@ -15,6 +15,7 @@
 #'   If this is a [`ParamSet`][paradox::ParamSet], it is used as the [`PipeOp`]'s [`ParamSet`][paradox::ParamSet]
 #'   directly. Otherwise it must be a `list` of expressions e.g. created by `alist()` that evaluate to [`ParamSet`][paradox::ParamSet]s.
 #'   These [`ParamSet`][paradox::ParamSet] are combined using a [`ParamSetCollection`][paradox::ParamSetCollection].
+#'   Default: ParamSet$new().
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
@@ -82,7 +83,7 @@ Optimizer = R6Class("Optimizer",
 
 #' @title Optimizer from nloptr
 #' @usage NULL
-#' @format Abstract [`R6Class`].
+#' @format [`R6Class`] object inheriting from [`Optimizer`].
 #'
 #' @description
 #'   Non-linear optimization using `nloptr::nloptr`, called with parameters specified in
@@ -90,17 +91,11 @@ Optimizer = R6Class("Optimizer",
 #'
 #' @section Construction:
 #' ```
-#' Optimizer$new(param_vals = list())
+#' OptimizerNloptr$new(param_vals = list())
 #' ```
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
-#'
-#'@section Fields:
-#' * `packages` :: `character`\cr
-#'   Packages required for the [`Optimizer`]. Functions that are not in base R should still be called using `::`.
-#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
-#'   Parameters and parameter constraints. Parameter values that influence the functioning of `$optimize`.
 #'
 #' @section Methods:
 #' * `optimize`, see [`Optimizer`] for details.
@@ -131,7 +126,6 @@ OptimizerNloptr = R6Class("OptimizerNloptr",
   ),
   private = list(
     .optimize = function(objfun, init_weights, ...) {
-      requireNamespace("nloptr")
       pv = self$param_set$values
       opts = pv[which(names(pv) %nin% c("measure", "eval_g_ineq", "lb", "ub"))]
       opt = nloptr::nloptr(
@@ -149,25 +143,19 @@ OptimizerNloptr = R6Class("OptimizerNloptr",
 
 #' @title Optimizer from GenSA
 #' @usage NULL
-#' @format Abstract [`R6Class`].
-#'
+#' @format [`R6Class`] object inheriting from [`Optimizer`].
+#' 
 #' @description
 #'   Optimizer GenSA, internally calls `GenSA::GenSA` with parameters specified in
 #'   `param_vals`.
 #'
 #' @section Construction:
 #' ```
-#' Optimizer$new(param_vals = list())
+#' OptimizerGenSA$new(param_vals = list())
 #' ```
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
-#'
-#'@section Fields:
-#' * `packages` :: `character`\cr
-#'   Packages required for the [`Optimizer`]. Functions that are not in base R should still be called using `::`.
-#' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
-#'   Parameters and parameter constraints. Parameter values that influence the functioning of `$optimize`.
 #'
 #' @section Methods:
 #' * `optimize`, see [`Optimizer`] for details.
@@ -200,7 +188,6 @@ OptimizerGenSA = R6Class("OptimizerGenSA",
   ),
   private = list(
     .optimize = function(objfun, init_weights, ...) {
-      requireNamespace("GenSA")
       pv = self$param_set$values
       ctrl = pv[which(!(names(pv) %in% c("lower", "upper")))]
       lower = rep(pv$lower, length(init_weights))
