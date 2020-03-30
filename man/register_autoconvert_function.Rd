@@ -33,9 +33,8 @@ a desired type.
 register_autoconvert_function("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
 }
 \seealso{
-Other class hierarchy operations: 
-\code{\link{add_class_hierarchy_cache}()},
-\code{\link{reset_autoconvert_register}()},
-\code{\link{reset_class_hierarchy_cache}()}
+Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},
+  \code{\link{reset_autoconvert_register}},
+  \code{\link{reset_class_hierarchy_cache}}
 }
 \concept{class hierarchy operations}
