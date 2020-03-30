@@ -34,6 +34,10 @@ test_that("PipeOpTextVectorizer - basic properties", {
 
   # allowed after https://github.com/mlr-org/paradox/issues/271
   # expect_datapreproc_pipeop_class(PipeOpTextVectorizer, task = task)
+  
+  prd = op$predict(list(task$filter(rows = character(0))))[[1]]
+  expect_task(prd)
+  expect_true(prd$nrow == 0L)
 })
 
 

@@ -76,12 +76,12 @@ Remove stopwords according to 'language'? Default: \code{TRUE}.
 \item \code{tolower} :: \code{logical(1)}\cr
 Convert to lower case? See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default: \code{TRUE}.
 \item \code{stem} :: \code{logical(1)}\cr
-Stemming? See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default: \code{TRUE}.
+Stemming? See \code{\link[quanteda:dfm]{quanteda::dfm}}. Default: \code{FALSE}.
 \item \code{what} :: \code{character(1)}\cr
 Tokenization splitter. See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{word}.
 \item \code{remove_punct} :: \code{logical(1)}\cr
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
-\item \code{remove_punct} :: \code{logical(1)}\cr
+\item \code{remove_url} :: \code{logical(1)}\cr
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_symbols} :: \code{logical(1)}\cr
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
@@ -89,6 +89,8 @@ See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{remove_separators} :: \code{logical(1)}\cr
 See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{TRUE}.
+\item \code{split_hypens} :: \code{logical(1)}\cr
+See \code{\link[quanteda:tokens]{quanteda::tokens}}. Default: \code{FALSE}.
 \item \code{n} :: \code{integer}\cr
 Vector of ngram lengths. See \code{\link[quanteda:tokens_ngrams]{quanteda::tokens_ngrams}}. Default: 1.
 \item \code{skip} :: \code{integer}\cr
@@ -163,6 +165,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

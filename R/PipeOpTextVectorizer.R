@@ -65,13 +65,13 @@
 #' * `tolower` :: `logical(1)`\cr
 #'   Convert to lower case? See [`quanteda::dfm`]. Default: `TRUE`.
 #' * `stem` :: `logical(1)`\cr
-#'   Stemming? See [`quanteda::dfm`]. Default: `TRUE`.
+#'   Stemming? See [`quanteda::dfm`]. Default: `FALSE`.
 #' 
 #' * `what` :: `character(1)`\cr
 #'   Tokenization splitter. See [`quanteda::tokens`]. Default: `word`.
 #' * `remove_punct` :: `logical(1)`\cr
 #'   See [`quanteda::tokens`]. Default: `FALSE`.
-#' * `remove_punct` :: `logical(1)`\cr
+#' * `remove_url` :: `logical(1)`\cr
 #'   See [`quanteda::tokens`]. Default: `FALSE`.
 #' * `remove_symbols` :: `logical(1)`\cr
 #'   See [`quanteda::tokens`]. Default: `FALSE`.
@@ -79,6 +79,8 @@
 #'   See [`quanteda::tokens`]. Default: `FALSE`.
 #' * `remove_separators` :: `logical(1)`\cr
 #'   See [`quanteda::tokens`]. Default: `TRUE`.
+#' * `split_hypens` :: `logical(1)`\cr
+#'   See [`quanteda::tokens`]. Default: `FALSE`.
 #' 
 #' * `n` :: `integer`\cr
 #'   Vector of ngram lengths. See [`quanteda::tokens_ngrams`]. Default: 1.
@@ -140,7 +142,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
   public = list(
     initialize = function(id = "text_vectorizer", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamFct$new("language", default = "en", tags = c("train", "predict"),
+        ParamFct$new("language", default = "smart", tags = c("train", "predict"),
           levels = c(stopwords::stopwords_getlanguages("snowball"), "smart")),
         ParamLgl$new("remove_stopwords", default = TRUE, tags = c("train", "predict")),
 
@@ -149,7 +151,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
 
         ParamFct$new("what", default = "word", tags = c("train", "predict", "tokenizer"),
           levels = c("word", "word1", "fasterword", "fastestword", "character", "sentence")),
-        ParamLgl$new("remove_punct", default = TRUE, tags = c("train", "predict", "tokenizer")),
+        ParamLgl$new("remove_punct", default = FALSE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("remove_symbols", default = FALSE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("remove_numbers", default = FALSE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("remove_url", default = FALSE, tags = c("train", "predict", "tokenizer")),

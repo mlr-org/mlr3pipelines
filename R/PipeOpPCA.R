@@ -72,11 +72,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
         ParamLgl$new("scale.", default = FALSE, tags = c("train", "pca")),
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     },
 
     train_dt = function(dt, levels, target) {

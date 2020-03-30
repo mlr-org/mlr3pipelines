@@ -63,11 +63,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         ParamInt$new("target_level_count", 2, tags = c("train", "predict"))
       ))
       ps$values = list(no_collapse_above_prevalence = 1, target_level_count = 2)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
     },
 
     get_state = function(task) {
