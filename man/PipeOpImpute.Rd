@@ -3,7 +3,9 @@
 \name{PipeOpImpute}
 \alias{PipeOpImpute}
 \title{PipeOpImpute}
-\format{Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Abstract base class for feature imputation.
 }

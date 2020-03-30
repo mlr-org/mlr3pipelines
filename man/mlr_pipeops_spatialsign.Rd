@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_spatialsign}
 \alias{PipeOpSpatialSign}
 \title{PipeOpSpatialSign}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Normalizes the data row-wise. This is a natural generalization of the "sign" function to higher dimensions.
 }

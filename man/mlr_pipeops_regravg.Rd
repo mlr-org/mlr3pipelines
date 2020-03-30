@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_regravg}
 \alias{PipeOpRegrAvg}
 \title{PipeOpRegrAvg}
-\format{\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+}
 \description{
 Perform (weighted) prediction averaging from regression \code{\link[mlr3:Prediction]{Prediction}}s by connecting
 \code{\link{PipeOpRegrAvg}} to multiple \code{\link{PipeOpLearner}} outputs.

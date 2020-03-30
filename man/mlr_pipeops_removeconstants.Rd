@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_removeconstants}
 \alias{PipeOpRemoveConstants}
 \title{PipeOpRemoveConstants}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Remove constant features from a \link[mlr3:Task]{mlr3::Task}.
 For each feature, calculates the ratio of features which differ from their mode value.

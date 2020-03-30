@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_ica}
 \alias{PipeOpICA}
 \title{PipeOpICA}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Extracts statistically independent components from data.  Only affects numerical features.
 See \link[fastICA:fastICA]{fastICA::fastICA} for details.
