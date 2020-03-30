@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpScaleMaxAbs — mlr_pipeops_scalemaxabs • mlr3pipelines</title>
+<title>PipeOpDateFeatures — mlr_pipeops_datefeatures • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +47,21 @@
 
 
 
-<meta property="og:title" content="PipeOpScaleMaxAbs — mlr_pipeops_scalemaxabs" />
-<meta property="og:description" content="Scales the numeric data columns so their maximum absolute value is maxabs,
-if possible. NA, Inf are ignored, and features that are constant 0
-are not scaled." />
+<meta property="og:title" content="PipeOpDateFeatures — mlr_pipeops_datefeatures" />
+<meta property="og:description" content="Based on POSIXct columns of the data, a set of date related features is computed and added to
+the feature set of the output task. If no POSIXct column is found, the original task is
+returned unaltered. This functionality is based on the add_datepart() and
+add_cyclic_datepart() functions from the fastai library. If operation on only particular
+POSIXct columns is requested, use the affect_columns parameter inherited from
+PipeOpTaskPreprocSimple.
+If cyclic = TRUE, cyclic features are computed for the features &quot;month&quot;, &quot;week_of_year&quot;,
+&quot;day_of_year&quot;, &quot;day_of_month&quot;, &quot;day_of_week&quot;, &quot;hour&quot;, &quot;minute&quot; and &quot;second&quot;. This
+means that for each feature x, two additional features are computed, namely the sine and cosine
+transformation of 2 * pi * x / max_x (here max_x is the largest possible value the feature
+could take on + 1, assuming the lowest possible value is given by 0, e.g., for hours from 0 to
+23, this is 24). This is useful to respect the cyclical nature of features such as seconds, i.e.,
+second 21 and second 22 are one second apart, but so are second 60 and second 1 of the next
+minute." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -144,15 +155,26 @@ are not scaled." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpScaleMaxAbs</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpScaleMaxAbs.R'><code>R/PipeOpScaleMaxAbs.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_scalemaxabs.Rd</code></div>
+    <h1>PipeOpDateFeatures</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpDateFeatures.R'><code>R/PipeOpDateFeatures.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_datefeatures.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Scales the numeric data columns so their maximum absolute value is <code>maxabs</code>,
-if possible. <code>NA</code>, <code>Inf</code> are ignored, and features that are constant 0
-are not scaled.</p>
+    <p>Based on <code>POSIXct</code> columns of the data, a set of date related features is computed and added to
+the feature set of the output task. If no <code>POSIXct</code> column is found, the original task is
+returned unaltered. This functionality is based on the <code>add_datepart()</code> and
+<code>add_cyclic_datepart()</code> functions from the <code>fastai</code> library. If operation on only particular
+<code>POSIXct</code> columns is requested, use the <code>affect_columns</code> parameter inherited from
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>.</p>
+<p>If <code>cyclic = TRUE</code>, cyclic features are computed for the features <code>"month"</code>, <code>"week_of_year"</code>,
+<code>"day_of_year"</code>, <code>"day_of_month"</code>, <code>"day_of_week"</code>, <code>"hour"</code>, <code>"minute"</code> and <code>"second"</code>. This
+means that for each feature <code>x</code>, two additional features are computed, namely the sine and cosine
+transformation of <code>2 * pi * x / max_x</code> (here <code>max_x</code> is the largest possible value the feature
+could take on <code>+ 1</code>, assuming the lowest possible value is given by 0, e.g., for hours from 0 to
+23, this is 24). This is useful to respect the cyclical nature of features such as seconds, i.e.,
+second 21 and second 22 are one second apart, but so are second 60 and second 1 of the next
+minute.</p>
     </div>
 
 
@@ -163,40 +185,77 @@ are not scaled.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpScaleMaxAbs</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"scalemaxabs"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpDateFeatures</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"datefeatures"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"scalemaxabs"</code>.</p></li>
+Identifier of resulting object, default <code>"datefeatures"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with scaled numeric features.</p>
+<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with date-related features computed and added to the
+feature set of the output task and the <code>POSIXct</code> columns of the data removed from the
+feature set (depending on the value of <code>keep_date_var</code>).</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
-as well as the maximum absolute values of each numeric feature.</p>
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>maxabs</code>  :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-The maximum absolute value for each column after transformation. Default is 1.</p></li>
+<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>, as well as:</p><ul>
+<li><p><code>keep_date_var</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the <code>POSIXct</code> columns be kept as features? Default FALSE.</p></li>
+<li><p><code>cyclic</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should cyclic features be computed? See Internals. Default FALSE.</p></li>
+<li><p><code>year</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the year be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>month</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the month be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>week_of_year</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the week of the year be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>day_of_year</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the day of the year be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>day_of_month</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the day of the month be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>day_of_week</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the day of the week be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>hour</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the hour be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>minute</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the minute be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>second</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should the second be extracted as a feature? Default TRUE.</p></li>
+<li><p><code>is_day</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Should a feature be extracted indicating whether it is day time (06:00am - 08:00pm)?
+Default TRUE.</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
+
+    
+
+<p>The cyclic feature transformation always assumes that values range from 0, so some values
+(e.g. day of the month) are shifted before sine/cosine transform.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
 <p>Only methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+
+    
+
+<p>Only fields inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
@@ -211,7 +270,6 @@ The maximum absolute value for each column after transformation. Default is 1.</
   <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
   <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
   <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
-  <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
   <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
   <code><a href='mlr_pipeops_encodelmer.html'>mlr_pipeops_encodelmer</a></code>,
   <code><a href='mlr_pipeops_encode.html'>mlr_pipeops_encode</a></code>,
@@ -235,6 +293,7 @@ The maximum absolute value for each column after transformation. Default is 1.</
   <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
   <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
   <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+  <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
   <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
   <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
   <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
@@ -247,50 +306,26 @@ The maximum absolute value for each column after transformation. Default is 1.</
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
-
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scalemaxabs"</span>)
-
-<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa    0.2028986        0.08    0.6455696   0.7954545
-#&gt;   2:    setosa    0.2028986        0.08    0.6202532   0.6818182
-#&gt;   3:    setosa    0.1884058        0.08    0.5949367   0.7272727
-#&gt;   4:    setosa    0.2173913        0.08    0.5822785   0.7045455
-#&gt;   5:    setosa    0.2028986        0.08    0.6329114   0.8181818
-#&gt;  ---                                                            
-#&gt; 146: virginica    0.7536232        0.92    0.8481013   0.6818182
-#&gt; 147: virginica    0.7246377        0.76    0.7974684   0.5681818
-#&gt; 148: virginica    0.7536232        0.80    0.8227848   0.6818182
-#&gt; 149: virginica    0.7826087        0.92    0.7848101   0.7727273
-#&gt; 150: virginica    0.7391304        0.72    0.7468354   0.6818182</div><div class='input'>
-<span class='no'>pop</span>$<span class='no'>state</span></div><div class='output co'>#&gt; $Petal.Length
-#&gt; [1] 6.9
-#&gt; 
-#&gt; $Petal.Width
-#&gt; [1] 2.5
-#&gt; 
-#&gt; $Sepal.Length
-#&gt; [1] 7.9
-#&gt; 
-#&gt; $Sepal.Width
-#&gt; [1] 4.4
-#&gt; 
-#&gt; $dt_columns
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
+<span class='no'>dat</span> <span class='kw'>=</span> <span class='no'>iris</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
+<span class='no'>dat</span>$<span class='no'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2020-02-01"</span>), <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2020-02-29"</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"hour"</span>),
+ <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>150L</span>)
+<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='st'>"iris_date"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)
+<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"datefeatures"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>cyclic</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>minute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>second</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))
+<span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+#&gt; &lt;TaskClassif:iris_date&gt; (150 x 13)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (12):
+#&gt;   - dbl (11): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width,
+#&gt;     date.day_of_month, date.day_of_week, date.day_of_year, date.hour,
+#&gt;     date.month, date.week_of_year, date.year
+#&gt;   - lgl (1): date.is_day
+#&gt; </div><div class='input'><span class='no'>pop</span>$<span class='no'>state</span></div><div class='output co'>#&gt; $dt_columns
+#&gt; [1] "date"
 #&gt; 
 #&gt; $affected_cols
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
+#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width"  "date"        
 #&gt; 
 #&gt; $intasklayout
 #&gt;              id    type
@@ -298,13 +333,22 @@ The maximum absolute value for each column after transformation. Default is 1.</
 #&gt; 2:  Petal.Width numeric
 #&gt; 3: Sepal.Length numeric
 #&gt; 4:  Sepal.Width numeric
+#&gt; 5:         date POSIXct
 #&gt; 
 #&gt; $outtasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length numeric
-#&gt; 2:  Petal.Width numeric
-#&gt; 3: Sepal.Length numeric
-#&gt; 4:  Sepal.Width numeric
+#&gt;                    id    type
+#&gt;  1:      Petal.Length numeric
+#&gt;  2:       Petal.Width numeric
+#&gt;  3:      Sepal.Length numeric
+#&gt;  4:       Sepal.Width numeric
+#&gt;  5: date.day_of_month numeric
+#&gt;  6:  date.day_of_week numeric
+#&gt;  7:  date.day_of_year numeric
+#&gt;  8:         date.hour numeric
+#&gt;  9:       date.is_day logical
+#&gt; 10:        date.month numeric
+#&gt; 11: date.week_of_year numeric
+#&gt; 12:         date.year numeric
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
