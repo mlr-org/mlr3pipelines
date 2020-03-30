@@ -17,6 +17,7 @@ Parameter space description. This should be created by the subclass and given to
 If this is a \code{\link[paradox:ParamSet]{ParamSet}}, it is used as the \code{\link{PipeOp}}'s \code{\link[paradox:ParamSet]{ParamSet}}
 directly. Otherwise it must be a \code{list} of expressions e.g. created by \code{alist()} that evaluate to \code{\link[paradox:ParamSet]{ParamSet}}s.
 These \code{\link[paradox:ParamSet]{ParamSet}} are combined using a \code{\link[paradox:ParamSetCollection]{ParamSetCollection}}.
+Default: ParamSet$new().
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.

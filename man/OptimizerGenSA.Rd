@@ -3,28 +3,18 @@
 \name{OptimizerGenSA}
 \alias{OptimizerGenSA}
 \title{Optimizer from GenSA}
-\format{Abstract \code{\link{R6Class}}.}
+\format{\code{\link{R6Class}} object inheriting from \code{\link{Optimizer}}.}
 \description{
 Optimizer GenSA, internally calls \code{GenSA::GenSA} with parameters specified in
 \code{param_vals}.
 }
 \section{Construction}{
-\preformatted{Optimizer$new(param_vals = list())
+\preformatted{OptimizerGenSA$new(param_vals = list())
 }
 \itemize{
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
-}
-}
-
-\section{Fields}{
-
-\itemize{
-\item \code{packages} :: \code{character}\cr
-Packages required for the \code{\link{Optimizer}}. Functions that are not in base R should still be called using \code{::}.
-\item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
-Parameters and parameter constraints. Parameter values that influence the functioning of \verb{$optimize}.
 }
 }
 
