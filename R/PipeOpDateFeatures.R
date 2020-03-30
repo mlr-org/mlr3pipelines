@@ -12,6 +12,15 @@
 #' `POSIXct` columns is requested, use the `affect_columns` parameter inherited from
 #' [`PipeOpTaskPreprocSimple`].
 #'
+#' If `cyclic = TRUE`, cyclic features are computed for the features `"month"`, `"week_of_year"`,
+#' `"day_of_year"`, `"day_of_month"`, `"day_of_week"`, `"hour"`, `"minute"` and `"second"`. This
+#' means that for each feature `x`, two additional features are computed, namely the sine and cosine
+#' transformation of `2 * pi * x / max_x` (here `max_x` is the largest possible value the feature
+#' could take on `+ 1`, assuming the lowest possible value is given by 0, e.g., for hours from 0 to
+#' 23, this is 24). This is useful to respect the cyclical nature of features such as seconds, i.e.,
+#' second 21 and second 22 are one second apart, but so are second 60 and second 1 of the next
+#' minute.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpDateFeatures$new(id = "datefeatures", param_vals = list())
@@ -62,18 +71,14 @@
 #'   Default TRUE.
 #'
 #' @section Internals:
-#' If `cyclic = TRUE`, cyclic features are computed for the features `"month"`, `"week_of_year"`,
-#' `"day_of_year"`, `"day_of_month"`, `"day_of_week"`, `"hour"`, `"minute"` and `"second"`. This
-#' means that for each feature `x`, two additional features are computed, namely the sine and cosine
-#' transformation of `2 * pi * x / max_x` (here `max_x` is the largest possible value the feature
-#' could take on `+ 1`, assuming the lowest possible value is given by 0, e.g., for hours from 0 to
-#' 23, this is 24). This is useful to respect the cyclical nature of features such as seconds, i.e.,
-#' second 21 and second 22 are one second apart, but so are second 60 and second 1 of the next
-#' minute. The transformation always assumes that `min_x = 0`, therefore prior shifting the values
-#' internally by minus one may occur if necessary.
+#' The cyclic feature transformation always assumes that values range from 0, so some values
+#' (e.g. day of the month) are shifted before sine/cosine transform.
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
+#' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
 #'library("mlr3")
