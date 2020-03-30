@@ -3,7 +3,9 @@
 \name{PipeOpTaskPreproc}
 \alias{PipeOpTaskPreproc}
 \title{PipeOpTaskPreproc}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Base class for handling most "preprocessing" operations. These
 are operations that have exactly one \code{\link[mlr3:Task]{Task}} input and one \code{\link[mlr3:Task]{Task}} output,

@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_branch}
 \alias{PipeOpBranch}
 \title{PipeOpBranch}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Perform alternative path branching: \code{\link{PipeOpBranch}} has multiple output channels
 that connect to different paths in a \code{\link{Graph}}. At any time, only one of these

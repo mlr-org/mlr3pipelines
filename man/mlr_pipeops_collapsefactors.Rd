@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_collapsefactors}
 \alias{PipeOpCollapseFactors}
 \title{PipeOpCollapseFactors}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Collapses factors of type \code{factor}, \code{ordered}: Collapses the rarest factors in the
 training samples, until \code{target_level_count} levels remain. Levels that have prevalence above \code{no_collapse_above_prevalence}

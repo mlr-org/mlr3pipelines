@@ -7,6 +7,9 @@
 #' @description
 #' Splits numeric features into equally spaced bins.
 #' See [graphics::hist()] for details.
+#' Note that to circumvent `NA`s for values that are out of range of the
+#' training data, the lower bound of the lowest bin is always `-Inf` and the
+#' upper bound of the highest bin is always `Inf`.
 #'
 #' @section Construction:
 #' ```
@@ -73,7 +76,10 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
 
     get_state_dt = function(dt, levels, target) {
       bins = lapply(seq_col(dt), function(i) {
-        invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$get_values(tags = "hist"))$breaks
+        breaks = invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$get_values(tags = "hist"))$breaks
+        breaks[1L] = -Inf
+        breaks[length(breaks)] = Inf
+        breaks
       })
       list(bins = bins)
     },

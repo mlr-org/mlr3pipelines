@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_mutate}
 \alias{PipeOpMutate}
 \title{PipeOpMutate}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Adds features according to expressions given as formulas that may depend on values of other features.
 This can add new features, or can change existing features.

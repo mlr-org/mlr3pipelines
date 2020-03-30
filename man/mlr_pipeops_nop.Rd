@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_nop}
 \alias{PipeOpNOP}
 \title{PipeOpNOP}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Simply pushes the input forward.
 Can be useful during \code{\link{Graph}} construction using the \code{\link{\%>>\%}}-operator to specify which \code{\link{PipeOp}} gets connected to which.

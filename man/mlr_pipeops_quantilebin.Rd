@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_quantilebin}
 \alias{PipeOpQuantileBin}
 \title{PipeOpQuantileBin}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Splits numeric features into quantile bins.
 }
