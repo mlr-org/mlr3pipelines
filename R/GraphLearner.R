@@ -53,6 +53,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         packages = graph$packages,
         properties = mlr_reflections$learner_properties[[task_type]])
       self$graph$param_set$values = param_vals
+      if(!is.null(predict_type)) self$predict_type = predict_type
     },
     train_internal = function(task) {
       on.exit({self$graph$state = NULL})

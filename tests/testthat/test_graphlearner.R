@@ -357,16 +357,22 @@ test_that("graphlearner predict type inference", {
   expect_equal(lrn$graph$pipeops[[lrp$id]]$predict_type, "response")
   
   # averager 
-  lrn = GraphLearner$new(greplicate(po("subsample") %>>% lrp, 3L) %>>% po("classifavg"))
+  lrn = GraphLearner$new(greplicate(po("subsample") %>>% lrp %>>% nop, 3L) %>>% po("classifavg"))
   lrn$predict_type = "response"
   expect_equal(lrn$predict_type, "response") 
   expect_true(all(map_chr(lrn$graph$pipeops[paste(lrp$id, 1:3, sep = "_")], "predict_type") == "response"))
 
   # branching
-  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(lrp, lfp)) %>>% po("unbranch"))
+  lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(lrp, lfp %>>% nop)) %>>% po("unbranch"))
   expect_equal(lrn$predict_type, "prob")
   lrn$predict_type = "response"
   expect_equal(lrn$predict_type, "response")
   expect_equal(lrn$graph$pipeops[[lrp$id]]$predict_type, "response")
   expect_equal(lrn$graph$pipeops[[lfp$id]]$predict_type, "response")
+
+  # Setter on construction
+  lrn = GraphLearner$new(lrr, predict_type = "prob")
+  expect_equal(lrr$predict_type, "response") 
+  expect_equal(lrn$predict_type, "prob") 
+  expect_equal(lrn$graph$pipeops[[lrr$id]]$predict_type, "prob")
 })
