@@ -7,7 +7,7 @@
 po(.obj, ...)
 }
 \arguments{
-\item{.obj}{\code{[any]}\cr
+\item{.obj}{\verb{[any]}\cr
 The object from which to construct a \code{PipeOp}. If this is a
 \code{character(1)}, it is looked up in the \code{\link{mlr_pipeops}} dictionary.
 Otherwise, it is converted to a \code{PipeOp}.}

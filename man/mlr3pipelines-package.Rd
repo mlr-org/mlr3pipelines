@@ -6,7 +6,7 @@
 \alias{mlr3pipelines-package}
 \title{mlr3pipelines: Preprocessing Operators and Pipelines for 'mlr3'}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
 Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
@@ -28,9 +28,9 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Florian Pfisterer \email{pfistererf@googlemail.com} (0000-0001-8867-762X)
-  \item Bernd Bischl \email{bernd_bischl@gmx.net} (0000-0001-6002-6980)
-  \item Michel Lang \email{michellang@gmail.com} (0000-0001-9754-0393)
+  \item Florian Pfisterer \email{pfistererf@googlemail.com} (\href{https://orcid.org/0000-0001-8867-762X}{ORCID})
+  \item Bernd Bischl \email{bernd_bischl@gmx.net} (\href{https://orcid.org/0000-0001-6002-6980}{ORCID})
+  \item Michel Lang \email{michellang@gmail.com} (\href{https://orcid.org/0000-0001-9754-0393}{ORCID})
   \item Susanne Dandl \email{dandl.susanne@googlemail.com}
 }
 
