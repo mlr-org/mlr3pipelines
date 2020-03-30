@@ -14,7 +14,7 @@ beneficial for training time at possibly (depending on original \code{\link[mlr3
 negligible cost of predictive performance.
 }
 \section{Construction}{
-\preformatted{PipeOpSubsample$new(id = "classbalancing", param_vals = list())
+\preformatted{PipeOpSubsample$new(id = "subsample", param_vals = list())
 }
 \itemize{
 \item \code{id} :: \code{character(1)}
@@ -70,13 +70,9 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 \examples{
 library("mlr3")
 
-pos = mlr_pipeops$get("subsample")
+pos = mlr_pipeops$get("subsample", param_vals = list(frac = 0.7, stratify = TRUE))
 
 pos$train(list(tsk("iris")))
-
-# simple bagging:
-gr = greplicate(pos \%>>\% mlr_pipeops$get("learner", lrn("classif.rpart")), 5) \%>>\%
-  mlr_pipeops$get("classifavg")
 
 }
 \seealso{
@@ -92,6 +88,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_colapply}},
   \code{\link{mlr_pipeops_collapsefactors}},
   \code{\link{mlr_pipeops_copy}},
+  \code{\link{mlr_pipeops_datefeatures}},
   \code{\link{mlr_pipeops_encodeimpact}},
   \code{\link{mlr_pipeops_encodelmer}},
   \code{\link{mlr_pipeops_encode}},

@@ -172,7 +172,8 @@ If this method is not overloaded, it defaults to selecting all columns.
 \seealso{
 Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOpTaskPreprocSimple}},
-  \code{\link{PipeOp}}, \code{\link{mlr_pipeops}}
+  \code{\link{PipeOp}}, \code{\link{mlr_graphs}},
+  \code{\link{mlr_pipeops}}
 
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpImpute}}, \code{\link{PipeOp}},
@@ -185,6 +186,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_colapply}},
   \code{\link{mlr_pipeops_collapsefactors}},
   \code{\link{mlr_pipeops_copy}},
+  \code{\link{mlr_pipeops_datefeatures}},
   \code{\link{mlr_pipeops_encodeimpact}},
   \code{\link{mlr_pipeops_encodelmer}},
   \code{\link{mlr_pipeops_encode}},

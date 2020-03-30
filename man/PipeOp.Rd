@@ -203,7 +203,7 @@ posum$predict(list(NULL, NULL))
 Other mlr3pipelines backend related: \code{\link{Graph}},
   \code{\link{PipeOpTaskPreprocSimple}},
   \code{\link{PipeOpTaskPreproc}},
-  \code{\link{mlr_pipeops}}
+  \code{\link{mlr_graphs}}, \code{\link{mlr_pipeops}}
 
 Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{PipeOpImpute}},
@@ -217,6 +217,7 @@ Other PipeOps: \code{\link{PipeOpEnsemble}},
   \code{\link{mlr_pipeops_colapply}},
   \code{\link{mlr_pipeops_collapsefactors}},
   \code{\link{mlr_pipeops_copy}},
+  \code{\link{mlr_pipeops_datefeatures}},
   \code{\link{mlr_pipeops_encodeimpact}},
   \code{\link{mlr_pipeops_encodelmer}},
   \code{\link{mlr_pipeops_encode}},

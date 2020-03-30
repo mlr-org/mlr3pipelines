@@ -31,6 +31,7 @@
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
+#' @family Dictionaries
 #' @export
 #' @examples
 #' library("mlr3")
