@@ -215,6 +215,9 @@ Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a
 The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
 should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
 <code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
+<li><p><code>feature_types</code> :: <code>character</code><br />
+Feature types affected by the <code>PipeOp</code>. See <code>$select_cols()</code> for more information.
+Defaults to all available feature types.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
@@ -243,6 +246,8 @@ the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
 <li><p><code>dt_columns</code> :: <code>character</code><br />
 Names of features selected by the <code>$select_cols()</code> call during training. This is only present if the <code>$train_dt()</code> functionality is used,
 and not present if the <code>$train_task()</code> function is overloaded instead.</p></li>
+<li><p><code>feature_types</code> :: <code>character</code><br />
+Feature types affected by the <code>PipeOp</code>. See <code>$select_cols()</code> for more information.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
