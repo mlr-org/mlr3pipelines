@@ -14,7 +14,7 @@ Each \code{PipeOp} has an associated help page, see \code{mlr_pipeops_[id]}.
 Fields inherited from \code{\link[mlr3misc:Dictionary]{Dictionary}}, as well as:
 \itemize{
 \item \code{metainf} :: \code{environment}\cr
-Environment that stores the \code{metainf} argument of the \verb{$add()} method.
+Environment that stores the \code{metainf} argument of the \code{$add()} method.
 Only for internal use.
 }
 }
@@ -55,63 +55,58 @@ po("learner", learner = lrn("classif.rpart"))
 as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
 }
 \seealso{
-Other mlr3pipelines backend related: 
-\code{\link{Graph}},
-\code{\link{PipeOpTaskPreprocSimple}},
-\code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
-\code{\link{mlr_graphs}}
+Other mlr3pipelines backend related: \code{\link{Graph}},
+  \code{\link{PipeOpTaskPreprocSimple}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_graphs}}
 
-Other PipeOps: 
-\code{\link{PipeOpEnsemble}},
-\code{\link{PipeOpImpute}},
-\code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
-\code{\link{mlr_pipeops_boxcox}},
-\code{\link{mlr_pipeops_branch}},
-\code{\link{mlr_pipeops_chunk}},
-\code{\link{mlr_pipeops_classbalancing}},
-\code{\link{mlr_pipeops_classifavg}},
-\code{\link{mlr_pipeops_classweights}},
-\code{\link{mlr_pipeops_colapply}},
-\code{\link{mlr_pipeops_collapsefactors}},
-\code{\link{mlr_pipeops_copy}},
-\code{\link{mlr_pipeops_datefeatures}},
-\code{\link{mlr_pipeops_encodeimpact}},
-\code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encode}},
-\code{\link{mlr_pipeops_featureunion}},
-\code{\link{mlr_pipeops_filter}},
-\code{\link{mlr_pipeops_fixfactors}},
-\code{\link{mlr_pipeops_histbin}},
-\code{\link{mlr_pipeops_ica}},
-\code{\link{mlr_pipeops_imputehist}},
-\code{\link{mlr_pipeops_imputemean}},
-\code{\link{mlr_pipeops_imputemedian}},
-\code{\link{mlr_pipeops_imputenewlvl}},
-\code{\link{mlr_pipeops_imputesample}},
-\code{\link{mlr_pipeops_kernelpca}},
-\code{\link{mlr_pipeops_learner}},
-\code{\link{mlr_pipeops_missind}},
-\code{\link{mlr_pipeops_modelmatrix}},
-\code{\link{mlr_pipeops_mutate}},
-\code{\link{mlr_pipeops_nop}},
-\code{\link{mlr_pipeops_pca}},
-\code{\link{mlr_pipeops_quantilebin}},
-\code{\link{mlr_pipeops_regravg}},
-\code{\link{mlr_pipeops_removeconstants}},
-\code{\link{mlr_pipeops_scalemaxabs}},
-\code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
-\code{\link{mlr_pipeops_select}},
-\code{\link{mlr_pipeops_smote}},
-\code{\link{mlr_pipeops_spatialsign}},
-\code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_unbranch}},
-\code{\link{mlr_pipeops_yeojohnson}}
+Other PipeOps: \code{\link{PipeOpEnsemble}},
+  \code{\link{PipeOpImpute}},
+  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
+  \code{\link{mlr_pipeops_boxcox}},
+  \code{\link{mlr_pipeops_branch}},
+  \code{\link{mlr_pipeops_chunk}},
+  \code{\link{mlr_pipeops_classbalancing}},
+  \code{\link{mlr_pipeops_classifavg}},
+  \code{\link{mlr_pipeops_classweights}},
+  \code{\link{mlr_pipeops_colapply}},
+  \code{\link{mlr_pipeops_collapsefactors}},
+  \code{\link{mlr_pipeops_copy}},
+  \code{\link{mlr_pipeops_datefeatures}},
+  \code{\link{mlr_pipeops_encodeimpact}},
+  \code{\link{mlr_pipeops_encodelmer}},
+  \code{\link{mlr_pipeops_encode}},
+  \code{\link{mlr_pipeops_featureunion}},
+  \code{\link{mlr_pipeops_filter}},
+  \code{\link{mlr_pipeops_fixfactors}},
+  \code{\link{mlr_pipeops_histbin}},
+  \code{\link{mlr_pipeops_ica}},
+  \code{\link{mlr_pipeops_imputehist}},
+  \code{\link{mlr_pipeops_imputemean}},
+  \code{\link{mlr_pipeops_imputemedian}},
+  \code{\link{mlr_pipeops_imputenewlvl}},
+  \code{\link{mlr_pipeops_imputesample}},
+  \code{\link{mlr_pipeops_kernelpca}},
+  \code{\link{mlr_pipeops_learner}},
+  \code{\link{mlr_pipeops_missind}},
+  \code{\link{mlr_pipeops_modelmatrix}},
+  \code{\link{mlr_pipeops_mutate}},
+  \code{\link{mlr_pipeops_nop}},
+  \code{\link{mlr_pipeops_pca}},
+  \code{\link{mlr_pipeops_quantilebin}},
+  \code{\link{mlr_pipeops_regravg}},
+  \code{\link{mlr_pipeops_removeconstants}},
+  \code{\link{mlr_pipeops_scalemaxabs}},
+  \code{\link{mlr_pipeops_scalerange}},
+  \code{\link{mlr_pipeops_scale}},
+  \code{\link{mlr_pipeops_select}},
+  \code{\link{mlr_pipeops_smote}},
+  \code{\link{mlr_pipeops_spatialsign}},
+  \code{\link{mlr_pipeops_subsample}},
+  \code{\link{mlr_pipeops_unbranch}},
+  \code{\link{mlr_pipeops_yeojohnson}}
 
-Other Dictionaries: 
-\code{\link{mlr_graphs}}
+Other Dictionaries: \code{\link{mlr_graphs}}
 }
 \concept{Dictionaries}
 \concept{PipeOps}

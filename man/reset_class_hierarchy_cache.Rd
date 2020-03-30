@@ -14,9 +14,8 @@ Reset the class hierarchy cache to factory default, thereby undoing
 any calls to \code{\link[=add_class_hierarchy_cache]{add_class_hierarchy_cache()}} by the user.
 }
 \seealso{
-Other class hierarchy operations: 
-\code{\link{add_class_hierarchy_cache}()},
-\code{\link{register_autoconvert_function}()},
-\code{\link{reset_autoconvert_register}()}
+Other class hierarchy operations: \code{\link{add_class_hierarchy_cache}},
+  \code{\link{register_autoconvert_function}},
+  \code{\link{reset_autoconvert_register}}
 }
 \concept{class hierarchy operations}
