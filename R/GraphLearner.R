@@ -124,19 +124,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       prediction[[1]]
     },
     get_predict_type = function() {
+      # recursively walk backwards through the graph 
       get_po_predict_type = function(x) {
         if (!is.null(x$predict_type)) return(x$predict_type)
         prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
         if (length(prdcssrs)) {
-          browser()
-          predict_types = map_chr(self$graph$pipeops[prdcssrs], get_po_predict_type)
+          # all non-null elements
+          predict_types = keep(map(self$graph$pipeops[prdcssrs], get_po_predict_type), Negate(is.null))
           if (length(unique(predict_types)) == 1L)
-            unique(predict_types)
-          else
-            NULL
-        } else {
-          NULL
+            return(unlist(unique(predict_types)))
         }
+        return(NULL)
       }
       predict_type = get_po_predict_type(self$graph$pipeops[[self$graph$rhs]])
       if (is.null(predict_type))
@@ -145,6 +143,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         predict_type
     },
     set_predict_type = function(predict_type) {
+      # recursively walk backwards through the graph 
       set_po_predict_type = function(x, predict_type) {
         assert_subset(predict_type, unlist(mlr_reflections$learner_predict_types[[self$task_type]]))
         if (!is.null(x$predict_type)) x$predict_type = predict_type
