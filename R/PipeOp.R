@@ -60,7 +60,7 @@
 #'   Default is `character(0)`.
 #' * `tags` ::`character`\cr
 #'   A set of tags associated with the `PipeOp`. Tags describe a PipeOp's purpose.
-#'   Can be used to filter `as.data.table(mlr_pipeops)`.
+#'   Can be used to filter `as.data.table(mlr_pipeops)`. Default is `"abstract"`, indicating an abstract `PipeOp`.
 #'
 #' @section Internals:
 #' [`PipeOp`] is an abstract class with abstract functions `$train_internal()` and `$predict_internal()`. To create a functional
@@ -200,7 +200,7 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
     tags = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0)) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -214,7 +214,7 @@ PipeOp = R6Class("PipeOp",
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
       self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
-      if (length(tags) == 0) self$tags = "abstract" else self$tags = assert_subset(tags, mlr_reflections$pipeops$valid_tags)
+      self$tags = assert_subset(tags, mlr_reflections$pipeops$valid_tags)
     },
 
     print = function(...) {

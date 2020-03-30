@@ -260,7 +260,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   ),
   active = list(
     feature_types = function(types) {
-      if (!missing(types)) stop("feature_types can not be changed. Use 'affect_columns' instead!")
+      if (!missing(types)) stop("feature_types can not be changed. Use the 'affect_columns' hyperparameter instead!")
       private$.feature_types
     }
   ),
