@@ -58,7 +58,8 @@ PipeOpPredPostproc = R6Class("PipeOpPredPostproc",
     initialize = function(id = "predpostproc", param_set = ParamSet$new(), param_vals = list(), packages = character(0)) {
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction")
+        output = data.table(name = "output", train = "NULL", predict = "Prediction"),
+        tags = "predpostproc"
       )
     },
     train = function(input) {
