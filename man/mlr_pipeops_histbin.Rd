@@ -10,9 +10,6 @@
 \description{
 Splits numeric features into equally spaced bins.
 See \code{\link[graphics:hist]{graphics::hist()}} for details.
-Note that to circumvent \code{NA}s for values that are out of range of the
-training data, the lower bound of the lowest bin is always \code{-Inf} and the
-upper bound of the highest bin is always \code{Inf}.
 }
 \section{Construction}{
 \preformatted{PipeOpHistBin$new(id = "histbin", param_vals = list())
