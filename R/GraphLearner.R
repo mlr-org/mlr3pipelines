@@ -128,6 +128,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (!is.null(x$predict_type)) return(x$predict_type)
         prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
         if (length(prdcssrs)) {
+          browser()
           predict_types = map_chr(self$graph$pipeops[prdcssrs], get_po_predict_type)
           if (length(unique(predict_types)) == 1L)
             unique(predict_types)
