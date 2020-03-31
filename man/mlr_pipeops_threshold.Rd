@@ -61,7 +61,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 \examples{
 library("mlr3")
 t = tsk("german_credit")
-gr = po(lrn("classif.rpart", predict_type = "prob")) \%>>\%
+gr = po(lrn("classif.rpart", .predict_type = "prob")) \%>>\%
   po("threshold", param_vals = list(thresholds = 0.9))
 gr$train(t)
 gr$predict(t)

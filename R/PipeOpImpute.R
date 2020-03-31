@@ -23,7 +23,7 @@
 #'   used for imputation inference. This should generally be `FALSE` if imputation depends only on individual features
 #'   (e.g. mode imputation), and `TRUE` if imputation depends on other features as well (e.g. kNN-imputation).
 #' * packages :: `character`\cr
-#'   Set of all required packages for the [`PipeOp`]'s `$train` and `$predict` methods. See `$packages` slot.
+#'   Set of all required packages for the [`PipeOp`]'s `private$.train` and `private$.predict` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
@@ -37,7 +37,7 @@
 #' [`PipeOpImpute`] has one output channel named `"output"`, producing a [`Task`][mlr3::Task], or a subclass;
 #' the [`Task`][mlr3::Task] type is the same as for input; both during training and prediction.
 #'
-#' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] with features imputed according to the `$impute()` function.
+#' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] with features imputed according to the `private$.impute()` function.
 #'
 #' @section State:
 #' The `$state` is a named `list`; besides members added by inheriting classes, the members are:
@@ -52,7 +52,7 @@
 #'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 #' * `model` :: named `list`\cr
-#'   Model used for imputation. This is a list named by [`Task`][mlr3::Task] features, containing the result of the `$train_imputer()` function for each one.
+#'   Model used for imputation. This is a list named by [`Task`][mlr3::Task] features, containing the result of the `private$.train_imputer()` function for each one.
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
@@ -75,18 +75,18 @@
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`], as well as:
-#' * `select_cols(task)` \cr
+#' * `.select_cols(task)` \cr
 #'   ([`Task`][mlr3::Task]) -> `character` \cr
 #'   Selects which columns the [`PipeOp`] operates on. In contrast to
-#'   the `affect_columns` parameter. `select_cols` is for the *inheriting class* to determine which columns
+#'   the `affect_columns` parameter. `private$.select_cols()` is for the *inheriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.
-#' * `train_imputer(feature, type, context)`\cr
+#' * `.train_imputer(feature, type, context)`\cr
 #'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
-#'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `$impute()`.
-#' * `impute(feature, type, model, context)`\cr
+#'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `private$.impute()`.
+#' * `.impute(feature, type, model, context)`\cr
 #'   (`atomic`, `character(1)`, `any`, [`data.table`]) -> `atomic`\cr
-#'   Imputes the features. `model` is the model created by `$train_imputer()`
+#'   Imputes the features. `model` is the model created by `private$.train_imputer()`
 #'
 #' @family PipeOps
 #' @family Imputation PipeOps
@@ -119,22 +119,18 @@ PipeOpImpute = R6Class("PipeOpImpute",
         output = data.table(name = "output", train = task_type, predict = task_type),
         packages = packages, tags = "missings"
       )
-    },
+    }
 
-    select_cols = function(task) task$feature_names,
-
-    train_imputer = function(feature, type, context) stop("Abstract."),
-
-    impute = function(feature, type, model, context) stop("Abstract.")
   ),
   private = list(
+
     .affectcols_ps = NULL,
-    
+
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
 
       affected_cols = (self$param_set$values$affect_columns %??% selector_all())(intask)
-      affected_cols = intersect(affected_cols, self$select_cols(intask))
+      affected_cols = intersect(affected_cols, private$.select_cols(intask))
 
       self$state = list(
         affected_cols = affected_cols,
@@ -160,9 +156,9 @@ PipeOpImpute = R6Class("PipeOpImpute",
         } else {
           context = NULL
         }
-        model = self$train_imputer(col, type, context)
+        model = private$.train_imputer(col, type, context)
         if (colname %in% names(imputanda)) {
-          col = self$impute(col, type, model, context)
+          col = private$.impute(col, type, model, context)
           imputanda[, (colname) := ..col]
         }
         model
@@ -199,7 +195,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
           context = NULL
         }
         model = self$state$model[[colname]]
-        col = self$impute(col, type, model, context)
+        col = private$.impute(col, type, model, context)
         imputanda[, (colname) := ..col]
       })
 
@@ -209,6 +205,13 @@ PipeOpImpute = R6Class("PipeOpImpute",
         stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       list(intask)
-    }
+    },
+
+    .select_cols = function(task) task$feature_names,
+
+    .train_imputer = function(feature, type, context) stop("Abstract."),
+
+    .impute = function(feature, type, model, context) stop("Abstract.")
+
   )
 )

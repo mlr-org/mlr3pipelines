@@ -7,7 +7,7 @@
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
-Parent class for \code{\link{PipeOp}}s that aggregate predictions. Implements the \verb{$.train()} and \verb{$.predict()} methods necessary
+Parent class for \code{\link{PipeOp}}s that aggregate predictions. Implements the \code{private$.train()} and \code{private$.predict()} methods necessary
 for a \code{PipeOp} and requires deriving classes to create the \code{private$weighted_avg_predictions()} function.
 }
 \section{Construction}{
@@ -30,7 +30,7 @@ Default \code{character(0)}.
 \item \code{prediction_type} :: \code{character(1)}\cr
 The \code{predict} entry of the \verb{$input} and \verb{$output} type specifications.
 Should be \code{"Prediction"} (default) or one of its subclasses, e.g. \code{"PredictionClassif"}, and correspond to the type accepted by
-\verb{$.train()} and \verb{$.predict()}.
+\code{private$.train()} and \code{private$.predict()}.
 }
 }
 
@@ -83,7 +83,7 @@ Methods inherited from \code{\link{PipeOp}} as well as:
 \item \code{weighted_avg_prediction(inputs, weights, row_ids, truth)}\cr
 (\code{list} of \code{\link[mlr3:Prediction]{Prediction}}, \code{numeric}, \code{integer} | \code{character}, \code{list}) -> \code{NULL}\cr
 Create \code{\link[mlr3:Prediction]{Prediction}}s that correspond to the weighted average of incoming \code{\link[mlr3:Prediction]{Prediction}}s. This is
-called by \verb{$.predict()} with cleaned and sanity-checked values: \code{inputs} are guaranteed to fit together,
+called by \code{private$.predict()} with cleaned and sanity-checked values: \code{inputs} are guaranteed to fit together,
 \code{row_ids} and \code{truth} are guaranteed to be the same as each one in \code{inputs}, and \code{weights} is guaranteed to have the same length as \code{inputs}.\cr
 This method is abstract, it must be implemented by deriving classes.
 }

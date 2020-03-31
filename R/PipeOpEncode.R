@@ -86,9 +86,11 @@ PipeOpEncode = R6Class("PipeOpEncode",
       ))
       ps$values = list(method = "one-hot")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", tags = "encode", feature_types = c("factor", "ordered"))
-    },
+    }
+  ),
+  private = list(
 
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       contrasts = switch(self$param_set$values$method,
         "one-hot" = function(x) stats::contr.treatment(x, contrasts = FALSE),
         treatment = stats::contr.treatment,
@@ -111,7 +113,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
       }))
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       cols = imap(self$state$contrasts, function(contrasts, id) {
         x = as.character(dt[[id]])
         contrasts[match(x, rownames(contrasts)), , drop = FALSE]

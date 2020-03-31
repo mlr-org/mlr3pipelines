@@ -124,9 +124,21 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set$set_id = "resampling"
 
       super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = "ensemble")
-    },
+    }
 
-    train_task = function(task) {
+  ),
+  active = list(
+    learner = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      private$.learner
+    }
+  ),
+  private = list(
+    .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
 
       # Train a learner for predicting
@@ -142,24 +154,13 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$pred_to_task(prds, task)
     },
 
-    predict_task = function(task) {
+    .predict_task = function(task) {
       on.exit({private$.learner$state = NULL})
       private$.learner$state = self$state
       prediction = as.data.table(private$.learner$predict(task))
       private$pred_to_task(prediction, task)
-    }
-  ),
-  active = list(
-    learner = function(val) {
-      if (!missing(val)) {
-        if (!identical(val, private$.learner)) {
-          stop("$learner is read-only.")
-        }
-      }
-      private$.learner
-    }
-  ),
-  private = list(
+    },
+
     pred_to_task = function(prds, task) {
       if (!is.null(prds$truth)) prds[, truth := NULL]
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {

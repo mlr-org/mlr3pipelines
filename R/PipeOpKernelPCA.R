@@ -76,16 +76,17 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "kernlab", feature_types = c("numeric", "integer"))
-    },
-
-    train_dt = function(dt, levels, target) {
+    }
+  ),
+  private = list(
+    .train_dt = function(dt, levels, target) {
       pcr = invoke(kernlab::kpca, as.matrix(dt), .args = self$param_set$get_values(tags = "kpca"))
       self$state$pcr = pcr
       self$state$pcr@rotated = matrix(numeric(0))
       kernlab::rotated(pcr)
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       kernlab::predict(self$state$pcr, as.matrix(dt))
     }
   )

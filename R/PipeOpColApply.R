@@ -94,15 +94,17 @@ PipeOpColApply = R6Class("PipeOpColApply",
       ))
       ps$values = list(applicator = identity)
       super$initialize(id, ps, param_vals = param_vals)
-    },
+    }
+  ),
+  private = list(
 
-    train_dt = function(dt, levels, target) {
+    .train_dt = function(dt, levels, target) {
       dt = self$transform_dt(dt, levels)
       self$state = list(emptydt = dt[integer(0)])
       dt
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       dt = self$transform_dt(dt, levels)
       if (!nrow(dt)) {
         dt = self$state$emptydt
@@ -110,7 +112,7 @@ PipeOpColApply = R6Class("PipeOpColApply",
       dt
     },
 
-    transform_dt = function(task, task_levels) {
+    .transform_dt = function(task, task_levels) {
       applicator = self$param_set$values$applicator
       task[, names(task) := lapply(task, applicator)]
     }

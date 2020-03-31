@@ -9,20 +9,20 @@
 #' and expect the column layout of these [`Task`][mlr3::Task]s during input and output
 #' to be the same.
 #'
-#' Users must implement `$train_task()` and `$predict_task()`, which have a [`Task`][mlr3::Task]
+#' Users must implement `private$.train_task()` and `private$.predict_task()`, which have a [`Task`][mlr3::Task]
 #' input and should return that [`Task`][mlr3::Task]. The [`Task`][mlr3::Task] should, if possible, be
 #' manipulated in-place, and should not be cloned.
 #'
-#' Alternatively, the `$train_dt()` and `$predict_dt()` functions can be implemented, which operate on
+#' Alternatively, the `private$.train_dt()` and `private$.predict_dt()` functions can be implemented, which operate on
 #' [`data.table`][data.table::data.table] objects instead. This should generally only be done if all
 #' data is in some way altered (e.g. PCA changing all columns to principal components) and not if only
 #' a few columns are added or removed (e.g. feature selection) because this should be done at the [`Task`][mlr3::Task]-level
-#' with `$train_task()`. The `$select_cols()` function can be overloaded for `$train_dt()` and `$predict_dt()`
+#' with `private$.train_task()`. The `private$.select_cols()` function can be overloaded for `private$.train_dt()` and `private$.predict_dt()`
 #' to operate only on subsets of the [`Task`][mlr3::Task]'s data, e.g. only on numerical columns.
 #'
 #' If the `can_subset_cols` argument of the constructor is `TRUE` (the default), then the hyperparameter `affect_columns`
 #' is added, which can limit the columns of the [`Task`][mlr3::Task] that is modified by the [`PipeOpTaskPreproc`]
-#' using a [`Selector`] function. Note this functionality is entirely independent of the `$select_cols()` functionality.
+#' using a [`Selector`] function. Note this functionality is entirely independent of the `private$.select_cols()` functionality.
 #'
 #' [`PipeOpTaskPreproc`] is useful for operations that behave differently during training and prediction. For operations
 #' that perform essentially the same operation and only need to perform extra work to build a `$state` during training,
@@ -45,14 +45,14 @@
 #'   modified by the [`PipeOpTaskPreproc`]. This should generally be `FALSE` if the operation adds or removes
 #'   rows from the [`Task`][mlr3::Task], and `TRUE` otherwise. Default is `TRUE`.
 #' * packages :: `character`\cr
-#'   Set of all required packages for the [`PipeOp`]'s `$train` and `$predict` methods. See `$packages` slot.
+#'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
 #'* `feature_types` :: `character`\cr
-#'   Feature types affected by the `PipeOp`. See `$select_cols()` for more information.
+#'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'   Defaults to all available feature types.
 #'
 #' @section Input and Output Channels:
@@ -63,7 +63,7 @@
 #' the [`Task`][mlr3::Task] type is the same as for input; both during training and prediction.
 #'
 #' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] according to the overloaded
-#' `$train_task()`/`$predict_taks()` or `$train_dt()`/`$predict_dt()` functions.
+#' `private$.train_task()`/`private$.predict_taks()` or `private$.train_dt()`/`private$.predict_dt()` functions.
 #'
 #' @section State:
 #' The `$state` is a named `list`; besides members added by inheriting classes, the members are:
@@ -76,10 +76,10 @@
 #'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 #' * `dt_columns` :: `character`\cr
-#'   Names of features selected by the `$select_cols()` call during training. This is only present if the `$train_dt()` functionality is used,
-#'   and not present if the `$train_task()` function is overloaded instead.
+#'   Names of features selected by the `private$.select_cols()` call during training. This is only present if the `private$.train_dt()` functionality is used,
+#'   and not present if the `private$.train_task()` function is overloaded instead.
 #' * `feature_types` :: `character`\cr
-#'   Feature types affected by the `PipeOp`. See `$select_cols()` for more information.
+#'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
@@ -90,10 +90,10 @@
 #'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
 #'
 #' @section Internals:
-#' [`PipeOpTaskPreproc`] is an abstract class inheriting from [`PipeOp`]. It implements the `$.train()` and
-#' `$.predict()` functions. These functions perform checks and go on to call `$train_task()` and `$predict_task()`.
-#' A subclass of [`PipeOpTaskPreproc`] may implement these functions, or implement `$train_dt()` and `$predict_dt()` instead.
-#' This works by having the default implementations of `$train_task()` and `$predict_task()` call `$train_dt()` and `$predict_dt()`,
+#' [`PipeOpTaskPreproc`] is an abstract class inheriting from [`PipeOp`]. It implements the `private$.train()` and
+#' `$.predict()` functions. These functions perform checks and go on to call `private$.train_task()` and `private$.predict_task()`.
+#' A subclass of [`PipeOpTaskPreproc`] may implement these functions, or implement `private$.train_dt()` and `private$.predict_dt()` instead.
+#' This works by having the default implementations of `private$.train_task()` and `private$.predict_task()` call `private$.train_dt()` and `private$.predict_dt()`,
 #' respectively.
 #'
 #' The `affect_columns` functionality works by unsetting columns by removing their "col_role" before
@@ -104,22 +104,22 @@
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`], as well as:
-#' * `train_task`\cr
+#' * `.train_task`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
-#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$.train()`. Takes a single [`Task`][mlr3::Task] as input
+#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `private$.train()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while storing information in the `$state` slot. Note that unlike
 #'   `$.train()`, the argument is *not* a list but a singular [`Task`][mlr3::Task], and the return object is also *not* a list but
-#'   a singular [`Task`][mlr3::Task]. Also, contrary to `$.train()`, the `$state` being generated must be a `list`, which
+#'   a singular [`Task`][mlr3::Task]. Also, contrary to `private$.train()`, the `$state` being generated must be a `list`, which
 #'   the [`PipeOpTaskPreproc`] will add additional slots to (see Section *State*). Care should be taken to avoid name collisions between
-#'   `$state` elements added by `$train_task()` and [`PipeOpTaskPreproc`].\cr
-#'   By default this function calls the `$train_dt()` function, but it can be overloaded to perform operations on the [`Task`][mlr3::Task]
+#'   `$state` elements added by `private$.train_task()` and [`PipeOpTaskPreproc`].\cr
+#'   By default this function calls the `private$.train_dt()` function, but it can be overloaded to perform operations on the [`Task`][mlr3::Task]
 #'   directly.
-#' * `predict_task`\cr
+#' * `.predict_task`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
 #'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$.predict()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while using information in the `$state` slot. Works analogously to
-#'   `$train_task()`. If `$predict_task()` should only be overloaded if `$train_task()` is overloaded (i.e. `$train_dt()` is *not* used).
-#' * `train_dt(dt, levels, target)` \cr
+#'   `private$.train_task()`. If `private$.predict_task()` should only be overloaded if `private$.train_task()` is overloaded (i.e. `private$.train_dt()` is *not* used).
+#' * `.train_dt(dt, levels, target)` \cr
 #'   ([`data.table`], named `list`, `any`) -> [`data.table`] | `data.frame` | `matrix` \cr
 #'   Train [`PipeOpTaskPreproc`] on `dt`, transform it and store a state in `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
@@ -127,25 +127,25 @@
 #'   The `levels` argument is a named list of factor levels for factorial or character features. The `target` argument
 #'   contains the `$truth()` information of the training [`Task`][mlr3::Task]; its type depends on the [`Task`][mlr3::Task]
 #'   type being trained on.\cr
-#'   This method can be overloaded when inheriting from [`PipeOpTaskPreproc`], together with `$predict_dt()` and optionally
-#'   `$select_cols()`; alternatively, `$train_task()` and `$predict_task()` can be overloaded.
-#' * `predict_dt(dt, levels)` \cr
+#'   This method can be overloaded when inheriting from [`PipeOpTaskPreproc`], together with `private$.predict_dt()` and optionally
+#'   `private$.select_cols()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.
+#' * `.predict_dt(dt, levels)` \cr
 #'   ([`data.table`], named `list`) -> [`data.table`] | `data.frame` | `matrix` \cr
 #'   Predict on new data in `dt`, possibly using the stored `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
 #'   is possible and encouraged to change it in-place.\cr
 #'   The `levels` argument is a named list of factor levels for factorial or character features.\cr
-#'   This method can be overloaded when inheriting `PipeOpTaskPreproc`, together with `$train_dt()` and optionally
-#'   `$select_cols()`; alternatively, `$train_task()` and `$predict_task()` can be overloaded.
-#' * `select_cols(task)` \cr
+#'   This method can be overloaded when inheriting `PipeOpTaskPreproc`, together with `private$.train_dt()` and optionally
+#'   `private$.select_cols()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.
+#' * `.select_cols(task)` \cr
 #'   ([`Task`][mlr3::Task]) -> `character` \cr
-#'   Selects which columns the [`PipeOp`] operates on, if `$train_dt()` and `$predict_dt()` are overloaded. This function
-#'   is not called if `$train_task()` and `$predict_task()` are overloaded. In contrast to
-#'   the `affect_columns` parameter. `select_cols` is for the *inheriting class* to determine which columns
+#'   Selects which columns the [`PipeOp`] operates on, if `private$.train_dt()` and `private$.predict_dt()` are overloaded. This function
+#'   is not called if `private$.train_task()` and `private$.predict_task()` are overloaded. In contrast to
+#'   the `affect_columns` parameter. `private$.select_cols()` is for the *inheriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.\cr
-#'   This method can optionally be overloaded when inheriting [`PipeOpTaskPreproc`], together with `$train_dt()` and
-#'   `$predict_dt()`; alternatively, `$train_task()` and `$predict_task()` can be overloaded.\cr
+#'   This method can optionally be overloaded when inheriting [`PipeOpTaskPreproc`], together with `private$.train_dt()` and
+#'   `private$.predict_dt()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.\cr
 #'   If this method is not overloaded, it defaults to selecting all columns.
 #'
 #' @family mlr3pipelines backend related
@@ -174,38 +174,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         output = data.table(name = "output", train = task_type, predict = task_type),
         packages = packages, tags = c(tags, "data transform")
       )
-    },
-
-    train_task = function(task) {
-      dt_columns = self$select_cols(task)
-      cols = dt_columns
-      if (!length(cols)) {
-        self$state = list(dt_columns = dt_columns)
-        return(task)
-      }
-      dt = task$data(cols = cols)
-      target = task$truth()
-      dt = as.data.table(self$train_dt(dt, task_levels(task, cols), target))
-      self$state$dt_columns = dt_columns
-      task$select(setdiff(task$feature_names, cols))$cbind(dt)
-    },
-
-    predict_task = function(task) {
-      cols = self$state$dt_columns
-      if (!length(cols)) {
-        return(task)
-      }
-      dt = task$data(cols = cols)
-      dt = as.data.table(self$predict_dt(dt, task_levels(task, cols)))
-      task$select(setdiff(task$feature_names, cols))$cbind(dt)
-    },
-
-    train_dt = function(dt, levels, target) stop("Abstract."),
-
-    predict_dt = function(dt, levels) stop("Abstract."),
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% self$feature_types, get("id")]
     }
   ),
   active = list(
@@ -217,7 +185,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   private = list(
     .affectcols_ps = NULL,
     .feature_types = NULL,
-    
+
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
@@ -231,14 +199,14 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       }
       intasklayout = copy(intask$feature_types)
 
-      intask = self$train_task(intask)
+      intask = private$.train_task(intask)
 
       self$state$affected_cols = affected_cols
       self$state$intasklayout = intasklayout
       self$state$outtasklayout = copy(intask$feature_types)
 
       if (do_subset) {
-        # FIXME: this fails if train_task added a column with the same name
+        # FIXME: this fails if .train_task added a column with the same name
         intask$set_col_role(remove_cols, "feature")
       }
       list(intask)
@@ -255,17 +223,49 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
-      intask = self$predict_task(intask)
+      intask = private$.predict_task(intask)
 
       if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       if (do_subset) {
-        # FIXME: see train fixme: this fails if train_task added a column with the same name
+        # FIXME: see train fixme: this fails if .train_task added a column with the same name
         intask$set_col_role(remove_cols, "feature")
       }
       list(intask)
+    },
+    .train_task = function(task) {
+      dt_columns = private$.select_cols(task)
+      cols = dt_columns
+      if (!length(cols)) {
+        self$state = list(dt_columns = dt_columns)
+        return(task)
+      }
+      dt = task$data(cols = cols)
+      target = task$truth()
+      dt = as.data.table(private$.train_dt(dt, task_levels(task, cols), target))
+      self$state$dt_columns = dt_columns
+      task$select(setdiff(task$feature_names, cols))$cbind(dt)
+    },
+
+    .predict_task = function(task) {
+      cols = self$state$dt_columns
+      if (!length(cols)) {
+        return(task)
+      }
+      dt = task$data(cols = cols)
+      dt = as.data.table(private$.predict_dt(dt, task_levels(task, cols)))
+      task$select(setdiff(task$feature_names, cols))$cbind(dt)
+    },
+
+    .train_dt = function(dt, levels, target) stop("Abstract."),
+
+    .predict_dt = function(dt, levels) stop("Abstract."),
+
+    .select_cols = function(task) {
+      task$feature_types[get("type") %in% self$feature_types, get("id")]
     }
+
   )
 )
 
@@ -277,16 +277,16 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #' @description
 #' Base class for handling many "preprocessing" operations
 #' that perform essentially the same operation during training and prediction.
-#' Instead implementing a `$train_task()` and a `$predict_task()` operation, only
-#' a `$get_state()` and a `$transform()` operation needs to be defined,
+#' Instead implementing a `private$.train_task()` and a `private$.predict_task()` operation, only
+#' a `private$.get_state()` and a `private$.transform()` operation needs to be defined,
 #' both of which take one argument: a [`Task`][mlr3::Task].
 #'
-#' Alternatively, analogously to the [`PipeOpTaskPreproc`] approach of offering `$train_dt()`/`$predict_dt()`,
-#' the `$get_state_dt()` and `$transform_dt()` functions may be implemented.
+#' Alternatively, analogously to the [`PipeOpTaskPreproc`] approach of offering `private$.train_dt()`/`private$.predict_dt()`,
+#' the `private$.get_state_dt()` and `private$.transform_dt()` functions may be implemented.
 #'
-#' `$get_state` must not change its input value in-place and must return
+#' `private$.get_state` must not change its input value in-place and must return
 #' something that will be written into `$state`
-#' (which must not be NULL), `transform()` should modify its argument in-place;
+#' (which must not be NULL), `private$.transform()` should modify its argument in-place;
 #' it is called both during training and prediction.
 #'
 #' This inherits from [`PipeOpTaskPreproc`] and behaves essentially the same.
@@ -309,7 +309,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   modified by the [`PipeOpTaskPreprocSimple`]. This should generally be `FALSE` if the operation adds or removes
 #'   rows from the [`Task`][mlr3::Task], and `TRUE` otherwise. Default is `TRUE`.
 #' * packages :: `character`\cr
-#'   Set of all required packages for the [`PipeOp`]'s `$train` and `$predict` methods. See `$packages` slot.
+#'   Set of all required packages for the [`PipeOp`]'s `private$.train()` and `private$.predict()` methods. See `$packages` slot.
 #'   Default is `character(0)`.
 #' * `task_type` :: `character(1)`\cr
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
@@ -319,7 +319,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output during training and prediction is the [`Task`][mlr3::Task], modified by `$transform()` or `$transform_dt()`.
+#' The output during training and prediction is the [`Task`][mlr3::Task], modified by `private$.transform()` or `private$.transform_dt()`.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
@@ -329,44 +329,44 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' @section Internals:
 #' [`PipeOpTaskPreprocSimple`] is an abstract class inheriting from [`PipeOpTaskPreproc`] and implementing the
-#' `$train_task()` and `$predict_task()` functions. A subclass of [`PipeOpTaskPreprocSimple`] may implement the
-#' functions `$get_state()` and `$transform()`, or alternatively the functions `$get_state_dt()` and `$transform_dt()`
-#' (as well as `$select_cols()`, in the latter case). This works by having the default implementations of
-#' `$get_state()` and `$transform()` call `$get_state_dt()` and `$transform_dt()`.
+#' `private$.train_task()` and `private$.predict_task()` functions. A subclass of [`PipeOpTaskPreprocSimple`] may implement the
+#' functions `private$.get_state()` and `private$.transform()`, or alternatively the functions `private$.get_state_dt()` and `private$.transform_dt()`
+#' (as well as `private$.select_cols()`, in the latter case). This works by having the default implementations of
+#' `private$.get_state()` and `private$.transform()` call `private$.get_state_dt()` and `private$.transform_dt()`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `get_state(task)` \cr
+#' * `.get_state(task)` \cr
 #'   ([`Task`][mlr3::Task]) -> named `list`\cr
 #'   Store create something that will be stored in `$state` during training phase of `PipeOpTaskPreprocSimple`.
-#'   The state can then influence the `$transform()` function. Note that `$get_state()` must *return* the state, and
-#'   should not store it in `$state`. It is not strictly necessary to implement either `$get_state()` or `$get_state_dt()`;
+#'   The state can then influence the `private$.transform()` function. Note that `private$.get_state()` must *return* the state, and
+#'   should not store it in `$state`. It is not strictly necessary to implement either `private$.get_state()` or `private$.get_state_dt()`;
 #'   if they are not implemented, the state will be stored as `list()`. \cr
-#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `$transform()`;
-#'   alternatively, `$get_state_dt()` (optional) and `$transform_dt()` (and possibly `$select_cols()`, from [`PipeOpTaskPreproc`])
+#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `private$.transform()`;
+#'   alternatively, `private$.get_state_dt()` (optional) and `private$.transform_dt()` (and possibly `private$.select_cols()`, from [`PipeOpTaskPreproc`])
 #'   can be overloaded.
-#' * `transform(task)` \cr
+#' * `.transform(task)` \cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
 #'   Predict on new data in `task`, possibly using the stored `$state`. `task` should not be cloned, instead it should be
 #'   changed in-place. This method is called both during training and prediction phase, and should essentially behave the
 #'   same independently of phase. (If this is incongruent with the functionality to be implemented, then it should inherit from
 #'   [`PipeOpTaskPreproc`], not from [`PipeOpTaskPreprocSimple`].) \cr
-#'   This method can be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], optionally with `$get_state()`;
-#'   alternatively, `$get_state_dt()` (optional) and `$transform_dt()` (and possibly `$select_cols()`, from [`PipeOpTaskPreproc`])
+#'   This method can be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], optionally with `private$.get_state()`;
+#'   alternatively, `private$.get_state_dt()` (optional) and `private$.transform_dt()` (and possibly `private$.select_cols()`, from [`PipeOpTaskPreproc`])
 #'   can be overloaded.
-#' * `get_state_dt(dt)` \cr
+#' * `.get_state_dt(dt)` \cr
 #'   ([`data.table`]) -> named `list`\cr
 #'   Create something that will be stored in `$state` during training phase of `PipeOpTaskPreprocSimple`.
-#'   The state can then influence the `$transform_dt()` function. Note that `$get_state_dt()` must *return* the state, and
-#'   should not store it in `$state`. If neither `$get_state()` nor `$get_state_dt()` are overloaded, the state will
+#'   The state can then influence the `private$.transform_dt()` function. Note that `private$.get_state_dt()` must *return* the state, and
+#'   should not store it in `$state`. If neither `private$.get_state()` nor `private$.get_state_dt()` are overloaded, the state will
 #'   be stored as `list()`. \cr
-#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `$transform_dt()`
-#'   (and optionally `$select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `$get_state()` (optional) and `$transform()`
+#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `private$.transform_dt()`
+#'   (and optionally `private$.select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `private$.get_state()` (optional) and `private$.transform()`
 #'   can be overloaded.
-#' * `transform_dt(dt)` \cr
+#' * `.transform_dt(dt)` \cr
 #'   ([`data.table`]) -> [`data.table`] | `data.frame` | `matrix` \cr
 #'   Predict on new data in `dt`, possibly using the stored `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
@@ -374,8 +374,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   and should essentially behave the same independently of phase.
 #'   (If this is incongruent with the functionality to be implemented, then it should inherit from
 #'   [`PipeOpTaskPreproc`], not from [`PipeOpTaskPreprocSimple`].) \cr
-#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `$transform_dt()`
-#'   (and optionally `$select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `$get_state()` (optional) and `$transform()`
+#'   This method can optionally be overloaded when inheriting from [`PipeOpTaskPreprocSimple`], together with `private$.transform_dt()`
+#'   (and optionally `private$.select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `private$.get_state()` (optional) and `private$.transform()`
 #'   can be overloaded.
 #'
 #' @family PipeOp
@@ -385,36 +385,36 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 
   inherit = PipeOpTaskPreproc,
 
-  public = list(
-    train_task = function(task) {
-      self$state = self$get_state(task)
-      self$transform(task)
+  private = list(
+    .train_task = function(task) {
+      self$state = private$.get_state(task)
+      private$.transform(task)
     },
-    predict_task = function(task) self$transform(task),
+    .predict_task = function(task) private$.transform(task),
 
-    get_state = function(task) {
-      dt_columns = self$select_cols(task)
+    .get_state = function(task) {
+      dt_columns = private$.select_cols(task)
       cols = dt_columns
       if (!length(cols)) {
         return(list(dt_columns = dt_columns))
       }
       dt = task$data(cols = cols)
       target = task$truth()
-      c(self$get_state_dt(dt, task_levels(task, cols), target), list(dt_columns = dt_columns))
+      c(private$.get_state_dt(dt, task_levels(task, cols), target), list(dt_columns = dt_columns))
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       cols = self$state$dt_columns
       if (!length(cols)) {
         return(task)
       }
       dt = task$data(cols = cols)
-      dt = as.data.table(self$transform_dt(dt, task_levels(task, cols)))
+      dt = as.data.table(private$.transform_dt(dt, task_levels(task, cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
-    get_state_dt = function(dt, levels, target) list(),
+    .get_state_dt = function(dt, levels, target) list(),
 
-    transform_dt = function(dt, levels) stop("Abstract")
+    .transform_dt = function(dt, levels) stop("Abstract")
   )
 )

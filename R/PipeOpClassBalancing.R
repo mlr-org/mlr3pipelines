@@ -111,9 +111,11 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
       ))
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
-    },
+    }
+  ),
+  private = list(
 
-    train_task = function(task) {
+    .train_task = function(task) {
 
       self$state = list()
       truth = task$truth()
@@ -156,7 +158,7 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
       task_filter_ex(task, new_ids)
     },
 
-    predict_task = identity
+    .predict_task = identity
   )
 )
 

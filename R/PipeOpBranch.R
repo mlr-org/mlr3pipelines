@@ -49,7 +49,7 @@
 #' Alternative path branching is handled by the [`PipeOp`] backend. To indicate that
 #' a path should not be taken, [`PipeOpBranch`] returns the [`NO_OP`] object on its
 #' output channel. The [`PipeOp`] handles each [`NO_OP`] input by automatically
-#' returning a [`NO_OP`] output without calling `$.train()` or `$.predict()`,
+#' returning a [`NO_OP`] output without calling `private$.train()` or `private$.predict()`,
 #' until [`PipeOpUnbranch`] is reached. [`PipeOpUnbranch`] will then take multiple inputs,
 #' all except one of which must be a [`NO_OP`], and forward the only non-[`NO_OP`]
 #' object on its output.
