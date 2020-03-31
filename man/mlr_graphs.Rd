@@ -9,7 +9,7 @@
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{Graph}}.
 The dictionary contains a collection of often-used graph structures, and it's aim
 is solely to make often-used functions more accessible.
-Each \code{Graph} has an associated help page, which can be accessed via \code{?mlr_graphs_<key>}, i.e.
+Each \code{Graph} has an associated help page, which can be accessed via \verb{?mlr_graphs_<key>}, i.e.
 \code{?mlr_graphs_bagging}.
 }
 \section{Methods}{
@@ -48,12 +48,15 @@ gr = ppl("robustify", task, lrn) \%>>\% po("learner", lrn)
 as.data.table(mlr_graphs)
 }
 \seealso{
-Other mlr3pipelines backend related: \code{\link{Graph}},
-  \code{\link{PipeOpTaskPreprocSimple}},
-  \code{\link{PipeOpTaskPreproc}}, \code{\link{PipeOp}},
-  \code{\link{mlr_pipeops}}
+Other mlr3pipelines backend related: 
+\code{\link{Graph}},
+\code{\link{PipeOpTaskPreprocSimple}},
+\code{\link{PipeOpTaskPreproc}},
+\code{\link{PipeOp}},
+\code{\link{mlr_pipeops}}
 
-Other Dictionaries: \code{\link{mlr_pipeops}}
+Other Dictionaries: 
+\code{\link{mlr_pipeops}}
 }
 \concept{Dictionaries}
 \concept{mlr3pipelines backend related}

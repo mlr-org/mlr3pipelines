@@ -121,7 +121,16 @@ PipeOpImpute = R6Class("PipeOpImpute",
       )
     },
 
-    train_internal = function(inputs) {
+    select_cols = function(task) task$feature_names,
+
+    train_imputer = function(feature, type, context) stop("Abstract."),
+
+    impute = function(feature, type, model, context) stop("Abstract.")
+  ),
+  private = list(
+    .affectcols_ps = NULL,
+    
+    .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
 
       affected_cols = (self$param_set$values$affect_columns %??% selector_all())(intask)
@@ -166,7 +175,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       list(intask)
     },
 
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
@@ -200,15 +209,6 @@ PipeOpImpute = R6Class("PipeOpImpute",
         stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
       }
       list(intask)
-    },
-
-    select_cols = function(task) task$feature_names,
-
-    train_imputer = function(feature, type, context) stop("Abstract."),
-
-    impute = function(feature, type, model, context) stop("Abstract.")
-  ),
-  private = list(
-    .affectcols_ps = NULL
+    }
   )
 )

@@ -17,8 +17,10 @@ List to filter.}
 Remove all \code{\link{NO_OP}} elements from a \code{list}.
 }
 \seealso{
-Other Path Branching: \code{\link{NO_OP}},
-  \code{\link{is_noop}}, \code{\link{mlr_pipeops_branch}},
-  \code{\link{mlr_pipeops_unbranch}}
+Other Path Branching: 
+\code{\link{NO_OP}},
+\code{\link{is_noop}()},
+\code{\link{mlr_pipeops_branch}},
+\code{\link{mlr_pipeops_unbranch}}
 }
 \concept{Path Branching}

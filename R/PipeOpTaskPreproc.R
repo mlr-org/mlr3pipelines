@@ -90,8 +90,8 @@
 #'   See [`Selector`] for example functions. Defaults to `NULL`, which selects all features.
 #'
 #' @section Internals:
-#' [`PipeOpTaskPreproc`] is an abstract class inheriting from [`PipeOp`]. It implements the `$train_internal()` and
-#' `$predict_internal()` functions. These functions perform checks and go on to call `$train_task()` and `$predict_task()`.
+#' [`PipeOpTaskPreproc`] is an abstract class inheriting from [`PipeOp`]. It implements the `$.train()` and
+#' `$.predict()` functions. These functions perform checks and go on to call `$train_task()` and `$predict_task()`.
 #' A subclass of [`PipeOpTaskPreproc`] may implement these functions, or implement `$train_dt()` and `$predict_dt()` instead.
 #' This works by having the default implementations of `$train_task()` and `$predict_task()` call `$train_dt()` and `$predict_dt()`,
 #' respectively.
@@ -106,17 +106,17 @@
 #' Methods inherited from [`PipeOp`], as well as:
 #' * `train_task`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
-#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$train_internal()`. Takes a single [`Task`][mlr3::Task] as input
+#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$.train()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while storing information in the `$state` slot. Note that unlike
-#'   `$train_internal()`, the argument is *not* a list but a singular [`Task`][mlr3::Task], and the return object is also *not* a list but
-#'   a singular [`Task`][mlr3::Task]. Also, contrary to `$train_internal()`, the `$state` being generated must be a `list`, which
+#'   `$.train()`, the argument is *not* a list but a singular [`Task`][mlr3::Task], and the return object is also *not* a list but
+#'   a singular [`Task`][mlr3::Task]. Also, contrary to `$.train()`, the `$state` being generated must be a `list`, which
 #'   the [`PipeOpTaskPreproc`] will add additional slots to (see Section *State*). Care should be taken to avoid name collisions between
 #'   `$state` elements added by `$train_task()` and [`PipeOpTaskPreproc`].\cr
 #'   By default this function calls the `$train_dt()` function, but it can be overloaded to perform operations on the [`Task`][mlr3::Task]
 #'   directly.
 #' * `predict_task`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
-#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$predict_internal()`. Takes a single [`Task`][mlr3::Task] as input
+#'   Called by the [`PipeOpTaskPreproc`]'s implementation of `$.predict()`. Takes a single [`Task`][mlr3::Task] as input
 #'   and modifies it (ideally in-place without cloning) while using information in the `$state` slot. Works analogously to
 #'   `$train_task()`. If `$predict_task()` should only be overloaded if `$train_task()` is overloaded (i.e. `$train_dt()` is *not* used).
 #' * `train_dt(dt, levels, target)` \cr
@@ -176,57 +176,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       )
     },
 
-    train_internal = function(inputs) {
-
-      intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = !is.null(self$param_set$values$affect_columns)
-      affected_cols = intask$feature_names
-      if (do_subset) {
-        affected_cols = self$param_set$values$affect_columns(intask)
-        assert_subset(affected_cols, intask$feature_names, empty.ok = TRUE)
-        # FIXME: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, affected_cols)
-        intask$set_col_role(remove_cols, character(0))
-      }
-      intasklayout = copy(intask$feature_types)
-
-      intask = self$train_task(intask)
-
-      self$state$affected_cols = affected_cols
-      self$state$intasklayout = intasklayout
-      self$state$outtasklayout = copy(intask$feature_types)
-
-      if (do_subset) {
-        # FIXME: this fails if train_task added a column with the same name
-        intask$set_col_role(remove_cols, "feature")
-      }
-      list(intask)
-    },
-
-    predict_internal = function(inputs) {
-
-      intask = inputs[[1]]$clone(deep = TRUE)
-      do_subset = !is.null(self$param_set$values$affect_columns)
-      if (do_subset) {
-        # FIXME: see train fixme: this fails when something is both a feature and something else
-        remove_cols = setdiff(intask$feature_names, self$state$affected_cols)
-        intask$set_col_role(remove_cols, character(0))
-      }
-      if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
-        stopf("Input task during prediction of %s does not match input task during training.", self$id)
-      }
-      intask = self$predict_task(intask)
-
-      if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
-        stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
-      }
-      if (do_subset) {
-        # FIXME: see train fixme: this fails if train_task added a column with the same name
-        intask$set_col_role(remove_cols, "feature")
-      }
-      list(intask)
-    },
-
     train_task = function(task) {
       dt_columns = self$select_cols(task)
       cols = dt_columns
@@ -267,7 +216,56 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   ),
   private = list(
     .affectcols_ps = NULL,
-    .feature_types = NULL
+    .feature_types = NULL,
+    
+    .train = function(inputs) {
+      intask = inputs[[1]]$clone(deep = TRUE)
+      do_subset = !is.null(self$param_set$values$affect_columns)
+      affected_cols = intask$feature_names
+      if (do_subset) {
+        affected_cols = self$param_set$values$affect_columns(intask)
+        assert_subset(affected_cols, intask$feature_names, empty.ok = TRUE)
+        # FIXME: this fails when something is both a feature and something else
+        remove_cols = setdiff(intask$feature_names, affected_cols)
+        intask$set_col_role(remove_cols, character(0))
+      }
+      intasklayout = copy(intask$feature_types)
+
+      intask = self$train_task(intask)
+
+      self$state$affected_cols = affected_cols
+      self$state$intasklayout = intasklayout
+      self$state$outtasklayout = copy(intask$feature_types)
+
+      if (do_subset) {
+        # FIXME: this fails if train_task added a column with the same name
+        intask$set_col_role(remove_cols, "feature")
+      }
+      list(intask)
+    },
+
+    .predict = function(inputs) {
+      intask = inputs[[1]]$clone(deep = TRUE)
+      do_subset = !is.null(self$param_set$values$affect_columns)
+      if (do_subset) {
+        # FIXME: see train fixme: this fails when something is both a feature and something else
+        remove_cols = setdiff(intask$feature_names, self$state$affected_cols)
+        intask$set_col_role(remove_cols, character(0))
+      }
+      if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
+        stopf("Input task during prediction of %s does not match input task during training.", self$id)
+      }
+      intask = self$predict_task(intask)
+
+      if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
+        stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
+      }
+      if (do_subset) {
+        # FIXME: see train fixme: this fails if train_task added a column with the same name
+        intask$set_col_role(remove_cols, "feature")
+      }
+      list(intask)
+    }
   )
 )
 

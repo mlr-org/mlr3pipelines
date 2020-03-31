@@ -50,7 +50,7 @@
 #' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object, together with the `$state` elements inherited from the
 #' [`PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
 #' * `model` :: `any`\cr
-#'   Model created by the [`Learner`][mlr3::Learner]'s `$train_internal()` function.
+#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
 #' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr

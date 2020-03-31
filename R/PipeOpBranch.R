@@ -49,7 +49,7 @@
 #' Alternative path branching is handled by the [`PipeOp`] backend. To indicate that
 #' a path should not be taken, [`PipeOpBranch`] returns the [`NO_OP`] object on its
 #' output channel. The [`PipeOp`] handles each [`NO_OP`] input by automatically
-#' returning a [`NO_OP`] output without calling `$train_internal()` or `$predict_internal()`,
+#' returning a [`NO_OP`] output without calling `$.train()` or `$.predict()`,
 #' until [`PipeOpUnbranch`] is reached. [`PipeOpUnbranch`] will then take multiple inputs,
 #' all except one of which must be a [`NO_OP`], and forward the only non-[`NO_OP`]
 #' object on its output.
@@ -103,16 +103,16 @@ PipeOpBranch = R6Class("PipeOpBranch",
         output = data.table(name = options, train = "*", predict = "*"),
         tags = "meta"
       )
-    },
-
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    .train = function(inputs) {
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]
       ret
     },
-
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]

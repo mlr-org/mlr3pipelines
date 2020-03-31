@@ -5,9 +5,13 @@
 \alias{robustify_pipeline}
 \title{Robustify a learner}
 \usage{
-robustify_pipeline(task = NULL, learner = NULL,
-  impute_missings = NULL, factors_to_numeric = NULL,
-  max_cardinality = 1000)
+robustify_pipeline(
+  task = NULL,
+  learner = NULL,
+  impute_missings = NULL,
+  factors_to_numeric = NULL,
+  max_cardinality = 1000
+)
 }
 \arguments{
 \item{task}{\code{\link{Task}} \cr
@@ -39,7 +43,7 @@ Performs the following steps:
 \item Drops empty factor levels using \code{\link{PipeOpFixFactors}}
 \item Imputes \code{numeric} features using \code{\link{PipeOpImputeHist}} and \code{\link{PipeOpMissInd}}
 \item Imputes \code{factor} features using \code{\link{PipeOpImputeNewlvl}}
-\item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality\code{ are collapsed using [}PipeOpCollapseFactors`].
+\item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality\verb{ are collapsed using [}PipeOpCollapseFactors`].
 \item If \code{scaling}, numeric features are scaled to mean 0 and standard deviation 1.
 }
 

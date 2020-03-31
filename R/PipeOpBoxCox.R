@@ -85,7 +85,6 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
       self$state = list(bc = bc)
       dt
     },
-
     predict_dt = function(dt, levels) {
       cols = colnames(dt)
       for (j in colnames(dt)) {
