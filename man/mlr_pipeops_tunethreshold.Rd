@@ -68,7 +68,7 @@ Only methods inherited from \code{\link{PipeOpPredPostproc}}.
 library("mlr3")
 
 task = tsk("iris")
-pop = po("learner_cv", lrn("classif.rpart")) \%>>\% 
+pop = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) \%>>\% 
   po("tunethreshold")
 
 task$data()
