@@ -130,11 +130,8 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
-<<<<<<< HEAD
-    'PipeOpTrafo.R'
-=======
     'PipeOpThreshold.R'
->>>>>>> origin/master
+    'PipeOpTrafo.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

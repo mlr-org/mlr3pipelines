@@ -70,6 +70,7 @@ gr$predict(t)
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpInvertiblePreproc}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -96,8 +97,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_inverter}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_logtrafo}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_mutate}},

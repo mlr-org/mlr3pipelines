@@ -4,11 +4,7 @@
 \alias{pipeline_branch}
 \title{Branch Between Alternative Paths}
 \usage{
-<<<<<<< HEAD:man/branch.Rd
-branch(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = FALSE)
-=======
 pipeline_branch(graphs, prefix_branchops = "", prefix_paths = FALSE)
->>>>>>> origin/master:man/pipeline_branch.Rd
 }
 \arguments{
 \item{graphs}{(\verb{[list of Graph]}):\cr
@@ -16,23 +12,12 @@ Multiple graphs, possibly named. They all must have exactly
 one output. If any of the arguments are named, then all must have
 unique names.}
 
-<<<<<<< HEAD:man/branch.Rd
-\item{.graphs}{(\verb{[list of Graph]}):
-Named list of Graphs, additionally to the graphs given in \code{...}.}
-
-\item{.prefix_branchops}{(\verb{[character(1)]}):
-=======
 \item{prefix_branchops}{(\verb{[character(1)]}):\cr
->>>>>>> origin/master:man/pipeline_branch.Rd
 Optional id prefix to prepend to \code{\link{PipeOpBranch}} and \code{\link{PipeOpUnbranch}} id. Their
 resulting IDs will be \code{"[prefix_branchops]branch"} and \code{"[prefix_branchops]unbranch"}.
 Default is \code{""}.}
 
-<<<<<<< HEAD:man/branch.Rd
-\item{.prefix_paths}{(\verb{[logical(1) | character(1)]}):
-=======
 \item{prefix_paths}{(\verb{[logical(1) | character(1)]}):\cr
->>>>>>> origin/master:man/pipeline_branch.Rd
 Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 avoid ID clashes in resulting graph. Default \code{FALSE}. If this is \code{TRUE}, the prefixes
 are taken from the names of the input arguments if present or \code{"poX"} where X counts up. If this is

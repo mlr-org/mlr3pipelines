@@ -5,11 +5,7 @@
 \alias{pipeline_robustify}
 \title{Robustify a learner}
 \usage{
-<<<<<<< HEAD
-robustify_pipeline(
-=======
 pipeline_robustify(
->>>>>>> origin/master
   task = NULL,
   learner = NULL,
   impute_missings = NULL,

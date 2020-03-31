@@ -52,10 +52,7 @@ as.data.table(mlr_graphs)
 \seealso{
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
-<<<<<<< HEAD
 \code{\link{PipeOpInvertiblePreproc}},
-=======
->>>>>>> origin/master
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
