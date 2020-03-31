@@ -47,8 +47,10 @@
 #'   instance count), `"major"`, `"minor"`, `"nonmajor"`, `"nonminor"` (see respective values
 #'   for `$reference`), `"upsample"` (only upsample), and `"downsample"`. Initialized to `"all"`.
 #' * `shuffle` :: `logical(1)` \cr
-#'   Whether to shuffle the result. Otherwise, the resulting task will have the original items that
-#'   were not removed in downsampling in-order, followed by all newly sampled items ordered by target class.
+#'   Whether to shuffle the rows of the resulting task.
+#'   In case the data is upsampled and `shuffle = FALSE`, the resulting task will have the original
+#'   rows (which were not removed in downsampling) in the original order, followed by all newly added rows
+#'   ordered by target class.
 #'   Initialized to `TRUE`.
 #'
 #' @section Internals:

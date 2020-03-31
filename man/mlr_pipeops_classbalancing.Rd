@@ -58,8 +58,10 @@ Which classes to up / downsample. Can be \code{"all"} (up and downsample all to 
 instance count), \code{"major"}, \code{"minor"}, \code{"nonmajor"}, \code{"nonminor"} (see respective values
 for \verb{$reference}), \code{"upsample"} (only upsample), and \code{"downsample"}. Initialized to \code{"all"}.
 \item \code{shuffle} :: \code{logical(1)} \cr
-Whether to shuffle the result. Otherwise, the resulting task will have the original items that
-were not removed in downsampling in-order, followed by all newly sampled items ordered by target class.
+Whether to shuffle the rows of the resulting task.
+In case the data is upsampled and \code{shuffle = FALSE}, the resulting task will have the original
+rows (which were not removed in downsampling) in the original order, followed by all newly added rows
+ordered by target class.
 Initialized to \code{TRUE}.
 }
 }
