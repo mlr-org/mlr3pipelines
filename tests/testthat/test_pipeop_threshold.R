@@ -4,7 +4,7 @@ test_that("threshold general", {
   po_thr = po("threshold")
   expect_pipeop(po_thr)
   expect_true(po_thr$id == "threshold")
-  expect_true(!length(po_thr$param_set$values$thresholds))
+  expect_equal(po_thr$param_set$values$thresholds, 0.5)
 
   po_thr = po("threshold", param_vals = list(thresholds = c(0.3, 0.5)))
   expect_pipeop(po_thr)
@@ -26,7 +26,7 @@ test_that("thresholding works for binary", {
   gr$train(t)
   prd = gr$predict(t)
   expect_prediction(prd[[1]])
-  expect_true(!length(gr$param_set$values$threshold.thresholds))
+  expect_equal(gr$param_set$values$threshold.thresholds, 0.5)
 
   # Same as setting threshold at 0.5
   gr = po_lrn %>>% po_thr
@@ -73,6 +73,12 @@ test_that("thresholding works for multiclass", {
   expect_pipeop(po_thr)
   gr = po_lrn %>>% po_thr
   gr$train(t)
+  expect_error(gr$predict(t), "only supported for binary classification")
+  gr$param_set$values$threshold.thresholds = c(a = 1, b = 0.4, c = 0.1)
+  gr$train(t)
+  expect_error(gr$predict(t), "Must be a permutation of")
+  gr$param_set$values$threshold.thresholds = c(.1, .1, .1)
+  gr$train(t)
   prd = gr$predict(t)
   expect_prediction(prd[[1]])
 
@@ -99,7 +105,7 @@ test_that("thresholding works for multiclass", {
   po_thr = PipeOpThreshold$new(param_vals = list(thresholds = c(0.3, 0.4)))
   gr = po_lrn %>>% po_thr
   gr$train(t)
-  expect_error(gr$predict(t), "ugh")
+  expect_error(gr$predict(t), "must have length one or length equal to number of outcome levels")
 
   po_thr = PipeOpThreshold$new(param_vals =
     list(thresholds = c("foo" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))
