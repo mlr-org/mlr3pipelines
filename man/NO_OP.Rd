@@ -4,7 +4,9 @@
 \name{NO_OP}
 \alias{NO_OP}
 \title{No-Op Sentinel Used for Alternative Branching}
-\format{\code{\link{R6}} object.}
+\format{
+\code{\link{R6}} object.
+}
 \usage{
 NO_OP
 }
@@ -13,9 +15,11 @@ Special data type for no-ops. Distinct from \code{NULL} for easier debugging
 and distinction from unintentional \code{NULL} returns.
 }
 \seealso{
-Other Path Branching: \code{\link{filter_noop}},
-  \code{\link{is_noop}}, \code{\link{mlr_pipeops_branch}},
-  \code{\link{mlr_pipeops_unbranch}}
+Other Path Branching: 
+\code{\link{filter_noop}()},
+\code{\link{is_noop}()},
+\code{\link{mlr_pipeops_branch}},
+\code{\link{mlr_pipeops_unbranch}}
 }
 \concept{Path Branching}
 \keyword{datasets}
