@@ -14,7 +14,7 @@ test_that("Branching Pipeline", {
   out = gr$predict(tsk("iris"))$unbranch.output
   assert_prediction(out)
   
-  gr = pipeline_branch(lrns, id_prefix = "foo_", prefix_branches = TRUE)
+  gr = pipeline_branch(lrns, id_prefix = "foo_", prefix_options = TRUE)
   assert_true(gr$input$name == "foo_branch.input")
   assert_true(gr$output$name == "foo_unbranch.output")
   assert_true(all(grepl("foo", gr$param_set$params[["foo_branch.selection"]]$levels)))
