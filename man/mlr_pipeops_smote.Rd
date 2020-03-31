@@ -4,13 +4,15 @@
 \alias{mlr_pipeops_smote}
 \alias{PipeOpSmote}
 \title{PipeOpSmote}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Generates a more balanced data set by creating
 synthetic instances of the minority class using the SMOTE algorithm.
 The algorithm samples for each minority instance a new data point based on the \code{K} nearest
 neighbors of that data point.
-It can only be applied to tasks with numeric features.
+It can only be applied to tasks with purely numeric features.
 See \code{\link[smotefamily:SMOTE]{smotefamily::SMOTE}} for details.
 }
 \section{Construction}{
@@ -99,6 +101,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

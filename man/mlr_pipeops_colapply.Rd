@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_colapply}
 \alias{PipeOpColApply}
 \title{PipeOpColApply}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Applies a function to each column of a task. Use the \code{affect_columns} parameter inherited from
 \code{\link{PipeOpTaskPreproc}} to limit the columns this function should be applied to. This can be used
@@ -117,6 +119,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

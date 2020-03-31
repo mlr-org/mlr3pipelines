@@ -8,10 +8,8 @@ Dataflow Programming for Machine Learning in R.
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master)](https://travis-ci.org/mlr-org/mlr3pipelines)
 [![R CMD Check via
-{tic}](https://img.shields.io/github/workflow/status/mlr-org/mlr3pipelines/R%20CMD%20Check%20via%20%7Btic%7D?logo=github&label=R%20CMD%20Check%20via%20%7Btic%7D&style=flat-square)](https://github.com/mlr-org/mlr3pipelines/actions)
+{tic}](https://github.com/mlr-org/mlr3pipelines/workflows/R%20CMD%20Check%20via%20%7Btic%7D/badge.svg?branch=master)](https://github.com/mlr-org/mlr3pipelines/actions)
 [![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
 [![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
 [![StackOverflow](https://img.shields.io/badge/stackoverflow-mlr3-orange.svg)](https://stackoverflow.com/questions/tagged/mlr3)

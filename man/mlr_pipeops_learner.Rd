@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_learner}
 \alias{PipeOpLearner}
 \title{PipeOpLearner}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 
@@ -107,6 +109,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

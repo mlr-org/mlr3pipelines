@@ -62,11 +62,7 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
         ParamDbl$new("upper", tags = c("required", "train", "predict"))
       ))
       ps$values = list(lower = 0, upper = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     },
 
     get_state_dt = function(dt, levels, target) {

@@ -3,7 +3,9 @@
 \name{PipeOpImpute}
 \alias{PipeOpImpute}
 \title{PipeOpImpute}
-\format{Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Abstract base class for feature imputation.
 }
@@ -123,6 +125,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

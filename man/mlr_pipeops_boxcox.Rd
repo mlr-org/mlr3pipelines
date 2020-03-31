@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_boxcox}
 \alias{PipeOpBoxCox}
 \title{PipeOpBoxCox}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Conducts a Box-Cox transformation on numeric features. The lambda parameter
 of the transformation is estimated during training and used for both training
@@ -88,6 +90,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

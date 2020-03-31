@@ -104,11 +104,7 @@ PipeOpICA = R6Class("PipeOpICA",
       ))
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "fastICA")
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+        packages = "fastICA", feature_types = c("numeric", "integer"))
     },
 
     train_dt = function(dt, levels, target) {

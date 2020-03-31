@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_copy}
 \alias{PipeOpCopy}
 \title{PipeOpCopy}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Copies its input \code{outnum} times. This PipeOp usually not needed,
 because copying happens automatically when one \code{PipeOp} is followed
@@ -106,6 +108,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

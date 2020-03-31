@@ -7,7 +7,9 @@
 \alias{LearnerRegrAvg}
 \alias{mlr_learners_regr.avg}
 \title{Optimized Weighted Average of Features for Classification and Regression}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3:LearnerClassif]{mlr3::LearnerClassif}}/\code{\link[mlr3:Learner]{mlr3::Learner}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link[mlr3:LearnerClassif]{mlr3::LearnerClassif}}/\code{\link[mlr3:Learner]{mlr3::Learner}}.
+}
 \usage{
 mlr_learners_classif.avg
 

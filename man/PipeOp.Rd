@@ -3,7 +3,9 @@
 \name{PipeOp}
 \alias{PipeOp}
 \title{PipeOp}
-\format{Abstract \code{\link{R6Class}}.}
+\format{
+Abstract \code{\link{R6Class}}.
+}
 \description{
 A \code{\link{PipeOp}} represents a transformation of a given "input" into a given "output", with two stages: "training"
 and "prediction". It can be understood as a generalized function that not only has multiple inputs, but
@@ -35,7 +37,7 @@ This class is an abstract base class that all \code{\link{PipeOp}}s being used i
 is not intended to be instantiated.
 }
 \section{Construction}{
-\preformatted{PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0))
+\preformatted{PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -55,6 +57,9 @@ Sets the \verb{$output} slot of the resulting object; see description there.
 \item packages :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \verb{$train} and \verb{$predict} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
+\item \code{tags} ::\code{character}\cr
+A set of tags associated with the \code{PipeOp}. Tags describe a PipeOp's purpose.
+Can be used to filter \code{as.data.table(mlr_pipeops)}. Default is \code{"abstract"}, indicating an abstract \code{PipeOp}.
 }
 }
 
@@ -103,6 +108,10 @@ Number of input channels. This equals \verb{nrow($input)}.
 Number of output channels. This equals \verb{nrow($output)}.
 \item \code{is_trained} :: \code{logical(1)} \cr
 Indicate whether the \code{\link{PipeOp}} was already trained and can therefore be used for prediction.
+\item \code{tags} ::\code{character}\cr
+A set of tags associated with the \code{PipeOp}. Tags describe a PipeOp's purpose.
+Can be used to filter \code{as.data.table(mlr_pipeops)}.
+PipeOp tags are inherited and child classes can introduce additional tags.
 \item \code{hash} :: \code{character(1)} \cr
 Checksum calculated on the \code{\link{PipeOp}}, depending on the \code{\link{PipeOp}}'s \code{class} and the slots \verb{$id} and \verb{$param_set}
 (and therefore also \verb{$param_set$values}). If a
@@ -213,6 +222,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

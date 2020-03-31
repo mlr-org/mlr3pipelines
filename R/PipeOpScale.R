@@ -71,11 +71,7 @@ PipeOpScale = R6Class("PipeOpScale",
         ParamLgl$new("center", default = TRUE, tags = c("train", "scale")),
         ParamLgl$new("scale", default = TRUE, tags = c("train", "scale"))
       ))
-      super$initialize(id = id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     },
 
     train_dt = function(dt, levels, target) {
