@@ -79,6 +79,12 @@
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
+      # This is needed if `learner` is a `Graph` and no `id` is provide
+      id = try(id, silent = TRUE)
+      if ((class(id) == "try-error") && test_r6(learner, classes = "Graph")) {
+        id = paste(learner$ids(sorted = TRUE), collapse = ".")
+      }
+
       private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
       out_type = mlr_reflections$task_types[private$.learner$task_type]$prediction
