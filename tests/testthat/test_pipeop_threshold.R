@@ -99,7 +99,7 @@ test_that("thresholding works for multiclass", {
   po_thr = PipeOpThreshold$new(param_vals = list(thresholds = c(0.3, 0.4)))
   gr = po_lrn %>>% po_thr
   gr$train(t)
-  expect_error(gr$predict(t))
+  expect_error(gr$predict(t), "ugh")
 
   po_thr = PipeOpThreshold$new(param_vals =
     list(thresholds = c("foo" = 0.3, "versicolor" = 0.4, "setosa" = 0.3)))

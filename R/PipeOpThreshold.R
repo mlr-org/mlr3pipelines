@@ -20,7 +20,7 @@
 #'   Defaults to `numeric(0)`.
 #'
 #' @section Input and Output Channels:
-#' During training, the input and output is `NULL`.
+#' During training, the input and output are `NULL`.
 #' A [`PredictionClassif`][mlr3::PredictionClassif] is required as input and returned as output during prediction.
 #'
 #' @section State:
@@ -28,11 +28,12 @@
 #'
 #' @section Parameters:
 #' * `thresholds` :: `numeric`\cr
-#' A numeric vector of thresholds for the different class levels.
-#' For binary tasks, this can be a single number, else a vector.
-#' Has to have the same length as number of class levels.
-#' Defaults to `numeric(0)`, i.e. no threshold adjustment is performed,
-#' and the prediction is passed on unchanged.
+#'   A numeric vector of thresholds for the different class levels.
+#'   May have length 1 for binary classification predictions, must
+#'   otherwise have length of the number of target classes; see
+#'   [`PredictionClassif`][mlr3::PredictionClassif]'s `$set_threshold()` method.
+#'   Initialized to `0.5`, i.e. thresholding for binary classification
+#'   at level `0.5`.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -53,11 +54,12 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
   public = list(
     initialize = function(id = "threshold", param_vals = list()) {
       param_set = ParamSet$new()
-      param_set$add(ParamUty$new("thresholds", custom_check = check_numeric, tags = "predict"))
-      param_set$values$thresholds = numeric(0)
+      param_set$add(ParamUty$new("thresholds", custom_check = check_numeric_valid_threshold, tags = "predict"))
+      param_set$values$thresholds = 0.5
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),
-        output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"))
+        output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"),
+        tags = "target transform")
     },
     train_internal = function(inputs) {
       self$state = list()
@@ -66,11 +68,17 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
     predict_internal = function(inputs) {
       prd = inputs[[1]]$clone()
       thr = self$param_set$values$thresholds
-      if (length(thr) == 0) return(list(prd))
       assert_subset("prob", prd$predict_types)
-      assert_true(length(thr) == ncol(prd$prob) || (length(thr) == 1 && ncol(prd$prob) == 2))
-      # Set names in case none are set.
-      if (is.null(names(thr)) && length(thr) > 1) thr = set_names(thr, colnames(prd$prob))
+      if (length(thr) > 1) {
+        if (length(thr) != length(levels(prd$truth))) {
+          stop("'thresholds' parameter must have length one or length equal to number of outcome levels")
+        }
+        if (is.null(names(thr))) {
+          # Set names in case none are set.
+          names(thr) = colnames(prd$prob)
+        }
+      }
+
       list(prd$set_threshold(thr))
     }
   )
