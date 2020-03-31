@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_filter}
 \alias{PipeOpFilter}
 \title{PipeOpFilter}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Feature filtering using a \code{\link[mlr3filters:Filter]{mlr3filters::Filter}} object, see the
 \CRANpkg{mlr3filters} package.
@@ -130,6 +132,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

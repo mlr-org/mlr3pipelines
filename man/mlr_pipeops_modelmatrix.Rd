@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_modelmatrix}
 \alias{PipeOpModelMatrix}
 \title{PipeOpModelMatrix}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Transforms columns using a given \code{formula} using the \code{\link[stats:model.matrix]{stats::model.matrix()}} function.
 }
@@ -81,6 +83,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

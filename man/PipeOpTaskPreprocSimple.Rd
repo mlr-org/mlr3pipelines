@@ -3,7 +3,9 @@
 \name{PipeOpTaskPreprocSimple}
 \alias{PipeOpTaskPreprocSimple}
 \title{PipeOpTaskPreprocSimple}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Base class for handling many "preprocessing" operations
 that perform essentially the same operation during training and prediction.

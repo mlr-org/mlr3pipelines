@@ -51,6 +51,9 @@
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
+#'* `feature_types` :: `character`\cr
+#'   Feature types affected by the `PipeOp`. See `$select_cols()` for more information.
+#'   Defaults to all available feature types.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpTaskPreproc`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task], or a subclass of
@@ -75,6 +78,8 @@
 #' * `dt_columns` :: `character`\cr
 #'   Names of features selected by the `$select_cols()` call during training. This is only present if the `$train_dt()` functionality is used,
 #'   and not present if the `$train_task()` function is overloaded instead.
+#' * `feature_types` :: `character`\cr
+#'   Feature types affected by the `PipeOp`. See `$select_cols()` for more information.
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
@@ -152,7 +157,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task") {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+      packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types) {
       if (can_subset_cols) {
         acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, default = selector_all(), tags = "train")
         if (inherits(param_set, "ParamSet")) {
@@ -162,10 +168,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
           param_set = c(param_set, alist(private$.affectcols_ps))
         }
       }
+      private$.feature_types = assert_subset(feature_types, mlr_reflections$task_feature_types)
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = task_type, predict = task_type),
-        packages = packages
+        packages = packages, tags = c(tags, "data transform")
       )
     },
 
@@ -248,10 +255,19 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     predict_dt = function(dt, levels) stop("Abstract."),
 
-    select_cols = function(task) task$feature_names
+    select_cols = function(task) {
+      task$feature_types[get("type") %in% self$feature_types, get("id")]
+    }
+  ),
+  active = list(
+    feature_types = function(types) {
+      if (!missing(types)) stop("feature_types can not be changed. Use the 'affect_columns' hyperparameter instead!")
+      private$.feature_types
+    }
   ),
   private = list(
-    .affectcols_ps = NULL
+    .affectcols_ps = NULL,
+    .feature_types = NULL
   )
 )
 

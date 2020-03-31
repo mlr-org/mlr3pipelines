@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_imputemode}
 \alias{PipeOpImputeMode}
 \title{PipeOpImputeMode}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
+}
 \description{
 Impute features by their mode. Supports factors as well as logical and numerical features.
 }
@@ -83,6 +85,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

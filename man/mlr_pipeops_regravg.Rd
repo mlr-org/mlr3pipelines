@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_regravg}
 \alias{PipeOpRegrAvg}
 \title{PipeOpRegrAvg}
-\format{\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+}
 \description{
 Perform (weighted) prediction averaging from regression \code{\link[mlr3:Prediction]{Prediction}}s by connecting
 \code{\link{PipeOpRegrAvg}} to multiple \code{\link{PipeOpLearner}} outputs.
@@ -88,6 +90,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
