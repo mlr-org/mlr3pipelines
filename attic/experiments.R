@@ -22,7 +22,11 @@ tools::buildVignettes(dir = "mlr3pipelines")
 system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
 devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "classbalancing")
+
+testthat::test_package("mlr3pipelines", filter = "branch")
+
+
+
 testthat::test_package("mlr3pipelines", filter = "encode")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
