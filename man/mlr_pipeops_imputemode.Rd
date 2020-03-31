@@ -9,6 +9,7 @@
 }
 \description{
 Impute features by their mode. Supports factors as well as logical and numerical features.
+If multiple modes are present then imputed values are sampled randomly from them.
 }
 \section{Construction}{
 \preformatted{PipeOpImputeMode$new(id = "imputemode", param_vals = list())
@@ -37,20 +38,18 @@ The \verb{$state$model} is a named \code{list} of a vector of length one of the 
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as the following parameters based on \code{\link[mlr3misc:compute_mode]{compute_mode()}}:
-\itemize{
-\item \code{ties_method} :: \code{character(1)}\cr
-Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{last}.
-}
+The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
 }
 
 \section{Internals}{
 
-Uses the \code{\link[mlr3misc:compute_mode]{mlr3misc::compute_mode()}} function. Features that are entirely \code{NA} are imputed as
-the following: For factors (also ordered factors) this depends on \code{ties_method}. If
-\dQuote{random}, a random factor level is sampled, if \dQuote{first}, the first factor level is
-used, and if \dQuote{last}, the last factor level is used. Numerics and integers are imputed as
-\code{0}. For logicals, \code{TRUE} or \code{FALSE} is randomly sampled.
+Features that are entirely \code{NA} are imputed as
+the following: For \code{factor} or \code{ordered}, random levels are sampled uniformly at random.
+For logicals, \code{TRUE} or \code{FALSE} are sampled uniformly at random.
+Numerics and integers are imputed as \code{0}.
+
+Note that every random imputation is drawn independently, so different values may be imputed
+if multiple values are missing.
 }
 
 \section{Methods}{

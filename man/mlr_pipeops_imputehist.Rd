@@ -23,7 +23,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpImputeHist}}.
+Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) histogram.
 }

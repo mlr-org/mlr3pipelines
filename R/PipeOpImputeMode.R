@@ -6,6 +6,9 @@
 #'
 #' @description
 #' Impute features by their mode. Supports factors as well as logical and numerical features.
+#' If multiple modes are present then imputed values are sampled randomly from them.
+#'
+#'
 #'
 #' @section Construction:
 #' ```
@@ -28,16 +31,16 @@
 #' The `$state$model` is a named `list` of a vector of length one of the type of the feature, indicating the mode of the respective feature.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpImpute`], as well as the following parameters based on [`compute_mode()`][mlr3misc::compute_mode]:
-#' * `ties_method` :: `character(1)`\cr
-#'   Ties handling type. One of \dQuote{random} (default), \dQuote{first} or \dQuote{last}.
+#' The parameters are the parameters inherited from [`PipeOpImpute`].
 #'
 #' @section Internals:
-#' Uses the [`mlr3misc::compute_mode()`] function. Features that are entirely `NA` are imputed as
-#' the following: For factors (also ordered factors) this depends on `ties_method`. If
-#' \dQuote{random}, a random factor level is sampled, if \dQuote{first}, the first factor level is
-#' used, and if \dQuote{last}, the last factor level is used. Numerics and integers are imputed as
-#' `0`. For logicals, `TRUE` or `FALSE` is randomly sampled.
+#' Features that are entirely `NA` are imputed as
+#' the following: For `factor` or `ordered`, random levels are sampled uniformly at random.
+#' For logicals, `TRUE` or `FALSE` are sampled uniformly at random.
+#' Numerics and integers are imputed as `0`.
+#'
+#' Note that every random imputation is drawn independently, so different values may be imputed
+#' if multiple values are missing.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -61,42 +64,37 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemode", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamFct$new("ties_method", levels = c("first", "last", "random"), default = "random", tags = c("train", "predict"))
-      ))
-      ps$values = list(ties_method = "random")
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "mlr3misc")
+      super$initialize(id, param_vals = param_vals, packages = "mlr3misc")
     },
 
     select_cols = function(task) task$feature_types[get("type") %in% c("factor", "integer", "logical", "numeric", "ordered"), get("id")],
 
     train_imputer = function(feature, type, context) {
-      mod = mlr3misc::compute_mode(feature, ties_method = self$param_set$values$ties_method, na_rm = TRUE)
-      # mod can be of zero length if all elements of "feature" are NA
-      if (length(mod) == 0L) {
-        mod = switch(type,
-          "factor" = switch(self$param_set$values$ties_method,
-            "random" = factor(sample(levels(feature), size = 1L), levels = levels(feature)),
-            "first" = factor(levels(feature)[1L], levels = levels(feature)),
-            "last" = factor(levels(feature)[length(levels(feature))], levels = levels(feature))
-          ),
-          "integer" = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
-          "logical" = sample(c(TRUE, FALSE), 1L),
-          "numeric" = 0, # see PipeOpImputeMean and PipeOpImputeMedian
-          "ordered" = switch(self$param_set$values$ties_method,
-            "random" = factor(sample(levels(feature), size = 1L), levels = levels(feature), ordered = TRUE),
-            "first" = factor(levels(feature)[1L], levels = levels(feature), ordered = TRUE),
-            "last" = factor(levels(feature)[length(levels(feature))], levels = levels(feature), ordered = TRUE)
-          ),
+      feature = feature[!is.na(feature)]
+      if (length(feature)) {
+        as.data.table(feature)[, .N, by = list(feature)][get("N") == max(get("N"))]$feature
+      } else {
+        # if all elements of "feature" are NA:
+        switch(type,
+          factor = levels(feature),
+          integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
+          logical = c(TRUE, FALSE),
+          numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
+          ordered = levels(feature)
         )
       }
-      mod
     },
 
     impute = function(feature, type, model, context) {
-      feature[is.na(feature)] = model
+      if (length(model) == 1) {
+        feature[is.na(feature)] = model
+      } else {
+        outlen = sum(is.na(feature))
+        feature[is.na(feature)] = sample(model, outlen, replace = TRUE)
+      }
       feature
     }
+
   )
 )
 
