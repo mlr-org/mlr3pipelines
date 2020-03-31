@@ -33,14 +33,14 @@ library("mlr3")
 po_pca = po("pca")
 po_nop = po("nop")
 
-branches = branch(pca = po_pca, nothing = po_nop)
+branches = pipeline_branch(list(pca = po_pca, nothing = po_nop))
 # gives the same as
 branches = c("pca", "nothing")
 po("branch", branches) \%>>\%
   gunion(list(po_pca, po_nop)) \%>>\%
   po("unbranch", branches)
 
-branch(pca = po_pca, nothing = po_nop,
+pipeline_branch(list(pca = po_pca, nothing = po_nop),
   prefix_branchops = "br_", prefix_paths = "xy_")
 # gives the same as
 po("branch", branches, id = "br_branch") \%>>\%
