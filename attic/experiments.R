@@ -23,7 +23,11 @@ system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), g
 devtools::run_examples("mlr3pipelines")
 
 
+testthat::test_package("mlr3pipelines", filter = "impute")
+
+
 testthat::test_package("mlr3pipelines", filter = "branch")
+
 
 
 

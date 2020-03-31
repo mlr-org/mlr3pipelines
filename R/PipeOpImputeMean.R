@@ -18,7 +18,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpImputeMean`].
+#' Input and output channels are inherited from [`PipeOpImpute`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) mean.
 #'
