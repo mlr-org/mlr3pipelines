@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_datefeatures}
 \alias{PipeOpDateFeatures}
 \title{PipeOpDateFeatures}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Based on \code{POSIXct} columns of the data, a set of date related features is computed and added to
 the feature set of the output task. If no \code{POSIXct} column is found, the original task is
@@ -153,6 +155,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

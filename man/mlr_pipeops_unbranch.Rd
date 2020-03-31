@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_unbranch}
 \alias{PipeOpUnbranch}
 \title{PipeOpUnbranch}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Used to bring together different paths created by \code{\link{PipeOpBranch}}.
 }
@@ -117,6 +119,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 

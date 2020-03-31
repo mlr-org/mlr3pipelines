@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_histbin}
 \alias{PipeOpHistBin}
 \title{PipeOpHistBin}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Splits numeric features into equally spaced bins.
 See \code{\link[graphics:hist]{graphics::hist()}} for details.
@@ -116,6 +118,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

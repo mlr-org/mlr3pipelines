@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_featureunion}
 \alias{PipeOpFeatureUnion}
 \title{PipeOpFeatureUnion}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing them together into a single \code{\link[mlr3:Task]{Task}}.
 
@@ -132,6 +134,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_kernelpca}
 \alias{PipeOpKernelPCA}
 \title{PipeOpKernelPCA}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Extracts kernel principle components from data. Only affects numerical features.
 See \link[kernlab:kpca]{kernlab::kpca} for details.
@@ -119,6 +121,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

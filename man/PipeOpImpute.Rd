@@ -3,7 +3,9 @@
 \name{PipeOpImpute}
 \alias{PipeOpImpute}
 \title{PipeOpImpute}
-\format{Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Abstract base class for feature imputation.
 }
@@ -153,6 +155,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

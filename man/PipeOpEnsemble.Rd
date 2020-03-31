@@ -3,7 +3,9 @@
 \name{PipeOpEnsemble}
 \alias{PipeOpEnsemble}
 \title{PipeOpEnsemble}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Parent class for \code{\link{PipeOp}}s that aggregate predictions. Implements the \verb{$.train()} and \verb{$.predict()} methods necessary
 for a \code{PipeOp} and requires deriving classes to create the \code{private$weighted_avg_predictions()} function.
@@ -132,6 +134,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

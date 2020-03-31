@@ -3,7 +3,9 @@
 \name{PipeOp}
 \alias{PipeOp}
 \title{PipeOp}
-\format{Abstract \code{\link{R6Class}}.}
+\format{
+Abstract \code{\link{R6Class}}.
+}
 \description{
 A \code{\link{PipeOp}} represents a transformation of a given "input" into a given "output", with two stages: "training"
 and "prediction". It can be understood as a generalized function that not only has multiple inputs, but
@@ -250,6 +252,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

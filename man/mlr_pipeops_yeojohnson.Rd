@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_yeojohnson}
 \alias{PipeOpYeoJohnson}
 \title{PipeOpYeoJohnson}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Conducts a Yeo-Johnson transformation on numeric features. It therefore estimates
 the optimal value of lambda for the transformation.
@@ -120,6 +122,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops}}
 }

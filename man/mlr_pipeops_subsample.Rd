@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_subsample}
 \alias{PipeOpSubsample}
 \title{PipeOpSubsample}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Subsamples a \code{\link[mlr3:Task]{Task}} to use a fraction of the rows.
 
@@ -119,6 +121,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

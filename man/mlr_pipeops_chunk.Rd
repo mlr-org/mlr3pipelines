@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_chunk}
 \alias{PipeOpChunk}
 \title{PipeOpChunk}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Chunks its input into \code{outnum} chunks.
 Creates \code{outnum} \code{\link[mlr3:Task]{Task}}s during training, and
@@ -117,6 +119,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

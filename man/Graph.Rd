@@ -3,7 +3,11 @@
 \name{Graph}
 \alias{Graph}
 \title{Graph}
-\format{\link{R6Class} Graph}
+\format{
+\link{R6Class} Graph
+
+\code{\link{R6Class}}.
+}
 \description{
 A \code{\link{Graph}} is a representation of a machine learning pipeline graph. It can be \emph{trained}, and subsequently used for \emph{prediction}.
 

@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_smote}
 \alias{PipeOpSmote}
 \title{PipeOpSmote}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Generates a more balanced data set by creating
 synthetic instances of the minority class using the SMOTE algorithm.
@@ -128,6 +130,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

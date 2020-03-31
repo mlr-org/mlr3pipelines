@@ -4,7 +4,9 @@
 \name{mlr_pipeops}
 \alias{mlr_pipeops}
 \title{Dictionary of PipeOps}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
+}
 \description{
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
 Each \code{PipeOp} has an associated help page, see \code{mlr_pipeops_[id]}.
@@ -107,6 +109,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
