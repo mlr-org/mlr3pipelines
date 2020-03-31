@@ -112,6 +112,7 @@ test_that("PipeOpImpute", {
       add_dummy = "missing_train")))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
+    deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
       method_num = "mode",
       method_fct = "mode",
