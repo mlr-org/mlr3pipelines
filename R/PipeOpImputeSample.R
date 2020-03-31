@@ -79,8 +79,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
         feature[is.na(feature)] = model
       } else {
         outlen = sum(is.na(feature))
-        sample(model, outlen, replace = TRUE)
-        feature[is.na(feature)] = filldata
+        feature[is.na(feature)] = sample(model, outlen, replace = TRUE)
       }
       feature
     }
