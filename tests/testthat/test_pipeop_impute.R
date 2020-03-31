@@ -20,13 +20,13 @@ test_that("PipeOpImpute", {
         numimputer = switch(self$param_set$values$method_num,
           median = po("imputemedian"),
           mean = po("imputemean"),
-          mode = po("imputemode", id = "num_mode", param_vals = list(ties_method = "first")),
+          mode = po("imputemode", id = "num_mode"),
           sample = po("imputesample", id = "num_sample"),
           hist = po("imputehist"))
         fctimputer = switch(self$param_set$values$method_fct,
           newlvl = po("imputenewlvl"),
           sample = po("imputesample", id = "fct_sample"),
-          mode = po("imputemode", id = "fct_mode", param_vals = list(ties_method = "first")))
+          mode = po("imputemode", id = "fct_mode"))
 
         if (self$param_set$values$add_dummy == "none") {
           dummyselector = selector_none()
