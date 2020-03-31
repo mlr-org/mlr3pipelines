@@ -148,44 +148,4 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
 mlr_graphs$add("bagging", pipeline_bagging)
 
 
-#' @title Create a branch - unbranch pipeline
-#' @name mlr_graphs_branching
-#' @description
-#' Creates a [`Graph`] that provides branching and unbranching 
-#' (using [`PipeOpBranch`] and [`PipeOpBranch`]) for a list of [`PipeOp`]s or [`Graph`]s
-#' supplied via `graphs`.
-#' Takes either the names of the list elements, or the graph's ids 
-#' as 'option' for [`PipeOpBranch`].
-#'
-#' @param graphs List of [`PipeOp`] | [`Graph`] \cr
-#'   A (possibly named) list of [`PipeOp`]s or [`Graph`]s.
-#' @param id_prefix [`character`] \cr
-#'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`].
-#'   IDs will be `"branch"` and `"unbranch"`, prefixed by `id_prefix`. Default is `""`.
-#' @param `prefix_options` [`logical`] \cr
-#'   Whether to add `id_prefix` as prefix to the `branch.selection` when performing `gunion`. 
-#'   Can be helpful to avoid ID clashes in resulting graph. Default `FALSE`.
-#' @return [`Graph`]
-#' @export
-#' @examples
-#' library(mlr3)
-#' library(mlr3misc)
-#' lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
-#' task = mlr_tasks$get("boston_housing")
-#' gr = pipeline_branch(lrns)
-#' # change parameters
-#' # gr$param_set$values$branch.selection = "classif.featureless"
-pipeline_branch = function(graphs, id_prefix = "", prefix_options = FALSE) {
-  graphs = map(graphs, as_graph)
-  nms = names(graphs)
-  if (is.null(nms)) 
-    nms = map_chr(graphs, function(x) str_collapse(map_chr(x$pipeops, "id"), sep = "."))
-    if (prefix_branches) nms = paste0(id_prefix, nms)
-  gr = po(id = paste0(id_prefix, "branch"), "branch", nms) %>>%
-    gunion(graphs) %>>%
-    po(id = paste0(id_prefix, "unbranch"), "unbranch")
-  return(gr)
-}
-
-mlr_graphs$add("branch", pipeline_branch)
 

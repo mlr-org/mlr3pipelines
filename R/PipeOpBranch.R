@@ -127,17 +127,15 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #' @description
 #' Create a multiplexed graph.
 #'
-#' @param ...
+#' @param graphs (`[list of Graph]`):\cr
 #'   Multiple graphs, possibly named. They all must have exactly
 #'   one output. If any of the arguments are named, then all must have
 #'   unique names.
-#' @param .graphs (`[list of Graph]`):
-#'   Named list of Graphs, additionally to the graphs given in `...`.
-#' @param .prefix_branchops (`[character(1)]`):
+#' @param prefix_branchops (`[character(1)]`):\cr
 #'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`] id. Their
-#'   resulting IDs will be `"[.prefix_branchops]branch"` and `"[.prefix_branchops]unbranch"`.
+#'   resulting IDs will be `"[prefix_branchops]branch"` and `"[prefix_branchops]unbranch"`.
 #'   Default is `""`.
-#' @param .prefix_paths (`[logical(1) | character(1)]`):
+#' @param prefix_paths (`[logical(1) | character(1)]`):\cr
 #'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 #'   avoid ID clashes in resulting graph. Default `FALSE`. If this is `TRUE`, the prefixes
 #'   are taken from the names of the input arguments if present or `"poX"` where X counts up. If this is
@@ -159,19 +157,18 @@ mlr_pipeops$add("branch", PipeOpBranch, list("N"))
 #'   po("unbranch", branches)
 #'
 #' branch(pca = po_pca, nothing = po_nop,
-#'   .prefix_branchops = "br_", .prefix_paths = "xy_")
+#'   prefix_branchops = "br_", prefix_paths = "xy_")
 #' # gives the same as
 #' po("branch", branches, id = "br_branch") %>>%
 #'   gunion(list(xy_pca = po_pca, xy_nothing = po_nop)) %>>%
 #'   po("unbranch", branches, id = "br_unbranch")
-branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = FALSE) {
-  assert_list(.graphs, null.ok = TRUE)
-  assert_string(.prefix_branchops)
+pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) {
+  assert_list(graphs, null.ok = TRUE)
+  assert_string(prefix_branchops)
   assert(
-    check_flag(.prefix_paths),
-    check_string(.prefix_paths)
+    check_flag(prefix_paths),
+    check_string(prefix_paths)
   )
-  graphs <- c(list(...), .graphs) ; rm(.graphs)
   assert(
     check_list(graphs, min.len = 1, any.missing = FALSE, names = "unique"),
     check_list(graphs, min.len = 1, any.missing = FALSE, names = "unnamed")
@@ -187,12 +184,12 @@ branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = 
   graphs_input = graphs
 
   branches = if (is.null(names(graphs))) length(graphs) else names(graphs)
-  if (!isFALSE(.prefix_paths)) {
+  if (!isFALSE(prefix_paths)) {
     if (is.null(names(graphs))) {
       names(graphs) = paste0("po", as.character(seq_along(graphs)))
     }
-    if (is.character(.prefix_paths)) {
-      names(graphs) = paste0(.prefix_paths, names(graphs))
+    if (is.character(prefix_paths)) {
+      names(graphs) = paste0(prefix_paths, names(graphs))
     }
     poname_prefix = paste0(names(graphs), ".")
   } else {
@@ -200,9 +197,9 @@ branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = 
     poname_prefix = ""
   }
 
-  graph = gunion(list(graphs)) %>>% PipeOpUnbranch$new(branches, id = paste0(.prefix_branchops, "unbranch"))
+  graph = gunion(list(graphs)) %>>% PipeOpUnbranch$new(branches, id = paste0(prefix_branchops, "unbranch"))
 
-  branch_id = paste0(.prefix_branchops, "branch")
+  branch_id = paste0(prefix_branchops, "branch")
   po_branch = PipeOpBranch$new(branches, id = branch_id)
   graph$add_pipeop(po_branch)
 
@@ -217,3 +214,7 @@ branch <- function(..., .graphs = NULL, .prefix_branchops = "", .prefix_paths = 
   })
   graph
 }
+
+#' @include mlr_graphs.R
+
+mlr_graphs$add("branch", pipeline_branch)

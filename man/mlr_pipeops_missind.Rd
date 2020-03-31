@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_missind}
 \alias{PipeOpMissInd}
 \title{PipeOpMissInd}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Add missing indicator columns ("dummy columns") to the \code{\link[mlr3:Task]{Task}}.
 Drops original features; should probably be used in combination with \code{\link{PipeOpFeatureUnion}} and imputation \code{\link{PipeOp}}s (see examples).

@@ -4,7 +4,9 @@
 \name{NO_OP}
 \alias{NO_OP}
 \title{No-Op Sentinel Used for Alternative Branching}
-\format{\code{\link{R6}} object.}
+\format{
+\code{\link{R6}} object.
+}
 \usage{
 NO_OP
 }

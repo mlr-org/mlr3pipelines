@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_scale}
 \alias{PipeOpScale}
 \title{PipeOpScale}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Centers all numeric features to mean = 0 (if \code{center} parameter is \code{TRUE}) and scales them
 by dividing them by their root-mean-square (if \code{scale} parameter is \code{TRUE}).

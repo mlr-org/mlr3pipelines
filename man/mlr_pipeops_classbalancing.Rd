@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_classbalancing}
 \alias{PipeOpClassBalancing}
 \title{PipeOpClassBalancing}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Both undersamples a \code{\link[mlr3:Task]{Task}} to keep only a fraction of the rows of the majority class,
 as well as oversamples (repeats data points) rows of the minority class.

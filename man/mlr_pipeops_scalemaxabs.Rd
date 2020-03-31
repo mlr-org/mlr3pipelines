@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_scalemaxabs}
 \alias{PipeOpScaleMaxAbs}
 \title{PipeOpScaleMaxAbs}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Scales the numeric data columns so their maximum absolute value is \code{maxabs},
 if possible. \code{NA}, \code{Inf} are ignored, and features that are constant 0

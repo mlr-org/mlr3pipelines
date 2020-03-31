@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_fixfactors}
 \alias{PipeOpFixFactors}
 \title{PipeOpFixFactors}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Fixes factors of type \code{factor}, \code{ordered}: Makes sure the factor levels
 during prediction are the same as during training; possibly dropping empty

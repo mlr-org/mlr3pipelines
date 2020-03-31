@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_unbranch}
 \alias{PipeOpUnbranch}
 \title{PipeOpUnbranch}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Used to bring together different paths created by \code{\link{PipeOpBranch}}.
 }

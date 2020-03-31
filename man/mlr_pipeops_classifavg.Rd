@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_classifavg}
 \alias{PipeOpClassifAvg}
 \title{PipeOpClassifAvg}
-\format{\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+}
 \description{
 Perform (weighted) majority vote prediction from classification \code{\link[mlr3:Prediction]{Prediction}}s by connecting
 \code{\link{PipeOpClassifAvg}} to multiple \code{\link{PipeOpLearner}} outputs.
