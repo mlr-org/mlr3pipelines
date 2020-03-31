@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_threshold}
 \alias{PipeOpThreshold}
 \title{PipeOpThreshold}
-\format{\code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Change the threshold of a \code{Prediction} during the \code{predict} step.
 The incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} needs to be \code{"prob"}.
@@ -24,7 +26,7 @@ Defaults to \code{numeric(0)}.
 
 \section{Input and Output Channels}{
 
-During training, the input and output is \code{NULL}.
+During training, the input and output are \code{NULL}.
 A \code{\link[mlr3:PredictionClassif]{PredictionClassif}} is required as input and returned as output during prediction.
 }
 
@@ -38,10 +40,11 @@ The \verb{$state} is left empty (\code{list()}).
 \itemize{
 \item \code{thresholds} :: \code{numeric}\cr
 A numeric vector of thresholds for the different class levels.
-For binary tasks, this can be a single number, else a vector.
-Has to have the same length as number of class levels.
-Defaults to \code{numeric(0)}, i.e. no threshold adjustment is performed,
-and the prediction is passed on unchanged.
+May have length 1 for binary classification predictions, must
+otherwise have length of the number of target classes; see
+\code{\link[mlr3:PredictionClassif]{PredictionClassif}}'s \verb{$set_threshold()} method.
+Initialized to \code{0.5}, i.e. thresholding for binary classification
+at level \code{0.5}.
 }
 }
 
@@ -78,6 +81,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

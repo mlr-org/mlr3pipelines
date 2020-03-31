@@ -40,3 +40,11 @@ test_that("PipeOpLearnerCV - param values", {
   polrn$param_set$values$resampling.folds = 4
   expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 4, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
 })
+
+
+#357 
+test_that("PipeOpLearnerCV - within resampling", {
+  lrn = mlr_learners$get("classif.rpart")
+  gr = GraphLearner$new(PipeOpLearnerCV$new(lrn) %>>% po(id = "l2", lrn))
+  resample(tsk("iris"), gr, rsmp("holdout"))
+})

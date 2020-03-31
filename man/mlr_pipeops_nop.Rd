@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_nop}
 \alias{PipeOpNOP}
 \title{PipeOpNOP}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Simply pushes the input forward.
 Can be useful during \code{\link{Graph}} construction using the \code{\link{\%>>\%}}-operator to specify which \code{\link{PipeOp}} gets connected to which.
@@ -83,6 +85,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},

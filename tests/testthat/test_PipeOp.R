@@ -12,6 +12,7 @@ test_that("PipeOp - General functions", {
   expect_output(print(po_1), "PipeOp:")
   expect_equal(po_1$packages, character(0))
   expect_null(po_1$state)
+  assert_subset(po_1$tags, mlr_reflections$pipeops$valid_tags)
 
   expect_output(expect_equal(po_1$train(list(1)), list(output = 1)), "Training debug.basic")
   expect_equal(po_1$state, list(input = 1))

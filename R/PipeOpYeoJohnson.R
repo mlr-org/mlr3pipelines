@@ -73,11 +73,7 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
         ParamDbl$new("upper", tags = c("train", "yj"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "bestNormalize")
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+        packages = "bestNormalize", feature_types = c("numeric", "integer"))
     },
 
     train_dt = function(dt, levels, target) {

@@ -81,11 +81,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         ParamLgl$new("impute_zero", tags = c("train", "required"))
       ))
       ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"))
     },
 
     get_state_dt = function(dt, levels, target) {
