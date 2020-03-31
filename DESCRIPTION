@@ -109,6 +109,7 @@ Collate:
     'PipeOpImputeHist.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
+    'PipeOpImputeMode.R'
     'PipeOpImputeNewlvl.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
@@ -129,7 +130,11 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+<<<<<<< HEAD
     'PipeOpTrafo.R'
+=======
+    'PipeOpThreshold.R'
+>>>>>>> origin/master
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

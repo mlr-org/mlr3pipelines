@@ -129,7 +129,10 @@ can be overloaded.
 \seealso{
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
+<<<<<<< HEAD
 \code{\link{PipeOpInvertiblePreproc}},
+=======
+>>>>>>> origin/master
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_graphs}},

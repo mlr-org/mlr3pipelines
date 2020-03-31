@@ -82,7 +82,10 @@ pom$train(list(tsk("iris")))[[1]]$data()
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+<<<<<<< HEAD
 \code{\link{PipeOpInvertiblePreproc}},
+=======
+>>>>>>> origin/master
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -106,12 +109,20 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+<<<<<<< HEAD
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_inverter}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_logtrafo}},
+=======
+\code{\link{mlr_pipeops_imputemode}},
+\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_kernelpca}},
+\code{\link{mlr_pipeops_learner}},
+>>>>>>> origin/master
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_nop}},
@@ -126,6 +137,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+<<<<<<< HEAD
+=======
+\code{\link{mlr_pipeops_threshold}},
+>>>>>>> origin/master
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

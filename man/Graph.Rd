@@ -147,7 +147,10 @@ predicted[[1]]$data()
 }
 \seealso{
 Other mlr3pipelines backend related: 
+<<<<<<< HEAD
 \code{\link{PipeOpInvertiblePreproc}},
+=======
+>>>>>>> origin/master
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
