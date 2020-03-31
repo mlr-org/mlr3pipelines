@@ -46,9 +46,6 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/assert_pipeop.html</loc>
   </url>
   <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/branch.html</loc>
-  </url>
-  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/filter_noop.html</loc>
   </url>
   <url>
@@ -148,6 +145,9 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputemedian.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputemode.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputenewlvl.html</loc>
   </url>
   <url>
@@ -215,6 +215,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_yeojohnson.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/pipeline_branch.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/po.html</loc>

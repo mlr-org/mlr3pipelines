@@ -163,7 +163,7 @@ This is done as follows:</p><ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'>bagging_pipeline</span>(<span class='no'>graph</span>, <span class='kw'>iterations</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>frac</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>averager</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>pipeline_bagging</span>(<span class='no'>graph</span>, <span class='kw'>iterations</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>frac</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>averager</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,7 +204,7 @@ predictions respectively.<code>If</code>NULL` (default), no averager is added to
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
 <span class='no'>lrn_po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>))
 <span class='no'>task</span> <span class='kw'>=</span> <span class='no'>mlr_tasks</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"boston_housing"</span>)
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'>bagging_pipeline</span>(<span class='no'>lrn_po</span>, <span class='fl'>3</span>, <span class='kw'>averager</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"regravg"</span>))
+<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'>pipeline_bagging</span>(<span class='no'>lrn_po</span>, <span class='fl'>3</span>, <span class='kw'>averager</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"regravg"</span>))
 <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
 #&gt; * Task: boston_housing
 #&gt; * Learner: subsample_1.subsample_2.subsample_3.regr.rpart_1.regr.rpart_2.regr.rpart_3.regravg

@@ -202,7 +202,7 @@ Returns a <code>data.table</code> with column <code>key</code> (<code>character<
 <span class='no'>task</span> <span class='kw'>=</span> <span class='no'>mlr_tasks</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"boston_housing"</span>)
 
 <span class='co'># Robustify the learner for the task.</span>
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='mlr_graphs_robustify.html'>robustify_pipeline</a></span>(<span class='no'>task</span>, <span class='no'>lrn</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='no'>lrn</span>)
+<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='mlr_graphs_robustify.html'>pipeline_robustify</a></span>(<span class='no'>task</span>, <span class='no'>lrn</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='no'>lrn</span>)
 <span class='co'># or equivalently</span>
 <span class='no'>gr</span> <span class='kw'>=</span> <span class='no'>mlr_graphs</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"robustify"</span>, <span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>, <span class='kw'>learner</span> <span class='kw'>=</span> <span class='no'>lrn</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='no'>lrn</span>)
 <span class='co'># or equivalently</span>
@@ -211,7 +211,8 @@ Returns a <code>data.table</code> with column <code>key</code> (<code>character<
 <span class='co'># all Graphs currently in the dictionary:</span>
 <span class='fu'><a href='as.data.table.html'>as.data.table</a></span>(<span class='no'>mlr_graphs</span>)</div><div class='output co'>#&gt;          key
 #&gt; 1:   bagging
-#&gt; 2: robustify</div></pre>
+#&gt; 2:    branch
+#&gt; 3: robustify</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

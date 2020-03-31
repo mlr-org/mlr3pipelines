@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpPCA — mlr_pipeops_pca • mlr3pipelines</title>
+<title>PipeOpImputeMode — mlr_pipeops_imputemode • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,9 +47,9 @@
 
 
 
-<meta property="og:title" content="PipeOpPCA — mlr_pipeops_pca" />
-<meta property="og:description" content="Extracts principle components from data. Only affects numerical features.
-See stats::prcomp() for details." />
+<meta property="og:title" content="PipeOpImputeMode — mlr_pipeops_imputemode" />
+<meta property="og:description" content="Impute features by their mode. Supports factors as well as logical and numerical features.
+If multiple modes are present then imputed values are sampled randomly from them." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -143,28 +143,28 @@ See stats::prcomp() for details." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpPCA</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpPCA.R'><code>R/PipeOpPCA.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_pca.Rd</code></div>
+    <h1>PipeOpImputeMode</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImputeMode.R'><code>R/PipeOpImputeMode.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_imputemode.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Extracts principle components from data. Only affects numerical features.
-See <code><a href='https://rdrr.io/r/stats/prcomp.html'>stats::prcomp()</a></code> for details.</p>
+    <p>Impute features by their mode. Supports factors as well as logical and numerical features.
+If multiple modes are present then imputed values are sampled randomly from them.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpPCA</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"pca"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpImputeMode</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"imputemode"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"pca"</code>.</p></li>
+Identifier of resulting object, default <code>"imputemode"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -173,47 +173,34 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected numeric features replaced by their principal components.</p>
+<p>Input and output channels are inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected features missing values imputed by (column-wise) mode.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as the elements of the class <a href='https://rdrr.io/r/stats/prcomp.html'>stats::prcomp</a>,
-with the exception of the <code>$x</code> slot. These are in particular:</p><ul>
-<li><p><code>sdev</code> :: <code>numeric</code><br />
-The standard deviations of the principal components.</p></li>
-<li><p><code>rotation</code> :: <code>matrix</code><br />
-The matrix of variable loadings.</p></li>
-<li><p><code>center</code> :: <code>numeric</code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-The centering used, or <code>FALSE</code>.</p></li>
-<li><p><code>scale</code> :: <code>numeric</code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-The scaling used, or <code>FALSE</code>.</p></li>
-</ul>
-
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
+<p>The <code>$state$model</code> is a named <code>list</code> of a vector of length one of the type of the feature, indicating the mode of the respective feature.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>center</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Indicating whether the features should be centered. Default is <code>FALSE</code>. See <code><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp()</a></code>.</p></li>
-<li><p><code>scale.</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Whether to scale features to unit variance before analysis. Default is <code>FALSE</code>, but scaling is advisable. See <code><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp()</a></code>.</p></li>
-<li><p><code>rank.</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
-Maximal number of principal components to be used. Default is <code>NULL</code>: use all components. See <code><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp()</a></code>.</p></li>
-</ul>
-
+<p>The parameters are the parameters inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Uses the <code><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp()</a></code> function.</p>
+<p>Features that are entirely <code>NA</code> are imputed as
+the following: For <code>factor</code> or <code>ordered</code>, random levels are sampled uniformly at random.
+For logicals, <code>TRUE</code> or <code>FALSE</code> are sampled uniformly at random.
+Numerics and integers are imputed as <code>0</code>.</p>
+<p>Note that every random imputation is drawn independently, so different values may be imputed
+if multiple values are missing.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -242,7 +229,6 @@ Maximal number of principal components to be used. Default is <code>NULL</code>:
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
-<code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
 <code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
@@ -251,6 +237,7 @@ Maximal number of principal components to be used. Default is <code>NULL</code>:
 <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
@@ -264,46 +251,53 @@ Maximal number of principal components to be used. Default is <code>NULL</code>:
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
+<p>Other Imputation PipeOps: 
+<code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
+<code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
+<code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
+<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+<code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>)
-
-<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species       PC1         PC2         PC3          PC4
-#&gt;   1:    setosa -2.684126  0.31939725 -0.02791483 -0.002262437
-#&gt;   2:    setosa -2.714142 -0.17700123 -0.21046427 -0.099026550
-#&gt;   3:    setosa -2.888991 -0.14494943  0.01790026 -0.019968390
-#&gt;   4:    setosa -2.745343 -0.31829898  0.03155937  0.075575817
-#&gt;   5:    setosa -2.728717  0.32675451  0.09007924  0.061258593
-#&gt;  ---                                                         
-#&gt; 146: virginica  1.944110  0.18753230  0.17782509 -0.426195940
-#&gt; 147: virginica  1.527167 -0.37531698 -0.12189817 -0.254367442
-#&gt; 148: virginica  1.764346  0.07885885  0.13048163 -0.137001274
-#&gt; 149: virginica  1.900942  0.11662796  0.72325156 -0.044595305
-#&gt; 150: virginica  1.390189 -0.28266094  0.36290965  0.155038628</div><div class='input'>
-<span class='no'>pop</span>$<span class='no'>state</span></div><div class='output co'>#&gt; Standard deviations (1, .., p=4):
-#&gt; [1] 2.0562689 0.4926162 0.2796596 0.1543862
+<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"pima"</span>)
+<span class='no'>task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
+#&gt;        0        0        5      374       11        0        0       35 
+#&gt;  triceps 
+#&gt;      227 </div><div class='input'>
+<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputemode"</span>)
+<span class='no'>new_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
+<span class='no'>new_task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
+#&gt;        0        0        0        0        0        0        0        0 
+#&gt;  triceps 
+#&gt;        0 </div><div class='input'>
+<span class='no'>po</span>$<span class='no'>state</span>$<span class='no'>model</span></div><div class='output co'>#&gt; $age
+#&gt; [1] 22
 #&gt; 
-#&gt; Rotation (n x k) = (4 x 4):
-#&gt;                      PC1         PC2         PC3        PC4
-#&gt; Petal.Length  0.85667061 -0.17337266  0.07623608  0.4798390
-#&gt; Petal.Width   0.35828920 -0.07548102  0.54583143 -0.7536574
-#&gt; Sepal.Length  0.36138659  0.65658877 -0.58202985 -0.3154872
-#&gt; Sepal.Width  -0.08452251  0.73016143  0.59791083  0.3197231</div></pre>
+#&gt; $glucose
+#&gt; [1] 100  99
+#&gt; 
+#&gt; $insulin
+#&gt; [1] 105
+#&gt; 
+#&gt; $mass
+#&gt; [1] 32
+#&gt; 
+#&gt; $pedigree
+#&gt; [1] 0.254 0.258
+#&gt; 
+#&gt; $pregnant
+#&gt; [1] 1
+#&gt; 
+#&gt; $pressure
+#&gt; [1] 70
+#&gt; 
+#&gt; $triceps
+#&gt; [1] 32
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

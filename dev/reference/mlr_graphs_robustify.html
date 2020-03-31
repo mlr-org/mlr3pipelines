@@ -173,7 +173,7 @@ If a learner is provided, some steps can be left out, i.e. if the learner can de
 factor variables, no encoding is performed.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>robustify_pipeline</span>(
+    <pre class="usage"><span class='fu'>pipeline_robustify</span>(
   <span class='kw'>task</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>learner</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>impute_missings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -223,7 +223,7 @@ Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
 <span class='no'>lrn</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>)
 <span class='no'>task</span> <span class='kw'>=</span> <span class='no'>mlr_tasks</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"boston_housing"</span>)
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'>robustify_pipeline</span>(<span class='no'>task</span>, <span class='no'>lrn</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='no'>lrn</span>)
+<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'>pipeline_robustify</span>(<span class='no'>task</span>, <span class='no'>lrn</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='no'>lrn</span>)
 <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
 #&gt; * Task: boston_housing
 #&gt; * Learner: fixfactors.encode.removeconstants.regr.rpart

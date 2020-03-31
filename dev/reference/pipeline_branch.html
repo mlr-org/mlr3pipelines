@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Branch Between Alternative Paths — branch • mlr3pipelines</title>
+<title>Branch Between Alternative Paths — pipeline_branch • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,7 +47,7 @@
 
 
 
-<meta property="og:title" content="Branch Between Alternative Paths — branch" />
+<meta property="og:title" content="Branch Between Alternative Paths — pipeline_branch" />
 <meta property="og:description" content="Create a multiplexed graph." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -143,40 +143,36 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Branch Between Alternative Paths</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpBranch.R'><code>R/PipeOpBranch.R</code></a></small>
-    <div class="hidden name"><code>branch.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/mlr_graphs_elements.R'><code>R/mlr_graphs_elements.R</code></a></small>
+    <div class="hidden name"><code>pipeline_branch.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Create a multiplexed graph.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>branch</span>(<span class='no'>...</span>, <span class='kw'>.graphs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.prefix_branchops</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>.prefix_paths</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>pipeline_branch</span>(<span class='no'>graphs</span>, <span class='kw'>prefix_branchops</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>prefix_paths</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Multiple graphs, possibly named. They all must have exactly
+      <th>graphs</th>
+      <td><p>(<code>[list of Graph]</code>):<br />
+Multiple graphs, possibly named. They all must have exactly
 one output. If any of the arguments are named, then all must have
 unique names.</p></td>
     </tr>
     <tr>
-      <th>.graphs</th>
-      <td><p>(<code>[list of Graph]</code>):
-Named list of Graphs, additionally to the graphs given in <code>...</code>.</p></td>
-    </tr>
-    <tr>
-      <th>.prefix_branchops</th>
-      <td><p>(<code>[character(1)]</code>):
+      <th>prefix_branchops</th>
+      <td><p>(<code>[character(1)]</code>):<br />
 Optional id prefix to prepend to <code><a href='mlr_pipeops_branch.html'>PipeOpBranch</a></code> and <code><a href='mlr_pipeops_unbranch.html'>PipeOpUnbranch</a></code> id. Their
-resulting IDs will be <code>"[.prefix_branchops]branch"</code> and <code>"[.prefix_branchops]unbranch"</code>.
+resulting IDs will be <code>"[prefix_branchops]branch"</code> and <code>"[prefix_branchops]unbranch"</code>.
 Default is <code>""</code>.</p></td>
     </tr>
     <tr>
-      <th>.prefix_paths</th>
-      <td><p>(<code>[logical(1) | character(1)]</code>):
+      <th>prefix_paths</th>
+      <td><p>(<code>[logical(1) | character(1)]</code>):<br />
 Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 avoid ID clashes in resulting graph. Default <code>FALSE</code>. If this is <code>TRUE</code>, the prefixes
 are taken from the names of the input arguments if present or <code>"poX"</code> where X counts up. If this is
@@ -192,7 +188,7 @@ to the input argument list.</p></td>
 <span class='no'>po_pca</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>)
 <span class='no'>po_nop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>)
 
-<span class='no'>branches</span> <span class='kw'>=</span> <span class='fu'>branch</span>(<span class='kw'>pca</span> <span class='kw'>=</span> <span class='no'>po_pca</span>, <span class='kw'>nothing</span> <span class='kw'>=</span> <span class='no'>po_nop</span>)
+<span class='no'>branches</span> <span class='kw'>=</span> <span class='fu'>pipeline_branch</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>pca</span> <span class='kw'>=</span> <span class='no'>po_pca</span>, <span class='kw'>nothing</span> <span class='kw'>=</span> <span class='no'>po_nop</span>))
 <span class='co'># gives the same as</span>
 <span class='no'>branches</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pca"</span>, <span class='st'>"nothing"</span>)
 <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"branch"</span>, <span class='no'>branches</span>) <span class='kw'>%&gt;&gt;%</span>
@@ -203,8 +199,8 @@ to the input argument list.</p></td>
 #&gt;       pca &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
 #&gt;       nop &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
 #&gt;  unbranch &lt;&lt;UNTRAINED&gt;&gt;            pca,nop</div><div class='input'>
-<span class='fu'>branch</span>(<span class='kw'>pca</span> <span class='kw'>=</span> <span class='no'>po_pca</span>, <span class='kw'>nothing</span> <span class='kw'>=</span> <span class='no'>po_nop</span>,
-  <span class='kw'>.prefix_branchops</span> <span class='kw'>=</span> <span class='st'>"br_"</span>, <span class='kw'>.prefix_paths</span> <span class='kw'>=</span> <span class='st'>"xy_"</span>)</div><div class='output co'>#&gt; Graph with 4 PipeOps:
+<span class='fu'>pipeline_branch</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>pca</span> <span class='kw'>=</span> <span class='no'>po_pca</span>, <span class='kw'>nothing</span> <span class='kw'>=</span> <span class='no'>po_nop</span>),
+  <span class='kw'>prefix_branchops</span> <span class='kw'>=</span> <span class='st'>"br_"</span>, <span class='kw'>prefix_paths</span> <span class='kw'>=</span> <span class='st'>"xy_"</span>)</div><div class='output co'>#&gt; Graph with 4 PipeOps:
 #&gt;              ID         State               sccssors              prdcssors
 #&gt;       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       
 #&gt;      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch
