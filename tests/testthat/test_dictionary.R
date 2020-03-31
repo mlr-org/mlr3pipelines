@@ -4,7 +4,7 @@ context("Dictionary")
 test_that("Dictionary contains all PipeOps", {
 
   # abstract pipeops that don't need to be in mlr_pipeops
-  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute")
+  abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpInvertiblePreproc")
 
   # constructor-args that have no defaults
   initargs = list(

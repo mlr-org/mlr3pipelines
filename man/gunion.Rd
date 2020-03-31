@@ -23,9 +23,12 @@ The \code{\link{PipeOp}}s of the input \code{\link{Graph}}s are not joined with 
 \code{\link{Graph}}s, so if \code{length(graphs) > 1} the resulting \code{\link{Graph}} will be disconnected.
 }
 \seealso{
-Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{as_graph}}, \code{\link{as_pipeop}},
-  \code{\link{assert_graph}}, \code{\link{assert_pipeop}},
-  \code{\link{greplicate}}
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_graph}()},
+\code{\link{as_pipeop}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{greplicate}()}
 }
 \concept{Graph operators}
