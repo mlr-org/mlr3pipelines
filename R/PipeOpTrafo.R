@@ -1,31 +1,31 @@
-#' @title PipeOpInvertiblePreproc
+#' @title PipeOpTargetTrafo
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Base class for handling target transformation operations that have to be inverted later. The
-#' target is transformed during the training phase and information to invert this transformation
-#' can be send along to [`PipeOpInverter`] which then inverts this transformation during the
+#' target is transformed during the training phase and information to invert this transformation can
+#' be send along to [`PipeOpTargetInverter`] which then inverts this transformation during the
 #' prediction phase. This inversion may need info about both the training and the prediction data.
 #'
 #' Users should overload three functions:
 #'
-#' `train_target()` has a [`Task`][mlr3::Task] input and should return a modified
-#' [`Task`][mlr3::Task] while also setting the `$state`. This typically consists of calculating a
-#' new target and modifying the task by using `private$.update_target()`.
+#' * `train_target()` has a [`Task`][mlr3::Task] input and should return a modified
+#'   [`Task`][mlr3::Task] while also setting the `$state`. This typically consists of calculating a
+#'   new target and modifying the task by using `private$.update_target()`.
 #'
-#' `train_invert()`has a [`Task`][mlr3::Task] input and should return a `predict_phase_control`
-#' object (can be anything the user needs for the inversion later). This should not
-#' modify the input task.
+#' * `train_invert()`has a [`Task`][mlr3::Task] input and should return a `predict_phase_control`
+#'   object (can be anything the user needs for the inversion later). This should not modify the input
+#'   task.
 #'
-#' `inverter()` has [`Prediction`][mlr3::Prediction] input as well as one for a
-#' `predict_phase_control` object and should return a function that can later be used to invert the
-#' transformation done by `train_target()` and return a [`Prediction`][mlr3::Prediction] object.
+#' * `inverter()` has a [`Prediction`][mlr3::Prediction] input as well as one for a
+#'   `predict_phase_control` object and should return a function that can later be used to invert the
+#'   transformation done by `train_target()` and return a [`Prediction`][mlr3::Prediction] object.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpInvertiblePreproc$new(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
+#' PipeOpTargetTrafo$new(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -42,46 +42,44 @@
 #'   `character(0)`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpInvertiblePreproc`] has one input channels named `"input"` taking a [`Task`][mlr3::Task]
-#' both during training and prediction.
+#' [`PipeOpTargetTrafo`] has one input channels named `"input"` taking a [`Task`][mlr3::Task] both
+#' during training and prediction.
 #'
-#' [`PipeOpInvertiblePreproc`] has two output channels named `"fun"` and `"output"`. During
-#' training, `"fun"` returns `NULL` and during prediction, `"fun"` returns a function that can later
-#' be used to invert the transformation done during training according to the overloaded
-#' `train_invert()` and `inverter()` functions. `"output"` returns the modified input
-#' [`Task`][mlr3::Task] according to the overloaded `train_target()` function both during training
-#' and prediction.
+#' [`PipeOpTargetTrafo`] has two output channels named `"fun"` and `"output"`. During training,
+#' `"fun"` returns `NULL` and during prediction, `"fun"` returns a function that can later be used
+#' to invert the transformation done during training according to the overloaded `train_invert()`
+#' and `inverter()` functions. `"output"` returns the modified input [`Task`][mlr3::Task] according
+#' to the overloaded `train_target()` function both during training and prediction.
 #'
 #' @section State:
 #' The `$state` is a named `list` and should be set explicitly by the user in the overloaded
 #' `train_target()` function.
 #'
 #' @section Internals:
-#' [`PipeOpInvertiblePreproc`] is an abstract class inheriting from [`PipeOp`]. It implements the
+#' [`PipeOpTargetTrafo`] is an abstract class inheriting from [`PipeOp`]. It implements the
 #' `private$.train()` and `private$.predict()` functions. These functions perform checks and go on
-#' to call `train_target()`, `train_invert()` and `inverter()`. A subclass of
-#' [`PipeOpInvertiblePreproc`] should implement these functions and be used in combination with
-#' [`PipeOpInverter`].
+#' to call `train_target()`, `train_invert()` and `inverter()`. A subclass of [`PipeOpTargetTrafo`]
+#' should implement these functions and be used in combination with [`PipeOpTargetInverter`].
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
 #'
-#' #' @section Methods:
+#' @section Methods:
 #' Methods inherited from [`PipeOp`], as well as:
 #' * `train_target(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
-#'   Called by [`PipeOpInvertiblePreproc`]'s implementation of `private$.train()`. Takes a single
+#'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.train()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and modifies it while storing information in the `$state` slot.
 #'   Note that unlike `$.train()`, the argument is *not* a list but a singular [`Task`][mlr3::Task],
 #'   and the return object is also *not* a list but a singular [`Task`][mlr3::Task].
 #' * `train_invert(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> `predict_phase_control` object\cr
-#'   Called by [`PipeOpInvertiblePreproc`]'s implementation of `private$.predict()`. Takes a single
+#'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.predict()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and returns a `predict_phase_control` object (can be anything the
 #'   user needs for the inversion later). This should not modify the input task.
 #' * `inverter(prediction, predict_phase_control)`\cr
 #'   ([`Prediction`][mlr3::Prediction], `predict_phase_control` object) -> `function`\cr
-#'   Called by `private$.invert_help()` within [`PipeOpInvertiblePreproc`]'s implementation of
+#'   Called by `private$.invert_help()` within [`PipeOpTargetTrafo`]'s implementation of
 #'   `private$.predict()`. Takes a [`Prediction`][mlr3::Prediction] and a `predict_phase_control`
 #'   object as input and returns a function that can later be used for the inversion.
 #' * `.update_target(task, new_target, new_type = NULL, ...)`\cr
@@ -96,7 +94,7 @@
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
-PipeOpInvertiblePreproc = R6Class("PipeOpInvertiblePreproc",
+PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), tags = NULL) {
@@ -159,7 +157,7 @@ PipeOpInvertiblePreproc = R6Class("PipeOpInvertiblePreproc",
 
     .invert_help = function(predict_phase_control) {
       # provides a helper function for the inversion
-      # PipeOpInverter will later apply this function during prediction
+      # PipeOpTargetInverter will later apply this function during prediction
       function(inputs) {
         assert_list(inputs, len = 1L, types = "Prediction")
         self$inverter(inputs[[1L]], predict_phase_control)
@@ -168,40 +166,40 @@ PipeOpInvertiblePreproc = R6Class("PipeOpInvertiblePreproc",
   )
 )
 
-#' @title PipeOpInverter
+#' @title PipeOpTargetInverter
 #'
 #' @usage NULL
-#' @name mlr_pipeops_inverter
+#' @name mlr_pipeops_targetinverter
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' During prediction inverts transformations done during training based on a supplied inversion
-#' function. Typically should be used in combination with a subclass of [`PipeOpInvertiblePreproc`].
+#' function. Typically should be used in combination with a subclass of [`PipeOpTargetTrafo`].
 #'
 #' @section Construction:
 #' ```
-#' PipeOpInverter$new(id = "inverter")
+#' PipeOpTargetInverter$new(id = "targetinverter")
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"inverter"`.
+#'   Identifier of resulting object, default `"targetinverter"`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpInverter`] has two input channels named `"fun"` and `"prediction"`. During training, both
-#' take `NULL` as input. During prediction, `"fun"` takes a function and `"prediction"` takes a
-#' [`Prediction`][mlr3::Prediction].
+#' [`PipeOpTargetInverter`] has two input channels named `"fun"` and `"prediction"`. During
+#' training, both take `NULL` as input. During prediction, `"fun"` takes a function and
+#' `"prediction"` takes a [`Prediction`][mlr3::Prediction].
 #'
-#' [`PipeOpInverter`] has one output channel named `"output"` and returns `NULL` during training and
-#' a [`Prediction`][mlr3::Prediction] during prediction.
+#' [`PipeOpTargetInverter`] has one output channel named `"output"` and returns `NULL` during
+#' training and a [`Prediction`][mlr3::Prediction] during prediction.
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' [`PipeOpInverter`] has no parameters.
+#' [`PipeOpTargetInverter`] has no parameters.
 #'
 #' @section Internals:
-#' Should be used in combination with a subclass of [`PipeOpInvertiblePreproc`].
+#' Should be used in combination with a subclass of [`PipeOpTargetTrafo`].
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
@@ -212,10 +210,10 @@ PipeOpInvertiblePreproc = R6Class("PipeOpInvertiblePreproc",
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
-PipeOpInverter = R6Class("PipeOpInverter",
+PipeOpTargetInverter = R6Class("PipeOpTargetInverter",
   inherit = PipeOp,
   public = list(
-    initialize = function(id = "inverter") {
+    initialize = function(id = "targetinverter") {
       super$initialize(id = id,
         input = data.table(name = c("fun", "prediction"), train = c("NULL", "NULL"), predict = c("function", "Prediction")),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")
@@ -234,37 +232,38 @@ PipeOpInverter = R6Class("PipeOpInverter",
   )
 )
 
-mlr_pipeops$add("inverter", PipeOpInverter)
+mlr_pipeops$add("targetinverter", PipeOpTargetInverter)
 
-#' @title PipeOpSimpleTrafo
+#' @title PipeOpTargetTrafoSimple
 #'
 #' @usage NULL
-#' @name mlr_pipeops_simpletrafo
-#' @format [`R6Class`] object inheriting from [`PipeOpInvertiblePreproc`]/[`PipeOp`]
+#' @name mlr_pipeops_targettrafosimple
+#' @format [`R6Class`] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
 #'
 #' @description
-#' Allows for target transformation operations that have to be inverted later, where the
-#' transformation function is simply given by a function of the target.
+#' Allows for target transformation operations of [`TaskRegr`][mlr3::Task] that have to be inverted
+#' later, where the transformation function is simply given by a function of the (continuous)
+#' numerical target.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpSimpleTrafo$new(id = "simpletrafo", param_vals = list())
+#' PipeOpTargetTrafoSimple$new(id = "targettrafosimple", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"simpletrafo"`.
+#'   Identifier of resulting object, default `"targettrafosimple"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
 #'   be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpInvertiblePreproc`].
+#' Input and output channels are inherited from [`PipeOpTargetTrafo`].
 #'
 #' @section State:
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpInvertiblePreproc`], as well as:
+#' The parameters are the parameters inherited from [`PipeOpTargetTrafo`], as well as:
 #' * `trafo` :: `function`\cr
 #'   Transformation function for the target. Should only be a function of the target, i.e., taking a
 #'   single argument. Default is `identity`.
@@ -278,16 +277,16 @@ mlr_pipeops$add("inverter", PipeOpInverter)
 #'   `mlr_reflections$task_types$type`.
 #'
 #' @section Internals:
-#' Overloads [`PipeOpInvertiblePreproc`]'s `train_target()`, `train_invert()` and `inverter()`.
-#' Should be used in combination with [`PipeOpInverter`].
+#' Overloads [`PipeOpTargetTrafo`]'s `train_target()`, `train_invert()` and `inverter()`.
+#' Should be used in combination with [`PipeOpTargetInverter`].
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOpInvertiblePreproc`]/[`PipeOp`].
+#' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
 #' @examples
 #'library(mlr3)
 #'task = tsk("boston_housing")
-#'po = PipeOpSimpleTrafo$new("logtrafo", param_vals = list(
+#'po = PipeOpTargetTrafoSimple$new("logtrafo", param_vals = list(
 #'  trafo = function(x) log(x, base = 2),
 #'  inverter = function(x) 2 ^ x)
 #')
@@ -298,20 +297,20 @@ mlr_pipeops$add("inverter", PipeOpInverter)
 #'g = Graph$new()
 #'g$add_pipeop(po)
 #'g$add_pipeop(LearnerRegrRpart$new())
-#'g$add_pipeop(PipeOpInverter$new())
-#'g$add_edge(src_id = "logtrafo", dst_id = "inverter", src_channel = 1, dst_channel = 1)
+#'g$add_pipeop(PipeOpTargetInverter$new())
+#'g$add_edge(src_id = "logtrafo", dst_id = "targetinverter", src_channel = 1, dst_channel = 1)
 #'g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart", src_channel = 2, dst_channel = 1)
-#'g$add_edge(src_id = "regr.rpart", dst_id = "inverter", src_channel = 1, dst_channel = 2)
+#'g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter", src_channel = 1, dst_channel = 2)
 #'
 #'g$train(task)
 #'g$predict(task)
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
-PipeOpSimpleTrafo = R6Class("PipeOpSimpleTrafo",
-  inherit = PipeOpInvertiblePreproc,
+PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
+  inherit = PipeOpTargetTrafo,
   public = list(
-    initialize = function(id = "simpletrafo", param_vals = list()) {
+    initialize = function(id = "targettrafosimple", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("trafo", default = identity, tags = "train", custom_check = function(x) check_function(x, nargs = 1L)),
         ParamUty$new("inverter", default = identity, tags = "predict", custom_check = function(x) check_function(x, nargs = 1L)),
@@ -324,20 +323,26 @@ PipeOpSimpleTrafo = R6Class("PipeOpSimpleTrafo",
     },
 
     train_target = function(task) {
+      assert_r6(task, "TaskRegr")
       self$state = list()
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
-      if (!is.null(self$param_set$values$new_target$name)) {
-        colnames(new_target) = self$param_set$values$new_target$name
+      if (!is.null(self$param_set$values$new_target_name)) {
+        colnames(new_target) = self$param_set$values$new_target_name
       }
       task$cbind(new_target)
-      private$.update_target(task, new_target = colnames(new_target))
+      private$.update_target(task, new_target = colnames(new_target), new_type = self$param_set$values$new_task_type)
     },
 
     train_invert = function(task) {
+      assert_r6(task, "TaskRegr")      
       self$param_set$values$inverter
     },
 
     inverter = function(prediction, predict_phase_control) {
+      assert_r6(prediction, "PredictionRegr")
+      # FIXME: probably should only work for predict_type = "response" and needs a check here?
+      # could be extended for se/probs using delta method?
+      assert_character(prediction$predict_types, pattern = "response", any.missing = FALSE, len = 1L)
       type = prediction$task_type
       get(mlr_reflections$task_types[type]$prediction)$new(row_ids = prediction$row_ids,
         truth = predict_phase_control(prediction$truth), response = predict_phase_control(prediction$response))
@@ -345,4 +350,4 @@ PipeOpSimpleTrafo = R6Class("PipeOpSimpleTrafo",
   )
 )
 
-mlr_pipeops$add("simpletrafo", PipeOpSimpleTrafo)
+mlr_pipeops$add("targettrafosimple", PipeOpTargetTrafoSimple)

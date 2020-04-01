@@ -203,7 +203,7 @@ posum$predict(list(NULL, NULL))
 \seealso{
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
-\code{\link{PipeOpInvertiblePreproc}},
+\code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{mlr_graphs}},
@@ -212,7 +212,7 @@ Other mlr3pipelines backend related:
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpInvertiblePreproc}},
+\code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
@@ -238,7 +238,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
-\code{\link{mlr_pipeops_inverter}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
@@ -253,10 +252,11 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
-\code{\link{mlr_pipeops_simpletrafo}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
