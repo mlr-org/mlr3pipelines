@@ -22,12 +22,12 @@ Identifier of resulting object, default \code{"targetinverter"}.
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpTargetInverter}} has two input channels named \code{"fun"} and \code{"prediction"}. During training, both
-take \code{NULL} as input. During prediction, \code{"fun"} takes a function and \code{"prediction"} takes a
-\code{\link[mlr3:Prediction]{Prediction}}.
+\code{\link{PipeOpTargetInverter}} has two input channels named \code{"fun"} and \code{"prediction"}. During
+training, both take \code{NULL} as input. During prediction, \code{"fun"} takes a function and
+\code{"prediction"} takes a \code{\link[mlr3:Prediction]{Prediction}}.
 
-\code{\link{PipeOpTargetInverter}} has one output channel named \code{"output"} and returns \code{NULL} during training and
-a \code{\link[mlr3:Prediction]{Prediction}} during prediction.
+\code{\link{PipeOpTargetInverter}} has one output channel named \code{"output"} and returns \code{NULL} during
+training and a \code{\link[mlr3:Prediction]{Prediction}} during prediction.
 }
 
 \section{State}{

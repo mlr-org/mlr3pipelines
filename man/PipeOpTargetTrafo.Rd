@@ -8,23 +8,22 @@ Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Base class for handling target transformation operations that have to be inverted later. The
-target is transformed during the training phase and information to invert this transformation
-can be send along to \code{\link{PipeOpTargetInverter}} which then inverts this transformation during the
+target is transformed during the training phase and information to invert this transformation can
+be send along to \code{\link{PipeOpTargetInverter}} which then inverts this transformation during the
 prediction phase. This inversion may need info about both the training and the prediction data.
 
 Users should overload three functions:
-
-\code{train_target()} has a \code{\link[mlr3:Task]{Task}} input and should return a modified
+\itemize{
+\item \code{train_target()} has a \code{\link[mlr3:Task]{Task}} input and should return a modified
 \code{\link[mlr3:Task]{Task}} while also setting the \verb{$state}. This typically consists of calculating a
 new target and modifying the task by using \code{private$.update_target()}.
-
-\code{train_invert()}has a \code{\link[mlr3:Task]{Task}} input and should return a \code{predict_phase_control}
-object (can be anything the user needs for the inversion later). This should not
-modify the input task.
-
-\code{inverter()} has a \code{\link[mlr3:Prediction]{Prediction}} input as well as one for a
+\item \code{train_invert()}has a \code{\link[mlr3:Task]{Task}} input and should return a \code{predict_phase_control}
+object (can be anything the user needs for the inversion later). This should not modify the input
+task.
+\item \code{inverter()} has a \code{\link[mlr3:Prediction]{Prediction}} input as well as one for a
 \code{predict_phase_control} object and should return a function that can later be used to invert the
 transformation done by \code{train_target()} and return a \code{\link[mlr3:Prediction]{Prediction}} object.
+}
 }
 \section{Construction}{
 \preformatted{PipeOpTargetTrafo$new(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
@@ -47,15 +46,14 @@ Set of all required packages for the \code{\link{PipeOp}}'s methods. See \verb{$
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpTargetTrafo}} has one input channels named \code{"input"} taking a \code{\link[mlr3:Task]{Task}}
-both during training and prediction.
+\code{\link{PipeOpTargetTrafo}} has one input channels named \code{"input"} taking a \code{\link[mlr3:Task]{Task}} both
+during training and prediction.
 
-\code{\link{PipeOpTargetTrafo}} has two output channels named \code{"fun"} and \code{"output"}. During
-training, \code{"fun"} returns \code{NULL} and during prediction, \code{"fun"} returns a function that can later
-be used to invert the transformation done during training according to the overloaded
-\code{train_invert()} and \code{inverter()} functions. \code{"output"} returns the modified input
-\code{\link[mlr3:Task]{Task}} according to the overloaded \code{train_target()} function both during training
-and prediction.
+\code{\link{PipeOpTargetTrafo}} has two output channels named \code{"fun"} and \code{"output"}. During training,
+\code{"fun"} returns \code{NULL} and during prediction, \code{"fun"} returns a function that can later be used
+to invert the transformation done during training according to the overloaded \code{train_invert()}
+and \code{inverter()} functions. \code{"output"} returns the modified input \code{\link[mlr3:Task]{Task}} according
+to the overloaded \code{train_target()} function both during training and prediction.
 }
 
 \section{State}{
@@ -68,9 +66,8 @@ The \verb{$state} is a named \code{list} and should be set explicitly by the use
 
 \code{\link{PipeOpTargetTrafo}} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the
 \code{private$.train()} and \code{private$.predict()} functions. These functions perform checks and go on
-to call \code{train_target()}, \code{train_invert()} and \code{inverter()}. A subclass of
-\code{\link{PipeOpTargetTrafo}} should implement these functions and be used in combination with
-\code{\link{PipeOpTargetInverter}}.
+to call \code{train_target()}, \code{train_invert()} and \code{inverter()}. A subclass of \code{\link{PipeOpTargetTrafo}}
+should implement these functions and be used in combination with \code{\link{PipeOpTargetInverter}}.
 }
 
 \section{Fields}{

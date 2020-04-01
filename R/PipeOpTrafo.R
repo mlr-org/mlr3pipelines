@@ -166,6 +166,8 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   )
 )
 
+
+
 #' @title PipeOpTargetInverter
 #'
 #' @usage NULL
@@ -234,6 +236,8 @@ PipeOpTargetInverter = R6Class("PipeOpTargetInverter",
 
 mlr_pipeops$add("targetinverter", PipeOpTargetInverter)
 
+
+
 #' @title PipeOpTargetTrafoSimple
 #'
 #' @usage NULL
@@ -241,9 +245,9 @@ mlr_pipeops$add("targetinverter", PipeOpTargetInverter)
 #' @format [`R6Class`] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
 #'
 #' @description
-#' Allows for target transformation operations of [`TaskRegr`][mlr3::Task] that have to be inverted
-#' later, where the transformation function is simply given by a function of the (continuous)
-#' numerical target.
+#' Allows for target transformation operations of [`TaskRegr`][mlr3::TaskRegr] that have to be
+#' inverted later, where the transformation function is simply given by a function of the
+#' (continuous) numerical target.
 #'
 #' @section Construction:
 #' ```
@@ -298,12 +302,20 @@ mlr_pipeops$add("targetinverter", PipeOpTargetInverter)
 #'g$add_pipeop(po)
 #'g$add_pipeop(LearnerRegrRpart$new())
 #'g$add_pipeop(PipeOpTargetInverter$new())
-#'g$add_edge(src_id = "logtrafo", dst_id = "targetinverter", src_channel = 1, dst_channel = 1)
-#'g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart", src_channel = 2, dst_channel = 1)
-#'g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter", src_channel = 1, dst_channel = 2)
+#'g$add_edge(src_id = "logtrafo", dst_id = "targetinverter",
+#'  src_channel = 1, dst_channel = 1)
+#'g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart",
+#'  src_channel = 2, dst_channel = 1)
+#'g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
+#'  src_channel = 1, dst_channel = 2)
 #'
 #'g$train(task)
 #'g$predict(task)
+#'
+#'#syntactic sugar using ppl():
+#'targettrafo = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
+#'targettrafo$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
+#'targettrafo$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
@@ -323,7 +335,7 @@ PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
     },
 
     train_target = function(task) {
-      assert_r6(task, "TaskRegr")
+      assert_r6(task, classes = "TaskRegr")
       self$state = list()
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
       if (!is.null(self$param_set$values$new_target_name)) {
@@ -334,12 +346,12 @@ PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
     },
 
     train_invert = function(task) {
-      assert_r6(task, "TaskRegr")      
+      assert_r6(task, classes = "TaskRegr")      
       self$param_set$values$inverter
     },
 
     inverter = function(prediction, predict_phase_control) {
-      assert_r6(prediction, "PredictionRegr")
+      assert_r6(prediction, classes = "PredictionRegr")
       # FIXME: probably should only work for predict_type = "response" and needs a check here?
       # could be extended for se/probs using delta method?
       assert_character(prediction$predict_types, pattern = "response", any.missing = FALSE, len = 1L)

@@ -12,7 +12,7 @@
 #'   If `NULL` (default), a new task with the same task_type is created.
 #' @param drop_original_target `logical(1)`\cr
 #'   If `FALSE` (default), the original target is added as a feature.
-#'   Otherwise the original target is assigned no col_role, i.e. dropped.
+#'   Otherwise the original target dropped.
 #' @param \dots \cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
@@ -36,7 +36,7 @@ convert_task = function(intask, new_target = NULL, new_type = NULL, drop_origina
   # during prediction, when target is NA, we do not call droplevels
   if (!all(is.na(newtask$data()[, newtask$target_names, with = FALSE]))) newtask$droplevels()
   # if drop_original_target, remove the original target from the col_roles
-  # FIXME: use unused col_role
+  # FIXME: in general implement the col_role `unused col_role`?
   if (drop_original_target) newtask$col_roles$feature = setdiff(newtask$col_roles$feature, intask$col_roles$target)
 
   newtask

@@ -17,7 +17,7 @@
 #' factor variables, no encoding is performed.
 #'
 #' @param task [`Task`] \cr
-#'   A task to create a robustifying pipeline for.
+#'   A [`Task`][mlr3::Task] to create a robustifying pipeline for.
 #'   Optional, if omitted, the full pipeline is created.
 #' @param learner [`Learner`] \cr
 #'   A learner to create a robustifying pipeline for. Optional, if omitted,
@@ -111,8 +111,8 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #' * Average outputs of replicated `graph`s predictions using the `averager`.
 #'
 #' @param graph [`PipeOp`] | [`Graph`] \cr
-#'   A `PipeOpLearner` or `Graph` to create a robustifying pipeline for.
-#'   Outputs from the replicated `graph`s are connected with the `averager`
+#'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for.
+#'   Outputs from the replicated `graph`s are connected with the `averager`.
 #' @param iterations [`integer`] \cr
 #'   Number of bagging iterations. Defaults to 10.
 #' @param frac [`numeric`] \cr
@@ -150,7 +150,7 @@ mlr_graphs$add("bagging", pipeline_bagging)
 
 
 #' @title Branch Between Alternative Paths
-#'
+#' @name mlr_graphs_branching
 #' @description
 #' Create a multiplexed graph.
 #'
@@ -169,6 +169,7 @@ mlr_graphs$add("bagging", pipeline_bagging)
 #'   a `character(1)`, it is a prefix that is added to the `PipeOp` IDs *additionally*
 #'   to the input argument list.
 #'
+#' @return [`Graph`]
 #' @export
 #' @examples
 #' library("mlr3")
@@ -243,3 +244,67 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
 }
 
 mlr_graphs$add("branch", pipeline_branch)
+
+
+
+#' @title Transform A Numerical Target And Later Invert The Transformation
+#' @name mlr_graphs_targettrafo
+#' @description
+#' Creates a [`Graph`] that transforms a numerical target of a [`TaskRegr`][mlr3::TaskRegr] during
+#' training and inverts the transformation during prediction.
+#' This is done as follows:
+#' * Specify a transformation and inversion function using [`PipeOpTargetTrafoSimple`], afterwards
+#'   apply `graph`.
+#' * At the very end, during prediction the transformation is inverted using [`PipeOpTargetInverter`].
+#' * To set a transformation and inversion function see the parameters `targettrafosimple.trafo` and
+#'   `targettrafosimple.inverter` of the `param_set` of the resulting [`Graph`].
+#'
+#' @param graph [`PipeOpLearner`] | [`Graph`] \cr
+#'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for. If this is a [`Graph`], the
+#'   last [`PipeOp`] should be a [`PipeOpLearner`] that can handle a [`TaskRegr`][mlr3::TaskRegr] and
+#'   the first [`PipeOp`] should accept a single [`TaskRegr`][mlr3::TaskRegr] as input.
+#'
+#' @return [`Graph`]
+#' @export
+#' @examples
+#'library("mlr3")
+#'
+#'targettrafo = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
+#'targettrafo$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
+#'targettrafo$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+#'
+#'# gives the same as
+#'g = Graph$new()
+#'g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
+#'  trafo = function(x) log(x, base = 2),
+#'  inverter = function(x) 2 ^ x)
+#'  )
+#')
+#'g$add_pipeop(LearnerRegrRpart$new())
+#'g$add_pipeop(PipeOpTargetInverter$new())
+#'g$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter",
+#'  src_channel = 1, dst_channel = 1)
+#'g$add_edge(src_id = "targettrafosimple", dst_id = "regr.rpart",
+#'  src_channel = 2, dst_channel = 1)
+#'g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
+#'  src_channel = 1, dst_channel = 2)
+pipeline_targettrafo = function(graph) {
+  graph = as_graph(graph)
+  assert_r6(graph$pipeops[length(graph$pipeops)][[1L]], classes = "PipeOpLearner")
+  if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
+    stopf("First PipeOp of graph should accept a single task as input.")
+  }
+
+  ids = graph$ids(sorted = FALSE)
+
+  graph$add_pipeop(PipeOpTargetTrafoSimple$new())
+  graph$add_pipeop(PipeOpTargetInverter$new())
+
+  graph$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter", src_channel = 1L, dst_channel = 1L)
+  graph$add_edge(src_id = "targettrafosimple", dst_id = ids[1L], src_channel = 2L, dst_channel = 1L)
+  graph$add_edge(src_id = ids[length(ids)], dst_id = "targetinverter", src_channel = 1L, dst_channel = 2L)
+
+  graph
+}
+
+mlr_graphs$add("targettrafo", pipeline_targettrafo)
