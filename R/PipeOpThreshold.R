@@ -45,7 +45,7 @@
 #' @examples
 #' library("mlr3")
 #' t = tsk("german_credit")
-#' gr = po(lrn("classif.rpart", .predict_type = "prob")) %>>%
+#' gr = po(lrn("classif.rpart", predict_type = "prob")) %>>%
 #'   po("threshold", param_vals = list(thresholds = 0.9))
 #' gr$train(t)
 #' gr$predict(t)
@@ -63,11 +63,11 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
     }
   ),
   private = list(
-    .train_internal = function(inputs) {
+    .train = function(inputs) {
       self$state = list()
       list(NULL)
     },
-    .predict_internal = function(inputs) {
+    .predict = function(inputs) {
       prd = inputs[[1]]$clone()
       thr = self$param_set$values$thresholds
       assert_subset("prob", prd$predict_types)

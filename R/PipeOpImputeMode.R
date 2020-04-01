@@ -65,11 +65,13 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
   public = list(
     initialize = function(id = "imputemode", param_vals = list()) {
       super$initialize(id, param_vals = param_vals, packages = "mlr3misc")
-    },
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) task$feature_types[get("type") %in% c("factor", "integer", "logical", "numeric", "ordered"), get("id")],
+    .select_cols = function(task) task$feature_types[get("type") %in% c("factor", "integer", "logical", "numeric", "ordered"), get("id")],
 
-    train_imputer = function(feature, type, context) {
+    .train_imputer = function(feature, type, context) {
       feature = feature[!is.na(feature)]
       if (length(feature)) {
         as.data.table(feature)[, .N, by = list(feature)][get("N") == max(get("N"))]$feature
@@ -85,7 +87,7 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
       }
     },
 
-    impute = function(feature, type, model, context) {
+    .impute = function(feature, type, model, context) {
       if (length(model) == 1) {
         feature[is.na(feature)] = model
       } else {

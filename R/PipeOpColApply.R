@@ -99,13 +99,13 @@ PipeOpColApply = R6Class("PipeOpColApply",
   private = list(
 
     .train_dt = function(dt, levels, target) {
-      dt = self$transform_dt(dt, levels)
+      dt = private$.transform_dt(dt, levels)
       self$state = list(emptydt = dt[integer(0)])
       dt
     },
 
     .predict_dt = function(dt, levels) {
-      dt = self$transform_dt(dt, levels)
+      dt = private$.transform_dt(dt, levels)
       if (!nrow(dt)) {
         dt = self$state$emptydt
       }

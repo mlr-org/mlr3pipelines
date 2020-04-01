@@ -20,7 +20,7 @@
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
-    initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, .predict_type = NULL) {
+    initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, predict_type = NULL) {
 
       graph = as_graph(graph, clone = TRUE)
       self$graph = graph
@@ -47,7 +47,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_subset(task_type, mlr_reflections$task_types$type)
 
       if (is.null(predict_type)) {
-        .predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
+        predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
       }
 
       assert_subset(predict_type, names(mlr_reflections$learner_predict_types[[task_type]]))
@@ -55,10 +55,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
-        .predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
+        predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
         properties = mlr_reflections$learner_properties[[task_type]])
-      private$.predict_type = .predict_type
+      private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
     }
   ),
@@ -66,8 +66,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     hash = function() {
       self$graph$hash
     },
-    .predict_type = function(rhs) {
-      # overload this to avoid feasibility checks. all .predict_types are allowed in principle
+    predict_type = function(rhs) {
+      # overload this to avoid feasibility checks. all predict_types are allowed in principle
       # (although we don't--can't--change the underlying graph's behaviour).
       if (!missing(rhs)) {
         private$.predict_type = rhs
