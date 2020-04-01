@@ -241,17 +241,13 @@ PipeOp = R6Class("PipeOp",
         return(named_list(self$output$name, NO_OP))
       }
       input = check_types(self, input, "input", "train")
-      print(self$hash)
-      print(digest(private$.param_set, algo = "xxhash64"))
-      a <<- private$.param_set
+      keya <<- list(map_chr(input, get_hash), self$hash)
       R.cache::evalWithMemoization({
         output = private$.train(input)
         },
         key = list(map_chr(input, get_hash), self$hash)
       )
-      print(self$hash)
-      print(digest(private$.param_set, algo = "xxhash64"))
-      b <<- private$.param_set
+      keyb <<- list(map_chr(input, get_hash), self$hash)
       output = check_types(self, output, "output", "train")
       output
     },
