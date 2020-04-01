@@ -58,9 +58,11 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
   public = list(
     initialize = function(id = "imputesample", param_vals = list()) {
       super$initialize(id, param_vals = param_vals)
-    },
+    }
+  ),
+  private = list(
 
-    train_imputer = function(feature, type, context) {
+    .train_imputer = function(feature, type, context) {
       model = feature[!is.na(feature)]
       if (!length(model)) {
         model = switch(type,
@@ -74,13 +76,13 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
       model
     },
 
-    impute = function(feature, type, model, context) {
+    .impute = function(feature, type, model, context) {
       if (length(model) == 1) {
         feature[is.na(feature)] = model
+
       } else {
         outlen = sum(is.na(feature))
-        sample(model, outlen, replace = TRUE)
-        feature[is.na(feature)] = filldata
+        feature[is.na(feature)] = sample(model, outlen, replace = TRUE)
       }
       feature
     }

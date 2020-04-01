@@ -4,7 +4,7 @@
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
-#' Parent class for [`PipeOp`]s that aggregate predictions. Implements the `$train_internal()` and `$predict_internal()` methods necessary
+#' Parent class for [`PipeOp`]s that aggregate predictions. Implements the `private$.train()` and `private$.predict()` methods necessary
 #' for a `PipeOp` and requires deriving classes to create the `private$weighted_avg_predictions()` function.
 #'
 #' @section Construction:
@@ -28,7 +28,7 @@
 #' * `prediction_type` :: `character(1)`\cr
 #'   The `predict` entry of the `$input` and `$output` type specifications.
 #'   Should be `"Prediction"` (default) or one of its subclasses, e.g. `"PredictionClassif"`, and correspond to the type accepted by
-#'   `$train_internal()` and `$predict_internal()`.
+#'   `private$.train()` and `private$.predict()`.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpEnsemble`] has multiple input channels depending on the `innum` construction argument, named `"input1"`, `"input2"`, ...
@@ -65,7 +65,7 @@
 #' * `weighted_avg_prediction(inputs, weights, row_ids, truth)`\cr
 #'   (`list` of [`Prediction`][mlr3::Prediction], `numeric`, `integer` | `character`, `list`) -> `NULL`\cr
 #'   Create [`Prediction`][mlr3::Prediction]s that correspond to the weighted average of incoming [`Prediction`][mlr3::Prediction]s. This is
-#'   called by `$predict_internal()` with cleaned and sanity-checked values: `inputs` are guaranteed to fit together,
+#'   called by `private$.predict()` with cleaned and sanity-checked values: `inputs` are guaranteed to fit together,
 #'   `row_ids` and `truth` are guaranteed to be the same as each one in `inputs`, and `weights` is guaranteed to have the same length as `inputs`.\cr
 #'   This method is abstract, it must be implemented by deriving classes.
 #'
@@ -86,12 +86,15 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
         output = data.table(name = "output", train = "NULL", predict = prediction_type),
         tags = "ensemble"
       )
-    },
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    weighted_avg_predictions = function(inputs, weights, row_ids, truth) stop("Abstract."),
+    .train = function(inputs) {
       self$state = list()
       list(NULL)
     },
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       weights = self$param_set$values$weights
       row_ids = inputs[[1]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
@@ -108,9 +111,6 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 
       list(private$weighted_avg_predictions(inputs, weights, row_ids, truth))
     }
-  ),
-  private = list(
-    weighted_avg_predictions = function(inputs, weights, row_ids, truth) stop("Abstract.")
   )
 )
 

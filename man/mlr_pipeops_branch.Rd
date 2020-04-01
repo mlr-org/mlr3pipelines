@@ -63,7 +63,7 @@ or the first element of \code{options} (if it is \code{character}).
 Alternative path branching is handled by the \code{\link{PipeOp}} backend. To indicate that
 a path should not be taken, \code{\link{PipeOpBranch}} returns the \code{\link{NO_OP}} object on its
 output channel. The \code{\link{PipeOp}} handles each \code{\link{NO_OP}} input by automatically
-returning a \code{\link{NO_OP}} output without calling \verb{$train_internal()} or \verb{$predict_internal()},
+returning a \code{\link{NO_OP}} output without calling \code{private$.train()} or \code{private$.predict()},
 until \code{\link{PipeOpUnbranch}} is reached. \code{\link{PipeOpUnbranch}} will then take multiple inputs,
 all except one of which must be a \code{\link{NO_OP}}, and forward the only non-\code{\link{NO_OP}}
 object on its output.

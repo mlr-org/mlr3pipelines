@@ -57,17 +57,6 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
       )
       self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
-
-    train_internal = function(task) {
-      pars = self$param_set$get_values(tags = "train")
-      data = self$prepare_data(task)
-      n_weights = length(data)
-      list("weights" = optimize_objfun_nlopt(task, pars, self$weighted_average_prediction, n_weights, data))
-    },
-
-    predict_internal = function(task) {
-      self$weighted_average_prediction(task, self$model$weights, self$prepare_data(task))
-    },
     prepare_data = function(task) {
       data = task$data(cols = task$feature_names)
       fcts = map_lgl(data, is.factor)
@@ -107,6 +96,17 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
 
       PredictionClassif$new(row_ids = task$row_ids, truth = task$truth(), response = response, prob = prob)
     }
+  ),
+  private = list(
+    .train = function(task) {
+      pars = self$param_set$get_values(tags = "train")
+      data = self$prepare_data(task)
+      n_weights = length(data)
+      list("weights" = optimize_objfun_nlopt(task, pars, self$weighted_average_prediction, n_weights, data))
+    },
+    .predict = function(task) {
+      self$weighted_average_prediction(task, self$model$weights, self$prepare_data(task))
+    }
   )
 )
 
@@ -130,17 +130,6 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
       )
       self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
-
-    train_internal = function(task) {
-      pars = self$param_set$get_values(tags = "train")
-      data = self$prepare_data(task)
-      n_weights = ncol(data$response_matrix)
-      list("weights" = optimize_objfun_nlopt(task, pars, self$weighted_average_prediction, n_weights, data))
-    },
-
-    predict_internal = function(task) {
-      self$weighted_average_prediction(task, self$model$weights, self$prepare_data(task))
-    },
     prepare_data = function(task) {
       response_matrix = as.matrix(task$data(cols = grep("\\.response$", task$feature_names, value = TRUE)))
       list(response_matrix = response_matrix)
@@ -151,6 +140,17 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
       response = c(data$response_matrix %*% wts)
       se = NULL
       PredictionRegr$new(row_ids = task$row_ids, truth = task$truth(), response = response, se = se)
+    }
+  ),
+  private = list(
+    .train = function(task) {
+      pars = self$param_set$get_values(tags = "train")
+      data = self$prepare_data(task)
+      n_weights = ncol(data$response_matrix)
+      list("weights" = optimize_objfun_nlopt(task, pars, self$weighted_average_prediction, n_weights, data))
+    },
+    .predict = function(task) {
+      self$weighted_average_prediction(task, self$model$weights, self$prepare_data(task))
     }
   )
 )
