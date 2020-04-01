@@ -12,7 +12,7 @@
 #'   If `NULL` (default), a new task with the same task_type is created.
 #' @param drop_original_target `logical(1)`\cr
 #'   If `FALSE` (default), the original target is added as a feature.
-#'   Otherwise the original target dropped.
+#'   Otherwise the original target is dropped.
 #' @param \dots \cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
