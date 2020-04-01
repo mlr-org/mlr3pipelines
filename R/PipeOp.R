@@ -108,8 +108,7 @@
 #'   Can be used to filter `as.data.table(mlr_pipeops)`.
 #'   PipeOp tags are inherited and child classes can introduce additional tags.
 #' * `hash` :: `character(1)` \cr
-#'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set`
-#'   (and therefore also `$param_set$values`). If a
+#'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set$values`. If a
 #'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result` :: `list` \cr
@@ -295,7 +294,7 @@ PipeOp = R6Class("PipeOp",
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
     hash = function() {
-      digest(list(class(self), self$id, self$param_set),
+      digest(list(class(self), self$id, self$param_set$values),
         algo = "xxhash64")
     }
   ),
