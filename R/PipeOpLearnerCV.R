@@ -113,7 +113,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
       private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
       private$.learner$param_set$set_id = ""
-      task_type = mlr_reflections$task_types[mlr_reflections$task_types$package == "mlr3"][private$.learner$task_type]$task
+      task_types = copy(mlr_reflections$task_types)
+      setorder(task_types, package)
+      task_type = task_types[type == private$.learner$task_type]$task[1L]
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = "cv", tags = c("train", "required")),
