@@ -60,12 +60,14 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),
         output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"),
         tags = "target transform")
-    },
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    .train = function(inputs) {
       self$state = list()
       list(NULL)
     },
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       prd = inputs[[1]]$clone()
       thr = self$param_set$values$thresholds
       assert_subset("prob", prd$predict_types)

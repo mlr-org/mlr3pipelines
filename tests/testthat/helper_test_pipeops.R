@@ -1,20 +1,22 @@
 PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
   inherit = PipeOp,
   public = list(
-    train_internal = function(inputs) {
-      catf("Training %s", self$id)
-      self$state = inputs
-    },
-    predict_internal = function(inputs) {
-      catf("Predicting %s", self$id)
-      self$state = c(self$state, inputs)
-    },
     initialize = function(id = "debug.basic", param_set = ParamSet$new()) {
       super$initialize(id = id, param_set = param_set,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
-    })
+    }),
+  private = list(
+    .train = function(inputs) {
+      catf("Training %s", self$id)
+      self$state = inputs
+    },
+    .predict = function(inputs) {
+      catf("Predicting %s", self$id)
+      self$state = c(self$state, inputs)
+    }
+  )
 )
 
 deparse_list_safe = function(l) {
@@ -32,18 +34,6 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
   public = list(
     nin = NULL,
     nout = NULL,
-    train_internal = function(inputs) {
-      catf("Training %s with input %s", self$id, deparse_list_safe(inputs))
-      self$state = inputs
-      iin = inputs[[1]]
-      as.list(iin + seq_len(self$nout))
-    },
-    predict_internal = function(inputs) {
-      catf("Predicting %s with input %s and state %s",
-        self$id, deparse_list_safe(inputs), deparse_list_safe(self$state))
-      iin = inputs[[1]]
-      as.list(iin + seq_len(self$nout))
-    },
     initialize = function(inputs, outputs, id = "debug.multi") {
       if (is.numeric(inputs)) {
         inputs = paste0("input_", seq_len(inputs))
@@ -57,9 +47,22 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       super$initialize(id, ParamSet$new(list(p)),
         input = data.table(name = inputs, train = "*", predict = "*"),
         output = data.table(name = outputs, train = "*", predict = "*"))
-    })
+    }),
+  private = list(
+    .train = function(inputs) {
+      catf("Training %s with input %s", self$id, deparse_list_safe(inputs))
+      self$state = inputs
+      iin = inputs[[1]]
+      as.list(iin + seq_len(self$nout))
+    },
+    .predict = function(inputs) {
+      catf("Predicting %s with input %s and state %s",
+        self$id, deparse_list_safe(inputs), deparse_list_safe(self$state))
+      iin = inputs[[1]]
+      as.list(iin + seq_len(self$nout))
+    }
+  )
 )
-
 
 VarargPipeop = R6Class("VarargPipeop",
   inherit = PipeOp,
@@ -69,14 +72,13 @@ VarargPipeop = R6Class("VarargPipeop",
         input = data.table(name = c("...", rep_suffix("input", innum)), train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
-    },
-
-    train_internal = function(inputs) {
+    }),
+    private = list(
+    .train = function(inputs) {
       self$state = inputs
       list(inputs)
     },
-
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       self$state = inputs
       list(inputs)
     }

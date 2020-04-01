@@ -47,7 +47,7 @@ trained on the training input data.
 The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object. It is a named \code{list} with members:
 \itemize{
 \item \code{model} :: \code{any}\cr
-Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$train_internal()} function.
+Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
 \item \code{train_log} :: \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr

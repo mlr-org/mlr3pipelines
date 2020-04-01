@@ -43,9 +43,11 @@ test_that("PipeOpImpute", {
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% po("featureunion")
-      },
+      }
+    ),
+    private = list(
 
-      get_state = function(task) {
+      .get_state = function(task) {
 
 
         graph = self$build_graph()
@@ -53,7 +55,7 @@ test_that("PipeOpImpute", {
         list(gs = graph$state)
       },
 
-      transform = function(task) {
+      .transform = function(task) {
         graph = self$build_graph()
         graph$state = self$state$gs
         graph$predict(task)[[1]]
