@@ -119,6 +119,7 @@ Collate:
     'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
+    'PipeOpNewTarget.R'
     'PipeOpPCA.R'
     'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'

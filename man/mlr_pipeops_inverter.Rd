@@ -8,37 +8,51 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
-#FIXME:
+Inverts transformations done during training based on a supplied inversion function. Typically
+should be used in combination with a subclass of \code{\link{PipeOpInvertiblePreproc}}.
 }
 \section{Construction}{
-
-#FIXME:\preformatted{PipeOpInverter$new(id)
+\preformatted{PipeOpInverter$new(id)
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
-Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
+Identifier of resulting object, default \code{"inverter"}.
 }
 }
 
 \section{Input and Output Channels}{
 
-#FIXME:
+\code{\link{PipeOpInverter}} has two input channels named \code{"fun"} and \code{"prediction"}. During training, both
+take \code{NULL} as input. During prediction, \code{"fun"} takes a function and \code{"prediction"} takes a
+\code{\link[mlr3:Prediction]{Prediction}}.
+
+\code{\link{PipeOpInverter}} has one output channel named \code{"output"} and returns \code{NULL} during training and
+a \code{\link[mlr3:Prediction]{Prediction}} during prediction.
 }
 
 \section{State}{
 
-#FIXME:
+The \verb{$state} is left empty (\code{list()}).
+}
+
+\section{Parameters}{
+
+\code{\link{PipeOpInverter}} has no parameters.
 }
 
 \section{Internals}{
 
-#FIXME:
+Should be used in combination with a subclass of \code{\link{PipeOpInvertiblePreproc}}.
+}
+
+\section{Fields}{
+
+Only fields inherited from \code{\link{PipeOp}}.
 }
 
 \section{Methods}{
 
-Methods inherited from \code{\link{PipeOp}}, as well as:
-#FIXME:
+Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \seealso{
@@ -74,7 +88,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
-\code{\link{mlr_pipeops_logtrafo}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_mutate}},
@@ -87,6 +100,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
+\code{\link{mlr_pipeops_simpletrafo}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},

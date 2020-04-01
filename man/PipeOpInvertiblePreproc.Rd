@@ -7,37 +7,97 @@
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
-#FIXME:
+Base class for handling target transformation operations that have to be inverted later. The
+target ist transformed during the training phase and information to invert this transformation
+can be send along to \code{\link{PipeOpInverter}} which then inverts this transformation during the
+prediction phase. This inversion may need info about both the training and the prediction data.
+
+Users should overload three functions:
+
+\code{train_target()} has a \code{\link[mlr3:Task]{Task}} input and should return a modified
+\code{\link[mlr3:Task]{Task}} while also setting the \verb{$state$. This typically consists of calculating a new target and modifying the task by using }private$.update_target()`.
+
+\code{train_invert()}has a \code{\link[mlr3:Task]{Task}} input and should return a \code{predict_phase_control}
+object (can be anything the user needs for the inversion later). This should not
+modify the input task.
+
+\code{inverter()} has \code{\link[mlr3:Prediction]{Prediction}} input aswell as one for a
+\code{predict_phase_control} object and should return a function that can later be used to invert the
+transformation done by \code{train_target()} and return a \code{\link[mlr3:Prediction]{Prediction}} object.
 }
 \section{Construction}{
-
-#FIXME:\preformatted{PipeOpInvertiblePreproc$new(id)
+\preformatted{PipeOpInvertiblePreproc$new(param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
+\item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
+Parameter space description. This should be created by the subclass and given to
+\code{super$initialize()}.
+\item \code{param_vals} :: named \code{list}\cr
+List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}.
+The subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}.
+Default \code{list()}.
+\item packages :: \code{character}\cr
+Set of all required packages for the \code{\link{PipeOp}}'s methods. See \verb{$packages} slot. Default is
+\code{character(0)}.
 }
 }
 
 \section{Input and Output Channels}{
 
-#FIXME:
+\code{\link{PipeOpInvertiblePreproc}} has one input channels named \verb{"input}" taking a \code{\link[mlr3:Task]{Task}}
+both during training and prediction.
+
+\code{\link{PipeOpInvertiblePreproc}} has two output channels named \code{"fun"} and \code{"output"}. During
+training, \code{"fun"} returns \code{NULL} and during prediction, \code{"fun"} returns a function that can later
+be used to invert the transformation done during training according to the overloaded
+\code{train_invert()} and \code{inverter()} functions. \code{"output"} returns the modified input
+\code{\link[mlr3:Task]{Task}} according to the overloaded \code{train_target()} function both during training
+and prediction.
 }
 
 \section{State}{
 
-#FIXME:
+The \verb{$state} is a named \code{list} and should be set explicitly by the user in the overloaded
+\code{train_target()} function.
 }
 
 \section{Internals}{
 
-#FIXME:
+\code{\link{PipeOpInvertiblePreproc}} is an abstract class inheriting from \code{\link{PipeOp}}.  It implements the
+\code{private$.train()} and \code{private$.predict()} functions.  These functions perform checks and go on
+to call \code{train_target()}, \code{train_invert()} and \code{inverter()}. A subclass of
+\code{\link{PipeOpInvertiblePreproc}} should implement these functions and be used in combination with
+\code{\link{PipeOpInverter}}.
 }
 
-\section{Methods}{
+\section{Fields}{
 
+Fields inherited from \code{\link{PipeOp}}.
+
+#' @section Methods:
 Methods inherited from \code{\link{PipeOp}}, as well as:
-#FIXME:
+\itemize{
+\item \code{train_target(task)}\cr
+(\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
+Called by \link[mlr3:Task]{\verb{PipeOpInvertiblePreproc]'s implementation of }private$.train()\verb{. Takes a single [}Task\verb{][mlr3::Task] as input and modifies it while storing information in the }$state\verb{slot. Note that unlike}$.train()\verb{, the argument is *not* a list but a singular [}Task\verb{][mlr3::Task], and the return object is also *not* a list but a singular [}Task`}.
+\item \code{train_invert(task)}\cr
+(\code{\link[mlr3:Task]{Task}}) -> \code{predict_phase_control} object\cr
+Called by [\verb{PipeOpInvertiblePreproc]'s implementation of }private$.predict()\verb{. Takes a single [}Task\verb{][mlr3::Task] as input and returns a }predict_phase_control` object (can be anything the
+user needs for the inversion later). This should not modify the input task.
+\item \code{inverter(prediction, predict_phase_control)}\cr
+(\code{\link[mlr3:Prediction]{Prediction}}, \code{predict_phase_control} object) -> \code{function}\cr
+Called by \code{private$.invert_help()} within [\verb{PipeOpInvertiblePreproc]'s implementation of }private$.predict()\verb{. Taks a [}Prediction\verb{][mlr3::Prediction] and a }predict_phase_control`
+object as input and returns a function that can later be used for the inversion.
+\item \code{.update_target(task, new_target, new_type = NULL, ...)}\cr
+(\code{\link[mlr3:Task]{Task}}, new_target, new_type, ...) -> \code{\link[mlr3:Task]{Task}}\cr
+Typically called within \code{train_target()}. Updates the target of a task and also the task_type
+(if needed). Internally uses \code{convert_task()} and drops the original target from the task.
+\item \code{.invert_help(predict_phase_control)}\cr
+(\code{predict_phase_control} object) -> \code{function}\cr
+Helper function that returns a function that can later be used for the inversion.
+}
 }
 
 \seealso{
@@ -81,7 +141,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_inverter}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
-\code{\link{mlr_pipeops_logtrafo}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
 \code{\link{mlr_pipeops_mutate}},
@@ -94,6 +153,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
+\code{\link{mlr_pipeops_simpletrafo}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
