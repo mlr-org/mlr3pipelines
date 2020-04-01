@@ -13,7 +13,7 @@
 #' @param drop_original_target `logical(1)`\cr
 #'   If `FALSE` (default), the original target is added as a feature.
 #'   Otherwise the original target is assigned no col_role, i.e. dropped.
-#' @param \dots\cr
+#' @param \dots \cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
 convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = FALSE, ...) {
