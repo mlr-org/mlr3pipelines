@@ -241,14 +241,13 @@ PipeOp = R6Class("PipeOp",
         return(named_list(self$output$name, NO_OP))
       }
       input = check_types(self, input, "input", "train")
-      keya <<- list(map_chr(input, get_hash), self$hash)
+      # caching
       R.cache::evalWithMemoization({
-        output = private$.train(input)
-        },
-        key = list(map_chr(input, get_hash), self$hash)
+        result = list(private$.train(input), self$state)
+        }, key = list(map_chr(input, get_hash), self$hash)
       )
-      keyb <<- list(map_chr(input, get_hash), self$hash)
-      output = check_types(self, output, "output", "train")
+      if (is.null(self$state)) state = result$state
+      output = check_types(self, result$output, "output", "train")
       output
     },
     predict = function(input) {
@@ -262,14 +261,13 @@ PipeOp = R6Class("PipeOp",
         stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
       }
       input = check_types(self, input, "input", "predict")
-
       R.cache::evalWithMemoization({
         output = private$.predict(input)
         },
          key = list(map_chr(input, get_hash), self$hash)
       )
-      print(digest(list(class(self), self$id), algo = "xxhash64"))
-      print(digest(self$param_set, algo = "xxhash64"))
+      # print(digest(list(class(self), self$id), algo = "xxhash64"))
+      # print(digest(self$param_set, algo = "xxhash64"))
       output = check_types(self, output, "output", "predict")
       output
     }
