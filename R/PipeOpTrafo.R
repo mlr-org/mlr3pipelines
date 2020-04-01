@@ -12,7 +12,7 @@
 #' Users should overload three functions:
 #'
 #' `train_target()` has a [`Task`][mlr3::Task] input and should return a modified
-#' [`Task`][mlr3::Task] while also setting the `$state$`. This typically consists of calculating a
+#' [`Task`][mlr3::Task] while also setting the `$state`. This typically consists of calculating a
 #' new target and modifying the task by using `private$.update_target()`.
 #'
 #' `train_invert()`has a [`Task`][mlr3::Task] input and should return a `predict_phase_control`
@@ -276,7 +276,7 @@ mlr_pipeops$add("inverter", PipeOpInverter)
 #' * `new_task_type` :: `character(1)`\cr
 #'   Optionally a new task type can be set. Legal types are listed in
 #'   `mlr_reflections$task_types$type`.
-#' 
+#'
 #' @section Internals:
 #' Overloads [`PipeOpInvertiblePreproc`]'s `train_target()`, `train_invert()` and `inverter()`.
 #' Should be used in combination with [`PipeOpInverter`].
