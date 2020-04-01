@@ -8,11 +8,11 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
-Inverts transformations done during training based on a supplied inversion function. Typically
-should be used in combination with a subclass of \code{\link{PipeOpInvertiblePreproc}}.
+During prediction inverts transformations done during training based on a supplied inversion
+function. Typically should be used in combination with a subclass of \code{\link{PipeOpInvertiblePreproc}}.
 }
 \section{Construction}{
-\preformatted{PipeOpInverter$new(id)
+\preformatted{PipeOpInverter$new(id = "inverter")
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr

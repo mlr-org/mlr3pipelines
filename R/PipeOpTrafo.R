@@ -5,27 +5,27 @@
 #'
 #' @description
 #' Base class for handling target transformation operations that have to be inverted later. The
-#' target ist transformed during the training phase and information to invert this transformation
+#' target is transformed during the training phase and information to invert this transformation
 #' can be send along to [`PipeOpInverter`] which then inverts this transformation during the
 #' prediction phase. This inversion may need info about both the training and the prediction data.
 #'
 #' Users should overload three functions:
 #'
 #' `train_target()` has a [`Task`][mlr3::Task] input and should return a modified
-#' [`Task`][mlr3::Task] while also setting the `$state$. This typically consists of calculating a
+#' [`Task`][mlr3::Task] while also setting the `$state$`. This typically consists of calculating a
 #' new target and modifying the task by using `private$.update_target()`.
 #' 
 #' `train_invert()`has a [`Task`][mlr3::Task] input and should return a `predict_phase_control`
 #' object (can be anything the user needs for the inversion later). This should not
 #' modify the input task.
 #'
-#' `inverter()` has [`Prediction`][mlr3::Prediction] input aswell as one for a
+#' `inverter()` has [`Prediction`][mlr3::Prediction] input as well as one for a
 #' `predict_phase_control` object and should return a function that can later be used to invert the
 #' transformation done by `train_target()` and return a [`Prediction`][mlr3::Prediction] object.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpInvertiblePreproc$new(param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
+#' PipeOpInvertiblePreproc$new(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -42,7 +42,7 @@
 #'   `character(0)`.
 #'
 #' @section Input and Output Channels:
-#' [`PipeOpInvertiblePreproc`] has one input channels named `"input`" taking a [`Task`][mlr3::Task]
+#' [`PipeOpInvertiblePreproc`] has one input channels named `"input"` taking a [`Task`][mlr3::Task]
 #' both during training and prediction.
 #'
 #' [`PipeOpInvertiblePreproc`] has two output channels named `"fun"` and `"output"`. During
@@ -70,19 +70,19 @@
 #' Methods inherited from [`PipeOp`], as well as:
 #' * `train_target(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> [`Task`][mlr3::Task]\cr
-#'   Called by [`PipeOpInvertiblePreproc]'s implementation of `private$.train()`. Takes a single
+#'   Called by [`PipeOpInvertiblePreproc`]'s implementation of `private$.train()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and modifies it while storing information in the `$state` slot.
 #'   Note that unlike `$.train()`, the argument is *not* a list but a singular [`Task`][mlr3::Task],
 #'   and the return object is also *not* a list but a singular [`Task`][mlr3::Task].
 #' * `train_invert(task)`\cr
 #'   ([`Task`][mlr3::Task]) -> `predict_phase_control` object\cr
-#'   Called by [`PipeOpInvertiblePreproc]'s implementation of `private$.predict()`. Takes a single
+#'   Called by [`PipeOpInvertiblePreproc`]'s implementation of `private$.predict()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and returns a `predict_phase_control` object (can be anything the
 #'   user needs for the inversion later). This should not modify the input task.
 #' * `inverter(prediction, predict_phase_control)`\cr
 #'   ([`Prediction`][mlr3::Prediction], `predict_phase_control` object) -> `function`\cr
-#'   Called by `private$.invert_help()` within [`PipeOpInvertiblePreproc]'s implementation of
-#'   `private$.predict()`. Taks a [`Prediction`][mlr3::Prediction] and a `predict_phase_control`
+#'   Called by `private$.invert_help()` within [`PipeOpInvertiblePreproc`]'s implementation of
+#'   `private$.predict()`. Takes a [`Prediction`][mlr3::Prediction] and a `predict_phase_control`
 #'   object as input and returns a function that can later be used for the inversion.
 #' * `.update_target(task, new_target, new_type = NULL, ...)`\cr
 #'   ([`Task`][mlr3::Task], new_target, new_type, ...) -> [`Task`][mlr3::Task]\cr
@@ -175,12 +175,12 @@ PipeOpInvertiblePreproc = R6Class("PipeOpInvertiblePreproc",
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Inverts transformations done during training based on a supplied inversion function. Typically
-#' should be used in combination with a subclass of [`PipeOpInvertiblePreproc`].
+#' During prediction inverts transformations done during training based on a supplied inversion
+#' function. Typically should be used in combination with a subclass of [`PipeOpInvertiblePreproc`].
 #'
 #' @section Construction:
 #' ```
-#' PipeOpInverter$new(id)
+#' PipeOpInverter$new(id = "inverter")
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -244,7 +244,7 @@ mlr_pipeops$add("inverter", PipeOpInverter)
 #'
 #' @description
 #' Allows for target transformation operations that have to be inverted later, where the
-#' transformation function is symply given by a function of the target.
+#' transformation function is simply given by a function of the target.
 #'
 #' @section Construction:
 #' ```

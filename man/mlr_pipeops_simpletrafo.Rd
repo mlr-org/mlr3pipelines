@@ -9,7 +9,7 @@
 }
 \description{
 Allows for target transformation operations that have to be inverted later, where the
-transformation function is symply given by a function of the target.
+transformation function is simply given by a function of the target.
 }
 \section{Construction}{
 \preformatted{PipeOpSimpleTrafo$new(id = "simpletrafo", param_vals = list())

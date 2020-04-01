@@ -16,7 +16,7 @@ convert_task(
 \item{intask}{\code{\link[mlr3:Task]{Task}}\cr
 A \code{\link[mlr3:Task]{Task}} to be converted.}
 
-\item{new_target}{\code{character(1)|NULL}\cr
+\item{new_target}{\code{character(1)}\cr
 New target to be set, must be a column in the \code{intask} data.
 If \code{NULL}, no new target is set, and task is converted as-is.}
 
@@ -28,7 +28,7 @@ If \code{NULL} (default), a new task with the same task_type is created.}
 If \code{FALSE} (default), the original target is added as a feature.
 Otherwise the original target is assigned no col_role, i.e. dropped.}
 
-\item{\dots\r}{Further arguments passed to the constructor of the task.}
+\item{\dots\cr}{Further arguments passed to the constructor of the task.}
 }
 \value{
 \code{\link[mlr3:Task]{Task}}

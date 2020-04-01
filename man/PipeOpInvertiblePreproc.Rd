@@ -8,25 +8,26 @@ Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Base class for handling target transformation operations that have to be inverted later. The
-target ist transformed during the training phase and information to invert this transformation
+target is transformed during the training phase and information to invert this transformation
 can be send along to \code{\link{PipeOpInverter}} which then inverts this transformation during the
 prediction phase. This inversion may need info about both the training and the prediction data.
 
 Users should overload three functions:
 
 \code{train_target()} has a \code{\link[mlr3:Task]{Task}} input and should return a modified
-\code{\link[mlr3:Task]{Task}} while also setting the \verb{$state$. This typically consists of calculating a new target and modifying the task by using }private$.update_target()`.
+\code{\link[mlr3:Task]{Task}} while also setting the \verb{$state$}. This typically consists of calculating a
+new target and modifying the task by using \code{private$.update_target()}.
 
 \code{train_invert()}has a \code{\link[mlr3:Task]{Task}} input and should return a \code{predict_phase_control}
 object (can be anything the user needs for the inversion later). This should not
 modify the input task.
 
-\code{inverter()} has \code{\link[mlr3:Prediction]{Prediction}} input aswell as one for a
+\code{inverter()} has \code{\link[mlr3:Prediction]{Prediction}} input as well as one for a
 \code{predict_phase_control} object and should return a function that can later be used to invert the
 transformation done by \code{train_target()} and return a \code{\link[mlr3:Prediction]{Prediction}} object.
 }
 \section{Construction}{
-\preformatted{PipeOpInvertiblePreproc$new(param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
+\preformatted{PipeOpInvertiblePreproc$new(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -46,7 +47,7 @@ Set of all required packages for the \code{\link{PipeOp}}'s methods. See \verb{$
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpInvertiblePreproc}} has one input channels named \verb{"input}" taking a \code{\link[mlr3:Task]{Task}}
+\code{\link{PipeOpInvertiblePreproc}} has one input channels named \code{"input"} taking a \code{\link[mlr3:Task]{Task}}
 both during training and prediction.
 
 \code{\link{PipeOpInvertiblePreproc}} has two output channels named \code{"fun"} and \code{"output"}. During
@@ -81,14 +82,19 @@ Methods inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{train_target(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
-Called by \link[mlr3:Task]{\verb{PipeOpInvertiblePreproc]'s implementation of }private$.train()\verb{. Takes a single [}Task\verb{][mlr3::Task] as input and modifies it while storing information in the }$state\verb{slot. Note that unlike}$.train()\verb{, the argument is *not* a list but a singular [}Task\verb{][mlr3::Task], and the return object is also *not* a list but a singular [}Task`}.
+Called by \code{\link{PipeOpInvertiblePreproc}}'s implementation of \code{private$.train()}. Takes a single
+\code{\link[mlr3:Task]{Task}} as input and modifies it while storing information in the \verb{$state} slot.
+Note that unlike \verb{$.train()}, the argument is \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}},
+and the return object is also \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}.
 \item \code{train_invert(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{predict_phase_control} object\cr
-Called by [\verb{PipeOpInvertiblePreproc]'s implementation of }private$.predict()\verb{. Takes a single [}Task\verb{][mlr3::Task] as input and returns a }predict_phase_control` object (can be anything the
+Called by \code{\link{PipeOpInvertiblePreproc}}'s implementation of \code{private$.predict()}. Takes a single
+\code{\link[mlr3:Task]{Task}} as input and returns a \code{predict_phase_control} object (can be anything the
 user needs for the inversion later). This should not modify the input task.
 \item \code{inverter(prediction, predict_phase_control)}\cr
 (\code{\link[mlr3:Prediction]{Prediction}}, \code{predict_phase_control} object) -> \code{function}\cr
-Called by \code{private$.invert_help()} within [\verb{PipeOpInvertiblePreproc]'s implementation of }private$.predict()\verb{. Taks a [}Prediction\verb{][mlr3::Prediction] and a }predict_phase_control`
+Called by \code{private$.invert_help()} within \code{\link{PipeOpInvertiblePreproc}}'s implementation of
+\code{private$.predict()}. Takes a \code{\link[mlr3:Prediction]{Prediction}} and a \code{predict_phase_control}
 object as input and returns a function that can later be used for the inversion.
 \item \code{.update_target(task, new_target, new_type = NULL, ...)}\cr
 (\code{\link[mlr3:Task]{Task}}, new_target, new_type, ...) -> \code{\link[mlr3:Task]{Task}}\cr

@@ -4,7 +4,7 @@
 #' #FIXME: This needs detailed tests.
 #' @param intask [`Task`][mlr3::Task]\cr
 #'   A [`Task`][mlr3::Task] to be converted.
-#' @param new_target `character(1)|NULL`\cr
+#' @param new_target `character(1)`\cr
 #'   New target to be set, must be a column in the `intask` data.
 #'   If `NULL`, no new target is set, and task is converted as-is.
 #' @param new_type `character(1)`\cr
@@ -13,7 +13,7 @@
 #' @param drop_original_target `logical(1)`\cr
 #'   If `FALSE` (default), the original target is added as a feature.
 #'   Otherwise the original target is assigned no col_role, i.e. dropped.
-#' @param \dots\r
+#' @param \dots\cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
 convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = FALSE, ...) {
