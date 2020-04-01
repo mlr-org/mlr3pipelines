@@ -75,9 +75,11 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       ))
       ps$values = list(minor_weight = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
-    },
+    }
+  ),
+  private = list(
 
-    train_task = function(task) {
+    .train_task = function(task) {
 
       if (length(levels(task$truth())) > 2) {
         stop("Only binary classification Tasks are supported.")
@@ -100,7 +102,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       task$cbind(wcol)$set_col_role(weightcolname, "weight")
     },
 
-    predict_task = identity
+    .predict_task = identity
   )
 )
 

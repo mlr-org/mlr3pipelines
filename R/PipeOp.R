@@ -26,7 +26,7 @@
 #' Input and output channel information of a [`PipeOp`] is defined in the `$input` and `$output` slots; each channel has a *name*, a required
 #' type during training, and a required type during prediction. The `$train()` and `$predict()` function are called with a `list` argument
 #' that has one entry for each declared channel (with one exception, see next paragraph). The `list` is automatically type-checked
-#' for each channel against `$input` and then passed on to the `$train_internal()` or `$predict_internal()` functions. There the data is processed and
+#' for each channel against `$input` and then passed on to the `private$.train()` or `private$.predict()` functions. There the data is processed and
 #' a result `list` is created. This `list` is again type-checked for declared output types of each channel. The length and types of the result
 #' `list` is as declared in `$output`.
 #'
@@ -63,10 +63,10 @@
 #'   Can be used to filter `as.data.table(mlr_pipeops)`. Default is `"abstract"`, indicating an abstract `PipeOp`.
 #'
 #' @section Internals:
-#' [`PipeOp`] is an abstract class with abstract functions `$train_internal()` and `$predict_internal()`. To create a functional
+#' [`PipeOp`] is an abstract class with abstract functions `private$.train()` and `private$.predict()`. To create a functional
 #' [`PipeOp`] class, these two methods must be implemented. Each of these functions receives a named `list` according to
 #' the [`PipeOp`]'s input channels, and must return a `list` (names are ignored) with values in the order of output
-#' channels in `$output`. The `$train_internal()` and `$predict_internal()` function should not be called by the user;
+#' channels in `$output`. The `private$.train()` and `private$.predict()` function should not be called by the user;
 #' instead, a `$train()` and `$predict()` should be used. The most convenient usage is to add the [`PipeOp`]
 #' to a `Graph` (possibly as singleton in that `Graph`), and using the `Graph`'s `$train()` / `$predict()` methods.
 #'
@@ -77,7 +77,7 @@
 #'   should be used.
 #' * `packages` :: `character`\cr
 #'   Packages required for the [`PipeOp`]. Functions that are not in base R should still be called using `::`
-#'   (or explicitly attached using `require()`) in `$train_internal()` *and* `$predict_internal()`, but
+#'   (or explicitly attached using `require()`) in `private$.train()` *and* `private$.predict()`, but
 #'   packages declared here are checked before any (possibly expensive) processing has started within a [`Graph`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameters and parameter constraints. Parameter values that influence the functioning of `$train` and / or `$predict` are
@@ -85,18 +85,18 @@
 #' * `state` :: `any` | `NULL`\cr
 #'   Method-dependent state obtained during training step, and usually required for the prediction step. This is `NULL`
 #'   if and only if the [`PipeOp`] has not been trained. The `$state` is the *only* slot that can be reliably modified during
-#'   `$train()`, because `$train_internal()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
+#'   `$train()`, because `private$.train()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
 #' * input :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Input channels of [`PipeOp`]. Column `name` gives the names (and order) of values in the list given to
 #'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
 #'   training, column `predict` is the (S3) class that an input object must conform to during prediction. Types
-#'   are checked by the [`PipeOp`] itself and do not need to be checked by `$train_internal()` / `$predict_internal()` code.\cr
+#'   are checked by the [`PipeOp`] itself and do not need to be checked by `private$.train()` / `private$.predict()` code.\cr
 #'   A special name is `"..."`, which creates a *vararg* input channel that accepts a variable number of inputs.
 #' * output :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Output channels of [`PipeOp`], in the order in which they will be given in the list returned by `$train` and
 #'   `$predict` functions. Column `train` is the (S3) class that an output object must conform to during training,
 #'   column `predict` is the (S3) class that an output object must conform to during prediction. The [`PipeOp`] checks
-#'   values returned by `$train_internal()` and `$predict_internal()` against these types specifications.
+#'   values returned by `private$.train()` and `private$.predict()` against these types specifications.
 #' * `innum` :: `numeric(1)` \cr
 #'   Number of input channels. This equals `nrow($input)`.
 #' * `outnum` :: `numeric(1)` \cr
@@ -115,7 +115,7 @@
 #' * `.result` :: `list` \cr
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
-#'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `$train_internal()` or `$predict_internal()`.
+#'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -124,24 +124,24 @@
 #'   trained, already present `$state` is overwritten. Input list is typechecked against the `$input` `train` column.
 #'   Return value is a list with as many entries as `$output` has
 #'   rows, with each entry named after the `$output` `name` column and class according to the `$output` `train` column.
-#' * `train_internal(input)`\cr
-#'   (named `list`) -> `list`\cr
-#'   Abstract function that must be implemented by concrete subclasses. `$train_internal()` is called by `$train()` after
+#'   The workhorse function for training each [`PipeOp`] is the private
+#'   `.train(input)`\cr: (named `list`) -> `list`\cr function.
+#'   It's an Abstract function that must be implemented by concrete subclasses. `private$.train()` is called by `$train()` after
 #'   typechecking. It must change the `$state` value to something non-`NULL` and return a list of transformed data according to
 #'   the `$output` `train` column. Names of the returned list are ignored.\cr
-#'   The `$train_internal()` method should not be called by a user; instead, the `$train()` method should be used which does some
+#'   The `private$.train()` method should not be called by a user; instead, the `$train()` method should be used which does some
 #'   checking and possibly type conversion.
 #' * `predict(input)` \cr
 #'   (`list`) -> named `list`\cr
 #'   Predict on new data in `input`, possibly using the stored `$state`. Input and output are specified by `$input` and `$output`
 #'   in the same way as for `$train()`, except that
 #'   the `predict` column is used for type checking.
-#' * `predict_internal(input)`\cr
-#'   (named `list`) -> `list`\cr
-#'   Abstract function that must be implemented by concrete subclasses. `$predict_internal()` is called by `$predict()` after
-#'   typechecking and works analogously to `$train_internal()`. Unlike `$train_internal()`, `$predict_internal()` should not modify
+#'   The workhorse function for predicting in each using each [`PipeOp`] is
+#'   `.predict(input)`\cr (named `list`) -> `list`\cr
+#'   Abstract function that must be implemented by concrete subclasses. `private$.predict()` is called by `$predict()` after
+#'   typechecking and works analogously to `private$.train()`. Unlike `private$.train()`, `private$.predict()` should not modify
 #'   the [`PipeOp`] in any way.\cr
-#'   Just as `$train_internal()`, `$predict_internal()` should not be called by a user; instead, the `$predict()` method should be used.
+#'   Just as `private$.train()`, `private$.predict()` should not be called by a user; instead, the `$predict()` method should be used.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Prints the [`PipeOp`]s most salient information: `$id`, `$is_trained`, `$param_set$values`, `$input` and `$output`.
@@ -162,18 +162,18 @@
 #'         output = data.table::data.table(name = "output",
 #'           train = "numeric", predict = "character")
 #'       )
-#'     },
-#'
-#'     # PipeOp deriving classes must implement train_internal and
-#'     # predict_internal; each taking an input list and returning
+#'     }
+#'   ),
+#'   private = list(
+#'     # PipeOp deriving classes must implement .train and
+#'     # .predict; each taking an input list and returning
 #'     # a list as output.
-#'     train_internal = function(input) {
+#'     .train = function(input) {
 #'       sum = input[[1]] + input[[2]]
 #'       self$state = sum
 #'       list(sum)
 #'     },
-#'
-#'     predict_internal = function(input) {
+#'     .predict = function(input) {
 #'       list(letters[self$state])
 #'     }
 #'   )
@@ -241,7 +241,7 @@ PipeOp = R6Class("PipeOp",
         return(named_list(self$output$name, NO_OP))
       }
       input = check_types(self, input, "input", "train")
-      output = self$train_internal(input)
+      output = private$.train(input)
       output = check_types(self, output, "output", "train")
       output
     },
@@ -257,12 +257,10 @@ PipeOp = R6Class("PipeOp",
       }
 
       input = check_types(self, input, "input", "predict")
-      output = self$predict_internal(input)
+      output = private$.predict(input)
       output = check_types(self, output, "output", "predict")
       output
-    },
-    train_internal = function(input) stop("abstract"),
-    predict_internal = function(input) stop("abstract")
+    }
   ),
 
   active = list(
@@ -317,6 +315,8 @@ PipeOp = R6Class("PipeOp",
       }
       value
     },
+    .train = function(input) stop("abstract"),
+    .predict = function(input) stop("abstract"),
     .param_set = NULL,
     .param_set_source = NULL,
     .id = NULL

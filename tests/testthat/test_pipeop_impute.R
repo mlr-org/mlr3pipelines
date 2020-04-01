@@ -20,13 +20,13 @@ test_that("PipeOpImpute", {
         numimputer = switch(self$param_set$values$method_num,
           median = po("imputemedian"),
           mean = po("imputemean"),
-          mode = po("imputemode", id = "num_mode", param_vals = list(ties_method = "first")),
+          mode = po("imputemode", id = "num_mode"),
           sample = po("imputesample", id = "num_sample"),
           hist = po("imputehist"))
         fctimputer = switch(self$param_set$values$method_fct,
           newlvl = po("imputenewlvl"),
           sample = po("imputesample", id = "fct_sample"),
-          mode = po("imputemode", id = "fct_mode", param_vals = list(ties_method = "first")))
+          mode = po("imputemode", id = "fct_mode"))
 
         if (self$param_set$values$add_dummy == "none") {
           dummyselector = selector_none()
@@ -43,9 +43,11 @@ test_that("PipeOpImpute", {
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% po("featureunion")
-      },
+      }
+    ),
+    private = list(
 
-      get_state = function(task) {
+      .get_state = function(task) {
 
 
         graph = self$build_graph()
@@ -53,7 +55,7 @@ test_that("PipeOpImpute", {
         list(gs = graph$state)
       },
 
-      transform = function(task) {
+      .transform = function(task) {
         graph = self$build_graph()
         graph$state = self$state$gs
         graph$predict(task)[[1]]
@@ -112,6 +114,7 @@ test_that("PipeOpImpute", {
       add_dummy = "missing_train")))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
+    deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
       method_num = "mode",
       method_fct = "mode",

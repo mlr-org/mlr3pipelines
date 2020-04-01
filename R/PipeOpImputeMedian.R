@@ -56,11 +56,13 @@ PipeOpImputeMedian = R6Class("PipeOpImputeMedian",
   public = list(
     initialize = function(id = "imputemedian", param_vals = list()) {
       super$initialize(id, param_vals = param_vals, packages = "stats")
-    },
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
+    .select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
 
-    train_imputer = function(feature, type, context) {
+    .train_imputer = function(feature, type, context) {
       med = stats::median(feature, na.rm = TRUE)
       if (is.na(med)) {
         med = 0
@@ -71,7 +73,7 @@ PipeOpImputeMedian = R6Class("PipeOpImputeMedian",
       med
     },
 
-    impute = function(feature, type, model, context) {
+    .impute = function(feature, type, model, context) {
       feature[is.na(feature)] = model
       feature
     }
