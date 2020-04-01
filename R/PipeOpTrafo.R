@@ -14,7 +14,7 @@
 #' `train_target()` has a [`Task`][mlr3::Task] input and should return a modified
 #' [`Task`][mlr3::Task] while also setting the `$state$`. This typically consists of calculating a
 #' new target and modifying the task by using `private$.update_target()`.
-#' 
+#'
 #' `train_invert()`has a [`Task`][mlr3::Task] input and should return a `predict_phase_control`
 #' object (can be anything the user needs for the inversion later). This should not
 #' modify the input task.
@@ -57,12 +57,12 @@
 #' `train_target()` function.
 #'
 #' @section Internals:
-#' [`PipeOpInvertiblePreproc`] is an abstract class inheriting from [`PipeOp`].  It implements the
-#' `private$.train()` and `private$.predict()` functions.  These functions perform checks and go on
+#' [`PipeOpInvertiblePreproc`] is an abstract class inheriting from [`PipeOp`]. It implements the
+#' `private$.train()` and `private$.predict()` functions. These functions perform checks and go on
 #' to call `train_target()`, `train_invert()` and `inverter()`. A subclass of
 #' [`PipeOpInvertiblePreproc`] should implement these functions and be used in combination with
 #' [`PipeOpInverter`].
-#' 
+#'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
 #'
@@ -113,7 +113,7 @@ PipeOpInvertiblePreproc = R6Class("PipeOpInvertiblePreproc",
       # therefore, typically calculate new_target (typically a data.table), do task$cbind(new_target)
       # and provide names(new_target) as a character to update_target, e.g.:
       # self$state = list()
-      # new_target = foo 
+      # new_target = foo
       # names(new_target) = "foo"
       # task$cbind(new_target)
       # private$.update_target(task, new_target = "foo", new_type = NULL, ...)
@@ -202,7 +202,7 @@ PipeOpInvertiblePreproc = R6Class("PipeOpInvertiblePreproc",
 #'
 #' @section Internals:
 #' Should be used in combination with a subclass of [`PipeOpInvertiblePreproc`].
-#' 
+#'
 #' @section Fields:
 #' Only fields inherited from [`PipeOp`].
 #'
@@ -288,8 +288,8 @@ mlr_pipeops$add("inverter", PipeOpInverter)
 #'library(mlr3)
 #'task = tsk("boston_housing")
 #'po = PipeOpSimpleTrafo$new("logtrafo", param_vals = list(
-#'  trafo = function(x) log(x, base = 2L),
-#'  inverter = function(x) x ^ 2L)
+#'  trafo = function(x) log(x, base = 2),
+#'  inverter = function(x) 2 ^ x)
 #')
 #'
 #'po$train(list(task))

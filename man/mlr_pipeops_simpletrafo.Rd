@@ -66,8 +66,8 @@ Only methods inherited from \code{\link{PipeOpInvertiblePreproc}}/\code{\link{Pi
 library(mlr3)
 task = tsk("boston_housing")
 po = PipeOpSimpleTrafo$new("logtrafo", param_vals = list(
- trafo = function(x) log(x, base = 2L),
- inverter = function(x) x ^ 2L)
+ trafo = function(x) log(x, base = 2),
+ inverter = function(x) 2 ^ x)
 )
 
 po$train(list(task))

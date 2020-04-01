@@ -66,8 +66,8 @@ The \verb{$state} is a named \code{list} and should be set explicitly by the use
 
 \section{Internals}{
 
-\code{\link{PipeOpInvertiblePreproc}} is an abstract class inheriting from \code{\link{PipeOp}}.  It implements the
-\code{private$.train()} and \code{private$.predict()} functions.  These functions perform checks and go on
+\code{\link{PipeOpInvertiblePreproc}} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the
+\code{private$.train()} and \code{private$.predict()} functions. These functions perform checks and go on
 to call \code{train_target()}, \code{train_invert()} and \code{inverter()}. A subclass of
 \code{\link{PipeOpInvertiblePreproc}} should implement these functions and be used in combination with
 \code{\link{PipeOpInverter}}.
