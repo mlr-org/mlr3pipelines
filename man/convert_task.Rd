@@ -26,7 +26,7 @@ If \code{NULL} (default), a new task with the same task_type is created.}
 
 \item{drop_original_target}{\code{logical(1)}\cr
 If \code{FALSE} (default), the original target is added as a feature.
-Otherwise the original target dropped.}
+Otherwise the original target is dropped.}
 
 \item{\dots}{\cr
 Further arguments passed to the constructor of the task.}
