@@ -50,14 +50,14 @@
 <meta property="og:title" content="PipeOpTaskPreprocSimple — PipeOpTaskPreprocSimple" />
 <meta property="og:description" content="Base class for handling many &quot;preprocessing&quot; operations
 that perform essentially the same operation during training and prediction.
-Instead implementing a $train_task() and a $predict_task() operation, only
-a $get_state() and a $transform() operation needs to be defined,
+Instead implementing a private$.train_task() and a private$.predict_task() operation, only
+a private$.get_state() and a private$.transform() operation needs to be defined,
 both of which take one argument: a Task.
-Alternatively, analogously to the PipeOpTaskPreproc approach of offering $train_dt()/$predict_dt(),
-the $get_state_dt() and $transform_dt() functions may be implemented.
-$get_state must not change its input value in-place and must return
+Alternatively, analogously to the PipeOpTaskPreproc approach of offering private$.train_dt()/private$.predict_dt(),
+the private$.get_state_dt() and private$.transform_dt() functions may be implemented.
+private$.get_state must not change its input value in-place and must return
 something that will be written into $state
-(which must not be NULL), transform() should modify its argument in-place;
+(which must not be NULL), private$.transform() should modify its argument in-place;
 it is called both during training and prediction.
 This inherits from PipeOpTaskPreproc and behaves essentially the same." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
@@ -161,14 +161,14 @@ This inherits from PipeOpTaskPreproc and behaves essentially the same." />
     <div class="ref-description">
     <p>Base class for handling many "preprocessing" operations
 that perform essentially the same operation during training and prediction.
-Instead implementing a <code>$train_task()</code> and a <code>$predict_task()</code> operation, only
-a <code>$get_state()</code> and a <code>$transform()</code> operation needs to be defined,
+Instead implementing a <code>private$.train_task()</code> and a <code>private$.predict_task()</code> operation, only
+a <code>private$.get_state()</code> and a <code>private$.transform()</code> operation needs to be defined,
 both of which take one argument: a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
-<p>Alternatively, analogously to the <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> approach of offering <code>$train_dt()</code>/<code>$predict_dt()</code>,
-the <code>$get_state_dt()</code> and <code>$transform_dt()</code> functions may be implemented.</p>
-<p><code>$get_state</code> must not change its input value in-place and must return
+<p>Alternatively, analogously to the <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> approach of offering <code>private$.train_dt()</code>/<code>private$.predict_dt()</code>,
+the <code>private$.get_state_dt()</code> and <code>private$.transform_dt()</code> functions may be implemented.</p>
+<p><code>private$.get_state</code> must not change its input value in-place and must return
 something that will be written into <code>$state</code>
-(which must not be NULL), <code><a href='https://rdrr.io/r/base/transform.html'>transform()</a></code> should modify its argument in-place;
+(which must not be NULL), <code>private$.transform()</code> should modify its argument in-place;
 it is called both during training and prediction.</p>
 <p>This inherits from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> and behaves essentially the same.</p>
     </div>
@@ -196,7 +196,7 @@ Whether the <code>affect_columns</code> parameter should be added which lets the
 modified by the <code>PipeOpTaskPreprocSimple</code>. This should generally be <code>FALSE</code> if the operation adds or removes
 rows from the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, and <code>TRUE</code> otherwise. Default is <code>TRUE</code>.</p></li>
 <li><p>packages :: <code>character</code><br />
-Set of all required packages for the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$train</code> and <code>$predict</code> methods. See <code>$packages</code> slot.
+Set of all required packages for the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>private$.train()</code> and <code>private$.predict()</code> methods. See <code>$packages</code> slot.
 Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
 <li><p><code>task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
@@ -209,7 +209,7 @@ should generally be a <code><a href='https://rdrr.io/r/base/character.html'>char
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output during training and prediction is the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, modified by <code>$transform()</code> or <code>$transform_dt()</code>.</p>
+<p>The output during training and prediction is the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, modified by <code>private$.transform()</code> or <code>private$.transform_dt()</code>.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -225,10 +225,10 @@ should generally be a <code><a href='https://rdrr.io/r/base/character.html'>char
     
 
 <p><code>PipeOpTaskPreprocSimple</code> is an abstract class inheriting from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> and implementing the
-<code>$train_task()</code> and <code>$predict_task()</code> functions. A subclass of <code>PipeOpTaskPreprocSimple</code> may implement the
-functions <code>$get_state()</code> and <code>$transform()</code>, or alternatively the functions <code>$get_state_dt()</code> and <code>$transform_dt()</code>
-(as well as <code>$select_cols()</code>, in the latter case). This works by having the default implementations of
-<code>$get_state()</code> and <code>$transform()</code> call <code>$get_state_dt()</code> and <code>$transform_dt()</code>.</p>
+<code>private$.train_task()</code> and <code>private$.predict_task()</code> functions. A subclass of <code>PipeOpTaskPreprocSimple</code> may implement the
+functions <code>private$.get_state()</code> and <code>private$.transform()</code>, or alternatively the functions <code>private$.get_state_dt()</code> and <code>private$.transform_dt()</code>
+(as well as <code>private$.select_cols()</code>, in the latter case). This works by having the default implementations of
+<code>private$.get_state()</code> and <code>private$.transform()</code> call <code>private$.get_state_dt()</code> and <code>private$.transform_dt()</code>.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
@@ -239,34 +239,34 @@ functions <code>$get_state()</code> and <code>$transform()</code>, or alternativ
     
 
 <p>Methods inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>get_state(task)</code> <br />
+<li><p><code>.get_state(task)</code> <br />
 (<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>) -&gt; named <code>list</code><br />
 Store create something that will be stored in <code>$state</code> during training phase of <code>PipeOpTaskPreprocSimple</code>.
-The state can then influence the <code>$transform()</code> function. Note that <code>$get_state()</code> must <em>return</em> the state, and
-should not store it in <code>$state</code>. It is not strictly necessary to implement either <code>$get_state()</code> or <code>$get_state_dt()</code>;
+The state can then influence the <code>private$.transform()</code> function. Note that <code>private$.get_state()</code> must <em>return</em> the state, and
+should not store it in <code>$state</code>. It is not strictly necessary to implement either <code>private$.get_state()</code> or <code>private$.get_state_dt()</code>;
 if they are not implemented, the state will be stored as <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>. <br />
-This method can optionally be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, together with <code>$transform()</code>;
-alternatively, <code>$get_state_dt()</code> (optional) and <code>$transform_dt()</code> (and possibly <code>$select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>)
+This method can optionally be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, together with <code>private$.transform()</code>;
+alternatively, <code>private$.get_state_dt()</code> (optional) and <code>private$.transform_dt()</code> (and possibly <code>private$.select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>)
 can be overloaded.</p></li>
-<li><p><code><a href='https://rdrr.io/r/base/transform.html'>transform(task)</a></code> <br />
+<li><p><code>.transform(task)</code> <br />
 (<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>) -&gt; <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code><br />
 Predict on new data in <code>task</code>, possibly using the stored <code>$state</code>. <code>task</code> should not be cloned, instead it should be
 changed in-place. This method is called both during training and prediction phase, and should essentially behave the
 same independently of phase. (If this is incongruent with the functionality to be implemented, then it should inherit from
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, not from <code>PipeOpTaskPreprocSimple</code>.) <br />
-This method can be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, optionally with <code>$get_state()</code>;
-alternatively, <code>$get_state_dt()</code> (optional) and <code>$transform_dt()</code> (and possibly <code>$select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>)
+This method can be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, optionally with <code>private$.get_state()</code>;
+alternatively, <code>private$.get_state_dt()</code> (optional) and <code>private$.transform_dt()</code> (and possibly <code>private$.select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>)
 can be overloaded.</p></li>
-<li><p><code>get_state_dt(dt)</code> <br />
+<li><p><code>.get_state_dt(dt)</code> <br />
 (<code>data.table</code>) -&gt; named <code>list</code><br />
 Create something that will be stored in <code>$state</code> during training phase of <code>PipeOpTaskPreprocSimple</code>.
-The state can then influence the <code>$transform_dt()</code> function. Note that <code>$get_state_dt()</code> must <em>return</em> the state, and
-should not store it in <code>$state</code>. If neither <code>$get_state()</code> nor <code>$get_state_dt()</code> are overloaded, the state will
+The state can then influence the <code>private$.transform_dt()</code> function. Note that <code>private$.get_state_dt()</code> must <em>return</em> the state, and
+should not store it in <code>$state</code>. If neither <code>private$.get_state()</code> nor <code>private$.get_state_dt()</code> are overloaded, the state will
 be stored as <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>. <br />
-This method can optionally be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, together with <code>$transform_dt()</code>
-(and optionally <code>$select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>); Alternatively, <code>$get_state()</code> (optional) and <code>$transform()</code>
+This method can optionally be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, together with <code>private$.transform_dt()</code>
+(and optionally <code>private$.select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>); Alternatively, <code>private$.get_state()</code> (optional) and <code>private$.transform()</code>
 can be overloaded.</p></li>
-<li><p><code>transform_dt(dt)</code> <br />
+<li><p><code>.transform_dt(dt)</code> <br />
 (<code>data.table</code>) -&gt; <code>data.table</code> | <code>data.frame</code> | <code>matrix</code> <br />
 Predict on new data in <code>dt</code>, possibly using the stored <code>$state</code>. A transformed object must be returned
 that can be converted to a <code>data.table</code> using <code><a href='as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
@@ -274,8 +274,8 @@ is possible and encouraged to change it in-place. This method is called both dur
 and should essentially behave the same independently of phase.
 (If this is incongruent with the functionality to be implemented, then it should inherit from
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, not from <code>PipeOpTaskPreprocSimple</code>.) <br />
-This method can optionally be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, together with <code>$transform_dt()</code>
-(and optionally <code>$select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>); Alternatively, <code>$get_state()</code> (optional) and <code>$transform()</code>
+This method can optionally be overloaded when inheriting from <code>PipeOpTaskPreprocSimple</code>, together with <code>private$.transform_dt()</code>
+(and optionally <code>private$.select_cols()</code>, from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>); Alternatively, <code>private$.get_state()</code> (optional) and <code>private$.transform()</code>
 can be overloaded.</p></li>
 </ul>
 

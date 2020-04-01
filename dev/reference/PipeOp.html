@@ -64,7 +64,7 @@ connect different outputs of some PipeOps to inputs of other PipeOps.
 Input and output channel information of a PipeOp is defined in the $input and $output slots; each channel has a name, a required
 type during training, and a required type during prediction. The $train() and $predict() function are called with a list argument
 that has one entry for each declared channel (with one exception, see next paragraph). The list is automatically type-checked
-for each channel against $input and then passed on to the $train_internal() or $predict_internal() functions. There the data is processed and
+for each channel against $input and then passed on to the private$.train() or private$.predict() functions. There the data is processed and
 a result list is created. This list is again type-checked for declared output types of each channel. The length and types of the result
 list is as declared in $output.
 A special input channel name is &quot;...&quot;, which creates a vararg channel that takes arbitrarily many arguments, all of the same type. If the $input
@@ -186,7 +186,7 @@ connect different outputs of some <code>PipeOp</code>s to inputs of other <code>
 <p>Input and output channel information of a <code>PipeOp</code> is defined in the <code>$input</code> and <code>$output</code> slots; each channel has a <em>name</em>, a required
 type during training, and a required type during prediction. The <code>$train()</code> and <code>$predict()</code> function are called with a <code>list</code> argument
 that has one entry for each declared channel (with one exception, see next paragraph). The <code>list</code> is automatically type-checked
-for each channel against <code>$input</code> and then passed on to the <code>$train_internal()</code> or <code>$predict_internal()</code> functions. There the data is processed and
+for each channel against <code>$input</code> and then passed on to the <code>private$.train()</code> or <code>private$.predict()</code> functions. There the data is processed and
 a result <code>list</code> is created. This <code>list</code> is again type-checked for declared output types of each channel. The length and types of the result
 <code>list</code> is as declared in <code>$output</code>.</p>
 <p>A special input channel name is <code>"..."</code>, which creates a <em>vararg</em> channel that takes arbitrarily many arguments, all of the same type. If the <code>$input</code>
@@ -231,10 +231,10 @@ Can be used to filter <code><a href='as.data.table.html'>as.data.table(mlr_pipeo
 
     
 
-<p><code>PipeOp</code> is an abstract class with abstract functions <code>$train_internal()</code> and <code>$predict_internal()</code>. To create a functional
+<p><code>PipeOp</code> is an abstract class with abstract functions <code>private$.train()</code> and <code>private$.predict()</code>. To create a functional
 <code>PipeOp</code> class, these two methods must be implemented. Each of these functions receives a named <code>list</code> according to
 the <code>PipeOp</code>'s input channels, and must return a <code>list</code> (names are ignored) with values in the order of output
-channels in <code>$output</code>. The <code>$train_internal()</code> and <code>$predict_internal()</code> function should not be called by the user;
+channels in <code>$output</code>. The <code>private$.train()</code> and <code>private$.predict()</code> function should not be called by the user;
 instead, a <code>$train()</code> and <code>$predict()</code> should be used. The most convenient usage is to add the <code>PipeOp</code>
 to a <code>Graph</code> (possibly as singleton in that <code>Graph</code>), and using the <code>Graph</code>'s <code>$train()</code> / <code>$predict()</code> methods.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
@@ -248,7 +248,7 @@ ID of the <code>PipeOp</code>. IDs are user-configurable, and IDs of <code>PipeO
 should be used.</p></li>
 <li><p><code>packages</code> :: <code>character</code><br />
 Packages required for the <code>PipeOp</code>. Functions that are not in base R should still be called using <code>::</code>
-(or explicitly attached using <code>require()</code>) in <code>$train_internal()</code> <em>and</em> <code>$predict_internal()</code>, but
+(or explicitly attached using <code>require()</code>) in <code>private$.train()</code> <em>and</em> <code>private$.predict()</code>, but
 packages declared here are checked before any (possibly expensive) processing has started within a <code><a href='Graph.html'>Graph</a></code>.</p></li>
 <li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
 Parameters and parameter constraints. Parameter values that influence the functioning of <code>$train</code> and / or <code>$predict</code> are
@@ -256,18 +256,18 @@ in the <code>$param_set$values</code> slot; these are automatically checked agai
 <li><p><code>state</code> :: <code>any</code> | <code>NULL</code><br />
 Method-dependent state obtained during training step, and usually required for the prediction step. This is <code>NULL</code>
 if and only if the <code>PipeOp</code> has not been trained. The <code>$state</code> is the <em>only</em> slot that can be reliably modified during
-<code>$train()</code>, because <code>$train_internal()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).</p></li>
+<code>$train()</code>, because <code>private$.train()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).</p></li>
 <li><p>input :: <code>data.table</code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br />
 Input channels of <code>PipeOp</code>. Column <code>name</code> gives the names (and order) of values in the list given to
 <code>$train()</code> and <code>$predict()</code>. Column <code>train</code> is the (S3) class that an input object must conform to during
 training, column <code>predict</code> is the (S3) class that an input object must conform to during prediction. Types
-are checked by the <code>PipeOp</code> itself and do not need to be checked by <code>$train_internal()</code> / <code>$predict_internal()</code> code.<br />
+are checked by the <code>PipeOp</code> itself and do not need to be checked by <code>private$.train()</code> / <code>private$.predict()</code> code.<br />
 A special name is <code>"..."</code>, which creates a <em>vararg</em> input channel that accepts a variable number of inputs.</p></li>
 <li><p>output :: <code>data.table</code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br />
 Output channels of <code>PipeOp</code>, in the order in which they will be given in the list returned by <code>$train</code> and
 <code>$predict</code> functions. Column <code>train</code> is the (S3) class that an output object must conform to during training,
 column <code>predict</code> is the (S3) class that an output object must conform to during prediction. The <code>PipeOp</code> checks
-values returned by <code>$train_internal()</code> and <code>$predict_internal()</code> against these types specifications.</p></li>
+values returned by <code>private$.train()</code> and <code>private$.predict()</code> against these types specifications.</p></li>
 <li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
 Number of input channels. This equals <code>nrow($input)</code>.</p></li>
 <li><p><code>outnum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
@@ -286,7 +286,7 @@ binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS
 <li><p><code>.result</code> :: <code>list</code> <br />
 If the <code><a href='Graph.html'>Graph</a></code>'s <code>$keep_results</code> flag is set to <code>TRUE</code>, then the intermediate Results of <code>$train()</code> and <code>$predict()</code>
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
-and done, if requested, by the <code><a href='Graph.html'>Graph</a></code> backend itself; it should <em>not</em> be done explicitly by <code>$train_internal()</code> or <code>$predict_internal()</code>.</p></li>
+and done, if requested, by the <code><a href='Graph.html'>Graph</a></code> backend itself; it should <em>not</em> be done explicitly by <code>private$.train()</code> or <code>private$.predict()</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -299,25 +299,25 @@ and done, if requested, by the <code><a href='Graph.html'>Graph</a></code> backe
 Train <code>PipeOp</code> on <code>inputs</code>, transform it to output and store the learned <code>$state</code>. If the PipeOp is already
 trained, already present <code>$state</code> is overwritten. Input list is typechecked against the <code>$input</code> <code>train</code> column.
 Return value is a list with as many entries as <code>$output</code> has
-rows, with each entry named after the <code>$output</code> <code>name</code> column and class according to the <code>$output</code> <code>train</code> column.</p></li>
-<li><p><code>train_internal(input)</code><br />
-(named <code>list</code>) -&gt; <code>list</code><br />
-Abstract function that must be implemented by concrete subclasses. <code>$train_internal()</code> is called by <code>$train()</code> after
+rows, with each entry named after the <code>$output</code> <code>name</code> column and class according to the <code>$output</code> <code>train</code> column.
+The workhorse function for training each <code>PipeOp</code> is the private
+<code>.train(input)</code><br />: (named <code>list</code>) -&gt; <code>list</code><br /> function.
+It's an Abstract function that must be implemented by concrete subclasses. <code>private$.train()</code> is called by <code>$train()</code> after
 typechecking. It must change the <code>$state</code> value to something non-<code>NULL</code> and return a list of transformed data according to
 the <code>$output</code> <code>train</code> column. Names of the returned list are ignored.<br />
-The <code>$train_internal()</code> method should not be called by a user; instead, the <code>$train()</code> method should be used which does some
+The <code>private$.train()</code> method should not be called by a user; instead, the <code>$train()</code> method should be used which does some
 checking and possibly type conversion.</p></li>
 <li><p><code><a href='https://rdrr.io/r/stats/predict.html'>predict(input)</a></code> <br />
 (<code>list</code>) -&gt; named <code>list</code><br />
 Predict on new data in <code>input</code>, possibly using the stored <code>$state</code>. Input and output are specified by <code>$input</code> and <code>$output</code>
 in the same way as for <code>$train()</code>, except that
-the <code>predict</code> column is used for type checking.</p></li>
-<li><p><code>predict_internal(input)</code><br />
-(named <code>list</code>) -&gt; <code>list</code><br />
-Abstract function that must be implemented by concrete subclasses. <code>$predict_internal()</code> is called by <code>$predict()</code> after
-typechecking and works analogously to <code>$train_internal()</code>. Unlike <code>$train_internal()</code>, <code>$predict_internal()</code> should not modify
+the <code>predict</code> column is used for type checking.
+The workhorse function for predicting in each using each <code>PipeOp</code> is
+<code>.predict(input)</code><br /> (named <code>list</code>) -&gt; <code>list</code><br />
+Abstract function that must be implemented by concrete subclasses. <code>private$.predict()</code> is called by <code>$predict()</code> after
+typechecking and works analogously to <code>private$.train()</code>. Unlike <code>private$.train()</code>, <code>private$.predict()</code> should not modify
 the <code>PipeOp</code> in any way.<br />
-Just as <code>$train_internal()</code>, <code>$predict_internal()</code> should not be called by a user; instead, the <code>$predict()</code> method should be used.</p></li>
+Just as <code>private$.train()</code>, <code>private$.predict()</code> should not be called by a user; instead, the <code>$predict()</code> method should be used.</p></li>
 <li><p><code><a href='https://rdrr.io/r/base/print.html'>print()</a></code> <br />
 () -&gt; <code>NULL</code> <br />
 Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <code>$is_trained</code>, <code>$param_set$values</code>, <code>$input</code> and <code>$output</code>.</p></li>
@@ -398,18 +398,18 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
         <span class='kw'>output</span> <span class='kw'>=</span> <span class='kw pkg'>data.table</span><span class='kw ns'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"output"</span>,
           <span class='kw'>train</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"character"</span>)
       )
-    },
-
-    <span class='co'># PipeOp deriving classes must implement train_internal and</span>
-    <span class='co'># predict_internal; each taking an input list and returning</span>
+    }
+  ),
+  <span class='kw'>private</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='co'># PipeOp deriving classes must implement .train and</span>
+    <span class='co'># .predict; each taking an input list and returning</span>
     <span class='co'># a list as output.</span>
-    <span class='kw'>train_internal</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>input</span>) {
+    <span class='kw'>.train</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>input</span>) {
       <span class='no'>sum</span> <span class='kw'>=</span> <span class='no'>input</span><span class='kw'>[[</span><span class='fl'>1</span>]] + <span class='no'>input</span><span class='kw'>[[</span><span class='fl'>2</span>]]
       <span class='no'>self</span>$<span class='no'>state</span> <span class='kw'>=</span> <span class='no'>sum</span>
       <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>sum</span>)
     },
-
-    <span class='kw'>predict_internal</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>input</span>) {
+    <span class='kw'>.predict</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>input</span>) {
       <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>letters</span>[<span class='no'>self</span>$<span class='no'>state</span>])
     }
   )

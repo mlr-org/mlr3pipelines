@@ -196,7 +196,7 @@ trained on the training input data.</p>
 
 <p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> object. It is a named <code>list</code> with members:</p><ul>
 <li><p><code>model</code> :: <code>any</code><br />
-Model created by the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s <code>$train_internal()</code> function.</p></li>
+Model created by the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s <code>$.train()</code> function.</p></li>
 <li><p><code>train_log</code> :: <code>data.table</code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br />
 Errors logged during training.</p></li>
 <li><p><code>train_time</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />

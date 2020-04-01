@@ -214,7 +214,7 @@ or the first element of <code>options</code> (if it is <code>character</code>).<
 <p>Alternative path branching is handled by the <code><a href='PipeOp.html'>PipeOp</a></code> backend. To indicate that
 a path should not be taken, <code>PipeOpBranch</code> returns the <code><a href='NO_OP.html'>NO_OP</a></code> object on its
 output channel. The <code><a href='PipeOp.html'>PipeOp</a></code> handles each <code><a href='NO_OP.html'>NO_OP</a></code> input by automatically
-returning a <code><a href='NO_OP.html'>NO_OP</a></code> output without calling <code>$train_internal()</code> or <code>$predict_internal()</code>,
+returning a <code><a href='NO_OP.html'>NO_OP</a></code> output without calling <code>private$.train()</code> or <code>private$.predict()</code>,
 until <code><a href='mlr_pipeops_unbranch.html'>PipeOpUnbranch</a></code> is reached. <code><a href='mlr_pipeops_unbranch.html'>PipeOpUnbranch</a></code> will then take multiple inputs,
 all except one of which must be a <code><a href='NO_OP.html'>NO_OP</a></code>, and forward the only non-<code><a href='NO_OP.html'>NO_OP</a></code>
 object on its output.</p>
