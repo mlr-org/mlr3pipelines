@@ -163,6 +163,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
+  affect_context_independent = TRUE,
   tolerance = sqrt(.Machine$double.eps)) {
   # NOTE
   # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
@@ -253,7 +254,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_equal(length(po$train(list(emptytask))[[1]]$feature_names), 0)
   expect_equal(length(po$predict(list(emptytask))[[1]]$feature_names), 0)
 
-  if ("affect_columns" %in% names(po$param_set$params)) {
+  if ("affect_columns" %in% names(po$param_set$params) && affect_context_independent) {
     selector = function(data) data$feature_names[-1]
     po2$param_set$values$affect_columns = selector
     trained.subset = po$train(list(task2))[[1]]

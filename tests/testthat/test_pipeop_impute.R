@@ -48,8 +48,6 @@ test_that("PipeOpImpute", {
     private = list(
 
       .get_state = function(task) {
-
-
         graph = self$build_graph()
         graph$train(task)
         list(gs = graph$state)
@@ -218,7 +216,41 @@ test_that("PipeOpImpute", {
     expect_true(task_predicted$a[6] <= 5 && task_trained$a[6] >= 1)
     expect_true(task_predicted$c[6] <= 5 && task_trained$c[6] >= 1)
   }
+
+  # impute full na columns:
+  po = PipeOpTestImpute$new(param_vals = list(method_num = "median", method_fct = "newlvl"))
+
+  mdata = data.table(
+    stringsAsFactors = FALSE,
+    a = as.numeric(rep(NA, 3)),
+    b = as.integer(rep(NA, 3)),
+    c = factor(rep(NA, 3), levels = "a"),
+    d = factor(rep(NA, 3), ordered = TRUE, levels = "a"),
+    e = as.logical(rep(NA, 3)),
+    f = as.character(rep(NA, 3)),
+    t = as.factor(letters[rep(1:2, 3)])
+  )
+  task = TaskClassif$new("mdata", as_data_backend(mdata), target = "t")
+
+  pmap(list(map_chr(map(mdata[, -"t"], class), 1L), colnames(mdata[, -"t"])), function(type, name) {
+    po$param_set$values$affect_columns = selector_type(type)
+    cst = switch(type,
+      "integer" = 0L,
+      "numeric" = 0,
+      "character" = ".MISSING",
+      "factor" = factor(".MISSING", levels = c(task$levels()[[name]], ".MISSING")), 
+      "ordered" = factor(".MISSING", levels = c(task$levels()[[name]], ".MISSING"), ordered = TRUE),
+      "logical" = FALSE,
+      0)
+    out1 = po$train(list(task))[[1]]$data()
+    out2 = po$predict(list(task))[[1]]$data()
+    expect_true(all(out1[[name]] == cst))
+    expect_true(all(out2[[name]] == cst))
+    expect_equal(out1, out2)
+    return(NULL)
+  })
 })
+
 
 test_that("More tests for PipeOpImputeMode", {
  set.seed(1)
@@ -246,6 +278,4 @@ test_that("More tests for PipeOpImputeMode", {
  expect_equal(levels(task_NA_predicted[[5L]]), as.character(1:5))
  expect_false(any(is.na(task_NA_predicted[[4L]])))
  expect_false(any(is.na(task_NA_predicted[[5L]])))
-
-
 })

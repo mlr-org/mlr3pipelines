@@ -56,93 +56,87 @@
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
-                           inherit = PipeOpImpute,
-                           public = list(
-                             initialize = function(id = "imputelearner", learner, param_vals = list()) {
-                               private$.learner = as_learner(learner)$clone(deep = TRUE) # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
-                               super$initialize(id, param_vals = param_vals, whole_task_dependent = TRUE)
-                             },
+  inherit = PipeOpImpute,
+  public = list(
+    initialize = function(id = "imputelearner", learner, param_vals = list(context_columns = selector_all())) {
+      private$.learner = as_learner(learner)$clone(deep = TRUE) # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
+      super$initialize(id, param_vals = param_vals, whole_task_dependent = TRUE)
+    }
+  ),
+  active = list(
+    id = function(val) {
+      if (!missing(val)) {
+        private$.id = val
+        private$.learner$param_set$set_id = val
+      }
+      private$.id
+    },
+    learner = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      private$.learner
+    }
+  ),
+  private = list(
+    .learner = NULL,
 
-                             select_cols = function(task) {
-                               # Choose columns to impute based on the supplied learner
-                               if(private$.learner$task_type == "regr"){
-                                 task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-                               } else {
-                                 task$feature_types[get("type") %in% c("logical", "character", "factor", "ordered"), get("id")]
-                               }
-                             },
+    .select_cols = function(task) {
+      # Choose columns to impute based on the supplied learner
+      if (private$.learner$task_type == "regr") {
+        task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
+      } else {
+        task$feature_types[get("type") %in% c("logical", "character", "factor", "ordered"), get("id")]
+      }
+    },
 
-                             train_imputer = function(feature, type, context) {
-                               on.exit({private$.learner$state = NULL})
-                               if (is.null(context) || nrow(context) == 0) {
-                                 context = data.table(const = rep(1, length(feature)))
-                               }
+    .train_imputer = function(feature, type, context) {
+      task = private$.create_imputation_task(feature, context)
+      private$.learner$train(task, row_ids = which(!is.na(feature)))$state
+    },
 
-                               task = private$.create_imputation_task(feature, context)
-                               private$.learner$train(task, row_ids = which(!is.na(feature)))$state
-                             },
+    .impute = function(feature, type, model, context) {
+      on.exit({private$.learner$state = NULL})
+      private$.learner$state = model
 
-                             impute = function(feature, type, model, context) {
-                               on.exit({private$.learner$state = NULL})
-                               private$.learner$state = self$state
-                               
-                               # Use the trained learner to perform the imputation
-                               task = private$.create_imputation_task(feature, context)
-                               pred = model$predict(task)
+      # Use the trained learner to perform the imputation
+      task = private$.create_imputation_task(feature, context)
+      pred = private$.learner$predict(task)
 
-                               # Replace the missing values with imputed values of the correct format
-                               imp_vals = pred$response[is.na(feature)]
-                               imp_vals = private$.convert_to_target(imp_vals, type)
+      # Replace the missing values with imputed values of the correct format
+      imp_vals = private$.convert_to_type(pred$response[is.na(feature)], type)
+      feature[is.na(feature)] = imp_vals
+      feature
+    },
 
-                               feature[is.na(feature)] = imp_vals
-                               feature
-                             }
-                           ),
-                           active = list(
-                             id = function(val) {
-                               if (!missing(val)) {
-                                 private$.id = val
-                                 private$.learner$param_set$set_id = val
-                               }
-                               private$.id
-                             },
-                             learner = function(val) {
-                               if (!missing(val)) {
-                                 if (!identical(val, private$.learner)) {
-                                   stop("$learner is read-only.")
-                                 }
-                               }
-                               private$.learner
-                             }
-                           ),
-                           private = list(
-                             .learner = NULL,
-                             .create_imputation_task = function(feature, context) {
-                               # Create a task that can be used by the learner based on imputation context
-                               context[['impute_col']] = private$.convert_to_predictable(feature)
-
-                               imp_tsk = if(private$.learner$task_type == "regr") TaskRegr else TaskClassif
-                               imp_tsk$new(id = "taskimpute", backend = context, target = "impute_col")
-                             },
-                             .convert_to_predictable = function(feature) {
-                               # Convert non-factor imputation targets to a factor
-                               if (is.numeric(feature))
-                                 feature
-                               else
-                                 factor(feature, ordered = FALSE)
-                             },
-                             .convert_to_target = function(feature, type) {
-                               # Convert an imputed feature to its original type
-                               if(type == "integer"){
-                                 feature = round(feature)
-                               }
-                               func = paste0("as.", type)
-                               invoke(func, args = list(feature))
-                             }
-                           )
+    .create_imputation_task = function(feature, context) {
+      # Create a task that can be used by the learner based on imputation context
+      if (is.null(context) || nrow(context) == 0) context = data.table()
+      context = cbind(context, 'impute_col' = private$.convert_to_predictable(feature))
+      convert_to_task(data = context, target = "impute_col", task_type = private$.learner$task_type)
+    },
+    .convert_to_predictable = function(feature) {
+      # Convert non-factor imputation targets to a factor
+      if (is.numeric(feature))
+        feature
+      else
+        factor(feature, ordered = FALSE)
+    },
+    .convert_to_type = function(feature, type) {
+      # Convert an imputed feature to its original type
+      if(type == "integer"){
+        feature = round(feature)
+      }
+      mlr3:::auto_convert(feature, NULL, type, levels = NULL)
+    }
+  )
 )
 
-mlr_pipeops$add("imputelearner", PipeOpImputeLearner,
-                list(learner = R6Class("Learner", public = list(id = "learner",
-                                                                task_type = "regr",
-                                                                param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(LearnerRegr$new("learner")))
+
+# See mlr-org/mlr#470
+convert_to_task = function(id = "impute", data, target, task_type, ...) {
+  get(mlr_reflections$task_types[task_type, ]$task)$new(id = id, backend = data, target = target, ...)
+}
