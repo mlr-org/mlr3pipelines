@@ -70,16 +70,18 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
           ParamLgl$new("na_ignore", tags = c("train", "required", "constant_check"))
       ))
       ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify")
+    }
+  ),
+  private = list(
 
-    get_state = function(task) {
+    .get_state = function(task) {
       pv = self$param_set$get_values(tags = "constant_check")
       list(features = names(invoke(discard, as.list(task$data(cols = task$feature_names)),
         is_constant_enough, .args = pv)))
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       task$select(self$state$features)
     }
   )

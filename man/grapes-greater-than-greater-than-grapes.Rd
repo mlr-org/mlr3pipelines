@@ -20,7 +20,7 @@ g1 \%>>\% g2
 This operator "pipes" data from the source \code{g1} into the sink \code{g2}. Both source and sink can either be
 a \code{\link{Graph}} or a \code{\link{PipeOp}} (or an object that can be automatically converted into a \code{\link{Graph}} or \code{\link{PipeOp}}, see \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}).
 
-\code{\%>>\%} tries to automatically match output channels of \code{g1} to input channels of \code{g2}; this is only possible if either
+\verb{\%>>\%} tries to automatically match output channels of \code{g1} to input channels of \code{g2}; this is only possible if either
 \itemize{
 \item the number of output channels of \code{g1} (as given by \code{g1$output}) is equal to the
 number of input channels of \code{g2} (as given by \code{g2$input}), or
@@ -33,11 +33,11 @@ order in which they occur in \code{g1} and \code{g2}, respectively: \code{g1}'s 
 channel 1, channel 2 to 2 etc.
 
 This operator always created deep copies of its input arguments, so they cannot be modified by reference afterwards.
-To access individual \code{\link{PipeOp}}s after composition, use the resulting \code{\link{Graph}}'s \code{$pipeops} list.
+To access individual \code{\link{PipeOp}}s after composition, use the resulting \code{\link{Graph}}'s \verb{$pipeops} list.
 
-Both arguments of \code{\%>>\%} are automatically converted to \code{\link{Graph}}s using \code{\link[=as_graph]{as_graph()}}; this means that objects on either side may be objects
+Both arguments of \verb{\%>>\%} are automatically converted to \code{\link{Graph}}s using \code{\link[=as_graph]{as_graph()}}; this means that objects on either side may be objects
 that can be automatically converted to \code{\link{PipeOp}}s (such as \code{\link[mlr3:Learner]{Learner}}s or \code{\link[mlr3filters:Filter]{Filter}}s), or that can
-be converted to \code{\link{Graph}}s. This means, in particular, \code{list}s of \code{\link{Graph}}s, \code{\link{PipeOp}}s or objects convertable to that, because
+be converted to \code{\link{Graph}}s. This means, in particular, \code{list}s of \code{\link{Graph}}s, \code{\link{PipeOp}}s or objects convertible to that, because
 \code{\link[=as_graph]{as_graph()}} automatically applies \code{\link[=gunion]{gunion()}} to \code{list}s. See examples.
 }
 \examples{
@@ -67,9 +67,12 @@ graph3 = Graph$new()$
   add_edge(o2$id, o3$id, dst_channel = 2)
 }
 \seealso{
-Other Graph operators: \code{\link{as_graph}},
-  \code{\link{as_pipeop}}, \code{\link{assert_graph}},
-  \code{\link{assert_pipeop}}, \code{\link{greplicate}},
-  \code{\link{gunion}}
+Other Graph operators: 
+\code{\link{as_graph}()},
+\code{\link{as_pipeop}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{greplicate}()},
+\code{\link{gunion}()}
 }
 \concept{Graph operators}

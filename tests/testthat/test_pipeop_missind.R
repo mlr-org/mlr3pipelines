@@ -1,4 +1,4 @@
-context("missind")
+context("PipeOpMissInd")
 
 test_that("PipeOpMissInd", {
   task = mlr_tasks$get("pima")
@@ -19,7 +19,8 @@ test_that("PipeOpMissInd", {
     i = letters[1:6],
     j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
     k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
-    l = letters[rep(1:2, 3)])
+    l = factor(letters[rep(1:2, 3)])
+  )
 
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
   mdata$j = NULL
@@ -91,8 +92,4 @@ test_that("PipeOpMissInd", {
   expect_null(task_predicted$missing_g)
   expect_null(task_predicted$missing_i)
   expect_null(task_predicted$missing_j)
-
 })
-
-
-

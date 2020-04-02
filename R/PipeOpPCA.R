@@ -24,7 +24,7 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their principal components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the [`"prcomp"` class][stats::prcomp],
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [stats::prcomp],
 #' with the exception of the `$x` slot. These are in particular:
 #' * `sdev` :: `numeric`\cr
 #'   The standard deviations of the principal components.
@@ -72,21 +72,19 @@ PipeOpPCA = R6Class("PipeOpPCA",
         ParamLgl$new("scale.", default = FALSE, tags = c("train", "pca")),
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
-    train_dt = function(dt, levels, target) {
+    .train_dt = function(dt, levels, target) {
       pcr = invoke(stats::prcomp, as.matrix(dt), .args = self$param_set$get_values(tags = "pca"))
       self$state = pcr
       self$state$x = NULL
       pcr$x
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       predict(self$state, as.matrix(dt))
     }
   )

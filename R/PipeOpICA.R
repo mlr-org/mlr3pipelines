@@ -24,7 +24,7 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric parameters replaced by independent components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the [`"fastICA"` function][fastICA::fastICA],
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the function [fastICA::fastICA()],
 #' with the exception of the `$X` and `$S` slots. These are in particular:
 #' * `K` :: `matrix`\cr
 #'   Matrix that projects data onto the first `n.comp` principal components.
@@ -104,14 +104,12 @@ PipeOpICA = R6Class("PipeOpICA",
       ))
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "fastICA")
-    },
+        packages = "fastICA", feature_types = c("numeric", "integer"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
-    train_dt = function(dt, levels, target) {
+    .train_dt = function(dt, levels, target) {
 
       params = insert_named(list(n.comp = ncol(dt)), self$param_set$get_values(tags = "ica"))
 
@@ -124,7 +122,7 @@ PipeOpICA = R6Class("PipeOpICA",
       ica$S
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       scale(as.matrix(dt), scale = FALSE, center = self$state$center) %*%
         (self$state$K %*% self$state$W)
     }

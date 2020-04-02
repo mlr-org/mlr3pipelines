@@ -83,6 +83,7 @@
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
+#'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Print a representation of the [`Graph`] on the console. Output is a table with one row for each contained [`PipeOp`] and
@@ -300,17 +301,12 @@ Graph = R6Class("Graph",
         ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
         ig_data$edges$color = "lightblue"
         # Visualize the nodes
-        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges)
-
-        if (any(c(duplicated(ig_data$edges$from), duplicated(ig_data$edges$to)))) {
-         # Bug in visNetwork? See: https://github.com/datastorm-open/visNetwork/issues/327
-          p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
-        } else {
-          p = visNetwork::visIgraphLayout(p, layout = "layout_with_kk", type = "full")
-        }
+        p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "400px", width = "50%")
+        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full") 
 
         # Draw edges between points
-        visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+        p 
       } else {
         suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
       }
@@ -483,6 +479,17 @@ graph_reduce = function(self, input, fun, single_input) {
   edges = copy(self$edges)
 
   # create virtual "__initial__" and "__terminal__" nodes with edges to inputs / outputs of graph.
+  # if we have `single_input == FALSE` and one(!) vararg channel, we widen the vararg input
+  # appropriately.
+  if (!single_input && length(assert_list(input)) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
+    if (sum("..." == graph_input$channel.name) != 1) {
+      stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.")
+    }
+    # repeat the "..." as often as necessary
+    repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1, 1)
+    graph_input = graph_input[rep(graph_input$name, repeats), , on = "name"]
+  }
+
   edges = rbind(edges,
     data.table(src_id = "__initial__", src_channel = graph_input$name,
       dst_id = graph_input$op.id, dst_channel = graph_input$channel.name),
@@ -493,11 +500,14 @@ graph_reduce = function(self, input, fun, single_input) {
   edges$payload = list()
 
   if (!single_input) {
+    # we need the input list length to be equal to the number of channels. This number was
+    # already increased appropriately if there is a single vararg channel.
+    assert_list(input, len = nrow(graph_input))
     # input can be a named list (will be distributed to respective edges) or unnamed.
     # if it is named, we check that names are unambiguous.
-    assert_list(input, len = nrow(graph_input))
     if (!is.null(names(input))) {
       if (anyDuplicated(graph_input$name)) {
+        # FIXME this will unfortunately trigger if there is more than one named input for a vararg channel.
         stopf("'input' must not be a named list because Graph %s input channels have duplicated names.", self$id)
       }
       assert_names(names(input), subset.of = graph_input$name)
@@ -563,4 +573,31 @@ graph_load_namespaces = function(self, info) {
   if (length(errors)) {
     stopf("Error during %s:\n  %s", info, str_collapse(errors, sep = "\n  "))
   }
+}
+
+
+#' @export
+predict.Graph = function(object, newdata, ...) {
+  if (!object$is_trained) {
+    stop("Graph is not trained.")
+  }
+  output = object$output
+  if (nrow(output) != 1) {
+    stop("Graph has more than one output channel")
+  }
+  if (!are_types_compatible(output$predict, "Prediction")) {
+    stop("Graph output type not 'Prediction' (or compatible with it)")
+  }
+  plain = "Task" %nin% class(newdata)
+  if (plain) {
+    assert_data_frame(newdata)
+    newdata = TaskRegr$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = NA_real_)), "...dummytarget...")
+  }
+  result = object$predict(newdata)
+  assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)
+  result = result[[1]]
+  if (plain) {
+    result = result$data$response %??% result$data$prob
+  }
+  result
 }

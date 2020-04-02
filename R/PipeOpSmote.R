@@ -9,7 +9,7 @@
 #' synthetic instances of the minority class using the SMOTE algorithm.
 #' The algorithm samples for each minority instance a new data point based on the `K` nearest
 #' neighbors of that data point.
-#' It can only be applied to tasks with numeric features.
+#' It can only be applied to tasks with purely numeric features.
 #' See [`smotefamily::SMOTE`] for details.
 #'
 #' @section Construction:
@@ -17,7 +17,7 @@
 #' PipeOpSmote$new(id = "smote", param_vals = list())
 #' ```
 #'
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"smote"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
@@ -52,12 +52,16 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
+#' @family PipeOps
+#' @include PipeOpTaskPreproc.R
+#' @export
 #' @examples
 #' library("mlr3")
 #'
 #' # Create example task
-#' data_example = smotefamily::sample_generator(1000, ratio = 0.80)
-#' task = TaskClassif$new(id = "example", backend = data_example, target = "result")
+#' data = smotefamily::sample_generator(1000, ratio = 0.80)
+#' data$result = factor(data$result)
+#' task = TaskClassif$new(id = "example", backend = data, target = "result")
 #' task$data()
 #' table(task$data()$result)
 #'
@@ -65,9 +69,6 @@
 #' pop = po("smote")
 #' smotedata = pop$train(list(task))[[1]]$data()
 #' table(smotedata$result)
-#' @family PipeOps
-#' @include PipeOpTaskPreproc.R
-#' @export
 PipeOpSmote = R6Class("PipeOpSmote",
   inherit = PipeOpTaskPreproc,
   public = list(
@@ -79,27 +80,31 @@ PipeOpSmote = R6Class("PipeOpSmote",
         ParamInt$new("dup_size", lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "smotefamily", can_subset_cols = FALSE)
-    },
+        packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data")
+    }
+  ),
+  private = list(
 
-    train_task = function(task) {
+    .train_task = function(task) {
       assert_true(all(task$feature_types$type == "numeric"))
-      dt_columns = self$select_cols(task)
-      cols = dt_columns
+      cols = private$.select_cols(task)
+
       if (!length(cols)) {
-        self$state = list(dt_columns = dt_columns)
+        self$state = list(dt_columns = cols)
         return(task)
       }
-      dt = as.data.frame(task$data(cols = cols))
+      dt = task$data(cols = cols)
 
       # calculate synthetic data
-      st = invoke(smotefamily::SMOTE, X = dt, target = task$data(cols = task$target_names)[[1]],
+      st = setDT(invoke(smotefamily::SMOTE, X = dt, target = task$truth(),
         .args = self$param_set$get_values(tags = "smote"),
-        .opts = list(warnPartialMatchArgs = FALSE))$syn_data
+        .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
 
-      # add synthetic data to task data
-      target.id = which(names(st) == "class")
-      colnames(st)[target.id] = task$target_names
+      # rename target column and fix character conversion for TaskClassif
+      if (task$task_type == "classif") {
+        st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
+      }
+      setnames(st, "class", task$target_names)
       task$rbind(st)
     }
   )

@@ -8,7 +8,7 @@
 #' Adds a class weight column to the [`Task`][mlr3::Task] that different [`Learner`][mlr3::Learner]s may be
 #' able to use for sample weighting. Sample weights are added to each sample according to the target class.
 #'
-#' Only binary [classification `Task`s][mlr3::TaskClassif] are supported.
+#' Only binary [classification tasks][mlr3::TaskClassif] are supported.
 #'
 #' Caution: when constructed naively without parameter, the weights are all set to 1. The `minor_weight` parameter
 #' must be adjusted for this [`PipeOp`] to be useful.
@@ -65,7 +65,6 @@
 #' opb$param_set$values$minor_weight = 2
 #' result = opb$train(list(task))[[1L]]
 #' result$weights
-#'
 PipeOpClassWeights = R6Class("PipeOpClassWeights",
   inherit = PipeOpTaskPreproc,
 
@@ -75,10 +74,12 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
         ParamDbl$new("minor_weight", lower = 0, upper = Inf, tags = "train")
       ))
       ps$values = list(minor_weight = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif")
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
+    }
+  ),
+  private = list(
 
-    train_task = function(task) {
+    .train_task = function(task) {
 
       if ("twoclass" %nin% task$properties) {
         stop("Only binary classification Tasks are supported.")
@@ -95,12 +96,12 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       wcol = setnames(data.table(fifelse(truth == minor, self$param_set$values$minor_weight, 1)), weightcolname)
 
       task$cbind(wcol)
-      task$col_roles$features = setdiff(task$col_roles$features, weightcolname)
-      task$col_roles$weights = weightcolname
+      task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
+      task$col_roles$weight = weightcolname
       task
     },
 
-    predict_task = identity
+    .predict_task = identity
   )
 )
 

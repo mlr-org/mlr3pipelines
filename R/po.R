@@ -1,6 +1,3 @@
-
-
-
 #' @title Shorthand PipeOp Constructor
 #'
 #' @description

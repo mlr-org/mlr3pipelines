@@ -57,8 +57,8 @@
 #' @examples
 #' library("mlr3")
 #'
-#' task = TaskClassif$new("task",
-#'   data.table::data.table(x = letters[1:3], y = letters[1:3]), "x")
+#' data = data.table::data.table(x = factor(letters[1:3]), y = factor(letters[1:3]))
+#' task = TaskClassif$new("task", data, "x")
 #'
 #' poe = po("encode")
 #'
@@ -85,14 +85,12 @@ PipeOpEncode = R6Class("PipeOpEncode",
         ParamFct$new("method", levels = c("one-hot", "treatment", "helmert", "poly", "sum"), tags = c("train", "predict"))
       ))
       ps$values = list(method = "one-hot")
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", tags = "encode", feature_types = c("factor", "ordered"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
-    },
-
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       contrasts = switch(self$param_set$values$method,
         "one-hot" = function(x) stats::contr.treatment(x, contrasts = FALSE),
         treatment = stats::contr.treatment,
@@ -115,7 +113,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
       }))
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       cols = imap(self$state$contrasts, function(contrasts, id) {
         x = as.character(dt[[id]])
         contrasts[match(x, rownames(contrasts)), , drop = FALSE]

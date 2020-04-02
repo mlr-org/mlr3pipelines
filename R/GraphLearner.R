@@ -10,6 +10,11 @@
 #' The Graph must return a single [`Prediction`][mlr3::Prediction] on its `$predict()`
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
+#'
+#' Note the `predict_type` of a [`GraphLearner`] does currently not track the `predict_type`
+#' of any [`Learner`][mlr3::Learner] encapsulated within the [`Graph`]. Therefore, when requesting
+#' e.g. `"prob"` predictions, the `predict_type` of *both* the encapsulated [`Learner`][mlr3::Learner]
+#' and the wrapping [`GraphLearner`] need to be set to `"prob"`.
 #' @family Learners
 #' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
@@ -55,20 +60,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         properties = mlr_reflections$learner_properties[[task_type]])
       private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
-    },
-    train_internal = function(task) {
-      on.exit({self$graph$state = NULL})
-      self$graph$train(task)
-      state = self$graph$state
-      state
-    },
-    predict_internal = function(task) {
-      on.exit({self$graph$state = NULL})
-      self$graph$state = self$model
-      prediction = self$graph$predict(task)
-      assert_list(prediction, types = "Prediction", len = 1,
-        .var.name = sprintf("Prediction returned by Graph %s", self$id))
-      prediction[[1]]
     }
   ),
   active = list(
@@ -97,6 +88,20 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         return(value$clone(deep = TRUE))
       }
       value
+    },
+    .train = function(task) {
+      on.exit({self$graph$state = NULL})
+      self$graph$train(task)
+      state = self$graph$state
+      state
+    },
+    .predict = function(task) {
+      on.exit({self$graph$state = NULL})
+      self$graph$state = self$model
+      prediction = self$graph$predict(task)
+      assert_list(prediction, types = "Prediction", len = 1,
+        .var.name = sprintf("Prediction returned by Graph %s", self$id))
+      prediction[[1]]
     }
   )
 )

@@ -1,9 +1,9 @@
-context("WeighedAverage Learner")
+context("WeightedAverage Learner")
 
 test_that("LearnerClassifAvg", {
   lrn = LearnerClassifAvg$new()
   expect_learner(lrn)
-  df = data.frame(x = matrix(sample(c("a", "b", "c"), 100, replace = TRUE), nrow = 10), y = as.factor(sample(c("a", "b", "c"), 10, replace = TRUE)))
+  df = data.frame(x = matrix(sample(c("a", "b", "c"), 100, replace = TRUE), nrow = 10), y = as.factor(sample(c("a", "b", "c"), 10, replace = TRUE)), stringsAsFactors = TRUE)
   for (col in seq_along(df)) {
     levels(df[[col]]) = c("a", "b", "c")
   }
@@ -49,7 +49,6 @@ test_that("LearnerClassifAvg", {
       expect_prediction(prd)
     }
   }
-
 })
 
 test_that("LearnerRegrAvg", {
@@ -82,7 +81,8 @@ test_that("LearnerRegrAvg", {
   expect_prediction(prd)
   expect_true(all(is.na(prd$se)))
 
-  intask = (greplicate(PipeOpLearnerCV$new(lrn("regr.featureless", predict_type = "response")), 3) %>>% PipeOpFeatureUnion$new())$train(tsk("boston_housing"))[[1]]
+  intask = (greplicate(PipeOpLearnerCV$new(lrn("regr.featureless", predict_type = "response")), 3) %>>%
+    PipeOpFeatureUnion$new())$train(tsk("boston_housing"))[[1]]
 
   # Works for accuracy
   lrn = LearnerRegrAvg$new()
@@ -95,8 +95,6 @@ test_that("LearnerRegrAvg", {
   prd = lrn$predict(intask)
   expect_prediction(prd)
   expect_true(all(is.na(prd$se)))
-
-
 })
 
 test_that("LearnerClassifAvg Pipeline", {

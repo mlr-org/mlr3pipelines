@@ -7,11 +7,11 @@
 #' @description
 #' Encodes columns of type `factor`, `character` and `ordered`.
 #'
-#' Impact coding for [classification `Task`s][mlr3::TaskClassif] converts factor levels of each (factorial) column
+#' Impact coding for [classification Tasks][mlr3::TaskClassif] converts factor levels of each (factorial) column
 #' to the difference between each target level's conditional log-likelihood
 #' given this level, and the target level's global log-likelihood.
 #'
-#' Impact coding for [Regression `Task`s][mlr3::TaskRegr] converts factor levels of each (factorial) column
+#' Impact coding for [regression Tasks][mlr3::TaskRegr] converts factor levels of each (factorial) column
 #' to the difference between the target's conditional mean given
 #' this level, and the target's global mean.
 #'
@@ -22,7 +22,7 @@
 #' PipeOpEncodeImpact$new(id = "encodeimpact", param_vals = list())
 #' ```
 #'
-#" * `id` :: `character(1)`\cr
+#' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"encodeimpact"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
@@ -44,14 +44,14 @@
 #'
 #' @section Parameters:
 #' * `smoothing`  :: `numeric(1)` \cr
-#'   A finite positive value used for smoothing. Mostly relevant for [classification `Task`s][mlr3::TaskClassif] if
+#'   A finite positive value used for smoothing. Mostly relevant for [classification Tasks][mlr3::TaskClassif] if
 #'   a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
 #'   Initialized to `1e-4`.
 #' * `impute_zero` :: `logical(1)`\cr
 #'   If `TRUE`, impute missing values as impact 0; otherwise the respective impact is coded as `NA`. Default `FALSE`.
 #'
 #' @section Internals:
-#' Uses laplace smoothing, mostly to avoid infinite values for [classification `Task`s][mlr3::TaskClassif].
+#' Uses laplace smoothing, mostly to avoid infinite values for [classification Task][mlr3::TaskClassif].
 #'
 #' @section Methods:
 #' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -81,14 +81,12 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         ParamLgl$new("impute_zero", tags = c("train", "required"))
       ))
       ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")]
-    },
-
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
 
@@ -119,7 +117,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         }))
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       impact = self$state$impact
       imap(dt, function(curdat, idx) {
         curdat = as.character(curdat)

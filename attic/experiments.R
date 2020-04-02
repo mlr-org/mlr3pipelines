@@ -8,6 +8,7 @@ options(error=recover)
 options(error=dump.frames)
 data.table::setDTthreads(0)
 data.table::setDTthreads(1)
+Sys.setenv(NOT_CRAN = "true")
 
 devtools::document("mlr3pipelines")
 
@@ -17,16 +18,25 @@ devtools::load_all("mlr3pipelines")
 
 tools::buildVignettes(dir = "mlr3pipelines")
 
-testthat::test_package("mlr3pipelines")
+
+system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
 devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "classbalancing")
+
+testthat::test_package("mlr3pipelines", filter = "impute")
+
+
+testthat::test_package("mlr3pipelines", filter = "branch")
+
+
+
+
 testthat::test_package("mlr3pipelines", filter = "encode")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
 testthat::test_package("mlr3pipelines", filter = "conversion")
 
-devtools::test("mlr3pipelines", stop_on_warning = TRUE)
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "pipeop_impute")
 
 
 testthat::test_package("mlr3pipelines", filter = "apply")

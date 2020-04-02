@@ -31,6 +31,7 @@
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
+#' @family Dictionaries
 #' @export
 #' @examples
 #' library("mlr3")
@@ -85,9 +86,13 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
     } else {
       outnum = NA
     }
+    if (exists("feature_types", envir = l1)) ft = list(l1$feature_types) else ft = NA
+
     list(
       key = key,
       packages = list(l1$packages),
+      tags = list(l1$tags),
+      feature_types = ft,
       input.num = innum,
       output.num = outnum,
       input.type.train = list(l1$input$train),

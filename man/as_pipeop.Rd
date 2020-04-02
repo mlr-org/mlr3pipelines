@@ -29,9 +29,12 @@ can be converted are for example \code{\link[mlr3:Learner]{Learner}} (using \cod
 \code{\link[mlr3filters:Filter]{Filter}} (using \code{\link{PipeOpFilter}}).
 }
 \seealso{
-Other Graph operators: \code{\link{\%>>\%}},
-  \code{\link{as_graph}}, \code{\link{assert_graph}},
-  \code{\link{assert_pipeop}}, \code{\link{greplicate}},
-  \code{\link{gunion}}
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_graph}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{greplicate}()},
+\code{\link{gunion}()}
 }
 \concept{Graph operators}

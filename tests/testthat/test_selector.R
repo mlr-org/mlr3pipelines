@@ -1,9 +1,9 @@
 context("Selector")
 
-
 test_that("Selectors work", {
   iris_task = mlr3::mlr_tasks$get("iris")
   bh_task = mlr3::mlr_tasks$get("boston_housing")
+  pima_task = mlr3::mlr_tasks$get("pima")
 
   sela = selector_all()
   expect_set_equal(sela(iris_task), iris_task$feature_names)
@@ -44,5 +44,9 @@ test_that("Selectors work", {
   selggd = selector_setdiff(selg, selector_grep("^Petal\\."))
   expect_set_equal(selggd(iris_task), "Sepal.Width")
   expect_set_equal(selggd(bh_task), "ptratio")
+  
+  selmiss = selector_missing()
+  expect_set_equal(selmiss(iris_task), character(0))
+  expect_set_equal(selmiss(pima_task), c("glucose", "insulin", "mass", "pressure", "triceps"))
 
 })

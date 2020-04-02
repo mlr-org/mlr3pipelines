@@ -1,5 +1,12 @@
+# mlr3pipelines (development version)
+
+# mlr3pipelines 0.1.2
+
+* Work with new mlr3 version 0.1.5 (handling of character columns changed)
+
 # mlr3pipelines 0.1.1
 
+* Better html graphics for linear Graphs
 * New PipeOps:
   - PipeOpEncodeImpact
 * Changed PipeOp Behaviour:

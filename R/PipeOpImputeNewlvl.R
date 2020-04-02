@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute factorial features by adding a new feature.
+#' Impute factorial features by adding a new level `".MISSING"`.
 #'
 #' @section Construction:
 #' ```
@@ -18,7 +18,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpImputeNewlvl`].
+#' Input and output channels are inherited from [`PipeOpImpute`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected factorial features missing values imputed by a new level.
 #'
@@ -55,15 +55,18 @@ PipeOpImputeNewlvl = R6Class("PipeOpImputeNewlvl",
   public = list(
     initialize = function(id = "imputenewlvl", param_vals = list()) {
       super$initialize(id, param_vals = param_vals)
-    },
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")],
+    # this is one of the few imputers that handles 'character' features!
+    .select_cols = function(task) task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")],
 
-    train_imputer = function(feature, type, context) {
+    .train_imputer = function(feature, type, context) {
       NULL
     },
 
-    impute = function(feature, type, model, context) {
+    .impute = function(feature, type, model, context) {
       if (is.factor(feature)) {
         levels(feature) = c(levels(feature), ".MISSING")
       }

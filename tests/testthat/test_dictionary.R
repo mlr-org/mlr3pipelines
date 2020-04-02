@@ -58,7 +58,8 @@ test_that("Dictionary contains all PipeOps", {
   })
 
   expect("__NOT_FOUND__" %nin% dictnames, "Not all exported non-abstract PipeOps are in mlr_pipeops")
-  expect(length(setdiff(mlr_pipeops$keys(), dictnames)) == 0, "Not all PipeOps in mlr_pipeops are exported.")
+  tmp = setdiff(mlr_pipeops$keys(), dictnames)
+  expect(length(tmp) == 0, sprintf("PipeOps in mlr_pipeops that are not exported: %s", paste(tmp, collapse = ",")))
 
   # as.atomic: converts non-atomic things to NULL
   as.atomic = function(x) if (is.atomic(x)) x
@@ -129,7 +130,8 @@ test_that("data.table of pipeops looks as it should", {
   potable = as.data.table(mlr_pipeops)
 
   expect_set_equal(colnames(potable),
-    c("key", "packages", "input.num", "output.num",
+    c("key", "packages", "tags", "feature_types",
+      "input.num", "output.num",
       "input.type.train", "input.type.predict",
       "output.type.train", "output.type.predict"))
 
@@ -160,4 +162,12 @@ test_that("GraphLearner is in mlr_learners", {
   # FIXME: depends on mlr-org/mlr3#328
   # expect_error(mlr_learners$get("graph"), "'graph'.*'graph'")  # Needs the argument 'graph' to construct 'graph'
 
+})
+
+
+test_that("mlr_graphs dictionary", {
+  expect_r6(mlr_graphs)
+  dt = as.data.table(mlr_graphs)
+  expect_data_table(dt, col.names = "unique")
+  expect_true("key" %in% colnames(dt))
 })

@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Linearily transforms numeric data columns so they are between `lower` and `upper`.
+#' Linearly transforms numeric data columns so they are between `lower` and `upper`.
 #' The formula for this is \eqn{x' = a + x * b},
 #' where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
 #' \eqn{a} is \eqn{-min(x) * b + lower}.
@@ -62,14 +62,12 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
         ParamDbl$new("upper", tags = c("required", "train", "predict"))
       ))
       ps$values = list(lower = 0, upper = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       lapply(dt, function(x) {
         rng = range(x, na.rm = TRUE, finite = TRUE)
         b = (self$param_set$values$upper - self$param_set$values$lower) / (rng[2] - rng[1])
@@ -78,7 +76,7 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
       })
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       for (i in seq_along(dt)) {
         trafo = self$state[[i]]
         dt[[i]] = trafo[1] + dt[[i]] * trafo[2]

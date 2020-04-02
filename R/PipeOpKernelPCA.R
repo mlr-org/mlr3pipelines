@@ -25,7 +25,7 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`],
-#' as well as the returned [`S4`] object of the [`"kpca"` function][kernlab::kpca].
+#' as well as the returned [`S4`] object of the function [kernlab::kpca()].
 #'
 #' The `@rotated` slot of the `"kpca"` object is overwritten with an empty matrix for memory efficiency.
 #'
@@ -75,22 +75,18 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
         ParamUty$new("na.action", default = na.omit, tags = c("train", "kpca"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "kernlab")
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
-
-    train_dt = function(dt, levels, target) {
+        packages = "kernlab", feature_types = c("numeric", "integer"))
+    }
+  ),
+  private = list(
+    .train_dt = function(dt, levels, target) {
       pcr = invoke(kernlab::kpca, as.matrix(dt), .args = self$param_set$get_values(tags = "kpca"))
       self$state$pcr = pcr
       self$state$pcr@rotated = matrix(numeric(0))
       kernlab::rotated(pcr)
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       kernlab::predict(self$state$pcr, as.matrix(dt))
     }
   )

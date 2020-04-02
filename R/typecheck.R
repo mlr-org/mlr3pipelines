@@ -73,7 +73,7 @@ get_class_hierarchy = function(classname) {
 #' whenever an S3 class's class hierarchy is important when inferring
 #' compatibility between types.
 #'
-#' @param hierarchy `character` the class hieararchy to add; should
+#' @param hierarchy `character` the class hierarchy to add; should
 #'   correspond to the `class()` of the lowest object in the hierarchy.
 #' @return `NULL`
 #' @family class hierarchy operations
@@ -163,7 +163,7 @@ reset_autoconvert_register = function() {
   for (item in default_acr) {
     # fill autoconvert register with given items
     do.call(register_autoconvert_function, item)
-    # fill class hierarchy cache with info about autoconvertable classes
+    # fill class hierarchy cache with info about autoconvertible classes
     get_class_hierarchy(item[[1]])
   }
 }
@@ -206,13 +206,13 @@ get_autoconverter = function(target) {
 
   # now check if there is a subclass of `target` that we can convert to.
   # for this we first get the class hierarchy cache entries corresponding to all possible autoconverters
-  # convertable_hierarchies is a `list` of `character`s;
+  # convertible_hierarchies is a `list` of `character`s;
   # e.g. if there was a `TaskClassif` converter it could be c("TaskClassif", "Task")
-  convertable_hierarchies = mget(names(autoconvert_register), class_hierarchy_cache, ifnotfound = list(NULL))
+  convertible_hierarchies = mget(names(autoconvert_register), class_hierarchy_cache, ifnotfound = list(NULL))
   # then we filter by all class hierarchies that actually contain `target`
   superclass_hierarchies = Filter(function(x) {
     target %in% x
-  }, convertable_hierarchies)
+  }, convertible_hierarchies)
 
   if (length(superclass_hierarchies)) {
     # if we found a class hierarchy entry we determine the one where `target` is at the earliest position,
