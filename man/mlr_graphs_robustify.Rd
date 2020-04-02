@@ -15,7 +15,7 @@ pipeline_robustify(
 }
 \arguments{
 \item{task}{\code{\link{Task}} \cr
-A task to create a robustifying pipeline for.
+A \code{\link[mlr3:Task]{Task}} to create a robustifying pipeline for.
 Optional, if omitted, the full pipeline is created.}
 
 \item{learner}{\code{\link{Learner}} \cr
