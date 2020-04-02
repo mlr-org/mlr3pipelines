@@ -8,9 +8,9 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }
 \description{
-Allows for target transformation operations of \code{\link[mlr3:TaskRegr]{TaskRegr}} that have to be
-inverted later, where the transformation function is simply given by a function of the
-(continuous) numerical target.
+Allows for target transformation operations of \code{\link[mlr3:Task]{Task}} that have to be inverted
+later, where the transformation function is simply given by a function of the target. Typically
+this will applied to a \code{\link[mlr3:TaskRegr]{TaskRegr}}
 }
 \section{Construction}{
 \preformatted{PipeOpTargetTrafoSimple$new(id = "targettrafosimple", param_vals = list())
@@ -67,8 +67,8 @@ Only methods inherited from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 library(mlr3)
 task = tsk("boston_housing")
 po = PipeOpTargetTrafoSimple$new("logtrafo", param_vals = list(
- trafo = function(x) log(x, base = 2),
- inverter = function(x) 2 ^ x)
+  trafo = function(x) log(x, base = 2),
+  inverter = function(x) 2 ^ x)
 )
 
 po$train(list(task))
@@ -79,11 +79,11 @@ g$add_pipeop(po)
 g$add_pipeop(LearnerRegrRpart$new())
 g$add_pipeop(PipeOpTargetInverter$new())
 g$add_edge(src_id = "logtrafo", dst_id = "targetinverter",
- src_channel = 1, dst_channel = 1)
+  src_channel = 1, dst_channel = 1)
 g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart",
- src_channel = 2, dst_channel = 1)
+  src_channel = 2, dst_channel = 1)
 g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
- src_channel = 1, dst_channel = 2)
+  src_channel = 1, dst_channel = 2)
 
 g$train(task)
 g$predict(task)

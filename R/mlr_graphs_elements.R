@@ -247,62 +247,70 @@ mlr_graphs$add("branch", pipeline_branch)
 
 
 
-#' @title Transform A Numerical Target And Later Invert The Transformation
+#' @title Transform and Re-Transform the Target Variable
 #' @name mlr_graphs_targettrafo
 #' @description
-#' Creates a [`Graph`] that transforms a numerical target of a [`TaskRegr`][mlr3::TaskRegr] during
-#' training and inverts the transformation during prediction.
-#' This is done as follows:
-#' * Specify a transformation and inversion function using [`PipeOpTargetTrafoSimple`], afterwards
-#'   apply `graph`.
+#' Wraps a [`Graph`] that transforms a target during training and inverts the transformation
+#' during prediction. This is done as follows:
+#' * Specify a transformation and inversion function using any subclass of [`PipeOpTargetTrafo`], defaults to
+#'   [`PipeOpTargetTrafoSimple`], afterwards apply `graph`.
 #' * At the very end, during prediction the transformation is inverted using [`PipeOpTargetInverter`].
-#' * To set a transformation and inversion function see the parameters `targettrafosimple.trafo` and
-#'   `targettrafosimple.inverter` of the `param_set` of the resulting [`Graph`].
+#' * To set a transformation and inversion function for [`PipeOpTargetTrafoSimple`] see the
+#'   parameters `trafo` and `inverter` of the `param_set` of the resulting [`Graph`].
 #'
 #' @param graph [`PipeOpLearner`] | [`Graph`] \cr
-#'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for. If this is a [`Graph`], the
-#'   last [`PipeOp`] should be a [`PipeOpLearner`] that can handle a [`TaskRegr`][mlr3::TaskRegr] and
-#'   the first [`PipeOp`] should accept a single [`TaskRegr`][mlr3::TaskRegr] as input.
+#'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for. If this is a [`Graph`],
+#'   the last [`PipeOp`] should be a [`PipeOpLearner`] and the first [`PipeOp`] should accept a
+#'   single [`Task`][mlr3::Task] as input.
+#' @param trafo_pipeop [`PipeOp`] \cr
+#'   A [`PipeOp`] that is a subclass of [`PipeOpTargetTrafo`]. Default is
+#'   [`PipeOpTargetTrafoSimple`].
+#' @param id_prefix (`[character(1)]`):\cr
+#'   Optional id prefix to prepend to [`PipeOpTargetInverter`] ID. The resulting ID will be
+#'   `"[id_prefix]targetinverter"`. Default is `""`.
 #'
 #' @return [`Graph`]
 #' @export
 #' @examples
-#'library("mlr3")
-#'
-#'targettrafo = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
-#'targettrafo$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
-#'targettrafo$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
-#'
-#'# gives the same as
-#'g = Graph$new()
-#'g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
-#'  trafo = function(x) log(x, base = 2),
-#'  inverter = function(x) 2 ^ x)
-#'  )
-#')
-#'g$add_pipeop(LearnerRegrRpart$new())
-#'g$add_pipeop(PipeOpTargetInverter$new())
-#'g$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter",
-#'  src_channel = 1, dst_channel = 1)
-#'g$add_edge(src_id = "targettrafosimple", dst_id = "regr.rpart",
-#'  src_channel = 2, dst_channel = 1)
-#'g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
-#'  src_channel = 1, dst_channel = 2)
-pipeline_targettrafo = function(graph) {
+#' library("mlr3")
+#' 
+#' targettrafo = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
+#' targettrafo$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
+#' targettrafo$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+#' 
+#' # gives the same as
+#' g = Graph$new()
+#' g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
+#'   trafo = function(x) log(x, base = 2),
+#'   inverter = function(x) 2 ^ x)
+#'   )
+#' )
+#' g$add_pipeop(LearnerRegrRpart$new())
+#' g$add_pipeop(PipeOpTargetInverter$new())
+#' g$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter",
+#'   src_channel = 1, dst_channel = 1)
+#' g$add_edge(src_id = "targettrafosimple", dst_id = "regr.rpart",
+#'   src_channel = 2, dst_channel = 1)
+#' g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
+#'   src_channel = 1, dst_channel = 2)
+pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetTrafoSimple$new(), id_prefix = "") {
   graph = as_graph(graph)
   assert_r6(graph$pipeops[length(graph$pipeops)][[1L]], classes = "PipeOpLearner")
   if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
     stopf("First PipeOp of graph should accept a single task as input.")
   }
+  assert_r6(trafo_pipeop, classes = "PipeOpTargetTrafo")
+  assert_string(id_prefix)
 
   ids = graph$ids(sorted = FALSE)
+  target_inverter_id = paste0(id_prefix, "targetinverter")
 
-  graph$add_pipeop(PipeOpTargetTrafoSimple$new())
-  graph$add_pipeop(PipeOpTargetInverter$new())
+  graph$add_pipeop(trafo_pipeop)
+  graph$add_pipeop(PipeOpTargetInverter$new(target_inverter_id))
 
-  graph$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter", src_channel = 1L, dst_channel = 1L)
-  graph$add_edge(src_id = "targettrafosimple", dst_id = ids[1L], src_channel = 2L, dst_channel = 1L)
-  graph$add_edge(src_id = ids[length(ids)], dst_id = "targetinverter", src_channel = 1L, dst_channel = 2L)
+  graph$add_edge(src_id = trafo_pipeop$id, dst_id = target_inverter_id, src_channel = 1L, dst_channel = 1L)
+  graph$add_edge(src_id = trafo_pipeop$id, dst_id = ids[1L], src_channel = 2L, dst_channel = 1L)
+  graph$add_edge(src_id = ids[length(ids)], dst_id = target_inverter_id, src_channel = 1L, dst_channel = 2L)
 
   graph
 }

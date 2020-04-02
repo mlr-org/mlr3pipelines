@@ -38,4 +38,13 @@ test_that("Target Trafo Pipeline", {
 
   train_ttg = targettrafo_g$train(task)
   predict_ttg = targettrafo_g$predict(task)
+
+  # assertions on graph
+  expect_error(ppl("targettrafo", graph = PipeOpNOP$new()), regexp = "PipeOpLearner")
+  expect_error(ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()),
+    trafo_pipeop = PipeOpNOP$new()), regexp = "PipeOpTargetTrafo")
+
+  # IDs
+  tt_id = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()), id_prefix = "test")
+  expect_equal(tt_id$ids(), c("regr.rpart", "targettrafosimple", "testtargetinverter"))
 })

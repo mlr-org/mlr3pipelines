@@ -1,7 +1,7 @@
 #' Convert a task from its type to another.
 #'
 #' The task's target is replaced by a different column from the data.
-#' #FIXME: This needs detailed tests.
+#' #FIXME: This needs detailed tests and should ne moved to mlr3.
 #' @param intask [`Task`][mlr3::Task]\cr
 #'   A [`Task`][mlr3::Task] to be converted.
 #' @param new_target `character(1)`\cr
@@ -36,7 +36,7 @@ convert_task = function(intask, new_target = NULL, new_type = NULL, drop_origina
   # during prediction, when target is NA, we do not call droplevels
   if (!all(is.na(newtask$data()[, newtask$target_names, with = FALSE]))) newtask$droplevels()
   # if drop_original_target, remove the original target from the col_roles
-  # FIXME: in general implement the col_role `unused col_role`?
+  # FIXME: in general implement the col_role "unused col_role"?
   if (drop_original_target) newtask$col_roles$feature = setdiff(newtask$col_roles$feature, intask$col_roles$target)
 
   newtask
