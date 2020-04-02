@@ -240,7 +240,7 @@ mlr_pipeops$add("targetinverter", PipeOpTargetInverter)
 #' @description
 #' Allows for target transformation operations of [`Task`][mlr3::Task] that have to be inverted
 #' later, where the transformation function is simply given by a function of the target. Typically
-#' this will applied to a [`TaskRegr`][mlr3::TaskRegr] 
+#' this will be applied to a [`TaskRegr`][mlr3::TaskRegr].
 #'
 #' @section Construction:
 #' ```
@@ -287,10 +287,10 @@ mlr_pipeops$add("targetinverter", PipeOpTargetInverter)
 #'   trafo = function(x) log(x, base = 2),
 #'   inverter = function(x) 2 ^ x)
 #' )
-#' 
+#'
 #' po$train(list(task))
 #' po$predict(list(task))
-#' 
+#'
 #' g = Graph$new()
 #' g$add_pipeop(po)
 #' g$add_pipeop(LearnerRegrRpart$new())

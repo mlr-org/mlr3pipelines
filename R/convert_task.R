@@ -1,7 +1,7 @@
 #' Convert a task from its type to another.
 #'
 #' The task's target is replaced by a different column from the data.
-#' #FIXME: This needs detailed tests and should ne moved to mlr3.
+#' #FIXME: This needs detailed tests and should be moved to mlr3.
 #' @param intask [`Task`][mlr3::Task]\cr
 #'   A [`Task`][mlr3::Task] to be converted.
 #' @param new_target `character(1)`\cr

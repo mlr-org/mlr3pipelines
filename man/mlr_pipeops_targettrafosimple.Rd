@@ -10,7 +10,7 @@
 \description{
 Allows for target transformation operations of \code{\link[mlr3:Task]{Task}} that have to be inverted
 later, where the transformation function is simply given by a function of the target. Typically
-this will applied to a \code{\link[mlr3:TaskRegr]{TaskRegr}}
+this will be applied to a \code{\link[mlr3:TaskRegr]{TaskRegr}}.
 }
 \section{Construction}{
 \preformatted{PipeOpTargetTrafoSimple$new(id = "targettrafosimple", param_vals = list())

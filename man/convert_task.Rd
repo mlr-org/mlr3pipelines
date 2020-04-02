@@ -36,5 +36,5 @@ Further arguments passed to the constructor of the task.}
 }
 \description{
 The task's target is replaced by a different column from the data.
-#FIXME: This needs detailed tests and should ne moved to mlr3.
+#FIXME: This needs detailed tests and should be moved to mlr3.
 }
