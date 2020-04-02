@@ -92,6 +92,7 @@ test_that("PipeOpImpute", {
       method_num = "median",
       method_fct = "newlvl",
       add_dummy = "none")))
+
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
@@ -251,31 +252,30 @@ test_that("PipeOpImpute", {
   })
 })
 
-
 test_that("More tests for PipeOpImputeMode", {
- set.seed(1)
- dat <- data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
-   x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
- dat[c(1L, 10L), ] <- NA
- task = TaskRegr$new("task", backend = dat, target = "y")
+  set.seed(1)
+  dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
+  x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
+  dat[c(1L, 10L), ] = NA
+  task = TaskRegr$new("task", backend = dat, target = "y")
 
- task_NA = task
- task_NA$filter(c(1L, 10L))
+  task_NA = task
+  task_NA$filter(c(1L, 10L))
 
- # works for complete NA
- po_NA = PipeOpImputeMode$new()
- task_NA_trained = po_NA$train(list(task_NA))[[1L]]$data()
- expect_equal(levels(task_NA_trained[[4L]]), as.character(1:2))
- expect_equal(levels(task_NA_trained[[5L]]), as.character(1:5))
- expect_false(any(is.na(task_NA_trained[[4L]])))
- expect_false(any(is.na(task_NA_trained[[5L]])))
+  # works for complete NA
+  po_NA = PipeOpImputeMode$new()
+  task_NA_trained = po_NA$train(list(task_NA))[[1L]]$data()
+  expect_equal(levels(task_NA_trained[[4L]]), as.character(1:2))
+  expect_equal(levels(task_NA_trained[[5L]]), as.character(1:5))
+  expect_false(any(is.na(task_NA_trained[[4L]])))
+  expect_false(any(is.na(task_NA_trained[[5L]])))
 
- expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
-   c("numeric", "character", "character", "integer", "logical"))
- task_NA_predicted = po_NA$predict(list(task_NA))[[1L]]$data()
+  expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
+    c("numeric", "character", "character", "integer", "logical"))
+  task_NA_predicted = po_NA$predict(list(task_NA))[[1L]]$data()
 
- expect_equal(levels(task_NA_predicted[[4L]]), as.character(1:2))
- expect_equal(levels(task_NA_predicted[[5L]]), as.character(1:5))
- expect_false(any(is.na(task_NA_predicted[[4L]])))
- expect_false(any(is.na(task_NA_predicted[[5L]])))
+  expect_equal(levels(task_NA_predicted[[4L]]), as.character(1:2))
+  expect_equal(levels(task_NA_predicted[[5L]]), as.character(1:5))
+  expect_false(any(is.na(task_NA_predicted[[4L]])))
+  expect_false(any(is.na(task_NA_predicted[[5L]])))
 })

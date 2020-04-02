@@ -100,14 +100,21 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
 
     .impute = function(feature, type, model, context) {
       on.exit({private$.learner$state = NULL})
-      private$.learner$state = model
+      if (is.null(model$model)) {
+        imp_vals = model[[1]]
+        if (is.factor(feature))
+          levels(feature) = levels(imp_vals)
+      } else {
+        private$.learner$state = model
 
-      # Use the trained learner to perform the imputation
-      task = private$.create_imputation_task(feature, context)
-      pred = private$.learner$predict(task)
+        # Use the trained learner to perform the imputation
+        task = private$.create_imputation_task(feature, context)
+        pred = private$.learner$predict(task)
 
-      # Replace the missing values with imputed values of the correct format
-      imp_vals = private$.convert_to_type(pred$response[is.na(feature)], type)
+        # Replace the missing values with imputed values of the correct format
+        imp_vals = private$.convert_to_type(pred$response[is.na(feature)], type)
+      }
+
       feature[is.na(feature)] = imp_vals
       feature
     },
@@ -131,6 +138,16 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
         feature = round(feature)
       }
       mlr3:::auto_convert(feature, NULL, type, levels = NULL)
+    },
+    .impute_all_na = function(data, task, colname, type) {
+      list(switch(type,
+        "integer" = 0L,
+        "numeric" = 0,
+        "character" = ".MISSING",
+        "factor" = factor(".MISSING", levels = c(task$levels()[[colname]], ".MISSING")), 
+        "ordered" = factor(".MISSING", levels = c(task$levels()[[colname]], ".MISSING"), ordered = TRUE),
+        "logical" = FALSE,
+        0)) 
     }
   )
 )

@@ -47,7 +47,6 @@ test_that("PipeOpImputeLearner", {
     predict_rows_independent = FALSE,
     affect_context_independent = FALSE)
 
-
   mdata = data.table(
     stringsAsFactors = FALSE,
     a = c(1, 2, 3, 4, 5, NA),
@@ -58,11 +57,10 @@ test_that("PipeOpImputeLearner", {
     # f = ordered(c(letters[1:5], NA), levels = letters[1:6]), # add after mlr-org/mlr3#475
     # g = ordered(letters[1:6], levels = letters[1:6]),        # add after mlr-org/mlr3#475
     j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
-    k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
+    # k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
     l = factor(letters[rep(1:2, 3)])
   )
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
-
 
   expect_datapreproc_pipeop_class(PipeOpImputeLearner, task = task,
     affect_context_independent = FALSE, predict_rows_independent = FALSE,

@@ -73,18 +73,7 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
 
     .train_imputer = function(feature, type, context) {
       feature = feature[!is.na(feature)]
-      if (length(feature)) {
-        as.data.table(feature)[, .N, by = list(feature)][get("N") == max(get("N"))]$feature
-      } else {
-        # if all elements of "feature" are NA:
-        switch(type,
-          factor = levels(feature),
-          integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
-          logical = c(TRUE, FALSE),
-          numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
-          ordered = levels(feature)
-        )
-      }
+      as.data.table(feature)[, .N, by = list(feature)][get("N") == max(get("N"))]$feature
     },
 
     .impute = function(feature, type, model, context) {
@@ -96,7 +85,6 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
       }
       feature
     }
-
   )
 )
 

@@ -150,21 +150,20 @@ PipeOpImpute = R6Class("PipeOpImpute",
       
       self$state$model = imap(intask$data(cols = affected_cols), function(col, colname) {
         type = intask$feature_types[colname, get("type")]
+        if (self$whole_task_dependent) {
+          context = copy(context_data)
+          context[[colname]] = NULL
+        } else {
+          context = NULL
+        }
         if (all(is.na(col))) {
-          imputanda = private$.impute_all_na(imputanda, task, colname, type)
-          model = NULL
-          } else {
-          if (self$whole_task_dependent) {
-            context = copy(context_data)
-            context[[colname]] = NULL
-          } else {
-            context = NULL
-          }
+          model = private$.impute_all_na(imputanda, task, colname, type)
+        } else {
           model = private$.train_imputer(col, type, context)
-          if (colname %in% names(imputanda)) {
-            col = private$.impute(col, type, model, context)
-            imputanda[, (colname) := ..col]
-          }
+        }
+        if (colname %in% names(imputanda)) {
+          col = private$.impute(col, type, model, context)
+          imputanda[, (colname) := ..col]
         }
         model
       })
@@ -194,18 +193,14 @@ PipeOpImpute = R6Class("PipeOpImpute",
       imap(imputanda, function(col, colname) {
         type = intask$feature_types[colname, get("type")]
         model = self$state$model[[colname]]
-        if (is.null(model)) {
-         imputanda = private$.impute_all_na(imputanda, task, colname, type)
+        if (self$whole_task_dependent) {
+          context = copy(context_data)
+          context[[colname]] = NULL
         } else {
-          if (self$whole_task_dependent) {
-            context = copy(context_data)
-            context[[colname]] = NULL
-          } else {
-            context = NULL
-          }
-          col = private$.impute(col, type, model, context)
-          imputanda[, (colname) := ..col]
+          context = NULL
         }
+        col = private$.impute(col, type, model, context)
+        imputanda[, (colname) := ..col]
       })
 
       intask$select(setdiff(intask$feature_names, colnames(imputanda)))$cbind(imputanda)
@@ -223,15 +218,13 @@ PipeOpImpute = R6Class("PipeOpImpute",
     .impute = function(feature, type, model, context) stop("Abstract."),
 
     .impute_all_na = function(data, task, colname, type) {
-      cst = switch(type,
-        "integer" = 0L,
-        "numeric" = 0,
-        "character" = ".MISSING",
-        "factor" = factor(".MISSING", levels = c(task$levels()[[colname]], ".MISSING")), 
-        "ordered" = factor(".MISSING", levels = c(task$levels()[[colname]], ".MISSING"), ordered = TRUE),
-        "logical" = FALSE,
-        0)
-      set(data, j = colname, value = cst)
+      switch(type,
+        factor = levels(data[[colname]]),
+        integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
+        logical = c(TRUE, FALSE),
+        numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
+        ordered = levels(data[[colname]])
+      )
     }
   )
 )
