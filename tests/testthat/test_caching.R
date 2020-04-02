@@ -54,38 +54,39 @@ test_that("Caching works for test hash pipeop", {
 })
 
 
-# test_that("Caching works for scale", {
-#   po = po("scale")
-#   old_hash = po$hash
+test_that("Caching works for scale", {
+ 
+  old_hash = po$hash
 
-#   po$train(list(tsk))
-#   R.cache::saveCache(key = keya, "a")
-#   R.cache::loadCache(key = keya)
-#   R.cache::loadCache(key = keyb)
+  po$train(list(tsk))
+  R.cache::saveCache(key = keya, "a")
+  R.cache::loadCache(key = keya)
+  R.cache::loadCache(key = keyb)
 
-#   R.cache::findCache(key = list(map(list(tsk), "hash"), po$hash))
-#   R.cache::findCache(key = list(map(list(tsk), "hash"), old_hash))
+  R.cache::findCache(key = list(map(list(tsk), "hash"), po$hash))
+  R.cache::findCache(key = list(map(list(tsk), "hash"), old_hash))
 
-#   po$train(list(tsk))
-#   # R.cache::findCache(list(map(list(tsk), "hash"), po_hash))
+  po$train(list(tsk))
+  # R.cache::findCache(list(map(list(tsk), "hash"), po_hash))
+  
+  po = po("scale")
+  tsk = tsk("zoo")
+  po$train(list(tsk))
+  
+  po = po("scale")
+  po$state
 
-#   tsk = tsk("zoo")
-#   print(po$hash)
-#   po$train(list(tsk))
-#   print(po$hash)
+  po = po("nop")
+  print(po$hash)
+  R.cache::clearCache(prompt = FALSE)
+  # R.cache::findCache(list(map(list(tsk), "hash"), po_hash))
+  po$train(list(tsk))
+  po$train(list(tsk))
 
 
-#   po = po("nop")
-#   print(po$hash)
-#   R.cache::clearCache(prompt = FALSE)
-#   # R.cache::findCache(list(map(list(tsk), "hash"), po_hash))
-#   po$train(list(tsk))
-#   po$train(list(tsk))
+  a = po("scale")
+  a$hash
+  a$param_set$values$center = FALSE
+  a$hash
 
-
-#   a = po("scale")
-#   a$hash
-#   a$param_set$values$center = FALSE
-#   a$hash
-
-# })
+})

@@ -6,6 +6,9 @@ The example currently uses the `R.cache` package by Henrik Bengtsson for caching
 This is just a very simple caching package, that provides a clean, simple API, could
 theoretically be replaced by other packages.
 
+Caching can / should be done on two levels:
+  - caching of individual pipeops
+  - caching of full graphs
 
 ## Implementation Details
 
@@ -54,6 +57,11 @@ get_hash = function(x) {
 }
 ```
 
+**Alternative:**
+
+Caching could also be done in `reduce_graph`. This would also simplify caching
+whole graph vs. single pipeops.
+
 ## Possible problems:
 
 A) Unfortunately `private$.train()` is not a pure function, but
@@ -99,3 +107,44 @@ Open Questions:
     Add a second argument `caching`?
   - How do caching and `parallelization` interact?
   - Does `R.cache::evalWithMemoization`s `key` arg need anything else?
+  - If `state` is obtained from a stochastic function, how do we want this to behave?
+
+From @mb706:
+
+- PipeOps should contain metadata about whether they are deterministic or not, and whether 
+  their .train() and .predict() results are the same whenever the input to both is the same (use common vs. separate cache)
+
+  **Possible solution**
+
+  1. Add a new field:
+  ```
+  cacheable = TRUE  # or deterministic = TRUE
+  ```
+  only `PipeOp`s where this holds are beeing cached.
+
+  2. For `cacheable = FALSE`, the `.Random.seed` is added to the caching `key`. 
+     This would allow to cache reproducible workflows.
+
+- with some operations it may make more sense to save just the $state and not the result.
+  Then during $train() the caching mechanism can set the state from cache and call $.predict().
+
+  Question: How do we decide this? We should maybe think about an **API** for this.
+
+### Caching a full graph
+
+- caching in mlrCPO was a wrapper-PipeOp, we could also have that here. 
+  Pro: For multiple operations only the last output needs to be saved; makes the configuration of different caching mechanisms easier. 
+  Cons: We get the drawbacks of wrapping: the graph structure gets obscured. Also when wrapping multiple operations and just one of them is nondeterministic everything falls apart. We may want a ppl() function that wraps a graph optimally so that linear deterministic segments are cached together and only the output of the last PipeOp is kept. (Also works for arbitrary Graphs).
+
+  Comments:
+  - Caching the graph: Yes!
+    Caching segments of the graph? 
+    This makes things unneccessarily complicated. We could instead either cache the whole graph **or** if any po is nondeterministic, cache only deterministic pipeops.
+
+  - **Possible solution**
+    1. Wrap the graph as described above with pro's, con's.
+
+    2. Cache the graph's `$reduce_graph` method in `$train, $predict` (in `Graph.R`)
+       similarly to how `PipeOp`s are cached above.
+       This is only possible if all po's in a graph are deterministic.
+
