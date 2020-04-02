@@ -18,7 +18,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpImputeHist`].
+#' Input and output channels are inherited from [`PipeOpImpute`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) histogram.
 #'
@@ -56,15 +56,17 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   public = list(
     initialize = function(id = "imputehist", param_vals = list()) {
       super$initialize(id, param_vals = param_vals, packages = "graphics")
-    },
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
+    .select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
 
-    train_imputer = function(feature, type, context) {
+    .train_imputer = function(feature, type, context) {
       graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]
     },
 
-    impute = function(feature, type, model, context) {
+    .impute = function(feature, type, model, context) {
       which.bins = sample.int(length(model$counts), sum(is.na(feature)), replace = TRUE, prob = model$counts)
       sampled = runif(length(which.bins), model$breaks[which.bins], model$breaks[which.bins + 1L])
       if (type == "integer") {

@@ -25,7 +25,7 @@ Whether the \code{context_columns} parameter should be added which lets the user
 used for imputation inference. This should generally be \code{FALSE} if imputation depends only on individual features
 (e.g. mode imputation), and \code{TRUE} if imputation depends on other features as well (e.g. kNN-imputation).
 \item packages :: \code{character}\cr
-Set of all required packages for the \code{\link{PipeOp}}'s \verb{$train} and \verb{$predict} methods. See \verb{$packages} slot.
+Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train} and \code{private$.predict} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{task_type} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input and will be returned as output. This
@@ -42,7 +42,7 @@ should generally be a \code{character(1)} identifying a type of \code{\link[mlr3
 \code{\link{PipeOpImpute}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}, or a subclass;
 the \code{\link[mlr3:Task]{Task}} type is the same as for input; both during training and prediction.
 
-The output \code{\link[mlr3:Task]{Task}} is the modified input \code{\link[mlr3:Task]{Task}} with features imputed according to the \verb{$impute()} function.
+The output \code{\link[mlr3:Task]{Task}} is the modified input \code{\link[mlr3:Task]{Task}} with features imputed according to the \code{private$.impute()} function.
 }
 
 \section{State}{
@@ -60,7 +60,7 @@ the prediction \code{\link[mlr3:Task]{Task}} has the same features, feature layo
 Copy of the trained \code{\link[mlr3:Task]{Task}}'s \verb{$feature_types} slot. This is used during prediction to ensure that
 the \code{\link[mlr3:Task]{Task}} resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 \item \code{model} :: named \code{list}\cr
-Model used for imputation. This is a list named by \code{\link[mlr3:Task]{Task}} features, containing the result of the \verb{$train_imputer()} function for each one.
+Model used for imputation. This is a list named by \code{\link[mlr3:Task]{Task}} features, containing the result of the \code{private$.train_imputer()} function for each one.
 }
 }
 
@@ -95,18 +95,18 @@ Fields inherited from \code{\link{PipeOp}}.
 
 Methods inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{select_cols(task)} \cr
+\item \code{.select_cols(task)} \cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{character} \cr
 Selects which columns the \code{\link{PipeOp}} operates on. In contrast to
-the \code{affect_columns} parameter. \code{select_cols} is for the \emph{inheriting class} to determine which columns
+the \code{affect_columns} parameter. \code{private$.select_cols()} is for the \emph{inheriting class} to determine which columns
 the operator should function on, e.g. based on feature type, while \code{affect_columns} is a way for the \emph{user}
 to limit the columns that a \code{\link{PipeOpTaskPreproc}} should operate on.
-\item \code{train_imputer(feature, type, context)}\cr
+\item \code{.train_imputer(feature, type, context)}\cr
 (\code{atomic}, \code{character(1)}, \code{\link{data.table}}) -> \code{any}\cr
-Called once for each feature selected by \code{affect_columns} to create the model entry to be used for \verb{$impute()}.
-\item \code{impute(feature, type, model, context)}\cr
+Called once for each feature selected by \code{affect_columns} to create the model entry to be used for \code{private$.impute()}.
+\item \code{.impute(feature, type, model, context)}\cr
 (\code{atomic}, \code{character(1)}, \code{any}, \code{\link{data.table}}) -> \code{atomic}\cr
-Imputes the features. \code{model} is the model created by \verb{$train_imputer()}
+Imputes the features. \code{model} is the model created by \code{private$.train_imputer()}
 }
 }
 
@@ -137,6 +137,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -156,6 +157,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
@@ -164,6 +166,7 @@ Other Imputation PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}}
 }

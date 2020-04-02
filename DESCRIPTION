@@ -77,7 +77,7 @@ LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.1.0
-Collate: 
+Collate:
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
@@ -110,6 +110,7 @@ Collate:
     'PipeOpImputeHist.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
+    'PipeOpImputeMode.R'
     'PipeOpImputeNewlvl.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
@@ -130,6 +131,7 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+    'PipeOpThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

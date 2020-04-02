@@ -74,9 +74,11 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize", feature_types = c("numeric", "integer"))
-    },
+    }
+  ),
+  private = list(
 
-    train_dt = function(dt, levels, target) {
+    .train_dt = function(dt, levels, target) {
       bc = lapply(dt, FUN = function(x) {
         invoke(bestNormalize::yeojohnson, x, .args = self$param_set$get_values(tags = "yj"))
       })
@@ -89,7 +91,7 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
       dt
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       for (j in colnames(dt)) {
         set(dt, j = j,
           value = predict(self$state$bc[[j]], newdata = dt[[j]]))

@@ -58,8 +58,8 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
       ps = ParamSet$new(params = list(
         # named list, each entry with a vector of roles
         ParamUty$new("new_role", tags = c("train", "predict"), custom_check = function(x) {
-          first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L,
-            names = "named")
+          first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
+          # return the error directly if this failed
           if (is.character(first_check)) {
             return(first_check)
           }
@@ -70,30 +70,35 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
         })
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
-    },
-
-    transform = function(task) {
+    }
+  ),
+  private = list(
+    .transform = function(task) {
       new_role = self$param_set$values$new_role
+
+      if (is.null(new_role)) {
+        return(task) # early exit
+      }
+
+      new_role_names = names(new_role)
       # names of "new_role" must be a subset of the column names of the task
-      assert_subset(names(new_role), choices = task$col_info$id)
+      assert_subset(new_role_names, choices = task$col_info$id, empty.ok = FALSE)
+
       # changing the role of a target is not supported
-      if (any(task$col_roles$target %in% names(new_role))) {
-        stop("Cannot change the role of a target.")
+      if (any(task$col_roles$target %in% new_role_names)) {
+        stopf("Cannot change the role of a target.")
       }
+
       # drop (all) old role(s)
-      task$col_roles = map(task$col_roles, .f = function(x) x[x %nin% names(new_role)])
-      col_roles = unlist(task$col_roles)
+      task$col_roles = map(task$col_roles, .f = function(x) x[x %nin% new_role_names])
+      
       # add the new role(s)
-      indices = rep.int(seq_along(task$col_roles), times = unlist(map(task$col_roles, length)))
-      for(i in seq_along(new_role)) {
-        if (length(new_role[[i]])) {
-          column = names(new_role)[i]
-          new = match(new_role[[i]], names(task$col_roles))
-          for(role in new) {
-            task$col_roles[[role]] = union(task$col_roles[[role]], column)
-          }
-        }
+      all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
+      for(role in all_col_roles) {
+        task$col_roles[[role]] = union(task$col_roles[[role]],
+          y = names(which(unlist(map(new_role, .f = function(x) role %in% x)))))
       }
+
       task
     }
   )
