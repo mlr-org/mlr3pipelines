@@ -241,13 +241,8 @@ PipeOp = R6Class("PipeOp",
         return(named_list(self$output$name, NO_OP))
       }
       input = check_types(self, input, "input", "train")
-      # caching
-      R.cache::evalWithMemoization({
-        result = list(private$.train(input), self$state)
-        }, key = list(map_chr(input, get_hash), self$hash)
-      )
-      if (is.null(self$state)) state = result$state
-      output = check_types(self, result$output, "output", "train")
+      output = list(private$.train(input), self$state)
+      output = check_types(self, output, "output", "train")
       output
     },
     predict = function(input) {
@@ -261,13 +256,7 @@ PipeOp = R6Class("PipeOp",
         stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
       }
       input = check_types(self, input, "input", "predict")
-      R.cache::evalWithMemoization({
-        output = private$.predict(input)
-        },
-         key = list(map_chr(input, get_hash), self$hash)
-      )
-      # print(digest(list(class(self), self$id), algo = "xxhash64"))
-      # print(digest(self$param_set, algo = "xxhash64"))
+      output = private$.predict(input)
       output = check_types(self, output, "output", "predict")
       output
     }
@@ -375,9 +364,4 @@ check_types = function(self, data, direction, operation) {
   }
   names(data) = typetable$name
   data
-}
-
-get_hash = function(x) {
-  if (!is.null(x$hash)) return(x$hash)
-    digest(x, algo = "xxhash64")
 }

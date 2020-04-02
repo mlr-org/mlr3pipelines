@@ -531,7 +531,13 @@ graph_reduce = function(self, input, fun, single_input) {
     input = input_tbl$payload
     names(input) = input_tbl$name
 
-    output = op[[fun]](input)
+    R.cache::evalWithMemoization(
+      {res_out = list(output = op[[fun]](input), state = op$state)},
+      key = list(map_chr(input, get_hash), op$hash)
+    )
+    if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
+    output = res_out$output
+    
     if (self$keep_results) {
       op$.result = output
     }
@@ -600,4 +606,9 @@ predict.Graph = function(object, newdata, ...) {
     result = result$data$response %??% result$data$prob
   }
   result
+}
+
+get_hash = function(x) {
+  if (!is.null(x$hash)) return(x$hash)
+    digest(x, algo = "xxhash64")
 }
