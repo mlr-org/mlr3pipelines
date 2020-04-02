@@ -187,7 +187,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
     .feature_types = NULL,
 
     .train = function(inputs) {
-      browser()
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
       affected_cols = intask$feature_names
