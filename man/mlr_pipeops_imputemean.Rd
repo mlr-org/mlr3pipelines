@@ -88,6 +88,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
@@ -119,6 +120,7 @@ Other PipeOps:
 Other Imputation PipeOps: 
 \code{\link{PipeOpImpute}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},

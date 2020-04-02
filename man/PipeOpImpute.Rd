@@ -135,6 +135,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
@@ -166,6 +167,7 @@ Other PipeOps:
 
 Other Imputation PipeOps: 
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
