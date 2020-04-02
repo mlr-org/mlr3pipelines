@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute numerical features by predicted values of a learner.
+#' Impute features using values predicted by a learner.
 #'
 #' @section Construction:
 #' ```
@@ -13,9 +13,10 @@
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"imputemean"`.
+#'   Identifier of resulting object, default `"imputelearner"`.
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
+#'   The [`Learner`][mlr3::Learner] needs to be able to handle missing values, i.e. have the `missings` property.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -27,7 +28,8 @@
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
 #'
-#' The `$state$model` is a named `list` of `numeric(n)` indicating the predicted values of the respective feature.
+#' The `$state$models` is a named `list` of `models` created by the [`Learner`][mlr3::Learner]'s `$.train()` function
+#' for each column.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`].
@@ -57,8 +59,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
                            inherit = PipeOpImpute,
                            public = list(
                              initialize = function(id = "imputelearner", learner, param_vals = list()) {
-                               private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
-
+                               private$.learner = as_learner(learner)$clone(deep = TRUE) # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
                                super$initialize(id, param_vals = param_vals, whole_task_dependent = TRUE)
                              },
 
@@ -72,18 +73,19 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
                              },
 
                              train_imputer = function(feature, type, context) {
-                               # TODO deal with fully missing feature
-
-                               if(is.null(context) || nrow(context) == 0){
-                                 # If no context is specified, use a constant context
+                               on.exit({private$.learner$state = NULL})
+                               if (is.null(context) || nrow(context) == 0) {
                                  context = data.table(const = rep(1, length(feature)))
                                }
 
                                task = private$.create_imputation_task(feature, context)
-                               private$.learner$train(task, row_ids = which(!is.na(feature)))
+                               private$.learner$train(task, row_ids = which(!is.na(feature)))$state
                              },
 
                              impute = function(feature, type, model, context) {
+                               on.exit({private$.learner$state = NULL})
+                               private$.learner$state = self$state
+                               
                                # Use the trained learner to perform the imputation
                                task = private$.create_imputation_task(feature, context)
                                pred = model$predict(task)
@@ -115,29 +117,27 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
                            ),
                            private = list(
                              .learner = NULL,
-                             .create_imputation_task = function(feature, context){
+                             .create_imputation_task = function(feature, context) {
                                # Create a task that can be used by the learner based on imputation context
                                context[['impute_col']] = private$.convert_to_predictable(feature)
 
                                imp_tsk = if(private$.learner$task_type == "regr") TaskRegr else TaskClassif
                                imp_tsk$new(id = "taskimpute", backend = context, target = "impute_col")
                              },
-                             .convert_to_predictable = function(feature){
+                             .convert_to_predictable = function(feature) {
                                # Convert non-factor imputation targets to a factor
-                               if(is.numeric(feature)){
+                               if (is.numeric(feature))
                                  feature
-                               } else {
+                               else
                                  factor(feature, ordered = FALSE)
-                               }
                              },
-                             .convert_to_target = function(feature, type){
+                             .convert_to_target = function(feature, type) {
                                # Convert an imputed feature to its original type
                                if(type == "integer"){
                                  feature = round(feature)
                                }
-
                                func = paste0("as.", type)
-                               do.call(func, args = list(feature))
+                               invoke(func, args = list(feature))
                              }
                            )
 )
