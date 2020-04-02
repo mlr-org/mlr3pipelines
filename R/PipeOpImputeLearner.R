@@ -59,6 +59,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputelearner", learner, param_vals = list(context_columns = selector_all())) {
+      assert_subset("missings", learner$properties)
       private$.learner = as_learner(learner)$clone(deep = TRUE) # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
       super$initialize(id, param_vals = param_vals, whole_task_dependent = TRUE)
     }
@@ -134,7 +135,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   )
 )
 
-mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(LearnerRegr$new("learner")))
+mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(learner = lrn("regr.featureless")))
 
 # See mlr-org/mlr#470
 convert_to_task = function(id = "impute", data, target, task_type, ...) {
