@@ -113,8 +113,7 @@ A set of tags associated with the \code{PipeOp}. Tags describe a PipeOp's purpos
 Can be used to filter \code{as.data.table(mlr_pipeops)}.
 PipeOp tags are inherited and child classes can introduce additional tags.
 \item \code{hash} :: \code{character(1)} \cr
-Checksum calculated on the \code{\link{PipeOp}}, depending on the \code{\link{PipeOp}}'s \code{class} and the slots \verb{$id} and \verb{$param_set}
-(and therefore also \verb{$param_set$values}). If a
+Checksum calculated on the \code{\link{PipeOp}}, depending on the \code{\link{PipeOp}}'s \code{class} and the slots \verb{$id} and \verb{$param_set$values}. If a
 \code{\link{PipeOp}}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
 binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
 \item \code{.result} :: \code{list} \cr
