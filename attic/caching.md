@@ -20,8 +20,7 @@ This would make complexity very manageable.
 `R.cache::evalWithMemoization` memoizes the provided expression.
 The `hash` is computed from its `key` argument.
 
-
-Possible solution: adjust `PipeOp` in `PipeOp.R`
+~~Possible solution: adjust `PipeOp` in `PipeOp.R`
 ```
 train = function(input) {
       ...
@@ -48,6 +47,20 @@ train = function(input) {
     }
   ),
 ```
+~~
+
+or alternatively in `graph_reduce`:
+
+The call to `op[[fun]](input)` calls the `PipeOp's` "train" and "predict" fun.
+
+```
+    R.cache::evalWithMemoization(
+      {res_out = list(output = op[[fun]](input), state = op$state)},
+      key = list(map_chr(input, get_hash), op$hash)
+    )
+    if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
+    output = res_out$output
+```   
 
 where `get_hash` is:
 ```
