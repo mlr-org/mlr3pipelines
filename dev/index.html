@@ -117,8 +117,8 @@
 <a href="#what-is-mlr3pipelines" class="anchor"></a>What is <code>mlr3pipelines</code>?</h2>
 <p>Watch our UseR 2019 Presentation on Youtube for a 15 minute introduction:</p>
 <p><a href="https://www.youtube.com/watch?v=gEW5RxkbQuQ"><img src="https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg" alt="UseR 2019 mlr3pipelines"></a></p>
-<p><strong><code>mlr3pipelines</code></strong> is a <a href="https://en.wikipedia.org/wiki/Dataflow_programming">dataflow programming</a> toolkit for machine learning in R utilising the <strong><a href="https://github.com/mlr-org/mlr3">mlr3</a></strong> package. Machine learning workflows can be written as directed “Graphs” that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the <strong><a href="https://github.com/mlr-org/mlr3tuning">mlr3tuning</a></strong> package, it is even possible to simultaneously optimize parameters of multiple processing units.</p>
-<p>In principle, <em>mlr3pipelines</em> is about defining singular data and model manipulation steps as “PipeOps”:</p>
+<p><strong><code>mlr3pipelines</code></strong> is a <a href="https://en.wikipedia.org/wiki/Dataflow_programming">dataflow programming</a> toolkit for machine learning in R utilising the <strong><a href="https://github.com/mlr-org/mlr3">mlr3</a></strong> package. Machine learning workflows can be written as directed âGraphsâ that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the <strong><a href="https://github.com/mlr-org/mlr3tuning">mlr3tuning</a></strong> package, it is even possible to simultaneously optimize parameters of multiple processing units.</p>
+<p>In principle, <em>mlr3pipelines</em> is about defining singular data and model manipulation steps as âPipeOpsâ:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="no">pca</span>        <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"pca"</span>)
 <span class="no">filter</span>     <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"filter"</span>, <span class="kw">filter</span> <span class="kw">=</span> <span class="kw pkg">mlr3filters</span><span class="kw ns">::</span><span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span>(<span class="st">"variance"</span>), <span class="kw">filter.frac</span> <span class="kw">=</span> <span class="fl">0.5</span>)
 <span class="no">learner_po</span> <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"learner"</span>, <span class="kw">learner</span> <span class="kw">=</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>))</pre></div>
@@ -138,7 +138,7 @@
 <a href="#feature-overview" class="anchor"></a>Feature Overview</h2>
 <p>Single computational steps can be represented as so-called <strong>PipeOps</strong>, which can then be connected with directed edges in a <strong>Graph</strong>. The scope of <em>mlr3pipelines</em> is still growing; currently supported features are:</p>
 <ul>
-<li>Simple data manipulation and preprocessing operations, e.g. PCA, feature filtering</li>
+<li>Simple data manipulation and preprocessing operations, e.g.Â PCA, feature filtering</li>
 <li>Task subsampling for speed and outcome class imbalance handling</li>
 <li>
 <em>mlr3</em> <em>Learner</em> operations for prediction and stacking</li>
@@ -166,8 +166,8 @@
 <div id="bugs-questions-feedback" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bugs-questions-feedback" class="anchor"></a>Bugs, Questions, Feedback</h2>
-<p><em>mlr3pipelines</em> is a free and open source software project that encourages participation and feedback. If you have any issues, questions, suggestions or feedback, please do not hesitate to open an “issue” about it on the GitHub page!</p>
-<p>In case of problems / bugs, it is often helpful if you provide a “minimum working example” that showcases the behaviour (but don’t worry about this if the bug is obvious).</p>
+<p><em>mlr3pipelines</em> is a free and open source software project that encourages participation and feedback. If you have any issues, questions, suggestions or feedback, please do not hesitate to open an âissueâ about it on the GitHub page!</p>
+<p>In case of problems / bugs, it is often helpful if you provide a âminimum working exampleâ that showcases the behaviour (but donât worry about this if the bug is obvious).</p>
 <p>Please understand that the resources of the project are limited: response may sometimes be delayed by a few days, and some feature suggestions may be rejected if they are deemed too tangential to the vision behind the project.</p>
 </div>
 <div id="similar-projects" class="section level2">
