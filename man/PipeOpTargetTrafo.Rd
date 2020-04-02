@@ -12,11 +12,17 @@ target is transformed during the training phase and information to invert this t
 be send along to \code{\link{PipeOpTargetInverter}} which then inverts this transformation during the
 prediction phase. This inversion may need info about both the training and the prediction data.
 
-Users should overload three functions:
+Users should overload four functions:
 \itemize{
+\item \code{set_state()} has a \code{\link[mlr3:Task]{Task}} input and should return a \code{list}, which can be used to
+set the \verb{$state}. \code{set_state()} will be called a single time during training right before
+\code{train_target()} will be called. Therefore, the \verb{$state} may contain info needed in
+\code{train_target()}.
 \item \code{train_target()} has a \code{\link[mlr3:Task]{Task}} input and should return a modified
-\code{\link[mlr3:Task]{Task}} while also setting the \verb{$state}. This typically consists of calculating a
-new target and modifying the task by using \code{private$.update_target()}.
+\code{\link[mlr3:Task]{Task}}. This typically consists of calculating a new target and modifying the
+task by using \code{private$.update_target()}. \code{train_target()} will be called during training and
+prediction because the target (and if needed also type) of the input task must be transformed
+both times.
 \item \code{train_invert()}has a \code{\link[mlr3:Task]{Task}} input and should return a \code{predict_phase_control}
 object (can be anything the user needs for the inversion later). This should not modify the input
 task.
@@ -26,7 +32,8 @@ transformation done by \code{train_target()} and return a \code{\link[mlr3:Predi
 }
 }
 \section{Construction}{
-\preformatted{PipeOpTargetTrafo$new(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type = "Task")
+\preformatted{PipeOpTargetTrafo$new(id, param_set = ParamSet$new(),
+  param_vals = list(), packages = character(0))
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -58,16 +65,17 @@ to the overloaded \code{train_target()} function both during training and predic
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} and should be set explicitly by the user in the overloaded
-\code{train_target()} function.
+The \verb{$state} is a named \code{list} and should be returned explicitly by the user in the overloaded
+\code{set_state()} function.
 }
 
 \section{Internals}{
 
 \code{\link{PipeOpTargetTrafo}} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the
 \code{private$.train()} and \code{private$.predict()} functions. These functions perform checks and go on
-to call \code{train_target()}, \code{train_invert()} and \code{inverter()}. A subclass of \code{\link{PipeOpTargetTrafo}}
-should implement these functions and be used in combination with \code{\link{PipeOpTargetInverter}}.
+to call \code{set_state()}, \code{train_target()}, \code{train_invert()} and \code{inverter()}. A subclass of
+\code{\link{PipeOpTargetTrafo}} should implement these functions and be used in combination with
+\code{\link{PipeOpTargetInverter}}.
 }
 
 \section{Fields}{
@@ -79,12 +87,16 @@ Fields inherited from \code{\link{PipeOp}}.
 
 Methods inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
+\item \code{set_state(task)}\cr
+(\code{\link[mlr3:Task]{Task}}) -> \code{list}\cr
+Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()}. Takes a single
+\code{\link[mlr3:Task]{Task}} as input and returns a \code{list} to set the \verb{$state}. Can be \code{list()}.
 \item \code{train_target(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
-Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()}. Takes a single
-\code{\link[mlr3:Task]{Task}} as input and modifies it while storing information in the \verb{$state} slot.
-Note that unlike \verb{$.train()}, the argument is \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}},
-and the return object is also \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}.
+Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()} and
+\code{private$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input and modifies it. Note that
+unlike \verb{$.train()}, the argument is \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}, and the
+return object is also \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}.
 \item \code{train_invert(task)}\cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{predict_phase_control} object\cr
 Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.predict()}. Takes a single
@@ -161,6 +173,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},

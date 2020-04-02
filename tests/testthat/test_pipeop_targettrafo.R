@@ -6,6 +6,6 @@ test_that("PipeOpTargetTrafo - basic properties", {
   po = PipeOpTargetTrafo$new("po")
 
   expect_pipeop(po)
-  expect_data_table(po$input, nrows = 1)
-  expect_data_table(po$output, nrows = 2)
+  expect_data_table(po$input, nrows = 1L)
+  expect_data_table(po$output, nrows = 2L)
 })

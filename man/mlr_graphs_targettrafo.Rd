@@ -21,7 +21,7 @@ single \code{\link[mlr3:Task]{Task}} as input.}
 A \code{\link{PipeOp}} that is a subclass of \code{\link{PipeOpTargetTrafo}}. Default is
 \code{\link{PipeOpTargetTrafoSimple}}.}
 
-\item{id_prefix}{(\verb{[character(1)]}):\cr
+\item{id_prefix}{\code{character(1)} \cr
 Optional id prefix to prepend to \code{\link{PipeOpTargetInverter}} ID. The resulting ID will be
 \code{"[id_prefix]targetinverter"}. Default is \code{""}.}
 }
@@ -42,9 +42,9 @@ parameters \code{trafo} and \code{inverter} of the \code{param_set} of the resul
 \examples{
 library("mlr3")
 
-targettrafo = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
-targettrafo$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
-targettrafo$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
+tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
+tt$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
 
 # gives the same as
 g = Graph$new()

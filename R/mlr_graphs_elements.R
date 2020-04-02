@@ -19,16 +19,16 @@
 #' @param task [`Task`] \cr
 #'   A [`Task`][mlr3::Task] to create a robustifying pipeline for.
 #'   Optional, if omitted, the full pipeline is created.
-#' @param learner [`Learner`] \cr
+#' @param learner [`Learner`][mlr3::Learner] \cr
 #'   A learner to create a robustifying pipeline for. Optional, if omitted,
 #'   a more conservative pipeline is built.
-#' @param impute_missings [`logical`] | [`NULL`] \cr
+#' @param impute_missings `logical(1)` | `NULL` \cr
 #'   Should missing values be imputed? Defaults to `NULL`, i.e imputes if the task has
 #'   missing values and the learner can not handle them.
-#' @param factors_to_numeric [`logical`] | [`NULL`] \cr
+#' @param factors_to_numeric `logical(1)` | `NULL` \cr
 #'   Should factors be encoded? Defaults to `NULL`, i.e encodes if the task has factors
 #'   and the learner can not handle factors.
-#' @param max_cardinality [`integer`] \cr
+#' @param max_cardinality `integer(1)` \cr
 #'   Maximum number of factor levels allowed. See above. Default: 1000.
 #' @return [`Graph`]
 #' @export
@@ -113,9 +113,9 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #' @param graph [`PipeOp`] | [`Graph`] \cr
 #'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for.
 #'   Outputs from the replicated `graph`s are connected with the `averager`.
-#' @param iterations [`integer`] \cr
+#' @param iterations `integer(1)` \cr
 #'   Number of bagging iterations. Defaults to 10.
-#' @param frac [`numeric`] \cr
+#' @param frac `numeric(1)` \cr
 #'   Percentage of rows to keep during subsampling. See [`PipeOpSubsample`] for
 #'   more information. Defaults to 0.7.
 #' @param averager [`PipeOp`] | [`Graph`] \cr
@@ -154,15 +154,15 @@ mlr_graphs$add("bagging", pipeline_bagging)
 #' @description
 #' Create a multiplexed graph.
 #'
-#' @param graphs (`[list of Graph]`):\cr
+#' @param graphs `list` of [`Graph`] \cr
 #'   Multiple graphs, possibly named. They all must have exactly
 #'   one output. If any of the arguments are named, then all must have
 #'   unique names.
-#' @param prefix_branchops (`[character(1)]`):\cr
+#' @param prefix_branchops `character(1)` \cr
 #'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`] id. Their
 #'   resulting IDs will be `"[prefix_branchops]branch"` and `"[prefix_branchops]unbranch"`.
 #'   Default is `""`.
-#' @param prefix_paths (`[logical(1) | character(1)]`):\cr
+#' @param prefix_paths `logical(1)` | `character(1)` \cr
 #'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 #'   avoid ID clashes in resulting graph. Default `FALSE`. If this is `TRUE`, the prefixes
 #'   are taken from the names of the input arguments if present or `"poX"` where X counts up. If this is
@@ -265,7 +265,7 @@ mlr_graphs$add("branch", pipeline_branch)
 #' @param trafo_pipeop [`PipeOp`] \cr
 #'   A [`PipeOp`] that is a subclass of [`PipeOpTargetTrafo`]. Default is
 #'   [`PipeOpTargetTrafoSimple`].
-#' @param id_prefix (`[character(1)]`):\cr
+#' @param id_prefix `character(1)` \cr
 #'   Optional id prefix to prepend to [`PipeOpTargetInverter`] ID. The resulting ID will be
 #'   `"[id_prefix]targetinverter"`. Default is `""`.
 #'
@@ -274,9 +274,9 @@ mlr_graphs$add("branch", pipeline_branch)
 #' @examples
 #' library("mlr3")
 #' 
-#' targettrafo = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
-#' targettrafo$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
-#' targettrafo$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+#' tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
+#' tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
+#' tt$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
 #' 
 #' # gives the same as
 #' g = Graph$new()
