@@ -8,8 +8,8 @@ test_that("PipeOpImpute", {
     public = list(
       initialize = function(id = "impute", param_vals = list()) {
         ps = ParamSet$new(list(
-          ParamFct$new("method_num", levels = c("median", "mean", "sample", "hist"), default = "median", tags = c("train", "predict")),
-          ParamFct$new("method_fct", levels = c("newlvl", "sample"), default = "newlvl", tags = c("train", "predict")),
+          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist"), default = "median", tags = c("train", "predict")),
+          ParamFct$new("method_fct", levels = c("newlvl", "sample", "mode"), default = "newlvl", tags = c("train", "predict")),
           ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict")),
           ParamUty$new("innum", tags = c("train", "predict"))
         ))
@@ -44,9 +44,10 @@ test_that("PipeOpImpute", {
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% if (is.null(self$param_set$values$innum)) po("featureunion") else po("featureunion", innum = self$param_set$values$innum)
-      },
+      }
+    ),
+    private = list(
       .get_state = function(task) {
-
 
         graph = self$build_graph()
         graph$train(task)

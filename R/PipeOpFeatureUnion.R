@@ -166,6 +166,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
         .f = function(x) x$data(cols = duplicates[i])), recursive = FALSE))))) > 0L
     }
     if (any(!real_duplicates)) {
+      # FIXME: sprintf may not be able to handle large error messages here?
       stopf(sprintf("PipeOpFeatureUnion cannot aggregate different features sharing the same feature name. This applies to the following features: '%s'",
         paste0(duplicates[!real_duplicates], collapse = "', '")))
     }
