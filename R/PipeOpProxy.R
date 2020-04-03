@@ -4,9 +4,9 @@
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description
-#' Behaves like another [`PipeOp`] or [`Graph`] that is encapsulated as a `content` hyperparameter.
-#' Input is routed through the `content` and the `content`s' output is returned. Note that the
-#' `content` hyperparameter can be changed, this is useful as an alternative to branching.
+#' Wraps another [`PipeOp`] or [`Graph`] as determined by the `content` hyperparameter.
+#' Input is routed through the `content` and the `content`s' output is returned.
+#' The `content` hyperparameter can be changed during tuning, this is useful as an alternative to [`PipeOpBranch`].
 #'
 #' @section Construction:
 #' ```
@@ -30,20 +30,22 @@
 #'
 #' [`PipeOpProxy`] has multiple output channels depending on the `outnum` construction argument,
 #' named `"output1"`, `"output2"`, ...
-#' The output is determined by the output of the `content` [`PipeOp`] or [`Graph`].
+#' The output is determined by the output of the `content` operation (a [`PipeOp`] or [`Graph`]).
 #'
 #' @section State:
-#' The `$state` is the `content` [`PipeOp`] or [`Graph`].
+#' The `$state` is the trained `content` [`PipeOp`] or [`Graph`].
 #'
 #' @section Parameters:
-#' * `content` :: [`PipeOp`] or [`Graph`] \cr
-#'   The [`PipeOp`] or [`Graph`] that is being proxied (more precisely an object that can be
-#'   converted to a [`Graph`], because this is done internally). Defaults to an instance of
-#'   [`PipeOpCopy`] (simply copies the input).
+#' * `content` :: [`PipeOp`] | [`Graph`]\cr
+#'   The [`PipeOp`] or [`Graph`] that is being proxied (or an object that is
+#'   converted to a [`Graph`] by [`as_graph()`]). Defaults to an instance of
+#'   [`PipeOpFeatureUnion`] (combines all input if they are [`Task`][mlr3::Task]s).
 #'
 #' @section Internals:
-#' [`PipeOpProxy`] inherits from [`PipeOp`]. The `content` will internally be coerced to a graph via
-#' `as_graph` prior to train and predict.
+#' The `content` will internally be coerced to a graph via
+#' [`as_graph()`] prior to train and predict.
+#'
+#' The default value for `content` is [`PipeOpFeatureUnion`],
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
@@ -81,45 +83,38 @@ PipeOpProxy = R6Class("PipeOpProxy",
           # content must be an object that can be coerced to a Graph and the output number must match
           tryCatch({
             graph = as_graph(x)
-            if (NROW(graph$output) != outnum) "Graph's output number must match `outnum`" else TRUE
+            # graph$output access may be slow, so we cache it here
+            graph_outnum = nrow(graph$output)
+            graph_input = nrow(graph$input)
+            if (graph_outnum != 1 && graph_outnum != outnum) {
+              "Graph's output number must either be 1 or match `outnum`"
+            } else if (innum > 1 && graph_input != innum && (graph_input > innum || "..." %nin% graph$input$name)) {
+              "Graph's input number must either match `outnum` or the Graph must contain a '...' (vararg) channel."
+            }
           },
           error = function(error_condition) "`content` must be an object that can be converted to a Graph")
-        })
+        }, tags = c("required", "train", "predict"))
       ))
-      ps$values = list(content = PipeOpCopy$new(outnum = outnum))
+      ps$values = list(content = PipeOpFeatureUnion$new(innum = innum))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
+        tags = "meta"
       )
     },
     train_internal = function(input) {
       content = as_graph(self$param_set$values$content, clone = TRUE)
-      output = content$train(unname(input), single_input = FALSE)
-      self$state = content
+      output = content$train(unname(input), single_input = length(input) == 1)
+      self$state = content$state
       output
     },
     predict_internal = function(input) {
-      content = self$state
-      output = content$predict(unname(input), single_input = FALSE)
-      self$state = content
-      output
+      content = as_graph(self$param_set$values$content, clone = TRUE)
+      content$state = self$state
+      content$predict(unname(input), single_input = length(input) == 1)
     }
   ),
   private = list(
-    deep_clone = function(name, value) {
-      if (name == "state" && !is.null(value)) {
-        value$clone(deep = TRUE)
-      } else if (name == ".param_set" && !is.null(value)) {
-        content = value$values$content$clone(deep = TRUE)
-        value = value$clone(deep = TRUE)
-        value$values$content = content
-        value
-      } else if (name == "content" && !is.null(value)) {
-        value$clone(deep = TRUE)
-      } else {
-       super$deep_clone(name, value)
-      }
-    },
     .param_set = NULL,
     .param_set_source = NULL,
     .id = NULL

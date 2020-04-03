@@ -27,7 +27,7 @@
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
-#' @section Input and Output:
+#' @section Input and Output Channels:
 #' [`PipeOpBranch`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
 #'
 #' [`PipeOpBranch`] has multiple output channels depending on the `options` construction argument, named `"output1"`, `"output2"`, ...
