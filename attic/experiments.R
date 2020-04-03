@@ -22,8 +22,7 @@ tools::buildVignettes(dir = "mlr3pipelines")
 system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
 devtools::run_examples("mlr3pipelines")
 
-
-testthat::test_package("mlr3pipelines", filter = "impute")
+testthat::test_package("mlr3pipelines", filter = "proxy")
 
 
 testthat::test_package("mlr3pipelines", filter = "branch")

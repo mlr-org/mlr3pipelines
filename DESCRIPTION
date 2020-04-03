@@ -71,7 +71,8 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    mlr-org/mlr3
+    mlr-org/mlr3,
+    mlr-org/paradox@fix_272_clone
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -121,6 +122,7 @@ Collate:
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
