@@ -8,7 +8,13 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute features using values predicted by a learner.
+Impute features by fitting a \code{\link[mlr3:Learner]{Learner}} for each feature.
+Uses the \code{context_columns} as features to train the imputation \code{\link[mlr3:Learner]{Learner}}.
+The \code{\link[mlr3:Learner]{Learner}} needs to  be able to handle missing values, i.e. have property
+'missings'.
+Additionally, only features supported by the learner can be imputed; i.e. learners of type
+'regr' can only impute features of type 'integer' and 'numeric', while 'classif' can impute
+features of type 'character', 'factor', 'ordered' and 'logical'.
 }
 \section{Construction}{
 \preformatted{PipeOpImputeLearner$new(id = "imputelearner", learner,  param_vals = list())

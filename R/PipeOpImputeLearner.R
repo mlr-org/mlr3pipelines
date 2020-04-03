@@ -5,7 +5,14 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute features using values predicted by a learner.
+#' Impute features by fitting a [`Learner`][mlr3::Learner] for each feature. 
+#' Uses the `context_columns` as features to train the imputation [`Learner`][mlr3::Learner]. 
+#' The [`Learner`][mlr3::Learner] needs to  be able to handle missing values, i.e. have property 
+#' 'missings'.
+#' Additionally, only features supported by the learner can be imputed; i.e. learners of type 
+#' 'regr' can only impute features of type 'integer' and 'numeric', while 'classif' can impute
+#' features of type 'character', 'factor', 'ordered' and 'logical'. 
+#' 
 #'
 #' @section Construction:
 #' ```
@@ -60,7 +67,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   public = list(
     initialize = function(id = "imputelearner", learner, param_vals = list(context_columns = selector_all())) {
       assert_subset("missings", learner$properties)
-      private$.learner = as_learner(learner)$clone(deep = TRUE) # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
+      private$.learner = as_learner(learner, clone = TRUE)
       super$initialize(id, param_vals = param_vals, whole_task_dependent = TRUE)
     }
   ),
