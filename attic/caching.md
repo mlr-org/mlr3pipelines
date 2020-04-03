@@ -157,3 +157,12 @@ This could be added in future work, but might not be relevant now.
 It should be possible to enforce caching for stochastic `PipeOp`s.
 Example: I want to evaluate choices (branches) made after or before a stochastic pipeop.
          This would allow me to circumvent stochasticity.
+
+
+### User Control for caching
+
+This basically could be handled via `R.cache`'s functionality, but should somehow be documented.
+
+### Testthat
+
+How do we disable caching during `unit` tests.

@@ -543,11 +543,8 @@ graph_reduce = function(self, input, fun, single_input) {
     input = input_tbl$payload
     names(input) = input_tbl$name
 
-    if (self$cache && po$cache) {
-      output = cached_pipeop_eval(self, op, fun, input)
-    } else {
-      output = op[[fun]](input)
-    }
+    output = cached_pipeop_eval(self, op, fun, input)
+
     if (self$keep_results) {
       op$.result = output
     }
@@ -623,11 +620,55 @@ get_hash = function(x) {
     digest(x, algo = "xxhash64")
 }
 
+
+# Cached train/predict of a PipeOp. 
+# 1) Caching is only performed if graph and po have `cache = TRUE`
+# 2) Additonally caching is only performed if 'fun' (train / predict) is not stochastic
+#    for a given PipeOp
+# 3) During training we have two options
+#    - Cache only state:
+#      This is possible if the train transform is the same as the predict transform
+#      and predict is comparatively cheap (i.e. filters).
+#    - Cache state and output
+#      (All other cases)
 cached_pipeop_eval = function(self, op, fun, input) {
-    R.cache::evalWithMemoization(
-      {res_out = list(output = op[[fun]](input), state = op$state)},
-      key = list(map_chr(input, get_hash), op$hash)
-    )
-    if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
-    output = res_out$output
+  if (FALSE) { # turn caching off for unit tests for now, turn back on when stuff works again.
+  if (self$cache && po$cache) {
+    cache_key = list(map_chr(input, get_hash), op$hash)
+    if (fun == "train") {
+      if (fun %nin% op$stochastic) {
+        # Two options: cache state (can predict on train set using state during train)
+        # Or: do not cache state () (if upper is not possible)
+        if (cache_state) {
+          R.cache::evalWithMemoization({
+            op[[fun]](input)
+            state = op$state
+          }, key = cache_key)
+          # Set state if PipeOp was cached
+          if (is.null(op$state) && fun == "train") op$state = state
+          # We call "predict" on train inputs, this avoids storing the outputs 
+          # during training on disk. This is only possible for some pipeops.
+          output = op[["predict"]](input)
+        } else {
+          R.cache::evalWithMemoization({
+            result = list(output = op[[fun]](input), state = op$state)
+          }, key = cache_key)
+          # Set state if PipeOp was cached
+          if (is.null(op$state) && fun == "train") op$state = result$state
+          output = result$output
+        }
+        return(output)
+      }
+    } else if (fun == "predict") {
+      if (fun %nin% op$stochastic) {
+        R.cache::evalWithMemoization(
+          {output = op[[fun]](input)},
+          key = cache_key)
+        return(output)
+      }
+    }
+  }
+  }
+  # No caching fallback, anything where we do not run into conditions above
+  return(op[[fun]](input))
 }
