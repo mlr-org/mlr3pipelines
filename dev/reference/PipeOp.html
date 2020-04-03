@@ -279,8 +279,7 @@ A set of tags associated with the <code>PipeOp</code>. Tags describe a PipeOp's 
 Can be used to filter <code><a href='as.data.table.html'>as.data.table(mlr_pipeops)</a></code>.
 PipeOp tags are inherited and child classes can introduce additional tags.</p></li>
 <li><p><code>hash</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
-Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> and <code>$param_set</code>
-(and therefore also <code>$param_set$values</code>). If a
+Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> and <code>$param_set$values</code>. If a
 <code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
 binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
 <li><p><code>.result</code> :: <code>list</code> <br />
@@ -334,6 +333,7 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 <p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
+<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
 <code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,

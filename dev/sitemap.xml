@@ -19,6 +19,9 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/PipeOpImpute.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/PipeOpProxy.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/PipeOpTaskPreproc.html</loc>
   </url>
   <url>
