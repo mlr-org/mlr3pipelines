@@ -5,19 +5,18 @@ test_that("PipeOpProxy - basic properties", {
   pop = PipeOpProxy$new(param_vals = list(content = PipeOpNOP$new()))
   expect_pipeop(pop)
   expect_equal(train_pipeop(pop, inputs = list(task))[[1L]], task)
-  expect_graph(pop$state)
+  expect_equal(pop$state, list(nop = list()))
   expect_equal(predict_pipeop(pop, inputs = list(task))[[1L]], task)
 })
 
 test_that("PipeOpProxy - datapreproc", {
   pop = PipeOpScale$new()
-  #FIXME: deep cloning seems to have problems with the content
   expect_datapreproc_pipeop_class(PipeOpProxy, constargs = list(param_vals = list(content = pop)), task = mlr_tasks$get("iris"))
 })
 
 test_that("PipeOpProxy - content error handling", {
   expect_error(PipeOpProxy$new(param_vals = list(content = "error")), regexp = "`content` must be an object that can be converted to a Graph")
-  expect_error(PipeOpProxy$new(param_vals = list(content = PipeOpCopy$new(outnum = 2L))), regexp = "Graph's output number must match `outnum`")
+  expect_error(PipeOpProxy$new(param_vals = list(content = PipeOpCopy$new(outnum = 2L))), regexp = "Graph's output number must either be 1 or match `outnum`")
 })
 
 test_that("PipeOpProxy - several inputs via featureunion", {

@@ -90,10 +90,12 @@ PipeOpProxy = R6Class("PipeOpProxy",
               "Graph's output number must either be 1 or match `outnum`"
             } else if (innum > 1 && graph_input != innum && (graph_input > innum || "..." %nin% graph$input$name)) {
               "Graph's input number must either match `outnum` or the Graph must contain a '...' (vararg) channel."
+            } else {
+              TRUE
             }
           },
           error = function(error_condition) "`content` must be an object that can be converted to a Graph")
-        }, tags = c("required", "train", "predict"))
+        })
       ))
       ps$values = list(content = PipeOpFeatureUnion$new(innum = innum))
       super$initialize(id, param_set = ps, param_vals = param_vals,
@@ -101,23 +103,33 @@ PipeOpProxy = R6Class("PipeOpProxy",
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
         tags = "meta"
       )
-    },
-    train_internal = function(input) {
-      content = as_graph(self$param_set$values$content, clone = TRUE)
-      output = content$train(unname(input), single_input = length(input) == 1)
-      self$state = content$state
-      output
-    },
-    predict_internal = function(input) {
-      content = as_graph(self$param_set$values$content, clone = TRUE)
-      content$state = self$state
-      content$predict(unname(input), single_input = length(input) == 1)
     }
   ),
   private = list(
     .param_set = NULL,
     .param_set_source = NULL,
-    .id = NULL
+    .id = NULL,
+    .train = function(input) {
+      content = as_graph(self$param_set$values$content, clone = TRUE)
+      if (length(input) > 1) {
+        output = content$train(unname(input), single_input = FALSE)
+      } else {
+        # automatically send input to all graph inputs
+        output = content$train(input[[1]])
+      }
+      self$state = content$state
+      output
+    },
+    .predict = function(input) {
+      content = as_graph(self$param_set$values$content, clone = TRUE)
+      content$state = self$state
+      if (length(input) > 1) {
+        output = content$predict(unname(input), single_input = FALSE)
+      } else {
+        # automatically send input to all graph inputs
+        output = content$predict(input[[1]])
+      }
+    }
   )
 )
 
