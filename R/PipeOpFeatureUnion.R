@@ -162,7 +162,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
     real_duplicates = logical(length(duplicates))
     for(i in seq_along(duplicates)) {
       # this is done by reference and should have good performance
-      real_duplicates[i] = sum(duplicated(t(setDF(unlist(map(inputs,
+      real_duplicates[i] = sum(duplicated(t(setDT(unlist(map(inputs,
         .f = function(x) x$data(cols = duplicates[i])), recursive = FALSE))))) > 0L
     }
     if (any(!real_duplicates)) {
@@ -175,6 +175,6 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   # cbind() with only empty data.tables is problematic, so we have to do voodoo magic here:
   # cbind at least one data.table that is guaranteed not to be empty and subtract that column later
   # again done by reference
-  task$clone(deep = TRUE)$cbind(setDF(unlist(c(list(data.table(x = vector(length = task$nrow))),
-    map(tail(inputs, -1L), .f = function(y) y$data(ids, y$feature_names))), recursive = FALSE))[, -1L])
+  task$clone(deep = TRUE)$cbind(setDT(unlist(c(list(data.table(x = vector(length = task$nrow))),
+    map(tail(inputs, -1L), .f = function(y) y$data(ids, cols = y$feature_names))), recursive = FALSE))[, -1L])
 }
