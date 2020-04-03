@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_learner_cv}
 \alias{PipeOpLearnerCV}
 \title{PipeOpLearnerCV}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 
@@ -56,7 +58,7 @@ The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learn
 \code{\link{PipeOpTaskPreproc}}. It is a named \code{list} with the inherited members, as well as:
 \itemize{
 \item \code{model} :: \code{any}\cr
-Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$train_internal()} function.
+Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
 \item \code{train_log} :: \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr

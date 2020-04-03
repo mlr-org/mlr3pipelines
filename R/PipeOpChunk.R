@@ -70,23 +70,23 @@ PipeOpChunk = R6Class("PipeOpChunk",
       super$initialize(id,
         param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task")
+        output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task"),
+        tags = "meta"
       )
-    },
-
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    .train = function(inputs) {
       self$state = list()
       task = inputs[[1L]]
 
       row_ids = chunk_vector(task$row_ids, n_chunks = self$outnum, shuffle = self$param_set$values$shuffle)
-
       # Subset data, clone task and overwrite data in it.
       map(row_ids, function(x) {
         task$clone(deep = TRUE)$filter(x)
       })
     },
-
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       rep(inputs, self$outnum)
     }
   )

@@ -3,7 +3,11 @@
 \name{Graph}
 \alias{Graph}
 \title{Graph}
-\format{\link{R6Class} Graph}
+\format{
+\link{R6Class} Graph
+
+\code{\link{R6Class}}.
+}
 \description{
 A \code{\link{Graph}} is a representation of a machine learning pipeline graph. It can be \emph{trained}, and subsequently used for \emph{prediction}.
 
@@ -146,6 +150,7 @@ Other mlr3pipelines backend related:
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
+\code{\link{mlr_graphs}},
 \code{\link{mlr_pipeops}}
 }
 \concept{mlr3pipelines backend related}

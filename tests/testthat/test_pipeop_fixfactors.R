@@ -105,4 +105,3 @@ test_that("PipeOpFixFactors", {
   expect_equal(op$state$levels, list(a = letters, b = letters[1:3]))
 
 })
-

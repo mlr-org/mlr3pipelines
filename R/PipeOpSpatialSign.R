@@ -59,14 +59,11 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
         ParamDbl$new("norm", tags = c("train", "predict"), lower = 0)
       ))
       ps$values = list(norm = 2, length = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
-    transform_dt = function(dt, levels) {
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+    }
+  ),
+  private = list(
+    .transform_dt = function(dt, levels) {
       if (!nrow(dt)) {
         # if dt has no rows then we still have to convert columns to numeric.
         return(dt[, lapply(.SD, as.numeric)])

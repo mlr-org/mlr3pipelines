@@ -60,20 +60,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         properties = mlr_reflections$learner_properties[[task_type]])
       private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
-    },
-    train_internal = function(task) {
-      on.exit({self$graph$state = NULL})
-      self$graph$train(task)
-      state = self$graph$state
-      state
-    },
-    predict_internal = function(task) {
-      on.exit({self$graph$state = NULL})
-      self$graph$state = self$model
-      prediction = self$graph$predict(task)
-      assert_list(prediction, types = "Prediction", len = 1,
-        .var.name = sprintf("Prediction returned by Graph %s", self$id))
-      prediction[[1]]
     }
   ),
   active = list(
@@ -102,6 +88,20 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         return(value$clone(deep = TRUE))
       }
       value
+    },
+    .train = function(task) {
+      on.exit({self$graph$state = NULL})
+      self$graph$train(task)
+      state = self$graph$state
+      state
+    },
+    .predict = function(task) {
+      on.exit({self$graph$state = NULL})
+      self$graph$state = self$model
+      prediction = self$graph$predict(task)
+      assert_list(prediction, types = "Prediction", len = 1,
+        .var.name = sprintf("Prediction returned by Graph %s", self$id))
+      prediction[[1]]
     }
   )
 )

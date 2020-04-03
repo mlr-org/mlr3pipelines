@@ -69,6 +69,8 @@ Suggests:
     evaluate
 VignetteBuilder:
     knitr
+Remotes:
+    mlr-org/mlr3
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -94,6 +96,7 @@ Collate:
     'PipeOpColApply.R'
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
+    'PipeOpDateFeatures.R'
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
@@ -106,6 +109,7 @@ Collate:
     'PipeOpImputeHist.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
+    'PipeOpImputeMode.R'
     'PipeOpImputeNewlvl.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
@@ -127,13 +131,17 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+    'PipeOpThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
     'greplicate.R'
     'gunion.R'
+    'mlr_graphs.R'
+    'mlr_graphs_elements.R'
     'operators.R'
+    'pipe.R'
     'po.R'
     'reexports.R'
     'typecheck.R'

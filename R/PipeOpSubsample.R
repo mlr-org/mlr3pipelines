@@ -13,7 +13,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpSubsample$new(id = "classbalancing", param_vals = list())
+#' PipeOpSubsample$new(id = "subsample", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"subsample"`
@@ -52,13 +52,9 @@
 #' @examples
 #' library("mlr3")
 #'
-#' pos = mlr_pipeops$get("subsample")
+#' pos = mlr_pipeops$get("subsample", param_vals = list(frac = 0.7, stratify = TRUE))
 #'
 #' pos$train(list(tsk("iris")))
-#'
-#' # simple bagging:
-#' gr = greplicate(pos %>>% mlr_pipeops$get("learner", lrn("classif.rpart")), 5) %>>%
-#'   mlr_pipeops$get("classifavg")
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
@@ -74,9 +70,11 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
       ))
       ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
-    },
+    }
+  ),
+  private = list(
 
-    train_task = function(task) {
+    .train_task = function(task) {
       if (!self$param_set$values$stratify) {
         keep = shuffle(task$row_roles$use,
           ceiling(self$param_set$values$frac * task$nrow),
@@ -96,7 +94,7 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
       task_filter_ex(task, keep)
     },
 
-    predict_task = identity
+    .predict_task = identity
   )
 )
 

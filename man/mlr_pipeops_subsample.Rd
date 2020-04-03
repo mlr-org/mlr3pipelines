@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_subsample}
 \alias{PipeOpSubsample}
 \title{PipeOpSubsample}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Subsamples a \code{\link[mlr3:Task]{Task}} to use a fraction of the rows.
 
@@ -13,7 +15,7 @@ beneficial for training time at possibly (depending on original \code{\link[mlr3
 negligible cost of predictive performance.
 }
 \section{Construction}{
-\preformatted{PipeOpSubsample$new(id = "classbalancing", param_vals = list())
+\preformatted{PipeOpSubsample$new(id = "subsample", param_vals = list())
 }
 \itemize{
 \item \code{id} :: \code{character(1)}
@@ -69,13 +71,9 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 \examples{
 library("mlr3")
 
-pos = mlr_pipeops$get("subsample")
+pos = mlr_pipeops$get("subsample", param_vals = list(frac = 0.7, stratify = TRUE))
 
 pos$train(list(tsk("iris")))
-
-# simple bagging:
-gr = greplicate(pos \%>>\% mlr_pipeops$get("learner", lrn("classif.rpart")), 5) \%>>\%
-  mlr_pipeops$get("classifavg")
 
 }
 \seealso{
@@ -94,6 +92,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
@@ -105,6 +104,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -123,6 +123,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

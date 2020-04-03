@@ -4,7 +4,9 @@
 \alias{mlr_learners_graph}
 \alias{GraphLearner}
 \title{GraphLearner}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3:Learner]{mlr3::Learner}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link[mlr3:Learner]{mlr3::Learner}}.
+}
 \description{
 A \code{\link[mlr3:Learner]{Learner}} that encapsulates a \code{\link{Graph}} to be used in
 \link[mlr3:mlr3-package]{mlr3} resampling and benchmarks.
