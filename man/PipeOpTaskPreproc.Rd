@@ -181,6 +181,7 @@ Other mlr3pipelines backend related:
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
