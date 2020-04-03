@@ -22,7 +22,7 @@ theoretically be replaced by other packages.
   ```
   stochastic = c("train", "predict", "character(0)") # "character(0)" means not stochastic.
   ```
-  This needs to be annotated in each `PipeOp`. Could default to `"deterministic"`.
+  This needs to be annotated in each `PipeOp`. Could default to deterministic.
 
 - Caching can be turned on / off for individual a full `Graph` or individual `PipeOps`.
   API for this could e.g. be: 
@@ -30,6 +30,22 @@ theoretically be replaced by other packages.
   - `PipeOp` has a `cache` slot, can be set to `TRUE` or `FALSE`, Default `TRUE`?
     `PipeOp`s that should never be cached (stochastic, meta, ...) are set to `FALSE`.
   - If `Graph$cache && PipeOp$cache`, caching is active.
+
+
+**Current implementation:**
+
+- `PipeOp` gets the following new slots:
+  - `stochastic`: can be c("train", "predict", character(0)). Default `character(0)`, set for some pos.
+  - `cache`: Whether the `PipeOp` should be cached. Default `TRUE`, set to `FALSE` for some pos.
+  - `cache_state`: Whether it is sufficient to cache the `$state`.
+
+  Those slots are `xxx` AB's pointing to `private$.xxxx`
+
+- `Graph` gets the following new slots:
+  - `cache`: Whether the `Graph` should be cached. Default `TRUE`, set to `FALSE` for some pos.
+
+- New function called within `graph_reduce`: `cached_pipeop_eval`. See **Implementation Details** below.
+
 
 
 ## Implementation Details
@@ -40,12 +56,13 @@ for each `PipeOp`.
 `R.cache::evalWithMemoization` memoizes the provided expression.
 The `hash` is computed from its `key` argument.
 
-Possible solution: apply caching in `graph_reduce` (`Graph.R`):
+Possible solution: apply caching during `graph_reduce` (`Graph.R`):
 
 The call to `op[[fun]](input)` calls each `PipeOp's` "train" and "predict" fun.
+Note: This is a simplified version, see the actual implementation `cached_pipeop_eval` in `graph.R`.
 
 ```
-    if (self$cache && op$cache) { # caching can be enabled / disabled
+    if (graph$cache && op$cache) { # caching can be enabled / disabled on graph and pipeop level
       R.cache::evalWithMemoization(
         {res_out = list(output = op[[fun]](input), state = op$state)},
         key = list(map_chr(input, get_hash), op$hash) # hash of input and hash of pipeop (latter includes param_vals)

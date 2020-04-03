@@ -83,7 +83,8 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
 
       list(prd$set_threshold(thr))
     },
-    .cache = FALSE
+    .cache = FALSE,
+    .cache_state = FALSE
   )
 )
 

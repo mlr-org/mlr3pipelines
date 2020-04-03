@@ -318,6 +318,12 @@ PipeOp = R6Class("PipeOp",
       } else {
         private$.stochastic
       }
+    },
+    cache_state = function(val) {
+      if (!missing(val)) {
+        stop("cache_state is read-only!")
+      } 
+      private$.cache_state
     }
   ),
 

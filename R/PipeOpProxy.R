@@ -124,6 +124,13 @@ PipeOpProxy = R6Class("PipeOpProxy",
       } else {
         self$param_set$values$content$stochastic
       }
+    },
+    cache_state = function(val) {
+      if (!missing(val)) {
+        stop("cache_state is read-only!")
+      } else {
+        self$param_set$values$content$cache_state
+      }
     }
   ),
   private = list(

@@ -162,7 +162,8 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
 
     .predict_task = identity,
     .cache = FALSE,
-    .stochastic = "train"
+    .stochastic = "train",
+    .cache_state = FALSE
   )
 )
 
