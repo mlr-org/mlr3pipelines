@@ -99,7 +99,8 @@ PipeOpCopy = R6Class("PipeOpCopy",
     },
     .predict = function(inputs) {
       rep_len(inputs, self$outnum)
-    }
+    },
+    .cache = FALSE
   )
 )
 

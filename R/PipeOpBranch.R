@@ -117,7 +117,8 @@ PipeOpBranch = R6Class("PipeOpBranch",
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]
       ret
-    }
+    },
+    .cache = FALSE
   )
 )
 

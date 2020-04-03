@@ -105,6 +105,27 @@ PipeOpProxy = R6Class("PipeOpProxy",
       )
     }
   ),
+  active = list(
+    cache = function(val) {
+      if (!missing(val)) {
+        assert_flag(val)
+        self$param_set$values$content$cache = val
+      } else {
+        self$param_set$values$content$cache
+      }
+    },
+    stochastic = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, c("train", "predict"))
+        if (inherits(self$param_set$values$content, "Graph"))
+          stop("'stochastic' not be set when content is a graph!")
+        else 
+          self$param_set$values$content$stochastic = val
+      } else {
+        self$param_set$values$content$stochastic
+      }
+    }
+  ),
   private = list(
     .param_set = NULL,
     .param_set_source = NULL,

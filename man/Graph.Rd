@@ -66,6 +66,8 @@ Stores a checksum calculated on the \code{\link{Graph}} configuration, which inc
 (and therefore their \verb{$param_set$values}) and a hash of \verb{$edges}.
 \item \code{keep_results} :: \code{logical(1)} \cr
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
+\item \code{cache} :: \code{logical(1)} \cr
+Whether to cache individual \code{\link{PipeOp}}'s during "train" and "predict". Default \code{FALSE}.
 }
 }
 

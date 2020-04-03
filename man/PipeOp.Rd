@@ -120,6 +120,12 @@ binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>),
 If the \code{\link{Graph}}'s \verb{$keep_results} flag is set to \code{TRUE}, then the intermediate Results of \verb{$train()} and \verb{$predict()}
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 and done, if requested, by the \code{\link{Graph}} backend itself; it should \emph{not} be done explicitly by \code{private$.train()} or \code{private$.predict()}.
+\item \code{cache} :: \code{logical(1)} \cr
+Whether to cache the \code{\link{PipeOp}}'s state and or output during "train" and "predict". Defaults to \code{TRUE}.
+A \code{\link{PipeOp}} can only be cached if it is deterministic.
+\item \code{stochastic} :: \code{character} \cr
+Whether a \code{\link{PipeOp}} is stochastic during \code{"train"}, \code{"predict"}, both, or not at all \code{character(0)}.
+Defaults to \code{character(0)} (deterministic).
 }
 }
 

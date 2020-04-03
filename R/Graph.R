@@ -58,6 +58,8 @@
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
+#' * `cache` :: `logical(1)` \cr
+#'   Whether to cache individual [`PipeOp`]'s during "train" and "predict". Default `FALSE`.
 #'
 #' @section Methods:
 #' * `ids(sorted = FALSE)` \cr
@@ -112,6 +114,7 @@
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
 #'   Predict with the [`Graph`] by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
+#' 
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
@@ -399,6 +402,14 @@ Graph = R6Class("Graph",
       } else {
         map(self$pipeops, "state")
       }
+    },
+    cache = function(val) {
+      if (!missing(val)) {
+        assert_flag(val)
+        private$.cache = val
+      } else {
+        private$.cache = val
+      }
     }
   ),
 
@@ -411,7 +422,8 @@ Graph = R6Class("Graph",
         value
       )
     },
-    .param_set = NULL
+    .param_set = NULL,
+    .cache = FALSE
   )
 )
 
@@ -531,13 +543,11 @@ graph_reduce = function(self, input, fun, single_input) {
     input = input_tbl$payload
     names(input) = input_tbl$name
 
-    R.cache::evalWithMemoization(
-      {res_out = list(output = op[[fun]](input), state = op$state)},
-      key = list(map_chr(input, get_hash), op$hash)
-    )
-    if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
-    output = res_out$output
-    
+    if (self$cache && po$cache) {
+      output = cached_pipeop_eval(self, op, fun, input)
+    } else {
+      output = op[[fun]](input)
+    }
     if (self$keep_results) {
       op$.result = output
     }
@@ -611,4 +621,13 @@ predict.Graph = function(object, newdata, ...) {
 get_hash = function(x) {
   if (!is.null(x$hash)) return(x$hash)
     digest(x, algo = "xxhash64")
+}
+
+cached_pipeop_eval = function(self, op, fun, input) {
+    R.cache::evalWithMemoization(
+      {res_out = list(output = op[[fun]](input), state = op$state)},
+      key = list(map_chr(input, get_hash), op$hash)
+    )
+    if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
+    output = res_out$output
 }

@@ -115,6 +115,13 @@
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
+#' * `cache` :: `logical(1)` \cr
+#'   Whether to cache the [`PipeOp`]'s state and or output during "train" and "predict". Defaults to `TRUE`.
+#'   A [`PipeOp`] can only be cached if it is deterministic.
+#' * `stochastic` :: `character` \cr
+#'   Whether a [`PipeOp`] is stochastic during `"train"`, `"predict"`, both, or not at all `character(0)`.
+#'   Defaults to `character(0)` (deterministic).
+#' 
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -295,6 +302,22 @@ PipeOp = R6Class("PipeOp",
     hash = function() {
       digest(list(class(self), self$id, self$param_set$values),
         algo = "xxhash64")
+    },
+    cache = function(val) {
+      if (!missing(val)) {
+        assert_flag(val)
+        private$.cache = val
+      } else {
+        private$.cache = val
+      }
+    },
+    stochastic = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, c("train", "predict"))
+        private$.stochastic = val
+      } else {
+        private$.stochastic = val
+      }
     }
   ),
 
@@ -317,7 +340,9 @@ PipeOp = R6Class("PipeOp",
     .predict = function(input) stop("abstract"),
     .param_set = NULL,
     .param_set_source = NULL,
-    .id = NULL
+    .id = NULL,
+    .cache = TRUE,
+    .stochastic = character(0)
   )
 )
 

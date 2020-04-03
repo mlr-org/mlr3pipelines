@@ -88,7 +88,8 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
     },
     .predict = function(inputs) {
       filter_noop(inputs)
-    }
+    },
+    .cache = FALSE
   )
 )
 

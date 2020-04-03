@@ -106,7 +106,9 @@ PipeOpSmote = R6Class("PipeOpSmote",
       }
       setnames(st, "class", task$target_names)
       task$rbind(st)
-    }
+    },
+    .cache = FALSE,
+    .stochastic = "train"
   )
 )
 
