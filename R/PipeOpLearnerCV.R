@@ -31,7 +31,7 @@
 #'   [`Learner`][mlr3::Learner] to use for cross validation / prediction, or a string identifying a
 #'   [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -110,15 +110,10 @@
 PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      # This is needed if `learner` is a `Graph` and no `id` is provide
-      id = try(id, silent = TRUE)
-      if ((class(id) == "try-error") && test_r6(learner, classes = "Graph")) {
-        id = paste(learner$ids(sorted = TRUE), collapse = ".")
-      }
-
-      private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
+    initialize = function(learner, id = NULL, param_vals = list()) {
+      private$.learner = as_learner(learner, clone = TRUE)
       private$.learner$param_set$set_id = ""
+      id = id %??% private$.learner$id
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
