@@ -68,6 +68,13 @@ Stores a checksum calculated on the \code{\link{Graph}} configuration, which inc
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 \item \code{cache} :: \code{logical(1)} \cr
 Whether to cache individual \code{\link{PipeOp}}'s during "train" and "predict". Default \code{FALSE}.
+Caching is performed using the \href{R.cache::R.cache}{\code{R.cache}} package.
+Caching can be disabled globally using \code{getOption("R.cache.enabled", TRUE)}.
+By default, files are cached in \code{R.cache::getCacheRootPath()}.
+For more information on how to set the cache path or retrieve cached items please consider
+the \href{R.cache::R.cache}{\code{R.cache}} documentation.
+Caching can be fine-controlled for each \code{\link{PipeOp}} by adjusting individual \code{\link{PipeOp}}'s
+\code{cache}, \code{cache_state} and \code{stochastic} fields.
 }
 }
 

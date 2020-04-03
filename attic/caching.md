@@ -62,23 +62,54 @@ The call to `op[[fun]](input)` calls each `PipeOp's` "train" and "predict" fun.
 Note: This is a simplified version, see the actual implementation `cached_pipeop_eval` in `graph.R`.
 
 ```
-  if (graph$cache && op$cache) { # caching can be enabled / disabled on graph and pipeop level
-    R.cache::evalWithMemoization(
-      {res_out = list(output = op[[fun]](input), state = op$state)},
-      key = list(map_chr(input, get_hash), op$hash) # hash of input and hash of pipeop (latter includes param_vals)
-    )
-    if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
-    output = res_out$output
-  } else {
-    output = list(output = op[[fun]](input), state = op$state)
+cached_pipeop_eval = function(self, op, fun, input) {
+
+  if (self$cache && op$cache) {
+    cache_key = list(map_chr(input, get_hash), op$hash)
+    if (fun == "train") {
+      if (fun %nin% op$stochastic) {
+        # Two options: cache state (can predict on train set using state during train)
+        # Or: do not cache state () (if upper is not possible)
+        if (op$cache_state) {
+          R.cache::evalWithMemoization({
+            op[[fun]](input)
+            state = op$state
+          }, key = cache_key)
+          # Set state if PipeOp was cached
+          if (is.null(op$state) && fun == "train") op$state = state
+          # We call "predict" on train inputs, this avoids storing the outputs 
+          # during training on disk. This is only possible for some pipeops.
+          cached_pipeop_eval(self, op, "predict", input)
+        } else {
+          R.cache::evalWithMemoization({
+            result = list(output = op[[fun]](input), state = op$state)
+          }, key = cache_key)
+          # Set state if PipeOp was cached
+          if (is.null(op$state) && fun == "train") op$state = result$state
+          return(result$output)
+        }
+      }
+    } else if (fun == "predict" && !op$cache_state) {
+      if (fun %nin% op$stochastic) {
+        R.cache::evalWithMemoization(
+          {output = op[[fun]](input)},
+          key = cache_key)
+        return(output)
+      }
+    }
   }
+  # No caching fallback, anything where we do not run into conditions above
+  return(op[[fun]](input))
+}
 ```   
 
 where `get_hash` is:
 ```
 get_hash = function(x) {
-  if (!is.null(x$hash)) return(x$hash)
+  hash = try(x$hash, silent = TRUE)
+  if (inherits(hash, "try-error"))
     digest(x, algo = "xxhash64")
+  return(hash)    
 }
 ```
 

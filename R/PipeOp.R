@@ -117,10 +117,18 @@
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #' * `cache` :: `logical(1)` \cr
 #'   Whether to cache the [`PipeOp`]'s state and or output during "train" and "predict". Defaults to `TRUE`.
-#'   A [`PipeOp`] can only be cached if it is deterministic.
+#'   See the `cache` field in [`Graph`] for more detailed information on caching as well as `cache_state` and
+#'   `stochastic` below.
+#'   A [`PipeOp`] is only cached if it is deterministic.
+#' * `cache_state` :: `logical(1)` \cr
+#'   Whether the [`PipeOp`]s behaviour during training is equal to behaviour during prediction
+#'   (other then setting a state). In this case, only the [`PipeOp`]s state is cached.
+#'   This avoids caching possibly large intermediate results.
+#'   Defaults to `TRUE`.
 #' * `stochastic` :: `character` \cr
-#'   Whether a [`PipeOp`] is stochastic during `"train"`, `"predict"`, both, or not at all `character(0)`.
-#'   Defaults to `character(0)` (deterministic).
+#'   Whether a [`PipeOp`] is stochastic during `"train"`, `"predict"`, or not at all: `character(0)`.
+#'   Defaults to `character(0)` (deterministic). Stochastic [`PipeOp`]s are not cached during the
+#'   respective phase.
 #' 
 #'
 #' @section Methods:
@@ -311,6 +319,12 @@ PipeOp = R6Class("PipeOp",
         private$.cache
       }
     },
+    cache_state = function(val) {
+      if (!missing(val)) {
+        stop("cache_state is read-only!")
+      } 
+      private$.cache_state
+    },
     stochastic = function(val) {
       if (!missing(val)) {
         assert_subset(val, c("train", "predict"))
@@ -318,12 +332,6 @@ PipeOp = R6Class("PipeOp",
       } else {
         private$.stochastic
       }
-    },
-    cache_state = function(val) {
-      if (!missing(val)) {
-        stop("cache_state is read-only!")
-      } 
-      private$.cache_state
     }
   ),
 
