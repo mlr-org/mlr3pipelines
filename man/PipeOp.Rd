@@ -122,7 +122,7 @@ are saved to this slot, exactly as they are returned by these functions. This is
 and done, if requested, by the \code{\link{Graph}} backend itself; it should \emph{not} be done explicitly by \code{private$.train()} or \code{private$.predict()}.
 \item \code{cache} :: \code{logical(1)} \cr
 Whether to cache the \code{\link{PipeOp}}'s state and or output during "train" and "predict". Defaults to \code{TRUE}.
-See the \code{cache} field in \code{\link{Graph}} for more detailed information on caching as well as \code{cache_state} and
+See the \code{cache} field in \code{\link{Graph}} for more detailed information on caching, as well as \code{cache_state} and
 \code{stochastic} below.
 A \code{\link{PipeOp}} is only cached if it is deterministic.
 \item \code{cache_state} :: \code{logical(1)} \cr

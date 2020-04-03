@@ -117,7 +117,7 @@
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #' * `cache` :: `logical(1)` \cr
 #'   Whether to cache the [`PipeOp`]'s state and or output during "train" and "predict". Defaults to `TRUE`.
-#'   See the `cache` field in [`Graph`] for more detailed information on caching as well as `cache_state` and
+#'   See the `cache` field in [`Graph`] for more detailed information on caching, as well as `cache_state` and
 #'   `stochastic` below.
 #'   A [`PipeOp`] is only cached if it is deterministic.
 #' * `cache_state` :: `logical(1)` \cr
