@@ -3,11 +3,13 @@
 \name{PipeOpProxy}
 \alias{PipeOpProxy}
 \title{PipeOpProxy}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+}
 \description{
-Behaves like another \code{\link{PipeOp}} or \code{\link{Graph}} that is encapsulated as a \code{content} hyperparameter.
-Input is routed through the \code{content} and the \code{content}s' output is returned. Note that the
-\code{content} hyperparameter can be changed, this is useful as an alternative to branching.
+Wraps another \code{\link{PipeOp}} or \code{\link{Graph}} as determined by the \code{content} hyperparameter.
+Input is routed through the \code{content} and the \code{content}s' output is returned.
+The \code{content} hyperparameter can be changed during tuning, this is useful as an alternative to \code{\link{PipeOpBranch}}.
 }
 \section{Construction}{
 \preformatted{PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
@@ -32,28 +34,30 @@ input channel named \code{"..."}.
 
 \code{\link{PipeOpProxy}} has multiple output channels depending on the \code{outnum} construction argument,
 named \code{"output1"}, \code{"output2"}, ...
-The output is determined by the output of the \code{content} \code{\link{PipeOp}} or \code{\link{Graph}}.
+The output is determined by the output of the \code{content} operation (a \code{\link{PipeOp}} or \code{\link{Graph}}).
 }
 
 \section{State}{
 
-The \verb{$state} is the \code{content} \code{\link{PipeOp}} or \code{\link{Graph}}.
+The \verb{$state} is the trained \code{content} \code{\link{PipeOp}} or \code{\link{Graph}}.
 }
 
 \section{Parameters}{
 
 \itemize{
-\item \code{content} :: \code{\link{PipeOp}} or \code{\link{Graph}} \cr
-The \code{\link{PipeOp}} or \code{\link{Graph}} that is being proxied (more precisely an object that can be
-converted to a \code{\link{Graph}}, because this is done internally). Defaults to an instance of
-\code{\link{PipeOpCopy}} (simply copies the input).
+\item \code{content} :: \code{\link{PipeOp}} | \code{\link{Graph}}\cr
+The \code{\link{PipeOp}} or \code{\link{Graph}} that is being proxied (or an object that is
+converted to a \code{\link{Graph}} by \code{\link[=as_graph]{as_graph()}}). Defaults to an instance of
+\code{\link{PipeOpFeatureUnion}} (combines all input if they are \code{\link[mlr3:Task]{Task}}s).
 }
 }
 
 \section{Internals}{
 
-\code{\link{PipeOpProxy}} inherits from \code{\link{PipeOp}}. The \code{content} will internally be coerced to a graph via
-\code{as_graph} prior to train and predict.
+The \code{content} will internally be coerced to a graph via
+\code{\link[=as_graph]{as_graph()}} prior to train and predict.
+
+The default value for \code{content} is \code{\link{PipeOpFeatureUnion}},
 }
 
 \section{Fields}{
@@ -96,6 +100,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
@@ -107,6 +112,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -126,6 +132,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

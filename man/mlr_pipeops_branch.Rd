@@ -32,7 +32,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 }
 }
 
-\section{Input and Output}{
+\section{Input and Output Channels}{
 
 \code{\link{PipeOpBranch}} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
 
