@@ -17,6 +17,7 @@ test_that("PipeOpProxy - datapreproc", {
 test_that("PipeOpProxy - content error handling", {
   expect_error(PipeOpProxy$new(param_vals = list(content = "error")), regexp = "`content` must be an object that can be converted to a Graph")
   expect_error(PipeOpProxy$new(param_vals = list(content = PipeOpCopy$new(outnum = 2L))), regexp = "Graph's output number must either be 1 or match `outnum`")
+  expect_error(PipeOpProxy$new(param_vals = list(content = PipeOpFeatureUnion$new(innum = 3L)), innum = 2), regexp = "Graph's input number .* match `innum`")
 })
 
 test_that("PipeOpProxy - several inputs via featureunion", {
@@ -36,7 +37,7 @@ test_that("PipeOpProxy - several outputs", {
   pop_copy = PipeOpCopy$new(outnum = 2L)
   tout1 = pop$train(list(task1))
   tout2 = pop_copy$train(list(task2))
-  expect_equal(tout1[[1L]], tout2[[1L]])
+  expect_equal(tout1, tout2)
 })
 
 test_that("PipeOpProxy - PCA proxied", {
@@ -63,4 +64,55 @@ test_that("PipeOpProxy - Graph proxied", {
   tout = train_pipeop(pop, list(task1))
   tout_gr = gr$train(task2)
   expect_equal(tout[[1L]], tout_gr[[1L]])
+})
+
+test_that("PipeOpProxy - Complicated Graphs", {
+
+  # ---------
+  # two parallel single-input-single-output pipeops
+
+  pop = po("proxy", content = list(PipeOpDebugMulti$new(1, 1, "debug1"), PipeOpDebugMulti$new(1, 1, "debug2")), outnum = 2)
+
+  expect_output(
+    expect_equal(pop$train(list(1)), list(output1 = 2, output2 = 2)),
+    "^Training debug1 with input list\\(input_1 = 1\\)
+Training debug2 with input list\\(input_1 = 1\\)$")
+
+  expect_output(
+    expect_equal(pop$predict(list(1)), list(output1 = 2, output2 = 2)),
+    "^Predicting debug1 with input list\\(input_1 = 1\\) and state list\\(input_1 = 1\\)
+Predicting debug2 with input list\\(input_1 = 1\\) and state list\\(input_1 = 1\\)$")
+
+  expect_output(
+    expect_equal(pop$train(list(1, 2)), list(output1 = 2, output2 = 3)),
+    "^Training debug1 with input list\\(input_1 = 1\\)
+Training debug2 with input list\\(input_1 = 2\\)$")
+
+  expect_output(
+    expect_equal(pop$predict(list(3, 4)), list(output1 = 4, output2 = 5)),
+    "^Predicting debug1 with input list\\(input_1 = 3\\) and state list\\(input_1 = 1\\)
+Predicting debug2 with input list\\(input_1 = 4\\) and state list\\(input_1 = 2\\)$")
+
+
+  # ---------
+  # NOP | feature union | NOP; feature union has vararg
+
+  pop = po("proxy", content = list(PipeOpDebugMulti$new(1, 1, "debug1"), PipeOpFeatureUnion$new(), PipeOpDebugMulti$new(1, 1, "debug2")), outnum = 3)
+
+  tsk1 = tsk("iris")
+  tsk2 = po("pca")$train(list(tsk1))[[1]]
+  tsk3 = po("ica")$train(list(tsk1))[[1]]
+
+  expect_output(
+      expect_equal(pop$train(list(1, tsk1, tsk2, tsk3, 2)),
+        list(output1 = 2, output2 = po("featureunion")$train(list(tsk1, tsk2, tsk3))[[1]], output3 = 3)),
+    "^Training debug1 with input list\\(input_1 = 1\\)
+Training debug2 with input list\\(input_1 = 2\\)$")
+
+  expect_output(
+      expect_equal(pop$train(list(1, tsk2, 2)),
+        list(output1 = 2, output2 = tsk2, output3 = 3)),
+    "^Training debug1 with input list\\(input_1 = 1\\)
+Training debug2 with input list\\(input_1 = 2\\)$")
+
 })

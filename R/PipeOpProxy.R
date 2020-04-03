@@ -89,7 +89,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
             if (graph_outnum != 1 && graph_outnum != outnum) {
               "Graph's output number must either be 1 or match `outnum`"
             } else if (innum > 1 && graph_input != innum && (graph_input > innum || "..." %nin% graph$input$name)) {
-              "Graph's input number must either match `outnum` or the Graph must contain a '...' (vararg) channel."
+              "Graph's input number when `innum` > 1 must either match `innum` or the Graph must contain a '...' (vararg) channel."
             } else {
               TRUE
             }
