@@ -221,7 +221,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       switch(type,
         factor = levels(data[[colname]]),
         integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
-        logical = c(TRUE, FALSE),
+        logical = FALSE,
         numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
         ordered = levels(data[[colname]])
       )

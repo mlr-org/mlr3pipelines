@@ -62,10 +62,9 @@ test_that("PipeOpImpute", {
   )
 
   task = mlr_tasks$get("pima")
-
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task)
-
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = mlr_tasks$get("iris"))
+
 
   mdata = data.frame(stringsAsFactors = FALSE,
     a = c(1, 2, 3, 4, 5, NA),
@@ -105,6 +104,7 @@ test_that("PipeOpImpute", {
       method_num = "mean",
       method_fct = "newlvl",
       add_dummy = "missing_train")))
+
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
@@ -118,6 +118,7 @@ test_that("PipeOpImpute", {
       method_num = "mode",
       method_fct = "mode",
       add_dummy = "missing_train")))
+
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
@@ -236,19 +237,17 @@ test_that("PipeOpImpute", {
   pmap(list(map_chr(map(mdata[, -"t"], class), 1L), colnames(mdata[, -"t"])), function(type, name) {
     po$param_set$values$affect_columns = selector_type(type)
     cst = switch(type,
-      "integer" = 0L,
-      "numeric" = 0,
-      "character" = ".MISSING",
-      "factor" = factor(".MISSING", levels = c(task$levels()[[name]], ".MISSING")), 
-      "ordered" = factor(".MISSING", levels = c(task$levels()[[name]], ".MISSING"), ordered = TRUE),
-      "logical" = FALSE,
-      0)
+        factor = factor(".MISSING", levels = c(task$levels()[[name]], ".MISSING")),
+        integer = 0L,
+        logical = FALSE,
+        numeric = 0,
+        ordered = factor(".MISSING", levels = c(task$levels()[[name]], ".MISSING"), ordered = TRUE)
+      )
     out1 = po$train(list(task))[[1]]$data()
-    out2 = po$predict(list(task))[[1]]$data()
+    out2 = po$predict(list(task))[[1]]$data() 
     expect_true(all(out1[[name]] == cst))
     expect_true(all(out2[[name]] == cst))
     expect_equal(out1, out2)
-    return(NULL)
   })
 })
 
