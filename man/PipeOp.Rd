@@ -124,7 +124,6 @@ and done, if requested, by the \code{\link{Graph}} backend itself; it should \em
 Whether to cache the \code{\link{PipeOp}}'s state and or output during "train" and "predict". Defaults to \code{TRUE}.
 See the \code{cache} field in \code{\link{Graph}} for more detailed information on caching, as well as \code{cache_state} and
 \code{stochastic} below.
-A \code{\link{PipeOp}} is only cached if it is deterministic.
 \item \code{cache_state} :: \code{logical(1)} \cr
 Whether the \code{\link{PipeOp}}s behaviour during training is equal to behaviour during prediction
 (other then setting a state). In this case, only the \code{\link{PipeOp}}s state is cached.
@@ -134,6 +133,7 @@ Defaults to \code{TRUE}.
 Whether a \code{\link{PipeOp}} is stochastic during \code{"train"}, \code{"predict"}, or not at all: \code{character(0)}.
 Defaults to \code{character(0)} (deterministic). Stochastic \code{\link{PipeOp}}s are not cached during the
 respective phase.
+A \code{\link{PipeOp}} is only cached if it is deterministic.
 }
 }
 

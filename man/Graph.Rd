@@ -69,7 +69,7 @@ Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.resu
 \item \code{cache} :: \code{logical(1)} \cr
 Whether to cache individual \code{\link{PipeOp}}'s during "train" and "predict". Default \code{FALSE}.
 Caching is performed using the \href{R.cache::R.cache}{\code{R.cache}} package.
-Caching can be disabled globally using \code{getOption("R.cache.enabled", TRUE)}.
+Caching can be disabled/enabled globally using \code{getOption("R.cache.enabled", TRUE)}.
 By default, files are cached in \code{R.cache::getCacheRootPath()}.
 For more information on how to set the cache path or retrieve cached items please consider
 the \href{R.cache::R.cache}{\code{R.cache}} documentation.

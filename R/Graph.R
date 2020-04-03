@@ -61,7 +61,7 @@
 #' * `cache` :: `logical(1)` \cr
 #'   Whether to cache individual [`PipeOp`]'s during "train" and "predict". Default `FALSE`.
 #'   Caching is performed using the [`R.cache`](R.cache::R.cache) package.
-#'   Caching can be disabled globally using `getOption("R.cache.enabled", TRUE)`.
+#'   Caching can be disabled/enabled globally using `getOption("R.cache.enabled", TRUE)`.
 #'   By default, files are cached in `R.cache::getCacheRootPath()`.
 #'   For more information on how to set the cache path or retrieve cached items please consider
 #'   the [`R.cache`](R.cache::R.cache) documentation.
@@ -121,7 +121,6 @@
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
 #'   Predict with the [`Graph`] by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
-#' 
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
@@ -412,8 +411,7 @@ Graph = R6Class("Graph",
     },
     cache = function(val) {
       if (!missing(val)) {
-        assert_flag(val)
-        private$.cache = val
+        private$.cache = assert_flag(val)
       } else {
         private$.cache
       }
@@ -551,7 +549,6 @@ graph_reduce = function(self, input, fun, single_input) {
     names(input) = input_tbl$name
 
     output = cached_pipeop_eval(self, op, fun, input)
-
     if (self$keep_results) {
       op$.result = output
     }
@@ -662,6 +659,7 @@ cached_pipeop_eval = function(self, op, fun, input) {
         }
       }
     } else if (fun == "predict" && !op$cache_state) {
+      # during predict, only cache if cache_state is FALSE and op is not stochastic.
       if (fun %nin% op$stochastic) {
         R.cache::evalWithMemoization(
           {output = op[[fun]](input)},
@@ -680,4 +678,3 @@ get_hash = function(x) {
     hash = digest(x, algo = "xxhash64")
   hash
 }
-
