@@ -247,7 +247,7 @@ PipeOp = R6Class("PipeOp",
         return(named_list(self$output$name, NO_OP))
       }
       input = check_types(self, input, "input", "train")
-      output = list(private$.train(input), self$state)
+      output = private$.train(input)
       output = check_types(self, output, "output", "train")
       output
     },
