@@ -108,8 +108,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
   active = list(
     cache = function(val) {
       if (!missing(val)) {
-        assert_flag(val)
-        self$param_set$values$content$cache = val
+        self$param_set$values$content$cache = assert_flag(val)
       } else {
         self$param_set$values$content$cache
       }
@@ -122,6 +121,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
         else 
           self$param_set$values$content$stochastic = val
       } else {
+        if (inherits(self$param_set$values$content, "Graph")) return(character(0))
         self$param_set$values$content$stochastic
       }
     },
@@ -129,6 +129,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
       if (!missing(val)) {
         stop("cache_state is read-only!")
       } else {
+        if (inherits(self$param_set$values$content, "Graph")) return(TRUE)
         self$param_set$values$content$cache_state
       }
     }
