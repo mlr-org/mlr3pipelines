@@ -308,7 +308,7 @@ PipeOp = R6Class("PipeOp",
         assert_flag(val)
         private$.cache = val
       } else {
-        private$.cache = val
+        private$.cache
       }
     },
     stochastic = function(val) {
@@ -316,7 +316,7 @@ PipeOp = R6Class("PipeOp",
         assert_subset(val, c("train", "predict"))
         private$.stochastic = val
       } else {
-        private$.stochastic = val
+        private$.stochastic
       }
     }
   ),

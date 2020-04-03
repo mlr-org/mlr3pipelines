@@ -408,7 +408,7 @@ Graph = R6Class("Graph",
         assert_flag(val)
         private$.cache = val
       } else {
-        private$.cache = val
+        private$.cache
       }
     }
   ),
@@ -639,7 +639,7 @@ cached_pipeop_eval = function(self, op, fun, input) {
       if (fun %nin% op$stochastic) {
         # Two options: cache state (can predict on train set using state during train)
         # Or: do not cache state () (if upper is not possible)
-        if (cache_state) {
+        if (po$cache_state) {
           R.cache::evalWithMemoization({
             op[[fun]](input)
             state = op$state
