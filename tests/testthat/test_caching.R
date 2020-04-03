@@ -1,6 +1,7 @@
 context("Caching")
 
 test_that("Caching works for test hash pipeop", {
+  skip_on_cran()
 
   PipeOpTestHash = R6Class("PipeOpTestHash",
     inherit = PipeOp,
@@ -134,7 +135,7 @@ test_that("Caching works for test hash pipeop", {
 
   # cached predict takes < 1 second
   st = Sys.time()
-  expect_message(gr$predict("predict"),  "sleeping predict")
+  expect_silent(gr$predict("predict"))
   expect_true(st > Sys.time() - 1)
   expect_true(length(list.files(R.cache::getCacheRootPath())) == 3)
 })
