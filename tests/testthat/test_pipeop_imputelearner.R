@@ -103,7 +103,7 @@ test_that("Test imputation matches, edge cases", {
     d = factor(c(letters[rep(1L, 4)], "b", NA)),
     l = factor(letters[rep(1:2, 3)])
   )
-  task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
+  task = TaskClassif$new("mdata", mdata, target = "l")
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   out = po$train(list(task))[[1]]$data()
   expect_true(!any(is.na(out$b)))
@@ -118,7 +118,7 @@ test_that("Test imputation matches, edge cases", {
     d = factor(rep(NA, 6), levels = letters[1]),
     l = factor(letters[rep(1:2, 3)])
   )
-  task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
+  task = TaskClassif$new("mdata", mdata, target = "l")
   po = PipeOpImputeLearner$new(learner = lrn("classif.featureless"))
   out = po$train(list(task))[[1]]$data()
   expect_true(!any(is.na(out$d)))

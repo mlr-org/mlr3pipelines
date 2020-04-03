@@ -157,7 +157,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
           context = NULL
         }
         if (all(is.na(col))) {
-          model = private$.impute_all_na(imputanda, task, colname, type)
+          model = private$.impute_all_na(imputanda, intask, colname, type)
         } else {
           model = private$.train_imputer(col, type, context)
         }
