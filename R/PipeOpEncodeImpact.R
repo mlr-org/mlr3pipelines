@@ -81,14 +81,12 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         ParamLgl$new("impute_zero", tags = c("train", "required"))
       ))
       ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
-    },
-
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
 
@@ -119,7 +117,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         }))
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       impact = self$state$impact
       imap(dt, function(curdat, idx) {
         curdat = as.character(curdat)

@@ -91,14 +91,12 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         ParamLgl$new("fast_optim", tags = c("train", "required"))
       ))
       ps$values = list(fast_optim = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"))
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
-    },
-
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
       # for prediction, use complete encoding model
@@ -126,7 +124,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       state
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       if (length(self$state$target_levels) <= 2) {
         dt_new = map_dtc(colnames(dt), function(cname) {
           as.numeric(self$state$control[[cname]][as.character(dt[[cname]])])
@@ -144,10 +142,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         dt_new = as.data.frame(num_vals_list, row.names = rownames(dt))
       }
       dt_new
-    }),
-
-
-  private = list(
+    },
     fit_lmer = function(feature, target, fast_optim, task_type) {
       args = private$get_args_nlopt_lmer(feature, target, fast_optim, task_type)
       if (task_type == "classif") args$family = stats::binomial

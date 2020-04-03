@@ -61,11 +61,11 @@ PipeOpModelMatrix = R6Class("PipeOpModelMatrix",
       ps = ParamSet$new(params = list(
         ParamUty$new("formula", tags = c("train", "predict"), custom_check = check_formula)
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "stats")
-    },
-
-    transform_dt = function(dt, levels) {
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
+    }
+  ),
+  private = list(
+    .transform_dt = function(dt, levels) {
       as.data.frame(stats::model.matrix(self$param_set$values$formula, data = dt))
     }
   )

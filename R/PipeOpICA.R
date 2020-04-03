@@ -104,14 +104,12 @@ PipeOpICA = R6Class("PipeOpICA",
       ))
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "fastICA")
-    },
+        packages = "fastICA", feature_types = c("numeric", "integer"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
-    train_dt = function(dt, levels, target) {
+    .train_dt = function(dt, levels, target) {
 
       params = insert_named(list(n.comp = ncol(dt)), self$param_set$get_values(tags = "ica"))
 
@@ -124,7 +122,7 @@ PipeOpICA = R6Class("PipeOpICA",
       ica$S
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       scale(as.matrix(dt), scale = FALSE, center = self$state$center) %*%
         (self$state$K %*% self$state$W)
     }

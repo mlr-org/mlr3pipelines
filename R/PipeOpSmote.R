@@ -9,7 +9,7 @@
 #' synthetic instances of the minority class using the SMOTE algorithm.
 #' The algorithm samples for each minority instance a new data point based on the `K` nearest
 #' neighbors of that data point.
-#' It can only be applied to tasks with numeric features.
+#' It can only be applied to tasks with purely numeric features.
 #' See [`smotefamily::SMOTE`] for details.
 #'
 #' @section Construction:
@@ -80,12 +80,14 @@ PipeOpSmote = R6Class("PipeOpSmote",
         ParamInt$new("dup_size", lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "smotefamily", can_subset_cols = FALSE)
-    },
+        packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data")
+    }
+  ),
+  private = list(
 
-    train_task = function(task) {
+    .train_task = function(task) {
       assert_true(all(task$feature_types$type == "numeric"))
-      cols = self$select_cols(task)
+      cols = private$.select_cols(task)
 
       if (!length(cols)) {
         self$state = list(dt_columns = cols)

@@ -96,16 +96,17 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = inname, train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "Task", predict = "Task")
+        output = data.table(name = "output", train = "Task", predict = "Task"),
+        tags = "ensemble"
       )
-    },
-
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    .train = function(inputs) {
       self$state = list()
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     },
-
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     }
   )
