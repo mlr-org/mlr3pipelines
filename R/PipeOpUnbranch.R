@@ -76,16 +76,17 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
       }
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = options, train = "*", predict = "*"),
-        output = data.table(name = "output", train = "*", predict = "*")
+        output = data.table(name = "output", train = "*", predict = "*"),
+        tags = "meta"
       )
-    },
-
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    .train = function(inputs) {
       self$state = list()
       filter_noop(inputs)
     },
-
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       filter_noop(inputs)
     }
   )

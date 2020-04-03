@@ -57,14 +57,12 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
         ParamDbl$new("maxabs", lower = 0, tags = c("required", "train", "predict"))
       ))
       ps$values = list(maxabs = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+    }
+  ),
+  private = list(
 
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-    },
-
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       lapply(dt, function(x){
         s = max(abs(range(x, na.rm = TRUE, finite = TRUE)))
         if (s == 0) {
@@ -74,7 +72,7 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
       })
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       for (i in seq_along(dt)) {
         dt[[i]] = dt[[i]] / self$state[[i]] * self$param_set$values$maxabs
       }

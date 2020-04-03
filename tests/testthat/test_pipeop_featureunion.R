@@ -1,6 +1,5 @@
 context("PipeOpFeatureUnion")
 
-
 test_that("featureunion - basic properties", {
   po = PipeOpFeatureUnion$new(3)
   expect_pipeop(po)
@@ -16,7 +15,6 @@ test_that("featureunion - basic properties", {
   expect_data_table(po$output, nrows = 1)
 
 })
-
 
 test_that("PipeOpFeatureUnion - train and predict", {
   # Define PipeOp's
@@ -201,10 +199,24 @@ test_that("feature renaming", {
 ##   pofu$train(list(t1, t2))
 ## })
 
-test_that("featureunion - error if duplicates in feature names", {
+test_that("featureunion - duplicates in feature names", {
   tsk = mlr_tasks$get("iris")
 
   g = greplicate(PipeOpPCA$new(), 2) %>>% PipeOpFeatureUnion$new(2)
 
-  expect_error(g$train(tsk), "PipeOpFeatureUnion cannot aggregate features sharing the same feature name")
+  # this should work (just keeps each PC a single time)
+  train_out_g = g$train(tsk)
+
+  popca = PipeOpPCA$new()
+  train_out_pca = popca$train(list(tsk))
+  expect_equal(train_out_g[[1]]$data(), train_out_pca[[1]]$data())
+
+  # the following should not (duplicated feature names but actually different values)
+  dat = tsk$data()
+  dat$Petal.Length = rnorm(150)
+  dat$Sepal.Width[1] = 999
+  tsk2 = TaskClassif$new("tsk2", backend = dat, target = "Species")
+
+  po = PipeOpFeatureUnion$new()
+  expect_error(po$train(list(tsk, tsk2)), regexp = "different features sharing the same feature name")
 })

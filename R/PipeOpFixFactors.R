@@ -54,23 +54,20 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
         ParamLgl$new("droplevels", tags = c("train", "predict"))
       ))
       ps$values = list(droplevels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") %in% c("factor", "ordered"), get("id")]
-    },
-
-    get_state = function(task) {
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", feature_types = c("factor", "ordered"))
+    }
+  ),
+  private = list(
+    .get_state = function(task) {
       # get the levels of the training task
-      dt = task$data(cols = self$select_cols(task))
+      dt = task$data(cols = private$.select_cols(task))
       if (self$param_set$values$droplevels) {
         dt = droplevels(dt)
       }
       list(levels = lapply(dt, function(x) levels(x)))  # explicitly access the "levels" function
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       dt = task$data(cols = names(self$state$levels))
 
       # check which levels are actually different during training and prediction

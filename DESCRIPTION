@@ -69,12 +69,14 @@ Suggests:
     evaluate
 VignetteBuilder:
     knitr
+Remotes:
+    mlr-org/mlr3
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -94,6 +96,7 @@ Collate:
     'PipeOpColApply.R'
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
+    'PipeOpDateFeatures.R'
     'PipeOpEncode.R'
     'PipeOpEncodeImpact.R'
     'PipeOpEncodeLmer.R'
@@ -106,6 +109,7 @@ Collate:
     'PipeOpImputeHist.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
+    'PipeOpImputeMode.R'
     'PipeOpImputeNewlvl.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
@@ -126,6 +130,7 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+    'PipeOpThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

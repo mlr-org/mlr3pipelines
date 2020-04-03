@@ -18,7 +18,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpImputeSample`].
+#' Input and output channels are inherited from [`PipeOpImpute`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by values sampled (column-wise) from training data.
 #'
@@ -31,7 +31,10 @@
 #' The parameters are the parameters inherited from [`PipeOpImpute`].
 #'
 #' @section Internals:
-#' Uses the `sample()` function. Features that are entirely `NA` are imputed as the values given by `vector()` of their type.
+#' Uses the `sample()` function. Features that are entirely `NA` are imputed as
+#' the following: For `factor` or `ordered`, random levels are sampled uniformly at random.
+#' For logicals, `TRUE` or `FALSE` are sampled uniformly at random.
+#' Numerics and integers are imputed as `0`.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -55,22 +58,32 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
   public = list(
     initialize = function(id = "imputesample", param_vals = list()) {
       super$initialize(id, param_vals = param_vals)
-    },
+    }
+  ),
+  private = list(
 
-    train_imputer = function(feature, type, context) {
-      feature[!is.na(feature)]
-    },
-
-    impute = function(feature, type, model, context) {
-      outlen = sum(is.na(feature))
-      filldata = if (!length(model)) {
-        vector(type, outlen)
-      } else if (length(model) == 1) {
-        rep_len(model, outlen)
-      } else {
-        sample(model, outlen, replace = TRUE)
+    .train_imputer = function(feature, type, context) {
+      model = feature[!is.na(feature)]
+      if (!length(model)) {
+        model = switch(type,
+          factor = levels(feature),
+          integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
+          logical = c(TRUE, FALSE),
+          numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
+          ordered = levels(feature)
+        )
       }
-      feature[is.na(feature)] = filldata
+      model
+    },
+
+    .impute = function(feature, type, model, context) {
+      if (length(model) == 1) {
+        feature[is.na(feature)] = model
+
+      } else {
+        outlen = sum(is.na(feature))
+        feature[is.na(feature)] = sample(model, outlen, replace = TRUE)
+      }
       feature
     }
   )

@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_filter}
 \alias{PipeOpFilter}
 \title{PipeOpFilter}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Feature filtering using a \code{\link[mlr3filters:Filter]{mlr3filters::Filter}} object, see the
 \CRANpkg{mlr3filters} package.
@@ -69,7 +71,7 @@ Note that at least one of \code{filter.nfeat}, \code{filter.frac}, or \code{filt
 \section{Internals}{
 
 This does \emph{not} use the \verb{$select_cols} feature of \code{\link{PipeOpTaskPreproc}} to select only features compatible with the \code{\link[mlr3filters:Filter]{Filter}};
-instead the whole \code{\link[mlr3:Task]{Task}} is used by \verb{$get_state()} and subset internally.
+instead the whole \code{\link[mlr3:Task]{Task}} is used by \code{private$.get_state()} and subset internally.
 }
 
 \section{Fields}{
@@ -130,6 +132,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
 \code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
@@ -140,6 +143,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -159,6 +163,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

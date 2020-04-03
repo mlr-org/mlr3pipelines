@@ -4,7 +4,9 @@
 \name{mlr_graphs}
 \alias{mlr_graphs}
 \title{Dictionary of (sub-)graphs}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
+}
 \description{
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{Graph}}.
 The dictionary contains a collection of often-used graph structures, and it's aim
@@ -38,7 +40,7 @@ lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
 
 # Robustify the learner for the task.
-gr = robustify_pipeline(task, lrn) \%>>\% po("learner", lrn)
+gr = pipeline_robustify(task, lrn) \%>>\% po("learner", lrn)
 # or equivalently
 gr = mlr_graphs$get("robustify", task = task, learner = lrn) \%>>\% po(lrn)
 # or equivalently
