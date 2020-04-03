@@ -257,18 +257,25 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"pima"</span>)
-<span class='no'>task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#&gt;        0        0        5      374       11        0        0       35 
-#&gt;  triceps 
-#&gt;      227 </div><div class='input'>
+<span class='no'>data</span> <span class='kw'>=</span> <span class='kw pkg'>data.table</span><span class='kw ns'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep.int</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"y"</span>, <span class='st'>"n"</span>), <span class='kw'>times</span> <span class='kw'>=</span> <span class='fl'>5</span>)),
+  <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='no'>letters</span>[<span class='fl'>2</span>:<span class='fl'>9</span>], <span class='fl'>NA</span>)), <span class='kw'>z</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>]))
+<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='st'>"task"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"x"</span>)
+<span class='no'>task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; x y z 
+#&gt; 0 2 0 </div><div class='input'>
 <span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputenewlvl"</span>)
 <span class='no'>new_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='no'>new_task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#&gt;        0        0        5      374       11        0        0       35 
-#&gt;  triceps 
-#&gt;      227 </div><div class='input'>
-</div></pre>
+<span class='no'>new_task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; x z y 
+#&gt; 0 0 0 </div><div class='input'><span class='no'>new_task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;     x z        y
+#&gt;  1: y a .MISSING
+#&gt;  2: n b        b
+#&gt;  3: y c        c
+#&gt;  4: n d        d
+#&gt;  5: y e        e
+#&gt;  6: n f        f
+#&gt;  7: y g        g
+#&gt;  8: n h        h
+#&gt;  9: y i        i
+#&gt; 10: n j .MISSING</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
