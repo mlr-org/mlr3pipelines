@@ -365,3 +365,10 @@ test_that("Graph with vararg input", {
                gr$train(list(1, t1, t2, 2, 3), single_input = FALSE))
 
 })
+
+test_that("Caching ABs", {
+  gr = as_graph(po("scale"))
+  expect_true(!gr$cache)
+  gr$cache = TRUE
+  expect_true(gr$cache)
+})

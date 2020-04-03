@@ -348,6 +348,7 @@ PipeOp = R6Class("PipeOp",
     .param_set_source = NULL,
     .id = NULL,
     .cache = TRUE,
+    .cache_state = TRUE,
     .stochastic = character(0)
   )
 )

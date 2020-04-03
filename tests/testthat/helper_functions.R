@@ -99,6 +99,9 @@ expect_pipeop = function(po) {
   expect_names(names(po$output), permutation.of = c("name", "train", "predict"))
   expect_int(po$innum, lower = 1)
   expect_int(po$outnum, lower = 1)
+  expect_flag(po$cache)
+  expect_flag(po$cache_state)
+  expect_character(po$stochastic)
   # at least one of "train" or "predict" must be in every parameter's tag
   testthat::expect_true(every(po$param_set$tags, function(x) length(intersect(c("train", "predict"), x)) > 0))
 

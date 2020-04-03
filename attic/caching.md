@@ -62,16 +62,16 @@ The call to `op[[fun]](input)` calls each `PipeOp's` "train" and "predict" fun.
 Note: This is a simplified version, see the actual implementation `cached_pipeop_eval` in `graph.R`.
 
 ```
-    if (graph$cache && op$cache) { # caching can be enabled / disabled on graph and pipeop level
-      R.cache::evalWithMemoization(
-        {res_out = list(output = op[[fun]](input), state = op$state)},
-        key = list(map_chr(input, get_hash), op$hash) # hash of input and hash of pipeop (latter includes param_vals)
-      )
-      if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
-      output = res_out$output
-    } else {
-      output = list(output = op[[fun]](input), state = op$state)
-    }
+  if (graph$cache && op$cache) { # caching can be enabled / disabled on graph and pipeop level
+    R.cache::evalWithMemoization(
+      {res_out = list(output = op[[fun]](input), state = op$state)},
+      key = list(map_chr(input, get_hash), op$hash) # hash of input and hash of pipeop (latter includes param_vals)
+    )
+    if (is.null(op$state) && fun == "train") op = res_out$state # write cached state
+    output = res_out$output
+  } else {
+    output = list(output = op[[fun]](input), state = op$state)
+  }
 ```   
 
 where `get_hash` is:
