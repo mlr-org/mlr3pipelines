@@ -45,6 +45,7 @@ Imports:
     mlr3misc (>= 0.1.4),
     paradox,
     R6,
+    R.cache,
     withr
 Suggests:
     ggplot2,
@@ -66,8 +67,7 @@ Suggests:
     fastICA,
     kernlab,
     smotefamily,
-    evaluate,
-    R.cache
+    evaluate
 VignetteBuilder:
     knitr
 Remotes:
