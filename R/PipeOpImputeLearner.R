@@ -144,7 +144,8 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       if(type == "integer"){
         feature = round(feature)
       }
-      mlr3:::auto_convert(feature, NULL, type, levels = NULL)
+      if (type == "logical") feature = as.logical(feature) # FIXME mlr-org/mlr3#475
+      mlr3:::auto_convert(feature, NULL, type, levels = levels(feature))
     },
     .impute_all_na = function(data, task, colname, type) {
       list(switch(type,

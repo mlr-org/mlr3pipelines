@@ -54,10 +54,10 @@ test_that("PipeOpImputeLearner", {
     c = c(1L, 2L, 3L, 4L, 5L, NA),
     d = factor(c(letters[1:5], NA), levels = letters[1:6]),
     e = factor(letters[1:6], levels = letters[1:6]),
-    # f = ordered(c(letters[1:5], NA), levels = letters[1:6]), # add after mlr-org/mlr3#475
-    # g = ordered(letters[1:6], levels = letters[1:6]),        # add after mlr-org/mlr3#475
+    f = ordered(c(letters[1:5], NA), levels = letters[1:6]),
+    g = ordered(letters[1:6], levels = letters[1:6]),  
     j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
-    # k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
+    k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
     l = factor(letters[rep(1:2, 3)])
   )
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
