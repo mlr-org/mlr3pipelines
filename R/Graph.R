@@ -632,6 +632,7 @@ predict.Graph = function(object, newdata, ...) {
 cached_pipeop_eval = function(self, op, fun, input) {
 
   if (self$cache && op$cache) {
+    require_namespaces("R.cache")
     cache_key = list(map_chr(input, get_hash), op$hash)
     if (fun == "train") {
       if (fun %nin% op$stochastic) {

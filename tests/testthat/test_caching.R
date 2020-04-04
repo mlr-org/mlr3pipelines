@@ -3,6 +3,15 @@ context("Caching")
 test_that("Caching works for test hash pipeop", {
   skip_on_cran()
 
+  # cache to tempdir
+  old_tmpdir = R.cache::getCacheRootPath()
+  test_tmpdir = tempdir()
+  R.cache::setCacheRootPath(test_tmpdir)
+  on.exit({
+    R.cache::setCacheRootPath(old_tmpdir)
+    unlink(test_tmpdir, recursive = TRUE)
+  })
+
   PipeOpTestHash = R6Class("PipeOpTestHash",
     inherit = PipeOp,
     public = list(
