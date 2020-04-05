@@ -48,10 +48,17 @@
 
 
 <meta property="og:title" content="PipeOpFeatureUnion — mlr_pipeops_featureunion" />
-<meta property="og:description" content="Aggregates features from all input tasks by cbind()ing them together into a single Task.
-DataBackend primary keys and Task targets have to be equal across all Tasks.
-Only the target column(s) of the first Task are kept.
-If assert_targets_equal is TRUE then target column names are compared and an error is thrown if they differ across inputs." />
+<meta property="og:description" content="Aggregates features from all input tasks by cbind()ing them together into a single
+Task.
+DataBackend primary keys and Task targets have to be equal
+across all Tasks. Only the target column(s) of the first Task
+are kept.
+If assert_targets_equal is TRUE then target column names are compared and an error is thrown
+if they differ across inputs.
+If input tasks share some feature names but these features are not identical an error is thrown.
+This check is performed by first comparing the features names and if duplicates are found, also
+the values of these possibly duplicated features. True duplicated features are only added a
+single time to the output task." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -151,10 +158,17 @@ If assert_targets_equal is TRUE then target column names are compared and an err
     </div>
 
     <div class="ref-description">
-    <p>Aggregates features from all input tasks by <code><a href='https://rdrr.io/r/base/cbind.html'>cbind()</a></code>ing them together into a single <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
-<p><code><a href='https://mlr3.mlr-org.com/reference/DataBackend.html'>DataBackend</a></code> primary keys and <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> targets have to be equal across all <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s.
-Only the target column(s) of the first <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> are kept.</p>
-<p>If <code>assert_targets_equal</code> is <code>TRUE</code> then target column names are compared and an error is thrown if they differ across inputs.</p>
+    <p>Aggregates features from all input tasks by <code><a href='https://rdrr.io/r/base/cbind.html'>cbind()</a></code>ing them together into a single
+<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
+<p><code><a href='https://mlr3.mlr-org.com/reference/DataBackend.html'>DataBackend</a></code> primary keys and <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> targets have to be equal
+across all <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s. Only the target column(s) of the first <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
+are kept.</p>
+<p>If <code>assert_targets_equal</code> is <code>TRUE</code> then target column names are compared and an error is thrown
+if they differ across inputs.</p>
+<p>If input tasks share some feature names but these features are not identical an error is thrown.
+This check is performed by first comparing the features names and if duplicates are found, also
+the values of these possibly duplicated features. True duplicated features are only added a
+single time to the output task.</p>
     </div>
 
 
@@ -165,33 +179,37 @@ Only the target column(s) of the first <code><a href='https://mlr3.mlr-org.com/r
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpFeatureUnion</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"featureunion"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>assert_targets_equal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<pre><span class='no'>PipeOpFeatureUnion</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"featureunion"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>assert_targets_equal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 <ul>
 <li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>character</code><br />
 Determines the number of input channels.
-If <code>innum</code> is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
-If <code>innum</code> is a <code>character</code> vector, the number of input channels
-is the length of <code>innum</code>, and the columns of the result are prefixed with the values.</p></li>
+If <code>innum</code> is 0 (default), a vararg input channel is created that can take an arbitrary number
+of inputs. If <code>innum</code> is a <code>character</code> vector, the number of input channels is the length of
+<code>innum</code>, and the columns of the result are prefixed with the values.</p></li>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-Identifier of the resulting  object, default <code>"featureunion"</code>.</p></li>
+Identifier of the resulting object, default <code>"featureunion"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 <li><p><code>assert_targets_equal</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-If <code>assert_targets_equal</code> is <code>TRUE</code> (Default),
-task target column names are checked for agreement. Disagreeing target column names are usually a
-bug, so this should often be left at the default.</p></li>
+If <code>assert_targets_equal</code> is <code>TRUE</code> (Default), task target column names are checked for
+agreement. Disagreeing target column names are usually a bug, so this should often be left at
+the default.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p><code>PipeOpFeatureUnion</code> has multiple input channels depending on the <code>innum</code> construction argument, named <code>"input1"</code>, <code>"input2"</code>, ...
-if <code>innum</code> is nonzero; if <code>innum</code> is 0, there is only one <em>vararg</em> input channel named <code>"..."</code>.
-All input channels take a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> both during training and prediction.</p>
-<p><code>PipeOpFeatureUnion</code> has one output channel named <code>"output"</code>, producing a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> both during training and prediction.</p>
-<p>The output is a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> constructed by <code><a href='https://rdrr.io/r/base/cbind.html'>cbind()</a></code>ing all features from all input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s, both during
-training and prediction.</p>
+<p><code>PipeOpFeatureUnion</code> has multiple input channels depending on the <code>innum</code> construction
+argument, named <code>"input1"</code>, <code>"input2"</code>, ... if <code>innum</code> is nonzero; if <code>innum</code> is 0, there is
+only one <em>vararg</em> input channel named <code>"..."</code>. All input channels take a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
+both during training and prediction.</p>
+<p><code>PipeOpFeatureUnion</code> has one output channel named <code>"output"</code>, producing a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
+both during training and prediction.</p>
+<p>The output is a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> constructed by <code><a href='https://rdrr.io/r/base/cbind.html'>cbind()</a></code>ing all features from all input
+<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s, both during training and prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -206,9 +224,10 @@ training and prediction.</p>
 
     
 
-<p><code>PipeOpFeatureUnion</code> uses the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> <code>$cbind()</code> method to bind the input values beyond the first
-input to the first <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. This means if the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s are database-backed, all of them
-except the first will be fetched into R memory for this. This behaviour may change in the future.</p>
+<p><code>PipeOpFeatureUnion</code> uses the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> <code>$cbind()</code> method to bind the input values
+beyond the first input to the first <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. This means if the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s
+are database-backed, all of them except the first will be fetched into R memory for this. This
+behaviour may change in the future.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
@@ -275,13 +294,13 @@ except the first will be fetched into R memory for this. This behaviour may chan
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='no'>task1</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
 <span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>),
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>)
 )) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>)
 
-<span class='no'>gr</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $featureunion.output
+<span class='no'>gr</span>$<span class='fu'>train</span>(<span class='no'>task1</span>)</div><div class='output co'>#&gt; $featureunion.output
 #&gt; &lt;TaskClassif:iris&gt; (150 x 9)
 #&gt; * Target: Species
 #&gt; * Properties: multiclass
@@ -289,16 +308,18 @@ except the first will be fetched into R memory for this. This behaviour may chan
 #&gt;   - dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width,
 #&gt;     Sepal.Length, Sepal.Width
 #&gt; </div><div class='input'>
+<span class='no'>task2</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='no'>task3</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
 <span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>, <span class='kw'>innum</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>))
 
-<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>, <span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task2</span>, <span class='no'>task3</span>))</div><div class='output co'>#&gt; $output
 #&gt; &lt;TaskClassif:iris&gt; (150 x 9)
 #&gt; * Target: Species
 #&gt; * Properties: multiclass
 #&gt; * Features (8):
 #&gt;   - dbl (8): a.Petal.Length, a.Petal.Width, a.Sepal.Length,
-#&gt;     a.Sepal.Width, b.a.Petal.Length, b.a.Petal.Width, b.a.Sepal.Length,
-#&gt;     b.a.Sepal.Width
+#&gt;     a.Sepal.Width, b.Petal.Length, b.Petal.Width, b.Sepal.Length,
+#&gt;     b.Sepal.Width
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
