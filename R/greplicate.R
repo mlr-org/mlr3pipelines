@@ -5,6 +5,9 @@
 #' To avoid ID collisions, PipeOp IDs are suffixed with `_i`
 #' where `i` ranges from 1 to `n`.
 #'
+#' This function is deprecated and will be removed in the next version in favor
+#' of using pipeline_greplicate.
+#'
 #' @param graph [`Graph`] \cr
 #'   Graph to replicate.
 #' @param n `integer(1)`
@@ -13,6 +16,7 @@
 #' @family Graph operators
 #' @export
 greplicate = function(graph, n) {
+  warning("This function is deprecated and will be removed in the next version in favor of using pipeline_greplicate.")
   graph = as_graph(graph)
   n = assert_count(n, positive = TRUE, coerce = TRUE)
   x = map(seq_len(n), function(i) {

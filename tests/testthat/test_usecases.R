@@ -56,7 +56,7 @@ test_that("featureunion", {
 # FIXME: have a look at intermediate results in all usecase, we should expect some stuff there
 
 test_that("bagging", {
-  g = greplicate(PipeOpSubsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(innum = 2L)
+  g = pipeline_greplicate(PipeOpSubsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(innum = 2L)
   g$pipeops$subsample_1$param_set$values$frac = .5
   g$pipeops$subsample_2$param_set$values$frac = .5
   z = test_graph(g, n_nodes = 5L, n_edges = 4L)
@@ -119,7 +119,7 @@ test_that("branching with varargs", {
 
 
 test_that("task chunking", {
-  g = PipeOpChunk$new(2L) %>>% greplicate(PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(2L)
+  g = PipeOpChunk$new(2L) %>>% pipeline_greplicate(PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(2L)
   z = test_graph(g, n_nodes = 4L, n_edges = 4L)
 })
 

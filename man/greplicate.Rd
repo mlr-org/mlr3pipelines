@@ -20,6 +20,9 @@ Number of copies to create.}
 Create a new \code{\link{Graph}} containing \code{n} copies of the input \code{Graph} / \code{\link{PipeOp}}.
 To avoid ID collisions, PipeOp IDs are suffixed with \verb{_i}
 where \code{i} ranges from 1 to \code{n}.
+
+This function is deprecated and will be removed in the next version in favor
+of using pipeline_greplicate.
 }
 \seealso{
 Other Graph operators: 

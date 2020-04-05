@@ -67,7 +67,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 library("mlr3")
 
 # Simple Bagging
-gr = greplicate(n = 5,
+gr = pipeline_greplicate(n = 5,
   po("subsample") \%>>\%
   po("learner", lrn("classif.rpart"))
 ) \%>>\%

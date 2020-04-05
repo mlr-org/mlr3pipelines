@@ -55,11 +55,11 @@ test_that("complex graph", {
   expect_graph(PipeOpDebugBasic$new() %>>% PipeOpDebugMulti$new(1, 2) %>>% PipeOpDebugMulti$new(2, 1, "debug2"))
 
   expect_graph(PipeOpDebugBasic$new() %>>% PipeOpDebugMulti$new(1, 2) %>>%
-    greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2))
+    pipeline_greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2))
 
   biggraph = PipeOpDebugBasic$new() %>>%
     PipeOpDebugMulti$new(1, 2) %>>%
-    greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2) %>>%
+    pipeline_greplicate(PipeOpDebugMulti$new(1, 2, "debug2"), 2) %>>%
     gunion(list(PipeOpDebugBasic$new("basictop"),
       PipeOpDebugMulti$new(2, 1, "debug2"),
       PipeOpDebugBasic$new("basicbottom"))) %>>%
@@ -252,7 +252,7 @@ test_that("Empty Graph", {
 
   expect_equal(gunion(list(Graph$new(), Graph$new())), Graph$new())
 
-  expect_equal(greplicate(Graph$new(), 100), Graph$new())
+  expect_equal(pipeline_greplicate(Graph$new(), 100), Graph$new())
 
   expect_error(Graph$new()$add_edge("a", "b"), "Cannot add edge to empty Graph")
 
