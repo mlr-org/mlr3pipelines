@@ -1,6 +1,5 @@
 context("PipeOpFeatureUnion")
 
-
 test_that("featureunion - basic properties", {
   po = PipeOpFeatureUnion$new(3)
   expect_pipeop(po)
@@ -16,7 +15,6 @@ test_that("featureunion - basic properties", {
   expect_data_table(po$output, nrows = 1)
 
 })
-
 
 test_that("PipeOpFeatureUnion - train and predict", {
   # Define PipeOp's
@@ -62,7 +60,7 @@ test_that("PipeOpFeatureUnion - train and predict II", {
   lrn = mlr_learners$get("classif.rpart")
   op4 = PipeOpLearner$new(learner = lrn)
 
-  #  FIXME: Check param_set
+  # FIXME: Check param_set
   param_names_union = c(
     "OpNULL.Petal.Width", "OpNULL.Petal.Length",
     "pca.PC1", "OpNULL.Sepal.Length", "pca.PC2",
@@ -103,7 +101,7 @@ test_that("Test wrong inputs", {
   g = greplicate(
     pos %>>% PipeOpPCA$new(),
     2
-  ) %>>% PipeOpFeatureUnion$new(2)
+  ) %>>% PipeOpFeatureUnion$new(c("a", "b"))
   task = mlr_tasks$get("iris")
   expect_error(g$train(task), "Assertion on 'rows'")
 })
@@ -120,12 +118,11 @@ test_that("PipeOpFeatureUnion - levels are preserved", {
   tsk2$col_info
 
   pofu = PipeOpFeatureUnion$new(2)
-
+  expect_true(!pofu$is_trained)
   pofu$train(list(tsk1, tsk2))[[1]]$col_info
-
-
+  expect_true(pofu$is_trained)
   pofu$train(list(tsk1$filter(3:5), tsk2$filter(3:5)))[[1]]$col_info
-
+  expect_true(pofu$is_trained)
 
 })
 
@@ -179,9 +176,8 @@ test_that("feature renaming", {
 
   po = PipeOpFeatureUnion$new(c("z", "a", "a"))
 
-# FIXME: this needs https://github.com/mlr-org/mlr3/issues/268
-#  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
-#    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
+  expect_equal(po$train(list(task, task, PipeOpPCA$new()$train(list(task))[[1]]))[[1]]$feature_names,
+    c(task$feature_names, paste0("a.", task$feature_names), paste0("a.PC", 1:4)))
 
 })
 
@@ -202,3 +198,25 @@ test_that("feature renaming", {
 ##
 ##   pofu$train(list(t1, t2))
 ## })
+
+test_that("featureunion - duplicates in feature names", {
+  tsk = mlr_tasks$get("iris")
+
+  g = greplicate(PipeOpPCA$new(), 2) %>>% PipeOpFeatureUnion$new(2)
+
+  # this should work (just keeps each PC a single time)
+  train_out_g = g$train(tsk)
+
+  popca = PipeOpPCA$new()
+  train_out_pca = popca$train(list(tsk))
+  expect_equal(train_out_g[[1]]$data(), train_out_pca[[1]]$data())
+
+  # the following should not (duplicated feature names but actually different values)
+  dat = tsk$data()
+  dat$Petal.Length = rnorm(150)
+  dat$Sepal.Width[1] = 999
+  tsk2 = TaskClassif$new("tsk2", backend = dat, target = "Species")
+
+  po = PipeOpFeatureUnion$new()
+  expect_error(po$train(list(tsk, tsk2)), regexp = "different features sharing the same feature name")
+})
