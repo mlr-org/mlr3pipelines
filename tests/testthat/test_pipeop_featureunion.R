@@ -19,8 +19,10 @@ test_that("featureunion - basic properties", {
 test_that("PipeOpFeatureUnion - train and predict", {
   # Define PipeOp's
   tsk = mlr_tasks$get("iris")
-  t1 = tsk$clone()$set_col_role(c("Sepal.Length", "Sepal.Width"), character())
-  t2 = tsk$clone()$set_col_role(c("Petal.Length", "Petal.Width"), character())
+  keep1 = setdiff(tsk$feature_names, c("Sepal.Length", "Sepal.Width"))
+  keep2 = setdiff(tsk$feature_names, c("Petal.Length", "Petal.Width"))
+  t1 = tsk$clone()$select(keep1)
+  t2 = tsk$clone()$select(keep2)
 
   expect_task(cbind_tasks(inputs = list(t1, t2), TRUE, c("", "")))
 
