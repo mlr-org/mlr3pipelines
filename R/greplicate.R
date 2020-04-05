@@ -16,7 +16,7 @@
 #' @family Graph operators
 #' @export
 greplicate = function(graph, n) {
-  warning("This function is deprecated and will be removed in the next version in favor of using pipeline_greplicate.")
+  warning('This function is deprecated and will be removed in the next version in favor of using ppl("greplicate").')
   graph = as_graph(graph)
   n = assert_count(n, positive = TRUE, coerce = TRUE)
   x = map(seq_len(n), function(i) {
