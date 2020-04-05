@@ -93,7 +93,7 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
       truth = task$truth()
       minor = names(which.min(table(task$truth())))
 
-      wcol = setnames(data.table(fifelse(truth == minor, self$param_set$values$minor_weight, 1)), weightcolname)
+      wcol = setnames(data.table(ifelse(truth == minor, self$param_set$values$minor_weight, 1)), weightcolname)
 
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
