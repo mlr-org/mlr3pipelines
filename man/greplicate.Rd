@@ -22,7 +22,7 @@ To avoid ID collisions, PipeOp IDs are suffixed with \verb{_i}
 where \code{i} ranges from 1 to \code{n}.
 
 This function is deprecated and will be removed in the next version in favor
-of using pipeline_greplicate.
+of using pipeline_greplicate / ppl("greplicate").
 }
 \seealso{
 Other Graph operators: 
@@ -31,6 +31,7 @@ Other Graph operators:
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
-\code{\link{gunion}()}
+\code{\link{gunion}()},
+\code{\link{pipeline_greplicate}()}
 }
 \concept{Graph operators}

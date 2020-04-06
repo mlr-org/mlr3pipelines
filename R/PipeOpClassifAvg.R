@@ -63,11 +63,11 @@
 #' gr = ppl("greplicate",
 #'   po("subsample") %>>%
 #'   po("learner", lrn("classif.rpart")),
-#'   5L
+#'   n = 5
 #' ) %>>%
 #'   po("classifavg")
 #'
-#'  mlr3::resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(

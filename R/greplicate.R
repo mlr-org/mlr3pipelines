@@ -6,7 +6,7 @@
 #' where `i` ranges from 1 to `n`.
 #'
 #' This function is deprecated and will be removed in the next version in favor
-#' of using pipeline_greplicate.
+#' of using pipeline_greplicate / ppl("greplicate").
 #'
 #' @param graph [`Graph`] \cr
 #'   Graph to replicate.
