@@ -84,6 +84,7 @@ pos$predict(list(one_line_of_iris))[[1]]$data()
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},

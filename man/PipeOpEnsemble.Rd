@@ -92,6 +92,7 @@ This method is abstract, it must be implemented by deriving classes.
 \seealso{
 Other PipeOps: 
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},

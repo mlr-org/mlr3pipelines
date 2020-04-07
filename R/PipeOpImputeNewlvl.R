@@ -39,13 +39,15 @@
 #' @examples
 #' library("mlr3")
 #'
-#' task = tsk("pima")
+#' data = data.table::data.table(x = factor(rep.int(c("y", "n"), times = 5)),
+#'   y = factor(c(NA, letters[2:9], NA)), z = factor(letters[1:10]))
+#' task = TaskClassif$new("task", backend = data, target = "x")
 #' task$missings()
 #'
 #' po = po("imputenewlvl")
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
-#'
+#' new_task$data()
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @include PipeOpImpute.R
