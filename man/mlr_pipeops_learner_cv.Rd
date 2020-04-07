@@ -76,10 +76,9 @@ The parameters are the parameters inherited from the \code{\link{PipeOpTaskPrepr
 Besides that, parameters introduced are:
 \itemize{
 \item \code{resampling.method} :: \code{character(1)}\cr
-Which resampling method do we want to use. Currently only supports \code{"cv"}.
+Which resampling method do we want to use. Currently only supports \code{"cv"} and \code{"insample"}.
 \item \code{resampling.folds} :: \code{numeric(1)}\cr
-Number of cross validation folds. Initialized to 3.
-For \code{folds = 1L}, resampling method \code{ResamplingInsample} is used.
+Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}.
 \item \code{keep_response} :: \code{logical(1)}\cr
 Only effective during \code{"prob"} prediction: Whether to keep response values, if available. Initialized to \code{FALSE}.
 }

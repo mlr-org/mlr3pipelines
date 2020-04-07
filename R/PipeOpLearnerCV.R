@@ -64,10 +64,9 @@
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
 #' Besides that, parameters introduced are:
 #' * `resampling.method` :: `character(1)`\cr
-#'   Which resampling method do we want to use. Currently only supports `"cv"`.
+#'   Which resampling method do we want to use. Currently only supports `"cv"` and `"insample"`.
 #' * `resampling.folds` :: `numeric(1)`\cr
-#'   Number of cross validation folds. Initialized to 3.
-#'   For `folds = 1L`, resampling method `ResamplingInsample` is used.
+#'   Number of cross validation folds. Initialized to 3. Only used for `resampling.method = "cv"`.
 #' * `keep_response` :: `logical(1)`\cr
 #'   Only effective during `"prob"` prediction: Whether to keep response values, if available. Initialized to `FALSE`.
 #'
@@ -123,6 +122,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
+      private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))
 
       super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = "ensemble")
     }
@@ -147,12 +147,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
-      if (pv[["folds"]] == 1L) {
-        rdesc = mlr_resamplings$get("insample")
-      } else {
-        rdesc = mlr_resamplings$get(pv[["method"]])
-        rdesc$param_set$values = list(folds = pv[["folds"]])
-      }
+      rdesc = mlr_resamplings$get(pv[["method"]])
+      if (pv[["method"]] == "cv") rdesc$param_set$values = list(folds = pv[["folds"]])
+
       res = resample(task, private$.learner, rdesc)
       prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
 
