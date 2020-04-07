@@ -544,6 +544,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @include PipeOp.R
 #' @examples
 #'   # Create a binary class task from iris
+#'   library(mlr3)
 #'   trafo_fun = function(x) {factor(ifelse(x == "setosa", "setosa", "other"))}
 #'   po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
 #'   po$train(list(tsk("iris")))
