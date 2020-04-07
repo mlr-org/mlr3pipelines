@@ -117,7 +117,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = "cv", tags = c("train", "required")),
-        ParamInt$new("folds", lower = 1L, upper = Inf, tags = c("train", "required")),
+        ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
         ParamLgl$new("keep_response", tags = c("train", "required"))
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
