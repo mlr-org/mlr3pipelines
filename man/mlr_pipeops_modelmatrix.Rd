@@ -120,6 +120,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }
