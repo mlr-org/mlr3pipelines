@@ -67,6 +67,7 @@
 #'   Which resampling method do we want to use. Currently only supports `"cv"`.
 #' * `resampling.folds` :: `numeric(1)`\cr
 #'   Number of cross validation folds. Initialized to 3.
+#'   For `folds = 1L`, resampling method `ResamplingInsample` is used.
 #' * `keep_response` :: `logical(1)`\cr
 #'   Only effective during `"prob"` prediction: Whether to keep response values, if available. Initialized to `FALSE`.
 #'
@@ -117,7 +118,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = "cv", tags = c("train", "required")),
-        ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
+        ParamInt$new("folds", lower = 1L, upper = Inf, tags = c("train", "required")),
         ParamLgl$new("keep_response", tags = c("train", "required"))
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
@@ -146,8 +147,12 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
-      rdesc = mlr_resamplings$get(pv[["method"]])
-      rdesc$param_set$values = list(folds = pv[["folds"]])
+      if (pv[["folds"]] == 1L) {
+        rdesc = mlr_resamplings$get("insample")
+      } else {
+        rdesc = mlr_resamplings$get(pv[["method"]])
+        rdesc$param_set$values = list(folds = pv[["folds"]])
+      }
       res = resample(task, private$.learner, rdesc)
       prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
 

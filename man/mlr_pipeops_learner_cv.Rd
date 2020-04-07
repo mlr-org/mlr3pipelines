@@ -79,6 +79,7 @@ Besides that, parameters introduced are:
 Which resampling method do we want to use. Currently only supports \code{"cv"}.
 \item \code{resampling.folds} :: \code{numeric(1)}\cr
 Number of cross validation folds. Initialized to 3.
+For \code{folds = 1L}, resampling method \code{ResamplingInsample} is used.
 \item \code{keep_response} :: \code{logical(1)}\cr
 Only effective during \code{"prob"} prediction: Whether to keep response values, if available. Initialized to \code{FALSE}.
 }
