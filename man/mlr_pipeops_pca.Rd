@@ -117,6 +117,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_scalemaxabs}},
