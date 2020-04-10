@@ -273,7 +273,7 @@ in the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></co
 <p>(this is the <code>selector_all()</code>-<code>Selector</code>.) A <code>Selector</code> that selects
 all columns that have names shorter than four letters would be:</p><pre>function(task) {
   task$feature_names[
-    nchar(task$feature_names) &lt; 4
+    nchar(task$feature_names) &amp;lt; 4
   ]
 }
 </pre>
@@ -322,7 +322,7 @@ all columns that have names shorter than four letters would be:</p><pre>function
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
