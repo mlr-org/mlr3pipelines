@@ -348,6 +348,10 @@ PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
     },
 
     train_target = function(task) {
+      # handle trafo = identity separately
+      if (identical(self$param_set$values$trafo, identity)) {
+        return(task)  # early exit
+      }
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
       if (!is.null(self$param_set$values$new_target_name)) {
         colnames(new_target) = self$param_set$values$new_target_name
@@ -361,9 +365,12 @@ PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
     },
 
     inverter = function(prediction, predict_phase_control) {
-      # FIXME: probably should only work for predict_type = "response" and needs a check here,
-      # could be extended for se/probs using delta method?
-      assert_string(prediction$predict_types, pattern = "response")
+      # FIXME: probably should only work for predict_type = "response" and needs a check here?
+      #assert_string(prediction$predict_types, pattern = "response")
+      # handle predict_phase_control = identity separetely
+      if (identical(predict_phase_control, identity)) {
+        return(prediction)  # early exit
+      }
       type = prediction$task_type
       get(mlr_reflections$task_types[type]$prediction)$new(row_ids = prediction$row_ids,
         truth = predict_phase_control(prediction$truth), response = predict_phase_control(prediction$response))
