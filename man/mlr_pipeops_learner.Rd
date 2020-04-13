@@ -47,7 +47,7 @@ trained on the training input data.
 The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learner]{Learner}} object. It is a named \code{list} with members:
 \itemize{
 \item \code{model} :: \code{any}\cr
-Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$train_internal()} function.
+Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
 \item \code{train_log} :: \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr
@@ -97,6 +97,7 @@ lrn_po$predict(list(task))
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -120,6 +121,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -138,6 +140,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_textvectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

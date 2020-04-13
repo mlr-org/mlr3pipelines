@@ -73,15 +73,17 @@ PipeOpSelect = R6Class("PipeOpSelect",
       ))
       ps$values = list(selector = selector_all())
       super$initialize(id, ps, param_vals = param_vals, tags = "feature selection")
-    },
+    }
+  ),
+  private = list(
 
-    get_state = function(task) {
+    .get_state = function(task) {
       selection = self$param_set$values$selector(task)
       assert_subset(selection, task$feature_names)
       list(selection = selection)
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       task$select(self$state$selection)
     }
   )

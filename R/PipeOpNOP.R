@@ -65,14 +65,15 @@ PipeOpNOP = R6Class("PipeOpNOP",
         output = data.table(name = "output", train = "*", predict = "*"),
         tags = "meta"
       )
-    },
-
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    .train = function(inputs) {
       self$state = list()
       inputs
     },
 
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       inputs
     }
   )

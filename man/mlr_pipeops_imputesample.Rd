@@ -23,7 +23,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpImputeSample}}.
+Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by values sampled (column-wise) from training data.
 }
@@ -42,7 +42,10 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
 
 \section{Internals}{
 
-Uses the \code{sample()} function. Features that are entirely \code{NA} are imputed as the values given by \code{vector()} of their type.
+Uses the \code{sample()} function. Features that are entirely \code{NA} are imputed as
+the following: For \code{factor} or \code{ordered}, random levels are sampled uniformly at random.
+For logicals, \code{TRUE} or \code{FALSE} are sampled uniformly at random.
+Numerics and integers are imputed as \code{0}.
 }
 
 \section{Methods}{
@@ -65,6 +68,7 @@ new_task$missings()
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -88,6 +92,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -106,6 +111,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_textvectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
@@ -115,6 +122,7 @@ Other Imputation PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}}
 }
 \concept{Imputation PipeOps}

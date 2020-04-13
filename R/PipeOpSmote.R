@@ -81,11 +81,13 @@ PipeOpSmote = R6Class("PipeOpSmote",
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data")
-    },
+    }
+  ),
+  private = list(
 
-    train_task = function(task) {
+    .train_task = function(task) {
       assert_true(all(task$feature_types$type == "numeric"))
-      cols = self$select_cols(task)
+      cols = private$.select_cols(task)
 
       if (!length(cols)) {
         self$state = list(dt_columns = cols)

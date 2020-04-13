@@ -64,11 +64,13 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
       ))
       ps$values = list(no_collapse_above_prevalence = 1, target_level_count = 2)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
-    },
+    }
+  ),
+  private = list(
 
-    get_state = function(task) {
+    .get_state = function(task) {
       # get the levels of the training task
-      dt = task$data(cols = self$select_cols(task))
+      dt = task$data(cols = private$.select_cols(task))
 
       keep_fraction = self$param_set$values$no_collapse_above_prevalence
       target_count = self$param_set$values$target_level_count
@@ -111,7 +113,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
       list(collapse_map = discard(collapse_map, is.null))
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       cmaplist = self$state$collapse_map
       dt = task$data(cols = names(cmaplist))
 
