@@ -47,26 +47,36 @@ test_that("PipeOpTextVectorizer - tfidf works", {
   dt = data.table("txt" = apply(iris, 1, function(x) {
     if (x["Species"] == "setosa")
       paste(map_chr(1:10, function(x) {
-        paste(sample(letters[1:12], 3, replace = TRUE), collapse = "")
+        paste(sample(letters[1:3], 3, replace = TRUE), collapse = "")
       }), collapse = " ")
     else if (x["Species"] == "versicolor")
       paste(map_chr(1:10, function(x) {
-        paste(sample(letters[8:16], 3, replace = TRUE), collapse = "")
+        paste(sample(letters[8:10], 3, replace = TRUE), collapse = "")
       }), collapse = " ")
     else
       paste(map_chr(1:10, function(x) {
-        paste(sample(letters[12:24], 3, replace = TRUE), collapse = "")
+        paste(sample(letters[12:14], 3, replace = TRUE), collapse = "")
       }), collapse = " ")
   }))
   task$cbind(dt)
 
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "en", scheme_df = "inverse"))
+  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", scheme_df = "inverse"))
   expect_pipeop(op)
   result = op$train(list(task))[[1]]
   expect_task(result)
   expect_true(result$nrow == 150)
   expect_true(result$ncol > 6)
   expect_true(all(result$feature_types$type == "numeric"))
+
+  trueresult = as.data.table(quanteda::convert(quanteda::dfm_tfidf(quanteda::dfm(dt$txt)), "matrix"))
+  colnames(trueresult) = paste0("txt.", colnames(trueresult))
+
+  popresult = result$data(cols = selector_grep("^txt\\.")(result))
+
+  expect_equal(popresult, trueresult)
+
+
+
 
   # verify for first row
   strs = unlist(strsplit(dt[1, ][["txt"]], fixed = TRUE, split = " "))
@@ -79,6 +89,11 @@ test_that("PipeOpTextVectorizer - tfidf works", {
   expect_true(result2$nrow == 150)
   expect_true(result2$ncol > 6)
   expect_true(all(result2$feature_types$type == "numeric"))
+
+  popresult2 = result$data(cols = selector_grep("^txt\\.")(result2))
+
+  expect_equal(popresult2, trueresult)
+
 
   # verify same for first row
   dt3 = result2$data()
