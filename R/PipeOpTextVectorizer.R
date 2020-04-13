@@ -170,8 +170,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamLgl$new("remove_separators", default = TRUE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("split_hyphens", default = FALSE, tags = c("train", "predict", "tokenizer")),
 
-        ParamUty$new("n", lower = 1, default = 2, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
-        ParamUty$new("skip", lower = 0, default = 0, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
+        ParamUty$new("n", default = 2, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 1, any.missing = FALSE)),
+        ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 0, any.missing = FALSE)),
 
         ParamDbl$new("sparsity", lower = 0, upper = 1, default = NULL,
           tags = c("train", "dfm_trim"), special_vals = list(NULL)),
@@ -193,21 +193,22 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
           levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
         ParamDbl$new("k_tf", lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight")),
         ParamDbl$new("base_tf", lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"))
-
       ))$
         add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("smoothing_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("k_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("threshold", "scheme_df", CondEqual$new("count"))$
+        add_dep("threshold_df", "scheme_df", CondEqual$new("count"))$
         add_dep("k_tf", "scheme_tf", CondEqual$new("augmented"))$
         add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary")
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
-    },
+    }
+  ),
+  private = list(
 
-    train_dt = function(dt, levels, target) {
+    .train_dt = function(dt, levels, target) {
       colwise_results = sapply(dt, function(column) {
         tdm = private$transform_bow(column, trim = TRUE)  # transform to BOW (bag of words), return term count matrix
         state = list(
@@ -222,7 +223,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       as.data.frame(map(colwise_results, "matrix"))
     },
 
-    predict_dt = function(dt, levels, target) {
+    .predict_dt = function(dt, levels, target) {
       colwise_results = imap(dt, function(column, colname) {
         state = self$state$colmodels[[colname]]
         if (nrow(dt)) {
@@ -234,11 +235,9 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
           tdm = state$tdm
         }
         quanteda::convert(tdm, "matrix")
-      }
-      as.data.frame(map(colwise_results, "matrix"))
-    }
-  ),
-  private = list(
+      })
+      as.data.frame(colwise_results)
+    },
     # text: character vector of feature column
     # trim: TRUE during training: trim infrequent features
     transform_bow = function(text, trim) {
