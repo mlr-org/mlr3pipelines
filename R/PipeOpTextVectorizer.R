@@ -208,23 +208,20 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
     },
 
     train_dt = function(dt, levels, target) {
-      tdm = private$transform_bow(dt, trim = TRUE)                     # transform to BOW (bag of words), return term count matrix
-      self$state = list(tdm = quanteda::dfm_subset(tdm, FALSE))     # empty tdm so we have vocab of training data
+      tdm = private$transform_bow(dt, trim = TRUE)  # transform to BOW (bag of words), return term count matrix
+      self$state = list(tdm = quanteda::dfm_subset(tdm, FALSE),  # empty tdm so we have vocab of training data
+        docfreq = invoke(quanteda::docfreq, .args = c(list(x = tdm),  # column weights
+        rename_list(self$param_set$get_values(tags = "docfreq"), "_df$", ""))))
 
-      # get column weights
-      self$state$docfreq = invoke(quanteda::docfreq, .args = c(list(x = tdm),
-        rename_list(self$param_set$get_values(tags = "docfreq"), "_df$", "")))
       tdm = private$transform_tfidf(tdm)
-
       quanteda::convert(tdm, "matrix")
     },
     predict_dt = function(dt, levels, target) {
       if (nrow(dt)) {
         tdm = private$transform_bow(dt, trim = FALSE)
-        tdm = rbind(tdm, self$state$tdm) # make sure all columns occur
-        # tf-idf
-        tdm = tdm[, colnames(self$state$tdm)]   # Ensure only train-time features are pased on
-        tdm = private$transform_tfidf(tdm)
+        tdm = rbind(tdm, self$state$tdm)  # make sure all columns occur
+        tdm = tdm[, colnames(self$state$tdm)]  # Ensure only train-time features are pased on
+        tdm = private$transform_tfidf(tdm)  # tf-idf
       } else {
         tdm = self$state$tdm
       }
@@ -262,7 +259,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       }
     },
     transform_tfidf = function(tdm) {
-      if (!quanteda::nfeat(tdm) || !quanteda::ndoc(tdm)) return(tdm)
+      if (!quanteda::nfeat(tdm)) return(tdm)
       # code copied from quanteda:::dfm_tfidf.dfm (adapting here to avoid train/test leakage)
       x = invoke(quanteda::dfm_weight, .args = c(list(x = tdm),
         rename_list(self$param_set$get_values("dfm_weight"), "_tf$", "")))
