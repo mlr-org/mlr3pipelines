@@ -50,7 +50,7 @@
 #' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object, together with the `$state` elements inherited from the
 #' [`PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
 #' * `model` :: `any`\cr
-#'   Model created by the [`Learner`][mlr3::Learner]'s `$train_internal()` function.
+#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
 #' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
@@ -111,9 +111,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
+      private$.learner = as_learner(learner, clone = TRUE)
       private$.learner$param_set$set_id = ""
-      task_type = mlr_reflections$task_types[private$.learner$task_type]$task
+      # FIXME: can be changed when mlr-org/mlr3#470 has an answer
+      task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = "cv", tags = c("train", "required")),
@@ -124,9 +125,21 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.crossval_param_set$set_id = "resampling"
 
       super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = "ensemble")
-    },
+    }
 
-    train_task = function(task) {
+  ),
+  active = list(
+    learner = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      private$.learner
+    }
+  ),
+  private = list(
+    .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
 
       # Train a learner for predicting
@@ -142,24 +155,13 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$pred_to_task(prds, task)
     },
 
-    predict_task = function(task) {
+    .predict_task = function(task) {
       on.exit({private$.learner$state = NULL})
       private$.learner$state = self$state
       prediction = as.data.table(private$.learner$predict(task))
       private$pred_to_task(prediction, task)
-    }
-  ),
-  active = list(
-    learner = function(val) {
-      if (!missing(val)) {
-        if (!identical(val, private$.learner)) {
-          stop("$learner is read-only.")
-        }
-      }
-      private$.learner
-    }
-  ),
-  private = list(
+    },
+
     pred_to_task = function(prds, task) {
       if (!is.null(prds$truth)) prds[, truth := NULL]
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {

@@ -55,7 +55,7 @@
 #'
 #' @section Internals:
 #' This does *not* use the `$select_cols` feature of [`PipeOpTaskPreproc`] to select only features compatible with the [`Filter`][mlr3filters::Filter];
-#' instead the whole [`Task`][mlr3::Task] is used by `$get_state()` and subset internally.
+#' instead the whole [`Task`][mlr3::Task] is used by `private$.get_state()` and subset internally.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOpTaskPreproc`], as well as:
@@ -112,9 +112,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
       ))
       private$.outer_param_set$set_id = "filter"
       super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
-    },
+    }
+  ),
+  private = list(
+    .outer_param_set = NULL,
 
-    get_state = function(task) {
+    .get_state = function(task) {
       # reset filter on exit, the user should not even feel the temptation to not use the `$state`
       on.exit({self$filter$scores = structure(numeric(0), .Names = character(0))})
       filtercrit = c("nfeat", "frac", "cutoff")
@@ -154,12 +157,9 @@ PipeOpFilter = R6Class("PipeOpFilter",
       list(scores = scores, features = features)
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       task$select(self$state$features)
     }
-  ),
-  private = list(
-    .outer_param_set = NULL
   )
 )
 

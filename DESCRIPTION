@@ -58,8 +58,10 @@ Suggests:
     mlr3learners,
     mlr3measures,
     nloptr,
+    quanteda,
     rmarkdown,
     rpart,
+    stopwords,
     testthat,
     visNetwork,
     bestNormalize,
@@ -70,7 +72,8 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    mlr-org/mlr3
+    mlr-org/mlr3,
+    mlr-org/paradox@fix_272_clone
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -109,6 +112,7 @@ Collate:
     'PipeOpImputeHist.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
+    'PipeOpImputeMode.R'
     'PipeOpImputeNewlvl.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
@@ -119,6 +123,7 @@ Collate:
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
@@ -129,6 +134,8 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+    'PipeOpTextVectorizer.R'
+    'PipeOpThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

@@ -60,16 +60,18 @@ PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
         ))
       ps$values = list(numsplits = 2L)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
-    },
+    }
+  ),
+  private = list(
 
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       bins = lapply(dt, function(d)
         unique(c(-Inf, quantile(d, (1:(self$param_set$values$numsplits - 1)) /
             self$param_set$values$numsplits, na.rm = TRUE), Inf)))
       list(bins = bins)
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       as.data.frame(mapply(function(d, b) ordered(cut(d, breaks = b)), d = dt,
         b = self$state$bins, SIMPLIFY = FALSE), row.names = rownames(dt))
     }

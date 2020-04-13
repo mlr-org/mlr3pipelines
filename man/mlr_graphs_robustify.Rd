@@ -2,12 +2,16 @@
 % Please edit documentation in R/mlr_graphs_elements.R
 \name{mlr_graphs_robustify}
 \alias{mlr_graphs_robustify}
-\alias{robustify_pipeline}
+\alias{pipeline_robustify}
 \title{Robustify a learner}
 \usage{
-robustify_pipeline(task = NULL, learner = NULL,
-  impute_missings = NULL, factors_to_numeric = NULL,
-  max_cardinality = 1000)
+pipeline_robustify(
+  task = NULL,
+  learner = NULL,
+  impute_missings = NULL,
+  factors_to_numeric = NULL,
+  max_cardinality = 1000
+)
 }
 \arguments{
 \item{task}{\code{\link{Task}} \cr
@@ -39,7 +43,7 @@ Performs the following steps:
 \item Drops empty factor levels using \code{\link{PipeOpFixFactors}}
 \item Imputes \code{numeric} features using \code{\link{PipeOpImputeHist}} and \code{\link{PipeOpMissInd}}
 \item Imputes \code{factor} features using \code{\link{PipeOpImputeNewlvl}}
-\item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality\code{ are collapsed using [}PipeOpCollapseFactors`].
+\item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality\verb{ are collapsed using [}PipeOpCollapseFactors`].
 \item If \code{scaling}, numeric features are scaled to mean 0 and standard deviation 1.
 }
 
@@ -51,6 +55,6 @@ factor variables, no encoding is performed.
 library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
-gr = robustify_pipeline(task, lrn) \%>>\% po("learner", lrn)
+gr = pipeline_robustify(task, lrn) \%>>\% po("learner", lrn)
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
 }

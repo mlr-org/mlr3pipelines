@@ -68,9 +68,11 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
         ParamUty$new("breaks", default = "Sturges", tags = c("train", "hist"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"))
-    },
+    }
+  ),
+  private = list(
 
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       bins = lapply(seq_col(dt), function(i) {
         breaks = invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$get_values(tags = "hist"))$breaks
         breaks[1L] = -Inf
@@ -80,7 +82,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
       list(bins = bins)
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       as.data.frame(mapply(function(d, b) ordered(cut(d, breaks = b, include.lowest = TRUE)),
         d = dt, b = self$state$bins, SIMPLIFY = FALSE), row.names = rownames(dt))
     }

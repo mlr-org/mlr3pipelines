@@ -7,7 +7,7 @@
 ppl(key, ...)
 }
 \arguments{
-\item{key}{\code{[character(1)]}\cr
+\item{key}{\verb{[character(1)]}\cr
 The key of the \code{\link{Graph}} in \code{\link{mlr_graphs}}.}
 
 \item{...}{\code{any}\cr

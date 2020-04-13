@@ -90,14 +90,14 @@ PipeOpCopy = R6Class("PipeOpCopy",
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
         tags = "meta"
       )
-    },
-
-    train_internal = function(inputs) {
+    }
+  ),
+  private = list(
+    .train = function(inputs) {
       self$state = list()
       rep_len(inputs, self$outnum)
     },
-
-    predict_internal = function(inputs) {
+    .predict = function(inputs) {
       rep_len(inputs, self$outnum)
     }
   )
