@@ -25,7 +25,7 @@
 #' arguments passed on to [`quanteda::dfm()`][quanteda::dfm].
 #' Defaults to a bag-of-words representation with token counts as matrix entries.
 #'
-#' In order to perform the *default* `tf_idf` weighting, set the `scheme_df` parameter to `"inverse"`.
+#' In order to perform the *default* `dfm_tfidf` weighting, set the `scheme_df` parameter to `"inverse"`.
 #' The `scheme_df` parameter is initialized to `"unary"`, which disables document frequency weighting.
 #'
 #' The pipeop works as follows:
