@@ -267,8 +267,7 @@ pipeline_greplicate = function(graph, n) {
   n = assert_count(n, positive = TRUE, coerce = TRUE)
   x = map(seq_len(n), function(i) {
     g = graph$clone(deep = TRUE)
-    ids = names2(g$pipeops)
-    g$set_names(ids, sprintf("%s_%i", ids, i))
+    g$update_ids(postfix = paste0("_", i))
   })
 
   gunion(x)

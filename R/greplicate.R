@@ -17,13 +17,5 @@
 #' @export
 greplicate = function(graph, n) {
   warning('This function is deprecated and will be removed in the next version in favor of using ppl("greplicate").')
-  graph = as_graph(graph)
-  n = assert_count(n, positive = TRUE, coerce = TRUE)
-  x = map(seq_len(n), function(i) {
-    g = graph$clone(deep = TRUE)
-    ids = names2(g$pipeops)
-    g$set_names(ids, sprintf("%s_%i", ids, i))
-  })
-
-  gunion(x)
+  pipeline_greplicate(graph, n)
 }
