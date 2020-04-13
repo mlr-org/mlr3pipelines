@@ -37,6 +37,10 @@ test_that("linear: scale + pca + learn", {
     abs(prcomp(scale(iris[1:4]))$x))
 
   expect_equal(unname(z$g.predicted$pipeops$classif.rpart$.result), unname(z$g.trained$predict(mlr_tasks$get("iris"))))
+
+  ids = g$ids()
+  expect_equal(ids, g$update_ids()$ids())
+  expect_equal(paste0("foo_", g$ids(), "_bar"), g$update_ids("foo_", "_bar")$ids())
 })
 
 test_that("featureunion", {
