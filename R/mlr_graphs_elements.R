@@ -140,7 +140,7 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   if (!is.null(averager)) averager = as_graph(averager)
 
   subs = po("subsample", param_vals = list(frac = frac)) %>>% graph
-  subs_repls = greplicate(subs, iterations)
+  subs_repls = pipeline_greplicate(subs, iterations)
 
   if (!is.null(averager)) subs_repls %>>% averager else subs_repls
 }
@@ -245,8 +245,6 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
 
 mlr_graphs$add("branch", pipeline_branch)
 
-
-
 #' @title Transform and Re-Transform the Target Variable
 #' @name mlr_graphs_targettrafo
 #' @description
@@ -273,11 +271,11 @@ mlr_graphs$add("branch", pipeline_branch)
 #' @export
 #' @examples
 #' library("mlr3")
-#' 
+#'
 #' tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
 #' tt$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
-#' 
+#'
 #' # gives the same as
 #' g = Graph$new()
 #' g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
@@ -316,3 +314,34 @@ pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetTrafoSimple$ne
 }
 
 mlr_graphs$add("targettrafo", pipeline_targettrafo)
+
+#' @title Create Disjoint Graph Union of Copies of a Graph
+#'
+#' @description
+#' Create a new [`Graph`] containing `n` copies of the input [`Graph`] / [`PipeOp`]. To avoid ID
+#' collisions, PipeOp IDs are suffixed with `_i` where `i` ranges from 1 to `n`.
+#'
+#' @param graph [`Graph`] \cr
+#'   Graph to replicate.
+#' @param n `integer(1)`
+#'   Number of copies to create.
+#' @return [`Graph`] containing `n` copies of input `graph`.
+#' @family Graph operators
+#' @export
+#' @examples
+#' library("mlr3")
+#'
+#' po_pca = po("pca")
+#' pipeline_greplicate(po_pca, n = 2)
+pipeline_greplicate = function(graph, n) {
+  graph = as_graph(graph)
+  n = assert_count(n, positive = TRUE, coerce = TRUE)
+  x = map(seq_len(n), function(i) {
+    g = graph$clone(deep = TRUE)
+    g$update_ids(postfix = paste0("_", i))
+  })
+
+  gunion(x)
+}
+
+mlr_graphs$add("greplicate", pipeline_greplicate)

@@ -29,6 +29,7 @@ Other Graph operators:
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
-\code{\link{greplicate}()}
+\code{\link{greplicate}()},
+\code{\link{pipeline_greplicate}()}
 }
 \concept{Graph operators}

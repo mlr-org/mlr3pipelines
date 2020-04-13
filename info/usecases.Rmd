@@ -349,7 +349,7 @@ Scenario:
 We want to do bagging (Train several models on subsamples of the data and
 average predictions).
 
-We use the `PipeOpDownSample` operator in conjunction with a `PipeOpLearner` to train a model. `greplicate()` let's us do the same operation multiple times.
+We use the `PipeOpDownSample` operator in conjunction with a `PipeOpLearner` to train a model. `pipeline_greplicate()` let's us do the same operation multiple times.
 Afterwards we average all predictions using `PipeOpModelAverage`
 
 ```r
@@ -357,7 +357,7 @@ op1 = PipeOpDownSample$new(rate = 0.6)
 op2 = PipeOpLearner$new("classif.rpart")
 op3 = PipeOpModelAverage$new()
 
-greplicate(op1 %>>% op2, 30) %>>% op3
+pipeline_greplicate(op1 %>>% op2, 30) %>>% op3
 ```
 
 
@@ -430,9 +430,9 @@ In order to aggregate the predictions for different classes, we use the `PipeOpM
 op1 = PipeOpMultiClass2Binary(codebook)
 op2 = PipeOpLearner("classif.svm")
 
-op1 %>>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
+op1 %>>% pipeline_greplicate(op2, k) %>>% PipeOpModelAverage$new()
 # or:
-op1 %>=>% greplicate(op2, k) %>>% PipeOpModelAverage$new()
+op1 %>=>% pipeline_greplicate(op2, k) %>>% PipeOpModelAverage$new()
 ```
 
 
@@ -481,7 +481,7 @@ Afterwards we train $k$ learners on each sub[[Task]].
 Afterwards the predictions are averaged in order to get a single prediction.
 
 ```r
-PipeOpChunk(k) %>>% greplicate(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg()
+PipeOpChunk(k) %>>% pipeline_greplicate(PipeOpLearner("classif.rpart"), 10) %>>% PipeOpModelAvg()
 ```
 
 

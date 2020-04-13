@@ -67,9 +67,10 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 library("mlr3")
 
 # Simple Bagging
-gr = greplicate(n = 5,
+gr = ppl("greplicate",
   po("subsample") \%>>\%
-  po("learner", lrn("classif.rpart"))
+  po("learner", lrn("classif.rpart")),
+  n = 5
 ) \%>>\%
   po("classifavg")
 
@@ -126,6 +127,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targetinverter}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_targettrafosimple}},
+\code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
