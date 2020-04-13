@@ -10,6 +10,8 @@
 \description{
 Splits numeric features into equally spaced bins.
 See \code{\link[graphics:hist]{graphics::hist()}} for details.
+Values that fall out of the training data range during prediction are
+binned with the lowest / highest bin respectively.
 }
 \section{Construction}{
 \preformatted{PipeOpHistBin$new(id = "histbin", param_vals = list())
