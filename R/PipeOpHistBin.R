@@ -7,9 +7,8 @@
 #' @description
 #' Splits numeric features into equally spaced bins.
 #' See [graphics::hist()] for details.
-#' Note that to circumvent `NA`s for values that are out of range of the
-#' training data, the lower bound of the lowest bin is always `-Inf` and the
-#' upper bound of the highest bin is always `Inf`.
+#' Values that fall out of the training data range during prediction are
+#' binned with the lowest / highest bin respectively.
 #'
 #' @section Construction:
 #' ```
