@@ -60,9 +60,10 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
       ))
       ps$values = list(norm = 2, length = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
-    },
-
-    transform_dt = function(dt, levels) {
+    }
+  ),
+  private = list(
+    .transform_dt = function(dt, levels) {
       if (!nrow(dt)) {
         # if dt has no rows then we still have to convert columns to numeric.
         return(dt[, lapply(.SD, as.numeric)])

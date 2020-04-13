@@ -80,9 +80,11 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       ))
       ps$values = list(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals, tags = "missings")
-    },
+    }
+  ),
+  private = list(
 
-    get_state = function(task) {
+    .get_state = function(task) {
       if (self$param_set$values$which == "all") {
         # 'which' is just all feature names
         indicand_cols = task$feature_names
@@ -94,10 +96,10 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       list(indicand_cols = indicand_cols)
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       if (!length(self$state$indicand_cols)) {
         # need to handle this as special case because cbind for empty tasks is broken
-        return(task)
+        return(task$select(character(0)))
       }
       data_dummy = as.data.table(is.na(task$data(cols = self$state$indicand_cols)))
       data_dummy = switch(self$param_set$values$type,

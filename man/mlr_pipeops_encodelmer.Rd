@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_encodelmer}
 \alias{PipeOpEncodeLmer}
 \title{Impact Encoding with Random Intercept Models}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
 
@@ -101,6 +103,7 @@ poe$state
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -123,6 +126,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -143,6 +147,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_text_vectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

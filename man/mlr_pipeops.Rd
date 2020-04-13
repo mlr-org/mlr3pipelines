@@ -4,7 +4,9 @@
 \name{mlr_pipeops}
 \alias{mlr_pipeops}
 \title{Dictionary of PipeOps}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
+}
 \description{
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
 Each \code{PipeOp} has an associated help page, see \code{mlr_pipeops_[id]}.
@@ -65,6 +67,7 @@ Other mlr3pipelines backend related:
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -88,6 +91,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -108,6 +112,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_text_vectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}}
 

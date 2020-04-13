@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_branch}
 \alias{PipeOpBranch}
 \title{PipeOpBranch}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
 Perform alternative path branching: \code{\link{PipeOpBranch}} has multiple output channels
 that connect to different paths in a \code{\link{Graph}}. At any time, only one of these
@@ -30,7 +32,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 }
 }
 
-\section{Input and Output}{
+\section{Input and Output Channels}{
 
 \code{\link{PipeOpBranch}} has one input channel named \code{"input"}, taking any input (\code{"*"}) both during training and prediction.
 
@@ -61,7 +63,7 @@ or the first element of \code{options} (if it is \code{character}).
 Alternative path branching is handled by the \code{\link{PipeOp}} backend. To indicate that
 a path should not be taken, \code{\link{PipeOpBranch}} returns the \code{\link{NO_OP}} object on its
 output channel. The \code{\link{PipeOp}} handles each \code{\link{NO_OP}} input by automatically
-returning a \code{\link{NO_OP}} output without calling \verb{$train_internal()} or \verb{$predict_internal()},
+returning a \code{\link{NO_OP}} output without calling \code{private$.train()} or \code{private$.predict()},
 until \code{\link{PipeOpUnbranch}} is reached. \code{\link{PipeOpUnbranch}} will then take multiple inputs,
 all except one of which must be a \code{\link{NO_OP}}, and forward the only non-\code{\link{NO_OP}}
 object on its output.
@@ -97,6 +99,7 @@ gr$train(tsk("iris"))
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -119,6 +122,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -139,6 +143,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_text_vectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

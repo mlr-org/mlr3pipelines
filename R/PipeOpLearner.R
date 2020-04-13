@@ -39,7 +39,7 @@
 #' @section State:
 #' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object. It is a named `list` with members:
 #' * `model` :: `any`\cr
-#'   Model created by the [`Learner`][mlr3::Learner]'s `$train_internal()` function.
+#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
 #' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
@@ -79,7 +79,7 @@
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
+      private$.learner = as_learner(learner, clone = TRUE)
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
       out_type = mlr_reflections$task_types[private$.learner$task_type]$prediction
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
@@ -87,21 +87,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         output = data.table(name = "output", train = "NULL", predict = out_type),
         tags = "learner"
       )
-    },
-
-    train_internal = function(inputs) {
-      on.exit({private$.learner$state = NULL})
-      task = inputs[[1L]]
-      self$state = private$.learner$train(task)$state
-
-      list(NULL)
-    },
-
-    predict_internal = function(inputs) {
-      on.exit({private$.learner$state = NULL})
-      task = inputs[[1]]
-      private$.learner$state = self$state
-      list(private$.learner$predict(task))
     }
   ),
   active = list(
@@ -122,7 +107,22 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     }
   ),
   private = list(
-    .learner = NULL
+    .learner = NULL,
+
+    .train = function(inputs) {
+      on.exit({private$.learner$state = NULL})
+      task = inputs[[1L]]
+      self$state = private$.learner$train(task)$state
+
+      list(NULL)
+    },
+
+    .predict = function(inputs) {
+      on.exit({private$.learner$state = NULL})
+      task = inputs[[1]]
+      private$.learner$state = self$state
+      list(private$.learner$predict(task))
+    }
   )
 )
 

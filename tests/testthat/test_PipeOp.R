@@ -17,7 +17,6 @@ test_that("PipeOp - General functions", {
   expect_output(expect_equal(po_1$train(list(1)), list(output = 1)), "Training debug.basic")
   expect_equal(po_1$state, list(input = 1))
   expect_true(po_1$is_trained)
-  expect_output(expect_equal(po_1$predict_internal(list(2)), list(input = 1, 2)), "Predicting debug.basic")
 })
 
 

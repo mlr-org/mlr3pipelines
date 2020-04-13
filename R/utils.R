@@ -55,6 +55,7 @@ task_filter_ex = function(task, row_ids) {
 
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
 check_function_or_null = function(x) check_function(x, null.ok = TRUE)
+check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE, min.len = 1, lower = 0, upper = 1)
 
 # 'and' operator for checkmate check_*-functions
 # example:

@@ -3,9 +3,11 @@
 \name{PipeOpEnsemble}
 \alias{PipeOpEnsemble}
 \title{PipeOpEnsemble}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+}
 \description{
-Parent class for \code{\link{PipeOp}}s that aggregate predictions. Implements the \verb{$train_internal()} and \verb{$predict_internal()} methods necessary
+Parent class for \code{\link{PipeOp}}s that aggregate predictions. Implements the \code{private$.train()} and \code{private$.predict()} methods necessary
 for a \code{PipeOp} and requires deriving classes to create the \code{private$weighted_avg_predictions()} function.
 }
 \section{Construction}{
@@ -28,7 +30,7 @@ Default \code{character(0)}.
 \item \code{prediction_type} :: \code{character(1)}\cr
 The \code{predict} entry of the \verb{$input} and \verb{$output} type specifications.
 Should be \code{"Prediction"} (default) or one of its subclasses, e.g. \code{"PredictionClassif"}, and correspond to the type accepted by
-\verb{$train_internal()} and \verb{$predict_internal()}.
+\code{private$.train()} and \code{private$.predict()}.
 }
 }
 
@@ -81,7 +83,7 @@ Methods inherited from \code{\link{PipeOp}} as well as:
 \item \code{weighted_avg_prediction(inputs, weights, row_ids, truth)}\cr
 (\code{list} of \code{\link[mlr3:Prediction]{Prediction}}, \code{numeric}, \code{integer} | \code{character}, \code{list}) -> \code{NULL}\cr
 Create \code{\link[mlr3:Prediction]{Prediction}}s that correspond to the weighted average of incoming \code{\link[mlr3:Prediction]{Prediction}}s. This is
-called by \verb{$predict_internal()} with cleaned and sanity-checked values: \code{inputs} are guaranteed to fit together,
+called by \code{private$.predict()} with cleaned and sanity-checked values: \code{inputs} are guaranteed to fit together,
 \code{row_ids} and \code{truth} are guaranteed to be the same as each one in \code{inputs}, and \code{weights} is guaranteed to have the same length as \code{inputs}.\cr
 This method is abstract, it must be implemented by deriving classes.
 }
@@ -90,6 +92,7 @@ This method is abstract, it must be implemented by deriving classes.
 \seealso{
 Other PipeOps: 
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -113,6 +116,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -133,6 +137,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_text_vectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

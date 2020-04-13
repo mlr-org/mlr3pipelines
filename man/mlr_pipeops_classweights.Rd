@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_classweights}
 \alias{PipeOpClassWeights}
 \title{PipeOpClassWeights}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Adds a class weight column to the \code{\link[mlr3:Task]{Task}} that different \code{\link[mlr3:Learner]{Learner}}s may be
 able to use for sample weighting. Sample weights are added to each sample according to the target class.
@@ -85,6 +87,7 @@ result$weights
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -107,6 +110,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -127,6 +131,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_text_vectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

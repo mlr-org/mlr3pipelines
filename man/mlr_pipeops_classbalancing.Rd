@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_classbalancing}
 \alias{PipeOpClassBalancing}
 \title{PipeOpClassBalancing}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Both undersamples a \code{\link[mlr3:Task]{Task}} to keep only a fraction of the rows of the majority class,
 as well as oversamples (repeats data points) rows of the minority class.
@@ -56,8 +58,10 @@ Which classes to up / downsample. Can be \code{"all"} (up and downsample all to 
 instance count), \code{"major"}, \code{"minor"}, \code{"nonmajor"}, \code{"nonminor"} (see respective values
 for \verb{$reference}), \code{"upsample"} (only upsample), and \code{"downsample"}. Initialized to \code{"all"}.
 \item \code{shuffle} :: \code{logical(1)} \cr
-Whether to shuffle the result. Otherwise, the resulting task will have the original items that
-were not removed in downsampling in-order, followed by all newly sampled items ordered by target class.
+Whether to shuffle the rows of the resulting task.
+In case the data is upsampled and \code{shuffle = FALSE}, the resulting task will have the original
+rows (which were not removed in downsampling) in the original order, followed by all newly added rows
+ordered by target class.
 Initialized to \code{TRUE}.
 }
 }
@@ -115,6 +119,7 @@ table(result$truth())
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -137,6 +142,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
 \code{\link{mlr_pipeops_imputenewlvl}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
@@ -157,6 +163,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_text_vectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}

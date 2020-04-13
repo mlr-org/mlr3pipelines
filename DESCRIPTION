@@ -72,13 +72,14 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    mlr-org/mlr3
+    mlr-org/mlr3,
+    mlr-org/paradox@fix_272_clone
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -111,6 +112,7 @@ Collate:
     'PipeOpImputeHist.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
+    'PipeOpImputeMode.R'
     'PipeOpImputeNewlvl.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
@@ -121,6 +123,7 @@ Collate:
     'PipeOpMutate.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
+    'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
@@ -132,6 +135,7 @@ Collate:
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
+    'PipeOpThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

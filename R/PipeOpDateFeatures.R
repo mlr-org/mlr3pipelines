@@ -114,14 +114,11 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       ps$values = list(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
         month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,
         day_of_week = TRUE, hour = TRUE, minute = TRUE, second = TRUE, is_day = TRUE)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals)
-    },
-
-    select_cols = function(task) {
-      task$feature_types[get("type") == "POSIXct", get("id")]
-    },
-
-    transform_dt = function(dt, levels) {
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct")
+    }
+  ),
+  private = list(
+    .transform_dt = function(dt, levels) {
       features = names(which(unlist(self$param_set$get_values(tags = "datepart"))))
       # early exit if no features are to be computed
       if (length(features) == 0L) {
