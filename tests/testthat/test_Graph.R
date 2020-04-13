@@ -258,6 +258,7 @@ test_that("Empty Graph", {
 
   expect_equal(Graph$new()$state, list())
 
+  expect_equal(Graph$new()$update_ids()$ids(), character(0))
 })
 
 test_that("Graph printer aux function calculates col widths well", {
@@ -363,5 +364,4 @@ test_that("Graph with vararg input", {
 
   expect_equal(list(nop.output = 1, featureunion.output = tcombined, nop2.output = 2, nop3.output = 3),
                gr$train(list(1, t1, t2, 2, 3), single_input = FALSE))
-
 })
