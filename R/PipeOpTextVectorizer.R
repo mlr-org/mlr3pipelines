@@ -1,7 +1,7 @@
 #' @title PipeOpTextVectorizer
 #'
 #' @usage NULL
-#' @name mlr_pipeops_text_vectorizer
+#' @name mlr_pipeops_textvectorizer
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
@@ -10,22 +10,22 @@
 #' Uses the [`quanteda::dfm()`][quanteda::dfm],
 #' [`quanteda::dfm_trim()`][quanteda::dfm_trim] from the 'quanteda' package.
 #' TF-IDF computation works similarly to [`quanteda::dfm_tfidf()`][quanteda::dfm_tfidf]
-#' but has been adjusted for train/test data split using [`quanteda::docfreq()`][quanteda::docfreq] 
+#' but has been adjusted for train/test data split using [`quanteda::docfreq()`][quanteda::docfreq]
 #' and [`quanteda::dfm_weight()`][quanteda::dfm_weight]
-#' 
+#'
 #' In short:
-#' * Per default, produces a bag-of-words representation 
+#' * Per default, produces a bag-of-words representation
 #' * If 'n' is set to values > 1 ngrams are computed
 #' * If 'df_trim' parameters are set, the bag-of-words is trimmed.
 #' * If 'scheme' parameters are set, term frequence - inverse document frequency is computed.
-#' 
+#'
 #' Parameters specify arguments to quanteda's dfm', 'dfm_trim', 'docfreq' and 'dfm_weight'.
 #' What belongs to what can be obtained from each params `tags` where `tokenizer` are
 #' arguments passed on to [`quanteda::dfm()`][quanteda::dfm].
 #' Defaults to a bag-of-words representation with token counts as matrix entries.
-#' 
+#'
 #' In order to do `tf_idf` weighting, set the 'scheme' parameter to 'inverse*'.
-#' 
+#'
 #' The pipeop works as follows:
 #' 1. Words are tokenized using [`quanteda::tokens`].
 #' 2. Ngrams are computed using [`quanteda::tokens_ngrams`]
@@ -35,10 +35,10 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTextVectorizer$new(id = "text_vectorizer", param_vals = list())
+#' PipeOpTextVectorizer$new(id = "textvectorizer", param_vals = list())
 #' ```
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"text_vectorizer"`.
+#'   Identifier of resulting object, default `"textvectorizer"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -53,20 +53,20 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' 
+#'
 #' * `language` :: `character(1)`\cr
-#'   Language to use for stopword filtering. Needs to be either in 
+#'   Language to use for stopword filtering. Needs to be either in
 #'   `stopwords::stopwords_getlanguages("snowball")` or `"smart"`.
 #'   'smart' coresponds to `stopwords::stopwords(source = "smart")`, which
 #'   also removes one-character strings. Default: 'smart'.
 #' * `remove_stopwords` :: `logical(1)`\cr
 #'   Remove stopwords according to 'language'? Default: `TRUE`.
-#' 
+#'
 #' * `tolower` :: `logical(1)`\cr
 #'   Convert to lower case? See [`quanteda::dfm`]. Default: `TRUE`.
 #' * `stem` :: `logical(1)`\cr
 #'   Stemming? See [`quanteda::dfm`]. Default: `FALSE`.
-#' 
+#'
 #' * `what` :: `character(1)`\cr
 #'   Tokenization splitter. See [`quanteda::tokens`]. Default: `word`.
 #' * `remove_punct` :: `logical(1)`\cr
@@ -81,13 +81,13 @@
 #'   See [`quanteda::tokens`]. Default: `TRUE`.
 #' * `split_hypens` :: `logical(1)`\cr
 #'   See [`quanteda::tokens`]. Default: `FALSE`.
-#' 
+#'
 #' * `n` :: `integer`\cr
 #'   Vector of ngram lengths. See [`quanteda::tokens_ngrams`]. Default: 1.
 #' * `skip` :: `integer`\cr
 #'   Vector of skips. See [`quanteda::tokens_ngrams`]. Default: 0.
 #' * `sparsity` :: `numeric(1)`\cr
-#' 
+#'
 #'   Desired sparsity of the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
 #' * `max_termfreq` :: `numeric(1)`\cr
 #'   Maximum term frequency in the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
@@ -107,7 +107,7 @@
 #'   See [`quanteda::docfreq`]. Default: 0.
 #' * `base` :: `numeric(1)`\cr
 #'   See [`quanteda::docfreq`]. Default: 10.
-#' 
+#'
 #' @section Internals:
 #' See Description. Internally uses the 'quanteda' package.
 #' All columns selected via `affect_columns` are concatenated before computing the bag of words.
@@ -124,8 +124,8 @@
 #'   txt = replicate(150, paste0(sample(letters, 3), collapse = " "))
 #' )
 #' task = tsk("iris")$cbind(dt)
-#' 
-#' pos = po("text_vectorizer", param_vals = list(language = "en"))
+#'
+#' pos = po("textvectorizer", param_vals = list(language = "en"))
 #'
 #' pos$train(list(task))[[1]]$data()
 #'
@@ -140,7 +140,7 @@
 PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
   inherit = PipeOpTaskPreproc,
   public = list(
-    initialize = function(id = "text_vectorizer", param_vals = list()) {
+    initialize = function(id = "textvectorizer", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamFct$new("language", default = "smart", tags = c("train", "predict"),
           levels = c(stopwords::stopwords_getlanguages("snowball"), "smart")),
@@ -175,7 +175,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamFct$new("scheme_tf", default = "count", tags = c("train", "predict"),
           levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
         ParamDbl$new("smoothing", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq")),
-        ParamDbl$new("k", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),       
+        ParamDbl$new("k", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),
         ParamDbl$new("threshold", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),
         ParamDbl$new("base", lower = 0, upper = Inf, default = 10, tags = c("train", "predict", "docfreq"))
       ))
@@ -227,7 +227,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       if (pv$remove_stopwords) {
         if (pv$language == "smart")
           remove = stopwords::stopwords(source = "smart")
-        else 
+        else
           remove = stopwords::stopwords(language = pv$language)
       }
       # tokenize
@@ -250,4 +250,4 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
   )
 )
 
-mlr_pipeops$add("text_vectorizer", PipeOpTextVectorizer)
+mlr_pipeops$add("textvectorizer", PipeOpTextVectorizer)
