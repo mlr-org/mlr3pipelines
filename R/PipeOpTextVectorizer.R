@@ -15,23 +15,25 @@
 #'
 #' In short:
 #' * Per default, produces a bag-of-words representation
-#' * If 'n' is set to values > 1 ngrams are computed
-#' * If 'df_trim' parameters are set, the bag-of-words is trimmed.
-#' * If 'scheme' parameters are set, term frequence - inverse document frequency is computed.
+#' * If `n` is set to values > 1, ngrams are computed
+#' * If `df_trim` parameters are set, the bag-of-words is trimmed.
+#' * The `scheme_tf` parameter controls term-frequency (per-document, i.e. per-row) weighting
+#' * The `scheme_df` parameter controls the document-frequency (per token, i.e. per-column) weighting.
 #'
-#' Parameters specify arguments to quanteda's dfm', 'dfm_trim', 'docfreq' and 'dfm_weight'.
+#' Parameters specify arguments to quanteda's `dfm`, `dfm_trim`, `docfreq` and `dfm_weight`.
 #' What belongs to what can be obtained from each params `tags` where `tokenizer` are
 #' arguments passed on to [`quanteda::dfm()`][quanteda::dfm].
 #' Defaults to a bag-of-words representation with token counts as matrix entries.
 #'
-#' In order to do `tf_idf` weighting, set the 'scheme' parameter to 'inverse*'.
+#' In order to perform the *default* `tf_idf` weighting, set the `scheme_df` parameter to `"inverse"`.
+#' The `scheme_df` parameter is initialized to `"unary"`, which disables document frequency weighting.
 #'
 #' The pipeop works as follows:
 #' 1. Words are tokenized using [`quanteda::tokens`].
 #' 2. Ngrams are computed using [`quanteda::tokens_ngrams`]
 #' 3. A document-frequency matrix is computed using [`quanteda::dfm`]
-#' 4. The document-frequency matrix is trimmed using [`quanteda::dfm_trim`]
-#' 5. The document-frequency matrix is re-weighted (e.g. tfidf) using [`quanteda::dfm_tfidf`]
+#' 4. The document-frequency matrix is trimmed using [`quanteda::dfm_trim`] during train-time.
+#' 5. The document-frequency matrix is re-weighted (similar to [`quanteda::dfm_tfidf`]) if `scheme_df` is not set to `"unary"`.
 #'
 #' @section Construction:
 #' ```
@@ -54,18 +56,20 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #'
-#' * `language` :: `character(1)`\cr
-#'   Language to use for stopword filtering. Needs to be either in
-#'   `stopwords::stopwords_getlanguages("snowball")` or `"smart"`.
-#'   'smart' coresponds to `stopwords::stopwords(source = "smart")`, which
-#'   also removes one-character strings. Default: 'smart'.
-#' * `remove_stopwords` :: `logical(1)`\cr
-#'   Remove stopwords according to 'language'? Default: `TRUE`.
+#' * `stopwords_language` :: `character(1)`\cr
+#'   Language to use for stopword filtering. Needs to be either `"none"`, a language identifier listed in
+#'   `stopwords::stopwords_getlanguages("snowball")` (`"de"`, `"en"`, ...) or `"smart"`.
+#'   `"none"` disables language-specific stopwords.
+#'   `"smart"` coresponds to `stopwords::stopwords(source = "smart")`, which
+#'   contains *English* stopwords and also removes one-character strings. Initialized to `"smart"`.\cr
+#' * `extra_stopwords` :: `character`\cr
+#'   Extra stopwords to remove. Must be a `character` vector containing individual tokens to remove. Initialized to `character(0)`.
+#'   When `n` is set to values greater than 1, this can also contain stop-ngrams.
 #'
 #' * `tolower` :: `logical(1)`\cr
 #'   Convert to lower case? See [`quanteda::dfm`]. Default: `TRUE`.
 #' * `stem` :: `logical(1)`\cr
-#'   Stemming? See [`quanteda::dfm`]. Default: `FALSE`.
+#'   Perform stemming? See [`quanteda::dfm`]. Default: `FALSE`.
 #'
 #' * `what` :: `character(1)`\cr
 #'   Tokenization splitter. See [`quanteda::tokens`]. Default: `word`.
@@ -83,35 +87,43 @@
 #'   See [`quanteda::tokens`]. Default: `FALSE`.
 #'
 #' * `n` :: `integer`\cr
-#'   Vector of ngram lengths. See [`quanteda::tokens_ngrams`]. Default: 1.
+#'   Vector of ngram lengths. See [`quanteda::tokens_ngrams`]. Initialized to 1, deviating from the base function's default.
+#'   Note that this can be a *vector* of multiple values, to construct ngrams of multiple orders.
 #' * `skip` :: `integer`\cr
-#'   Vector of skips. See [`quanteda::tokens_ngrams`]. Default: 0.
-#' * `sparsity` :: `numeric(1)`\cr
+#'   Vector of skips. See [`quanteda::tokens_ngrams`]. Default: 0. Note that this can be a *vector* of multiple values.
 #'
+#' * `sparsity` :: `numeric(1)`\cr
 #'   Desired sparsity of the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
 #' * `max_termfreq` :: `numeric(1)`\cr
 #'   Maximum term frequency in the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
 #' * `min_termfreq` :: `numeric(1)`\cr
 #'   Minimum term frequency in the 'tfm' matrix. See [`quanteda::dfm_trim`]. Default: `NULL`.
 #' * `termfreq_type` :: `character(1)`\cr
-#'   How to asess term frequency. See [`quanteda::dfm_trim`]. Default: 'count'.
+#'   How to asess term frequency. See [`quanteda::dfm_trim`]. Default: `"count"`.
+#'
+#' * `scheme_df` :: `character(1)` \cr
+#'   Weighting scheme for document frequency: See [`quanteda::docfreq`]. Initialized to `"unary"` (1 for each document, deviating from base function default).
+#' * `smoothing_df` :: `numeric(1)`\cr
+#'   See [`quanteda::docfreq`]. Default: 0.
+#' * `k_df` :: `numeric(1)`\cr
+#'   `k` parameter given to [`quanteda::docfreq`] (see there).
+#'    Default is 0.
+#' * `threshold_df` :: `numeric(1)`\cr
+#'   See [`quanteda::docfreq`]. Default: 0. Only considered for `scheme_df` = `"count"`.
+#' * `base_df` :: `numeric(1)`\cr
+#'   The base for logarithms in [`quanteda::docfreq`] (see there). Default: 10.
+#'
 #' * `scheme_tf` :: `character(1)` \cr
-#'   Weighting scheme for term frequency: See [`quanteda::dfm_weight`]. Default: 'count'.
-#' * `scheme` :: `character(1)` \cr
-#'   Weighting scheme for document frequency: See [`quanteda::docfreq`]. Default: 'unary' (1 for each document).
-#' * `smoothing` :: `numeric(1)`\cr
-#'   See [`quanteda::docfreq`]. Default: 0.
-#' * `k` :: `numeric(1)`\cr
-#'   See [`quanteda::docfreq`]. Default: 0.
-#' * `threshold` :: `numeric(1)`\cr
-#'   See [`quanteda::docfreq`]. Default: 0.
-#' * `base` :: `numeric(1)`\cr
-#'   See [`quanteda::docfreq`]. Default: 10.
+#'   Weighting scheme for term frequency: See [`quanteda::dfm_weight`]. Default: `"count"`.
+#' * `k_tf` :: `numeric(1)`\cr
+#'   `k` parameter given to [`quanteda::dfm_weight`] (see there).
+#'    Default behaviour is 0.5.
+#' * `base_df` :: `numeric(1)`\cr
+#'   The base for logarithms in [`quanteda::dfm_weight`] (see there). Default: 10.
 #'
 #' @section Internals:
-#' See Description. Internally uses the 'quanteda' package.
-#' All columns selected via `affect_columns` are concatenated before computing the bag of words.
-#' Tokens not seen during training are silently dropped.
+#' See Description. Internally uses the `quanteda` package. Calls [`quanteda::tokens`], [`quanteda::tokens_ngrams`] and [`quanteda::dfm`]. During training,
+#' [`quanteda::dfm_trim`] is also called. Tokens not seen during training are dropped during prediction.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -125,7 +137,7 @@
 #' )
 #' task = tsk("iris")$cbind(dt)
 #'
-#' pos = po("textvectorizer", param_vals = list(language = "en"))
+#' pos = po("textvectorizer", param_vals = list(stopwords_language = "en"))
 #'
 #' pos$train(list(task))[[1]]$data()
 #'
@@ -142,9 +154,9 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
   public = list(
     initialize = function(id = "textvectorizer", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamFct$new("language", default = "smart", tags = c("train", "predict"),
-          levels = c(stopwords::stopwords_getlanguages("snowball"), "smart")),
-        ParamLgl$new("remove_stopwords", default = TRUE, tags = c("train", "predict")),
+        ParamFct$new("stopwords_language", tags = c("train", "predict"),
+          levels = c(stopwords::stopwords_getlanguages("snowball"), "smart", "none")),
+        ParamUty$new("extra_stopwords", tags = c("train", "predict"), custom_check = check_character),
 
         ParamLgl$new("tolower", default = TRUE, tags = c("train", "predict", "dfm")),
         ParamLgl$new("stem", default = FALSE, tags = c("train", "predict", "dfm")),
@@ -158,57 +170,61 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamLgl$new("remove_separators", default = TRUE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("split_hyphens", default = FALSE, tags = c("train", "predict", "tokenizer")),
 
-        ParamUty$new("n", default = 1, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
-        ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
+        ParamUty$new("n", lower = 1, default = 2, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
+        ParamUty$new("skip", lower = 0, default = 0, tags = c("train", "predict", "ngrams"), custom_check = check_integerish),
 
         ParamDbl$new("sparsity", lower = 0, upper = 1, default = NULL,
-          tags = c("train", "predict", "dfm_trim"), special_vals = list(NULL)),
-        ParamFct$new("termfreq_type", default = "count", tags = c("train", "predict", "dfm_trim"),
+          tags = c("train", "dfm_trim"), special_vals = list(NULL)),
+        ParamFct$new("termfreq_type", default = "count", tags = c("train", "dfm_trim"),
           levels = c("count", "prop", "rank", "quantile")),
-        ParamDbl$new("min_termfreq", lower = 0, upper = Inf, default = NULL,
-          tags = c("train", "predict", "dfm_trim"), special_vals = list(NULL)),
-        ParamDbl$new("max_termfreq", lower = 0, upper = Inf, default = NULL,
-          tags = c("train", "predict", "dfm_trim"), special_vals = list(NULL)),
+        ParamDbl$new("min_termfreq", lower = 0, default = NULL,
+          tags = c("train", "dfm_trim"), special_vals = list(NULL)),
+        ParamDbl$new("max_termfreq", lower = 0, default = NULL,
+          tags = c("train", "dfm_trim"), special_vals = list(NULL)),
 
-        ParamFct$new("scheme", default = "unary", tags = c("train", "predict", "docfreq"),
+        ParamFct$new("scheme_df", default = "count", tags = c("train", "docfreq"),
           levels = c("count", "inverse", "inversemax", "inverseprob", "unary")),
-        ParamFct$new("scheme_tf", default = "count", tags = c("train", "predict"),
-          levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
-        ParamDbl$new("smoothing", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq")),
-        ParamDbl$new("k", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),
-        ParamDbl$new("threshold", lower = 0, upper = Inf, default = 0, tags = c("train", "predict", "docfreq", "dfm_weight")),
-        ParamDbl$new("base", lower = 0, upper = Inf, default = 10, tags = c("train", "predict", "docfreq"))
-      ))
-      ps$add_dep("base", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
-      ps$add_dep("smoothing", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
-      ps$add_dep("k", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
-      ps$add_dep("base", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
-      ps$add_dep("threshold", "scheme", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))
-      ps$values = list("remove_stopwords" = TRUE, language = "smart", n = 1, scheme = "unary", scheme_tf = "count")
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"))
-    },
+        ParamDbl$new("smoothing_df", lower = 0, default = 0, tags = c("train", "docfreq")),
+        ParamDbl$new("k_df", lower = 0, tags = c("train", "docfreq")),
+        ParamDbl$new("threshold_df", lower = 0, default = 0, tags = c("train", "docfreq")),
+        ParamDbl$new("base_df", lower = 0, default = 10, tags = c("train", "docfreq")),
 
-    select_cols = function(task) {
-      task$feature_types[get("type") == "character", get("id")]
+        ParamFct$new("scheme_tf", default = "count", tags = c("train", "predict", "dfm_weight"),
+          levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
+        ParamDbl$new("k_tf", lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight")),
+        ParamDbl$new("base_tf", lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"))
+
+      ))$
+        add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
+        add_dep("smoothing_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
+        add_dep("k_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
+        add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
+        add_dep("threshold", "scheme_df", CondEqual$new("count"))$
+        add_dep("k_tf", "scheme_tf", CondEqual$new("augmented"))$
+        add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))
+
+      ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
     },
 
     train_dt = function(dt, levels, target) {
-      tdm = private$transform_bow(dt)                     # transform to BOW, return doc-freq matrix
+      tdm = private$transform_bow(dt, trim = TRUE)                     # transform to BOW (bag of words), return term count matrix
       self$state = list(tdm = quanteda::dfm_subset(tdm, FALSE))     # empty tdm so we have vocab of training data
-      # tf-idf
-      if (self$param_set$get_values()$scheme != "unary") {
-          self$state$docfreq = invoke(quanteda::docfreq, .args = c(tdm, self$param_set$get_values(tags = "docfreq")))
-          tdm = private$transform_tfidf(tdm)
-      }
+
+      # get column weights
+      self$state$docfreq = invoke(quanteda::docfreq, .args = c(list(x = tdm),
+        rename_list(self$param_set$get_values(tags = "docfreq"), "_df$", "")))
+      tdm = private$transform_tfidf(tdm)
+
       quanteda::convert(tdm, "matrix")
     },
     predict_dt = function(dt, levels, target) {
       if (nrow(dt)) {
-        tdm = private$transform_bow(dt)
+        tdm = private$transform_bow(dt, trim = FALSE)
         tdm = rbind(tdm, self$state$tdm) # make sure all columns occur
         # tf-idf
-        if (self$param_set$get_values()$scheme != "unary") tdm = private$transform_tfidf(tdm)
         tdm = tdm[, colnames(self$state$tdm)]   # Ensure only train-time features are pased on
+        tdm = private$transform_tfidf(tdm)
       } else {
         tdm = self$state$tdm
       }
@@ -216,36 +232,44 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
     }
   ),
   private = list(
-    transform_bow = function(dt) {
+    transform_bow = function(dt, trim) {
+      # trim: logical(1) whether to perform trimming step. This should only be done during training.
       # Collapse all columns into one if > 1 columns are provied.
       if (ncol(dt) > 1) {
         dt = data.table("text" = dt[, do.call(paste, c(.SD, sep = ". ")), .SDcols = colnames(dt)])
       }
-      corps = quanteda::corpus(data.frame(dt), text_field = colnames(dt))
+      corpus = quanteda::corpus(data.frame(dt), text_field = colnames(dt))
       pv = self$param_set$get_values()
       remove = NULL
-      if (pv$remove_stopwords) {
-        if (pv$language == "smart")
+      if (pv$stopwords_language != "none") {
+        if (pv$stopwords_language == "smart") {
           remove = stopwords::stopwords(source = "smart")
-        else
-          remove = stopwords::stopwords(language = pv$language)
+        } else {
+          remove = stopwords::stopwords(language = pv$stopwords_language)
+        }
       }
+      remove = c(remove, pv$extra_stopwords)
       # tokenize
-      tkn = invoke(quanteda::tokens, .args = c(list(x = corps), self$param_set$get_values(tags = "tokenizer")))
+      tkn = invoke(quanteda::tokens, .args = c(list(x = corpus), self$param_set$get_values(tags = "tokenizer")))
       tkn = invoke(quanteda::tokens_ngrams, .args = c(list(x = tkn), self$param_set$get_values(tags = "ngrams")))
       # document-feature matrix
       tdm = invoke(quanteda::dfm, .args = c(list(x = tkn, remove = remove), self$param_set$get_values(tags = "dfm")))
       # trim rare tokens
-      invoke(quanteda::dfm_trim, .args = c(tdm, self$param_set$get_values(tags = "dfm_trim")))
+      if (trim) {
+        invoke(quanteda::dfm_trim, .args = c(list(x = tdm), self$param_set$get_values(tags = "dfm_trim")))
+      } else {
+        tdm
+      }
     },
     transform_tfidf = function(tdm) {
       if (!quanteda::nfeat(tdm) || !quanteda::ndoc(tdm)) return(tdm)
       # code copied from quanteda:::dfm_tfidf.dfm (adapting here to avoid train/test leakage)
-      x = invoke(quanteda::dfm_weight, .args = c(x = tdm, scheme = self$param_set$get_values()$scheme_tf, self$param_set$get_values("dfm_weight")))
+      x = invoke(quanteda::dfm_weight, .args = c(list(x = tdm),
+        rename_list(self$param_set$get_values("dfm_weight"), "_tf$", "")))
       v = self$state$docfreq
       j = as(x, "dgTMatrix")@j + 1L
       x@x = x@x * v[j]
-      return(x)
+      x
     }
   )
 )

@@ -63,3 +63,10 @@ check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE
 `%&&%` = function(lhs, rhs) {
   if (isTRUE(lhs)) rhs else lhs
 }
+
+# perform gsub on names of list
+# `...` are given to `gsub()`
+rename_list = function(x, ...) {
+  names(x) = gsub(x = names(x), ...)
+  x
+}
