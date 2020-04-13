@@ -80,7 +80,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       assert_integerish(innum, lower = 0)
       param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
       param_set$values$weights = 1
-      inname = if (innum) rep_suffix("input", innum) else "..."
+      inname = if (innum) sprintf("%s%s", "input", seq_len(innum)) else "..."
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = inname, train = "NULL", predict = prediction_type),
         output = data.table(name = "output", train = "NULL", predict = prediction_type),

@@ -578,6 +578,24 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       list(private$.update_target(intask))
     },
 
+    # .predict = function(inputs) {
+    #   intask = inputs[[1]]$clone(deep = TRUE)
+    #   # During predict, we set the new target to NA and then call the trafo
+    #   new_target = set(intask$data(cols = intask$target_names), j = intask$target_names, value = NA)
+    #   new_target = data.table(self$param_set$values$trafo(new_target))
+    #   # rename, cbind and convert
+    #   setnames(new_target, colnames(new_target), self$param_set$values$new_target_name)
+    #   # Make sure levels match target levels
+    #   if (length(self$state))
+    #     new_target = imap_dtc(new_target, function(x, nms) {
+    #       if(nms %in% names(self$state))
+    #         levels(x) = self$state[[nms]]
+    #       return(x)
+    #   })
+    #   intask$cbind(new_target)
+    #   list(private$.update_target(intask))
+    # },
+
     .predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       # During predict, we set the new target to NA and then call the trafo
@@ -594,7 +612,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       })
       intask$cbind(new_target)
       list(private$.update_target(intask))
-    },
+    },    
 
     # updates the target of a task and also the task_type (if needed), uses convert_task
     .update_target = function(task, ...) {
