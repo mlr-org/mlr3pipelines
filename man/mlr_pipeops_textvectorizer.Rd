@@ -30,7 +30,7 @@ What belongs to what can be obtained from each params \code{tags} where \code{to
 arguments passed on to \code{\link[quanteda:dfm]{quanteda::dfm()}}.
 Defaults to a bag-of-words representation with token counts as matrix entries.
 
-In order to perform the \emph{default} \code{tf_idf} weighting, set the \code{scheme_df} parameter to \code{"inverse"}.
+In order to perform the \emph{default} \code{dfm_tfidf} weighting, set the \code{scheme_df} parameter to \code{"inverse"}.
 The \code{scheme_df} parameter is initialized to \code{"unary"}, which disables document frequency weighting.
 
 The pipeop works as follows:
