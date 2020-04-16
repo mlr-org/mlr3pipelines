@@ -62,7 +62,7 @@ PipeOpImputeNewlvl = R6Class("PipeOpImputeNewlvl",
   private = list(
 
     # this is one of the few imputers that handles 'character' features!
-    .select_cols = function(task) task$feature_types[get("type") %in% c("factor", "ordered", "character"), get("id")],
+    .select_cols = function(task) selector_type(c("factor", "ordered", "character"))(task),
 
     .train_imputer = function(feature, type, context) {
       NULL

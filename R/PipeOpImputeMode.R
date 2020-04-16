@@ -69,7 +69,7 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
   ),
   private = list(
 
-    .select_cols = function(task) task$feature_types[get("type") %in% c("factor", "integer", "logical", "numeric", "ordered"), get("id")],
+    .select_cols = function(task) selector_type(c("factor", "integer", "logical", "numeric", "ordered"))(task),
 
     .train_imputer = function(feature, type, context) {
       feature = feature[!is.na(feature)]

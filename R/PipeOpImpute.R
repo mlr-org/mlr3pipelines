@@ -207,7 +207,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       list(intask)
     },
 
-    .select_cols = function(task) task$feature_names,
+    .select_cols = function(task) selector_all()(task),
 
     .train_imputer = function(feature, type, context) stop("Abstract."),
 

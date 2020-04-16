@@ -12,6 +12,7 @@
 \alias{selector_union}
 \alias{selector_setdiff}
 \alias{selector_missing}
+\alias{selector_cardinality_greater_than}
 \title{Selector Functions}
 \usage{
 selector_all()
@@ -33,6 +34,8 @@ selector_union(selector_x, selector_y)
 selector_setdiff(selector_x, selector_y)
 
 selector_missing()
+
+selector_cardinality_greater_than(levels)
 }
 \arguments{
 \item{types}{(\code{character}) \cr
@@ -103,6 +106,9 @@ selected by \code{selector_x} are selected, unless they are also selected
 by \code{selector_y}.
 
 \item \code{selector_missing}: \code{selector_missing} selects features with missing values.
+
+\item \code{selector_cardinality_greater_than}: \code{selector_cardinality_greater_than} selects categorical features with cardinality
+greater then a given threshold.
 }}
 
 \section{Details}{

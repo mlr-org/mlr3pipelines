@@ -229,3 +229,14 @@ selector_missing = function() make_selector(function(task) {
   missings = task$missings()
   names(missings)[missings != 0]
 }, "selector_missing()")
+
+#' @describeIn Selector `selector_cardinality_greater_than` selects categorical features with cardinality
+#' greater then a given threshold.
+#' @export
+selector_cardinality_greater_than = function(levels) {
+  assert_int(levels)
+  make_selector(function(task) {
+    levlens = map_int(task$clone(deep = TRUE)$droplevels()$levels(), length)
+    names(levlens[levlens > levels])
+  }, "selector_cardinality_greater_than(%s)", levels)
+}
