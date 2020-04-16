@@ -8,7 +8,7 @@ test_that("PipeOpImpute", {
     public = list(
       initialize = function(id = "impute", param_vals = list()) {
         ps = ParamSet$new(list(
-          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist"), default = "median", tags = c("train", "predict")),
+          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist", "oor"), default = "median", tags = c("train", "predict")),
           ParamFct$new("method_fct", levels = c("newlvl", "sample", "mode"), default = "newlvl", tags = c("train", "predict")),
           ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict")),
           ParamUty$new("innum", tags = c("train", "predict"))
@@ -23,7 +23,8 @@ test_that("PipeOpImpute", {
           mean = po("imputemean"),
           mode = po("imputemode", id = "num_mode"),
           sample = po("imputesample", id = "num_sample"),
-          hist = po("imputehist"))
+          hist = po("imputehist"),
+          oor = po("imputeoor"))
         fctimputer = switch(self$param_set$values$method_fct,
           newlvl = po("imputenewlvl"),
           sample = po("imputesample", id = "fct_sample"),
@@ -138,6 +139,20 @@ test_that("PipeOpImpute", {
       method_num = "hist",
       method_fct = "sample",
       add_dummy = "all")))
+
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
+    deterministic_train = FALSE, deterministic_predict = FALSE,
+    constargs = list(param_vals = list(
+      method_num = "oor",
+      method_fct = "newlvl",
+      add_dummy = "missing_train")))
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
+    deterministic_train = FALSE, deterministic_predict = FALSE,
+    constargs = list(param_vals = list(
+      method_num = "oor",
+      method_fct = "newlvl",
+      add_dummy = "missing_train")))
+
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "sample", method_fct = "sample", add_dummy = "all"))
