@@ -263,9 +263,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     .predict_dt = function(dt, levels) stop("Abstract."),
 
-    .select_cols = function(task) {
-      task$feature_types[get("type") %in% self$feature_types, get("id")]
-    }
+    .select_cols = function(task) selector_type(self$feature_types)(task)
 
   )
 )

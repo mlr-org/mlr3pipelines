@@ -60,7 +60,7 @@ PipeOpImputeMedian = R6Class("PipeOpImputeMedian",
   ),
   private = list(
 
-    .select_cols = function(task) function(task) selector_type(c("numeric", "integer"))(task),
+    .select_cols = function(task) selector_type(c("numeric", "integer"))(task),
 
     .train_imputer = function(feature, type, context) {
       med = stats::median(feature, na.rm = TRUE)
