@@ -10,6 +10,8 @@
 \description{
 Splits numeric features into equally spaced bins.
 See \code{\link[graphics:hist]{graphics::hist()}} for details.
+Values that fall out of the training data range during prediction are
+binned with the lowest / highest bin respectively.
 }
 \section{Construction}{
 \preformatted{PipeOpHistBin$new(id = "histbin", param_vals = list())
@@ -120,6 +122,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},

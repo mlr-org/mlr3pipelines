@@ -24,6 +24,7 @@ Other Graph operators:
 \code{\link{as_pipeop}()},
 \code{\link{assert_pipeop}()},
 \code{\link{greplicate}()},
-\code{\link{gunion}()}
+\code{\link{gunion}()},
+\code{\link{pipeline_greplicate}()}
 }
 \concept{Graph operators}

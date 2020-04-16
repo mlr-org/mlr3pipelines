@@ -83,16 +83,17 @@ are:
 
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
-
+  - [Cheat Sheet for mlr3pipelines](https://cheatsheets.mlr-org.com/mlr3pipelines.pdf) for a 1-page overview.
+  - [Examples Gallery](https://mlr3gallery.mlr-org.com/) for a variety of code examples
   - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
   - [Detailed
-    Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html),
+    Introduction](https://mlr3book.mlr-org.com/in-depth-pipelines.html),
     diving into concepts and describing the objects involved
   - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
-    of `mlr3pipelines` with other packages (not yet authoritative)
+    of `mlr3pipelines` with other packages
   - [Writing Custom
-    `PipeOp`s](https://mlr3book.mlr-org.com/extending-mlr3pipelines.html)
+    `PipeOp`s](https://mlr3book.mlr-org.com/extending-pipeops.html)
     to extend and build on top of `mlr3pipelines`
 
 ## Bugs, Questions, Feedback

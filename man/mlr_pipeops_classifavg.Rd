@@ -73,13 +73,14 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 library("mlr3")
 
 # Simple Bagging
-gr = greplicate(n = 5,
+gr = ppl("greplicate",
   po("subsample") \%>>\%
-  po("learner", lrn("classif.rpart"))
+  po("learner", lrn("classif.rpart")),
+  n = 5
 ) \%>>\%
   po("classifavg")
 
- mlr3::resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 }
 \seealso{
 Other PipeOps: 
@@ -128,6 +129,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_yeojohnson}},

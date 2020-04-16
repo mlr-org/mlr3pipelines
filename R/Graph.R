@@ -103,6 +103,9 @@
 #'   (`character`, `character`) -> `self` \cr
 #'   Rename [`PipeOp`]s: Change ID of each [`PipeOp`] as identified by `old` to the corresponding item in `new`. This should be used
 #'   instead of changing a [`PipeOp`]'s `$id` value directly!
+#' * `update_ids(prefix = "", postfix = "")` \cr
+#'   (`character`, `character`) -> `self` \cr
+#'   Pre- or postfix [`PipeOp`]'s existing ids. Both `prefix` and `postfix` default to `""`, i.e. no changes.
 #' * `train(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> named `list`\cr
 #'   Train [`Graph`] by traversing the [`Graph`]s' edges and calling all the [`PipeOp`]'s `$train` methods in turn.
@@ -359,6 +362,11 @@ Graph = R6Class("Graph",
       imap(self$pipeops, function(x, nn) x$id = nn)
 
       self$edges[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
+      invisible(self)
+    },
+    update_ids = function(prefix = "", postfix = "") {
+      ids = names2(self$pipeops)
+      self$set_names(ids, sprintf("%s%s%s", assert_string(prefix), ids, assert_string(postfix)))
       invisible(self)
     },
 
