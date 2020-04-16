@@ -83,7 +83,7 @@ are:
 
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
-  - [mlr3pipelines cheat sheet](https://cheatsheets.mlr-org.com/mlr3pipelines.pdf) for a 1-page overview.
+  - [Cheat Sheet for mlr3pipelines](https://cheatsheets.mlr-org.com/mlr3pipelines.pdf) for a 1-page overview.
   - [Examples Gallery](https://mlr3gallery.mlr-org.com/) for a variety of code examples
   - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
