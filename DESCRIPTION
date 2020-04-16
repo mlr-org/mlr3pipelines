@@ -72,8 +72,7 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    mlr-org/mlr3,
-    mlr-org/paradox@fix_272_clone
+    mlr-org/mlr3
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
