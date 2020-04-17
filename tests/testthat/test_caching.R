@@ -6,7 +6,7 @@ test_that("Caching works for test hash pipeop", {
 
   # cache to tempdir
   old_tmpdir = R.cache::getCacheRootPath()
-  test_tmpdir = tempdir()
+  test_tmpdir = dir.create(paste0(tempdir(), "R.cache"))
   R.cache::setCacheRootPath(test_tmpdir)
 
   PipeOpTestHash = R6Class("PipeOpTestHash",
@@ -147,5 +147,5 @@ test_that("Caching works for test hash pipeop", {
 
   # # Reset old cachepath
   R.cache::setCacheRootPath(old_tmpdir)
-  unlink(test_tmpdir, recursive = TRUE)
+  unlink(list.files(test_tmpdir), recursive = TRUE)
 })
