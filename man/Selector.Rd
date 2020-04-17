@@ -35,7 +35,7 @@ selector_setdiff(selector_x, selector_y)
 
 selector_missing()
 
-selector_cardinality_greater_than(levels)
+selector_cardinality_greater_than(min_cardinality)
 }
 \arguments{
 \item{types}{(\code{character}) \cr
@@ -67,6 +67,9 @@ First \code{\link{Selector}} to query.}
 
 \item{selector_y}{(\code{\link{Selector}})\cr
 Second \code{\link{Selector}} to query.}
+
+\item{min_cardinality}{(\code{integer}) \cr
+Minimum number of levels required to be selected.}
 }
 \value{
 \code{function}: A \code{\link{Selector}} function that takes a \code{\link[mlr3:Task]{Task}} and returns the feature names to be processed.
