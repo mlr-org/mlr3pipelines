@@ -2,11 +2,12 @@ context("Caching")
 
 test_that("Caching works for test hash pipeop", {
   skip_on_cran()
+  require("R.cache")
 
   # cache to tempdir
-  # old_tmpdir = R.cache::getCacheRootPath()
-  # test_tmpdir = tempdir()
-  # R.cache::setCacheRootPath(test_tmpdir)
+  old_tmpdir = R.cache::getCacheRootPath()
+  test_tmpdir = tempdir()
+  R.cache::setCacheRootPath(test_tmpdir)
 
   PipeOpTestHash = R6Class("PipeOpTestHash",
     inherit = PipeOp,
@@ -145,6 +146,6 @@ test_that("Caching works for test hash pipeop", {
   expect_true(length(list.files(R.cache::getCacheRootPath())) == 3)
 
   # # Reset old cachepath
-  # R.cache::setCacheRootPath(old_tmpdir)
-  # unlink(test_tmpdir, recursive = TRUE)
+  R.cache::setCacheRootPath(old_tmpdir)
+  unlink(test_tmpdir, recursive = TRUE)
 })
