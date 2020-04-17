@@ -53,6 +53,5 @@ po.Filter = function(.obj, ...) {
 
 #' @export
 po.Selector = function(.obj, ...) {
-  # we use po() because that makes it possible to set hyperpars via `...`
-  po(.obj = "select", param_vals = list(selector = .obj), ...)
+  po(.obj = "select", selector = .obj, ...)
 }
