@@ -147,5 +147,5 @@ test_that("Caching works for test hash pipeop", {
 
   # # Reset old cachepath
   R.cache::setCacheRootPath(old_tmpdir)
-  unlink(list.files(test_tmpdir), recursive = TRUE)
+  unlink(test_tmpdir, recursive = TRUE)
 })
