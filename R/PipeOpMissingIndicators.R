@@ -110,7 +110,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
       task$select(character(0))$cbind(data_dummy)
     },
-    .select_cols = function(task) {selector_invert(selector_type(c("factor", "ordinal", "character")))(task)}
+    .select_cols = function(task) {selector_invert(selector_type(c("factor", "ordered", "character")))(task)}
   )
 )
 
