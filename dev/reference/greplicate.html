@@ -50,7 +50,9 @@
 <meta property="og:title" content="Create Disjoint Graph Union of Copies of a Graph — greplicate" />
 <meta property="og:description" content="Create a new Graph containing n copies of the input Graph / PipeOp.
 To avoid ID collisions, PipeOp IDs are suffixed with _i
-where i ranges from 1 to n." />
+where i ranges from 1 to n.
+This function is deprecated and will be removed in the next version in favor
+of using pipeline_greplicate / ppl(&quot;greplicate&quot;)." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -153,6 +155,8 @@ where i ranges from 1 to n." />
     <p>Create a new <code><a href='Graph.html'>Graph</a></code> containing <code>n</code> copies of the input <code>Graph</code> / <code><a href='PipeOp.html'>PipeOp</a></code>.
 To avoid ID collisions, PipeOp IDs are suffixed with <code>_i</code>
 where <code>i</code> ranges from 1 to <code>n</code>.</p>
+<p>This function is deprecated and will be removed in the next version in favor
+of using pipeline_greplicate / ppl("greplicate").</p>
     </div>
 
     <pre class="usage"><span class='fu'>greplicate</span>(<span class='no'>graph</span>, <span class='no'>n</span>)</pre>
@@ -183,7 +187,8 @@ Number of copies to create.</p></td>
 <code><a href='as_pipeop.html'>as_pipeop</a>()</code>,
 <code><a href='assert_graph.html'>assert_graph</a>()</code>,
 <code><a href='assert_pipeop.html'>assert_pipeop</a>()</code>,
-<code><a href='gunion.html'>gunion</a>()</code></p></div>
+<code><a href='gunion.html'>gunion</a>()</code>,
+<code><a href='pipeline_greplicate.html'>pipeline_greplicate</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -248,6 +248,7 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
+<code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code></p>
@@ -271,54 +272,55 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 #&gt; Output channels &lt;name [train type, predict type]&gt;:
 #&gt;   output [NULL,PredictionClassif]</div><div class='input'>
 <span class='co'># all PipeOps currently in the dictionary:</span>
-<span class='fu'><a href='as.data.table.html'>as.data.table</a></span>(<span class='no'>mlr_pipeops</span>)[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"key"</span>, <span class='st'>"input.num"</span>, <span class='st'>"output.num"</span>, <span class='st'>"packages"</span>)]</div><div class='output co'>#&gt;                 key input.num output.num      packages
-#&gt;  1:          boxcox         1          1 bestNormalize
-#&gt;  2:          branch         1         NA              
-#&gt;  3:           chunk         1         NA              
-#&gt;  4:  classbalancing         1          1              
-#&gt;  5:      classifavg        NA          1         stats
-#&gt;  6:    classweights         1          1              
-#&gt;  7:        colapply         1          1              
-#&gt;  8: collapsefactors         1          1              
-#&gt;  9:            copy         1         NA              
-#&gt; 10:    datefeatures         1          1              
-#&gt; 11:          encode         1          1         stats
-#&gt; 12:    encodeimpact         1          1              
-#&gt; 13:      encodelmer         1          1   lme4,nloptr
-#&gt; 14:    featureunion        NA          1              
-#&gt; 15:          filter         1          1              
-#&gt; 16:      fixfactors         1          1              
-#&gt; 17:         histbin         1          1      graphics
-#&gt; 18:             ica         1          1       fastICA
-#&gt; 19:      imputehist         1          1      graphics
-#&gt; 20:      imputemean         1          1              
-#&gt; 21:    imputemedian         1          1         stats
-#&gt; 22:      imputemode         1          1      mlr3misc
-#&gt; 23:    imputenewlvl         1          1              
-#&gt; 24:    imputesample         1          1              
-#&gt; 25:       kernelpca         1          1       kernlab
-#&gt; 26:         learner         1          1              
-#&gt; 27:      learner_cv         1          1              
-#&gt; 28:         missind         1          1              
-#&gt; 29:     modelmatrix         1          1         stats
-#&gt; 30:          mutate         1          1              
-#&gt; 31:             nop         1          1              
-#&gt; 32:             pca         1          1              
-#&gt; 33:           proxy        NA          1              
-#&gt; 34:     quantilebin         1          1         stats
-#&gt; 35:         regravg        NA          1              
-#&gt; 36: removeconstants         1          1              
-#&gt; 37:           scale         1          1              
-#&gt; 38:     scalemaxabs         1          1              
-#&gt; 39:      scalerange         1          1              
-#&gt; 40:          select         1          1              
-#&gt; 41:           smote         1          1   smotefamily
-#&gt; 42:     spatialsign         1          1              
-#&gt; 43:       subsample         1          1              
-#&gt; 44:       threshold         1          1              
-#&gt; 45:        unbranch        NA          1              
-#&gt; 46:      yeojohnson         1          1 bestNormalize
-#&gt;                 key input.num output.num      packages</div></pre>
+<span class='fu'><a href='as.data.table.html'>as.data.table</a></span>(<span class='no'>mlr_pipeops</span>)[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"key"</span>, <span class='st'>"input.num"</span>, <span class='st'>"output.num"</span>, <span class='st'>"packages"</span>)]</div><div class='output co'>#&gt;                 key input.num output.num           packages
+#&gt;  1:          boxcox         1          1      bestNormalize
+#&gt;  2:          branch         1         NA                   
+#&gt;  3:           chunk         1         NA                   
+#&gt;  4:  classbalancing         1          1                   
+#&gt;  5:      classifavg        NA          1              stats
+#&gt;  6:    classweights         1          1                   
+#&gt;  7:        colapply         1          1                   
+#&gt;  8: collapsefactors         1          1                   
+#&gt;  9:            copy         1         NA                   
+#&gt; 10:    datefeatures         1          1                   
+#&gt; 11:          encode         1          1              stats
+#&gt; 12:    encodeimpact         1          1                   
+#&gt; 13:      encodelmer         1          1        lme4,nloptr
+#&gt; 14:    featureunion        NA          1                   
+#&gt; 15:          filter         1          1                   
+#&gt; 16:      fixfactors         1          1                   
+#&gt; 17:         histbin         1          1           graphics
+#&gt; 18:             ica         1          1            fastICA
+#&gt; 19:      imputehist         1          1           graphics
+#&gt; 20:      imputemean         1          1                   
+#&gt; 21:    imputemedian         1          1              stats
+#&gt; 22:      imputemode         1          1           mlr3misc
+#&gt; 23:    imputenewlvl         1          1                   
+#&gt; 24:    imputesample         1          1                   
+#&gt; 25:       kernelpca         1          1            kernlab
+#&gt; 26:         learner         1          1                   
+#&gt; 27:      learner_cv         1          1                   
+#&gt; 28:         missind         1          1                   
+#&gt; 29:     modelmatrix         1          1              stats
+#&gt; 30:          mutate         1          1                   
+#&gt; 31:             nop         1          1                   
+#&gt; 32:             pca         1          1                   
+#&gt; 33:           proxy        NA          1                   
+#&gt; 34:     quantilebin         1          1              stats
+#&gt; 35:         regravg        NA          1                   
+#&gt; 36: removeconstants         1          1                   
+#&gt; 37:           scale         1          1                   
+#&gt; 38:     scalemaxabs         1          1                   
+#&gt; 39:      scalerange         1          1                   
+#&gt; 40:          select         1          1                   
+#&gt; 41:           smote         1          1        smotefamily
+#&gt; 42:     spatialsign         1          1                   
+#&gt; 43:       subsample         1          1                   
+#&gt; 44:  textvectorizer         1          1 quanteda,stopwords
+#&gt; 45:       threshold         1          1                   
+#&gt; 46:        unbranch        NA          1                   
+#&gt; 47:      yeojohnson         1          1      bestNormalize
+#&gt;                 key input.num output.num           packages</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

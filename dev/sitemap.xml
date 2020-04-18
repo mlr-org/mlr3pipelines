@@ -211,6 +211,9 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_subsample.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_textvectorizer.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_threshold.html</loc>
   </url>
   <url>
@@ -221,6 +224,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/pipeline_branch.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/pipeline_greplicate.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/po.html</loc>

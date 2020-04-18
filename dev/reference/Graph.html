@@ -259,6 +259,9 @@ that is read as input by the <code><a href='PipeOp.html'>PipeOp</a></code> on th
 (<code>character</code>, <code>character</code>) -&gt; <code>self</code> <br />
 Rename <code><a href='PipeOp.html'>PipeOp</a></code>s: Change ID of each <code><a href='PipeOp.html'>PipeOp</a></code> as identified by <code>old</code> to the corresponding item in <code>new</code>. This should be used
 instead of changing a <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$id</code> value directly!</p></li>
+<li><p><code>update_ids(prefix = "", postfix = "")</code> <br />
+(<code>character</code>, <code>character</code>) -&gt; <code>self</code> <br />
+Pre- or postfix <code><a href='PipeOp.html'>PipeOp</a></code>'s existing ids. Both <code>prefix</code> and <code>postfix</code> default to <code>""</code>, i.e. no changes.</p></li>
 <li><p><code>train(input, single_input = TRUE)</code> <br />
 (<code>any</code>, <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; named <code>list</code><br />
 Train <code>Graph</code> by traversing the <code>Graph</code>s' edges and calling all the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$train</code> methods in turn.
