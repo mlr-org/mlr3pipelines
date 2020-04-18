@@ -69,7 +69,8 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
-    NMF
+    NMF,
+    MASS
 VignetteBuilder:
     knitr
 Remotes:
