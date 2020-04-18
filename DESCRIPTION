@@ -68,7 +68,8 @@ Suggests:
     fastICA,
     kernlab,
     smotefamily,
-    evaluate
+    evaluate,
+    NMF
 VignetteBuilder:
     knitr
 Remotes:
@@ -120,6 +121,7 @@ Collate:
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
+    'PipeOpNMF.R'
     'PipeOpNOP.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
