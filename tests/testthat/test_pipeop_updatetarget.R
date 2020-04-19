@@ -51,3 +51,18 @@ test_that("update target classif to regr", {
   expect_true("quality" %in% newtsk2$target_names)
   expect_true(all(is.na(newtsk2$data()$quality)))
 })
+
+test_that("update target same target", {
+  pom = po("update_target", new_target_name = "type", new_task_type = "classif")
+  expect_pipeop(pom)
+  newtsk = pom$train(list(tsk("wine")))[[1]]
+  expect_task(newtsk)
+  expect_true("type" %in% newtsk$target_names)
+  expect_equal(newtsk$data(), tsk("wine")$data())
+  expect_true(pom$is_trained)
+
+  newtsk2 = pom$predict(list(tsk("wine")))[[1]]
+  expect_task(newtsk2)
+  expect_true("quality" %in% newtsk2$target_names)
+  expect_true(all(is.na(newtsk2$data()$quality)))
+})

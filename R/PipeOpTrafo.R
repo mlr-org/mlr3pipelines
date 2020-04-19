@@ -567,10 +567,10 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         ParamUty$new("trafo", default = identity, tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
         ParamUty$new("new_target_name", tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
         ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
-        ParamLgl$new("drop_old_target", default = TRUE, tags = c("train", "predict"))   
+        ParamLgl$new("drop_original_target", default = TRUE, tags = c("train", "predict"))   
         )
       )
-      ps$values = list(trafo = identity, drop_old_target = TRUE)
+      ps$values = list(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
         input =  data.table(name = "input",  train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
@@ -580,30 +580,38 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   private = list(
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-      # Apply fun to target, rename, cbind and convert task if required
-      new_target = data.table(self$param_set$values$trafo(intask$data(cols = intask$target_names)))
-      if (!is.null(self$param_set$values$new_target_name))
-        setnames(new_target, colnames(new_target), self$param_set$values$new_target_name)
-      self$state = keep(map(new_target, levels), Negate(is.null))
-      intask$cbind(new_target)
+      pv = self$param_set$values
+      if (!identical(pv$trafo, identity)) {
+        # Apply fun to target, rename, cbind and convert task if required
+        new_target = data.table(pv$trafo(intask$data(cols = intask$target_names)))
+        if (!is.null(pv$new_target_name))
+          setnames(new_target, colnames(new_target), pv$new_target_name)
+        self$state = keep(map(new_target, levels), Negate(is.null))
+        intask$cbind(new_target)
+      } else {
+        self$state = list()
+      }
       list(private$.update_target(intask))
     },
 
     .predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-      # During predict, we set the new target to NA and then call the trafo
-      new_target = set(intask$data(cols = intask$target_names), j = intask$target_names, value = NA)
-      new_target = data.table(self$param_set$values$trafo(new_target))
-      # rename, cbind and convert
-      setnames(new_target, colnames(new_target), self$param_set$values$new_target_name)
-      # Make sure levels match target levels
-      if (length(self$state))
-        new_target = imap_dtc(new_target, function(x, nms) {
-          if(nms %in% names(self$state))
-            levels(x) = self$state[[nms]]
-          return(x)
-      })
-      intask$cbind(new_target)
+      pv = self$param_set$values
+      if (!identical(pv$trafo, identity)) {
+        # During predict, we set the new target to NA and then call the trafo
+        new_target = set(intask$data(cols = intask$target_names), j = intask$target_names, value = NA)
+        new_target = data.table(self$param_set$values$trafo(new_target))
+        # rename, cbind and convert
+        setnames(new_target, colnames(new_target), self$param_set$values$new_target_name)
+        # Make sure levels match target levels
+        if (length(self$state))
+          new_target = imap_dtc(new_target, function(x, nms) {
+            if(nms %in% names(self$state))
+              levels(x) = self$state[[nms]]
+            return(x)
+        })
+        intask$cbind(new_target)
+      }
       list(private$.update_target(intask))
     },    
 
