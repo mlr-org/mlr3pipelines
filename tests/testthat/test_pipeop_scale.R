@@ -82,3 +82,17 @@ test_that("PipeOpScale", {
   expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
   expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
 })
+
+
+test_that("PipeOpScale robust works", {
+  t = tsk("iris")
+  posc = po("scale", robust = TRUE)
+  scaled = posc$train(list(t))[[1]]$data()
+  prd = posc$predict(list(t))[[1]]$data()
+  expect_equal(scaled, prd)
+  x = iris[,names(posc$state$center)]
+  expect_equal(posc$state$center, apply(x, 2, median))
+  x = t(x) - posc$state$center
+  expect_equal(posc$state$scale, apply(t(x), 2, mad))
+})
+

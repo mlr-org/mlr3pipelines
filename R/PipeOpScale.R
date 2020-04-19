@@ -40,9 +40,13 @@
 #'   Whether to center  features, i.e. subtract their `mean()` from them. Default `TRUE`.
 #' * `scale` :: `logical(1)`\cr
 #'   Whether to scale features, i.e. divide them by `sqrt(sum(x^2)/(length(x)-1))`. Default `TRUE`.
+#' * `roubst` :: `logical(1)`\cr
+#'   Whether to use robust scaling; instead of scaling / centering with mean / standard deviation, median and median absolute 
+#'   deviation [`mad`][stats::mad] are used. Defaults to `FALSE`.
 #'
 #' @section Internals:
-#' Uses the [`scale()`][base::scale] function.
+#' Uses the [`scale()`][base::scale] function for `robust = FALSE` and alternatively subtracts the 
+#' `median` and divides by [`mad`][stats::mad]. 
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -69,15 +73,18 @@ PipeOpScale = R6Class("PipeOpScale",
     initialize = function(id = "scale", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamLgl$new("center", default = TRUE, tags = c("train", "scale")),
-        ParamLgl$new("scale", default = TRUE, tags = c("train", "scale"))
+        ParamLgl$new("scale", default = TRUE, tags = c("train", "scale")),
+        ParamLgl$new("robust", default = TRUE, tags =c("train"))
       ))
+      ps$values = list(robust = FALSE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
 
     .train_dt = function(dt, levels, target) {
-      sc = invoke(scale, as.matrix(dt), .args = self$param_set$get_values(tags = "scale"))
+      scalefn = ifelse(self$param_set$values$robust, scale_robust, scale)
+      sc = invoke(scalefn, as.matrix(dt), .args = self$param_set$get_values(tags = "scale"))
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1
@@ -95,3 +102,26 @@ PipeOpScale = R6Class("PipeOpScale",
 )
 
 mlr_pipeops$add("scale", PipeOpScale)
+
+
+# Robust scale, same interface as `scale` but instead subtracts median and
+# divides by median absolute deviation.
+scale_robust = function(x, center = TRUE, scale = TRUE) {
+  mds = NULL
+  if (center) {
+    mds = apply(x, 2, median, na.rm = TRUE)
+    x = sweep(x, 2, mds, "-")
+  }
+
+  mads = NULL
+  if (scale) {
+    mads = apply(x, 2, mad, na.rm = TRUE)
+    x = sweep(x, 2, mads, "/")
+  }
+
+  if (!is.null(mds))
+    attr(x, "scaled:center") = mds
+  if (!is.null(mads))
+    attr(x, "scaled:scale") = mads
+  x
+}
