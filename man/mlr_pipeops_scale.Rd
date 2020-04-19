@@ -53,9 +53,10 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 Whether to center  features, i.e. subtract their \code{mean()} from them. Default \code{TRUE}.
 \item \code{scale} :: \code{logical(1)}\cr
 Whether to scale features, i.e. divide them by \code{sqrt(sum(x^2)/(length(x)-1))}. Default \code{TRUE}.
-\item \code{roubst} :: \code{logical(1)}\cr
-Whether to use robust scaling; instead of scaling / centering with mean / standard deviation, median and median absolute
-deviation \code{\link[stats:mad]{mad}} are used. Defaults to \code{FALSE}.
+\item \code{robust} :: \code{logical(1)}\cr
+Whether to use robust scaling; instead of scaling / centering with mean / standard deviation,
+median and median absolute deviation \code{\link[stats:mad]{mad}} are used.
+Defaults to \code{FALSE}.
 }
 }
 

@@ -40,9 +40,10 @@
 #'   Whether to center  features, i.e. subtract their `mean()` from them. Default `TRUE`.
 #' * `scale` :: `logical(1)`\cr
 #'   Whether to scale features, i.e. divide them by `sqrt(sum(x^2)/(length(x)-1))`. Default `TRUE`.
-#' * `roubst` :: `logical(1)`\cr
-#'   Whether to use robust scaling; instead of scaling / centering with mean / standard deviation, median and median absolute 
-#'   deviation [`mad`][stats::mad] are used. Defaults to `FALSE`.
+#' * `robust` :: `logical(1)`\cr
+#'   Whether to use robust scaling; instead of scaling / centering with mean / standard deviation,
+#'   median and median absolute deviation [`mad`][stats::mad] are used.
+#'   Defaults to `FALSE`.
 #'
 #' @section Internals:
 #' Uses the [`scale()`][base::scale] function for `robust = FALSE` and alternatively subtracts the 
