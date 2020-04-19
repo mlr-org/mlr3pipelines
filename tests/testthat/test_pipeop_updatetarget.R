@@ -53,6 +53,8 @@ test_that("update target classif to regr", {
 })
 
 test_that("update target same target", {
+  # this is e.g. used in ordinal for casting 
+  # orginal classif to classif
   pom = po("update_target", new_target_name = "type", new_task_type = "classif")
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]
@@ -63,6 +65,6 @@ test_that("update target same target", {
 
   newtsk2 = pom$predict(list(tsk("wine")))[[1]]
   expect_task(newtsk2)
-  expect_true("quality" %in% newtsk2$target_names)
-  expect_true(all(is.na(newtsk2$data()$quality)))
+  expect_true("type" %in% newtsk2$target_names)
+  expect_equal(newtsk2$data(), tsk("wine")$data())
 })
