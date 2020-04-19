@@ -63,7 +63,7 @@ Defaults to \code{FALSE}.
 \section{Internals}{
 
 Uses the \code{\link[base:scale]{scale()}} function for \code{robust = FALSE} and alternatively subtracts the
-\code{median} and divides by \code{\link[stats:mad]{mad}}.
+\code{median} and divides by \code{\link[stats:mad]{mad}} for \code{robust = TRUE}.
 }
 
 \section{Methods}{

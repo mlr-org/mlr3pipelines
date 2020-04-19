@@ -26,7 +26,7 @@ test_that("graph param vals", {
   expect_equal(gr$param_set$values$pca.center, TRUE)
 
   expect_set_equal(names(gr$param_set$params),
-    c("scale.center", "scale.scale", "scale.affect_columns", "pca.center", "pca.scale.", "pca.rank.", "pca.affect_columns"))
+    c("scale.center", "scale.scale", ,"scale.robust", "scale.affect_columns", "pca.center", "pca.scale.", "pca.rank.", "pca.affect_columns"))
 
   expect_error({
     gr$pipeops$pca$param_set$values$center = 1

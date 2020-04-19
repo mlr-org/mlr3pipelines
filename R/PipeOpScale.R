@@ -47,7 +47,7 @@
 #'
 #' @section Internals:
 #' Uses the [`scale()`][base::scale] function for `robust = FALSE` and alternatively subtracts the 
-#' `median` and divides by [`mad`][stats::mad]. 
+#' `median` and divides by [`mad`][stats::mad] for `robust = TRUE`.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
