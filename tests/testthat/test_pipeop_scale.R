@@ -95,4 +95,3 @@ test_that("PipeOpScale robust works", {
   x = t(x) - posc$state$center
   expect_equal(posc$state$scale, apply(t(x), 2, mad))
 })
-
