@@ -171,3 +171,10 @@ test_that("mlr_graphs dictionary", {
   expect_data_table(dt, col.names = "unique")
   expect_true("key" %in% colnames(dt))
 })
+
+test_that("ppl and args work", {
+  gr = ppl("branch", graphs = list(po("scale"), po("pca")), prefix = "bar_", postfix = "_foo", prefix_branchops = "branched_")
+  ids = map_chr(gr$pipeops, "id")
+  expect_character(ids, pattern = "bar_.*_foo")
+})
+

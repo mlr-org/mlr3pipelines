@@ -4,11 +4,19 @@
 \alias{ppl}
 \title{Shorthand Graph Constructor}
 \usage{
-ppl(key, ...)
+ppl(key, prefix = "", postfix = "", ...)
 }
 \arguments{
 \item{key}{\verb{[character(1)]}\cr
 The key of the \code{\link{Graph}} in \code{\link{mlr_graphs}}.}
+
+\item{prefix}{\verb{[character(1)]}\cr
+Additional prefixes for \code{\link{PipeOp}}'s existing ids.
+Defaults to \code{""}, i.e. no changes.}
+
+\item{postfix}{\verb{[character(1)]}\cr
+Additional postifxes for \code{\link{PipeOp}}'s existing ids.
+Defaults to \code{""}, i.e. no changes.}
 
 \item{...}{\code{any}\cr
 Additional parameters to give to constructed object.
