@@ -173,7 +173,8 @@ test_that("mlr_graphs dictionary", {
 })
 
 test_that("ppl and args work", {
-  gr = ppl("branch", graphs = list(po("scale"), po("pca")), prefix = "bar_", postfix = "_foo", prefix_branchops = "branched_")
+  gr = ppl("branch", graphs = list(po("scale"), po("pca")), id_prefix = "bar_", id_postfix = "_foo", prefix_branchops = "branched_")
+  assert_graph(gr)
   ids = map_chr(gr$pipeops, "id")
   expect_character(ids, pattern = "bar_.*_foo")
 })

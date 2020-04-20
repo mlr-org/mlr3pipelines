@@ -5,10 +5,10 @@
 #'
 #' @param key `[character(1)]`\cr
 #'   The key of the [`Graph`] in [`mlr_graphs`].
-#' @param prefix `[character(1)]`\cr
+#' @param id_prefix `[character(1)]`\cr
 #'   Additional prefixes for [`PipeOp`]'s existing ids.
 #'   Defaults to `""`, i.e. no changes.
-#' @param postfix `[character(1)]`\cr
+#' @param id_postfix `[character(1)]`\cr
 #'   Additional postifxes for [`PipeOp`]'s existing ids.
 #'   Defaults to `""`, i.e. no changes.
 #' @param ... `any`\cr
@@ -21,7 +21,7 @@
 #' library("mlr3")
 #'
 #' gr = ppl("bagging", graph = po(lrn("regr.rpart")), averager = po("regravg"))
-ppl = function(key, prefix = "", postfix = "", ...) {
+ppl = function(key, ..., id_prefix = "", id_postfix = "") {
   gr = dictionary_sugar(dict = mlr_graphs, .key = key, ...)
-  gr$update_ids(prefix, postfix)
+  gr$update_ids(id_prefix, id_postfix)
 }
