@@ -18,10 +18,6 @@ test_that("Branching Pipeline", {
   assert_true(gr$input$name == "foo_branch.input")
   assert_true(gr$output$name == "foo_unbranch.output")
   assert_true(all(grepl("foo", gr$param_set$params[["foo_branch.selection"]]$levels)))
-
-  gr = ppl("branch", graphs = list(po("scale"), po("pca")), prefix = "bar_", postfix = "_foo", prefix_branchops = "_branched_")
-  ids = map_chr(gr$pipeops, "id")
-  expect_character(ids, pattern = "bar_.*_foo")
 })
 
 
