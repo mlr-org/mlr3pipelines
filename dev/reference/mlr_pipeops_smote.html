@@ -281,26 +281,26 @@ Journal of Artificial Intelligence Research. 16, 321-357.</p>
 <span class='no'>data</span> <span class='kw'>=</span> <span class='kw pkg'>smotefamily</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/smotefamily/man/sample_generator.html'>sample_generator</a></span>(<span class='fl'>1000</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>0.80</span>)
 <span class='no'>data</span>$<span class='no'>result</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>data</span>$<span class='no'>result</span>)
 <span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"example"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"result"</span>)
-<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;       result         X1         X2
-#&gt;    1:      n 0.24640946 0.48736967
-#&gt;    2:      n 0.19515926 0.21357152
-#&gt;    3:      n 0.02877143 0.23456643
-#&gt;    4:      n 0.27731579 0.69602195
-#&gt;    5:      p 0.66047681 0.21241652
-#&gt;   ---                             
-#&gt;  996:      p 0.63617309 0.45853114
-#&gt;  997:      n 0.44948753 0.98480840
-#&gt;  998:      n 0.55552916 0.03965638
-#&gt;  999:      n 0.62338137 0.01447523
-#&gt; 1000:      p 0.56160982 0.33221036</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()$<span class='no'>result</span>)</div><div class='output co'>#&gt; 
+<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;       result        X1         X2
+#&gt;    1:      n 0.5997731 0.96863391
+#&gt;    2:      n 0.2735337 0.28716847
+#&gt;    3:      n 0.1962447 0.99100304
+#&gt;    4:      p 0.3741871 0.44781175
+#&gt;    5:      n 0.2183344 0.22255622
+#&gt;   ---                            
+#&gt;  996:      p 0.4508638 0.37066127
+#&gt;  997:      n 0.5175595 0.76583497
+#&gt;  998:      n 0.8693904 0.57044628
+#&gt;  999:      n 0.8611127 0.02332048
+#&gt; 1000:      n 0.9537473 0.53578895</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()$<span class='no'>result</span>)</div><div class='output co'>#&gt; 
 #&gt;   n   p 
-#&gt; 777 223 </div><div class='input'>
+#&gt; 803 197 </div><div class='input'>
 <span class='co'># Generate synthetic data for minority class</span>
 <span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"smote"</span>)
 <span class='no'>smotedata</span> <span class='kw'>=</span> <span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>smotedata</span>$<span class='no'>result</span>)</div><div class='output co'>#&gt; 
 #&gt;   n   p 
-#&gt; 777 669 </div></pre>
+#&gt; 803 788 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

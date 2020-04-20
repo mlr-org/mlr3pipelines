@@ -376,31 +376,31 @@ The base for logarithms in <code><a href='https://quanteda.io/reference/dfm_weig
 
 <span class='no'>pos</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"textvectorizer"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>stopwords_language</span> <span class='kw'>=</span> <span class='st'>"en"</span>))
 
-<span class='no'>pos</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.b txt.c
+<span class='no'>pos</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.r txt.b
 #&gt;   1:    setosa          1.4         0.2          5.1         3.5     1     1
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0     0     0
+#&gt;   2:    setosa          1.4         0.2          4.9         3.0     0     1
 #&gt;   3:    setosa          1.3         0.2          4.7         3.2     0     0
 #&gt;   4:    setosa          1.5         0.2          4.6         3.1     0     0
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6     1     1
+#&gt;   5:    setosa          1.4         0.2          5.0         3.6     0     0
 #&gt;  ---                                                                        
 #&gt; 146: virginica          5.2         2.3          6.7         3.0     0     0
 #&gt; 147: virginica          5.0         1.9          6.3         2.5     0     0
 #&gt; 148: virginica          5.2         2.0          6.5         3.0     0     0
 #&gt; 149: virginica          5.4         2.3          6.2         3.4     0     0
 #&gt; 150: virginica          5.1         1.8          5.9         3.0     0     0
-#&gt;      txt.t txt.r txt.z txt.m txt.k txt.f txt.d txt.w txt.u txt.j txt.s txt.e
+#&gt;      txt.p txt.v txt.w txt.y txt.z txt.t txt.l txt.k txt.e txt.q txt.u txt.m
 #&gt;   1:     0     0     0     0     0     0     0     0     0     0     0     0
 #&gt;   2:     1     1     0     0     0     0     0     0     0     0     0     0
-#&gt;   3:     0     0     1     1     0     0     0     0     0     0     0     0
-#&gt;   4:     1     0     1     0     1     0     0     0     0     0     0     0
-#&gt;   5:     0     0     0     0     0     1     0     0     0     0     0     0
+#&gt;   3:     0     0     1     1     1     0     0     0     0     0     0     0
+#&gt;   4:     0     0     0     0     0     1     1     1     0     0     0     0
+#&gt;   5:     1     0     0     0     0     0     0     0     1     1     0     0
 #&gt;  ---                                                                        
-#&gt; 146:     0     0     0     0     0     1     0     0     0     1     1     0
-#&gt; 147:     1     0     0     0     0     0     0     1     0     0     0     0
-#&gt; 148:     0     0     0     0     1     0     0     0     0     0     0     1
-#&gt; 149:     0     0     0     0     0     0     0     0     0     0     0     0
-#&gt; 150:     0     0     0     0     1     0     1     0     0     0     1     0
-#&gt;      txt.x txt.q txt.o txt.h txt.n txt.g txt.y txt.p txt.l txt.v
+#&gt; 146:     0     0     0     0     1     0     0     0     1     1     0     0
+#&gt; 147:     0     0     0     0     0     0     0     0     0     0     1     1
+#&gt; 148:     0     0     0     0     0     0     0     1     0     1     0     0
+#&gt; 149:     0     0     0     0     0     0     1     0     0     0     0     1
+#&gt; 150:     0     0     0     0     1     0     0     0     1     0     0     0
+#&gt;      txt.d txt.s txt.h txt.c txt.j txt.x txt.f txt.g txt.n txt.o
 #&gt;   1:     0     0     0     0     0     0     0     0     0     0
 #&gt;   2:     0     0     0     0     0     0     0     0     0     0
 #&gt;   3:     0     0     0     0     0     0     0     0     0     0
@@ -408,20 +408,20 @@ The base for logarithms in <code><a href='https://quanteda.io/reference/dfm_weig
 #&gt;   5:     0     0     0     0     0     0     0     0     0     0
 #&gt;  ---                                                            
 #&gt; 146:     0     0     0     0     0     0     0     0     0     0
-#&gt; 147:     0     0     0     0     0     0     1     0     0     0
-#&gt; 148:     0     0     0     0     1     0     0     0     0     0
-#&gt; 149:     0     0     0     0     0     0     1     0     0     1
+#&gt; 147:     0     0     0     0     0     0     0     0     1     0
+#&gt; 148:     0     0     0     0     0     0     0     0     0     1
+#&gt; 149:     0     0     0     0     0     0     0     0     0     1
 #&gt; 150:     0     0     0     0     0     0     0     0     0     0</div><div class='input'>
 <span class='no'>one_line_of_iris</span> <span class='kw'>=</span> <span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>13</span>)
 
 <span class='no'>one_line_of_iris</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width   txt
-#&gt; 1:  setosa          1.4         0.1          4.8           3 n h s</div><div class='input'>
-<span class='no'>pos</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>one_line_of_iris</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.b txt.c txt.t
+#&gt; 1:  setosa          1.4         0.1          4.8           3 t s x</div><div class='input'>
+<span class='no'>pos</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>one_line_of_iris</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.r txt.b txt.p
 #&gt; 1:  setosa          1.4         0.1          4.8           3     0     0     0
-#&gt;    txt.r txt.z txt.m txt.k txt.f txt.d txt.w txt.u txt.j txt.s txt.e txt.x
-#&gt; 1:     0     0     0     0     0     0     0     0     0     1     0     0
-#&gt;    txt.q txt.o txt.h txt.n txt.g txt.y txt.p txt.l txt.v
-#&gt; 1:     0     0     1     1     0     0     0     0     0</div></pre>
+#&gt;    txt.v txt.w txt.y txt.z txt.t txt.l txt.k txt.e txt.q txt.u txt.m txt.d
+#&gt; 1:     0     0     0     0     1     0     0     0     0     0     0     0
+#&gt;    txt.s txt.h txt.c txt.j txt.x txt.f txt.g txt.n txt.o
+#&gt; 1:     1     0     0     0     1     0     0     0     0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
