@@ -110,13 +110,13 @@ mlr_pipeops$add("scale", PipeOpScale)
 scale_robust = function(x, center = TRUE, scale = TRUE) {
   mds = NULL
   if (center) {
-    mds = apply(x, 2, median, na.rm = TRUE)
+    mds = apply(x, 2, stats::median, na.rm = TRUE)
     x = sweep(x, 2, mds, "-")
   }
 
   mads = NULL
   if (scale) {
-    mads = apply(x, 2, mad, na.rm = TRUE)
+    mads = apply(x, 2, stats::mad, na.rm = TRUE)
     x = sweep(x, 2, mads, "/")
   }
 
