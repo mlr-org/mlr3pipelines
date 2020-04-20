@@ -39,6 +39,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}
 \item \code{trafo} :: \code{function}\cr
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single argument. Default is \code{identity}.
+Note, that the data passed on to the target is a \code{data.table} consisting of all target column.
 \item \code{new_target_name} :: \code{character}\cr
 Optionally give the transformed target a new name. By default the original name is used.
 \item \code{new_task_type} :: \code{character(1)}\cr
@@ -46,6 +47,7 @@ Optionally a new task type can be set. Legal types are listed in
 \code{mlr_reflections$task_types$type}.
 #' \code{drop_old_target} :: \code{logical(1)}\cr
 Whether to drop the original target column. Default: \code{TRUE}.
+If \code{drop_old_target}
 }
 }
 
@@ -63,7 +65,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 \examples{
   # Create a binary class task from iris
   library(mlr3)
-  trafo_fun = function(x) {factor(ifelse(x == "setosa", "setosa", "other"))}
+  trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
   po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
   po$train(list(tsk("iris")))
   po$predict(list(tsk("iris")))

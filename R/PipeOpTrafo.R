@@ -532,6 +532,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' * `trafo` :: `function`\cr
 #'   Transformation function for the target. Should only be a function of the target, i.e., taking a
 #'   single argument. Default is `identity`.
+#'   Note, that the data passed on to the target is a `data.table` consisting of all target column.
 #' * `new_target_name` :: `character`\cr
 #'   Optionally give the transformed target a new name. By default the original name is used.
 #' * `new_task_type` :: `character(1)`\cr
@@ -539,6 +540,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #'   `mlr_reflections$task_types$type`.
 #' #' `drop_old_target` :: `logical(1)`\cr
 #'   Whether to drop the original target column. Default: `TRUE`.
+#'   If `drop_old_target`
 #' 
 #' @section State:
 #' The `$state` is a list of class levels for each target after trafo. 
@@ -554,7 +556,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @examples
 #'   # Create a binary class task from iris
 #'   library(mlr3)
-#'   trafo_fun = function(x) {factor(ifelse(x == "setosa", "setosa", "other"))}
+#'   trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
 #'   po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
 #'   po$train(list(tsk("iris")))
 #'   po$predict(list(tsk("iris")))
@@ -581,7 +583,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       pv = self$param_set$values
-      if (!identical(pv$trafo, identity)) {
+      if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         # Apply fun to target, rename, cbind and convert task if required
         new_target = data.table(pv$trafo(intask$data(cols = intask$target_names)))
         if (!is.null(pv$new_target_name))
@@ -597,9 +599,11 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
     .predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       pv = self$param_set$values
-      if (!identical(pv$trafo, identity)) {
-        # During predict, we set the new target to NA and then call the trafo
-        new_target = set(intask$data(cols = intask$target_names), j = intask$target_names, value = NA)
+      if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
+        new_target = intask$data(cols = intask$target_names)
+        if (!pv$drop_original_target)
+          # During predict, if old target is not dropped, set the new target to NA and then call the trafo
+          new_target = set(new_target, j = intask$target_names, value = NA)
         new_target = data.table(pv$trafo(new_target))
         # rename, cbind and convert
         setnames(new_target, colnames(new_target), self$param_set$values$new_target_name)
