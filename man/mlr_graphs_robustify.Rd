@@ -18,19 +18,19 @@ pipeline_robustify(
 A \code{\link[mlr3:Task]{Task}} to create a robustifying pipeline for.
 Optional, if omitted, the full pipeline is created.}
 
-\item{learner}{\code{\link{Learner}} \cr
+\item{learner}{\code{\link[mlr3:Learner]{Learner}} \cr
 A learner to create a robustifying pipeline for. Optional, if omitted,
 a more conservative pipeline is built.}
 
-\item{impute_missings}{\code{\link{logical}} | \code{\link{NULL}} \cr
+\item{impute_missings}{\code{logical(1)} | \code{NULL} \cr
 Should missing values be imputed? Defaults to \code{NULL}, i.e imputes if the task has
 missing values and the learner can not handle them.}
 
-\item{factors_to_numeric}{\code{\link{logical}} | \code{\link{NULL}} \cr
+\item{factors_to_numeric}{\code{logical(1)} | \code{NULL} \cr
 Should factors be encoded? Defaults to \code{NULL}, i.e encodes if the task has factors
 and the learner can not handle factors.}
 
-\item{max_cardinality}{\code{\link{integer}} \cr
+\item{max_cardinality}{\code{integer(1)} \cr
 Maximum number of factor levels allowed. See above. Default: 1000.}
 }
 \value{

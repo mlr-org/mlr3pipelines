@@ -12,10 +12,10 @@ pipeline_bagging(graph, iterations = 10, frac = 0.7, averager = NULL)
 A \code{\link{PipeOpLearner}} or \code{\link{Graph}} to create a robustifying pipeline for.
 Outputs from the replicated \code{graph}s are connected with the \code{averager}.}
 
-\item{iterations}{\code{\link{integer}} \cr
+\item{iterations}{\code{integer(1)} \cr
 Number of bagging iterations. Defaults to 10.}
 
-\item{frac}{\code{\link{numeric}} \cr
+\item{frac}{\code{numeric(1)} \cr
 Percentage of rows to keep during subsampling. See \code{\link{PipeOpSubsample}} for
 more information. Defaults to 0.7.}
 

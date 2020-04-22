@@ -53,13 +53,15 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 \examples{
 library("mlr3")
 
-task = tsk("pima")
+data = data.table::data.table(x = factor(rep.int(c("y", "n"), times = 5)),
+  y = factor(c(NA, letters[2:9], NA)), z = factor(letters[1:10]))
+task = TaskClassif$new("task", backend = data, target = "x")
 task$missings()
 
 po = po("imputenewlvl")
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
-
+new_task$data()
 }
 \seealso{
 Other PipeOps: 
@@ -111,9 +113,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_targettrafosimple}},
+\code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 

@@ -63,7 +63,8 @@ Other mlr3pipelines backend related:
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
-\code{\link{mlr_graphs}}
+\code{\link{mlr_graphs}},
+\code{\link{mlr_pipeops_updatetarget}}
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
@@ -115,9 +116,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
 \code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_targettrafosimple}},
+\code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}}
 
 Other Dictionaries: 

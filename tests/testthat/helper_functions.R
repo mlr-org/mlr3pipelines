@@ -7,6 +7,9 @@ expect_deep_clone = function(one, two) {
   expect_references_differ = function(a, b, path) {
 
     force(path)
+    if (length(path) > 400) {
+      stop("Recursion too deep in expect_deep_clone()")
+    }
 
     # don't go in circles
     addr_a = data.table::address(a)
@@ -42,6 +45,9 @@ expect_deep_clone = function(one, two) {
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
       expect_null(visited_b[[addr_a]], label = label)
+    } else {
+      a <- unclass(a)
+      b <- unclass(b)
     }
 
     # recurse
@@ -357,23 +363,21 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     }
   }
 
-  ## ## The following becomes relevant when mlr3 gets unsupervised tasks. We then want
-  ## ## to test them automatically here by creating the unsupervised tasks.
-  ##
-  ## targetless = task$clone(deep = TRUE)$set_col_role(task$target_names, character(0))
-  ##
-  ## po$train(list(task))
-  ## predicted = po$predict(list(task))[[1]]
-  ## predicted.targetless = po$predict(list(targetless))[[1]]
-  ##
-  ## if (deterministic_predict) {
-  ##   expect_equal(predicted$data(cols = predicted$feature_names),
-  ##     predicted.targetless$data(cols = predicted.targetless$feature_names))
-  ## }
+  if (packageVersion("mlr3") >= "0.1.3-9001") {
+    y = task$data(cols = task$target_names, rows = shuffle(task$row_ids))
+    permutated = task$clone(deep = TRUE)$cbind(y)
 
+    po$train(list(task))
+    predicted = po$predict(list(task))[[1]]
+    predicted.permutated = po$predict(list(permutated))[[1]]
+
+    if (deterministic_predict) {
+      expect_equal(predicted$data(cols = predicted$feature_names),
+        predicted.permutated$data(cols = predicted.permutated$feature_names))
+    }
+  }
 
   expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
-
 }
 
 train_pipeop = function(po, inputs) {

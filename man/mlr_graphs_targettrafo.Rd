@@ -3,51 +3,62 @@
 \name{mlr_graphs_targettrafo}
 \alias{mlr_graphs_targettrafo}
 \alias{pipeline_targettrafo}
-\title{Transform A Numerical Target And Later Invert The Transformation}
+\title{Transform and Re-Transform the Target Variable}
 \usage{
-pipeline_targettrafo(graph)
+pipeline_targettrafo(
+  graph,
+  trafo_pipeop = PipeOpTargetTrafoSimple$new(),
+  id_prefix = ""
+)
 }
 \arguments{
 \item{graph}{\code{\link{PipeOpLearner}} | \code{\link{Graph}} \cr
-A \code{\link{PipeOpLearner}} or \code{\link{Graph}} to create a robustifying pipeline for. If this is a \code{\link{Graph}}, the
-last \code{\link{PipeOp}} should be a \code{\link{PipeOpLearner}} that can handle a \code{\link[mlr3:TaskRegr]{TaskRegr}} and
-the first \code{\link{PipeOp}} should accept a single \code{\link[mlr3:TaskRegr]{TaskRegr}} as input.}
+A \code{\link{PipeOpLearner}} or \code{\link{Graph}} to create a robustifying pipeline for. If this is a \code{\link{Graph}},
+the last \code{\link{PipeOp}} should be a \code{\link{PipeOpLearner}} and the first \code{\link{PipeOp}} should accept a
+single \code{\link[mlr3:Task]{Task}} as input.}
+
+\item{trafo_pipeop}{\code{\link{PipeOp}} \cr
+A \code{\link{PipeOp}} that is a subclass of \code{\link{PipeOpTargetTrafo}}. Default is
+\code{\link{PipeOpTargetTrafoSimple}}.}
+
+\item{id_prefix}{\code{character(1)} \cr
+Optional id prefix to prepend to \code{\link{PipeOpTargetInverter}} ID. The resulting ID will be
+\code{"[id_prefix]targetinverter"}. Default is \code{""}.}
 }
 \value{
 \code{\link{Graph}}
 }
 \description{
-Creates a \code{\link{Graph}} that transforms a numerical target of a \code{\link[mlr3:TaskRegr]{TaskRegr}} during
-training and inverts the transformation during prediction.
-This is done as follows:
+Wraps a \code{\link{Graph}} that transforms a target during training and inverts the transformation
+during prediction. This is done as follows:
 \itemize{
-\item Specify a transformation and inversion function using \code{\link{PipeOpTargetTrafoSimple}}, afterwards
-apply \code{graph}.
+\item Specify a transformation and inversion function using any subclass of \code{\link{PipeOpTargetTrafo}}, defaults to
+\code{\link{PipeOpTargetTrafoSimple}}, afterwards apply \code{graph}.
 \item At the very end, during prediction the transformation is inverted using \code{\link{PipeOpTargetInverter}}.
-\item To set a transformation and inversion function see the parameters \code{targettrafosimple.trafo} and
-\code{targettrafosimple.inverter} of the \code{param_set} of the resulting \code{\link{Graph}}.
+\item To set a transformation and inversion function for \code{\link{PipeOpTargetTrafoSimple}} see the
+parameters \code{trafo} and \code{inverter} of the \code{param_set} of the resulting \code{\link{Graph}}.
 }
 }
 \examples{
 library("mlr3")
 
-targettrafo = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
-targettrafo$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
-targettrafo$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
+tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
+tt$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
 
 # gives the same as
 g = Graph$new()
 g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
- trafo = function(x) log(x, base = 2),
- inverter = function(x) 2 ^ x)
- )
+  trafo = function(x) log(x, base = 2),
+  inverter = function(x) 2 ^ x)
+  )
 )
 g$add_pipeop(LearnerRegrRpart$new())
 g$add_pipeop(PipeOpTargetInverter$new())
 g$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter",
- src_channel = 1, dst_channel = 1)
+  src_channel = 1, dst_channel = 1)
 g$add_edge(src_id = "targettrafosimple", dst_id = "regr.rpart",
- src_channel = 2, dst_channel = 1)
+  src_channel = 2, dst_channel = 1)
 g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
- src_channel = 1, dst_channel = 2)
+  src_channel = 1, dst_channel = 2)
 }

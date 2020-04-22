@@ -8,17 +8,17 @@
 pipeline_branch(graphs, prefix_branchops = "", prefix_paths = FALSE)
 }
 \arguments{
-\item{graphs}{(\verb{[list of Graph]}):\cr
+\item{graphs}{\code{list} of \code{\link{Graph}} \cr
 Multiple graphs, possibly named. They all must have exactly
 one output. If any of the arguments are named, then all must have
 unique names.}
 
-\item{prefix_branchops}{(\verb{[character(1)]}):\cr
+\item{prefix_branchops}{\code{character(1)} \cr
 Optional id prefix to prepend to \code{\link{PipeOpBranch}} and \code{\link{PipeOpUnbranch}} id. Their
 resulting IDs will be \code{"[prefix_branchops]branch"} and \code{"[prefix_branchops]unbranch"}.
 Default is \code{""}.}
 
-\item{prefix_paths}{(\verb{[logical(1) | character(1)]}):\cr
+\item{prefix_paths}{\code{logical(1)} | \code{character(1)} \cr
 Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 avoid ID clashes in resulting graph. Default \code{FALSE}. If this is \code{TRUE}, the prefixes
 are taken from the names of the input arguments if present or \code{"poX"} where X counts up. If this is

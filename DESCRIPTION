@@ -24,7 +24,12 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"))
+             email = "dandl.susanne@googlemail.com"),
+      person(given = "Lennart",
+             family = "Schneider",
+             role = "aut",
+             email = "lennart.sch@web.de",
+             comment = c(ORCID = "0000-0003-4152-5308")))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -58,8 +63,10 @@ Suggests:
     mlr3learners,
     mlr3measures,
     nloptr,
+    quanteda,
     rmarkdown,
     rpart,
+    stopwords,
     testthat,
     visNetwork,
     bestNormalize,
@@ -70,8 +77,7 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    mlr-org/mlr3,
-    mlr-org/paradox@fix_272_clone
+    mlr-org/mlr3
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -121,7 +127,6 @@ Collate:
     'PipeOpModelMatrix.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
-    'PipeOpNewTarget.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
@@ -134,12 +139,14 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+    'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
+    'convert_task.R'
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'
