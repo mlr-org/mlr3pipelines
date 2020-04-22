@@ -6,13 +6,20 @@ test_that("PipeOpPredictionUnion - basic properties", {
   expect_data_table(po$input, nrows = 3)
   expect_data_table(po$output, nrows = 1)
 
-  expect_pipeop_class(PipeOpFeatureUnion, list(1))
-  expect_pipeop_class(PipeOpFeatureUnion, list(3))
+  expect_pipeop_class(PipeOpPredictionUnion, list(1))
+  expect_pipeop_class(PipeOpPredictionUnion, list(3))
 
-  po = PipeOpFeatureUnion$new()
+  po = PipeOpPredictionUnion$new()
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
+
+  po = PipeOpPredictionUnion$new(innum = "test")
+  expect_equal(po$input$name, "input1")
+
+  prediction = PredictionRegr$new(row_ids = 1, truth = 1, response = 1)
+  prediction$task_type = "test"
+  expect_error(po$predict(list(prediction)), regexp = "task types")
 })
 
 test_that("PipeOpPredictionUnion - train and predict classif", {
@@ -80,7 +87,7 @@ test_that("PipeOpPredictionUnion - train and predict regr", {
   expect_error(po$predict(list(learner1$predict(task1), learner2$predict(task2))), regexp = "same task type and predict types")
 })
 
-test_that("PipeOpFilterRows and PipeOpPredictionUnion - use case", {
+test_that("PipeOpFilterRows and PipeOpPredictionUnion - use case pima", {
   task = mlr_tasks$get("pima")
   age_ids = which(task$data(cols = "age")[[1L]] < median(task$data(cols = "age")[[1L]]))
   na_ids = which(rowSums(is.na(task$data())) > 0L)
@@ -88,9 +95,9 @@ test_that("PipeOpFilterRows and PipeOpPredictionUnion - use case", {
 
   g = PipeOpCopy$new(2) %>>%
     gunion(list(
-      PipeOpFilterRows$new("filter1", param_vals = list(filter = filter, na_column = "all")) %>>%
+      PipeOpFilterRows$new("filter1", param_vals = list(filter = filter, na_column = "_all_", skip_during_predict = FALSE)) %>>%
         PipeOpLearner$new(LearnerClassifRpart$new(), "learner1"),
-      PipeOpFilterRows$new("filter2", param_vals = list(filter = filter, na_column = "all", invert = TRUE)) %>>%
+      PipeOpFilterRows$new("filter2", param_vals = list(filter = filter, na_column = "_all_", invert = TRUE, skip_during_predict = FALSE)) %>>%
         PipeOpLearner$new(LearnerClassifRpart$new(), "learner2"))
     ) %>>%
     PipeOpPredictionUnion$new()

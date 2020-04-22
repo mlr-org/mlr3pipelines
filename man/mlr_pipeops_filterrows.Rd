@@ -9,7 +9,8 @@
 }
 \description{
 Filter rows of the data of a task. Also directly allows for the removal of rows holding missing
-values.
+values. If both filtering and missing value removal is performed, filtering is done after missing
+value removal.
 }
 \section{Construction}{
 \preformatted{PipeOpFilterRows$new(id = "filterrows", param_vals = list())
@@ -63,17 +64,17 @@ the input \code{\link[mlr3:Task]{Task}} when evaluated withing the environment o
 input \code{\link[mlr3:Task]{Task}}. Finally, this can also be an integerish vector that directly
 specifies the row identifiers of the rows of the data of the input \code{\link[mlr3:Task]{Task}} that
 should be kept. Default is \code{NULL}, i.e., no filtering is done.
-\item \code{na_column} :: \code{NULL} | \code{character}\cr
+\item \code{na_column} :: \code{character}\cr
 A character vector that specifies the columns of the data of the input \code{\link[mlr3:Task]{Task}}
-that should be checked for missing values. If set to \code{all}, all columns of the data are used. A
+that should be checked for missing values. If set to \verb{_all_}, all columns of the data are used. A
 row is removed if at least one missing value is found with respect to the columns specified.
-Default is \code{NULL}, i.e., no removal of missing values is done.
+Default is \code{character(0)}, i.e., no removal of missing values is done.
 \item \code{invert} :: \code{logical(1)}\cr
 Should the filtering rule be set-theoretically inverted? Note that this happens after
 (possible) missing values were removed if \code{na_column} is specified. Default is \code{FALSE}.
 \item \code{skip_during_predict} :: \code{logical(1)}\cr
-Should the filtering and missing value removal steps be skipped during prediction? If \code{TRUE},
-the input \code{\link[mlr3:Task]{Task}} is returned unaltered during prediction. Default is \code{FALSE}.
+Should the filtering and missing value removal steps be skipped during prediction? Default is
+\code{TRUE}, i.e., the input \code{\link[mlr3:Task]{Task}} is returned unaltered during prediction.
 }
 }
 
@@ -92,7 +93,7 @@ library("mlr3")
 task = tsk("pima")
 po = PipeOpFilterRows$new(param_vals = list(
   filter = expression(age < median(age) & mass > 30),
-  na_column = "all")
+  na_column = "_all_")
 )
 po$train(list(task))
 po$state

@@ -8,6 +8,8 @@ test_that("PipeOpFilterRows - basic properties", {
   expect_equal(predict_pipeop(op, inputs = list(task))[[1L]], task)
 
   expect_datapreproc_pipeop_class(PipeOpFilterRows, task = task)
+
+  expect_error(PipeOpFilterRows$new(param_vals = list(filter = list())))
 })
 
 test_that("PipeOpFilterRows - NA handling", {
@@ -24,7 +26,8 @@ test_that("PipeOpFilterRows - NA handling", {
   train_out1 = op$train(list(task))[[1L]]
   expect_equal(op$state$na_ids, c(1, 3, 100))
 
-  op$param_set$values$na_column = "all"
+  op$param_set$values$na_column = "_all_"
+  op$param_set$values$skip_during_predict = FALSE
   train_out2 = op$train(list(task))[[1L]]
   expect_equal(op$state$na_ids, c(1, 2, 3, 4, 5, 100))
   predict_out2 = op$predict(list(task))[[1L]]
@@ -80,11 +83,24 @@ test_that("PipeOpFilterRows - filter by ids", {
   dat$Species[2L] = NA
   task = TaskClassif$new("test", backend = dat, target = "Species")
 
-  op = PipeOpFilterRows$new(param_vals = list(na_column = "all", filter = 1:10))
+  op = PipeOpFilterRows$new(param_vals = list(na_column = "_all_", filter = 1:10))
   train_out1 = op$train(list(task))[[1L]]
   expect_equal(op$state$row_ids, setdiff(1:10, c(1, 2, 3, 4, 5)))
   op$param_set$values$invert = TRUE
   train_out2 = op$train(list(task))[[1L]]
   expect_equal(op$state$na_ids, c(1, 2, 3, 4, 5, 100))
   expect_true(!(100 %in% op$state$row_ids))
+})
+
+test_that("PipeOpFilterRows - use case iris", {
+  task = mlr_tasks$get("iris")
+
+  g = PipeOpFilterRows$new(param_vals = list(filter = expression(Sepal.Length < median(Sepal.Length)))) %>>%
+    PipeOpLearnerCV$new(LearnerClassifRpart$new())
+
+  train_out = g$train(task)[[1L]]
+  predict_out = g$predict(task)[[1L]]
+  expect_equal(g$state$filterrows$row_ids, which(with(task$data(), Sepal.Length < median(Sepal.Length))))
+  expect_equal(g$state$filterrows$row_ids, train_out$row_ids)
+  expect_equal(task$row_ids, predict_out$row_ids)
 })

@@ -6,7 +6,8 @@
 #'
 #' @description
 #' Filter rows of the data of a task. Also directly allows for the removal of rows holding missing
-#' values.
+#' values. If both filtering and missing value removal is performed, filtering is done after missing
+#' value removal.
 #'
 #' @section Construction:
 #' ```
@@ -51,17 +52,17 @@
 #'   input [`Task`][mlr3::Task]. Finally, this can also be an integerish vector that directly
 #'   specifies the row identifiers of the rows of the data of the input [`Task`][mlr3::Task] that
 #'   should be kept. Default is `NULL`, i.e., no filtering is done.
-#' * `na_column` :: `NULL` | `character`\cr
+#' * `na_column` :: `character`\cr
 #'   A character vector that specifies the columns of the data of the input [`Task`][mlr3::Task]
-#'   that should be checked for missing values. If set to `all`, all columns of the data are used. A
+#'   that should be checked for missing values. If set to `_all_`, all columns of the data are used. A
 #'   row is removed if at least one missing value is found with respect to the columns specified.
-#'   Default is `NULL`, i.e., no removal of missing values is done.
+#'   Default is `character(0)`, i.e., no removal of missing values is done.
 #' * `invert` :: `logical(1)`\cr
 #'   Should the filtering rule be set-theoretically inverted? Note that this happens after
 #'   (possible) missing values were removed if `na_column` is specified. Default is `FALSE`.
 #' * `skip_during_predict` :: `logical(1)`\cr
-#'   Should the filtering and missing value removal steps be skipped during prediction? If `TRUE`,
-#'   the input [`Task`][mlr3::Task] is returned unaltered during prediction. Default is `FALSE`.
+#'   Should the filtering and missing value removal steps be skipped during prediction? Default is
+#'   `TRUE`, i.e., the input [`Task`][mlr3::Task] is returned unaltered during prediction.
 #'
 #' @section Internals:
 #' Uses the [`is.na()`][base::is.na] function for the checking of missing values.
@@ -74,7 +75,7 @@
 #' task = tsk("pima")
 #' po = PipeOpFilterRows$new(param_vals = list(
 #'   filter = expression(age < median(age) & mass > 30),
-#'   na_column = "all")
+#'   na_column = "_all_")
 #' )
 #' po$train(list(task))
 #' po$state
@@ -94,13 +95,13 @@ PipeOpFilterRows = R6Class("PipeOpFilterRows",
           if (!ok) return("Must either be a character vector of length 1, an expression, or an integerish object of row ids")
           TRUE
         }),
-        ParamUty$new("na_column", default = NULL, tags = c("train", "predict"), custom_check = function(x) {
-          check_character(x, any.missing = FALSE, min.len = 1L, null.ok = TRUE)
+        ParamUty$new("na_column", default = character(0L), tags = c("train", "predict"), custom_check = function(x) {
+          check_character(x, any.missing = FALSE, null.ok = TRUE)
         }),
         ParamLgl$new("invert", default = FALSE, tags = c("train", "predict")),
-        ParamLgl$new("skip_during_predict", default = FALSE, tags = "predict"))
+        ParamLgl$new("skip_during_predict", default = TRUE, tags = "predict"))
       )
-      ps$values = list(filter = NULL, na_column = NULL, invert = FALSE, skip_during_predict = FALSE)
+      ps$values = list(filter = NULL, na_column = character(0L), invert = FALSE, skip_during_predict = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals)
     }
   ),
@@ -114,9 +115,9 @@ PipeOpFilterRows = R6Class("PipeOpFilterRows",
 
       # NA column(s) handling
       na = self$param_set$values$na_column
-      if (!is.null(na)) {
-        assert_subset(na, choices = c("all", colnames(task$data())))
-        if (na == "all") na = colnames(task$data())
+      if (length(na)) {
+        assert_subset(na, choices = c("_all_", colnames(task$data())))
+        if (na == "_all_") na = colnames(task$data())
         na_ids = which(rowSums(is.na(task$data(cols = na))) > 0L)
         row_ids = setdiff(row_ids, na_ids)
       } else {
