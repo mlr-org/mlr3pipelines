@@ -52,9 +52,11 @@ as.data.table(mlr_graphs)
 \seealso{
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
+\code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops}}
 
 Other Dictionaries: 

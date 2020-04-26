@@ -24,7 +24,12 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"))
+             email = "dandl.susanne@googlemail.com"),
+      person(given = "Lennart",
+             family = "Schneider",
+             role = "aut",
+             email = "lennart.sch@web.de",
+             comment = c(ORCID = "0000-0003-4152-5308")))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -136,10 +141,12 @@ Collate:
     'PipeOpSubsample.R'
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
+    'PipeOpTrafo.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
+    'convert_task.R'
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'
