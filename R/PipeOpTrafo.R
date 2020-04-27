@@ -514,9 +514,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' During prediction: Sets all target values to `NA` before calling the `trafo` again.
 #' In case target after the `trafo` is a factor, levels saved in the `state` are
 #' set during prediction.
-==== BASE ====
-#' 
-==== BASE ====
+#'
 #'
 #' As a special case when `trafo` is `identity` and `new_target_name` matches an existing column
 #' name of the data of the input task, this column is set as the new target. Depending on
@@ -550,7 +548,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #'   Whether to drop the original target column. Default: `TRUE`.
 #'
 #' @section State:
-#' The `$state` is a list of class levels for each target after trafo. 
+#' The `$state` is a list of class levels for each target after trafo.
 #' `list()` if none of the targets have levels.
 #'
 #' @section Methods:
