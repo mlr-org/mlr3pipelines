@@ -589,7 +589,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       pv = self$param_set$values
       if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
         self$state = list()
-        return(list(private$.update_target(intask)))  # early exit
+        return(list(private$.update_target(intask, drop_levels = TRUE)))  # early exit
       }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         # Apply fun to target, rename, cbind and convert task if required
@@ -609,7 +609,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       intask = inputs[[1]]$clone(deep = TRUE)
       pv = self$param_set$values
       if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
-        return(list(private$.update_target(intask)))  # early exit
+        return(list(private$.update_target(intask, drop_levels = FALSE)))  # early exit
       }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         new_target = intask$data(cols = intask$target_names)
