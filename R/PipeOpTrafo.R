@@ -617,7 +617,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         })
         intask$cbind(new_target)
       }
-      list(private$.update_target(intask, drop_levels = FALSE)
+      list(private$.update_target(intask, drop_levels = FALSE))
     },
 
     # updates the target of a task and also the task_type (if needed), uses convert_task
