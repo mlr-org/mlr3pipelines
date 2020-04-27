@@ -29,6 +29,9 @@ If \code{NULL} (default), a new task with the same task_type is created.}
 If \code{FALSE} (default), the original target is added as a feature.
 Otherwise the original target is dropped.}
 
+\item{drop_levels}{\code{logical(1)}\cr
+If \code{TRUE} (default), unused levels of the new target variable are dropped.}
+
 \item{\dots}{\cr
 Further arguments passed to the constructor of the task.}
 }
