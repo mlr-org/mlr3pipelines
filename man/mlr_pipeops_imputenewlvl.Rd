@@ -8,7 +8,14 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute factorial features by adding a new level \code{".MISSING"}.
+Impute factorial features by adding a new level \code{".MISSING"}.\cr
+
+Impute numerical features by constant values shifted below the minimum or above the maximum by
+using \eqn{min(x) - offset - multiplier * diff(range(x))} or
+\eqn{max(x) + offset + multiplier * diff(range(x))}.\cr
+
+This type of imputation is especially sensible in the context of tree-based methods, see also
+Ding & Simonoff (2010).
 }
 \section{Construction}{
 \preformatted{PipeOpImputeNewlvl$new(id = "imputenewlvl", param_vals = list())
@@ -17,7 +24,8 @@ Impute factorial features by adding a new level \code{".MISSING"}.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputenewlvl"}.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+be set during construction. Default \code{list()}.
 }
 }
 
@@ -25,24 +33,40 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected factorial features missing values imputed by a new level.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected features having missing values
+imputed as described above.
 }
 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpImpute}}.
 
-The \verb{$state$model} contains only \code{NULL} elements.
+The \verb{$state$model} contains either \code{".MISSING"} used for \code{character} and \code{factor} (also
+\code{ordered}) or \code{numeric(1)} indicating the constant value used for imputation of \code{integer} and
+\code{numeric} features.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
+The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
+\itemize{
+\item \code{min} :: \code{logical(1)} \cr
+Should \code{integer} and \code{numeric} features be shifted below the minimum? Default is TRUE. If FALSE
+they are shifted above the maximum. See also the description above.
+\item \code{offset} :: \code{numeric(1)} \cr
+Numerical non-negative offset as used in the description above for \code{integer} and \code{numeric}
+features. Default is 1.
+\item \code{multiplier} :: \code{numeric(1)} \cr
+Numerical non-negative multiplier as used in the description above for \code{integer} and \code{numeric}
+features. Default is 1.
+}
 }
 
 \section{Internals}{
 
-Adds an explicit new \code{level()} to \code{factor} and \code{ordered} features, but not to \code{character} features.
+Adds an explicit new \code{level()} to \code{factor} and \code{ordered} features, but not to \code{character}
+features. For \code{integer} and \code{numeric} features uses the \code{min}, \code{max}, \code{diff} and \code{range} functions.
+\code{integer} and \code{numeric} features that are entirely \code{NA} are imputed as \code{0}.
 }
 
 \section{Methods}{
@@ -52,12 +76,12 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 
 \examples{
 library("mlr3")
-
-data = data.table::data.table(x = factor(rep.int(c("y", "n"), times = 5)),
-  y = factor(c(NA, letters[2:9], NA)), z = factor(letters[1:10]))
-task = TaskClassif$new("task", backend = data, target = "x")
+set.seed(2409)
+data = tsk("pima")$data()
+data$y = factor(c(NA, sample(letters, size = 766, replace = TRUE), NA))
+data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))
+task = TaskClassif$new("task", backend = data, target = "diabetes")
 task$missings()
-
 po = po("imputenewlvl")
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
@@ -93,7 +117,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -128,7 +151,6 @@ Other Imputation PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}}
 }
 \concept{Imputation PipeOps}

@@ -8,7 +8,7 @@ test_that("PipeOpImpute", {
     public = list(
       initialize = function(id = "impute", param_vals = list()) {
         ps = ParamSet$new(list(
-          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist", "oor"), default = "median", tags = c("train", "predict")),
+          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist", "newlvl"), default = "median", tags = c("train", "predict")),
           ParamFct$new("method_fct", levels = c("newlvl", "sample", "mode"), default = "newlvl", tags = c("train", "predict")),
           ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict")),
           ParamUty$new("innum", tags = c("train", "predict"))
@@ -24,9 +24,9 @@ test_that("PipeOpImpute", {
           mode = po("imputemode", id = "num_mode"),
           sample = po("imputesample", id = "num_sample"),
           hist = po("imputehist"),
-          oor = po("imputeoor"))
+          newlvl = po("imputenewlvl", id = "num_newlvl"))
         fctimputer = switch(self$param_set$values$method_fct,
-          newlvl = po("imputenewlvl"),
+          newlvl = po("imputenewlvl", id = "fct_newlvl"),
           sample = po("imputesample", id = "fct_sample"),
           mode = po("imputemode", id = "fct_mode"))
 
@@ -143,13 +143,13 @@ test_that("PipeOpImpute", {
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
-      method_num = "oor",
+      method_num = "newlvl",
       method_fct = "newlvl",
       add_dummy = "missing_train")))
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
-      method_num = "oor",
+      method_num = "newlvl",
       method_fct = "newlvl",
       add_dummy = "missing_train")))
 

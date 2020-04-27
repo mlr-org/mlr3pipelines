@@ -118,7 +118,6 @@ Collate:
     'PipeOpImputeMedian.R'
     'PipeOpImputeMode.R'
     'PipeOpImputeNewlvl.R'
-    'PipeOpImputeOutOfRange.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
