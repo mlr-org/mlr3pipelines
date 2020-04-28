@@ -47,7 +47,7 @@ The constant value that should be used for the imputation, atomic vector of leng
 atomic mode must match the type of the features that will be selected by the \code{affect_columns}
 parameter and this will be checked during imputation. Note that for \code{factor} and \code{ordered}
 features a character vector should be supplied and during imputation, the levels of the
-affected factorial features will be automatically extended. Defaults to ``".MISSING"`.
+affected factorial features will be automatically extended. Default is \code{".MISSING"}.
 }
 }
 
@@ -68,7 +68,9 @@ task = tsk("pima")
 task$missings()
 
 # impute missing values of the numeric feature "glucose" by the constant value -999
-po = po("imputeconstant", param_vals = list(constant = -999, affect_columns = selector_name("glucose")))
+po = po("imputeconstant", param_vals = list(
+  constant = -999, affect_columns = selector_name("glucose"))
+)
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
 new_task$data(cols = "glucose")[[1]]

@@ -37,7 +37,7 @@
 #'   atomic mode must match the type of the features that will be selected by the `affect_columns`
 #'   parameter and this will be checked during imputation. Note that for `factor` and `ordered`
 #'   features a character vector should be supplied and during imputation, the levels of the
-#'   affected factorial features will be automatically extended. Defaults to ``".MISSING"`.
+#'   affected factorial features will be automatically extended. Default is `".MISSING"`.
 #'
 #' @section Internals:
 #' Adds an explicit new `level()` to `factor` and `ordered` features, but not to `character` features.
