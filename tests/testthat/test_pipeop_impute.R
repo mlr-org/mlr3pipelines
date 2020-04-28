@@ -8,8 +8,8 @@ test_that("PipeOpImpute", {
     public = list(
       initialize = function(id = "impute", param_vals = list()) {
         ps = ParamSet$new(list(
-          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist"), default = "median", tags = c("train", "predict")),
-          ParamFct$new("method_fct", levels = c("newlvl", "sample", "mode"), default = "newlvl", tags = c("train", "predict")),
+          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist", "constant"), default = "median", tags = c("train", "predict")),
+          ParamFct$new("method_fct", levels = c("newlvl", "sample", "mode", "constant"), default = "newlvl", tags = c("train", "predict")),
           ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), default = "missing_train", tags = c("train", "predict")),
           ParamUty$new("innum", tags = c("train", "predict"))
         ))
@@ -23,11 +23,13 @@ test_that("PipeOpImpute", {
           mean = po("imputemean"),
           mode = po("imputemode", id = "num_mode"),
           sample = po("imputesample", id = "num_sample"),
-          hist = po("imputehist"))
+          hist = po("imputehist"),
+          constant = po("imputeconstant", id = "num_constant", param_vals = list(constant = -999)))
         fctimputer = switch(self$param_set$values$method_fct,
           newlvl = po("imputenewlvl"),
           sample = po("imputesample", id = "fct_sample"),
-          mode = po("imputemode", id = "fct_mode"))
+          mode = po("imputemode", id = "fct_mode"),
+          constant = po("imputeconstant", id = "fct_constant", param_vals = list(constant = ".MISSING")))
 
         if (self$param_set$values$add_dummy == "none") {
           dummyselector = selector_none()
@@ -139,6 +141,13 @@ test_that("PipeOpImpute", {
       method_fct = "sample",
       add_dummy = "all")))
 
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
+  deterministic_train = FALSE, deterministic_predict = FALSE,
+  constargs = list(param_vals = list(
+    method_num = "constant",
+    method_fct = "constant",
+    add_dummy = "all")))
+
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "sample", method_fct = "sample", add_dummy = "all"))
 
@@ -167,7 +176,6 @@ test_that("PipeOpImpute", {
 
   expect_set_equal(colnames(task_trained), c(letters[1:12], paste0("missing_", letters[1:11])))
   expect_set_equal(colnames(task_predicted), c(letters[1:12], paste0("missing_", letters[1:11])))
-
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "median", method_fct = "newlvl", add_dummy = "all"))
@@ -245,4 +253,53 @@ test_that("More tests for PipeOpImputeMode", {
  expect_equal(levels(task_NA_predicted[[5L]]), as.character(1:5))
  expect_false(any(is.na(task_NA_predicted[[4L]])))
  expect_false(any(is.na(task_NA_predicted[[5L]])))
+})
+
+test_that("More tests for PipeOpImputeConstant", {
+ set.seed(1)
+ dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
+   x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L),
+   x7 = as.POSIXct(1L:10L, origin = "1960-01-01", tz = "GMT"), stringsAsFactors = FALSE)
+ dat[1L, ] = NA
+ task = TaskRegr$new("task", backend = dat, target = "y")
+
+ po = PipeOpImputeConstant$new(param_vals = list(constant = "test"))
+
+ expect_error(po$train(list(task)))
+
+ po$param_set$values$affect_columns = selector_type("character")
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x1")[[1L]][1L], "test")
+
+ po$param_set$values = list(constant = -999, affect_columns = selector_type("numeric"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x2")[[1L]][1L], -999)
+
+ po$param_set$values = list(constant = "test", affect_columns = selector_type("factor"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
+
+ po$param_set$values = list(constant = "test", affect_columns = selector_type("ordered"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(po$train(list(task))[[1L]]$data(cols = "x4")[[1L]][1L], ordered("test", levels = c("1", "2", "3", "4", "5", "test")))
+
+ po$param_set$values = list(constant = -999, affect_columns = selector_type("integer"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x5")[[1L]][1L], -999)
+
+ po$param_set$values = list(constant = TRUE, affect_columns = selector_type("logical"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x6")[[1L]][1L], TRUE)
+
+ pos_impute = as.POSIXct(1000000, origin = "1960-01-01", tz = "GMT")
+ po$param_set$values = list(constant = pos_impute, affect_columns = selector_type("POSIXct"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x7")[[1L]][1L], pos_impute)
 })

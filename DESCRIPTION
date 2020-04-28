@@ -113,6 +113,7 @@ Collate:
     'PipeOpHistBin.R'
     'PipeOpICA.R'
     'PipeOpImpute.R'
+    'PipeOpImputeConstant.R'
     'PipeOpImputeHist.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
