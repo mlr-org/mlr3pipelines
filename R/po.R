@@ -30,6 +30,9 @@
 #' mlr_pipeops$get("learner", lrn("classif.rpart"),
 #'   param_vals = list(cp = 0.3))
 po = function(.obj, ...) {
+  if (missing(.obj)) {
+    return(mlr_pipeops)
+  }
   UseMethod("po")
 }
 
