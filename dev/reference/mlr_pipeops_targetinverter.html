@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpImpute — PipeOpImpute • mlr3pipelines</title>
+<title>PipeOpTargetInverter — mlr_pipeops_targetinverter • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,8 +47,9 @@
 
 
 
-<meta property="og:title" content="PipeOpImpute — PipeOpImpute" />
-<meta property="og:description" content="Abstract base class for feature imputation." />
+<meta property="og:title" content="PipeOpTargetInverter — mlr_pipeops_targetinverter" />
+<meta property="og:description" content="During prediction inverts transformations done during training based on a supplied inversion
+function. Typically should be used in combination with a subclass of PipeOpTargetTrafo." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -142,125 +143,69 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpImpute</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImpute.R'><code>R/PipeOpImpute.R</code></a></small>
-    <div class="hidden name"><code>PipeOpImpute.Rd</code></div>
+    <h1>PipeOpTargetInverter</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTrafo.R'><code>R/PipeOpTrafo.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_targetinverter.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Abstract base class for feature imputation.</p>
+    <p>During prediction inverts transformations done during training based on a supplied inversion
+function. Typically should be used in combination with a subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>Abstract <code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOpImpute$$new(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
-</pre>
+<pre><span class='no'>PipeOpTargetInverter</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"targetinverter"</span>)</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object. See <code>$id</code> slot of <code><a href='PipeOp.html'>PipeOp</a></code>.</p></li>
-<li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
-Parameter space description. This should be created by the subclass and given to <code>super$initialize()</code>.</p></li>
-<li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings given in <code>param_set</code>. The
-subclass should have its own <code>param_vals</code> parameter and pass it on to <code>super$initialize()</code>. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
-<li><p><code>whole_task_dependent</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Whether the <code>context_columns</code> parameter should be added which lets the user limit the columns that are
-used for imputation inference. This should generally be <code>FALSE</code> if imputation depends only on individual features
-(e.g. mode imputation), and <code>TRUE</code> if imputation depends on other features as well (e.g. kNN-imputation).</p></li>
-<li><p>packages :: <code>character</code><br />
-Set of all required packages for the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>private$.train</code> and <code>private$.predict</code> methods. See <code>$packages</code> slot.
-Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
-<li><p><code>task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
-should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
-<code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
+Identifier of resulting object, default <code>"targetinverter"</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p><code>PipeOpImpute</code> has one input channel named <code>"input"</code>, taking a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, or a subclass of
-<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> if the <code>task_type</code> construction argument is given as such; both during training and prediction.</p>
-<p><code>PipeOpImpute</code> has one output channel named <code>"output"</code>, producing a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, or a subclass;
-the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> type is the same as for input; both during training and prediction.</p>
-<p>The output <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> is the modified input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with features imputed according to the <code>private$.impute()</code> function.</p>
+<p><code>PipeOpTargetInverter</code> has two input channels named <code>"fun"</code> and <code>"prediction"</code>. During
+training, both take <code>NULL</code> as input. During prediction, <code>"fun"</code> takes a function and
+<code>"prediction"</code> takes a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>.</p>
+<p><code>PipeOpTargetInverter</code> has one output channel named <code>"output"</code> and returns <code>NULL</code> during
+training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> during prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code>; besides members added by inheriting classes, the members are:</p><ul>
-<li><p><code>affect_cols</code> :: <code>character</code><br />
-Names of features being selected by the <code>affect_columns</code> parameter.</p></li>
-<li><p><code>inference_cols</code> :: <code>character</code><br />
-Names of features being selected by the <code>context_columns</code> parameter.</p></li>
-<li><p><code>intasklayout</code> :: <code>data.table</code><br />
-Copy of the training <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
-the prediction <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> has the same features, feature layout, and feature types as during training.</p></li>
-<li><p><code>outtasklayout</code> :: <code>data.table</code><br />
-Copy of the trained <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
-the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> resulting from the prediction operation has the same features, feature layout, and feature types as after training.</p></li>
-<li><p><code>model</code> :: named <code>list</code><br />
-Model used for imputation. This is a list named by <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> features, containing the result of the <code>private$.train_imputer()</code> function for each one.</p></li>
-</ul>
-
+<p>The <code>$state</code> is left empty (<code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>).</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<ul>
-<li><p><code>affect_columns</code> :: <code>function</code> | <code><a href='Selector.html'>Selector</a></code> | <code>NULL</code> <br />
-What columns the <code>PipeOpImpute</code> should operate on.
-The parameter must be a <code><a href='Selector.html'>Selector</a></code> function, which takes a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as argument and returns a <code>character</code>
-of features to use.<br />
-See <code><a href='Selector.html'>Selector</a></code> for example functions. Defaults to <code>NULL</code>, which selects all features.</p></li>
-<li><p><code>context_columns</code> :: <code>function</code> | <code><a href='Selector.html'>Selector</a></code> | <code>NULL</code> <br />
-What columns the <code>PipeOpImpute</code> imputation may depend on. This parameter is only present if the constructor is called with
-the <code>whole_task_dependent</code> argument set to <code>TRUE</code>.<br />
-The parameter must be a <code><a href='Selector.html'>Selector</a></code> function, which takes a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as argument and returns a <code>character</code>
-of features to use.<br />
-See <code><a href='Selector.html'>Selector</a></code> for example functions. Defaults to <code>NULL</code>, which selects all features.</p></li>
-</ul>
-
+<p><code>PipeOpTargetInverter</code> has no parameters.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p><code>PipeOpImpute</code> is an abstract class inheriting from <code><a href='PipeOp.html'>PipeOp</a></code> that makes implementing imputer <code><a href='PipeOp.html'>PipeOp</a></code>s simple.</p>
+<p>Should be used in combination with a subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
 
-<p>Fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
-<li><p><code>.select_cols(task)</code> <br />
-(<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>) -&gt; <code>character</code> <br />
-Selects which columns the <code><a href='PipeOp.html'>PipeOp</a></code> operates on. In contrast to
-the <code>affect_columns</code> parameter. <code>private$.select_cols()</code> is for the <em>inheriting class</em> to determine which columns
-the operator should function on, e.g. based on feature type, while <code>affect_columns</code> is a way for the <em>user</em>
-to limit the columns that a <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> should operate on.</p></li>
-<li><p><code>.train_imputer(feature, type, context)</code><br />
-(<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>data.table</code>) -&gt; <code>any</code><br />
-Called once for each feature selected by <code>affect_columns</code> to create the model entry to be used for <code>private$.impute()</code>.</p></li>
-<li><p><code>.impute(feature, type, model, context)</code><br />
-(<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>any</code>, <code>data.table</code>) -&gt; <code>atomic</code><br />
-Imputes the features. <code>model</code> is the model created by <code>private$.train_imputer()</code></p></li>
-</ul>
-
+<p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+<code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
@@ -306,7 +251,6 @@ Imputes the features. <code>model</code> is the model created by <code>private$.
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-<code><a href='mlr_pipeops_targetinverter.html'>mlr_pipeops_targetinverter</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_targettrafosimple.html'>mlr_pipeops_targettrafosimple</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
@@ -314,14 +258,7 @@ Imputes the features. <code>model</code> is the model created by <code>private$.
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
-<p>Other Imputation PipeOps: 
-<code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
-<code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
-<code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
-<code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
-<code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
