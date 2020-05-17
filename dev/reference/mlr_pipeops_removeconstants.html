@@ -50,7 +50,7 @@
 <meta property="og:title" content="PipeOpRemoveConstants — mlr_pipeops_removeconstants" />
 <meta property="og:description" content="Remove constant features from a mlr3::Task.
 For each feature, calculates the ratio of features which differ from their mode value.
-All features which a ratio below a settable threshold are removed from the task.
+All features with a ratio below a settable threshold are removed from the task.
 Missing values can be ignored or treated as a regular value distinct from non-missing values." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -153,7 +153,7 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
     <div class="ref-description">
     <p>Remove constant features from a <a href='https://mlr3.mlr-org.com/reference/Task.html'>mlr3::Task</a>.
 For each feature, calculates the ratio of features which differ from their mode value.
-All features which a ratio below a settable threshold are removed from the task.
+All features with a ratio below a settable threshold are removed from the task.
 Missing values can be ignored or treated as a regular value distinct from non-missing values.</p>
     </div>
 
@@ -178,7 +178,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p><code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>features</code> :: <code>character</code><br />
+<li><p><code>features</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code><br />
 Names of features that are being kept. Features of types that the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> can not operate on are always being kept.</p></li>
 </ul>
 
