@@ -42,6 +42,10 @@
 #' the `formula` is created. This makes it possible to use variables in the `~`-expressions that both
 #' reference either column names or variable names.
 #'
+#' Note that the `formula`s in `mutation` are evaluated sequentially. This
+#' allows for using variables that were constructed during evaluation of a
+#' previous formula. Therefore, be cautious when changing existing features.
+#'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -54,10 +58,13 @@
 #' @examples
 #' library("mlr3")
 #'
+#' constant = 1
 #' pom = po("mutate")
 #' pom$param_set$values$mutation = list(
+#'   Sepal.Length_plus_constant = ~ Sepal.Length + constant,
 #'   Sepal.Area = ~ Sepal.Width * Sepal.Length,
-#'   Petal.Area = ~ Petal.Width * Petal.Length
+#'   Petal.Area = ~ Petal.Width * Petal.Length,
+#'   Sepal.Area_plus_Petal.Area = ~ Sepal.Area + Petal.Area
 #' )
 #'
 #' pom$train(list(tsk("iris")))[[1]]$data()
@@ -77,9 +84,16 @@ PipeOpMutate = R6Class("PipeOpMutate",
 
     .transform = function(task) {
       taskdata = task$data(cols = task$feature_names)
-      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
-        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
-      }))
+
+      # sequentially evaluate the formulas
+      # this allows us to use variables constructed/changed earlier in the loop
+      nms = names(self$param_set$values$mutation)
+      for (i in seq_along(nms)) {
+        frm = self$param_set$values$mutation[[i]]
+        set(taskdata, j = nms[i], value = eval(frm[[2L]], envir = taskdata, enclos = environment(frm)))
+      }
+      newdata = taskdata[, ..nms]
+
       keep_feats = character(0)
       if (!self$param_set$values$delete_originals) {
         keep_feats = setdiff(task$feature_names, colnames(newdata))

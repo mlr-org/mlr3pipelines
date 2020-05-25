@@ -55,6 +55,10 @@ present features may still be overwritten. Initialized to \code{FALSE}.
 A \code{formula} created using the \code{~} operator always contains a reference to the \code{environment} in which
 the \code{formula} is created. This makes it possible to use variables in the \code{~}-expressions that both
 reference either column names or variable names.
+
+Note that the \code{formula}s in \code{mutation} are evaluated sequentially. This
+allows for using variables that were constructed during evaluation of a
+previous formula. Therefore, be cautious when changing existing features.
 }
 
 \section{Fields}{
@@ -70,10 +74,13 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 \examples{
 library("mlr3")
 
+constant = 1
 pom = po("mutate")
 pom$param_set$values$mutation = list(
+  Sepal.Length_plus_constant = ~ Sepal.Length + constant,
   Sepal.Area = ~ Sepal.Width * Sepal.Length,
-  Petal.Area = ~ Petal.Width * Petal.Length
+  Petal.Area = ~ Petal.Width * Petal.Length,
+  Sepal.Area_plus_Petal.Area = ~ Sepal.Area + Petal.Area
 )
 
 pom$train(list(tsk("iris")))[[1]]$data()

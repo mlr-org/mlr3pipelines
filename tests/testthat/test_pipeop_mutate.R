@@ -68,5 +68,15 @@ test_that("mutate", {
   # non-constant column, mismatching number of rows
   al = list(Sepal.Sum = ~ c(0, sum(Sepal.Length + Sepal.Width)))
   op$param_set$values$mutation = al
-  expect_error(op$train(list(task)), "have 150 rows")
+  expect_error(op$train(list(task)), "150 items")
+
+  # Can use just-created variables
+  op$param_set$values$mutation = list(
+    Petal.Length_half = ~ Petal.Length / 2,
+    Petal.Length_quart = ~ Petal.Length_half / 2
+  )
+  res5 = op$train(list(task))
+  expect_task(res5[[1]])
+  expect_true(all(c("Petal.Length_half", "Petal.Length_quart") %in% res5[[1]]$feature_names))
+  expect_equivalent(res5[[1]]$data(cols = "Petal.Length_quart"), res5[[1]]$data(cols = "Petal.Length_half") / 2)
 })
