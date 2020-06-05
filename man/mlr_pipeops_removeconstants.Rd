@@ -10,7 +10,7 @@
 \description{
 Remove constant features from a \link[mlr3:Task]{mlr3::Task}.
 For each feature, calculates the ratio of features which differ from their mode value.
-All features which a ratio below a settable threshold are removed from the task.
+All features with a ratio below a settable threshold are removed from the task.
 Missing values can be ignored or treated as a regular value distinct from non-missing values.
 }
 \section{Construction}{
@@ -28,7 +28,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{features} :: \code{character}\cr
+\item \code{features} :: \code{character()}\cr
 Names of features that are being kept. Features of types that the \code{\link[mlr3filters:Filter]{Filter}} can not operate on are always being kept.
 }
 }
