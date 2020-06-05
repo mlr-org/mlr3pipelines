@@ -367,7 +367,7 @@ PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
     inverter = function(prediction, predict_phase_control) {
       # FIXME: probably should only work for predict_type = "response" and needs a check here?
       #assert_string(prediction$predict_types, pattern = "response")
-      # handle predict_phase_control = identity separetely
+      # handle predict_phase_control = identity separately
       if (identical(predict_phase_control, identity)) {
         return(prediction)  # early exit
       }
@@ -416,7 +416,7 @@ mlr_pipeops$add("targettrafosimple", PipeOpTargetTrafoSimple)
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTargetTrafo`], as well as:
-#' * `lower`  :: `numeric(1)` \cr
+#' * `lower` :: `numeric(1)` \cr
 #'   Target value of smallest item of input target. Default is 0.
 #' * `upper` :: `numeric(1)` \cr
 #'   Target value of greatest item of input target. Default is 1.
