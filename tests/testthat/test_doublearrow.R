@@ -67,7 +67,7 @@ test_that("neutral elements", {
   p = PipeOpNOP$new("p1")
   g1 = p %>>% NULL
   expect_graph(g1)
-  expect_true((length(g$pipeops) == 1L) && (names(g$pipeops) == "p1"))
+  expect_true((length(g1$pipeops) == 1L) && (names(g1$pipeops) == "p1"))
   g2 = NULL %>>% p
   expect_equal(g1$pipeops, g2$pipeops)
 })
