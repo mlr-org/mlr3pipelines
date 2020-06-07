@@ -45,15 +45,18 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as 
 \item \code{constant} :: \code{atomic(1)}\cr
 The constant value that should be used for the imputation, atomic vector of length 1. The
 atomic mode must match the type of the features that will be selected by the \code{affect_columns}
-parameter and this will be checked during imputation. Note that for \code{factor} and \code{ordered}
-features a character vector should be supplied and during imputation, the levels of the
-affected factorial features will be automatically extended. Default is \code{".MISSING"}.
+parameter and this will be checked during imputation. Default is \code{".MISSING"}.
+\item \code{check_levels} :: \code{logical(1)}\cr
+Should be checked whether the \code{constant} value is a valid level of factorial features (i.e., it
+already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
+features (i.e., \code{factor}, \code{ordered}; skipped for \code{character}). Default is \code{TRUE}.
 }
 }
 
 \section{Internals}{
 
-Adds an explicit new \code{level()} to \code{factor} and \code{ordered} features, but not to \code{character} features.
+Adds an explicit new level to \code{factor} and \code{ordered} features, but not to \code{character} features if
+\code{check_levels} is \code{FALSE}.
 }
 
 \section{Methods}{

@@ -42,7 +42,7 @@ The \verb{$state} is a named \code{list} with a vector of the two transformation
 
 The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}, as well as:
 \itemize{
-\item \code{lower}  :: \code{numeric(1)} \cr
+\item \code{lower} :: \code{numeric(1)} \cr
 Target value of smallest item of input target. Default is 0.
 \item \code{upper} :: \code{numeric(1)} \cr
 Target value of greatest item of input target. Default is 1.
