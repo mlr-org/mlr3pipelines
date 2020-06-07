@@ -13,7 +13,7 @@ test_that("PipeOpRenameColumns - basic properties", {
 
 test_that("PipeOpRenameColumns - renaming works", {
   task = mlr_tasks$get("iris")
-  op = PipeOpRenameColumns$new(param_vals = list(old = c("Species", "Petal.Length"), new = c("S", "PL")))
+  op = PipeOpRenameColumns$new(param_vals = list(renaming = c("Species" = "S", "Petal.Length" = "PL")))
   train_out1 = op$train(list(task))[[1L]]
   predict_out1 = op$predict(list(task))[[1L]]
   expect_equal(train_out1, predict_out1)
@@ -26,7 +26,7 @@ test_that("PipeOpRenameColumns - renaming works", {
   col_roles$name = "Petal.Width"
   col_roles$weight = "Sepal.Length"
   col_roles$feature = setdiff(col_roles$feature, c("Petal.Width", "Sepal.Length"))
-  op$param_set$values = list(old = c("Petal.Width", "Sepal.Length", "Sepal.Width"), new = c("PW", "SL", "SW"))
+  op$param_set$values = list(renaming = c("Petal.Width" = "PW", "Sepal.Length" = "SL", "Sepal.Width" = "SW"))
   train_out1$col_roles = col_roles
   train_out2 = op$train(list(train_out1))[[1L]]
   predict_out2 = op$predict(list(train_out1))[[1L]]
@@ -40,6 +40,6 @@ test_that("PipeOpRenameColumns - renaming works", {
 
 test_that("PipeOpRenameColumns - error handling", {
   task = mlr_tasks$get("iris")
-  op = PipeOpRenameColumns$new(param_vals = list(new = "Test"))
-  expect_error(op$train(list(task)), regexp = "length of new")
+  op = PipeOpRenameColumns$new(param_vals = list(renaming = "Test"))
+  expect_error(op$train(list(task)), regexp = "not 'NULL'")
 })

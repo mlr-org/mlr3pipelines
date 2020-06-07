@@ -38,10 +38,9 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
 \itemize{
-\item \code{old} :: \code{character}\cr
-Character vector specifying the old column names that should be changed. Default \code{character()}, i.e., no column names are changed.
-\item \code{new} :: \code{character}\cr
-Character vector of the new column names with the positions matching the old column names. Default \code{character()}.
+\item \code{renaming} :: named \code{character}\cr
+Named character vector. The names of the vector specify the old column names that should be
+changed to the new column names as given by the elements of the vector.
 }
 }
 
@@ -64,7 +63,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 library("mlr3")
 
 task = tsk("iris")
-pop = po("renamecolumns", param_vals = list(old = c("Species", "Petal.Length"), new = c("S", "PL")))
+pop = po("renamecolumns", param_vals = list(renaming = c("Species" = "S", "Petal.Length" = "PL")))
 pop$train(list(task))
 }
 \seealso{

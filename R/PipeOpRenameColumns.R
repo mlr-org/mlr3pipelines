@@ -27,10 +27,9 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
-#' * `old` :: `character`\cr
-#'   Character vector specifying the old column names that should be changed. Default `character()`, i.e., no column names are changed.
-#' * `new` :: `character`\cr
-#'   Character vector of the new column names with the positions matching the old column names. Default `character()`.
+#' * `renaming` :: named `character`\cr
+#'   Named character vector. The names of the vector specify the old column names that should be
+#'   changed to the new column names as given by the elements of the vector.
 #'
 #' @section Internals:
 #' Uses the `$rename()` mutator of the [`Task`][mlr3::Task] to set the new column names.
@@ -48,36 +47,26 @@
 #' library("mlr3")
 #'
 #' task = tsk("iris")
-#' pop = po("renamecolumns", param_vals = list(old = c("Species", "Petal.Length"), new = c("S", "PL")))
+#' pop = po("renamecolumns", param_vals = list(renaming = c("Species" = "S", "Petal.Length" = "PL")))
 #' pop$train(list(task))
 PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "renamecolumns", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("old", default = character(), tags = c("train", "predict"), custom_check = function(x) check_names(x, type = "strict")),
-        ParamUty$new("new", default = character(), tags = c("train", "predict"), custom_check = function(x) check_names(x, type = "strict"))
+        ParamUty$new("renaming", default = character(), tags = c("train", "predict"), custom_check = function(x) check_names(x, type = "strict"))
       ))
-      ps$values = list(old = character(), new = character())
+      ps$values = list(renaming = character())
       super$initialize(id, ps, param_vals = param_vals, can_subset_cols = FALSE)
     }
   ),
   private = list(
     .transform = function(task) {
-      old = self$param_set$values$old
-      assert_subset(old, choices = unique(unlist(task$col_roles, use.names = FALSE)))
-      new = self$param_set$values$new
-      n = length(new)
-
-      if (n != length(old)) {
-        stopf("The length of new must match the length of old.")
-      }
-
-      if (n == 0L) {
+      if (length(self$param_set$values$renaming) == 0L) {
         return(task)  # early exit
       }
 
-      task$rename(old = old, new = new)
+      task$rename(old = names(self$param_set$values$renaming), new = self$param_set$values$renaming)
       task
     }
   )
