@@ -35,12 +35,6 @@ test_that("PipeOpTargetTrafoSimple - basic properties", {
 
   expect_equal(learner$predict(task), predict_out[[1L]])
 
-  # set a new target name
-  g$pipeops$targettrafosimple$param_set$values$new_target_name = "test"
-  train_out = g$train(task)
-  expect_equal("test", g$state[[2L]]$train_task$target_names)
-  expect_true("medv" %nin% g$state[[2L]]$train_task$feature_names)
-  predict_out = g$predict(task)
 })
 
 test_that("PipeOpTargetTrafoSimple - log base 2 trafo", {

@@ -55,14 +55,14 @@ based on \code{\link[fastICA:fastICA]{fastICA()}}:
 Number of components to extract. Default is \code{NULL}, which sets it
 to the number of available numeric columns.
 \item \code{alg.typ}:: \code{character(1)}\cr
-Algorithm type. One of \dQuote{parallel} (default) or \dQuote{deflation}.
+Algorithm type. One of "parallel" (default) or "deflation".
 \item \code{fun} :: \code{character(1)}\cr
-One of \dQuote{logcosh} (default) or \dQuote{exp}.
+One of "logcosh" (default) or "exp".
 \item \code{alpha} :: \code{numeric(1)}\cr
-In range \verb{[1, 2]}, Used for negentropy calculation when \code{fun} is \dQuote{logcosh}.
+In range \verb{[1, 2]}, Used for negentropy calculation when \code{fun} is "logcosh".
 Default is 1.0.
 \item \code{method} :: \code{character(1)}\cr
-Internal calculation method. \dQuote{C} (default) or \dQuote{R}.
+Internal calculation method. "C" (default) or "R".
 See \code{\link[fastICA:fastICA]{fastICA()}}.
 \item \code{row.norm} :: \code{logical(1)}\cr
 Logical value indicating whether rows should be standardized beforehand.
