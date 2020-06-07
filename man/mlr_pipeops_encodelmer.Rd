@@ -69,7 +69,7 @@ List of coefficients learned via \code{glmer}
 \itemize{
 \item \code{fast_optim}  :: \code{logical(1)} \cr
 Initialized to \code{TRUE}.
-If \dQuote{fast_optim} is \code{TRUE} (default), a faster (up to 50 percent)
+If "fast_optim" is \code{TRUE} (default), a faster (up to 50 percent)
 optimizer from the nloptr package is used when fitting the lmer models.
 This uses additional stopping criteria which can give suboptimal results.
 }
