@@ -23,7 +23,6 @@ test_that("mutate", {
   expect_equal(res2[[1]]$data("Sepal.Sum", rows = 1:10)$Sepal.Sum,
     (task$data("Sepal.Length", rows = 1:10) + task$data("Sepal.Width", rows = 1:10))$Sepal.Length)
 
-
   # Name clashes
   al = list(Sepal.Width = ~ Sepal.Width^2)
   op$param_set$values$mutation = al
@@ -31,7 +30,6 @@ test_that("mutate", {
   expect_true("Sepal.Width" %in% res_repl[[1]]$feature_names)
   expect_equal(res_repl[[1]]$data("Sepal.Width", rows = 1:10)$Sepal.Width,
     task$data("Sepal.Width", rows = 1:10)$Sepal.Width^2)
-
 
   # Delete originals
   op$param_set$values$delete_originals = TRUE
@@ -58,7 +56,6 @@ test_that("mutate", {
   expect_equal(res4[[1]]$data("Sepal.PlusVal", rows = 1:10)$Sepal.PlusVal,
     (task$data("Sepal.Length", rows = 1:10) + env$some_test_val)$Sepal.Length)
 
-
   # Constant column
   al = list(Sepal.Sum = ~ sum(Sepal.Length + Sepal.Width))
   op$param_set$values$mutation = al
@@ -79,4 +76,15 @@ test_that("mutate", {
   expect_task(res5[[1]])
   expect_true(all(c("Petal.Length_half", "Petal.Length_quart") %in% res5[[1]]$feature_names))
   expect_equivalent(res5[[1]]$data(cols = "Petal.Length_quart"), res5[[1]]$data(cols = "Petal.Length_half") / 2)
+
+  # Give Precedence to the original variables before the newly constructed ones
+  op$param_set$values$mutation = list(
+    Petal.Length = ~ 1,
+    Petal.Length_half = ~ Petal.Length / 2,
+    Petal.Length_quart = ~ Petal.Length_half / 2
+  )
+  res6 = op$train(list(task))
+  expect_true(all(c("Petal.Length_half", "Petal.Length_quart") %in% res6[[1]]$feature_names))
+  expect_equivalent(res6[[1]]$data(cols = c("Petal.Length_half", "Petal.Length_quart")), res5[[1]]$data(cols = c("Petal.Length_half", "Petal.Length_quart")))
+  expect_equivalent(res6[[1]]$data(cols = "Petal.Length")[[1]], rep(1, times = task$nrow))
 })
