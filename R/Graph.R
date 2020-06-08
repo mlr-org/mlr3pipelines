@@ -305,11 +305,11 @@ Graph = R6Class("Graph",
         ig_data$edges$color = "lightblue"
         # Visualize the nodes
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "400px", width = "50%")
-        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full") 
+        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
 
         # Draw edges between points
         p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
-        p 
+        p
       } else {
         suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
       }
@@ -538,6 +538,8 @@ graph_reduce = function(self, input, fun, single_input) {
     edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
     names(input) = input_tbl$name
+
+    lg$debug("Running PipeOp '%s$%s()'", id, fun, pipeop = op, input = input)
 
     output = op[[fun]](input)
     if (self$keep_results) {
