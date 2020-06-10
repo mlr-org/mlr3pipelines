@@ -42,8 +42,8 @@ imputed as described above.
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpImpute}}.
 
 The \verb{$state$model} contains either \code{".MISSING"} used for \code{character} and \code{factor} (also
-\code{ordered}) or \code{numeric(1)} indicating the constant value used for imputation of \code{integer} and
-\code{numeric} features.
+\code{ordered}) features or \code{numeric(1)} indicating the constant value used for imputation of
+\code{integer} and \code{numeric} features.
 }
 
 \section{Parameters}{

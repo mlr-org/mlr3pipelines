@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Impute factorial features by adding a new level `".MISSING"`.\cr
-#' 
+#'
 #' Impute numerical features by constant values shifted below the minimum or above the maximum by
 #' using \eqn{min(x) - offset - multiplier * diff(range(x))} or
 #' \eqn{max(x) + offset + multiplier * diff(range(x))}.\cr
@@ -35,8 +35,8 @@
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
 #'
 #' The `$state$model` contains either `".MISSING"` used for `character` and `factor` (also
-#' `ordered`) or `numeric(1)` indicating the constant value used for imputation of `integer` and
-#' `numeric` features.
+#' `ordered`) features or `numeric(1)` indicating the constant value used for imputation of
+#' `integer` and `numeric` features.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
@@ -105,7 +105,9 @@ PipeOpImputeNewlvl = R6Class("PipeOpImputeNewlvl",
         max(feature, na.rm = TRUE) + self$param_set$values$offset + self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))
       }
 
-      if (is.nan(oor)) {
+      # if the feature only consists of NA/NaN values, oor will be NaN if offset and multiplier are 0;
+      # oor will be Inf if offset and multiplier are larger than 0
+      if (is.nan(oor) || is.infinite(oor)) {
         oor = 0
       }
 
