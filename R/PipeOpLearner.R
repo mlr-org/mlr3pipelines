@@ -22,7 +22,7 @@
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -78,10 +78,12 @@
 #' lrn_po$predict(list(task))
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
-    initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
+    initialize = function(learner, id = NULL, param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      task_type = mlr_reflections$task_types[private$.learner$task_type]$task
-      out_type = mlr_reflections$task_types[private$.learner$task_type]$prediction
+      id = id %??% private$.learner$id
+      # FIXME: can be changed when mlr-org/mlr3#470 has an answer
+      task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
+      out_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$prediction
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
