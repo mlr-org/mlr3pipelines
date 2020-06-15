@@ -85,7 +85,9 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
         feature[is.na(feature)] = sample(model, outlen, replace = TRUE)
       }
       feature
-    }
+    },
+    .cache = FALSE,
+    .stochastic = c("train", "predict")
   )
 )
 

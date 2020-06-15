@@ -75,6 +75,17 @@ PipeOpChunk = R6Class("PipeOpChunk",
       )
     }
   ),
+  active = list(
+    stochastic = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, c("train", "predict"))
+        private$.stochastic = val
+      } else {
+        if (self$param_set$values$shuffle) return("train")
+        character(0)
+      }
+    }
+  ),
   private = list(
     .train = function(inputs) {
       self$state = list()
@@ -88,7 +99,8 @@ PipeOpChunk = R6Class("PipeOpChunk",
     },
     .predict = function(inputs) {
       rep(inputs, self$outnum)
-    }
+    },
+    .cache = FALSE
   )
 )
 

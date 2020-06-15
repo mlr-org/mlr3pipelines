@@ -115,6 +115,21 @@
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
+#' * `cache` :: `logical(1)` \cr
+#'   Whether to cache the [`PipeOp`]'s state and or output during "train" and "predict". Defaults to `TRUE`.
+#'   See the `cache` field in [`Graph`] for more detailed information on caching, as well as `cache_state` and
+#'   `stochastic` below.
+#' * `cache_state` :: `logical(1)` \cr
+#'   Whether the [`PipeOp`]s behaviour during training is equal to behaviour during prediction
+#'   (other then setting a state). In this case, only the [`PipeOp`]s state is cached.
+#'   This avoids caching possibly large intermediate results.
+#'   Defaults to `TRUE`.
+#' * `stochastic` :: `character` \cr
+#'   Whether a [`PipeOp`] is stochastic during `"train"`, `"predict"`, or not at all: `character(0)`.
+#'   Defaults to `character(0)` (deterministic). Stochastic [`PipeOp`]s are not cached during the
+#'   respective phase.
+#'   A [`PipeOp`] is only cached if it is deterministic.
+#' 
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -254,7 +269,6 @@ PipeOp = R6Class("PipeOp",
       if (is_noop(self$state)) {
         stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
       }
-
       input = check_types(self, input, "input", "predict")
       output = private$.predict(input)
       output = check_types(self, output, "output", "predict")
@@ -296,6 +310,26 @@ PipeOp = R6Class("PipeOp",
     hash = function() {
       digest(list(class(self), self$id, self$param_set$values),
         algo = "xxhash64")
+    },
+    cache = function(val) {
+      if (!missing(val)) {
+        private$.cache = assert_flag(val)
+      } else {
+        private$.cache
+      }
+    },
+    cache_state = function(val) {
+      if (!missing(val)) {
+        stop("cache_state is read-only!")
+      } 
+      private$.cache_state
+    },
+    stochastic = function(val) {
+      if (!missing(val)) {
+        private$.stochastic = assert_subset(val, c("train", "predict"))
+      } else {
+        private$.stochastic
+      }
     }
   ),
 
@@ -318,7 +352,10 @@ PipeOp = R6Class("PipeOp",
     .predict = function(input) stop("abstract"),
     .param_set = NULL,
     .param_set_source = NULL,
-    .id = NULL
+    .id = NULL,
+    .cache = TRUE,
+    .cache_state = TRUE,
+    .stochastic = character(0)
   )
 )
 

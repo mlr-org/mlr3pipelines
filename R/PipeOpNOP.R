@@ -75,7 +75,8 @@ PipeOpNOP = R6Class("PipeOpNOP",
 
     .predict = function(inputs) {
       inputs
-    }
+    },
+    .cache = FALSE
   )
 )
 

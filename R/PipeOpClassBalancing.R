@@ -160,7 +160,10 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
       task_filter_ex(task, new_ids)
     },
 
-    .predict_task = identity
+    .predict_task = identity,
+    .cache = FALSE,
+    .stochastic = "train",
+    .cache_state = FALSE
   )
 )
 

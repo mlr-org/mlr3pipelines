@@ -74,7 +74,9 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
       }
       feature[is.na(feature)] = sampled
       feature
-    }
+    },
+    .cache = FALSE,
+    .stochastic = c("train", "predict")
   )
 )
 

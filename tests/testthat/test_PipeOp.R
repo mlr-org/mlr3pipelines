@@ -67,3 +67,15 @@ test_that("Errors occur for inputs", {
     po$param_set = ParamSet$new()
   }, "read-only")
 })
+
+test_that("Caching ABs", {
+  po = po("scale")
+  expect_true(po$cache)
+  expect_true(po$cache_state)
+  expect_true(length(po$stochastic) == 0L)
+  po$cache = FALSE
+  expect_error({po$cache_state = TRUE})
+  po$stochastic = "train"
+  expect_true(!po$cache)
+  expect_true(po$stochastic == "train")
+})

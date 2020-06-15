@@ -58,6 +58,15 @@
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
+#' * `cache` :: `logical(1)` \cr
+#'   Whether to cache individual [`PipeOp`]'s during "train" and "predict". Default `FALSE`.
+#'   Caching is performed using the [`R.cache`](R.cache::R.cache) package.
+#'   Caching can be disabled/enabled globally using `getOption("R.cache.enabled", TRUE)`.
+#'   By default, files are cached in `R.cache::getCacheRootPath()`.
+#'   For more information on how to set the cache path or retrieve cached items please consider
+#'   the [`R.cache`](R.cache::R.cache) documentation.
+#'   Caching can be fine-controlled for each [`PipeOp`] by adjusting individual [`PipeOp`]'s
+#'   `cache`, `cache_state` and `stochastic` fields.
 #'
 #' @section Methods:
 #' * `ids(sorted = FALSE)` \cr
@@ -407,6 +416,13 @@ Graph = R6Class("Graph",
       } else {
         map(self$pipeops, "state")
       }
+    },
+    cache = function(val) {
+      if (!missing(val)) {
+        private$.cache = assert_flag(val)
+      } else {
+        private$.cache
+      }
     }
   ),
 
@@ -419,7 +435,8 @@ Graph = R6Class("Graph",
         value
       )
     },
-    .param_set = NULL
+    .param_set = NULL,
+    .cache = FALSE
   )
 )
 
@@ -539,7 +556,7 @@ graph_reduce = function(self, input, fun, single_input) {
     input = input_tbl$payload
     names(input) = input_tbl$name
 
-    output = op[[fun]](input)
+    output = cached_pipeop_eval(self, op, fun, input)
     if (self$keep_results) {
       op$.result = output
     }
@@ -608,4 +625,71 @@ predict.Graph = function(object, newdata, ...) {
     result = result$data$response %??% result$data$prob
   }
   result
+}
+
+# Cached train/predict of a PipeOp. 
+# 1) Caching of a PipeOp only performed if graph and po have `cache = TRUE`,
+#    i.e both the Graph AND the PipeOp want to be cached.
+# 2) Additonally caching is only performed if 'train' or 'predict' is not stochastic
+#    for a given PipeOp. This can be obtained from `.$stochastic` and can be set
+#    for each PipeOp.
+# 3) During training we have two options
+#    Each PipeOp stores whether it wants to do I. or II. in `.$cache_state`.
+#    I. Cache only state:
+#      This is possible if the train transform is the same as the predict transform
+#      and predict is comparatively cheap (i.e. filters).
+#    II. Cache state and output
+#      (All other cases)
+
+cached_pipeop_eval = function(self, op, fun, input) {
+
+  if (self$cache && op$cache) {
+    require_namespaces("R.cache")
+    cache_key = list(map_chr(input, get_hash), op$hash)
+    if (fun == "train") {
+      if (fun %nin% op$stochastic) {
+        # Two options:
+        # I.  cache state (can predict on train set using state during train)
+        # II. do not cache state () (if I. is not possible)
+        if (op$cache_state) {
+          # only cache state (I.)
+          R.cache::evalWithMemoization({
+            op[[fun]](input)
+            state = op$state 
+          }, key = cache_key)
+          # Set state if PipeOp was cached (and "train" was therefore not called)
+          if (is.null(op$state) && fun == "train") op$state = state
+          # We call "predict" on train inputs, this avoids storing the outputs 
+          # during training on disk.
+          # This is only done for pipeops where 'cache_state' is TRUE.
+          return(cached_pipeop_eval(self, op, "predict", input))
+        } else {
+          # Otherwise we cache state and input (II.)
+          R.cache::evalWithMemoization({
+            result = list(output = op[[fun]](input), state = op$state)
+          }, key = cache_key)
+          # Set state if PipeOp was cached before (and thus no state was set)
+          if (is.null(op$state) && fun == "train") op$state = result$state
+          return(result$output)
+        }
+      }
+    } else if (fun == "predict" && !op$cache_state) {
+      # during predict, only cache if cache_state is FALSE and op is not stochastic.
+      if (fun %nin% op$stochastic) {
+        R.cache::evalWithMemoization(
+          {output = op[[fun]](input)},
+          key = cache_key)
+        return(output)
+      }
+    }
+  }
+  # No caching fallback, anything where we do not run into conditions above
+  return(op[[fun]](input))
+}
+
+get_hash = function(x) {
+  hash = try(x$hash, silent = TRUE)
+  if (inherits(hash, "try-error") || is.null(hash))
+    hash = digest(x, algo = "xxhash64")
+  hash
 }
