@@ -123,7 +123,13 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
-      private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))
+      # Dependencies in paradox have been broken from the start and this is known since at least a year:
+      # https://github.com/mlr-org/paradox/issues/216
+      # The following would make it _impossible_ to set "method" to "insample", because then "folds"
+      # is both _required_ (required tag above) and at the same time must be unset (because of this
+      # dependency). We will opt for the least annoying behaviour here and just not use dependencies
+      # in PipeOp ParamSets.
+      # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
       super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = "ensemble")
     }
@@ -149,8 +155,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
       # Compute CV Predictions
       if (pv$method != "insample") {
-        rdesc = mlr_resamplings$get(pv[["method"]])
-        if (pv[["method"]] == "cv") rdesc$param_set$values = list(folds = pv[["folds"]])
+        rdesc = mlr_resamplings$get(pv$method)
+        if (pv$method == "cv") rdesc$param_set$values = list(folds = pv$folds)
         res = resample(task, private$.learner, rdesc)
         prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
       } else {

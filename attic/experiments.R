@@ -27,6 +27,8 @@ testthat::test_package("mlr3pipelines", filter = "proxy")
 
 testthat::test_package("mlr3pipelines", filter = "branch")
 
+testthat::test_package("mlr3pipelines", filter = "learnercv")
+
 
 
 
