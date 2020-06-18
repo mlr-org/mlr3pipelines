@@ -34,6 +34,12 @@ po = function(.obj, ...) {
 }
 
 #' @export
+po.NULL = function(.obj, ...) {
+  # class is NULL if .obj is missing
+  dictionary_sugar(dict = mlr_pipeops)
+}
+
+#' @export
 po.character = function(.obj, ...) {
   dictionary_sugar(dict = mlr_pipeops, .key = .obj, ...)
 }
