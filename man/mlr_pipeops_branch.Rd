@@ -137,6 +137,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},

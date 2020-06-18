@@ -133,6 +133,7 @@ Collate:
     'PipeOpRandomResponse.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
+    'PipeOpRenameColumns.R'
     'PipeOpScale.R'
     'PipeOpScaleMaxAbs.R'
     'PipeOpScaleRange.R'
