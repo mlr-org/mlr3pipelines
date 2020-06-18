@@ -204,6 +204,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$affected_cols = affected_cols
       self$state$intasklayout = intasklayout
       self$state$outtasklayout = copy(intask$feature_types)
+      self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
 
       if (do_subset) {
         # FIXME: this fails if .train_task added a column with the same name
@@ -224,7 +225,16 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
-      intask = private$.predict_task(intask)
+      if (!intask$nrow) {
+        # don't put the burdon of having to deal with 0-row tasks on the individual PipeOps.
+        # Instead we do this here: add the correct columns (which are all empty)
+        targetlayout = self$state$outtasklayout
+        intask$
+          select(fintersect(intask$feature_types, targetlayout)$id)$
+          cbind(self$state$outtaskshell[, fsetdiff(targetlayout, intask$feature_types)$id, with = FALSE])
+      } else {
+        intask = private$.predict_task(intask)
+      }
 
       if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
