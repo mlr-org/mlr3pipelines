@@ -28,20 +28,19 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `mutation` :: named `list` of `formula`\cr
-#'   Expressions for new features to create (or present features to change), in the form of
-#'   `formula`.  Each element of the list is a `formula` with the name of the element naming the
-#'   feature to create or change, and the formula expression determining the result. This expression
-#'   may reference other features, as well as variables visible at the creation of the `formula`
-#'   (see examples).
+#'   Expressions for new features to create (or present features to change), in the form of `formula`.
+#'   Each element of the list is a `formula` with the name of the element naming the feature to create or
+#'   change, and the formula expression determining the result. This expression may reference
+#'    other features, as well as variables visible at the creation of the `formula` (see examples).
 #'   Initialized to `list()`.
 #' * `delete_originals` :: `logical(1)` \cr
-#'   Whether to delete original features. Even when this is `FALSE`, present features may still be
-#'   overwritten. Initialized to `FALSE`.
+#'   Whether to delete original features. Even when this is `FALSE`,
+#'   present features may still be overwritten. Initialized to `FALSE`.
 #'
 #' @section Internals:
-#' A `formula` created using the `~` operator always contains a reference to the `environment` in
-#' which the `formula` is created. This makes it possible to use variables in the `~`-expressions
-#' that both reference either column names or variable names.
+#' A `formula` created using the `~` operator always contains a reference to the `environment` in which
+#' the `formula` is created. This makes it possible to use variables in the `~`-expressions that both
+#' reference either column names or variable names.
 #'
 #' Note that the `formula`s in `mutation` are evaluated sequentially. This allows for using
 #' variables that were constructed during evaluation of a previous formula. However, if existing
@@ -97,7 +96,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
         frm = self$param_set$values$mutation[[i]]
         set(taskdata, j = nms[i], value = eval(frm[[2L]], envir = insert_named(as.list(taskdata), oldtask), enclos = environment(frm)))
       }
-      newdata = taskdata[, ..nms]
+      newdata = taskdata[, nms, which = FALSE]
 
       keep_feats = character(0)
       if (!self$param_set$values$delete_originals) {
