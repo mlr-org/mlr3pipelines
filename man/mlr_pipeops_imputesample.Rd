@@ -94,7 +94,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
@@ -103,6 +103,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_scalemaxabs}},
@@ -128,7 +129,7 @@ Other Imputation PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}}
+\code{\link{mlr_pipeops_imputeoor}}
 }
 \concept{Imputation PipeOps}
 \concept{PipeOps}

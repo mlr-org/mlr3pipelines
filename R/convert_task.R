@@ -13,10 +13,12 @@
 #' @param drop_original_target `logical(1)`\cr
 #'   If `FALSE` (default), the original target is added as a feature.
 #'   Otherwise the original target is dropped.
+#' @param drop_levels `logical(1)`\cr
+#'   If `TRUE` (default), unused levels of the new target variable are dropped.
 #' @param \dots \cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
-convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = FALSE, ...) {
+convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = FALSE, drop_levels = TRUE, ...) {
   assert_task(intask)
   assert_subset(new_target, choices = intask$col_info$id)
   assert_choice(new_type, choices = mlr_reflections$task_types$type, null.ok = TRUE)
@@ -34,7 +36,7 @@ convert_task = function(intask, new_target = NULL, new_type = NULL, drop_origina
   newtask$set_col_role(new_target, "target")
   if (!all(intask$target_names == new_target)) newtask$set_col_role(intask$col_roles$target, "feature")
   # during prediction, when target is NA, we do not call droplevels
-  if (!all(is.na(newtask$data()[, newtask$target_names, with = FALSE]))) newtask$droplevels()
+  if (assert_flag(drop_levels)) newtask$droplevels()
   # if drop_original_target, remove the original target from the col_roles
   # FIXME: in general implement the col_role "unused col_role"?
   if (drop_original_target) newtask$col_roles$feature = setdiff(newtask$col_roles$feature, intask$col_roles$target)

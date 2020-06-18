@@ -167,3 +167,19 @@ test_that("PipeOpImpactEncode on Regression", {
   expect_equal(which(is.na(encoded)), c(11, 18))
 
 })
+
+test_that("PipeOpImpactEncode factor level ``", {
+
+  op = PipeOpEncodeImpact$new()
+
+  testdf3 = iris
+  levels(testdf3$Species) = c("setosa", "versicolor", "")
+  testtask3 = TaskRegr$new(id = "test3", backend = testdf3, target = "Sepal.Length")
+  train_out3 = op$train(list(testtask3))[[1L]]
+
+  testtask3ref = TaskRegr$new(id = "test3ref", backend = iris, target = "Sepal.Length")
+  train_out3ref = op$train(list(testtask3ref))[[1L]]
+
+  expect_equal(train_out3$data(), train_out3ref$data())
+
+})

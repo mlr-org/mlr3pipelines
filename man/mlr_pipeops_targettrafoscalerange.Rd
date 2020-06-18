@@ -42,7 +42,7 @@ The \verb{$state} is a named \code{list} with a vector of the two transformation
 
 The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}, as well as:
 \itemize{
-\item \code{lower}  :: \code{numeric(1)} \cr
+\item \code{lower} :: \code{numeric(1)} \cr
 Target value of smallest item of input target. Default is 0.
 \item \code{upper} :: \code{numeric(1)} \cr
 Target value of greatest item of input target. Default is 1.
@@ -105,7 +105,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -115,6 +115,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_scalemaxabs}},

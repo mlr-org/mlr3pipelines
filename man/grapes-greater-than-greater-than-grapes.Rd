@@ -39,6 +39,9 @@ Both arguments of \verb{\%>>\%} are automatically converted to \code{\link{Graph
 that can be automatically converted to \code{\link{PipeOp}}s (such as \code{\link[mlr3:Learner]{Learner}}s or \code{\link[mlr3filters:Filter]{Filter}}s), or that can
 be converted to \code{\link{Graph}}s. This means, in particular, \code{list}s of \code{\link{Graph}}s, \code{\link{PipeOp}}s or objects convertible to that, because
 \code{\link[=as_graph]{as_graph()}} automatically applies \code{\link[=gunion]{gunion()}} to \code{list}s. See examples.
+
+Note that if \code{g1} is \code{NULL}, \code{g2} converted to a \code{\link{Graph}} will be returned.
+Analogously, if \code{g2} is \code{NULL}, \code{g1} converted to a \code{\link{Graph}} will be returned.
 }
 \examples{
 o1 = PipeOpScale$new()

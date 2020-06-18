@@ -46,6 +46,7 @@ Imports:
     checkmate,
     data.table,
     digest,
+    lgr,
     mlr3 (>= 0.1.4),
     mlr3misc (>= 0.1.4),
     paradox,
@@ -56,7 +57,6 @@ Suggests:
     glmnet,
     igraph,
     knitr,
-    lgr,
     lme4,
     mlbench,
     mlr3filters (>= 0.1.1),
@@ -73,7 +73,8 @@ Suggests:
     fastICA,
     kernlab,
     smotefamily,
-    evaluate
+    evaluate,
+    kknn
 VignetteBuilder:
     knitr
 Remotes:
@@ -117,7 +118,7 @@ Collate:
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
     'PipeOpImputeMode.R'
-    'PipeOpImputeNewlvl.R'
+    'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
@@ -129,6 +130,7 @@ Collate:
     'PipeOpPCA.R'
     'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
+    'PipeOpRandomResponse.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
     'PipeOpScale.R'

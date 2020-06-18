@@ -96,3 +96,17 @@ test_that("update resample and predict_newdata", {
   g$train(t)
   g$predict_newdata(t$data(cols = t$feature_names))
 })
+
+test_that("make an existing feature a target", {
+  pom = po("update_target", new_target_name = "ash", new_task_type = "regr", drop_original_target = FALSE)
+  expect_pipeop(pom)
+  newtsk = pom$train(list(tsk("wine")))[[1]]
+  expect_task(newtsk)
+  expect_true("ash" %in% newtsk$target_names)
+  expect_true("type" %nin% newtsk$target_names)
+  expect_true("type" %in% newtsk$feature_names)
+  expect_equal(newtsk$data()$ash, tsk("wine")$data()$ash)
+
+  newtsk2 = pom$predict(list(tsk("wine")))[[1]]
+  expect_equivalent(newtsk, newtsk2)
+})
