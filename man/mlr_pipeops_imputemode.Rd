@@ -98,7 +98,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -133,7 +133,7 @@ Other Imputation PipeOps:
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}}
 }
 \concept{Imputation PipeOps}
