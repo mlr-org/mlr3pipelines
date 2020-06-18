@@ -7,6 +7,9 @@ test_that("basic properties", {
 
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("pima"))
 
+  expect_datapreproc_pipeop_class(PipeOpScale, list(param_vals = list(robust = TRUE)), task = mlr_tasks$get("iris"))
+
+
   data = data.table(
     a = 1:5,
     b = as.numeric(1:5),
