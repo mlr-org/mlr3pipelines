@@ -22,6 +22,9 @@
 #' be converted to [`Graph`]s. This means, in particular, `list`s of [`Graph`]s, [`PipeOp`]s or objects convertible to that, because
 #' [`as_graph()`] automatically applies [`gunion()`] to `list`s. See examples.
 #'
+#' Note that if `g1` is `NULL`, `g2` converted to a [`Graph`] will be returned.
+#' Analogously, if `g2` is `NULL`, `g1` converted to a [`Graph`] will be returned.
+#'
 #' @param g1 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
 #'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put in front of `g2`.
 #' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
@@ -56,6 +59,9 @@
 #'   add_edge(o1$id, o3$id, dst_channel = 1)$
 #'   add_edge(o2$id, o3$id, dst_channel = 2)
 `%>>%` = function(g1, g2) {
+  # neutral elements handling
+  if (is.null(g1)) return(as_graph(g2))
+  if (is.null(g2)) return(as_graph(g1))
 
   g1 = as_graph(g1)
   g2 = as_graph(g2)

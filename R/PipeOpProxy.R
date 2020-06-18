@@ -55,18 +55,23 @@
 #'
 #' @examples
 #' library("mlr3")
+#' library("mlr3learners")
 #'
-#' task1 = tsk("iris")
-#' task2 = task1$clone(deep = TRUE)
+#' set.seed(1234)
+#' task = tsk("iris")
 #'
-#' pop = po("pca", param_vals = list(scale. = TRUE))
-#' pop$train(list(task1))
-#' pop$state
+#' # use a proxy for preprocessing and a proxy for learning, i.e.,
+#' # no preprocessing and classif.kknn
+#' g = po("proxy", id = "preproc", param_vals = list(content = po("nop"))) %>>%
+#'   po("proxy", id = "learner", param_vals = list(content = lrn("classif.kknn")))
+#' rr_kknn = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+#' rr_kknn$aggregate(msr("classif.ce"))
 #'
-#' proxy = po("proxy", innum = 1, outnum = 1,
-#'   param_vals = list(content = po("pca", param_vals = list(scale. = TRUE))))
-#' proxy$train(list(task2))
-#' proxy$state$state
+#' # use pca for preprocessing and classif.rpart as the learner
+#' g$param_set$values$preproc.content = po("pca")
+#' g$param_set$values$learner.content = lrn("classif.rpart")
+#' rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+#' rr_pca_rpart$aggregate(msr("classif.ce"))
 #' @family PipeOps
 #' @include PipeOp.R
 #' @export
