@@ -65,7 +65,9 @@ To access individual PipeOps after composition, use the resulting Graph's $pipeo
 Both arguments of %&amp;gt;&amp;gt;% are automatically converted to Graphs using as_graph(); this means that objects on either side may be objects
 that can be automatically converted to PipeOps (such as Learners or Filters), or that can
 be converted to Graphs. This means, in particular, lists of Graphs, PipeOps or objects convertible to that, because
-as_graph() automatically applies gunion() to lists. See examples." />
+as_graph() automatically applies gunion() to lists. See examples.
+Note that if g1 is NULL, g2 converted to a Graph will be returned.
+Analogously, if g2 is NULL, g1 converted to a Graph will be returned." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -183,6 +185,8 @@ To access individual <code><a href='PipeOp.html'>PipeOp</a></code>s after compos
 that can be automatically converted to <code><a href='PipeOp.html'>PipeOp</a></code>s (such as <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>s or <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>s), or that can
 be converted to <code><a href='Graph.html'>Graph</a></code>s. This means, in particular, <code>list</code>s of <code><a href='Graph.html'>Graph</a></code>s, <code><a href='PipeOp.html'>PipeOp</a></code>s or objects convertible to that, because
 <code><a href='as_graph.html'>as_graph()</a></code> automatically applies <code><a href='gunion.html'>gunion()</a></code> to <code>list</code>s. See examples.</p>
+<p>Note that if <code>g1</code> is <code>NULL</code>, <code>g2</code> converted to a <code><a href='Graph.html'>Graph</a></code> will be returned.
+Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted to a <code><a href='Graph.html'>Graph</a></code> will be returned.</p>
     </div>
 
     <pre class="usage"><span class='no'>g1</span> <span class='kw'>%&gt;&gt;%</span> <span class='no'>g2</span></pre>
