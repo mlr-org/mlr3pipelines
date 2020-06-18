@@ -91,9 +91,6 @@ shipped with the package, which can also be viewed online:
     diving into concepts and describing the objects involved
   - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
     of `mlr3pipelines` with other packages (not yet authoritative)
-  - [Writing Custom
-    `PipeOp`s](https://mlr3book.mlr-org.com/extending-mlr3pipelines.html)
-    to extend and build on top of `mlr3pipelines`
 
 ## Bugs, Questions, Feedback
 

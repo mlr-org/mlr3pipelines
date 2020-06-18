@@ -1,4 +1,6 @@
-# mlr3pipelines (development version)
+# mlr3pipelines 0.1.3
+
+* small test fix for R 4.0
 
 # mlr3pipelines 0.1.2
 
