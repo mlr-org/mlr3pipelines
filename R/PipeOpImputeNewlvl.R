@@ -1,35 +1,33 @@
-#' @title PipeOpImputeNewlvl
+#' @title PipeOpImputeOOR
 #'
 #' @usage NULL
-#' @name mlr_pipeops_imputenewlvl
+#' @name mlr_pipeops_imputeoor
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute factorial features by adding a new level `".MISSING"`.\cr
+#' Impute factorial features by adding a new level `".MISSING"`.
 #'
 #' Impute numerical features by constant values shifted below the minimum or above the maximum by
 #' using \eqn{min(x) - offset - multiplier * diff(range(x))} or
-#' \eqn{max(x) + offset + multiplier * diff(range(x))}.\cr
+#' \eqn{max(x) + offset + multiplier * diff(range(x))}.
 #'
 #' This type of imputation is especially sensible in the context of tree-based methods, see also
 #' Ding & Simonoff (2010).
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImputeNewlvl$new(id = "imputenewlvl", param_vals = list())
+#' PipeOpImputeOor$new(id = "imputeoor", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"imputenewlvl"`.
+#'   Identifier of resulting object, default `"imputeoor"`.
 #' * `param_vals` :: named `list`\cr
-#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-#'   be set during construction. Default `list()`.
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected features having missing values
-#' imputed as described above.
+#' The output is the input [`Task`][mlr3::Task] with all affected features having missing values imputed as described above.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
@@ -51,10 +49,9 @@
 #'   features. Default is 1.
 #'
 #' @section Internals:
-#' Adds an explicit new `level()` to `factor` and `ordered` features, but not to `character`
-#' features. For `integer` and `numeric` features uses the `min`, `max`, `diff` and `range` functions.
+#' Adds an explicit new `level()` to `factor` and `ordered` features, but not to `character` features.
+#' For `integer` and `numeric` features uses the `min`, `max`, `diff` and `range` functions.
 #' `integer` and `numeric` features that are entirely `NA` are imputed as `0`.
-
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -67,7 +64,7 @@
 #' data$z = ordered(c(NA, sample(1:10, size = 767, replace = TRUE)))
 #' task = TaskClassif$new("task", backend = data, target = "diabetes")
 #' task$missings()
-#' po = po("imputenewlvl")
+#' po = po("imputeoor")
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #' new_task$data()
@@ -75,10 +72,10 @@
 #' @family Imputation PipeOps
 #' @include PipeOpImpute.R
 #' @export
-PipeOpImputeNewlvl = R6Class("PipeOpImputeNewlvl",
+PipeOpImputeOor = R6Class("PipeOpImputeOor",
   inherit = PipeOpImpute,
   public = list(
-    initialize = function(id = "imputenewlvl", param_vals = list()) {
+    initialize = function(id = "imputeoor", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamLgl$new("min", default = TRUE, tags = c("train", "predict")),
         ParamDbl$new("offset", lower = 0, default = 1, tags = c("train", "predict")),
@@ -99,7 +96,7 @@ PipeOpImputeNewlvl = R6Class("PipeOpImputeNewlvl",
       }
 
       # for integer or numeric do
-      oor = if(self$param_set$values$min) {
+      oor = if (self$param_set$values$min) {
         min(feature, na.rm = TRUE) - self$param_set$values$offset - self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))
       } else {
         max(feature, na.rm = TRUE) + self$param_set$values$offset + self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))
@@ -128,4 +125,4 @@ PipeOpImputeNewlvl = R6Class("PipeOpImputeNewlvl",
   )
 )
 
-mlr_pipeops$add("imputenewlvl", PipeOpImputeNewlvl)
+mlr_pipeops$add("imputeoor", PipeOpImputeOor)
