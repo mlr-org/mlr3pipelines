@@ -27,7 +27,7 @@ testthat::test_package("mlr3pipelines", filter = "proxy")
 
 testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 
-testthat::test_package("mlr3pipelines", filter = "learnercv")
+testthat::test_package("mlr3pipelines", filter = "randomresponse")
 
 
 
