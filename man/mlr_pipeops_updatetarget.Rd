@@ -17,6 +17,10 @@ In case target after the \code{trafo} is a factor, levels are saved to \verb{$st
 During prediction: Sets all target values to \code{NA} before calling the \code{trafo} again.
 In case target after the \code{trafo} is a factor, levels saved in the \code{state} are
 set during prediction.
+
+As a special case when \code{trafo} is \code{identity} and \code{new_target_name} matches an existing column
+name of the data of the input task, this column is set as the new target. Depending on
+\code{drop_original_target} the original target is then either dropped or added to the features.
 }
 \section{Construction}{
 \preformatted{PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
@@ -40,21 +44,20 @@ The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single argument. Default is \code{identity}.
 Note, that the data passed on to the target is a \code{data.table} consisting of all target column.
-\item \code{new_target_name} :: \code{character}\cr
+\item \code{new_target_name} :: \code{character(1)}\cr
 Optionally give the transformed target a new name. By default the original name is used.
 \item \code{new_task_type} :: \code{character(1)}\cr
 Optionally a new task type can be set. Legal types are listed in
 \code{mlr_reflections$task_types$type}.
-#' \code{drop_old_target} :: \code{logical(1)}\cr
+#' \code{drop_original_target} :: \code{logical(1)}\cr
 Whether to drop the original target column. Default: \code{TRUE}.
-If \code{drop_old_target}
 }
 }
 
 \section{State}{
 
 The \verb{$state} is a list of class levels for each target after trafo.
-\code{list(0)} if none of the targets have levels.
+\code{list()} if none of the targets have levels.
 }
 
 \section{Methods}{
@@ -63,12 +66,12 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-  # Create a binary class task from iris
-  library(mlr3)
-  trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
-  po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
-  po$train(list(tsk("iris")))
-  po$predict(list(tsk("iris")))
+# Create a binary class task from iris
+library(mlr3)
+trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
+po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
+po$train(list(tsk("iris")))
+po$predict(list(tsk("iris")))
 }
 \seealso{
 Other mlr3pipelines backend related: 
@@ -109,7 +112,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -119,6 +122,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},

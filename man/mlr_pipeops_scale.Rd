@@ -53,12 +53,17 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 Whether to center  features, i.e. subtract their \code{mean()} from them. Default \code{TRUE}.
 \item \code{scale} :: \code{logical(1)}\cr
 Whether to scale features, i.e. divide them by \code{sqrt(sum(x^2)/(length(x)-1))}. Default \code{TRUE}.
+\item \code{robust} :: \code{logical(1)}\cr
+Whether to use robust scaling; instead of scaling / centering with mean / standard deviation,
+median and median absolute deviation \code{\link[stats:mad]{mad}} are used.
+Defaults to \code{FALSE}.
 }
 }
 
 \section{Internals}{
 
-Uses the \code{\link[base:scale]{scale()}} function.
+Uses the \code{\link[base:scale]{scale()}} function for \code{robust = FALSE} and alternatively subtracts the
+\code{median} and divides by \code{\link[stats:mad]{mad}} for \code{robust = TRUE}.
 }
 
 \section{Methods}{
@@ -110,7 +115,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -120,6 +125,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},

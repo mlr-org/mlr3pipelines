@@ -73,5 +73,16 @@ test_that("Robustify Pipeline", {
   g$train(tsk)
   prd = g$predict(tsk2)
   expect_prediction(prd)
-})
 
+  # date features
+  dat = iris
+  set.seed(1)
+  dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
+   size = 150L)
+  tsk = TaskClassif$new("iris_date", backend = dat, target = "Species")
+  p = pipeline_robustify(task = tsk, learner = lrn) %>>% po(lrn)
+  expect_graph(p)
+  expect_true("removeconstants" %in% names(p$pipeops))
+  expect_true("datefeatures" %in% names(p$pipeops))
+  expect_true(length(p$pipeops) == 3)
+})
