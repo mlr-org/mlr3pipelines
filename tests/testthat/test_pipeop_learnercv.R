@@ -49,8 +49,6 @@ test_that("param values", {
   expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 4, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
 })
 
-
-#357
 test_that("within resampling", {
   lrn = mlr_learners$get("classif.rpart")
   gr = GraphLearner$new(PipeOpLearnerCV$new(lrn) %>>% po(id = "l2", lrn))
@@ -71,4 +69,8 @@ test_that("insample resampling", {
   expect_equal(polrn$train(list(iris_with_unambiguous_mode))[[1]],
     polrn$predict(list(iris_with_unambiguous_mode))[[1]])
 
+test_that("PipeOpLearnerCV - graph but no id", {
+  g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
+  po = PipeOpLearnerCV$new(g)
+  expect_string(po$id)
 })

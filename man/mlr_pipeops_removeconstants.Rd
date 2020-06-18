@@ -10,7 +10,7 @@
 \description{
 Remove constant features from a \link[mlr3:Task]{mlr3::Task}.
 For each feature, calculates the ratio of features which differ from their mode value.
-All features which a ratio below a settable threshold are removed from the task.
+All features with a ratio below a settable threshold are removed from the task.
 Missing values can be ignored or treated as a regular value distinct from non-missing values.
 }
 \section{Construction}{
@@ -28,7 +28,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{features} :: \code{character}\cr
+\item \code{features} :: \code{character()}\cr
 Names of features that are being kept. Features of types that the \code{\link[mlr3filters:Filter]{Filter}} can not operate on are always being kept.
 }
 }
@@ -77,6 +77,7 @@ Other PipeOps:
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpProxy}},
+\code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -119,8 +120,13 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
+\code{\link{mlr_pipeops_targettrafosimple}},
+\code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }

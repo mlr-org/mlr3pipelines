@@ -17,18 +17,18 @@
 #' factor variables, no encoding is performed.
 #'
 #' @param task [`Task`] \cr
-#'   A task to create a robustifying pipeline for.
+#'   A [`Task`][mlr3::Task] to create a robustifying pipeline for.
 #'   Optional, if omitted, the full pipeline is created.
-#' @param learner [`Learner`] \cr
+#' @param learner [`Learner`][mlr3::Learner] \cr
 #'   A learner to create a robustifying pipeline for. Optional, if omitted,
 #'   a more conservative pipeline is built.
-#' @param impute_missings [`logical`] | [`NULL`] \cr
+#' @param impute_missings `logical(1)` | `NULL` \cr
 #'   Should missing values be imputed? Defaults to `NULL`, i.e imputes if the task has
 #'   missing values and the learner can not handle them.
-#' @param factors_to_numeric [`logical`] | [`NULL`] \cr
+#' @param factors_to_numeric `logical(1)` | `NULL` \cr
 #'   Should factors be encoded? Defaults to `NULL`, i.e encodes if the task has factors
 #'   and the learner can not handle factors.
-#' @param max_cardinality [`integer`] \cr
+#' @param max_cardinality `integer(1)` \cr
 #'   Maximum number of factor levels allowed. See above. Default: 1000.
 #' @return [`Graph`]
 #' @export
@@ -59,9 +59,9 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
   if (has_type_feats("character") && "character" %nin% learner$feature_types)
     pos = c(pos, po("colapply", id = "char_to_fct", param_vals = list(affect_columns = selector_type("character"), applicator = function(x) as.factor(x))))
 
-  # FIXME: Uncomment once #308 is merged
-  # if (has_type_feats("POSIXct") && "POSIXct" %nin% learner$feature_types))
-  #   pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
+  # Date processing
+   if (has_type_feats("POSIXct") && ("POSIXct" %nin% learner$feature_types))
+     pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
 
   if (impute_missings) {
     # Impute numerics
@@ -111,11 +111,11 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #' * Average outputs of replicated `graph`s predictions using the `averager`.
 #'
 #' @param graph [`PipeOp`] | [`Graph`] \cr
-#'   A `PipeOpLearner` or `Graph` to create a robustifying pipeline for.
-#'   Outputs from the replicated `graph`s are connected with the `averager`
-#' @param iterations [`integer`] \cr
+#'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for.
+#'   Outputs from the replicated `graph`s are connected with the `averager`.
+#' @param iterations `integer(1)` \cr
 #'   Number of bagging iterations. Defaults to 10.
-#' @param frac [`numeric`] \cr
+#' @param frac `numeric(1)` \cr
 #'   Percentage of rows to keep during subsampling. See [`PipeOpSubsample`] for
 #'   more information. Defaults to 0.7.
 #' @param averager [`PipeOp`] | [`Graph`] \cr
@@ -140,9 +140,9 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   if (!is.null(averager)) averager = as_graph(averager)
 
   subs = po("subsample", param_vals = list(frac = frac)) %>>% graph
-  subs_repls = greplicate(subs, iterations)
+  subs_repls = pipeline_greplicate(subs, iterations)
 
-  if (!is.null(averager)) subs_repls %>>% averager else subs_repls
+  subs_repls %>>% averager
 }
 
 mlr_graphs$add("bagging", pipeline_bagging)
@@ -150,25 +150,26 @@ mlr_graphs$add("bagging", pipeline_bagging)
 
 
 #' @title Branch Between Alternative Paths
-#'
+#' @name mlr_graphs_branching
 #' @description
 #' Create a multiplexed graph.
 #'
-#' @param graphs (`[list of Graph]`):\cr
+#' @param graphs `list` of [`Graph`] \cr
 #'   Multiple graphs, possibly named. They all must have exactly
 #'   one output. If any of the arguments are named, then all must have
 #'   unique names.
-#' @param prefix_branchops (`[character(1)]`):\cr
+#' @param prefix_branchops `character(1)` \cr
 #'   Optional id prefix to prepend to [`PipeOpBranch`] and [`PipeOpUnbranch`] id. Their
 #'   resulting IDs will be `"[prefix_branchops]branch"` and `"[prefix_branchops]unbranch"`.
 #'   Default is `""`.
-#' @param prefix_paths (`[logical(1) | character(1)]`):\cr
+#' @param prefix_paths `logical(1)` | `character(1)` \cr
 #'   Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 #'   avoid ID clashes in resulting graph. Default `FALSE`. If this is `TRUE`, the prefixes
 #'   are taken from the names of the input arguments if present or `"poX"` where X counts up. If this is
 #'   a `character(1)`, it is a prefix that is added to the `PipeOp` IDs *additionally*
 #'   to the input argument list.
 #'
+#' @return [`Graph`]
 #' @export
 #' @examples
 #' library("mlr3")
@@ -243,3 +244,104 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
 }
 
 mlr_graphs$add("branch", pipeline_branch)
+
+#' @title Transform and Re-Transform the Target Variable
+#' @name mlr_graphs_targettrafo
+#' @description
+#' Wraps a [`Graph`] that transforms a target during training and inverts the transformation
+#' during prediction. This is done as follows:
+#' * Specify a transformation and inversion function using any subclass of [`PipeOpTargetTrafo`], defaults to
+#'   [`PipeOpTargetTrafoSimple`], afterwards apply `graph`.
+#' * At the very end, during prediction the transformation is inverted using [`PipeOpTargetInverter`].
+#' * To set a transformation and inversion function for [`PipeOpTargetTrafoSimple`] see the
+#'   parameters `trafo` and `inverter` of the `param_set` of the resulting [`Graph`].
+#'
+#' @param graph [`PipeOpLearner`] | [`Graph`] \cr
+#'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for. If this is a [`Graph`],
+#'   the last [`PipeOp`] should be a [`PipeOpLearner`] and the first [`PipeOp`] should accept a
+#'   single [`Task`][mlr3::Task] as input.
+#' @param trafo_pipeop [`PipeOp`] \cr
+#'   A [`PipeOp`] that is a subclass of [`PipeOpTargetTrafo`]. Default is
+#'   [`PipeOpTargetTrafoSimple`].
+#' @param id_prefix `character(1)` \cr
+#'   Optional id prefix to prepend to [`PipeOpTargetInverter`] ID. The resulting ID will be
+#'   `"[id_prefix]targetinverter"`. Default is `""`.
+#'
+#' @return [`Graph`]
+#' @export
+#' @examples
+#' library("mlr3")
+#'
+#' tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
+#' tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
+#' tt$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+#'
+#' # gives the same as
+#' g = Graph$new()
+#' g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
+#'   trafo = function(x) log(x, base = 2),
+#'   inverter = function(x) 2 ^ x)
+#'   )
+#' )
+#' g$add_pipeop(LearnerRegrRpart$new())
+#' g$add_pipeop(PipeOpTargetInverter$new())
+#' g$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter",
+#'   src_channel = 1, dst_channel = 1)
+#' g$add_edge(src_id = "targettrafosimple", dst_id = "regr.rpart",
+#'   src_channel = 2, dst_channel = 1)
+#' g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
+#'   src_channel = 1, dst_channel = 2)
+pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetTrafoSimple$new(), id_prefix = "") {
+  graph = as_graph(graph)
+  assert_r6(graph$pipeops[length(graph$pipeops)][[1L]], classes = "PipeOpLearner")
+  if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
+    stopf("First PipeOp of graph should accept a single task as input.")
+  }
+  assert_r6(trafo_pipeop, classes = "PipeOpTargetTrafo")
+  assert_string(id_prefix)
+
+  ids = graph$ids(sorted = FALSE)
+  target_inverter_id = paste0(id_prefix, "targetinverter")
+
+  graph$add_pipeop(trafo_pipeop)
+  graph$add_pipeop(PipeOpTargetInverter$new(target_inverter_id))
+
+  graph$add_edge(src_id = trafo_pipeop$id, dst_id = target_inverter_id, src_channel = 1L, dst_channel = 1L)
+  graph$add_edge(src_id = trafo_pipeop$id, dst_id = ids[1L], src_channel = 2L, dst_channel = 1L)
+  graph$add_edge(src_id = ids[length(ids)], dst_id = target_inverter_id, src_channel = 1L, dst_channel = 2L)
+
+  graph
+}
+
+mlr_graphs$add("targettrafo", pipeline_targettrafo)
+
+#' @title Create Disjoint Graph Union of Copies of a Graph
+#'
+#' @description
+#' Create a new [`Graph`] containing `n` copies of the input [`Graph`] / [`PipeOp`]. To avoid ID
+#' collisions, PipeOp IDs are suffixed with `_i` where `i` ranges from 1 to `n`.
+#'
+#' @param graph [`Graph`] \cr
+#'   Graph to replicate.
+#' @param n `integer(1)`
+#'   Number of copies to create.
+#' @return [`Graph`] containing `n` copies of input `graph`.
+#' @family Graph operators
+#' @export
+#' @examples
+#' library("mlr3")
+#'
+#' po_pca = po("pca")
+#' pipeline_greplicate(po_pca, n = 2)
+pipeline_greplicate = function(graph, n) {
+  graph = as_graph(graph)
+  n = assert_count(n, positive = TRUE, coerce = TRUE)
+  x = map(seq_len(n), function(i) {
+    g = graph$clone(deep = TRUE)
+    g$update_ids(postfix = paste0("_", i))
+  })
+
+  gunion(x)
+}
+
+mlr_graphs$add("greplicate", pipeline_greplicate)

@@ -24,15 +24,6 @@ calculate_collimit = function(colwidths, outwidth) {
   collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
-# Get 'levels' of task columns as named list [feature name] -> [levels]
-# If a feature has no levels, the entry is NULL
-# @param task [Task] the task
-# @param cols [character] the columns to query
-# @return named [list]
-task_levels = function(task, cols) {
-  structure(task$col_info[cols, get("levels"), on = "id"], names = cols)
-}
-
 # same as task$filter(), but allows duplicate row IDs
 # @param task [Task] the task
 # @param row_ids [numeric] the row IDs to select
@@ -56,10 +47,24 @@ task_filter_ex = function(task, row_ids) {
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
 check_function_or_null = function(x) check_function(x, null.ok = TRUE)
 check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE, min.len = 1, lower = 0, upper = 1)
+curry = function(fn, ..., varname = "x") {
+  arguments = list(...)
+  function(x) {
+    arguments[[varname]] = x
+    do.call(fn, arguments)
+  }
+}
 
 # 'and' operator for checkmate check_*-functions
 # example:
 # check_numeric(x) %&&% check_true(all(x < 0))
 `%&&%` = function(lhs, rhs) {
   if (isTRUE(lhs)) rhs else lhs
+}
+
+# perform gsub on names of list
+# `...` are given to `gsub()`
+rename_list = function(x, ...) {
+  names(x) = gsub(x = names(x), ...)
+  x
 }

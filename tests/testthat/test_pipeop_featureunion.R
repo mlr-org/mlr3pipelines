@@ -100,7 +100,7 @@ test_that("Test wrong inputs", {
   # Differing rows
   pos = PipeOpSubsample$new()
   pos$param_set$values$frac = 0.5
-  g = greplicate(
+  g = pipeline_greplicate(
     pos %>>% PipeOpPCA$new(),
     2
   ) %>>% PipeOpFeatureUnion$new(c("a", "b"))
@@ -204,7 +204,7 @@ test_that("feature renaming", {
 test_that("featureunion - duplicates in feature names", {
   tsk = mlr_tasks$get("iris")
 
-  g = greplicate(PipeOpPCA$new(), 2) %>>% PipeOpFeatureUnion$new(2)
+  g = pipeline_greplicate(PipeOpPCA$new(), 2) %>>% PipeOpFeatureUnion$new(2)
 
   # this should work (just keeps each PC a single time)
   train_out_g = g$train(tsk)

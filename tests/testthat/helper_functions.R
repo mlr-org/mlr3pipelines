@@ -7,6 +7,9 @@ expect_deep_clone = function(one, two) {
   expect_references_differ = function(a, b, path) {
 
     force(path)
+    if (length(path) > 400) {
+      stop("Recursion too deep in expect_deep_clone()")
+    }
 
     # don't go in circles
     addr_a = data.table::address(a)
@@ -45,6 +48,9 @@ expect_deep_clone = function(one, two) {
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
       expect_null(visited_b[[addr_a]], label = label)
+    } else {
+      a <- unclass(a)
+      b <- unclass(b)
     }
 
     # recurse

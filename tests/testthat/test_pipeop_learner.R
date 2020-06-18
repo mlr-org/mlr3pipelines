@@ -18,8 +18,7 @@ test_that("PipeOpLearner - basic properties", {
   expect_error(PipeOpLearner$new())
 })
 
-
-test_that("PipeOLearner - param_set and values", {
+test_that("PipeOpLearner - param_set and values", {
   lrn = mlr_learners$get("classif.rpart")
   po = PipeOpLearner$new(lrn)
 
@@ -45,4 +44,10 @@ test_that("PipeOLearner - param_set and values", {
   expect_error({
     po$param_set$values = list(foo = "foo")
   })
+})
+
+test_that("PipeOpLearner - graph but no id", {
+  g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
+  po = PipeOpLearner$new(g)
+  expect_string(po$id)
 })
