@@ -31,7 +31,7 @@
 #'   Expressions for new features to create (or present features to change), in the form of `formula`.
 #'   Each element of the list is a `formula` with the name of the element naming the feature to create or
 #'   change, and the formula expression determining the result. This expression may reference
-#'    other features, as well as variables visible at the creation of the `formula` (see examples).
+#'   other features, as well as variables visible at the creation of the `formula` (see examples).
 #'   Initialized to `list()`.
 #' * `delete_originals` :: `logical(1)` \cr
 #'   Whether to delete original features. Even when this is `FALSE`,
