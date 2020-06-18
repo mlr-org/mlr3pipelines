@@ -64,7 +64,8 @@
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
 #' Besides that, parameters introduced are:
 #' * `resampling.method` :: `character(1)`\cr
-#'   Which resampling method do we want to use. Currently only supports `"cv"` and `"insample"`.
+#'   Which resampling method do we want to use. Currently only supports `"cv"` and `"insample"`. `"insample"` generates
+#'   predictions with the model trained on all training data.
 #' * `resampling.folds` :: `numeric(1)`\cr
 #'   Number of cross validation folds. Initialized to 3. Only used for `resampling.method = "cv"`.
 #' * `keep_response` :: `logical(1)`\cr
@@ -116,7 +117,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task_type = mlr_reflections$task_types[private$.learner$task_type]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = "cv", tags = c("train", "required")),
+        ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
         ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
         ParamLgl$new("keep_response", tags = c("train", "required"))
       ))
@@ -147,11 +148,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
-      rdesc = mlr_resamplings$get(pv[["method"]])
-      if (pv[["method"]] == "cv") rdesc$param_set$values = list(folds = pv[["folds"]])
-
-      res = resample(task, private$.learner, rdesc)
-      prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
+      if (pv$method != "insample") {
+        rdesc = mlr_resamplings$get(pv[["method"]])
+        if (pv[["method"]] == "cv") rdesc$param_set$values = list(folds = pv[["folds"]])
+        res = resample(task, private$.learner, rdesc)
+        prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
+      } else {
+        prds = as.data.table(private$.learner$predict(task))
+      }
 
       private$pred_to_task(prds, task)
     },
