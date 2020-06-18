@@ -16,7 +16,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImputeOor$new(id = "imputeoor", param_vals = list())
+#' PipeOpImputeOOR$new(id = "imputeoor", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -72,7 +72,7 @@
 #' @family Imputation PipeOps
 #' @include PipeOpImpute.R
 #' @export
-PipeOpImputeOor = R6Class("PipeOpImputeOor",
+PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputeoor", param_vals = list()) {
@@ -125,4 +125,4 @@ PipeOpImputeOor = R6Class("PipeOpImputeOor",
   )
 )
 
-mlr_pipeops$add("imputeoor", PipeOpImputeOor)
+mlr_pipeops$add("imputeoor", PipeOpImputeOOR)
