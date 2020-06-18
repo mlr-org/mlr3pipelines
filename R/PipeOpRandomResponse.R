@@ -5,9 +5,12 @@
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' During prediction generates random responses for the `predict_types` `"prob"`
-#' ([`PredictionClassif`][mlr3::PredictionClassif]) or `"se"`
-#' ([`PredictionRegr`][mlr3::PredictionRegr]). For `"prob"`, the responses are sampled according to
+#' Takes in a [`Prediction`][mlr3::Prediction] of `predict_type` `"prob"`
+#' (for [`PredictionClassif`][mlr3::PredictionClassif]) or `"se"`
+#' (for [`PredictionRegr`][mlr3::PredictionRegr]). and generates a randomized `"response"`
+#' prediction.
+#'
+#' For `"prob"`, the responses are sampled according to
 #' the probabilities of the input [`PredictionClassif`][mlr3::PredictionClassif]. For `"se"`,
 #' responses are randomly drawn according to the `rdistfun` parameter (default is `rnorm`) by using
 #' the original responses of the input [`PredictionRegr`][mlr3::PredictionRegr] as the mean and the
@@ -18,6 +21,7 @@
 #' ```
 #' PipeOpRandomResponse$new(id = "randomresponse", param_vals = list(), packages = character(0))
 #' ```
+#'
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"randomresponse"`.
 #' * `param_vals` :: named `list`\cr
@@ -40,8 +44,9 @@
 #' @section Parameters:
 #' * `rdistfun` :: `function` \cr
 #'   A function for generating random responses when the predict type is `"se"`. This function must
-#'   accept the arguments `n` (integerish number of responses), `mean` (`numeric(1)` for the mean),
-#'   and  `sd` (`numeric(1)` for the  standard deviation). Default is `rnorm`.
+#'   accept the arguments `n` (integerish number of responses), `mean` (`numeric` for the mean),
+#'   and `sd` (`numeric` for the  standard deviation), and must *vectorize* over `mean`
+#'   and `sd`. Default is `rnorm`.
 #'
 #' @section Internals:
 #' If the `predict_type` of the input [`Prediction`][mlr3::Prediction] does not match `"prob"` or
@@ -78,7 +83,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
   public = list(
     initialize = function(id = "randomresponse", param_vals = list(), packages = character(0L)) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("rdistfun", default = rnorm, tags = "predict", custom_check = function(x) {
+        ParamUty$new("rdistfun", default = rnorm, tags = c("predict", "required"), custom_check = function(x) {
           check_function(x, args = c("n", "mean", "sd"))
         })
         )
@@ -97,19 +102,17 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
     },
     .predict = function(inputs) {
       prediction = inputs[[1L]]
-      predict_type = c("prob", "se")[match(prediction$predict_types, table = c("prob", "se"), nomatch = 0L)]
-      if (length(predict_type) == 0L) {
+      predict_type = intersect(prediction$predict_types, c("prob", "se"))
+      if (!length(predict_type)) {
         return(list(prediction))  # early exit for predict_types that are neither "prob" nor "se"
       }
       response = switch(predict_type,
         "prob" = {
-          values = map(seq_len(NROW(prediction$data[[1L]])), .f = function(i) sample(levels(prediction$truth), size = 1L, prob = prediction$prob[i, ]))
-          factor(unlist(values), levels = levels(prediction$truth), ordered = is.ordered(prediction$truth))
-          },
-        "se" = {
-          values = map(seq_len(NROW(prediction$data[[1L]])), .f = function(i) self$param_set$values$rdistfun(n = 1L, mean = prediction$response[i], sd = prediction$se[i]))
-          unlist(values)
-        }
+          # apply does annoying things if prob has 0 rows
+          values = if (nrow(prediction$data$prob)) apply(prediction$data$prob, 1, function(row) sample(levels(prediction$truth), 1, prob = row))
+          factor(values, levels = levels(prediction$truth), ordered = is.ordered(prediction$truth))
+        },
+        "se" = prediction$data$tab[, self$param_set$values$rdistfun(n = get(".N"), mean = get("response"), sd = get("se"))]
       )
       type = prediction$task_type
       list(get(mlr_reflections$task_types[type]$prediction)$new(row_ids = prediction$row_ids,

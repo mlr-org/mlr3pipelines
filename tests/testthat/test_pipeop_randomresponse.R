@@ -1,7 +1,7 @@
 context("PipeOpRandomResponse")
 
 
-test_that("PipeOpRandomResponse - basic properties", {
+test_that("basic properties", {
   expect_pipeop_class(PipeOpRandomResponse)
   expect_error(PipeOpCopy$new(param_vals = list(rdistfun = function(n) {})))
 
@@ -12,7 +12,7 @@ test_that("PipeOpRandomResponse - basic properties", {
 })
 
 
-test_that("PipeOpRandomResponse - train and predict", {
+test_that("train and predict", {
   task1 = mlr_tasks$get("iris")
   task1$row_roles$use = c(1:10, 140:150)
   g1 = LearnerClassifRpart$new() %>>% PipeOpRandomResponse$new()
@@ -48,11 +48,13 @@ test_that("PipeOpRandomResponse - train and predict", {
   expect_numeric(predict_out2[[1L]]$se, len = 0L)
 
   g2$pipeops$randomresponse$param_set$values$rdistfun = function(n, mean, sd) {
+    expect_equal(length(mean), n)
+    expect_equal(length(sd), n)
     runif(n, min = 0, max = 1)
   }
   expect_numeric(g2$predict(task2)[[1L]]$response, lower = 0, upper = 1, any.missing = FALSE)
 
-  learner2 = LearnerRegrLM$new() 
+  learner2 = LearnerRegrLM$new()
   learner2$train(task2)
   g2x = LearnerRegrLM$new() %>>% PipeOpRandomResponse$new()
   g2x$train(task2)
