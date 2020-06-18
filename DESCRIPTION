@@ -117,7 +117,7 @@ Collate:
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
     'PipeOpImputeMode.R'
-    'PipeOpImputeNewlvl.R'
+    'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
