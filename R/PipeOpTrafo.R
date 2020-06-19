@@ -17,18 +17,20 @@
 #'   `train_target()`.
 #'
 #' * `train_target()` has a [`Task`][mlr3::Task] input and should return a modified
-#'   [`Task`][mlr3::Task]. This typically consists of calculating a new target and modifying the
-#'   task by using `private$.update_target()`. `train_target()` will be called during training and
-#'   prediction because the target (and if needed also type) of the input task must be transformed
-#'   both times.
+#'   [`Task`][mlr3::Task]. This typically consists of calculating a new target and modifying the task
+#'   by using `private$.update_target()`, which simply calls `convert_task()` and drops the original
+#'   target from the task. `train_target()` will be called during training and prediction because the
+#'   target (and if needed also type) of the input task must be transformed both times.
 #'
 #' * `train_invert()`has a [`Task`][mlr3::Task] input and should return a `predict_phase_control`
-#'   object (can be anything the user needs for the inversion later). This should not modify the input
+#'   object (can be anything needed for the inversion later). This should not modify the input
 #'   task.
 #'
-#' * `inverter()` has a [`Prediction`][mlr3::Prediction] input as well as one for a
-#'   `predict_phase_control` object and should return a function that can later be used to invert the
-#'   transformation done by `train_target()` and return a [`Prediction`][mlr3::Prediction] object.
+#' * `inverter()` takes a [`Prediction`][mlr3::Prediction] and a `predict_phase_control` object as
+#'   inputs. Here, the inverse target transformation should be applied and a
+#'   [`Prediction`][mlr3::Prediction] should be returned. Internally, `inverter()` will be wrapped to
+#'   the `"fun"` output so that [`PipeOpTargetInverter`] can later dispatch the inverse target
+#'   transformation on its `"prediction"` input.
 #'
 #' @section Construction:
 #' ```
@@ -68,7 +70,7 @@
 #' `private$.train()` and `private$.predict()` functions. These functions perform checks and go on
 #' to call `set_state()`, `train_target()`, `train_invert()` and `inverter()`. A subclass of
 #' [`PipeOpTargetTrafo`] should implement these functions and be used in combination with
-#' [`PipeOpTargetInverter`].
+#' [`PipeOpTargetInverter`] in a [`Graph`].
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
@@ -89,12 +91,12 @@
 #'   ([`Task`][mlr3::Task]) -> `predict_phase_control` object\cr
 #'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.predict()`. Takes a single
 #'   [`Task`][mlr3::Task] as input and returns a `predict_phase_control` object (can be anything the
-#'   user needs for the inversion later). This should not modify the input task.
+#'   needed for the inversion later). This should not modify the input task.
 #' * `inverter(prediction, predict_phase_control)`\cr
-#'   ([`Prediction`][mlr3::Prediction], `predict_phase_control` object) -> `function`\cr
+#'   ([`Prediction`][mlr3::Prediction], `predict_phase_control` object) -> [`Prediction`][mlr3::Prediction]\cr
 #'   Called by `private$.invert_help()` within [`PipeOpTargetTrafo`]'s implementation of
 #'   `private$.predict()`. Takes a [`Prediction`][mlr3::Prediction] and a `predict_phase_control`
-#'   object as input and returns a function that can later be used for the inversion.
+#'   object as input and returns a [`Prediction`][mlr3::Prediction].
 #' * `.update_target(task, new_target, new_type = NULL, ...)`\cr
 #'   ([`Task`][mlr3::Task], new_target, new_type, ...) -> [`Task`][mlr3::Task]\cr
 #'   Typically called within `train_target()`. Updates the target of a task and also the task_type
@@ -142,14 +144,14 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   ),
   private = list(
     .train = function(inputs) {
-      intask = inputs[[1]]$clone(deep = TRUE)
+      intask = inputs[[1L]]$clone(deep = TRUE)
       self$state = self$set_state(intask)
       intask = self$train_target(intask)
       list(NULL, intask)
     },
 
     .predict = function(inputs) {
-      intask = inputs[[1]]$clone(deep = TRUE)
+      intask = inputs[[1L]]$clone(deep = TRUE)
       intask = self$train_target(intask)
       predict_phase_control = self$train_invert(inputs[[1L]])
       list(
@@ -398,8 +400,7 @@ mlr_pipeops$add("targettrafosimple", PipeOpTargetTrafoSimple)
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange",
-#'   param_vals = list())
+#' PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -483,6 +484,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
     },
 
     inverter = function(prediction, predict_phase_control) {
+      assert_r6(prediction, classes = "PredictionRegr")
       type = prediction$task_type
       trafo = predict_phase_control
       truth = prediction$truth
@@ -514,7 +516,6 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' During prediction: Sets all target values to `NA` before calling the `trafo` again.
 #' In case target after the `trafo` is a factor, levels saved in the `state` are
 #' set during prediction.
-#'
 #'
 #' As a special case when `trafo` is `identity` and `new_target_name` matches an existing column
 #' name of the data of the input task, this column is set as the new target. Depending on

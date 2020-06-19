@@ -8,9 +8,12 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
-During prediction generates random responses for the \code{predict_types} \code{"prob"}
-(\code{\link[mlr3:PredictionClassif]{PredictionClassif}}) or \code{"se"}
-(\code{\link[mlr3:PredictionRegr]{PredictionRegr}}). For \code{"prob"}, the responses are sampled according to
+Takes in a \code{\link[mlr3:Prediction]{Prediction}} of \code{predict_type} \code{"prob"}
+(for \code{\link[mlr3:PredictionClassif]{PredictionClassif}}) or \code{"se"}
+(for \code{\link[mlr3:PredictionRegr]{PredictionRegr}}). and generates a randomized \code{"response"}
+prediction.
+
+For \code{"prob"}, the responses are sampled according to
 the probabilities of the input \code{\link[mlr3:PredictionClassif]{PredictionClassif}}. For \code{"se"},
 responses are randomly drawn according to the \code{rdistfun} parameter (default is \code{rnorm}) by using
 the original responses of the input \code{\link[mlr3:PredictionRegr]{PredictionRegr}} as the mean and the
@@ -51,8 +54,9 @@ The \verb{$state} is left empty (\code{list()}).
 \itemize{
 \item \code{rdistfun} :: \code{function} \cr
 A function for generating random responses when the predict type is \code{"se"}. This function must
-accept the arguments \code{n} (integerish number of responses), \code{mean} (\code{numeric(1)} for the mean),
-and  \code{sd} (\code{numeric(1)} for the  standard deviation). Default is \code{rnorm}.
+accept the arguments \code{n} (integerish number of responses), \code{mean} (\code{numeric} for the mean),
+and \code{sd} (\code{numeric} for the  standard deviation), and must \emph{vectorize} over \code{mean}
+and \code{sd}. Default is \code{rnorm}.
 }
 }
 
@@ -116,11 +120,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -132,6 +137,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
