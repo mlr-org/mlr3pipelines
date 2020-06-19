@@ -58,7 +58,7 @@ curry = function(fn, ..., varname = "x") {
 # 'and' operator for checkmate check_*-functions
 # example:
 # check_numeric(x) %&&% check_true(all(x < 0))
-`%&&%` = function(lhs, rhs) {
+`%check&&%` = function(lhs, rhs) {
   if (isTRUE(lhs)) rhs else lhs
 }
 

@@ -8,8 +8,7 @@ Dataflow Programming for Machine Learning in R.
 
 <!-- badges: start -->
 
-[![R CMD Check via
-{tic}](https://github.com/mlr-org/mlr3pipelines/workflows/R%20CMD%20Check%20via%20%7Btic%7D/badge.svg?branch=master)](https://github.com/mlr-org/mlr3pipelines/actions)
+[![tic](https://github.com/mlr-org/mlr3pipelines/workflows/tic/badge.svg?branch=master)](https://github.com/mlr-org/mlr3pipelines/actions)
 [![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
 [![Coverage](https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg)](https://codecov.io/github/mlr-org/mlr3pipelines)
 [![StackOverflow](https://img.shields.io/badge/stackoverflow-mlr3-orange.svg)](https://stackoverflow.com/questions/tagged/mlr3)
@@ -83,17 +82,16 @@ are:
 
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
-  - [Cheat Sheet for mlr3pipelines](https://cheatsheets.mlr-org.com/mlr3pipelines.pdf) for a 1-page overview.
-  - [Examples Gallery](https://mlr3gallery.mlr-org.com/) for a variety of code examples
+
   - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
   - [Detailed
-    Introduction](https://mlr3book.mlr-org.com/in-depth-pipelines.html),
+    Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html),
     diving into concepts and describing the objects involved
   - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
-    of `mlr3pipelines` with other packages
+    of `mlr3pipelines` with other packages (not yet authoritative)
   - [Writing Custom
-    `PipeOp`s](https://mlr3book.mlr-org.com/extending-pipeops.html)
+    `PipeOp`s](https://mlr3book.mlr-org.com/extending-mlr3pipelines.html)
     to extend and build on top of `mlr3pipelines`
 
 ## Bugs, Questions, Feedback

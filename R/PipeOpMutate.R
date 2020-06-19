@@ -42,6 +42,10 @@
 #' the `formula` is created. This makes it possible to use variables in the `~`-expressions that both
 #' reference either column names or variable names.
 #'
+#' Note that the `formula`s in `mutation` are evaluated sequentially. This allows for using
+#' variables that were constructed during evaluation of a previous formula. However, if existing
+#' features are changed, precedence is given to the original ones before the newly constructed ones.
+#'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
@@ -54,10 +58,13 @@
 #' @examples
 #' library("mlr3")
 #'
+#' constant = 1
 #' pom = po("mutate")
 #' pom$param_set$values$mutation = list(
+#'   Sepal.Length_plus_constant = ~ Sepal.Length + constant,
 #'   Sepal.Area = ~ Sepal.Width * Sepal.Length,
-#'   Petal.Area = ~ Petal.Width * Petal.Length
+#'   Petal.Area = ~ Petal.Width * Petal.Length,
+#'   Sepal.Area_plus_Petal.Area = ~ Sepal.Area + Petal.Area
 #' )
 #'
 #' pom$train(list(tsk("iris")))[[1]]$data()
@@ -77,16 +84,27 @@ PipeOpMutate = R6Class("PipeOpMutate",
 
     .transform = function(task) {
       taskdata = task$data(cols = task$feature_names)
-      newdata = as.data.table(lapply(self$param_set$values$mutation, function(frm) {
-        eval(frm[[2]], envir = taskdata, enclos = environment(frm))
-      }))
+
+      # make a copy of the original data
+      oldtask = copy(taskdata)
+
+      # sequentially evaluate the formulas
+      # this allows us to use variables constructed earlier in the loop,
+      # however, we give precedence to the original variables before new changed variables
+      nms = names(self$param_set$values$mutation)
+      for (i in seq_along(nms)) {
+        frm = self$param_set$values$mutation[[i]]
+        set(taskdata, j = nms[i], value = eval(frm[[2L]], envir = insert_named(as.list(taskdata), oldtask), enclos = environment(frm)))
+      }
+      newdata = taskdata[, nms, which = FALSE]
+
       keep_feats = character(0)
       if (!self$param_set$values$delete_originals) {
         keep_feats = setdiff(task$feature_names, colnames(newdata))
       }
       task = task$select(keep_feats)
       if (nrow(newdata) == 1) {
-        # if the user gave us something like "one = ~1" to introduce a constant column, we will only
+        # if the user gave us something like "one = ~ 1" to introduce a constant column, we will only
         # have a single row here and need to copy that.
         newdata = newdata[rep(1, task$nrow)]
       }
@@ -105,8 +123,8 @@ PipeOpMutate = R6Class("PipeOpMutate",
 # * a named list of `formula`
 # * that each element has only a lhs
 check_mutation_formulae = function(x) {
-  check_list(x, types = "formula", names = "unique") %&&%
-    Reduce(`%&&%`, lapply(x, function(xel) {
+  check_list(x, types = "formula", names = "unique") %check&&%
+    Reduce(`%check&&%`, lapply(x, function(xel) {
       if (length(xel) != 2) {
         return(sprintf("formula %s must not have a left hand side.",
           deparse(xel, nlines = 1, width.cutoff = 500)))

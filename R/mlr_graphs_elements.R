@@ -59,9 +59,9 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
   if (has_type_feats("character") && "character" %nin% learner$feature_types)
     pos = c(pos, po("colapply", id = "char_to_fct", param_vals = list(affect_columns = selector_type("character"), applicator = function(x) as.factor(x))))
 
-  # FIXME: Uncomment once #308 is merged
-  # if (has_type_feats("POSIXct") && "POSIXct" %nin% learner$feature_types))
-  #   pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
+  # Date processing
+   if (has_type_feats("POSIXct") && ("POSIXct" %nin% learner$feature_types))
+     pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
 
   if (impute_missings) {
     # Impute numerics
@@ -142,7 +142,7 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   subs = po("subsample", param_vals = list(frac = frac)) %>>% graph
   subs_repls = pipeline_greplicate(subs, iterations)
 
-  if (!is.null(averager)) subs_repls %>>% averager else subs_repls
+  subs_repls %>>% averager
 }
 
 mlr_graphs$add("bagging", pipeline_bagging)
