@@ -70,7 +70,7 @@ Note that at least one of \code{filter.nfeat}, \code{filter.frac}, or \code{filt
 
 \section{Internals}{
 
-This does \emph{not} use the \verb{$select_cols} feature of \code{\link{PipeOpTaskPreproc}} to select only features compatible with the \code{\link[mlr3filters:Filter]{Filter}};
+This does \emph{not} use the \verb{$.select_cols} feature of \code{\link{PipeOpTaskPreproc}} to select only features compatible with the \code{\link[mlr3filters:Filter]{Filter}};
 instead the whole \code{\link[mlr3:Task]{Task}} is used by \code{private$.get_state()} and subset internally.
 }
 

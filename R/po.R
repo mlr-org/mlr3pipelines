@@ -5,6 +5,7 @@
 #'  - a `PipeOp` from `mlr_pipeops` from given ID
 #'  - a `PipeOpLearner` from a `Learner` object
 #'  - a `PipeOpFilter` from a `Filter` object
+#'  - a `PipeOpSelect` from a `Selector` object
 #'
 #' The object is initialized with given parameters and `param_vals`.
 #'
@@ -54,4 +55,9 @@ po.Learner = function(.obj, ...) {
 po.Filter = function(.obj, ...) {
   # we use po() because that makes it possible to set hyperpars via `...`
   po(.obj = "filter", filter = .obj, ...)
+}
+
+#' @export
+po.Selector = function(.obj, ...) {
+  po(.obj = "select", selector = .obj, ...)
 }

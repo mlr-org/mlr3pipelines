@@ -59,7 +59,7 @@ PipeOpImputeMean = R6Class("PipeOpImputeMean",
     }
   ),
   private = list(
-    .select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
+    .select_cols = function(task) selector_type(c("numeric", "integer"))(task),
 
     .train_imputer = function(feature, type, context) {
       men = mean(feature, na.rm = TRUE)

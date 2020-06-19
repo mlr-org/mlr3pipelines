@@ -109,7 +109,8 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         stop("Invalid value of 'type' parameter"))
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
       task$select(character(0))$cbind(data_dummy)
-    }
+    },
+    .select_cols = function(task) {selector_invert(selector_type(c("factor", "ordered", "character")))(task)}
   )
 )
 
