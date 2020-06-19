@@ -27,18 +27,20 @@ testthat::test_package("mlr3pipelines", filter = "proxy")
 
 testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 
+testthat::test_package("mlr3pipelines", filter = "randomresponse")
 
 
 
-testthat::test_package("mlr3pipelines", filter = "encode")
+
+testthat::test_package("mlr3pipelines", filter = "scale")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
 testthat::test_package("mlr3pipelines", filter = "conversion")
 
-devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "pipeop_impute")
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "impute")
 
 
-testthat::test_package("mlr3pipelines", filter = "apply")
+testthat::test_package("mlr3pipelines", filter = "renamecolumns")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")

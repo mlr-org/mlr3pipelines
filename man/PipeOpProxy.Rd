@@ -72,23 +72,29 @@ Only methods inherited from \code{\link{PipeOp}}.
 
 \examples{
 library("mlr3")
+library("mlr3learners")
 
-task1 = tsk("iris")
-task2 = task1$clone(deep = TRUE)
+set.seed(1234)
+task = tsk("iris")
 
-pop = po("pca", param_vals = list(scale. = TRUE))
-pop$train(list(task1))
-pop$state
+# use a proxy for preprocessing and a proxy for learning, i.e.,
+# no preprocessing and classif.kknn
+g = po("proxy", id = "preproc", param_vals = list(content = po("nop"))) \%>>\%
+  po("proxy", id = "learner", param_vals = list(content = lrn("classif.kknn")))
+rr_kknn = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+rr_kknn$aggregate(msr("classif.ce"))
 
-proxy = po("proxy", innum = 1, outnum = 1,
-  param_vals = list(content = po("pca", param_vals = list(scale. = TRUE))))
-proxy$train(list(task2))
-proxy$state$state
+# use pca for preprocessing and classif.rpart as the learner
+g$param_set$values$preproc.content = po("pca")
+g$param_set$values$learner.content = lrn("classif.rpart")
+rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
+rr_pca_rpart$aggregate(msr("classif.ce"))
 }
 \seealso{
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -109,11 +115,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -123,8 +130,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -132,9 +141,13 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
+\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }
