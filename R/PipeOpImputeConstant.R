@@ -5,8 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute features by a constant value. To select specific features use the `affect_columns`
-#' parameter inherited from [`PipeOpImpute`].
+#' Impute features by a constant value.
 #'
 #' @section Construction:
 #' ```
@@ -35,15 +34,15 @@
 #' * `constant` :: `atomic(1)`\cr
 #'   The constant value that should be used for the imputation, atomic vector of length 1. The
 #'   atomic mode must match the type of the features that will be selected by the `affect_columns`
-#'   parameter and this will be checked during imputation. Default is `".MISSING"`.
+#'   parameter and this will be checked during imputation. Initialized to `".MISSING"`.
 #' * `check_levels` :: `logical(1)`\cr
 #'   Should be checked whether the `constant` value is a valid level of factorial features (i.e., it
 #'   already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
-#'   features (i.e., `factor`, `ordered`; skipped for `character`). Default is `TRUE`.
+#'   features (i.e., `factor`, `ordered`; skipped for `character`). Initialized to `TRUE`.
 #'
 #' @section Internals:
-#' Adds an explicit new level to `factor` and `ordered` features, but not to `character` features if
-#' `check_levels` is `FALSE`.
+#' Adds an explicit new level to `factor` and `ordered` features, but not to `character` features,
+#' if `check_levels` is `FALSE` and the level is not already present.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -71,7 +70,7 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
     initialize = function(id = "imputeconstant", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamUty$new("constant", tags = c("train", "predict", "required"), custom_check = check_scalar),
-        ParamLgl$new("check_levels", default = TRUE, tags = c("train", "predict", "required"))
+        ParamLgl$new("check_levels", tags = c("train", "predict", "required"))
       ))
       ps$values = list(constant = ".MISSING", check_levels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals)
@@ -117,8 +116,4 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
 
 mlr_pipeops$add("imputeconstant", PipeOpImputeConstant)
 
-check_string_or_factor = function(x) {
-  if (test_string(x) || test_factor(x, len = 1L)) TRUE else sprintf("Must be of type 'string' or 'factor'")
-}
-
-assert_string_or_factor = makeAssertionFunction(check_string_or_factor)
+assert_string_or_factor = function(x) assert(check_string(x), check_factor(x, len = 1, any.missing = FALSE))
