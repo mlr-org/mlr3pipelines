@@ -234,11 +234,11 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
     .train_nullmodel = function(feature, type, context) {
       switch(type,
-        factor = levels(data[[colname]]),
+        factor = levels(feature),
         integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
         logical = c(TRUE, FALSE),
         numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
-        ordered = levels(data[[colname]]),
+        ordered = levels(feature),
         character = ""
       )
     },
