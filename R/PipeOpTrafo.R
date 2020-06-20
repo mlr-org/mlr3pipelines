@@ -317,10 +317,10 @@ mlr_pipeops$add("targetinverter", PipeOpTargetInverter)
 #'   src_channel = 2, dst_channel = 1)
 #' g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
 #'   src_channel = 1, dst_channel = 2)
-#' 
+#'
 #' g$train(task)
 #' g$predict(task)
-#' 
+#'
 #' #syntactic sugar using ppl():
 #' tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
@@ -339,6 +339,7 @@ PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
         ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type))
         )
       )
+      # FIXME: add condition for new_target_name and new_task_type on trafo and inverter when mlr-org/paradox#278 has an answer
       ps$values = list(trafo = identity, inverter = identity)
       super$initialize(id = id, param_set = ps, param_vals = param_vals)
     },
@@ -367,7 +368,7 @@ PipeOpTargetTrafoSimple = R6Class("PipeOpTargetTrafoSimple",
     inverter = function(prediction, predict_phase_control) {
       # FIXME: probably should only work for predict_type = "response" and needs a check here?
       #assert_string(prediction$predict_types, pattern = "response")
-      # handle predict_phase_control = identity separetely
+      # handle predict_phase_control = identity separately
       if (identical(predict_phase_control, identity)) {
         return(prediction)  # early exit
       }
@@ -416,7 +417,7 @@ mlr_pipeops$add("targettrafosimple", PipeOpTargetTrafoSimple)
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTargetTrafo`], as well as:
-#' * `lower`  :: `numeric(1)` \cr
+#' * `lower` :: `numeric(1)` \cr
 #'   Target value of smallest item of input target. Default is 0.
 #' * `upper` :: `numeric(1)` \cr
 #'   Target value of greatest item of input target. Default is 1.
@@ -432,10 +433,10 @@ mlr_pipeops$add("targettrafosimple", PipeOpTargetTrafoSimple)
 #' library(mlr3)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetTrafoScaleRange$new()
-#' 
+#'
 #' po$train(list(task))
 #' po$predict(list(task))
-#' 
+#'
 #' #syntactic sugar for a graph using ppl():
 #' ttscalerange = ppl("targettrafo", trafo_pipeop = PipeOpTargetTrafoScaleRange$new(),
 #'   graph = PipeOpLearner$new(LearnerRegrRpart$new()))
@@ -459,7 +460,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
 
     set_state = function(task) {
       assert_r6(task, classes = "TaskRegr")
-      target_name = task$target_names 
+      target_name = task$target_names
       x = task$data(cols = task$target_names)[[1L]]
       rng = range(x, na.rm = TRUE, finite = TRUE)
       b = (self$param_set$values$upper - self$param_set$values$lower) / (rng[2L] - rng[1L])
@@ -497,6 +498,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
 mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 
 
+
 #' @title PipeOpUpdateTarget
 #' @usage NULL
 #' @name mlr_pipeops_updatetarget
@@ -507,12 +509,16 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' In case the new target is required during predict, creates a vector of `NA`.
 #' Works similar to [`PipeOpTargetTrafo`] and [`PipeOpTargetTrafoSimple`], but forgoes the
 #' inversion step.
-#' In case target after the `trafo` is a factor, levels are saved to `$state`.\cr 
-#' 
+#' In case target after the `trafo` is a factor, levels are saved to `$state`.\cr
+#'
 #' During prediction: Sets all target values to `NA` before calling the `trafo` again.
 #' In case target after the `trafo` is a factor, levels saved in the `state` are
 #' set during prediction.
-#' 
+#'
+#'
+#' As a special case when `trafo` is `identity` and `new_target_name` matches an existing column
+#' name of the data of the input task, this column is set as the new target. Depending on
+#' `drop_original_target` the original target is then either dropped or added to the features.
 #'
 #' @section Construction:
 #' ```
@@ -533,33 +539,31 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #'   Transformation function for the target. Should only be a function of the target, i.e., taking a
 #'   single argument. Default is `identity`.
 #'   Note, that the data passed on to the target is a `data.table` consisting of all target column.
-#' * `new_target_name` :: `character`\cr
+#' * `new_target_name` :: `character(1)`\cr
 #'   Optionally give the transformed target a new name. By default the original name is used.
 #' * `new_task_type` :: `character(1)`\cr
 #'   Optionally a new task type can be set. Legal types are listed in
 #'   `mlr_reflections$task_types$type`.
-#' #' `drop_old_target` :: `logical(1)`\cr
+#' #' `drop_original_target` :: `logical(1)`\cr
 #'   Whether to drop the original target column. Default: `TRUE`.
-#'   If `drop_old_target`
-#' 
+#'
 #' @section State:
-#' The `$state` is a list of class levels for each target after trafo. 
-#' `list(0)` if none of the targets have levels.
-#' 
+#' The `$state` is a list of class levels for each target after trafo.
+#' `list()` if none of the targets have levels.
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
-#' 
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @include PipeOp.R
 #' @examples
-#'   # Create a binary class task from iris
-#'   library(mlr3)
-#'   trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
-#'   po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
-#'   po$train(list(tsk("iris")))
-#'   po$predict(list(tsk("iris")))
+#' # Create a binary class task from iris
+#' library(mlr3)
+#' trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
+#' po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
+#' po$train(list(tsk("iris")))
+#' po$predict(list(tsk("iris")))
 #' @export
 PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   inherit = PipeOp,
@@ -569,12 +573,12 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         ParamUty$new("trafo", default = identity, tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
         ParamUty$new("new_target_name", tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
         ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
-        ParamLgl$new("drop_original_target", default = TRUE, tags = c("train", "predict"))   
+        ParamLgl$new("drop_original_target", default = TRUE, tags = c("train", "predict"))
         )
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
-        input =  data.table(name = "input",  train = "Task", predict = "Task"),
+        input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "Task", predict = "Task")
       )
     }
@@ -583,29 +587,37 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       pv = self$param_set$values
+      if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
+        self$state = list()
+        return(list(private$.update_target(intask, drop_levels = TRUE)))  # early exit
+      }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         # Apply fun to target, rename, cbind and convert task if required
         new_target = data.table(pv$trafo(intask$data(cols = intask$target_names)))
-        if (!is.null(pv$new_target_name))
+        if (!is.null(pv$new_target_name)) {
           setnames(new_target, colnames(new_target), pv$new_target_name)
+        }
         self$state = keep(map(new_target, levels), Negate(is.null))
         intask$cbind(new_target)
       } else {
         self$state = list()
       }
-      list(private$.update_target(intask))
+      list(private$.update_target(intask, drop_levels = TRUE))
     },
 
     .predict = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
       pv = self$param_set$values
+      if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
+        return(list(private$.update_target(intask, drop_levels = FALSE)))  # early exit
+      }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         new_target = intask$data(cols = intask$target_names)
         if (!pv$drop_original_target)
-          # During predict, if old target is not dropped, set the new target to NA and then call the trafo
+          # During predict, if original target is not dropped, set the new target to NA and then call the trafo
           new_target = set(new_target, j = intask$target_names, value = NA)
         new_target = data.table(pv$trafo(new_target))
-        # rename, cbind and convert
+        # Rename, cbind and convert
         setnames(new_target, colnames(new_target), self$param_set$values$new_target_name)
         # Make sure levels match target levels
         if (length(self$state))
@@ -616,14 +628,14 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         })
         intask$cbind(new_target)
       }
-      list(private$.update_target(intask))
-    },    
+      list(private$.update_target(intask, drop_levels = FALSE))
+    },
 
-    # updates the target of a task and also the task_type (if needed), uses convert_task
-    .update_target = function(task) {
+    # Updates the target of a task and also the task_type (if needed), uses convert_task
+    .update_target = function(task, drop_levels) {
       pv = self$param_set$values
       convert_task(task, new_target = pv$new_target_name,
-        new_type = pv$new_task_type, drop_original_target = pv$drop_original_target)
+        new_type = pv$new_task_type, drop_original_target = pv$drop_original_target, drop_levels = drop_levels)
     }
   )
 )

@@ -90,12 +90,13 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
@@ -104,8 +105,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -125,12 +128,13 @@ Other PipeOps:
 
 Other Imputation PipeOps: 
 \code{\link{PipeOpImpute}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}}
+\code{\link{mlr_pipeops_imputeoor}}
 }
 \concept{Imputation PipeOps}
 \concept{PipeOps}

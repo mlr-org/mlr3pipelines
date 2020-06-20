@@ -204,6 +204,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$affected_cols = affected_cols
       self$state$intasklayout = intasklayout
       self$state$outtasklayout = copy(intask$feature_types)
+      self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
 
       if (do_subset) {
         # FIXME: this fails if .train_task added a column with the same name
@@ -224,7 +225,16 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       if (!isTRUE(all.equal(self$state$intasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
-      intask = private$.predict_task(intask)
+      if (!intask$nrow) {
+        # don't put the burdon of having to deal with 0-row tasks on the individual PipeOps.
+        # Instead we do this here: add the correct columns (which are all empty)
+        targetlayout = self$state$outtasklayout
+        intask$
+          select(fintersect(intask$feature_types, targetlayout)$id)$
+          cbind(self$state$outtaskshell[, fsetdiff(targetlayout, intask$feature_types)$id, with = FALSE])
+      } else {
+        intask = private$.predict_task(intask)
+      }
 
       if (!isTRUE(all.equal(self$state$outtasklayout, intask$feature_types, ignore.row.order = TRUE))) {
         stopf("Processed output task during prediction of %s does not match output task during training.", self$id)
@@ -244,7 +254,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       }
       dt = task$data(cols = cols)
       target = task$truth()
-      dt = as.data.table(private$.train_dt(dt, task_levels(task, cols), target))
+      dt = as.data.table(private$.train_dt(dt, task$levels(cols), target))
       self$state$dt_columns = dt_columns
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
@@ -255,7 +265,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
-      dt = as.data.table(private$.predict_dt(dt, task_levels(task, cols)))
+      dt = as.data.table(private$.predict_dt(dt, task$levels(cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 
@@ -263,9 +273,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     .predict_dt = function(dt, levels) stop("Abstract."),
 
-    .select_cols = function(task) {
-      task$feature_types[get("type") %in% self$feature_types, get("id")]
-    }
+    .select_cols = function(task) selector_type(self$feature_types)(task)
 
   )
 )
@@ -401,7 +409,7 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
       }
       dt = task$data(cols = cols)
       target = task$truth()
-      c(private$.get_state_dt(dt, task_levels(task, cols), target), list(dt_columns = dt_columns))
+      c(private$.get_state_dt(dt, task$levels(cols), target), list(dt_columns = dt_columns))
     },
 
     .transform = function(task) {
@@ -410,7 +418,7 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
         return(task)
       }
       dt = task$data(cols = cols)
-      dt = as.data.table(private$.transform_dt(dt, task_levels(task, cols)))
+      dt = as.data.table(private$.transform_dt(dt, task$levels(cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
 

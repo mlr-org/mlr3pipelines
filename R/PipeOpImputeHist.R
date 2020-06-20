@@ -60,7 +60,7 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   ),
   private = list(
 
-    .select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
+    .select_cols = function(task) selector_type(c("numeric", "integer"))(task),
 
     .train_imputer = function(feature, type, context) {
       graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]

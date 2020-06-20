@@ -70,7 +70,7 @@ Note that at least one of \code{filter.nfeat}, \code{filter.frac}, or \code{filt
 
 \section{Internals}{
 
-This does \emph{not} use the \verb{$select_cols} feature of \code{\link{PipeOpTaskPreproc}} to select only features compatible with the \code{\link[mlr3filters:Filter]{Filter}};
+This does \emph{not} use the \verb{$.select_cols} feature of \code{\link{PipeOpTaskPreproc}} to select only features compatible with the \code{\link[mlr3filters:Filter]{Filter}};
 instead the whole \code{\link[mlr3:Task]{Task}} is used by \code{private$.get_state()} and subset internally.
 }
 
@@ -142,12 +142,13 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -157,8 +158,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
