@@ -5,22 +5,22 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
-#' Impute features by fitting a [`Learner`][mlr3::Learner] for each feature. 
-#' Uses the `context_columns` as features to train the imputation [`Learner`][mlr3::Learner]. 
-#' The [`Learner`][mlr3::Learner] needs to  be able to handle missing values, i.e. have property 
-#' 'missings'.
-#' Additionally, only features supported by the learner can be imputed; i.e. learners of type 
-#' 'regr' can only impute features of type 'integer' and 'numeric', while 'classif' can impute
-#' features of type 'character', 'factor', 'ordered' and 'logical'. 
-#' 
+#' Impute features by fitting a [`Learner`][mlr3::Learner] for each feature.
+#' Uses the features indicated by the `context_columns` parameter as features to train the imputation [`Learner`][mlr3::Learner].
+#' Note this parameter is part of the [`PipeOpImpute`] base class and explained there.
+#'
+#' Additionally, only features supported by the learner can be imputed; i.e. learners of type
+#' `regr` can only impute features of type `integer` and `numeric`, while `classif` can impute
+#' features of type `factor`, `ordered` and `logical`.
+#'
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImputeLearner$new(id = "imputelearner", learner,  param_vals = list())
+#' PipeOpImputeLearner$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"imputelearner"`.
+#'   Identifier of resulting object, default `"impute."`, followed by the `id` of the `Learner`.
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #'   The [`Learner`][mlr3::Learner] needs to be able to handle missing values, i.e. have the `missings` property.
@@ -30,19 +30,25 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by first training the provided learner and then predicting the expected value.
+#' The output is the input [`Task`][mlr3::Task] with missing values from all affected features imputed by the trained model.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
 #'
 #' The `$state$models` is a named `list` of `models` created by the [`Learner`][mlr3::Learner]'s `$.train()` function
-#' for each column.
+#' for each column. If a column consists of missing values only during training, the `model` is `0` or the levels of the
+#' feature; these are used for sampling during prediction.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpImpute`].
+#' The parameters are the parameters inherited from [`PipeOpImpute`], in addition to the parameters of the [`Learner`][mlr3::Learner]
+#' used for imputation.
 #'
 #' @section Internals:
-#' Uses the `$train` and `$predict` functions of the provided learner. Features that are entirely `NA` are imputed as `0`.
+#' Uses the `$train` and `$predict` functions of the provided learner. Features that are entirely `NA` are imputed as `0`
+#' or randomly sampled from available (`factor` / `logical`) levels.
+#'
+#' The [`Learner`][mlr3::Learner] does *not* necessarily need to handle missing values in cases
+#' where `context_columns` is chosen well (or there is only one column with missing values present).
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -65,10 +71,19 @@
 PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   inherit = PipeOpImpute,
   public = list(
-    initialize = function(id = "imputelearner", learner, param_vals = list(context_columns = selector_all())) {
-      assert_subset("missings", learner$properties)
+    initialize = function(learner, id = "imputelearner", param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      super$initialize(id, param_vals = param_vals, whole_task_dependent = TRUE)
+      private$.learner$param_set$set_id = ""
+      id = id %??% private$.learner$id
+      feature_types = switch(private$.learner$task_type,
+        regr = c("integer", "numeric"),
+        classif = c("logical", "factor", "ordered"),
+        stop("Only `classif` or `regr` Learners are currently supported by PipeOpImputeLearner.")
+        # FIXME: at least ordinal should also be possible. When Moore's law catches up with us we could even do `character`
+        # with generative text models, but by the time R/mlr3 can do that it is probably post-singularity.
+      )
+      super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
+        whole_task_dependent = TRUE, feature_types = feature_types)
     }
   ),
   active = list(
@@ -91,35 +106,30 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   private = list(
     .learner = NULL,
 
-    .select_cols = function(task) {
-      # Choose columns to impute based on the supplied learner
-      if (private$.learner$task_type == "regr") {
-        task$feature_types[get("type") %in% c("numeric", "integer"), get("id")]
-      } else {
-        task$feature_types[get("type") %in% c("logical", "character", "factor", "ordered"), get("id")]
-      }
-    },
-
     .train_imputer = function(feature, type, context) {
+      on.exit({private$.learner$state = NULL})
       task = private$.create_imputation_task(feature, context)
       private$.learner$train(task, row_ids = which(!is.na(feature)))$state
     },
 
     .impute = function(feature, type, model, context) {
+      if (is.atomic(model)) {  # handle nullmodel, making use of the fact that `Learner$state` is always a list
+        return(super$.impute(feature, type, model, context))
+      }
       on.exit({private$.learner$state = NULL})
-      if (is.null(model$model)) {
-        imp_vals = model[[1]]
-        if (is.factor(feature))
-          levels(feature) = levels(imp_vals)
-      } else {
-        private$.learner$state = model
 
-        # Use the trained learner to perform the imputation
-        task = private$.create_imputation_task(feature, context)
-        pred = private$.learner$predict(task)
+      private$.learner$state = model
 
-        # Replace the missing values with imputed values of the correct format
-        imp_vals = private$.convert_to_type(pred$response[is.na(feature)], type)
+      # Use the trained learner to perform the imputation
+      task = private$.create_imputation_task(feature, context)
+      pred = private$.learner$predict(task, which(is.na(feature)))
+
+      # Replace the missing values with imputed values of the correct format
+      imp_vals = private$.convert_to_type(pred$response, type)
+
+      if (type %in% c("factor", "ordered")) {
+        # in some edge cases there may be levels during training that are missing during predict.
+        levels(feature) = c(levels(feature), as.character(type))
       }
 
       feature[is.na(feature)] = imp_vals
@@ -128,41 +138,33 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
 
     .create_imputation_task = function(feature, context) {
       # Create a task that can be used by the learner based on imputation context
-      if (is.null(context) || nrow(context) == 0) context = data.table()
-      context = cbind(context, 'impute_col' = private$.convert_to_predictable(feature))
-      convert_to_task(data = context, target = "impute_col", task_type = private$.learner$task_type)
+      context = cbind(context, ".impute_col" = private$.convert_to_predictable(feature))
+      convert_to_task(data = context, target = ".impute_col", task_type = private$.learner$task_type)
     },
+
     .convert_to_predictable = function(feature) {
       # Convert non-factor imputation targets to a factor
-      if (is.numeric(feature))
+      if (is.numeric(feature)) {
         feature
-      else
+      } else {
         factor(feature, ordered = FALSE)
+      }
     },
+
     .convert_to_type = function(feature, type) {
       # Convert an imputed feature to its original type
       if(type == "integer"){
         feature = round(feature)
       }
       if (type == "logical") feature = as.logical(feature) # FIXME mlr-org/mlr3#475
-      mlr3:::auto_convert(feature, NULL, type, levels = levels(feature))
-    },
-    .impute_all_na = function(data, task, colname, type) {
-      list(switch(type,
-        "integer" = 0L,
-        "numeric" = 0,
-        "character" = ".MISSING",
-        "factor" = factor(".MISSING", levels = c(task$levels()[[colname]], ".MISSING")), 
-        "ordered" = factor(".MISSING", levels = c(task$levels()[[colname]], ".MISSING"), ordered = TRUE),
-        "logical" = FALSE,
-        0)) 
+      auto_convert(feature, "feature to be imputed", type, levels = levels(feature))
     }
   )
 )
 
-mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(learner = lrn("regr.featureless")))
+mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()))$new()))
 
 # See mlr-org/mlr#470
-convert_to_task = function(id = "impute", data, target, task_type, ...) {
+convert_to_task = function(id = "imputing", data, target, task_type, ...) {
   get(mlr_reflections$task_types[task_type, ]$task)$new(id = id, backend = data, target = target, ...)
 }
