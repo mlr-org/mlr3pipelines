@@ -82,30 +82,21 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
         ParamDbl$new("multiplier", lower = 0, default = 1, tags = c("train", "predict")))
       )
       ps$values = list(min = TRUE, offset = 1, multiplier = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
+      # this is one of the few imputers that handles 'character' features!
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("character", "factor", "integer", "numeric", "ordered"))
     }
   ),
   private = list(
-
-    # this is one of the few imputers that handles 'character' features!
-    .select_cols = function(task) task$feature_types[get("type") %in% c("character", "factor", "integer", "numeric", "ordered"), get("id")],
-
     .train_imputer = function(feature, type, context) {
       if (type %in% c("factor", "ordered", "character")) {
         return(".MISSING")  # early exit
       }
 
-      # for integer or numeric do
+      offset = self$param_set$values$offset + self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))
       oor = if (self$param_set$values$min) {
-        min(feature, na.rm = TRUE) - self$param_set$values$offset - self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))
+        min(feature, na.rm = TRUE) - offset
       } else {
-        max(feature, na.rm = TRUE) + self$param_set$values$offset + self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))
-      }
-
-      # if the feature only consists of NA/NaN values, oor will be NaN if offset and multiplier are 0;
-      # oor will be Inf if offset and multiplier are larger than 0
-      if (is.nan(oor) || is.infinite(oor)) {
-        oor = 0
+        max(feature, na.rm = TRUE) + offset
       }
 
       if (type == "integer") {
@@ -113,14 +104,6 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       }
 
       oor
-    },
-
-    .impute = function(feature, type, model, context) {
-      if (type %in% c("factor", "ordered")) {
-        levels(feature) = c(levels(feature), ".MISSING")
-      }
-      feature[is.na(feature)] = model
-      feature
     }
   )
 )
