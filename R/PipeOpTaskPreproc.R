@@ -146,7 +146,7 @@
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.\cr
 #'   This method can optionally be overloaded when inheriting [`PipeOpTaskPreproc`], together with `private$.train_dt()` and
 #'   `private$.predict_dt()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.\cr
-#'   If this method is not overloaded, it defaults to selecting all columns.
+#'   If this method is not overloaded, it defaults to selecting of type indicated by the `feature_types` construction argument.
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
@@ -273,7 +273,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     .predict_dt = function(dt, levels) stop("Abstract."),
 
-    .select_cols = function(task) selector_type(self$feature_types)(task)
+    .select_cols = function(task) selector_type(private$.feature_types)(task)
 
   )
 )

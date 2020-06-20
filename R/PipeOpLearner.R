@@ -16,7 +16,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpLearner$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())
+#' PipeOpLearner$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
