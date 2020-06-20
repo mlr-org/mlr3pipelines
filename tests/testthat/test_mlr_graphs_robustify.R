@@ -31,7 +31,7 @@ test_that("Robustify Pipeline", {
   tsk$cbind(dt)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "encode", "imputenewlvl") %in% names(p$pipeops)))
+  expect_true(all(c("imputehist", "missind", "encode", "imputeoor") %in% names(p$pipeops)))
 
   # no scaling
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
@@ -45,23 +45,23 @@ test_that("Robustify Pipeline", {
   expect_graph(p)
   expect_true("encode" %in% names(p$pipeops))
   expect_true(!("missind" %in% names(p$pipeops)))
-  expect_true(!("imputenewlvl" %in% names(p$pipeops)))
+  expect_true(!("imputeoor" %in% names(p$pipeops)))
 
   # logical impute_missings
   p = ppl("robustify", task = tsk, learner = lrn, impute_missings = TRUE) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
+  expect_true(all(c("imputehist", "missind", "imputeoor") %in% names(p$pipeops)))
 
   # no task
   p = pipeline_robustify() %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("char_to_fct", "imputehist", "missind", "imputenewlvl",
+  expect_true(all(c("char_to_fct", "imputehist", "missind", "imputeoor",
     "collapsefactors", "encode") %in% names(p$pipeops)))
 
   p = ppl("robustify", impute_missings = FALSE) %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("char_to_fct", "fixfactors", "collapsefactors", "encode") %in% names(p$pipeops)))
-  expect_true(!all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
+  expect_true(!all(c("imputehist", "missind", "imputeoor") %in% names(p$pipeops)))
 
   # missings during predict
   dt = tsk$data()
