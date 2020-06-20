@@ -53,7 +53,7 @@
 #' library("mlr3")
 #'
 #' task = tsk("iris")
-#' pop = po("renamecolumns", param_vals = list(renaming = c("Species" = "S", "Petal.Length" = "PL")))
+#' pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL")))
 #' pop$train(list(task))
 PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   inherit = PipeOpTaskPreprocSimple,

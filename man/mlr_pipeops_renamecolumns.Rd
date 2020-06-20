@@ -68,7 +68,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{Pi
 library("mlr3")
 
 task = tsk("iris")
-pop = po("renamecolumns", param_vals = list(renaming = c("Species" = "S", "Petal.Length" = "PL")))
+pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL")))
 pop$train(list(task))
 }
 \seealso{
