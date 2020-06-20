@@ -42,8 +42,9 @@ test_that("PipeOpImpute", {
 
         graph = list(
           po("select", id = "num_select", selector = selector_type(c("integer", "numeric"))) %>>% numimputer,
-          po("select", id = "fct_select", selector = selector_type(c("factor", "ordered", "character"))) %>>% fctimputer,
-          po("select", id = "lgl_select", selector = selector_type(c("logical"))) %>>% po("imputesample", id = "lgl_sample"),
+          po("select", id = "fct_select", selector = selector_type(c("factor", "ordered"))) %>>% fctimputer,
+          po("select", id = "lgl_select", selector = selector_type("logical")) %>>% po("imputesample", id = "lgl_sample"),
+          po("select", id = "chr_select", selector = selector_type("character")) %>>% po("imputeconstant", id = "chr_const"),
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% if (is.null(self$param_set$values$innum)) po("featureunion") else po("featureunion", innum = self$param_set$values$innum)

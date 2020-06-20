@@ -9,7 +9,7 @@ test_that("PipeOpImputeLearner - simple tests", {
   tsk2 = po$predict(list(task))[[1]]
   expect_true(all(tsk2$missings() == 0))
 
-  
+
   # Only imputes relevant columns
   mdata = data.table(
     a = c(1, 2, 3, 4, 5, NA),
@@ -55,7 +55,7 @@ test_that("PipeOpImputeLearner", {
     d = factor(c(letters[1:5], NA), levels = letters[1:6]),
     e = factor(letters[1:6], levels = letters[1:6]),
     f = ordered(c(letters[1:5], NA), levels = letters[1:6]),
-    g = ordered(letters[1:6], levels = letters[1:6]),  
+    g = ordered(letters[1:6], levels = letters[1:6]),
     j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
     k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
     l = factor(letters[rep(1:2, 3)])
@@ -79,7 +79,7 @@ test_that("Test imputation matches, edge cases", {
     l = factor(letters[rep(1:2, 3)])
   )
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
-   
+
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   out = po$train(list(task))[[1]]$data()
   expect_true(!any(is.na(out$b)))
@@ -122,8 +122,8 @@ test_that("Test imputation matches, edge cases", {
   po = PipeOpImputeLearner$new(learner = lrn("classif.featureless"))
   out = po$train(list(task))[[1]]$data()
   expect_true(!any(is.na(out$d)))
-  expect_true(all(out$d == ".MISSING"))
+  expect_true(all(out$d == "a"))
   out = po$predict(list(task))[[1]]$data()
   expect_true(!any(is.na(out$d)))
-  expect_true(all(out$d == ".MISSING"))
+  expect_true(all(out$d == "a"))
 })
