@@ -8,8 +8,7 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
-Impute features by a constant value. To select specific features use the \code{affect_columns}
-parameter inherited from \code{\link{PipeOpImpute}}.
+Impute features by a constant value.
 }
 \section{Construction}{
 \preformatted{PipeOpImputeConstant$new(id = "imputeconstant", param_vals = list())
@@ -35,7 +34,7 @@ the value of the \code{constant} parameter.
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpImpute}}.
 
-The \verb{$state$model} contains only \code{NULL} elements.
+The \verb{$state$model} contains the value of the \code{constant} parameter that is used for imputation.
 }
 
 \section{Parameters}{
@@ -45,18 +44,18 @@ The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as 
 \item \code{constant} :: \code{atomic(1)}\cr
 The constant value that should be used for the imputation, atomic vector of length 1. The
 atomic mode must match the type of the features that will be selected by the \code{affect_columns}
-parameter and this will be checked during imputation. Default is \code{".MISSING"}.
+parameter and this will be checked during imputation. Initialized to \code{".MISSING"}.
 \item \code{check_levels} :: \code{logical(1)}\cr
 Should be checked whether the \code{constant} value is a valid level of factorial features (i.e., it
 already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
-features (i.e., \code{factor}, \code{ordered}; skipped for \code{character}). Default is \code{TRUE}.
+features (i.e., \code{factor}, \code{ordered}; skipped for \code{character}). Initialized to \code{TRUE}.
 }
 }
 
 \section{Internals}{
 
-Adds an explicit new level to \code{factor} and \code{ordered} features, but not to \code{character} features if
-\code{check_levels} is \code{FALSE}.
+Adds an explicit new level to \code{factor} and \code{ordered} features, but not to \code{character} features,
+if \code{check_levels} is \code{FALSE} and the level is not already present.
 }
 
 \section{Methods}{
@@ -109,7 +108,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -119,8 +118,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -145,7 +146,7 @@ Other Imputation PipeOps:
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}}
 }
 \concept{Imputation PipeOps}

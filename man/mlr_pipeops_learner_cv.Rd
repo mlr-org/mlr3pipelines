@@ -26,7 +26,7 @@ as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\l
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
-\preformatted{PipeOpLearnerCV$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())
+\preformatted{PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
 }
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
@@ -76,7 +76,8 @@ The parameters are the parameters inherited from the \code{\link{PipeOpTaskPrepr
 Besides that, parameters introduced are:
 \itemize{
 \item \code{resampling.method} :: \code{character(1)}\cr
-Which resampling method do we want to use. Currently only supports \code{"cv"} and \code{"insample"}.
+Which resampling method do we want to use. Currently only supports \code{"cv"} and \code{"insample"}. \code{"insample"} generates
+predictions with the model trained on all training data.
 \item \code{resampling.folds} :: \code{numeric(1)}\cr
 Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}.
 \item \code{keep_response} :: \code{logical(1)}\cr

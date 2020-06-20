@@ -37,10 +37,11 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{center} :: \code{numeric}\cr
-The mean of each numeric feature during training, or 0 if \code{center} is \code{FALSE}. Will be subtracted during the predict phase.
+The mean / median (depending on \code{robust}) of each numeric feature during training, or 0 if \code{center} is \code{FALSE}. Will be subtracted during the predict phase.
 \item \code{scale} :: \code{numeric}\cr
-The root mean square, defined as \code{sqrt(sum(x^2)/(length(x)-1))}, of each feature during training, or 1 if \code{scale} is FALSE.
-During predict phase, features are divided by this.\cr
+The value by which features are divided. 1 if \code{scale} is \code{FALSE}\cr
+If \code{robust} is \code{FALSE}, this is the root mean square, defined as \code{sqrt(sum(x^2)/(length(x)-1))}, of each feature, possibly after centering.
+If \code{robust} is \code{TRUE}, this is the mean absolute deviation multiplied by 1.4826 (see \link[stats:mad]{stats::mad} of each feature, possibly after centering.
 This is 1 for features that are constant during training if \code{center} is \code{TRUE}, to avoid division-by-zero.
 }
 }
@@ -56,7 +57,7 @@ Whether to scale features, i.e. divide them by \code{sqrt(sum(x^2)/(length(x)-1)
 \item \code{robust} :: \code{logical(1)}\cr
 Whether to use robust scaling; instead of scaling / centering with mean / standard deviation,
 median and median absolute deviation \code{\link[stats:mad]{mad}} are used.
-Defaults to \code{FALSE}.
+Initialized to \code{FALSE}.
 }
 }
 

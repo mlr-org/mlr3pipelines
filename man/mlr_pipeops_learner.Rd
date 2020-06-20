@@ -18,7 +18,7 @@ into a machine learning pipeline which then can be handled as singular object fo
 and tuning.
 }
 \section{Construction}{
-\preformatted{PipeOpLearner$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())\\cr
+\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
 }
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}

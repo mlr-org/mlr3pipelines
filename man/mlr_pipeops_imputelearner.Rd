@@ -9,19 +9,19 @@
 }
 \description{
 Impute features by fitting a \code{\link[mlr3:Learner]{Learner}} for each feature.
-Uses the \code{context_columns} as features to train the imputation \code{\link[mlr3:Learner]{Learner}}.
-The \code{\link[mlr3:Learner]{Learner}} needs to  be able to handle missing values, i.e. have property
-'missings'.
+Uses the features indicated by the \code{context_columns} parameter as features to train the imputation \code{\link[mlr3:Learner]{Learner}}.
+Note this parameter is part of the \code{\link{PipeOpImpute}} base class and explained there.
+
 Additionally, only features supported by the learner can be imputed; i.e. learners of type
-'regr' can only impute features of type 'integer' and 'numeric', while 'classif' can impute
-features of type 'character', 'factor', 'ordered' and 'logical'.
+\code{regr} can only impute features of type \code{integer} and \code{numeric}, while \code{classif} can impute
+features of type \code{factor}, \code{ordered} and \code{logical}.
 }
 \section{Construction}{
-\preformatted{PipeOpImputeLearner$new(id = "imputelearner", learner,  param_vals = list())
+\preformatted{PipeOpImputeLearner$new(learner, id = NULL, param_vals = list())
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
-Identifier of resulting object, default \code{"imputelearner"}.
+Identifier of resulting object, default \code{"impute."}, followed by the \code{id} of the \code{Learner}.
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
 The \code{\link[mlr3:Learner]{Learner}} needs to be able to handle missing values, i.e. have the \code{missings} property.
@@ -34,7 +34,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by first training the provided learner and then predicting the expected value.
+The output is the input \code{\link[mlr3:Task]{Task}} with missing values from all affected features imputed by the trained model.
 }
 
 \section{State}{
@@ -42,17 +42,23 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpImpute}}.
 
 The \verb{$state$models} is a named \code{list} of \code{models} created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function
-for each column.
+for each column. If a column consists of missing values only during training, the \code{model} is \code{0} or the levels of the
+feature; these are used for sampling during prediction.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpImpute}}.
+The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, in addition to the parameters of the \code{\link[mlr3:Learner]{Learner}}
+used for imputation.
 }
 
 \section{Internals}{
 
-Uses the \verb{$train} and \verb{$predict} functions of the provided learner. Features that are entirely \code{NA} are imputed as \code{0}.
+Uses the \verb{$train} and \verb{$predict} functions of the provided learner. Features that are entirely \code{NA} are imputed as \code{0}
+or randomly sampled from available (\code{factor} / \code{logical}) levels.
+
+The \code{\link[mlr3:Learner]{Learner}} does \emph{not} necessarily need to handle missing values in cases
+where \code{context_columns} is chosen well (or there is only one column with missing values present).
 }
 
 \section{Methods}{
@@ -98,11 +104,12 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
@@ -112,8 +119,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -133,11 +142,12 @@ Other PipeOps:
 
 Other Imputation PipeOps: 
 \code{\link{PipeOpImpute}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}}
 }
 \concept{Imputation PipeOps}

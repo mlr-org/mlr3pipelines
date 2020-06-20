@@ -166,7 +166,7 @@ the operator should function on, e.g. based on feature type, while \code{affect_
 to limit the columns that a \code{\link{PipeOpTaskPreproc}} should operate on.\cr
 This method can optionally be overloaded when inheriting \code{\link{PipeOpTaskPreproc}}, together with \code{private$.train_dt()} and
 \code{private$.predict_dt()}; alternatively, \code{private$.train_task()} and \code{private$.predict_task()} can be overloaded.\cr
-If this method is not overloaded, it defaults to selecting all columns.
+If this method is not overloaded, it defaults to selecting of type indicated by the \code{feature_types} construction argument.
 }
 }
 
