@@ -27,7 +27,7 @@
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
 #'
-#' The `$state$model` contains only `NULL` elements.
+#' The `$state$model` contains the value of the `constant` parameter that is used for imputation.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
@@ -69,8 +69,8 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
   public = list(
     initialize = function(id = "imputeconstant", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("constant", tags = c("train", "predict", "required"), custom_check = check_scalar),
-        ParamLgl$new("check_levels", tags = c("train", "predict", "required"))
+        ParamUty$new("constant", tags = c("train", "required"), custom_check = check_scalar),
+        ParamLgl$new("check_levels", tags = c("train", "required"))
       ))
       ps$values = list(constant = ".MISSING", check_levels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals)
@@ -81,10 +81,6 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
     .select_cols = function(task) task$feature_names,
 
     .train_imputer = function(feature, type, context) {
-      NULL
-    },
-
-    .impute = function(feature, type, model, context) {
       constant = self$param_set$values$constant
       switch(type,
         "logical"   = assert_flag(constant),
@@ -95,22 +91,16 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         "ordered"   = assert_string_or_factor(constant),
         "POSIXct"   = assert_posixct(constant, any.missing = FALSE, len = 1L)
       )
-
+      if (type %in% c("ordered", "factor") && self$param_set$values$check_levels) {
+        assert_choice(as.character(constant), levels(feature))
+      }
       if (type == "integer") {
         constant = as.integer(constant)
       }
+      constant
+    },
 
-      if (type %in% c("ordered", "factor")) {
-        constant = as.factor(constant)
-        if (self$param_set$values$check_levels) {
-          assert_subset(levels(constant), choices = levels(feature))
-        }
-        levels(feature) = c(levels(feature), levels(constant)[constant])
-      }
-
-      feature[is.na(feature)] = constant
-      feature
-    }
+    .train_nullmodel = function(feature, type, context) private$.train_imputer(feature, type, context)
   )
 )
 

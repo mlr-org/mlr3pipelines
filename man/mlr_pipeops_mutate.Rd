@@ -39,23 +39,22 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{mutation} :: named \code{list} of \code{formula}\cr
-Expressions for new features to create (or present features to change), in the form of
-\code{formula}.  Each element of the list is a \code{formula} with the name of the element naming the
-feature to create or change, and the formula expression determining the result. This expression
-may reference other features, as well as variables visible at the creation of the \code{formula}
-(see examples).
+Expressions for new features to create (or present features to change), in the form of \code{formula}.
+Each element of the list is a \code{formula} with the name of the element naming the feature to create or
+change, and the formula expression determining the result. This expression may reference
+other features, as well as variables visible at the creation of the \code{formula} (see examples).
 Initialized to \code{list()}.
 \item \code{delete_originals} :: \code{logical(1)} \cr
-Whether to delete original features. Even when this is \code{FALSE}, present features may still be
-overwritten. Initialized to \code{FALSE}.
+Whether to delete original features. Even when this is \code{FALSE},
+present features may still be overwritten. Initialized to \code{FALSE}.
 }
 }
 
 \section{Internals}{
 
-A \code{formula} created using the \code{~} operator always contains a reference to the \code{environment} in
-which the \code{formula} is created. This makes it possible to use variables in the \code{~}-expressions
-that both reference either column names or variable names.
+A \code{formula} created using the \code{~} operator always contains a reference to the \code{environment} in which
+the \code{formula} is created. This makes it possible to use variables in the \code{~}-expressions that both
+reference either column names or variable names.
 
 Note that the \code{formula}s in \code{mutation} are evaluated sequentially. This allows for using
 variables that were constructed during evaluation of a previous formula. However, if existing
@@ -114,6 +113,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ica}},
 \code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},

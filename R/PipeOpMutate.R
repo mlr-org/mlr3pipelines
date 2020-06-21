@@ -96,7 +96,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
         frm = self$param_set$values$mutation[[i]]
         set(taskdata, j = nms[i], value = eval(frm[[2L]], envir = insert_named(as.list(taskdata), oldtask), enclos = environment(frm)))
       }
-      newdata = taskdata[, nms, which = FALSE]
+      newdata = taskdata[, nms, with = FALSE]
 
       keep_feats = character(0)
       if (!self$param_set$values$delete_originals) {

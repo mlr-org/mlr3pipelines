@@ -42,8 +42,9 @@ test_that("PipeOpImpute", {
 
         graph = list(
           po("select", id = "num_select", selector = selector_type(c("integer", "numeric"))) %>>% numimputer,
-          po("select", id = "fct_select", selector = selector_type(c("factor", "ordered", "character"))) %>>% fctimputer,
-          po("select", id = "lgl_select", selector = selector_type(c("logical"))) %>>% po("imputesample", id = "lgl_sample"),
+          po("select", id = "fct_select", selector = selector_type(c("factor", "ordered"))) %>>% fctimputer,
+          po("select", id = "lgl_select", selector = selector_type("logical")) %>>% po("imputesample", id = "lgl_sample"),
+          po("select", id = "chr_select", selector = selector_type("character")) %>>% po("imputeconstant", id = "chr_const"),
           po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% if (is.null(self$param_set$values$innum)) po("featureunion") else po("featureunion", innum = self$param_set$values$innum)
@@ -51,25 +52,33 @@ test_that("PipeOpImpute", {
     ),
     private = list(
       .get_state = function(task) {
-
         graph = self$build_graph()
         graph$train(task)
-        list(gs = graph$state)
+        list(gs = graph)
       },
 
       .transform = function(task) {
-        graph = self$build_graph()
-        graph$state = self$state$gs
+        graph = self$state$gs
         graph$predict(task)[[1]]
+      },
+      deep_clone = function(name, value) {
+        if (name == "state" && "gs" %in% names(value)) {
+          value$gs = value$gs$clone(deep = TRUE)
+          return(value)
+        }
+        super$deep_clone(name, value)
       }
     )
   )
 
   task = mlr_tasks$get("pima")
 
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d"))), task = task)
 
-  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d"))), task = mlr_tasks$get("iris"))
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = task)
+
+  expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = mlr_tasks$get("iris"))
+
+
 
   mdata = data.frame(stringsAsFactors = FALSE,
     a = c(1, 2, 3, 4, 5, NA),
@@ -96,6 +105,7 @@ test_that("PipeOpImpute", {
       method_num = "median",
       method_fct = "oor",
       add_dummy = "none")))
+
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
@@ -108,6 +118,7 @@ test_that("PipeOpImpute", {
       method_num = "mean",
       method_fct = "oor",
       add_dummy = "missing_train")))
+
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
@@ -121,6 +132,7 @@ test_that("PipeOpImpute", {
       method_num = "mode",
       method_fct = "mode",
       add_dummy = "missing_train")))
+
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
     deterministic_train = FALSE, deterministic_predict = FALSE,
     constargs = list(param_vals = list(
@@ -170,11 +182,11 @@ test_that("PipeOpImpute", {
 
   task_predicted = po$predict(list(task))[[1]]$data()
 
-  expect_equal(task_trained[1, c("a", "c", "d", "f", "h", "k")],
-    task_trained[2, c("a", "c", "d", "f", "h", "k")])
+  expect_equal(task_trained[1, c("a", "c", "d", "f", "k")],
+    task_trained[2, c("a", "c", "d", "f", "k")])
 
-  expect_equal(task_predicted[c(5:6), c("a", "c", "d", "f", "h", "k")],
-    task_trained[c(1:2), c("a", "c", "d", "f", "h", "k")])
+  expect_equal(task_predicted[c(5:6), c("a", "c", "d", "f", "k")],
+    task_trained[c(1:2), c("a", "c", "d", "f", "k")])
 
   expect_equal(task_trained$missing_a, c(FALSE, TRUE))
   expect_equal(task_trained$missing_c, c(FALSE, TRUE))
@@ -225,7 +237,7 @@ test_that("PipeOpImpute", {
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task$clone(deep = TRUE)$filter(1:3)))[[1]]$data()
 
-  expect_equal(task_predicted, task$clone(deep = TRUE)$filter(1:3)$data())
+  expect_equal(task_predicted, task$clone(deep = TRUE)$filter(1:3)$data(), ignore.col.order = TRUE)
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "hist", method_fct = "oor", add_dummy = "missing_train"))
@@ -240,34 +252,68 @@ test_that("PipeOpImpute", {
     expect_true(task_predicted$a[6] <= 5 && task_trained$a[6] >= 1)
     expect_true(task_predicted$c[6] <= 5 && task_trained$c[6] >= 1)
   }
+
+  # impute full na columns:
+  po = PipeOpTestImpute$new(param_vals = list(method_num = "median", method_fct = "oor"))
+
+  mdata = data.table(
+    stringsAsFactors = FALSE,
+    a = as.numeric(rep(NA, 3)),
+    b = as.integer(rep(NA, 3)),
+    c = factor(rep(NA, 3), levels = "a"),
+    d = factor(rep(NA, 3), ordered = TRUE, levels = "a"),
+    e = as.logical(rep(NA, 3)),
+    f = as.character(rep(NA, 3)),
+    t = as.factor(letters[rep(1:2, 3)])
+  )
+  task = TaskClassif$new("mdata", as_data_backend(mdata), target = "t")
+
+  pmap(list(map_chr(map(mdata[, -"t"], class), 1L), colnames(mdata[, -"t"])), function(type, name) {
+    po$param_set$values$affect_columns = selector_type(type)
+    cst = switch(type,
+        factor = factor("a"),
+        integer = 0L,
+        logical = c(TRUE, FALSE),
+        numeric = 0,
+        ordered = ordered("a"),
+        character = ".MISSING"
+      )
+    out1 = po$train(list(task))[[1]]$data()
+    out2 = po$predict(list(task))[[1]]$data()
+    expect_true(all(out1[[name]] %in% cst))
+    expect_true(all(out2[[name]] %in% cst))
+    if (type != "logical") {
+      expect_equal(out1, out2)
+    }
+  })
 })
 
 test_that("More tests for PipeOpImputeMode", {
- set.seed(1)
- dat <- data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
-   x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
- dat[c(1L, 10L), ] <- NA
- task = TaskRegr$new("task", backend = dat, target = "y")
+  set.seed(1)
+  dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
+  x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
+  dat[c(1L, 10L), ] = NA
+  task = TaskRegr$new("task", backend = dat, target = "y")
 
- task_NA = task
- task_NA$filter(c(1L, 10L))
+  task_NA = task
+  task_NA$filter(c(1L, 10L))
 
- # works for complete NA
- po_NA = PipeOpImputeMode$new()
- task_NA_trained = po_NA$train(list(task_NA))[[1L]]$data()
- expect_equal(levels(task_NA_trained[[4L]]), as.character(1:2))
- expect_equal(levels(task_NA_trained[[5L]]), as.character(1:5))
- expect_false(any(is.na(task_NA_trained[[4L]])))
- expect_false(any(is.na(task_NA_trained[[5L]])))
+  # works for complete NA
+  po_NA = PipeOpImputeMode$new()
+  task_NA_trained = po_NA$train(list(task_NA))[[1L]]$data()
+  expect_equal(levels(task_NA_trained[[4L]]), as.character(1:2))
+  expect_equal(levels(task_NA_trained[[5L]]), as.character(1:5))
+  expect_false(any(is.na(task_NA_trained[[4L]])))
+  expect_false(any(is.na(task_NA_trained[[5L]])))
 
- expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
-   c("numeric", "character", "character", "integer", "logical"))
- task_NA_predicted = po_NA$predict(list(task_NA))[[1L]]$data()
+  expect_equivalent(sapply(po_NA$state$model, FUN = function(x) class(x)[1L]),
+    c("numeric", "character", "character", "integer", "logical"))
+  task_NA_predicted = po_NA$predict(list(task_NA))[[1L]]$data()
 
- expect_equal(levels(task_NA_predicted[[4L]]), as.character(1:2))
- expect_equal(levels(task_NA_predicted[[5L]]), as.character(1:5))
- expect_false(any(is.na(task_NA_predicted[[4L]])))
- expect_false(any(is.na(task_NA_predicted[[5L]])))
+  expect_equal(levels(task_NA_predicted[[4L]]), as.character(1:2))
+  expect_equal(levels(task_NA_predicted[[5L]]), as.character(1:5))
+  expect_false(any(is.na(task_NA_predicted[[4L]])))
+  expect_false(any(is.na(task_NA_predicted[[5L]])))
 })
 
 test_that("More tests for PipeOpImputeConstant", {

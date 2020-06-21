@@ -68,8 +68,9 @@ test_that("insample resampling", {
   polrn = PipeOpLearnerCV$new(lrn, param_vals = list(resampling.method = "insample"))
   expect_equal(polrn$train(list(iris_with_unambiguous_mode))[[1]],
     polrn$predict(list(iris_with_unambiguous_mode))[[1]])
+})
 
-test_that("PipeOpLearnerCV - graph but no id", {
+test_that("graph but no id", {
   g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
   po = PipeOpLearnerCV$new(g)
   expect_string(po$id)

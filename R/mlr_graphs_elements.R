@@ -7,7 +7,7 @@
 #' Performs the following steps:
 #' * Drops empty factor levels using [`PipeOpFixFactors`]
 #' * Imputes `numeric` features using [`PipeOpImputeHist`] and [`PipeOpMissInd`]
-#' * Imputes `factor` features using [`PipeOpImputeNewlvl`]
+#' * Imputes `factor` features using [`PipeOpImputeOOR`]
 #' * Encodes `factors` using `one-hot-encoding`. Factors with a cardinality > max_cardinality` are
 #'   collapsed using [`PipeOpCollapseFactors`].
 #' * If `scaling`, numeric features are scaled to mean 0 and standard deviation 1.
@@ -73,7 +73,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
         po("featureunion"))
     # Impute factors
     if (has_type_feats(c("factor", "ordered", "character")))
-      pos = c(pos, po("imputenewlvl"))
+      pos = c(pos, po("imputeoor"))
   }
 
   # Fix extra factor levels

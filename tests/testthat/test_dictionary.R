@@ -12,6 +12,7 @@ test_that("Dictionary contains all PipeOps", {
     PipeOpChunk = list(outnum = 2),
     PipeOpCopy = list(outnum = 2),
     PipeOpFeatureUnion = list(innum = 2),
+    PipeOpImputeLearner = list(learner = mlr_learners$get("classif.rpart")),
     PipeOpLearner = list(learner = mlr_learners$get("classif.rpart")),
     PipeOpLearnerCV = list(learner = mlr_learners$get("classif.rpart")),
     PipeOpClassifAvg = list(innum = 2),

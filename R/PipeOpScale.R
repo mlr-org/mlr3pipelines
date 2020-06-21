@@ -113,7 +113,7 @@ scale_robust = function(x, center = TRUE, scale = TRUE) {
     center = apply(x, 2, stats::median, na.rm = TRUE)
   }
   if (scale) {
-    scale = apply(x, 2, function(col) stats::mad(col, if (!isFALSE(center)) median(col) else 0, na.rm = TRUE))
+    scale = apply(x, 2, function(col) stats::mad(col, if (!isFALSE(center)) stats::median(col) else 0, na.rm = TRUE))
   }
   scale(x, center = center, scale = scale)
 }

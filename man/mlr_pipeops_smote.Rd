@@ -113,6 +113,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ica}},
 \code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},

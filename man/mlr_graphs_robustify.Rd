@@ -42,7 +42,7 @@ Performs the following steps:
 \itemize{
 \item Drops empty factor levels using \code{\link{PipeOpFixFactors}}
 \item Imputes \code{numeric} features using \code{\link{PipeOpImputeHist}} and \code{\link{PipeOpMissInd}}
-\item Imputes \code{factor} features using \code{\link{PipeOpImputeNewlvl}}
+\item Imputes \code{factor} features using \code{\link{PipeOpImputeOOR}}
 \item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality\verb{ are collapsed using [}PipeOpCollapseFactors`].
 \item If \code{scaling}, numeric features are scaled to mean 0 and standard deviation 1.
 }
