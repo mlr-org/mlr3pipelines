@@ -8,6 +8,9 @@
 #' Add missing indicator columns ("dummy columns") to the [`Task`][mlr3::Task].
 #' Drops original features; should probably be used in combination with [`PipeOpFeatureUnion`] and imputation [`PipeOp`]s (see examples).
 #'
+#' Note the `affect_columns` is initialized with `selector_invert(selector_type(c("factor", "ordered", "character")))`, since missing
+#' values in factorial columns are often indicated by out-of-range imputation ([`PipeOpImputeOOR`]).
+#'
 #' @section Construction:
 #' ```
 #' PipeOpMissInd$new(id = "missind", param_vals = list())
@@ -78,7 +81,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         ParamFct$new("which", levels = c("missing_train", "all"), tags = c("train", "required")),
         ParamFct$new("type", levels = c("numeric", "factor", "logical"), tags = c("train", "predict", "required"))
       ))
-      ps$values = list(which = "missing_train", type = "factor")
+      ps$values = list(which = "missing_train", type = "factor", affect_columns = selector_invert(selector_type(c("factor", "ordered", "character"))))
       super$initialize(id, ps, param_vals = param_vals, tags = "missings")
     }
   ),
@@ -109,8 +112,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         stop("Invalid value of 'type' parameter"))
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
       task$select(character(0))$cbind(data_dummy)
-    },
-    .select_cols = function(task) {selector_invert(selector_type(c("factor", "ordered", "character")))(task)}
+    }
   )
 )
 
