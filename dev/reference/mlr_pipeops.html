@@ -228,11 +228,13 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
 <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
 <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
@@ -242,8 +244,10 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+<code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -298,39 +302,43 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 #&gt; 16:            fixfactors         1          1                   
 #&gt; 17:               histbin         1          1           graphics
 #&gt; 18:                   ica         1          1            fastICA
-#&gt; 19:            imputehist         1          1           graphics
-#&gt; 20:            imputemean         1          1                   
-#&gt; 21:          imputemedian         1          1              stats
-#&gt; 22:            imputemode         1          1           mlr3misc
-#&gt; 23:          imputenewlvl         1          1                   
-#&gt; 24:          imputesample         1          1                   
-#&gt; 25:             kernelpca         1          1            kernlab
-#&gt; 26:               learner         1          1                   
-#&gt; 27:            learner_cv         1          1                   
-#&gt; 28:               missind         1          1                   
-#&gt; 29:           modelmatrix         1          1              stats
-#&gt; 30:                mutate         1          1                   
-#&gt; 31:                   nop         1          1                   
-#&gt; 32:                   pca         1          1                   
-#&gt; 33:                 proxy        NA          1                   
-#&gt; 34:           quantilebin         1          1              stats
-#&gt; 35:               regravg        NA          1                   
-#&gt; 36:       removeconstants         1          1                   
-#&gt; 37:                 scale         1          1                   
-#&gt; 38:           scalemaxabs         1          1                   
-#&gt; 39:            scalerange         1          1                   
-#&gt; 40:                select         1          1                   
-#&gt; 41:                 smote         1          1        smotefamily
-#&gt; 42:           spatialsign         1          1                   
-#&gt; 43:             subsample         1          1                   
-#&gt; 44:        targetinverter         2          1                   
-#&gt; 45: targettrafoscalerange         1          2                   
-#&gt; 46:     targettrafosimple         1          2                   
-#&gt; 47:        textvectorizer         1          1 quanteda,stopwords
-#&gt; 48:             threshold         1          1                   
-#&gt; 49:              unbranch        NA          1                   
-#&gt; 50:         update_target         1          1                   
-#&gt; 51:            yeojohnson         1          1      bestNormalize
+#&gt; 19:        imputeconstant         1          1                   
+#&gt; 20:            imputehist         1          1           graphics
+#&gt; 21:         imputelearner         1          1                   
+#&gt; 22:            imputemean         1          1                   
+#&gt; 23:          imputemedian         1          1              stats
+#&gt; 24:            imputemode         1          1                   
+#&gt; 25:             imputeoor         1          1                   
+#&gt; 26:          imputesample         1          1                   
+#&gt; 27:             kernelpca         1          1            kernlab
+#&gt; 28:               learner         1          1                   
+#&gt; 29:            learner_cv         1          1                   
+#&gt; 30:               missind         1          1                   
+#&gt; 31:           modelmatrix         1          1              stats
+#&gt; 32:                mutate         1          1                   
+#&gt; 33:                   nop         1          1                   
+#&gt; 34:                   pca         1          1                   
+#&gt; 35:                 proxy        NA          1                   
+#&gt; 36:           quantilebin         1          1              stats
+#&gt; 37:        randomresponse         1          1                   
+#&gt; 38:               regravg        NA          1                   
+#&gt; 39:       removeconstants         1          1                   
+#&gt; 40:         renamecolumns         1          1                   
+#&gt; 41:                 scale         1          1                   
+#&gt; 42:           scalemaxabs         1          1                   
+#&gt; 43:            scalerange         1          1                   
+#&gt; 44:                select         1          1                   
+#&gt; 45:                 smote         1          1        smotefamily
+#&gt; 46:           spatialsign         1          1                   
+#&gt; 47:             subsample         1          1                   
+#&gt; 48:        targetinverter         2          1                   
+#&gt; 49: targettrafoscalerange         1          2                   
+#&gt; 50:     targettrafosimple         1          2                   
+#&gt; 51:        textvectorizer         1          1 quanteda,stopwords
+#&gt; 52:             threshold         1          1                   
+#&gt; 53:              unbranch        NA          1                   
+#&gt; 54:         update_target         1          1                   
+#&gt; 55:            yeojohnson         1          1      bestNormalize
 #&gt;                       key input.num output.num           packages</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

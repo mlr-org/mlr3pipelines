@@ -177,7 +177,9 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
 
 <span class='fu'>selector_setdiff</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
 
-<span class='fu'>selector_missing</span>()</pre>
+<span class='fu'>selector_missing</span>()
+
+<span class='fu'>selector_cardinality_greater_than</span>(<span class='no'>min_cardinality</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -232,6 +234,11 @@ First <code>Selector</code> to query.</p></td>
       <td><p>(<code>Selector</code>)<br />
 Second <code>Selector</code> to query.</p></td>
     </tr>
+    <tr>
+      <th>min_cardinality</th>
+      <td><p>(<code>integer</code>) <br />
+Minimum number of levels required to be selected.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -257,6 +264,8 @@ selected by either <code>Selector</code> are selected in the end.</p></li>
 selected by <code>selector_x</code> are selected, unless they are also selected
 by <code>selector_y</code>.</p></li>
 <li><p><code>selector_missing</code>: <code>selector_missing</code> selects features with missing values.</p></li>
+<li><p><code>selector_cardinality_greater_than</code>: <code>selector_cardinality_greater_than</code> selects categorical features with cardinality
+greater then a given threshold.</p></li>
 </ul>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 

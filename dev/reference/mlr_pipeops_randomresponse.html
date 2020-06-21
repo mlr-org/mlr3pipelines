@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpClassBalancing — mlr_pipeops_classbalancing • mlr3pipelines</title>
+<title>PipeOpRandomResponse — mlr_pipeops_randomresponse • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,11 +47,17 @@
 
 
 
-<meta property="og:title" content="PipeOpClassBalancing — mlr_pipeops_classbalancing" />
-<meta property="og:description" content="Both undersamples a Task to keep only a fraction of the rows of the majority class,
-as well as oversamples (repeats data points) rows of the minority class.
-Sampling happens only during training phase. Class-balancing a Task by sampling may be
-beneficial for classification with imbalanced training data." />
+<meta property="og:title" content="PipeOpRandomResponse — mlr_pipeops_randomresponse" />
+<meta property="og:description" content="Takes in a Prediction of predict_type &quot;prob&quot;
+(for PredictionClassif) or &quot;se&quot;
+(for PredictionRegr). and generates a randomized &quot;response&quot;
+prediction.
+For &quot;prob&quot;, the responses are sampled according to
+the probabilities of the input PredictionClassif. For &quot;se&quot;,
+responses are randomly drawn according to the rdistfun parameter (default is rnorm) by using
+the original responses of the input PredictionRegr as the mean and the
+original standard errors of the input PredictionRegr as the standard
+deviation (sampling is done observation-wise)." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -145,100 +151,85 @@ beneficial for classification with imbalanced training data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpClassBalancing</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpClassBalancing.R'><code>R/PipeOpClassBalancing.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_classbalancing.Rd</code></div>
+    <h1>PipeOpRandomResponse</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRandomResponse.R'><code>R/PipeOpRandomResponse.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_randomresponse.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Both undersamples a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> to keep only a fraction of the rows of the majority class,
-as well as oversamples (repeats data points) rows of the minority class.</p>
-<p>Sampling happens only during training phase. Class-balancing a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> by sampling may be
-beneficial for classification with imbalanced training data.</p>
+    <p>Takes in a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> of <code>predict_type</code> <code>"prob"</code>
+(for <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>) or <code>"se"</code>
+(for <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code>). and generates a randomized <code>"response"</code>
+prediction.</p>
+<p>For <code>"prob"</code>, the responses are sampled according to
+the probabilities of the input <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>. For <code>"se"</code>,
+responses are randomly drawn according to the <code>rdistfun</code> parameter (default is <code>rnorm</code>) by using
+the original responses of the input <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code> as the mean and the
+original standard errors of the input <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code> as the standard
+deviation (sampling is done observation-wise).</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpClassBalancing</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"classbalancing"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpRandomResponse</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"randomresponse"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))</pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-Identifier of the resulting  object, default <code>"classbalancing"</code></p></li>
+<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Identifier of the resulting object, default <code>"randomresponse"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+<li><p>packages :: <code>character</code><br />
+Set of all required packages for the <code>private$.predict()</code> methods related to the <code>rdistfun</code>
+parameter. Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>. Instead of a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, a
-<code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code> is used as input and output during training and prediction.</p>
-<p>The output during training is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with added or removed rows to balance target classes.
-The output during prediction is the unchanged input.</p>
+<p><code>PipeOpRandomResponse</code> has one input channel named <code>"input"</code>, taking <code>NULL</code> during training and
+a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> during prediction.</p>
+<p><code>PipeOpRandomResponse</code> has one output channel named <code>"output"</code>, producing <code>NULL</code> during
+training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> with random responses during prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
+<p>The <code>$state</code> is left empty (<code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>).</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>; however, the <code>affect_columns</code> parameter is <em>not</em> present. Further parameters are:</p><ul>
-<li><p><code>ratio</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Ratio of number of rows of classes to keep, relative
-to the <code>$reference</code> value. Initialized to 1.</p></li>
-<li><p><code>reference</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-What the <code>$ratio</code> value is measured against. Can be <code>"all"</code> (mean instance count of
-all classes), <code>"major"</code> (instance count of class with most instances), <code>"minor"</code>
-(instance count of class with fewest instances), <code>"nonmajor"</code> (average instance
-count of all classes except the major one), <code>"nonminor"</code> (average instance count
-of all classes except the minor one), and <code>"one"</code> (<code>$ratio</code> determines the number of
-instances to have, per class). Initialized to <code>"all"</code>.</p></li>
-<li><p><code>adjust</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Which classes to up / downsample. Can be <code>"all"</code> (up and downsample all to match required
-instance count), <code>"major"</code>, <code>"minor"</code>, <code>"nonmajor"</code>, <code>"nonminor"</code> (see respective values
-for <code>$reference</code>), <code>"upsample"</code> (only upsample), and <code>"downsample"</code>. Initialized to <code>"all"</code>.</p></li>
-<li><p><code>shuffle</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
-Whether to shuffle the rows of the resulting task.
-In case the data is upsampled and <code>shuffle = FALSE</code>, the resulting task will have the original
-rows (which were not removed in downsampling) in the original order, followed by all newly added rows
-ordered by target class.
-Initialized to <code>TRUE</code>.</p></li>
+<ul>
+<li><p><code>rdistfun</code> :: <code>function</code> <br />
+A function for generating random responses when the predict type is <code>"se"</code>. This function must
+accept the arguments <code>n</code> (integerish number of responses), <code>mean</code> (<code>numeric</code> for the mean),
+and <code>sd</code> (<code>numeric</code> for the  standard deviation), and must <em>vectorize</em> over <code>mean</code>
+and <code>sd</code>. Default is <code>rnorm</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Up / downsampling happens as follows: At first, a "target class count" is calculated, by taking the mean
-class count of all classes indicated by the <code>reference</code> parameter (e.g. if <code>reference</code> is <code>"nonmajor"</code>:
-the mean class count of all classes that are not the "major" class, i.e. the class with the most samples)
-and multiplying this with the value of the <code>ratio</code> parameter. If <code>reference</code> is <code>"one"</code>, then the "target
-class count" is just the value of <code>ratio</code> (i.e. <code>1 * ratio</code>).</p>
-<p>Then for each class that is referenced by the <code>adjust</code> parameter (e.g. if <code>adjust</code> is <code>"nonminor"</code>:
-each class that is not the class with the fewest samples), <code>PipeOpClassBalancing</code> either throws out
-samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
-until the number of samples for these classes equals the "target class count".</p>
-<p>Uses <code>task$filter()</code> to remove rows. When identical rows are added during upsampling, then the <code>task$row_roles$use</code> can <em>not</em> be used
-to duplicate rows because of [inaudible]; instead the <code>task$rbind()</code> function is used, and
-a new <code>data.table</code> is attached that contains all rows that are being duplicated exactly as many times as they are being added.</p>
+<p>If the <code>predict_type</code> of the input <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> does not match <code>"prob"</code> or
+<code>"se"</code>, the input <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> will be returned unaltered.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
 
-<p>Only fields inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -251,6 +242,7 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
 <code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
 <code><a href='mlr_pipeops_chunk.html'>mlr_pipeops_chunk</a></code>,
+<code><a href='mlr_pipeops_classbalancing.html'>mlr_pipeops_classbalancing</a></code>,
 <code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
@@ -281,7 +273,6 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
-<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
@@ -303,29 +294,43 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3learners</span>)
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"spam"</span>)
-<span class='no'>opb</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"classbalancing"</span>)
-
-<span class='co'># target class counts</span>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>task</span>$<span class='fu'>truth</span>())</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;    1813    2788 </div><div class='input'>
-<span class='co'># double the instances in the minority class (spam)</span>
-<span class='no'>opb</span>$<span class='no'>param_set</span>$<span class='no'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>reference</span> <span class='kw'>=</span> <span class='st'>"minor"</span>,
-  <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='st'>"minor"</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>result</span> <span class='kw'>=</span> <span class='no'>opb</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1L</span>]]
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>result</span>$<span class='fu'>truth</span>())</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;    3626    2788 </div><div class='input'>
-<span class='co'># up or downsample all classes until exactly 20 per class remain</span>
-<span class='no'>opb</span>$<span class='no'>param_set</span>$<span class='no'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>reference</span> <span class='kw'>=</span> <span class='st'>"one"</span>,
-  <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>result</span> <span class='kw'>=</span> <span class='no'>opb</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>result</span>$<span class='fu'>truth</span>())</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;      20      20 </div></pre>
+<span class='no'>task1</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='no'>g1</span> <span class='kw'>=</span> <span class='no'>LearnerClassifRpart</span>$<span class='fu'>new</span>() <span class='kw'>%&gt;&gt;%</span> <span class='no'>PipeOpRandomResponse</span>$<span class='fu'>new</span>()
+<span class='no'>g1</span>$<span class='fu'>train</span>(<span class='no'>task1</span>)</div><div class='output co'>#&gt; $randomresponse.output
+#&gt; NULL
+#&gt; </div><div class='input'><span class='no'>g1</span>$<span class='no'>pipeops</span>$<span class='no'>classif.rpart</span>$<span class='no'>learner</span>$<span class='no'>predict_type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2409</span>)
+<span class='no'>g1</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task1</span>)</div><div class='output co'>#&gt; $randomresponse.output
+#&gt; &lt;PredictionClassif&gt; for 150 observations:
+#&gt;     row_id     truth  response
+#&gt;          1    setosa    setosa
+#&gt;          2    setosa    setosa
+#&gt;          3    setosa    setosa
+#&gt; ---                           
+#&gt;        148 virginica virginica
+#&gt;        149 virginica virginica
+#&gt;        150 virginica virginica
+#&gt; </div><div class='input'>
+<span class='no'>task2</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"mtcars"</span>)
+<span class='no'>g2</span> <span class='kw'>=</span> <span class='no'>LearnerRegrLM</span>$<span class='fu'>new</span>() <span class='kw'>%&gt;&gt;%</span> <span class='no'>PipeOpRandomResponse</span>$<span class='fu'>new</span>()
+<span class='no'>g2</span>$<span class='fu'>train</span>(<span class='no'>task2</span>)</div><div class='output co'>#&gt; $randomresponse.output
+#&gt; NULL
+#&gt; </div><div class='input'><span class='no'>g2</span>$<span class='no'>pipeops</span>$<span class='no'>regr.lm</span>$<span class='no'>learner</span>$<span class='no'>predict_type</span> <span class='kw'>=</span> <span class='st'>"se"</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2906</span>)
+<span class='no'>g2</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task2</span>)</div><div class='output co'>#&gt; $randomresponse.output
+#&gt; &lt;PredictionRegr&gt; for 32 observations:
+#&gt;     row_id truth response
+#&gt;          1  21.0 23.76570
+#&gt;          2  21.0 21.28602
+#&gt;          3  22.8 27.52332
+#&gt; ---                      
+#&gt;         30  19.7 16.99001
+#&gt;         31  15.0 13.88306
+#&gt;         32  21.4 22.80808
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

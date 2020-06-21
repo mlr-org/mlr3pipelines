@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpImputeNewlvl — mlr_pipeops_imputenewlvl • mlr3pipelines</title>
+<title>PipeOpRenameColumns — mlr_pipeops_renamecolumns • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,8 +47,9 @@
 
 
 
-<meta property="og:title" content="PipeOpImputeNewlvl — mlr_pipeops_imputenewlvl" />
-<meta property="og:description" content="Impute factorial features by adding a new level &quot;.MISSING&quot;." />
+<meta property="og:title" content="PipeOpRenameColumns — mlr_pipeops_renamecolumns" />
+<meta property="og:description" content="Renames the columns of a Task both during training and prediction.
+Uses the $rename() mutator of the Task." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -142,27 +143,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpImputeNewlvl</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImputeNewlvl.R'><code>R/PipeOpImputeNewlvl.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_imputenewlvl.Rd</code></div>
+    <h1>PipeOpRenameColumns</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRenameColumns.R'><code>R/PipeOpRenameColumns.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_renamecolumns.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Impute factorial features by adding a new level <code>".MISSING"</code>.</p>
+    <p>Renames the columns of a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> both during training and prediction.
+Uses the <code>$rename()</code> mutator of the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpImputeNewlvl</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"imputenewlvl"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpRenameColumns</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"renamecolumns"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"imputenewlvl"</code>.</p></li>
+Identifier of resulting object, default <code>"renamecolumns"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -171,29 +173,43 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected factorial features missing values imputed by a new level.</p>
+<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with the old column names changed to the new ones.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
-<p>The <code>$state$model</code> contains only <code>NULL</code> elements.</p>
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
+<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>, as well as:</p><ul>
+<li><p><code>renaming</code> :: named <code>character</code><br />
+Named <code>character</code> vector. The names of the vector specify the old column names that should be
+changed to the new column names as given by the elements of the vector. Initialized to the empty
+character vector.</p></li>
+<li><p><code>ignore_missing</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Ignore if columns named in <code>renaming</code> are not found in the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. If this is
+<code>FALSE</code>, then names found in <code>renaming</code> not found in the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> cause an error.
+Initialized to <code>FALSE</code>.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Adds an explicit new <code>level()</code> to <code>factor</code> and <code>ordered</code> features, but not to <code>character</code> features.</p>
+<p>Uses the <code>$rename()</code> mutator of the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> to set the new column names.</p>
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+
+    
+
+<p>Only fields inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -221,10 +237,13 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
 <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
 <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
@@ -234,6 +253,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
@@ -251,37 +271,20 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
-<p>Other Imputation PipeOps: 
-<code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
-<code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
-<code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
-<code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
 
-<span class='no'>data</span> <span class='kw'>=</span> <span class='kw pkg'>data.table</span><span class='kw ns'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep.int</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"y"</span>, <span class='st'>"n"</span>), <span class='kw'>times</span> <span class='kw'>=</span> <span class='fl'>5</span>)),
-  <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='no'>letters</span>[<span class='fl'>2</span>:<span class='fl'>9</span>], <span class='fl'>NA</span>)), <span class='kw'>z</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>]))
-<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='st'>"task"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"x"</span>)
-<span class='no'>task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; x y z 
-#&gt; 0 2 0 </div><div class='input'>
-<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputenewlvl"</span>)
-<span class='no'>new_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='no'>new_task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; x z y 
-#&gt; 0 0 0 </div><div class='input'><span class='no'>new_task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;     x z        y
-#&gt;  1: y a .MISSING
-#&gt;  2: n b        b
-#&gt;  3: y c        c
-#&gt;  4: n d        d
-#&gt;  5: y e        e
-#&gt;  6: n f        f
-#&gt;  7: y g        g
-#&gt;  8: n h        h
-#&gt;  9: y i        i
-#&gt; 10: n j .MISSING</div></pre>
+<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"renamecolumns"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>renaming</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Petal.Length"</span> <span class='kw'>=</span> <span class='st'>"PL"</span>)))
+<span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): PL, Petal.Width, Sepal.Length, Sepal.Width
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -244,11 +244,13 @@ converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_
 <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
 <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
 <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
@@ -258,8 +260,10 @@ converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+<code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -279,35 +283,24 @@ converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3learners"</span>)
 
-<span class='no'>task1</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>task2</span> <span class='kw'>=</span> <span class='no'>task1</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1234</span>)
+<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
 
-<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>scale.</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
-<span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task1</span>))</div><div class='output co'>#&gt; $output
-#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
-#&gt; * Target: Species
-#&gt; * Properties: multiclass
-#&gt; * Features (4):
-#&gt;   - dbl (4): PC1, PC2, PC3, PC4
-#&gt; </div><div class='input'><span class='no'>pop</span>$<span class='no'>state</span></div><div class='output co'>#&gt; Standard deviations (1, .., p=4):
-#&gt; [1] 1.7083611 0.9560494 0.3830886 0.1439265
-#&gt; 
-#&gt; Rotation (n x k) = (4 x 4):
-#&gt;                     PC1         PC2        PC3        PC4
-#&gt; Petal.Length  0.5804131 -0.02449161  0.1421264 -0.8014492
-#&gt; Petal.Width   0.5648565 -0.06694199  0.6342727  0.5235971
-#&gt; Sepal.Length  0.5210659 -0.37741762 -0.7195664  0.2612863
-#&gt; Sepal.Width  -0.2693474 -0.92329566  0.2443818 -0.1235096</div><div class='input'>
-<span class='no'>proxy</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"proxy"</span>, <span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>outnum</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>content</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>scale.</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))))
-<span class='no'>proxy</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task2</span>))</div><div class='output co'>#&gt; $output1
-#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
-#&gt; * Target: Species
-#&gt; * Properties: multiclass
-#&gt; * Features (4):
-#&gt;   - dbl (4): PC1, PC2, PC3, PC4
-#&gt; </div><div class='input'><span class='no'>proxy</span>$<span class='no'>state</span>$<span class='no'>state</span></div><div class='output co'>#&gt; NULL</div></pre>
+<span class='co'># use a proxy for preprocessing and a proxy for learning, i.e.,</span>
+<span class='co'># no preprocessing and classif.kknn</span>
+<span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"proxy"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"preproc"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>content</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>))) <span class='kw'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"proxy"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"learner"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>content</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.kknn"</span>)))
+<span class='no'>rr_kknn</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='kw'>learner</span> <span class='kw'>=</span> <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>g</span>), <span class='kw'>resampling</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"cv"</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='fl'>3</span>))
+<span class='no'>rr_kknn</span>$<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>msr</a></span>(<span class='st'>"classif.ce"</span>))</div><div class='output co'>#&gt; classif.ce 
+#&gt; 0.05333333 </div><div class='input'>
+<span class='co'># use pca for preprocessing and classif.rpart as the learner</span>
+<span class='no'>g</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>preproc.content</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>)
+<span class='no'>g</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>learner.content</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>)
+<span class='no'>rr_pca_rpart</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='kw'>learner</span> <span class='kw'>=</span> <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>g</span>), <span class='kw'>resampling</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"cv"</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='fl'>3</span>))
+<span class='no'>rr_pca_rpart</span>$<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>msr</a></span>(<span class='st'>"classif.ce"</span>))</div><div class='output co'>#&gt; classif.ce 
+#&gt; 0.06666667 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

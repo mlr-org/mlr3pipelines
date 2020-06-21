@@ -169,8 +169,7 @@ and tuning.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOpLearner$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())\cr
-</pre>
+<pre><span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>learner</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
 <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> to wrap, or a string identifying a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> in the <code><a href='https://mlr3.mlr-org.com/reference/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.</p></li>
@@ -258,11 +257,13 @@ Prediction time, in seconds.</p></li>
 <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
 <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
 <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
 <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
@@ -271,8 +272,10 @@ Prediction time, in seconds.</p></li>
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+<code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,

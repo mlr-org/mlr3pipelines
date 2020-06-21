@@ -180,6 +180,8 @@ Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a
 The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
 should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
 <code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
+<li><p><code>feature_types</code> :: <code>character</code><br />
+Feature types affected by the <code>PipeOp</code>. See <code>private$.select_cols()</code> for more information.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
@@ -196,9 +198,9 @@ the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
     
 
 <p>The <code>$state</code> is a named <code>list</code>; besides members added by inheriting classes, the members are:</p><ul>
-<li><p><code>affect_cols</code> :: <code>character</code><br />
+<li><p><code>affected_cols</code> :: <code>character</code><br />
 Names of features being selected by the <code>affect_columns</code> parameter.</p></li>
-<li><p><code>inference_cols</code> :: <code>character</code><br />
+<li><p><code>context_cols</code> :: <code>character</code><br />
 Names of features being selected by the <code>context_columns</code> parameter.</p></li>
 <li><p><code>intasklayout</code> :: <code>data.table</code><br />
 Copy of the training <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
@@ -207,7 +209,8 @@ the prediction <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task
 Copy of the trained <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
 the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> resulting from the prediction operation has the same features, feature layout, and feature types as after training.</p></li>
 <li><p><code>model</code> :: named <code>list</code><br />
-Model used for imputation. This is a list named by <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> features, containing the result of the <code>private$.train_imputer()</code> function for each one.</p></li>
+Model used for imputation. This is a list named by <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> features, containing the result of the <code>private$.train_imputer()</code> or
+<code>private$.train_nullmodel()</code> function for each one.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
@@ -248,13 +251,23 @@ See <code><a href='Selector.html'>Selector</a></code> for example functions. Def
 Selects which columns the <code><a href='PipeOp.html'>PipeOp</a></code> operates on. In contrast to
 the <code>affect_columns</code> parameter. <code>private$.select_cols()</code> is for the <em>inheriting class</em> to determine which columns
 the operator should function on, e.g. based on feature type, while <code>affect_columns</code> is a way for the <em>user</em>
-to limit the columns that a <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> should operate on.</p></li>
+to limit the columns that a <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> should operate on.
+This method can optionally be overloaded when inheriting <code>PipeOpImpute</code>;
+If this method is not overloaded, it defaults to selecting the columns of type indicated by the <code>feature_types</code> construction argument.</p></li>
 <li><p><code>.train_imputer(feature, type, context)</code><br />
 (<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>data.table</code>) -&gt; <code>any</code><br />
-Called once for each feature selected by <code>affect_columns</code> to create the model entry to be used for <code>private$.impute()</code>.</p></li>
+Abstract function that must be overloaded when inheriting.
+Called once for each feature selected by <code>affect_columns</code> to create the model entry to be used for <code>private$.impute()</code>. This function
+is only called for features with at least one non-missing value.</p></li>
+<li><p><code>.train_nullmodel(feature, type, context)</code><br />
+(<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>data.table</code>) -&gt; <code>any</code><br />
+Like <code>.train_imputer()</code>, but only called for each feature that only contains missing values. This is not an abstract function
+and, if not overloaded, gives a default response of <code>0</code> (<code>integer</code>, <code>numeric</code>), <code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, FALSE)</a></code> (<code>logical</code>), all available levels (<code>factor</code>/<code>ordered</code>),
+or the empty  string (<code>character</code>).</p></li>
 <li><p><code>.impute(feature, type, model, context)</code><br />
 (<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>any</code>, <code>data.table</code>) -&gt; <code>atomic</code><br />
-Imputes the features. <code>model</code> is the model created by <code>private$.train_imputer()</code></p></li>
+Imputes the features. <code>model</code> is the model created by <code>private$.train_imputer()</code> Default behaviour is to assume <code>model</code> is an atomic vector
+from which values are sampled to impute missing values of <code>feature</code>. <code>model</code> may have an attribute <code>probabilities</code> for non-uniform sampling.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -283,11 +296,13 @@ Imputes the features. <code>model</code> is the model created by <code>private$.
 <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
 <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
 <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
@@ -297,8 +312,10 @@ Imputes the features. <code>model</code> is the model created by <code>private$.
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+<code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -316,11 +333,13 @@ Imputes the features. <code>model</code> is the model created by <code>private$.
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
 <p>Other Imputation PipeOps: 
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
 
   </div>

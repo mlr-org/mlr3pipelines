@@ -52,7 +52,7 @@
 Performs the following steps:
 Drops empty factor levels using PipeOpFixFactors
 Imputes numeric features using PipeOpImputeHist and PipeOpMissInd
-Imputes factor features using PipeOpImputeNewlvl
+Imputes factor features using PipeOpImputeOOR
 Encodes factors using one-hot-encoding. Factors with a cardinality &amp;gt; max_cardinality are collapsed using [PipeOpCollapseFactors`].
 If scaling, numeric features are scaled to mean 0 and standard deviation 1.
 
@@ -163,7 +163,7 @@ factor variables, no encoding is performed." />
 Performs the following steps:</p><ul>
 <li><p>Drops empty factor levels using <code><a href='mlr_pipeops_fixfactors.html'>PipeOpFixFactors</a></code></p></li>
 <li><p>Imputes <code>numeric</code> features using <code><a href='mlr_pipeops_imputehist.html'>PipeOpImputeHist</a></code> and <code><a href='mlr_pipeops_missind.html'>PipeOpMissInd</a></code></p></li>
-<li><p>Imputes <code>factor</code> features using <code><a href='mlr_pipeops_imputenewlvl.html'>PipeOpImputeNewlvl</a></code></p></li>
+<li><p>Imputes <code>factor</code> features using <code><a href='mlr_pipeops_imputeoor.html'>PipeOpImputeOOR</a></code></p></li>
 <li><p>Encodes <code>factors</code> using <code>one-hot-encoding</code>. Factors with a cardinality &gt; max_cardinality<code> are collapsed using [</code>PipeOpCollapseFactors`].</p></li>
 <li><p>If <code>scaling</code>, numeric features are scaled to mean 0 and standard deviation 1.</p></li>
 </ul>

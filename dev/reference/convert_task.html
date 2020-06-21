@@ -158,6 +158,7 @@
   <span class='kw'>new_target</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>new_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>drop_original_target</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>drop_levels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -186,6 +187,11 @@ If <code>NULL</code> (default), a new task with the same task_type is created.</
       <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
 If <code>FALSE</code> (default), the original target is added as a feature.
 Otherwise the original target is dropped.</p></td>
+    </tr>
+    <tr>
+      <th>drop_levels</th>
+      <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code> (default), unused levels of the new target variable are dropped.</p></td>
     </tr>
     <tr>
       <th>...</th>

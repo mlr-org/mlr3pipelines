@@ -151,7 +151,13 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_ica.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputeconstant.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputehist.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputelearner.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputemean.html</loc>
@@ -163,7 +169,7 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputemode.html</loc>
   </url>
   <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputenewlvl.html</loc>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputeoor.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_imputesample.html</loc>
@@ -196,10 +202,16 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_quantilebin.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_randomresponse.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_regravg.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_removeconstants.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_renamecolumns.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_scale.html</loc>

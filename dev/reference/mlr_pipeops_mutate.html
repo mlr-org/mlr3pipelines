@@ -203,6 +203,9 @@ present features may still be overwritten. Initialized to <code>FALSE</code>.</p
 <p>A <code>formula</code> created using the <code>~</code> operator always contains a reference to the <code>environment</code> in which
 the <code>formula</code> is created. This makes it possible to use variables in the <code>~</code>-expressions that both
 reference either column names or variable names.</p>
+<p>Note that the <code>formula</code>s in <code>mutation</code> are evaluated sequentially. This allows for using
+variables that were constructed during evaluation of a previous formula. However, if existing
+features are changed, precedence is given to the original ones before the newly constructed ones.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
@@ -240,11 +243,13 @@ reference either column names or variable names.</p>
 <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
 <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
 <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
 <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
@@ -253,8 +258,10 @@ reference either column names or variable names.</p>
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+<code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -275,36 +282,51 @@ reference either column names or variable names.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
 
+<span class='no'>constant</span> <span class='kw'>=</span> <span class='fl'>1</span>
 <span class='no'>pom</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"mutate"</span>)
 <span class='no'>pom</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>mutation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='kw'>Sepal.Length_plus_constant</span> <span class='kw'>=</span> ~ <span class='no'>Sepal.Length</span> + <span class='no'>constant</span>,
   <span class='kw'>Sepal.Area</span> <span class='kw'>=</span> ~ <span class='no'>Sepal.Width</span> * <span class='no'>Sepal.Length</span>,
-  <span class='kw'>Petal.Area</span> <span class='kw'>=</span> ~ <span class='no'>Petal.Width</span> * <span class='no'>Petal.Length</span>
+  <span class='kw'>Petal.Area</span> <span class='kw'>=</span> ~ <span class='no'>Petal.Width</span> * <span class='no'>Petal.Length</span>,
+  <span class='kw'>Sepal.Area_plus_Petal.Area</span> <span class='kw'>=</span> ~ <span class='no'>Sepal.Area</span> + <span class='no'>Petal.Area</span>
 )
 
-<span class='no'>pom</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width Sepal.Area
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5      17.85
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0      14.70
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2      15.04
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1      14.26
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6      18.00
-#&gt;  ---                                                                       
-#&gt; 146: virginica          5.2         2.3          6.7         3.0      20.10
-#&gt; 147: virginica          5.0         1.9          6.3         2.5      15.75
-#&gt; 148: virginica          5.2         2.0          6.5         3.0      19.50
-#&gt; 149: virginica          5.4         2.3          6.2         3.4      21.08
-#&gt; 150: virginica          5.1         1.8          5.9         3.0      17.70
-#&gt;      Petal.Area
-#&gt;   1:       0.28
-#&gt;   2:       0.28
-#&gt;   3:       0.26
-#&gt;   4:       0.30
-#&gt;   5:       0.28
-#&gt;  ---           
-#&gt; 146:      11.96
-#&gt; 147:       9.50
-#&gt; 148:      10.40
-#&gt; 149:      12.42
-#&gt; 150:       9.18</div></pre>
+<span class='no'>pom</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+#&gt;   1:    setosa          1.4         0.2          5.1         3.5
+#&gt;   2:    setosa          1.4         0.2          4.9         3.0
+#&gt;   3:    setosa          1.3         0.2          4.7         3.2
+#&gt;   4:    setosa          1.5         0.2          4.6         3.1
+#&gt;   5:    setosa          1.4         0.2          5.0         3.6
+#&gt;  ---                                                            
+#&gt; 146: virginica          5.2         2.3          6.7         3.0
+#&gt; 147: virginica          5.0         1.9          6.3         2.5
+#&gt; 148: virginica          5.2         2.0          6.5         3.0
+#&gt; 149: virginica          5.4         2.3          6.2         3.4
+#&gt; 150: virginica          5.1         1.8          5.9         3.0
+#&gt;      Sepal.Length_plus_constant Sepal.Area Petal.Area
+#&gt;   1:                        6.1      17.85       0.28
+#&gt;   2:                        5.9      14.70       0.28
+#&gt;   3:                        5.7      15.04       0.26
+#&gt;   4:                        5.6      14.26       0.30
+#&gt;   5:                        6.0      18.00       0.28
+#&gt;  ---                                                 
+#&gt; 146:                        7.7      20.10      11.96
+#&gt; 147:                        7.3      15.75       9.50
+#&gt; 148:                        7.5      19.50      10.40
+#&gt; 149:                        7.2      21.08      12.42
+#&gt; 150:                        6.9      17.70       9.18
+#&gt;      Sepal.Area_plus_Petal.Area
+#&gt;   1:                      18.13
+#&gt;   2:                      14.98
+#&gt;   3:                      15.30
+#&gt;   4:                      14.56
+#&gt;   5:                      18.28
+#&gt;  ---                           
+#&gt; 146:                      32.06
+#&gt; 147:                      25.25
+#&gt; 148:                      29.90
+#&gt; 149:                      33.50
+#&gt; 150:                      26.88</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

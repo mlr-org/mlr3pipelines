@@ -181,7 +181,7 @@ useful to use <code><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpLearnerCV</span>$<span class='fu'>new</span>(<span class='no'>learner</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span>(<span class='no'>learner</span>)) <span class='no'>learner</span> <span class='kw'>else</span> <span class='no'>learner</span>$<span class='no'>id</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpLearnerCV</span>$<span class='fu'>new</span>(<span class='no'>learner</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> <br />
 <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> to use for cross validation / prediction, or a string identifying a
@@ -228,9 +228,10 @@ Prediction time, in seconds.</p></li>
 <p>The parameters are the parameters inherited from the <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as the parameters of the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> wrapped by this object.
 Besides that, parameters introduced are:</p><ul>
 <li><p><code>resampling.method</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Which resampling method do we want to use. Currently only supports <code>"cv"</code>.</p></li>
+Which resampling method do we want to use. Currently only supports <code>"cv"</code> and <code>"insample"</code>. <code>"insample"</code> generates
+predictions with the model trained on all training data.</p></li>
 <li><p><code>resampling.folds</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Number of cross validation folds. Initialized to 3.</p></li>
+Number of cross validation folds. Initialized to 3. Only used for <code>resampling.method = "cv"</code>.</p></li>
 <li><p><code>keep_response</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
 Only effective during <code>"prob"</code> prediction: Whether to keep response values, if available. Initialized to <code>FALSE</code>.</p></li>
 </ul>

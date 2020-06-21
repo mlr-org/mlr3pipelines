@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpClassBalancing — mlr_pipeops_classbalancing • mlr3pipelines</title>
+<title>PipeOpImputeOOR — mlr_pipeops_imputeoor • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,11 +47,13 @@
 
 
 
-<meta property="og:title" content="PipeOpClassBalancing — mlr_pipeops_classbalancing" />
-<meta property="og:description" content="Both undersamples a Task to keep only a fraction of the rows of the majority class,
-as well as oversamples (repeats data points) rows of the minority class.
-Sampling happens only during training phase. Class-balancing a Task by sampling may be
-beneficial for classification with imbalanced training data." />
+<meta property="og:title" content="PipeOpImputeOOR — mlr_pipeops_imputeoor" />
+<meta property="og:description" content="Impute factorial features by adding a new level &quot;.MISSING&quot;.
+Impute numerical features by constant values shifted below the minimum or above the maximum by
+using \(min(x) - offset - multiplier * diff(range(x))\) or
+\(max(x) + offset + multiplier * diff(range(x))\).
+This type of imputation is especially sensible in the context of tree-based methods, see also
+Ding &amp;amp; Simonoff (2010)." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -145,30 +147,32 @@ beneficial for classification with imbalanced training data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpClassBalancing</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpClassBalancing.R'><code>R/PipeOpClassBalancing.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_classbalancing.Rd</code></div>
+    <h1>PipeOpImputeOOR</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImputeOOR.R'><code>R/PipeOpImputeOOR.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_imputeoor.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Both undersamples a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> to keep only a fraction of the rows of the majority class,
-as well as oversamples (repeats data points) rows of the minority class.</p>
-<p>Sampling happens only during training phase. Class-balancing a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> by sampling may be
-beneficial for classification with imbalanced training data.</p>
+    <p>Impute factorial features by adding a new level <code>".MISSING"</code>.</p>
+<p>Impute numerical features by constant values shifted below the minimum or above the maximum by
+using \(min(x) - offset - multiplier * diff(range(x))\) or
+\(max(x) + offset + multiplier * diff(range(x))\).</p>
+<p>This type of imputation is especially sensible in the context of tree-based methods, see also
+Ding &amp; Simonoff (2010).</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpClassBalancing</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"classbalancing"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpImputeOOR</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"imputeoor"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-Identifier of the resulting  object, default <code>"classbalancing"</code></p></li>
+<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Identifier of resulting object, default <code>"imputeoor"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -177,68 +181,44 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>. Instead of a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, a
-<code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code> is used as input and output during training and prediction.</p>
-<p>The output during training is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with added or removed rows to balance target classes.
-The output during prediction is the unchanged input.</p>
+<p>Input and output channels are inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected features having missing values imputed as described above.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
+<p>The <code>$state$model</code> contains either <code>".MISSING"</code> used for <code>character</code> and <code>factor</code> (also
+<code>ordered</code>) features or <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> indicating the constant value used for imputation of
+<code>integer</code> and <code>numeric</code> features.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>; however, the <code>affect_columns</code> parameter is <em>not</em> present. Further parameters are:</p><ul>
-<li><p><code>ratio</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Ratio of number of rows of classes to keep, relative
-to the <code>$reference</code> value. Initialized to 1.</p></li>
-<li><p><code>reference</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-What the <code>$ratio</code> value is measured against. Can be <code>"all"</code> (mean instance count of
-all classes), <code>"major"</code> (instance count of class with most instances), <code>"minor"</code>
-(instance count of class with fewest instances), <code>"nonmajor"</code> (average instance
-count of all classes except the major one), <code>"nonminor"</code> (average instance count
-of all classes except the minor one), and <code>"one"</code> (<code>$ratio</code> determines the number of
-instances to have, per class). Initialized to <code>"all"</code>.</p></li>
-<li><p><code>adjust</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Which classes to up / downsample. Can be <code>"all"</code> (up and downsample all to match required
-instance count), <code>"major"</code>, <code>"minor"</code>, <code>"nonmajor"</code>, <code>"nonminor"</code> (see respective values
-for <code>$reference</code>), <code>"upsample"</code> (only upsample), and <code>"downsample"</code>. Initialized to <code>"all"</code>.</p></li>
-<li><p><code>shuffle</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
-Whether to shuffle the rows of the resulting task.
-In case the data is upsampled and <code>shuffle = FALSE</code>, the resulting task will have the original
-rows (which were not removed in downsampling) in the original order, followed by all newly added rows
-ordered by target class.
-Initialized to <code>TRUE</code>.</p></li>
+<p>The parameters are the parameters inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>, as well as:</p><ul>
+<li><p><code>min</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
+Should <code>integer</code> and <code>numeric</code> features be shifted below the minimum? Default is TRUE. If FALSE
+they are shifted above the maximum. See also the description above.</p></li>
+<li><p><code>offset</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+Numerical non-negative offset as used in the description above for <code>integer</code> and <code>numeric</code>
+features. Default is 1.</p></li>
+<li><p><code>multiplier</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+Numerical non-negative multiplier as used in the description above for <code>integer</code> and <code>numeric</code>
+features. Default is 1.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Up / downsampling happens as follows: At first, a "target class count" is calculated, by taking the mean
-class count of all classes indicated by the <code>reference</code> parameter (e.g. if <code>reference</code> is <code>"nonmajor"</code>:
-the mean class count of all classes that are not the "major" class, i.e. the class with the most samples)
-and multiplying this with the value of the <code>ratio</code> parameter. If <code>reference</code> is <code>"one"</code>, then the "target
-class count" is just the value of <code>ratio</code> (i.e. <code>1 * ratio</code>).</p>
-<p>Then for each class that is referenced by the <code>adjust</code> parameter (e.g. if <code>adjust</code> is <code>"nonminor"</code>:
-each class that is not the class with the fewest samples), <code>PipeOpClassBalancing</code> either throws out
-samples (downsampling), or adds additional rows that are equal to randomly chosen samples (upsampling),
-until the number of samples for these classes equals the "target class count".</p>
-<p>Uses <code>task$filter()</code> to remove rows. When identical rows are added during upsampling, then the <code>task$row_roles$use</code> can <em>not</em> be used
-to duplicate rows because of [inaudible]; instead the <code>task$rbind()</code> function is used, and
-a new <code>data.table</code> is attached that contains all rows that are being duplicated exactly as many times as they are being added.</p>
-    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
-
-    
-
-<p>Only fields inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Adds an explicit new <code>level()</code> to <code>factor</code> and <code>ordered</code> features, but not to <code>character</code> features.
+For <code>integer</code> and <code>numeric</code> features uses the <code>min</code>, <code>max</code>, <code>diff</code> and <code>range</code> functions.
+<code>integer</code> and <code>numeric</code> features that are entirely <code>NA</code> are imputed as <code>0</code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -251,6 +231,7 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
 <code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
 <code><a href='mlr_pipeops_chunk.html'>mlr_pipeops_chunk</a></code>,
+<code><a href='mlr_pipeops_classbalancing.html'>mlr_pipeops_classbalancing</a></code>,
 <code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
@@ -271,7 +252,6 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
 <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
 <code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
-<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
 <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
@@ -300,32 +280,56 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
+<p>Other Imputation PipeOps: 
+<code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
+<code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
+<code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
+<code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
+<code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
+<code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
-
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"spam"</span>)
-<span class='no'>opb</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"classbalancing"</span>)
-
-<span class='co'># target class counts</span>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>task</span>$<span class='fu'>truth</span>())</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;    1813    2788 </div><div class='input'>
-<span class='co'># double the instances in the minority class (spam)</span>
-<span class='no'>opb</span>$<span class='no'>param_set</span>$<span class='no'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>reference</span> <span class='kw'>=</span> <span class='st'>"minor"</span>,
-  <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='st'>"minor"</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>result</span> <span class='kw'>=</span> <span class='no'>opb</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1L</span>]]
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>result</span>$<span class='fu'>truth</span>())</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;    3626    2788 </div><div class='input'>
-<span class='co'># up or downsample all classes until exactly 20 per class remain</span>
-<span class='no'>opb</span>$<span class='no'>param_set</span>$<span class='no'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>reference</span> <span class='kw'>=</span> <span class='st'>"one"</span>,
-  <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>shuffle</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>result</span> <span class='kw'>=</span> <span class='no'>opb</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>result</span>$<span class='fu'>truth</span>())</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;      20      20 </div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2409</span>)
+<span class='no'>data</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"pima"</span>)$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+<span class='no'>data</span>$<span class='no'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='no'>letters</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>766</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='fl'>NA</span>))
+<span class='no'>data</span>$<span class='no'>z</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>ordered</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>767</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)))
+<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='st'>"task"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"diabetes"</span>)
+<span class='no'>task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
+#&gt;        0        0        5      374       11        0        0       35 
+#&gt;  triceps        y        z 
+#&gt;      227        2        1 </div><div class='input'><span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputeoor"</span>)
+<span class='no'>new_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
+<span class='no'>new_task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
+#&gt;        0        0        0        0        0        0        0        0 
+#&gt;  triceps        y        z 
+#&gt;        0        0        0 </div><div class='input'><span class='no'>new_task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;      diabetes age pedigree pregnant glucose insulin mass pressure triceps
+#&gt;   1:      pos  50    0.627        6     148    -819 33.6       72      35
+#&gt;   2:      neg  31    0.351        1      85    -819 26.6       66      29
+#&gt;   3:      pos  32    0.672        8     183    -819 23.3       64     -86
+#&gt;   4:      neg  21    0.167        1      89      94 28.1       66      23
+#&gt;   5:      pos  33    2.288        0     137     168 43.1       40      35
+#&gt;  ---                                                                     
+#&gt; 764:      neg  63    0.171       10     101     180 32.9       76      48
+#&gt; 765:      neg  27    0.340        2     122    -819 36.8       70      27
+#&gt; 766:      neg  30    0.245        5     121     112 26.2       72      23
+#&gt; 767:      pos  47    0.349        1     126    -819 30.1       60     -86
+#&gt; 768:      neg  23    0.315        1      93    -819 30.4       70      31
+#&gt;             y        z
+#&gt;   1: .MISSING .MISSING
+#&gt;   2:        l        9
+#&gt;   3:        q        6
+#&gt;   4:        f        3
+#&gt;   5:        l        3
+#&gt;  ---                  
+#&gt; 764:        o        7
+#&gt; 765:        n        5
+#&gt; 766:        e        6
+#&gt; 767:        c        8
+#&gt; 768: .MISSING        9</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
