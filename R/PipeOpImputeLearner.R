@@ -50,6 +50,15 @@
 #' The [`Learner`][mlr3::Learner] does *not* necessarily need to handle missing values in cases
 #' where `context_columns` is chosen well (or there is only one column with missing values present).
 #'
+#' @section Fields:
+#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`], as well as:
+#' * `learners`  :: `list` of [`Learner`][mlr3::Learner] | `NULL`\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. This list is named by features for which a `Learner` was fitted, and
+#'   contains the same `Learner`, but with different respective models for each feature. If this `PipeOp` is not trained,
+#'   this is an empty `list`. For features that were entirely `NA` during training, the `list` contains `NULL` elements.
+#' * `learner_bare` :: [`Learner`][mlr3::Learner]\cr
+#'   Untrained [`Learner`][mlr3::Learner] being wrapped. Read-only.
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
@@ -87,7 +96,22 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     }
   ),
   active = list(
-    learner = function(val) {
+    learners = function(val) {
+      if (!missing(val)) {
+        stop("$learners is read-only.")
+      }
+      if (is.null(self$state)) {
+        list()
+      } else {
+        map(self$state$model, function(x) {
+          if (is.atomic(x)) return(NULL)
+          lrn = private$.learner$clone(deep = TRUE)
+          lrn$state = x
+          lrn
+        })
+      }
+    },
+    learner_bare = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
           stop("$learner is read-only.")
