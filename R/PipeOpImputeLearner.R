@@ -87,13 +87,6 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     }
   ),
   active = list(
-    id = function(val) {
-      if (!missing(val)) {
-        private$.id = val
-        private$.learner$param_set$set_id = val
-      }
-      private$.id
-    },
     learner = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {

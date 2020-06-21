@@ -72,7 +72,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
         return(fvals)
       }
       model = tab$fvals
-      attr(model, "probabilities") = model / sum(model)
+      attr(model, "probabilities") = tab$N / sum(tab$N)
       model
     }
   )
