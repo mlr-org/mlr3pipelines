@@ -22,12 +22,12 @@ tools::buildVignettes(dir = "mlr3pipelines")
 system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
 devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "proxy")
+testthat::test_package("mlr3pipelines")
 
 
 testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 
-testthat::test_package("mlr3pipelines", filter = "randomresponse")
+testthat::test_package("mlr3pipelines", filter = "dictionary")
 
 
 
@@ -36,6 +36,8 @@ testthat::test_package("mlr3pipelines", filter = "scale")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
 testthat::test_package("mlr3pipelines", filter = "conversion")
+
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "imputelearner")
 
 devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "impute")
 
