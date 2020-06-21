@@ -18,7 +18,7 @@
 #' @param \dots \cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
-convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = FALSE, drop_levels = TRUE, ...) {
+convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = TRUE, drop_levels = FALSE, ...) {
   assert_task(intask)
   assert_subset(new_target, choices = intask$col_info$id)
   assert_choice(new_type, choices = mlr_reflections$task_types$type, null.ok = TRUE)
