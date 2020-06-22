@@ -77,14 +77,6 @@ PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   ),
   private = list(
     weighted_avg_predictions = function(inputs, weights, row_ids, truth) {
-      has_probs = every(inputs, function(x) !is.null(x$prob))
-      has_classif_response = every(inputs, function(x) !is.null(x$response))
-      if (!(has_probs || has_classif_response)) {
-        stop("PipeOpClassifAvg input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
-      }
-
-      prob = response = NULL
-
       # PredictionClassif makes sure that matrix column names and response levels are identical to levels(x$truth).
       # We therefore only check that truth levels are identical.
       lvls = map(inputs, function(x) levels(x$truth))
@@ -93,15 +85,16 @@ PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
         stop("PipeOpClassifAvg input predictions are incompatible (different levels of target variable).")
       }
 
-      if (has_probs) {
+      prob = NULL
+      if (every(inputs, function(x) !is.null(x$prob))) {
         prob = weighted_matrix_sum(map(inputs, "prob"), weights)
+      } else if (every(inputs, function(x) !is.null(x$response))) {
+        prob = weighted_factor_mean(map(inputs, "response"), weights, lvls)
+      } else {
+        stop("PipeOpClassifAvg input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
       }
 
-      if (has_classif_response) {
-        response = weighted_factor_mean(map(inputs, "response"), weights, lvls)
-      }
-
-      PredictionClassif$new(row_ids = row_ids, truth = truth, response = response, prob = prob)
+      PredictionClassif$new(row_ids = row_ids, truth = truth, prob = pmin(pmax(prob, 0), 1))
     }
   )
 )

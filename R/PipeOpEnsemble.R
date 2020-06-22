@@ -78,7 +78,7 @@
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0, collect = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
+    initialize = function(innum = 0, collect = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
       assert_integerish(innum, lower = 0)
       param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
       param_set$values$weights = 1
@@ -95,7 +95,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = inname, train = intype[[1]], predict = intype[[2]]),
         output = data.table(name = "output", train = "NULL", predict = prediction_type),
-        tags = "ensemble"
+        tags = c(tags, "ensemble")
       )
     }
   ),
@@ -166,10 +166,11 @@ weighted_matrix_sum = function(matrices, weights) {
 # @return `factor`
 weighted_factor_mean = function(factors, weights, alllevels) {
   accmat = matrix(0, nrow = length(factors[[1]]), ncol = length(alllevels))
+  colnames(accmat) = alllevels
   for (idx in seq_along(factors)) {
     rdf = data.frame(x = factor(factors[[idx]], levels = alllevels))
     curmat = stats::model.matrix(~ 0 + x, rdf) * weights[idx]
     accmat = accmat + curmat
   }
-  factor(alllevels[max.col(accmat)], levels = alllevels)
+  accmat
 }
