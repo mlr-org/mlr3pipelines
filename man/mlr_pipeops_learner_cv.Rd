@@ -95,7 +95,7 @@ The \verb{$state} is currently not updated by prediction, so the \verb{$state$pr
 Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{learner}  :: \code{\link[mlr3:Learner]{Learner}}\cr
-\code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. This learner contains the model if the \code{PipeOp} is trained. Read-only.
 }
 }
 

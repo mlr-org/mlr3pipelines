@@ -51,3 +51,23 @@ test_that("PipeOpLearner - graph but no id", {
   po = PipeOpLearner$new(g)
   expect_string(po$id)
 })
+
+test_that("PipeOpLearner - model active binding to state", {
+  lrn = mlr_learners$get("classif.featureless")
+  po = PipeOpLearner$new(lrn)
+  task = mlr_tasks$get("iris")
+
+  # before training states are NULL
+  expect_null(po$state)
+  expect_equal(po$learner$state, po$state)
+
+  # after training learner's state and state are equal
+  train_out = po$train(list(task))
+  train_state = po$state
+  expect_equal(po$learner$state, train_state)
+
+  # after predicting states are unchanged
+  predict_out = po$predict(list(task))
+  expect_equal(po$state, train_state)
+  expect_equal(po$learner$state, po$state)
+})
