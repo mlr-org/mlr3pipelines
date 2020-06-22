@@ -71,8 +71,8 @@
 PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(
-    initialize = function(innum = 0, id = "classifavg", param_vals = list()) {
-      super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionClassif", packages = "stats")
+    initialize = function(innum = 0, collect = FALSE, id = "classifavg", param_vals = list()) {
+      super$initialize(innum, collect, id, param_vals = param_vals, prediction_type = "PredictionClassif", packages = "stats")
     }
   ),
   private = list(

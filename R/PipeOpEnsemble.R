@@ -10,12 +10,14 @@
 #' @section Construction:
 #' Note: This object is typically constructed via a derived class, e.g. [`PipeOpClassifAvg`] or [`PipeOpRegrAvg`].
 #' ```
-#' PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+#' PipeOpEnsemble$new(innum = 0, collect = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 #' ```
 #'
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#' * `collect` :: `logical(1)`\cr
+#'   FIXME document this
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
@@ -76,13 +78,22 @@
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
+    initialize = function(innum = 0, collect = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
       assert_integerish(innum, lower = 0)
       param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
       param_set$values$weights = 1
       inname = if (innum) rep_suffix("input", innum) else "..."
+      intype = c("NULL", prediction_type)
+      private$.collect = assert_flag(collect)
+      if (collect) {
+        if (innum) {
+          stop("collect only works with innum == 0")
+        }
+        inname = "[...]"
+        intype = sprintf("[%s]", intype)
+      }
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = inname, train = "NULL", predict = prediction_type),
+        input = data.table(name = inname, train = intype[[1]], predict = intype[[2]]),
         output = data.table(name = "output", train = "NULL", predict = prediction_type),
         tags = "ensemble"
       )
@@ -95,6 +106,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       list(NULL)
     },
     .predict = function(inputs) {
+      if (private$.collect) {
+        inputs = unclass(inputs[[1]])
+      }
       weights = self$param_set$values$weights
       row_ids = inputs[[1]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
@@ -110,7 +124,8 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       weights = weights[weights != 0]
 
       list(private$weighted_avg_predictions(inputs, weights, row_ids, truth))
-    }
+    },
+    .collect = NULL
   )
 )
 

@@ -66,8 +66,8 @@ PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum = 0, id = "regravg", param_vals = list(), ...) {
-      super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
+    initialize = function(innum = 0, collect = FALSE, id = "regravg", param_vals = list(), ...) {
+      super$initialize(innum, collect, id, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
     }
   ),
   private = list(
