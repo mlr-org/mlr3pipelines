@@ -130,6 +130,7 @@ Collate:
     'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
+    'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
