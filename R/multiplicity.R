@@ -6,8 +6,12 @@ Multiplicity = function(...) {
 }
 
 print.Multiplicity = function(x, ...) {
-  cat("Multiplicity:\n")
-  print(unclass(x), ...)
+  if (!length(x)) {
+    cat("Empty Multiplicity.\n")
+  } else {
+    cat("Multiplicity:\n")
+    print(unclass(x), ...)
+  }
 }
 
 #' @title Check if a Value is a Multiplicity
