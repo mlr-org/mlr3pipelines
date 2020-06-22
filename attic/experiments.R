@@ -30,6 +30,36 @@ testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 testthat::test_package("mlr3pipelines", filter = "dictionary")
 
 
+ntree <- 10
+mtry <- 2
+
+gr <- po("replicate", reps = ntree) %>>%
+  po("select", selector = function(task) sample(task$feature_names, mtry)) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE)
+
+gr <- po("ovrsplit") %>>% lrn("classif.rpart") %>>% po("ovrunite")
+gr <- po("ovrsplit") %>>%
+  po("replicate", reps = 3) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE) %>>%
+  po("ovrunite")
+
+gr <- po("replicate", reps = 3) %>>%
+  po("ovrsplit") %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("ovrunite") %>>%
+  po("classifavg", collect = TRUE)
+
+library("mlr3learners")
+
+gr <- list(
+    po("nop"),
+    po("learner_cv", lrn("regr.lm")),
+    po("replicate", reps = 3) %>>% po("learner_cv", lrn("regr.ranger"))
+  ) %>>%
+  po("featureunion") %>>% lrn("regr.rpart") %>>% po("regravg", collect = TRUE)
+
 
 
 testthat::test_package("mlr3pipelines", filter = "scale")
