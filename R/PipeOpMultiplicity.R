@@ -1,9 +1,9 @@
 #' @title Implicate Multiplicity
 #' #export
-PipeOpImplicateMultiplicity = R6Class("PipeOpImplicateMultiplicity",
+PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0L, id = "implicatemultiplicity", param_vals = list()) {
+    initialize = function(innum = 0L, id = "multiplicityimply", param_vals = list()) {
       assert(
         check_int(innum, lower = 0L),
         check_character(innum, min.len = 1L, any.missing = FALSE)
@@ -36,14 +36,14 @@ PipeOpImplicateMultiplicity = R6Class("PipeOpImplicateMultiplicity",
   )
 )
 
-mlr_pipeops$add("implicatemultiplicity", PipeOpImplicateMultiplicity)
+mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 
 #' @title Explicate Multiplicity
 #' #export
-PipeOpExplicateMultiplicity = R6Class("PipeOpExplicateMultiplicity",
+PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
   inherit = PipeOp,
   public = list(
-    initialize = function(outnum, id = "explicatemultiplicity", param_vals = list()) {
+    initialize = function(outnum, id = "multiplicityexply", param_vals = list()) {
       assert_int(outnum, lower = 1)
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "[*]", predict = "[*]"),
@@ -64,7 +64,7 @@ PipeOpExplicateMultiplicity = R6Class("PipeOpExplicateMultiplicity",
   )
 )
 
-mlr_pipeops$add("explicatemultiplicity", PipeOpExplicateMultiplicity, list("N"))
+mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 
 
 #' @title Replicate through Multiplicity
