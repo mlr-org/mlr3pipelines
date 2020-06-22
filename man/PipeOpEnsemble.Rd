@@ -12,12 +12,14 @@ for a \code{PipeOp} and requires deriving classes to create the \code{private$we
 }
 \section{Construction}{
 
-Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpClassifAvg}} or \code{\link{PipeOpRegrAvg}}.\preformatted{PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpClassifAvg}} or \code{\link{PipeOpRegrAvg}}.\preformatted{PipeOpEnsemble$new(innum = 0, collect = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 }
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
 Determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+\item \code{collect} :: \code{logical(1)}\cr
+FIXME document this
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr

@@ -24,7 +24,7 @@ the values of these possibly duplicated features. True duplicated features are o
 single time to the output task.
 }
 \section{Construction}{
-\preformatted{PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(),
+\preformatted{PipeOpFeatureUnion$new(innum = 0, collect = FALSE, id = "featureunion", param_vals = list(),
   assert_targets_equal = TRUE)
 }
 \itemize{
@@ -33,6 +33,8 @@ Determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number
 of inputs. If \code{innum} is a \code{character} vector, the number of input channels is the length of
 \code{innum}, and the columns of the result are prefixed with the values.
+\item \code{collect} :: \code{logical(1)}\cr
+FIXME document this
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting object, default \code{"featureunion"}.
 \item \code{param_vals} :: named \code{list}\cr
