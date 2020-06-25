@@ -7,7 +7,7 @@
 \usage{
 pipeline_targettrafo(
   graph,
-  trafo_pipeop = PipeOpTargetTrafoSimple$new(),
+  trafo_pipeop = PipeOpTargetMutate$new(),
   id_prefix = ""
 )
 }
@@ -19,10 +19,10 @@ single \code{\link[mlr3:Task]{Task}} as input.}
 
 \item{trafo_pipeop}{\code{\link{PipeOp}} \cr
 A \code{\link{PipeOp}} that is a subclass of \code{\link{PipeOpTargetTrafo}}. Default is
-\code{\link{PipeOpTargetTrafoSimple}}.}
+\code{\link{PipeOpTargetMutate}}.}
 
 \item{id_prefix}{\code{character(1)} \cr
-Optional id prefix to prepend to \code{\link{PipeOpTargetInverter}} ID. The resulting ID will be
+Optional id prefix to prepend to \code{\link{PipeOpTargetInvert}} ID. The resulting ID will be
 \code{"[id_prefix]targetinverter"}. Default is \code{""}.}
 }
 \value{
@@ -33,9 +33,9 @@ Wraps a \code{\link{Graph}} that transforms a target during training and inverts
 during prediction. This is done as follows:
 \itemize{
 \item Specify a transformation and inversion function using any subclass of \code{\link{PipeOpTargetTrafo}}, defaults to
-\code{\link{PipeOpTargetTrafoSimple}}, afterwards apply \code{graph}.
-\item At the very end, during prediction the transformation is inverted using \code{\link{PipeOpTargetInverter}}.
-\item To set a transformation and inversion function for \code{\link{PipeOpTargetTrafoSimple}} see the
+\code{\link{PipeOpTargetMutate}}, afterwards apply \code{graph}.
+\item At the very end, during prediction the transformation is inverted using \code{\link{PipeOpTargetInvert}}.
+\item To set a transformation and inversion function for \code{\link{PipeOpTargetMutate}} see the
 parameters \code{trafo} and \code{inverter} of the \code{param_set} of the resulting \code{\link{Graph}}.
 }
 }
@@ -43,22 +43,22 @@ parameters \code{trafo} and \code{inverter} of the \code{param_set} of the resul
 library("mlr3")
 
 tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
-tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
-tt$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
+tt$param_set$values$targetmutate.inverter = function(x) 2 ^ x
 
 # gives the same as
 g = Graph$new()
-g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
+g$add_pipeop(PipeOpTargetMutate$new(param_vals = list(
   trafo = function(x) log(x, base = 2),
   inverter = function(x) 2 ^ x)
   )
 )
 g$add_pipeop(LearnerRegrRpart$new())
-g$add_pipeop(PipeOpTargetInverter$new())
-g$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter",
+g$add_pipeop(PipeOpTargetInvert$new())
+g$add_edge(src_id = "targetmutate", dst_id = "targetinvert",
   src_channel = 1, dst_channel = 1)
-g$add_edge(src_id = "targettrafosimple", dst_id = "regr.rpart",
+g$add_edge(src_id = "targetmutate", dst_id = "regr.rpart",
   src_channel = 2, dst_channel = 1)
-g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
+g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
   src_channel = 1, dst_channel = 2)
 }

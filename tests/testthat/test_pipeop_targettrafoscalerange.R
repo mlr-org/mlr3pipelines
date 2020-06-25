@@ -15,7 +15,7 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
   b = 1 / (rng[2L] - rng[1L])
   a = -rng[1L] * b
   expect_equal(train_out1[[2L]]$data(cols = "medv.scaled")[[1L]], a + x * b)
-  expect_equal(po$state[[1L]], c(a, b))
+  expect_equal(po$state, list(scale = b, offset = a))
 
   predict_out1 = po$predict(list(task))
 
@@ -29,10 +29,10 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
   g = Graph$new()
   g$add_pipeop(po)
   g$add_pipeop(LearnerRegrRpart$new())
-  g$add_pipeop(PipeOpTargetInverter$new())
-  g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinverter", src_channel = 1L, dst_channel = 1L)
+  g$add_pipeop(PipeOpTargetInvert$new())
+  g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
-  g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter", src_channel = 1L, dst_channel = 2L)
+  g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
 
   train_out3 = g$train(task)
   predict_out3 = g$predict(task)
@@ -44,7 +44,7 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
   expect_equivalent(predict_out3[[1L]]$response, predict_out4$response)
 
   # fails for other Task's than TaskRegr
-  expect_error(po$train(list(mlr_tasks$get("iris"))), regexp = "TaskRegr")
+  expect_error(po$train(list(mlr_tasks$get("iris"))), regexp = "Must inherit from class 'TaskRegr'")
 })
 
 test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
@@ -72,10 +72,10 @@ test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
   g = Graph$new()
   g$add_pipeop(po)
   g$add_pipeop(LearnerRegrRpart$new())
-  g$add_pipeop(PipeOpTargetInverter$new())
-  g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinverter", src_channel = 1L, dst_channel = 1L)
+  g$add_pipeop(PipeOpTargetInvert$new())
+  g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
-  g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter", src_channel = 1L, dst_channel = 2L)
+  g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
 
   task$row_roles$use = 1:50
   train_out2 = g$train(task)
@@ -85,4 +85,3 @@ test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
   expect_equivalent((predict_out1$truth - a) / b, predict_out2[[1L]]$truth)
   expect_equivalent((predict_out1$response - a) / b, predict_out2[[1L]]$response)
 })
-

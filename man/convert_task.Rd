@@ -8,8 +8,8 @@ convert_task(
   intask,
   new_target = NULL,
   new_type = NULL,
-  drop_original_target = FALSE,
-  drop_levels = TRUE,
+  drop_original_target = TRUE,
+  drop_levels = FALSE,
   ...
 )
 }
