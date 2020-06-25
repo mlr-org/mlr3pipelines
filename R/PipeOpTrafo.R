@@ -121,7 +121,6 @@
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
-    # FIXME: maybe this should get a `task` argument so you can define subclasses that only work for subtasks etc.
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type_in, predict = task_type_in),
@@ -153,14 +152,14 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
     },
 
     .train = function(inputs) {
-      intask = inputs[[1]]$clone(deep = TRUE)
+      intask = inputs[[1L]]$clone(deep = TRUE)
       self$state = private$.get_state(intask)
       intask = private$.transform(intask, "train")
       list(NULL, intask)
     },
 
     .predict = function(inputs) {
-      intask = inputs[[1]]$clone(deep = TRUE)
+      intask = inputs[[1L]]$clone(deep = TRUE)
       predict_phase_state = private$.train_invert(intask)
       intask = private$.transform(intask, "predict")
       list(
@@ -407,8 +406,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange",
-#'   param_vals = list())
+#' PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -511,7 +509,6 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' During prediction: Sets all target values to `NA` before calling the `trafo` again.
 #' In case target after the `trafo` is a factor, levels saved in the `state` are
 #' set during prediction.
-#'
 #'
 #' As a special case when `trafo` is `identity` and `new_target_name` matches an existing column
 #' name of the data of the input task, this column is set as the new target. Depending on

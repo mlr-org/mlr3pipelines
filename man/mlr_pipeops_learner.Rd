@@ -94,7 +94,7 @@ lrn_po$train(list(task))
 lrn_po$predict(list(task))
 }
 \seealso{
-Other PipeOps: 
+Other PipeOps:
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpProxy}},
@@ -155,7 +155,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 
-Other Meta PipeOps: 
+Other Meta PipeOps:
 \code{\link{mlr_pipeops_learner_cv}}
 }
 \concept{Meta PipeOps}

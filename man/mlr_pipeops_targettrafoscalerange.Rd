@@ -15,8 +15,7 @@ where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
 prediction.
 }
 \section{Construction}{
-\preformatted{PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange",
-  param_vals = list())
+\preformatted{PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange", param_vals = list())
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr

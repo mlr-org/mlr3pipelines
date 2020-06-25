@@ -19,16 +19,18 @@ set the \verb{$state}. \code{set_state()} will be called a single time during tr
 \code{train_target()} will be called. Therefore, the \verb{$state} may contain info needed in
 \code{train_target()}.
 \item \code{train_target()} has a \code{\link[mlr3:Task]{Task}} input and should return a modified
-\code{\link[mlr3:Task]{Task}}. This typically consists of calculating a new target and modifying the
-task by using \code{private$.update_target()}. \code{train_target()} will be called during training and
-prediction because the target (and if needed also type) of the input task must be transformed
-both times.
+\code{\link[mlr3:Task]{Task}}. This typically consists of calculating a new target and modifying the task
+by using \code{private$.update_target()}, which simply calls \code{convert_task()} and drops the original
+target from the task. \code{train_target()} will be called during training and prediction because the
+target (and if needed also type) of the input task must be transformed both times.
 \item \code{train_invert()}has a \code{\link[mlr3:Task]{Task}} input and should return a \code{predict_phase_control}
-object (can be anything the user needs for the inversion later). This should not modify the input
+object (can be anything needed for the inversion later). This should not modify the input
 task.
-\item \code{inverter()} has a \code{\link[mlr3:Prediction]{Prediction}} input as well as one for a
-\code{predict_phase_control} object and should return a function that can later be used to invert the
-transformation done by \code{train_target()} and return a \code{\link[mlr3:Prediction]{Prediction}} object.
+\item \code{inverter()} takes a \code{\link[mlr3:Prediction]{Prediction}} and a \code{predict_phase_control} object as
+inputs. Here, the inverse target transformation should be applied and a
+\code{\link[mlr3:Prediction]{Prediction}} should be returned. Internally, \code{inverter()} will be wrapped to
+the \code{"fun"} output so that \code{\link{PipeOpTargetInverter}} can later dispatch the inverse target
+transformation on its \code{"prediction"} input.
 }
 }
 \section{Construction}{
@@ -75,7 +77,7 @@ The \verb{$state} is a named \code{list} and should be returned explicitly by th
 \code{private$.train()} and \code{private$.predict()} functions. These functions perform checks and go on
 to call \code{set_state()}, \code{train_target()}, \code{train_invert()} and \code{inverter()}. A subclass of
 \code{\link{PipeOpTargetTrafo}} should implement these functions and be used in combination with
-\code{\link{PipeOpTargetInverter}}.
+\code{\link{PipeOpTargetInverter}} in a \code{\link{Graph}}.
 }
 
 \section{Fields}{
@@ -101,12 +103,12 @@ return object is also \emph{not} a list but a singular \code{\link[mlr3:Task]{Ta
 (\code{\link[mlr3:Task]{Task}}) -> \code{predict_phase_control} object\cr
 Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.predict()}. Takes a single
 \code{\link[mlr3:Task]{Task}} as input and returns a \code{predict_phase_control} object (can be anything the
-user needs for the inversion later). This should not modify the input task.
+needed for the inversion later). This should not modify the input task.
 \item \code{inverter(prediction, predict_phase_control)}\cr
-(\code{\link[mlr3:Prediction]{Prediction}}, \code{predict_phase_control} object) -> \code{function}\cr
+(\code{\link[mlr3:Prediction]{Prediction}}, \code{predict_phase_control} object) -> \code{\link[mlr3:Prediction]{Prediction}}\cr
 Called by \code{private$.invert_help()} within \code{\link{PipeOpTargetTrafo}}'s implementation of
 \code{private$.predict()}. Takes a \code{\link[mlr3:Prediction]{Prediction}} and a \code{predict_phase_control}
-object as input and returns a function that can later be used for the inversion.
+object as input and returns a \code{\link[mlr3:Prediction]{Prediction}}.
 \item \code{.update_target(task, new_target, new_type = NULL, ...)}\cr
 (\code{\link[mlr3:Task]{Task}}, new_target, new_type, ...) -> \code{\link[mlr3:Task]{Task}}\cr
 Typically called within \code{train_target()}. Updates the target of a task and also the task_type
