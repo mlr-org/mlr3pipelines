@@ -17,20 +17,20 @@ convert_task(
 \item{intask}{\code{\link[mlr3:Task]{Task}}\cr
 A \code{\link[mlr3:Task]{Task}} to be converted.}
 
-\item{new_target}{\code{character(1)}\cr
+\item{new_target}{\code{character(1)} | \code{NULL}\cr
 New target to be set, must be a column in the \code{intask} data.
 If \code{NULL}, no new target is set, and task is converted as-is.}
 
-\item{new_type}{\code{character(1)}\cr
+\item{new_type}{\code{character(1)} | \code{NULL}\cr
 The new task type. Must be in \code{mlr_reflections$task_types}.
 If \code{NULL} (default), a new task with the same task_type is created.}
 
 \item{drop_original_target}{\code{logical(1)}\cr
-If \code{FALSE} (default), the original target is added as a feature.
-Otherwise the original target is dropped.}
+If \code{TRUE} (default), the original target is dropped. Otherwise it is
+added as a feature.}
 
 \item{drop_levels}{\code{logical(1)}\cr
-If \code{TRUE} (default), unused levels of the new target variable are dropped.}
+If \code{TRUE}, unused levels of the new target variable are dropped.}
 
 \item{\dots}{\cr
 Further arguments passed to the constructor of the task.}

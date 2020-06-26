@@ -48,10 +48,11 @@ using e.g. \code{\link[data.table:setnames]{setnames()}}.\cr
 Note that this function also gets called during prediction and should thus gracefully handle
 \code{NA} values.\cr
 Initialized to \code{identity()}.
-\item \code{inverter} :: \code{function}\cr
-Inversion of the transformation function for the target. Called with the \verb{$data} slot of a
-\code{\link[mlr3:Prediction]{Prediction}} (a \code{list}), without the \verb{$truth} slot, and should return a \code{list} to be the new
-\verb{$data} slot of a \code{\link[mlr3:Prediction]{Prediction}}. Initialized to be the identity.
+\item \code{inverter} :: \code{function} \code{data.table} -> \code{data.table}\cr
+Inversion of the transformation function for the target. Called with the \verb{$data$tab} slot of a
+\code{\link[mlr3:Prediction]{Prediction}} (a \code{data.table}), without the \verb{$row_id} and \verb{$truth} columns,
+and should return a \code{data.table} that contains the new relevant columns of a
+\code{\link[mlr3:Prediction]{Prediction}} (e.g., \verb{$response}). Initialized to \code{identity()}.
 }
 }
 
@@ -65,7 +66,7 @@ Overloads \code{\link{PipeOpTargetTrafo}}'s \code{.transform()} and
 
 Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{new_task_type}  :: \code{character(1)}\cr
+\item \code{new_task_type} :: \code{character(1)}\cr
 \code{new_task_type} construction argument. Read-only.
 }
 }

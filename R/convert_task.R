@@ -4,17 +4,17 @@
 #' #FIXME: This needs detailed tests and should be moved to mlr3.
 #' @param intask [`Task`][mlr3::Task]\cr
 #'   A [`Task`][mlr3::Task] to be converted.
-#' @param new_target `character(1)`\cr
+#' @param new_target `character(1)` | `NULL`\cr
 #'   New target to be set, must be a column in the `intask` data.
 #'   If `NULL`, no new target is set, and task is converted as-is.
-#' @param new_type `character(1)`\cr
+#' @param new_type `character(1)` | `NULL`\cr
 #'   The new task type. Must be in `mlr_reflections$task_types`.
 #'   If `NULL` (default), a new task with the same task_type is created.
 #' @param drop_original_target `logical(1)`\cr
-#'   If `FALSE` (default), the original target is added as a feature.
-#'   Otherwise the original target is dropped.
+#'   If `TRUE` (default), the original target is dropped. Otherwise it is
+#'   added as a feature.
 #' @param drop_levels `logical(1)`\cr
-#'   If `TRUE` (default), unused levels of the new target variable are dropped.
+#'   If `TRUE`, unused levels of the new target variable are dropped.
 #' @param \dots \cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]

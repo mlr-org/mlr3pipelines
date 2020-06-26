@@ -95,7 +95,7 @@ The base implementation returns \code{list()} and should be overloaded if state 
 Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()} and
 \code{private$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input and modifies it.
 This should typically consist of calculating a new target and modifying the
-\code{\link[mlr3:Task]{Task}} by using \code{private$.update_target()}. \code{.transform()} will be called during training and
+\code{\link[mlr3:Task]{Task}} by using \code{convert_task}. \code{.transform()} will be called during training and
 prediction because the target (and if needed also type) of the input \code{\link[mlr3:Task]{Task}} must be transformed
 both times. Note that unlike \verb{$.train()}, the argument is \emph{not} a list but a singular
 \code{\link[mlr3:Task]{Task}}, and the return object is also \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}.
@@ -106,7 +106,7 @@ or in addition to overloading \code{.get_state()}.\cr
 The input should \emph{not} be cloned and if possible should be changed in-place.\cr
 This function is abstract and should be overloaded by inheriting classes.
 \item \code{.train_invert(task)}\cr
-(\code{\link[mlr3:Task]{Task}}) -> \code{any}
+(\code{\link[mlr3:Task]{Task}}) -> \code{any}\cr
 Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.predict()}. Takes a single
 \code{\link[mlr3:Task]{Task}} as input and returns an arbitrary value that will be given as
 \code{predict_phase_state} to \code{.invert()}. This should not modify the input \code{\link[mlr3:Task]{Task}} .\cr
@@ -119,13 +119,9 @@ object as input and inverts the prediction. This function is sent as \code{"fun"
 \code{\link{PipeOpTargetInvert}}.\cr
 This function is abstract and should be overloaded by inheriting classes. Care should be
 taken that the \code{predict_type} of the \code{\link[mlr3:Prediction]{Prediction}} being inverted is handled well.
-\item \code{.update_target(task, new_target, new_type = NULL, ...)}\cr
-(\code{\link[mlr3:Task]{Task}}, new_target, new_type, ...) -> \code{\link[mlr3:Task]{Task}}\cr
-Typically called within \code{.transform()}. Updates the target of a \code{\link[mlr3:Task]{Task}} and also the task_type
-(if needed). Internally uses \code{convert_task()} and drops the original target from the \code{\link[mlr3:Task]{Task}}.
 \item \code{.invert_help(predict_phase_state)}\cr
 (\code{predict_phase_state} object) -> \code{function}\cr
-Helper function that returns a function that can later be used for the inversion.
+Helper function that packages \code{.invert()} that can later be used for the inversion.
 }
 }
 
