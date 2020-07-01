@@ -1,0 +1,128 @@
+context("Multiplicities")
+
+test_that("Multiplicity class and methods", {
+  mp = Multiplicity(0)
+  expect_multiplicity(mp)
+  expect_equal(mp, as.Multiplicity(0))
+  expect_error(assert_multiplicity(0, .var.name = "x"), regexp = "Must inherit from class 'Multiplicity'")
+  expect_multiplicity(assert_multiplicity(mp))
+  nmp = Multiplicity(Multiplicity(0))
+  expect_multiplicity(assert_multiplicity(nmp))
+  expect_multiplicity(assert_multiplicity(nmp, check_nesting = TRUE))
+  expect_error(assert_multiplicity(as.Multiplicity(list(0, Multiplicity(0))), .var.name = "y", check_nesting = TRUE), regexp = "Inconsistent multiplicity nesting level")
+})
+
+test_that("multiplicity_nests_deeper_than", {
+  expect_true(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(1)), 1))
+  expect_false(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(1)), 2))
+  expect_true(is.na(multiplicity_nests_deeper_than(Multiplicity(Multiplicity()), 2)))
+  expect_false(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(), Multiplicity(1)), 2))
+  expect_true(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(), Multiplicity(Multiplicity())), 2))
+})
+
+test_that("PipeOp - assert_connection_table", {
+  # toy PipeOp that should fail to be constructed
+  PipeOpTestMultiplicitesTable = R6Class("PipeOpTestMultiplicitesTable", inherit = PipeOp,
+    public = list(
+      initialize = function(id = "multiplicitiestable", param_vals = list()) {
+        super$initialize(id, param_vals = param_vals,
+          input = data.table(name = "input", train = "[*]", predict = "*"),
+          output = data.table(name = "output", train = "*", predict = "*"),
+          tags = "multiplicity"
+        )
+      }
+    )
+  )
+  expect_error(PipeOpTestMultiplicitesTable$new(), regexp = "Multiplicity during train and predict conflicts")
+})
+
+# FIXME: check_types in PipeOp
+
+test_that("PipeOp - multiplicity_type_nesting_level", {
+  expect_equal(multiplicity_type_nesting_level(c("Task", "[Prediction]", "[[*]]")), c(0L, 1L, 2L))
+  expect_error(multiplicity_type_nesting_level("[wrong", varname = "test"), regexp = "square bracket mismatch")
+})
+
+test_that("PipeOp - unpack_multiplicities", {
+  expect_equal(unpack_multiplicities(list(a = Multiplicity(1, 2), b = 4), c(0, 0), c("a", "b"), "test"),
+    list(list(a = 1, b = 4), list(a = 2, b = 4)))
+  expect_equal(unpack_multiplicities(list(a = Multiplicity(x = 1, y = 2), b = 4), c(0, 0), c("a", "b"), "test"),
+    list(x = list(a = 1, b = 4), y = list(a = 2, b = 4)))
+  expect_equal(unpack_multiplicities(list(a = Multiplicity(x = 1, y = 2), b = Multiplicity(x = 10, y = 20)), c(0, 0), c("a", "b"), "test"),
+    list(x = list(a = 1, b = 10), y = list(a = 2, b = 20)))
+  expect_error(unpack_multiplicities(list(a = Multiplicity(x = 1, z = 2), b = Multiplicity(x = 10, y = 20)), c(0, 0), c("a", "b"), "test"), regexp = "bad multiplicities")
+  expect_equal(unpack_multiplicities(list(a = Multiplicity(x = 1, z = 2), b = Multiplicity(x = 10, y = 20)), c(0, 1), c("a", "b"), "test"),
+    list(x = list(a = 1, b = Multiplicity(x = 10, y = 20)), z = list(a = 2, b = Multiplicity(x = 10, y = 20))))
+  expect_equal(unpack_multiplicities(list(0), 0, "a", "test"), NULL)
+})
+
+test_that("PipeOp - evaluate_multiplicities", {
+# toy PipeOp only for testing
+  PipeOpTestMultiplicites = R6Class("PipeOpTestMultiplicites", inherit = PipeOp,
+    public = list(
+      initialize = function(num, id = "multiplicities", param_vals = list()) {
+        assert_int(num, lower = 1L)
+        ps = ParamSet$new(params = list(
+          ParamUty$new("state", tags = "train")
+        ))
+        super$initialize(id, param_set = ps, param_vals = param_vals,
+          input = data.table(name = rep_suffix("input", num), train = "*", predict = "*"),
+          output = data.table(name = rep_suffix("output", num), train = "*", predict = "*"),
+          tags = "multiplicity"
+        )
+      }
+    ),
+    private = list(
+      # allows to stop with an error on purpose
+      .train = function(inputs) {
+        if (self$param_set$values$state == "error") stop("Error.")
+        self$state = self$param_set$values$state
+        inputs
+      },
+      .predict = function(inputs) {
+        if (self$param_set$values$state == "error") stop("Error.")
+        inputs
+      }
+    )
+  )
+
+  task = mlr_tasks$get("iris")
+  po = PipeOpTestMultiplicites$new(2)
+  expect_null(po$state)
+
+  po$param_set$values$state = "trained"
+  train_out1 = po$train(as.Multiplicity(list(0, as.Multiplicity(0))))
+  expect_multiplicity(train_out1[[1]])
+  expect_equal(po$state, as.Multiplicity(list("trained")))
+  predict_out1 = po$predict(as.Multiplicity(list(0, as.Multiplicity(0))))
+  expect_equal(po$state, as.Multiplicity(list("trained")))
+  expect_multiplicity(predict_out1[[1]])
+
+  po$state = list("no_multiplicties")
+  expect_error(po$predict(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "state was not a multiplicity")
+  expect_equal(po$state, list("no_multiplicties"))
+
+  po$state = as.Multiplicity(NULL)
+  expect_error(po$predict(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "state had different length / names than input")
+  expect_equal(po$state, as.Multiplicity(NULL))
+
+  po$param_set$values$state = "trained"
+  train_out2 = po$train(as.Multiplicity(list(0, as.Multiplicity(0))))
+  expect_multiplicity(train_out2[[1]])
+  old_state = po$state
+  po$param_set$values$state = "error"
+  expect_error(po$train(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "Error")
+  expect_equal(po$state, old_state)  # FIXME: state is completely reset?
+
+  # this illustrates the same problem
+  dat1 = data.table(target = as.factor(rep(c("a", "b", "c"), each = 10)))
+  dat2 = cbind(dat1, feature = rnorm(30))
+  task1 = TaskClassif$new("task1", backend = dat1, target = "target")
+  task2 = TaskClassif$new("task2", backend = dat2, target = "target")
+
+  learner = PipeOpLearner$new(LearnerClassifRpart$new())
+  learner$train(list(as.Multiplicity(list(task2, task2))))
+  old_state = learner$state
+  expect_warning(expect_error(learner$train(list(as.Multiplicity(list(task1, task2))))))
+  expect_equal(learner$state, old_state)
+})

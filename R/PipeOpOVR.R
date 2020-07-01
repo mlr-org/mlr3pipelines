@@ -33,7 +33,7 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
         truthcol = task$data(cols = task$target_names)
         truthcol[[1]] = factor(ifelse(truthcol[[1]] == l, l, rest), levels = c(l, rest))
         backend = task$clone(deep = TRUE)$cbind(truthcol)$backend
-        TaskClassif$new(sprintf("%s_%s_vs_rest", task$id, l), backend, task$target_names, positive = l)
+        TaskClassif$new(sprintf("%s_%s_vs_%s", task$id, l, rest), backend, task$target_names, positive = l)
       }, simplify = FALSE)
     }
   )
@@ -69,7 +69,7 @@ PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
       if (length(weights) == 1) weights = rep(1, length(inputs))
       assert_numeric(weights, any.missing = FALSE, len = length(inputs))
       has_probs = every(inputs, function(x) !is.null(x$prob))
-      has_classif_response = every(inputs, function(x) !is.null(x$response))
+      has_classif_response = every(inputs, function(x) length(x$response) != 0)  # if response is missing this will be an empty factor
 
       names(inputs) = map_chr(inputs, function(x) levels(x$truth)[[1]])
 

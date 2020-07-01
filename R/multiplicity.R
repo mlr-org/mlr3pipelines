@@ -1,4 +1,3 @@
-
 #' @title Multiplicity
 #' @export
 Multiplicity = function(...) {
@@ -41,14 +40,8 @@ assert_multiplicity = function(x, .var.name, check_nesting = FALSE) {
   invisible(x)
 }
 
-# check whether multiplicity x has a deeper nesting level than cutoff.
-# assumes multiplicity is well-formed. Use assert_multiplicity to check well-formedness
-#
-# multiplicity_nests_deeper_than(Multiplicity(Multiplicity(1)), 1) --> TRUE
-# multiplicity_nests_deeper_than(Multiplicity(Multiplicity(1)), 2) --> FALSE
-# multiplicity_nests_deeper_than(Multiplicity(Multiplicity()), 2) --> NA  # don't know
-# multiplicity_nests_deeper_than(Multiplicity(Multiplicity(), Multiplicity(1)), 2) --> FALSE
-# multiplicity_nests_deeper_than(Multiplicity(Multiplicity(), Multiplicity(Multiplicity())), 2) --> TRUE
+# Check whether multiplicity x has a deeper nesting level than cutoff
+# Assumes multiplicity is well-formed. Use assert_multiplicity to check well-formedness
 multiplicity_nests_deeper_than = function(x, cutoff) {
   cutoff = assert_count(cutoff)
   if (!is.Multiplicity(x)) return(FALSE)

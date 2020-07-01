@@ -329,26 +329,27 @@ PipeOp = R6Class("PipeOp",
   )
 )
 
+# Asserts that input and output tables are correctly specified
+# @param table: `data.table`: either input or output
 assert_connection_table = function(table) {
   varname = deparse(substitute(table))
   assert_data_table(table, .var.name = varname, min.rows = 1)
   assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = varname)
   assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", varname))
   if (!all(multiplicity_type_nesting_level(table$train) == multiplicity_type_nesting_level(table$predict))) {
-    stop("Multiplicity during train and predict conflicts")
+    stop("Multiplicity during train and predict conflicts.")
   }
   table
 }
 
-
-# Checks that data conforms to the type specifications given.
+# Checks that data conforms to the type specifications given
 # Handles multiplicities: if a type is in square brackets ("[<TYPE>]"), then a "Multiplicity" that contains the type is checked.
 # Yes, this can handle nested multiplicities: "[[<TYPE>]]" etc. works.
-# @param `data` [list of any] is either the input or output given to a train/predict function. it is checked to be a *list* first
-#   and then to have the types as given by the `$input` or `$output` data.table.
-# @param direction [character(1)] is either `"input"` or `"output"`
-# @param operation [character(1)] is either `"train"` or `"predict"`.
-# @return an instance of 'data', possibly converted, with names added according to `$input`/`$output` "name" column.
+# @param data: `list of any`: is either the input or output given to a train/predict function. it is checked to be a *list* first
+#   and then to have the types as given by the `$input` or `$output` data.table
+# @param direction: `character(1)`: is either `"input"` or `"output"`
+# @param operation: `character(1)`: is either `"train"` or `"predict"`
+# @return an instance of data, possibly converted, with names added according to `$input`/`$output` "name" column
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   if (direction == "input" && "..." %in% typetable$name) {
@@ -371,7 +372,7 @@ check_types = function(self, data, direction, operation) {
       return(data_element)
     }
     if (is.Multiplicity(data_element)) {
-      stop("%s contained Multiplicity when it shouldn't have")
+      stopf("%s contained Multiplicity when it shouldn't have.", data_element)
     }
     if (typereq == "*") return(data_element)
     if (typereq %in% class(data_element)) return(data_element)
@@ -379,11 +380,11 @@ check_types = function(self, data, direction, operation) {
     msg = ""
     if (!is.null(autoconverter)) {
       mlr3misc::require_namespaces(autoconverter$packages,
-        sprintf("The following packages are required to convert object of class %s to class %s: %%s", class(data_element)[1], typereq))
+        sprintf("The following packages are required to convert object of class %s to class %s: %%s.", class(data_element)[1], typereq))
       msg = tryCatch({
         data_element = autoconverter$fun(data_element)
         ""
-      }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message))
+      }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s.", typereq, e$message))
     }
     assert_class(data_element, typereq, .var.name = paste0(varname, msg))
   }
@@ -397,28 +398,26 @@ check_types = function(self, data, direction, operation) {
   data
 }
 
-
 # get the number of `[` `]` nestings of a variable name
-# E.g. multiplicity_nesting_level(c("Task", "[Prediction]", "[[*]]")) --> c(0, 1, 2)
+# E.g. multiplicity_type_nesting_level(c("Task", "[Prediction]", "[[*]]")) --> c(0, 1, 2)
 # @param str: `character`: type descriptors to check
 # @param varname `character(1)`: where the value is found, used to print error message
+# @return `integer`
 multiplicity_type_nesting_level = function(str, varname) {
   beginning = map_int(gregexpr("^\\[*", str), attr, "match.length")
   end = map_int(gregexpr("\\]*$", str), attr, "match.length")
   if (any(beginning != end)) {
-    stop("Invalid type(s) %s in %s: square bracket mismatch.", str_collapse(str[beginning != end]), varname)
+    stopf("Invalid type(s) %s in %s: square bracket mismatch.", str_collapse(str[beginning != end]), varname)
   }
   beginning
 }
 
-# unpacks pipeop arguments with multiplicities, if necessary, into (possibly named) lists that can be iterated over.
-#
-# test these cases:
-# unpack_multiplicities(list(a = Multiplicity(1, 2), b = 4), c(0, 0), c("a", "b"), "test")
-# unpack_multiplicities(list(a = Multiplicity(x = 1, y = 2), b = 4), c(0, 0), c("a", "b"), "test")
-# unpack_multiplicities(list(a = Multiplicity(x = 1, y = 2), b = Multiplicity(x = 10, y = 20)), c(0, 0), c("a", "b"), "test")
-# unpack_multiplicities(list(a = Multiplicity(x = 1, z = 2), b = Multiplicity(x = 10, y = 20)), c(0, 0), c("a", "b"), "test")  # should give error!
-# unpack_multiplicities(list(a = Multiplicity(x = 1, z = 2), b = Multiplicity(x = 10, y = 20)), c(0, 1), c("a", "b"), "test") # no error
+# unpacks pipeop arguments with multiplicities, if necessary, into (possibly named) lists that can be iterated over
+# @param input: `list` of multiplicities: multiplicities to unpack
+# @param expected_nesting_level: `integer`: expected nesting level of the multiplicities
+# @param inputnames: `character`: names of the resulting lists
+# @param poid: `character(1)`: character id of the PipeOp
+# @return `list`
 unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid) {
   unpacking = mapply(multiplicity_nests_deeper_than, input, expected_nesting_level)
   if (!any(unpacking)) {
@@ -433,7 +432,7 @@ unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid
     for (comparing_index in which(unpacking)[-1]) {
       comparing = input[[comparing_index]]
       if (length(comparing) != length(prototype) || !identical(names(comparing), names(prototype))) {
-        stopf("Input of %s has bad multiplicities: %s has different length and/or names than %s",
+        stopf("Input of %s has bad multiplicities: %s has different length and/or names than %s.",
           poid, inputnames[[prototype_index]], inputnames[[comparing_index]])
       }
     }
@@ -443,17 +442,20 @@ unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid
   }), names(prototype))
 }
 
-# FIXME:
-# - check that on.exit works: if there is an error in evaluating element N of multiplicity, the state must be reset afterwards
+# evaluate multiplicities
+# @param self: typically a `PipeOp`
+# @param unpacked: `list` of unpacked multiplicities
+# @param evalcall: either `train` or `predict`
+# @param instate: typically `self$state`
 evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
   force(instate)
   on.exit({self$state = instate})
   if (!is.null(instate)) {
     if (!is.Multiplicity(instate)) {
-      stopf("PipeOp %s received multiplicity input but state was not a multiplicity", self$id)
+      stopf("PipeOp %s received multiplicity input but state was not a multiplicity.", self$id)
     }
     if (length(instate) != length(unpacked) || !identical(names(instate), names(unpacked))) {
-      stopf("PipeOp %s received multiplicity input but state had different length / names than input", self$id)
+      stopf("PipeOp %s received multiplicity input but state had different length / names than input.", self$id)
     }
   }
   result = imap(unpacked, function(input, reference) {
