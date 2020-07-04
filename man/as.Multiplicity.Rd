@@ -2,10 +2,17 @@
 % Please edit documentation in R/multiplicity.R
 \name{as.Multiplicity}
 \alias{as.Multiplicity}
-\title{Convert to Multiplicity}
+\title{Convert an object to a Multiplicity}
 \usage{
 as.Multiplicity(x)
 }
+\arguments{
+\item{x}{(\code{any}) \cr
+Object to convert.}
+}
+\value{
+\code{\link{Multiplicity}}
+}
 \description{
-Convert to Multiplicity
+Convert an object to a \code{\link{Multiplicity}}.
 }

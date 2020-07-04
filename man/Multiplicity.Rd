@@ -6,6 +6,14 @@
 \usage{
 Multiplicity(...)
 }
+\arguments{
+\item{\dots}{\cr
+Can be anything.}
+}
+\value{
+\code{\link{Multiplicity}}
+}
 \description{
-Multiplicity
+Construct an object of the S3 class \code{\link{Multiplicity}}, which is a named or
+unnamed lists of data.
 }

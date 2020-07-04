@@ -1,5 +1,64 @@
-#' @title Implicate Multiplicity
-#' #export
+#' @title PipeOpMultiplicityImply
+#'
+#' @usage NULL
+#' @name mlr_pipeops_multiplicityimply
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#'
+#' @description
+#' Implicate a [`Multiplicity`] by returning the input(s) converted to a [`Multiplicity`].
+#'
+#' @section Construction:
+#' ```
+#' PipeOpMultiplicityImply$new(innum = 0, id = "multiplicityimply", param_vals = list())
+#' ```
+#'
+#' * `innum` :: `numeric(1)` | `character`\cr
+#'   Determines the number of input channels.
+#'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number
+#'   of inputs. If `innum` is a `character` vector, the number of input channels is the length of
+#'   `innum`.
+#' * `id` :: `character(1)`\cr
+#'   Identifier of the resulting object, default `"multiplicityimply"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+#'   be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' [`PipeOpMultiplicityImply`] has multiple input channels depending on the `innum` construction
+#' argument, named `"input1"`, `"input2"`, ... if `innum` is nonzero; if `innum` is 0, there is
+#' only one *vararg* input channel named `"..."`. All input channels take any input (`"*"`) both
+#' during training and prediction.
+#'
+#' [`PipeOpMultiplicityImply`] has one output channel named `"output"`, emitting a [`Multiplicity`]
+#' of type any (`"[*]"`), i.e., returning the input(s) converted to a [`Multiplicity`] both during
+#' training and prediction.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' [`PipeOpMultiplicityImply`] has no Parameters.
+#'
+#' @section Internals:
+#' If `innum` is not `numeric`, e.g., a `character`, the output [`Multiplicity`] will be named based
+#' on the input channel names
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOp`].
+#'
+#' @family PipeOps
+#' @include PipeOp.R
+#' @export
+#' @examples
+#' library("mlr3")
+#' task1 = tsk("iris")
+#' task2 = tsk("mtcars")
+#' po = po("multiplicityimply")
+#' po$train(list(task1, task2))
+#' po$predict(list(task1, task2))
 PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
   inherit = PipeOp,
   public = list(
@@ -38,8 +97,61 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
 
 mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 
-#' @title Explicate Multiplicity
-#' #export
+#' @title PipeOpMultiplicityExply
+#'
+#' @usage NULL
+#' @name mlr_pipeops_multiplicityexply
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#'
+#' @description
+#' Explicate a [`Multiplicity`] by returning the unclassed input [`Multiplicity`], i.e., a `list()`.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpMultiplicityExply$new(outnum , id = "multiplicityexply", param_vals = list())
+#' ```
+#'
+#' * `outnum` :: `numeric(1)` | `character`\cr
+#'   Determines the number of output channels.
+#' * `id` :: `character(1)`\cr
+#'   Identifier of the resulting object, default `"multiplicityexply"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+#'   be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' [`PipeOpMultiplicityExply`] has a single input channel named `"input"`, collecting a
+#' [`Multiplicity`] of type any (`"[*]"`) both during training and prediction.
+#'
+#' [`PipeOpMultiplicityExply`] has multiple output channels depending on the `outnum` construction
+#' argument, named `"output1"`, `"output2"` returning the elements of the unclassed input
+#' [`Multiplicity`].
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' [`PipeOpMultiplicityExply`] has no Parameters.
+#'
+#' @section Internals:
+#' `outnum` should match the number of elements of the unclassed input [`Multiplicity`].
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOp`].
+#'
+#' @family PipeOps
+#' @include PipeOp.R
+#' @export
+#' @examples
+#' library("mlr3")
+#' task1 = tsk("iris")
+#' task2 = tsk("mtcars")
+#' po = po("multiplicityexply", outnum = 2)
+#' po$train(list(Multiplicity(task1, task2)))
+#' po$predict(list(Multiplicity(task1, task2)))
 PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
   inherit = PipeOp,
   public = list(
@@ -66,9 +178,54 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
 
 mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 
-
-#' @title Replicate through Multiplicity
-#' #export
+#' @title PipeOpReplicate
+#'
+#' @usage NULL
+#' @name mlr_pipeops_replicate
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#'
+#' @description
+#' Replicate the input and return a [`Multiplicity`].
+#'
+#' @section Construction:
+#' ```
+#' PipeOpReplicate$new(id = "replicate", param_vals = list())
+#' ```
+#'
+#' * `id` :: `character(1)`
+#'   Identifier of the resulting object, default `"replicate"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+#'   be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' [`PipeOpReplicate`] has one input channel named `"input"`, taking any input (`"*"`) both during training and prediction.
+#'
+#' [`PipeOpReplicate`] has one output channel named `"output"` returning the replicated input as a
+#' [`Multiplicity`] of type any (`"[*]"`) both during training and prediction.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' * `reps` :: `numeric(1)`\cr
+#'   Integer indicating the number of times the input should be replicated.
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOp`].
+#'
+#' @family PipeOps
+#' @include PipeOp.R
+#' @export
+#' @examples
+#' library("mlr3")
+#' task = tsk("iris")
+#' po = po("replicate", param_vals = list(reps = 3))
+#' po$train(list(task))
+#' po$predict(list(task))
 PipeOpReplicate = R6Class("PipeOpReplicate",
   inherit = PipeOp,
   public = list(

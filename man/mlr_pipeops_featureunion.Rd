@@ -34,8 +34,9 @@ If \code{innum} is 0 (default), a vararg input channel is created that can take 
 of inputs. If \code{innum} is a \code{character} vector, the number of input channels is the length of
 \code{innum}, and the columns of the result are prefixed with the values.
 \item \code{collect} :: \code{logical(1)}\cr
-FIXME document this
-\item \code{id} :: \code{character(1)}
+If \code{TRUE}, the vararg input channel is turned into a \code{\link{Multiplicity}} collecting channel, e.g.,
+all input \code{\link[mlr3:Task]{Task}}s are collected. Default is \code{FALSE}.
+\item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting object, default \code{"featureunion"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
@@ -143,14 +144,19 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},

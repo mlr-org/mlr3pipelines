@@ -1,9 +1,67 @@
 #' @title PipeOpOVRSplit
 #'
 #' @usage NULL
-#' @name mlr_pipeop_ovrsplit
+#' @name mlr_pipeops_ovrsplit
+#' @format [`R6Class`] inheriting from [`PipeOp`].
+#'
+#' @description
+#' Splits a [classification Task][mlr3::TaskClassif] into several binary [classification
+#' Tasks][mlr3::TaskClassif] to perform "One vs. Rest" classification.
+#'
+#' For each target level a new binary [classification Task][mlr3::TaskClassif] is constructed with
+#' the respective target level being the positive class and all other target levels being the
+#' new negative class `"rest"`.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpOVRSplit$new(id = "ovrsplit", param_vals = list())
+#' ```
+#' * `id` :: `character(1)`\cr
+#'   Identifier of the resulting object, default `"ovrsplit"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' [`PipeOpOVRSplit`] has one input channel named `"input"` taking a [`TaskClassif`][mlr3::TaskClassif]
+#' both during training and prediction.
+#'
+#' [`PipeOpOVRSplit`] has one output channel named `"output"` returning a [`Multiplicity`] of
+#' [`TaskClassif`][mlr3::TaskClassif]s both during training and prediction, i.e., the newly
+#' constructed binary [classification Tasks][mlr3::TaskClassif].
+#'
+#' @section State:
+#' The `$state` contains the original target levels of the [`TaskClassif`][mlr3::TaskClassif] supplied
+#' during training.
+#'
+#' @section Parameters:
+#' [`PipeOpOVRSplit`] has no parameters.
+#'
+#' @section Internals:
+#' The original target levels stored in the `$state` are also used during prediction when creating the new
+#' binary [classification Tasks][mlr3::TaskClassif].
+#'
+#' The names of the element of the output [`Multiplicity`] are given by the levels of the target.
+#'
+#' If a target level `"rest"` is present in the input [`TaskClassif`][mlr3::TaskClassif], the
+#' negative class will be labeled as `"rest." (using as many `"."` postfixes needed to yield a
+#' valid label).
+#'
+#' Should be used in combination with [`PipeOpOVRUnite`].
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOp`].
+#' @family PipeOps
 #' @include PipeOp.R
 #' @export
+#' @examples
+#' library(mlr3)
+#' task = tsk("iris")
+#' po = po("ovrsplit")
+#' po$train(list(task))
+#' po$predict(list(task))
 PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
   inherit = PipeOp,
   public = list(
@@ -41,16 +99,69 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
 
 mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 
-
-
 #' @title PipeOpOVRUnite
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrunite
 #' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
-#' FIXME: document
+#'
+#' @description
+#' Perform "One vs. Rest" classification by (weighted) majority vote prediction from [classification
+#' Predictions][mlr3::PredictionClassif].
+#'
+#' Weights can be set as a parameter; if none are provided, defaults to equal weights for each
+#' prediction.
+#'
+#' Always returns a `"prob"` prediction, regardless of the incoming [`Learner`][mlr3::Learner]'s
+#' `$predict_type`. The label of the class with the highest predicted probability is selected as the
+#' `"response"` prediction.
+#'
+#' Missing values during prediction are treated as each class label being equally likely.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpOVRUnite$new(id = "ovrunite", param_vals = list())
+#' ```
+#'
+#' * `id` :: `character(1)`\cr
+#'   Identifier of the resulting object, default `"ovrunite"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpEnsemble`]. Instead of a
+#' [`Prediction`][mlr3::Prediction], a [`PredictionClassif`][mlr3::PredictionClassif] is used as
+#' input and output during prediction and [`PipeOpEnsemble`]'s `collect` parameter is initialized
+#' with `TRUE` to allow for collecting a [`Multiplicity`] input.
+#'
+#' @section State:
+#' The `$state` is left empty (`list()`).
+#'
+#' @section Parameters:
+#' The parameters are the parameters inherited from the [`PipeOpEnsemble`].
+#'
+#' @section Internals:
+#' Inherits from [`PipeOpEnsemble`] by implementing the `private$.predict()` method.
+#'
+#' Should be used in combination with [`PipeOpOVRSplit`].
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
+#' @family PipeOps
+#' @family Ensembles
 #' @include PipeOpEnsemble.R
 #' @export
+#' @examples
+#' library(mlr3)
+#' task = tsk("iris")
+#' gr = po("ovrsplit") %>>% lrn("classif.rpart") %>>% po("ovrunite")
+#' gr$train(task)
+#' gr$predict(task)
+#' gr$pipeops$classif.rpart$learner$predict_type = "prob"
+#' gr$predict(task)
 PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
   inherit = PipeOpEnsemble,
   public = list(

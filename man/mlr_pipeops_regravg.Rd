@@ -114,13 +114,18 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -141,7 +146,8 @@ Other PipeOps:
 Other Ensembles: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_learners_avg}},
-\code{\link{mlr_pipeops_classifavg}}
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_ovrunite}}
 }
 \concept{Ensembles}
 \concept{PipeOps}

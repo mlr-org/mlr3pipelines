@@ -32,8 +32,9 @@
 #'   of inputs. If `innum` is a `character` vector, the number of input channels is the length of
 #'   `innum`, and the columns of the result are prefixed with the values.
 #' * `collect` :: `logical(1)`\cr
-#'   FIXME document this
-#' * `id` :: `character(1)`
+#'   If `TRUE`, the vararg input channel is turned into a [`Multiplicity`] collecting channel, e.g.,
+#'   all input [`Task`][mlr3::Task]s are collected. Default is `FALSE`.
+#' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"featureunion"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise

@@ -17,7 +17,8 @@
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
 #' * `collect` :: `logical(1)`\cr
-#'   FIXME document this
+#'   If `TRUE`, the vararg input channel is turned into a [`Multiplicity`] collecting channel, e.g.,
+#'   all input [`Prediction`][mlr3::Prediction]s are collected. Default is `FALSE`.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr

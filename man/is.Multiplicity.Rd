@@ -2,10 +2,17 @@
 % Please edit documentation in R/multiplicity.R
 \name{is.Multiplicity}
 \alias{is.Multiplicity}
-\title{Check if a Value is a Multiplicity}
+\title{Check if an object is a Multiplicity}
 \usage{
 is.Multiplicity(x)
 }
+\arguments{
+\item{x}{(\code{any}) \cr
+Object to check.}
+}
+\value{
+\code{logical(1)}
+}
 \description{
-Check if a Value is a Multiplicity
+Check if an object is a \code{\link{Multiplicity}}.
 }
