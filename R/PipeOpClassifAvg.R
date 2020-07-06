@@ -8,12 +8,11 @@
 #' Perform (weighted) majority vote prediction from classification [`Prediction`][mlr3::Prediction]s by connecting
 #' [`PipeOpClassifAvg`] to multiple [`PipeOpLearner`] outputs.
 #'
-#' If the incoming [`Learner`][mlr3::Learner]'s
-#' `$predict_type` is set to `"response"`, the prediction obtained is also a `"response"` prediction
-#' with each instance predicted to the prediction from incoming [`Learner`][mlr3::Learner]s with the
-#' highest total weight. If the [`Learner`][mlr3::Learner]'s `$predict_type` is set to `"prob"`, the
-#' prediction obtained is also a `"prob"` type prediction with the probability predicted to be a weighted
-#' average of incoming predictions.
+#' Always returns a `"prob"` prediction, regardless of the incoming [`Learner`][mlr3::Learner]'s
+#' `$predict_type`. The label of the class with the highest predicted probability is selected as the
+#' `"response"` prediction. If the [`Learner`][mlr3::Learner]'s `$predict_type` is set to `"prob"`,
+#' the prediction obtained is also a `"prob"` type prediction with the probability predicted to be a
+#' weighted average of incoming predictions.
 #'
 #' All incoming [`Learner`][mlr3::Learner]'s `$predict_type` must agree.
 #'
@@ -29,7 +28,7 @@
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, default `"classifavg"`.
+#'   Identifier of the resulting object, default `"classifavg"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'

@@ -11,12 +11,11 @@
 Perform (weighted) majority vote prediction from classification \code{\link[mlr3:Prediction]{Prediction}}s by connecting
 \code{\link{PipeOpClassifAvg}} to multiple \code{\link{PipeOpLearner}} outputs.
 
-If the incoming \code{\link[mlr3:Learner]{Learner}}'s
-\verb{$predict_type} is set to \code{"response"}, the prediction obtained is also a \code{"response"} prediction
-with each instance predicted to the prediction from incoming \code{\link[mlr3:Learner]{Learner}}s with the
-highest total weight. If the \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} is set to \code{"prob"}, the
-prediction obtained is also a \code{"prob"} type prediction with the probability predicted to be a weighted
-average of incoming predictions.
+Always returns a \code{"prob"} prediction, regardless of the incoming \code{\link[mlr3:Learner]{Learner}}'s
+\verb{$predict_type}. The label of the class with the highest predicted probability is selected as the
+\code{"response"} prediction. If the \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} is set to \code{"prob"},
+the prediction obtained is also a \code{"prob"} type prediction with the probability predicted to be a
+weighted average of incoming predictions.
 
 All incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} must agree.
 
@@ -32,7 +31,7 @@ Defaults to equal weights for each model.
 Determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
 \item \code{id} :: \code{character(1)}
-Identifier of the resulting  object, default \code{"classifavg"}.
+Identifier of the resulting object, default \code{"classifavg"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
