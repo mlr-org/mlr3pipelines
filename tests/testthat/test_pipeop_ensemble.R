@@ -51,7 +51,6 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(output = prds[[3]]))
-
 })
 
 ## test_that("PipeOpNlOptRegrAvg - response - train and predict", {
@@ -86,7 +85,7 @@ test_that("PipeOpWeightedClassifAvg - response - train and predict", {
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
-  expect_equal(out[[1]]$data, prds[[4]]$data)
+  expect_equal(out[[1]]$data$tab, prds[[4]]$data$tab)
 
   po = PipeOpClassifAvg$new()
   expect_pipeop(po)
@@ -99,7 +98,7 @@ test_that("PipeOpWeightedClassifAvg - response - train and predict", {
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
-  expect_equal(out[[1]]$data, prds[[4]]$data)
+  expect_equal(out[[1]]$data$tab, prds[[4]]$data$tab)
 })
 
 test_that("PipeOpWeightedClassifAvg - prob - train and predict", {

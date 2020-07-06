@@ -112,17 +112,5 @@ test_that("PipeOp - evaluate_multiplicities", {
   old_state = po$state
   po$param_set$values$state = "error"
   expect_error(po$train(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "Error")
-  expect_equal(po$state, old_state)  # FIXME: state is completely reset?
-
-  # this illustrates the same problem
-  dat1 = data.table(target = as.factor(rep(c("a", "b", "c"), each = 10)))
-  dat2 = cbind(dat1, feature = rnorm(30))
-  task1 = TaskClassif$new("task1", backend = dat1, target = "target")
-  task2 = TaskClassif$new("task2", backend = dat2, target = "target")
-
-  learner = PipeOpLearner$new(LearnerClassifRpart$new())
-  learner$train(list(as.Multiplicity(list(task2, task2))))
-  old_state = learner$state
-  expect_warning(expect_error(learner$train(list(as.Multiplicity(list(task1, task2))))))
-  expect_equal(learner$state, old_state)
+  expect_equal(po$state, NULL)  # state is completely reset to NULL
 })
