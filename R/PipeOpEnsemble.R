@@ -159,12 +159,16 @@ weighted_matrix_sum = function(matrices, weights) {
   accmat
 }
 
-# Weighted mode of factors: For a set of `factor` vectors, gives
-# a vector with the same length, for each position the level with
-# the highest total weight, ties broken at random.
+# For a set of n `factor` vectors each of length l with the same k levels and a
+# numeric weight vector of length n, returns a matrix of dimension l times k.
+# Each cell contains the weighted relative frequency of the respective factor
+# level being present at the respective positional index over all n factors.
+# If `factors` is a data.frame/data.table and the weights are uniform (1 / l),
+# the output would simply be t(apply(factors, 1, table) / l).
 # @param factors [`list` of `factor`]: must have the same length and levels
-# @param weights [`numeric`]: weights, same length as `factors`
-# @return `factor`
+# @param weights [`numeric`]: weights, same length as the list of `factors`
+# @return `matrix`
+# FIXME: probably should be renamed
 weighted_factor_mean = function(factors, weights, alllevels) {
   accmat = matrix(0, nrow = length(factors[[1]]), ncol = length(alllevels))
   colnames(accmat) = alllevels
