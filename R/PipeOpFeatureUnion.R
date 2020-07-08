@@ -116,7 +116,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       private$.collect = assert_flag(collect)
       if (collect) {
         if (innum) {
-          stop("collect only works with innum == 0")
+          stop("collect only works with innum == 0.")
         }
         inname = "[...]"
         intype = sprintf("[%s]", intype)

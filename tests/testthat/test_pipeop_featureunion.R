@@ -13,6 +13,8 @@ test_that("featureunion - basic properties", {
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
+
+  expect_error(PipeOpFeatureUnion$new(1, collect = TRUE), regexp = "collect only works with innum == 0")
 })
 
 test_that("PipeOpFeatureUnion - train and predict", {
@@ -101,6 +103,10 @@ test_that("Test wrong inputs", {
   ) %>>% PipeOpFeatureUnion$new(c("a", "b"))
   task = mlr_tasks$get("iris")
   expect_error(g$train(task), "Assertion on 'rows'")
+
+  # Differing target columns
+  po = PipeOpFeatureUnion$new()
+  expect_error(po$train(list(tsk("iris"), tsk("mtcars")), regexp = "All tasks must have the same target columns"))
 })
 
 test_that("PipeOpFeatureUnion - levels are preserved", {

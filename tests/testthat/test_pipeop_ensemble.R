@@ -20,6 +20,8 @@ test_that("PipeOpEnsemble - basic properties", {
   expect_pipeop(op)
   expect_list(train_pipeop(op, list(as.Multiplicity(rep(list(NULL), 4)))), len = 1)
   expect_error(predict_pipeop(op, list(as.Multiplicity(prds))), "Abstract")
+
+  expect_error(PipeOpEnsemble$new(1, collect = TRUE, id = "ensemble", param_vals = list()), regexp = "collect only works with innum == 0")
 })
 
 test_that("PipeOpWeightedRegrAvg - train and predict", {
@@ -65,7 +67,6 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
 ##   expect_class(out[[1]], "PredictionRegr")
 ## })
 
-# FIXME: PipeOpClassifAvg now always returns probs and calculates response based on probs?
 test_that("PipeOpWeightedClassifAvg - response - train and predict", {
   nulls = rep(list(NULL), 4)
   prds = replicate(4,

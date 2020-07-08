@@ -12,6 +12,7 @@ Multiplicity = function(...) {
   structure(list(...), class = "Multiplicity")
 }
 
+#' @export
 print.Multiplicity = function(x, ...) {
   if (!length(x)) {
     cat("Empty Multiplicity.\n")
