@@ -101,6 +101,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
 mlr_graphs$add("robustify", pipeline_robustify)
 
 
+
 #' @title Create a bagging learner
 #' @name mlr_graphs_bagging
 #' @description
@@ -245,6 +246,8 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
 
 mlr_graphs$add("branch", pipeline_branch)
 
+
+
 #' @title Transform and Re-Transform the Target Variable
 #' @name mlr_graphs_targettrafo
 #' @description
@@ -315,6 +318,8 @@ pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetTrafoSimple$ne
 
 mlr_graphs$add("targettrafo", pipeline_targettrafo)
 
+
+
 #' @title Create Disjoint Graph Union of Copies of a Graph
 #'
 #' @description
@@ -345,3 +350,56 @@ pipeline_greplicate = function(graph, n) {
 }
 
 mlr_graphs$add("greplicate", pipeline_greplicate)
+
+
+
+#' @title Create A Graph to Perform "One vs. Rest" classification.
+#'
+#' @description
+#' Create a new [`Graph`] for a [classification Task][mlr3::TaskClassif] to
+#' perform "One vs. Rest" classification.
+#'
+#' @param graph [`Graph`] \cr
+#'   Graph being wrapped between [`PipeOpOVRSplit`] and [`PipeOpOVRUnite`].
+#'   The Graph should return `NULL` during training and a
+#'   [classification Prediction][mlr3::PredictionClassif] during prediction.
+#' @return [`Graph`]
+#' @export
+#' @examples
+#' library("mlr3")
+#'
+#' task = tsk("wine")
+#'
+#' learner = lrn("classif.rpart")
+#' learner$predict_type = "prob"
+#'
+#' # Simple OVR
+#' g1 = pipeline_ovr(learner)
+#' g1$train(task)
+#' g1$predict(task)
+#'
+#' # Bagged Learners
+#' gr = po("replicate", reps = 3) %>>%
+#'   po("subsample") %>>%
+#'   learner %>>%
+#'   po("classifavg", collect = TRUE)
+#' g2 = pipeline_ovr(gr)
+#' g2$train(task)
+#' g2$predict(task)
+#'
+#' # Bagging outside OVR
+#' g3 = po("replicate", reps = 3) %>>%
+#'   pipeline_ovr(po("subsample") %>>% learner) %>>%
+#'   po("classifavg", collect = TRUE)
+#' g3$train(task)
+#' g3$predict(task)
+pipeline_ovr = function(graph) {
+  graph = as_graph(graph)
+  if (graph$output$train != "NULL" || graph$output$predict != "PredictionClassif") {
+    stopf("Graph should return 'NULL' during training and a 'PredictionClassif' during prediction.")
+  }
+  g = graph$clone(deep = TRUE)
+  PipeOpOVRSplit$new() %>>% g %>>% PipeOpOVRUnite$new()
+}
+
+mlr_graphs$add("ovr", pipeline_ovr)
