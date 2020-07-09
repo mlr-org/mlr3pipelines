@@ -293,7 +293,7 @@ mlr_graphs$add("branch", pipeline_branch)
 #'   src_channel = 1, dst_channel = 2)
 pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetMutate$new(), id_prefix = "") {
   graph = as_graph(graph)
-  assert_r6(graph$pipeops[length(graph$pipeops)][[1L]], classes = "PipeOpLearner")
+  assert_r6(graph$pipeops[[graph$output$op.id]], classes = "PipeOpLearner")
   if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
     stopf("First PipeOp of graph should accept a single task as input.")
   }
