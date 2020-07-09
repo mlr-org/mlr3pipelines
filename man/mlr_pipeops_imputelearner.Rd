@@ -65,12 +65,12 @@ where \code{context_columns} is chosen well (or there is only one column with mi
 
 Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{learners}  :: \code{list} of \code{\link[mlr3:Learner]{Learner}} | \code{NULL}\cr
+\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
+\item \code{learner_models} :: \code{list} of \code{\link[mlr3:Learner]{Learner}} | \code{NULL}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. This list is named by features for which a \code{Learner} was fitted, and
 contains the same \code{Learner}, but with different respective models for each feature. If this \code{PipeOp} is not trained,
 this is an empty \code{list}. For features that were entirely \code{NA} during training, the \code{list} contains \code{NULL} elements.
-\item \code{learner_bare} :: \code{\link[mlr3:Learner]{Learner}}\cr
-Untrained \code{\link[mlr3:Learner]{Learner}} being wrapped. Read-only.
 }
 }
 

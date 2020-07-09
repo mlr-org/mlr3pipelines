@@ -31,7 +31,7 @@
 #'   [`Learner`][mlr3::Learner] to use for cross validation / prediction, or a string identifying a
 #'   [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Identifier of the resulting object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -75,8 +75,10 @@
 #' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`], as well as:
-#' * `learner`  :: [`Learner`][mlr3::Learner]\cr
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `learner` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
 #'
 #' @section Methods:
@@ -139,6 +141,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   ),
   active = list(
     learner = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      private$.learner
+    },
+    learner_model = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
           stop("$learner is read-only.")

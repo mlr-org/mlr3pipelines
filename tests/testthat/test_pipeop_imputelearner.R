@@ -131,23 +131,24 @@ test_that("PipeOpImputeLearner - model active binding to state", {
   po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
   task = mlr_tasks$get("pima")
 
-  # before training states are NULL and learners are list()
+  # before training states are NULL and learner_models are list()
   expect_null(po$state)
-  expect_equal(po$learner_bare$state, po$state)
-  expect_equal(po$learners, list())
+  expect_equal(po$learner$state, po$state)
+  expect_equal(po$learner_models, list())
 
-  # after training learner_bare's state is NULL
+  # after training learner's state is NULL
   train_out = po$train(list(task))
   train_state = po$state
-  expect_null(po$learner_bare$state)
-  # after training models in the learners are equivalent to the models in the state
+  expect_null(po$learner$state)
+  # after training models in the learner_models are equivalent to the models in the state
   models = po$state$model
-  expect_equal(names(models), names(po$learners))
-  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learners, .f = "model")), .f = all.equal)))
+  expect_equal(names(models), names(po$learner_models))
+  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
 
   # after predicting state is unchanged and models still are equivalent
   predict_out = po$predict(list(task))
   expect_equal(po$state, train_state)
-  expect_equal(names(models), names(po$learners))
-  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learners, .f = "model")), .f = all.equal)))
+  expect_null(po$learner$state)
+  expect_equal(names(models), names(po$learner_models))
+  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
 })

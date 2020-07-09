@@ -52,12 +52,12 @@
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`], as well as:
-#' * `learners`  :: `list` of [`Learner`][mlr3::Learner] | `NULL`\cr
+#' * `learner` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_models` :: `list` of [`Learner`][mlr3::Learner] | `NULL`\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. This list is named by features for which a `Learner` was fitted, and
 #'   contains the same `Learner`, but with different respective models for each feature. If this `PipeOp` is not trained,
 #'   this is an empty `list`. For features that were entirely `NA` during training, the `list` contains `NULL` elements.
-#' * `learner_bare` :: [`Learner`][mlr3::Learner]\cr
-#'   Untrained [`Learner`][mlr3::Learner] being wrapped. Read-only.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
@@ -96,7 +96,15 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     }
   ),
   active = list(
-    learners = function(val) {
+    learner = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      private$.learner
+    },
+    learner_models = function(val) {
       if (!missing(val)) {
         stop("$learners is read-only.")
       }
@@ -110,14 +118,6 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
           lrn
         })
       }
-    },
-    learner_bare = function(val) {
-      if (!missing(val)) {
-        if (!identical(val, private$.learner)) {
-          stop("$learner is read-only.")
-        }
-      }
-      private$.learner
     }
   ),
   private = list(

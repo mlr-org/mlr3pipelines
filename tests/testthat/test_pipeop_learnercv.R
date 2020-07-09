@@ -84,14 +84,17 @@ test_that("PipeOpLearnerCV - model active binding to state", {
   # before training states are NULL
   expect_null(po$state)
   expect_equal(po$learner$state, po$state)
+  expect_equal(po$learner_model$state, po$state)
 
-  # after training learner's state and state are equal
+  # after training learner_model's state and state are equal
   train_out = po$train(list(task))
   train_state = po$state
-  expect_equal(po$learner$state, train_state)
+  expect_null(po$learner$state)
+  expect_equal(po$learner_model$state, train_state)
 
   # after predicting states are unchanged
   predict_out = po$predict(list(task))
   expect_equal(po$state, train_state)
-  expect_equal(po$learner$state, po$state)
+  expect_null(po$learner$state)
+  expect_equal(po$learner_model$state, po$state)
 })
