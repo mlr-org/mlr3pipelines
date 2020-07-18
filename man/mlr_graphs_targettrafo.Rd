@@ -13,17 +13,13 @@ pipeline_targettrafo(
 }
 \arguments{
 \item{graph}{\code{\link{PipeOpLearner}} | \code{\link{Graph}} \cr
-A \code{\link{PipeOpLearner}} or \code{\link{Graph}} to create a robustifying pipeline for. If this is a \code{\link{Graph}},
-the last \code{\link{PipeOp}} should be a \code{\link{PipeOpLearner}} and the first \code{\link{PipeOp}} should accept a
-single \code{\link[mlr3:Task]{Task}} as input.}
+A \code{\link{PipeOpLearner}} or \code{\link{Graph}} to wrap between a transformation and re-transformation of the target variable.}
 
 \item{trafo_pipeop}{\code{\link{PipeOp}} \cr
-A \code{\link{PipeOp}} that is a subclass of \code{\link{PipeOpTargetTrafo}}. Default is
-\code{\link{PipeOpTargetMutate}}.}
+A \code{\link{PipeOp}} that is a subclass of \code{\link{PipeOpTargetTrafo}}. Default is \code{\link{PipeOpTargetMutate}}.}
 
 \item{id_prefix}{\code{character(1)} \cr
-Optional id prefix to prepend to \code{\link{PipeOpTargetInvert}} ID. The resulting ID will be
-\code{"[id_prefix]targetinverter"}. Default is \code{""}.}
+Optional id prefix to prepend to \code{\link{PipeOpTargetInvert}} ID. The resulting ID will be \code{"[id_prefix]targetinvert"}. Default is \code{""}.}
 }
 \value{
 \code{\link{Graph}}
@@ -37,6 +33,8 @@ during prediction. This is done as follows:
 \item At the very end, during prediction the transformation is inverted using \code{\link{PipeOpTargetInvert}}.
 \item To set a transformation and inversion function for \code{\link{PipeOpTargetMutate}} see the
 parameters \code{trafo} and \code{inverter} of the \code{param_set} of the resulting \code{\link{Graph}}.
+\item Note that the input \code{graph} is not explicitly checked to actually return a
+\code{\link[mlr3:Prediction]{Prediction}} during prediction.
 }
 }
 \examples{

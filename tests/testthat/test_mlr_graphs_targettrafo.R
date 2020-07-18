@@ -39,12 +39,27 @@ test_that("Target Trafo Pipeline", {
   train_ttg = tt_g$train(task)
   predict_ttg = tt_g$predict(task)
 
-  # assertions on graph
-  expect_error(ppl("targettrafo", graph = PipeOpNOP$new()), regexp = "PipeOpLearner")
-  expect_error(ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()),
-    trafo_pipeop = PipeOpNOP$new()), regexp = "PipeOpTargetTrafo")
-
   # IDs
   tt_id = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()), id_prefix = "test")
   expect_equal(tt_id$ids(), c("regr.rpart", "targetmutate", "testtargetinvert"))
+})
+
+test_that("More Complex Target Trafo Pipelines", {
+ task = tsk("mtcars")
+ tt = pipeline_targettrafo((po("select") %>>% ppl("branch", list(lrn("regr.featureless"), lrn("regr.rpart")))))
+ expect_equal(tt$input$op.id, "targetmutate")
+ expect_equal(tt$output$op.id, "targetinvert")
+
+ tt$param_set$values$targetmutate.trafo = function(x) exp(x)
+ tt$param_set$values$targetmutate.inverter = function(x) log(x)
+
+ train_tt1 = tt$train(task)
+ expect_null(train_tt1[[1L]])
+ predict_tt1 = tt$predict(task)
+ expect_equal(unique(predict_tt1[[1L]]$response)[1L], log(mean(exp(task$data(cols = "mpg")[[1L]]))))
+
+ tt$param_set$values$branch.selection = 2L
+ train_tt2 = tt$train(task)
+ expect_null(train_tt2[[1L]])
+ predict_tt2 = tt$predict(task)
 })
