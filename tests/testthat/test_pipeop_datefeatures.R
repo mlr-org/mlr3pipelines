@@ -116,6 +116,7 @@ test_that("PipeOpDateFeatures - feature selection works", {
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
+  task$col_roles$feature = sort(task$col_roles$feature)
   po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE, year = FALSE,
     second = FALSE))
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
@@ -190,7 +191,7 @@ test_that("PipeOpDateFeatures - only year and cyclic", {
   po$param_set$values$minute = FALSE
   po$param_set$values$second = FALSE
   po$param_set$values$is_day = FALSE
-  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)  
+  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)
 })
 
 test_that("PipeOpDateFeatures - two POSIXct variables", {
@@ -201,6 +202,8 @@ test_that("PipeOpDateFeatures - two POSIXct variables", {
   dat$date2 = sample(seq(as.POSIXct("2020-02-29"), to = as.POSIXct("2020-04-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
+  task$col_roles$feature = sort(task$col_roles$feature)
+
   po = PipeOpDateFeatures$new(param_vals = list(keep_date_var = TRUE, cyclic = TRUE))
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
     c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width", "date1", "date2",

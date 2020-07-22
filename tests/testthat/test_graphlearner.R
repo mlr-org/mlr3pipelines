@@ -49,6 +49,7 @@ test_that("basic graphlearn tests", {
 
   scidf = cbind(scale(iris[1:4]), iris[5])
   scalediris = TaskClassif$new("scalediris", as_data_backend(scidf), "Species")
+  scalediris$col_roles$feature = sort(scalediris$col_roles$feature)
 
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
