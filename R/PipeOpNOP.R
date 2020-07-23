@@ -60,7 +60,13 @@ PipeOpNOP = R6Class("PipeOpNOP",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "nop", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals,
+
+      ps = ParamSet$new(list(
+        ParamFct$new(id = "phase", default = "both", levels = c("both", "train", "predict"),
+                     tags = c("train", "predict"))
+      ))
+
+      super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*"),
         tags = "meta"
@@ -70,11 +76,21 @@ PipeOpNOP = R6Class("PipeOpNOP",
   private = list(
     .train = function(inputs) {
       self$state = list()
-      inputs
+      phase = self$param_set$values$phase
+      if (is.null(phase) || phase %in% c("both", "train")) {
+        return(inputs)
+      } else {
+        return(list(NULL))
+      }
     },
 
     .predict = function(inputs) {
-      inputs
+      phase = self$param_set$values$phase
+      if (is.null(phase) || phase %in% c("both", "predict")) {
+        return(inputs)
+      } else {
+        return(list(NULL))
+      }
     }
   )
 )
