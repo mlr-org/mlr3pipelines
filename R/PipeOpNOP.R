@@ -26,7 +26,10 @@
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' [`PipeOpNOP`] has no parameters.
+#' * `phase` :: `character(1)`\cr
+#' What phase information should be pushed through the `PipeOp`. If `"train"` then in training the
+#' output is identical to input but in prediction the output is `NULL`. Analogously for `"predict"`.
+#' Default is `"both"` so objects are pushed through both training and predicting.
 #'
 #' @section Internals:
 #' [`PipeOpNOP`] is a useful "default" stand-in for a [`PipeOp`]/[`Graph`] that does nothing.

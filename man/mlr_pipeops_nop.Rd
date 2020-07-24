@@ -36,7 +36,12 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpNOP}} has no parameters.
+\itemize{
+\item \code{phase} :: \code{character(1)}\cr
+What phase information should be pushed through the \code{PipeOp}. If \code{"train"} then in training the
+output is identical to input but in prediction the output is \code{NULL}. Analogously for \code{"predict"}.
+Default is \code{"both"} so objects are pushed through both training and predicting.
+}
 }
 
 \section{Internals}{
