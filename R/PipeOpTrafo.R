@@ -58,10 +58,10 @@
 #' @section Internals:
 #' [`PipeOpTargetTrafo`] is an abstract class inheriting from [`PipeOp`]. It implements the
 #' `private$.train()` and `private$.predict()` functions. These functions perform checks and go on
-#' to call `.get_state()`, `.transform()`, `.train_invert()`. `.invert()` is packaged
-#' and sent along the `"fun"` output to be applied to a prediction by [`PipeOpTargetInvert`]. A subclass of
-#' [`PipeOpTargetTrafo`] should implement these functions and be used in combination with
-#' [`PipeOpTargetInvert`].
+#' to call `.get_state()`, `.transform()`, `.train_invert()`. `.invert()` is packaged and sent along
+#' the `"fun"` output to be applied to a [`Prediction`][mlr3::Prediction] by [`PipeOpTargetInvert`].
+#' A subclass of [`PipeOpTargetTrafo`] should implement these functions and be used in combination
+#' with [`PipeOpTargetInvert`].
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`].
@@ -75,13 +75,13 @@
 #'   `.get_state()` will be called a single time during *training* right before
 #'   `.transform()` is called. The return value (i.e. the `$state`) should contain info needed in
 #'   `.transform()` as well as in `.invert()`.\cr
-#'   The base implementation returns `list()` and should be overloaded if state is desired.
+#'   The base implementation returns `list()` and should be overloaded if setting the state is desired.
 #' * `.transform(task, phase)`\cr
 #'   ([`Task`][mlr3::Task], `character(1)`) -> [`Task`][mlr3::Task]\cr
 #'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.train()` and
 #'   `private$.predict()`. Takes a single [`Task`][mlr3::Task] as input and modifies it.
 #'   This should typically consist of calculating a new target and modifying the
-#'   [`Task`][mlr3::Task] by using `convert_task`. `.transform()` will be called during training and
+#'   [`Task`][mlr3::Task] by using the `[convert_task]` function. `.transform()` will be called during training and
 #'   prediction because the target (and if needed also type) of the input [`Task`][mlr3::Task] must be transformed
 #'   both times. Note that unlike `$.train()`, the argument is *not* a list but a singular
 #'   [`Task`][mlr3::Task], and the return object is also *not* a list but a singular [`Task`][mlr3::Task].
@@ -97,7 +97,7 @@
 #'   [`Task`][mlr3::Task] as input and returns an arbitrary value that will be given as
 #'   `predict_phase_state` to `.invert()`. This should not modify the input [`Task`][mlr3::Task] .\cr
 #'   The base implementation returns a list with a single element, the `$truth` column of the [`Task`][mlr3::Task],
-#'   and should be overloaded if more training-phase-dependent state is desired.
+#'   and should be overloaded if a more training-phase-dependent state is desired.
 #' * `.invert(prediction, predict_phase_state)`\cr
 #'   ([`Prediction`][mlr3::Prediction], `any`) -> [`Prediction`][mlr3::Prediction]\cr
 #'   Takes a [`Prediction`][mlr3::Prediction] and a `predict_phase_state`

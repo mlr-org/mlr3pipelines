@@ -67,10 +67,10 @@ The \verb{$state} is a named \code{list} and should be returned explicitly by th
 
 \code{\link{PipeOpTargetTrafo}} is an abstract class inheriting from \code{\link{PipeOp}}. It implements the
 \code{private$.train()} and \code{private$.predict()} functions. These functions perform checks and go on
-to call \code{.get_state()}, \code{.transform()}, \code{.train_invert()}. \code{.invert()} is packaged
-and sent along the \code{"fun"} output to be applied to a prediction by \code{\link{PipeOpTargetInvert}}. A subclass of
-\code{\link{PipeOpTargetTrafo}} should implement these functions and be used in combination with
-\code{\link{PipeOpTargetInvert}}.
+to call \code{.get_state()}, \code{.transform()}, \code{.train_invert()}. \code{.invert()} is packaged and sent along
+the \code{"fun"} output to be applied to a \code{\link[mlr3:Prediction]{Prediction}} by \code{\link{PipeOpTargetInvert}}.
+A subclass of \code{\link{PipeOpTargetTrafo}} should implement these functions and be used in combination
+with \code{\link{PipeOpTargetInvert}}.
 }
 
 \section{Fields}{
@@ -89,13 +89,13 @@ Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.tra
 \code{.get_state()} will be called a single time during \emph{training} right before
 \code{.transform()} is called. The return value (i.e. the \verb{$state}) should contain info needed in
 \code{.transform()} as well as in \code{.invert()}.\cr
-The base implementation returns \code{list()} and should be overloaded if state is desired.
+The base implementation returns \code{list()} and should be overloaded if setting the state is desired.
 \item \code{.transform(task, phase)}\cr
 (\code{\link[mlr3:Task]{Task}}, \code{character(1)}) -> \code{\link[mlr3:Task]{Task}}\cr
 Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()} and
 \code{private$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input and modifies it.
 This should typically consist of calculating a new target and modifying the
-\code{\link[mlr3:Task]{Task}} by using \code{convert_task}. \code{.transform()} will be called during training and
+\code{\link[mlr3:Task]{Task}} by using the \verb{[convert_task]} function. \code{.transform()} will be called during training and
 prediction because the target (and if needed also type) of the input \code{\link[mlr3:Task]{Task}} must be transformed
 both times. Note that unlike \verb{$.train()}, the argument is \emph{not} a list but a singular
 \code{\link[mlr3:Task]{Task}}, and the return object is also \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}.
@@ -111,7 +111,7 @@ Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.pre
 \code{\link[mlr3:Task]{Task}} as input and returns an arbitrary value that will be given as
 \code{predict_phase_state} to \code{.invert()}. This should not modify the input \code{\link[mlr3:Task]{Task}} .\cr
 The base implementation returns a list with a single element, the \verb{$truth} column of the \code{\link[mlr3:Task]{Task}},
-and should be overloaded if more training-phase-dependent state is desired.
+and should be overloaded if a more training-phase-dependent state is desired.
 \item \code{.invert(prediction, predict_phase_state)}\cr
 (\code{\link[mlr3:Prediction]{Prediction}}, \code{any}) -> \code{\link[mlr3:Prediction]{Prediction}}\cr
 Takes a \code{\link[mlr3:Prediction]{Prediction}} and a \code{predict_phase_state}
