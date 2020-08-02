@@ -33,16 +33,43 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
 
       if (is.null(task_type)) {
+        # check the high level input and output
         class_table = mlr_reflections$task_types
         input = graph$input
-        inferred = c(
+        task_type = c(
           match(c(output$train, output$predict), class_table$prediction),
           match(c(input$train, input$predict), class_table$task))
-        inferred = unique(class_table$type[na.omit(inferred)])
-        if (length(inferred) > 1) {
-          stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(inferred))
+        task_type = unique(class_table$type[na.omit(task_type)])
+        if (length(task_type) > 1L) {
+          stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
         }
-        task_type = c(inferred, "classif")[1]
+        if (length(task_type) == 0L) {
+          # recursively walk backwards through the graph
+          # FIXME: think more about target transformation graphs here
+          get_po_task_type = function(x) {
+            task_type = c(
+              match(c(x$output$train, x$output$predict), class_table$prediction),
+              match(c(x$input$train, x$input$predict), class_table$task))
+            task_type = unique(class_table$type[na.omit(task_type)])
+            if (length(task_type) > 1) {
+              stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
+            }
+            if (length(task_type) == 1) {
+              return(task_type)  # early exit
+            }
+            prdcssrs = graph$edges[dst_id == x$id, ]$src_id
+            if (length(prdcssrs)) {
+              # all non-null elements
+              task_types = keep(map(graph$pipeops[prdcssrs], get_po_task_type), Negate(is.null))
+              if (length(unique(task_types)) == 1L) {
+                return(unlist(unique(task_types)))
+              }
+            }
+            return(NULL)
+          }
+          task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
+        }
+        task_type = c(task_type, "classif")[1L]  # final fallback
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
