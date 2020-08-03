@@ -57,8 +57,10 @@
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
-#' * `learner`  :: [`Learner`][mlr3::Learner]\cr
+#' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -106,6 +108,20 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         }
       }
       private$.learner
+    },
+    learner_model = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      if (is.null(self$state)) {
+        private$.learner
+      } else {
+        lrn = private$.learner$clone(deep = TRUE)
+        lrn$state = self$state
+        lrn
+      }
     }
   ),
   private = list(

@@ -80,14 +80,14 @@ test_that("Dictionary contains all PipeOps", {
     }
 
     # check that mlr_pipeops$get() gives the same object as PipeOpXXX$new() does
-    expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)
+    expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj, info = dictname)
 
     # check that ID can be changed
     args$id = "TESTID"
     expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
     test_obj$id = "TESTID"
-    expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)
-    expect_equal(do.call(pogen$new, args), test_obj)
+    expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj, info = dictname)
+    expect_equal(do.call(pogen$new, args), test_obj, info = dictname)
 
     # we now check if hyperparameters can be changed through construction
     # we do this by automatically generating a hyperparameter value that deviates from the automatically constructed one.

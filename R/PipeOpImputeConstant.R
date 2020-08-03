@@ -73,13 +73,10 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         ParamLgl$new("check_levels", tags = c("train", "required"))
       ))
       ps$values = list(constant = ".MISSING", check_levels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals)
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
     }
   ),
   private = list(
-
-    .select_cols = function(task) task$feature_names,
-
     .train_imputer = function(feature, type, context) {
       constant = self$param_set$values$constant
       switch(type,
