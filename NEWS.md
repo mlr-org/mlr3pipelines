@@ -1,4 +1,12 @@
-# mlr3pipelines (development version)
+# mlr3pipelines 0.1.4
+
+* 
+
+# mlr3pipelines 0.1.3
+
+* small test fix for R 4.0 (necessary for stringsAsFactors option default change in 3.6 -> 4.0)
+* predict() generic for Graph
+* Migrated last vignette to "mlr3 Book"
 
 # mlr3pipelines 0.1.2
 
