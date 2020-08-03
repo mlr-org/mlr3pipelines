@@ -80,7 +80,7 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
     .transform_dt = function(dt, levels) {
       for (i in seq_along(dt)) {
         trafo = self$state[[i]]
-        dt[[i]] = trafo[2L] + dt[[i]] * trafo[1L]
+        dt[[i]] = trafo[["offset"]] + dt[[i]] * trafo[["scale"]]
       }
       dt
     }
