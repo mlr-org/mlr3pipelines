@@ -14,7 +14,7 @@ test_that("featureunion - basic properties", {
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
 
-  expect_error(PipeOpFeatureUnion$new(1, collect = TRUE), regexp = "collect only works with innum == 0")
+  expect_error(PipeOpFeatureUnion$new(1, collect_multiplicity = TRUE), regexp = "collect_multiplicity only works with innum == 0")
 })
 
 test_that("PipeOpFeatureUnion - train and predict", {
@@ -220,8 +220,8 @@ test_that("featureunion - duplicates in feature names", {
   expect_error(po$train(list(tsk, tsk2)), regexp = "different features sharing the same feature name")
 })
 
-test_that("featureunion - collect", {
-  po = PipeOpFeatureUnion$new(0, collect = TRUE)
+test_that("featureunion - collect_multiplicity", {
+  po = PipeOpFeatureUnion$new(0, collect_multiplicity = TRUE)
   expect_pipeop(po)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
