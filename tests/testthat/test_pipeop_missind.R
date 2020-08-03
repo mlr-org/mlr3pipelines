@@ -28,16 +28,16 @@ test_that("PipeOpMissInd", {
   task_no_lgl = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "missing_train", type = "logical")))
+    constargs = list(param_vals = list(which = "missing_train", type = "logical", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "logical")))
+    constargs = list(param_vals = list(which = "all", type = "logical", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "factor")))
+    constargs = list(param_vals = list(which = "all", type = "factor", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "numeric")))
+    constargs = list(param_vals = list(which = "all", type = "numeric", affect_columns = NULL)))
 
   po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical"))
 
