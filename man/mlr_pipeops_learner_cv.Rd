@@ -33,7 +33,7 @@ useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\lin
 \code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a
 \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
 \item \code{id} :: \code{character(1)}
-Identifier of the resulting  object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
+Identifier of the resulting object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -92,10 +92,12 @@ The \verb{$state} is currently not updated by prediction, so the \verb{$state$pr
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}, as well as:
+Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{learner}  :: \code{\link[mlr3:Learner]{Learner}}\cr
+\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
+\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. This learner contains the model if the \code{PipeOp} is trained. Read-only.
 }
 }
 

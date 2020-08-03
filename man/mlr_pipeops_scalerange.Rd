@@ -8,10 +8,11 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Linearly transforms numeric data columns so they are between \code{lower} and \code{upper}.
-The formula for this is \eqn{x' = a + x * b},
-where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
-\eqn{a} is \eqn{-min(x) * b + lower}.
+Linearly transforms numeric data columns so they are between \code{lower}
+and \code{upper}. The formula for this is \eqn{x' = offset + x * scale},
+where \eqn{scale} is \eqn{(upper - lower) / (max(x) - min(x))} and
+\eqn{offset} is \eqn{-min(x) * scale + lower}. The same transformation is applied during training and
+prediction.
 }
 \section{Construction}{
 \preformatted{PipeOpScaleRange$new(id = "scalerange", param_vals = list())
@@ -34,7 +35,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with scaled numeric featur
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}},
-as well as the two transformation parameters \eqn{a} and \eqn{b} for each numeric
+as well as the two transformation parameters \eqn{scale} and \eqn{offset} for each numeric
 feature.
 }
 
@@ -42,10 +43,10 @@ feature.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{lower}  :: \code{numeric(1)} \cr
-Target value of smallest item of input data. Default is 0.
-\item \code{upper} :: \code{numeric(1)} \cr
-Target value of greatest item of input data. Default is 1.
+\item \code{lower} :: \code{numeric(1)}\cr
+Target value of smallest item of input data. Initialized to 0.
+\item \code{upper} :: \code{numeric(1)}\cr
+Target value of greatest item of input data. Initialized to 1.
 }
 }
 

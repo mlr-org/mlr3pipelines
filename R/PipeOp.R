@@ -309,8 +309,19 @@ PipeOp = R6Class("PipeOp",
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
     hash = function() {
-      digest(list(class(self), self$id, self$param_set$values),
-        algo = "xxhash64")
+      digest(list(class(self), self$id, lapply(self$param_set$values, function(val) {
+        # ideally we would just want to hash `param_set$values`, but one of the values
+        # could be an R6 object with a `$hash` slot as well, in which case we take that
+        # slot's value. This is to avoid different hashes from essentially the same
+        # objects.
+        # In the following we also avoid accessing `val$hash` twice, because it could
+        # potentially be an expensive AB.
+        if (is.environment(val) && !is.null({vhash = val$hash})) {
+          vhash
+        } else {
+          val
+        }
+      })), algo = "xxhash64")
     }
   ),
 
