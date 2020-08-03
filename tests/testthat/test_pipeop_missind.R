@@ -39,7 +39,7 @@ test_that("PipeOpMissInd", {
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
     constargs = list(param_vals = list(which = "all", type = "numeric", affect_columns = NULL)))
 
-  po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical"))
+  po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical", affect_columns = NULL))
 
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
 
