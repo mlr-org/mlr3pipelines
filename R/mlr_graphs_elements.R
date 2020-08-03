@@ -382,7 +382,7 @@ mlr_graphs$add("greplicate", pipeline_greplicate)
 #' gr = po("replicate", reps = 3) %>>%
 #'   po("subsample") %>>%
 #'   learner %>>%
-#'   po("classifavg", collect = TRUE)
+#'   po("classifavg", collect_multiplicity = TRUE)
 #' g2 = pipeline_ovr(gr)
 #' g2$train(task)
 #' g2$predict(task)
@@ -390,7 +390,7 @@ mlr_graphs$add("greplicate", pipeline_greplicate)
 #' # Bagging outside OVR
 #' g3 = po("replicate", reps = 3) %>>%
 #'   pipeline_ovr(po("subsample") %>>% learner) %>>%
-#'   po("classifavg", collect = TRUE)
+#'   po("classifavg", collect_multiplicity = TRUE)
 #' g3$train(task)
 #' g3$predict(task)
 pipeline_ovr = function(graph) {
