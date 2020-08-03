@@ -301,7 +301,7 @@ Optionally a new task type can be set. Legal types are listed in
 #&gt;     assert_list(inputs, len = 1L, types = "Prediction")
 #&gt;     self$inverter(inputs[[1L]], predict_phase_control)
 #&gt; }
-#&gt; &lt;environment: 0x7fec43a8ca18&gt;
+#&gt; &lt;environment: 0x7fbd4e27c5b8&gt;
 #&gt; 
 #&gt; $output
 #&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
@@ -326,7 +326,17 @@ Optionally a new task type can be set. Legal types are listed in
 
 <span class='no'>g</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>g</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output</div><div class='output co'>#&gt; <span class='error'>Error: The following packages could not be loaded: distr6</span></div><div class='input'>
+#&gt; </div><div class='input'><span class='no'>g</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
+#&gt; &lt;PredictionRegr&gt; for 506 observations:
+#&gt;     row_id truth response
+#&gt;          1  24.0 24.35119
+#&gt;          2  21.6 20.48150
+#&gt;          3  34.7 32.83886
+#&gt; ---                      
+#&gt;        504  23.9 24.35119
+#&gt;        505  22.0 20.48150
+#&gt;        506  11.9 16.99570
+#&gt; </div><div class='input'>
 <span class='co'>#syntactic sugar using ppl():</span>
 <span class='no'>tt</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"targettrafo"</span>, <span class='kw'>graph</span> <span class='kw'>=</span> <span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
 <span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targettrafosimple.trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>)

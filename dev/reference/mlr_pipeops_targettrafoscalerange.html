@@ -296,7 +296,7 @@ Target value of greatest item of input target. Default is 1.</p></li>
 #&gt;     assert_list(inputs, len = 1L, types = "Prediction")
 #&gt;     self$inverter(inputs[[1L]], predict_phase_control)
 #&gt; }
-#&gt; &lt;environment: 0x7fec3658c6b0&gt;
+#&gt; &lt;environment: 0x7fbd538b7f38&gt;
 #&gt; 
 #&gt; $output
 #&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
@@ -313,7 +313,17 @@ Target value of greatest item of input target. Default is 1.</p></li>
   <span class='kw'>graph</span> <span class='kw'>=</span> <span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
 <span class='no'>ttscalerange</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>ttscalerange</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output</div><div class='output co'>#&gt; <span class='error'>Error: The following packages could not be loaded: distr6</span></div><div class='input'><span class='no'>ttscalerange</span>$<span class='no'>state</span>$<span class='no'>regr.rpart</span></div><div class='output co'>#&gt; $model
+#&gt; </div><div class='input'><span class='no'>ttscalerange</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
+#&gt; &lt;PredictionRegr&gt; for 506 observations:
+#&gt;     row_id truth response
+#&gt;          1  24.0 23.72519
+#&gt;          2  21.6 19.55954
+#&gt;          3  34.7 35.10312
+#&gt; ---                      
+#&gt;        504  23.9 23.72519
+#&gt;        505  22.0 23.72519
+#&gt;        506  11.9 19.55954
+#&gt; </div><div class='input'><span class='no'>ttscalerange</span>$<span class='no'>state</span>$<span class='no'>regr.rpart</span></div><div class='output co'>#&gt; $model
 #&gt; n= 506 
 #&gt; 
 #&gt; node), split, n, deviance, yval
@@ -337,7 +347,7 @@ Target value of greatest item of input target. Default is 1.</p></li>
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $train_time
-#&gt; [1] 0.014
+#&gt; [1] 0.013
 #&gt; 
 #&gt; $train_task
 #&gt; &lt;TaskRegr:boston_housing&gt; (0 x 19)
