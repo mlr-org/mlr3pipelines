@@ -14,7 +14,7 @@
 #' new negative class `"rest"`.
 #'
 #' This [`PipeOp`] creates a [`Multiplicity`], which means that subsequent [`PipeOp`]s are executed
-#' multiple times, once for each created [binary `Task`][mlr3::TaskClassif], until a [`PipeOpOVRUnite`]
+#' multiple times, once for each created [binary Task][mlr3::TaskClassif], until a [`PipeOpOVRUnite`]
 #' is reached.
 #'
 #' Note that [`Multiplicity`] is currently an experimental features and the implementation or UI
@@ -129,7 +129,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' Missing values during prediction are treated as each class label being equally likely.
 #'
 #' This [`PipeOp`] uses a [`Multiplicity`] input, which is created by [`PipeOpOVRSplit`] and causes
-#' [`PipeOp`]s on the way to this [`PipeOp`] to be called once for each individual [binary `Task`][mlr3::TaskClassif].
+#' [`PipeOp`]s on the way to this [`PipeOp`] to be called once for each individual [binary Task][mlr3::TaskClassif].
 #'
 #' Note that [`Multiplicity`] is currently an experimental features and the implementation or UI
 #' may change.

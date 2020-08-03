@@ -16,7 +16,7 @@ the respective target level being the positive class and all other target levels
 new negative class \code{"rest"}.
 
 This \code{\link{PipeOp}} creates a \code{\link{Multiplicity}}, which means that subsequent \code{\link{PipeOp}}s are executed
-multiple times, once for each created \link[mlr3:TaskClassif]{binary \code{Task}}, until a \code{\link{PipeOpOVRUnite}}
+multiple times, once for each created \link[mlr3:TaskClassif]{binary Task}, until a \code{\link{PipeOpOVRUnite}}
 is reached.
 
 Note that \code{\link{Multiplicity}} is currently an experimental features and the implementation or UI

@@ -20,7 +20,7 @@ Always returns a \code{"prob"} prediction, regardless of the incoming \code{\lin
 Missing values during prediction are treated as each class label being equally likely.
 
 This \code{\link{PipeOp}} uses a \code{\link{Multiplicity}} input, which is created by \code{\link{PipeOpOVRSplit}} and causes
-\code{\link{PipeOp}}s on the way to this \code{\link{PipeOp}} to be called once for each individual \link[mlr3:TaskClassif]{binary \code{Task}}.
+\code{\link{PipeOp}}s on the way to this \code{\link{PipeOp}} to be called once for each individual \link[mlr3:TaskClassif]{binary Task}.
 
 Note that \code{\link{Multiplicity}} is currently an experimental features and the implementation or UI
 may change.
