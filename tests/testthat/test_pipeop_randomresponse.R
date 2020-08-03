@@ -45,7 +45,7 @@ test_that("train and predict", {
   expect_prediction(predict_out2[[1L]])
   expect_equal(task2$data(cols = "mpg")[[1L]], predict_out2[[1L]]$truth)
   expect_numeric(predict_out2[[1L]]$response, finite = TRUE, any.missing = FALSE)
-  expect_numeric(predict_out2[[1L]]$se, len = 0L)
+  expect_numeric(na.omit(predict_out2[[1L]]$se), len = 0L)
 
   g2$pipeops$randomresponse$param_set$values$rdistfun = function(n, mean, sd) {
     expect_equal(length(mean), n)
