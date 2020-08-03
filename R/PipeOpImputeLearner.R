@@ -68,7 +68,7 @@
 #' task = tsk("pima")
 #' task$missings()
 #'
-#' po = po("imputemean")
+#' po = po("imputelearner", lrn("regr.rpart"))
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #'
