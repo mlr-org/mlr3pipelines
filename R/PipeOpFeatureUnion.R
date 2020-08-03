@@ -116,7 +116,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       inname = if (innum) rep_suffix("input", innum) else "..."
       intype = "Task"
       private$.collect = assert_flag(collect_multiplicity)
-      if (collect) {
+      if (collect_multiplicity) {
         if (innum) {
           stop("collect only works with innum == 0.")
         }
