@@ -11,6 +11,11 @@ Authors@R:
              role = "aut",
              email = "pfistererf@googlemail.com",
              comment = c(ORCID = "0000-0001-8867-762X")),
+      person(given = "Lennart",
+             family = "Schneider",
+             role = "aut",
+             email = "lennart.sch@web.de",
+             comment = c(ORCID = "0000-0003-4152-5308")),
       person(given = "Bernd",
              family = "Bischl",
              role = "aut",
@@ -24,12 +29,7 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"),
-      person(given = "Lennart",
-             family = "Schneider",
-             role = "aut",
-             email = "lennart.sch@web.de",
-             comment = c(ORCID = "0000-0003-4152-5308")))
+             email = "dandl.susanne@googlemail.com"))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
