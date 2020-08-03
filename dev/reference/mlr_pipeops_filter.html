@@ -308,12 +308,12 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"spam"</span>)
 <span class='no'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span>(<span class='st'>"auc"</span>)
 <span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"filter"</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>filter</span>)
-<span class='no'>po</span>$<span class='no'>param_set</span></div><div class='output co'>#&gt; ParamSet: auc
-#&gt;                id    class lower upper levels     default value
-#&gt; 1:   filter.nfeat ParamInt     0   Inf        &lt;NoDefault&gt;      
-#&gt; 2:    filter.frac ParamDbl     0     1        &lt;NoDefault&gt;      
-#&gt; 3:  filter.cutoff ParamDbl  -Inf   Inf        &lt;NoDefault&gt;      
-#&gt; 4: affect_columns ParamUty    NA    NA         &lt;Selector&gt;      </div><div class='input'><span class='no'>po</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>filter.nfeat</span> <span class='kw'>=</span> <span class='fl'>5</span>
+<span class='no'>po</span>$<span class='no'>param_set</span></div><div class='output co'>#&gt; &lt;ParamSetCollection:auc&gt;
+#&gt;                id    class lower upper levels        default value
+#&gt; 1:   filter.nfeat ParamInt     0   Inf        &lt;NoDefault[3]&gt;      
+#&gt; 2:    filter.frac ParamDbl     0     1        &lt;NoDefault[3]&gt;      
+#&gt; 3:  filter.cutoff ParamDbl  -Inf   Inf        &lt;NoDefault[3]&gt;      
+#&gt; 4: affect_columns ParamUty    NA    NA         &lt;Selector[1]&gt;      </div><div class='input'><span class='no'>po</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>filter.nfeat</span> <span class='kw'>=</span> <span class='fl'>5</span>
 
 <span class='co'># filter the task</span>
 <span class='no'>filtered_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]

@@ -207,11 +207,11 @@ is not intended to be instantiated.</p>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object. See <code>$id</code> slot.</p></li>
-<li><p><code>param_set</code> :: <code><a href='https://rdrr.io/pkg/paradox/man/ParamSet.html'>ParamSet</a></code> | <code>list</code> of <code>expression</code><br />
+<li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code> | <code>list</code> of <code>expression</code><br />
 Parameter space description. This should be created by the subclass and given to <code>super$initialize()</code>.
-If this is a <code><a href='https://rdrr.io/pkg/paradox/man/ParamSet.html'>ParamSet</a></code>, it is used as the <code>PipeOp</code>'s <code><a href='https://rdrr.io/pkg/paradox/man/ParamSet.html'>ParamSet</a></code>
-directly. Otherwise it must be a <code>list</code> of expressions e.g. created by <code><a href='https://rdrr.io/r/base/list.html'>alist()</a></code> that evaluate to <code><a href='https://rdrr.io/pkg/paradox/man/ParamSet.html'>ParamSet</a></code>s.
-These <code><a href='https://rdrr.io/pkg/paradox/man/ParamSet.html'>ParamSet</a></code> are combined using a <code><a href='https://rdrr.io/pkg/paradox/man/ParamSetCollection.html'>ParamSetCollection</a></code>.</p></li>
+If this is a <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code>, it is used as the <code>PipeOp</code>'s <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code>
+directly. Otherwise it must be a <code>list</code> of expressions e.g. created by <code><a href='https://rdrr.io/r/base/list.html'>alist()</a></code> that evaluate to <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code>s.
+These <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code> are combined using a <code><a href='https://paradox.mlr-org.com/reference/ParamSetCollection.html'>ParamSetCollection</a></code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings given in <code>param_set</code>. The
 subclass should have its own <code>param_vals</code> parameter and pass it on to <code>super$initialize()</code>. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -250,7 +250,7 @@ should be used.</p></li>
 Packages required for the <code>PipeOp</code>. Functions that are not in base R should still be called using <code>::</code>
 (or explicitly attached using <code>require()</code>) in <code>private$.train()</code> <em>and</em> <code>private$.predict()</code>, but
 packages declared here are checked before any (possibly expensive) processing has started within a <code><a href='Graph.html'>Graph</a></code>.</p></li>
-<li><p><code>param_set</code> :: <code><a href='https://rdrr.io/pkg/paradox/man/ParamSet.html'>ParamSet</a></code><br />
+<li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
 Parameters and parameter constraints. Parameter values that influence the functioning of <code>$train</code> and / or <code>$predict</code> are
 in the <code>$param_set$values</code> slot; these are automatically checked against parameter constraints in <code>$param_set</code>.</p></li>
 <li><p><code>state</code> :: <code>any</code> | <code>NULL</code><br />

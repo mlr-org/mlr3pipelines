@@ -293,35 +293,305 @@ where <code>context_columns</code> is chosen well (or there is only one column w
 #&gt;        0        0        5      374       11        0        0       35 
 #&gt;  triceps 
 #&gt;      227 </div><div class='input'>
-<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputemean"</span>)
+<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputelearner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>))
 <span class='no'>new_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
 <span class='no'>new_task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
 #&gt;        0        0        0        0        0        0        0        0 
 #&gt;  triceps 
 #&gt;        0 </div><div class='input'>
 <span class='no'>po</span>$<span class='no'>state</span>$<span class='no'>model</span></div><div class='output co'>#&gt; $age
-#&gt; [1] 33.24089
+#&gt; $age$model
+#&gt; n= 768 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 768 106078.400 33.24089  
+#&gt;    2) pregnant&lt; 4.5 492  43078.630 28.38618  
+#&gt;      4) pressure&lt; 71 279  16080.330 26.33692  
+#&gt;        8) glucose&lt; 180.5 268  12548.100 25.82836 *
+#&gt;        9) glucose&gt;=180.5 11   1774.182 38.72727 *
+#&gt;      5) pressure&gt;=71 213  24291.940 31.07042  
+#&gt;       10) pregnant&lt; 3.5 179  16978.990 29.99441 *
+#&gt;       11) pregnant&gt;=3.5 34   6014.618 36.73529 *
+#&gt;    3) pregnant&gt;=4.5 276  30733.950 41.89493  
+#&gt;      6) glucose&lt; 124.5 143  14584.150 39.07692  
+#&gt;       12) pregnant&lt; 7.5 81   6781.136 35.61728 *
+#&gt;       13) pregnant&gt;=7.5 62   5566.919 43.59677 *
+#&gt;      7) glucose&gt;=124.5 133  13793.250 44.92481  
+#&gt;       14) mass&gt;=26.9 115   9558.730 43.48696 *
+#&gt;       15) mass&lt; 26.9 18   2477.778 54.11111 *
+#&gt; 
+#&gt; $age$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $age$train_time
+#&gt; [1] 0.007
+#&gt; 
+#&gt; $age$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): glucose, insulin, mass, pedigree, pregnant, pressure,
+#&gt;     triceps
+#&gt; 
 #&gt; 
 #&gt; $glucose
-#&gt; [1] 121.6868
+#&gt; $glucose$model
+#&gt; n= 763 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 763 710508.10 121.6868  
+#&gt;    2) insulin&lt; 119.5 341 216223.70 108.0293  
+#&gt;      4) age&lt; 34.5 250 103114.90 102.8200 *
+#&gt;      5) age&gt;=34.5 91  87686.44 122.3407 *
+#&gt;    3) insulin&gt;=119.5 422 379282.60 132.7227  
+#&gt;      6) insulin&lt; 222.5 338 277176.00 127.9882  
+#&gt;       12) pedigree&lt; 0.296 122  91512.30 120.4590 *
+#&gt;       13) pedigree&gt;=0.296 216 174841.50 132.2407  
+#&gt;         26) pressure&lt; 81 161 128716.40 128.7205 *
+#&gt;         27) pressure&gt;=81 55  38289.64 142.5455 *
+#&gt;      7) insulin&gt;=222.5 84  64042.70 151.7738 *
+#&gt; 
+#&gt; $glucose$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $glucose$train_time
+#&gt; [1] 0.005
+#&gt; 
+#&gt; $glucose$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): age, insulin, mass, pedigree, pregnant, pressure, triceps
+#&gt; 
 #&gt; 
 #&gt; $insulin
-#&gt; [1] 155.5482
+#&gt; $insulin$model
+#&gt; n= 394 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 394 5544328.00 155.54820  
+#&gt;    2) glucose&lt; 121.5 209  646628.00  99.46411  
+#&gt;      4) glucose&lt; 99.5 103  168042.10  73.80583 *
+#&gt;      5) glucose&gt;=99.5 106  344885.40 124.39620 *
+#&gt;    3) glucose&gt;=121.5 185 3497627.00 218.90810  
+#&gt;      6) glucose&lt; 180.5 163 2415965.00 203.23310  
+#&gt;       12) mass&lt; 38.05 123 1296233.00 183.49590 *
+#&gt;       13) mass&gt;=38.05 40  924476.80 263.92500  
+#&gt;         26) glucose&lt; 138 13   58892.31 194.76920 *
+#&gt;         27) glucose&gt;=138 27  773476.70 297.22220  
+#&gt;           54) mass&gt;=42.5 11  297613.60 212.18180 *
+#&gt;           55) mass&lt; 42.5 16  341621.40 355.68750 *
+#&gt;      7) glucose&gt;=180.5 22  744879.00 335.04550  
+#&gt;       14) triceps&lt; 35.5 14  426141.40 282.57140 *
+#&gt;       15) triceps&gt;=35.5 8  212726.90 426.87500 *
+#&gt; 
+#&gt; $insulin$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $insulin$train_time
+#&gt; [1] 0.005
+#&gt; 
+#&gt; $insulin$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): age, glucose, mass, pedigree, pregnant, pressure, triceps
+#&gt; 
 #&gt; 
 #&gt; $mass
-#&gt; [1] 32.45746
+#&gt; $mass$model
+#&gt; n= 757 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 757 36254.3300 32.45746  
+#&gt;    2) triceps&lt; 25.5 219  5537.6560 27.93196  
+#&gt;      4) triceps&lt; 20.5 144  3140.7800 26.68333 *
+#&gt;      5) triceps&gt;=20.5 75  1741.3150 30.32933  
+#&gt;       10) pressure&lt; 83 64  1081.6090 29.37813 *
+#&gt;       11) pressure&gt;=83 11   264.8855 35.86364 *
+#&gt;    3) triceps&gt;=25.5 538 24405.7800 34.29963  
+#&gt;      6) triceps&lt; 35.5 380 14414.2500 32.50474  
+#&gt;       12) pressure&lt; 74.5 223  6772.1180 31.49013  
+#&gt;         24) glucose&lt; 73.5 8    44.1000 24.20000 *
+#&gt;         25) glucose&gt;=73.5 215  6287.0300 31.76140  
+#&gt;           50) pregnant&gt;=0.5 190  4822.6790 31.28947 *
+#&gt;           51) pregnant&lt; 0.5 25  1100.4420 35.34800 *
+#&gt;       13) pressure&gt;=74.5 157  7086.5100 33.94586  
+#&gt;         26) insulin&lt; 187 122  4736.5000 33.05656 *
+#&gt;         27) insulin&gt;=187 35  1917.2070 37.04571 *
+#&gt;      7) triceps&gt;=35.5 158  5822.9770 38.61646  
+#&gt;       14) pregnant&gt;=1.5 92  2351.3170 37.02174 *
+#&gt;       15) pregnant&lt; 1.5 66  2911.5580 40.83939 *
+#&gt; 
+#&gt; $mass$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $mass$train_time
+#&gt; [1] 0.01
+#&gt; 
+#&gt; $mass$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): age, glucose, insulin, pedigree, pregnant, pressure,
+#&gt;     triceps
+#&gt; 
 #&gt; 
 #&gt; $pedigree
-#&gt; [1] 0.4718763
+#&gt; $pedigree$model
+#&gt; n= 768 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 768 84.2002200 0.4718763  
+#&gt;    2) mass&lt; 39.95 670 62.5082100 0.4498313  
+#&gt;      4) insulin&lt; 149 440 33.4978700 0.4156341 *
+#&gt;      5) insulin&gt;=149 230 27.5114100 0.5152522  
+#&gt;       10) triceps&lt; 46.5 222 23.0603100 0.4986712  
+#&gt;         20) glucose&lt; 194.5 215 18.9026700 0.4872930  
+#&gt;           40) insulin&gt;=157 206 16.8518900 0.4721699 *
+#&gt;           41) insulin&lt; 157 9  0.9252762 0.8334444 *
+#&gt;         21) glucose&gt;=194.5 7  3.2748970 0.8481429 *
+#&gt;       11) triceps&gt;=46.5 8  2.6963540 0.9753750 *
+#&gt;    3) mass&gt;=39.95 98 19.1403100 0.6225918  
+#&gt;      6) glucose&lt; 172.5 85 11.3114300 0.5637647 *
+#&gt;      7) glucose&gt;=172.5 13  5.6114200 1.0072310 *
+#&gt; 
+#&gt; $pedigree$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $pedigree$train_time
+#&gt; [1] 0.006
+#&gt; 
+#&gt; $pedigree$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): age, glucose, insulin, mass, pregnant, pressure, triceps
+#&gt; 
 #&gt; 
 #&gt; $pregnant
-#&gt; [1] 3.845052
+#&gt; $pregnant$model
+#&gt; n= 768 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 768 8708.5610 3.845052  
+#&gt;    2) age&lt; 31.5 441 1602.7760 2.108844  
+#&gt;      4) age&lt; 26.5 300  626.5700 1.590000 *
+#&gt;      5) age&gt;=26.5 141  723.6170 3.212766 *
+#&gt;    3) age&gt;=31.5 327 3983.6210 6.186544  
+#&gt;      6) age&lt; 37.5 92  758.7283 4.945652 *
+#&gt;      7) age&gt;=37.5 235 3027.7700 6.672340  
+#&gt;       14) age&gt;=58.5 35  305.6000 4.800000 *
+#&gt;       15) age&lt; 58.5 200 2578.0000 7.000000 *
+#&gt; 
+#&gt; $pregnant$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $pregnant$train_time
+#&gt; [1] 0.005
+#&gt; 
+#&gt; $pregnant$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): age, glucose, insulin, mass, pedigree, pressure, triceps
+#&gt; 
 #&gt; 
 #&gt; $pressure
-#&gt; [1] 72.40518
+#&gt; $pressure$model
+#&gt; n= 733 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 733 112228.700 72.40518  
+#&gt;    2) age&lt; 26.5 285  40349.940 67.21404  
+#&gt;      4) mass&lt; 42.35 258  31003.860 66.02326  
+#&gt;        8) pregnant&gt;=0.5 201  23452.640 64.87065 *
+#&gt;        9) pregnant&lt; 0.5 57   6342.561 70.08772 *
+#&gt;      5) mass&gt;=42.35 27   5484.519 78.59259  
+#&gt;       10) insulin&lt; 117.5 8   1928.000 67.00000 *
+#&gt;       11) insulin&gt;=117.5 19   2028.737 83.47368 *
+#&gt;    3) age&gt;=26.5 448  59312.690 75.70759  
+#&gt;      6) mass&lt; 34.05 265  31517.600 73.40000  
+#&gt;       12) age&lt; 42.5 174  20436.530 71.42529 *
+#&gt;       13) age&gt;=42.5 91   9105.187 77.17582 *
+#&gt;      7) mass&gt;=34.05 183  24340.560 79.04918  
+#&gt;       14) age&lt; 34.5 71   9296.310 75.09859  
+#&gt;         28) triceps&lt; 38.5 33   4378.182 70.54545 *
+#&gt;         29) triceps&gt;=38.5 38   3639.895 79.05263 *
+#&gt;       15) age&gt;=34.5 112  13233.680 81.55357 *
+#&gt; 
+#&gt; $pressure$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $pressure$train_time
+#&gt; [1] 0.006
+#&gt; 
+#&gt; $pressure$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): age, glucose, insulin, mass, pedigree, pregnant, triceps
+#&gt; 
 #&gt; 
 #&gt; $triceps
-#&gt; [1] 29.15342
+#&gt; $triceps$model
+#&gt; n= 541 
+#&gt; 
+#&gt; node), split, n, deviance, yval
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt;  1) root 541 59274.2700 29.15342  
+#&gt;    2) mass&lt; 32.75 267 15721.6700 22.87266  
+#&gt;      4) mass&lt; 27.55 123  5480.2600 19.64228  
+#&gt;        8) mass&lt; 23.85 39   878.9744 15.97436 *
+#&gt;        9) mass&gt;=23.85 84  3832.9880 21.34524  
+#&gt;         18) age&lt; 36.5 70  2536.0000 20.00000 *
+#&gt;         19) age&gt;=36.5 14   536.9286 28.07143 *
+#&gt;      5) mass&gt;=27.55 144  7861.4930 25.63194  
+#&gt;       10) pregnant&lt; 4.5 101  5228.2380 24.27723 *
+#&gt;       11) pregnant&gt;=4.5 43  2012.5120 28.81395 *
+#&gt;    3) mass&gt;=32.75 274 22756.4700 35.27372  
+#&gt;      6) mass&lt; 36.95 140 12899.2200 32.33571  
+#&gt;       12) age&lt; 53 133  8114.1050 31.78947 *
+#&gt;       13) age&gt;=53 7  3991.4290 42.71429 *
+#&gt;      7) mass&gt;=36.95 134  7386.2090 38.34328  
+#&gt;       14) mass&lt; 46.75 121  5587.3390 37.58678 *
+#&gt;       15) mass&gt;=46.75 13  1085.0770 45.38462 *
+#&gt; 
+#&gt; $triceps$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $triceps$train_time
+#&gt; [1] 0.006
+#&gt; 
+#&gt; $triceps$train_task
+#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; * Target: .impute_col
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): age, glucose, insulin, mass, pedigree, pregnant, pressure
+#&gt; 
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
