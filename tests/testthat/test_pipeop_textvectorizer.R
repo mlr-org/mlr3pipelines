@@ -35,7 +35,7 @@ test_that("PipeOpTextVectorizer - basic properties", {
 
   expect_datapreproc_pipeop_class(PipeOpTextVectorizer, task = task)
 
-  prd = op$predict(list(task$filter(rows = character(0))))[[1]]
+  prd = op$predict(list(task$filter(rows = integer(0))))[[1]]
   expect_task(prd)
   expect_true(prd$nrow == 0L)
 })
