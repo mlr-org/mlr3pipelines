@@ -7,6 +7,7 @@
 #' and distinction from unintentional `NULL` returns.
 #'
 #' @family Path Branching
+#' @family Special Graph Messages
 #' @export
 NO_OP = R6Class("NO_OP",
   public = list(

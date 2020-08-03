@@ -96,12 +96,20 @@ Input channels of \code{\link{PipeOp}}. Column \code{name} gives the names (and 
 \verb{$train()} and \verb{$predict()}. Column \code{train} is the (S3) class that an input object must conform to during
 training, column \code{predict} is the (S3) class that an input object must conform to during prediction. Types
 are checked by the \code{\link{PipeOp}} itself and do not need to be checked by \code{private$.train()} / \code{private$.predict()} code.\cr
-A special name is \code{"..."}, which creates a \emph{vararg} input channel that accepts a variable number of inputs.
+A special name is \code{"..."}, which creates a \emph{vararg} input channel that accepts a variable number of inputs.\cr
+If a row has both \code{train} and \code{predict} values enclosed by square brackets ("\code{[}", "\verb{]}), then this channel is
+\code{\link{Multiplicity}}-aware. If the \code{\link{PipeOp}} receives a \code{\link{Multiplicity}} value on these channels, this \code{\link{Multiplicity}}
+is given to the \code{.train()} and \code{.predict()} functions directly. Otherwise, the \code{\link{Multiplicity}} is transparently
+unpacked and the \code{.train()} and \code{.predict()} functions are called multiple times, once for each \code{\link{Multiplicity}} element.
+The type enclosed by square brackets indicates that only a \code{\link{Multiplicity}} containing values of this type are accepted.
+See \code{\link{Multiplicity}} for more information.
 \item output :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Output channels of \code{\link{PipeOp}}, in the order in which they will be given in the list returned by \verb{$train} and
 \verb{$predict} functions. Column \code{train} is the (S3) class that an output object must conform to during training,
 column \code{predict} is the (S3) class that an output object must conform to during prediction. The \code{\link{PipeOp}} checks
-values returned by \code{private$.train()} and \code{private$.predict()} against these types specifications.
+values returned by \code{private$.train()} and \code{private$.predict()} against these types specifications.\cr
+If a row has both \code{train} and \code{predict} values enclosed by square brackets ("\code{[}", "\verb{]}), then this signals that the channel
+emits a \code{\link{Multiplicity}} of the indicated type. See \code{\link{Multiplicity}} for more information.
 \item \code{innum} :: \code{numeric(1)} \cr
 Number of input channels. This equals \verb{nrow($input)}.
 \item \code{outnum} :: \code{numeric(1)} \cr
@@ -246,14 +254,19 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},

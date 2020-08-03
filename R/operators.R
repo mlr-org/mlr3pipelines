@@ -77,11 +77,11 @@
   for (row in seq_len(max(nrow(g1out), nrow(g2in)))) {
     outrow = min(nrow(g1out), row)
     inrow = min(nrow(g2in), row)
-    if (!are_types_compatible(g1out$train[outrow], g2in$train[inrow])) {
+    if (!are_types_compatible(strip_multiplicity_type(g1out$train[outrow]), strip_multiplicity_type(g2in$train[inrow]))) {
       stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
         g1out$op.id[outrow], g1out$train[outrow], g2in$op.id[inrow], g2in$train[inrow])
     }
-    if (!are_types_compatible(g1out$predict[outrow], g2in$predict[inrow])) {
+    if (!are_types_compatible(strip_multiplicity_type(g1out$predict[outrow]), strip_multiplicity_type(g2in$predict[inrow]))) {
       stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
         g1out$op.id[outrow], g1out$predict[outrow], g2in$op.id[inrow], g2in$predict[inrow])
     }
@@ -92,4 +92,8 @@
     g2in[, list(dst_id = get("op.id"), dst_channel = get("channel.name"))])
   g$edges = rbind(g$edges, new_edges)
   g
+}
+
+strip_multiplicity_type = function(type) {
+  gsub("^\\[*|\\]*$", "", type)
 }

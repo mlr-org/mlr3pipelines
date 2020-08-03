@@ -84,7 +84,7 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.1
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -127,8 +127,10 @@ Collate:
     'PipeOpLearnerCV.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
+    'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
+    'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
@@ -155,6 +157,7 @@ Collate:
     'gunion.R'
     'mlr_graphs.R'
     'mlr_graphs_elements.R'
+    'multiplicity.R'
     'operators.R'
     'pipe.R'
     'po.R'

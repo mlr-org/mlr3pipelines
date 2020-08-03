@@ -485,3 +485,7 @@ touch = function(x) {
   x$param_set
   x
 }
+
+expect_multiplicity = function(x) {
+  expect_true(is.Multiplicity(x))
+}

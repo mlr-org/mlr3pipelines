@@ -10,12 +10,16 @@
 #' @section Construction:
 #' Note: This object is typically constructed via a derived class, e.g. [`PipeOpClassifAvg`] or [`PipeOpRegrAvg`].
 #' ```
-#' PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+#' PipeOpEnsemble$new(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 #' ```
 #'
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#' * `collect_multiplicity` :: `logical(1)`\cr
+#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
+#'   [`Multiplicity`] input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires `innum` to be 0.
+#'   Default is `FALSE`.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
@@ -70,21 +74,31 @@
 #'   This method is abstract, it must be implemented by deriving classes.
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
 #' @family Ensembles
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction") {
+    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
       assert_integerish(innum, lower = 0)
       param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
       param_set$values$weights = 1
       inname = if (innum) rep_suffix("input", innum) else "..."
+      intype = c("NULL", prediction_type)
+      private$.collect = assert_flag(collect_multiplicity)
+      if (collect_multiplicity) {
+        if (innum) {
+          stop("collect_multiplicity only works with innum == 0.")
+        }
+        inname = "[...]"
+        intype = sprintf("[%s]", intype)
+      }
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
-        input = data.table(name = inname, train = "NULL", predict = prediction_type),
+        input = data.table(name = inname, train = intype[[1]], predict = intype[[2]]),
         output = data.table(name = "output", train = "NULL", predict = prediction_type),
-        tags = "ensemble"
+        tags = c(tags, "ensemble")
       )
     }
   ),
@@ -95,6 +109,9 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       list(NULL)
     },
     .predict = function(inputs) {
+      if (private$.collect) {
+        inputs = unclass(inputs[[1]])
+      }
       weights = self$param_set$values$weights
       row_ids = inputs[[1]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
@@ -110,7 +127,8 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       weights = weights[weights != 0]
 
       list(private$weighted_avg_predictions(inputs, weights, row_ids, truth))
-    }
+    },
+    .collect = NULL
   )
 )
 
@@ -143,18 +161,23 @@ weighted_matrix_sum = function(matrices, weights) {
   accmat
 }
 
-# Weighted mode of factors: For a set of `factor` vectors, gives
-# a vector with the same length, for each position the level with
-# the highest total weight, ties broken at random.
+# For a set of n `factor` vectors each of length l with the same k levels and a
+# numeric weight vector of length n, returns a matrix of dimension l times k.
+# Each cell contains the weighted relative frequency of the respective factor
+# level being present at the respective positional index over all n factors.
+# If `factors` is a data.frame/data.table and the weights are uniform (1 / l),
+# the output would simply be t(apply(factors, 1, table) / l).
 # @param factors [`list` of `factor`]: must have the same length and levels
-# @param weights [`numeric`]: weights, same length as `factors`
-# @return `factor`
+# @param weights [`numeric`]: weights, same length as the list of `factors`
+# @return `matrix`
+# FIXME: probably should be renamed
 weighted_factor_mean = function(factors, weights, alllevels) {
   accmat = matrix(0, nrow = length(factors[[1]]), ncol = length(alllevels))
+  colnames(accmat) = alllevels
   for (idx in seq_along(factors)) {
     rdf = data.frame(x = factor(factors[[idx]], levels = alllevels))
     curmat = stats::model.matrix(~ 0 + x, rdf) * weights[idx]
     accmat = accmat + curmat
   }
-  factor(alllevels[max.col(accmat)], levels = alllevels)
+  accmat
 }

@@ -88,7 +88,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
       prob = NULL
       response = NULL
       if (self$predict_type == "response") {
-        response = weighted_factor_mean(data, weights, task$class_names)
+        response = factor(task$class_names[max.col(weighted_factor_mean(data, weights, task$class_names))], levels = task$class_names)  # ties broken at random
       } else {
         prob = weighted_matrix_sum(data, weights)
         prob = pmin(pmax(prob, 0), 1)
