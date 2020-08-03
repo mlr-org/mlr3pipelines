@@ -61,6 +61,19 @@ The \code{\link[mlr3:Learner]{Learner}} does \emph{not} necessarily need to hand
 where \code{context_columns} is chosen well (or there is only one column with missing values present).
 }
 
+\section{Fields}{
+
+Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}, as well as:
+\itemize{
+\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
+\item \code{learner_models} :: \code{list} of \code{\link[mlr3:Learner]{Learner}} | \code{NULL}\cr
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. This list is named by features for which a \code{Learner} was fitted, and
+contains the same \code{Learner}, but with different respective models for each feature. If this \code{PipeOp} is not trained,
+this is an empty \code{list}. For features that were entirely \code{NA} during training, the \code{list} contains \code{NULL} elements.
+}
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.

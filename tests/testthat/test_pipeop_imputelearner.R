@@ -36,7 +36,6 @@ test_that("PipeOpImputeLearner - simple tests", {
   expect_true(!all(out$missings()[c("a", "c")] == 0))
 })
 
-
 test_that("PipeOpImputeLearner", {
   skip_on_cran()  # slow test, so we don't do it on cran
 
@@ -126,4 +125,30 @@ test_that("Test imputation matches, edge cases", {
   out = po$predict(list(task))[[1]]$data()
   expect_true(!any(is.na(out$d)))
   expect_true(all(out$d == "a"))
+})
+
+test_that("PipeOpImputeLearner - model active binding to state", {
+  po = PipeOpImputeLearner$new(learner = lrn("regr.featureless"))
+  task = mlr_tasks$get("pima")
+
+  # before training states are NULL and learner_models are list()
+  expect_null(po$state)
+  expect_equal(po$learner$state, po$state)
+  expect_equal(po$learner_models, list())
+
+  # after training learner's state is NULL
+  train_out = po$train(list(task))
+  train_state = po$state
+  expect_null(po$learner$state)
+  # after training models in the learner_models are equivalent to the models in the state
+  models = po$state$model
+  expect_equal(names(models), names(po$learner_models))
+  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
+
+  # after predicting state is unchanged and models still are equivalent
+  predict_out = po$predict(list(task))
+  expect_equal(po$state, train_state)
+  expect_null(po$learner$state)
+  expect_equal(names(models), names(po$learner_models))
+  expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
 })
