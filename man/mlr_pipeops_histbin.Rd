@@ -49,7 +49,7 @@ Either a \code{character(1)} string naming an algorithm to compute the number of
 a \code{numeric(1)} giving the number of breaks for the histogram,
 a vector \code{numeric} giving the breakpoints between the histogram cells, or
 a \code{function} to compute the vector of breakpoints or to compute the number
-of cells. Default is algorithm \code{"Sturges"} (see \code{\link[grDevices:nclass.Sturges]{grDevices::nclass.Sturges()}}).
+of cells. Default is algorithm \code{"Sturges"} (see \code{\link[grDevices:nclass]{grDevices::nclass.Sturges()}}).
 For details see \code{\link[graphics:hist]{hist()}}.
 }
 }
@@ -81,6 +81,7 @@ Other PipeOps:
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -127,9 +128,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
-\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},

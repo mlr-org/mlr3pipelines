@@ -10,6 +10,9 @@
 \description{
 Add missing indicator columns ("dummy columns") to the \code{\link[mlr3:Task]{Task}}.
 Drops original features; should probably be used in combination with \code{\link{PipeOpFeatureUnion}} and imputation \code{\link{PipeOp}}s (see examples).
+
+Note the \code{affect_columns} is initialized with \code{selector_invert(selector_type(c("factor", "ordered", "character")))}, since missing
+values in factorial columns are often indicated by out-of-range imputation (\code{\link{PipeOpImputeOOR}}).
 }
 \section{Construction}{
 \preformatted{PipeOpMissInd$new(id = "missind", param_vals = list())
@@ -94,6 +97,7 @@ Other PipeOps:
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -140,9 +144,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
-\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},

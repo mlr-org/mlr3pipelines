@@ -97,7 +97,7 @@ test_that("convert_task reconstructs task", {
   expect_equal(task, tsk, check.attributes = FALSE)
 
   task2 = task$filter(1:100)
-  tsk2 = convert_task(task2)
+  tsk2 = convert_task(task2, drop_levels = TRUE)
   expect_equal(task2$nrow, tsk2$nrow)
   expect_equal(task2$ncol, tsk2$ncol)
   expect_true("twoclass" %in% tsk2$properties)

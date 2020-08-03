@@ -9,14 +9,13 @@
 }
 \description{
 Linearly transforms a numeric target of a \code{\link[mlr3:TaskRegr]{TaskRegr}} so it is between \code{lower}
-and \code{upper}. The formula for this is \eqn{x' = a + x * b},
-where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
-\eqn{a} is \eqn{-min(x) * b + lower}. The same transformation is applied during training and
+and \code{upper}. The formula for this is \eqn{x' = offset + x * scale},
+where \eqn{scale} is \eqn{(upper - lower) / (max(x) - min(x))} and
+\eqn{offset} is \eqn{-min(x) * scale + lower}. The same transformation is applied during training and
 prediction.
 }
 \section{Construction}{
-\preformatted{PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange",
-  param_vals = list())
+\preformatted{PipeOpTargetTrafoScaleRange$new(id = "targettrafoscalerange", param_vals = list())
 }
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
@@ -34,25 +33,24 @@ Input and output channels are inherited from \code{\link{PipeOpTargetTrafo}}.
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with a vector of the two transformation parameters \eqn{a} and
-\eqn{b} for the numeric target.
+The \verb{$state} is a named \code{list} containing the slots \verb{$offset} and \verb{$scale}.
 }
 
 \section{Parameters}{
 
 The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}, as well as:
 \itemize{
-\item \code{lower} :: \code{numeric(1)} \cr
-Target value of smallest item of input target. Default is 0.
-\item \code{upper} :: \code{numeric(1)} \cr
-Target value of greatest item of input target. Default is 1.
+\item \code{lower} :: \code{numeric(1)}\cr
+Target value of smallest item of input target. Initialized to 0.
+\item \code{upper} :: \code{numeric(1)}\cr
+Target value of greatest item of input target. Initialized to 1.
 }
 }
 
 \section{Internals}{
 
-Overloads \code{\link{PipeOpTargetTrafo}}'s \code{set_state()}, \code{train_target()}, \code{train_invert()} and
-\code{inverter()}. Should be used in combination with \code{\link{PipeOpTargetInverter}}.
+Overloads \code{\link{PipeOpTargetTrafo}}'s \code{.get_state()}, \code{.transform()}, and
+\code{.invert()}. Should be used in combination with \code{\link{PipeOpTargetInvert}}.
 }
 
 \section{Methods}{
@@ -81,6 +79,7 @@ Other PipeOps:
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -128,8 +127,8 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
-\code{\link{mlr_pipeops_targettrafosimple}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
