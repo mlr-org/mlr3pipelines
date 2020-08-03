@@ -154,12 +154,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
           stop("$learner is read-only.")
         }
       }
-      if (is.null(self$state)) {
+      if (is.null(self$state) || is_noop(self$state)) {
         private$.learner
       } else {
-        lrn = private$.learner$clone(deep = TRUE)
-        lrn$state = self$state
-        lrn
+        multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
       }
     }
   ),
