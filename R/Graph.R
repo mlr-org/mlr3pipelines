@@ -302,10 +302,11 @@ Graph = R6Class("Graph",
           return(txt)
         })
         ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
-        if (NROW(ig_data$edges)) ig_data$edges$color = "lightblue"  # Only if more than one pipeop
+        edges = NROW(ig_data$edges)
+        if (edges) ig_data$edges$color = "lightblue"  # Only if more than one pipeop
         # Visualize the nodes
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "400px", width = "50%")
-        if (NROW(ig_data$edges)) { # Only if more than one pipeop
+        if (edges) { # Only if more than one pipeop
           # Set up layout
           p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
           # Draw edges between points
