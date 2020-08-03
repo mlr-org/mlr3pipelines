@@ -22,7 +22,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpFeatureUnion$new(innum = 0, collect = FALSE, id = "featureunion", param_vals = list(),
+#' PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
 #'   assert_targets_equal = TRUE)
 #' ```
 #'
@@ -31,9 +31,10 @@
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number
 #'   of inputs. If `innum` is a `character` vector, the number of input channels is the length of
 #'   `innum`, and the columns of the result are prefixed with the values.
-#' * `collect` :: `logical(1)`\cr
-#'   If `TRUE`, the vararg input channel is turned into a [`Multiplicity`] collecting channel, e.g.,
-#'   all input [`Task`][mlr3::Task]s are collected. Default is `FALSE`.
+#' * `collect_multiplicity` :: `logical(1)`\cr
+#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
+#'   [`Multiplicity`] input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires `innum` to be 0.
+#'   Default is `FALSE`.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"featureunion"`.
 #' * `param_vals` :: named `list`\cr
@@ -75,6 +76,7 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -98,7 +100,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   public = list(
     assert_targets_equal = NULL,
     inprefix = NULL,
-    initialize = function(innum = 0L, collect = FALSE, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
+    initialize = function(innum = 0L, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
       assert(
         check_int(innum, lower = 0L),
         check_character(innum, min.len = 1L, any.missing = FALSE)
@@ -113,7 +115,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       self$assert_targets_equal = assert_targets_equal
       inname = if (innum) rep_suffix("input", innum) else "..."
       intype = "Task"
-      private$.collect = assert_flag(collect)
+      private$.collect = assert_flag(collect_multiplicity)
       if (collect) {
         if (innum) {
           stop("collect only works with innum == 0.")

@@ -8,11 +8,19 @@
 \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
-Splits a \link[mlr3:TaskClassif]{classification Task} into several binary \link[mlr3:TaskClassif]{classification Tasks} to perform "One vs. Rest" classification.
+Splits a \link[mlr3:TaskClassif]{classification Task} into several binary \link[mlr3:TaskClassif]{classification Tasks} to perform "One vs. Rest" classification. This works in combination
+with \code{\link{PipeOpOVRUnite}}.
 
 For each target level a new binary \link[mlr3:TaskClassif]{classification Task} is constructed with
 the respective target level being the positive class and all other target levels being the
 new negative class \code{"rest"}.
+
+This \code{\link{PipeOp}} creates a \code{\link{Multiplicity}}, which means that subsequent \code{\link{PipeOp}}s are executed
+multiple times, once for each created \link[mlr3:TaskClassif]{binary \code{Task}}, until a \code{\link{PipeOpOVRUnite}}
+is reached.
+
+Note that \code{\link{Multiplicity}} is currently an experimental features and the implementation or UI
+may change.
 }
 \section{Construction}{
 \preformatted{PipeOpOVRSplit$new(id = "ovrsplit", param_vals = list())
@@ -143,5 +151,25 @@ Other PipeOps:
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_replicate}}
+
+Other Experimental Features: 
+\code{\link{Multiplicity}()},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_replicate}}
 }
+\concept{Experimental Features}
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

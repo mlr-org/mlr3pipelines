@@ -8,7 +8,7 @@
 \code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 \description{
-Perform "One vs. Rest" classification by (weighted) majority vote prediction from \link[mlr3:PredictionClassif]{classification Predictions}.
+Perform "One vs. Rest" classification by (weighted) majority vote prediction from \link[mlr3:PredictionClassif]{classification Predictions}. This works in combination with \code{\link{PipeOpOVRSplit}}.
 
 Weights can be set as a parameter; if none are provided, defaults to equal weights for each
 prediction.
@@ -18,6 +18,12 @@ Always returns a \code{"prob"} prediction, regardless of the incoming \code{\lin
 \code{"response"} prediction.
 
 Missing values during prediction are treated as each class label being equally likely.
+
+This \code{\link{PipeOp}} uses a \code{\link{Multiplicity}} input, which is created by \code{\link{PipeOpOVRSplit}} and causes
+\code{\link{PipeOp}}s on the way to this \code{\link{PipeOp}} to be called once for each individual \link[mlr3:TaskClassif]{binary \code{Task}}.
+
+Note that \code{\link{Multiplicity}} is currently an experimental features and the implementation or UI
+may change.
 }
 \section{Construction}{
 \preformatted{PipeOpOVRUnite$new(id = "ovrunite", param_vals = list())
@@ -146,6 +152,26 @@ Other Ensembles:
 \code{\link{mlr_learners_avg}},
 \code{\link{mlr_pipeops_classifavg}},
 \code{\link{mlr_pipeops_regravg}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_replicate}}
+
+Other Experimental Features: 
+\code{\link{Multiplicity}()},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_replicate}}
 }
 \concept{Ensembles}
+\concept{Experimental Features}
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

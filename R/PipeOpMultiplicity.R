@@ -7,6 +7,13 @@
 #' @description
 #' Implicate a [`Multiplicity`] by returning the input(s) converted to a [`Multiplicity`].
 #'
+#' This [`PipeOp`] has multiple input channels; all inputs are collected into a [`Multiplicity`]
+#' and then are forwarded along a single edge, causing the following [`PipeOp`]s to be called
+#' multiple times, once for each [`Multiplicity`] member.
+#'
+#' Note that [`Multiplicity`] is currently an experimental features and the implementation or UI
+#' may change.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpMultiplicityImply$new(innum = 0, id = "multiplicityimply", param_vals = list())
@@ -50,6 +57,8 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
+#' @family Experimental Features
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -104,7 +113,14 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Explicate a [`Multiplicity`] by returning the unclassed input [`Multiplicity`], i.e., a `list()`.
+#' Explicate a [`Multiplicity`] by turning the input [`Multiplicity`] into multiple outputs.
+#'
+#' This [`PipeOp`] has multiple output channels; the members of the input [`Multiplicity`]
+#' are forwarded each along a single edge. Therefore, only multiplicities with exactly as many
+#' members as `outnum` are accepted.
+#'
+#' Note that [`Multiplicity`] is currently an experimental features and the implementation or UI
+#' may change.
 #'
 #' @section Construction:
 #' ```
@@ -143,6 +159,8 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
+#' @family Experimental Features
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -185,7 +203,11 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
-#' Replicate the input and return a [`Multiplicity`].
+#' Replicate the input as a [`Multiplicity`], causing subsequent [`PipeOp`]s to be executed multiple
+#' `reps` times.
+#'
+#' Note that [`Multiplicity`] is currently an experimental features and the implementation or UI
+#' may change.
 #'
 #' @section Construction:
 #' ```
@@ -218,6 +240,8 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
+#' @family Experimental Features
 #' @include PipeOp.R
 #' @export
 #' @examples

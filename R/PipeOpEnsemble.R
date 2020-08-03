@@ -10,15 +10,16 @@
 #' @section Construction:
 #' Note: This object is typically constructed via a derived class, e.g. [`PipeOpClassifAvg`] or [`PipeOpRegrAvg`].
 #' ```
-#' PipeOpEnsemble$new(innum = 0, collect = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+#' PipeOpEnsemble$new(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 #' ```
 #'
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
-#' * `collect` :: `logical(1)`\cr
-#'   If `TRUE`, the vararg input channel is turned into a [`Multiplicity`] collecting channel, e.g.,
-#'   all input [`Prediction`][mlr3::Prediction]s are collected. Default is `FALSE`.
+#' * `collect_multiplicity` :: `logical(1)`\cr
+#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
+#'   [`Multiplicity`] input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires `innum` to be 0.
+#'   Default is `FALSE`.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting  object.
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
@@ -73,20 +74,21 @@
 #'   This method is abstract, it must be implemented by deriving classes.
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
 #' @family Ensembles
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0, collect = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
+    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
       assert_integerish(innum, lower = 0)
       param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
       param_set$values$weights = 1
       inname = if (innum) rep_suffix("input", innum) else "..."
       intype = c("NULL", prediction_type)
-      private$.collect = assert_flag(collect)
-      if (collect) {
+      private$.collect = assert_flag(collect_multiplicity)
+      if (collect_multiplicity) {
         if (innum) {
           stop("collect only works with innum == 0.")
         }

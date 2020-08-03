@@ -6,11 +6,19 @@
 #'
 #' @description
 #' Splits a [classification Task][mlr3::TaskClassif] into several binary [classification
-#' Tasks][mlr3::TaskClassif] to perform "One vs. Rest" classification.
+#' Tasks][mlr3::TaskClassif] to perform "One vs. Rest" classification. This works in combination
+#' with [`PipeOpOVRUnite`].
 #'
 #' For each target level a new binary [classification Task][mlr3::TaskClassif] is constructed with
 #' the respective target level being the positive class and all other target levels being the
 #' new negative class `"rest"`.
+#'
+#' This [`PipeOp`] creates a [`Multiplicity`], which means that subsequent [`PipeOp`]s are executed
+#' multiple times, once for each created [binary `Task`][mlr3::TaskClassif], until a [`PipeOpOVRUnite`]
+#' is reached.
+#'
+#' Note that [`Multiplicity`] is currently an experimental features and the implementation or UI
+#' may change.
 #'
 #' @section Construction:
 #' ```
@@ -54,6 +62,8 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #' @family PipeOps
+#' @family Multiplicity PipeOps
+#' @family Experimental Features
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -107,7 +117,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #'
 #' @description
 #' Perform "One vs. Rest" classification by (weighted) majority vote prediction from [classification
-#' Predictions][mlr3::PredictionClassif].
+#' Predictions][mlr3::PredictionClassif]. This works in combination with [`PipeOpOVRSplit`].
 #'
 #' Weights can be set as a parameter; if none are provided, defaults to equal weights for each
 #' prediction.
@@ -117,6 +127,12 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' `"response"` prediction.
 #'
 #' Missing values during prediction are treated as each class label being equally likely.
+#'
+#' This [`PipeOp`] uses a [`Multiplicity`] input, which is created by [`PipeOpOVRSplit`] and causes
+#' [`PipeOp`]s on the way to this [`PipeOp`] to be called once for each individual [binary `Task`][mlr3::TaskClassif].
+#'
+#' Note that [`Multiplicity`] is currently an experimental features and the implementation or UI
+#' may change.
 #'
 #' @section Construction:
 #' ```
@@ -152,6 +168,8 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
 #' @family PipeOps
 #' @family Ensembles
+#' @family Multiplicity PipeOps
+#' @family Experimental Features
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples

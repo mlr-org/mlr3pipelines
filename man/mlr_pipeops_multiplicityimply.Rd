@@ -9,6 +9,13 @@
 }
 \description{
 Implicate a \code{\link{Multiplicity}} by returning the input(s) converted to a \code{\link{Multiplicity}}.
+
+This \code{\link{PipeOp}} has multiple input channels; all inputs are collected into a \code{\link{Multiplicity}}
+and then are forwarded along a single edge, causing the following \code{\link{PipeOp}}s to be called
+multiple times, once for each \code{\link{Multiplicity}} member.
+
+Note that \code{\link{Multiplicity}} is currently an experimental features and the implementation or UI
+may change.
 }
 \section{Construction}{
 \preformatted{PipeOpMultiplicityImply$new(innum = 0, id = "multiplicityimply", param_vals = list())
@@ -139,5 +146,25 @@ Other PipeOps:
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_replicate}}
+
+Other Experimental Features: 
+\code{\link{Multiplicity}()},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_replicate}}
 }
+\concept{Experimental Features}
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

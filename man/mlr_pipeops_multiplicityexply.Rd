@@ -8,7 +8,14 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
-Explicate a \code{\link{Multiplicity}} by returning the unclassed input \code{\link{Multiplicity}}, i.e., a \code{list()}.
+Explicate a \code{\link{Multiplicity}} by turning the input \code{\link{Multiplicity}} into multiple outputs.
+
+This \code{\link{PipeOp}} has multiple output channels; the members of the input \code{\link{Multiplicity}}
+are forwarded each along a single edge. Therefore, only multiplicities with exactly as many
+members as \code{outnum} are accepted.
+
+Note that \code{\link{Multiplicity}} is currently an experimental features and the implementation or UI
+may change.
 }
 \section{Construction}{
 \preformatted{PipeOpMultiplicityExply$new(outnum , id = "multiplicityexply", param_vals = list())
@@ -133,5 +140,25 @@ Other PipeOps:
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_replicate}}
+
+Other Experimental Features: 
+\code{\link{Multiplicity}()},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_replicate}}
 }
+\concept{Experimental Features}
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

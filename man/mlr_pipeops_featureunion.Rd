@@ -24,7 +24,7 @@ the values of these possibly duplicated features. True duplicated features are o
 single time to the output task.
 }
 \section{Construction}{
-\preformatted{PipeOpFeatureUnion$new(innum = 0, collect = FALSE, id = "featureunion", param_vals = list(),
+\preformatted{PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
   assert_targets_equal = TRUE)
 }
 \itemize{
@@ -33,9 +33,10 @@ Determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number
 of inputs. If \code{innum} is a \code{character} vector, the number of input channels is the length of
 \code{innum}, and the columns of the result are prefixed with the values.
-\item \code{collect} :: \code{logical(1)}\cr
-If \code{TRUE}, the vararg input channel is turned into a \code{\link{Multiplicity}} collecting channel, e.g.,
-all input \code{\link[mlr3:Task]{Task}}s are collected. Default is \code{FALSE}.
+\item \code{collect_multiplicity} :: \code{logical(1)}\cr
+If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. This means, a
+\code{\link{Multiplicity}} input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires \code{innum} to be 0.
+Default is \code{FALSE}.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting object, default \code{"featureunion"}.
 \item \code{param_vals} :: named \code{list}\cr
@@ -173,5 +174,17 @@ Other PipeOps:
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_replicate}}
 }
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

@@ -1,12 +1,51 @@
 #' @title Multiplicity
 #'
 #' @description
-#' Construct an object of the S3 class [`Multiplicity`], which is a named or
-#' unnamed lists of data.
+#' A [`Multiplicity`] class S3 object.
+#'
+#' The function of multiplicities is to indicate that [`PipeOp`]s should be executed
+#' multiple times with multiple values.
+#'
+#' A [`Multiplicity`] is a container, like a
+#' `list()`, that contains multiple values. If the message that is passed along the
+#' edge of a [`Graph`] is a [`Multiplicity`]-object, then the [`PipeOp`] that receives
+#' this object will *usually* be called once for each contained value. The result of
+#' each of these calls is then, again, packed in a [`Multiplicity`] and sent along the
+#' outgoing edge(s) of that [`PipeOp`]. This means that a [`Multiplicity`] can cause
+#' multiple [`PipeOp`]s in a row to be run multiple times, where the run for each element
+#' of the [`Multiplicity`] is independent from the others.
+#'
+#' Most [`PipeOp`]s only return a [`Multiplicity`] if their input was a [`Multiplicity`]
+#' (and after having run their code multiple times, once for each entry). However,
+#' there are a few special [`PipeOp`]s that are "aware" of [`Multiplicity`] objects. These
+#' may either *create* a [`Multiplicity`] even though not having a [`Multiplicity`] input
+#' (e.g. [`PipeOpReplicate`] or [`PipeOpOVRSplit`]) -- causing the subsequent [`PipeOp`]s
+#' to be run multiple times -- or *collect* a [`Multiplicity`], being called only once
+#' even though their input is a [`Multiplicity`] (e.g. [`PipeOpOVRUnite`] or [`PipeOpFeatureUnion`]
+#' if constructed with the `collect_multiplicity` argument set to `TRUE`). The combination
+#' of these mechanisms makes it possible for parts of a [`Graph`] to be called variably
+#' many times if "sandwiched" between [`Multiplicity`] creating and collecting [`PipeOp`]s.
+#'
+#' Whether a [`PipeOp`] creates or collects a [`Multiplicity`] is indicated by the `$input`
+#' or `$output` slot (which indicate names and types of in/out channels). If the `train` and
+#' `predict` types of an input or output are surrounded by square brackets ("`[`", "`]`"), then
+#' this channel handles a [`Multiplicity`] explicitly. Depending on the function of the [`PipeOp`],
+#' it will usually collect (input channel) or create (output channel) a [`Multiplicity`].
+#' [`PipeOp`]s without this indicator are [`Multiplicity`] agnostic and blindly execute their
+#' function multiple times when given a [`Multiplicity`].
+#'
+#' If a [`PipeOp`] is trained on a [`Multiplicity`], the `$state` slot is set to a [`Multiplicity`]
+#' as well; this [`Multiplicity`] contains the "original" `$state` resulting from each individual
+#' call of the [`PipeOP`] with the input [`Multiplicity`]'s content. If a [`PipeOp`] was trained
+#' with a [`Multiplicity`], then the `predict()` argument must be a [`Multiplicity`] with the same
+#' number of elements.
 #'
 #' @param \dots \cr
 #'   Can be anything.
 #' @return [`Multiplicity`]
+#' @family Special Graph Messages
+#' @family Experimental Features
+#' @family Multiplicity PipeOps
 #' @export
 Multiplicity = function(...) {
   structure(list(...), class = "Multiplicity")

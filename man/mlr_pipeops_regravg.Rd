@@ -19,12 +19,16 @@ equal weights for each prediction.
 Defaults to equal weights for each model.
 }
 \section{Construction}{
-\preformatted{PipeOpRegrAvg$new(innum = 0, id = "regravg", param_vals = list())
+\preformatted{PipeOpRegrAvg$new(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list())
 }
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
 Determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+\item \code{collect_multiplicity} :: \code{logical(1)}\cr
+If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. This means, a
+\code{\link{Multiplicity}} input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires \code{innum} to be 0.
+Default is \code{FALSE}.
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"regravg"}.
 \item \code{param_vals} :: named \code{list}\cr
@@ -143,6 +147,17 @@ Other PipeOps:
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_replicate}}
+
 Other Ensembles: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_learners_avg}},
@@ -150,4 +165,5 @@ Other Ensembles:
 \code{\link{mlr_pipeops_ovrunite}}
 }
 \concept{Ensembles}
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}
