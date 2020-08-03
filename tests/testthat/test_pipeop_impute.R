@@ -45,7 +45,7 @@ test_that("PipeOpImpute", {
           po("select", id = "fct_select", selector = selector_type(c("factor", "ordered"))) %>>% fctimputer,
           po("select", id = "lgl_select", selector = selector_type("logical")) %>>% po("imputesample", id = "lgl_sample"),
           po("select", id = "chr_select", selector = selector_type("character")) %>>% po("imputeconstant", id = "chr_const"),
-          po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical",
+          po("select", id = "dummyselector", selector = dummyselector) %>>% po("missind", type = "logical", affect_columns = NULL,
             which = switch(self$param_set$values$add_dummy, none = "all", self$param_set$values$add_dummy))
         ) %>>% if (is.null(self$param_set$values$innum)) po("featureunion") else po("featureunion", innum = self$param_set$values$innum)
       }
