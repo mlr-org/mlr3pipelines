@@ -30,7 +30,8 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTaskPreproc$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+#' PipeOpTaskPreproc$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+#'   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -51,6 +52,8 @@
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
+#' * tags :: `character` | `NULL`\cr
+#'   Tags of the resulting `PipeOp`. This is added to the tag `"data transform"`. Default `NULL`.
 #'* `feature_types` :: `character`\cr
 #'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'   Defaults to all available feature types.
@@ -387,7 +390,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   (and optionally `private$.select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `private$.get_state()` (optional) and `private$.transform()`
 #'   can be overloaded.
 #'
-#' @family PipeOp
+#' @family PipeOps
 #' @family mlr3pipelines backend related
 #' @export
 PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
