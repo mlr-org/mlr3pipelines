@@ -90,7 +90,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       private$.collect = assert_flag(collect_multiplicity)
       if (collect_multiplicity) {
         if (innum) {
-          stop("collect only works with innum == 0.")
+          stop("collect_multiplicity only works with innum == 0.")
         }
         inname = "[...]"
         intype = sprintf("[%s]", intype)
