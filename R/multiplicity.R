@@ -40,7 +40,7 @@
 #' with a [`Multiplicity`], then the `predict()` argument must be a [`Multiplicity`] with the same
 #' number of elements.
 #'
-#' @param \dots \cr
+#' @param \dots `any`\cr
 #'   Can be anything.
 #' @return [`Multiplicity`]
 #' @family Special Graph Messages

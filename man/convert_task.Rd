@@ -32,7 +32,7 @@ added as a feature.}
 \item{drop_levels}{\code{logical(1)}\cr
 If \code{TRUE}, unused levels of the new target variable are dropped.}
 
-\item{\dots}{\cr
+\item{\dots}{\code{any}\cr
 Further arguments passed to the constructor of the task.}
 }
 \value{

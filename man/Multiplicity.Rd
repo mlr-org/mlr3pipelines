@@ -7,7 +7,7 @@
 Multiplicity(...)
 }
 \arguments{
-\item{\dots}{\cr
+\item{\dots}{\code{any}\cr
 Can be anything.}
 }
 \value{

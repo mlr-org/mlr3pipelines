@@ -15,7 +15,7 @@
 #'   added as a feature.
 #' @param drop_levels `logical(1)`\cr
 #'   If `TRUE`, unused levels of the new target variable are dropped.
-#' @param \dots \cr
+#' @param \dots `any`\cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
 convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = TRUE, drop_levels = FALSE, ...) {
