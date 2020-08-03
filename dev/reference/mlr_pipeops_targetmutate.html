@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpRegrAvg — mlr_pipeops_regravg • mlr3pipelines</title>
+<title>PipeOpTargetMutate — mlr_pipeops_targetmutate • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,14 +47,9 @@
 
 
 
-<meta property="og:title" content="PipeOpRegrAvg — mlr_pipeops_regravg" />
-<meta property="og:description" content="Perform (weighted) prediction averaging from regression Predictions by connecting
-PipeOpRegrAvg to multiple PipeOpLearner outputs.
-The resulting &quot;response&quot; prediction is a weighted average of the incoming &quot;response&quot; predictions.
-&quot;se&quot; prediction is currently not aggregated but discarded if present.
-Weights can be set as a parameter; if none are provided, defaults to
-equal weights for each prediction.
-Defaults to equal weights for each model." />
+<meta property="og:title" content="PipeOpTargetMutate — mlr_pipeops_targetmutate" />
+<meta property="og:description" content="Changes the target of a Task according to a function given as hyperparameter.
+An inverter-function that undoes the transformation during prediction must also be given." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -148,50 +143,41 @@ Defaults to equal weights for each model." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpRegrAvg</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRegrAvg.R'><code>R/PipeOpRegrAvg.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_regravg.Rd</code></div>
+    <h1>PipeOpTargetMutate</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTrafo.R'><code>R/PipeOpTrafo.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_targetmutate.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Perform (weighted) prediction averaging from regression <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>s by connecting
-<code>PipeOpRegrAvg</code> to multiple <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code> outputs.</p>
-<p>The resulting <code>"response"</code> prediction is a weighted average of the incoming <code>"response"</code> predictions.
-<code>"se"</code> prediction is currently not aggregated but discarded if present.</p>
-<p>Weights can be set as a parameter; if none are provided, defaults to
-equal weights for each prediction.
-Defaults to equal weights for each model.</p>
+    <p>Changes the <em>target</em> of a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> according to a function given as hyperparameter.
+An inverter-function that undoes the transformation during prediction must also be given.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> inheriting from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code></p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpRegrAvg</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>collect_multiplicity</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"regravg"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpTargetMutate</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"targetmutate"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>new_task_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 <ul>
-<li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Determines the number of input channels.
-If <code>innum</code> is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.</p></li>
-<li><p><code>collect_multiplicity</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-If <code>TRUE</code>, the input is a <code><a href='Multiplicity.html'>Multiplicity</a></code> collecting channel. This means, a
-<code><a href='Multiplicity.html'>Multiplicity</a></code> input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires <code>innum</code> to be 0.
-Default is <code>FALSE</code>.</p></li>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-Identifier of the resulting  object, default <code>"regravg"</code>.</p></li>
+<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Identifier of resulting object, default <code>"targetmutate"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+<li><p><code>new_task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code>NULL</code><br />
+The task type to which the output is converted, must be one of <code>mlr_reflections$task_types$type</code>.
+Defaults to <code>NULL</code>: no change in task type.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>. Instead of a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>, a <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code>
-is used as input and output during prediction.</p>
+<p>Input and output channels are inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -201,22 +187,42 @@ is used as input and output during prediction.</p>
 
     
 
-<p>The parameters are the parameters inherited from the <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>.</p>
+<p>The parameters are the parameters inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>, as well as:</p><ul>
+<li><p><code>trafo</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code><br />
+Transformation function for the target. Should only be a function of the target, i.e., taking a
+single <code>data.table</code> argument, typically with one column. The return value is used as the new
+target of the resulting <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. To change target names, change the column name of the data
+using e.g. <code><a href='https://Rdatatable.gitlab.io/data.table/reference/setattr.html'>setnames()</a></code>.<br />
+Note that this function also gets called during prediction and should thus gracefully handle
+<code>NA</code> values.<br />
+Initialized to <code><a href='https://rdrr.io/r/base/identity.html'>identity()</a></code>.</p></li>
+<li><p><code>inverter</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code><br />
+Inversion of the transformation function for the target. Called with the <code>$data$tab</code> slot of a
+<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> (a <code>data.table</code>), without the <code>$row_id</code> and <code>$truth</code> columns,
+and should return a <code>data.table</code> that contains the new relevant columns of a
+<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> (e.g., <code>$response</code>). Initialized to <code><a href='https://rdrr.io/r/base/identity.html'>identity()</a></code>.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Inherits from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code> by implementing the <code>private$weighted_avg_predictions()</code> method.</p>
+<p>Overloads <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>'s <code>.transform()</code> and
+<code>.invert()</code> functions. Should be used in combination with <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
 
-<p>Only fields inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
+<li><p><code>new_task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<code>new_task_type</code> construction argument. Read-only.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -266,6 +272,7 @@ is used as input and output during prediction.</p>
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
+<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
 <code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
@@ -277,46 +284,82 @@ is used as input and output during prediction.</p>
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
 <code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
-<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
-<p>Other Multiplicity PipeOps: 
-<code><a href='Multiplicity.html'>Multiplicity</a>()</code>,
-<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
-<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
-<code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
-<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
-<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
-<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
-<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
-<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code></p>
-<p>Other Ensembles: 
-<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
-<code><a href='mlr_learners_avg.html'>mlr_learners_avg</a></code>,
-<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
-<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
+<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"boston_housing"</span>)
+<span class='no'>po</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetMutate</span>$<span class='fu'>new</span>(<span class='st'>"logtrafo"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='kw'>trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>),
+  <span class='kw'>inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>response</span> <span class='kw'>=</span> <span class='fl'>2</span> ^ <span class='no'>x</span>$<span class='no'>response</span>))
+)
+<span class='co'># Note that this example is ill-equipped to work with</span>
+<span class='co'># `predict_type == "se"` predictions.</span>
 
-<span class='co'># Simple Bagging</span>
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"greplicate"</span>,
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"subsample"</span>) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>)),
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>
-) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"classifavg"</span>)
+<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $fun
+#&gt; NULL
+#&gt; 
+#&gt; $output
+#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
+#&gt; * Target: medv
+#&gt; * Properties: -
+#&gt; * Features (18):
+#&gt;   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,
+#&gt;     ptratio, rm, zn
+#&gt;   - int (3): rad, tax, tract
+#&gt;   - fct (2): chas, town
+#&gt; </div><div class='input'><span class='no'>po</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $fun
+#&gt; function (inputs) 
+#&gt; {
+#&gt;     assert_list(inputs, len = 1L, types = "Prediction")
+#&gt;     list(private$.invert(inputs[[1L]], predict_phase_state))
+#&gt; }
+#&gt; &lt;environment: 0x7ff0c2ee0bd0&gt;
+#&gt; 
+#&gt; $output
+#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
+#&gt; * Target: medv
+#&gt; * Properties: -
+#&gt; * Features (18):
+#&gt;   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,
+#&gt;     ptratio, rm, zn
+#&gt;   - int (3): rad, tax, tract
+#&gt;   - fct (2): chas, town
+#&gt; </div><div class='input'>
+<span class='no'>g</span> <span class='kw'>=</span> <span class='no'>Graph</span>$<span class='fu'>new</span>()
+<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>po</span>)
+<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>())
+<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetInvert</span>$<span class='fu'>new</span>())
+<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"logtrafo"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinvert"</span>,
+  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"logtrafo"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>,
+  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinvert"</span>,
+  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 
-<span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>), <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
-#&gt; * Task: iris
-#&gt; * Learner: subsample_1.subsample_2.subsample_3.subsample_4.subsample_5.classif.rpart_1.classif.rpart_2.classif.rpart_3.classif.rpart_4.classif.rpart_5.classifavg
-#&gt; * Warnings: 0 in 0 iterations
-#&gt; * Errors: 0 in 0 iterations</div></pre>
+<span class='no'>g</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinvert.output
+#&gt; NULL
+#&gt; </div><div class='input'><span class='no'>g</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinvert.output
+#&gt; &lt;PredictionRegr&gt; for 506 observations:
+#&gt;     row_id truth response
+#&gt;          1  24.0 24.35119
+#&gt;          2  21.6 20.48150
+#&gt;          3  34.7 32.83886
+#&gt; ---                      
+#&gt;        504  23.9 24.35119
+#&gt;        505  22.0 20.48150
+#&gt;        506  11.9 16.99570
+#&gt; </div><div class='input'>
+<span class='co'>#syntactic sugar using ppl():</span>
+<span class='no'>tt</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"targettrafo"</span>, <span class='kw'>graph</span> <span class='kw'>=</span> <span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
+<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targetmutate.trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targetmutate.inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>response</span> <span class='kw'>=</span> <span class='fl'>2</span> ^ <span class='no'>x</span>$<span class='no'>response</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

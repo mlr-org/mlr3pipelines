@@ -262,12 +262,20 @@ Input channels of <code>PipeOp</code>. Column <code>name</code> gives the names 
 <code>$train()</code> and <code>$predict()</code>. Column <code>train</code> is the (S3) class that an input object must conform to during
 training, column <code>predict</code> is the (S3) class that an input object must conform to during prediction. Types
 are checked by the <code>PipeOp</code> itself and do not need to be checked by <code>private$.train()</code> / <code>private$.predict()</code> code.<br />
-A special name is <code>"..."</code>, which creates a <em>vararg</em> input channel that accepts a variable number of inputs.</p></li>
+A special name is <code>"..."</code>, which creates a <em>vararg</em> input channel that accepts a variable number of inputs.<br />
+If a row has both <code>train</code> and <code>predict</code> values enclosed by square brackets ("<code>[</code>", "<code>]</code>), then this channel is
+<code><a href='Multiplicity.html'>Multiplicity</a></code>-aware. If the <code>PipeOp</code> receives a <code><a href='Multiplicity.html'>Multiplicity</a></code> value on these channels, this <code><a href='Multiplicity.html'>Multiplicity</a></code>
+is given to the <code>.train()</code> and <code>.predict()</code> functions directly. Otherwise, the <code><a href='Multiplicity.html'>Multiplicity</a></code> is transparently
+unpacked and the <code>.train()</code> and <code>.predict()</code> functions are called multiple times, once for each <code><a href='Multiplicity.html'>Multiplicity</a></code> element.
+The type enclosed by square brackets indicates that only a <code><a href='Multiplicity.html'>Multiplicity</a></code> containing values of this type are accepted.
+See <code><a href='Multiplicity.html'>Multiplicity</a></code> for more information.</p></li>
 <li><p>output :: <code>data.table</code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br />
 Output channels of <code>PipeOp</code>, in the order in which they will be given in the list returned by <code>$train</code> and
 <code>$predict</code> functions. Column <code>train</code> is the (S3) class that an output object must conform to during training,
 column <code>predict</code> is the (S3) class that an output object must conform to during prediction. The <code>PipeOp</code> checks
-values returned by <code>private$.train()</code> and <code>private$.predict()</code> against these types specifications.</p></li>
+values returned by <code>private$.train()</code> and <code>private$.predict()</code> against these types specifications.<br />
+If a row has both <code>train</code> and <code>predict</code> values enclosed by square brackets ("<code>[</code>", "<code>]</code>), then this signals that the channel
+emits a <code><a href='Multiplicity.html'>Multiplicity</a></code> of the indicated type. See <code><a href='Multiplicity.html'>Multiplicity</a></code> for more information.</p></li>
 <li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
 Number of input channels. This equals <code>nrow($input)</code>.</p></li>
 <li><p><code>outnum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
@@ -337,6 +345,7 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
 <code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
@@ -368,14 +377,19 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
 <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
 <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -383,9 +397,9 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-<code><a href='mlr_pipeops_targetinverter.html'>mlr_pipeops_targetinverter</a></code>,
+<code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
+<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
-<code><a href='mlr_pipeops_targettrafosimple.html'>mlr_pipeops_targettrafosimple</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpTargetInverter — mlr_pipeops_targetinverter • mlr3pipelines</title>
+<title>PipeOpOVRUnite — mlr_pipeops_ovrunite • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,9 +47,18 @@
 
 
 
-<meta property="og:title" content="PipeOpTargetInverter — mlr_pipeops_targetinverter" />
-<meta property="og:description" content="During prediction inverts transformations done during training based on a supplied inversion
-function. Typically should be used in combination with a subclass of PipeOpTargetTrafo." />
+<meta property="og:title" content="PipeOpOVRUnite — mlr_pipeops_ovrunite" />
+<meta property="og:description" content="Perform &quot;One vs. Rest&quot; classification by (weighted) majority vote prediction from classification Predictions. This works in combination with PipeOpOVRSplit.
+Weights can be set as a parameter; if none are provided, defaults to equal weights for each
+prediction.
+Always returns a &quot;prob&quot; prediction, regardless of the incoming Learner's
+$predict_type. The label of the class with the highest predicted probability is selected as the
+&quot;response&quot; prediction.
+Missing values during prediction are treated as each class label being equally likely.
+This PipeOp uses a Multiplicity input, which is created by PipeOpOVRSplit and causes
+PipeOps on the way to this PipeOp to be called once for each individual binary Task.
+Note that Multiplicity is currently an experimental features and the implementation or UI
+may change." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -143,39 +152,49 @@ function. Typically should be used in combination with a subclass of PipeOpTarge
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpTargetInverter</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTrafo.R'><code>R/PipeOpTrafo.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_targetinverter.Rd</code></div>
+    <h1>PipeOpOVRUnite</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpOVR.R'><code>R/PipeOpOVR.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_ovrunite.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>During prediction inverts transformations done during training based on a supplied inversion
-function. Typically should be used in combination with a subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>.</p>
+    <p>Perform "One vs. Rest" classification by (weighted) majority vote prediction from <a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>classification Predictions</a>. This works in combination with <code><a href='mlr_pipeops_ovrsplit.html'>PipeOpOVRSplit</a></code>.</p>
+<p>Weights can be set as a parameter; if none are provided, defaults to equal weights for each
+prediction.</p>
+<p>Always returns a <code>"prob"</code> prediction, regardless of the incoming <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s
+<code>$predict_type</code>. The label of the class with the highest predicted probability is selected as the
+<code>"response"</code> prediction.</p>
+<p>Missing values during prediction are treated as each class label being equally likely.</p>
+<p>This <code><a href='PipeOp.html'>PipeOp</a></code> uses a <code><a href='Multiplicity.html'>Multiplicity</a></code> input, which is created by <code><a href='mlr_pipeops_ovrsplit.html'>PipeOpOVRSplit</a></code> and causes
+<code><a href='PipeOp.html'>PipeOp</a></code>s on the way to this <code><a href='PipeOp.html'>PipeOp</a></code> to be called once for each individual <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>binary Task</a>.</p>
+<p>Note that <code><a href='Multiplicity.html'>Multiplicity</a></code> is currently an experimental features and the implementation or UI
+may change.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> inheriting from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpTargetInverter</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"targetinverter"</span>)</pre>
+<pre><span class='no'>PipeOpOVRUnite</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"ovrunite"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"targetinverter"</code>.</p></li>
+Identifier of the resulting object, default <code>"ovrunite"</code>.</p></li>
+<li><p><code>param_vals</code> :: named <code>list</code><br />
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p><code>PipeOpTargetInverter</code> has two input channels named <code>"fun"</code> and <code>"prediction"</code>. During
-training, both take <code>NULL</code> as input. During prediction, <code>"fun"</code> takes a function and
-<code>"prediction"</code> takes a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>.</p>
-<p><code>PipeOpTargetInverter</code> has one output channel named <code>"output"</code> and returns <code>NULL</code> during
-training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> during prediction.</p>
+<p>Input and output channels are inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>. Instead of a
+<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>, a <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code> is used as
+input and output during prediction and <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>'s <code>collect</code> parameter is initialized
+with <code>TRUE</code> to allow for collecting a <code><a href='Multiplicity.html'>Multiplicity</a></code> input.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -185,22 +204,23 @@ training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html
 
     
 
-<p><code>PipeOpTargetInverter</code> has no parameters.</p>
+<p>The parameters are the parameters inherited from the <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Should be used in combination with a subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>.</p>
+<p>Inherits from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code> by implementing the <code>private$.predict()</code> method.</p>
+<p>Should be used in combination with <code><a href='mlr_pipeops_ovrsplit.html'>PipeOpOVRSplit</a></code>.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
 
-<p>Only fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only fields inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -208,6 +228,7 @@ training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
 <code><a href='PipeOp.html'>PipeOp</a></code>,
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
@@ -240,14 +261,18 @@ training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
 <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
 <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -255,15 +280,65 @@ training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
+<code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
+<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
-<code><a href='mlr_pipeops_targettrafosimple.html'>mlr_pipeops_targettrafosimple</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
+<p>Other Ensembles: 
+<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+<code><a href='mlr_learners_avg.html'>mlr_learners_avg</a></code>,
+<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
+<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code></p>
+<p>Other Multiplicity PipeOps: 
+<code><a href='Multiplicity.html'>Multiplicity</a>()</code>,
+<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
+<code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code></p>
+<p>Other Experimental Features: 
+<code><a href='Multiplicity.html'>Multiplicity</a>()</code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
+<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"ovrsplit"</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"ovrunite"</span>)
+<span class='no'>gr</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
+#&gt; NULL
+#&gt; </div><div class='input'><span class='no'>gr</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
+#&gt; &lt;PredictionClassif&gt; for 150 observations:
+#&gt;     row_id     truth  response prob.setosa prob.versicolor prob.virginica
+#&gt;          1    setosa    setosa           1               0              0
+#&gt;          2    setosa    setosa           1               0              0
+#&gt;          3    setosa    setosa           1               0              0
+#&gt; ---                                                                      
+#&gt;        148 virginica virginica           0               0              1
+#&gt;        149 virginica virginica           0               0              1
+#&gt;        150 virginica virginica           0               0              1
+#&gt; </div><div class='input'><span class='no'>gr</span>$<span class='no'>pipeops</span>$<span class='no'>classif.rpart</span>$<span class='no'>learner</span>$<span class='no'>predict_type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>
+<span class='no'>gr</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
+#&gt; &lt;PredictionClassif&gt; for 150 observations:
+#&gt;     row_id     truth  response prob.setosa prob.versicolor prob.virginica
+#&gt;          1    setosa    setosa   0.9541284      0.00000000     0.04587156
+#&gt;          2    setosa    setosa   0.9541284      0.00000000     0.04587156
+#&gt;          3    setosa    setosa   0.9541284      0.00000000     0.04587156
+#&gt; ---                                                                      
+#&gt;        148 virginica virginica   0.0000000      0.02173913     0.97826087
+#&gt;        149 virginica virginica   0.0000000      0.02173913     0.97826087
+#&gt;        150 virginica virginica   0.0000000      0.02173913     0.97826087
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

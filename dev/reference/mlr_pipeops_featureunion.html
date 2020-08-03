@@ -179,7 +179,7 @@ single time to the output task.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpFeatureUnion</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"featureunion"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+<pre><span class='no'>PipeOpFeatureUnion</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>collect_multiplicity</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"featureunion"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
   <span class='kw'>assert_targets_equal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 <ul>
 <li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>character</code><br />
@@ -187,7 +187,11 @@ Determines the number of input channels.
 If <code>innum</code> is 0 (default), a vararg input channel is created that can take an arbitrary number
 of inputs. If <code>innum</code> is a <code>character</code> vector, the number of input channels is the length of
 <code>innum</code>, and the columns of the result are prefixed with the values.</p></li>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<li><p><code>collect_multiplicity</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code>, the input is a <code><a href='Multiplicity.html'>Multiplicity</a></code> collecting channel. This means, a
+<code><a href='Multiplicity.html'>Multiplicity</a></code> input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires <code>innum</code> to be 0.
+Default is <code>FALSE</code>.</p></li>
+<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of the resulting object, default <code>"featureunion"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
@@ -245,6 +249,7 @@ behaviour may change in the future.</p>
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
 <code><a href='PipeOp.html'>PipeOp</a></code>,
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
@@ -276,14 +281,19 @@ behaviour may change in the future.</p>
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
 <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
 <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -291,15 +301,25 @@ behaviour may change in the future.</p>
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-<code><a href='mlr_pipeops_targetinverter.html'>mlr_pipeops_targetinverter</a></code>,
+<code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
+<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
-<code><a href='mlr_pipeops_targettrafosimple.html'>mlr_pipeops_targettrafosimple</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
+<p>Other Multiplicity PipeOps: 
+<code><a href='Multiplicity.html'>Multiplicity</a>()</code>,
+<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
+<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)

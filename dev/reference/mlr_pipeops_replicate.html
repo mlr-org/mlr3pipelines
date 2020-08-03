@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpTargetTrafoSimple — mlr_pipeops_targettrafosimple • mlr3pipelines</title>
+<title>PipeOpReplicate — mlr_pipeops_replicate • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +47,11 @@
 
 
 
-<meta property="og:title" content="PipeOpTargetTrafoSimple — mlr_pipeops_targettrafosimple" />
-<meta property="og:description" content="Allows for target transformation operations of Task that have to be inverted
-later, where the transformation function is simply given by a function of the target. Typically
-this will be applied to a TaskRegr." />
+<meta property="og:title" content="PipeOpReplicate — mlr_pipeops_replicate" />
+<meta property="og:description" content="Replicate the input as a Multiplicity, causing subsequent PipeOps to be executed multiple
+reps times.
+Note that Multiplicity is currently an experimental features and the implementation or UI
+may change." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -144,30 +145,30 @@ this will be applied to a TaskRegr." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpTargetTrafoSimple</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTrafo.R'><code>R/PipeOpTrafo.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_targettrafosimple.Rd</code></div>
+    <h1>PipeOpReplicate</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpMultiplicity.R'><code>R/PipeOpMultiplicity.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_replicate.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Allows for target transformation operations of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that have to be inverted
-later, where the transformation function is simply given by a function of the target. Typically
-this will be applied to a <code><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></code>.</p>
+    <p>Replicate the input as a <code><a href='Multiplicity.html'>Multiplicity</a></code>, causing subsequent <code><a href='PipeOp.html'>PipeOp</a></code>s to be executed multiple
+<code>reps</code> times.</p>
+<p>Note that <code><a href='Multiplicity.html'>Multiplicity</a></code> is currently an experimental features and the implementation or UI
+may change.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code></p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpTargetTrafoSimple</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"targettrafosimple"</span>,
-  <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpReplicate</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"replicate"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"targettrafosimple"</code>.</p></li>
+<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+Identifier of the resulting object, default <code>"replicate"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
 be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -177,7 +178,9 @@ be set during construction. Default <code><a href='https://rdrr.io/r/base/list.h
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>.</p>
+<p><code>PipeOpReplicate</code> has one input channel named <code>"input"</code>, taking any input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>) both during training and prediction.</p>
+<p><code>PipeOpReplicate</code> has one output channel named <code>"output"</code> returning the replicated input as a
+<code><a href='Multiplicity.html'>Multiplicity</a></code> of type any (<code>"[*]"</code>) both during training and prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -187,31 +190,21 @@ be set during construction. Default <code><a href='https://rdrr.io/r/base/list.h
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>, as well as:</p><ul>
-<li><p><code>trafo</code> :: <code>function</code><br />
-Transformation function for the target. Should only be a function of the target, i.e., taking a
-single argument. Default is <code>identity</code>.</p></li>
-<li><p><code>inverter</code> :: <code>function</code><br />
-Inversion of the transformation function for the target. Should only be a function of the
-target, i.e., taking a single argument. Default is <code>identity</code>.</p></li>
-<li><p><code>new_target_name</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Optionally give the transformed target a new name. By default the original name is used.</p></li>
-<li><p><code>new_task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Optionally a new task type can be set. Legal types are listed in
-<code>mlr_reflections$task_types$type</code>.</p></li>
+<ul>
+<li><p><code>reps</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+Integer indicating the number of times the input should be replicated.</p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
 
-<p>Overloads <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>'s <code>set_state()</code>, <code>train_target()</code>, <code>train_invert()</code> and
-<code>inverter()</code>. Should be used in combination with <code><a href='mlr_pipeops_targetinverter.html'>PipeOpTargetInverter</a></code>.</p>
+<p>Only fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -219,6 +212,7 @@ Optionally a new task type can be set. Legal types are listed in
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
 <code><a href='PipeOp.html'>PipeOp</a></code>,
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
@@ -251,8 +245,12 @@ Optionally a new task type can be set. Legal types are listed in
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
 <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
 <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
@@ -266,81 +264,83 @@ Optionally a new task type can be set. Legal types are listed in
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-<code><a href='mlr_pipeops_targetinverter.html'>mlr_pipeops_targetinverter</a></code>,
+<code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
+<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
+<p>Other Multiplicity PipeOps: 
+<code><a href='Multiplicity.html'>Multiplicity</a>()</code>,
+<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
+<code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
+<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code></p>
+<p>Other Experimental Features: 
+<code><a href='Multiplicity.html'>Multiplicity</a>()</code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"boston_housing"</span>)
-<span class='no'>po</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetTrafoSimple</span>$<span class='fu'>new</span>(<span class='st'>"logtrafo"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-  <span class='kw'>inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>2</span> ^ <span class='no'>x</span>)
-)
-
-<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $fun
-#&gt; NULL
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"replicate"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>3</span>))
+<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+#&gt; Multiplicity:
+#&gt; [[1]]
+#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
 #&gt; 
-#&gt; $output
-#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
-#&gt; * Target: medv
-#&gt; * Properties: -
-#&gt; * Features (18):
-#&gt;   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,
-#&gt;     ptratio, rm, zn
-#&gt;   - int (3): rad, tax, tract
-#&gt;   - fct (2): chas, town
-#&gt; </div><div class='input'><span class='no'>po</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $fun
-#&gt; function (inputs) 
-#&gt; {
-#&gt;     assert_list(inputs, len = 1L, types = "Prediction")
-#&gt;     self$inverter(inputs[[1L]], predict_phase_control)
-#&gt; }
-#&gt; &lt;environment: 0x7fbd4e27c5b8&gt;
+#&gt; [[2]]
+#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
 #&gt; 
-#&gt; $output
-#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
-#&gt; * Target: medv
-#&gt; * Properties: -
-#&gt; * Features (18):
-#&gt;   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,
-#&gt;     ptratio, rm, zn
-#&gt;   - int (3): rad, tax, tract
-#&gt;   - fct (2): chas, town
-#&gt; </div><div class='input'>
-<span class='no'>g</span> <span class='kw'>=</span> <span class='no'>Graph</span>$<span class='fu'>new</span>()
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>po</span>)
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>())
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetInverter</span>$<span class='fu'>new</span>())
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"logtrafo"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinverter"</span>,
-  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"logtrafo"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>,
-  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinverter"</span>,
-  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-
-<span class='no'>g</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
-#&gt; NULL
-#&gt; </div><div class='input'><span class='no'>g</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
-#&gt; &lt;PredictionRegr&gt; for 506 observations:
-#&gt;     row_id truth response
-#&gt;          1  24.0 24.35119
-#&gt;          2  21.6 20.48150
-#&gt;          3  34.7 32.83886
-#&gt; ---                      
-#&gt;        504  23.9 24.35119
-#&gt;        505  22.0 20.48150
-#&gt;        506  11.9 16.99570
-#&gt; </div><div class='input'>
-<span class='co'>#syntactic sugar using ppl():</span>
-<span class='no'>tt</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"targettrafo"</span>, <span class='kw'>graph</span> <span class='kw'>=</span> <span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
-<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targettrafosimple.trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targettrafosimple.inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>2</span> ^ <span class='no'>x</span></div></pre>
+#&gt; [[3]]
+#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#&gt; 
+#&gt; </div><div class='input'><span class='no'>po</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+#&gt; Multiplicity:
+#&gt; [[1]]
+#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#&gt; 
+#&gt; [[2]]
+#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#&gt; 
+#&gt; [[3]]
+#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#&gt; 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

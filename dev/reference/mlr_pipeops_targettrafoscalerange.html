@@ -49,9 +49,9 @@
 
 <meta property="og:title" content="PipeOpTargetTrafoScaleRange — mlr_pipeops_targettrafoscalerange" />
 <meta property="og:description" content="Linearly transforms a numeric target of a TaskRegr so it is between lower
-and upper. The formula for this is \(x' = a + x * b\),
-where \(b\) is \((upper - lower) / (max(x) - min(x))\) and
-\(a\) is \(-min(x) * b + lower\). The same transformation is applied during training and
+and upper. The formula for this is \(x' = offset + x * scale\),
+where \(scale\) is \((upper - lower) / (max(x) - min(x))\) and
+\(offset\) is \(-min(x) * scale + lower\). The same transformation is applied during training and
 prediction." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -153,9 +153,9 @@ prediction." />
 
     <div class="ref-description">
     <p>Linearly transforms a numeric target of a <code><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></code> so it is between <code>lower</code>
-and <code>upper</code>. The formula for this is \(x' = a + x * b\),
-where \(b\) is \((upper - lower) / (max(x) - min(x))\) and
-\(a\) is \(-min(x) * b + lower\). The same transformation is applied during training and
+and <code>upper</code>. The formula for this is \(x' = offset + x * scale\),
+where \(scale\) is \((upper - lower) / (max(x) - min(x))\) and
+\(offset\) is \(-min(x) * scale + lower\). The same transformation is applied during training and
 prediction.</p>
     </div>
 
@@ -167,8 +167,7 @@ prediction.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpTargetTrafoScaleRange</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"targettrafoscalerange"</span>,
-  <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpTargetTrafoScaleRange</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"targettrafoscalerange"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"targettrafoscalerange"</code>.</p></li>
@@ -186,25 +185,24 @@ be set during construction. Default <code><a href='https://rdrr.io/r/base/list.h
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with a vector of the two transformation parameters \(a\) and
-\(b\) for the numeric target.</p>
+<p>The <code>$state</code> is a named <code>list</code> containing the slots <code>$offset</code> and <code>$scale</code>.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>, as well as:</p><ul>
-<li><p><code>lower</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Target value of smallest item of input target. Default is 0.</p></li>
-<li><p><code>upper</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Target value of greatest item of input target. Default is 1.</p></li>
+<li><p><code>lower</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+Target value of smallest item of input target. Initialized to 0.</p></li>
+<li><p><code>upper</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+Target value of greatest item of input target. Initialized to 1.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Overloads <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>'s <code>set_state()</code>, <code>train_target()</code>, <code>train_invert()</code> and
-<code>inverter()</code>. Should be used in combination with <code><a href='mlr_pipeops_targetinverter.html'>PipeOpTargetInverter</a></code>.</p>
+<p>Overloads <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>'s <code>.get_state()</code>, <code>.transform()</code>, and
+<code>.invert()</code>. Should be used in combination with <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -217,6 +215,7 @@ Target value of greatest item of input target. Default is 1.</p></li>
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
 <code><a href='PipeOp.html'>PipeOp</a></code>,
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
@@ -249,14 +248,19 @@ Target value of greatest item of input target. Default is 1.</p></li>
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
 <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
 <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -264,8 +268,8 @@ Target value of greatest item of input target. Default is 1.</p></li>
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-<code><a href='mlr_pipeops_targetinverter.html'>mlr_pipeops_targetinverter</a></code>,
-<code><a href='mlr_pipeops_targettrafosimple.html'>mlr_pipeops_targettrafosimple</a></code>,
+<code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
+<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
@@ -294,9 +298,9 @@ Target value of greatest item of input target. Default is 1.</p></li>
 #&gt; function (inputs) 
 #&gt; {
 #&gt;     assert_list(inputs, len = 1L, types = "Prediction")
-#&gt;     self$inverter(inputs[[1L]], predict_phase_control)
+#&gt;     list(private$.invert(inputs[[1L]], predict_phase_state))
 #&gt; }
-#&gt; &lt;environment: 0x7fbd538b7f38&gt;
+#&gt; &lt;environment: 0x7ff0c04ffb10&gt;
 #&gt; 
 #&gt; $output
 #&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
@@ -311,9 +315,9 @@ Target value of greatest item of input target. Default is 1.</p></li>
 <span class='co'>#syntactic sugar for a graph using ppl():</span>
 <span class='no'>ttscalerange</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"targettrafo"</span>, <span class='kw'>trafo_pipeop</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetTrafoScaleRange</span>$<span class='fu'>new</span>(),
   <span class='kw'>graph</span> <span class='kw'>=</span> <span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
-<span class='no'>ttscalerange</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
+<span class='no'>ttscalerange</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinvert.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>ttscalerange</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinverter.output
+#&gt; </div><div class='input'><span class='no'>ttscalerange</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinvert.output
 #&gt; &lt;PredictionRegr&gt; for 506 observations:
 #&gt;     row_id truth response
 #&gt;          1  24.0 23.72519
@@ -347,7 +351,7 @@ Target value of greatest item of input target. Default is 1.</p></li>
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $train_time
-#&gt; [1] 0.013
+#&gt; [1] 0.015
 #&gt; 
 #&gt; $train_task
 #&gt; &lt;TaskRegr:boston_housing&gt; (0 x 19)

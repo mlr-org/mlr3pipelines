@@ -50,16 +50,16 @@
 <meta property="og:title" content="PipeOpClassifAvg — mlr_pipeops_classifavg" />
 <meta property="og:description" content="Perform (weighted) majority vote prediction from classification Predictions by connecting
 PipeOpClassifAvg to multiple PipeOpLearner outputs.
-If the incoming Learner's
-$predict_type is set to &quot;response&quot;, the prediction obtained is also a &quot;response&quot; prediction
-with each instance predicted to the prediction from incoming Learners with the
-highest total weight. If the Learner's $predict_type is set to &quot;prob&quot;, the
-prediction obtained is also a &quot;prob&quot; type prediction with the probability predicted to be a weighted
-average of incoming predictions.
+Always returns a &quot;prob&quot; prediction, regardless of the incoming Learner's
+$predict_type. The label of the class with the highest predicted probability is selected as the
+&quot;response&quot; prediction. If the Learner's $predict_type is set to &quot;prob&quot;,
+the prediction obtained is also a &quot;prob&quot; type prediction with the probability predicted to be a
+weighted average of incoming predictions.
 All incoming Learner's $predict_type must agree.
 Weights can be set as a parameter; if none are provided, defaults to
 equal weights for each prediction.
-Defaults to equal weights for each model." />
+Defaults to equal weights for each model.
+If `" />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -161,16 +161,16 @@ Defaults to equal weights for each model." />
     <div class="ref-description">
     <p>Perform (weighted) majority vote prediction from classification <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>s by connecting
 <code>PipeOpClassifAvg</code> to multiple <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code> outputs.</p>
-<p>If the incoming <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s
-<code>$predict_type</code> is set to <code>"response"</code>, the prediction obtained is also a <code>"response"</code> prediction
-with each instance predicted to the prediction from incoming <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>s with the
-highest total weight. If the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s <code>$predict_type</code> is set to <code>"prob"</code>, the
-prediction obtained is also a <code>"prob"</code> type prediction with the probability predicted to be a weighted
-average of incoming predictions.</p>
+<p>Always returns a <code>"prob"</code> prediction, regardless of the incoming <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s
+<code>$predict_type</code>. The label of the class with the highest predicted probability is selected as the
+<code>"response"</code> prediction. If the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s <code>$predict_type</code> is set to <code>"prob"</code>,
+the prediction obtained is also a <code>"prob"</code> type prediction with the probability predicted to be a
+weighted average of incoming predictions.</p>
 <p>All incoming <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s <code>$predict_type</code> must agree.</p>
 <p>Weights can be set as a parameter; if none are provided, defaults to
 equal weights for each prediction.
 Defaults to equal weights for each model.</p>
+<p>If `</p>
     </div>
 
 
@@ -181,13 +181,17 @@ Defaults to equal weights for each model.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpClassifAvg</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"classifavg"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='no'>PipeOpClassifAvg</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>collect_multiplicity</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"classifavg"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
 Determines the number of input channels.
 If <code>innum</code> is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.</p></li>
+<li><p><code>collect_multiplicity</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code>, the input is a <code><a href='Multiplicity.html'>Multiplicity</a></code> collecting channel. This means, a
+<code><a href='Multiplicity.html'>Multiplicity</a></code> input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires <code>innum</code> to be 0.
+Default is <code>FALSE</code>.</p></li>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-Identifier of the resulting  object, default <code>"classifavg"</code>.</p></li>
+Identifier of the resulting object, default <code>"classifavg"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -230,6 +234,7 @@ is used as input and output during prediction.</p>
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
 <code><a href='PipeOp.html'>PipeOp</a></code>,
 <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
@@ -261,14 +266,19 @@ is used as input and output during prediction.</p>
 <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
 <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
 <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
@@ -276,18 +286,29 @@ is used as input and output during prediction.</p>
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-<code><a href='mlr_pipeops_targetinverter.html'>mlr_pipeops_targetinverter</a></code>,
+<code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
+<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
-<code><a href='mlr_pipeops_targettrafosimple.html'>mlr_pipeops_targettrafosimple</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
+<p>Other Multiplicity PipeOps: 
+<code><a href='Multiplicity.html'>Multiplicity</a>()</code>,
+<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+<code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
+<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code></p>
 <p>Other Ensembles: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='mlr_learners_avg.html'>mlr_learners_avg</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

@@ -7,6 +7,9 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/Graph.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/Multiplicity.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/NO_OP.html</loc>
   </url>
   <url>
@@ -37,6 +40,9 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/add_class_hierarchy_cache.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/as.Multiplicity.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/as.data.table.html</loc>
   </url>
   <url>
@@ -65,6 +71,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/gunion.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/is.Multiplicity.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/is_noop.html</loc>
@@ -190,10 +199,22 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_modelmatrix.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_multiplicityexply.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_multiplicityimply.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_mutate.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_nop.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_ovrsplit.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_ovrunite.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_pca.html</loc>
@@ -212,6 +233,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_renamecolumns.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_replicate.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_scale.html</loc>
@@ -235,13 +259,13 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_subsample.html</loc>
   </url>
   <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_targetinverter.html</loc>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_targetinvert.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_targetmutate.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_targettrafoscalerange.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_targettrafosimple.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_textvectorizer.html</loc>
@@ -260,6 +284,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/pipeline_greplicate.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/pipeline_ovr.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/po.html</loc>

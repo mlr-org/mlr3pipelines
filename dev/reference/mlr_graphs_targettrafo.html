@@ -51,10 +51,12 @@
 <meta property="og:description" content="Wraps a Graph that transforms a target during training and inverts the transformation
 during prediction. This is done as follows:
 Specify a transformation and inversion function using any subclass of PipeOpTargetTrafo, defaults to
-PipeOpTargetTrafoSimple, afterwards apply graph.
-At the very end, during prediction the transformation is inverted using PipeOpTargetInverter.
-To set a transformation and inversion function for PipeOpTargetTrafoSimple see the
+PipeOpTargetMutate, afterwards apply graph.
+At the very end, during prediction the transformation is inverted using PipeOpTargetInvert.
+To set a transformation and inversion function for PipeOpTargetMutate see the
 parameters trafo and inverter of the param_set of the resulting Graph.
+Note that the input graph is not explicitly checked to actually return a
+Prediction during prediction.
 
 " />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
@@ -159,17 +161,19 @@ parameters trafo and inverter of the param_set of the resulting Graph.
     <p>Wraps a <code><a href='Graph.html'>Graph</a></code> that transforms a target during training and inverts the transformation
 during prediction. This is done as follows:</p><ul>
 <li><p>Specify a transformation and inversion function using any subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>, defaults to
-<code><a href='mlr_pipeops_targettrafosimple.html'>PipeOpTargetTrafoSimple</a></code>, afterwards apply <code>graph</code>.</p></li>
-<li><p>At the very end, during prediction the transformation is inverted using <code><a href='mlr_pipeops_targetinverter.html'>PipeOpTargetInverter</a></code>.</p></li>
-<li><p>To set a transformation and inversion function for <code><a href='mlr_pipeops_targettrafosimple.html'>PipeOpTargetTrafoSimple</a></code> see the
+<code><a href='mlr_pipeops_targetmutate.html'>PipeOpTargetMutate</a></code>, afterwards apply <code>graph</code>.</p></li>
+<li><p>At the very end, during prediction the transformation is inverted using <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>.</p></li>
+<li><p>To set a transformation and inversion function for <code><a href='mlr_pipeops_targetmutate.html'>PipeOpTargetMutate</a></code> see the
 parameters <code>trafo</code> and <code>inverter</code> of the <code>param_set</code> of the resulting <code><a href='Graph.html'>Graph</a></code>.</p></li>
+<li><p>Note that the input <code>graph</code> is not explicitly checked to actually return a
+<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> during prediction.</p></li>
 </ul>
 
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_targettrafo</span>(
   <span class='no'>graph</span>,
-  <span class='kw'>trafo_pipeop</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetTrafoSimple</span>$<span class='fu'>new</span>(),
+  <span class='kw'>trafo_pipeop</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetMutate</span>$<span class='fu'>new</span>(),
   <span class='kw'>id_prefix</span> <span class='kw'>=</span> <span class='st'>""</span>
 )</pre>
 
@@ -179,21 +183,17 @@ parameters <code>trafo</code> and <code>inverter</code> of the <code>param_set</
     <tr>
       <th>graph</th>
       <td><p><code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code> | <code><a href='Graph.html'>Graph</a></code> <br />
-A <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code> or <code><a href='Graph.html'>Graph</a></code> to create a robustifying pipeline for. If this is a <code><a href='Graph.html'>Graph</a></code>,
-the last <code><a href='PipeOp.html'>PipeOp</a></code> should be a <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code> and the first <code><a href='PipeOp.html'>PipeOp</a></code> should accept a
-single <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as input.</p></td>
+A <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code> or <code><a href='Graph.html'>Graph</a></code> to wrap between a transformation and re-transformation of the target variable.</p></td>
     </tr>
     <tr>
       <th>trafo_pipeop</th>
       <td><p><code><a href='PipeOp.html'>PipeOp</a></code> <br />
-A <code><a href='PipeOp.html'>PipeOp</a></code> that is a subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>. Default is
-<code><a href='mlr_pipeops_targettrafosimple.html'>PipeOpTargetTrafoSimple</a></code>.</p></td>
+A <code><a href='PipeOp.html'>PipeOp</a></code> that is a subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>. Default is <code><a href='mlr_pipeops_targetmutate.html'>PipeOpTargetMutate</a></code>.</p></td>
     </tr>
     <tr>
       <th>id_prefix</th>
       <td><p><code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
-Optional id prefix to prepend to <code><a href='mlr_pipeops_targetinverter.html'>PipeOpTargetInverter</a></code> ID. The resulting ID will be
-<code>"[id_prefix]targetinverter"</code>. Default is <code>""</code>.</p></td>
+Optional id prefix to prepend to <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code> ID. The resulting ID will be <code>"[id_prefix]targetinvert"</code>. Default is <code>""</code>.</p></td>
     </tr>
     </table>
 
@@ -205,23 +205,23 @@ Optional id prefix to prepend to <code><a href='mlr_pipeops_targetinverter.html'
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
 
 <span class='no'>tt</span> <span class='kw'>=</span> <span class='fu'>pipeline_targettrafo</span>(<span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
-<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targettrafosimple.trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targettrafosimple.inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>2</span> ^ <span class='no'>x</span>
+<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targetmutate.trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targetmutate.inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>2</span> ^ <span class='no'>x</span>
 
 <span class='co'># gives the same as</span>
 <span class='no'>g</span> <span class='kw'>=</span> <span class='no'>Graph</span>$<span class='fu'>new</span>()
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetTrafoSimple</span>$<span class='fu'>new</span>(<span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetMutate</span>$<span class='fu'>new</span>(<span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
   <span class='kw'>trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>),
   <span class='kw'>inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>2</span> ^ <span class='no'>x</span>)
   )
 )
 <span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>())
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetInverter</span>$<span class='fu'>new</span>())
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"targettrafosimple"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinverter"</span>,
+<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetInvert</span>$<span class='fu'>new</span>())
+<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"targetmutate"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinvert"</span>,
   <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"targettrafosimple"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>,
+<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"targetmutate"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>,
   <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinverter"</span>,
+<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinvert"</span>,
   <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
