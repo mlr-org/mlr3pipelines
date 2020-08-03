@@ -1,6 +1,46 @@
 # mlr3pipelines 0.1.4
 
-* 
+* po() prints available mlr_pipeops dictionary content
+* NULL is neutral element of %>>%
+* PipeOpTaskPreproc now has feature_types slot
+* PipeOpTaskPreproc(Simple) internal API changed: use .train_task(), .predict_task(), .train_dt(), .predict_dt(), .select_cols(), .get_state(), .transform(), .get_state_dt(), .transform_dt() instead of the old methods without dot prefix
+* PipeOp now has tags slot
+* PipeOp internal API changed: use .train(), .predict() instead of train_internal(), predict_internal()
+* Graph new method update_ids()
+* Graph methods train(single_input = FALSE) and predict(single_input = FALSE) now handle vararg channels correctly.
+* Obsoleted greplicate(); use pipeline_greplicate / ppl("greplicate") instead.
+* new mlr_graphs:
+  - pipeline_bagging
+  - pipeline_branch
+  - pipeline_greplicate
+  - pipeline_robustify
+  - pipeline_targettrafo
+* mlr_graphs dictionary of useful Graphs, with short form accessor ppl()
+* po() now automatically converts Selector to PipeOpSelect
+* New PipeOps:
+  - PipeOpDateFeatures
+  - PipeOpImputeConstant
+  - PipeOpImputeLearner
+  - PipeOpMode
+  - PipeOpProxy
+  - PipeOpRandomResponse
+  - PipeOpRenameColumns
+  - PipeOpTextVectorizer
+  - PipeOpThreshold
+* Renamed PipeOps:
+  - PipeOpImputeNewlvl --> PipeOpImputeOOR (with additional functionality for continuous values)
+* Changed PipeOps:
+  - PipeOpFeatureUnion: Bugfix: avoid silently overwriting features when names clash
+  - PipeOpHistBin: Bugfix: handle test set data out of training set range
+  - PipeOpLearnerCV: Allow returning trainingset prediction during train()
+  - PipeOpMutate: Allow referencing newly created columns
+  - PipeOpScale: Allow robust scaling
+  - 
+* New Selectors:
+  - selector_missing
+  - selector_cardinality_greater_than
+
+* Work with new mlr3 version 0.4.0
 
 # mlr3pipelines 0.1.3
 
