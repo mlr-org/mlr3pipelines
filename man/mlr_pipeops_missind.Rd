@@ -10,6 +10,9 @@
 \description{
 Add missing indicator columns ("dummy columns") to the \code{\link[mlr3:Task]{Task}}.
 Drops original features; should probably be used in combination with \code{\link{PipeOpFeatureUnion}} and imputation \code{\link{PipeOp}}s (see examples).
+
+Note the \code{affect_columns} is initialized with \code{selector_invert(selector_type(c("factor", "ordered", "character")))}, since missing
+values in factorial columns are often indicated by out-of-range imputation (\code{\link{PipeOpImputeOOR}}).
 }
 \section{Construction}{
 \preformatted{PipeOpMissInd$new(id = "missind", param_vals = list())
