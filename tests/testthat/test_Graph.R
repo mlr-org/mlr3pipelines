@@ -365,3 +365,16 @@ test_that("Graph with vararg input", {
   expect_equal(list(nop.output = 1, featureunion.output = tcombined, nop2.output = 2, nop3.output = 3),
                gr$train(list(1, t1, t2, 2, 3), single_input = FALSE))
 })
+
+test_that("single pipeop plot", {
+  imp_num = po("imputehist")
+  graph = as_graph(imp_num)
+
+  pdf(file = NULL)
+  graph$plot()
+  dev.off()
+
+  p = graph$plot(TRUE)
+  expect_class(p, "htmlwidget")
+  expect_class(p, "visNetwork")
+})
