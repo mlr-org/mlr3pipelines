@@ -75,8 +75,6 @@ Suggests:
     smotefamily,
     evaluate,
     kknn
-VignetteBuilder:
-    knitr
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
