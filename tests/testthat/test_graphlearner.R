@@ -1,6 +1,6 @@
-context("GraphLearn")
+context("GraphLearner")
 
-test_that("basic graphlearn tests", {
+test_that("basic graphlearner tests", {
   task = mlr_tasks$get("iris")
 
   lrn = mlr_learners$get("classif.rpart")
@@ -200,5 +200,19 @@ test_that("graphlearner type inference", {
   # input two mismatching types
   expect_error(GraphLearner$new(PipeOpScale$new()), "output type not.*Prediction.*or compatible")
 
+  ###########################
+  # Target Transformations  #
+  ###########################
 
+  lrn = GraphLearner$new(ppl("targettrafo", graph = lrn("classif.rpart"), trafo_pipeop = PipeOpTargetMutate$new()))
+  expect_equal(lrn$task_type, "classif")
+  expect_equal(lrn$predict_type, "response")
+
+  lrn = GraphLearner$new(ppl("targettrafo", graph = lrn("regr.rpart"), trafo_pipeop = PipeOpTargetMutate$new()))
+  expect_equal(lrn$task_type, "regr")
+  expect_equal(lrn$predict_type, "response")
+
+  lrn = GraphLearner$new(ppl("targettrafo", graph = lrn("regr.rpart"), trafo_pipeop = PipeOpTargetTrafoScaleRange$new()))
+  expect_equal(lrn$task_type, "regr")
+  expect_equal(lrn$predict_type, "response")
 })

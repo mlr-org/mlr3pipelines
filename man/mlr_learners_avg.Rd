@@ -61,6 +61,7 @@ Other Learners:
 Other Ensembles: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_regravg}}
 }
 \concept{Ensembles}

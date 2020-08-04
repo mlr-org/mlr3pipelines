@@ -68,3 +68,19 @@ rename_list = function(x, ...) {
   names(x) = gsub(x = names(x), ...)
   x
 }
+
+# clone a learner and set a state
+clone_with_state = function(learner, state) {
+  lrn = learner$clone(deep = TRUE)
+  lrn$state = state
+  lrn
+}
+
+#' @include multiplicity.R
+multiplicity_recurse = function(.multip, .fun, ...) {
+  if (is.Multiplicity(.multip)) {
+    as.Multiplicity(lapply(.multip, function(m) multiplicity_recurse(.multip = m, .fun = .fun, ...)))
+  } else {
+    .fun(.multip, ...)
+  }
+}

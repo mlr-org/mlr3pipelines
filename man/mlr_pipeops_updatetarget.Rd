@@ -8,9 +8,11 @@
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
+EXPERIMENTAL, API SUBJECT TO CHANGE
+
 Handles target transformation operations that do not need explicit inversion.
 In case the new target is required during predict, creates a vector of \code{NA}.
-Works similar to \code{\link{PipeOpTargetTrafo}} and \code{\link{PipeOpTargetTrafoSimple}}, but forgoes the
+Works similar to \code{\link{PipeOpTargetTrafo}} and \code{\link{PipeOpTargetMutate}}, but forgoes the
 inversion step.
 In case target after the \code{trafo} is a factor, levels are saved to \verb{$state}.\cr
 
@@ -19,7 +21,7 @@ In case target after the \code{trafo} is a factor, levels saved in the \code{sta
 set during prediction.
 
 As a special case when \code{trafo} is \code{identity} and \code{new_target_name} matches an existing column
-name of the data of the input task, this column is set as the new target. Depending on
+name of the data of the input \code{\link[mlr3:Task]{Task}}, this column is set as the new target. Depending on
 \code{drop_original_target} the original target is then either dropped or added to the features.
 }
 \section{Construction}{
@@ -66,12 +68,15 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontrun{
 # Create a binary class task from iris
 library(mlr3)
 trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
 po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
 po$train(list(tsk("iris")))
 po$predict(list(tsk("iris")))
+}
+# not yet exported
 }
 \seealso{
 Other mlr3pipelines backend related: 
@@ -88,6 +93,7 @@ Other PipeOps:
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -120,14 +126,19 @@ Other PipeOps:
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -135,9 +146,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
-\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},

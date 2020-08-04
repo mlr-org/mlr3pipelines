@@ -22,7 +22,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(),
+#' PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
 #'   assert_targets_equal = TRUE)
 #' ```
 #'
@@ -31,7 +31,11 @@
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number
 #'   of inputs. If `innum` is a `character` vector, the number of input channels is the length of
 #'   `innum`, and the columns of the result are prefixed with the values.
-#' * `id` :: `character(1)`
+#' * `collect_multiplicity` :: `logical(1)`\cr
+#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
+#'   [`Multiplicity`] input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires `innum` to be 0.
+#'   Default is `FALSE`.
+#' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, default `"featureunion"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
@@ -72,6 +76,7 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -95,7 +100,7 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   public = list(
     assert_targets_equal = NULL,
     inprefix = NULL,
-    initialize = function(innum = 0L, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
+    initialize = function(innum = 0L, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
       assert(
         check_int(innum, lower = 0L),
         check_character(innum, min.len = 1L, any.missing = FALSE)
@@ -109,8 +114,17 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       assert_flag(assert_targets_equal)
       self$assert_targets_equal = assert_targets_equal
       inname = if (innum) rep_suffix("input", innum) else "..."
+      intype = "Task"
+      private$.collect = assert_flag(collect_multiplicity)
+      if (collect_multiplicity) {
+        if (innum) {
+          stop("collect_multiplicity only works with innum == 0.")
+        }
+        inname = "[...]"
+        intype = sprintf("[%s]", intype)
+      }
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = inname, train = "Task", predict = "Task"),
+        input = data.table(name = inname, train = intype, predict = intype),
         output = data.table(name = "output", train = "Task", predict = "Task"),
         tags = "ensemble"
       )
@@ -119,11 +133,14 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   private = list(
     .train = function(inputs) {
       self$state = list()
+      if (private$.collect) inputs = unclass(inputs[[1]])
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     },
     .predict = function(inputs) {
+      if (private$.collect) inputs = unclass(inputs[[1]])
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
-    }
+    },
+    .collect = NULL
   )
 )
 
