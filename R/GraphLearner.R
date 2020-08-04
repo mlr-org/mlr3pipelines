@@ -11,10 +11,10 @@
 #' call. The result of the `$train()` call is discarded, only the
 #' internal state changes during training are used.
 #'
-#' Note the `predict_type` of a [`GraphLearner`] does currently not track the `predict_type`
-#' of any [`Learner`][mlr3::Learner] encapsulated within the [`Graph`]. Therefore, when requesting
-#' e.g. `"prob"` predictions, the `predict_type` of *both* the encapsulated [`Learner`][mlr3::Learner]
-#' and the wrapping [`GraphLearner`] need to be set to `"prob"`.
+#' The `predict_type` of a [`GraphLearner`] can be obtained or set via it's `predict_type` active binding.
+#' Setting a new predict type will try to set the `predict_type` in all relevant
+#' [`PipeOp`] / [`Learner`][mlr3::Learner] encapsulated within the [`Graph`].
+#' Similarly, the predict_type of a Graph will always be the smallest denominator in the [`Graph`].
 #' @family Learners
 #' @export
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
@@ -73,20 +73,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
-      if (is.null(predict_type)) {
-        predict_type = names(mlr_reflections$learner_predict_types[[task_type]])[1]
-      }
-
-      assert_subset(predict_type, names(mlr_reflections$learner_predict_types[[task_type]]))
-
       param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
         properties = mlr_reflections$learner_properties[[task_type]])
-      private$.predict_type = predict_type
       self$graph$param_set$values = param_vals
+      if(!is.null(predict_type)) self$predict_type = predict_type
     }
   ),
   active = list(
@@ -94,12 +88,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       self$graph$hash
     },
     predict_type = function(rhs) {
-      # overload this to avoid feasibility checks. all predict_types are allowed in principle
-      # (although we don't--can't--change the underlying graph's behaviour).
       if (!missing(rhs)) {
-        private$.predict_type = rhs
+        private$set_predict_type(rhs)
       }
-      private$.predict_type
+      private$get_predict_type()
     },
     param_set = function(rhs) {
       if (!missing(rhs) && !identical(rhs, self$graph$param_set)) {
@@ -116,6 +108,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       value
     },
+
     .train = function(task) {
       on.exit({self$graph$state = NULL})
       self$graph$train(task)
@@ -129,6 +122,37 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
+    },
+    get_predict_type = function() {
+      # recursively walk backwards through the graph 
+      get_po_predict_type = function(x) {
+        if (!is.null(x$predict_type)) return(x$predict_type)
+        prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
+        if (length(prdcssrs)) {
+          # all non-null elements
+          predict_types = keep(map(self$graph$pipeops[prdcssrs], get_po_predict_type), Negate(is.null))
+          if (length(unique(predict_types)) == 1L)
+            return(unlist(unique(predict_types)))
+        }
+        return(NULL)
+      }
+      predict_type = get_po_predict_type(self$graph$pipeops[[self$graph$rhs]])
+      if (is.null(predict_type))
+        mlr_reflections$learner_predict_types[[self$task_type]][[1]]
+      else
+        predict_type
+    },
+    set_predict_type = function(predict_type) {
+      # recursively walk backwards through the graph 
+      set_po_predict_type = function(x, predict_type) {
+        assert_subset(predict_type, unlist(mlr_reflections$learner_predict_types[[self$task_type]]))
+        if (!is.null(x$predict_type)) x$predict_type = predict_type
+        prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
+        if (length(prdcssrs)) {
+          map(self$graph$pipeops[prdcssrs], set_po_predict_type, predict_type = predict_type)
+        }
+      }
+      set_po_predict_type(self$graph$pipeops[[self$graph$rhs]], predict_type)
     }
   )
 )
