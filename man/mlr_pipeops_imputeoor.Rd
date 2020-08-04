@@ -85,6 +85,9 @@ new_task = po$train(list(task = task))[[1]]
 new_task$missings()
 new_task$data()
 }
+\references{
+\cite{mlr3pipelines}{ding_2010}
+}
 \seealso{
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
