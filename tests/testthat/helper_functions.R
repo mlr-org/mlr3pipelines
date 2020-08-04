@@ -503,7 +503,7 @@ r6_to_list = function(x) {
   ln = names(ll)
   attributes(ll) = attributes(x)
   names(ll) = ln
-  ll
+  ll[sort(names(ll))]
 }
 
 all.equal.R6 = function(target, current, ...) {
