@@ -108,14 +108,11 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       if (!missing(val)) {
         stop("$learners is read-only.")
       }
-      if (is.null(self$state)) {
+      if (is.null(self$state) || is_noop(self$state)) {
         list()
       } else {
-        map(self$state$model, function(x) {
-          if (is.atomic(x)) return(NULL)
-          lrn = private$.learner$clone(deep = TRUE)
-          lrn$state = x
-          lrn
+        multiplicity_recurse(self$state$model, map, function(x) {
+          if (!is.atomic(x)) clone_with_state(private$.learner, x)
         })
       }
     }
