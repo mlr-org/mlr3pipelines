@@ -52,14 +52,6 @@ majority instances. See \code{\link[smotefamily:SMOTE]{SMOTE()}}.
 }
 }
 
-\section{Internals}{
-
-For details see: \cr
-Chawla, N., Bowyer, K., Hall, L. and Kegelmeyer, W. 2002.\cr
-SMOTE: Synthetic minority oversampling technique.\cr
-Journal of Artificial Intelligence Research. 16, 321-357.
-}
-
 \section{Fields}{
 
 Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
@@ -84,6 +76,9 @@ table(task$data()$result)
 pop = po("smote")
 smotedata = pop$train(list(task))[[1]]$data()
 table(smotedata$result)
+}
+\references{
+\cite{mlr3pipelines}{chawla_2002}
 }
 \seealso{
 Other PipeOps: 
