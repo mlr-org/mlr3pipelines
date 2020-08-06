@@ -1,4 +1,4 @@
-# mlr3pipelines 0.1.4
+# mlr3pipelines 0.2.0
 
 * New feature: Multiplicities: implicit repetition of operations
 * new mlr_graphs:

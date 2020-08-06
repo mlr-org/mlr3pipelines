@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.1.4
+Version: 0.2.0
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
