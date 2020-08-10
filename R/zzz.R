@@ -33,3 +33,5 @@ register_mlr3 = function() {
    pkgname = vapply(hooks[-1], function(x) environment(x)$pkgname, NA_character_)
    setHook(event, hooks[pkgname != "mlr3pipelines"], action = "replace")
 } # nocov end
+
+leanify_package()
