@@ -83,6 +83,16 @@ test_that("Graph is type-checking", {
 
   expect_error(gr$add_edge("scale", "regravg"),
     "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
+
+  expect_error(PipeOpRegrAvg$new(1) %>>% PipeOpScale$new(),
+    "Output type of PipeOp regravg during training \\(NULL\\) incompatible with input type of PipeOp scale \\(Task\\)")
+
+  gr = Graph$new()$
+    add_pipeop(PipeOpRegrAvg$new(1))$
+    add_pipeop(PipeOpScale$new())
+
+  expect_error(gr$add_edge("regravg", "scale"),
+    "Output type of PipeOp regravg during training \\(NULL\\) incompatible with input type of PipeOp scale \\(Task\\)")
 })
 
 test_that("Autoconversion utility functions work", {
