@@ -51,11 +51,17 @@ test_that("utility function works", {
   expect_true(are_types_compatible("ajfpoiewj", "ajfpoiewj"))
 
   expect_false(are_types_compatible("ajfpoiewj", "sjpoawj"))
+
+  expect_true(are_types_compatible("MeasureClassif", "NULL"))
+  expect_true(are_types_compatible("LearnerClassif", "NULL"))
+  expect_true(are_types_compatible("ResamplingCV", "NULL"))
+  expect_true(are_types_compatible("PipeOp", "NULL"))
+  expect_true(are_types_compatible("NULL", "NULL"))
 })
 
 test_that("Graph is type-checking", {
   expect_error(PipeOpScale$new() %>>% PipeOpRegrAvg$new(1),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 
   mavtest = PipeOpRegrAvg$new(1)
   mavtest$input$train = "Task"
@@ -69,7 +75,7 @@ test_that("Graph is type-checking", {
     add_pipeop(PipeOpRegrAvg$new(1))
 
   expect_error(gr$add_edge("scale", "regravg"),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 
   gr = Graph$new()$
     add_pipeop(PipeOpScale$new())$
