@@ -39,11 +39,11 @@
 #'  * `optimizer` :: [`Optimizer`]\cr
 #'    [`Optimizer`] used to find optimal thresholds.
 #'    Defaults to `OptimizerGenSA$new()`
-#' 
+#'
 #' @section Internals:
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
 #' See the `optimizer` parameter for more info.
-#' 
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpPredPostproc`].
 #'
@@ -54,7 +54,7 @@
 #' library("mlr3")
 #'
 #' task = tsk("iris")
-#' pop = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>% 
+#' pop = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>%
 #'   po("tunethreshold")
 #'
 #' task$data()
@@ -67,11 +67,13 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   public = list(
     initialize = function(id = "tunethreshold", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = function(x) check_r6(x, classes = "MeasureClassif"), tags = "train"),
-        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train")
+        ParamUty$new("measure", custom_check = function(x) check_r6(x, "MeasureClassif"), tags = "train"),
+        ParamUty$new("optimizer", custom_check = function(x) {
+          inherits(x, "Optimizer") | x %in% c("gensa", "nloptr", "random_search")
+        }, tags = "train")
       ))
-      ps$values = list(measure = msr("classif.ce"), optimizer = OptimizerGenSA$new())
-      super$initialize(id, param_vals = param_vals, param_set = ps, packages = "GenSA")
+      ps$values = list(measure = msr("classif.ce"), optimizer = "gensa")
+      super$initialize(id, param_vals = param_vals, param_set = ps, packages = "bbotk")
     },
     train = function(input) {
       if(!all(input[[1]]$feature_types$type == "numeric"))
@@ -95,11 +97,28 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       res
     },
     optimize_objfun = function(pred) {
+      browser()
       cnames = colnames(pred$prob)
-      opt = self$param_set$values$optimizer
-      thr = opt$optimize(private$objfun, init_weights = rep(1, length(cnames)) / length(cnames),
-        pred = pred, measure = self$param_set$values$measure)
+      optimizer = self$param_set$values$optimizer
+      ps = private$make_param_set(pred)
+      ObjectiveRFun$new(
+        fun = curry(private$objfun, pred = pred, measure = measure),
+        domain = ps
+       )
+      if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
+      inst = bbotk::OptimInstanceSingleCrit$new(
+        objective = private$objfun,
+        search_space = ,
+        terminator = trm("combo", terminators = list(trm("stagnation", iters = 30), trm(evals, 100)))
+      )
+      ret = optimizer$optimize(inst)
       set_names(thr, cnames)
+    },
+    make_param_set = function(pred) {
+      ps = ParamSet$new(params = list())
+      for(cn in colnames(pred$prob))
+        ps$add(ParamDbl$new(id = cn, lower = 0, upper = 1))
+      return(ps)
     },
     task_to_prediction = function(input) {
       prob = as.matrix(input$data(cols = input$feature_names))
