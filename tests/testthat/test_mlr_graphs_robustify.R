@@ -17,9 +17,13 @@ test_that("Robustify Pipeline", {
   expect_graph(p)
   expect_true(all(c("removeconstants") %in% names(p$pipeops)))
 
-  # with fct, assuming rpart can not do fct
+  # with fct
   dt = data.table("fct" = factor(rep_len(letters[1:3], tsk$nrow)))
   tsk$cbind(dt)
+  p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
+  expect_graph(p)
+  expect_true("encode" %nin% names(p$pipeops))
+  # assuming rpart can not do fcts
   lrn$feature_types = c("integer", "numeric")
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
@@ -43,9 +47,9 @@ test_that("Robustify Pipeline", {
   lrn = lrn("regr.rpart")
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true("encode" %in% names(p$pipeops))
-  expect_true(!("missind" %in% names(p$pipeops)))
-  expect_true(!("imputeoor" %in% names(p$pipeops)))
+  expect_true("encode" %nin% names(p$pipeops))
+  expect_true("missind" %nin% names(p$pipeops))
+  expect_true("imputeoor" %nin% names(p$pipeops))
 
   # logical impute_missings
   p = ppl("robustify", task = tsk, learner = lrn, impute_missings = TRUE) %>>% po(lrn)
@@ -61,7 +65,7 @@ test_that("Robustify Pipeline", {
   p = ppl("robustify", impute_missings = FALSE) %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("char_to_fct", "fixfactors", "collapsefactors", "encode") %in% names(p$pipeops)))
-  expect_true(!all(c("imputehist", "missind", "imputeoor") %in% names(p$pipeops)))
+  expect_true(all(c("imputehist", "missind", "imputeoor") %nin% names(p$pipeops)))
 
   # missings during predict
   dt = tsk$data()
