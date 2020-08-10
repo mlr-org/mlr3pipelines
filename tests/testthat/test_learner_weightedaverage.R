@@ -20,7 +20,7 @@ test_that("LearnerClassifAvg", {
   tsk = TaskClassif$new(id = "tsk", backend = df, target = "y")
 
   for (predicttype in c("prob", "response")) {
-    intask = (greplicate(PipeOpLearnerCV$new(lrn("classif.rpart", predict_type = predicttype)), 3) %>>% PipeOpFeatureUnion$new())$train(tsk)[[1]]
+    intask = (pipeline_greplicate(PipeOpLearnerCV$new(lrn("classif.rpart", predict_type = predicttype)), 3) %>>% PipeOpFeatureUnion$new())$train(tsk)[[1]]
 
     # Works for accuracy
     lrn = LearnerClassifAvg$new()
@@ -49,7 +49,6 @@ test_that("LearnerClassifAvg", {
       expect_prediction(prd)
     }
   }
-
 })
 
 test_that("LearnerRegrAvg", {
@@ -82,7 +81,8 @@ test_that("LearnerRegrAvg", {
   expect_prediction(prd)
   expect_true(all(is.na(prd$se)))
 
-  intask = (greplicate(PipeOpLearnerCV$new(lrn("regr.featureless", predict_type = "response")), 3) %>>% PipeOpFeatureUnion$new())$train(tsk("boston_housing"))[[1]]
+  intask = (pipeline_greplicate(PipeOpLearnerCV$new(lrn("regr.featureless", predict_type = "response")), 3) %>>%
+    PipeOpFeatureUnion$new())$train(tsk("boston_housing"))[[1]]
 
   # Works for accuracy
   lrn = LearnerRegrAvg$new()
@@ -95,8 +95,6 @@ test_that("LearnerRegrAvg", {
   prd = lrn$predict(intask)
   expect_prediction(prd)
   expect_true(all(is.na(prd$se)))
-
-
 })
 
 test_that("LearnerClassifAvg Pipeline", {
@@ -106,7 +104,7 @@ test_that("LearnerClassifAvg Pipeline", {
   ## lrn = LearnerClassifAvg$new()
   ## single_pred = PipeOpSubsample$new() %>>%
   ##   PipeOpLearnerCV$new(lrn("classif.rpart"))
-  ## pred_set = greplicate(single_pred, 3L) %>>%
+  ## pred_set = pipeline_greplicate(single_pred, 3L) %>>%
   ##   PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
   ##   PipeOpLearner$new(lrn)
   ## expect_graph(pred_set)
@@ -151,7 +149,7 @@ test_that("LearnerRegrAvg Pipeline", {
   ## lrn = LearnerRegrAvg$new()
   ## single_pred = PipeOpSubsample$new() %>>%
   ##   PipeOpLearnerCV$new(lrn("regr.rpart"))
-  ## pred_set = greplicate(single_pred, 3L) %>>%
+  ## pred_set = pipeline_greplicate(single_pred, 3L) %>>%
   ##   PipeOpFeatureUnion$new(innum = 3L, "union") %>>%
   ##   PipeOpLearner$new(lrn)
   ## expect_graph(pred_set)

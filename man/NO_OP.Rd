@@ -4,7 +4,9 @@
 \name{NO_OP}
 \alias{NO_OP}
 \title{No-Op Sentinel Used for Alternative Branching}
-\format{\code{\link{R6}} object.}
+\format{
+\code{\link{R6}} object.
+}
 \usage{
 NO_OP
 }
@@ -18,6 +20,10 @@ Other Path Branching:
 \code{\link{is_noop}()},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_unbranch}}
+
+Other Special Graph Messages: 
+\code{\link{Multiplicity}()}
 }
 \concept{Path Branching}
+\concept{Special Graph Messages}
 \keyword{datasets}

@@ -8,7 +8,7 @@
 #' @description
 #' Remove constant features from a [mlr3::Task].
 #' For each feature, calculates the ratio of features which differ from their mode value.
-#' All features which a ratio below a settable threshold are removed from the task.
+#' All features with a ratio below a settable threshold are removed from the task.
 #' Missing values can be ignored or treated as a regular value distinct from non-missing values.
 #'
 #' @section Construction:
@@ -23,7 +23,7 @@
 #'
 #' @section State:
 #' `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `features` :: `character`\cr
+#' * `features` :: `character()`\cr
 #'   Names of features that are being kept. Features of types that the [`Filter`][mlr3filters::Filter] can not operate on are always being kept.
 #'
 #' @section Parameters:
@@ -71,15 +71,17 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
       ))
       ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify")
-    },
+    }
+  ),
+  private = list(
 
-    get_state = function(task) {
+    .get_state = function(task) {
       pv = self$param_set$get_values(tags = "constant_check")
       list(features = names(invoke(discard, as.list(task$data(cols = task$feature_names)),
         is_constant_enough, .args = pv)))
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       task$select(self$state$features)
     }
   )

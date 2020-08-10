@@ -3,7 +3,9 @@
 \name{OptimizerGenSA}
 \alias{OptimizerGenSA}
 \title{Optimizer from GenSA}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{Optimizer}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{Optimizer}}.
+}
 \description{
 Optimizer GenSA, internally calls \code{GenSA::GenSA} with parameters specified in
 \code{param_vals}.

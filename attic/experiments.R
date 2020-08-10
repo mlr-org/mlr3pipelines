@@ -22,16 +22,57 @@ tools::buildVignettes(dir = "mlr3pipelines")
 system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
 devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "classbalancing")
-testthat::test_package("mlr3pipelines", filter = "encode")
+testthat::test_package("mlr3pipelines")
+
+
+testthat::test_package("mlr3pipelines", filter = "textvectorizer")
+
+testthat::test_package("mlr3pipelines", filter = "dictionary")
+
+
+ntree <- 10
+mtry <- 2
+
+gr <- po("replicate", reps = ntree) %>>%
+  po("select", selector = function(task) sample(task$feature_names, mtry)) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE)
+
+gr <- po("ovrsplit") %>>% lrn("classif.rpart") %>>% po("ovrunite")
+gr <- po("ovrsplit") %>>%
+  po("replicate", reps = 3) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE) %>>%
+  po("ovrunite")
+
+gr <- po("replicate", reps = 3) %>>%
+  po("ovrsplit") %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("ovrunite") %>>%
+  po("classifavg", collect = TRUE)
+
+library("mlr3learners")
+
+gr <- list(
+    po("nop"),
+    po("learner_cv", lrn("regr.lm")),
+    po("replicate", reps = 3) %>>% po("learner_cv", lrn("regr.ranger"))
+  ) %>>%
+  po("featureunion") %>>% lrn("regr.rpart") %>>% po("regravg", collect = TRUE)
+
+
+
+testthat::test_package("mlr3pipelines", filter = "scale")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
 testthat::test_package("mlr3pipelines", filter = "conversion")
 
-devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "pipeop_impute")
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "imputelearner")
+
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "impute")
 
 
-testthat::test_package("mlr3pipelines", filter = "apply")
+testthat::test_package("mlr3pipelines", filter = "renamecolumns")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")

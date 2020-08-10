@@ -3,20 +3,22 @@
 \name{PipeOpTaskPreprocSimple}
 \alias{PipeOpTaskPreprocSimple}
 \title{PipeOpTaskPreprocSimple}
-\format{Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Base class for handling many "preprocessing" operations
 that perform essentially the same operation during training and prediction.
-Instead implementing a \verb{$train_task()} and a \verb{$predict_task()} operation, only
-a \verb{$get_state()} and a \verb{$transform()} operation needs to be defined,
+Instead implementing a \code{private$.train_task()} and a \code{private$.predict_task()} operation, only
+a \code{private$.get_state()} and a \code{private$.transform()} operation needs to be defined,
 both of which take one argument: a \code{\link[mlr3:Task]{Task}}.
 
-Alternatively, analogously to the \code{\link{PipeOpTaskPreproc}} approach of offering \verb{$train_dt()}/\verb{$predict_dt()},
-the \verb{$get_state_dt()} and \verb{$transform_dt()} functions may be implemented.
+Alternatively, analogously to the \code{\link{PipeOpTaskPreproc}} approach of offering \code{private$.train_dt()}/\code{private$.predict_dt()},
+the \code{private$.get_state_dt()} and \code{private$.transform_dt()} functions may be implemented.
 
-\verb{$get_state} must not change its input value in-place and must return
+\code{private$.get_state} must not change its input value in-place and must return
 something that will be written into \verb{$state}
-(which must not be NULL), \code{transform()} should modify its argument in-place;
+(which must not be NULL), \code{private$.transform()} should modify its argument in-place;
 it is called both during training and prediction.
 
 This inherits from \code{\link{PipeOpTaskPreproc}} and behaves essentially the same.
@@ -39,7 +41,7 @@ Whether the \code{affect_columns} parameter should be added which lets the user 
 modified by the \code{\link{PipeOpTaskPreprocSimple}}. This should generally be \code{FALSE} if the operation adds or removes
 rows from the \code{\link[mlr3:Task]{Task}}, and \code{TRUE} otherwise. Default is \code{TRUE}.
 \item packages :: \code{character}\cr
-Set of all required packages for the \code{\link{PipeOp}}'s \verb{$train} and \verb{$predict} methods. See \verb{$packages} slot.
+Set of all required packages for the \code{\link{PipeOp}}'s \code{private$.train()} and \code{private$.predict()} methods. See \verb{$packages} slot.
 Default is \code{character(0)}.
 \item \code{task_type} :: \code{character(1)}\cr
 The class of \code{\link[mlr3:Task]{Task}} that should be accepted as input and will be returned as output. This
@@ -52,7 +54,7 @@ should generally be a \code{character(1)} identifying a type of \code{\link[mlr3
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output during training and prediction is the \code{\link[mlr3:Task]{Task}}, modified by \verb{$transform()} or \verb{$transform_dt()}.
+The output during training and prediction is the \code{\link[mlr3:Task]{Task}}, modified by \code{private$.transform()} or \code{private$.transform_dt()}.
 }
 
 \section{State}{
@@ -68,10 +70,10 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \section{Internals}{
 
 \code{\link{PipeOpTaskPreprocSimple}} is an abstract class inheriting from \code{\link{PipeOpTaskPreproc}} and implementing the
-\verb{$train_task()} and \verb{$predict_task()} functions. A subclass of \code{\link{PipeOpTaskPreprocSimple}} may implement the
-functions \verb{$get_state()} and \verb{$transform()}, or alternatively the functions \verb{$get_state_dt()} and \verb{$transform_dt()}
-(as well as \verb{$select_cols()}, in the latter case). This works by having the default implementations of
-\verb{$get_state()} and \verb{$transform()} call \verb{$get_state_dt()} and \verb{$transform_dt()}.
+\code{private$.train_task()} and \code{private$.predict_task()} functions. A subclass of \code{\link{PipeOpTaskPreprocSimple}} may implement the
+functions \code{private$.get_state()} and \code{private$.transform()}, or alternatively the functions \code{private$.get_state_dt()} and \code{private$.transform_dt()}
+(as well as \code{private$.select_cols()}, in the latter case). This works by having the default implementations of
+\code{private$.get_state()} and \code{private$.transform()} call \code{private$.get_state_dt()} and \code{private$.transform_dt()}.
 }
 
 \section{Fields}{
@@ -83,34 +85,34 @@ Fields inherited from \code{\link{PipeOp}}.
 
 Methods inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{get_state(task)} \cr
+\item \code{.get_state(task)} \cr
 (\code{\link[mlr3:Task]{Task}}) -> named \code{list}\cr
 Store create something that will be stored in \verb{$state} during training phase of \code{PipeOpTaskPreprocSimple}.
-The state can then influence the \verb{$transform()} function. Note that \verb{$get_state()} must \emph{return} the state, and
-should not store it in \verb{$state}. It is not strictly necessary to implement either \verb{$get_state()} or \verb{$get_state_dt()};
+The state can then influence the \code{private$.transform()} function. Note that \code{private$.get_state()} must \emph{return} the state, and
+should not store it in \verb{$state}. It is not strictly necessary to implement either \code{private$.get_state()} or \code{private$.get_state_dt()};
 if they are not implemented, the state will be stored as \code{list()}. \cr
-This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \verb{$transform()};
-alternatively, \verb{$get_state_dt()} (optional) and \verb{$transform_dt()} (and possibly \verb{$select_cols()}, from \code{\link{PipeOpTaskPreproc}})
+This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{private$.transform()};
+alternatively, \code{private$.get_state_dt()} (optional) and \code{private$.transform_dt()} (and possibly \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
-\item \code{transform(task)} \cr
+\item \code{.transform(task)} \cr
 (\code{\link[mlr3:Task]{Task}}) -> \code{\link[mlr3:Task]{Task}}\cr
 Predict on new data in \code{task}, possibly using the stored \verb{$state}. \code{task} should not be cloned, instead it should be
 changed in-place. This method is called both during training and prediction phase, and should essentially behave the
 same independently of phase. (If this is incongruent with the functionality to be implemented, then it should inherit from
 \code{\link{PipeOpTaskPreproc}}, not from \code{\link{PipeOpTaskPreprocSimple}}.) \cr
-This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, optionally with \verb{$get_state()};
-alternatively, \verb{$get_state_dt()} (optional) and \verb{$transform_dt()} (and possibly \verb{$select_cols()}, from \code{\link{PipeOpTaskPreproc}})
+This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, optionally with \code{private$.get_state()};
+alternatively, \code{private$.get_state_dt()} (optional) and \code{private$.transform_dt()} (and possibly \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
-\item \code{get_state_dt(dt)} \cr
+\item \code{.get_state_dt(dt)} \cr
 (\code{\link{data.table}}) -> named \code{list}\cr
 Create something that will be stored in \verb{$state} during training phase of \code{PipeOpTaskPreprocSimple}.
-The state can then influence the \verb{$transform_dt()} function. Note that \verb{$get_state_dt()} must \emph{return} the state, and
-should not store it in \verb{$state}. If neither \verb{$get_state()} nor \verb{$get_state_dt()} are overloaded, the state will
+The state can then influence the \code{private$.transform_dt()} function. Note that \code{private$.get_state_dt()} must \emph{return} the state, and
+should not store it in \verb{$state}. If neither \code{private$.get_state()} nor \code{private$.get_state_dt()} are overloaded, the state will
 be stored as \code{list()}. \cr
-This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \verb{$transform_dt()}
-(and optionally \verb{$select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \verb{$get_state()} (optional) and \verb{$transform()}
+This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{private$.transform_dt()}
+(and optionally \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{private$.get_state()} (optional) and \code{private$.transform()}
 can be overloaded.
-\item \code{transform_dt(dt)} \cr
+\item \code{.transform_dt(dt)} \cr
 (\code{\link{data.table}}) -> \code{\link{data.table}} | \code{data.frame} | \code{matrix} \cr
 Predict on new data in \code{dt}, possibly using the stored \verb{$state}. A transformed object must be returned
 that can be converted to a \code{data.table} using \code{\link{as.data.table}}. \code{dt} does not need to be copied deliberately, it
@@ -118,19 +120,90 @@ is possible and encouraged to change it in-place. This method is called both dur
 and should essentially behave the same independently of phase.
 (If this is incongruent with the functionality to be implemented, then it should inherit from
 \code{\link{PipeOpTaskPreproc}}, not from \code{\link{PipeOpTaskPreprocSimple}}.) \cr
-This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \verb{$transform_dt()}
-(and optionally \verb{$select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \verb{$get_state()} (optional) and \verb{$transform()}
+This method can optionally be overloaded when inheriting from \code{\link{PipeOpTaskPreprocSimple}}, together with \code{private$.transform_dt()}
+(and optionally \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{private$.get_state()} (optional) and \code{private$.transform()}
 can be overloaded.
 }
 }
 
 \seealso{
+Other PipeOps: 
+\code{\link{PipeOpEnsemble}},
+\code{\link{PipeOpImpute}},
+\code{\link{PipeOpPredPostproc}},
+\code{\link{PipeOpProxy}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreproc}},
+\code{\link{PipeOp}},
+\code{\link{mlr_pipeops_boxcox}},
+\code{\link{mlr_pipeops_branch}},
+\code{\link{mlr_pipeops_chunk}},
+\code{\link{mlr_pipeops_classbalancing}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_classweights}},
+\code{\link{mlr_pipeops_colapply}},
+\code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_copy}},
+\code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_encodeimpact}},
+\code{\link{mlr_pipeops_encodelmer}},
+\code{\link{mlr_pipeops_encode}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_filter}},
+\code{\link{mlr_pipeops_fixfactors}},
+\code{\link{mlr_pipeops_histbin}},
+\code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
+\code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
+\code{\link{mlr_pipeops_imputemean}},
+\code{\link{mlr_pipeops_imputemedian}},
+\code{\link{mlr_pipeops_imputemode}},
+\code{\link{mlr_pipeops_imputeoor}},
+\code{\link{mlr_pipeops_imputesample}},
+\code{\link{mlr_pipeops_kernelpca}},
+\code{\link{mlr_pipeops_learner}},
+\code{\link{mlr_pipeops_missind}},
+\code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_pca}},
+\code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_scalemaxabs}},
+\code{\link{mlr_pipeops_scalerange}},
+\code{\link{mlr_pipeops_scale}},
+\code{\link{mlr_pipeops_select}},
+\code{\link{mlr_pipeops_smote}},
+\code{\link{mlr_pipeops_spatialsign}},
+\code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
+\code{\link{mlr_pipeops_textvectorizer}},
+\code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tunethreshold}},
+\code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
+\code{\link{mlr_pipeops_yeojohnson}},
+\code{\link{mlr_pipeops}}
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
+\code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_graphs}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops}}
 }
-\concept{PipeOp}
+\concept{PipeOps}
 \concept{mlr3pipelines backend related}

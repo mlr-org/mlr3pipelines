@@ -16,13 +16,13 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpLearner$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())\cr
+#' PipeOpLearner$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -39,7 +39,7 @@
 #' @section State:
 #' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object. It is a named `list` with members:
 #' * `model` :: `any`\cr
-#'   Model created by the [`Learner`][mlr3::Learner]'s `$train_internal()` function.
+#'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
 #' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
@@ -57,8 +57,10 @@
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
-#' * `learner`  :: [`Learner`][mlr3::Learner]\cr
+#' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -78,30 +80,17 @@
 #' lrn_po$predict(list(task))
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
-    initialize = function(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list()) {
-      private$.learner = as_learner(learner)$clone(deep = TRUE)  # FIXME: use `clone=TRUE` when mlr-org/mlr3#344 is fixed
-      task_type = mlr_reflections$task_types[private$.learner$task_type]$task
-      out_type = mlr_reflections$task_types[private$.learner$task_type]$prediction
+    initialize = function(learner, id = NULL, param_vals = list()) {
+      private$.learner = as_learner(learner, clone = TRUE)
+      id = id %??% private$.learner$id
+      # FIXME: can be changed when mlr-org/mlr3#470 has an answer
+      task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
+      out_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$prediction
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
         tags = "learner"
       )
-    },
-
-    train_internal = function(inputs) {
-      on.exit({private$.learner$state = NULL})
-      task = inputs[[1L]]
-      self$state = private$.learner$train(task)$state
-
-      list(NULL)
-    },
-
-    predict_internal = function(inputs) {
-      on.exit({private$.learner$state = NULL})
-      task = inputs[[1]]
-      private$.learner$state = self$state
-      list(private$.learner$predict(task))
     }
   ),
   active = list(
@@ -119,10 +108,44 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         }
       }
       private$.learner
+    },
+    learner_model = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      if (is.null(self$state) || is_noop(self$state)) {
+        private$.learner
+      } else {
+        multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
+      }
+    },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, names(mlr_reflections$learner_predict_types[[private$.learner$task_type]]))
+        private$.learner$predict_type = val
+      }
+      private$.learner$predict_type
     }
   ),
   private = list(
-    .learner = NULL
+    .learner = NULL,
+
+    .train = function(inputs) {
+      on.exit({private$.learner$state = NULL})
+      task = inputs[[1L]]
+      self$state = private$.learner$train(task)$state
+
+      list(NULL)
+    },
+
+    .predict = function(inputs) {
+      on.exit({private$.learner$state = NULL})
+      task = inputs[[1]]
+      private$.learner$state = self$state
+      list(private$.learner$predict(task))
+    }
   )
 )
 

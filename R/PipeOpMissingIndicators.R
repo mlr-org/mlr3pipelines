@@ -8,6 +8,9 @@
 #' Add missing indicator columns ("dummy columns") to the [`Task`][mlr3::Task].
 #' Drops original features; should probably be used in combination with [`PipeOpFeatureUnion`] and imputation [`PipeOp`]s (see examples).
 #'
+#' Note the `affect_columns` is initialized with `selector_invert(selector_type(c("factor", "ordered", "character")))`, since missing
+#' values in factorial columns are often indicated by out-of-range imputation ([`PipeOpImputeOOR`]).
+#'
 #' @section Construction:
 #' ```
 #' PipeOpMissInd$new(id = "missind", param_vals = list())
@@ -80,9 +83,15 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       ))
       ps$values = list(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals, tags = "missings")
-    },
+      if ("affect_columns" %nin% names(param_vals)) {
+        # can't put this in `ps$values` because it is a PipeOpTaskPreproc param
+        self$param_set$values$affect_columns = selector_invert(selector_type(c("factor", "ordered", "character")))
+      }
+    }
+  ),
+  private = list(
 
-    get_state = function(task) {
+    .get_state = function(task) {
       if (self$param_set$values$which == "all") {
         # 'which' is just all feature names
         indicand_cols = task$feature_names
@@ -94,10 +103,10 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       list(indicand_cols = indicand_cols)
     },
 
-    transform = function(task) {
+    .transform = function(task) {
       if (!length(self$state$indicand_cols)) {
         # need to handle this as special case because cbind for empty tasks is broken
-        return(task)
+        return(task$select(character(0)))
       }
       data_dummy = as.data.table(is.na(task$data(cols = self$state$indicand_cols)))
       data_dummy = switch(self$param_set$values$type,

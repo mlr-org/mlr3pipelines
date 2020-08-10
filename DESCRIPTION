@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.1.2.9000
+Version: 0.1.3.9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -24,7 +24,12 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"))
+             email = "dandl.susanne@googlemail.com"),
+      person(given = "Lennart",
+             family = "Schneider",
+             role = "aut",
+             email = "lennart.sch@web.de",
+             comment = c(ORCID = "0000-0003-4152-5308")))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -41,34 +46,41 @@ Imports:
     checkmate,
     data.table,
     digest,
+    lgr,
     mlr3 (>= 0.1.4),
     mlr3misc (>= 0.1.4),
     paradox,
     R6,
     withr
 Suggests:
+    bibtex,
     ggplot2,
     glmnet,
     igraph,
     knitr,
-    lgr,
     lme4,
     mlbench,
     bbotk (>= 0.2.0),
     mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
+    nloptr,
+    quanteda,
     rmarkdown,
     rpart,
+    stopwords,
     testthat,
     visNetwork,
     bestNormalize,
     fastICA,
     kernlab,
     smotefamily,
-    evaluate
+    evaluate,
+    kknn
 VignetteBuilder:
     knitr
+RdMacros:
+    mlr3misc
 Remotes:
     mlr-org/mlr3
 ByteCompile: true
@@ -76,11 +88,12 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Collate:
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
+    'multiplicity.R'
     'utils.R'
     'PipeOp.R'
     'PipeOpEnsemble.R'
@@ -107,23 +120,31 @@ Collate:
     'PipeOpHistBin.R'
     'PipeOpICA.R'
     'PipeOpImpute.R'
+    'PipeOpImputeConstant.R'
     'PipeOpImputeHist.R'
+    'PipeOpImputeLearner.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
-    'PipeOpImputeNewlvl.R'
+    'PipeOpImputeMode.R'
+    'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
+    'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
+    'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpPredPostproc.R'
+    'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
+    'PipeOpRandomResponse.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
+    'PipeOpRenameColumns.R'
     'PipeOpScale.R'
     'PipeOpScaleMaxAbs.R'
     'PipeOpScaleRange.R'
@@ -131,11 +152,15 @@ Collate:
     'PipeOpSmote.R'
     'PipeOpSpatialSign.R'
     'PipeOpSubsample.R'
+    'PipeOpTextVectorizer.R'
+    'PipeOpThreshold.R'
+    'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
+    'convert_task.R'
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'

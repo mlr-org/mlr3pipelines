@@ -22,3 +22,4 @@
 ^\.ccache$
 ^\.github$
 ^clang-.*
+^\.vscode$

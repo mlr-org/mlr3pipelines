@@ -2,20 +2,20 @@
 % Please edit documentation in R/mlr_graphs_elements.R
 \name{mlr_graphs_bagging}
 \alias{mlr_graphs_bagging}
-\alias{bagging_pipeline}
+\alias{pipeline_bagging}
 \title{Create a bagging learner}
 \usage{
-bagging_pipeline(graph, iterations = 10, frac = 0.7, averager = NULL)
+pipeline_bagging(graph, iterations = 10, frac = 0.7, averager = NULL)
 }
 \arguments{
 \item{graph}{\code{\link{PipeOp}} | \code{\link{Graph}} \cr
-A \code{PipeOpLearner} or \code{Graph} to create a robustifying pipeline for.
-Outputs from the replicated \code{graph}s are connected with the \code{averager}}
+A \code{\link{PipeOpLearner}} or \code{\link{Graph}} to create a robustifying pipeline for.
+Outputs from the replicated \code{graph}s are connected with the \code{averager}.}
 
-\item{iterations}{\code{\link{integer}} \cr
+\item{iterations}{\code{integer(1)} \cr
 Number of bagging iterations. Defaults to 10.}
 
-\item{frac}{\code{\link{numeric}} \cr
+\item{frac}{\code{numeric(1)} \cr
 Percentage of rows to keep during subsampling. See \code{\link{PipeOpSubsample}} for
 more information. Defaults to 0.7.}
 
@@ -42,6 +42,6 @@ This is done as follows:
 library(mlr3)
 lrn_po = po("learner", lrn("regr.rpart"))
 task = mlr_tasks$get("boston_housing")
-gr = bagging_pipeline(lrn_po, 3, averager = po("regravg"))
+gr = pipeline_bagging(lrn_po, 3, averager = po("regravg"))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
 }

@@ -10,7 +10,7 @@
 #' PipeOpEncodeLmer() converts factor levels of each factorial column to the
 #' estimated coefficients of a simple random intercept model.
 #' Models are fitted with the glmer function of the lme4 package and are
-#' of the type \code{target ~ 1 + (1 | factor)}.
+#' of the type `target ~ 1 + (1 | factor)`.
 #' If the task is a regression task, the numeric target
 #' variable is used as dependent variable and the factor is used for grouping.
 #' If the task is a classification task, the target variable is used as dependent variable
@@ -57,7 +57,7 @@
 #' @section Parameters:
 #' * `fast_optim`  :: `logical(1)` \cr
 #'   Initialized to `TRUE`.
-#'   If \dQuote{fast_optim} is \code{TRUE} (default), a faster (up to 50 percent)
+#'   If "fast_optim" is `TRUE` (default), a faster (up to 50 percent)
 #'   optimizer from the nloptr package is used when fitting the lmer models.
 #'   This uses additional stopping criteria which can give suboptimal results.
 #'
@@ -92,9 +92,11 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       ))
       ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"))
-    },
+    }
+  ),
+  private = list(
 
-    get_state_dt = function(dt, levels, target) {
+    .get_state_dt = function(dt, levels, target) {
       task_type = if (is.numeric(target)) "regr" else "classif"
       state = list()
       # for prediction, use complete encoding model
@@ -122,7 +124,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       state
     },
 
-    transform_dt = function(dt, levels) {
+    .transform_dt = function(dt, levels) {
       if (length(self$state$target_levels) <= 2) {
         dt_new = map_dtc(colnames(dt), function(cname) {
           as.numeric(self$state$control[[cname]][as.character(dt[[cname]])])
@@ -140,10 +142,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         dt_new = as.data.frame(num_vals_list, row.names = rownames(dt))
       }
       dt_new
-    }),
-
-
-  private = list(
+    },
     fit_lmer = function(feature, target, fast_optim, task_type) {
       args = private$get_args_nlopt_lmer(feature, target, fast_optim, task_type)
       if (task_type == "classif") args$family = stats::binomial

@@ -7,7 +7,9 @@
 \alias{LearnerRegrAvg}
 \alias{mlr_learners_regr.avg}
 \title{Optimized Weighted Average of Features for Classification and Regression}
-\format{\code{\link{R6Class}} object inheriting from \code{\link[mlr3:LearnerClassif]{mlr3::LearnerClassif}}/\code{\link[mlr3:Learner]{mlr3::Learner}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link[mlr3:LearnerClassif]{mlr3::LearnerClassif}}/\code{\link[mlr3:Learner]{mlr3::Learner}}.
+}
 \usage{
 mlr_learners_classif.avg
 
@@ -22,8 +24,7 @@ nonlinear optimization from the package "nloptr" for a measure provided in \code
 for \code{LearnerClassifAvg} and \code{regr.mse} for \code{LearnerRegrAvg}).
 Learned weights can be obtained from \verb{$model}.
 Using non-linear optimization is implemented in the SuperLearner R package.
-For a more detailed analysis the reader is referred to
-\emph{LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation}.
+For a more detailed analysis the reader is referred to LeDell (2015).
 }
 \section{Parameter Set}{
 
@@ -52,6 +53,9 @@ Constructor.
 }
 }
 
+\references{
+\cite{mlr3pipelines}{ledell_2015}
+}
 \seealso{
 Other Learners: 
 \code{\link{mlr_learners_graph}}
@@ -59,6 +63,7 @@ Other Learners:
 Other Ensembles: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_regravg}}
 }
 \concept{Ensembles}

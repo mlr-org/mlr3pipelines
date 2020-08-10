@@ -3,7 +3,9 @@
 \name{Optimizer}
 \alias{Optimizer}
 \title{Optimizer Base class}
-\format{Abstract \code{\link{R6Class}}.}
+\format{
+Abstract \code{\link{R6Class}}.
+}
 \description{
 Abstract base class for Optimizers. Exposes a \verb{$optimize} method
 that can be used for optimization.

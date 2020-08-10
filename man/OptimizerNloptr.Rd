@@ -3,7 +3,9 @@
 \name{OptimizerNloptr}
 \alias{OptimizerNloptr}
 \title{Optimizer from nloptr}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{Optimizer}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{Optimizer}}.
+}
 \description{
 Non-linear optimization using \code{nloptr::nloptr}, called with parameters specified in
 param_vals`.

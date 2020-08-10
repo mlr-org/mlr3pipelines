@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_learner_cv}
 \alias{PipeOpLearnerCV}
 \title{PipeOpLearnerCV}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 
@@ -24,14 +26,14 @@ as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\l
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
-\preformatted{PipeOpLearnerCV$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())
+\preformatted{PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
 }
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
 \code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a
 \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
 \item \code{id} :: \code{character(1)}
-Identifier of the resulting  object, defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
+Identifier of the resulting object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -56,7 +58,7 @@ The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learn
 \code{\link{PipeOpTaskPreproc}}. It is a named \code{list} with the inherited members, as well as:
 \itemize{
 \item \code{model} :: \code{any}\cr
-Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$train_internal()} function.
+Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
 \item \code{train_log} :: \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr
@@ -74,9 +76,10 @@ The parameters are the parameters inherited from the \code{\link{PipeOpTaskPrepr
 Besides that, parameters introduced are:
 \itemize{
 \item \code{resampling.method} :: \code{character(1)}\cr
-Which resampling method do we want to use. Currently only supports \code{"cv"}.
+Which resampling method do we want to use. Currently only supports \code{"cv"} and \code{"insample"}. \code{"insample"} generates
+predictions with the model trained on all training data.
 \item \code{resampling.folds} :: \code{numeric(1)}\cr
-Number of cross validation folds. Initialized to 3.
+Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}.
 \item \code{keep_response} :: \code{logical(1)}\cr
 Only effective during \code{"prob"} prediction: Whether to keep response values, if available. Initialized to \code{FALSE}.
 }
@@ -89,10 +92,12 @@ The \verb{$state} is currently not updated by prediction, so the \verb{$state$pr
 
 \section{Fields}{
 
-Fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}, as well as:
+Fields inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{learner}  :: \code{\link[mlr3:Learner]{Learner}}\cr
+\item \code{learner} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
+\item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\code{\link[mlr3:Learner]{Learner}} that is being wrapped. This learner contains the model if the \code{PipeOp} is trained. Read-only.
 }
 }
 

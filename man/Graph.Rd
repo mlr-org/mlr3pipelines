@@ -3,7 +3,11 @@
 \name{Graph}
 \alias{Graph}
 \title{Graph}
-\format{\link{R6Class} Graph}
+\format{
+\link{R6Class} Graph
+
+\code{\link{R6Class}}.
+}
 \description{
 A \code{\link{Graph}} is a representation of a machine learning pipeline graph. It can be \emph{trained}, and subsequently used for \emph{prediction}.
 
@@ -90,8 +94,8 @@ are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
 \item \code{plot(html)} \cr
 (\code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
-the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}}.
-The \code{\link[htmlwidgets:htmlwidgets]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
+the \code{visNetwork} package for \code{html = TRUE} producing a \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}}.
+The \code{\link[htmlwidgets:htmlwidgets-package]{htmlWidget}} can be rescaled using \code{\link[visNetwork:visOptions]{visOptions}}.
 \item \code{print()} \cr
 () -> \code{NULL} \cr
 Print a representation of the \code{\link{Graph}} on the console. Output is a table with one row for each contained \code{\link{PipeOp}} and
@@ -102,6 +106,9 @@ that is read as input by the \code{\link{PipeOp}} on this line).
 (\code{character}, \code{character}) -> \code{self} \cr
 Rename \code{\link{PipeOp}}s: Change ID of each \code{\link{PipeOp}} as identified by \code{old} to the corresponding item in \code{new}. This should be used
 instead of changing a \code{\link{PipeOp}}'s \verb{$id} value directly!
+\item \code{update_ids(prefix = "", postfix = "")} \cr
+(\code{character}, \code{character}) -> \code{self} \cr
+Pre- or postfix \code{\link{PipeOp}}'s existing ids. Both \code{prefix} and \code{postfix} default to \code{""}, i.e. no changes.
 \item \code{train(input, single_input = TRUE)} \cr
 (\code{any}, \code{logical(1)}) -> named \code{list}\cr
 Train \code{\link{Graph}} by traversing the \code{\link{Graph}}s' edges and calling all the \code{\link{PipeOp}}'s \verb{$train} methods in turn.
@@ -143,10 +150,12 @@ predicted[[1]]$data()
 }
 \seealso{
 Other mlr3pipelines backend related: 
+\code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_graphs}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops}}
 }
 \concept{mlr3pipelines backend related}

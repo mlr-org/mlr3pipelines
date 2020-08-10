@@ -26,7 +26,7 @@
 #' Input and output channel information of a [`PipeOp`] is defined in the `$input` and `$output` slots; each channel has a *name*, a required
 #' type during training, and a required type during prediction. The `$train()` and `$predict()` function are called with a `list` argument
 #' that has one entry for each declared channel (with one exception, see next paragraph). The `list` is automatically type-checked
-#' for each channel against `$input` and then passed on to the `$train_internal()` or `$predict_internal()` functions. There the data is processed and
+#' for each channel against `$input` and then passed on to the `private$.train()` or `private$.predict()` functions. There the data is processed and
 #' a result `list` is created. This `list` is again type-checked for declared output types of each channel. The length and types of the result
 #' `list` is as declared in `$output`.
 #'
@@ -63,10 +63,10 @@
 #'   Can be used to filter `as.data.table(mlr_pipeops)`. Default is `"abstract"`, indicating an abstract `PipeOp`.
 #'
 #' @section Internals:
-#' [`PipeOp`] is an abstract class with abstract functions `$train_internal()` and `$predict_internal()`. To create a functional
+#' [`PipeOp`] is an abstract class with abstract functions `private$.train()` and `private$.predict()`. To create a functional
 #' [`PipeOp`] class, these two methods must be implemented. Each of these functions receives a named `list` according to
 #' the [`PipeOp`]'s input channels, and must return a `list` (names are ignored) with values in the order of output
-#' channels in `$output`. The `$train_internal()` and `$predict_internal()` function should not be called by the user;
+#' channels in `$output`. The `private$.train()` and `private$.predict()` function should not be called by the user;
 #' instead, a `$train()` and `$predict()` should be used. The most convenient usage is to add the [`PipeOp`]
 #' to a `Graph` (possibly as singleton in that `Graph`), and using the `Graph`'s `$train()` / `$predict()` methods.
 #'
@@ -77,7 +77,7 @@
 #'   should be used.
 #' * `packages` :: `character`\cr
 #'   Packages required for the [`PipeOp`]. Functions that are not in base R should still be called using `::`
-#'   (or explicitly attached using `require()`) in `$train_internal()` *and* `$predict_internal()`, but
+#'   (or explicitly attached using `require()`) in `private$.train()` *and* `private$.predict()`, but
 #'   packages declared here are checked before any (possibly expensive) processing has started within a [`Graph`].
 #' * `param_set` :: [`ParamSet`][paradox::ParamSet]\cr
 #'   Parameters and parameter constraints. Parameter values that influence the functioning of `$train` and / or `$predict` are
@@ -85,18 +85,26 @@
 #' * `state` :: `any` | `NULL`\cr
 #'   Method-dependent state obtained during training step, and usually required for the prediction step. This is `NULL`
 #'   if and only if the [`PipeOp`] has not been trained. The `$state` is the *only* slot that can be reliably modified during
-#'   `$train()`, because `$train_internal()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
+#'   `$train()`, because `private$.train()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
 #' * input :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Input channels of [`PipeOp`]. Column `name` gives the names (and order) of values in the list given to
 #'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
 #'   training, column `predict` is the (S3) class that an input object must conform to during prediction. Types
-#'   are checked by the [`PipeOp`] itself and do not need to be checked by `$train_internal()` / `$predict_internal()` code.\cr
-#'   A special name is `"..."`, which creates a *vararg* input channel that accepts a variable number of inputs.
+#'   are checked by the [`PipeOp`] itself and do not need to be checked by `private$.train()` / `private$.predict()` code.\cr
+#'   A special name is `"..."`, which creates a *vararg* input channel that accepts a variable number of inputs.\cr
+#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`), then this channel is
+#'   [`Multiplicity`]-aware. If the [`PipeOp`] receives a [`Multiplicity`] value on these channels, this [`Multiplicity`]
+#'   is given to the `.train()` and `.predict()` functions directly. Otherwise, the [`Multiplicity`] is transparently
+#'   unpacked and the `.train()` and `.predict()` functions are called multiple times, once for each [`Multiplicity`] element.
+#'   The type enclosed by square brackets indicates that only a [`Multiplicity`] containing values of this type are accepted.
+#'   See [`Multiplicity`] for more information.
 #' * output :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Output channels of [`PipeOp`], in the order in which they will be given in the list returned by `$train` and
 #'   `$predict` functions. Column `train` is the (S3) class that an output object must conform to during training,
 #'   column `predict` is the (S3) class that an output object must conform to during prediction. The [`PipeOp`] checks
-#'   values returned by `$train_internal()` and `$predict_internal()` against these types specifications.
+#'   values returned by `private$.train()` and `private$.predict()` against these types specifications.\cr
+#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`), then this signals that the channel
+#'   emits a [`Multiplicity`] of the indicated type. See [`Multiplicity`] for more information.
 #' * `innum` :: `numeric(1)` \cr
 #'   Number of input channels. This equals `nrow($input)`.
 #' * `outnum` :: `numeric(1)` \cr
@@ -108,14 +116,13 @@
 #'   Can be used to filter `as.data.table(mlr_pipeops)`.
 #'   PipeOp tags are inherited and child classes can introduce additional tags.
 #' * `hash` :: `character(1)` \cr
-#'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set`
-#'   (and therefore also `$param_set$values`). If a
+#'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set$values`. If a
 #'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result` :: `list` \cr
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
-#'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `$train_internal()` or `$predict_internal()`.
+#'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -124,24 +131,24 @@
 #'   trained, already present `$state` is overwritten. Input list is typechecked against the `$input` `train` column.
 #'   Return value is a list with as many entries as `$output` has
 #'   rows, with each entry named after the `$output` `name` column and class according to the `$output` `train` column.
-#' * `train_internal(input)`\cr
-#'   (named `list`) -> `list`\cr
-#'   Abstract function that must be implemented by concrete subclasses. `$train_internal()` is called by `$train()` after
+#'   The workhorse function for training each [`PipeOp`] is the private
+#'   `.train(input)`\cr: (named `list`) -> `list`\cr function.
+#'   It's an Abstract function that must be implemented by concrete subclasses. `private$.train()` is called by `$train()` after
 #'   typechecking. It must change the `$state` value to something non-`NULL` and return a list of transformed data according to
 #'   the `$output` `train` column. Names of the returned list are ignored.\cr
-#'   The `$train_internal()` method should not be called by a user; instead, the `$train()` method should be used which does some
+#'   The `private$.train()` method should not be called by a user; instead, the `$train()` method should be used which does some
 #'   checking and possibly type conversion.
 #' * `predict(input)` \cr
 #'   (`list`) -> named `list`\cr
 #'   Predict on new data in `input`, possibly using the stored `$state`. Input and output are specified by `$input` and `$output`
 #'   in the same way as for `$train()`, except that
 #'   the `predict` column is used for type checking.
-#' * `predict_internal(input)`\cr
-#'   (named `list`) -> `list`\cr
-#'   Abstract function that must be implemented by concrete subclasses. `$predict_internal()` is called by `$predict()` after
-#'   typechecking and works analogously to `$train_internal()`. Unlike `$train_internal()`, `$predict_internal()` should not modify
+#'   The workhorse function for predicting in each using each [`PipeOp`] is
+#'   `.predict(input)`\cr (named `list`) -> `list`\cr
+#'   Abstract function that must be implemented by concrete subclasses. `private$.predict()` is called by `$predict()` after
+#'   typechecking and works analogously to `private$.train()`. Unlike `private$.train()`, `private$.predict()` should not modify
 #'   the [`PipeOp`] in any way.\cr
-#'   Just as `$train_internal()`, `$predict_internal()` should not be called by a user; instead, the `$predict()` method should be used.
+#'   Just as `private$.train()`, `private$.predict()` should not be called by a user; instead, the `$predict()` method should be used.
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Prints the [`PipeOp`]s most salient information: `$id`, `$is_trained`, `$param_set$values`, `$input` and `$output`.
@@ -162,18 +169,18 @@
 #'         output = data.table::data.table(name = "output",
 #'           train = "numeric", predict = "character")
 #'       )
-#'     },
-#'
-#'     # PipeOp deriving classes must implement train_internal and
-#'     # predict_internal; each taking an input list and returning
+#'     }
+#'   ),
+#'   private = list(
+#'     # PipeOp deriving classes must implement .train and
+#'     # .predict; each taking an input list and returning
 #'     # a list as output.
-#'     train_internal = function(input) {
+#'     .train = function(input) {
 #'       sum = input[[1]] + input[[2]]
 #'       self$state = sum
 #'       list(sum)
 #'     },
-#'
-#'     predict_internal = function(input) {
+#'     .predict = function(input) {
 #'       list(letters[self$state])
 #'     }
 #'   )
@@ -240,8 +247,12 @@ PipeOp = R6Class("PipeOp",
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
+      unpacked = unpack_multiplicities(input, multiplicity_type_nesting_level(self$input$train), self$input$name, self$id)
+      if (!is.null(unpacked)) {
+        return(evaluate_multiplicities(self, unpacked, "train", NULL))
+      }
       input = check_types(self, input, "input", "train")
-      output = self$train_internal(input)
+      output = private$.train(input)
       output = check_types(self, output, "output", "train")
       output
     },
@@ -255,14 +266,15 @@ PipeOp = R6Class("PipeOp",
       if (is_noop(self$state)) {
         stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
       }
-
+      unpacked = unpack_multiplicities(input, multiplicity_type_nesting_level(self$input$predict), self$input$name, self$id)
+      if (!is.null(unpacked)) {
+        return(evaluate_multiplicities(self, unpacked, "predict", self$state))
+      }
       input = check_types(self, input, "input", "predict")
-      output = self$predict_internal(input)
+      output = private$.predict(input)
       output = check_types(self, output, "output", "predict")
       output
-    },
-    train_internal = function(input) stop("abstract"),
-    predict_internal = function(input) stop("abstract")
+    }
   ),
 
   active = list(
@@ -293,12 +305,31 @@ PipeOp = R6Class("PipeOp",
       }
       private$.param_set
     },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$predict_type is read-only.")
+        }
+      }
+      return(NULL)
+    },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
     hash = function() {
-      digest(list(class(self), self$id, self$param_set),
-        algo = "xxhash64")
+      digest(list(class(self), self$id, lapply(self$param_set$values, function(val) {
+        # ideally we would just want to hash `param_set$values`, but one of the values
+        # could be an R6 object with a `$hash` slot as well, in which case we take that
+        # slot's value. This is to avoid different hashes from essentially the same
+        # objects.
+        # In the following we also avoid accessing `val$hash` twice, because it could
+        # potentially be an expensive AB.
+        if (is.environment(val) && !is.null({vhash = val$hash})) {
+          vhash
+        } else {
+          val
+        }
+      })), algo = "xxhash64")
     }
   ),
 
@@ -317,27 +348,35 @@ PipeOp = R6Class("PipeOp",
       }
       value
     },
+    .train = function(input) stop("abstract"),
+    .predict = function(input) stop("abstract"),
     .param_set = NULL,
     .param_set_source = NULL,
     .id = NULL
   )
 )
 
+# Asserts that input and output tables are correctly specified
+# @param table: `data.table`: either input or output
 assert_connection_table = function(table) {
   varname = deparse(substitute(table))
   assert_data_table(table, .var.name = varname, min.rows = 1)
   assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = varname)
   assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", varname))
+  if (!all(multiplicity_type_nesting_level(table$train) == multiplicity_type_nesting_level(table$predict))) {
+    stop("Multiplicity during train and predict conflicts.")
+  }
   table
 }
 
-
-# Checks that data conforms to the type specifications given.
-# @param `data` [list of any] is either the input or output given to a train/predict function. it is checked to be a *list* first
-#   and then to have the types as given by the `$input` or `$output` data.table.
-# @param direction [character(1)] is either `"input"` or `"output"`
-# @param operation [character(1)] is either `"train"` or `"predict"`.
-# @return an instance of 'data', possibly converted, with names added according to `$input`/`$output` "name" column.
+# Checks that data conforms to the type specifications given
+# Handles multiplicities: if a type is in square brackets ("[<TYPE>]"), then a "Multiplicity" that contains the type is checked.
+# Yes, this can handle nested multiplicities: "[[<TYPE>]]" etc. works.
+# @param data: `list of any`: is either the input or output given to a train/predict function. it is checked to be a *list* first
+#   and then to have the types as given by the `$input` or `$output` data.table
+# @param direction: `character(1)`: is either `"input"` or `"output"`
+# @param operation: `character(1)`: is either `"train"` or `"predict"`
+# @return an instance of data, possibly converted, with names added according to `$input`/`$output` "name" column
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   if (direction == "input" && "..." %in% typetable$name) {
@@ -346,23 +385,111 @@ check_types = function(self, data, direction, operation) {
   } else {
     assert_list(data, len = nrow(typetable))
   }
-  for (idx in seq_along(data)) {
-    typereq = typetable[[operation]][idx]
-    if (typereq == "*") next
-    if (typereq %in% class(data[[idx]])) next
+
+  check_item = function(data_element, typereq, varname) {
+    if (multiplicity_type_nesting_level(typereq, varname)) {
+      # unpack multiplicity
+      assert_multiplicity(data_element, varname)
+      typereq = substr(typereq, 2, nchar(typereq) - 1)
+      for (midx in seq_along(data_element)) {
+        # recursively call check_item for each multiplicity-item
+        data_element[midx] = list(check_item(data_element[[midx]], typereq, sprintf("Multiplicity element %s of %s", midx, varname)))
+      }
+      # done checking, return early.
+      return(data_element)
+    }
+    if (is.Multiplicity(data_element)) {
+      stopf("%s contained Multiplicity when it shouldn't have.", data_element)
+    }
+    if (typereq == "*") return(data_element)
+    if (typereq %in% class(data_element)) return(data_element)
     autoconverter = get_autoconverter(typereq)
     msg = ""
     if (!is.null(autoconverter)) {
       mlr3misc::require_namespaces(autoconverter$packages,
-        sprintf("The following packages are required to convert object of class %s to class %s: %%s", class(data[[idx]])[1], typereq))
-      tryCatch({
-        data[[idx]] = autoconverter$fun(data[[idx]])
-      }, error = function(e) msg <<- sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message))
+        sprintf("The following packages are required to convert object of class %s to class %s: %%s.", class(data_element)[1], typereq))
+      msg = tryCatch({
+        data_element = autoconverter$fun(data_element)
+        ""
+      }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s.", typereq, e$message))
     }
-    assert_class(data[[idx]], typereq,
-      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s%s",
-        direction, idx, self$input$name[idx], self$id, msg))
+    assert_class(data_element, typereq, .var.name = paste0(varname, msg))
+  }
+
+  for (idx in seq_along(data)) {
+    data[idx] = list(check_item(data[[idx]], typetable[[operation]][[idx]],
+      varname = sprintf("%s %s (\"%s\") of PipeOp %s",
+        direction, idx, self$input$name[[idx]], self$id)))
   }
   names(data) = typetable$name
   data
+}
+
+# get the number of `[` `]` nestings of a variable name
+# E.g. multiplicity_type_nesting_level(c("Task", "[Prediction]", "[[*]]")) --> c(0, 1, 2)
+# @param str: `character`: type descriptors to check
+# @param varname `character(1)`: where the value is found, used to print error message
+# @return `integer`
+multiplicity_type_nesting_level = function(str, varname) {
+  beginning = map_int(gregexpr("^\\[*", str), attr, "match.length")
+  end = map_int(gregexpr("\\]*$", str), attr, "match.length")
+  if (any(beginning != end)) {
+    stopf("Invalid type(s) %s in %s: square bracket mismatch.", str_collapse(str[beginning != end]), varname)
+  }
+  beginning
+}
+
+# unpacks pipeop arguments with multiplicities, if necessary, into (possibly named) lists that can be iterated over
+# @param input: `list` of multiplicities: multiplicities to unpack
+# @param expected_nesting_level: `integer`: expected nesting level of the multiplicities
+# @param inputnames: `character`: names of the resulting lists
+# @param poid: `character(1)`: character id of the PipeOp
+# @return `list`
+unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid) {
+  unpacking = mapply(multiplicity_nests_deeper_than, input, expected_nesting_level)
+  if (!any(unpacking)) {
+    return(NULL)  # no unpacking
+  }
+  prototype_index = which(unpacking)[[1]]
+  prototype = input[[prototype_index]]
+  if (sum(unpacking) > 1) {
+    # check that all elements being unpacked are the same multiplicity (length, names)
+    # in the future we may be a bit more lax here and allow "vectorization" or cartesian products, but
+    # for that we may rather want to have explicit pipeops
+    for (comparing_index in which(unpacking)[-1]) {
+      comparing = input[[comparing_index]]
+      if (length(comparing) != length(prototype) || !identical(names(comparing), names(prototype))) {
+        stopf("Input of %s has bad multiplicities: %s has different length and/or names than %s.",
+          poid, inputnames[[prototype_index]], inputnames[[comparing_index]])
+      }
+    }
+  }
+  set_names(map(seq_along(prototype), function(idx) {
+    map_at(input, unpacking, function(x) x[[idx]])
+  }), names(prototype))
+}
+
+# evaluate multiplicities
+# @param self: typically a `PipeOp`
+# @param unpacked: `list` of unpacked multiplicities
+# @param evalcall: either `train` or `predict`
+# @param instate: typically `self$state`
+evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
+  force(instate)
+  on.exit({self$state = instate})
+  if (!is.null(instate)) {
+    if (!is.Multiplicity(instate)) {
+      stopf("PipeOp %s received multiplicity input but state was not a multiplicity.", self$id)
+    }
+    if (length(instate) != length(unpacked) || !identical(names(instate), names(unpacked))) {
+      stopf("PipeOp %s received multiplicity input but state had different length / names than input.", self$id)
+    }
+  }
+  result = imap(unpacked, function(input, reference) {
+    self$state = if (!is.null(instate)) instate[[reference]]
+    list(output = self[[evalcall]](input), state = self$state)
+  })
+  on.exit({self$state = as.Multiplicity(map(result, "state"))})
+
+  map(transpose_list(map(result, "output")), as.Multiplicity)
 }

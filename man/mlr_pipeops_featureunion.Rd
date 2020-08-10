@@ -4,45 +4,63 @@
 \alias{mlr_pipeops_featureunion}
 \alias{PipeOpFeatureUnion}
 \title{PipeOpFeatureUnion}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+}
 \description{
-Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing them together into a single \code{\link[mlr3:Task]{Task}}.
+Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing them together into a single
+\code{\link[mlr3:Task]{Task}}.
 
-\code{\link[mlr3:DataBackend]{DataBackend}} primary keys and \code{\link[mlr3:Task]{Task}} targets have to be equal across all \code{\link[mlr3:Task]{Task}}s.
-Only the target column(s) of the first \code{\link[mlr3:Task]{Task}} are kept.
+\code{\link[mlr3:DataBackend]{DataBackend}} primary keys and \code{\link[mlr3:Task]{Task}} targets have to be equal
+across all \code{\link[mlr3:Task]{Task}}s. Only the target column(s) of the first \code{\link[mlr3:Task]{Task}}
+are kept.
 
-If \code{assert_targets_equal} is \code{TRUE} then target column names are compared and an error is thrown if they differ across inputs.
+If \code{assert_targets_equal} is \code{TRUE} then target column names are compared and an error is thrown
+if they differ across inputs.
+
+If input tasks share some feature names but these features are not identical an error is thrown.
+This check is performed by first comparing the features names and if duplicates are found, also
+the values of these possibly duplicated features. True duplicated features are only added a
+single time to the output task.
 }
 \section{Construction}{
-\preformatted{PipeOpFeatureUnion$new(innum = 0, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE)
+\preformatted{PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
+  assert_targets_equal = TRUE)
 }
 \itemize{
 \item \code{innum} :: \code{numeric(1)} | \code{character}\cr
 Determines the number of input channels.
-If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
-If \code{innum} is a \code{character} vector, the number of input channels
-is the length of \code{innum}, and the columns of the result are prefixed with the values.
-\item \code{id} :: \code{character(1)}
-Identifier of the resulting  object, default \code{"featureunion"}.
+If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number
+of inputs. If \code{innum} is a \code{character} vector, the number of input channels is the length of
+\code{innum}, and the columns of the result are prefixed with the values.
+\item \code{collect_multiplicity} :: \code{logical(1)}\cr
+If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. This means, a
+\code{\link{Multiplicity}} input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires \code{innum} to be 0.
+Default is \code{FALSE}.
+\item \code{id} :: \code{character(1)}\cr
+Identifier of the resulting object, default \code{"featureunion"}.
 \item \code{param_vals} :: named \code{list}\cr
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+be set during construction. Default \code{list()}.
 \item \code{assert_targets_equal} :: \code{logical(1)}\cr
-If \code{assert_targets_equal} is \code{TRUE} (Default),
-task target column names are checked for agreement. Disagreeing target column names are usually a
-bug, so this should often be left at the default.
+If \code{assert_targets_equal} is \code{TRUE} (Default), task target column names are checked for
+agreement. Disagreeing target column names are usually a bug, so this should often be left at
+the default.
 }
 }
 
 \section{Input and Output Channels}{
 
-\code{\link{PipeOpFeatureUnion}} has multiple input channels depending on the \code{innum} construction argument, named \code{"input1"}, \code{"input2"}, ...
-if \code{innum} is nonzero; if \code{innum} is 0, there is only one \emph{vararg} input channel named \code{"..."}.
-All input channels take a \code{\link[mlr3:Task]{Task}} both during training and prediction.
+\code{\link{PipeOpFeatureUnion}} has multiple input channels depending on the \code{innum} construction
+argument, named \code{"input1"}, \code{"input2"}, ... if \code{innum} is nonzero; if \code{innum} is 0, there is
+only one \emph{vararg} input channel named \code{"..."}. All input channels take a \code{\link[mlr3:Task]{Task}}
+both during training and prediction.
 
-\code{\link{PipeOpFeatureUnion}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} both during training and prediction.
+\code{\link{PipeOpFeatureUnion}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}}
+both during training and prediction.
 
-The output is a \code{\link[mlr3:Task]{Task}} constructed by \code{cbind()}ing all features from all input \code{\link[mlr3:Task]{Task}}s, both during
-training and prediction.
+The output is a \code{\link[mlr3:Task]{Task}} constructed by \code{cbind()}ing all features from all input
+\code{\link[mlr3:Task]{Task}}s, both during training and prediction.
 }
 
 \section{State}{
@@ -57,9 +75,10 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Internals}{
 
-\code{\link{PipeOpFeatureUnion}} uses the \code{\link[mlr3:Task]{Task}} \verb{$cbind()} method to bind the input values beyond the first
-input to the first \code{\link[mlr3:Task]{Task}}. This means if the \code{\link[mlr3:Task]{Task}}s are database-backed, all of them
-except the first will be fetched into R memory for this. This behaviour may change in the future.
+\code{\link{PipeOpFeatureUnion}} uses the \code{\link[mlr3:Task]{Task}} \verb{$cbind()} method to bind the input values
+beyond the first input to the first \code{\link[mlr3:Task]{Task}}. This means if the \code{\link[mlr3:Task]{Task}}s
+are database-backed, all of them except the first will be fetched into R memory for this. This
+behaviour may change in the future.
 }
 
 \section{Fields}{
@@ -75,23 +94,28 @@ Only methods inherited from \code{\link{PipeOp}}.
 \examples{
 library("mlr3")
 
-task = tsk("iris")
+task1 = tsk("iris")
 gr = gunion(list(
   po("nop"),
   po("pca")
 )) \%>>\% po("featureunion")
 
-gr$train(task)
+gr$train(task1)
 
+task2 = tsk("iris")
+task3 = tsk("iris")
 po = po("featureunion", innum = c("a", "b"))
 
-po$train(list(task, task))
+po$train(list(task2, task3))
 }
 \seealso{
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpPredPostproc}},
+\code{\link{PipeOpProxy}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -111,21 +135,31 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputemode}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -133,9 +167,27 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
+\code{\link{mlr_pipeops_textvectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_replicate}}
 }
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

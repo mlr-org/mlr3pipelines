@@ -4,7 +4,9 @@
 \alias{mlr_pipeops_ica}
 \alias{PipeOpICA}
 \title{PipeOpICA}
-\format{\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.}
+\format{
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+}
 \description{
 Extracts statistically independent components from data.  Only affects numerical features.
 See \link[fastICA:fastICA]{fastICA::fastICA} for details.
@@ -53,14 +55,14 @@ based on \code{\link[fastICA:fastICA]{fastICA()}}:
 Number of components to extract. Default is \code{NULL}, which sets it
 to the number of available numeric columns.
 \item \code{alg.typ}:: \code{character(1)}\cr
-Algorithm type. One of \dQuote{parallel} (default) or \dQuote{deflation}.
+Algorithm type. One of "parallel" (default) or "deflation".
 \item \code{fun} :: \code{character(1)}\cr
-One of \dQuote{logcosh} (default) or \dQuote{exp}.
+One of "logcosh" (default) or "exp".
 \item \code{alpha} :: \code{numeric(1)}\cr
-In range \verb{[1, 2]}, Used for negentropy calculation when \code{fun} is \dQuote{logcosh}.
+In range \verb{[1, 2]}, Used for negentropy calculation when \code{fun} is "logcosh".
 Default is 1.0.
 \item \code{method} :: \code{character(1)}\cr
-Internal calculation method. \dQuote{C} (default) or \dQuote{R}.
+Internal calculation method. "C" (default) or "R".
 See \code{\link[fastICA:fastICA]{fastICA()}}.
 \item \code{row.norm} :: \code{logical(1)}\cr
 Logical value indicating whether rows should be standardized beforehand.
@@ -104,6 +106,9 @@ Other PipeOps:
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpPredPostproc}},
+\code{\link{PipeOpProxy}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -123,21 +128,31 @@ Other PipeOps:
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputemode}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -145,8 +160,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
+\code{\link{mlr_pipeops_textvectorizer}},
+\code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }

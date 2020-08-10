@@ -43,14 +43,14 @@
 #'   Number of components to extract. Default is `NULL`, which sets it
 #'   to the number of available numeric columns.
 #' * `alg.typ`:: `character(1)`\cr
-#'   Algorithm type. One of \dQuote{parallel} (default) or \dQuote{deflation}.
+#'   Algorithm type. One of "parallel" (default) or "deflation".
 #' * `fun` :: `character(1)`\cr
-#'   One of \dQuote{logcosh} (default) or \dQuote{exp}.
+#'   One of "logcosh" (default) or "exp".
 #' * `alpha` :: `numeric(1)`\cr
-#'   In range `[1, 2]`, Used for negentropy calculation when `fun` is \dQuote{logcosh}.
+#'   In range `[1, 2]`, Used for negentropy calculation when `fun` is "logcosh".
 #'   Default is 1.0.
 #' * `method` :: `character(1)`\cr
-#'   Internal calculation method. \dQuote{C} (default) or \dQuote{R}.
+#'   Internal calculation method. "C" (default) or "R".
 #'   See [`fastICA()`][fastICA::fastICA].
 #' * `row.norm` :: `logical(1)`\cr
 #'   Logical value indicating whether rows should be standardized beforehand.
@@ -105,9 +105,11 @@ PipeOpICA = R6Class("PipeOpICA",
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "fastICA", feature_types = c("numeric", "integer"))
-    },
+    }
+  ),
+  private = list(
 
-    train_dt = function(dt, levels, target) {
+    .train_dt = function(dt, levels, target) {
 
       params = insert_named(list(n.comp = ncol(dt)), self$param_set$get_values(tags = "ica"))
 
@@ -120,7 +122,7 @@ PipeOpICA = R6Class("PipeOpICA",
       ica$S
     },
 
-    predict_dt = function(dt, levels) {
+    .predict_dt = function(dt, levels) {
       scale(as.matrix(dt), scale = FALSE, center = self$state$center) %*%
         (self$state$K %*% self$state$W)
     }

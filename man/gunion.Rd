@@ -9,7 +9,8 @@ gunion(graphs)
 \arguments{
 \item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}})\cr
 List of elements with one of the types defined above, which are the
-\code{\link{Graph}}s to be joined.}
+\code{\link{Graph}}s to be joined. The list can be named, in which case the
+IDs of the elements are prefixed with the names, separated by a dot (\code{.}).}
 }
 \value{
 \code{\link{Graph}} the resulting \code{\link{Graph}}.
@@ -29,6 +30,7 @@ Other Graph operators:
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
-\code{\link{greplicate}()}
+\code{\link{greplicate}()},
+\code{\link{pipeline_greplicate}()}
 }
 \concept{Graph operators}
