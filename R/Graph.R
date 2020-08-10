@@ -302,14 +302,17 @@ Graph = R6Class("Graph",
           return(txt)
         })
         ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
-        ig_data$edges$color = "lightblue"
+        edges = NROW(ig_data$edges)
+        if (edges) ig_data$edges$color = "lightblue"  # Only if more than one pipeop
         # Visualize the nodes
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "400px", width = "50%")
-        p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full") 
-
-        # Draw edges between points
-        p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
-        p 
+        if (edges) { # Only if more than one pipeop
+          # Set up layout
+          p = visNetwork::visIgraphLayout(p, layout = "layout_with_sugiyama", type = "full")
+          # Draw edges between points
+          p = visNetwork::visEdges(p, arrows = "to", smooth = list(enabled = FALSE, forceDirection = "vertical"))
+        }
+        p
       } else {
         suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
       }
@@ -473,7 +476,7 @@ graph_channels_dt = function(ids, channels, pipeops, direction) {
 # input: as given by `$train`, `$predict`. single valued to be copied (if
 #   `single_input` is `TRUE`) or (possibly named) list of values for each
 #   incoming edge.
-# fun: function of each `PipeOp` to call; should be `train` oder
+# fun: function of each `PipeOp` to call; should be `train` or
 #   `predict`.
 # single_input: whether `input` is to be copied to all input channels
 #   (`TRUE`) or is a list with different input for each channel (`FALSE`).
@@ -538,6 +541,8 @@ graph_reduce = function(self, input, fun, single_input) {
     edges[get("dst_id") == id, "payload" := list(list(NULL))]
     input = input_tbl$payload
     names(input) = input_tbl$name
+
+    lg$debug("Running PipeOp '%s$%s()'", id, fun, pipeop = op, input = input)
 
     output = op[[fun]](input)
     if (self$keep_results) {

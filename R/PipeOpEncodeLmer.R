@@ -10,7 +10,7 @@
 #' PipeOpEncodeLmer() converts factor levels of each factorial column to the
 #' estimated coefficients of a simple random intercept model.
 #' Models are fitted with the glmer function of the lme4 package and are
-#' of the type \code{target ~ 1 + (1 | factor)}.
+#' of the type `target ~ 1 + (1 | factor)`.
 #' If the task is a regression task, the numeric target
 #' variable is used as dependent variable and the factor is used for grouping.
 #' If the task is a classification task, the target variable is used as dependent variable
@@ -57,7 +57,7 @@
 #' @section Parameters:
 #' * `fast_optim`  :: `logical(1)` \cr
 #'   Initialized to `TRUE`.
-#'   If \dQuote{fast_optim} is \code{TRUE} (default), a faster (up to 50 percent)
+#'   If "fast_optim" is `TRUE` (default), a faster (up to 50 percent)
 #'   optimizer from the nloptr package is used when fitting the lmer models.
 #'   This uses additional stopping criteria which can give suboptimal results.
 #'

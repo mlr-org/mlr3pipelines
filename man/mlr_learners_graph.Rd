@@ -15,10 +15,10 @@ The Graph must return a single \code{\link[mlr3:Prediction]{Prediction}} on its 
 call. The result of the \verb{$train()} call is discarded, only the
 internal state changes during training are used.
 
-Note the \code{predict_type} of a \code{\link{GraphLearner}} does currently not track the \code{predict_type}
-of any \code{\link[mlr3:Learner]{Learner}} encapsulated within the \code{\link{Graph}}. Therefore, when requesting
-e.g. \code{"prob"} predictions, the \code{predict_type} of \emph{both} the encapsulated \code{\link[mlr3:Learner]{Learner}}
-and the wrapping \code{\link{GraphLearner}} need to be set to \code{"prob"}.
+The \code{predict_type} of a \code{\link{GraphLearner}} can be obtained or set via it's \code{predict_type} active binding.
+Setting a new predict type will try to set the \code{predict_type} in all relevant
+\code{\link{PipeOp}} / \code{\link[mlr3:Learner]{Learner}} encapsulated within the \code{\link{Graph}}.
+Similarly, the predict_type of a Graph will always be the smallest denominator in the \code{\link{Graph}}.
 }
 \seealso{
 Other Learners: 

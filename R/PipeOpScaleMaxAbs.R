@@ -5,8 +5,8 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Scales the numeric data columns so their maximum absolute value is \code{maxabs},
-#' if possible. \code{NA}, \code{Inf} are ignored, and features that are constant 0
+#' Scales the numeric data columns so their maximum absolute value is `maxabs`,
+#' if possible. `NA`, `Inf` are ignored, and features that are constant 0
 #' are not scaled.
 #'
 #' @section Construction:

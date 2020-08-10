@@ -28,10 +28,11 @@
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `center` :: `numeric`\cr
-#'   The mean of each numeric feature during training, or 0 if `center` is `FALSE`. Will be subtracted during the predict phase.
+#'   The mean / median (depending on `robust`) of each numeric feature during training, or 0 if `center` is `FALSE`. Will be subtracted during the predict phase.
 #' * `scale` :: `numeric`\cr
-#'   The root mean square, defined as `sqrt(sum(x^2)/(length(x)-1))`, of each feature during training, or 1 if `scale` is FALSE.
-#'   During predict phase, features are divided by this.\cr
+#'   The value by which features are divided. 1 if `scale` is `FALSE`\cr
+#'   If `robust` is `FALSE`, this is the root mean square, defined as `sqrt(sum(x^2)/(length(x)-1))`, of each feature, possibly after centering.
+#'   If `robust` is `TRUE`, this is the mean absolute deviation multiplied by 1.4826 (see [stats::mad] of each feature, possibly after centering.
 #'   This is 1 for features that are constant during training if `center` is `TRUE`, to avoid division-by-zero.
 #'
 #' @section Parameters:
@@ -40,9 +41,14 @@
 #'   Whether to center  features, i.e. subtract their `mean()` from them. Default `TRUE`.
 #' * `scale` :: `logical(1)`\cr
 #'   Whether to scale features, i.e. divide them by `sqrt(sum(x^2)/(length(x)-1))`. Default `TRUE`.
+#' * `robust` :: `logical(1)`\cr
+#'   Whether to use robust scaling; instead of scaling / centering with mean / standard deviation,
+#'   median and median absolute deviation [`mad`][stats::mad] are used.
+#'   Initialized to `FALSE`.
 #'
 #' @section Internals:
-#' Uses the [`scale()`][base::scale] function.
+#' Uses the [`scale()`][base::scale] function for `robust = FALSE` and alternatively subtracts the
+#' `median` and divides by [`mad`][stats::mad] for `robust = TRUE`.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -69,15 +75,18 @@ PipeOpScale = R6Class("PipeOpScale",
     initialize = function(id = "scale", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamLgl$new("center", default = TRUE, tags = c("train", "scale")),
-        ParamLgl$new("scale", default = TRUE, tags = c("train", "scale"))
+        ParamLgl$new("scale", default = TRUE, tags = c("train", "scale")),
+        ParamLgl$new("robust", tags = c("train", "required"))
       ))
+      ps$values = list(robust = FALSE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
 
     .train_dt = function(dt, levels, target) {
-      sc = invoke(scale, as.matrix(dt), .args = self$param_set$get_values(tags = "scale"))
+      scalefn = if (self$param_set$values$robust) scale_robust else scale
+      sc = invoke(scalefn, as.matrix(dt), .args = self$param_set$get_values(tags = "scale"))
       self$state = list(
         center = attr(sc, "scaled:center") %??% 0,
         scale = attr(sc, "scaled:scale") %??% 1
@@ -95,3 +104,16 @@ PipeOpScale = R6Class("PipeOpScale",
 )
 
 mlr_pipeops$add("scale", PipeOpScale)
+
+
+# Robust scale, same interface as `scale` but instead subtracts median and
+# divides by median absolute deviation.
+scale_robust = function(x, center = TRUE, scale = TRUE) {
+  if (center) {
+    center = apply(x, 2, stats::median, na.rm = TRUE)
+  }
+  if (scale) {
+    scale = apply(x, 2, function(col) stats::mad(col, if (!isFALSE(center)) stats::median(col) else 0, na.rm = TRUE))
+  }
+  scale(x, center = center, scale = scale)
+}

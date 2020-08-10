@@ -91,12 +91,20 @@
 #'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
 #'   training, column `predict` is the (S3) class that an input object must conform to during prediction. Types
 #'   are checked by the [`PipeOp`] itself and do not need to be checked by `private$.train()` / `private$.predict()` code.\cr
-#'   A special name is `"..."`, which creates a *vararg* input channel that accepts a variable number of inputs.
+#'   A special name is `"..."`, which creates a *vararg* input channel that accepts a variable number of inputs.\cr
+#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`), then this channel is
+#'   [`Multiplicity`]-aware. If the [`PipeOp`] receives a [`Multiplicity`] value on these channels, this [`Multiplicity`]
+#'   is given to the `.train()` and `.predict()` functions directly. Otherwise, the [`Multiplicity`] is transparently
+#'   unpacked and the `.train()` and `.predict()` functions are called multiple times, once for each [`Multiplicity`] element.
+#'   The type enclosed by square brackets indicates that only a [`Multiplicity`] containing values of this type are accepted.
+#'   See [`Multiplicity`] for more information.
 #' * output :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Output channels of [`PipeOp`], in the order in which they will be given in the list returned by `$train` and
 #'   `$predict` functions. Column `train` is the (S3) class that an output object must conform to during training,
 #'   column `predict` is the (S3) class that an output object must conform to during prediction. The [`PipeOp`] checks
-#'   values returned by `private$.train()` and `private$.predict()` against these types specifications.
+#'   values returned by `private$.train()` and `private$.predict()` against these types specifications.\cr
+#'   If a row has both `train` and `predict` values enclosed by square brackets ("`[`", "`]`), then this signals that the channel
+#'   emits a [`Multiplicity`] of the indicated type. See [`Multiplicity`] for more information.
 #' * `innum` :: `numeric(1)` \cr
 #'   Number of input channels. This equals `nrow($input)`.
 #' * `outnum` :: `numeric(1)` \cr
@@ -239,6 +247,10 @@ PipeOp = R6Class("PipeOp",
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
+      unpacked = unpack_multiplicities(input, multiplicity_type_nesting_level(self$input$train), self$input$name, self$id)
+      if (!is.null(unpacked)) {
+        return(evaluate_multiplicities(self, unpacked, "train", NULL))
+      }
       input = check_types(self, input, "input", "train")
       output = private$.train(input)
       output = check_types(self, output, "output", "train")
@@ -254,7 +266,10 @@ PipeOp = R6Class("PipeOp",
       if (is_noop(self$state)) {
         stopf("Pipeop %s got NO_OP during train but no NO_OP during predict.", self$id)
       }
-
+      unpacked = unpack_multiplicities(input, multiplicity_type_nesting_level(self$input$predict), self$input$name, self$id)
+      if (!is.null(unpacked)) {
+        return(evaluate_multiplicities(self, unpacked, "predict", self$state))
+      }
       input = check_types(self, input, "input", "predict")
       output = private$.predict(input)
       output = check_types(self, output, "output", "predict")
@@ -290,12 +305,31 @@ PipeOp = R6Class("PipeOp",
       }
       private$.param_set
     },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$predict_type is read-only.")
+        }
+      }
+      return(NULL)
+    },
     innum = function() nrow(self$input),
     outnum = function() nrow(self$output),
     is_trained = function() !is.null(self$state),
     hash = function() {
-      digest(list(class(self), self$id, self$param_set$values),
-        algo = "xxhash64")
+      digest(list(class(self), self$id, lapply(self$param_set$values, function(val) {
+        # ideally we would just want to hash `param_set$values`, but one of the values
+        # could be an R6 object with a `$hash` slot as well, in which case we take that
+        # slot's value. This is to avoid different hashes from essentially the same
+        # objects.
+        # In the following we also avoid accessing `val$hash` twice, because it could
+        # potentially be an expensive AB.
+        if (is.environment(val) && !is.null({vhash = val$hash})) {
+          vhash
+        } else {
+          val
+        }
+      })), algo = "xxhash64")
     }
   ),
 
@@ -322,21 +356,27 @@ PipeOp = R6Class("PipeOp",
   )
 )
 
+# Asserts that input and output tables are correctly specified
+# @param table: `data.table`: either input or output
 assert_connection_table = function(table) {
   varname = deparse(substitute(table))
   assert_data_table(table, .var.name = varname, min.rows = 1)
   assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = varname)
   assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", varname))
+  if (!all(multiplicity_type_nesting_level(table$train) == multiplicity_type_nesting_level(table$predict))) {
+    stop("Multiplicity during train and predict conflicts.")
+  }
   table
 }
 
-
-# Checks that data conforms to the type specifications given.
-# @param `data` [list of any] is either the input or output given to a train/predict function. it is checked to be a *list* first
-#   and then to have the types as given by the `$input` or `$output` data.table.
-# @param direction [character(1)] is either `"input"` or `"output"`
-# @param operation [character(1)] is either `"train"` or `"predict"`.
-# @return an instance of 'data', possibly converted, with names added according to `$input`/`$output` "name" column.
+# Checks that data conforms to the type specifications given
+# Handles multiplicities: if a type is in square brackets ("[<TYPE>]"), then a "Multiplicity" that contains the type is checked.
+# Yes, this can handle nested multiplicities: "[[<TYPE>]]" etc. works.
+# @param data: `list of any`: is either the input or output given to a train/predict function. it is checked to be a *list* first
+#   and then to have the types as given by the `$input` or `$output` data.table
+# @param direction: `character(1)`: is either `"input"` or `"output"`
+# @param operation: `character(1)`: is either `"train"` or `"predict"`
+# @return an instance of data, possibly converted, with names added according to `$input`/`$output` "name" column
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   if (direction == "input" && "..." %in% typetable$name) {
@@ -345,23 +385,111 @@ check_types = function(self, data, direction, operation) {
   } else {
     assert_list(data, len = nrow(typetable))
   }
-  for (idx in seq_along(data)) {
-    typereq = typetable[[operation]][idx]
-    if (typereq == "*") next
-    if (typereq %in% class(data[[idx]])) next
+
+  check_item = function(data_element, typereq, varname) {
+    if (multiplicity_type_nesting_level(typereq, varname)) {
+      # unpack multiplicity
+      assert_multiplicity(data_element, varname)
+      typereq = substr(typereq, 2, nchar(typereq) - 1)
+      for (midx in seq_along(data_element)) {
+        # recursively call check_item for each multiplicity-item
+        data_element[midx] = list(check_item(data_element[[midx]], typereq, sprintf("Multiplicity element %s of %s", midx, varname)))
+      }
+      # done checking, return early.
+      return(data_element)
+    }
+    if (is.Multiplicity(data_element)) {
+      stopf("%s contained Multiplicity when it shouldn't have.", data_element)
+    }
+    if (typereq == "*") return(data_element)
+    if (typereq %in% class(data_element)) return(data_element)
     autoconverter = get_autoconverter(typereq)
     msg = ""
     if (!is.null(autoconverter)) {
       mlr3misc::require_namespaces(autoconverter$packages,
-        sprintf("The following packages are required to convert object of class %s to class %s: %%s", class(data[[idx]])[1], typereq))
-      tryCatch({
-        data[[idx]] = autoconverter$fun(data[[idx]])
-      }, error = function(e) msg <<- sprintf("\nConversion from given data to %s produced message:\n%s", typereq, e$message))
+        sprintf("The following packages are required to convert object of class %s to class %s: %%s.", class(data_element)[1], typereq))
+      msg = tryCatch({
+        data_element = autoconverter$fun(data_element)
+        ""
+      }, error = function(e) sprintf("\nConversion from given data to %s produced message:\n%s.", typereq, e$message))
     }
-    assert_class(data[[idx]], typereq,
-      .var.name = sprintf("%s %s (\"%s\") of PipeOp %s%s",
-        direction, idx, self$input$name[idx], self$id, msg))
+    assert_class(data_element, typereq, .var.name = paste0(varname, msg))
+  }
+
+  for (idx in seq_along(data)) {
+    data[idx] = list(check_item(data[[idx]], typetable[[operation]][[idx]],
+      varname = sprintf("%s %s (\"%s\") of PipeOp %s",
+        direction, idx, self$input$name[[idx]], self$id)))
   }
   names(data) = typetable$name
   data
+}
+
+# get the number of `[` `]` nestings of a variable name
+# E.g. multiplicity_type_nesting_level(c("Task", "[Prediction]", "[[*]]")) --> c(0, 1, 2)
+# @param str: `character`: type descriptors to check
+# @param varname `character(1)`: where the value is found, used to print error message
+# @return `integer`
+multiplicity_type_nesting_level = function(str, varname) {
+  beginning = map_int(gregexpr("^\\[*", str), attr, "match.length")
+  end = map_int(gregexpr("\\]*$", str), attr, "match.length")
+  if (any(beginning != end)) {
+    stopf("Invalid type(s) %s in %s: square bracket mismatch.", str_collapse(str[beginning != end]), varname)
+  }
+  beginning
+}
+
+# unpacks pipeop arguments with multiplicities, if necessary, into (possibly named) lists that can be iterated over
+# @param input: `list` of multiplicities: multiplicities to unpack
+# @param expected_nesting_level: `integer`: expected nesting level of the multiplicities
+# @param inputnames: `character`: names of the resulting lists
+# @param poid: `character(1)`: character id of the PipeOp
+# @return `list`
+unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid) {
+  unpacking = mapply(multiplicity_nests_deeper_than, input, expected_nesting_level)
+  if (!any(unpacking)) {
+    return(NULL)  # no unpacking
+  }
+  prototype_index = which(unpacking)[[1]]
+  prototype = input[[prototype_index]]
+  if (sum(unpacking) > 1) {
+    # check that all elements being unpacked are the same multiplicity (length, names)
+    # in the future we may be a bit more lax here and allow "vectorization" or cartesian products, but
+    # for that we may rather want to have explicit pipeops
+    for (comparing_index in which(unpacking)[-1]) {
+      comparing = input[[comparing_index]]
+      if (length(comparing) != length(prototype) || !identical(names(comparing), names(prototype))) {
+        stopf("Input of %s has bad multiplicities: %s has different length and/or names than %s.",
+          poid, inputnames[[prototype_index]], inputnames[[comparing_index]])
+      }
+    }
+  }
+  set_names(map(seq_along(prototype), function(idx) {
+    map_at(input, unpacking, function(x) x[[idx]])
+  }), names(prototype))
+}
+
+# evaluate multiplicities
+# @param self: typically a `PipeOp`
+# @param unpacked: `list` of unpacked multiplicities
+# @param evalcall: either `train` or `predict`
+# @param instate: typically `self$state`
+evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
+  force(instate)
+  on.exit({self$state = instate})
+  if (!is.null(instate)) {
+    if (!is.Multiplicity(instate)) {
+      stopf("PipeOp %s received multiplicity input but state was not a multiplicity.", self$id)
+    }
+    if (length(instate) != length(unpacked) || !identical(names(instate), names(unpacked))) {
+      stopf("PipeOp %s received multiplicity input but state had different length / names than input.", self$id)
+    }
+  }
+  result = imap(unpacked, function(input, reference) {
+    self$state = if (!is.null(instate)) instate[[reference]]
+    list(output = self[[evalcall]](input), state = self$state)
+  })
+  on.exit({self$state = as.Multiplicity(map(result, "state"))})
+
+  map(transpose_list(map(result, "output")), as.Multiplicity)
 }
