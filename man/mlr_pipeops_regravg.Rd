@@ -19,12 +19,16 @@ equal weights for each prediction.
 Defaults to equal weights for each model.
 }
 \section{Construction}{
-\preformatted{PipeOpRegrAvg$new(innum = 0, id = "regravg", param_vals = list())
+\preformatted{PipeOpRegrAvg$new(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list())
 }
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
 Determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+\item \code{collect_multiplicity} :: \code{logical(1)}\cr
+If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. This means, a
+\code{\link{Multiplicity}} input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires \code{innum} to be 0.
+Default is \code{FALSE}.
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"regravg"}.
 \item \code{param_vals} :: named \code{list}\cr
@@ -67,9 +71,10 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 library("mlr3")
 
 # Simple Bagging
-gr = greplicate(n = 5,
+gr = ppl("greplicate",
   po("subsample") \%>>\%
-  po("learner", lrn("classif.rpart"))
+  po("learner", lrn("classif.rpart")),
+  n = 5
 ) \%>>\%
   po("classifavg")
 
@@ -79,6 +84,9 @@ resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
+\code{\link{PipeOpProxy}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -100,21 +108,30 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -122,15 +139,33 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
+\code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{PipeOpEnsemble}},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_replicate}}
 
 Other Ensembles: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{mlr_learners_avg}},
-\code{\link{mlr_pipeops_classifavg}}
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_ovrunite}}
 }
 \concept{Ensembles}
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

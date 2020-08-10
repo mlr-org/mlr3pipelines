@@ -8,12 +8,11 @@
 #' Perform (weighted) majority vote prediction from classification [`Prediction`][mlr3::Prediction]s by connecting
 #' [`PipeOpClassifAvg`] to multiple [`PipeOpLearner`] outputs.
 #'
-#' If the incoming [`Learner`][mlr3::Learner]'s
-#' `$predict_type` is set to `"response"`, the prediction obtained is also a `"response"` prediction
-#' with each instance predicted to the prediction from incoming [`Learner`][mlr3::Learner]s with the
-#' highest total weight. If the [`Learner`][mlr3::Learner]'s `$predict_type` is set to `"prob"`, the
-#' prediction obtained is also a `"prob"` type prediction with the probability predicted to be a weighted
-#' average of incoming predictions.
+#' Always returns a `"prob"` prediction, regardless of the incoming [`Learner`][mlr3::Learner]'s
+#' `$predict_type`. The label of the class with the highest predicted probability is selected as the
+#' `"response"` prediction. If the [`Learner`][mlr3::Learner]'s `$predict_type` is set to `"prob"`,
+#' the prediction obtained is also a `"prob"` type prediction with the probability predicted to be a
+#' weighted average of incoming predictions.
 #'
 #' All incoming [`Learner`][mlr3::Learner]'s `$predict_type` must agree.
 #'
@@ -21,15 +20,21 @@
 #' equal weights for each prediction.
 #' Defaults to equal weights for each model.
 #'
+#' If `
+#'
 #' @section Construction:
 #' ```
-#' PipeOpClassifAvg$new(innum = 0, id = "classifavg", param_vals = list())
+#' PipeOpClassifAvg$new(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list())
 #' ```
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#' * `collect_multiplicity` :: `logical(1)`\cr
+#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
+#'   [`Multiplicity`] input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires `innum` to be 0.
+#'   Default is `FALSE`.
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, default `"classifavg"`.
+#'   Identifier of the resulting object, default `"classifavg"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -52,6 +57,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
 #' @family PipeOps
+#' @family Multiplicity PipeOps
 #' @family Ensembles
 #' @include PipeOpEnsemble.R
 #' @export
@@ -60,30 +66,23 @@
 #' library("mlr3")
 #'
 #' # Simple Bagging
-#' gr = greplicate(n = 5,
+#' gr = ppl("greplicate",
 #'   po("subsample") %>>%
-#'   po("learner", lrn("classif.rpart"))
+#'   po("learner", lrn("classif.rpart")),
+#'   n = 5
 #' ) %>>%
 #'   po("classifavg")
 #'
-#'  mlr3::resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+#' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(
-    initialize = function(innum = 0, id = "classifavg", param_vals = list()) {
-      super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionClassif", packages = "stats")
+    initialize = function(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list()) {
+      super$initialize(innum, collect_multiplicity, id, param_vals = param_vals, prediction_type = "PredictionClassif", packages = "stats")
     }
   ),
   private = list(
     weighted_avg_predictions = function(inputs, weights, row_ids, truth) {
-      has_probs = every(inputs, function(x) !is.null(x$prob))
-      has_classif_response = every(inputs, function(x) !is.null(x$response))
-      if (!(has_probs || has_classif_response)) {
-        stop("PipeOpClassifAvg input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
-      }
-
-      prob = response = NULL
-
       # PredictionClassif makes sure that matrix column names and response levels are identical to levels(x$truth).
       # We therefore only check that truth levels are identical.
       lvls = map(inputs, function(x) levels(x$truth))
@@ -92,15 +91,16 @@ PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
         stop("PipeOpClassifAvg input predictions are incompatible (different levels of target variable).")
       }
 
-      if (has_probs) {
+      prob = NULL
+      if (every(inputs, function(x) !is.null(x$prob))) {
         prob = weighted_matrix_sum(map(inputs, "prob"), weights)
+      } else if (every(inputs, function(x) !is.null(x$response))) {
+        prob = weighted_factor_mean(map(inputs, "response"), weights, lvls)
+      } else {
+        stop("PipeOpClassifAvg input predictions had missing 'prob' and missing 'response' values. At least one of them must be given for all predictions.")
       }
 
-      if (has_classif_response) {
-        response = weighted_factor_mean(map(inputs, "response"), weights, lvls)
-      }
-
-      PredictionClassif$new(row_ids = row_ids, truth = truth, response = response, prob = prob)
+      PredictionClassif$new(row_ids = row_ids, truth = truth, prob = pmin(pmax(prob, 0), 1))
     }
   )
 )

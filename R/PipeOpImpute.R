@@ -29,6 +29,8 @@
 #'   The class of [`Task`][mlr3::Task] that should be accepted as input and will be returned as output. This
 #'   should generally be a `character(1)` identifying a type of [`Task`][mlr3::Task], e.g. `"Task"`, `"TaskClassif"` or
 #'   `"TaskRegr"` (or another subclass introduced by other packages). Default is `"Task"`.
+#' * `feature_types` :: `character`\cr
+#'   Feature types affected by the `PipeOp`. See `private$.select_cols()` for more information.
 #'
 #' @section Input and Output Channels:
 #' [`PipeOpImpute`] has one input channel named `"input"`, taking a [`Task`][mlr3::Task], or a subclass of
@@ -41,9 +43,9 @@
 #'
 #' @section State:
 #' The `$state` is a named `list`; besides members added by inheriting classes, the members are:
-#' * `affect_cols` :: `character`\cr
+#' * `affected_cols` :: `character`\cr
 #'   Names of features being selected by the `affect_columns` parameter.
-#' * `inference_cols` :: `character`\cr
+#' * `context_cols` :: `character`\cr
 #'   Names of features being selected by the `context_columns` parameter.
 #' * `intasklayout` :: [`data.table`]\cr
 #'   Copy of the training [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
@@ -52,7 +54,8 @@
 #'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 #' * `model` :: named `list`\cr
-#'   Model used for imputation. This is a list named by [`Task`][mlr3::Task] features, containing the result of the `private$.train_imputer()` function for each one.
+#'   Model used for imputation. This is a list named by [`Task`][mlr3::Task] features, containing the result of the `private$.train_imputer()` or
+#'   `private$.train_nullmodel()` function for each one.
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
@@ -81,12 +84,22 @@
 #'   the `affect_columns` parameter. `private$.select_cols()` is for the *inheriting class* to determine which columns
 #'   the operator should function on, e.g. based on feature type, while `affect_columns` is a way for the *user*
 #'   to limit the columns that a [`PipeOpTaskPreproc`] should operate on.
+#'   This method can optionally be overloaded when inheriting [`PipeOpImpute`];
+#'   If this method is not overloaded, it defaults to selecting the columns of type indicated by the `feature_types` construction argument.
 #' * `.train_imputer(feature, type, context)`\cr
 #'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
-#'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `private$.impute()`.
+#'   Abstract function that must be overloaded when inheriting.
+#'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `private$.impute()`. This function
+#'   is only called for features with at least one non-missing value.
+#' * `.train_nullmodel(feature, type, context)`\cr
+#'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
+#'   Like `.train_imputer()`, but only called for each feature that only contains missing values. This is not an abstract function
+#'   and, if not overloaded, gives a default response of `0` (`integer`, `numeric`), `c(TRUE, FALSE)` (`logical`), all available levels (`factor`/`ordered`),
+#'   or the empty  string (`character`).
 #' * `.impute(feature, type, model, context)`\cr
 #'   (`atomic`, `character(1)`, `any`, [`data.table`]) -> `atomic`\cr
-#'   Imputes the features. `model` is the model created by `private$.train_imputer()`
+#'   Imputes the features. `model` is the model created by `private$.train_imputer()` Default behaviour is to assume `model` is an atomic vector
+#'   from which values are sampled to impute missing values of `feature`. `model` may have an attribute `probabilities` for non-uniform sampling.
 #'
 #' @family PipeOps
 #' @family Imputation PipeOps
@@ -95,9 +108,8 @@
 PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOp,
   public = list(
-    whole_task_dependent = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task") {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
       # add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
       addparams = list(ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train"))
       if (whole_task_dependent) {
@@ -111,8 +123,8 @@ PipeOpImpute = R6Class("PipeOpImpute",
         private$.affectcols_ps = ParamSet$new(addparams)
         param_set = c(param_set, alist(private$.affectcols_ps))
       }
-
-      self$whole_task_dependent = whole_task_dependent
+      private$.feature_types = assert_subset(feature_types, mlr_reflections$task_feature_types)
+      private$.whole_task_dependent = whole_task_dependent
 
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
@@ -122,9 +134,16 @@ PipeOpImpute = R6Class("PipeOpImpute",
     }
 
   ),
+  active = list(
+    feature_types = function(types) {
+      if (!missing(types)) stop("feature_types can not be changed. Use the 'affect_columns' hyperparameter instead!")
+      private$.feature_types
+    }
+  ),
   private = list(
-
+    .feature_types = NULL,
     .affectcols_ps = NULL,
+    .whole_task_dependent = NULL,
 
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
@@ -137,7 +156,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         intasklayout = copy(intask$feature_types)
       )
 
-      if (self$whole_task_dependent) {
+      if (private$.whole_task_dependent) {
         context_cols = (self$param_set$values$context_columns %??% selector_all())(intask)
         context_data = intask$data(cols = context_cols)
         self$state$context_cols = context_cols
@@ -150,13 +169,16 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       self$state$model = imap(intask$data(cols = affected_cols), function(col, colname) {
         type = intask$feature_types[colname, get("type")]
-        if (self$whole_task_dependent) {
-          context = copy(context_data)
-          context[[colname]] = NULL
+        if (private$.whole_task_dependent) {
+          context = copy(context_data)[, (colname) := NULL]
         } else {
           context = NULL
         }
-        model = private$.train_imputer(col, type, context)
+        if (all(is.na(col))) {
+          model = private$.train_nullmodel(col, type, context)
+        } else {
+          model = private$.train_imputer(col, type, context)
+        }
         if (colname %in% names(imputanda)) {
           col = private$.impute(col, type, model, context)
           imputanda[, (colname) := ..col]
@@ -177,7 +199,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         stopf("Input task during prediction of %s does not match input task during training.", self$id)
       }
 
-      if (self$whole_task_dependent) {
+      if (private$.whole_task_dependent) {
         context_data = intask$data(cols = self$state$context_cols)
       }
 
@@ -188,13 +210,12 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       imap(imputanda, function(col, colname) {
         type = intask$feature_types[colname, get("type")]
-        if (self$whole_task_dependent) {
-          context = copy(context_data)
-          context[[colname]] = NULL
+        model = self$state$model[[colname]]
+        if (private$.whole_task_dependent) {
+          context = copy(context_data)[, (colname) := NULL]
         } else {
           context = NULL
         }
-        model = self$state$model[[colname]]
         col = private$.impute(col, type, model, context)
         imputanda[, (colname) := ..col]
       })
@@ -207,11 +228,34 @@ PipeOpImpute = R6Class("PipeOpImpute",
       list(intask)
     },
 
-    .select_cols = function(task) task$feature_names,
+    .select_cols = function(task) selector_type(private$.feature_types)(task),
 
     .train_imputer = function(feature, type, context) stop("Abstract."),
 
-    .impute = function(feature, type, model, context) stop("Abstract.")
+    .train_nullmodel = function(feature, type, context) {
+      switch(type,
+        factor = levels(feature),
+        integer = 0L, # see PipeOpImputeMean and PipeOpImputeMedian
+        logical = c(TRUE, FALSE),
+        numeric = 0, # see PipeOpImputeMean and PipeOpImputeMedian
+        ordered = levels(feature),
+        character = ""
+      )
+    },
+
+    .impute = function(feature, type, model, context) {
+      if (type %in% c("factor", "ordered")) {
+        # in some edge cases there may be levels during training that are missing during predict.
+        levels(feature) = c(levels(feature), as.character(model))
+      }
+      if (length(model) == 1) {
+        feature[is.na(feature)] = model
+      } else {
+        outlen = sum(is.na(feature))
+        feature[is.na(feature)] = sample(model, outlen, replace = TRUE, prob = attr(model, "probabilities"))
+      }
+      feature
+    }
 
   )
 )

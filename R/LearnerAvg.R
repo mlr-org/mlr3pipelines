@@ -14,8 +14,7 @@
 #' for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`).
 #' Learned weights can be obtained from `$model`.
 #' Using non-linear optimization is implemented in the SuperLearner R package.
-#' For a more detailed analysis the reader is referred to
-#' *LeDell, 2015: Scalable Ensemble Learning and Computationally Efficient Variance Estimation*.
+#' For a more detailed analysis the reader is referred to LeDell (2015).
 #'
 #' @section Parameter Set:
 #' * `measure` :: `character(1)` | `Measure` \cr
@@ -35,6 +34,10 @@
 #' * `LearnerRegrAvg$new(), id = "regr.avg")` \cr
 #'   (`chr`) -> `self` \cr
 #'   Constructor.
+#'
+#' @references
+#' \cite{mlr3pipelines}{ledell_2015}
+#'
 #' @family Learners
 #' @family Ensembles
 #' @include PipeOpEnsemble.R
@@ -88,7 +91,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
       prob = NULL
       response = NULL
       if (self$predict_type == "response") {
-        response = weighted_factor_mean(data, weights, task$class_names)
+        response = factor(task$class_names[max.col(weighted_factor_mean(data, weights, task$class_names))], levels = task$class_names)  # ties broken at random
       } else {
         prob = weighted_matrix_sum(data, weights)
         prob = pmin(pmax(prob, 0), 1)

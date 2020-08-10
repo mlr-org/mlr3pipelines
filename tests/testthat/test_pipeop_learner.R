@@ -18,8 +18,7 @@ test_that("PipeOpLearner - basic properties", {
   expect_error(PipeOpLearner$new())
 })
 
-
-test_that("PipeOLearner - param_set and values", {
+test_that("PipeOpLearner - param_set and values", {
   lrn = mlr_learners$get("classif.rpart")
   po = PipeOpLearner$new(lrn)
 
@@ -45,4 +44,33 @@ test_that("PipeOLearner - param_set and values", {
   expect_error({
     po$param_set$values = list(foo = "foo")
   })
+})
+
+test_that("PipeOpLearner - graph but no id", {
+  g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
+  po = PipeOpLearner$new(g)
+  expect_string(po$id)
+})
+
+test_that("PipeOpLearner - model active binding to state", {
+  lrn = mlr_learners$get("classif.featureless")
+  po = PipeOpLearner$new(lrn)
+  task = mlr_tasks$get("iris")
+
+  # before training states are NULL
+  expect_null(po$state)
+  expect_equal(po$learner$state, po$state)
+  expect_equal(po$learner_model$state, po$state)
+
+  # after training learner_model's state and state are equal
+  train_out = po$train(list(task))
+  train_state = po$state
+  expect_null(po$learner$state)
+  expect_equal(po$learner_model$state, train_state)
+
+  # after predicting states are unchanged
+  predict_out = po$predict(list(task))
+  expect_equal(po$state, train_state)
+  expect_null(po$learner$state)
+  expect_equal(po$learner_model$state, po$state)
 })

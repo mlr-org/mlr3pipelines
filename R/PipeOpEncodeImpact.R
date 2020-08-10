@@ -125,11 +125,10 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         curdat[curdat %nin% rownames(impact[[idx]])] = ".TEMP.MISSING"
         # we only want to "drop" if there are no column names.
         # otherwise we want the naming scheme <original feature name>.<target level>
-        impact[[idx]][curdat, , drop = is.null(colnames(impact[[idx]]))]
+        impact[[idx]][match(curdat, rownames(impact[[idx]])), , drop = is.null(colnames(impact[[idx]]))]
       })
     }
   )
 )
 
 mlr_pipeops$add("encodeimpact", PipeOpEncodeImpact)
-

@@ -28,18 +28,18 @@ test_that("PipeOpMissInd", {
   task_no_lgl = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "missing_train", type = "logical")))
+    constargs = list(param_vals = list(which = "missing_train", type = "logical", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "logical")))
+    constargs = list(param_vals = list(which = "all", type = "logical", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "factor")))
+    constargs = list(param_vals = list(which = "all", type = "factor", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "numeric")))
+    constargs = list(param_vals = list(which = "all", type = "numeric", affect_columns = NULL)))
 
-  po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical"))
+  po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical", affect_columns = NULL))
 
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
 
@@ -92,4 +92,41 @@ test_that("PipeOpMissInd", {
   expect_null(task_predicted$missing_g)
   expect_null(task_predicted$missing_i)
   expect_null(task_predicted$missing_j)
+})
+
+
+# https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
+test_that("union with missing rows", {
+  data("mtcars", package = "datasets")
+  data = mtcars[, 1:3]
+  # Train task
+  task_mtcars = TaskRegr$new(id="cars", backend = data, target = "mpg")
+  # Prediction
+  data2 = task_mtcars$data()[12:12,]
+  data2[1:1, cyl:=NA]
+
+  imp_missind = po("missind")
+  imp_num =  po("imputehist", param_vals = list(affect_columns = selector_type("numeric")))
+  learner = lrn("regr.rpart")
+
+  g1 = gunion(list(imp_num, imp_missind)) %>>% po("featureunion")
+  g1$train(task_mtcars)
+  out = g1$predict(TaskRegr$new("t2", data2, target = "mpg"))[[1]]$data()
+  assert_true(!any(is.na(out)))
+
+  g2= gunion(list(imp_missind, imp_num)) %>>% po("featureunion")
+  g2$train(task_mtcars)
+  out = g2$predict(TaskRegr$new("t2", data2, target = "mpg"))[[1]]$data()
+  assert_true(!any(is.na(out)))
+})
+
+# https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
+test_that("missind on full data returns empty task", {
+  library(mlr3learners)
+  task = tsk("iris")
+  imp_missind = po("missind")
+  imp_missind$train(list(task))
+  out = imp_missind$predict(list(task))$output
+  expect_task(out)
+  expect_data_table(out$data(), ncols = 1L)
 })

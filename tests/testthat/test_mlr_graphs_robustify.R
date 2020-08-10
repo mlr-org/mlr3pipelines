@@ -31,7 +31,7 @@ test_that("Robustify Pipeline", {
   tsk$cbind(dt)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "encode", "imputenewlvl") %in% names(p$pipeops)))
+  expect_true(all(c("imputehist", "missind", "encode", "imputeoor") %in% names(p$pipeops)))
 
   # no scaling
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
@@ -45,23 +45,23 @@ test_that("Robustify Pipeline", {
   expect_graph(p)
   expect_true("encode" %in% names(p$pipeops))
   expect_true(!("missind" %in% names(p$pipeops)))
-  expect_true(!("imputenewlvl" %in% names(p$pipeops)))
+  expect_true(!("imputeoor" %in% names(p$pipeops)))
 
   # logical impute_missings
   p = ppl("robustify", task = tsk, learner = lrn, impute_missings = TRUE) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
+  expect_true(all(c("imputehist", "missind", "imputeoor") %in% names(p$pipeops)))
 
   # no task
   p = pipeline_robustify() %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("char_to_fct", "imputehist", "missind", "imputenewlvl",
+  expect_true(all(c("char_to_fct", "imputehist", "missind", "imputeoor",
     "collapsefactors", "encode") %in% names(p$pipeops)))
 
   p = ppl("robustify", impute_missings = FALSE) %>>% po(lrn)
   expect_graph(p)
   expect_true(all(c("char_to_fct", "fixfactors", "collapsefactors", "encode") %in% names(p$pipeops)))
-  expect_true(!all(c("imputehist", "missind", "imputenewlvl") %in% names(p$pipeops)))
+  expect_true(!all(c("imputehist", "missind", "imputeoor") %in% names(p$pipeops)))
 
   # missings during predict
   dt = tsk$data()
@@ -73,5 +73,16 @@ test_that("Robustify Pipeline", {
   g$train(tsk)
   prd = g$predict(tsk2)
   expect_prediction(prd)
-})
 
+  # date features
+  dat = iris
+  set.seed(1)
+  dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
+   size = 150L)
+  tsk = TaskClassif$new("iris_date", backend = dat, target = "Species")
+  p = pipeline_robustify(task = tsk, learner = lrn) %>>% po(lrn)
+  expect_graph(p)
+  expect_true("removeconstants" %in% names(p$pipeops))
+  expect_true("datefeatures" %in% names(p$pipeops))
+  expect_true(length(p$pipeops) == 3)
+})
