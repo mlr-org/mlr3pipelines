@@ -241,19 +241,23 @@ PipeOp = R6Class("PipeOp",
     },
 
     train = function(input) {
+      on.exit({self$state = NULL})  # if training fails, reset $state to NULL
       require_namespaces(self$packages)
 
       if (every(input, is_noop)) {
+        on.exit({self$state = self$state})
         self$state = NO_OP
         return(named_list(self$output$name, NO_OP))
       }
       unpacked = unpack_multiplicities(input, multiplicity_type_nesting_level(self$input$train), self$input$name, self$id)
       if (!is.null(unpacked)) {
+        on.exit({self$state = self$state})
         return(evaluate_multiplicities(self, unpacked, "train", NULL))
       }
       input = check_types(self, input, "input", "train")
       output = private$.train(input)
       output = check_types(self, output, "output", "train")
+      on.exit({self$state = self$state})
       output
     },
     predict = function(input) {
