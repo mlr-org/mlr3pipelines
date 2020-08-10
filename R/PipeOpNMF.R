@@ -113,7 +113,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
     .select_cols = function(task) {
       # only use non-negative numerical features
       features = task$feature_types[get("type") %in% self$feature_types, get("id")]
-      non_negative = map(task$data(cols = features), function(x) all(x >= 0))
+      non_negative = map(task$data(cols = features), function(x) all(x >= 0))  # could also be more precise
       names(non_negative[unlist(non_negative)])
     }
   )
