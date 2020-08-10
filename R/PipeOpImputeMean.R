@@ -55,26 +55,16 @@ PipeOpImputeMean = R6Class("PipeOpImputeMean",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemean", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals)
+      super$initialize(id, param_vals = param_vals, feature_types= c("numeric", "integer"))
     }
   ),
   private = list(
-    .select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
-
     .train_imputer = function(feature, type, context) {
       men = mean(feature, na.rm = TRUE)
-      if (is.nan(men)) {
-        men = 0
-      }
       if (type == "integer") {
         men = as.integer(round(men))
       }
       men
-    },
-
-    .impute = function(feature, type, model, context) {
-      feature[is.na(feature)] = model
-      feature
     }
   )
 )

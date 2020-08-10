@@ -49,4 +49,8 @@ test_that("Selectors work", {
   expect_set_equal(selmiss(iris_task), character(0))
   expect_set_equal(selmiss(pima_task), c("glucose", "insulin", "mass", "pressure", "triceps"))
 
+  selcgt = selector_cardinality_greater_than(3)
+  expect_set_equal(selcgt(bh_task), "town")
+  expect_set_equal(selcgt(bh_task$filter(1:3)), character(0))
+  expect_set_equal(selcgt(pima_task), character(0))
 })

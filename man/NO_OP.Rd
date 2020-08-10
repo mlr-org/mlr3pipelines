@@ -20,6 +20,10 @@ Other Path Branching:
 \code{\link{is_noop}()},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_unbranch}}
+
+Other Special Graph Messages: 
+\code{\link{Multiplicity}()}
 }
 \concept{Path Branching}
+\concept{Special Graph Messages}
 \keyword{datasets}

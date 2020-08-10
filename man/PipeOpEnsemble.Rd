@@ -12,12 +12,16 @@ for a \code{PipeOp} and requires deriving classes to create the \code{private$we
 }
 \section{Construction}{
 
-Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpClassifAvg}} or \code{\link{PipeOpRegrAvg}}.\preformatted{PipeOpEnsemble$new(innum = 0, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpClassifAvg}} or \code{\link{PipeOpRegrAvg}}.\preformatted{PipeOpEnsemble$new(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 }
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
 Determines the number of input channels.
 If \code{innum} is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+\item \code{collect_multiplicity} :: \code{logical(1)}\cr
+If \code{TRUE}, the input is a \code{\link{Multiplicity}} collecting channel. This means, a
+\code{\link{Multiplicity}} input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires \code{innum} to be 0.
+Default is \code{FALSE}.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting  object.
 \item \code{param_set} :: \code{\link[paradox:ParamSet]{ParamSet}}\cr
@@ -93,6 +97,8 @@ This method is abstract, it must be implemented by deriving classes.
 Other PipeOps: 
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpProxy}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -113,23 +119,32 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
 \code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -137,16 +152,33 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
+\code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
+
+Other Multiplicity PipeOps: 
+\code{\link{Multiplicity}()},
+\code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
+\code{\link{mlr_pipeops_regravg}},
+\code{\link{mlr_pipeops_replicate}}
 
 Other Ensembles: 
 \code{\link{mlr_learners_avg}},
 \code{\link{mlr_pipeops_classifavg}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_regravg}}
 }
 \concept{Ensembles}
+\concept{Multiplicity PipeOps}
 \concept{PipeOps}

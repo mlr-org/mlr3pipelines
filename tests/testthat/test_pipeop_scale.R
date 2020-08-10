@@ -1,11 +1,14 @@
 context("PipeOpScale")
 
-test_that("PipeOpScale", {
+test_that("basic properties", {
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("iris"))
 
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("boston_housing"))
 
   expect_datapreproc_pipeop_class(PipeOpScale, task = mlr_tasks$get("pima"))
+
+  expect_datapreproc_pipeop_class(PipeOpScale, list(param_vals = list(robust = TRUE)), task = mlr_tasks$get("iris"))
+
 
   data = data.table(
     a = 1:5,
@@ -81,4 +84,17 @@ test_that("PipeOpScale", {
 
   expect_equal(data.center, po$train(list(task))[[1]]$data(), ignore.col.order = TRUE)
   expect_equal(data.center, po$predict(list(task))[[1]]$data(), ignore.col.order = TRUE)
+})
+
+
+test_that("robust scaling", {
+  t = tsk("iris")
+  posc = po("scale", robust = TRUE)
+  scaled = posc$train(list(t))[[1]]$data()
+  prd = posc$predict(list(t))[[1]]$data()
+  expect_equal(scaled, prd)
+  x = iris[, names(posc$state$center)]
+  expect_equal(posc$state$center, apply(x, 2, median))
+  x = t(x) - posc$state$center
+  expect_equal(posc$state$scale, apply(t(x), 2, mad))
 })

@@ -1,20 +1,27 @@
 context("PipeOpEnsemble")
 
 test_that("PipeOpEnsemble - basic properties", {
-  op = PipeOpEnsemble$new(4, "ensemble", param_vals = list())
+  op = PipeOpEnsemble$new(4, id = "ensemble", param_vals = list())
   expect_pipeop(op)
-  expect_pipeop_class(PipeOpEnsemble, list(3, "ensemble", param_vals = list()))
-  expect_pipeop_class(PipeOpEnsemble, list(1, "ensemble", param_vals = list()))
-  expect_pipeop_class(PipeOpEnsemble, list(0, "ensemble", param_vals = list()))
+  expect_pipeop_class(PipeOpEnsemble, list(3, id = "ensemble", param_vals = list()))
+  expect_pipeop_class(PipeOpEnsemble, list(1, id = "ensemble", param_vals = list()))
+  expect_pipeop_class(PipeOpEnsemble, list(0, id = "ensemble", param_vals = list()))
 
   truth = rnorm(70)
   prds = replicate(4, PredictionRegr$new(row_ids = seq_len(70), truth = truth, response = truth + rnorm(70, sd = 0.1)))
   expect_list(train_pipeop(op, rep(list(NULL), 4)), len = 1)
   expect_error(predict_pipeop(op, prds), "Abstract")
 
-  op = PipeOpEnsemble$new(0, "ensemble", param_vals = list())
+  op = PipeOpEnsemble$new(0, id = "ensemble", param_vals = list())
   expect_pipeop(op)
 
+  # collect_multiplicity = TRUE
+  op = PipeOpEnsemble$new(0, collect_multiplicity = TRUE, id = "ensemble", param_vals = list())
+  expect_pipeop(op)
+  expect_list(train_pipeop(op, list(as.Multiplicity(rep(list(NULL), 4)))), len = 1)
+  expect_error(predict_pipeop(op, list(as.Multiplicity(prds))), "Abstract")
+
+  expect_error(PipeOpEnsemble$new(1, collect_multiplicity = TRUE, id = "ensemble", param_vals = list()), regexp = "collect_multiplicity only works with innum == 0")
 })
 
 test_that("PipeOpWeightedRegrAvg - train and predict", {
@@ -46,7 +53,6 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
   expect_list(train_pipeop(po, rep(list(NULL), 4)), len = 1)
   out = predict_pipeop(po, prds)
   expect_equal(out, list(output = prds[[3]]))
-
 })
 
 ## test_that("PipeOpNlOptRegrAvg - response - train and predict", {
@@ -61,11 +67,11 @@ test_that("PipeOpWeightedRegrAvg - train and predict", {
 ##   expect_class(out[[1]], "PredictionRegr")
 ## })
 
-test_that("PipeOpWeightedClassifAvg - response -train and predict", {
+test_that("PipeOpWeightedClassifAvg - response - train and predict", {
   nulls = rep(list(NULL), 4)
   prds = replicate(4,
     make_prediction_obj_classif(n = 100, noise = TRUE,
-      predict_types = c("response"), nclasses = 3),
+      predict_types = "response", nclasses = 3),
     simplify = FALSE
   )
   lapply(prds, function(x) x$data$tab$truth = prds[[1]]$data$tab$truth)  # works because of R6 reference semantics
@@ -80,8 +86,7 @@ test_that("PipeOpWeightedClassifAvg - response -train and predict", {
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
-  expect_equal(out[[1]]$data, prds[[4]]$data)
-
+  expect_equal(out[[1]]$data$tab, prds[[4]]$data$tab)
 
   po = PipeOpClassifAvg$new()
   expect_pipeop(po)
@@ -94,8 +99,7 @@ test_that("PipeOpWeightedClassifAvg - response -train and predict", {
   expect_list(train_pipeop(po, nulls), len = 1)
   out = predict_pipeop(po, prds)
   expect_class(out[[1]], "PredictionClassif")
-  expect_equal(out[[1]]$data, prds[[4]]$data)
-
+  expect_equal(out[[1]]$data$tab, prds[[4]]$data$tab)
 })
 
 test_that("PipeOpWeightedClassifAvg - prob - train and predict", {

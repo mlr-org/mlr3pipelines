@@ -43,14 +43,14 @@
 #'   Number of components to extract. Default is `NULL`, which sets it
 #'   to the number of available numeric columns.
 #' * `alg.typ`:: `character(1)`\cr
-#'   Algorithm type. One of \dQuote{parallel} (default) or \dQuote{deflation}.
+#'   Algorithm type. One of "parallel" (default) or "deflation".
 #' * `fun` :: `character(1)`\cr
-#'   One of \dQuote{logcosh} (default) or \dQuote{exp}.
+#'   One of "logcosh" (default) or "exp".
 #' * `alpha` :: `numeric(1)`\cr
-#'   In range `[1, 2]`, Used for negentropy calculation when `fun` is \dQuote{logcosh}.
+#'   In range `[1, 2]`, Used for negentropy calculation when `fun` is "logcosh".
 #'   Default is 1.0.
 #' * `method` :: `character(1)`\cr
-#'   Internal calculation method. \dQuote{C} (default) or \dQuote{R}.
+#'   Internal calculation method. "C" (default) or "R".
 #'   See [`fastICA()`][fastICA::fastICA].
 #' * `row.norm` :: `logical(1)`\cr
 #'   Logical value indicating whether rows should be standardized beforehand.

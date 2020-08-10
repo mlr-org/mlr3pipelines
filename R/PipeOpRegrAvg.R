@@ -17,11 +17,15 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpRegrAvg$new(innum = 0, id = "regravg", param_vals = list())
+#' PipeOpRegrAvg$new(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list())
 #' ```
 #' * `innum` :: `numeric(1)`\cr
 #'   Determines the number of input channels.
 #'   If `innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
+#' * `collect_multiplicity` :: `logical(1)`\cr
+#'   If `TRUE`, the input is a [`Multiplicity`] collecting channel. This means, a
+#'   [`Multiplicity`] input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires `innum` to be 0.
+#'   Default is `FALSE`.
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, default `"regravg"`.
 #' * `param_vals` :: named `list`\cr
@@ -47,6 +51,7 @@
 #' Only methods inherited from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @family Multiplicity PipeOps
 #' @family Ensembles
 #' @include PipeOpEnsemble.R
 #' @export
@@ -66,8 +71,8 @@ PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 
   public = list(
-    initialize = function(innum = 0, id = "regravg", param_vals = list(), ...) {
-      super$initialize(innum, id, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
+    initialize = function(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list(), ...) {
+      super$initialize(innum, collect_multiplicity, id, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
     }
   ),
   private = list(
