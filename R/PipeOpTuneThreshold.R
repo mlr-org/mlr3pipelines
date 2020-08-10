@@ -2,16 +2,17 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_tunethreshold
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Tunes optimal probability thresholds over different [`PredictionClassif`][mlr3::PredictionClassif]s.
-#' Learner's `predict_type` `"prob"` is required.
-#' Thresholds for each learner are optimized using (GenSA)[GenSA::GenSA].
+#' Learner `predict_type`: `"prob"` is required.
+#' Thresholds for each learner are optimized using the [`Optimizer`][bbotk::Optimizer] supplied via
+#' the `param_set`. Defaults to (GenSA)[GenSA::GenSA].
 #' Returns a single [`PredictionClassif`][mlr3::PredictionClassif].
-#' As a default, optimizes the miss-classification error [`MeasureClassif`].
+#' As a default, optimizes the miss-classification error (`msr("ce")`).
 #' This PipeOp should be used in conjunction with [`PipeOpLearnerCV`] in order to
-#' optimize thresholds of predictions.
+#' optimize thresholds of cross-validated predictions.
 #'
 #' @section Construction:
 #' ```
@@ -36,19 +37,18 @@
 #'  * `measure` :: [`Measure`]\cr
 #'    [`Measure`] to optimize.
 #'    Defaults to `msr("classif.ce")`, i.e. misclassification error.
-#'  * `optimizer` :: [`Optimizer`]\cr
-#'    [`Optimizer`] used to find optimal thresholds.
-#'    Defaults to `OptimizerGenSA$new()`
+#'  * `optimizer` :: [`Optimizer`]|[`character`]\cr
+#'    [`Optimizer`] used to find optimal thresholds. If `character`, converts to [`Optimizer`]
+#'    via [`bbotk::opt`]. Defaults to `bbotk::OptimizerGenSA$new()`
 #'
 #' @section Internals:
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
 #' See the `optimizer` parameter for more info.
 #'
 #' @section Methods:
-#' Only methods inherited from [`PipeOpPredPostproc`].
+#' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
-#' @include PipeOpPredPostproc.R
 #' @export
 #' @examples
 #' library("mlr3")
@@ -62,7 +62,7 @@
 #'
 #' pop$state
 PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
-  inherit = PipeOpPredPostproc,
+  inherit = PipeOp,
 
   public = list(
     initialize = function(id = "tunethreshold", param_vals = list()) {
@@ -73,7 +73,11 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         }, tags = "train")
       ))
       ps$values = list(measure = msr("classif.ce"), optimizer = "gensa")
-      super$initialize(id, param_vals = param_vals, param_set = ps, packages = "bbotk")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
+        input = data.table(name = "input", train = "Task", predict = "Task"),
+        output = data.table(name = "output", train = "NULL", predict = "Prediction"),
+        tags = "target transform"
+      )
     },
     train = function(input) {
       if(!all(input[[1]]$feature_types$type == "numeric"))
@@ -83,36 +87,36 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       self$state = list("threshold" = th)
       return(list(NULL))
     },
-    predict = function(input) {#
+    predict = function(input) {
       pred = private$task_to_prediction(input[[1]])
       pred$set_threshold(self$state$threshold)
       return(list(pred))
     }
   ),
   private = list(
-    objfun = function(threshold, pred, measure) {
+    objfun = function(xs, pred, measure) {
       lvls = colnames(pred$prob)
-      res = pred$set_threshold(set_names(threshold, lvls))$score(measure)
+      res = pred$set_threshold(unlist(xs))$score(measure)
       if (!measure$minimize) res = -res
       res
     },
     optimize_objfun = function(pred) {
-      browser()
-      cnames = colnames(pred$prob)
       optimizer = self$param_set$values$optimizer
-      ps = private$make_param_set(pred)
-      ObjectiveRFun$new(
-        fun = curry(private$objfun, pred = pred, measure = measure),
-        domain = ps
-       )
       if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
-      inst = bbotk::OptimInstanceSingleCrit$new(
-        objective = private$objfun,
-        search_space = ,
-        terminator = trm("combo", terminators = list(trm("stagnation", iters = 30), trm(evals, 100)))
+      ps = private$make_param_set(pred)
+      objfun = bbotk::ObjectiveRFun$new(
+        fun = function(xs) private$objfun(xs, pred = pred, measure = self$param_set$values$measure),
+        domain = ps
       )
-      ret = optimizer$optimize(inst)
-      set_names(thr, cnames)
+      inst = bbotk::OptimInstanceSingleCrit$new(
+        objective = objfun,
+        terminator = bbotk::trm("combo", terminators = list(
+          bbotk::trm("stagnation", iters = 20*ncol(pred$prob)),
+          bbotk::trm("evals", n_evals = 50*ncol(pred$prob)))
+        )
+      )
+      optimizer$optimize(inst)
+      unlist(inst$result_x_domain)
     },
     make_param_set = function(pred) {
       ps = ParamSet$new(params = list())

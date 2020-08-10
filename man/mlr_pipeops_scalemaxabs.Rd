@@ -65,7 +65,6 @@ pop$state
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpPredPostproc}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},

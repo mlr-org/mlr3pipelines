@@ -112,7 +112,6 @@ tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$re
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpPredPostproc}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},

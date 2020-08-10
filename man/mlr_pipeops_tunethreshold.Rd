@@ -5,16 +5,17 @@
 \alias{PipeOpTuneThreshold}
 \title{PipeOpTuneThreshold}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Tunes optimal probability thresholds over different \code{\link[mlr3:PredictionClassif]{PredictionClassif}}s.
-Learner's \code{predict_type} \code{"prob"} is required.
-Thresholds for each learner are optimized using (GenSA)\link[GenSA:GenSA]{GenSA::GenSA}.
+Learner \code{predict_type}: \code{"prob"} is required.
+Thresholds for each learner are optimized using the \code{\link[bbotk:Optimizer]{Optimizer}} supplied via
+the \code{param_set}. Defaults to (GenSA)\link[GenSA:GenSA]{GenSA::GenSA}.
 Returns a single \code{\link[mlr3:PredictionClassif]{PredictionClassif}}.
-As a default, optimizes the miss-classification error \code{\link{MeasureClassif}}.
+As a default, optimizes the miss-classification error (\code{msr("ce")}).
 This PipeOp should be used in conjunction with \code{\link{PipeOpLearnerCV}} in order to
-optimize thresholds of predictions.
+optimize thresholds of cross-validated predictions.
 }
 \section{Construction}{
 \preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
@@ -49,9 +50,9 @@ The parameters are the parameters inherited from \code{\link{PipeOpPredPostproc}
 \item \code{measure} :: \code{\link{Measure}}\cr
 \code{\link{Measure}} to optimize.
 Defaults to \code{msr("classif.ce")}, i.e. misclassification error.
-\item \code{optimizer} :: \code{\link{Optimizer}}\cr
-\code{\link{Optimizer}} used to find optimal thresholds.
-Defaults to \code{OptimizerGenSA$new()}
+\item \code{optimizer} :: \code{\link{Optimizer}}|\code{\link{character}}\cr
+\code{\link{Optimizer}} used to find optimal thresholds. If \code{character}, converts to \code{\link{Optimizer}}
+via \code{\link[bbotk:opt]{bbotk::opt}}. Defaults to \code{bbotk::OptimizerGenSA$new()}
 }
 }
 
@@ -63,7 +64,7 @@ See the \code{optimizer} parameter for more info.
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOpPredPostproc}}.
+Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
@@ -82,7 +83,6 @@ pop$state
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpPredPostproc}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},

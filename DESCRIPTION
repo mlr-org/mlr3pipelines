@@ -138,7 +138,6 @@ Collate:
     'PipeOpNOP.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'
-    'PipeOpPredPostproc.R'
     'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
     'PipeOpRandomResponse.R'

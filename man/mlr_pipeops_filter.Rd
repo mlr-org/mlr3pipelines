@@ -121,7 +121,6 @@ rr$learners[[1]]$model$auc$scores
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpPredPostproc}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},

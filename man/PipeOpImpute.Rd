@@ -126,7 +126,6 @@ from which values are sampled to impute missing values of \code{feature}. \code{
 \seealso{
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
-\code{\link{PipeOpPredPostproc}},
 \code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
