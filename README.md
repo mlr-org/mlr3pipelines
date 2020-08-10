@@ -2,7 +2,7 @@
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
 Package website: [release](https://mlr3pipelines.mlr-org.com/) |
-[dev](https://mlr3pipelines.mlr-org.com/dev)
+[dev](https://mlr3pipelines.mlr-org.com/dev/)
 
 Dataflow Programming for Machine Learning in R.
 
@@ -85,7 +85,7 @@ shipped with the package, which can also be viewed online:
   - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
   - [Detailed
-    Introduction](https://mlr-org.github.io/mlr3pipelines/articles/introduction.html),
+    Introduction](https://mlr3pipelines.mlr-org.com/articles/introduction.html),
     diving into concepts and describing the objects involved
   - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
     of `mlr3pipelines` with other packages (not yet authoritative)
@@ -113,5 +113,5 @@ A predecessor to this package is the
 *mlr* 2.x. Other packages that provide, to varying degree, some
 preprocessing functionality or machine learning domain specific
 language, are the *[caret](https://github.com/topepo/caret)* package and
-the related *[recipes](https://tidymodels.github.io/recipes/)* project,
+the related *[recipes](https://recipes.tidymodels.org/)* project,
 and the *[dplyr](https://github.com/tidyverse/dplyr)* package.
