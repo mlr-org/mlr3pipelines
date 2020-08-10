@@ -99,7 +99,6 @@ Collate:
     'PipeOpEnsemble.R'
     'LearnerAvg.R'
     'NO_OP.R'
-    'Optimizer.R'
     'PipeOpTaskPreproc.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
