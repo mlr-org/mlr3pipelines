@@ -76,7 +76,7 @@ Suggests:
     smotefamily,
     evaluate,
     NMF,
-    MASS
+    MASS,
     kknn
 VignetteBuilder:
     knitr
