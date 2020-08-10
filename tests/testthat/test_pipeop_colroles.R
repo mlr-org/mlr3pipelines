@@ -32,7 +32,7 @@ test_that("PipeOpColRoles - functionality works", {
   task = mlr_tasks$get("iris")
   op = PipeOpColRoles$new(param_vals = list(new_role = list(Petal.Length = c("name", "order"), Petal.Width = character())))
   train_out = train_pipeop(op, inputs = list(task))$output
-  expect_equal(train_out$col_roles, 
+  expect_equal(train_out$col_roles,
     list(feature = c("Sepal.Length", "Sepal.Width"), target = "Species", name = "Petal.Length",
       order = "Petal.Length", stratum = character(), group = character(), weight = character()
     )

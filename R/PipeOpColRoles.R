@@ -28,13 +28,13 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `new_role`  :: `list` \cr
+#' * `new_role` :: `list`\cr
 #'   Named list of new column roles. The names must match the column names of the input task that
 #'   will later be trained/predicted on. Each entry of the list must contain a character vector with
 #'   possible values of [`mlr_reflections$task_col_roles`][mlr3::mlr_reflections]. If the value is
 #'   given as `character()`, the column will be dropped from the input task. Changing the role of a
 #'   column results in this column loosing its previous role(s). Setting a new target variable or
-#'   changing the role of an existing target variable is not supported. 
+#'   changing the role of an existing target variable is not supported.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -63,8 +63,8 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
           if (is.character(first_check)) {
             return(first_check)
           }
-          # for changing the target use PipeOpNewTarget
-          # a value of "character()" will lead to this column being dropped
+          # changing anything target related is not supported
+          # a value of "character()" will lead to the column being dropped
           all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
           check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
         })
@@ -77,12 +77,14 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
       new_role = self$param_set$values$new_role
 
       if (is.null(new_role)) {
-        return(task) # early exit
+        return(task)  # early exit
       }
 
       new_role_names = names(new_role)
+      ids = task$col_info$id
+      ids = ids[ids != "..row_id"]
       # names of "new_role" must be a subset of the column names of the task
-      assert_subset(new_role_names, choices = task$col_info$id, empty.ok = FALSE)
+      assert_subset(new_role_names, choices = ids, empty.ok = FALSE)
 
       # changing the role of a target is not supported
       if (any(task$col_roles$target %in% new_role_names)) {
@@ -91,7 +93,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
 
       # drop (all) old role(s)
       task$col_roles = map(task$col_roles, .f = function(x) x[x %nin% new_role_names])
-      
+
       # add the new role(s)
       all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
       for(role in all_col_roles) {
