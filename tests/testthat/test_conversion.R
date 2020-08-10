@@ -135,3 +135,32 @@ test_that("Graph to GraphLearner", {
   expect_equal(r1, r3)
 
 })
+
+test_that("PipeOp to GraphLearner", {
+
+  po = po("proxy", param_vals = list(content = lrn("classif.rpart")))
+
+  glrn1 = GraphLearner$new(po)
+
+  glrn2 = as_learner(po)
+
+  expect_equal(glrn1, glrn2)
+
+  task = tsk("iris")
+
+  cv = rsmp("holdout")$instantiate(task)
+
+  r1 = resample(task, glrn1, cv)$predictions()
+  r3 = resample(task, po$param_set$values$content, cv)$predictions()
+
+  expect_equal(r1, r3)
+
+  po_cv = po("learner_cv", learner = po, param_vals = list(resampling.method = "insample"))
+  expect_true("GraphLearner" %in% class(po_cv$learner))
+
+  train_out = po_cv$train(list(task))
+  expect_task(train_out[[1L]])
+  predict_out = po_cv$train(list(task))
+  expect_task(predict_out[[1L]])
+
+})
