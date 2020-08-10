@@ -172,10 +172,10 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
 
       list(formula = y ~ 1 + (1 | lvl),
         data = data.frame(lvl = feature, y = target),
-        na.action = na.omit, control = control)
+        na.action = stats::na.omit, control = control)
     },
     get_coefs = function(mod) {
-      coefs = invoke(coef, mod, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))$lvl
+      coefs = invoke(stats::coef, mod, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))$lvl
       lvls = rownames(coefs)
       coefs = coefs[,1]
       names(coefs) = lvls

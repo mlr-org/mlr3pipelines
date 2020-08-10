@@ -12,7 +12,7 @@
 #'
 #' For `"prob"`, the responses are sampled according to
 #' the probabilities of the input [`PredictionClassif`][mlr3::PredictionClassif]. For `"se"`,
-#' responses are randomly drawn according to the `rdistfun` parameter (default is `rnorm`) by using
+#' responses are randomly drawn according to the `rdistfun` parameter (default is [`rnorm`]) by using
 #' the original responses of the input [`PredictionRegr`][mlr3::PredictionRegr] as the mean and the
 #' original standard errors of the input [`PredictionRegr`][mlr3::PredictionRegr] as the standard
 #' deviation (sampling is done observation-wise).
@@ -46,7 +46,7 @@
 #'   A function for generating random responses when the predict type is `"se"`. This function must
 #'   accept the arguments `n` (integerish number of responses), `mean` (`numeric` for the mean),
 #'   and `sd` (`numeric` for the  standard deviation), and must *vectorize* over `mean`
-#'   and `sd`. Default is `rnorm`.
+#'   and `sd`. Default is [`rnorm`].
 #'
 #' @section Internals:
 #' If the `predict_type` of the input [`Prediction`][mlr3::Prediction] does not match `"prob"` or
@@ -83,12 +83,12 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
   public = list(
     initialize = function(id = "randomresponse", param_vals = list(), packages = character(0L)) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("rdistfun", default = rnorm, tags = c("predict", "required"), custom_check = function(x) {
+        ParamUty$new("rdistfun", default = stats::rnorm, tags = c("predict", "required"), custom_check = function(x) {
           check_function(x, args = c("n", "mean", "sd"))
         })
         )
       )
-      ps$values = list(rdistfun = rnorm)
+      ps$values = list(rdistfun = stats::rnorm)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = packages,
         input = data.table(name = "input", train = "NULL", predict = "Prediction"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction")

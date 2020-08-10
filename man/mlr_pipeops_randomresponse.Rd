@@ -15,7 +15,7 @@ prediction.
 
 For \code{"prob"}, the responses are sampled according to
 the probabilities of the input \code{\link[mlr3:PredictionClassif]{PredictionClassif}}. For \code{"se"},
-responses are randomly drawn according to the \code{rdistfun} parameter (default is \code{rnorm}) by using
+responses are randomly drawn according to the \code{rdistfun} parameter (default is \code{\link{rnorm}}) by using
 the original responses of the input \code{\link[mlr3:PredictionRegr]{PredictionRegr}} as the mean and the
 original standard errors of the input \code{\link[mlr3:PredictionRegr]{PredictionRegr}} as the standard
 deviation (sampling is done observation-wise).
@@ -56,7 +56,7 @@ The \verb{$state} is left empty (\code{list()}).
 A function for generating random responses when the predict type is \code{"se"}. This function must
 accept the arguments \code{n} (integerish number of responses), \code{mean} (\code{numeric} for the mean),
 and \code{sd} (\code{numeric} for the  standard deviation), and must \emph{vectorize} over \code{mean}
-and \code{sd}. Default is \code{rnorm}.
+and \code{sd}. Default is \code{\link{rnorm}}.
 }
 }
 

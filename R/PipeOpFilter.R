@@ -144,8 +144,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
       features = switch(filtercrit,
         cutoff = names(scores)[scores >= critvalue],
-        nfeat = head(names(scores), nfeat),
-        frac = head(names(scores), nfeat),
+        nfeat = utils::head(names(scores), nfeat),
+        frac = utils::head(names(scores), nfeat),
         stop("unknown filter criterion"))
 
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep

@@ -39,7 +39,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         task_type = c(
           match(c(output$train, output$predict), class_table$prediction),
           match(c(input$train, input$predict), class_table$task))
-        task_type = unique(class_table$type[na.omit(task_type)])
+        task_type = unique(class_table$type[stats::na.omit(task_type)])
         if (length(task_type) > 1L) {
           stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
         }
@@ -50,14 +50,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
             task_type = c(
               match(c(x$output$train, x$output$predict), class_table$prediction),
               match(c(x$input$train, x$input$predict), class_table$task))
-            task_type = unique(class_table$type[na.omit(task_type)])
+            task_type = unique(class_table$type[stats::na.omit(task_type)])
             if (length(task_type) > 1) {
               stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
             }
             if (length(task_type) == 1) {
               return(task_type)  # early exit
             }
-            prdcssrs = graph$edges[dst_id == x$id, ]$src_id
+            prdcssrs = graph$edges[get("dst_id") == x$id, ]$src_id
             if (length(prdcssrs)) {
               # all non-null elements
               task_types = keep(map(graph$pipeops[prdcssrs], get_po_task_type), Negate(is.null))
@@ -124,10 +124,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       prediction[[1]]
     },
     get_predict_type = function() {
-      # recursively walk backwards through the graph 
+      # recursively walk backwards through the graph
       get_po_predict_type = function(x) {
         if (!is.null(x$predict_type)) return(x$predict_type)
-        prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
+        prdcssrs = self$graph$edges[get("dst_id") == x$id, ]$src_id
         if (length(prdcssrs)) {
           # all non-null elements
           predict_types = keep(map(self$graph$pipeops[prdcssrs], get_po_predict_type), Negate(is.null))
@@ -143,11 +143,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         predict_type
     },
     set_predict_type = function(predict_type) {
-      # recursively walk backwards through the graph 
+      # recursively walk backwards through the graph
       set_po_predict_type = function(x, predict_type) {
         assert_subset(predict_type, unlist(mlr_reflections$learner_predict_types[[self$task_type]]))
         if (!is.null(x$predict_type)) x$predict_type = predict_type
-        prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
+        prdcssrs = self$graph$edges[get("dst_id") == x$id, ]$src_id
         if (length(prdcssrs)) {
           map(self$graph$pipeops[prdcssrs], set_po_predict_type, predict_type = predict_type)
         }
