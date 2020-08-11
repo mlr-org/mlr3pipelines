@@ -75,7 +75,8 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
-    kknn
+    kknn,
+    methods
 VignetteBuilder:
     knitr
 RdMacros:
