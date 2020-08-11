@@ -6,16 +6,17 @@
 #'
 #' @description
 #' Tunes optimal probability thresholds over different [`PredictionClassif`][mlr3::PredictionClassif]s.
+#'
 #' Learner `predict_type`: `"prob"` is required.
 #' Thresholds for each learner are optimized using the [`Optimizer`][bbotk::Optimizer] supplied via
-#' the `param_set`. Defaults to [`GenSA`][GenSA::GenSA].
+#' the `param_set`.
+#' Defaults to [`GenSA`][GenSA::GenSA].
 #' Returns a single [`PredictionClassif`][mlr3::PredictionClassif].
-#' As a default, optimizes the miss-classification error (`msr("ce")`).
+#'
 #' This PipeOp should be used in conjunction with [`PipeOpLearnerCV`] in order to
 #' optimize thresholds of cross-validated predictions.
-#'
 #' In order to optimize thresholds without cross-validation, use [`PipeOpLearnerCV`]
-#' in conjunction with [`ResamplingInsample`][[mlr3::ResamplingInsample].
+#' in conjunction with [`ResamplingInsample`][mlr3::ResamplingInsample].
 #'
 #' @section Construction:
 #' ```
@@ -40,11 +41,11 @@
 #'  * `measure` :: [`Measure`][mlr3::Measure]\cr
 #'    [`Measure`][mlr3::Measure] to optimize.
 #'    Defaults to `msr("classif.ce")`, i.e. misclassification error.
-#'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|[`character`]\cr
+#'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
-#'    via [`opt()`][bbotk::opt]. Defaults to `bbotk::OptimizerGenSA`
-#'  * `log_level` :: [`character`]|[`integer`]\cr
+#'    via [`opt`][bbotk::opt]. Defaults to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
+#'  * `log_level` :: `character(1)`|`integer(1)`\cr
 #'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Default: "warn".
 #'
 #' @section Internals:
