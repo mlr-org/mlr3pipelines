@@ -11,11 +11,14 @@
 Tunes optimal probability thresholds over different \code{\link[mlr3:PredictionClassif]{PredictionClassif}}s.
 Learner \code{predict_type}: \code{"prob"} is required.
 Thresholds for each learner are optimized using the \code{\link[bbotk:Optimizer]{Optimizer}} supplied via
-the \code{param_set}. Defaults to (GenSA)\link[GenSA:GenSA]{GenSA::GenSA}.
+the \code{param_set}. Defaults to \code{\link[GenSA:GenSA]{GenSA}}.
 Returns a single \code{\link[mlr3:PredictionClassif]{PredictionClassif}}.
 As a default, optimizes the miss-classification error (\code{msr("ce")}).
 This PipeOp should be used in conjunction with \code{\link{PipeOpLearnerCV}} in order to
 optimize thresholds of cross-validated predictions.
+
+In order to optimize thresholds without cross-validation, use \code{\link{PipeOpLearnerCV}}
+in conjunction with [\code{ResamplingInsample}][\link[mlr3:mlr_resamplings_insample]{mlr3::ResamplingInsample}.
 }
 \section{Construction}{
 \preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
@@ -32,27 +35,30 @@ that would otherwise be set during construction. Default \code{list()}.
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpPredPostproc}}.
+Input and output channels are inherited from \code{\link{PipeOp}}.
 }
 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with elements
 \itemize{
-\item \code{thresholds} :: \code{character} learned thresholds
+\item \code{thresholds} :: \code{numeric} learned thresholds
 }
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpPredPostproc}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{measure} :: \code{\link{Measure}}\cr
-\code{\link{Measure}} to optimize.
+\item \code{measure} :: \code{\link[mlr3:Measure]{Measure}}\cr
+\code{\link[mlr3:Measure]{Measure}} to optimize.
 Defaults to \code{msr("classif.ce")}, i.e. misclassification error.
-\item \code{optimizer} :: \code{\link{Optimizer}}|\code{\link{character}}\cr
-\code{\link{Optimizer}} used to find optimal thresholds. If \code{character}, converts to \code{\link{Optimizer}}
-via \code{\link[bbotk:opt]{bbotk::opt}}. Defaults to \code{bbotk::OptimizerGenSA$new()}
+\item \code{optimizer} :: \code{\link[bbotk:Optimizer]{Optimizer}}|\code{\link{character}}\cr
+\code{\link[bbotk:Optimizer]{Optimizer}} used to find optimal thresholds.
+If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
+via \code{\link[bbotk:opt]{opt()}}. Defaults to \code{bbotk::OptimizerGenSA}
+\item \code{log_level} :: \code{\link{character}}|\code{\link{integer}}\cr
+Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Default: "warn".
 }
 }
 

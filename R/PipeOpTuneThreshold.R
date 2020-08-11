@@ -8,11 +8,14 @@
 #' Tunes optimal probability thresholds over different [`PredictionClassif`][mlr3::PredictionClassif]s.
 #' Learner `predict_type`: `"prob"` is required.
 #' Thresholds for each learner are optimized using the [`Optimizer`][bbotk::Optimizer] supplied via
-#' the `param_set`. Defaults to (GenSA)[GenSA::GenSA].
+#' the `param_set`. Defaults to [`GenSA`][GenSA::GenSA].
 #' Returns a single [`PredictionClassif`][mlr3::PredictionClassif].
 #' As a default, optimizes the miss-classification error (`msr("ce")`).
 #' This PipeOp should be used in conjunction with [`PipeOpLearnerCV`] in order to
 #' optimize thresholds of cross-validated predictions.
+#'
+#' In order to optimize thresholds without cross-validation, use [`PipeOpLearnerCV`]
+#' in conjunction with [`ResamplingInsample`][[mlr3::ResamplingInsample].
 #'
 #' @section Construction:
 #' ```
@@ -26,20 +29,23 @@
 #'   that would otherwise be set during construction. Default `list()`.
 #'
 #' @section Input and Output Channels:
-#' Input and output channels are inherited from [`PipeOpPredPostproc`].
+#' Input and output channels are inherited from [`PipeOp`].
 #'
 #' @section State:
 #' The `$state` is a named `list` with elements
-#' * `thresholds` :: `character` learned thresholds
+#' * `thresholds` :: `numeric` learned thresholds
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpPredPostproc`], as well as:
-#'  * `measure` :: [`Measure`]\cr
-#'    [`Measure`] to optimize.
+#' The parameters are the parameters inherited from [`PipeOp`], as well as:
+#'  * `measure` :: [`Measure`][mlr3::Measure]\cr
+#'    [`Measure`][mlr3::Measure] to optimize.
 #'    Defaults to `msr("classif.ce")`, i.e. misclassification error.
-#'  * `optimizer` :: [`Optimizer`]|[`character`]\cr
-#'    [`Optimizer`] used to find optimal thresholds. If `character`, converts to [`Optimizer`]
-#'    via [`bbotk::opt`]. Defaults to `bbotk::OptimizerGenSA$new()`
+#'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|[`character`]\cr
+#'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
+#'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
+#'    via [`opt()`][bbotk::opt]. Defaults to `bbotk::OptimizerGenSA`
+#'  * `log_level` :: [`character`]|[`integer`]\cr
+#'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Default: "warn".
 #'
 #' @section Internals:
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
@@ -70,9 +76,10 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
         ParamUty$new("measure", custom_check = function(x) check_r6(x, "MeasureClassif"), tags = "train"),
         ParamUty$new("optimizer", custom_check = function(x) {
           inherits(x, "Optimizer") | x %in% c("gensa", "nloptr", "random_search")
-        }, tags = "train")
+        }, tags = "train"),
+        ParamUty$new("log_level", default = "warn", tags = "train")
       ))
-      ps$values = list(measure = msr("classif.ce"), optimizer = "gensa")
+      ps$values = list(measure = msr("classif.ce"), optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction"),
@@ -115,7 +122,11 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
           bbotk::trm("evals", n_evals = 50*ncol(pred$prob)))
         )
       )
+      lgr = lgr::get_logger("bbotk")
+      old_threshold = lgr$threshold
+      lgr$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
+      on.exit(lgr$set_threshold(old_threshold))
       unlist(inst$result_x_domain)
     },
     make_param_set = function(pred) {
