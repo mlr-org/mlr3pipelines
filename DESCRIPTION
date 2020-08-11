@@ -85,6 +85,7 @@ Remotes:
     mlr-org/mlr3@leanify_with_misc,
     mlr-org/paradox@leanify,
     mlr-org/mlr3learners@leanify
+    mlr-org/mlr3misc
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
