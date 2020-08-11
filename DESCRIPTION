@@ -83,7 +83,6 @@ RdMacros:
     mlr3misc
 Remotes:
     mlr-org/mlr3@leanify_with_misc,
-    mlr-org/mlr3misc@leanify,
     mlr-org/paradox@leanify,
     mlr-org/mlr3learners@leanify
 ByteCompile: true
