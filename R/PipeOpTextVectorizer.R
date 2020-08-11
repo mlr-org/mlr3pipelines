@@ -203,7 +203,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary")
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords", "methods"), feature_types = "character")
     }
   ),
   private = list(
