@@ -153,7 +153,7 @@ Graph = R6Class("Graph",
         return(names2(self$pipeops))
       }
 
-      tmp = self$edges[, list(parents = list(unique(get("src_id")))), by = list(id = get("dst_id"))]
+      tmp = self$edges[, list(parents = list(unique(src_id))), by = list(id = dst_id)]
       orphans = setdiff(names(self$pipeops), self$edges$dst_id)  # the ones without parents
       if (length(orphans)) {
         # if orphans is empty either the Graph is empty (won't happen here) or has cycles, in
@@ -256,14 +256,14 @@ Graph = R6Class("Graph",
         ig = igraph::make_empty_graph()
         extra_vertices = names(self$pipeops)
       } else {
-        df = self$edges[, list(from = get("src_id"), to = get("dst_id"))]
-        df = rbind(df, self$input[, list(from = "<INPUT>", to = get("op.id"))])
+        df = self$edges[, list(from = src_id, to = dst_id)]
+        df = rbind(df, self$input[, list(from = "<INPUT>", to = op.id)])
         output = self$output
         if (nrow(output) > 1) {
           # In case we have multiple outputs, we add an output for every final node
-          df = rbind(df, output[, list(from = get("op.id"), to = paste0("<OUTPUT>\n", get("name")))])
+          df = rbind(df, output[, list(from = op.id, to = paste0("<OUTPUT>\n", name))])
         } else {
-          df = rbind(df, output[, list(from = get("op.id"), to = "<OUTPUT>")])
+          df = rbind(df, output[, list(from = op.id, to = "<OUTPUT>")])
         }
         ig = igraph::graph_from_data_frame(df)
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
@@ -325,8 +325,8 @@ Graph = R6Class("Graph",
           map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
       }), use.names = TRUE)
       if (nrow(lines)) {
-        prd = self$edges[, list(prdcssors = paste(unique(get("src_id")), collapse = ",")), by = list(ID = get("dst_id"))]
-        scc = self$edges[, list(sccssors = paste(unique(get("dst_id")), collapse = ",")), by = list(ID = get("src_id"))]
+        prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
+        scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
         lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
         lines[is.na(lines)] = ""
         catf("Graph with %s PipeOps:", nrow(lines))
@@ -355,7 +355,7 @@ Graph = R6Class("Graph",
       names(self$pipeops) = new_ids
       imap(self$pipeops, function(x, nn) x$id = nn)
 
-      self$edges[, c("src_id", "dst_id") := list(map_values(get("src_id"), old, new), map_values(get("dst_id"), old, new))]
+      self$edges[, c("src_id", "dst_id") := list(map_values(src_id, old, new), map_values(dst_id, old, new))]
       invisible(self)
     },
     update_ids = function(prefix = "", postfix = "") {
