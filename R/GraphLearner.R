@@ -20,9 +20,10 @@
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     graph = NULL,
-    initialize = function(graph, id = paste(graph$ids(sorted = TRUE), collapse = "."), param_vals = list(), task_type = NULL, predict_type = NULL) {
+    initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL) {
 
       graph = as_graph(graph, clone = TRUE)
+      id = paste(graph$ids(sorted = TRUE), collapse = ".")
       self$graph = graph
       output = graph$output
       if (nrow(output) != 1) {
