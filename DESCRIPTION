@@ -75,7 +75,8 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
-    kknn
+    kknn,
+    vtreat
 VignetteBuilder:
     knitr
 RdMacros:
@@ -87,7 +88,7 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9000
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -153,6 +154,7 @@ Collate:
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
     'PipeOpUnbranch.R'
+    'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
