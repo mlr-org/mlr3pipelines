@@ -148,7 +148,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       set_po_predict_type = function(x, predict_type) {
         assert_subset(predict_type, unlist(mlr_reflections$learner_predict_types[[self$task_type]]))
         if (!is.null(x$predict_type)) x$predict_type = predict_type
-        prdcssrs = self$graph$edges[get("dst_id") == x$id, ]$src_id
+        prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
         if (length(prdcssrs)) {
           map(self$graph$pipeops[prdcssrs], set_po_predict_type, predict_type = predict_type)
         }
