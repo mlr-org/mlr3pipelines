@@ -63,4 +63,10 @@ test_that("mlr_pipeops access works", {
     mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99))
   )
 
+
+  expect_equal(
+    po("select", param_vals = list(selector = selector_all())),
+    po(selector_all())
+  )
+
 })

@@ -83,6 +83,16 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
 
       list(prd$set_threshold(thr))
     }
+  ),
+  active = list(
+    predict_type = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$predict_type for PipeOpThreshold is read-only.")
+        }
+      }
+      return("response")
+    }
   )
 )
 

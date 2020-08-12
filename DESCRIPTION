@@ -46,17 +46,18 @@ Imports:
     checkmate,
     data.table,
     digest,
+    lgr,
     mlr3 (>= 0.1.4),
     mlr3misc (>= 0.1.4),
     paradox,
     R6,
     withr
 Suggests:
+    bibtex,
     ggplot2,
     glmnet,
     igraph,
     knitr,
-    lgr,
     lme4,
     mlbench,
     mlr3filters (>= 0.1.1),
@@ -73,9 +74,12 @@ Suggests:
     fastICA,
     kernlab,
     smotefamily,
-    evaluate
+    evaluate,
+    kknn
 VignetteBuilder:
     knitr
+RdMacros:
+    mlr3misc
 Remotes:
     mlr-org/mlr3
 ByteCompile: true
@@ -83,11 +87,12 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Collate:
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'
+    'multiplicity.R'
     'utils.R'
     'PipeOp.R'
     'PipeOpEnsemble.R'
@@ -113,24 +118,30 @@ Collate:
     'PipeOpHistBin.R'
     'PipeOpICA.R'
     'PipeOpImpute.R'
+    'PipeOpImputeConstant.R'
     'PipeOpImputeHist.R'
+    'PipeOpImputeLearner.R'
     'PipeOpImputeMean.R'
     'PipeOpImputeMedian.R'
     'PipeOpImputeMode.R'
-    'PipeOpImputeNewlvl.R'
+    'PipeOpImputeOOR.R'
     'PipeOpImputeSample.R'
     'PipeOpKernelPCA.R'
     'PipeOpLearner.R'
     'PipeOpLearnerCV.R'
     'PipeOpMissingIndicators.R'
     'PipeOpModelMatrix.R'
+    'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
     'PipeOpNOP.R'
+    'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
+    'PipeOpRandomResponse.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
+    'PipeOpRenameColumns.R'
     'PipeOpScale.R'
     'PipeOpScaleMaxAbs.R'
     'PipeOpScaleRange.R'

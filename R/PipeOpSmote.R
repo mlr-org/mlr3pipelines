@@ -40,17 +40,14 @@
 #'   Desired times of synthetic minority instances over the original number of
 #'   majority instances. See [`SMOTE()`][`smotefamily::SMOTE`].
 #'
-#' @section Internals:
-#' For details see: \cr
-#' Chawla, N., Bowyer, K., Hall, L. and Kegelmeyer, W. 2002.\cr
-#' SMOTE: Synthetic minority oversampling technique.\cr
-#' Journal of Artificial Intelligence Research. 16, 321-357.
-#'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @references
+#' \cite{mlr3pipelines}{chawla_2002}
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R

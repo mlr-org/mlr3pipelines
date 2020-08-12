@@ -10,7 +10,8 @@
 #'
 #' @param graphs `list` of ([`Graph`] | [`PipeOp`])\cr
 #'   List of elements with one of the types defined above, which are the
-#'   [`Graph`]s to be joined.
+#'   [`Graph`]s to be joined. The list can be named, in which case the
+#'   IDs of the elements are prefixed with the names, separated by a dot (`.`).
 #' @return [`Graph`] the resulting [`Graph`].
 #'
 #' @family Graph operators

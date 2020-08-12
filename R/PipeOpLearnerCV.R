@@ -24,14 +24,14 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpLearnerCV$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())
+#' PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] \cr
 #'   [`Learner`][mlr3::Learner] to use for cross validation / prediction, or a string identifying a
 #'   [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
 #' * `id` :: `character(1)`
-#'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
+#'   Identifier of the resulting object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -64,9 +64,10 @@
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
 #' Besides that, parameters introduced are:
 #' * `resampling.method` :: `character(1)`\cr
-#'   Which resampling method do we want to use. Currently only supports `"cv"`.
+#'   Which resampling method do we want to use. Currently only supports `"cv"` and `"insample"`. `"insample"` generates
+#'   predictions with the model trained on all training data.
 #' * `resampling.folds` :: `numeric(1)`\cr
-#'   Number of cross validation folds. Initialized to 3.
+#'   Number of cross validation folds. Initialized to 3. Only used for `resampling.method = "cv"`.
 #' * `keep_response` :: `logical(1)`\cr
 #'   Only effective during `"prob"` prediction: Whether to keep response values, if available. Initialized to `FALSE`.
 #'
@@ -74,9 +75,11 @@
 #' The `$state` is currently not updated by prediction, so the `$state$predict_log` and `$state$predict_time` will always be `NULL`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`], as well as:
-#' * `learner`  :: [`Learner`][mlr3::Learner]\cr
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -118,14 +121,21 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = "cv", tags = c("train", "required")),
+        ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
         ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
         ParamLgl$new("keep_response", tags = c("train", "required"))
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
+      # Dependencies in paradox have been broken from the start and this is known since at least a year:
+      # https://github.com/mlr-org/paradox/issues/216
+      # The following would make it _impossible_ to set "method" to "insample", because then "folds"
+      # is both _required_ (required tag above) and at the same time must be unset (because of this
+      # dependency). We will opt for the least annoying behaviour here and just not use dependencies
+      # in PipeOp ParamSets.
+      # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
-      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = "ensemble")
+      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
     }
 
   ),
@@ -137,6 +147,18 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         }
       }
       private$.learner
+    },
+    learner_model = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      if (is.null(self$state) || is_noop(self$state)) {
+        private$.learner
+      } else {
+        multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
+      }
     }
   ),
   private = list(
@@ -148,10 +170,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       pv = private$.crossval_param_set$values
 
       # Compute CV Predictions
-      rdesc = mlr_resamplings$get(pv[["method"]])
-      rdesc$param_set$values = list(folds = pv[["folds"]])
-      res = resample(task, private$.learner, rdesc)
-      prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
+      if (pv$method != "insample") {
+        rdesc = mlr_resamplings$get(pv$method)
+        if (pv$method == "cv") rdesc$param_set$values = list(folds = pv$folds)
+        res = resample(task, private$.learner, rdesc)
+        prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
+      } else {
+        prds = as.data.table(private$.learner$predict(task))
+      }
 
       private$pred_to_task(prds, task)
     },

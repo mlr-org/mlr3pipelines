@@ -4,19 +4,21 @@
 #' #FIXME: This needs detailed tests and should be moved to mlr3.
 #' @param intask [`Task`][mlr3::Task]\cr
 #'   A [`Task`][mlr3::Task] to be converted.
-#' @param new_target `character(1)`\cr
+#' @param new_target `character(1)` | `NULL`\cr
 #'   New target to be set, must be a column in the `intask` data.
 #'   If `NULL`, no new target is set, and task is converted as-is.
-#' @param new_type `character(1)`\cr
+#' @param new_type `character(1)` | `NULL`\cr
 #'   The new task type. Must be in `mlr_reflections$task_types`.
 #'   If `NULL` (default), a new task with the same task_type is created.
 #' @param drop_original_target `logical(1)`\cr
-#'   If `FALSE` (default), the original target is added as a feature.
-#'   Otherwise the original target is dropped.
-#' @param \dots \cr
+#'   If `TRUE` (default), the original target is dropped. Otherwise it is
+#'   added as a feature.
+#' @param drop_levels `logical(1)`\cr
+#'   If `TRUE`, unused levels of the new target variable are dropped.
+#' @param \dots `any`\cr
 #'  Further arguments passed to the constructor of the task.
 #' @return [`Task`][mlr3::Task]
-convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = FALSE, ...) {
+convert_task = function(intask, new_target = NULL, new_type = NULL, drop_original_target = TRUE, drop_levels = FALSE, ...) {
   assert_task(intask)
   assert_subset(new_target, choices = intask$col_info$id)
   assert_choice(new_type, choices = mlr_reflections$task_types$type, null.ok = TRUE)
@@ -34,7 +36,7 @@ convert_task = function(intask, new_target = NULL, new_type = NULL, drop_origina
   newtask$set_col_role(new_target, "target")
   if (!all(intask$target_names == new_target)) newtask$set_col_role(intask$col_roles$target, "feature")
   # during prediction, when target is NA, we do not call droplevels
-  if (!all(is.na(newtask$data()[, newtask$target_names, with = FALSE]))) newtask$droplevels()
+  if (assert_flag(drop_levels)) newtask$droplevels()
   # if drop_original_target, remove the original target from the col_roles
   # FIXME: in general implement the col_role "unused col_role"?
   if (drop_original_target) newtask$col_roles$feature = setdiff(newtask$col_roles$feature, intask$col_roles$target)
