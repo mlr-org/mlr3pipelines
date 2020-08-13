@@ -146,4 +146,35 @@ test_that("Autoconversion for pipeops works", {
 
   expect_error(po$predict(list(msr("regr.mse"))), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
 
+  po1 = R6Class("test", inherit = PipeOp,
+    public = list(
+      initialize = function()
+        super$initialize("test",
+          input = data.table(name = "in", train = "*", predict = "*"),
+          output = data.table(name = "out", train = "Task", predict  = "Task"))),
+    private = list(
+      .train = function(...) {
+        self$state = list()
+        list(tsk("iris"))
+      },
+      .predict = function(...) list(tsk("iris"))
+    )
+  )$new()
+  po2 <- R6Class("test", inherit = PipeOp,
+    public = list(
+      initialize = function() super$initialize("test2",
+        input = data.table(name = "in", train = "NULL", predict = "Task"),
+        output = data.table(name = "out", train = "*", predict = "*"))),
+    private = list(
+      .train = function(inp) self$state = inp,
+      .predict = function(inp) inp
+    )
+  )$new()
+
+  graph = po1 %>>% po2
+
+  expect_equal(graph$train(1), list(test2.out = NULL))
+
+  expect_equal(graph$predict(1), list(test2.out = tsk("iris")))
+
 })
