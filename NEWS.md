@@ -1,3 +1,7 @@
+# mlr3pipelines 0.2.2
+
+* NULL input channels accept any kind of input
+
 # mlr3pipelines 0.2.1
 
 * New feature: Multiplicities: implicit repetition of operations
