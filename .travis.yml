@@ -18,5 +18,4 @@ script:
   - Rscript -e 'remotes::install_deps()'
   - R CMD build .
   - R CMD INSTALL *.tar.gz
-  - Rscript -e 'lintr::lint_package()'
 
