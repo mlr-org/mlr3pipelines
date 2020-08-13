@@ -94,7 +94,7 @@ If `" />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.1.3.9000</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1-9000</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -318,13 +318,13 @@ is used as input and output during prediction.</p>
 <span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"greplicate"</span>,
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"subsample"</span>) <span class='kw'>%&gt;&gt;%</span>
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>)),
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>
 ) <span class='kw'>%&gt;&gt;%</span>
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"classifavg"</span>)
 
 <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>), <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
 #&gt; * Task: iris
-#&gt; * Learner: subsample_1.subsample_2.subsample_3.subsample_4.subsample_5.classif.rpart_1.classif.rpart_2.classif.rpart_3.classif.rpart_4.classif.rpart_5.classifavg
+#&gt; * Learner: subsample_1.subsample_2.subsample_3.classif.rpart_1.classif.rpart_2.classif.rpart_3.classifavg
 #&gt; * Warnings: 0 in 0 iterations
 #&gt; * Errors: 0 in 0 iterations</div></pre>
   </div>
@@ -338,7 +338,7 @@ is used as input and output during prediction.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Martin Binder, Florian Pfisterer, Bernd Bischl, Michel Lang, Susanne Dandl, Lennart Schneider.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown">
