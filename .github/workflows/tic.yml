@@ -1,9 +1,6 @@
 ## tic GitHub Actions template: linux-macos-windows-deploy
 ## revision date: 2020-08-06
-<<<<<<< HEAD:.github/workflows/main.yml
-=======
 # [Custom header]
->>>>>>> 47ab66ff... Run CI only on Ubuntu:.github/workflows/tic.yml
 on:
   workflow_dispatch:
   push:
