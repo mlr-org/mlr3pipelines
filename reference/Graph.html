@@ -19,6 +19,10 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
+
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
@@ -69,7 +73,7 @@ dependency structure (although the PipeOps for this would need to be written)." 
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -81,52 +85,46 @@ dependency structure (although the PipeOps for this would need to be written)." 
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
-      </span>
-    </div>
 
+      <div class="navbar-brand-container">
+        <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+      </div>
+    </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/introduction.html">Introduction</a>
-    </li>
-    <li>
-      <a href="../articles/comparison_mlr3pipelines_mlr_sklearn.html">Comparison to Other Packages</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Function Reference</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
-</li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="../reference/index.html">
+    <span class="fa fa fa fa-file-alt"></span>
+     
+    Reference
+  </a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="https://mlr3book.mlr-org.com">
+    <span class="fa fa fa fa-link"></span>
+     
+    mlr3book
+  </a>
+</li>
+        <li>
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://mlr-org.slack.com">
-    <span class="fa fa-slack"></span>
+  <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
+    <span class="fa fa fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fa fa-stack-overflow"></span>
+    <span class="fab fa fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -168,11 +166,11 @@ dependency structure (although the <code><a href='PipeOp.html'>PipeOp</a></code>
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>R6Class Graph</p>
+<p><code>R6Class</code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>Graph$new()
-</pre>
+<pre><span class='no'>Graph</span>$<span class='fu'>new</span>()</pre>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
@@ -246,7 +244,7 @@ Add an edge from <code><a href='PipeOp.html'>PipeOp</a></code> <code>src_id</cod
 channel <code>dst_channel</code> (identified by its name or number as listed in the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$input</code>).
 If source or destination <code><a href='PipeOp.html'>PipeOp</a></code> have only one input / output channel and <code>src_channel</code> / <code>dst_channel</code>
 are therefore unambiguous, they can be omitted (i.e. left as <code>NULL</code>).</p></li>
-<li><p><code><a href='https://rdrr.io/r/graphics/plot.html'>plot(html)</a></code> <br />
+<li><p><code><a href='https://rdrr.io/r/base/plot.html'>plot(html)</a></code> <br />
 (<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; <code>NULL</code> <br />
 Plot the <code>Graph</code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
 the <code>visNetwork</code> package for <code>html = TRUE</code> producing a <code><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlWidget</a></code>.
@@ -261,6 +259,9 @@ that is read as input by the <code><a href='PipeOp.html'>PipeOp</a></code> on th
 (<code>character</code>, <code>character</code>) -&gt; <code>self</code> <br />
 Rename <code><a href='PipeOp.html'>PipeOp</a></code>s: Change ID of each <code><a href='PipeOp.html'>PipeOp</a></code> as identified by <code>old</code> to the corresponding item in <code>new</code>. This should be used
 instead of changing a <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$id</code> value directly!</p></li>
+<li><p><code>update_ids(prefix = "", postfix = "")</code> <br />
+(<code>character</code>, <code>character</code>) -&gt; <code>self</code> <br />
+Pre- or postfix <code><a href='PipeOp.html'>PipeOp</a></code>'s existing ids. Both <code>prefix</code> and <code>postfix</code> default to <code>""</code>, i.e. no changes.</p></li>
 <li><p><code>train(input, single_input = TRUE)</code> <br />
 (<code>any</code>, <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; named <code>list</code><br />
 Train <code>Graph</code> by traversing the <code>Graph</code>s' edges and calling all the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$train</code> methods in turn.
@@ -283,9 +284,14 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other mlr3pipelines backend related: <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
-  <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, <code><a href='PipeOp.html'>PipeOp</a></code>,
-  <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+    <div class='dont-index'><p>Other mlr3pipelines backend related: 
+<code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
+<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
+<code><a href='PipeOp.html'>PipeOp</a></code>,
+<code><a href='mlr_graphs.html'>mlr_graphs</a></code>,
+<code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
@@ -325,29 +331,21 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 #&gt;  9:  setosa -2.326845  1.11160370  0.14459247 -0.026769540
 #&gt; 10:  setosa -2.177035  0.46744757 -0.25291827 -0.039766068</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#construction">Construction</a></li>
-      <li><a href="#internals">Internals</a></li>
-      <li><a href="#fields">Fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Martin Binder, Florian Pfisterer, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

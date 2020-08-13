@@ -19,6 +19,10 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
+
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
@@ -63,7 +67,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,52 +79,46 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
-      </span>
-    </div>
 
+      <div class="navbar-brand-container">
+        <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+      </div>
+    </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/introduction.html">Introduction</a>
-    </li>
-    <li>
-      <a href="../articles/comparison_mlr3pipelines_mlr_sklearn.html">Comparison to Other Packages</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Function Reference</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
-</li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="../reference/index.html">
+    <span class="fa fa fa fa-file-alt"></span>
+     
+    Reference
+  </a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="https://mlr3book.mlr-org.com">
+    <span class="fa fa fa fa-link"></span>
+     
+    mlr3book
+  </a>
+</li>
+        <li>
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://mlr-org.slack.com">
-    <span class="fa fa-slack"></span>
+  <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
+    <span class="fa fa fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fa fa-stack-overflow"></span>
+    <span class="fab fa fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -161,6 +159,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -175,6 +178,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -213,10 +221,15 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
-          <p><code><a href="grapes-greater-than-greater-than-grapes.html">`%>>%`</a></code> </p>
+          <p><code><a href="grapes-greater-than-greater-than-grapes.html">`%&gt;&gt;%`</a></code> </p>
         </td>
         <td><p>PipeOp Composition Operator</p></td>
       </tr><tr>
@@ -231,12 +244,6 @@
           <p><code><a href="greplicate.html">greplicate()</a></code> </p>
         </td>
         <td><p>Create Disjoint Graph Union of Copies of a Graph</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="branch.html">branch()</a></code> </p>
-        </td>
-        <td><p>Branch Between Alternative Paths</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -245,6 +252,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -314,6 +326,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="mlr_pipeops_datefeatures.html">mlr_pipeops_datefeatures</a></code> </p>
+        </td>
+        <td><p>PipeOpDateFeatures</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mlr_pipeops_encode.html">mlr_pipeops_encode</a></code> </p>
         </td>
         <td><p>PipeOpEncode</p></td>
@@ -362,9 +380,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="mlr_pipeops_imputeconstant.html">mlr_pipeops_imputeconstant</a></code> </p>
+        </td>
+        <td><p>PipeOpImputeConstant</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mlr_pipeops_imputehist.html">mlr_pipeops_imputehist</a></code> </p>
         </td>
         <td><p>PipeOpImputeHist</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_imputelearner.html">mlr_pipeops_imputelearner</a></code> </p>
+        </td>
+        <td><p>PipeOpImputeLearner</p></td>
       </tr><tr>
         
         <td>
@@ -380,9 +410,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="mlr_pipeops_imputenewlvl.html">mlr_pipeops_imputenewlvl</a></code> </p>
+          <p><code><a href="mlr_pipeops_imputemode.html">mlr_pipeops_imputemode</a></code> </p>
         </td>
-        <td><p>PipeOpImputeNewlvl</p></td>
+        <td><p>PipeOpImputeMode</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_imputeoor.html">mlr_pipeops_imputeoor</a></code> </p>
+        </td>
+        <td><p>PipeOpImputeOOR</p></td>
       </tr><tr>
         
         <td>
@@ -422,6 +458,18 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="mlr_pipeops_multiplicityexply.html">mlr_pipeops_multiplicityexply</a></code> </p>
+        </td>
+        <td><p>PipeOpMultiplicityExply</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_multiplicityimply.html">mlr_pipeops_multiplicityimply</a></code> </p>
+        </td>
+        <td><p>PipeOpMultiplicityImply</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mlr_pipeops_mutate.html">mlr_pipeops_mutate</a></code> </p>
         </td>
         <td><p>PipeOpMutate</p></td>
@@ -431,6 +479,18 @@
           <p><code><a href="mlr_pipeops_nop.html">mlr_pipeops_nop</a></code> </p>
         </td>
         <td><p>PipeOpNOP</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_ovrsplit.html">mlr_pipeops_ovrsplit</a></code> </p>
+        </td>
+        <td><p>PipeOpOVRSplit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_ovrunite.html">mlr_pipeops_ovrunite</a></code> </p>
+        </td>
+        <td><p>PipeOpOVRUnite</p></td>
       </tr><tr>
         
         <td>
@@ -446,6 +506,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="mlr_pipeops_randomresponse.html">mlr_pipeops_randomresponse</a></code> </p>
+        </td>
+        <td><p>PipeOpRandomResponse</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mlr_pipeops_regravg.html">mlr_pipeops_regravg</a></code> </p>
         </td>
         <td><p>PipeOpRegrAvg</p></td>
@@ -455,6 +521,18 @@
           <p><code><a href="mlr_pipeops_removeconstants.html">mlr_pipeops_removeconstants</a></code> </p>
         </td>
         <td><p>PipeOpRemoveConstants</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_renamecolumns.html">mlr_pipeops_renamecolumns</a></code> </p>
+        </td>
+        <td><p>PipeOpRenameColumns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_replicate.html">mlr_pipeops_replicate</a></code> </p>
+        </td>
+        <td><p>PipeOpReplicate</p></td>
       </tr><tr>
         
         <td>
@@ -500,9 +578,45 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="mlr_pipeops_targetinvert.html">mlr_pipeops_targetinvert</a></code> </p>
+        </td>
+        <td><p>PipeOpTargetInvert</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_targetmutate.html">mlr_pipeops_targetmutate</a></code> </p>
+        </td>
+        <td><p>PipeOpTargetMutate</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_targettrafoscalerange.html">mlr_pipeops_targettrafoscalerange</a></code> </p>
+        </td>
+        <td><p>PipeOpTargetTrafoScaleRange</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_textvectorizer.html">mlr_pipeops_textvectorizer</a></code> </p>
+        </td>
+        <td><p>PipeOpTextVectorizer</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_threshold.html">mlr_pipeops_threshold</a></code> </p>
+        </td>
+        <td><p>PipeOpThreshold</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mlr_pipeops_unbranch.html">mlr_pipeops_unbranch</a></code> </p>
         </td>
         <td><p>PipeOpUnbranch</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mlr_pipeops_updatetarget.html">mlr_pipeops_updatetarget</a></code> </p>
+        </td>
+        <td><p>PipeOpUpdateTarget</p></td>
       </tr><tr>
         
         <td>
@@ -517,10 +631,15 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
-          <p><code><a href="mlr_learners_graph.html">GraphLearner</a></code> </p>
+          <p><code><a href="mlr_learners_graph.html">mlr_learners_graph</a></code> </p>
         </td>
         <td><p>GraphLearner</p></td>
       </tr><tr>
@@ -537,10 +656,15 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
-          <p><code><a href="Selector.html">selector_all()</a></code> <code><a href="Selector.html">selector_none()</a></code> <code><a href="Selector.html">selector_type()</a></code> <code><a href="Selector.html">selector_grep()</a></code> <code><a href="Selector.html">selector_name()</a></code> <code><a href="Selector.html">selector_invert()</a></code> <code><a href="Selector.html">selector_intersect()</a></code> <code><a href="Selector.html">selector_union()</a></code> <code><a href="Selector.html">selector_setdiff()</a></code> </p>
+          <p><code><a href="Selector.html">selector_all()</a></code> <code><a href="Selector.html">selector_none()</a></code> <code><a href="Selector.html">selector_type()</a></code> <code><a href="Selector.html">selector_grep()</a></code> <code><a href="Selector.html">selector_name()</a></code> <code><a href="Selector.html">selector_invert()</a></code> <code><a href="Selector.html">selector_intersect()</a></code> <code><a href="Selector.html">selector_union()</a></code> <code><a href="Selector.html">selector_setdiff()</a></code> <code><a href="Selector.html">selector_missing()</a></code> <code><a href="Selector.html">selector_cardinality_greater_than()</a></code> </p>
         </td>
         <td><p>Selector Functions</p></td>
       </tr><tr>
@@ -593,6 +717,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -607,6 +736,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -636,29 +770,21 @@
     </table>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-package">Package</a></li>
-      <li><a href="#section-building-blocks">Building Blocks</a></li>
-      <li><a href="#section-graph-tools">Graph Tools</a></li>
-      <li><a href="#section-pipeops">PipeOps</a></li>
-      <li><a href="#section-learners">Learners</a></li>
-      <li><a href="#section-helpers">Helpers</a></li>
-      <li><a href="#section-abstract-pipeops">Abstract PipeOps</a></li>
-      <li><a href="#section-pipeop-type-inference">PipeOp Type Inference</a></li>
-    </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Martin Binder, Florian Pfisterer, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

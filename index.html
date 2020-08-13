@@ -12,7 +12,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -30,7 +31,7 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -41,52 +42,46 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
-      </span>
-    </div>
 
+      <div class="navbar-brand-container">
+        <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org"></a>
+        <a class="navbar-brand" href="index.html">mlr3pipelines <small>v0.2.1</small></a>
+      </div>
+    </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
+      <ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="reference/index.html">
+    <span class="fa fa fa fa-file-alt"></span>
      
-    <span class="caret"></span>
+    Reference
   </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/introduction.html">Introduction</a>
-    </li>
-    <li>
-      <a href="articles/comparison_mlr3pipelines_mlr_sklearn.html">Comparison to Other Packages</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="reference/index.html">Function Reference</a>
+  <a href="news/index.html">Changelog</a>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="https://mlr3book.mlr-org.com">
+    <span class="fa fa fa fa-link"></span>
+     
+    mlr3book
+  </a>
 </li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fa fa-github fa-lg"></span>
+        <li>
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://mlr-org.slack.com">
-    <span class="fa fa-slack"></span>
+  <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
+    <span class="fa fa fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fa fa-stack-overflow"></span>
+    <span class="fab fa fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -109,30 +104,33 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div id="mlr3pipelines-" class="section level1">
-
-<p>Package website: <a href="https://mlr3pipelines.mlr-org.com/">release</a> | <a href="https://mlr3pipelines.mlr-org.com/dev">dev</a></p>
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#mlr3pipelines-" class="anchor"></a>mlr3pipelines <img src="reference/figures/logo.png" align="right">
+</h1></div>
+<p>Package website: <a href="https://mlr3pipelines.mlr-org.com/">release</a> | <a href="https://mlr3pipelines.mlr-org.com/dev/">dev</a></p>
 <p>Dataflow Programming for Machine Learning in R.</p>
-<p><a href="https://travis-ci.org/mlr-org/mlr3pipelines"><img src="https://travis-ci.org/mlr-org/mlr3pipelines.svg?branch=master" alt="Travis build status"></a> <a href="https://cran.r-project.org/package=mlr3pipelines"><img src="https://www.r-pkg.org/badges/version/mlr3pipelines" alt="CRAN"></a> <a href="https://codecov.io/github/mlr-org/mlr3pipelines"><img src="https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg" alt="Coverage"></a> <a href="https://stackoverflow.com/questions/tagged/mlr3"><img src="https://img.shields.io/badge/stackoverflow-mlr3-orange.svg" alt="StackOverflow"></a></p>
+<!-- badges: start -->
+<p><a href="https://github.com/mlr-org/mlr3pipelines/actions"><img src="https://github.com/mlr-org/mlr3pipelines/workflows/tic/badge.svg?branch=master" alt="tic"></a> <a href="https://cran.r-project.org/package=mlr3pipelines"><img src="https://www.r-pkg.org/badges/version/mlr3pipelines" alt="CRAN"></a> <a href="https://codecov.io/github/mlr-org/mlr3pipelines"><img src="https://codecov.io/github/mlr-org/mlr3pipelines/branch/master/graphs/badge.svg" alt="Coverage"></a> <a href="https://stackoverflow.com/questions/tagged/mlr3"><img src="https://img.shields.io/badge/stackoverflow-mlr3-orange.svg" alt="StackOverflow"></a> <!-- badges: end --></p>
 <div id="what-is-mlr3pipelines" class="section level2">
 <h2 class="hasAnchor">
 <a href="#what-is-mlr3pipelines" class="anchor"></a>What is <code>mlr3pipelines</code>?</h2>
-<p>Watch our UseR 2019 Presentation on Youtube for a 15 minute introduction:</p>
-<p><a href="https://www.youtube.com/watch?v=gEW5RxkbQuQ"><img src="https://img.youtube.com/vi/gEW5RxkbQuQ/0.jpg" alt="UseR 2019 mlr3pipelines"></a></p>
+<p>Watch our “WhyR 2020” Webinar Presentation on Youtube for an introduction! Find the slides <a href="https://github.com/mlr-org/mlr-outreach/raw/master/2020_whyr/slides.pdf">here</a>.</p>
+<p><a href="https://www.youtube.com/watch?v=4r8K3GO5wk4"><img src="https://img.youtube.com/vi/4r8K3GO5wk4/0.jpg" alt="WhyR 2020 mlr3pipelines"></a></p>
 <p><strong><code>mlr3pipelines</code></strong> is a <a href="https://en.wikipedia.org/wiki/Dataflow_programming">dataflow programming</a> toolkit for machine learning in R utilising the <strong><a href="https://github.com/mlr-org/mlr3">mlr3</a></strong> package. Machine learning workflows can be written as directed “Graphs” that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the <strong><a href="https://github.com/mlr-org/mlr3tuning">mlr3tuning</a></strong> package, it is even possible to simultaneously optimize parameters of multiple processing units.</p>
 <p>In principle, <em>mlr3pipelines</em> is about defining singular data and model manipulation steps as “PipeOps”:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pca        =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"pca"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>filter     =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"filter"</span>, <span class="dt">filter =</span> mlr3filters<span class="op">::</span><span class="kw"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span>(<span class="st">"variance"</span>), <span class="dt">filter.frac =</span> <span class="fl">0.5</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>learner_po =<span class="st"> </span><span class="kw"><a href="reference/po.html">po</a></span>(<span class="st">"learner"</span>, <span class="dt">learner =</span> <span class="kw">lrn</span>(<span class="st">"classif.rpart"</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="no">pca</span>        <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"pca"</span>)
+<span class="no">filter</span>     <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"filter"</span>, <span class="kw">filter</span> <span class="kw">=</span> <span class="kw pkg">mlr3filters</span><span class="kw ns">::</span><span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span>(<span class="st">"variance"</span>), <span class="kw">filter.frac</span> <span class="kw">=</span> <span class="fl">0.5</span>)
+<span class="no">learner_po</span> <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"learner"</span>, <span class="kw">learner</span> <span class="kw">=</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>))</pre></div>
 <p>These pipeops can then be combined together to define machine learning pipelines. These can be wrapped in a <code>GraphLearner</code> that behave like any other <code>Learner</code> in <code>mlr3</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>graph =<span class="st"> </span>pca <span class="op">%&gt;&gt;%</span><span class="st"> </span>filter <span class="op">%&gt;&gt;%</span><span class="st"> </span>learner_po</span>
-<span id="cb2-2"><a href="#cb2-2"></a>glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="no">graph</span> <span class="kw">=</span> <span class="no">pca</span> <span class="kw">%&gt;&gt;%</span> <span class="no">filter</span> <span class="kw">%&gt;&gt;%</span> <span class="no">learner_po</span>
+<span class="no">glrn</span> <span class="kw">=</span> <span class="no">GraphLearner</span>$<span class="fu">new</span>(<span class="no">graph</span>)</pre></div>
 <p>This learner can be used for resampling, benchmarking, and even tuning.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">resample</span>(<span class="kw">tsk</span>(<span class="st">"iris"</span>), glrn, <span class="kw">rsmp</span>(<span class="st">"cv"</span>))</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; * Task: iris</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; * Learner: pca.variance.classif.rpart</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; * Errors: 0 in 0 iterations</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu">resample</span>(<span class="fu">tsk</span>(<span class="st">"iris"</span>), <span class="no">glrn</span>, <span class="fu">rsmp</span>(<span class="st">"cv"</span>))
+<span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span>
+<span class="co">#&gt; * Task: iris</span>
+<span class="co">#&gt; * Learner: pca.variance.classif.rpart</span>
+<span class="co">#&gt; * Warnings: 0 in 0 iterations</span>
+<span class="co">#&gt; * Errors: 0 in 0 iterations</span></pre></div>
 </div>
 <div id="feature-overview" class="section level2">
 <h2 class="hasAnchor">
@@ -156,12 +154,9 @@
 <li>
 <a href="https://mlr3book.mlr-org.com/pipelines.html">Quick Introduction</a>, with short examples to get started</li>
 <li>
-<a href="https://mlr-org.github.io/mlr3pipelines/articles/introduction.html">Detailed Introduction</a>, diving into concepts and describing the objects involved</li>
+<a href="https://mlr3pipelines.mlr-org.com/articles/introduction.html">Detailed Introduction</a>, diving into concepts and describing the objects involved</li>
 <li>
 <a href="https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html">Comparison</a> of <code>mlr3pipelines</code> with other packages (not yet authoritative)</li>
-<li>
-<a href="https://mlr3book.mlr-org.com/extending-mlr3pipelines.html">Writing Custom <code>PipeOp</code>s</a> to extend and build on top of <code>mlr3pipelines</code>
-</li>
 </ul>
 </div>
 <div id="bugs-questions-feedback" class="section level2">
@@ -174,18 +169,18 @@
 <div id="similar-projects" class="section level2">
 <h2 class="hasAnchor">
 <a href="#similar-projects" class="anchor"></a>Similar Projects</h2>
-<p>A predecessor to this package is the <a href="https://github.com/mlr-org/mlrCPO"><em>mlrCPO</em>-package</a>, which works with <em>mlr</em> 2.x. Other packages that provide, to varying degree, some preprocessing functionality or machine learning domain specific language, are the <em><a href="https://github.com/topepo/caret">caret</a></em> package and the related <em><a href="https://tidymodels.github.io/recipes/">recipes</a></em> project, and the <em><a href="https://github.com/tidyverse/dplyr">dplyr</a></em> package.</p>
+<p>A predecessor to this package is the <a href="https://github.com/mlr-org/mlrCPO"><em>mlrCPO</em>-package</a>, which works with <em>mlr</em> 2.x. Other packages that provide, to varying degree, some preprocessing functionality or machine learning domain specific language, are the <em><a href="https://github.com/topepo/caret">caret</a></em> package and the related <em><a href="https://recipes.tidymodels.org/">recipes</a></em> project, and the <em><a href="https://github.com/tidyverse/dplyr">dplyr</a></em> package.</p>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=mlr3pipelines">https://​cloud.r-project.org/​package=mlr3pipelines</a>
 </li>
-<li>Browse source code at <br><a href="https://github.com/mlr-org/mlr3pipelines">https://​github.com/​mlr-org/​mlr3pipelines</a>
+<li>Browse source code at <br><a href="https://github.com/mlr-org/mlr3pipelines/">https://​github.com/​mlr-org/​mlr3pipelines/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/mlr-org/mlr3pipelines/issues">https://​github.com/​mlr-org/​mlr3pipelines/​issues</a>
 </li>
@@ -201,9 +196,10 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Martin Binder <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Florian Pfisterer <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-8867-762X" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
-<li>Bernd Bischl <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6002-6980" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
-<li>Michel Lang <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9754-0393" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>Florian Pfisterer <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-8867-762X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Lennart Schneider <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4152-5308" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Bernd Bischl <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6002-6980" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Michel Lang <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9754-0393" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Susanne Dandl <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
@@ -213,11 +209,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Martin Binder, Florian Pfisterer, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

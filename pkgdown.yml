@@ -1,9 +1,8 @@
-pandoc: 2.8.1
-pkgdown: 1.4.1
+pandoc: 2.7.3
+pkgdown: 1.5.1
 pkgdown_sha: ~
-articles:
-  comparison_mlr3pipelines_mlr_sklearn: comparison_mlr3pipelines_mlr_sklearn.html
-  introduction: introduction.html
+articles: []
+last_built: 2020-08-13T13:51Z
 urls:
   reference: https://mlr3pipelines.mlr-org.com//reference
   article: https://mlr3pipelines.mlr-org.com//articles

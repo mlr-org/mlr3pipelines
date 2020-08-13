@@ -19,6 +19,10 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
+
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
@@ -68,7 +72,7 @@ selector parameter, or many PipeOpTaskPreprocs' affect_columns parameter. See th
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,52 +84,46 @@ selector parameter, or many PipeOpTaskPreprocs' affect_columns parameter. See th
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
-      </span>
-    </div>
 
+      <div class="navbar-brand-container">
+        <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+      </div>
+    </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/introduction.html">Introduction</a>
-    </li>
-    <li>
-      <a href="../articles/comparison_mlr3pipelines_mlr_sklearn.html">Comparison to Other Packages</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Function Reference</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
-</li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="../reference/index.html">
+    <span class="fa fa fa fa-file-alt"></span>
+     
+    Reference
+  </a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="https://mlr3book.mlr-org.com">
+    <span class="fa fa fa fa-link"></span>
+     
+    mlr3book
+  </a>
+</li>
+        <li>
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://mlr-org.slack.com">
-    <span class="fa fa-slack"></span>
+  <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
+    <span class="fa fa fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fa fa-stack-overflow"></span>
+    <span class="fab fa fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -167,8 +165,7 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
 
 <span class='fu'>selector_type</span>(<span class='no'>types</span>)
 
-<span class='fu'>selector_grep</span>(<span class='no'>pattern</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>perl</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>selector_grep</span>(<span class='no'>pattern</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>perl</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>selector_name</span>(<span class='no'>feature_names</span>, <span class='kw'>assert_present</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
@@ -178,7 +175,11 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
 
 <span class='fu'>selector_union</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
 
-<span class='fu'>selector_setdiff</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)</pre>
+<span class='fu'>selector_setdiff</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
+
+<span class='fu'>selector_missing</span>()
+
+<span class='fu'>selector_cardinality_greater_than</span>(<span class='no'>min_cardinality</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -233,6 +234,11 @@ First <code>Selector</code> to query.</p></td>
       <td><p>(<code>Selector</code>)<br />
 Second <code>Selector</code> to query.</p></td>
     </tr>
+    <tr>
+      <th>min_cardinality</th>
+      <td><p>(<code>integer</code>) <br />
+Minimum number of levels required to be selected.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -257,6 +263,9 @@ selected by either <code>Selector</code> are selected in the end.</p></li>
 <li><p><code>selector_setdiff</code>: <code>selector_setdiff</code> selects the setdiff of two <code>Selector</code>s: Features
 selected by <code>selector_x</code> are selected, unless they are also selected
 by <code>selector_y</code>.</p></li>
+<li><p><code>selector_missing</code>: <code>selector_missing</code> selects features with missing values.</p></li>
+<li><p><code>selector_cardinality_greater_than</code>: <code>selector_cardinality_greater_than</code> selects categorical features with cardinality
+greater then a given threshold.</p></li>
 </ul>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -266,28 +275,27 @@ by <code>selector_y</code>.</p></li>
 that has one input argument (commonly named <code>task</code>). The function is called with the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that a <code><a href='PipeOp.html'>PipeOp</a></code>
 is operating on. The return value of the function must be a <code>character</code> vector that is a subset of the feature names present
 in the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
-<p>For example, a <code>Selector</code> that selects all columns is</p><pre>function(task) {
-  task$feature_names
-}
-</pre>
+<p>For example, a <code>Selector</code> that selects all columns is</p><pre><span class='kw'>function</span>(<span class='no'>task</span>) {
+  <span class='no'>task</span>$<span class='no'>feature_names</span>
+}</pre>
 
 <p>(this is the <code>selector_all()</code>-<code>Selector</code>.) A <code>Selector</code> that selects
 all columns that have names shorter than four letters would be:</p><pre>function(task) {
   task$feature_names[
-    nchar(task$feature_names) &lt; 4
+    nchar(task$feature_names) &amp;lt; 4
   ]
 }
 </pre>
 
-<p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href='https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html'>"iris"-Task</a>), if present, is</p><pre>function(task) {
-  intersect(task$feature_names, "Sepal.Length")
-}
-</pre>
+<p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href='https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html'>iris task</a>), if present, is</p><pre><span class='kw'>function</span>(<span class='no'>task</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>intersect</a></span>(<span class='no'>task</span>$<span class='no'>feature_names</span>, <span class='st'>"Sepal.Length"</span>)
+}</pre>
 
 <p>It is preferable to use the <code>Selector</code> construction functions like <code>select_type</code>, <code>select_grep</code> etc. if possible, instead of writing custom <code>Selector</code>s.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Selectors: <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code></p></div>
+    <div class='dont-index'><p>Other Selectors: 
+<code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
@@ -309,28 +317,21 @@ all columns that have names shorter than four letters would be:</p><pre>function
 <span class='no'>selgf</span> <span class='kw'>=</span> <span class='fu'>selector_union</span>(<span class='no'>selg</span>, <span class='no'>self</span>)
 <span class='fu'>selgf</span>(<span class='no'>iris_task</span>)</div><div class='output co'>#&gt; [1] "Petal.Width" "Sepal.Width"</div><div class='input'><span class='fu'>selgf</span>(<span class='no'>bh_task</span>)</div><div class='output co'>#&gt; [1] "ptratio" "chas"    "town"   </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#functions">Functions</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Martin Binder, Florian Pfisterer, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -19,6 +19,10 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
+
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
@@ -68,7 +72,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,52 +84,46 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
-      </span>
-    </div>
 
+      <div class="navbar-brand-container">
+        <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+      </div>
+    </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/introduction.html">Introduction</a>
-    </li>
-    <li>
-      <a href="../articles/comparison_mlr3pipelines_mlr_sklearn.html">Comparison to Other Packages</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Function Reference</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
-</li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="../reference/index.html">
+    <span class="fa fa fa fa-file-alt"></span>
+     
+    Reference
+  </a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="https://mlr3book.mlr-org.com">
+    <span class="fa fa fa fa-link"></span>
+     
+    mlr3book
+  </a>
+</li>
+        <li>
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://mlr-org.slack.com">
-    <span class="fa fa-slack"></span>
+  <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
+    <span class="fa fa fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fa fa-stack-overflow"></span>
+    <span class="fab fa fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -169,8 +167,7 @@ this means e.g. that setting <code>nfeat</code> to 0 will only remove features o
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre>PipeOpFilter$new(filter, id = filter$id, param_vals = list())
-</pre>
+<pre><span class='no'>PipeOpFilter</span>$<span class='fu'>new</span>(<span class='no'>filter</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>filter</span>$<span class='no'>id</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
 <ul>
 <li><p><code>filter</code> :: <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code><br />
 <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> used for feature filtering.</p></li>
@@ -222,8 +219,8 @@ Mutually exclusive with <code>nfeat</code> and <code>frac</code>.</p></li>
 
     
 
-<p>This does <em>not</em> use the <code>$select_cols</code> feature of <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> to select only features compatible with the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>;
-instead the whole <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> is used by <code>$get_state()</code> and subset internally.</p>
+<p>This does <em>not</em> use the <code>$.select_cols</code> feature of <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code> to select only features compatible with the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>;
+instead the whole <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> is used by <code>private$.get_state()</code> and subset internally.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
@@ -241,50 +238,72 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <p>Methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
-  <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-  <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, <code><a href='PipeOp.html'>PipeOp</a></code>,
-  <code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
-  <code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
-  <code><a href='mlr_pipeops_chunk.html'>mlr_pipeops_chunk</a></code>,
-  <code><a href='mlr_pipeops_classbalancing.html'>mlr_pipeops_classbalancing</a></code>,
-  <code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
-  <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
-  <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
-  <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
-  <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
-  <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
-  <code><a href='mlr_pipeops_encodelmer.html'>mlr_pipeops_encodelmer</a></code>,
-  <code><a href='mlr_pipeops_encode.html'>mlr_pipeops_encode</a></code>,
-  <code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
-  <code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
-  <code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
-  <code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
-  <code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
-  <code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
-  <code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
-  <code><a href='mlr_pipeops_imputenewlvl.html'>mlr_pipeops_imputenewlvl</a></code>,
-  <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
-  <code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
-  <code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
-  <code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
-  <code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
-  <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
-  <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
-  <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
-  <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
-  <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
-  <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
-  <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
-  <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
-  <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
-  <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
-  <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
-  <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
-  <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
-  <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
-  <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
-  <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
+    <div class='dont-index'><p>Other PipeOps: 
+<code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
+<code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
+<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
+<code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
+<code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
+<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
+<code><a href='PipeOp.html'>PipeOp</a></code>,
+<code><a href='mlr_pipeops_boxcox.html'>mlr_pipeops_boxcox</a></code>,
+<code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
+<code><a href='mlr_pipeops_chunk.html'>mlr_pipeops_chunk</a></code>,
+<code><a href='mlr_pipeops_classbalancing.html'>mlr_pipeops_classbalancing</a></code>,
+<code><a href='mlr_pipeops_classifavg.html'>mlr_pipeops_classifavg</a></code>,
+<code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
+<code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
+<code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
+<code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
+<code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
+<code><a href='mlr_pipeops_encodelmer.html'>mlr_pipeops_encodelmer</a></code>,
+<code><a href='mlr_pipeops_encode.html'>mlr_pipeops_encode</a></code>,
+<code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
+<code><a href='mlr_pipeops_fixfactors.html'>mlr_pipeops_fixfactors</a></code>,
+<code><a href='mlr_pipeops_histbin.html'>mlr_pipeops_histbin</a></code>,
+<code><a href='mlr_pipeops_ica.html'>mlr_pipeops_ica</a></code>,
+<code><a href='mlr_pipeops_imputeconstant.html'>mlr_pipeops_imputeconstant</a></code>,
+<code><a href='mlr_pipeops_imputehist.html'>mlr_pipeops_imputehist</a></code>,
+<code><a href='mlr_pipeops_imputelearner.html'>mlr_pipeops_imputelearner</a></code>,
+<code><a href='mlr_pipeops_imputemean.html'>mlr_pipeops_imputemean</a></code>,
+<code><a href='mlr_pipeops_imputemedian.html'>mlr_pipeops_imputemedian</a></code>,
+<code><a href='mlr_pipeops_imputemode.html'>mlr_pipeops_imputemode</a></code>,
+<code><a href='mlr_pipeops_imputeoor.html'>mlr_pipeops_imputeoor</a></code>,
+<code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code>,
+<code><a href='mlr_pipeops_kernelpca.html'>mlr_pipeops_kernelpca</a></code>,
+<code><a href='mlr_pipeops_learner.html'>mlr_pipeops_learner</a></code>,
+<code><a href='mlr_pipeops_missind.html'>mlr_pipeops_missind</a></code>,
+<code><a href='mlr_pipeops_modelmatrix.html'>mlr_pipeops_modelmatrix</a></code>,
+<code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
+<code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
+<code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
+<code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
+<code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
+<code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
+<code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
+<code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
+<code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
+<code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
+<code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
+<code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
+<code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
+<code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
+<code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
+<code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
+<code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
+<code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
+<code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
+<code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
+<code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
+<code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
+<code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
+<code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
+<code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
@@ -295,12 +314,12 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"spam"</span>)
 <span class='no'>filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span>(<span class='st'>"auc"</span>)
 <span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"filter"</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='no'>filter</span>)
-<span class='no'>po</span>$<span class='no'>param_set</span></div><div class='output co'>#&gt; ParamSet: auc
-#&gt;                id    class lower upper levels     default value
-#&gt; 1:   filter.nfeat ParamInt     0   Inf        &lt;NoDefault&gt;      
-#&gt; 2:    filter.frac ParamDbl     0     1        &lt;NoDefault&gt;      
-#&gt; 3:  filter.cutoff ParamDbl  -Inf   Inf        &lt;NoDefault&gt;      
-#&gt; 4: affect_columns ParamUty    NA    NA        &lt;NoDefault&gt;      </div><div class='input'><span class='no'>po</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>filter.nfeat</span> <span class='kw'>=</span> <span class='fl'>5</span>
+<span class='no'>po</span>$<span class='no'>param_set</span></div><div class='output co'>#&gt; &lt;ParamSetCollection:auc&gt;
+#&gt;                id    class lower upper levels        default value
+#&gt; 1:   filter.nfeat ParamInt     0   Inf        &lt;NoDefault[3]&gt;      
+#&gt; 2:    filter.frac ParamDbl     0     1        &lt;NoDefault[3]&gt;      
+#&gt; 3:  filter.cutoff ParamDbl  -Inf   Inf        &lt;NoDefault[3]&gt;      
+#&gt; 4: affect_columns ParamUty    NA    NA         &lt;Selector[1]&gt;      </div><div class='input'><span class='no'>po</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>filter.nfeat</span> <span class='kw'>=</span> <span class='fl'>5</span>
 
 <span class='co'># filter the task</span>
 <span class='no'>filtered_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
@@ -319,62 +338,51 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <span class='no'>learner</span> <span class='kw'>=</span> <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>)
 <span class='no'>rr</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='no'>learner</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>), <span class='kw'>store_models</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>rr</span>$<span class='no'>learners</span><span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='no'>model</span>$<span class='no'>auc</span>$<span class='no'>scores</span></div><div class='output co'>#&gt;   charExclamation       capitalLong        capitalAve              your 
-#&gt;       0.334104675       0.303172295       0.284178501       0.274073473 
-#&gt;        charDollar      capitalTotal              free               our 
-#&gt;       0.268829241       0.260534520       0.238240723       0.212845684 
-#&gt;               you            remove             money               all 
-#&gt;       0.202178359       0.193070040       0.177594683       0.176178991 
-#&gt;                hp            num000          business          internet 
-#&gt;       0.175957873       0.150730517       0.144906996       0.138119186 
-#&gt;            george              over              mail               hpl 
-#&gt;       0.135077639       0.133729691       0.133660830       0.131520523 
-#&gt;           receive             email           address             order 
-#&gt;       0.126980784       0.122406838       0.118232647       0.115468784 
-#&gt;           num1999              make          charHash            credit 
-#&gt;       0.105703146       0.100847045       0.099345723       0.093536735 
-#&gt;            people              labs              will         addresses 
-#&gt;       0.085092887       0.073494139       0.071127796       0.068573648 
-#&gt;             num85            num650               lab               edu 
-#&gt;       0.067434521       0.067365883       0.062974375       0.059673479 
-#&gt;        technology           meeting            telnet              data 
-#&gt;       0.057667319       0.053994836       0.051205037       0.047252189 
-#&gt;            report                pm charSquarebracket            num857 
-#&gt;       0.042756495       0.042534929       0.037635231       0.035629518 
-#&gt;           project            num415          original                re 
-#&gt;       0.035013562       0.034052179       0.033806915       0.031376629 
-#&gt;        conference                cs     charSemicolon              font 
-#&gt;       0.028086464       0.026428190       0.022944631       0.020986316 
-#&gt;  charRoundbracket             num3d            direct             table 
-#&gt;       0.014926251       0.011405130       0.006168500       0.002078599 
+#&gt;      3.290018e-01      3.084719e-01      2.924356e-01      2.850997e-01 
+#&gt;        charDollar      capitalTotal              free               you 
+#&gt;      2.760477e-01      2.690304e-01      2.328002e-01      2.133331e-01 
+#&gt;               our            remove             money               all 
+#&gt;      2.127344e-01      2.049659e-01      1.848303e-01      1.800999e-01 
+#&gt;                hp            num000          business              over 
+#&gt;      1.768315e-01      1.592152e-01      1.529875e-01      1.490547e-01 
+#&gt;              mail          internet               hpl            george 
+#&gt;      1.395390e-01      1.362281e-01      1.362075e-01      1.341867e-01 
+#&gt;             email           receive           address             order 
+#&gt;      1.316039e-01      1.303801e-01      1.246968e-01      1.142778e-01 
+#&gt;              make           num1999          charHash            credit 
+#&gt;      1.090133e-01      1.049933e-01      1.024926e-01      9.926152e-02 
+#&gt;              will            people              labs         addresses 
+#&gt;      9.423281e-02      9.040350e-02      7.689188e-02      7.541491e-02 
+#&gt;            num650             num85               edu               lab 
+#&gt;      6.979414e-02      6.939648e-02      6.787860e-02      6.004967e-02 
+#&gt;        technology            telnet           meeting              data 
+#&gt;      5.498094e-02      5.137943e-02      4.946566e-02      4.597672e-02 
+#&gt;                pm            report           project            num857 
+#&gt;      3.984151e-02      3.941819e-02      3.742082e-02      3.490039e-02 
+#&gt; charSquarebracket            num415          original        conference 
+#&gt;      3.485239e-02      3.285303e-02      2.864972e-02      2.808021e-02 
+#&gt;                cs                re              font     charSemicolon 
+#&gt;      2.658932e-02      2.658113e-02      2.309021e-02      2.247249e-02 
+#&gt;  charRoundbracket            direct             num3d             table 
+#&gt;      1.810618e-02      1.206585e-02      9.208792e-03      2.783626e-03 
 #&gt;             parts 
-#&gt;       0.001845631 </div></pre>
+#&gt;      5.883081e-05 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#construction">Construction</a></li>
-      <li><a href="#input-and-output-channels">Input and Output Channels</a></li>
-      <li><a href="#state">State</a></li>
-      <li><a href="#parameters">Parameters</a></li>
-      <li><a href="#internals">Internals</a></li>
-      <li><a href="#fields">Fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Martin Binder, Florian Pfisterer, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

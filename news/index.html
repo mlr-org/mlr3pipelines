@@ -19,6 +19,10 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
+
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
@@ -63,7 +67,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,52 +79,46 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">mlr3pipelines</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Development version">0.1.1</span>
-      </span>
-    </div>
 
+      <div class="navbar-brand-container">
+        <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+      </div>
+    </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/introduction.html">Introduction</a>
-    </li>
-    <li>
-      <a href="../articles/comparison_mlr3pipelines_mlr_sklearn.html">Comparison to Other Packages</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Function Reference</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
-</li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mlr-org/mlr3pipelines">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="../reference/index.html">
+    <span class="fa fa fa fa-file-alt"></span>
+     
+    Reference
+  </a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="https://mlr3book.mlr-org.com">
+    <span class="fa fa fa fa-link"></span>
+     
+    mlr3book
+  </a>
+</li>
+        <li>
+  <a href="https://github.com/mlr-org/mlr3pipelines/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://mlr-org.slack.com">
-    <span class="fa fa-slack"></span>
+  <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
+    <span class="fa fa fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fa fa-stack-overflow"></span>
+    <span class="fab fa fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -143,12 +141,100 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="mlr3pipelines-021" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.1">
+<a href="#mlr3pipelines-021" class="anchor"></a>mlr3pipelines 0.2.1<small> Unreleased </small>
+</h1>
+<ul>
+<li>New feature: Multiplicities: implicit repetition of operations</li>
+<li>new mlr_graphs:
+<ul>
+<li>pipeline_bagging</li>
+<li>pipeline_branch</li>
+<li>pipeline_greplicate</li>
+<li>pipeline_robustify</li>
+<li>pipeline_targettrafo</li>
+<li>pipeline_ovr</li>
+</ul>
+</li>
+<li>New PipeOps:
+<ul>
+<li>PipeOpOVRSplit, PipeOpOVRUnite</li>
+<li>PipeOpReplicate</li>
+<li>PipeOpMultiplicityExply, PipeOpMultiplicityImply</li>
+<li>PipeOpTargetTrafo, PipeOpTargetInvert</li>
+<li>PipeOpTargetMutate</li>
+<li>PipeOpTargetTrafoScaleRange</li>
+<li>PipeOpProxy</li>
+<li>PipeOpDateFeatures</li>
+<li>PipeOpImputeConstant</li>
+<li>PipeOpImputeLearner</li>
+<li>PipeOpMode</li>
+<li>PipeOpRandomResponse</li>
+<li>PipeOpRenameColumns</li>
+<li>PipeOpTextVectorizer</li>
+<li>PipeOpThreshold</li>
+</ul>
+</li>
+<li>Renamed PipeOps:
+<ul>
+<li>PipeOpImputeNewlvl –&gt; PipeOpImputeOOR (with additional functionality for continuous values)</li>
+</ul>
+</li>
+<li>Changed PipeOps:
+<ul>
+<li>PipeOpFeatureUnion: Bugfix: avoid silently overwriting features when names clash</li>
+<li>PipeOpHistBin: Bugfix: handle test set data out of training set range</li>
+<li>PipeOpLearnerCV: Allow returning trainingset prediction during train()</li>
+<li>PipeOpMutate: Allow referencing newly created columns</li>
+<li>PipeOpScale: Allow robust scaling</li>
+<li>PipeOpLearner, PipeOpLearnerCV: learner_models for access to learner with model slot</li>
+</ul>
+</li>
+<li>New Selectors:
+<ul>
+<li>selector_missing</li>
+<li>selector_cardinality_greater_than</li>
+</ul>
+</li>
+<li>NULL is neutral element of %&gt;&gt;%</li>
+<li>PipeOpTaskPreproc now has feature_types slot</li>
+<li>PipeOpTaskPreproc(Simple) internal API changed: use .train_task(), .predict_task(), .train_dt(), .predict_dt(), .select_cols(), .get_state(), .transform(), .get_state_dt(), .transform_dt() instead of the old methods without dot prefix</li>
+<li>PipeOp now has tags slot</li>
+<li>PipeOp internal API changed: use .train(), .predict() instead of train_internal(), predict_internal()</li>
+<li>Graph new method update_ids()</li>
+<li>Graph methods train(single_input = FALSE) and predict(single_input = FALSE) now handle vararg channels correctly.</li>
+<li>Obsoleted greplicate(); use pipeline_greplicate / ppl(“greplicate”) instead.</li>
+<li>po() now automatically converts Selector to PipeOpSelect</li>
+<li>po() prints available mlr_pipeops dictionary content</li>
+<li>mlr_graphs dictionary of useful Graphs, with short form accessor ppl()</li>
+<li>Work with new mlr3 version 0.4.0</li>
+</ul>
+</div>
+    <div id="mlr3pipelines-013" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.3">
+<a href="#mlr3pipelines-013" class="anchor"></a>mlr3pipelines 0.1.3<small> 2020-04-06 </small>
+</h1>
+<ul>
+<li>small test fix for R 4.0 (necessary for stringsAsFactors option default change in 3.6 -&gt; 4.0)</li>
+<li>predict() generic for Graph</li>
+<li>Migrated last vignette to “mlr3 Book”</li>
+</ul>
+</div>
+    <div id="mlr3pipelines-012" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.2">
+<a href="#mlr3pipelines-012" class="anchor"></a>mlr3pipelines 0.1.2<small> 2019-12-10 </small>
+</h1>
+<ul>
+<li>Work with new mlr3 version 0.1.5 (handling of character columns changed)</li>
+</ul>
+</div>
     <div id="mlr3pipelines-011" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.1.1">
 <a href="#mlr3pipelines-011" class="anchor"></a>mlr3pipelines 0.1.1<small> 2019-10-29 </small>
 </h1>
 <ul>
@@ -166,7 +252,7 @@
 </ul>
 </div>
     <div id="mlr3pipelines-010" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.1.0">
 <a href="#mlr3pipelines-010" class="anchor"></a>mlr3pipelines 0.1.0<small> 2019-10-06 </small>
 </h1>
 <ul>
@@ -175,14 +261,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#mlr3pipelines-011">0.1.1</a></li>
-        <li><a href="#mlr3pipelines-010">0.1.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -190,11 +272,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Martin Binder, Florian Pfisterer, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
