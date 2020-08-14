@@ -152,6 +152,7 @@ Collate:
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
     'PipeOpUnbranch.R'
+    'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
