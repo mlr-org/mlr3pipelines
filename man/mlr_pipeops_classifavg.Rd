@@ -81,7 +81,7 @@ library("mlr3")
 gr = ppl("greplicate",
   po("subsample") \%>>\%
   po("learner", lrn("classif.rpart")),
-  n = 5
+  n = 3
 ) \%>>\%
   po("classifavg")
 
