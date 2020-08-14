@@ -5,7 +5,10 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' FIXME:
+#' Provides an interface to the vtreat package.
+#'
+#' [`PipeOpVtreat`] naturally works for [classification Tasks][mlr3::TaskClassif] and [regression Tasks][mlr3::TaskRegr].
+#' Internallly [`PipeOpVtreat`] follows the fit/prepare interface of vtreat.
 #'
 #' @section Construction:
 #' ```
@@ -20,18 +23,32 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' FIXME:
+#' The output is the input [`Task`][mlr3::Task] with all affected features "prepared" by vtreat.
+#' If vtreat found "no usable vars", the input [`Task`][mlr3::Task] is returned unaltered.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the following elements:
-#' * FIXME:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
+#' * `treatment_plan` :: object of class `vtreat_pipe_step` | `NULL`\cr
+#'   The treatment plan as constructed by vtreat based on the training data, i.e., an object of class `treatment_plan`.
+#'   If vtreat found "no usable vars" and designing the treatment would have failed, this is `NULL`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' FIXME:
+#' * `recommended` :: `logical(1)`\cr
+#'   Whether only the "recommended" constructed columns should be returned, i.e., non constant
+#'   variables with a significance value smaller than vtreat's threshold.
+#' * `cols_to_copy` :: `list`\cr
+#'   List of extra columns to copy.
+#' * `params` :: `list`\cr
+#'   List of parameter values that will be used to construct vtreat's internal parameters by calling
+#'   vtreat::regression_parameters(), vtreat::classification_parameters(), or
+#'   vtreat::multinomial_parameters() on it, depending on the input [`Task`][mlr3::Task].
+#' * `imputation_map` :: `list`\cr
+#'   List of map from column names to functions of signature f(values: numeric, weights: numeric),
+#'   simple missing value imputers as used by vtreat.
 #'
 #' @section Internals:
-#' FIXME:
+#' Follows vtreat's fit/prepare interface.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -116,7 +133,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         mlr3misc::invoke(vtreat::fit_prepare,
           vps = transform_design,
           dframe = task$data(),
-          weights = task$weights$weight),
+          weights = task$weights$weight),  # FIXME: check
         silent = TRUE
       )
       if (class(vtreat_res) == "try-error") {
@@ -138,7 +155,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
     },
 
     .predict_task = function(task) {
-      if (is.null(self$state$treatment_plan)) return(task)  # early exit
+      if (is.null(self$state$treatment_plan) || (length(task$feature_names) == 0L)) return(task)  # early exit
 
       # in the following we suppress warnings;
       # because if we predict on the same task that was used for training vtreat will tell us:

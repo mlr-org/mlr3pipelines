@@ -1,17 +1,17 @@
 context("PipeOpVtreat")
 
 test_that("PipeOpVtreat - basic properties", {
-  # FIXME:
   expect_pipeop(PipeOpVtreat$new())
 
+  # FIXME: expect_deep_clone(po, po$clone(deep = TRUE)) fails because state$treatment_plan$settings$state is an environment
   task_regr = mlr_tasks$get("boston_housing")
-  expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_regr)
+  expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_regr, deterministic_train = FALSE, deterministic_predict = FALSE)
 
   task_classiftc = mlr_tasks$get("pima")
-  expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_classiftc)
+  expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_classiftc, deterministic_train = FALSE, deterministic_predict = FALSE)
 
   task_classifmc = mlr_tasks$get("iris")
-  expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_classifmc)
+  expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_classifmc, deterministic_train = FALSE, deterministic_predict = FALSE)
 })
 
 test_that("PipeOpVtreat - Regression", {
@@ -57,7 +57,7 @@ test_that("PipeOpVtreat - Regression", {
   expect_true(op$state$treatment_plan$settings$var_list == "x")
   expect_true(all(c("x2", "xc") %in% train_out2$feature_names))
   expect_true("y" %nin% train_out2$feature_names)
-  expect_true(op$state$treatment_plan$setting$params$minFraction == 0.1)
+  expect_true(op$state$treatment_plan$settings$params$minFraction == 0.1)
   expect_true(train_out2$missings("x") == 0)
 })
 
@@ -105,7 +105,7 @@ test_that("PipeOpVtreat - Binary Classification", {
   expect_true(op$state$treatment_plan$settings$var_list == "x")
   expect_true(all(c("x2", "xc", "y") %in% train_out2$feature_names))
   expect_true("yc" %nin% train_out2$feature_names)
-  expect_true(op$state$treatment_plan$setting$params$ncross == 4)
+  expect_true(op$state$treatment_plan$settings$params$ncross == 4)
   expect_true(train_out2$missings("x") == 0)
 })
 
@@ -153,7 +153,7 @@ test_that("PipeOpVtreat - Multiclass Classification", {
   expect_true(all(op$state$treatment_plan$settings$var_list == c("x", "xc")))
   expect_true(all(c("x2", "xc", "y") %in% train_out2$feature_names))
   expect_true("yc" %nin% train_out2$feature_names)
-  expect_true(op$state$treatment_plan$setting$params$scale == TRUE)
+  expect_true(op$state$treatment_plan$settings$params$scale == TRUE)
   expect_true(train_out2$missings("x") == 0)
 })
 

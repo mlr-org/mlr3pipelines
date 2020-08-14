@@ -8,7 +8,10 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-FIXME:
+Provides an interface to the vtreat package.
+
+\code{\link{PipeOpVtreat}} naturally works for \link[mlr3:TaskClassif]{classification Tasks} and \link[mlr3:TaskRegr]{regression Tasks}.
+Internallly \code{\link{PipeOpVtreat}} follows the fit/prepare interface of vtreat.
 }
 \section{Construction}{
 \preformatted{PipeOpVreat$new(id = "vtreat", param_vals = list())
@@ -25,26 +28,42 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-FIXME:
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected features "prepared" by vtreat.
+If vtreat found "no usable vars", the input \code{\link[mlr3:Task]{Task}} is returned unaltered.
 }
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the following elements:
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item FIXME:
+\item \code{treatment_plan} :: object of class \code{vtreat_pipe_step} | \code{NULL}\cr
+The treatment plan as constructed by vtreat based on the training data, i.e., an object of class \code{treatment_plan}.
+If vtreat found "no usable vars" and designing the treatment would have failed, this is \code{NULL}.
 }
 }
 
 \section{Parameters}{
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
-FIXME:
+\itemize{
+\item \code{recommended} :: \code{logical(1)}\cr
+Whether only the "recommended" constructed columns should be returned, i.e., non constant
+variables with a significance value smaller than vtreat's threshold.
+\item \code{cols_to_copy} :: \code{list}\cr
+List of extra columns to copy.
+\item \code{params} :: \code{list}\cr
+List of parameter values that will be used to construct vtreat's internal parameters by calling
+vtreat::regression_parameters(), vtreat::classification_parameters(), or
+vtreat::multinomial_parameters() on it, depending on the input \code{\link[mlr3:Task]{Task}}.
+\item \code{imputation_map} :: \code{list}\cr
+List of map from column names to functions of signature f(values: numeric, weights: numeric),
+simple missing value imputers as used by vtreat.
+}
 }
 
 \section{Internals}{
 
-FIXME:
+Follows vtreat's fit/prepare interface.
 }
 
 \section{Methods}{
