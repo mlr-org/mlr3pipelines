@@ -102,6 +102,9 @@ Print a representation of the \code{\link{Graph}} on the console. Output is a ta
 columns \code{ID} (\verb{$id} of \code{PipeOp}), \code{State} (short representation of \verb{$state} of \code{\link{PipeOp}}), \code{sccssors} (\code{\link{PipeOp}}s that
 take their input directly from the \code{\link{PipeOp}} on this line), and \code{prdcssors} (the \code{\link{PipeOp}}s that produce the data
 that is read as input by the \code{\link{PipeOp}} on this line).
+\item \code{to_dot(dotname, fontsize)} \cr
+(\code{character(1)}, positive \code{integer(1)}) -> \code{NULL} \cr
+Print a DOT representation of the \code{\link{Graph}} on the console.
 \item \code{set_names(old, new)} \cr
 (\code{character}, \code{character}) -> \code{self} \cr
 Rename \code{\link{PipeOp}}s: Change ID of each \code{\link{PipeOp}} as identified by \code{old} to the corresponding item in \code{new}. This should be used

@@ -90,6 +90,9 @@
 #'   columns `ID` (`$id` of `PipeOp`), `State` (short representation of `$state` of [`PipeOp`]), `sccssors` ([`PipeOp`]s that
 #'   take their input directly from the [`PipeOp`] on this line), and `prdcssors` (the [`PipeOp`]s that produce the data
 #'   that is read as input by the [`PipeOp`] on this line).
+#' * `to_dot(dotname, fontsize)` \cr
+#'   (`character(1)`, positive `integer(1)`) -> `NULL` \cr
+#'   Print a DOT representation of the [`Graph`] on the console.
 #' * `set_names(old, new)` \cr
 #'   (`character`, `character`) -> `self` \cr
 #'   Rename [`PipeOp`]s: Change ID of each [`PipeOp`] as identified by `old` to the corresponding item in `new`. This should be used
@@ -342,6 +345,53 @@ Graph = R6Class("Graph",
         cat("Empty Graph.\n")
       }
       invisible(self)
+    },
+
+    to_dot = function(dotname = "dot", fontsize = 24L) {
+      assert_character(dotname, any.missing = FALSE, len = 1L)
+      assert_count(fontsize, positive = TRUE)
+
+      if (!length(self$pipeops)) {
+        return(cat(paste0("digraph ", dotname, " {\n", "", "\n}\n")))
+      }
+      if (nrow(self$edges) == 0L) {
+        all_names = gsub("\\.", "_", self$ids(TRUE))
+        dot = paste0(paste0(seq_along(all_names), " [label=", '"', all_names, '"',
+          ",fontsize=", fontsize, ']'),
+          collapse = ";\n")
+      } else {
+        df = self$edges[, list(from = src_id, to = dst_id)]
+        df = rbind(df, self$input[, list(from = "INPUT", to = op.id)])
+        output = self$output
+        if (nrow(output) > 1L) {
+          df = rbind(df, output[, list(from = op.id, to = paste0("OUTPUT\n", name))])
+        } else {
+          df = rbind(df, output[, list(from = op.id, to = "OUTPUT")])
+        }
+        ids = self$ids(TRUE)
+        extra_vertices = setdiff(ids, c(df$from, df$to))
+
+        all_names = unique(unlist(df))
+        df = data.table::setDT(mlr3misc::map(df, function(x) match(x, all_names)))
+        gr = paste0(map(seq_len(nrow(df)), function(x) {
+          paste0(df[x, ][[1L]], " -> ", df[x, ][[2L]])
+        }), collapse = ";\n")
+
+        all_names = gsub("\\.", "_", all_names)
+        labels = paste0(unlist(mlr3misc::map(unique(unlist(df)), function(x) {
+          paste0(x, " [label=", '"', all_names[x], '"', ",fontsize=", fontsize, ']')
+        })), collapse = ";\n")
+        dot = paste0(gr, ";\n", labels)
+
+        if (length(extra_vertices)) {
+           ev_names = gsub("\\.", "_", extra_vertices)
+           ev = paste0(paste0(length(all_names) + seq_along(ev_names), " [label=",
+             '"', ev_names, '"', ",fontsize=", fontsize, ']'),
+             collapse = ";\n")
+           dot = paste0(dot, ";\n", ev)
+        }
+      }
+      cat(paste0("digraph ", dotname, " {\n", dot, "\n}\n"))
     },
 
     # Mutator to change PipeOp IDs
