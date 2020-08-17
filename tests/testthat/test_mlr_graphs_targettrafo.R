@@ -40,7 +40,7 @@ test_that("Target Trafo Pipeline", {
   predict_ttg = tt_g$predict(task)
 
   # IDs
-  tt_id = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()), id_prefix = "test")
+  tt_id = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()), invert_prefix = "test")
   expect_equal(tt_id$ids(), c("regr.rpart", "targetmutate", "testtargetinvert"))
 })
 

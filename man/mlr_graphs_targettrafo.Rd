@@ -8,7 +8,7 @@
 pipeline_targettrafo(
   graph,
   trafo_pipeop = PipeOpTargetMutate$new(),
-  id_prefix = ""
+  invert_prefix = ""
 )
 }
 \arguments{
@@ -18,8 +18,10 @@ A \code{\link{PipeOpLearner}} or \code{\link{Graph}} to wrap between a transform
 \item{trafo_pipeop}{\code{\link{PipeOp}} \cr
 A \code{\link{PipeOp}} that is a subclass of \code{\link{PipeOpTargetTrafo}}. Default is \code{\link{PipeOpTargetMutate}}.}
 
-\item{id_prefix}{\code{character(1)} \cr
-Optional id prefix to prepend to \code{\link{PipeOpTargetInvert}} ID. The resulting ID will be \code{"[id_prefix]targetinvert"}. Default is \code{""}.}
+\item{invert_prefix}{\code{character(1)} \cr
+Optional id prefix to prepend to \code{\link{PipeOpTargetInvert}} ID.
+The resulting ID will be \code{"[invert_prefix]targetinvert"}.
+Default is \code{""}.}
 }
 \value{
 \code{\link{Graph}}

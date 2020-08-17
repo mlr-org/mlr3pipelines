@@ -265,8 +265,10 @@ mlr_graphs$add("branch", pipeline_branch)
 #'   A [`PipeOpLearner`] or [`Graph`] to wrap between a transformation and re-transformation of the target variable.
 #' @param trafo_pipeop [`PipeOp`] \cr
 #'   A [`PipeOp`] that is a subclass of [`PipeOpTargetTrafo`]. Default is [`PipeOpTargetMutate`].
-#' @param id_prefix `character(1)` \cr
-#'   Optional id prefix to prepend to [`PipeOpTargetInvert`] ID. The resulting ID will be `"[id_prefix]targetinvert"`. Default is `""`.
+#' @param invert_prefix `character(1)` \cr
+#'   Optional id prefix to prepend to [`PipeOpTargetInvert`] ID.
+#'   The resulting ID will be `"[invert_prefix]targetinvert"`.
+#'   Default is `""`.
 #'
 #' @return [`Graph`]
 #' @export
@@ -292,18 +294,18 @@ mlr_graphs$add("branch", pipeline_branch)
 #'   src_channel = 2, dst_channel = 1)
 #' g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
 #'   src_channel = 1, dst_channel = 2)
-pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetMutate$new(), id_prefix = "") {
+pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetMutate$new(), invert_prefix = "") {
   graph = as_graph(graph)
   if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
     stopf("First PipeOp of graph should accept a single task as input.")
   }
   assert_r6(trafo_pipeop, classes = "PipeOpTargetTrafo")
-  assert_string(id_prefix)
+  assert_string(invert_prefix)
 
   input_id = graph$input$op.id
   output_id = graph$output$op.id
   trafo_pipeop_id = trafo_pipeop$id
-  target_invert_id = paste0(id_prefix, "targetinvert")
+  target_invert_id = paste0(invert_prefix, "targetinvert")
 
   graph$add_pipeop(trafo_pipeop)
   graph$add_pipeop(PipeOpTargetInvert$new(target_invert_id))

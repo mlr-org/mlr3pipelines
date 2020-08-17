@@ -23,5 +23,5 @@
 #' gr = ppl("bagging", graph = po(lrn("regr.rpart")), averager = po("regravg"))
 ppl = function(key, ..., id_prefix = "", id_postfix = "") {
   gr = dictionary_sugar(dict = mlr_graphs, .key = key, ...)
-  gr$update_ids(id_prefix, id_postfix)
+  gr$update_ids(assert_string(id_prefix), assert_string(id_postfix))
 }
