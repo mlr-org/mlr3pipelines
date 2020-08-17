@@ -1,6 +1,7 @@
 context("ppl - pipeline_robustify")
 
 test_that("Robustify Pipeline", {
+  skip_on_cran()
   lrn = lrn("classif.rpart")
 
   # complete data, numeric
