@@ -3,7 +3,6 @@ context("PipeOpVtreat")
 test_that("PipeOpVtreat - basic properties", {
   expect_pipeop(PipeOpVtreat$new())
 
-  # FIXME: expect_deep_clone(po, po$clone(deep = TRUE)) fails because state$treatment_plan$settings$state is an environment
   task_regr = mlr_tasks$get("boston_housing")
   expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_regr, deterministic_train = FALSE, deterministic_predict = FALSE)
 
@@ -49,7 +48,7 @@ test_that("PipeOpVtreat - Regression", {
   expect_false(identical(train_out1$data(), predict_out1$data()))
 
   op$param_set$values = list(recommended = FALSE,
-    cols_to_copy = list("xc", "y"),
+    cols_to_copy = list("xc"),
     params = list(minFraction = 0.1),
     imputation_map = list("x" = 0),
     affect_columns = selector_name(c("x", "xc")))
@@ -97,7 +96,7 @@ test_that("PipeOpVtreat - Binary Classification", {
   expect_false(identical(train_out1$data(), predict_out1$data()))
 
   op$param_set$values = list(recommended = FALSE,
-    cols_to_copy = list("xc", "y", "yc"),
+    cols_to_copy = list("xc", "y"),
     params = list(ncross = 4),
     imputation_map = list("x" = 0),
     affect_columns = selector_name(c("x", "xc", "y")))
@@ -145,15 +144,38 @@ test_that("PipeOpVtreat - Multiclass Classification", {
   expect_false(identical(train_out1$data(), predict_out1$data()))
 
   op$param_set$values = list(recommended = FALSE,
-    cols_to_copy = list("y", "yc"),
+    cols_to_copy = list("y"),
     params = list(scale = TRUE),
     imputation_map = list("x" = 0),
     affect_columns = selector_name(c("x", "xc", "y")))
   train_out2 = op$train(list(task))[[1L]]
   expect_true(all(op$state$treatment_plan$settings$var_list == c("x", "xc")))
-  expect_true(all(c("x2", "xc", "y") %in% train_out2$feature_names))
+  expect_true(all(c("x2", "y") %in% train_out2$feature_names))
   expect_true("yc" %nin% train_out2$feature_names)
   expect_true(op$state$treatment_plan$settings$params$scale == TRUE)
   expect_true(train_out2$missings("x") == 0)
+})
+
+test_that("PipeOpVtreat - Edge Cases", {
+  op = PipeOpVtreat$new()
+
+  set.seed(3)
+  dat = data.table(y = rnorm(12), x = as.factor(rep(c("a", "b", "c"), 4L)),
+    weights = rep(c(1L, 2L), 6L))
+
+  task = TaskRegr$new("test", backend = dat, target = "y")
+  task$col_roles$weight = "weights"
+  task$col_roles$feature = "x"
+
+  po = PipeOpVtreat$new()
+  train_out1 = po$train(list(task))[[1L]]
+  predict_out1 = po$predict(list(task))[[1L]]
+
+  expect_true(colnames(train_out1$data()) == "y")
+  expect_equal(train_out1$data(), predict_out1$data())
+
+  task$col_roles$weight = character()
+  train_out2 = po$train(list(task))[[1L]]
+  predict_out2 = po$predict(list(task))[[1L]]
 })
 

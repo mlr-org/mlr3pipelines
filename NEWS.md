@@ -1,6 +1,8 @@
 # mlr3pipelines 0.2.1-9000
 
 * NULL input channels accept any kind of input
+* New PipeOps:
+  - PipeOpVtreat
 
 # mlr3pipelines 0.2.1
 

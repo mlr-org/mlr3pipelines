@@ -93,6 +93,12 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
   private = list(
 
     .train_task = function(task) {
+
+      var_list = task$feature_names
+      if (length(var_list) == 0) {
+        return(task)  # early exit
+      }
+
       task_type = task$task_type
 
       if (task_type == "regr") {
@@ -108,13 +114,8 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         }
       }
 
-      var_list = task$feature_names
-      if (length(var_list) == 0) {
-        return(task)  # early exit
-      }
-
       if (length(self$param_set$values$cols_to_copy)) {
-        checkmate::assert_subset(names(self$param_set$values$cols_to_copy), choices = var_list, empty.ok = TRUE)
+        checkmate::assert_subset(unlist(self$param_set$values$cols_to_copy), choices = var_list, empty.ok = TRUE)
       }
 
       if (length(self$param_set$values$imputation_map)) {
@@ -133,11 +134,12 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         mlr3misc::invoke(vtreat::fit_prepare,
           vps = transform_design,
           dframe = task$data(),
-          weights = task$weights$weight),  # FIXME: check
+          weights = task$weights$weight),
         silent = TRUE
       )
+
       if (class(vtreat_res) == "try-error") {
-        self$state$treatment_plan = NULL
+        self$state = NULL
         return(task)  # early exit
       }
 
@@ -147,29 +149,67 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       task$cbind(d_prepared)
 
+      feature_subset = self$state$treatment_plan$get_feature_names()  # subset to vtreat features
+
       if (self$param_set$values$recommended) {
         score_frame = mlr3misc::invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
-        task$select(score_frame$varName[score_frame$recommended])
+        feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]]  # subset to only recommended
       }
+
+      feature_subset = c(feature_subset, unlist(self$state$treatment_plan$settings$cols_to_copy))  # respect cols_to_copy
+
+      task$select(feature_subset)
+
       task
     },
 
     .predict_task = function(task) {
       if (is.null(self$state$treatment_plan) || (length(task$feature_names) == 0L)) return(task)  # early exit
 
-      # in the following we suppress warnings;
+      # in the following we suppress warnings and catch errors
       # because if we predict on the same task that was used for training vtreat will tell us:
       #"possibly called transform() on same data frame as fit(), this can lead to over-fit. To avoid this, please use fit_transform()."
       # but this is fine, because we are in the predict step and all models are trained already
-      d_prepared = suppressWarnings(mlr3misc::invoke(vtreat::prepare, treatmentplan = self$state$treatment_plan, dframe = task$data()))
+      # also, in rare case vtreat will have dropped all features (if recommended = TRUE) and now will fail with "no usable vars"
+      d_prepared = try(
+        suppressWarnings(mlr3misc::invoke(vtreat::prepare,
+          treatmentplan = self$state$treatment_plan,
+          dframe = task$data())),
+        silent = TRUE
+      )
 
-      task$cbind(d_prepared)
+      if (class(d_prepared) != "try-error") {
+        task$cbind(d_prepared)
+      }
+
+      feature_subset = self$state$treatment_plan$get_feature_names()  # subset to vtreat features
 
       if (self$param_set$values$recommended) {
         score_frame = mlr3misc::invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
-        task$select(score_frame$varName[score_frame$recommended])
+        feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]]  # subset to only recommended
       }
+
+      feature_subset = c(feature_subset, unlist(self$state$treatment_plan$settings$cols_to_copy))  # respect cols_to_copy
+
+      task$select(feature_subset)
+
       task
+    },
+
+    # we need to overload the deep_clone method because state$treatment_plan$settings$state is an environment
+    deep_clone = function(name, value) {
+      if (name == "state" && "NO_OP" %nin% class(value)) {
+        if (!is.null(value$treatment_plan)) {
+          state = value
+          state$treatment_plan = value$treatment_plan$fresh_copy()
+          state$treatment_plan$settings$params = value$treatment_plan$settings$params
+          state$treatment_plan$settings$state$score_frame = value$treatment_plan$settings$state$score_frame
+          state$treatment_plan$settings$state$transform = value$treatment_plan$settings$state$transform
+          state
+        } else {
+          super$deep_clone(name, value)
+        }
+      } else super$deep_clone(name, value)
     }
   )
 )
