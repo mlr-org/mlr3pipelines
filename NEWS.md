@@ -1,6 +1,7 @@
 # mlr3pipelines 0.2.1-9000
 
 * NULL input channels accept any kind of input
+* PipeOpEncodeImpact now allows for using a cross-method during training
 
 # mlr3pipelines 0.2.1
 
