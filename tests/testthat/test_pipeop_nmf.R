@@ -20,18 +20,17 @@ test_that("PipeOpNMF - feature selector", {
 
 
 test_that("PipeOpNMF - parameters", {
-  # if we uncomment nrun we have to explicitly load nmf (for whatever reasons)
   op = PipeOpNMF$new()
   op$param_set$values$rank = 3L
-  #op$param_set$values$nrun = 2L
+  op$param_set$values$nrun = 2L
   op$param_set$values$seed = 999
 
   task = mlr_tasks$get("iris")
 
   train_out1 = op$train(list(task))[[1L]]
   expect_subset(paste0("NMF", 1:3), train_out1$feature_names)
-  #expect_equal(op$state@nrun, 2L)
-  #expect_matrix(op$state@consensus)
+  expect_equal(op$state@nrun, 2L)
+  expect_matrix(op$state@consensus)
 
   train_out2 = op$train(list(task))[[1L]]
   expect_equal(train_out1, train_out2)

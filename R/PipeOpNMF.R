@@ -6,9 +6,7 @@
 #'
 #' @description
 #' Extracts non-negative components from data by performing non-negative matrix factorization. Only
-#' affects non-negative numerical features. See [NMF::nmf()] for details. Note that [NMF::nmf()]
-#' sometimes requires to explicitly load the package via `library(NMF)`, i.e., when running multiple
-#' runs in parallel, so that all dependencies can be loaded correctly.
+#' affects non-negative numerical features. See [NMF::nmf()] for details.
 #'
 #' @section Construction:
 #' ```
@@ -36,14 +34,16 @@
 #' * `rank` :: `integer(1)`\cr
 #'   Factorization rank, i.e., number of components. Default is `2`. See [`nmf()`][NMF::nmf].
 #' * `method` :: `character(1)`\cr
-#'   Specification of the NMF algorithm. Default is `brunet`. See [`nmf()`][NMF::nmf].
+#'   Specification of the NMF algorithm. Default is `"brunet"`. See [`nmf()`][NMF::nmf].
+#' * `seed` :: `numeric(1)`\cr
+#'   Specification of the starting point. Default is `NULL`. See [`nmf()`][NMF::nmf].
 #' * `nrun` :: `integer(1)`\cr
 #'   Number of runs to performs. More than a single run allows for the computation of a consensus
 #'   matrix which will also be stored in the `$state`. See [`nmf()`][NMF::nmf].
-#' * `seed` :: `numeric(1)`\cr
-#'   Specification of the starting point. Default is `NULL`. See [`nmf()`][NMF::nmf].
 #' * `options` :: `list()`\cr
-#'   Optional named list of additional parameters passed to [`nmf()`][NMF::nmf].
+#'   Named list of additional parameters. See `.options` in [`nmf()`][NMF::nmf].
+#'   Note that the parameters `parallel` and `parallel.required` are always set to `FALSE` and
+#'   cannot be changed.
 #'
 #' @section Internals:
 #' Uses the [`nmf`][NMF::nmf] function as well as [`basis`][NMF::basis], [`coef`][NMF::coef] and
@@ -73,12 +73,13 @@ PipeOpNMF = R6Class("PipeOpNMF",
         ParamInt$new("rank", lower = 1L, upper = Inf, default = 2L, tags = c("train", "nmf")),
         ParamFct$new("method", default = "brunet", tags = c("train", "nmf"),
           levels = c("brunet", "lee", "ls-nmf", "nsNMF", "offset", "pe-nmf", "snmf/r", "snmf/l")),
+        ParamDbl$new("seed", lower = -Inf, upper = Inf, special_vals = list(NULL), default = NULL,
+          tags = c("train", "nmf")),
         ParamInt$new("nrun", lower = 1L, upper = Inf, default = 1L, tags = c("train", "nmf")),
-        ParamDbl$new("seed", lower = -Inf, upper = Inf, special_vals = list(NULL), default = NULL, tags = c("train", "nmf")),
-        # FIXME: pass all other options here? Name check them against the formalArgs of nmf?
-        ParamUty$new("options", default = NULL, tags = c("train", "nmf"), custom_check = function(x) check_list(x, null.ok = TRUE))
+        ParamUty$new("options", default = list(), tags = c("train", "nmf"),
+          custom_check = function(x) check_list(x, any.missing = FALSE, names = "unique"))
       ))
-      ps$values = list(rank = 2L)
+      ps$values = list(rank = 2L, method = "brunet", nrun = 1L, options = list())
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
     }
   ),
@@ -86,15 +87,24 @@ PipeOpNMF = R6Class("PipeOpNMF",
 
     .train_dt = function(dt, levels, target) {
       x = t(as.matrix(dt))  # nmf expects a matrix with the rows holding the features
+
       # handling of additional options
       args = self$param_set$get_values(tags = "nmf")
-      if (!is.null(args$options)) {
-        args = append(args, args$options)
-        args$options = NULL
-      }
-      nmf = mlr3misc::invoke(NMF::nmf, x = x, .args = args)
+      args$options$parallel = FALSE
+      args$options$parallel.required = FALSE
+      names(args)[which(names(args) == "options")] = ".options"
+
+      nmf = mlr3misc::invoke(NMF::nmf,
+        x = x,
+        rng = NULL,
+        model = NULL,
+        .pbackend = NA,
+        .callback = NULL,
+        .args = args
+      )
+
       self$state = nmf
-      # FIXME: here we have two options? return directly h or do what we do during prediction
+      # here we have two options? return directly h or do what we do during prediction
       #h = t(mlr3misc::invoke(NMF::coef, object = nmf))
       w = mlr3misc::invoke(NMF::basis, object = nmf)
       h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
