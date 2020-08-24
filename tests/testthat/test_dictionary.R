@@ -2,7 +2,7 @@ context("Dictionary")
 
 # we check that all pipeops that are exported are also in the dictionary, and can be constructed from there.
 test_that("Dictionary contains all PipeOps", {
-
+  skip_on_cran()
   # abstract pipeops that don't need to be in mlr_pipeops
   abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo")
 
