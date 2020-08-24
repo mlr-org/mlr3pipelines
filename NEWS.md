@@ -1,6 +1,7 @@
 # mlr3pipelines 0.2.1-9000
 
 * NULL input channels accept any kind of input
+* fix how ppl_robustify detects whether a learner can handle factors
 
 # mlr3pipelines 0.2.1
 
