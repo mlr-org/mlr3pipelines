@@ -1,6 +1,7 @@
 # mlr3pipelines 0.2.1-9000
 
 * NULL input channels accept any kind of input
+* added as_learner.PipeOp method
 
 # mlr3pipelines 0.2.1
 
