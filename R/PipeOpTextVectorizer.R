@@ -155,7 +155,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
     initialize = function(id = "textvectorizer", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamFct$new("stopwords_language", tags = c("train", "predict"),
-          levels = c(stopwords::stopwords_getlanguages("snowball"), "smart", "none")),
+          levels = c("da", "de",    "en",   "es",    "fi",   "fr",   "hu",     "ir",   "it",
+                     "nl", "no",    "pt",   "ro",    "ru",   "sv" ,   "smart", "none")),
         ParamUty$new("extra_stopwords", tags = c("train", "predict"), custom_check = check_character),
 
         ParamLgl$new("tolower", default = TRUE, tags = c("train", "predict", "dfm")),
