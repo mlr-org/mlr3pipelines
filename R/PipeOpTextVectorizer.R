@@ -56,6 +56,12 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #'
+#' * `return_type` ::dev.size `character(1)`\cr
+#'    Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
+#'    If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to `integer_length`.
+#'    If set to 'bow', a possibly weighted bag-of-words matrix is returned.
+#'    Defaults to `bow`.
+#'
 #' * `stopwords_language` :: `character(1)`\cr
 #'   Language to use for stopword filtering. Needs to be either `"none"`, a language identifier listed in
 #'   `stopwords::stopwords_getlanguages("snowball")` (`"de"`, `"en"`, ...) or `"smart"`.
@@ -120,6 +126,10 @@
 #'    Default behaviour is 0.5.
 #' * `base_df` :: `numeric(1)`\cr
 #'   The base for logarithms in [`quanteda::dfm_weight`] (see there). Default: 10.
+#'
+#' #' * `integer_length` :: `integer(1)`\cr
+#'   The length of the integer sequence. Defaults to `Inf`, i.e. all texts are padded to the length
+#'   of the longest text. Only relevant for "return_type" : "integer_sequence"
 #'
 #' @section Internals:
 #' See Description. Internally uses the `quanteda` package. Calls [`quanteda::tokens`], [`quanteda::tokens_ngrams`] and [`quanteda::dfm`]. During training,
@@ -205,6 +215,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         add_dep("threshold_df", "scheme_df", CondEqual$new("count"))$
         add_dep("k_tf", "scheme_tf", CondEqual$new("augmented"))$
         add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))$
+        add_dep("scheme_tf", "return_type", CondEqual$new("bow"))$
+        add_dep("sparsity", "return_type", CondEqual$new("bow"))$
         add_dep("integer_length", "return_type", CondEqual$new("integer_sequence"))
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
@@ -223,7 +235,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
             rename_list(self$param_set$get_values(tags = "docfreq"), "_df$", "")))
         )
         if (self$param_set$values$return_type == "bow")
-          matrix = quanteda::convert(private$transform_tfidf(tdm, state$docfreq), "matrix")
+          matrix = quanteda::convert(private$.transform_tfidf(tdm, state$docfreq), "matrix")
         else
           matrix = private$.transform_integer_sequence(tkn, tdm, state)
         list(state = state, matrix = matrix)
@@ -242,7 +254,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
           tdm = tdm[, colnames(state$tdm)]  # Ensure only train-time features are pased on
 
           if (self$param_set$values$return_type == "bow")
-            tdm = quanteda::convert(private$transform_tfidf(tdm, state$docfreq), "matrix")
+            tdm = quanteda::convert(private$.transform_tfidf(tdm, state$docfreq), "matrix")
           else
             tdm = private$.transform_integer_sequence(tkn, tdm, state)
         } else {
