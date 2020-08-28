@@ -56,7 +56,7 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #'
-#' * `return_type` ::dev.size `character(1)`\cr
+#' * `return_type` :: `character(1)`\cr
 #'    Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
 #'    If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to `integer_length`.
 #'    If set to 'bow', a possibly weighted bag-of-words matrix is returned.
