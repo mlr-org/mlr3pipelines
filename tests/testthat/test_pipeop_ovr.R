@@ -131,5 +131,5 @@ test_that("PipeOpOVRSplit and PipeOpOVRUnite - task size", {
   gr$train(tsk("iris")$filter(c(1:30, 51:80, 101:130)))
   prd = gr$predict(tsk("iris")$filter(c(1:30, 51:80, 101:130)))[[1]]
   expect_prediction_classif(prd)
-  expect_true(nrow(prd$data$prob) == 90))
+  expect_true(nrow(prd$data$prob) == 90)
 })
