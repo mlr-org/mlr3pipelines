@@ -125,3 +125,11 @@ test_that("PipeOpOVRSplit and PipeOpOVRUnite - train and predict", {
   gr$param_set$values$ovrunite.weights = rep(0, 3)
   expect_true(all.equal(unique(gr$predict(tsk0)[[1]]$prob), t(c(a = 1/3, b = 1/3, c = 1/3))))
 })
+
+test_that("PipeOpOVRSplit and PipeOpOVRUnite - task size", {
+  gr = PipeOpOVRSplit$new() %>>% LearnerClassifRpart$new() %>>% PipeOpOVRUnite$new()
+  gr$train(tsk("iris")$filter(c(1:30, 51:80, 101:130)))
+  prd = gr$predict(tsk("iris")$filter(c(1:30, 51:80, 101:130)))[[1]]
+  expect_prediction_classif(prd)
+  expect_true(nrow(prd$data$prob) == 90))
+})
