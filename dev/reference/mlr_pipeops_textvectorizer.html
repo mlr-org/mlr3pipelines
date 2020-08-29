@@ -240,6 +240,12 @@ representation.</p>
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
+<li><p><code>return_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
+If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to <code>sequence_length</code>.
+If set to "factor_sequence", tokens are replaced by a factor and padded/truncated to <code>sequence_length</code>.
+If set to 'bow', a possibly weighted bag-of-words matrix is returned.
+Defaults to <code>bow</code>.</p></li>
 <li><p><code>stopwords_language</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Language to use for stopword filtering. Needs to be either <code>"none"</code>, a language identifier listed in
 <code><a href='https://rdrr.io/pkg/stopwords/man/stopwords_getlanguages.html'>stopwords::stopwords_getlanguages("snowball")</a></code> (<code>"de"</code>, <code>"en"</code>, ...) or <code>"smart"</code>.
@@ -300,6 +306,9 @@ Default behaviour is 0.5.</p></li>
 The base for logarithms in <code><a href='https://quanteda.io/reference/dfm_weight.html'>quanteda::dfm_weight</a></code> (see there). Default: 10.</p></li>
 </ul>
 
+<p>#' * <code>sequence_length</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+The length of the integer sequence. Defaults to <code>Inf</code>, i.e. all texts are padded to the length
+of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
