@@ -7,7 +7,7 @@
 #' @description
 #' Tunes optimal probability thresholds over different [`PredictionClassif`][mlr3::PredictionClassif]s.
 #'
-#' Learner `predict_type`: `"prob"` is required.
+#' [`mlr3::Learner`] `predict_type`: `"prob"` is required.
 #' Thresholds for each learner are optimized using the [`Optimizer`][bbotk::Optimizer] supplied via
 #' the `param_set`.
 #' Defaults to [`GenSA`][GenSA::GenSA].
@@ -40,13 +40,13 @@
 #' The parameters are the parameters inherited from [`PipeOp`], as well as:
 #'  * `measure` :: [`Measure`][mlr3::Measure]\cr
 #'    [`Measure`][mlr3::Measure] to optimize.
-#'    Defaults to `msr("classif.ce")`, i.e. misclassification error.
+#'    Initialized to `msr("classif.ce")`, i.e. misclassification error.
 #'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
-#'    via [`opt`][bbotk::opt]. Defaults to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
+#'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
 #'  * `log_level` :: `character(1)`|`integer(1)`\cr
-#'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Default: "warn".
+#'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
 #'
 #' @section Internals:
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
@@ -76,9 +76,13 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       ps = ParamSet$new(params = list(
         ParamUty$new("measure", custom_check = function(x) check_r6(x, "MeasureClassif"), tags = "train"),
         ParamUty$new("optimizer", custom_check = function(x) {
-          inherits(x, "Optimizer") | x %in% c("gensa", "nloptr", "random_search")
+          if (!(inherits(x, "Optimizer") | x %in% c("gensa", "nloptr", "random_search"))) {
+            paste0("'optimizer' either needs to inherit from 'bbotk::Optimizer' or ",
+              "be one of 'gensa', 'nloptr' or 'random_search'")
+          }
         }, tags = "train"),
-        ParamUty$new("log_level", default = "warn", tags = "train")
+        ParamUty$new("log_level", default = "warn", tags = "train",
+          function(x) assert(check_character(x), check_integerish(x)))
       ))
       ps$values = list(measure = msr("classif.ce"), optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
@@ -88,32 +92,33 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       )
     },
     train = function(input) {
-      if(!all(input[[1]]$feature_types$type == "numeric"))
+      if(!all(input[[1]]$feature_types$type == "numeric")) {
         stop("PipeOpTuneThreshold requires predicted probabilities! Set learner predict_type to 'prob'")
-      pred = private$task_to_prediction(input[[1]])
-      th = private$optimize_objfun(pred)
+      }
+      pred = private$.task_to_prediction(input[[1]])
+      th = private$.optimize_objfun(pred)
       self$state = list("threshold" = th)
       return(list(NULL))
     },
     predict = function(input) {
-      pred = private$task_to_prediction(input[[1]])
+      pred = private$.task_to_prediction(input[[1]])
       pred$set_threshold(self$state$threshold)
       return(list(pred))
     }
   ),
   private = list(
-    objfun = function(xs, pred, measure) {
+    .objfun = function(xs, pred, measure) {
       lvls = colnames(pred$prob)
       res = pred$set_threshold(unlist(xs))$score(measure)
       if (!measure$minimize) res = -res
       res
     },
-    optimize_objfun = function(pred) {
+    .optimize_objfun = function(pred) {
       optimizer = self$param_set$values$optimizer
       if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
-      ps = private$make_param_set(pred)
+      ps = private$.make_param_set(pred)
       objfun = bbotk::ObjectiveRFun$new(
-        fun = function(xs) private$objfun(xs, pred = pred, measure = self$param_set$values$measure),
+        fun = function(xs) private$.objfun(xs, pred = pred, measure = self$param_set$values$measure),
         domain = ps
       )
       inst = bbotk::OptimInstanceSingleCrit$new(
@@ -130,13 +135,13 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       on.exit(lgr$set_threshold(old_threshold))
       unlist(inst$result_x_domain)
     },
-    make_param_set = function(pred) {
+    .make_param_set = function(pred) {
       ps = ParamSet$new(params = list())
       for(cn in colnames(pred$prob))
         ps$add(ParamDbl$new(id = cn, lower = 0, upper = 1))
       return(ps)
     },
-    task_to_prediction = function(input) {
+    .task_to_prediction = function(input) {
       prob = as.matrix(input$data(cols = input$feature_names))
       colnames(prob) = unlist(input$levels())
       PredictionClassif$new(input, row_ids = input$row_ids, truth = input$truth(),
