@@ -70,9 +70,10 @@ The \verb{$state} is a list with element 'cols': A vector of extracted columns.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{return_type} ::dev.size \code{character(1)}\cr
+\item \code{return_type} :: \code{character(1)}\cr
 Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
-If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to \code{integer_length}.
+If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to \code{sequence_length}.
+If set to "factor_sequence", tokens are replaced by a factor and padded/truncated to \code{sequence_length}.
 If set to 'bow', a possibly weighted bag-of-words matrix is returned.
 Defaults to \code{bow}.
 \item \code{stopwords_language} :: \code{character(1)}\cr
@@ -135,7 +136,7 @@ Default behaviour is 0.5.
 The base for logarithms in \code{\link[quanteda:dfm_weight]{quanteda::dfm_weight}} (see there). Default: 10.
 }
 
-#' * \code{integer_length} :: \code{integer(1)}\cr
+#' * \code{sequence_length} :: \code{integer(1)}\cr
 The length of the integer sequence. Defaults to \code{Inf}, i.e. all texts are padded to the length
 of the longest text. Only relevant for "return_type" : "integer_sequence"
 }

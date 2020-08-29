@@ -186,7 +186,7 @@ test_that("PipeOpTextVectorizer - integer sequence", {
   expect_true(prd$nrow == 0L)
 
   # Pad pad0
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence", integer_length = 20L))
+  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence", sequence_length = 20L))
   result = op$train(list(task))[[1]]
   dt2 = result$data()
   expect_true(ncol(dt2) == 25L)
@@ -195,11 +195,66 @@ test_that("PipeOpTextVectorizer - integer sequence", {
   expect_true(prd$nrow == 1L)
 
   # Cut pad0
-  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence", integer_length = 4L))
+  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "integer_sequence", sequence_length = 4L))
   result = op$train(list(task))[[1]]
   dt2 = result$data()
   expect_true(ncol(dt2) == 9L)
   prd = op$predict(list(task$clone()$filter(rows = 1L)))[[1]]
   expect_true(all(prd$data() == result$data(rows = 1L)))
+  expect_true(prd$nrow == 1L)
+})
+
+test_that("PipeOpTextVectorizer - factor sequence", {
+  task = mlr_tasks$get("iris")
+  # create hacky text data:
+  dt = data.table("txt" = apply(iris, 1, function(x) {
+    if (x["Species"] == "setosa")
+      paste(map_chr(1:10, function(x) {
+        paste(sample(letters[1:12], 3, replace = TRUE), collapse = "")
+      }), collapse = " ")
+    else if (x["Species"] == "versicolor")
+      paste(map_chr(1:10, function(x) {
+        paste(sample(letters[8:16], 3, replace = TRUE), collapse = "")
+      }), collapse = " ")
+    else
+      paste(map_chr(1:10, function(x) {
+        paste(sample(letters[12:24], 3, replace = TRUE), collapse = "")
+      }), collapse = " ")
+  }))
+  task$cbind(dt)
+
+  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence"))
+  expect_pipeop(op)
+  result = op$train(list(task))[[1]]
+  expect_task(result)
+  expect_true(result$nrow == 150)
+  expect_true(result$ncol > 6)
+  expect_true(all(grepl("^Petal\\..*|^Sepal\\..*|^txt\\..*", result$feature_names)))
+
+  prd = op$predict(list(task$clone()$filter(rows = 1L)))[[1]]
+  expect_true(all(prd$data() == result$data(rows = 1L)))
+  expect_true(prd$nrow == 1L)
+
+  prd = op$predict(list(task$clone()$filter(rows = integer(0))))[[1]]
+  expect_task(prd)
+  expect_true(prd$nrow == 0L)
+
+  # Pad pad0
+  nona = function(x) {x[!is.na(x)]}
+  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence", sequence_length = 20L))
+  result = op$train(list(task))[[1]]
+  dt2 = result$data()
+  expect_true(ncol(dt2) == 25L)
+  prd = op$predict(list(task$clone()$filter(rows = 1L)))[[1]]
+  expect_true(all(nona(prd$data() == result$data(rows = 1L))))
+  expect_true(prd$nrow == 1L)
+
+  # Cut pad0
+  op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence", sequence_length = 4L))
+  result = op$train(list(task))[[1]]
+  dt2 = result$data()
+  expect_true(ncol(dt2) == 9L)
+  prd = op$predict(list(task$clone()$filter(rows = 1L)))[[1]]
+  expect_true(all(nona(prd$data() == result$data(rows = 1L))))
   expect_true(prd$nrow == 1L)
 })

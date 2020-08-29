@@ -58,7 +58,8 @@
 #'
 #' * `return_type` :: `character(1)`\cr
 #'    Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
-#'    If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to `integer_length`.
+#'    If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to `sequence_length`.
+#'    If set to "factor_sequence", tokens are replaced by a factor and padded/truncated to `sequence_length`.
 #'    If set to 'bow', a possibly weighted bag-of-words matrix is returned.
 #'    Defaults to `bow`.
 #'
@@ -127,7 +128,7 @@
 #' * `base_df` :: `numeric(1)`\cr
 #'   The base for logarithms in [`quanteda::dfm_weight`] (see there). Default: 10.
 #'
-#' #' * `integer_length` :: `integer(1)`\cr
+#' #' * `sequence_length` :: `integer(1)`\cr
 #'   The length of the integer sequence. Defaults to `Inf`, i.e. all texts are padded to the length
 #'   of the longest text. Only relevant for "return_type" : "integer_sequence"
 #'
@@ -205,8 +206,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamDbl$new("k_tf", lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight")),
         ParamDbl$new("base_tf", lower = 0, default = 10, tags = c("train", "predict", "dfm_weight")),
 
-        ParamFct$new("return_type", default = "bow", levels = c("bow", "integer_sequence"), tags = c("train", "predict")),
-        ParamInt$new("integer_length", default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"))
+        ParamFct$new("return_type", default = "bow", levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
+        ParamInt$new("sequence_length", default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"))
       ))$
         add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("smoothing_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
@@ -217,7 +218,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))$
         add_dep("scheme_tf", "return_type", CondEqual$new("bow"))$
         add_dep("sparsity", "return_type", CondEqual$new("bow"))$
-        add_dep("integer_length", "return_type", CondEqual$new("integer_sequence"))
+        add_dep("sequence_length", "return_type", CondAnyOf$new(c("integer_sequence", "factor_sequence")))
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
@@ -234,10 +235,11 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
           docfreq = invoke(quanteda::docfreq, .args = c(list(x = tdm),  # column weights
             rename_list(self$param_set$get_values(tags = "docfreq"), "_df$", "")))
         )
-        if (self$param_set$values$return_type == "bow")
+        if (self$param_set$values$return_type == "bow") {
           matrix = quanteda::convert(private$.transform_tfidf(tdm, state$docfreq), "matrix")
-        else
+        } else {
           matrix = private$.transform_integer_sequence(tkn, tdm, state)
+        }
         list(state = state, matrix = matrix)
       }, simplify = FALSE)
       self$state = list(colmodels = map(colwise_results, "state"))
@@ -253,10 +255,11 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
           tdm = rbind(tdm, state$tdm)  # make sure all columns occur
           tdm = tdm[, colnames(state$tdm)]  # Ensure only train-time features are pased on
 
-          if (self$param_set$values$return_type == "bow")
+          if (self$param_set$values$return_type == "bow") {
             tdm = quanteda::convert(private$.transform_tfidf(tdm, state$docfreq), "matrix")
-          else
+          } else {
             tdm = private$.transform_integer_sequence(tkn, tdm, state)
+          }
         } else {
           tdm = quanteda::convert(state$tdm, "matrix")
         }
@@ -307,13 +310,17 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         c(x[seq_len(min(length(x), l))], rep(0, max(0, l - length(x))))
       }
 
-      il = self$param_set$values$integer_length
+      il = self$param_set$values$sequence_length
       if (is.null(il)) il = max(map_int(tokens, length))
       tokens = map(tokens, function(x) {
         x = pad0(ifelse(x %in% dict$v, x, 0), il)
         data.table(matrix(x, nrow = 1))
       })
-      rbindlist(tokens)
+      tokens = rbindlist(tokens)
+      if (self$param_set$values$return_type == "factor_sequence") {
+        tokens = map_dtc(tokens, factor, levels = dict$v[!is.na(dict$v)], labels = dict$k[!is.na(dict$v)])
+      }
+      tokens
     },
     .transform_tfidf = function(tdm, docfreq) {
       if (!quanteda::nfeat(tdm)) return(tdm)
