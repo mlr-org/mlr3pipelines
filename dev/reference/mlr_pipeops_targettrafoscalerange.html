@@ -272,6 +272,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
@@ -300,7 +301,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 #&gt;     assert_list(inputs, len = 1L, types = "Prediction")
 #&gt;     list(private$.invert(inputs[[1L]], predict_phase_state))
 #&gt; }
-#&gt; &lt;environment: 0x55c4d6c17f08&gt;
+#&gt; &lt;environment: 0x55c67b683c08&gt;
 #&gt; 
 #&gt; $output
 #&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
@@ -351,7 +352,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $train_time
-#&gt; [1] 0.012
+#&gt; [1] 0.01
 #&gt; 
 #&gt; $train_task
 #&gt; &lt;TaskRegr:boston_housing&gt; (0 x 19)

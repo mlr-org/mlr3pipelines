@@ -274,6 +274,9 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_threshold.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_tunethreshold.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_unbranch.html</loc>
   </url>
   <url>

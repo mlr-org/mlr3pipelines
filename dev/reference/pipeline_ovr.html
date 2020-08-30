@@ -205,13 +205,13 @@ The Graph should return <code>NULL</code> during training and a
 #&gt; </div><div class='input'><span class='no'>g2</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
 #&gt; &lt;PredictionClassif&gt; for 178 observations:
 #&gt;     row_id truth response     prob.1     prob.2      prob.3
-#&gt;          1     1        1 0.96626001 0.02999479 0.003745194
-#&gt;          2     1        1 0.95880254 0.03662447 0.004572985
-#&gt;          3     1        1 0.94668082 0.04740067 0.005918517
+#&gt;          1     1        1 0.96527672 0.02617753 0.008545751
+#&gt;          2     1        1 0.96527672 0.02617753 0.008545751
+#&gt;          3     1        1 0.96527672 0.02617753 0.008545751
 #&gt; ---                                                        
-#&gt;        176     3        3 0.33734056 0.02111932 0.641540116
-#&gt;        177     3        3 0.23736170 0.02430570 0.738332594
-#&gt;        178     3        3 0.02661413 0.03102234 0.942363524
+#&gt;        176     3        3 0.15371834 0.02256311 0.823718549
+#&gt;        177     3        3 0.15371834 0.02256311 0.823718549
+#&gt;        178     3        3 0.04538261 0.02545150 0.929165893
 #&gt; </div><div class='input'>
 <span class='co'># Bagging outside OVR</span>
 <span class='no'>g3</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"replicate"</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;&gt;%</span>
@@ -221,14 +221,14 @@ The Graph should return <code>NULL</code> during training and a
 #&gt; NULL
 #&gt; </div><div class='input'><span class='no'>g3</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $classifavg.output
 #&gt; &lt;PredictionClassif&gt; for 178 observations:
-#&gt;     row_id truth response     prob.1     prob.2      prob.3
-#&gt;          1     1        1 0.96962334 0.02633903 0.004037635
-#&gt;          2     1        1 0.96962334 0.02633903 0.004037635
-#&gt;          3     1        1 0.96962334 0.02633903 0.004037635
-#&gt; ---                                                        
-#&gt;        176     3        3 0.17080787 0.02262046 0.806571671
-#&gt;        177     3        3 0.17080787 0.02262046 0.806571671
-#&gt;        178     3        3 0.03921399 0.02538650 0.935399510
+#&gt;     row_id truth response     prob.1     prob.2    prob.3
+#&gt;          1     1        1 0.94297897 0.04120693 0.0158141
+#&gt;          2     1        1 0.94297897 0.04120693 0.0158141
+#&gt;          3     1        1 0.94297897 0.04120693 0.0158141
+#&gt; ---                                                      
+#&gt;        176     3        3 0.08503485 0.03972120 0.8752440
+#&gt;        177     3        3 0.08503485 0.03972120 0.8752440
+#&gt;        178     3        3 0.01955021 0.04135189 0.9390979
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

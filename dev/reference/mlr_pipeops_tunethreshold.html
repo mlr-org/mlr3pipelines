@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpRemoveConstants — mlr_pipeops_removeconstants • mlr3pipelines</title>
+<title>PipeOpTuneThreshold — mlr_pipeops_tunethreshold • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,11 +47,17 @@
 
 
 
-<meta property="og:title" content="PipeOpRemoveConstants — mlr_pipeops_removeconstants" />
-<meta property="og:description" content="Remove constant features from a mlr3::Task.
-For each feature, calculates the ratio of features which differ from their mode value.
-All features with a ratio below a settable threshold are removed from the task.
-Missing values can be ignored or treated as a regular value distinct from non-missing values." />
+<meta property="og:title" content="PipeOpTuneThreshold — mlr_pipeops_tunethreshold" />
+<meta property="og:description" content="Tunes optimal probability thresholds over different PredictionClassifs.
+Learner predict_type: &quot;prob&quot; is required.
+Thresholds for each learner are optimized using the Optimizer supplied via
+the param_set.
+Defaults to GenSA.
+Returns a single PredictionClassif.
+This PipeOp should be used in conjunction with PipeOpLearnerCV in order to
+optimize thresholds of cross-validated predictions.
+In order to optimize thresholds without cross-validation, use PipeOpLearnerCV
+in conjunction with ResamplingInsample." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -145,70 +151,83 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpRemoveConstants</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRemoveConstants.R'><code>R/PipeOpRemoveConstants.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_removeconstants.Rd</code></div>
+    <h1>PipeOpTuneThreshold</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTuneThreshold.R'><code>R/PipeOpTuneThreshold.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_tunethreshold.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Remove constant features from a <a href='https://mlr3.mlr-org.com/reference/Task.html'>mlr3::Task</a>.
-For each feature, calculates the ratio of features which differ from their mode value.
-All features with a ratio below a settable threshold are removed from the task.
-Missing values can be ignored or treated as a regular value distinct from non-missing values.</p>
+    <p>Tunes optimal probability thresholds over different <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>s.</p>
+<p>Learner <code>predict_type</code>: <code>"prob"</code> is required.
+Thresholds for each learner are optimized using the <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> supplied via
+the <code>param_set</code>.
+Defaults to <code><a href='https://rdrr.io/pkg/GenSA/man/GenSA.html'>GenSA</a></code>.
+Returns a single <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>.</p>
+<p>This PipeOp should be used in conjunction with <code><a href='mlr_pipeops_learner_cv.html'>PipeOpLearnerCV</a></code> in order to
+optimize thresholds of cross-validated predictions.
+In order to optimize thresholds without cross-validation, use <code><a href='mlr_pipeops_learner_cv.html'>PipeOpLearnerCV</a></code>
+in conjunction with <code><a href='https://mlr3.mlr-org.com/reference/mlr_resamplings_insample.html'>ResamplingInsample</a></code>.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpRemoveConstants</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"removeconstants"</span>)</pre>
+<pre>* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \cr
+  (`character(1)`, `list`) -&amp;gt; `self` \cr
+</pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-Identifier of the resulting  object, defaulting to <code>"removeconstants"</code>.</p></li>
+<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Identifier of resulting object. Default: "tunethreshold".</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings
+that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
+
+    
+
+<p>Input and output channels are inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p><code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>features</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code><br />
-Names of features that are being kept. Features of types that the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> can not operate on are always being kept.</p></li>
+<p>The <code>$state</code> is a named <code>list</code> with elements</p><ul>
+<li><p><code>thresholds</code> :: <code>numeric</code> learned thresholds</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from the <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>ratio</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Ratio of values which must be different from the mode value in order to keep a feature in the task.
-Default is 0, which means only constant features with exactly one observed level are removed.</p></li>
-<li><p><code>rel_tol</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Relative tolerance within which to consider a numeric feature constant. Set to 0 to disregard relative tolerance. Default is <code>1e-8</code>.</p></li>
-<li><p><code>abs_tol</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Absolute tolerance within which to consider a numeric feature constant. Set to 0 to disregard absolute tolerance. Default is <code>1e-8</code>.</p></li>
-<li><p><code>na_ignore</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-If <code>TRUE</code>, the ratio is calculated after removing all missing values first.
-Default is <code>FALSE</code>.</p></li>
+<p>The parameters are the parameters inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
+<li><p><code>measure</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code><br />
+<code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> to optimize.
+Defaults to <code><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>msr("classif.ce")</a></code>, i.e. misclassification error.</p></li>
+<li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
+If <code>character</code>, converts to <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>
+via <code><a href='https://bbotk.mlr-org.com/reference/opt.html'>opt</a></code>. Defaults to <code><a href='https://bbotk.mlr-org.com/reference/mlr_optimizers_gensa.html'>OptimizerGenSA</a></code>.</p></li>
+<li><p><code>log_level</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>|<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+Set a temporary log-level for <code><a href='https://rdrr.io/pkg/lgr/man/get_logger.html'>lgr::get_logger("bbotk")</a></code>. Default: "warn".</p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+    <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Fields inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Uses the <code>optimizer</code> provided as a <code>param_val</code> in order to find an optimal threshold.
+See the <code>optimizer</code> parameter for more info.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -259,6 +278,7 @@ Default is <code>FALSE</code>.</p></li>
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
+<code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
 <code><a href='mlr_pipeops_renamecolumns.html'>mlr_pipeops_renamecolumns</a></code>,
 <code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
@@ -273,7 +293,6 @@ Default is <code>FALSE</code>.</p></li>
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
-<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
@@ -281,42 +300,76 @@ Default is <code>FALSE</code>.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
-<span class='no'>data</span> <span class='kw'>=</span> <span class='kw pkg'>data.table</span><span class='kw ns'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>10</span>), <span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>5</span>))
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskRegr</span>$<span class='fu'>new</span>(<span class='st'>"example"</span>, <span class='no'>data</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"y"</span>)
+<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>, <span class='kw'>predict_type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>)) <span class='kw'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"tunethreshold"</span>)
 
-<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"removeconstants"</span>)
-
-<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;              y  a c
-#&gt;  1: 0.80315378  1 1
-#&gt;  2: 0.69474203  2 1
-#&gt;  3: 0.84982510  3 1
-#&gt;  4: 0.33041754  4 1
-#&gt;  5: 0.36344250  5 1
-#&gt;  6: 0.76530451  6 2
-#&gt;  7: 0.54021206  7 2
-#&gt;  8: 0.06709176  8 2
-#&gt;  9: 0.02093449  9 2
-#&gt; 10: 0.80938970 10 2</div><div class='input'>
-<span class='no'>po</span>$<span class='no'>state</span></div><div class='output co'>#&gt; $features
-#&gt; [1] "a" "c"
+<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+#&gt;   1:    setosa          1.4         0.2          5.1         3.5
+#&gt;   2:    setosa          1.4         0.2          4.9         3.0
+#&gt;   3:    setosa          1.3         0.2          4.7         3.2
+#&gt;   4:    setosa          1.5         0.2          4.6         3.1
+#&gt;   5:    setosa          1.4         0.2          5.0         3.6
+#&gt;  ---                                                            
+#&gt; 146: virginica          5.2         2.3          6.7         3.0
+#&gt; 147: virginica          5.0         1.9          6.3         2.5
+#&gt; 148: virginica          5.2         2.0          6.5         3.0
+#&gt; 149: virginica          5.4         2.3          6.2         3.4
+#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='no'>pop</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $tunethreshold.output
+#&gt; NULL
+#&gt; </div><div class='input'>
+<span class='no'>pop</span>$<span class='no'>state</span></div><div class='output co'>#&gt; $classif.rpart
+#&gt; $classif.rpart$model
+#&gt; n= 150 
 #&gt; 
-#&gt; $affected_cols
-#&gt; [1] "a" "b" "c"
+#&gt; node), split, n, loss, yval, (yprob)
+#&gt;       * denotes terminal node
 #&gt; 
-#&gt; $intasklayout
-#&gt;    id    type
-#&gt; 1:  a integer
-#&gt; 2:  b numeric
-#&gt; 3:  c integer
+#&gt; 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  
+#&gt;   2) Petal.Length&lt; 2.45 50   0 setosa (1.00000000 0.00000000 0.00000000) *
+#&gt;   3) Petal.Length&gt;=2.45 100  50 versicolor (0.00000000 0.50000000 0.50000000)  
+#&gt;     6) Petal.Width&lt; 1.75 54   5 versicolor (0.00000000 0.90740741 0.09259259) *
+#&gt;     7) Petal.Width&gt;=1.75 46   1 virginica (0.00000000 0.02173913 0.97826087) *
 #&gt; 
-#&gt; $outtasklayout
-#&gt;    id    type
-#&gt; 1:  a integer
-#&gt; 2:  c integer
+#&gt; $classif.rpart$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
-#&gt; $outtaskshell
-#&gt; Empty data.table (0 rows and 3 cols): y,a,c
+#&gt; $classif.rpart$train_time
+#&gt; [1] 0.005
+#&gt; 
+#&gt; $classif.rpart$train_task
+#&gt; &lt;TaskClassif:iris&gt; (0 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#&gt; 
+#&gt; $classif.rpart$affected_cols
+#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
+#&gt; 
+#&gt; $classif.rpart$intasklayout
+#&gt;              id    type
+#&gt; 1: Petal.Length numeric
+#&gt; 2:  Petal.Width numeric
+#&gt; 3: Sepal.Length numeric
+#&gt; 4:  Sepal.Width numeric
+#&gt; 
+#&gt; $classif.rpart$outtasklayout
+#&gt;                               id    type
+#&gt; 1:     classif.rpart.prob.setosa numeric
+#&gt; 2: classif.rpart.prob.versicolor numeric
+#&gt; 3:  classif.rpart.prob.virginica numeric
+#&gt; 
+#&gt; $classif.rpart$outtaskshell
+#&gt; Empty data.table (0 rows and 4 cols): Species,classif.rpart.prob.setosa,classif.rpart.prob.versicolor,classif.rpart.prob.virginica
+#&gt; 
+#&gt; 
+#&gt; $tunethreshold
+#&gt; $tunethreshold$threshold
+#&gt;     setosa versicolor  virginica 
+#&gt; 0.95271154 0.09424859 0.28900137 
+#&gt; 
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
