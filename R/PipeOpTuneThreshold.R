@@ -124,8 +124,10 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       optimizer = self$param_set$values$optimizer
       if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
       ps = private$.make_param_set(pred)
+      measure = self$param_set$values$measure
+      if (is.character(measure)) measure = msr(measure) else measure
       objfun = bbotk::ObjectiveRFun$new(
-        fun = function(xs) private$.objfun(xs, pred = pred, measure = as_measure(self$param_set$values$measure)),
+        fun = function(xs) private$.objfun(xs, pred = pred, measure = measure),
         domain = ps
       )
       inst = bbotk::OptimInstanceSingleCrit$new(
