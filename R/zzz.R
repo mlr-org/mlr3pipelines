@@ -13,7 +13,8 @@ register_mlr3 = function() {
   x = utils::getFromNamespace("mlr_reflections", ns = "mlr3")
   x$pipeops$valid_tags = unique(c(x$pipeops$valid_tags,
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
-    "data transform", "target transform", "ensemble", "robustify", "learner", "encode", "multiplicity")))
+    "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
+     "multiplicity")))
 }
 
 .onLoad = function(libname, pkgname) {  # nocov start
