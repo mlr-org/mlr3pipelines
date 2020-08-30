@@ -78,8 +78,6 @@ Suggests:
     evaluate,
     kknn,
     GenSA
-VignetteBuilder:
-    knitr
 RdMacros:
     mlr3misc
 Remotes:
