@@ -39,8 +39,9 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOp`], as well as:
 #'  * `measure` :: [`Measure`][mlr3::Measure]\cr
-#'    [`Measure`][mlr3::Measure] to optimize.
-#'    Initialized to `msr("classif.ce")`, i.e. misclassification error.
+#'    [`Measure`][mlr3::Measure] | `character` to optimize.
+#'    Will be converted to a [`Measure`][mlr3::Measure] in case it is `character`.
+#'    Initialized to `"classif.ce"`, i.e. misclassification error.
 #'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
@@ -74,17 +75,23 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   public = list(
     initialize = function(id = "tunethreshold", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = function(x) check_r6(x, "MeasureClassif"), tags = "train"),
+        ParamUty$new("measure", custom_check = function(x)
+          check_r6(if (is.character(x)) msr(x) else x, "MeasureClassif"), tags = "train"),
         ParamUty$new("optimizer", custom_check = function(x) {
-          if (!(inherits(x, "Optimizer") | x %in% c("gensa", "nloptr", "random_search"))) {
-            paste0("'optimizer' either needs to inherit from 'bbotk::Optimizer' or ",
-              "be one of 'gensa', 'nloptr' or 'random_search'")
+          msg = paste0("'optimizer' needs to inherit from 'bbotk::Optimizer' or be convertable to one via bbotk::opt().")
+          if (is.character(x)) {
+            if (!(x %in% c("gensa", "nloptr", "random_search"))) {
+              return(msg)
+            }
+          } else if (!inherits(x, "Optimizer")) {
+            return(msg)
           }
+          return(TRUE)
         }, tags = "train"),
         ParamUty$new("log_level", default = "warn", tags = "train",
-          function(x) assert(check_character(x), check_integerish(x)))
+          function(x) assert(check_string(x), check_integerish(x)))
       ))
-      ps$values = list(measure = msr("classif.ce"), optimizer = "gensa", log_level = "warn")
+      ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction"),
@@ -118,7 +125,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
       ps = private$.make_param_set(pred)
       objfun = bbotk::ObjectiveRFun$new(
-        fun = function(xs) private$.objfun(xs, pred = pred, measure = self$param_set$values$measure),
+        fun = function(xs) private$.objfun(xs, pred = pred, measure = as_measure(self$param_set$values$measure)),
         domain = ps
       )
       inst = bbotk::OptimInstanceSingleCrit$new(
