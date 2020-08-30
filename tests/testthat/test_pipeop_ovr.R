@@ -32,7 +32,7 @@ test_that("PipeOpOVRSplit - train and predict", {
   expect_named(pout[[1]], tsk$class_names)
   expect_true(all(pmap_lgl(list(pout[[1]], names(pout[[1]])), .f = function(task, name) {
     expect_task(task)
-    task$target_names == paste0(tsk$target_names, "_tmp")) && task$positive == name && task$negative == "rest." &&
+    task$target_names == paste0(tsk$target_names, "_tmp") && task$positive == name && task$negative == "rest." &&
       all.equal(task$truth(), factor(ifelse(tsk$truth() == task$positive, task$positive, "rest."), levels = c(task$positive, "rest.")))
   })))
 })
