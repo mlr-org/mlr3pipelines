@@ -226,7 +226,7 @@ Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
 <span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'>pipeline_robustify</span>(<span class='no'>task</span>, <span class='no'>lrn</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='no'>lrn</span>)
 <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
 #&gt; * Task: boston_housing
-#&gt; * Learner: fixfactors.removeconstants.regr.rpart
+#&gt; * Learner: fixfactors.encode.removeconstants.regr.rpart
 #&gt; * Warnings: 0 in 0 iterations
 #&gt; * Errors: 0 in 0 iterations</div></pre>
   </div>
