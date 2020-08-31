@@ -49,7 +49,7 @@
 
 <meta property="og:title" content="PipeOpTuneThreshold — mlr_pipeops_tunethreshold" />
 <meta property="og:description" content="Tunes optimal probability thresholds over different PredictionClassifs.
-Learner predict_type: &quot;prob&quot; is required.
+mlr3::Learner predict_type: &quot;prob&quot; is required.
 Thresholds for each learner are optimized using the Optimizer supplied via
 the param_set.
 Defaults to GenSA.
@@ -158,7 +158,7 @@ in conjunction with ResamplingInsample." />
 
     <div class="ref-description">
     <p>Tunes optimal probability thresholds over different <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>s.</p>
-<p>Learner <code>predict_type</code>: <code>"prob"</code> is required.
+<p><code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code> <code>predict_type</code>: <code>"prob"</code> is required.
 Thresholds for each learner are optimized using the <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> supplied via
 the <code>param_set</code>.
 Defaults to <code><a href='https://rdrr.io/pkg/GenSA/man/GenSA.html'>GenSA</a></code>.
@@ -207,14 +207,15 @@ that would otherwise be set during construction. Default <code><a href='https://
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
 <li><p><code>measure</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code><br />
-<code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> to optimize.
-Defaults to <code><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>msr("classif.ce")</a></code>, i.e. misclassification error.</p></li>
+<code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> | <code>character</code> to optimize.
+Will be converted to a <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> in case it is <code>character</code>.
+Initialized to <code>"classif.ce"</code>, i.e. misclassification error.</p></li>
 <li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
 If <code>character</code>, converts to <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>
-via <code><a href='https://bbotk.mlr-org.com/reference/opt.html'>opt</a></code>. Defaults to <code><a href='https://bbotk.mlr-org.com/reference/mlr_optimizers_gensa.html'>OptimizerGenSA</a></code>.</p></li>
+via <code><a href='https://bbotk.mlr-org.com/reference/opt.html'>opt</a></code>. Initialized to <code><a href='https://bbotk.mlr-org.com/reference/mlr_optimizers_gensa.html'>OptimizerGenSA</a></code>.</p></li>
 <li><p><code>log_level</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>|<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
-Set a temporary log-level for <code><a href='https://rdrr.io/pkg/lgr/man/get_logger.html'>lgr::get_logger("bbotk")</a></code>. Default: "warn".</p></li>
+Set a temporary log-level for <code><a href='https://rdrr.io/pkg/lgr/man/get_logger.html'>lgr::get_logger("bbotk")</a></code>. Initialized to: "warn".</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -246,6 +247,7 @@ See the <code>optimizer</code> parameter for more info.</p>
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -271,6 +273,7 @@ See the <code>optimizer</code> parameter for more info.</p>
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
@@ -336,7 +339,7 @@ See the <code>optimizer</code> parameter for more info.</p>
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $classif.rpart$train_time
-#&gt; [1] 0.007
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $classif.rpart$train_task
 #&gt; &lt;TaskClassif:iris&gt; (0 x 5)
