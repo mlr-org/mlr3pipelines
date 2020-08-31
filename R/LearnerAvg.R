@@ -52,7 +52,6 @@
 LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
     initialize = function(id = "classif.avg") {
-
       ps = ParamSet$new(params = list(
         ParamUty$new("measure", custom_check = function(x)
           check_r6(if (is.character(x)) msr(x) else x, "MeasureClassif"), tags = "train"),
@@ -106,7 +105,6 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
     },
     weighted_average_prediction = function(task, weights, data) {
       weights = weights / sum(weights)
-
       prob = NULL
       response = NULL
       if (self$predict_type == "response") {
@@ -155,8 +153,7 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
         ParamUty$new("log_level", default = "warn", tags = "train",
           function(x) assert(check_string(x), check_integerish(x)))
       ))
-      ps$values = list(measure = "regr.mse", optimizer = "gensa", log_level = "warn")
-
+      ps$values = list(measure = "regr.mse", optimizer = "nloptr", log_level = "warn")
       super$initialize(
         id = id,
         param_set = ps,
@@ -209,7 +206,9 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       optimizer = pars$optimizer
       if (inherits(optimizer, "character")) {
         optimizer = bbotk::opt(optimizer)
-        optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA")
+        if (inherits(optimizer, "OptimizerNLoptr")) {
+          optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", x0 = rep(1/n_weights, n_weights))
+        }
       }
       measure = pars$measure
       if (is.character(measure)) measure = msr(measure)
