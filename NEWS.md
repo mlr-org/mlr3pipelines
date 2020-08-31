@@ -1,6 +1,7 @@
 # mlr3pipelines 0.2.1-9000
 
 * NULL input channels accept any kind of input
+* implemented as_learner.PipeOp
 * Changed PPLs:
   - fix how ppl_robustify detects whether a learner can handle factors
 * Changed PipeOps:
