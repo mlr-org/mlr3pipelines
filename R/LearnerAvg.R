@@ -16,16 +16,20 @@
 #' Using non-linear optimization is implemented in the SuperLearner R package.
 #' For a more detailed analysis the reader is referred to LeDell (2015).
 #'
-#' @section Parameter Set:
-#' * `measure` :: `character(1)` | `Measure` \cr
-#'   Measure to optimized weights for.
-#'   The Measure is either obtained from `mlr_measures` or directly supplied. Defaults to `classif.acc`
-#'   for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`
-#' * `algorithm` :: `character(1)` \cr
-#'   Several nonlinear optimization methods from `nloptr` are available.
-#'   See `nloptr::nloptr.print.options()` for a list of possible options.
-#'   Note that we only allow for derivative free local or global algorithms, i.e.
-#'   NLOPT_(G|L)N_.
+#' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOp`], as well as:
+#'  * `measure` :: [`Measure`][mlr3::Measure]\cr
+#'    [`Measure`][mlr3::Measure] | `character` to optimize.
+#'    Will be converted to a [`Measure`][mlr3::Measure] in case it is `character`.
+#'    Initialized to `"classif.ce"`, i.e. misclassification error for classification
+#'    and `regr.mse`, i.e. mean squared error for regression.
+#'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
+#'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
+#'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
+#'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
+#'  * `log_level` :: `character(1)`|`integer(1)`\cr
+#'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
+#'
 #'
 #' @section Methods:
 #' * `LearnerClassifAvg$new(), id = "classif.avg")` \cr
@@ -45,20 +49,32 @@
 LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
     initialize = function(id = "classif.avg") {
+
+      ps = ParamSet$new(params = list(
+        ParamUty$new("measure", custom_check = function(x)
+          check_r6(if (is.character(x)) msr(x) else x, "MeasureClassif"), tags = "train"),
+        ParamUty$new("optimizer", custom_check = function(x) {
+          msg = paste0("'optimizer' needs to inherit from 'bbotk::Optimizer' or be convertable to one via bbotk::opt().")
+          if (is.character(x)) {
+            if (!(x %in% c("gensa", "nloptr", "random_search"))) {
+              return(msg)
+            }
+          } else if (!inherits(x, "Optimizer")) {
+            return(msg)
+          }
+          return(TRUE)
+        }, tags = "train"),
+        ParamUty$new("log_level", default = "warn", tags = "train",
+          function(x) assert(check_string(x), check_integerish(x)))
+      ))
+      ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(
         id = id,
-        param_set = ParamSet$new(
-          params = list(
-            ParamUty$new(id = "measure", tags = "train"),
-            ParamFct$new(id = "algorithm", tags = c("train", "required"),
-              levels = nlopt_levels)
-          )
-        ),
+        param_set = ps,
         predict_types = c("response", "prob"),
         feature_types = c("integer", "numeric", "factor"),
         properties = c("twoclass", "multiclass")
       )
-      self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
     prepare_data = function(task) {
       data = task$data(cols = task$feature_names)
@@ -102,10 +118,9 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   ),
   private = list(
     .train = function(task) {
-      pars = self$param_set$get_values(tags = "train")
       data = self$prepare_data(task)
       n_weights = length(data)
-      list("weights" = optimize_objfun_nlopt(task, pars, self$weighted_average_prediction, n_weights, data))
+      list("weights" = optimize_weights_learneravg(self, task, n_weights, data))
     },
     .predict = function(task) {
       self$weighted_average_prediction(task, self$model$weights, self$prepare_data(task))
@@ -120,37 +135,47 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
 LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
     initialize = function(id = "regr.avg") {
+      ps = ParamSet$new(params = list(
+        ParamUty$new("measure", custom_check = function(x)
+          check_r6(if (is.character(x)) msr(x) else x, "MeasureRegr"), tags = "train"),
+        ParamUty$new("optimizer", custom_check = function(x) {
+          msg = paste0("'optimizer' needs to inherit from 'bbotk::Optimizer' or be convertable to one via bbotk::opt().")
+          if (is.character(x)) {
+            if (!(x %in% c("gensa", "nloptr", "random_search"))) {
+              return(msg)
+            }
+          } else if (!inherits(x, "Optimizer")) {
+            return(msg)
+          }
+          return(TRUE)
+        }, tags = "train"),
+        ParamUty$new("log_level", default = "warn", tags = "train",
+          function(x) assert(check_string(x), check_integerish(x)))
+      ))
+      ps$values = list(measure = "regr.mse", optimizer = "gensa", log_level = "warn")
+
       super$initialize(
         id = id,
-        param_set = ParamSet$new(
-          params = list(
-            ParamUty$new(id = "measure", tags = "train"),
-            ParamFct$new(id = "algorithm", tags = c("train", "required"), levels = nlopt_levels)
-          )
-        ),
+        param_set = ps,
         predict_types = "response",
         feature_types = c("integer", "numeric")
       )
-      self$param_set$values = list(algorithm = "NLOPT_LN_COBYLA")
     },
     prepare_data = function(task) {
-      response_matrix = as.matrix(task$data(cols = grep("\\.response$", task$feature_names, value = TRUE)))
-      list(response_matrix = response_matrix)
+      task$data(cols = grep("\\.response$", task$feature_names, value = TRUE))
     },
     weighted_average_prediction = function(task, weights, data) {
       wts = weights / sum(weights)
-
-      response = c(data$response_matrix %*% wts)
+      response = as.matrix(data) %*% wts
       se = NULL
       PredictionRegr$new(row_ids = task$row_ids, truth = task$truth(), response = response, se = se)
     }
   ),
   private = list(
     .train = function(task) {
-      pars = self$param_set$get_values(tags = "train")
       data = self$prepare_data(task)
-      n_weights = ncol(data$response_matrix)
-      list("weights" = optimize_objfun_nlopt(task, pars, self$weighted_average_prediction, n_weights, data))
+      n_weights = ncol(data)
+      list("weights" = optimize_weights_learneravg(self, task, n_weights, data))
     },
     .predict = function(task) {
       self$weighted_average_prediction(task, self$model$weights, self$prepare_data(task))
@@ -163,35 +188,40 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
 mlr_learners_regr.avg = NULL
 mlr_learners_classif.avg = NULL
 
-nlopt_levels = c("NLOPT_GN_DIRECT", "NLOPT_GN_DIRECT_L", "NLOPT_GN_DIRECT_L_RAND",
-  "NLOPT_GN_DIRECT_NOSCAL", "NLOPT_GN_DIRECT_L_NOSCAL", "NLOPT_GN_DIRECT_L_RAND_NOSCAL",
-  "NLOPT_GN_ORIG_DIRECT", "NLOPT_GN_ORIG_DIRECT_L", "NLOPT_LN_PRAXIS",
-  "NLOPT_GN_CRS2_LM", "NLOPT_GN_MLSL", "NLOPT_GN_MLSL_LDS",
-  "NLOPT_LN_COBYLA", "NLOPT_LN_NEWUOA", "NLOPT_LN_NEWUOA_BOUND",
-  "NLOPT_LN_NELDERMEAD", "NLOPT_LN_SBPLX", "NLOPT_LN_AUGLAG",
-  "NLOPT_LN_AUGLAG_EQ", "NLOPT_LN_BOBYQA", "NLOPT_GN_ISRES")
+optimize_weights_learneravg = function(self, task, n_weights, data) {
 
-nlopt_objfun = function(weights, task, measure, avg_weight_fun, data) {
-  # This is the objective function we minimize using nlopt
-  prd = avg_weight_fun(task, weights, data)
-  res = prd$score(measure)
-  if (measure$minimize) res else -res
+      # objective function to optimize
+      learneravg_objfun = function(x, task, measure, avg_weight_fun, data) {
+        # This is the objective function we minimize using nlopt
+        prd = avg_weight_fun(task, unlist(x), data)
+        res = prd$score(measure)
+        if (measure$minimize) res else -res
+      }
+
+      pars = self$param_set$get_values(tags = "train")
+      ps = ParamSet$new(params = imap(data, function(x, n) {
+        if (is.numeric(n)) n = paste0("w.", n)
+        ParamDbl$new(id = n, lower = 0, upper = 1)
+      }))
+      optimizer = pars$optimizer
+      if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
+      measure = pars$measure
+      if (is.character(measure)) measure = msr(measure)
+      objfun = bbotk::ObjectiveRFun$new(
+        fun = function(xs) learneravg_objfun(xs, task = task, measure = measure, avg_weight_fun = self$weighted_average_prediction, data = data),
+        domain = ps
+      )
+      inst = bbotk::OptimInstanceSingleCrit$new(
+        objective = objfun,
+        terminator = bbotk::trm("combo", terminators = list(
+          bbotk::trm("stagnation", iters = 20 * n_weights),
+          bbotk::trm("evals", n_evals = 50 * n_weights)
+        ))
+      )
+      lgr = lgr::get_logger("bbotk")
+      old_threshold = lgr$threshold
+      lgr$set_threshold(self$param_set$values$log_level)
+      optimizer$optimize(inst)
+      on.exit(lgr$set_threshold(old_threshold))
+      unlist(inst$result_x_domain)
 }
-
-optimize_objfun_nlopt = function(task, pars, avg_weight_fun, n_weights, data) {
-  require_namespaces("nloptr")
-  measure = assert_measure(as_measure(pars$measure, task_type = task$task_type))
-
-  opt = nloptr::nloptr(
-    x0 = rep(1 / n_weights, n_weights),
-    eval_f = nlopt_objfun,
-    lb = rep(0, n_weights), ub = rep(1, n_weights),
-    eval_g_ineq = function(x, task, measure, avg_weight_fun, data) max(x) - 1,
-    opts = list(algorithm = pars$algorithm, xtol_rel = 1e-8),
-    task = task,
-    measure = measure,
-    avg_weight_fun = avg_weight_fun,
-    data = data
-  )$solution
-}
-
