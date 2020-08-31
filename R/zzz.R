@@ -34,3 +34,8 @@ register_mlr3 = function() {
    pkgname = vapply(hooks[-1], function(x) environment(x)$pkgname, NA_character_)
    setHook(event, hooks[pkgname != "mlr3pipelines"], action = "replace")
 } # nocov end
+
+# static code checks should not complain about commonly used data.table columns
+utils::globalVariables(c("src_id", "dst_id", "name", "op.id", "response", "truth"))
+
+leanify_package()
