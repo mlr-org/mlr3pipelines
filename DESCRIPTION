@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.1.3.9000
+Version: 0.2.1-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -11,6 +11,11 @@ Authors@R:
              role = "aut",
              email = "pfistererf@googlemail.com",
              comment = c(ORCID = "0000-0001-8867-762X")),
+      person(given = "Lennart",
+             family = "Schneider",
+             role = "aut",
+             email = "lennart.sch@web.de",
+             comment = c(ORCID = "0000-0003-4152-5308")),
       person(given = "Bernd",
              family = "Bischl",
              role = "aut",
@@ -24,12 +29,7 @@ Authors@R:
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
-             email = "dandl.susanne@googlemail.com"),
-      person(given = "Lennart",
-             family = "Schneider",
-             role = "aut",
-             email = "lennart.sch@web.de",
-             comment = c(ORCID = "0000-0003-4152-5308")))
+             email = "dandl.susanne@googlemail.com"))
 Description: Dataflow programming toolkit that enriches 'mlr3' with a diverse
   set of pipelining operators ('PipeOps') that can be composed into graphs.
   Operations exist for data preprocessing, model fitting, and ensemble
@@ -60,6 +60,7 @@ Suggests:
     knitr,
     lme4,
     mlbench,
+    bbotk (>= 0.2.0),
     mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
@@ -75,12 +76,15 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
+    NMF,
+    MASS,
     kknn,
-    methods
-VignetteBuilder:
-    knitr
+    GenSA
 RdMacros:
     mlr3misc
+Remotes:
+    mlr-org/mlr3,
+    Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -132,6 +136,7 @@ Collate:
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
+    'PipeOpNMF.R'
     'PipeOpNOP.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'
@@ -151,6 +156,7 @@ Collate:
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
+    'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

@@ -51,11 +51,17 @@ test_that("utility function works", {
   expect_true(are_types_compatible("ajfpoiewj", "ajfpoiewj"))
 
   expect_false(are_types_compatible("ajfpoiewj", "sjpoawj"))
+
+  expect_true(are_types_compatible("MeasureClassif", "NULL"))
+  expect_true(are_types_compatible("LearnerClassif", "NULL"))
+  expect_true(are_types_compatible("ResamplingCV", "NULL"))
+  expect_true(are_types_compatible("PipeOp", "NULL"))
+  expect_true(are_types_compatible("NULL", "NULL"))
 })
 
 test_that("Graph is type-checking", {
   expect_error(PipeOpScale$new() %>>% PipeOpRegrAvg$new(1),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 
   mavtest = PipeOpRegrAvg$new(1)
   mavtest$input$train = "Task"
@@ -69,7 +75,7 @@ test_that("Graph is type-checking", {
     add_pipeop(PipeOpRegrAvg$new(1))
 
   expect_error(gr$add_edge("scale", "regravg"),
-    "Output type of PipeOp scale during training \\(Task\\) incompatible with input type of PipeOp regravg \\(NULL\\)")
+    "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
 
   gr = Graph$new()$
     add_pipeop(PipeOpScale$new())$
@@ -77,6 +83,16 @@ test_that("Graph is type-checking", {
 
   expect_error(gr$add_edge("scale", "regravg"),
     "Output type of PipeOp scale during prediction \\(Task\\) incompatible with input type of PipeOp regravg \\(PredictionRegr\\)")
+
+  expect_error(PipeOpRegrAvg$new(1) %>>% PipeOpScale$new(),
+    "Output type of PipeOp regravg during training \\(NULL\\) incompatible with input type of PipeOp scale \\(Task\\)")
+
+  gr = Graph$new()$
+    add_pipeop(PipeOpRegrAvg$new(1))$
+    add_pipeop(PipeOpScale$new())
+
+  expect_error(gr$add_edge("regravg", "scale"),
+    "Output type of PipeOp regravg during training \\(NULL\\) incompatible with input type of PipeOp scale \\(Task\\)")
 })
 
 test_that("Autoconversion utility functions work", {
@@ -129,5 +145,36 @@ test_that("Autoconversion for pipeops works", {
   expect_equal(po$predict(list(msr("classif.fn")))[[1]], mlr_measures$get("classif.fn"))
 
   expect_error(po$predict(list(msr("regr.mse"))), "inherit from.*MeasureClassif.*but has.*MeasureRegr")
+
+  po1 = R6Class("test", inherit = PipeOp,
+    public = list(
+      initialize = function()
+        super$initialize("test",
+          input = data.table(name = "in", train = "*", predict = "*"),
+          output = data.table(name = "out", train = "Task", predict  = "Task"))),
+    private = list(
+      .train = function(...) {
+        self$state = list()
+        list(tsk("iris"))
+      },
+      .predict = function(...) list(tsk("iris"))
+    )
+  )$new()
+  po2 <- R6Class("test", inherit = PipeOp,
+    public = list(
+      initialize = function() super$initialize("test2",
+        input = data.table(name = "in", train = "NULL", predict = "Task"),
+        output = data.table(name = "out", train = "*", predict = "*"))),
+    private = list(
+      .train = function(inp) self$state = inp,
+      .predict = function(inp) inp
+    )
+  )$new()
+
+  graph = po1 %>>% po2
+
+  expect_equal(graph$train(1), list(test2.out = NULL))
+
+  expect_equal(graph$predict(1), list(test2.out = tsk("iris")))
 
 })

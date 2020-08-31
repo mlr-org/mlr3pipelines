@@ -56,6 +56,13 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #'
+#' * `return_type` :: `character(1)`\cr
+#'    Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
+#'    If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to `sequence_length`.
+#'    If set to "factor_sequence", tokens are replaced by a factor and padded/truncated to `sequence_length`.
+#'    If set to 'bow', a possibly weighted bag-of-words matrix is returned.
+#'    Defaults to `bow`.
+#'
 #' * `stopwords_language` :: `character(1)`\cr
 #'   Language to use for stopword filtering. Needs to be either `"none"`, a language identifier listed in
 #'   `stopwords::stopwords_getlanguages("snowball")` (`"de"`, `"en"`, ...) or `"smart"`.
@@ -121,6 +128,10 @@
 #' * `base_df` :: `numeric(1)`\cr
 #'   The base for logarithms in [`quanteda::dfm_weight`] (see there). Default: 10.
 #'
+#' #' * `sequence_length` :: `integer(1)`\cr
+#'   The length of the integer sequence. Defaults to `Inf`, i.e. all texts are padded to the length
+#'   of the longest text. Only relevant for "return_type" : "integer_sequence"
+#'
 #' @section Internals:
 #' See Description. Internally uses the `quanteda` package. Calls [`quanteda::tokens`], [`quanteda::tokens_ngrams`] and [`quanteda::dfm`]. During training,
 #' [`quanteda::dfm_trim`] is also called. Tokens not seen during training are dropped during prediction.
@@ -155,7 +166,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
     initialize = function(id = "textvectorizer", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamFct$new("stopwords_language", tags = c("train", "predict"),
-          levels = c(stopwords::stopwords_getlanguages("snowball"), "smart", "none")),
+          levels = c("da", "de",    "en",   "es",    "fi",   "fr",   "hu",     "ir",   "it",
+                     "nl", "no",    "pt",   "ro",    "ru",   "sv" ,   "smart", "none")),
         ParamUty$new("extra_stopwords", tags = c("train", "predict"), custom_check = check_character),
 
         ParamLgl$new("tolower", default = TRUE, tags = c("train", "predict", "dfm")),
@@ -192,7 +204,10 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamFct$new("scheme_tf", default = "count", tags = c("train", "predict", "dfm_weight"),
           levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
         ParamDbl$new("k_tf", lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight")),
-        ParamDbl$new("base_tf", lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"))
+        ParamDbl$new("base_tf", lower = 0, default = 10, tags = c("train", "predict", "dfm_weight")),
+
+        ParamFct$new("return_type", default = "bow", levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
+        ParamInt$new("sequence_length", default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"))
       ))$
         add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("smoothing_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
@@ -200,23 +215,31 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("threshold_df", "scheme_df", CondEqual$new("count"))$
         add_dep("k_tf", "scheme_tf", CondEqual$new("augmented"))$
-        add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))
+        add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))$
+        add_dep("scheme_tf", "return_type", CondEqual$new("bow"))$
+        add_dep("sparsity", "return_type", CondEqual$new("bow"))$
+        add_dep("sequence_length", "return_type", CondAnyOf$new(c("integer_sequence", "factor_sequence")))
 
-      ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary")
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords", "methods"), feature_types = "character")
+      ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
     }
   ),
   private = list(
 
     .train_dt = function(dt, levels, target) {
       colwise_results = sapply(dt, function(column) {
-        tdm = private$transform_bow(column, trim = TRUE)  # transform to BOW (bag of words), return term count matrix
+        tkn = private$.transform_tokens(column)
+        tdm = private$.transform_bow(tkn, trim = TRUE)  # transform to BOW (bag of words), return term count matrix
         state = list(
           tdm = quanteda::dfm_subset(tdm, FALSE),  # empty tdm so we have vocab of training data
           docfreq = invoke(quanteda::docfreq, .args = c(list(x = tdm),  # column weights
             rename_list(self$param_set$get_values(tags = "docfreq"), "_df$", "")))
         )
-        matrix = quanteda::convert(private$transform_tfidf(tdm, state$docfreq), "matrix")
+        if (self$param_set$values$return_type == "bow") {
+          matrix = quanteda::convert(private$.transform_tfidf(tdm, state$docfreq), "matrix")
+        } else {
+          matrix = private$.transform_integer_sequence(tkn, tdm, state)
+        }
         list(state = state, matrix = matrix)
       }, simplify = FALSE)
       self$state = list(colmodels = map(colwise_results, "state"))
@@ -227,34 +250,43 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       colwise_results = imap(dt, function(column, colname) {
         state = self$state$colmodels[[colname]]
         if (nrow(dt)) {
-          tdm = private$transform_bow(column, trim = FALSE)
+          tkn = private$.transform_tokens(column)
+          tdm = private$.transform_bow(tkn, trim = TRUE)
           tdm = rbind(tdm, state$tdm)  # make sure all columns occur
           tdm = tdm[, colnames(state$tdm)]  # Ensure only train-time features are pased on
-          tdm = private$transform_tfidf(tdm, state$docfreq)  # tf-idf
+
+          if (self$param_set$values$return_type == "bow") {
+            tdm = quanteda::convert(private$.transform_tfidf(tdm, state$docfreq), "matrix")
+          } else {
+            tdm = private$.transform_integer_sequence(tkn, tdm, state)
+          }
         } else {
-          tdm = state$tdm
+          tdm = quanteda::convert(state$tdm, "matrix")
         }
-        quanteda::convert(tdm, "matrix")
+        tdm
       })
       as.data.frame(colwise_results)
     },
     # text: character vector of feature column
-    # trim: TRUE during training: trim infrequent features
-    transform_bow = function(text, trim) {
+    .transform_tokens = function(text) {
       corpus = quanteda::corpus(text)
+      # tokenize
+      tkn = invoke(quanteda::tokens, .args = c(list(x = corpus), self$param_set$get_values(tags = "tokenizer")))
+      invoke(quanteda::tokens_ngrams, .args = c(list(x = tkn), self$param_set$get_values(tags = "ngrams")))
+    },
+    # tkn: tokenized text, result from `.transform_tokens`
+    # trim: TRUE during training: trim infrequent features
+    .transform_bow = function(tkn, trim) {
       pv = self$param_set$get_values()
       remove = NULL
       if (pv$stopwords_language != "none") {
         if (pv$stopwords_language == "smart") {
           remove = stopwords::stopwords(source = "smart")
         } else {
-          remove = stopwords::stopwords(language = pv$stopwords_language)
+          remove = stopwords::stopwords(language = self$param_set$get_values()$stopwords_language)
         }
       }
       remove = c(remove, pv$extra_stopwords)
-      # tokenize
-      tkn = invoke(quanteda::tokens, .args = c(list(x = corpus), self$param_set$get_values(tags = "tokenizer")))
-      tkn = invoke(quanteda::tokens_ngrams, .args = c(list(x = tkn), self$param_set$get_values(tags = "ngrams")))
       # document-feature matrix
       tdm = invoke(quanteda::dfm, .args = c(list(x = tkn, remove = remove), self$param_set$get_values(tags = "dfm")))
       # trim rare tokens
@@ -264,7 +296,33 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         tdm
       }
     },
-    transform_tfidf = function(tdm, docfreq) {
+    .transform_integer_sequence = function(tkn, tdm, state) {
+      # List of allowed tokens:
+      pv = insert_named(list(min_termfreq = 0, max_termfreq = Inf), self$param_set$get_values(tags = "dfm_trim"))
+      dt = data.table(data.table(feature = names(state$docfreq), frequency = state$docfreq))
+      tokens = unname(unclass(tkn))
+      dict = attr(tokens, "types")
+      dict = setkey(data.table(k = dict, v = seq_along(dict)), k)
+      dict = dict[dt][pv$min_termfreq < frequency & frequency < pv$max_termfreq,]
+
+      # pad or cut x to length l
+      pad0 = function(x, l) {
+        c(x[seq_len(min(length(x), l))], rep(0, max(0, l - length(x))))
+      }
+
+      il = self$param_set$values$sequence_length
+      if (is.null(il)) il = max(map_int(tokens, length))
+      tokens = map(tokens, function(x) {
+        x = pad0(ifelse(x %in% dict$v, x, 0), il)
+        data.table(matrix(x, nrow = 1))
+      })
+      tokens = rbindlist(tokens)
+      if (self$param_set$values$return_type == "factor_sequence") {
+        tokens = map_dtc(tokens, factor, levels = dict$v[!is.na(dict$v)], labels = dict$k[!is.na(dict$v)])
+      }
+      tokens
+    },
+    .transform_tfidf = function(tdm, docfreq) {
       if (!quanteda::nfeat(tdm)) return(tdm)
       # code copied from quanteda:::dfm_tfidf.dfm (adapting here to avoid train/test leakage)
       x = invoke(quanteda::dfm_weight, .args = c(list(x = tdm),

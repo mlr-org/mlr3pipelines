@@ -48,10 +48,12 @@ test_that("LearnerClassifAvg", {
       prd = lrn$predict(intask)
       expect_prediction(prd)
     }
+    skip_on_cran()  # skip on cran after one round
   }
 })
 
 test_that("LearnerRegrAvg", {
+  skip_on_cran()  # skip on cran after one round
   lrn = LearnerRegrAvg$new()
   expect_learner(lrn)
   df = data.frame(x = matrix(rnorm(100), nrow = 10), y = rnorm(100))
@@ -98,6 +100,7 @@ test_that("LearnerRegrAvg", {
 })
 
 test_that("LearnerClassifAvg Pipeline", {
+  skip_on_cran()  # skip on cran after one round
   tsk = mlr_tasks$get("iris")
   # Works for response
   # TODO: this is a bit of a deep problem: https://github.com/mlr-org/mlr3pipelines/issues/216
@@ -143,6 +146,7 @@ test_that("LearnerClassifAvg Pipeline", {
 })
 
 test_that("LearnerRegrAvg Pipeline", {
+  skip_on_cran()  # skip on cran after one round
   tsk = mlr_tasks$get("boston_housing")
   # Works for response
   # TODO: this is a bit of a deep problem: https://github.com/mlr-org/mlr3pipelines/issues/216
