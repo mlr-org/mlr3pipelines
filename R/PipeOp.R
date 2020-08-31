@@ -241,6 +241,7 @@ PipeOp = R6Class("PipeOp",
     },
 
     train = function(input) {
+      self$state = NULL  # reset to untrained state first
       require_namespaces(self$packages)
 
       if (every(input, is_noop)) {
@@ -252,8 +253,10 @@ PipeOp = R6Class("PipeOp",
         return(evaluate_multiplicities(self, unpacked, "train", NULL))
       }
       input = check_types(self, input, "input", "train")
+      on.exit({self$state = NULL})  # if any of the followi fails, make sure to reset self$state
       output = private$.train(input)
       output = check_types(self, output, "output", "train")
+      on.exit()  # don't reset state any more
       output
     },
     predict = function(input) {
