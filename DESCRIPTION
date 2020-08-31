@@ -76,12 +76,15 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
+    NMF,
+    MASS,
     kknn,
     GenSA
 RdMacros:
     mlr3misc
 Remotes:
-    mlr-org/mlr3
+    mlr-org/mlr3,
+    Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -133,6 +136,7 @@ Collate:
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
+    'PipeOpNMF.R'
     'PipeOpNOP.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'

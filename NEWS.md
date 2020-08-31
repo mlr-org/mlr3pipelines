@@ -2,6 +2,8 @@
 
 * NULL input channels accept any kind of input
 * PipeOpTextVectorizer can now return an "integer sequence representation".
+* New PipeOps:
+  - PipeOpNMF
 
 # mlr3pipelines 0.2.1
 
