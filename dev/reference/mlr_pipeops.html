@@ -244,6 +244,7 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
@@ -325,32 +326,33 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 #&gt; 32:     multiplicityexply         1         NA                   
 #&gt; 33:     multiplicityimply        NA          1                   
 #&gt; 34:                mutate         1          1                   
-#&gt; 35:                   nop         1          1                   
-#&gt; 36:              ovrsplit         1          1                   
-#&gt; 37:              ovrunite         1          1                   
-#&gt; 38:                   pca         1          1                   
-#&gt; 39:                 proxy        NA          1                   
-#&gt; 40:           quantilebin         1          1              stats
-#&gt; 41:        randomresponse         1          1                   
-#&gt; 42:               regravg        NA          1                   
-#&gt; 43:       removeconstants         1          1                   
-#&gt; 44:         renamecolumns         1          1                   
-#&gt; 45:             replicate         1          1                   
-#&gt; 46:                 scale         1          1                   
-#&gt; 47:           scalemaxabs         1          1                   
-#&gt; 48:            scalerange         1          1                   
-#&gt; 49:                select         1          1                   
-#&gt; 50:                 smote         1          1        smotefamily
-#&gt; 51:           spatialsign         1          1                   
-#&gt; 52:             subsample         1          1                   
-#&gt; 53:          targetinvert         2          1                   
-#&gt; 54:          targetmutate         1          2                   
-#&gt; 55: targettrafoscalerange         1          2                   
-#&gt; 56:        textvectorizer         1          1 quanteda,stopwords
-#&gt; 57:             threshold         1          1                   
-#&gt; 58:         tunethreshold         1          1              bbotk
-#&gt; 59:              unbranch        NA          1                   
-#&gt; 60:            yeojohnson         1          1      bestNormalize
+#&gt; 35:                   nmf         1          1           MASS,NMF
+#&gt; 36:                   nop         1          1                   
+#&gt; 37:              ovrsplit         1          1                   
+#&gt; 38:              ovrunite         1          1                   
+#&gt; 39:                   pca         1          1                   
+#&gt; 40:                 proxy        NA          1                   
+#&gt; 41:           quantilebin         1          1              stats
+#&gt; 42:        randomresponse         1          1                   
+#&gt; 43:               regravg        NA          1                   
+#&gt; 44:       removeconstants         1          1                   
+#&gt; 45:         renamecolumns         1          1                   
+#&gt; 46:             replicate         1          1                   
+#&gt; 47:                 scale         1          1                   
+#&gt; 48:           scalemaxabs         1          1                   
+#&gt; 49:            scalerange         1          1                   
+#&gt; 50:                select         1          1                   
+#&gt; 51:                 smote         1          1        smotefamily
+#&gt; 52:           spatialsign         1          1                   
+#&gt; 53:             subsample         1          1                   
+#&gt; 54:          targetinvert         2          1                   
+#&gt; 55:          targetmutate         1          2                   
+#&gt; 56: targettrafoscalerange         1          2                   
+#&gt; 57:        textvectorizer         1          1 quanteda,stopwords
+#&gt; 58:             threshold         1          1                   
+#&gt; 59:         tunethreshold         1          1              bbotk
+#&gt; 60:              unbranch        NA          1                   
+#&gt; 61:            yeojohnson         1          1      bestNormalize
 #&gt;                       key input.num output.num           packages</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
