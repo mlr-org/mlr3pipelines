@@ -109,6 +109,7 @@ Collate:
     'PipeOpClassWeights.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
+    'PipeOpColRoles.R'
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpDateFeatures.R'

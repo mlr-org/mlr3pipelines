@@ -9,6 +9,7 @@
   - PipeOpTextVectorizer can now return an "integer sequence representation".
 * New PipeOps:
   - PipeOpNMF
+  - PipeOpColRoles
 
 # mlr3pipelines 0.2.1
 
