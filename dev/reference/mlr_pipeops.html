@@ -219,6 +219,7 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -300,59 +301,60 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 #&gt;  6:          classweights         1          1                   
 #&gt;  7:              colapply         1          1                   
 #&gt;  8:       collapsefactors         1          1                   
-#&gt;  9:                  copy         1         NA                   
-#&gt; 10:          datefeatures         1          1                   
-#&gt; 11:                encode         1          1              stats
-#&gt; 12:          encodeimpact         1          1                   
-#&gt; 13:            encodelmer         1          1        lme4,nloptr
-#&gt; 14:          featureunion        NA          1                   
-#&gt; 15:                filter         1          1                   
-#&gt; 16:            fixfactors         1          1                   
-#&gt; 17:               histbin         1          1           graphics
-#&gt; 18:                   ica         1          1            fastICA
-#&gt; 19:        imputeconstant         1          1                   
-#&gt; 20:            imputehist         1          1           graphics
-#&gt; 21:         imputelearner         1          1                   
-#&gt; 22:            imputemean         1          1                   
-#&gt; 23:          imputemedian         1          1              stats
-#&gt; 24:            imputemode         1          1                   
-#&gt; 25:             imputeoor         1          1                   
-#&gt; 26:          imputesample         1          1                   
-#&gt; 27:             kernelpca         1          1            kernlab
-#&gt; 28:               learner         1          1                   
-#&gt; 29:            learner_cv         1          1                   
-#&gt; 30:               missind         1          1                   
-#&gt; 31:           modelmatrix         1          1              stats
-#&gt; 32:     multiplicityexply         1         NA                   
-#&gt; 33:     multiplicityimply        NA          1                   
-#&gt; 34:                mutate         1          1                   
-#&gt; 35:                   nmf         1          1           MASS,NMF
-#&gt; 36:                   nop         1          1                   
-#&gt; 37:              ovrsplit         1          1                   
-#&gt; 38:              ovrunite         1          1                   
-#&gt; 39:                   pca         1          1                   
-#&gt; 40:                 proxy        NA          1                   
-#&gt; 41:           quantilebin         1          1              stats
-#&gt; 42:        randomresponse         1          1                   
-#&gt; 43:               regravg        NA          1                   
-#&gt; 44:       removeconstants         1          1                   
-#&gt; 45:         renamecolumns         1          1                   
-#&gt; 46:             replicate         1          1                   
-#&gt; 47:                 scale         1          1                   
-#&gt; 48:           scalemaxabs         1          1                   
-#&gt; 49:            scalerange         1          1                   
-#&gt; 50:                select         1          1                   
-#&gt; 51:                 smote         1          1        smotefamily
-#&gt; 52:           spatialsign         1          1                   
-#&gt; 53:             subsample         1          1                   
-#&gt; 54:          targetinvert         2          1                   
-#&gt; 55:          targetmutate         1          2                   
-#&gt; 56: targettrafoscalerange         1          2                   
-#&gt; 57:        textvectorizer         1          1 quanteda,stopwords
-#&gt; 58:             threshold         1          1                   
-#&gt; 59:         tunethreshold         1          1              bbotk
-#&gt; 60:              unbranch        NA          1                   
-#&gt; 61:            yeojohnson         1          1      bestNormalize
+#&gt;  9:              colroles         1          1                   
+#&gt; 10:                  copy         1         NA                   
+#&gt; 11:          datefeatures         1          1                   
+#&gt; 12:                encode         1          1              stats
+#&gt; 13:          encodeimpact         1          1                   
+#&gt; 14:            encodelmer         1          1        lme4,nloptr
+#&gt; 15:          featureunion        NA          1                   
+#&gt; 16:                filter         1          1                   
+#&gt; 17:            fixfactors         1          1                   
+#&gt; 18:               histbin         1          1           graphics
+#&gt; 19:                   ica         1          1            fastICA
+#&gt; 20:        imputeconstant         1          1                   
+#&gt; 21:            imputehist         1          1           graphics
+#&gt; 22:         imputelearner         1          1                   
+#&gt; 23:            imputemean         1          1                   
+#&gt; 24:          imputemedian         1          1              stats
+#&gt; 25:            imputemode         1          1                   
+#&gt; 26:             imputeoor         1          1                   
+#&gt; 27:          imputesample         1          1                   
+#&gt; 28:             kernelpca         1          1            kernlab
+#&gt; 29:               learner         1          1                   
+#&gt; 30:            learner_cv         1          1                   
+#&gt; 31:               missind         1          1                   
+#&gt; 32:           modelmatrix         1          1              stats
+#&gt; 33:     multiplicityexply         1         NA                   
+#&gt; 34:     multiplicityimply        NA          1                   
+#&gt; 35:                mutate         1          1                   
+#&gt; 36:                   nmf         1          1           MASS,NMF
+#&gt; 37:                   nop         1          1                   
+#&gt; 38:              ovrsplit         1          1                   
+#&gt; 39:              ovrunite         1          1                   
+#&gt; 40:                   pca         1          1                   
+#&gt; 41:                 proxy        NA          1                   
+#&gt; 42:           quantilebin         1          1              stats
+#&gt; 43:        randomresponse         1          1                   
+#&gt; 44:               regravg        NA          1                   
+#&gt; 45:       removeconstants         1          1                   
+#&gt; 46:         renamecolumns         1          1                   
+#&gt; 47:             replicate         1          1                   
+#&gt; 48:                 scale         1          1                   
+#&gt; 49:           scalemaxabs         1          1                   
+#&gt; 50:            scalerange         1          1                   
+#&gt; 51:                select         1          1                   
+#&gt; 52:                 smote         1          1        smotefamily
+#&gt; 53:           spatialsign         1          1                   
+#&gt; 54:             subsample         1          1                   
+#&gt; 55:          targetinvert         2          1                   
+#&gt; 56:          targetmutate         1          2                   
+#&gt; 57: targettrafoscalerange         1          2                   
+#&gt; 58:        textvectorizer         1          1 quanteda,stopwords
+#&gt; 59:             threshold         1          1                   
+#&gt; 60:         tunethreshold         1          1              bbotk
+#&gt; 61:              unbranch        NA          1                   
+#&gt; 62:            yeojohnson         1          1      bestNormalize
 #&gt;                       key input.num output.num           packages</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
