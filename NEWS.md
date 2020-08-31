@@ -1,7 +1,12 @@
 # mlr3pipelines 0.2.1-9000
 
 * NULL input channels accept any kind of input
-* fix how ppl_robustify detects whether a learner can handle factors
+* Changed PPLs:
+  - fix how ppl_robustify detects whether a learner can handle factors
+* Changed PipeOps:
+  - PipeOpTextVectorizer can now return an "integer sequence representation".
+* New PipeOps:
+  - PipeOpNMF
 
 # mlr3pipelines 0.2.1
 
