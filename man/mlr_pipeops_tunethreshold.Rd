@@ -10,7 +10,7 @@
 \description{
 Tunes optimal probability thresholds over different \code{\link[mlr3:PredictionClassif]{PredictionClassif}}s.
 
-Learner \code{predict_type}: \code{"prob"} is required.
+\code{\link[mlr3:Learner]{mlr3::Learner}} \code{predict_type}: \code{"prob"} is required.
 Thresholds for each learner are optimized using the \code{\link[bbotk:Optimizer]{Optimizer}} supplied via
 the \code{param_set}.
 Defaults to \code{\link[GenSA:GenSA]{GenSA}}.
@@ -52,14 +52,15 @@ The \verb{$state} is a named \code{list} with elements
 The parameters are the parameters inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
 \item \code{measure} :: \code{\link[mlr3:Measure]{Measure}}\cr
-\code{\link[mlr3:Measure]{Measure}} to optimize.
-Defaults to \code{msr("classif.ce")}, i.e. misclassification error.
+\code{\link[mlr3:Measure]{Measure}} | \code{character} to optimize.
+Will be converted to a \code{\link[mlr3:Measure]{Measure}} in case it is \code{character}.
+Initialized to \code{"classif.ce"}, i.e. misclassification error.
 \item \code{optimizer} :: \code{\link[bbotk:Optimizer]{Optimizer}}|\code{character(1)}\cr
 \code{\link[bbotk:Optimizer]{Optimizer}} used to find optimal thresholds.
 If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
-via \code{\link[bbotk:opt]{opt}}. Defaults to \code{\link[bbotk:mlr_optimizers_gensa]{OptimizerGenSA}}.
+via \code{\link[bbotk:opt]{opt}}. Initialized to \code{\link[bbotk:mlr_optimizers_gensa]{OptimizerGenSA}}.
 \item \code{log_level} :: \code{character(1)}|\code{integer(1)}\cr
-Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Default: "warn".
+Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
 }
 }
 
@@ -103,6 +104,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classweights}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
@@ -128,6 +130,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
