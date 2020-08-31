@@ -60,6 +60,7 @@ Suggests:
     knitr,
     lme4,
     mlbench,
+    bbotk (>= 0.2.0),
     mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
@@ -75,7 +76,8 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
-    kknn
+    kknn,
+    GenSA
 RdMacros:
     mlr3misc
 Remotes:
@@ -150,6 +152,7 @@ Collate:
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
+    'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
