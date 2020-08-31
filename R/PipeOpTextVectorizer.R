@@ -302,8 +302,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       dt = data.table(data.table(feature = names(state$docfreq), frequency = state$docfreq))
       tokens = unname(unclass(tkn))
       dict = attr(tokens, "types")
-      dict = setkey(data.table(k = dict, v = seq_along(dict)), k)
-      dict = dict[dt][pv$min_termfreq < frequency & frequency < pv$max_termfreq,]
+      dict = setkeyv(data.table(k = dict, v = seq_along(dict)), "k")
+      dict = dict[dt][pv$min_termfreq < get("frequency") & get("frequency") < pv$max_termfreq,]
 
       # pad or cut x to length l
       pad0 = function(x, l) {

@@ -79,7 +79,8 @@ Suggests:
     NMF,
     MASS,
     kknn,
-    GenSA
+    GenSA,
+    methods
 RdMacros:
     mlr3misc
 Remotes:
