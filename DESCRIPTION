@@ -137,6 +137,7 @@ Collate:
     'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
+    'PipeOpPseudoLabelLearner.R'
     'PipeOpQuantileBin.R'
     'PipeOpRandomResponse.R'
     'PipeOpRegrAvg.R'

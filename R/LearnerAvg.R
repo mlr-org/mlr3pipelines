@@ -16,17 +16,20 @@
 #' Using non-linear optimization is implemented in the SuperLearner R package.
 #' For a more detailed analysis the reader is referred to LeDell (2015).
 #'
+#' Note, that weights always sum to 1 by dividing through sum(weights) before weighting
+#' incoming features.
+#'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOp`], as well as:
+#' The parameters are the parameters inherited from [`LearnerClassif`], as well as:
 #'  * `measure` :: [`Measure`][mlr3::Measure]\cr
 #'    [`Measure`][mlr3::Measure] | `character` to optimize.
 #'    Will be converted to a [`Measure`][mlr3::Measure] in case it is `character`.
 #'    Initialized to `"classif.ce"`, i.e. misclassification error for classification
-#'    and `regr.mse`, i.e. mean squared error for regression.
+#'    and `"regr.mse"`, i.e. mean squared error for regression.
 #'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
-#'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
+#'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerNLoptr`][bbotk::OptimizerNLoptr].
 #'  * `log_level` :: `character(1)`|`integer(1)`\cr
 #'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
 #'
@@ -67,7 +70,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
         ParamUty$new("log_level", default = "warn", tags = "train",
           function(x) assert(check_string(x), check_integerish(x)))
       ))
-      ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
+      ps$values = list(measure = "classif.ce", optimizer = "nloptr", log_level = "warn")
       super$initialize(
         id = id,
         param_set = ps,
@@ -204,7 +207,10 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
         ParamDbl$new(id = n, lower = 0, upper = 1)
       }))
       optimizer = pars$optimizer
-      if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
+      if (inherits(optimizer, "character")) {
+        optimizer = bbotk::opt(optimizer)
+        optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA")
+      }
       measure = pars$measure
       if (is.character(measure)) measure = msr(measure)
       objfun = bbotk::ObjectiveRFun$new(

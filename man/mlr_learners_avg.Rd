@@ -25,19 +25,25 @@ for \code{LearnerClassifAvg} and \code{regr.mse} for \code{LearnerRegrAvg}).
 Learned weights can be obtained from \verb{$model}.
 Using non-linear optimization is implemented in the SuperLearner R package.
 For a more detailed analysis the reader is referred to LeDell (2015).
-}
-\section{Parameter Set}{
 
+Note, that weights always sum to 1 by dividing through sum(weights) before weighting
+incoming features.
+}
+\section{Parameters}{
+
+The parameters are the parameters inherited from \code{\link{LearnerClassif}}, as well as:
 \itemize{
-\item \code{measure} :: \code{character(1)} | \code{Measure} \cr
-Measure to optimized weights for.
-The Measure is either obtained from \code{mlr_measures} or directly supplied. Defaults to \code{classif.acc}
-for \code{LearnerClassifAvg} and \code{regr.mse} for \code{LearnerRegrAvg}
-\item \code{algorithm} :: \code{character(1)} \cr
-Several nonlinear optimization methods from \code{nloptr} are available.
-See \code{nloptr::nloptr.print.options()} for a list of possible options.
-Note that we only allow for derivative free local or global algorithms, i.e.
-NLOPT_(G|L)N_.
+\item \code{measure} :: \code{\link[mlr3:Measure]{Measure}}\cr
+\code{\link[mlr3:Measure]{Measure}} | \code{character} to optimize.
+Will be converted to a \code{\link[mlr3:Measure]{Measure}} in case it is \code{character}.
+Initialized to \code{"classif.ce"}, i.e. misclassification error for classification
+and \code{"regr.mse"}, i.e. mean squared error for regression.
+\item \code{optimizer} :: \code{\link[bbotk:Optimizer]{Optimizer}}|\code{character(1)}\cr
+\code{\link[bbotk:Optimizer]{Optimizer}} used to find optimal thresholds.
+If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
+via \code{\link[bbotk:opt]{opt}}. Initialized to \code{\link[bbotk:OptimizerNLoptr]{OptimizerNLoptr}}.
+\item \code{log_level} :: \code{character(1)}|\code{integer(1)}\cr
+Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
 }
 }
 
