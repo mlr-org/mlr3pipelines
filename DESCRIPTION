@@ -60,6 +60,7 @@ Suggests:
     knitr,
     lme4,
     mlbench,
+    bbotk (>= 0.2.0),
     mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
@@ -75,11 +76,15 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
-    kknn
+    NMF,
+    MASS,
+    kknn,
+    GenSA
 RdMacros:
     mlr3misc
 Remotes:
-    mlr-org/mlr3
+    mlr-org/mlr3,
+    Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
@@ -132,6 +137,7 @@ Collate:
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
+    'PipeOpNMF.R'
     'PipeOpNOP.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'
@@ -151,6 +157,7 @@ Collate:
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
+    'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
