@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Changes the columns roles of the input [`Task`][mlr3::Task] according to `new_role`.
+#' Changes the column roles of the input [`Task`][mlr3::Task] according to `new_role`.
 #'
 #' @section Construction:
 #' ```
