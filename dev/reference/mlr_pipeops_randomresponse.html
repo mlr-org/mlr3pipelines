@@ -163,7 +163,7 @@ deviation (sampling is done observation-wise)." />
 prediction.</p>
 <p>For <code>"prob"</code>, the responses are sampled according to
 the probabilities of the input <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>. For <code>"se"</code>,
-responses are randomly drawn according to the <code>rdistfun</code> parameter (default is <code>rnorm</code>) by using
+responses are randomly drawn according to the <code>rdistfun</code> parameter (default is <code><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></code>) by using
 the original responses of the input <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code> as the mean and the
 original standard errors of the input <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code> as the standard
 deviation (sampling is done observation-wise).</p>
@@ -211,7 +211,7 @@ training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html
 A function for generating random responses when the predict type is <code>"se"</code>. This function must
 accept the arguments <code>n</code> (integerish number of responses), <code>mean</code> (<code>numeric</code> for the mean),
 and <code>sd</code> (<code>numeric</code> for the  standard deviation), and must <em>vectorize</em> over <code>mean</code>
-and <code>sd</code>. Default is <code>rnorm</code>.</p></li>
+and <code>sd</code>. Default is <code><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
