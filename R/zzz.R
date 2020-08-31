@@ -34,6 +34,7 @@ register_mlr3 = function() {
    setHook(event, hooks[pkgname != "mlr3pipelines"], action = "replace")
 } # nocov end
 
-if (getRversion() >= "2.15.1")  utils::globalVariables(c("dst_id", "name", "op.id", "response", "src_id", "truth"))
+# static code checks should not complain about commonly used data.table columns
+utils::globalVariables(c("src_id", "dst_id", "name", "op.id", "response", "truth"))
 
 leanify_package()
