@@ -33,8 +33,8 @@ incoming features.
 
 The parameters are the parameters inherited from \code{\link{LearnerClassif}}, as well as:
 \itemize{
-\item \code{measure} :: \code{\link[mlr3:Measure]{Measure}}\cr
-\code{\link[mlr3:Measure]{Measure}} | \code{character} to optimize.
+\item \code{measure} :: \code{\link[mlr3:Measure]{Measure}} | \code{character} \cr
+\code{\link[mlr3:Measure]{Measure}} to optimize for.
 Will be converted to a \code{\link[mlr3:Measure]{Measure}} in case it is \code{character}.
 Initialized to \code{"classif.ce"}, i.e. misclassification error for classification
 and \code{"regr.mse"}, i.e. mean squared error for regression.
@@ -45,7 +45,7 @@ via \code{\link[bbotk:opt]{opt}}. Initialized to \code{\link[bbotk:OptimizerNLop
 Nloptr hyperparameters are initialized to \code{xtol_rel = 1e-8}, \code{algorithm = "NLOPT_LN_COBYLA"}
 and equal initial weights for each learner.
 For more fine-grained control, it is recommended to supply a instantiated \code{\link[bbotk:Optimizer]{Optimizer}}.
-\item \code{log_level} :: \code{character(1)}|\code{integer(1)}\cr
+\item \code{log_level} :: \code{character(1)} | \code{integer(1)}\cr
 Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
 }
 }

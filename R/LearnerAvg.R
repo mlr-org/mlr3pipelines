@@ -21,8 +21,8 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`LearnerClassif`], as well as:
-#'  * `measure` :: [`Measure`][mlr3::Measure]\cr
-#'    [`Measure`][mlr3::Measure] | `character` to optimize.
+#'  * `measure` :: [`Measure`][mlr3::Measure] | `character` \cr
+#'    [`Measure`][mlr3::Measure] to optimize for.
 #'    Will be converted to a [`Measure`][mlr3::Measure] in case it is `character`.
 #'    Initialized to `"classif.ce"`, i.e. misclassification error for classification
 #'    and `"regr.mse"`, i.e. mean squared error for regression.
@@ -33,7 +33,7 @@
 #'    Nloptr hyperparameters are initialized to `xtol_rel = 1e-8`, `algorithm = "NLOPT_LN_COBYLA"`
 #'    and equal initial weights for each learner.
 #'    For more fine-grained control, it is recommended to supply a instantiated [`Optimizer`][bbotk::Optimizer].
-#'  * `log_level` :: `character(1)`|`integer(1)`\cr
+#'  * `log_level` :: `character(1)` | `integer(1)`\cr
 #'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
 #'
 #'
@@ -56,19 +56,8 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
     initialize = function(id = "classif.avg") {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = function(x)
-          check_r6(if (is.character(x)) msr(x) else x, "MeasureClassif"), tags = "train"),
-        ParamUty$new("optimizer", custom_check = function(x) {
-          msg = paste0("'optimizer' needs to inherit from 'bbotk::Optimizer' or be convertable to one via bbotk::opt().")
-          if (is.character(x)) {
-            if (!(x %in% c("gensa", "nloptr", "random_search"))) {
-              return(msg)
-            }
-          } else if (!inherits(x, "Optimizer")) {
-            return(msg)
-          }
-          return(TRUE)
-        }, tags = "train"),
+        ParamUty$new("measure", custom_check = curry(check_measure, class = "MeasureClassif"), tags = "train"),
+        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", default = "warn", tags = "train",
           function(x) assert(check_string(x), check_integerish(x)))
       ))
@@ -140,19 +129,8 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
     initialize = function(id = "regr.avg") {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = function(x)
-          check_r6(if (is.character(x)) msr(x) else x, "MeasureRegr"), tags = "train"),
-        ParamUty$new("optimizer", custom_check = function(x) {
-          msg = paste0("'optimizer' needs to inherit from 'bbotk::Optimizer' or be convertable to one via bbotk::opt().")
-          if (is.character(x)) {
-            if (!(x %in% c("gensa", "nloptr", "random_search"))) {
-              return(msg)
-            }
-          } else if (!inherits(x, "Optimizer")) {
-            return(msg)
-          }
-          return(TRUE)
-        }, tags = "train"),
+        ParamUty$new("measure", custom_check = curry(check_measure, class = "MeasureRegr"), tags = "train"),
+        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", default = "warn", tags = "train",
           function(x) assert(check_string(x), check_integerish(x)))
       ))
@@ -228,8 +206,8 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       )
       lgr = lgr::get_logger("bbotk")
       old_threshold = lgr$threshold
+      on.exit(lgr$set_threshold(old_threshold))
       lgr$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
-      on.exit(lgr$set_threshold(old_threshold))
       unlist(inst$result_x_domain)
 }

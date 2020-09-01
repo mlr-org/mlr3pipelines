@@ -84,3 +84,26 @@ multiplicity_recurse = function(.multip, .fun, ...) {
     .fun(.multip, ...)
   }
 }
+
+# Check whether an object is a measure or convertable to one via `msr()`
+check_measure = function(x, class = "Measure") {
+  if (is.character(x)) {
+    if (x %nin% mlr_measures$keys()) "Is a `character` but not a known measure" else TRUE
+  } else {
+    check_r6(x, class)
+  }
+}
+
+
+# Check whether an object is an Optimizer or in a fixed set of optimizers.
+check_optimizer = function(x, class = "Optimizer") {
+  if (is.character(x)) {
+    if (!(x %in% c("gensa", "nloptr", "random_search"))) {
+      paste0("optimizer must be convertable to a bbotk::Optimizer via bbotk::opt().")
+    } else {
+      TRUE
+    }
+  } else {
+    check_r6(optimizer)
+  }
+}
