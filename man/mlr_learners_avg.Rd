@@ -42,6 +42,9 @@ and \code{"regr.mse"}, i.e. mean squared error for regression.
 \code{\link[bbotk:Optimizer]{Optimizer}} used to find optimal thresholds.
 If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
 via \code{\link[bbotk:opt]{opt}}. Initialized to \code{\link[bbotk:OptimizerNLoptr]{OptimizerNLoptr}}.
+Nloptr hyperparameters are initialized to \code{xtol_rel = 1e-8}, \code{algorithm = "NLOPT_LN_COBYLA"}
+and equal initial weights for each learner.
+For more fine-grained control, it is recommended to supply a instantiated \code{\link[bbotk:Optimizer]{Optimizer}}.
 \item \code{log_level} :: \code{character(1)}|\code{integer(1)}\cr
 Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
 }

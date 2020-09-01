@@ -30,6 +30,9 @@
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
 #'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerNLoptr`][bbotk::OptimizerNLoptr].
+#'    Nloptr hyperparameters are initialized to `xtol_rel = 1e-8`, `algorithm = "NLOPT_LN_COBYLA"`
+#'    and equal initial weights for each learner.
+#'    For more fine-grained control, it is recommended to supply a instantiated [`Optimizer`][bbotk::Optimizer].
 #'  * `log_level` :: `character(1)`|`integer(1)`\cr
 #'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
 #'
