@@ -17,7 +17,6 @@ test_that("LearnerClassifAvg", {
 
 
   df = data.frame(x = matrix(runif(90), nrow = 30), y = as.factor(sample(c(0, 1), 30, replace = TRUE)))
-  df$y[1:3] = abs(df$y[4:6] - 1) # prevent stochastic errors
   tsk = TaskClassif$new(id = "tsk", backend = df, target = "y")
 
   for (predicttype in c("prob", "response")) {
