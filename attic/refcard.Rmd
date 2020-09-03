@@ -1,3 +1,8 @@
+---
+title: "mlr3pipelines reference"
+author: "Martin Binder"
+---
+
 # Creating a `PipeOp`
 
 Every `PipeOp` has a class name (the same as `class(p)[[1]]`) and a name inside the `po()` / `mlr_pipeops` dictionary, which is often the class name in lowercase without the `PipeOp` prefix.
