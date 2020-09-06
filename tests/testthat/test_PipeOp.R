@@ -67,3 +67,12 @@ test_that("Errors occur for inputs", {
     po$param_set = ParamSet$new()
   }, "read-only")
 })
+
+test_that("Errors during training set $state to NULL", {
+  po = PipeOp$new("id", input = data.table(name = "input", train = "*", predict = "*"),
+    output = data.table(name = "output", train = "*", predict = "*"))
+  expect_null(po$state)
+  po$state = list("not_null")
+  expect_error(po$train(list(mlr_tasks$get("iris"))), regexp = "abstract")
+  expect_null(po$state)  # state is completely reset to NULL
+})
