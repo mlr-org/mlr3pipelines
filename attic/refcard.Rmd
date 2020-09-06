@@ -1,0 +1,176 @@
+---
+title: "mlr3pipelines reference"
+author: "Martin Binder"
+---
+
+# Creating a `PipeOp`
+
+Every `PipeOp` has a class name (the same as `class(p)[[1]]`) and a name inside the `po()` / `mlr_pipeops` dictionary, which is often the class name in lowercase without the `PipeOp` prefix.
+
+Equivalent:
+```{r}
+p = PipeOpPCA$new()
+p = mlr_pipeops$get("pca")
+p = po("pca")  # preferred
+```
+
+## Construction arguments
+
+Equivalent:
+```{r}
+p = PipeOpPCA$new(id = "pca2", param_vals = list(center = FALSE, scale. = TRUE))
+p = mlr_pipeops$get("pca", id = "pca2", param_vals = list(center = FALSE, scale. = TRUE))
+p = po("pca", id = "pca2", param_vals = list(center = FALSE, scale. = TRUE))
+p = po("pca", id = "pca2", center = FALSE, scale. = TRUE)  # preferred
+```
+Note the last line: `po()` automatically sets param_vals and other attributes of the constructed `PipeOp` based on further arguments.
+
+## `PipeOp` wrapping other objects
+
+`PipeOpLearner` and `PipeOpLearnerCV` wrap `mlr3::Learner`, `PipeOpFilter` wraps `mlr3filters::Filter`.
+
+### Wrapping a Learner
+
+The `PipeOpLearner` has `NULL` output during train phase and `Prediction` output during predict phase. Suppose we have a Learner `l`:
+
+```{r}
+l = lrn("classif.rpart")
+```
+
+Then the following all are quivalent:
+
+Equivalent:
+```{r}
+p = PipeOpLearner$new(l)
+p = mlr_pipeops$get("learner", l)
+p = po("learner", l)  # preferred
+p = as_pipeop(l)  # preferred
+```
+
+The `param_values` argument makes it possible to change `Learner` hyperparameter values. The last two lines are preferred. `po("learner", l)` can also set `predict_type` and hyperparameter values directly:
+```{r}
+p = po("learner", l, predict_type = "prob", cp = 0.05)
+```
+
+### Wrapping a Learner with Train-Time Cross-Validation
+
+For stacking and threshold tuning it is necessary to have estimates of out-of-sample predictions during training. In that case a `PipeOpLearnerCV` is needed, which has `Task` output during both train and predict phase.
+
+`PipeOpLearnerCV` works similarly (except for the `as_pipeop()` construct) as `PipeOpLearner`:
+```{r}
+p = PipeOpLearnerCV$new(l)
+p = mlr_pipeops$get("learner_cv", l)
+p = po("learner_cv", l)  # preferred
+```
+and
+```{r}
+p = po("learner_cv", l, predict_type = "prob", cp = 0.05)
+```
+
+### Wrapping a Filter
+
+Given a `Filter` `f`:
+```{r}
+f = mlr3filters:::flt("anova")
+```
+
+Equivalent:
+```{r}
+p = PipeOpFilter$new(f)
+p = mlr_pipeops$get("filter", f)
+p = po("filter", f)  # preferred
+p = as_pipeop(f)  # preferred
+```
+
+### Automatic Wrapping
+
+Operations that expect a `PipeOp` or a `Graph` often automatically convert `Learner` and `Filter` objects (using `as_pipeop()` internally). Examples are:
+
+- The `%>>%`-operator
+- `Graph$add_pipeop()`
+- `gunion()`
+- Various `ppl()`-arguments
+- `PipeOpProxy`'s `content` parameter
+
+Equivalent:
+```{r}
+gr = po("filter", f) %>>% po("pca") %>>% po("learner", l)
+gr = as_pipeop(f) %>>% po("pca") %>>% as_pipeop(l)
+gr = f %>>% po("pca") %>>% l  # preferred
+```
+
+# Creating a Graph
+
+Graphs can be created and modified using several basic operations
+
+- Create an empty `Graph` using `gr = Graph$new()`
+- Create a `Graph` from a single `PipeOp`, `Learner` or `Filter` using `as_graph()`.
+- Create one of several pre-packaged `Graph` using `ppl()` or `mlr_graphs$get()`
+- Add a `PipeOp` to a `Graph` using `gr$add_pipeop()`
+- Create a union of a `list` of `Graph` using `gunion()` (preferred) or `as_graph()`. Note that `as_graph()` is automatically used for a list of `Graph` objects, so when chaining `Graph` using `%>>%`, it is not necessary to use `gunion()` / `as_graph()`.
+- Create a connection between `PipeOp` that are in the same `Graph` using `gr$add_edge()`
+- Create a union of two `Graph`, while connecting the output of one `Graph` to the input of the other `Graph`, using `%>>%`.
+
+The `Graph`
+```
+      ,--- pca ---.
+branch             unbranch -- anova -- classif.rpart
+      `--- nop ---'
+```
+using
+```{r}
+f = mlr3filters::flt("anova")
+l = lrn("classif.rpart")
+```
+
+Can be created in the following way:
+```{r}
+gr = Graph$new()$
+  add_pipeop(po("branch", 2))$
+  add_pipeop(po("pca"))$
+  add_pipeop(po("nop"))$
+  add_pipeop(po("unbranch", 2))$
+  add_pipeop(po("filter", f))$  # auto-convert to PipeOpFilter
+  add_pipeop(po("learner", l))$  # auto-convert to PipeOpLearner
+  add_edge("branch", "pca", src_channel = "output1")$
+  add_edge("branch", "nop", src_channel = "output2")$
+  add_edge("pca", "unbranch", dst_channel = "input1")$
+  add_edge("nop", "unbranch", dst_channel = "input2")$
+  add_edge("unbranch", "anova")$
+  add_edge("anova", "classif.rpart")
+```
+(note that the `src_channel = "output2"` and `dst_channel = "input2"` are not required, since as soon as `output1` / `input1` are connected, the possible source / destination channel of the second edge are unambiguous.
+
+Equivalent  to the above construction are:
+```{r}
+gr = po("branch", 2) %>>% gunion(list(po("pca"), po("nop"))) %>>%
+  po("unbranch", 2) %>>% f %>>% l
+gr = po("branch", 2) %>>% list(po("pca"), po("nop")) %>>%
+  po("unbranch", 2) %>>% f %>>% l
+gr = ppl("branch", list(po("pca"), po("nop"))) %>>% f %>>% l
+```
+The second option uses the automatic conversion of `list` to `gunion()` by `%>>%`. The last option uses the pre-packaged branch-pipeline.
+
+There are many other ways of combining these methods. The following is an unconventional but legitimate way to build the same `Graph`:
+```{r}
+gr = gunion(list(
+    ppl("branch", list(po("pca"), po("nop"))),
+    f %>>% l
+  ))$add_edge("unbranch", "anova")
+```
+The use of `gunion()` is necessary here because the `$add_edge` method is used. 
+
+## Vararg Channels
+
+## `add_edge` Automatic Channel Selection
+
+- only free edge, if there is one
+- vararg channel counts as free
+
+## `%>>%` Automatic Channel Selection
+
+- many-to-many
+- one-to-many, many-to-one
+- automatic distribution to vararg
+
+## Common Graph Creation Pattern
