@@ -387,7 +387,7 @@ test_that("dot output", {
   gr$add_edge("debug.multi", "debug3", "output_2", "input_1")
   gr$add_edge("debug2", "debug.multi", 2, 1)
   gr$add_edge("debug2", "debug.multi", "output_1", "input_2")
-  out = capture.output(gr$to_dot(dotname = "test", fontsize = 20))
+  out = capture.output(gr$print(dot = TRUE, dotname = "test", fontsize = 20))
   expect_true(out[1L] == "digraph test {")
   expect_true(out[22L] == "}")
   expect_setequal(c("1 -> 4;", "1 -> 4;", "2 -> 1;", "2 -> 1;", "3 -> 2;", "3 -> 2;",
@@ -404,16 +404,16 @@ test_that("dot output", {
     "debug3_output_2\",fontsize=20]"), out[-c(1L, 22L)])
 
   gr = Graph$new()
-  out = capture.output(gr$to_dot())
+  out = capture.output(print(gr, dot = TRUE))
   expect_setequal(c("digraph dot {", "", "}"), out)
 
   gr = Graph$new()$add_pipeop(po("scale"))
-  out = capture.output(gr$to_dot())
+  out = capture.output(gr$print(dot = TRUE))
   expect_setequal(c("digraph dot {", "1 [label=\"scale\",fontsize=24]", "}"), out)
 
   gr = po("scale") %>>% po("pca")
   gr$add_pipeop(po("nop"))
-  out = capture.output(gr$to_dot())
+  out = capture.output(gr$print(dot = TRUE))
   expect_true(out[1L] == "digraph dot {")
   expect_true(out[15L] == "}")
   expect_setequal(c("1 -> 3;", "2 -> 1;", "2 -> 4;", "3 -> 5;", "4 -> 6;",

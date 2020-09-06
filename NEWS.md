@@ -1,7 +1,7 @@
 # mlr3pipelines 0.2.1-9000
 
 * NULL input channels accept any kind of input
-* New to_dot() method added to Graphs printing a DOT representation on console
+* print() method of Graphs now also allows for printing a DOT representation on the console
 * state of PipeOps now reset to NULL if training fails
 * implemented as_learner.PipeOp
 * Changed PPLs:
