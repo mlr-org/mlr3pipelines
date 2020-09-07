@@ -88,7 +88,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
           }
           return(TRUE)
         }, tags = "train"),
-        ParamUty$new("log_level", default = "warn", tags = "train",
+        ParamUty$new("log_level", tags = "train",
           function(x) assert(check_string(x), check_integerish(x)))
       ))
       ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")

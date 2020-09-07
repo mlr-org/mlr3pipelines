@@ -561,10 +561,10 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   public = list(
     initialize = function(id = "update_target", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("trafo", default = identity, tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
+        ParamUty$new("trafo", tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
         ParamUty$new("new_target_name", tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
         ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
-        ParamLgl$new("drop_original_target", default = TRUE, tags = c("train", "predict"))
+        ParamLgl$new("drop_original_target", tags = c("train", "predict"))
         )
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)
