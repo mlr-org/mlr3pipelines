@@ -77,12 +77,13 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
         check_character(innum, min.len = 1L, any.missing = FALSE)
       )
       if (is.numeric(innum)) {
+        inname = if (innum) rep_suffix("input", innum) else "..."
         private$.named = FALSE
       } else {
+        inname = innum
         innum = length(innum)
         private$.named = TRUE
       }
-      inname = if (innum) rep_suffix("input", innum) else "..."
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = "output", train = "[*]", predict = "[*]"),

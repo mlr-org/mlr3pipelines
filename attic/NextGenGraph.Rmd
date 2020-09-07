@@ -1,0 +1,59 @@
+---
+title: "Next Generation Graph Structure"
+author: "Martin Binder"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "#>", collapse = TRUE)
+devtools::load_all("..")
+library("mlr3")
+options(width = 100)
+```
+
+## The Story So Far
+
+### Creating Graphs
+There are currently mainly etwo ways of creating a `Graph` in `mlr3pipelines`, both of them have their drawbacks.
+
+1. It is possible to add `PipeOp`s to a `Graph` and then add edges to the graph:
+    ```{r}
+    gr = Graph$new()$
+      add_pipeop(po("nop"))$
+      add_pipeop(po("pca"))$
+      add_pipeop(po("featureunion"))$
+      add_edge("nop", "featureunion")$
+      add_edge("pca", "featureunion")
+    ```
+2. It is possible to concatenate `PipeOp`s using the `%>>%`-operator. This is based on `mlrCPO`'s syntax, which was itself inspired by `magrittr`.
+    ```{r}
+    gr = list(po("nop"), po("pca")) %>>% po("featureunion")
+   ```
+
+The second of these options is much less verbose but at the same time not as versatile as the first option.
+
+### Input / Output Channels
+
+Every `PipeOp` has a fixed number of input / output "channels" that act like positional function arguments. A single output channel can be connected to multiple input channels (the object in question is then copied automatically). An input channel may be designated as "vararg"-channel, it can then be connected to multiple output channels. The `%>>%`-operator does its best to connect output channels to input channels; it can even connect the correct channels to vararg input channels.
+
+Every input channel that is not connected to some output channel receives the `Graph` input. The output of every output channel not connected to some input channel is given as the `Graph` output.
+
+## Things That Could Change
+
+### Optional Channels
+
+`PipeOp`s may create information that could be interesting for other `PipeOp`s, but may be optional. An example would be the activation of a NN layer, or the hyperparameters chosen by an "auto-tuned" `Learner`. There could furthermore be some input for `PipeOp`s that is "optional". An idea would be to set the value of the `ParamSet` according to the output of a different `PipeOp`.
+
+This makes the `%>>%`-syntax more difficult, because it would no longer be obvious what inputs and outputs should be connected if they can all be optional. An idea would be to have "secondary" input / output channels that get ignored by `%>>%` and must be set manually.
+
+### Syntax for Creating Graphs
+
+The `%>>%`-syntax is inspired by function calls, and `PipeOp`s are, in a way, generalized functions with multiple inputs and outputs. A possible syntax for creating `Graph`s that is more verbose / powerful than `%>>%` but less clumsy than `add_pipeop` and `add_edge` could be:
+
+```{r, eval = FALSE}
+gr = po("featureunion")$input(po("nop")$output_connector[[1]], po("pca")$output_connector[[1]])
+```
+
+I.e. give `PipeOp` and `Graph` an `$output_connector` object that represents the possible outputs of the `Graph`. Furthermore, an `$input()` function that takes output connectors as arguments and connects the designated outputs of objects to inputs, adding the objects to a `Graph` if necessary.
+
+A possible issue here is that we could end up connecting `PipeOp`s cross-graph. I.e. `graph1$pipeops[[1]]$input(graph2$pipeops[[1]]$output_connector[[1]])`. What we would want this to do is to give a union of ghese graphs, so `PipeOp`s would ultimately need to know about the `Graph` that they are a member of, which is a true PITA with `R6` as soon as things start getting cloned.
+

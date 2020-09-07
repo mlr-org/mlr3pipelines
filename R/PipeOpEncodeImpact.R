@@ -98,7 +98,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
           sapply(levels(target), function(tl) {
             tprop = (sum(target == tl) + smoothing) / (length(target) + 2 * smoothing)
             tplogit = log(tprop / (1 - tprop))
-            map_dbl(c(setNames(levels(col), levels(col)), c(.TEMP.MISSING = NA)),
+            map_dbl(c(stats::setNames(levels(col), levels(col)), c(.TEMP.MISSING = NA)),
               function(cl) {
                 if (!self$param_set$values$impute_zero && is.na(cl)) return(NA_real_)
                 condprob = (sum(target[is.na(cl) | col == cl] == tl, na.rm = TRUE) + smoothing) /
