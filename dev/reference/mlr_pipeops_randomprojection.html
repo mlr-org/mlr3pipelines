@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Conditional Target Value Impact Encoding — mlr_pipeops_encodeimpact • mlr3pipelines</title>
+<title>PipeOpRandomProjection — mlr_pipeops_randomprojection • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,15 +47,13 @@
 
 
 
-<meta property="og:title" content="Conditional Target Value Impact Encoding — mlr_pipeops_encodeimpact" />
-<meta property="og:description" content="Encodes columns of type factor, character and ordered.
-Impact coding for classification Tasks converts factor levels of each (factorial) column
-to the difference between each target level's conditional log-likelihood
-given this level, and the target level's global log-likelihood.
-Impact coding for regression Tasks converts factor levels of each (factorial) column
-to the difference between the target's conditional mean given
-this level, and the target's global mean.
-Treats new levels during prediction like missing values." />
+<meta property="og:title" content="PipeOpRandomProjection — mlr_pipeops_randomprojection" />
+<meta property="og:description" content="Projects numeric features onto a randomly sampled subspace. All numeric features
+(or the ones selected by affect_columns) are replaced by numeric features
+PR1, PR2, ... PRn
+Samples with features that contain missing values result in all PR1..PRn being
+NA for that sample, so it is advised to do imputation before random projections
+if missing values can be expected." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -149,20 +147,18 @@ Treats new levels during prediction like missing values." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Conditional Target Value Impact Encoding</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpEncodeImpact.R'><code>R/PipeOpEncodeImpact.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_encodeimpact.Rd</code></div>
+    <h1>PipeOpRandomProjection</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRandomProjection.R'><code>R/PipeOpRandomProjection.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_randomprojection.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Encodes columns of type <code>factor</code>, <code>character</code> and <code>ordered</code>.</p>
-<p>Impact coding for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Tasks</a> converts factor levels of each (factorial) column
-to the difference between each target level's conditional log-likelihood
-given this level, and the target level's global log-likelihood.</p>
-<p>Impact coding for <a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>regression Tasks</a> converts factor levels of each (factorial) column
-to the difference between the target's conditional mean given
-this level, and the target's global mean.</p>
-<p>Treats new levels during prediction like missing values.</p>
+    <p>Projects numeric features onto a randomly sampled subspace. All numeric features
+(or the ones selected by <code>affect_columns</code>) are replaced by numeric features
+<code>PR1</code>, <code>PR2</code>, ... <code>PRn</code></p>
+<p>Samples with features that contain missing values result in all <code>PR1</code>..<code>PRn</code> being
+NA for that sample, so it is advised to do imputation <em>before</em> random projections
+if missing values can be expected.</p>
     </div>
 
 
@@ -173,14 +169,14 @@ this level, and the target's global mean.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpEncodeImpact</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"encodeimpact"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<pre><span class='kw'>PipeOpRandomProjection</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"randomprojection"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"encodeimpact"</code>.</p></li>
+Identifier of resulting object, default <code>"randomprojection"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would
-otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings that
+would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
@@ -188,43 +184,39 @@ otherwise be set during construction. Default <code><a href='https://rdrr.io/r/b
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected <code>factor</code>, <code>character</code> or
-<code>ordered</code> parameters encoded.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with affected numeric features
+projected onto a random subspace.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>impact</code> :: a named <code>list</code><br />
-A list with an element for each affected feature:<br />
-For regression each element is a single column matrix of impact values for each level of that feature.<br />
-For classification, it is a list with an element for each <em>feature level</em>, which is a vector giving the impact of
-this feature level on each <em>outcome level</em>.</p></li>
-</ul>
-
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
+as well as an element <code>$projection</code>, a <code>matrix</code>.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<ul>
-<li><p><code>smoothing</code>  :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-A finite positive value used for smoothing. Mostly relevant for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Tasks</a> if
-a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
-Initialized to <code>1e-4</code>.</p></li>
-<li><p><code>impute_zero</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-If <code>TRUE</code>, impute missing values as impact 0; otherwise the respective impact is coded as <code>NA</code>. Default <code>FALSE</code>.</p></li>
+<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
+<li><p><code>rank</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+The dimension of the subspace to project onto. Initialized to 1.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Uses laplace smoothing, mostly to avoid infinite values for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Task</a>.</p>
+<p>If there are <code>n</code> (affected) numeric features in the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>,
+then <code>$state$projection</code> is a <code>rank</code> x <code>m</code> <code>matrix</code>. The output is calculated as
+<code>input %*% state$projection</code>.</p>
+<p>The random projection matrix is obtained through Gram-Schmidt orthogonalization
+from a matrix with values standard normally distributed, which gives a distribution
+that is rotation invariant, as per Eaton: Multivariate Statistics, A Vector Space
+Approach, Pg. 234.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -246,6 +238,7 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 <code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
+<code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
 <code><a href='mlr_pipeops_encodelmer.html'>mlr_pipeops_encodelmer</a></code>,
 <code><a href='mlr_pipeops_encode.html'>mlr_pipeops_encode</a></code>,
 <code><a href='mlr_pipeops_featureunion.html'>mlr_pipeops_featureunion</a></code>,
@@ -274,7 +267,6 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
-<code><a href='mlr_pipeops_randomprojection.html'>mlr_pipeops_randomprojection</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
@@ -300,47 +292,63 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
-<span class='kw'>poe</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"encodeimpact"</span>)
 
-<span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>TaskClassif</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"task"</span>,
-  <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
-    x = <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>)),
-    y = <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>))),
-  <span class='st'>"x"</span>)
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"randomprojection"</span>, rank = <span class='fl'>2</span>)
 
-<span class='kw'>poe</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-</div><div class='output co'>#&gt;    x       y.a       y.b
-#&gt; 1: a  9.498089 -9.498089
-#&gt; 2: a  9.498089 -9.498089
-#&gt; 3: a -1.098546  1.098546
-#&gt; 4: b -1.098546  1.098546
-#&gt; 5: b -1.098546  1.098546</div><div class='input'>
-<span class='kw'>poe</span><span class='op'>$</span><span class='kw'>state</span>
-</div><div class='output co'>#&gt; $impact
-#&gt; $impact$y
-#&gt;                       a         b
-#&gt; a              9.498089 -9.498089
-#&gt; b             -1.098546  1.098546
-#&gt; .TEMP.MISSING        NA        NA
-#&gt; 
+<span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+#&gt;   1:    setosa          1.4         0.2          5.1         3.5
+#&gt;   2:    setosa          1.4         0.2          4.9         3.0
+#&gt;   3:    setosa          1.3         0.2          4.7         3.2
+#&gt;   4:    setosa          1.5         0.2          4.6         3.1
+#&gt;   5:    setosa          1.4         0.2          5.0         3.6
+#&gt;  ---                                                            
+#&gt; 146: virginica          5.2         2.3          6.7         3.0
+#&gt; 147: virginica          5.0         1.9          6.3         2.5
+#&gt; 148: virginica          5.2         2.0          6.5         3.0
+#&gt; 149: virginica          5.4         2.3          6.2         3.4
+#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='kw'>pop</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;        Species        PR1      PR2
+#&gt;   1:    setosa  1.7589182 1.527126
+#&gt;   2:    setosa  1.6574919 1.594524
+#&gt;   3:    setosa  1.6154625 1.406222
+#&gt;   4:    setosa  1.3991160 1.443240
+#&gt;   5:    setosa  1.6976284 1.446097
+#&gt;  ---                              
+#&gt; 146: virginica -0.1369878 1.846045
+#&gt; 147: virginica -0.2352984 2.071930
+#&gt; 148: virginica -0.2846103 1.980150
+#&gt; 149: virginica -0.6015154 1.526166
+#&gt; 150: virginica -0.5743921 1.818145</div><div class='input'>
+<span class='kw'>pop</span><span class='op'>$</span><span class='kw'>state</span>
+</div><div class='output co'>#&gt; $projection
+#&gt;                      PR1        PR2
+#&gt; Petal.Length -0.80550244  0.2624371
+#&gt; Petal.Width   0.10362243 -0.7686832
+#&gt; Sepal.Length  0.58267917  0.4824969
+#&gt; Sepal.Width  -0.03021903 -0.3277951
 #&gt; 
 #&gt; $dt_columns
-#&gt; [1] "y"
+#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
 #&gt; 
 #&gt; $affected_cols
-#&gt; [1] "y"
+#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
 #&gt; 
 #&gt; $intasklayout
-#&gt;    id   type
-#&gt; 1:  y factor
+#&gt;              id    type
+#&gt; 1: Petal.Length numeric
+#&gt; 2:  Petal.Width numeric
+#&gt; 3: Sepal.Length numeric
+#&gt; 4:  Sepal.Width numeric
 #&gt; 
 #&gt; $outtasklayout
 #&gt;     id    type
-#&gt; 1: y.a numeric
-#&gt; 2: y.b numeric
+#&gt; 1: PR1 numeric
+#&gt; 2: PR2 numeric
 #&gt; 
 #&gt; $outtaskshell
-#&gt; Empty data.table (0 rows and 3 cols): x,y.a,y.b
+#&gt; Empty data.table (0 rows and 3 cols): Species,PR1,PR2
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
