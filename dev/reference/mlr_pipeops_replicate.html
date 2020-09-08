@@ -165,7 +165,8 @@ may change.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpReplicate</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"replicate"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpReplicate</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"replicate"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
 Identifier of the resulting object, default <code>"replicate"</code>.</p></li>
@@ -178,7 +179,7 @@ be set during construction. Default <code><a href='https://rdrr.io/r/base/list.h
 
     
 
-<p><code>PipeOpReplicate</code> has one input channel named <code>"input"</code>, taking any input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>) both during training and prediction.</p>
+<p><code>PipeOpReplicate</code> has one input channel named <code>"input"</code>, taking any input (<code>"*"</code>) both during training and prediction.</p>
 <p><code>PipeOpReplicate</code> has one output channel named <code>"output"</code> returning the replicated input as a
 <code><a href='Multiplicity.html'>Multiplicity</a></code> of type any (<code>"[*]"</code>) both during training and prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
@@ -294,10 +295,11 @@ Integer indicating the number of times the input should be replicated.</p></li>
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"replicate"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>3</span>))
-<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"replicate"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(reps = <span class='fl'>3</span>))
+<span class='kw'>po</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))
+</div><div class='output co'>#&gt; $output
 #&gt; Multiplicity:
 #&gt; [[1]]
 #&gt; &lt;TaskClassif:iris&gt; (150 x 5)
@@ -320,7 +322,8 @@ Integer indicating the number of times the input should be replicated.</p></li>
 #&gt; * Features (4):
 #&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
 #&gt; 
-#&gt; </div><div class='input'><span class='no'>po</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+#&gt; </div><div class='input'><span class='kw'>po</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))
+</div><div class='output co'>#&gt; $output
 #&gt; Multiplicity:
 #&gt; [[1]]
 #&gt; &lt;TaskClassif:iris&gt; (150 x 5)
@@ -359,7 +362,7 @@ Integer indicating the number of times the input should be replicated.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

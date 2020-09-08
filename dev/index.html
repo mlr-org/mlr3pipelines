@@ -119,19 +119,25 @@
 <p><a href="https://www.youtube.com/watch?v=4r8K3GO5wk4"><img src="https://img.youtube.com/vi/4r8K3GO5wk4/0.jpg" alt="WhyR 2020 mlr3pipelines"></a></p>
 <p><strong><code>mlr3pipelines</code></strong> is a <a href="https://en.wikipedia.org/wiki/Dataflow_programming">dataflow programming</a> toolkit for machine learning in R utilising the <strong><a href="https://github.com/mlr-org/mlr3">mlr3</a></strong> package. Machine learning workflows can be written as directed “Graphs” that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the <strong><a href="https://github.com/mlr-org/mlr3tuning">mlr3tuning</a></strong> package, it is even possible to simultaneously optimize parameters of multiple processing units.</p>
 <p>In principle, <em>mlr3pipelines</em> is about defining singular data and model manipulation steps as “PipeOps”:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="no">pca</span>        <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"pca"</span>)
-<span class="no">filter</span>     <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"filter"</span>, <span class="kw">filter</span> <span class="kw">=</span> <span class="kw pkg">mlr3filters</span><span class="kw ns">::</span><span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span>(<span class="st">"variance"</span>), <span class="kw">filter.frac</span> <span class="kw">=</span> <span class="fl">0.5</span>)
-<span class="no">learner_po</span> <span class="kw">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"learner"</span>, <span class="kw">learner</span> <span class="kw">=</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>))</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw">pca</span>        <span class="op">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"pca"</span>)
+<span class="kw">filter</span>     <span class="op">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"filter"</span>, filter = <span class="kw">mlr3filters</span>::<span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span>(<span class="st">"variance"</span>), filter.frac = <span class="fl">0.5</span>)
+<span class="kw">learner_po</span> <span class="op">=</span> <span class="fu"><a href="reference/po.html">po</a></span>(<span class="st">"learner"</span>, learner = <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>))
+</pre></div>
 <p>These pipeops can then be combined together to define machine learning pipelines. These can be wrapped in a <code>GraphLearner</code> that behave like any other <code>Learner</code> in <code>mlr3</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="no">graph</span> <span class="kw">=</span> <span class="no">pca</span> <span class="kw">%&gt;&gt;%</span> <span class="no">filter</span> <span class="kw">%&gt;&gt;%</span> <span class="no">learner_po</span>
-<span class="no">glrn</span> <span class="kw">=</span> <span class="no">GraphLearner</span>$<span class="fu">new</span>(<span class="no">graph</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="kw">graph</span> <span class="op">=</span> <span class="kw">pca</span> <span class="op">%&gt;&gt;%</span> <span class="kw">filter</span> <span class="op">%&gt;&gt;%</span> <span class="kw">learner_po</span>
+<span class="kw">glrn</span> <span class="op">=</span> <span class="kw">GraphLearner</span><span class="op">$</span><span class="fu">new</span>(<span class="kw">graph</span>)
+</pre></div>
 <p>This learner can be used for resampling, benchmarking, and even tuning.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu">resample</span>(<span class="fu">tsk</span>(<span class="st">"iris"</span>), <span class="no">glrn</span>, <span class="fu">rsmp</span>(<span class="st">"cv"</span>))
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu">resample</span>(<span class="fu">tsk</span>(<span class="st">"iris"</span>), <span class="kw">glrn</span>, <span class="fu">rsmp</span>(<span class="st">"cv"</span>))
 <span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span>
 <span class="co">#&gt; * Task: iris</span>
 <span class="co">#&gt; * Learner: pca.variance.classif.rpart</span>
 <span class="co">#&gt; * Warnings: 0 in 0 iterations</span>
-<span class="co">#&gt; * Errors: 0 in 0 iterations</span></pre></div>
+<span class="co">#&gt; * Errors: 0 in 0 iterations</span>
+</pre></div>
 </div>
 <div id="feature-overview" class="section level2">
 <h2 class="hasAnchor">
@@ -214,7 +220,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

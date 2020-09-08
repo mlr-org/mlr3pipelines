@@ -169,7 +169,8 @@ features of type <code>factor</code>, <code>ordered</code> and <code>logical</co
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpImputeLearner</span>$<span class='fu'>new</span>(<span class='no'>learner</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpImputeLearner</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>learner</span>, id = <span class='kw'>NULL</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"impute."</code>, followed by the <code>id</code> of the <code>Learner</code>.</p></li>
@@ -308,20 +309,23 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"pima"</span>)
-<span class='no'>task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"pima"</span>)
+<span class='kw'>task</span><span class='op'>$</span><span class='fu'>missings</span>()
+</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
 #&gt;        0        0        5      374       11        0        0       35 
 #&gt;  triceps 
 #&gt;      227 </div><div class='input'>
-<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputelearner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>))
-<span class='no'>new_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span> <span class='kw'>=</span> <span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='no'>new_task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
+<span class='kw'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputelearner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>))
+<span class='kw'>new_task</span> <span class='op'>=</span> <span class='kw'>po</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(task = <span class='kw'>task</span>))[[<span class='fl'>1</span>]]
+<span class='kw'>new_task</span><span class='op'>$</span><span class='fu'>missings</span>()
+</div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
 #&gt;        0        0        0        0        0        0        0        0 
 #&gt;  triceps 
 #&gt;        0 </div><div class='input'>
-<span class='no'>po</span>$<span class='no'>state</span>$<span class='no'>model</span></div><div class='output co'>#&gt; $age
+<span class='kw'>po</span><span class='op'>$</span><span class='kw'>state</span><span class='op'>$</span><span class='kw'>model</span>
+</div><div class='output co'>#&gt; $age
 #&gt; $age$model
 #&gt; n= 768 
 #&gt; 
@@ -382,7 +386,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $glucose$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.007
 #&gt; 
 #&gt; $glucose$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
@@ -419,7 +423,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $insulin$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.005
 #&gt; 
 #&gt; $insulin$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
@@ -496,7 +500,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $pedigree$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.009
 #&gt; 
 #&gt; $pedigree$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
@@ -527,7 +531,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $pregnant$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.007
 #&gt; 
 #&gt; $pregnant$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
@@ -605,7 +609,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $triceps$train_time
-#&gt; [1] 0.007
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $triceps$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
@@ -630,7 +634,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

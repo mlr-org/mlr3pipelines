@@ -151,7 +151,7 @@
     <p>Creates a <code><a href='Graph.html'>Graph</a></code> from <code><a href='mlr_graphs.html'>mlr_graphs</a></code> from given ID</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ppl</span>(<span class='no'>key</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>ppl</span>(<span class='kw'>key</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,9 +175,10 @@ underlying function.</p></td>
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'>ppl</span>(<span class='st'>"bagging"</span>, <span class='kw'>graph</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>)), <span class='kw'>averager</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"regravg"</span>))</div></pre>
+<span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'>ppl</span>(<span class='st'>"bagging"</span>, graph = <span class='fu'><a href='po.html'>po</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>)), averager = <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"regravg"</span>))
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -193,7 +194,7 @@ underlying function.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

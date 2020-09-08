@@ -185,7 +185,8 @@ minute.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpDateFeatures</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"datefeatures"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpDateFeatures</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"datefeatures"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"datefeatures"</code>.</p></li>
@@ -329,14 +330,15 @@ Default TRUE.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
-<span class='no'>dat</span> <span class='kw'>=</span> <span class='no'>iris</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+<span class='kw'>dat</span> <span class='op'>=</span> <span class='kw'>iris</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
-<span class='no'>dat</span>$<span class='no'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2020-02-01"</span>), <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2020-02-29"</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"hour"</span>),
- <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>150L</span>)
-<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>TaskClassif</span>$<span class='fu'>new</span>(<span class='st'>"iris_date"</span>, <span class='kw'>backend</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)
-<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"datefeatures"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>cyclic</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>minute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>second</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))
-<span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $output
+<span class='kw'>dat</span><span class='op'>$</span><span class='kw'>date</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2020-02-01"</span>), to = <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='st'>"2020-02-29"</span>), by = <span class='st'>"hour"</span>),
+ size = <span class='fl'>150L</span>)
+<span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>TaskClassif</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"iris_date"</span>, backend = <span class='kw'>dat</span>, target = <span class='st'>"Species"</span>)
+<span class='kw'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"datefeatures"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(cyclic = <span class='fl'>FALSE</span>, minute = <span class='fl'>FALSE</span>, second = <span class='fl'>FALSE</span>))
+<span class='kw'>pop</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))
+</div><div class='output co'>#&gt; $output
 #&gt; &lt;TaskClassif:iris_date&gt; (150 x 13)
 #&gt; * Target: Species
 #&gt; * Properties: multiclass
@@ -345,7 +347,8 @@ Default TRUE.</p></li>
 #&gt;     date.day_of_month, date.day_of_week, date.day_of_year, date.hour,
 #&gt;     date.month, date.week_of_year, date.year
 #&gt;   - lgl (1): date.is_day
-#&gt; </div><div class='input'><span class='no'>pop</span>$<span class='no'>state</span></div><div class='output co'>#&gt; $dt_columns
+#&gt; </div><div class='input'><span class='kw'>pop</span><span class='op'>$</span><span class='kw'>state</span>
+</div><div class='output co'>#&gt; $dt_columns
 #&gt; [1] "date"
 #&gt; 
 #&gt; $affected_cols
@@ -392,7 +395,7 @@ Default TRUE.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

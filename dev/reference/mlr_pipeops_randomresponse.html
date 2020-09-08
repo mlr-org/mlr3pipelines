@@ -177,7 +177,8 @@ deviation (sampling is done observation-wise).</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpRandomResponse</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"randomresponse"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))</pre>
+<pre><span class='kw'>PipeOpRandomResponse</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"randomresponse"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), packages = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of the resulting object, default <code>"randomresponse"</code>.</p></li>
@@ -303,16 +304,18 @@ and <code>sd</code>. Default is <code><a href='https://rdrr.io/r/stats/Normal.ht
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3learners</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mlr3.mlr-org.com'>mlr3</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mlr3learners.mlr-org.com'>mlr3learners</a></span>)
 
-<span class='no'>task1</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>g1</span> <span class='kw'>=</span> <span class='no'>LearnerClassifRpart</span>$<span class='fu'>new</span>() <span class='kw'>%&gt;&gt;%</span> <span class='no'>PipeOpRandomResponse</span>$<span class='fu'>new</span>()
-<span class='no'>g1</span>$<span class='fu'>train</span>(<span class='no'>task1</span>)</div><div class='output co'>#&gt; $randomresponse.output
+<span class='kw'>task1</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>g1</span> <span class='op'>=</span> <span class='kw'>LearnerClassifRpart</span><span class='op'>$</span><span class='fu'>new</span>() <span class='op'>%&gt;&gt;%</span> <span class='kw'>PipeOpRandomResponse</span><span class='op'>$</span><span class='fu'>new</span>()
+<span class='kw'>g1</span><span class='op'>$</span><span class='fu'>train</span>(<span class='kw'>task1</span>)
+</div><div class='output co'>#&gt; $randomresponse.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>g1</span>$<span class='no'>pipeops</span>$<span class='no'>classif.rpart</span>$<span class='no'>learner</span>$<span class='no'>predict_type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>
+#&gt; </div><div class='input'><span class='kw'>g1</span><span class='op'>$</span><span class='kw'>pipeops</span><span class='op'>$</span><span class='kw'>classif.rpart</span><span class='op'>$</span><span class='kw'>learner</span><span class='op'>$</span><span class='kw'>predict_type</span> <span class='op'>=</span> <span class='st'>"prob"</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2409</span>)
-<span class='no'>g1</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task1</span>)</div><div class='output co'>#&gt; $randomresponse.output
+<span class='kw'>g1</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='kw'>task1</span>)
+</div><div class='output co'>#&gt; $randomresponse.output
 #&gt; &lt;PredictionClassif&gt; for 150 observations:
 #&gt;     row_id     truth  response
 #&gt;          1    setosa    setosa
@@ -323,13 +326,15 @@ and <code>sd</code>. Default is <code><a href='https://rdrr.io/r/stats/Normal.ht
 #&gt;        149 virginica virginica
 #&gt;        150 virginica virginica
 #&gt; </div><div class='input'>
-<span class='no'>task2</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"mtcars"</span>)
-<span class='no'>g2</span> <span class='kw'>=</span> <span class='no'>LearnerRegrLM</span>$<span class='fu'>new</span>() <span class='kw'>%&gt;&gt;%</span> <span class='no'>PipeOpRandomResponse</span>$<span class='fu'>new</span>()
-<span class='no'>g2</span>$<span class='fu'>train</span>(<span class='no'>task2</span>)</div><div class='output co'>#&gt; $randomresponse.output
+<span class='kw'>task2</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"mtcars"</span>)
+<span class='kw'>g2</span> <span class='op'>=</span> <span class='kw'>LearnerRegrLM</span><span class='op'>$</span><span class='fu'>new</span>() <span class='op'>%&gt;&gt;%</span> <span class='kw'>PipeOpRandomResponse</span><span class='op'>$</span><span class='fu'>new</span>()
+<span class='kw'>g2</span><span class='op'>$</span><span class='fu'>train</span>(<span class='kw'>task2</span>)
+</div><div class='output co'>#&gt; $randomresponse.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>g2</span>$<span class='no'>pipeops</span>$<span class='no'>regr.lm</span>$<span class='no'>learner</span>$<span class='no'>predict_type</span> <span class='kw'>=</span> <span class='st'>"se"</span>
+#&gt; </div><div class='input'><span class='kw'>g2</span><span class='op'>$</span><span class='kw'>pipeops</span><span class='op'>$</span><span class='kw'>regr.lm</span><span class='op'>$</span><span class='kw'>learner</span><span class='op'>$</span><span class='kw'>predict_type</span> <span class='op'>=</span> <span class='st'>"se"</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2906</span>)
-<span class='no'>g2</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task2</span>)</div><div class='output co'>#&gt; $randomresponse.output
+<span class='kw'>g2</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='kw'>task2</span>)
+</div><div class='output co'>#&gt; $randomresponse.output
 #&gt; &lt;PredictionRegr&gt; for 32 observations:
 #&gt;     row_id truth response
 #&gt;          1  21.0 23.76570
@@ -355,7 +360,7 @@ and <code>sd</code>. Default is <code><a href='https://rdrr.io/r/stats/Normal.ht
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

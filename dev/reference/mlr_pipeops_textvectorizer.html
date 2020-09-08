@@ -215,7 +215,8 @@ The <code>scheme_df</code> parameter is initialized to <code>"unary"</code>, whi
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpTextVectorizer</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"textvectorizer"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpTextVectorizer</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"textvectorizer"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"textvectorizer"</code>.</p></li>
@@ -393,17 +394,18 @@ of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='http://r-datatable.com'>"data.table"</a></span>)
 <span class='co'># create some text data</span>
-<span class='no'>dt</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
-  <span class='kw'>txt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>150</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='no'>letters</span>, <span class='fl'>3</span>), <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>" "</span>))
+<span class='kw'>dt</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
+  txt = <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='fl'>150</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='kw'>letters</span>, <span class='fl'>3</span>), collapse = <span class='st'>" "</span>))
 )
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)$<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>dt</span>)
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>dt</span>)
 
-<span class='no'>pos</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"textvectorizer"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>stopwords_language</span> <span class='kw'>=</span> <span class='st'>"en"</span>))
+<span class='kw'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"textvectorizer"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(stopwords_language = <span class='st'>"en"</span>))
 
-<span class='no'>pos</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.c txt.q
+<span class='kw'>pos</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.c txt.q
 #&gt;   1:    setosa          1.4         0.2          5.1         3.5     1     1
 #&gt;   2:    setosa          1.4         0.2          4.9         3.0     0     0
 #&gt;   3:    setosa          1.3         0.2          4.7         3.2     0     0
@@ -439,11 +441,13 @@ of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
 #&gt; 148:     0     1     0     0     0     0     0     0     0     0
 #&gt; 149:     0     0     1     0     0     0     0     0     0     0
 #&gt; 150:     1     0     0     0     0     0     1     0     0     0</div><div class='input'>
-<span class='no'>one_line_of_iris</span> <span class='kw'>=</span> <span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>13</span>)
+<span class='kw'>one_line_of_iris</span> <span class='op'>=</span> <span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>13</span>)
 
-<span class='no'>one_line_of_iris</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width   txt
+<span class='kw'>one_line_of_iris</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width   txt
 #&gt; 1:  setosa          1.4         0.1          4.8           3 n o i</div><div class='input'>
-<span class='no'>pos</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>one_line_of_iris</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.c txt.q txt.f
+<span class='kw'>pos</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>one_line_of_iris</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.c txt.q txt.f
 #&gt; 1:  setosa          1.4         0.1          4.8           3     0     0     0
 #&gt;    txt.g txt.b txt.v txt.e txt.u txt.y txt.j txt.w txt.z txt.t txt.d txt.h
 #&gt; 1:     0     0     0     0     0     0     0     0     0     0     0     0
@@ -464,7 +468,7 @@ of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

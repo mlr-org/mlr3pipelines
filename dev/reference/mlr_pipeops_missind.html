@@ -165,7 +165,8 @@ values in factorial columns are often indicated by out-of-range imputation (<cod
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpMissInd</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"missind"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpMissInd</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"missind"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
 Identifier of the resulting  object, defaulting to <code>"missind"</code>.</p></li>
@@ -290,21 +291,25 @@ can be set to <code><a href='Selector.html'>selector_type("numeric")</a></code>.
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"pima"</span>)$<span class='fu'>select</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"insulin"</span>, <span class='st'>"triceps"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/complete.cases.html'>complete.cases</a></span>(<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()))</div><div class='output co'>#&gt; [1] 394</div><div class='input'><span class='no'>task</span>$<span class='fu'>missings</span>()</div><div class='output co'>#&gt; diabetes  insulin  triceps 
-#&gt;        0      374      227 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span>(<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>())</div><div class='output co'>#&gt;    diabetes insulin triceps
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"pima"</span>)<span class='op'>$</span><span class='fu'>select</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"insulin"</span>, <span class='st'>"triceps"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/complete.cases.html'>complete.cases</a></span>(<span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()))
+</div><div class='output co'>#&gt; [1] 394</div><div class='input'><span class='kw'>task</span><span class='op'>$</span><span class='fu'>missings</span>()
+</div><div class='output co'>#&gt; diabetes  insulin  triceps 
+#&gt;        0      374      227 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span>(<span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>())
+</div><div class='output co'>#&gt;    diabetes insulin triceps
 #&gt; 1:      neg      NA      NA
 #&gt; 2:      neg     180      48
 #&gt; 3:      neg      NA      27
 #&gt; 4:      neg     112      23
 #&gt; 5:      pos      NA      NA
 #&gt; 6:      neg      NA      31</div><div class='input'>
-<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"missind"</span>)
-<span class='no'>new_task</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]
+<span class='kw'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"missind"</span>)
+<span class='kw'>new_task</span> <span class='op'>=</span> <span class='kw'>po</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span>(<span class='no'>new_task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>())</div><div class='output co'>#&gt;    diabetes missing_insulin missing_triceps
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span>(<span class='kw'>new_task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>())
+</div><div class='output co'>#&gt;    diabetes missing_insulin missing_triceps
 #&gt; 1:      neg         missing         missing
 #&gt; 2:      neg         present         present
 #&gt; 3:      neg         missing         present
@@ -313,12 +318,13 @@ can be set to <code><a href='Selector.html'>selector_type("numeric")</a></code>.
 #&gt; 6:      neg         missing         present</div><div class='input'>
 <span class='co'># proper imputation + missing indicators</span>
 
-<span class='no'>impgraph</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='kw'>impgraph</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputesample"</span>),
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"missind"</span>)
-) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>)
+) <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span>(<span class='no'>impgraph</span>$<span class='fu'>train</span>(<span class='no'>task</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>())</div><div class='output co'>#&gt;    diabetes insulin triceps missing_insulin missing_triceps
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span>(<span class='kw'>impgraph</span><span class='op'>$</span><span class='fu'>train</span>(<span class='kw'>task</span>)[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>())
+</div><div class='output co'>#&gt;    diabetes insulin triceps missing_insulin missing_triceps
 #&gt; 1:      neg      89      24         missing         missing
 #&gt; 2:      neg     180      48         present         present
 #&gt; 3:      neg     194      27         missing         present
@@ -340,7 +346,7 @@ can be set to <code><a href='Selector.html'>selector_type("numeric")</a></code>.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

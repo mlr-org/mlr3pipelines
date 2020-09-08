@@ -170,7 +170,8 @@ dependency structure (although the <code><a href='PipeOp.html'>PipeOp</a></code>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>Graph</span>$<span class='fu'>new</span>()</pre>
+<pre><span class='kw'>Graph</span><span class='op'>$</span><span class='fu'>new</span>()
+</pre>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
@@ -244,7 +245,7 @@ Add an edge from <code><a href='PipeOp.html'>PipeOp</a></code> <code>src_id</cod
 channel <code>dst_channel</code> (identified by its name or number as listed in the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$input</code>).
 If source or destination <code><a href='PipeOp.html'>PipeOp</a></code> have only one input / output channel and <code>src_channel</code> / <code>dst_channel</code>
 are therefore unambiguous, they can be omitted (i.e. left as <code>NULL</code>).</p></li>
-<li><p><code><a href='https://rdrr.io/r/base/plot.html'>plot(html)</a></code> <br />
+<li><p><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot(html)</a></code> <br />
 (<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; <code>NULL</code> <br />
 Plot the <code>Graph</code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
 the <code>visNetwork</code> package for <code>html = TRUE</code> producing a <code><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlWidget</a></code>.
@@ -294,18 +295,21 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>g</span> <span class='kw'>=</span> <span class='no'>Graph</span>$<span class='fu'>new</span>()$
-  <span class='fu'>add_pipeop</span>(<span class='no'>PipeOpScale</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"scale"</span>))$
-  <span class='fu'>add_pipeop</span>(<span class='no'>PipeOpPCA</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"pca"</span>))$
+<span class='kw'>g</span> <span class='op'>=</span> <span class='kw'>Graph</span><span class='op'>$</span><span class='fu'>new</span>()<span class='op'>$</span>
+  <span class='fu'>add_pipeop</span>(<span class='kw'>PipeOpScale</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"scale"</span>))<span class='op'>$</span>
+  <span class='fu'>add_pipeop</span>(<span class='kw'>PipeOpPCA</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"pca"</span>))<span class='op'>$</span>
   <span class='fu'>add_edge</span>(<span class='st'>"scale"</span>, <span class='st'>"pca"</span>)
-<span class='no'>g</span>$<span class='no'>input</span></div><div class='output co'>#&gt;           name train predict op.id channel.name
-#&gt; 1: scale.input  Task    Task scale        input</div><div class='input'><span class='no'>g</span>$<span class='no'>output</span></div><div class='output co'>#&gt;          name train predict op.id channel.name
+<span class='kw'>g</span><span class='op'>$</span><span class='kw'>input</span>
+</div><div class='output co'>#&gt;           name train predict op.id channel.name
+#&gt; 1: scale.input  Task    Task scale        input</div><div class='input'><span class='kw'>g</span><span class='op'>$</span><span class='kw'>output</span>
+</div><div class='output co'>#&gt;          name train predict op.id channel.name
 #&gt; 1: pca.output  Task    Task   pca       output</div><div class='input'>
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>trained</span> <span class='kw'>=</span> <span class='no'>g</span>$<span class='fu'>train</span>(<span class='no'>task</span>)
-<span class='no'>trained</span><span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species        PC1         PC2         PC3         PC4
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>trained</span> <span class='op'>=</span> <span class='kw'>g</span><span class='op'>$</span><span class='fu'>train</span>(<span class='kw'>task</span>)
+<span class='kw'>trained</span>[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;        Species        PC1         PC2         PC3         PC4
 #&gt;   1:    setosa -2.2571412 -0.47842383 -0.12727962  0.02408751
 #&gt;   2:    setosa -2.0740130  0.67188269 -0.23382552  0.10266284
 #&gt;   3:    setosa -2.3563351  0.34076642  0.04405390  0.02828231
@@ -317,9 +321,10 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 #&gt; 148: virginica  1.5160915 -0.26817075  0.17957678  0.11877324
 #&gt; 149: virginica  1.3682042 -1.00787793  0.93027872  0.02604141
 #&gt; 150: virginica  0.9574485  0.02425043  0.52648503 -0.16253353</div><div class='input'>
-<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>)
-<span class='no'>predicted</span> <span class='kw'>=</span> <span class='no'>g</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)
-<span class='no'>predicted</span><span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;     Species       PC1         PC2         PC3          PC4
+<span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>)
+<span class='kw'>predicted</span> <span class='op'>=</span> <span class='kw'>g</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='kw'>task</span>)
+<span class='kw'>predicted</span>[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;     Species       PC1         PC2         PC3          PC4
 #&gt;  1:  setosa -2.257141 -0.47842383 -0.12727962  0.024087508
 #&gt;  2:  setosa -2.074013  0.67188269 -0.23382552  0.102662845
 #&gt;  3:  setosa -2.356335  0.34076642  0.04405390  0.028282305
@@ -345,7 +350,7 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

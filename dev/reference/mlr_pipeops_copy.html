@@ -167,7 +167,8 @@ specify which <code><a href='PipeOp.html'>PipeOp</a></code> gets connected to wh
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpEnsemble</span>$<span class='fu'>new</span>(<span class='no'>outnum</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"copy"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpEnsemble</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>outnum</span>, id = <span class='st'>"copy"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>outnum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
 Number of output channels, and therefore number of copies being made.</p></li>
@@ -181,9 +182,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p><code>PipeOpCopy</code> has one input channel named <code>"input"</code>, taking any input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>) both during training and prediction.</p>
+<p><code>PipeOpCopy</code> has one input channel named <code>"input"</code>, taking any input (<code>"*"</code>) both during training and prediction.</p>
 <p><code>PipeOpCopy</code> has multiple output channels depending on the <code>outnum</code> construction argument, named <code>"output1"</code>, <code>"output2"</code>, ...
-All output channels produce the object given as input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>).</p>
+All output channels produce the object given as input (<code>"*"</code>).</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -288,11 +289,12 @@ before</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The following copies the output of 'scale' automatically to both</span>
 <span class='co'># 'pca' and 'nop'</span>
-<span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>) <span class='kw'>%&gt;&gt;%</span>
+<span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>) <span class='op'>%&gt;&gt;%</span>
   <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
     <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>),
     <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>)
-  ))</div><div class='output co'>#&gt; Graph with 3 PipeOps:
+  ))
+</div><div class='output co'>#&gt; Graph with 3 PipeOps:
 #&gt;     ID         State sccssors prdcssors
 #&gt;  scale &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          
 #&gt;    pca &lt;&lt;UNTRAINED&gt;&gt;              scale
@@ -310,14 +312,15 @@ before</p>
 <span class='co'># &gt;   ))</span>
 <span class='co'># Instead, the 'copy' operator makes clear which output gets copied.</span>
 <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>) <span class='kw'>%&gt;&gt;%</span> <span class='no'>mlr_pipeops</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"copy"</span>, <span class='kw'>outnum</span> <span class='kw'>=</span> <span class='fl'>2</span>),
+  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>) <span class='op'>%&gt;&gt;%</span> <span class='kw'>mlr_pipeops</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"copy"</span>, outnum = <span class='fl'>2</span>),
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"select"</span>)
-)) <span class='kw'>%&gt;&gt;%</span>
+)) <span class='op'>%&gt;&gt;%</span>
   <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
     <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>),
     <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>),
     <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputemean"</span>)
-  ))</div><div class='output co'>#&gt; Graph with 6 PipeOps:
+  ))
+</div><div class='output co'>#&gt; Graph with 6 PipeOps:
 #&gt;          ID         State   sccssors prdcssors
 #&gt;       scale &lt;&lt;UNTRAINED&gt;&gt;       copy          
 #&gt;      select &lt;&lt;UNTRAINED&gt;&gt; imputemean          
@@ -340,7 +343,7 @@ before</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

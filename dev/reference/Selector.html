@@ -163,23 +163,23 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
 
 <span class='fu'>selector_none</span>()
 
-<span class='fu'>selector_type</span>(<span class='no'>types</span>)
+<span class='fu'>selector_type</span>(<span class='kw'>types</span>)
 
-<span class='fu'>selector_grep</span>(<span class='no'>pattern</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>perl</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>selector_grep</span>(<span class='kw'>pattern</span>, ignore.case = <span class='fl'>FALSE</span>, perl = <span class='fl'>FALSE</span>, fixed = <span class='fl'>FALSE</span>)
 
-<span class='fu'>selector_name</span>(<span class='no'>feature_names</span>, <span class='kw'>assert_present</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>selector_name</span>(<span class='kw'>feature_names</span>, assert_present = <span class='fl'>FALSE</span>)
 
-<span class='fu'>selector_invert</span>(<span class='no'>selector</span>)
+<span class='fu'>selector_invert</span>(<span class='kw'>selector</span>)
 
-<span class='fu'>selector_intersect</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
+<span class='fu'>selector_intersect</span>(<span class='kw'>selector_x</span>, <span class='kw'>selector_y</span>)
 
-<span class='fu'>selector_union</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
+<span class='fu'>selector_union</span>(<span class='kw'>selector_x</span>, <span class='kw'>selector_y</span>)
 
-<span class='fu'>selector_setdiff</span>(<span class='no'>selector_x</span>, <span class='no'>selector_y</span>)
+<span class='fu'>selector_setdiff</span>(<span class='kw'>selector_x</span>, <span class='kw'>selector_y</span>)
 
 <span class='fu'>selector_missing</span>()
 
-<span class='fu'>selector_cardinality_greater_than</span>(<span class='no'>min_cardinality</span>)</pre>
+<span class='fu'>selector_cardinality_greater_than</span>(<span class='kw'>min_cardinality</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -275,21 +275,23 @@ greater then a given threshold.</p></li>
 that has one input argument (commonly named <code>task</code>). The function is called with the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that a <code><a href='PipeOp.html'>PipeOp</a></code>
 is operating on. The return value of the function must be a <code>character</code> vector that is a subset of the feature names present
 in the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
-<p>For example, a <code>Selector</code> that selects all columns is</p><pre><span class='kw'>function</span>(<span class='no'>task</span>) {
-  <span class='no'>task</span>$<span class='no'>feature_names</span>
-}</pre>
+<p>For example, a <code>Selector</code> that selects all columns is</p><pre><span class='fu'>function</span>(<span class='kw'>task</span>) {
+  <span class='kw'>task</span><span class='op'>$</span><span class='kw'>feature_names</span>
+}
+</pre>
 
 <p>(this is the <code>selector_all()</code>-<code>Selector</code>.) A <code>Selector</code> that selects
-all columns that have names shorter than four letters would be:</p><pre>function(task) {
-  task$feature_names[
-    nchar(task$feature_names) &amp;lt; 4
+all columns that have names shorter than four letters would be:</p><pre><span class='fu'>function</span>(<span class='kw'>task</span>) {
+  <span class='kw'>task</span><span class='op'>$</span><span class='kw'>feature_names</span>[
+    <span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='kw'>task</span><span class='op'>$</span><span class='kw'>feature_names</span>) <span class='op'>&lt;</span> <span class='fl'>4</span>
   ]
 }
 </pre>
 
-<p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href='https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html'>iris task</a>), if present, is</p><pre><span class='kw'>function</span>(<span class='no'>task</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>intersect</a></span>(<span class='no'>task</span>$<span class='no'>feature_names</span>, <span class='st'>"Sepal.Length"</span>)
-}</pre>
+<p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href='https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html'>iris task</a>), if present, is</p><pre><span class='fu'>function</span>(<span class='kw'>task</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>intersect</a></span>(<span class='kw'>task</span><span class='op'>$</span><span class='kw'>feature_names</span>, <span class='st'>"Sepal.Length"</span>)
+}
+</pre>
 
 <p>It is preferable to use the <code>Selector</code> construction functions like <code>select_type</code>, <code>select_grep</code> etc. if possible, instead of writing custom <code>Selector</code>s.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -298,24 +300,34 @@ all columns that have names shorter than four letters would be:</p><pre>function
 <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>iris_task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>bh_task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"boston_housing"</span>)
+<span class='kw'>iris_task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>bh_task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"boston_housing"</span>)
 
-<span class='no'>sela</span> <span class='kw'>=</span> <span class='fu'>selector_all</span>()
-<span class='fu'>sela</span>(<span class='no'>iris_task</span>)</div><div class='output co'>#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </div><div class='input'><span class='fu'>sela</span>(<span class='no'>bh_task</span>)</div><div class='output co'>#&gt;  [1] "age"     "b"       "chas"    "cmedv"   "crim"    "dis"     "indus"  
+<span class='kw'>sela</span> <span class='op'>=</span> <span class='fu'>selector_all</span>()
+<span class='fu'>sela</span>(<span class='kw'>iris_task</span>)
+</div><div class='output co'>#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </div><div class='input'><span class='fu'>sela</span>(<span class='kw'>bh_task</span>)
+</div><div class='output co'>#&gt;  [1] "age"     "b"       "chas"    "cmedv"   "crim"    "dis"     "indus"  
 #&gt;  [8] "lat"     "lon"     "lstat"   "nox"     "ptratio" "rad"     "rm"     
 #&gt; [15] "tax"     "town"    "tract"   "zn"     </div><div class='input'>
-<span class='no'>self</span> <span class='kw'>=</span> <span class='fu'>selector_type</span>(<span class='st'>"factor"</span>)
-<span class='fu'>self</span>(<span class='no'>iris_task</span>)</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='fu'>self</span>(<span class='no'>bh_task</span>)</div><div class='output co'>#&gt; [1] "chas" "town"</div><div class='input'>
-<span class='no'>selg</span> <span class='kw'>=</span> <span class='fu'>selector_grep</span>(<span class='st'>"a.*i"</span>)
-<span class='fu'>selg</span>(<span class='no'>iris_task</span>)</div><div class='output co'>#&gt; [1] "Petal.Width" "Sepal.Width"</div><div class='input'><span class='fu'>selg</span>(<span class='no'>bh_task</span>)</div><div class='output co'>#&gt; [1] "ptratio"</div><div class='input'>
-<span class='no'>selgi</span> <span class='kw'>=</span> <span class='fu'>selector_invert</span>(<span class='no'>selg</span>)
-<span class='fu'>selgi</span>(<span class='no'>iris_task</span>)</div><div class='output co'>#&gt; [1] "Petal.Length" "Sepal.Length"</div><div class='input'><span class='fu'>selgi</span>(<span class='no'>bh_task</span>)</div><div class='output co'>#&gt;  [1] "age"   "b"     "chas"  "cmedv" "crim"  "dis"   "indus" "lat"   "lon"  
+<span class='kw'>self</span> <span class='op'>=</span> <span class='fu'>selector_type</span>(<span class='st'>"factor"</span>)
+<span class='fu'>self</span>(<span class='kw'>iris_task</span>)
+</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='fu'>self</span>(<span class='kw'>bh_task</span>)
+</div><div class='output co'>#&gt; [1] "chas" "town"</div><div class='input'>
+<span class='kw'>selg</span> <span class='op'>=</span> <span class='fu'>selector_grep</span>(<span class='st'>"a.*i"</span>)
+<span class='fu'>selg</span>(<span class='kw'>iris_task</span>)
+</div><div class='output co'>#&gt; [1] "Petal.Width" "Sepal.Width"</div><div class='input'><span class='fu'>selg</span>(<span class='kw'>bh_task</span>)
+</div><div class='output co'>#&gt; [1] "ptratio"</div><div class='input'>
+<span class='kw'>selgi</span> <span class='op'>=</span> <span class='fu'>selector_invert</span>(<span class='kw'>selg</span>)
+<span class='fu'>selgi</span>(<span class='kw'>iris_task</span>)
+</div><div class='output co'>#&gt; [1] "Petal.Length" "Sepal.Length"</div><div class='input'><span class='fu'>selgi</span>(<span class='kw'>bh_task</span>)
+</div><div class='output co'>#&gt;  [1] "age"   "b"     "chas"  "cmedv" "crim"  "dis"   "indus" "lat"   "lon"  
 #&gt; [10] "lstat" "nox"   "rad"   "rm"    "tax"   "town"  "tract" "zn"   </div><div class='input'>
-<span class='no'>selgf</span> <span class='kw'>=</span> <span class='fu'>selector_union</span>(<span class='no'>selg</span>, <span class='no'>self</span>)
-<span class='fu'>selgf</span>(<span class='no'>iris_task</span>)</div><div class='output co'>#&gt; [1] "Petal.Width" "Sepal.Width"</div><div class='input'><span class='fu'>selgf</span>(<span class='no'>bh_task</span>)</div><div class='output co'>#&gt; [1] "ptratio" "chas"    "town"   </div></pre>
+<span class='kw'>selgf</span> <span class='op'>=</span> <span class='fu'>selector_union</span>(<span class='kw'>selg</span>, <span class='kw'>self</span>)
+<span class='fu'>selgf</span>(<span class='kw'>iris_task</span>)
+</div><div class='output co'>#&gt; [1] "Petal.Width" "Sepal.Width"</div><div class='input'><span class='fu'>selgf</span>(<span class='kw'>bh_task</span>)
+</div><div class='output co'>#&gt; [1] "ptratio" "chas"    "town"   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -331,7 +343,7 @@ all columns that have names shorter than four letters would be:</p><pre>function
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

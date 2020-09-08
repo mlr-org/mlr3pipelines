@@ -161,7 +161,8 @@ See <a href='https://rdrr.io/pkg/fastICA/man/fastICA.html'>fastICA::fastICA</a> 
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpICA</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"ica"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpICA</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"ica"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"ica"</code>.</p></li>
@@ -309,12 +310,13 @@ Default is <code>NULL</code>.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>pop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"ica"</span>)
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"ica"</span>)
 
-<span class='no'>task</span>$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+<span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
 #&gt;   1:    setosa          1.4         0.2          5.1         3.5
 #&gt;   2:    setosa          1.4         0.2          4.9         3.0
 #&gt;   3:    setosa          1.3         0.2          4.7         3.2
@@ -325,7 +327,8 @@ Default is <code>NULL</code>.</p></li>
 #&gt; 147: virginica          5.0         1.9          6.3         2.5
 #&gt; 148: virginica          5.2         2.0          6.5         3.0
 #&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='no'>pop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species         V1          V2          V3         V4
+#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='kw'>pop</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+</div><div class='output co'>#&gt;        Species         V1          V2          V3         V4
 #&gt;   1:    setosa -0.2614755  0.02983740  0.37506910  1.3924283
 #&gt;   2:    setosa -0.3860629 -0.08156352 -0.97213942  1.3294691
 #&gt;   3:    setosa  0.3570901 -0.15922553 -0.34915798  1.3492702
@@ -337,7 +340,8 @@ Default is <code>NULL</code>.</p></li>
 #&gt; 148: virginica -0.3433976 -0.98347112  0.09362505 -0.8276228
 #&gt; 149: virginica  1.2489064 -1.76954601  1.39436355 -1.0481996
 #&gt; 150: virginica  1.5513418  0.04192667  0.57258954 -0.8751219</div><div class='input'>
-<span class='no'>pop</span>$<span class='no'>state</span></div><div class='output co'>#&gt; $K
+<span class='kw'>pop</span><span class='op'>$</span><span class='kw'>state</span>
+</div><div class='output co'>#&gt; $K
 #&gt;            [,1]       [,2]       [,3]      [,4]
 #&gt; [1,] -0.4180098  0.3531217 -0.2735163 -3.118456
 #&gt; [2,] -0.1748261  0.1537381 -1.9583093  4.897992
@@ -400,7 +404,7 @@ Default is <code>NULL</code>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

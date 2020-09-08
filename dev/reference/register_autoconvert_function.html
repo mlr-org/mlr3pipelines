@@ -159,7 +159,7 @@ register" is queried for functions that may turn the object into
 a desired type.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>register_autoconvert_function</span>(<span class='no'>cls</span>, <span class='no'>fun</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))</pre>
+    <pre class="usage"><span class='fu'>register_autoconvert_function</span>(<span class='kw'>cls</span>, <span class='kw'>fun</span>, packages = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,7 +194,8 @@ a sub-class as recognized by <code>are_types_compatible()</code>.</p></td>
     <pre class="examples"><div class='input'><span class='co'># This lets mlr3pipelines automatically try to convert a string into</span>
 <span class='co'># a `PipeOp` by querying the [`mlr_pipeops`] [`Dictionary`][mlr3misc::Dictionary].</span>
 <span class='co'># This is an example and not necessary, because mlr3pipelines adds it by default.</span>
-<span class='fu'>register_autoconvert_function</span>(<span class='st'>"PipeOp"</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='as_pipeop.html'>as_pipeop</a></span>(<span class='no'>x</span>), <span class='kw'>packages</span> <span class='kw'>=</span> <span class='st'>"mlr3pipelines"</span>)</div></pre>
+<span class='fu'>register_autoconvert_function</span>(<span class='st'>"PipeOp"</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='as_pipeop.html'>as_pipeop</a></span>(<span class='kw'>x</span>), packages = <span class='st'>"mlr3pipelines"</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -210,7 +211,7 @@ a sub-class as recognized by <code>are_types_compatible()</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

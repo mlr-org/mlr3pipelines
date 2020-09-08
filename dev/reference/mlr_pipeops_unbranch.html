@@ -159,7 +159,8 @@
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpUnbranch</span>$<span class='fu'>new</span>(<span class='no'>options</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"unbranch"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpUnbranch</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>options</span>, id = <span class='st'>"unbranch"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>options</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>character</code><br />
 If <code>options</code> is 0, a vararg input channel is created that can take
@@ -184,8 +185,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <p><code>PipeOpUnbranch</code> has multiple input channels depending on the <code>options</code> construction argument, named <code>"input1"</code>, <code>"input2"</code>, ...
 if <code>options</code> is a nonzero integer and named after each <code>options</code> value if <code>options</code> is a <code>character</code>; if <code>options</code> is 0, there is only one
 <em>vararg</em> input channel named <code>"..."</code>.
-All input channels take any argument (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>) both during training and prediction.</p>
-<p><code>PipeOpUnbranch</code> has one output channel named <code>"output"</code>, producing the only <code><a href='NO_OP.html'>NO_OP</a></code> object received as input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>),
+All input channels take any argument (<code>"*"</code>) both during training and prediction.</p>
+<p><code>PipeOpUnbranch</code> has one output channel named <code>"output"</code>, producing the only <code><a href='NO_OP.html'>NO_OP</a></code> object received as input (<code>"*"</code>),
 both during training and prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -291,9 +292,10 @@ both during training and prediction.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># See PipeOpBranch for a complete branching example</span>
-<span class='no'>pou</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"unbranch"</span>)
+<span class='kw'>pou</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"unbranch"</span>)
 
-<span class='no'>pou</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>NO_OP</span>, <span class='no'>NO_OP</span>, <span class='st'>"hello"</span>, <span class='no'>NO_OP</span>, <span class='no'>NO_OP</span>))</div><div class='output co'>#&gt; $output
+<span class='kw'>pou</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>NO_OP</span>, <span class='kw'>NO_OP</span>, <span class='st'>"hello"</span>, <span class='kw'>NO_OP</span>, <span class='kw'>NO_OP</span>))
+</div><div class='output co'>#&gt; $output
 #&gt; [1] "hello"
 #&gt; </div></pre>
   </div>
@@ -311,7 +313,7 @@ both during training and prediction.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

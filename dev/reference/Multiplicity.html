@@ -203,7 +203,7 @@ of these mechanisms makes it possible for parts of a <code><a href='Graph.html'>
 many times if "sandwiched" between <code>Multiplicity</code> creating and collecting <code><a href='PipeOp.html'>PipeOp</a></code>s.</p>
 <p>Whether a <code><a href='PipeOp.html'>PipeOp</a></code> creates or collects a <code>Multiplicity</code> is indicated by the <code>$input</code>
 or <code>$output</code> slot (which indicate names and types of in/out channels). If the <code>train</code> and
-<code>predict</code> types of an input or output are surrounded by square brackets ("<code>[</code>", "<code>]</code>"), then
+<code>predict</code> types of an input or output are surrounded by square brackets ("<code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>", "<code>]</code>"), then
 this channel handles a <code>Multiplicity</code> explicitly. Depending on the function of the <code><a href='PipeOp.html'>PipeOp</a></code>,
 it will usually collect (input channel) or create (output channel) a <code>Multiplicity</code>.
 <code><a href='PipeOp.html'>PipeOp</a></code>s without this indicator are <code>Multiplicity</code> agnostic and blindly execute their
@@ -215,7 +215,7 @@ with a <code>Multiplicity</code>, then the <code><a href='https://rdrr.io/r/stat
 number of elements.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Multiplicity</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Multiplicity</span>(<span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -266,7 +266,7 @@ Can be anything.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

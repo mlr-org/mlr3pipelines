@@ -172,9 +172,9 @@ parameters <code>trafo</code> and <code>inverter</code> of the <code>param_set</
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_targettrafo</span>(
-  <span class='no'>graph</span>,
-  <span class='kw'>trafo_pipeop</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetMutate</span>$<span class='fu'>new</span>(),
-  <span class='kw'>id_prefix</span> <span class='kw'>=</span> <span class='st'>""</span>
+  <span class='kw'>graph</span>,
+  trafo_pipeop = <span class='kw'>PipeOpTargetMutate</span><span class='op'>$</span><span class='fu'>new</span>(),
+  id_prefix = <span class='st'>""</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -202,27 +202,28 @@ Optional id prefix to prepend to <code><a href='mlr_pipeops_targetinvert.html'>P
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>tt</span> <span class='kw'>=</span> <span class='fu'>pipeline_targettrafo</span>(<span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
-<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targetmutate.trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>tt</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>targetmutate.inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>2</span> ^ <span class='no'>x</span>
+<span class='kw'>tt</span> <span class='op'>=</span> <span class='fu'>pipeline_targettrafo</span>(<span class='kw'>PipeOpLearner</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>LearnerRegrRpart</span><span class='op'>$</span><span class='fu'>new</span>()))
+<span class='kw'>tt</span><span class='op'>$</span><span class='kw'>param_set</span><span class='op'>$</span><span class='kw'>values</span><span class='op'>$</span><span class='kw'>targetmutate.trafo</span> <span class='op'>=</span> <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='kw'>x</span>, base = <span class='fl'>2</span>)
+<span class='kw'>tt</span><span class='op'>$</span><span class='kw'>param_set</span><span class='op'>$</span><span class='kw'>values</span><span class='op'>$</span><span class='kw'>targetmutate.inverter</span> <span class='op'>=</span> <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fl'>2</span> <span class='op'>^</span> <span class='kw'>x</span>
 
 <span class='co'># gives the same as</span>
-<span class='no'>g</span> <span class='kw'>=</span> <span class='no'>Graph</span>$<span class='fu'>new</span>()
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetMutate</span>$<span class='fu'>new</span>(<span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>trafo</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-  <span class='kw'>inverter</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>2</span> ^ <span class='no'>x</span>)
+<span class='kw'>g</span> <span class='op'>=</span> <span class='kw'>Graph</span><span class='op'>$</span><span class='fu'>new</span>()
+<span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_pipeop</span>(<span class='kw'>PipeOpTargetMutate</span><span class='op'>$</span><span class='fu'>new</span>(param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  trafo = <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='kw'>x</span>, base = <span class='fl'>2</span>),
+  inverter = <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fl'>2</span> <span class='op'>^</span> <span class='kw'>x</span>)
   )
 )
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>())
-<span class='no'>g</span>$<span class='fu'>add_pipeop</span>(<span class='no'>PipeOpTargetInvert</span>$<span class='fu'>new</span>())
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"targetmutate"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinvert"</span>,
-  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"targetmutate"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>,
-  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>g</span>$<span class='fu'>add_edge</span>(<span class='kw'>src_id</span> <span class='kw'>=</span> <span class='st'>"regr.rpart"</span>, <span class='kw'>dst_id</span> <span class='kw'>=</span> <span class='st'>"targetinvert"</span>,
-  <span class='kw'>src_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div></pre>
+<span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_pipeop</span>(<span class='kw'>LearnerRegrRpart</span><span class='op'>$</span><span class='fu'>new</span>())
+<span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_pipeop</span>(<span class='kw'>PipeOpTargetInvert</span><span class='op'>$</span><span class='fu'>new</span>())
+<span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_edge</span>(src_id = <span class='st'>"targetmutate"</span>, dst_id = <span class='st'>"targetinvert"</span>,
+  src_channel = <span class='fl'>1</span>, dst_channel = <span class='fl'>1</span>)
+<span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_edge</span>(src_id = <span class='st'>"targetmutate"</span>, dst_id = <span class='st'>"regr.rpart"</span>,
+  src_channel = <span class='fl'>2</span>, dst_channel = <span class='fl'>1</span>)
+<span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_edge</span>(src_id = <span class='st'>"regr.rpart"</span>, dst_id = <span class='st'>"targetinvert"</span>,
+  src_channel = <span class='fl'>1</span>, dst_channel = <span class='fl'>2</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -238,7 +239,7 @@ Optional id prefix to prepend to <code><a href='mlr_pipeops_targetinvert.html'>P
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

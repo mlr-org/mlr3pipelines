@@ -179,8 +179,9 @@ single time to the output task.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpFeatureUnion</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>collect_multiplicity</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"featureunion"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>assert_targets_equal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<pre><span class='kw'>PipeOpFeatureUnion</span><span class='op'>$</span><span class='fu'>new</span>(innum = <span class='fl'>0</span>, collect_multiplicity = <span class='fl'>FALSE</span>, id = <span class='st'>"featureunion"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  assert_targets_equal = <span class='fl'>TRUE</span>)
+</pre>
 <ul>
 <li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>character</code><br />
 Determines the number of input channels.
@@ -325,15 +326,16 @@ behaviour may change in the future.</p>
 <code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='no'>task1</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='kw'>task1</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>),
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>)
-)) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>)
+)) <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>)
 
-<span class='no'>gr</span>$<span class='fu'>train</span>(<span class='no'>task1</span>)</div><div class='output co'>#&gt; $featureunion.output
+<span class='kw'>gr</span><span class='op'>$</span><span class='fu'>train</span>(<span class='kw'>task1</span>)
+</div><div class='output co'>#&gt; $featureunion.output
 #&gt; &lt;TaskClassif:iris&gt; (150 x 9)
 #&gt; * Target: Species
 #&gt; * Properties: multiclass
@@ -341,11 +343,12 @@ behaviour may change in the future.</p>
 #&gt;   - dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width,
 #&gt;     Sepal.Length, Sepal.Width
 #&gt; </div><div class='input'>
-<span class='no'>task2</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>task3</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>, <span class='kw'>innum</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>))
+<span class='kw'>task2</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>task3</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='kw'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>, innum = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>))
 
-<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task2</span>, <span class='no'>task3</span>))</div><div class='output co'>#&gt; $output
+<span class='kw'>po</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task2</span>, <span class='kw'>task3</span>))
+</div><div class='output co'>#&gt; $output
 #&gt; &lt;TaskClassif:iris&gt; (150 x 9)
 #&gt; * Target: Species
 #&gt; * Properties: multiclass
@@ -369,7 +372,7 @@ behaviour may change in the future.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

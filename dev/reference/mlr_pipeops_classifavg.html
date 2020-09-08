@@ -181,7 +181,8 @@ Defaults to equal weights for each model.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpClassifAvg</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>collect_multiplicity</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"classifavg"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpClassifAvg</span><span class='op'>$</span><span class='fu'>new</span>(innum = <span class='fl'>0</span>, collect_multiplicity = <span class='fl'>FALSE</span>, id = <span class='st'>"classifavg"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
 Determines the number of input channels.
@@ -315,17 +316,18 @@ is used as input and output during prediction.</p>
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
 <span class='co'># Simple Bagging</span>
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"greplicate"</span>,
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"subsample"</span>) <span class='kw'>%&gt;&gt;%</span>
+<span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"greplicate"</span>,
+  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"subsample"</span>) <span class='op'>%&gt;&gt;%</span>
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>)),
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>
-) <span class='kw'>%&gt;&gt;%</span>
+  n = <span class='fl'>3</span>
+) <span class='op'>%&gt;&gt;%</span>
   <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"classifavg"</span>)
 
-<span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>), <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
+<span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>), <span class='kw'>GraphLearner</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))
+</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
 #&gt; * Task: iris
 #&gt; * Learner: subsample_1.subsample_2.subsample_3.classif.rpart_1.classif.rpart_2.classif.rpart_3.classifavg
 #&gt; * Warnings: 0 in 0 iterations
@@ -345,7 +347,7 @@ is used as input and output during prediction.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

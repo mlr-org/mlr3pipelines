@@ -167,7 +167,8 @@ prediction.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpTargetTrafoScaleRange</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"targettrafoscalerange"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='kw'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"targettrafoscalerange"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"targettrafoscalerange"</code>.</p></li>
@@ -281,11 +282,12 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"boston_housing"</span>)
-<span class='no'>po</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetTrafoScaleRange</span>$<span class='fu'>new</span>()
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mlr3.mlr-org.com'>mlr3</a></span>)
+<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"boston_housing"</span>)
+<span class='kw'>po</span> <span class='op'>=</span> <span class='kw'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span>()
 
-<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $fun
+<span class='kw'>po</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))
+</div><div class='output co'>#&gt; $fun
 #&gt; NULL
 #&gt; 
 #&gt; $output
@@ -297,14 +299,15 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 #&gt;     ptratio, rm, zn
 #&gt;   - int (3): rad, tax, tract
 #&gt;   - fct (2): chas, town
-#&gt; </div><div class='input'><span class='no'>po</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>task</span>))</div><div class='output co'>#&gt; $fun
+#&gt; </div><div class='input'><span class='kw'>po</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))
+</div><div class='output co'>#&gt; $fun
 #&gt; function (inputs) 
 #&gt; {
 #&gt;     assert_list(inputs, len = 1L, types = "Prediction")
 #&gt;     list(private$.invert(inputs[[1L]], predict_phase_state))
 #&gt; }
-#&gt; &lt;bytecode: 0x55b931e58f30&gt;
-#&gt; &lt;environment: 0x55b940c854c0&gt;
+#&gt; &lt;bytecode: 0x555a374c7b70&gt;
+#&gt; &lt;environment: 0x555a1de5fe40&gt;
 #&gt; 
 #&gt; $output
 #&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
@@ -317,11 +320,13 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 #&gt;   - fct (2): chas, town
 #&gt; </div><div class='input'>
 <span class='co'>#syntactic sugar for a graph using ppl():</span>
-<span class='no'>ttscalerange</span> <span class='kw'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"targettrafo"</span>, <span class='kw'>trafo_pipeop</span> <span class='kw'>=</span> <span class='no'>PipeOpTargetTrafoScaleRange</span>$<span class='fu'>new</span>(),
-  <span class='kw'>graph</span> <span class='kw'>=</span> <span class='no'>PipeOpLearner</span>$<span class='fu'>new</span>(<span class='no'>LearnerRegrRpart</span>$<span class='fu'>new</span>()))
-<span class='no'>ttscalerange</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinvert.output
+<span class='kw'>ttscalerange</span> <span class='op'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"targettrafo"</span>, trafo_pipeop = <span class='kw'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span>(),
+  graph = <span class='kw'>PipeOpLearner</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>LearnerRegrRpart</span><span class='op'>$</span><span class='fu'>new</span>()))
+<span class='kw'>ttscalerange</span><span class='op'>$</span><span class='fu'>train</span>(<span class='kw'>task</span>)
+</div><div class='output co'>#&gt; $targetinvert.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>ttscalerange</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $targetinvert.output
+#&gt; </div><div class='input'><span class='kw'>ttscalerange</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='kw'>task</span>)
+</div><div class='output co'>#&gt; $targetinvert.output
 #&gt; &lt;PredictionRegr&gt; for 506 observations:
 #&gt;     row_id truth response
 #&gt;          1  24.0 23.72519
@@ -331,7 +336,8 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 #&gt;        504  23.9 23.72519
 #&gt;        505  22.0 23.72519
 #&gt;        506  11.9 19.55954
-#&gt; </div><div class='input'><span class='no'>ttscalerange</span>$<span class='no'>state</span>$<span class='no'>regr.rpart</span></div><div class='output co'>#&gt; $model
+#&gt; </div><div class='input'><span class='kw'>ttscalerange</span><span class='op'>$</span><span class='kw'>state</span><span class='op'>$</span><span class='kw'>regr.rpart</span>
+</div><div class='output co'>#&gt; $model
 #&gt; n= 506 
 #&gt; 
 #&gt; node), split, n, deviance, yval
@@ -355,7 +361,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $train_time
-#&gt; [1] 0.012
+#&gt; [1] 0.014
 #&gt; 
 #&gt; $train_task
 #&gt; &lt;TaskRegr:boston_housing&gt; (0 x 19)
@@ -382,7 +388,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

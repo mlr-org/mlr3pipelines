@@ -174,11 +174,11 @@ factor variables, no encoding is performed.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_robustify</span>(
-  <span class='kw'>task</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>learner</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>impute_missings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>factors_to_numeric</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>max_cardinality</span> <span class='kw'>=</span> <span class='fl'>1000</span>
+  task = <span class='kw'>NULL</span>,
+  learner = <span class='kw'>NULL</span>,
+  impute_missings = <span class='kw'>NULL</span>,
+  factors_to_numeric = <span class='kw'>NULL</span>,
+  max_cardinality = <span class='fl'>1000</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -186,7 +186,7 @@ factor variables, no encoding is performed.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>task</th>
-      <td><p><code>Task</code> <br />
+      <td><p><code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> <br />
 A <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> to create a robustifying pipeline for.
 Optional, if omitted, the full pipeline is created.</p></td>
     </tr>
@@ -220,11 +220,12 @@ Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
-<span class='no'>lrn</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>)
-<span class='no'>task</span> <span class='kw'>=</span> <span class='no'>mlr_tasks</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"boston_housing"</span>)
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'>pipeline_robustify</span>(<span class='no'>task</span>, <span class='no'>lrn</span>) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='no'>lrn</span>)
-<span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mlr3.mlr-org.com'>mlr3</a></span>)
+<span class='kw'>lrn</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>)
+<span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>mlr_tasks</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"boston_housing"</span>)
+<span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'>pipeline_robustify</span>(<span class='kw'>task</span>, <span class='kw'>lrn</span>) <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='kw'>lrn</span>)
+<span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='kw'>task</span>, <span class='kw'>GraphLearner</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>gr</span>), <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>))
+</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
 #&gt; * Task: boston_housing
 #&gt; * Learner: fixfactors.removeconstants.regr.rpart
 #&gt; * Warnings: 0 in 0 iterations
@@ -244,7 +245,7 @@ Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
