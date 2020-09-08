@@ -84,7 +84,7 @@ Suggests:
 RdMacros:
     mlr3misc
 Remotes:
-    mlr-org/mlr3,
+    mlr-org/mlr3@refactor_containers3,
     Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
