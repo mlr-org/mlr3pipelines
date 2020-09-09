@@ -47,8 +47,8 @@ Imports:
     data.table,
     digest,
     lgr,
-    mlr3 (>= 0.1.4),
-    mlr3misc (>= 0.1.4),
+    mlr3 (>= 0.6.0),
+    mlr3misc (>= 0.5.0),
     paradox,
     R6,
     withr
