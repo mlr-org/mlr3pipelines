@@ -5,10 +5,12 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Provides an interface to the vtreat package.
+#' Provides an interface to the [vtreat] package.
 #'
 #' [`PipeOpVtreat`] naturally works for [classification Tasks][mlr3::TaskClassif] and [regression Tasks][mlr3::TaskRegr].
-#' Internallly [`PipeOpVtreat`] follows the fit/prepare interface of vtreat.
+#' Internallly [`PipeOpVtreat`] follows the fit/prepare interface of [vtreat], i.e., first creating a data treatment transform object via
+#' [vtreat::NumericOutcomeTreatment], [vtreat::BinomialOutcomeTreatment], or [vtreat::MultinomialOutcomeTreatment], followed by calling
+#' [vtreat::fit_prepare] on the training data and [vtreat::prepare] during prediciton.
 #'
 #' @section Construction:
 #' ```
@@ -23,32 +25,30 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected features "prepared" by vtreat.
-#' If vtreat found "no usable vars", the input [`Task`][mlr3::Task] is returned unaltered.
+#' The output is the input [`Task`][mlr3::Task] with all affected features "prepared" by [vtreat].
+#' If [vtreat] found "no usable vars", the input [`Task`][mlr3::Task] is returned unaltered.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `treatment_plan` :: object of class `vtreat_pipe_step` | `NULL`\cr
-#'   The treatment plan as constructed by vtreat based on the training data, i.e., an object of class `treatment_plan`.
-#'   If vtreat found "no usable vars" and designing the treatment would have failed, this is `NULL`.
+#'   The treatment plan as constructed by [vtreat] based on the training data, i.e., an object of class `treatment_plan`.
+#'   If [vtreat] found "no usable vars" and designing the treatment would have failed, this is `list(NULL)`.
 #'
 #' @section Parameters:
+#' FIXME:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `recommended` :: `logical(1)`\cr
-#'   Whether only the "recommended" constructed columns should be returned, i.e., non constant
-#'   variables with a significance value smaller than vtreat's threshold.
+#'   Whether only the "recommended" prepared features should be returned, i.e., non constant
+#'   variables with a significance value smaller than [vtreat]'s threshold. Initialized to `TRUE`.
 #' * `cols_to_copy` :: `list`\cr
-#'   List of extra columns to copy.
-#' * `params` :: `list`\cr
-#'   List of parameter values that will be used to construct vtreat's internal parameters by calling
-#'   vtreat::regression_parameters(), vtreat::classification_parameters(), or
-#'   vtreat::multinomial_parameters() on it, depending on the input [`Task`][mlr3::Task].
+#'   List of extra columns to copy. See [vtreat::NumericOutcomeTreatment], [vtreat::BinomialOutcomeTreatment], or
+#'   [vtreat::MultinomialOutcomeTreatment] for details.
 #' * `imputation_map` :: `list`\cr
 #'   List of map from column names to functions of signature f(values: numeric, weights: numeric),
-#'   simple missing value imputers as used by vtreat.
+#'   simple missing value imputers as used by [vtreat].
 #'
 #' @section Internals:
-#' Follows vtreat's fit/prepare interface.
+#' Follows [vtreat]'s fit/prepare interface.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -80,13 +80,37 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
   public = list(
     initialize = function(id = "vtreat", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("recommended", default = TRUE, tags = c("train", "predict")),
-        ParamUty$new("cols_to_copy", default = NULL, tags = "train", custom_check = function(x) checkmate::check_list(x, null.ok = TRUE)),
-        ParamUty$new("params", default = NULL, tags = "train", custom_check = function(x) checkmate::check_list(x, null.ok = TRUE)),
-        ParamUty$new("imputation_map", default = NULL, tags = "train", custom_check = function(x) checkmate::check_list(x, null.ok = TRUE))
-        # FIXME: parallelCluster
+        # FIXME: tags predict?
+        ParamLgl$new("recommended", tags = c("train", "predict")),
+        ParamUty$new("cols_to_copy", custom_check = checkmate::check_function, tags = "train"),
+        # tags stand for: regression vtreat::regression_parameters() / classification vtreat::classification_parameters() / multinomial vtreat::multinomial_parameters()
+        ParamDbl$new("minFraction", lower = 0, upper = 1, default = 0.02, tags = c("train", "regression", "classification", "multinomial")),
+        ParamDbl$new("smFactor", lower = 0, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
+        ParamInt$new("rareCount", lower = 0L, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
+        ParamDbl$new("rareSig", lower = 0, upper = 1, special_vals = list(NULL), tags = c("train", "regression", "classification", "multinomial")),  # default NULL for regression, classification, 1 for multinomial
+        ParamDbl$new("collarProb", lower = 0, upper = 1, default = 0, tags = c("train", "regression", "classification", "multinomial")),
+        ParamUty$new("codeRestriction", default = NULL, custom_check = function(x) checkmate::check_character(x, any.missing = FALSE, null.ok = TRUE), tags = c("train", "regression", "classification", "multinomial")),
+        ParamUty$new("customCoders", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification", "multinomial")),
+        ParamUty$new("splitFunction", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification", "multinomial")),
+        ParamInt$new("ncross", lower = 2L, upper = Inf, default = 3L, tags = c("train", "regression", "classification", "multinomial")),
+        ParamLgl$new("forceSplit", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        ParamLgl$new("catScaling", tags = c("train", "regression", "classification", "multinomial")),  # default TRUE for regression, classification, FALSE for multinomial
+        ParamLgl$new("verbose", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        ParamLgl$new("use_paralell", default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
+        ParamUty$new("missingness_imputation", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification", "multinomial")),
+        ParamDbl$new("pruneSig", lower = 0, upper = 1, special_vals = list(NULL), default = NULL, tags = c("train", "regression", "classification")),
+        ParamLgl$new("scale", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        ParamLgl$new("doCollar", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        ParamUty$new("varRestriction", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification")),
+        ParamUty$new("trackedValues", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification")),
+        ParamLgl$new("check_for_duplicate_frames", default = TRUE, tags = c("train", "regression", "classification", "multinomial")),  # default TRUE but initialized to FALSE
+        ParamUty$new("y_dependent_treatments", default = "catB", custom_check = function(x) checkmate::check_character(x, any.missing = FALSE), tags = c("train", "multinomial")),
+        # NOTE: imputation_map is also in multinomial_parameters(); this is redundant so only include it here
+        ParamUty$new("imputation_map", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "predict"))
+        # NOTE: parallelCluster missing intentionally and will be set to NULL
       ))
-      ps$values = list(recommended = TRUE, cols_to_copy = NULL, params = NULL, imputation_map = NULL)
+      ps$add_dep("collarProb", on = "doCollar", cond = CondEqual$new(TRUE))
+      ps$values = list(recommended = TRUE, cols_to_copy = selector_none(), check_for_duplicate_frames = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat")
     }
   ),
@@ -95,7 +119,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
     .train_task = function(task) {
 
       var_list = task$feature_names
-      if (length(var_list) == 0) {
+      if (length(var_list) == 0L) {
         return(task)  # early exit
       }
 
@@ -103,21 +127,21 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       if (task_type == "regr") {
         treatment = vtreat::NumericOutcomeTreatment
-        params = vtreat::regression_parameters(self$param_set$values$params)
+        params = vtreat::regression_parameters(self$param_set$get_values(tags = "regression"))
       } else if (task_type == "classif") {
         if (length(task$class_names) > 2L) {
           treatment = vtreat::MultinomialOutcomeTreatment
-          params = vtreat::multinomial_parameters(self$param_set$values$params)
+          params = vtreat::multinomial_parameters(self$param_set$get_values(tags = "multinomial"))
         } else {
           treatment = vtreat::BinomialOutcomeTreatment
-          params = vtreat::classification_parameters(self$param_set$values$params)
+          params = vtreat::classification_parameters(self$param_set$get_values(tags = "classification"))
         }
       }
 
+      # FIXME:
       if (length(self$param_set$values$cols_to_copy)) {
         checkmate::assert_subset(unlist(self$param_set$values$cols_to_copy), choices = var_list, empty.ok = TRUE)
       }
-
       if (length(self$param_set$values$imputation_map)) {
         checkmate::assert_subset(names(self$param_set$values$imputation_map), choices = var_list, empty.ok = TRUE)
       }
@@ -125,7 +149,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
       transform_design = mlr3misc::invoke(treatment,
         var_list = var_list,
         outcome_name = task$target_names,
-        cols_to_copy = self$param_set$values$cols_to_copy,
+        cols_to_copy = self$param_set$values$cols_to_copy(task),
         params = params,
         imputation_map = self$param_set$values$imputation_map)
 
@@ -134,12 +158,13 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         mlr3misc::invoke(vtreat::fit_prepare,
           vps = transform_design,
           dframe = task$data(),
-          weights = task$weights$weight),
+          weights = task$weights$weight,
+          parallelCluster = NULL),
         silent = TRUE
       )
 
       if (class(vtreat_res) == "try-error") {
-        self$state = NULL
+        self$state = list(NULL)
         return(task)  # early exit
       }
 
@@ -168,7 +193,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       # in the following we suppress warnings and catch errors
       # because if we predict on the same task that was used for training vtreat will tell us:
-      #"possibly called transform() on same data frame as fit(), this can lead to over-fit. To avoid this, please use fit_transform()."
+      # "possibly called transform() on same data frame as fit(), this can lead to over-fit. To avoid this, please use fit_transform()."
       # but this is fine, because we are in the predict step and all models are trained already
       # also, in rare case vtreat will have dropped all features (if recommended = TRUE) and now will fail with "no usable vars"
       d_prepared = try(

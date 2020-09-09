@@ -8,7 +8,7 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Provides an interface to the vtreat package.
+Provides an interface to the \link{vtreat} package.
 
 \code{\link{PipeOpVtreat}} naturally works for \link[mlr3:TaskClassif]{classification Tasks} and \link[mlr3:TaskRegr]{regression Tasks}.
 Internallly \code{\link{PipeOpVtreat}} follows the fit/prepare interface of vtreat.
@@ -47,7 +47,7 @@ If vtreat found "no usable vars" and designing the treatment would have failed, 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{recommended} :: \code{logical(1)}\cr
-Whether only the "recommended" constructed columns should be returned, i.e., non constant
+Whether only the "recommended" prepared features should be returned, i.e., non constant
 variables with a significance value smaller than vtreat's threshold.
 \item \code{cols_to_copy} :: \code{list}\cr
 List of extra columns to copy.
