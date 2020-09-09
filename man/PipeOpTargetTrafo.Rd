@@ -95,7 +95,7 @@ The base implementation returns \code{list()} and should be overloaded if settin
 Called by \code{\link{PipeOpTargetTrafo}}'s implementation of \code{private$.train()} and
 \code{private$.predict()}. Takes a single \code{\link[mlr3:Task]{Task}} as input and modifies it.
 This should typically consist of calculating a new target and modifying the
-\code{\link[mlr3:Task]{Task}} by using the \verb{[convert_task]} function. \code{.transform()} will be called during training and
+\code{\link[mlr3:Task]{Task}} by using the \code{\link[mlr3:convert_task]{convert_task}} function. \code{.transform()} will be called during training and
 prediction because the target (and if needed also type) of the input \code{\link[mlr3:Task]{Task}} must be transformed
 both times. Note that unlike \verb{$.train()}, the argument is \emph{not} a list but a singular
 \code{\link[mlr3:Task]{Task}}, and the return object is also \emph{not} a list but a singular \code{\link[mlr3:Task]{Task}}.

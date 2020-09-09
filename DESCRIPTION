@@ -164,7 +164,6 @@ Collate:
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
-    'convert_task.R'
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'

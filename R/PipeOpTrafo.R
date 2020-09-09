@@ -81,7 +81,7 @@
 #'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.train()` and
 #'   `private$.predict()`. Takes a single [`Task`][mlr3::Task] as input and modifies it.
 #'   This should typically consist of calculating a new target and modifying the
-#'   [`Task`][mlr3::Task] by using the `[convert_task]` function. `.transform()` will be called during training and
+#'   [`Task`][mlr3::Task] by using the [`convert_task`][mlr3::convert_task] function. `.transform()` will be called during training and
 #'   prediction because the target (and if needed also type) of the input [`Task`][mlr3::Task] must be transformed
 #'   both times. Note that unlike `$.train()`, the argument is *not* a list but a singular
 #'   [`Task`][mlr3::Task], and the return object is also *not* a list but a singular [`Task`][mlr3::Task].
@@ -133,7 +133,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
     },
 
     .transform = function(task, phase) {
-      # return a modified task, should make use of convert_task()
+      # return a modified task, should make use of mlr3::convert_task()
       stop("Abstract.")
     },
 
@@ -372,7 +372,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
       task$cbind(new_target)
-      convert_task(task, new_target = colnames(new_target), new_type = private$.new_task_type)
+      convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE)
     },
 
     .invert = function(prediction, predict_phase_state) {
@@ -474,7 +474,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
       new_target = self$state$offset + x * self$state$scale
       setnames(new_target, paste0(colnames(new_target), ".scaled"))
       task$cbind(new_target)
-      convert_task(task, new_target = colnames(new_target))
+      convert_task(task, target = colnames(new_target), drop_original_target = TRUE)
     },
 
     .invert = function(prediction, predict_phase_state) {
@@ -622,10 +622,10 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       list(private$.update_target(intask, drop_levels = FALSE))
     },
 
-    # Updates the target of a task and also the task_type (if needed), uses convert_task
+    # Updates the target of a task and also the task_type (if needed), uses mlr3::convert_task()
     .update_target = function(task, drop_levels) {
       pv = self$param_set$values
-      convert_task(task, new_target = pv$new_target_name,
+      convert_task(task, target = pv$new_target_name,
         new_type = pv$new_task_type, drop_original_target = pv$drop_original_target, drop_levels = drop_levels)
     }
   )
