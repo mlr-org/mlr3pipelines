@@ -121,7 +121,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
+        ParamFct$new("method", levels = mlr_resamplings$keys(), tags = c("train", "required")),
         ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
         ParamLgl$new("keep_response", tags = c("train", "required"))
       ))
@@ -172,7 +172,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # Compute CV Predictions
       if (pv$method != "insample") {
         rdesc = mlr_resamplings$get(pv$method)
-        if (pv$method == "cv") rdesc$param_set$values = list(folds = pv$folds)
+        if (grepl("cv",  pv$method)) rdesc$param_set$values = list(folds = pv$folds)
         res = resample(task, private$.learner, rdesc)
         prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
       } else {
