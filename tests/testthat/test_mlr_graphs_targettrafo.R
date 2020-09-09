@@ -51,7 +51,7 @@ test_that("More Complex Target Trafo Pipelines", {
  expect_equal(tt$output$op.id, "targetinvert")
 
  tt$param_set$values$targetmutate.trafo = function(x) exp(x)
- tt$param_set$values$targetmutate.inverter = function(x) log(x)
+ tt$param_set$values$targetmutate.inverter = function(x) list(response = log(x$response))
 
  train_tt1 = tt$train(task)
  expect_null(train_tt1[[1L]])
