@@ -40,18 +40,17 @@ The \verb{$state} is left empty (\code{list()}).
 
 The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}, as well as:
 \itemize{
-\item \code{trafo} :: \code{function} \code{data.table} -> \code{data.table}\cr
+\item \code{trafo} :: \code{function} \code{data.table} -> \code{data.table} | named \code{list}\cr
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single \code{data.table} argument, typically with one column. The return value is used as the new
 target of the resulting \code{\link[mlr3:Task]{Task}}. To change target names, change the column name of the data
 using e.g. \code{\link[data.table:setattr]{setnames()}}.\cr
-Note that this function also gets called during prediction and should thus gracefully handle
-\code{NA} values.\cr
+Note that this function also gets called during prediction and should thus gracefully handle \code{NA} values.\cr
 Initialized to \code{identity()}.
-\item \code{inverter} :: \code{function} \code{data.table} -> \code{data.table}\cr
-Inversion of the transformation function for the target. Called with the \verb{$data$tab} slot of a
-\code{\link[mlr3:Prediction]{Prediction}} (a \code{data.table}), without the \verb{$row_id} and \verb{$truth} columns,
-and should return a \code{data.table} that contains the new relevant columns of a
+\item \code{inverter} :: \code{function} \code{data.table} -> \code{data.table} | named \code{list}\cr
+Inversion of the transformation function for the target. Called on the \verb{$data} slot of a
+\code{\link[mlr3:Prediction]{Prediction}}, i.e., a \code{\link[mlr3:PredictionData]{PredictionData}} object, without the \verb{$row_ids} and \verb{$truth} slots,
+and should return a \code{data.table} or named \code{list} that contains the new relevant slots of a
 \code{\link[mlr3:Prediction]{Prediction}} (e.g., \verb{$response}). Initialized to \code{identity()}.
 }
 }
