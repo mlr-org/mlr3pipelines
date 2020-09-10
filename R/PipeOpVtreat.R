@@ -138,10 +138,6 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         }
       }
 
-      # FIXME:
-      if (length(self$param_set$values$cols_to_copy)) {
-        checkmate::assert_subset(unlist(self$param_set$values$cols_to_copy), choices = var_list, empty.ok = TRUE)
-      }
       if (length(self$param_set$values$imputation_map)) {
         checkmate::assert_subset(names(self$param_set$values$imputation_map), choices = var_list, empty.ok = TRUE)
       }
@@ -154,17 +150,21 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         imputation_map = self$param_set$values$imputation_map)
 
       # the following exception handling is necessary because vtreat sometimes fails with "no usable vars" if the data is already "clean" enough
-      vtreat_res = try(
+      vtreat_res = tryCatch(
         mlr3misc::invoke(vtreat::fit_prepare,
           vps = transform_design,
           dframe = task$data(),
           weights = task$weights$weight,
           parallelCluster = NULL),
-        silent = TRUE
+        error = function(error_condition) {
+          if (grepl("no usable vars", error_condition$message )) {
+          self$state = list(NULL)
+          NULL
+          }
+        }
       )
 
-      if (class(vtreat_res) == "try-error") {
-        self$state = list(NULL)
+      if (is.null(vtreat_res)) {
         return(task)  # early exit
       }
 
@@ -196,16 +196,25 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
       # "possibly called transform() on same data frame as fit(), this can lead to over-fit. To avoid this, please use fit_transform()."
       # but this is fine, because we are in the predict step and all models are trained already
       # also, in rare case vtreat will have dropped all features (if recommended = TRUE) and now will fail with "no usable vars"
-      d_prepared = try(
-        suppressWarnings(mlr3misc::invoke(vtreat::prepare,
+      d_prepared = tryCatch(
+        mlr3misc::invoke(vtreat::prepare,
           treatmentplan = self$state$treatment_plan,
-          dframe = task$data())),
-        silent = TRUE
+          dframe = task$data()),
+        error = function(error_condition) {
+          if (grepl("no useable vars", x = error_condition$message)) {
+            data.table()
+          } else {
+            stopf(error_condition$message)
+          }
+        },
+        warning = function(warning_condition) {
+          if (!grepl("on same data", x = warning_condition$message)) {
+            warningf(warning_condition)
+          }
+        }
       )
 
-      if (class(d_prepared) != "try-error") {
-        task$cbind(d_prepared)
-      }
+      task$cbind(d_prepared)
 
       feature_subset = self$state$treatment_plan$get_feature_names()  # subset to vtreat features
 
@@ -225,16 +234,21 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
     deep_clone = function(name, value) {
       if (name == "state" && "NO_OP" %nin% class(value)) {
         if (!is.null(value$treatment_plan)) {
-          state = value
-          state$treatment_plan = value$treatment_plan$fresh_copy()
-          state$treatment_plan$settings$params = value$treatment_plan$settings$params
-          state$treatment_plan$settings$state$score_frame = value$treatment_plan$settings$state$score_frame
-          state$treatment_plan$settings$state$transform = value$treatment_plan$settings$state$transform
-          state
+          # FIXME: tests
+          multiplicity_recurse(value, .fun = function(value) {
+            state = value
+            state$treatment_plan = value$treatment_plan$fresh_copy()
+            state$treatment_plan$settings$params = value$treatment_plan$settings$params
+            state$treatment_plan$settings$state$score_frame = value$treatment_plan$settings$state$score_frame
+            state$treatment_plan$settings$state$transform = value$treatment_plan$settings$state$transform
+            state
+          })
         } else {
           super$deep_clone(name, value)
         }
-      } else super$deep_clone(name, value)
+      } else {
+        super$deep_clone(name, value)
+      }
     }
   )
 )

@@ -42,14 +42,14 @@ test_that("PipeOpVtreat - Regression", {
   expect_true(op$state$treatment_plan$treatment_type == "NumericOutcomeTreatment")
   expect_true(all(settings$var_list == task$feature_names))
   expect_true(all(settings$outcome_name == task$target_names))
-  expect_null(settings$cols_to_copy)
-  expect_equivalent(settings$params, vtreat::regression_parameters(NULL))
+  expect_true(length(settings$cols_to_copy) == 0L)
+  expect_equivalent(settings$params, vtreat::regression_parameters(list(check_for_duplicate_frames = FALSE)))
   predict_out1 = op$predict(list(task))[[1L]]
   expect_false(identical(train_out1$data(), predict_out1$data()))
 
   op$param_set$values = list(recommended = FALSE,
-    cols_to_copy = list("xc"),
-    params = list(minFraction = 0.1),
+    cols_to_copy = selector_name("xc"),
+    minFraction = 0.1,
     imputation_map = list("x" = 0),
     affect_columns = selector_name(c("x", "xc")))
   train_out2 = op$train(list(task))[[1L]]
@@ -90,14 +90,14 @@ test_that("PipeOpVtreat - Binary Classification", {
   expect_true(op$state$treatment_plan$treatment_type == "BinomialOutcomeTreatment")
   expect_true(all(settings$var_list == task$feature_names))
   expect_true(all(settings$outcome_name == task$target_names))
-  expect_null(settings$cols_to_copy)
-  expect_equivalent(settings$params, vtreat::classification_parameters(NULL))
+  expect_true(length(settings$cols_to_copy) == 0L)
+  expect_equivalent(settings$params, vtreat::classification_parameters(list(check_for_duplicate_frames = FALSE)))
   predict_out1 = op$predict(list(task))[[1L]]
   expect_false(identical(train_out1$data(), predict_out1$data()))
 
   op$param_set$values = list(recommended = FALSE,
-    cols_to_copy = list("xc", "y"),
-    params = list(ncross = 4),
+    cols_to_copy = selector_name(c("xc", "y")),
+    ncross = 4,
     imputation_map = list("x" = 0),
     affect_columns = selector_name(c("x", "xc", "y")))
   train_out2 = op$train(list(task))[[1L]]
@@ -138,14 +138,14 @@ test_that("PipeOpVtreat - Multiclass Classification", {
   expect_true(op$state$treatment_plan$treatment_type == "MultinomialOutcomeTreatment")
   expect_true(all(settings$var_list == task$feature_names))
   expect_true(all(settings$outcome_name == task$target_names))
-  expect_null(settings$cols_to_copy)
-  expect_equivalent(settings$params, vtreat::multinomial_parameters(NULL))
+  expect_true(length(settings$cols_to_copy) == 0L)
+  expect_equivalent(settings$params, vtreat::multinomial_parameters(list(check_for_duplicate_frames = FALSE)))
   predict_out1 = op$predict(list(task))[[1L]]
   expect_false(identical(train_out1$data(), predict_out1$data()))
 
   op$param_set$values = list(recommended = FALSE,
-    cols_to_copy = list("y"),
-    params = list(scale = TRUE),
+    cols_to_copy = selector_name("y"),
+    scale = TRUE,
     imputation_map = list("x" = 0),
     affect_columns = selector_name(c("x", "xc", "y")))
   train_out2 = op$train(list(task))[[1L]]
