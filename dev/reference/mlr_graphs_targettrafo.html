@@ -206,13 +206,13 @@ Optional id prefix to prepend to <code><a href='mlr_pipeops_targetinvert.html'>P
 
 <span class='kw'>tt</span> <span class='op'>=</span> <span class='fu'>pipeline_targettrafo</span>(<span class='kw'>PipeOpLearner</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>LearnerRegrRpart</span><span class='op'>$</span><span class='fu'>new</span>()))
 <span class='kw'>tt</span><span class='op'>$</span><span class='kw'>param_set</span><span class='op'>$</span><span class='kw'>values</span><span class='op'>$</span><span class='kw'>targetmutate.trafo</span> <span class='op'>=</span> <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='kw'>x</span>, base = <span class='fl'>2</span>)
-<span class='kw'>tt</span><span class='op'>$</span><span class='kw'>param_set</span><span class='op'>$</span><span class='kw'>values</span><span class='op'>$</span><span class='kw'>targetmutate.inverter</span> <span class='op'>=</span> <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fl'>2</span> <span class='op'>^</span> <span class='kw'>x</span>
+<span class='kw'>tt</span><span class='op'>$</span><span class='kw'>param_set</span><span class='op'>$</span><span class='kw'>values</span><span class='op'>$</span><span class='kw'>targetmutate.inverter</span> <span class='op'>=</span> <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(response = <span class='fl'>2</span> <span class='op'>^</span> <span class='kw'>x</span><span class='op'>$</span><span class='kw'>response</span>)
 
 <span class='co'># gives the same as</span>
 <span class='kw'>g</span> <span class='op'>=</span> <span class='kw'>Graph</span><span class='op'>$</span><span class='fu'>new</span>()
 <span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_pipeop</span>(<span class='kw'>PipeOpTargetMutate</span><span class='op'>$</span><span class='fu'>new</span>(param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
   trafo = <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='kw'>x</span>, base = <span class='fl'>2</span>),
-  inverter = <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fl'>2</span> <span class='op'>^</span> <span class='kw'>x</span>)
+  inverter = <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(response = <span class='fl'>2</span> <span class='op'>^</span> <span class='kw'>x</span><span class='op'>$</span><span class='kw'>response</span>))
   )
 )
 <span class='kw'>g</span><span class='op'>$</span><span class='fu'>add_pipeop</span>(<span class='kw'>LearnerRegrRpart</span><span class='op'>$</span><span class='fu'>new</span>())

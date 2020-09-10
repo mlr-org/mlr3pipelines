@@ -189,18 +189,17 @@ Defaults to <code>NULL</code>: no change in task type.</p></li>
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>, as well as:</p><ul>
-<li><p><code>trafo</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code><br />
+<li><p><code>trafo</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code> | named <code>list</code><br />
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single <code>data.table</code> argument, typically with one column. The return value is used as the new
 target of the resulting <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. To change target names, change the column name of the data
 using e.g. <code><a href='https://Rdatatable.gitlab.io/data.table/reference/setattr.html'>setnames()</a></code>.<br />
-Note that this function also gets called during prediction and should thus gracefully handle
-<code>NA</code> values.<br />
+Note that this function also gets called during prediction and should thus gracefully handle <code>NA</code> values.<br />
 Initialized to <code><a href='https://rdrr.io/r/base/identity.html'>identity()</a></code>.</p></li>
-<li><p><code>inverter</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code><br />
-Inversion of the transformation function for the target. Called with the <code>$data$tab</code> slot of a
-<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> (a <code>data.table</code>), without the <code>$row_id</code> and <code>$truth</code> columns,
-and should return a <code>data.table</code> that contains the new relevant columns of a
+<li><p><code>inverter</code> :: <code>function</code> <code>data.table</code> -&gt; <code>data.table</code> | named <code>list</code><br />
+Inversion of the transformation function for the target. Called on the <code>$data</code> slot of a
+<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>, i.e., a <code><a href='https://mlr3.mlr-org.com/reference/PredictionData.html'>PredictionData</a></code> object, without the <code>$row_ids</code> and <code>$truth</code> slots,
+and should return a <code>data.table</code> or named <code>list</code> that contains the new relevant slots of a
 <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> (e.g., <code>$response</code>). Initialized to <code><a href='https://rdrr.io/r/base/identity.html'>identity()</a></code>.</p></li>
 </ul>
 
@@ -327,8 +326,8 @@ and should return a <code>data.table</code> that contains the new relevant colum
 #&gt;     assert_list(inputs, len = 1L, types = "Prediction")
 #&gt;     list(private$.invert(inputs[[1L]], predict_phase_state))
 #&gt; }
-#&gt; &lt;bytecode: 0x55dd67a601c0&gt;
-#&gt; &lt;environment: 0x55dd67a5f858&gt;
+#&gt; &lt;bytecode: 0x55a30fc52f78&gt;
+#&gt; &lt;environment: 0x55a30fc538a8&gt;
 #&gt; 
 #&gt; $output
 #&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
