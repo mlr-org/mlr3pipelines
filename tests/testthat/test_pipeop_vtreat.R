@@ -64,7 +64,7 @@ test_that("PipeOpVtreat - Binary Classification", {
   op = PipeOpVtreat$new()
 
   # clean task simply passes through
-  clean_task = TaskClassif$new("vtreat_binary_clean", backend = data.frame(y = as.factor(c(0, 0, 1)), x = c(1, 1, 1)), target = "y")
+  clean_task = TaskClassif$new("vtreat_binary_clean", backend = data.frame(y = as.factor(c(0, 0, 1, 1, 0)), x = c(1, 1, 1, 1, 1)), target = "y")
 
   expect_equal(op$train(list(clean_task))[[1L]]$data(), op$predict(list(clean_task))[[1L]]$data())
   expect_null(op$state$treatment_plan)

@@ -8,10 +8,12 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Provides an interface to the \link{vtreat} package.
+Provides an interface to the vtreat package.
 
-\code{\link{PipeOpVtreat}} naturally works for \link[mlr3:TaskClassif]{classification Tasks} and \link[mlr3:TaskRegr]{regression Tasks}.
-Internallly \code{\link{PipeOpVtreat}} follows the fit/prepare interface of vtreat.
+\code{\link{PipeOpVtreat}} naturally works for \link[mlr3:TaskClassif]{classification tasks} and \link[mlr3:TaskRegr]{regression tasks}.
+Internally, \code{\link{PipeOpVtreat}} follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
+\code{\link[vtreat:NumericOutcomeTreatment]{vtreat::NumericOutcomeTreatment()}}, \code{\link[vtreat:BinomialOutcomeTreatment]{vtreat::BinomialOutcomeTreatment()}}, or \code{\link[vtreat:MultinomialOutcomeTreatment]{vtreat::MultinomialOutcomeTreatment()}}, followed by calling
+\code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} on the training data and \code{\link[vtreat:prepare]{vtreat::prepare()}} during predicton.
 }
 \section{Construction}{
 \preformatted{PipeOpVreat$new(id = "vtreat", param_vals = list())
@@ -48,22 +50,68 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{recommended} :: \code{logical(1)}\cr
 Whether only the "recommended" prepared features should be returned, i.e., non constant
-variables with a significance value smaller than vtreat's threshold.
-\item \code{cols_to_copy} :: \code{list}\cr
-List of extra columns to copy.
-\item \code{params} :: \code{list}\cr
-List of parameter values that will be used to construct vtreat's internal parameters by calling
-vtreat::regression_parameters(), vtreat::classification_parameters(), or
-vtreat::multinomial_parameters() on it, depending on the input \code{\link[mlr3:Task]{Task}}.
-\item \code{imputation_map} :: \code{list}\cr
-List of map from column names to functions of signature f(values: numeric, weights: numeric),
-simple missing value imputers as used by vtreat.
+variables with a significance value smaller than vtreat's threshold. Initialized to \code{TRUE}.
+\item \code{cols_to_copy} :: \code{function} | \code{\link{Selector}} \cr
+\code{\link{Selector}} function, takes a \code{\link[mlr3:Task]{Task}} as argument and returns a \code{character()} of features to copy.\cr
+See \code{\link{Selector}} for example functions. Initialized to \code{selector_none()}.
+\item \code{minFraction} :: \code{numeric(1)}\cr
+Minimum frequency a categorical level must have to be converted to an indicator column.
+\item \code{smFactor} :: \code{numeric(1)}\cr
+Smoothing factor for impact coding models.
+\item \code{rareCount} :: \code{integer(1)}\cr
+Allow levels with this count or below to be pooled into a shared rare-level.
+\item \code{rareSig} :: \code{numeric(1)}\cr
+Suppress levels from pooling at this significance value greater.
+\item \code{collarProb} :: \code{numeric(1)}\cr
+What fraction of the data (pseudo-probability) to collar data at if \code{doCollar = TRUE}.
+\item \code{doCollar} :: \code{logical(1)}\cr
+If \code{TRUE} collar numeric variables by cutting off after a tail-probability specified by \code{collarProb} during treatment design.
+\item \code{codeRestriction} :: \code{character()}\cr
+What types of variables to produce.
+\item \code{customCoders} :: named \code{list}\cr
+Map from code names to custom categorical variable encoding functions.
+\item \code{splitFunction} :: \code{function}\cr
+Function taking arguments nSplits, nRows, dframe, and y; returning a user desired split.
+\item \code{ncross} :: \code{integer(1)}\cr
+Integer larger than one, number of cross-validation rounds to design.
+\item \code{forceSplit} :: \code{logical(1)}\cr
+If \code{TRUE} force cross-validated significance calculations on all variables.
+\item \code{catScaling} :: \code{logical(1)}\cr
+If \code{TRUE} use \code{\link[stats:glm]{stats::glm()}} linkspace, if FALSE use \code{\link[stats:lm]{stats::lm()}} for scaling.
+\item \code{verbose} :: \code{logical(1)}\cr
+If \code{TRUE} print progress.
+\item \code{use_paralell} :: \code{logical(1)}\cr
+If \code{TRUE} use parallel methods.
+\item \code{missingness_imputation} :: \code{function}\cr
+Function of signature f(values: numeric, weights: numeric), simple missing value imputer.\cr
+Typically, an imputation via a \code{\link{PipeOp}} should be preferred, see \code{\link{PipeOpImpute}}.
+\item \code{pruneSig} :: \code{numeric(1)}\cr
+Suppress variables with significance above this level.
+Only effects [regression tasks\link[mlr3:TaskRegr]{mlr3::TaskRegr} and binary \link[mlr3:TaskClassif]{classification tasks}.
+\item \code{scale} :: \code{logical(1)}\cr
+If \code{TRUE} replace numeric variables with single variable model regressions ("move to outcome-scale").
+These have mean zero and (for variables with significant less than 1) slope 1 when regressed (lm for regression problems/glm for classification problems) against outcome.
+\item \code{varRestriction} :: \code{list()}\cr
+List of treated variable names to restrict to.
+Only effects [regression tasks\link[mlr3:TaskRegr]{mlr3::TaskRegr} and binary \link[mlr3:TaskClassif]{classification tasks}.
+\item \code{trackedValues} :: named \code{list()}\cr
+Named list mapping variables to know values, allows warnings upon novel level appearances (see \code{\link[vtreat:track_values]{vtreat::track_values()}}).
+Only effects [regression tasks\link[mlr3:TaskRegr]{mlr3::TaskRegr} and binary \link[mlr3:TaskClassif]{classification tasks}.
+\item \code{y_dependent_treatments} :: \code{character()}\cr
+Character what treatment types to build per-outcome level.
+Only effects multiclass \link[mlr3:TaskClassif]{classification tasks}.
+\item \code{imputation_map} :: named \code{list}\cr
+List of map from column names to functions of signature f(values: numeric, weights: numeric), simple missing value imputers.\cr
+Typically, an imputation via a \code{\link{PipeOp}} is to be preferred, see \code{\link{PipeOpImpute}}.
 }
+
+For more information, see \code{\link[vtreat:regression_parameters]{vtreat::regression_parameters()}}, \code{\link[vtreat:classification_parameters]{vtreat::classification_parameters()}}, or \code{\link[vtreat:multinomial_parameters]{vtreat::multinomial_parameters()}}.
 }
 
 \section{Internals}{
 
-Follows vtreat's fit/prepare interface.
+Follows vtreat's fit/prepare interface. See \code{\link[vtreat:NumericOutcomeTreatment]{vtreat::NumericOutcomeTreatment()}}, \code{\link[vtreat:BinomialOutcomeTreatment]{vtreat::BinomialOutcomeTreatment()}},
+\code{\link[vtreat:MultinomialOutcomeTreatment]{vtreat::MultinomialOutcomeTreatment()}}, \code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} and \code{\link[vtreat:prepare]{vtreat::prepare()}}.
 }
 
 \section{Methods}{
@@ -108,6 +156,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classweights}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
@@ -133,11 +182,13 @@ Other PipeOps:
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
@@ -155,6 +206,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
