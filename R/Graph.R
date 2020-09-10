@@ -295,7 +295,7 @@ Graph = R6Class("Graph",
             }
             txt = paste0("Output:<br>Name: ", out$name, "<br>Train: ", null_str(out$train), "<br>Predict: ", null_str(out$predict))
           } else {
-            txt = paste((gsub("<(.*)>", capture.output(self$pipeops[[node]]), replacement = "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
+            txt = paste((gsub("<(.*)>", utils::capture.output(self$pipeops[[node]]), replacement = "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
           }
           # Deal with special case: multiple edges between two pipeops
           if (length(txt) > 1) txt = paste0(txt, collapse = "<br>")

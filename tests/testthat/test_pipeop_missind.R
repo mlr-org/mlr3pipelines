@@ -94,7 +94,6 @@ test_that("PipeOpMissInd", {
   expect_null(task_predicted$missing_j)
 })
 
-
 # https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
 test_that("union with missing rows", {
   data("mtcars", package = "datasets")
@@ -122,7 +121,6 @@ test_that("union with missing rows", {
 
 # https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
 test_that("missind on full data returns empty task", {
-  library(mlr3learners)
   task = tsk("iris")
   imp_missind = po("missind")
   imp_missind$train(list(task))

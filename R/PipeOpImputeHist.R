@@ -69,7 +69,7 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
         return(super$.impute(feature, type, model, context))
       }
       which.bins = sample.int(length(model$counts), sum(is.na(feature)), replace = TRUE, prob = model$counts)
-      sampled = runif(length(which.bins), model$breaks[which.bins], model$breaks[which.bins + 1L])
+      sampled = stats::runif(length(which.bins), model$breaks[which.bins], model$breaks[which.bins + 1L])
       if (type == "integer") {
         sampled = as.integer(round(sampled))
       }
