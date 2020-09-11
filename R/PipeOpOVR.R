@@ -100,8 +100,7 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
       sapply(levels, function(l) {
         truthcol = task$data(cols = task$target_names)
         truthcol[[1]] = factor(ifelse(truthcol[[1]] == l, l, rest), levels = c(l, rest))
-        ntsk = task$clone(deep = TRUE)$cbind(truthcol)
-        convert_task(ntsk)
+        convert_task(task$clone(deep = TRUE)$cbind(truthcol))
       }, simplify = FALSE)
     }
   )
