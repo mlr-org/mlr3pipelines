@@ -13,6 +13,7 @@
   - PipeOpNMF
   - PipeOpColRoles
   - PipeOpVtreat
+* various bugfixes
 
 # mlr3pipelines 0.2.1
 
