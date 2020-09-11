@@ -51,15 +51,15 @@ The \verb{$state} is a named \code{list} with elements
 
 The parameters are the parameters inherited from \code{\link{PipeOp}}, as well as:
 \itemize{
-\item \code{measure} :: \code{\link[mlr3:Measure]{Measure}}\cr
-\code{\link[mlr3:Measure]{Measure}} | \code{character} to optimize.
+\item \code{measure} :: \code{\link[mlr3:Measure]{Measure}}  | \code{character}\cr
+\code{\link[mlr3:Measure]{Measure}} to optimize for.
 Will be converted to a \code{\link[mlr3:Measure]{Measure}} in case it is \code{character}.
 Initialized to \code{"classif.ce"}, i.e. misclassification error.
 \item \code{optimizer} :: \code{\link[bbotk:Optimizer]{Optimizer}}|\code{character(1)}\cr
 \code{\link[bbotk:Optimizer]{Optimizer}} used to find optimal thresholds.
 If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
 via \code{\link[bbotk:opt]{opt}}. Initialized to \code{\link[bbotk:OptimizerGenSA]{OptimizerGenSA}}.
-\item \code{log_level} :: \code{character(1)}|\code{integer(1)}\cr
+\item \code{log_level} :: \code{character(1)} | \code{integer(1)}\cr
 Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
 }
 }
@@ -91,7 +91,6 @@ pop$state
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
@@ -135,6 +134,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
+\code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},

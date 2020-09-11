@@ -16,7 +16,7 @@ test_that("LearnerClassifAvg", {
   expect_prediction(prd)
 
 
-  df = data.frame(x = matrix(runif(100), nrow = 10), y = as.factor(sample(c(0, 1), 10, replace = TRUE)))
+  df = data.frame(x = matrix(runif(90), nrow = 30), y = as.factor(sample(c(0, 1), 30, replace = TRUE)))
   tsk = TaskClassif$new(id = "tsk", backend = df, target = "y")
 
   for (predicttype in c("prob", "response")) {
@@ -26,7 +26,7 @@ test_that("LearnerClassifAvg", {
     lrn = LearnerClassifAvg$new()
     lrn$predict_type = predicttype
     expect_learner(lrn)
-    lrn$param_set$values = list(measure = msr("classif.acc"), algorithm = "NLOPT_LN_COBYLA")
+    lrn$param_set$values$measure = msr("classif.acc")
     lrn$train(intask)
     expect_list(lrn$model, names = "named")
     expect_numeric(lrn$model$weights, len = 3)
@@ -41,7 +41,7 @@ test_that("LearnerClassifAvg", {
       lrn = LearnerClassifAvg$new()
       lrn$predict_type = predicttype
       expect_learner(lrn)
-      lrn$param_set$values = list(measure = msr("classif.auc"), algorithm = "NLOPT_LN_COBYLA")
+      lrn$param_set$values$measure = msr("classif.auc")
       lrn$train(intask)
       expect_list(lrn$model, names = "named")
       expect_numeric(lrn$model$weights, len = 3)
@@ -90,7 +90,7 @@ test_that("LearnerRegrAvg", {
   lrn = LearnerRegrAvg$new()
   lrn$predict_type = "response"
   expect_learner(lrn)
-  lrn$param_set$values = list(measure = msr("regr.mse"), algorithm = "NLOPT_LN_COBYLA")
+  lrn$param_set$values$measure = msr("regr.mse")
   lrn$train(intask)
   expect_list(lrn$model, names = "named")
   expect_numeric(lrn$model$weights, len = 3)

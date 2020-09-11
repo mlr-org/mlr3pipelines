@@ -1,6 +1,7 @@
 #' @title PipeOpProxy
 #'
 #' @usage NULL
+#' @name mlr_pipeops_proxy
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
 #'
 #' @description

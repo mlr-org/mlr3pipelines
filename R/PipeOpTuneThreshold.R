@@ -38,15 +38,15 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOp`], as well as:
-#'  * `measure` :: [`Measure`][mlr3::Measure]\cr
-#'    [`Measure`][mlr3::Measure] | `character` to optimize.
+#'  * `measure` :: [`Measure`][mlr3::Measure]  | `character`\cr
+#'    [`Measure`][mlr3::Measure] to optimize for.
 #'    Will be converted to a [`Measure`][mlr3::Measure] in case it is `character`.
 #'    Initialized to `"classif.ce"`, i.e. misclassification error.
 #'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
 #'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
-#'  * `log_level` :: `character(1)`|`integer(1)`\cr
+#'  * `log_level` :: `character(1)` | `integer(1)`\cr
 #'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
 #'
 #' @section Internals:
@@ -75,21 +75,10 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   public = list(
     initialize = function(id = "tunethreshold", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = function(x)
-          check_r6(if (is.character(x)) msr(x) else x, "MeasureClassif"), tags = "train"),
-        ParamUty$new("optimizer", custom_check = function(x) {
-          msg = paste0("'optimizer' needs to inherit from 'bbotk::Optimizer' or be convertable to one via bbotk::opt().")
-          if (is.character(x)) {
-            if (!(x %in% c("gensa", "nloptr", "random_search"))) {
-              return(msg)
-            }
-          } else if (!inherits(x, "Optimizer")) {
-            return(msg)
-          }
-          return(TRUE)
-        }, tags = "train"),
+        ParamUty$new("measure", custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
+        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", tags = "train",
-          function(x) assert(check_string(x), check_integerish(x)))
+          function(x) check_string(x) %check||% check_integerish(x))
       ))
       ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
@@ -139,9 +128,9 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       )
       lgr = lgr::get_logger("bbotk")
       old_threshold = lgr$threshold
+      on.exit(lgr$set_threshold(old_threshold))
       lgr$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
-      on.exit(lgr$set_threshold(old_threshold))
       unlist(inst$result_x_domain)
     },
     .make_param_set = function(pred) {

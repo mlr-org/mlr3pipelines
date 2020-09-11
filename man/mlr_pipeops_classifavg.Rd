@@ -91,7 +91,6 @@ resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
@@ -134,6 +133,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
+\code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},

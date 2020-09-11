@@ -111,7 +111,6 @@ tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$re
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
@@ -155,6 +154,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
+\code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
 \code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
