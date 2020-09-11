@@ -44,22 +44,22 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \item \code{rank} :: \code{integer(1)}\cr
 Factorization rank, i.e., number of components. Default is \code{2}. See \code{\link[NMF:nmf]{nmf()}}.
 \item \code{method} :: \code{character(1)}\cr
-Specification of the NMF algorithm. See \code{\link[NMF:nmf]{nmf()}}.
+Specification of the NMF algorithm. Default is \code{"brunet"}. See \code{\link[NMF:nmf]{nmf()}}.
 \item \code{seed} :: \code{numeric(1)}\cr
 Specification of the starting point. See \code{\link[NMF:nmf]{nmf()}}.
 \item \code{nrun} :: \code{integer(1)}\cr
 Number of runs to performs. More than a single run allows for the computation of a consensus
 matrix which will also be stored in the \verb{$state}. See \code{\link[NMF:nmf]{nmf()}}.
-\item \code{options} :: \code{list()}\cr
+\item \code{options} :: named \code{list}\cr
 Named list of additional parameters. Default is \code{list()}. See \code{.options} in \code{\link[NMF:nmf]{nmf()}}.
-Note that the parameters \code{parallel} and \code{parallel.required} are always set to \code{FALSE} and
-cannot be changed.
+Initialized to parameters \code{parallel} and \code{parallel.required} set to \code{FALSE}, as it is recommended
+to use \code{mlr3}'s \code{future}-based parallelization.
 }
 }
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf}} function as well as \code{\link[NMF:basis-coef-methods]{basis}}, \code{\link[NMF:basis-coef-methods]{coef}} and
+Uses the \code{\link[NMF:nmf]{nmf}} function as well as \code{\link[NMF:basis]{basis}}, \code{\link[NMF:coef]{coef}} and
 \code{\link[MASS:ginv]{ginv}}.
 }
 
