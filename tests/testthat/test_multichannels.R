@@ -189,6 +189,7 @@ test_that("vararg passes args through as it should", {
     add_edge("nop3", "vararg", dst_channel = "...")$
     add_edge("nop2", "vararg", dst_channel = "input1")
 
-  expect_equal(nullgraph$train(list(1, 2, 3), single_input = FALSE)[[1]], list(`...` = 1, `...` = 3, input1 = 2))
+    # FIXME: check the following warning
+  expect_equal(suppressWarnings(nullgraph$train(list(1, 2, 3), single_input = FALSE))[[1]], list(`...` = 1, `...` = 3, input1 = 2))
 
 })
