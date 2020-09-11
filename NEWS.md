@@ -12,6 +12,7 @@
 * New PipeOps:
   - PipeOpNMF
   - PipeOpColRoles
+  - PipeOpVtreat
 
 # mlr3pipelines 0.2.1
 

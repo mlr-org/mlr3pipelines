@@ -80,7 +80,8 @@ Suggests:
     MASS,
     kknn,
     GenSA,
-    methods
+    methods,
+    vtreat
 RdMacros:
     mlr3misc
 Remotes:
@@ -161,6 +162,7 @@ Collate:
     'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
+    'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
