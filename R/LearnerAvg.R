@@ -26,7 +26,7 @@
 #'    Will be converted to a [`Measure`][mlr3::Measure] in case it is `character`.
 #'    Initialized to `"classif.ce"`, i.e. misclassification error for classification
 #'    and `"regr.mse"`, i.e. mean squared error for regression.
-#'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
+#'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer] | `character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
 #'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerNLoptr`][bbotk::OptimizerNLoptr].
@@ -59,7 +59,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
         ParamUty$new("measure", custom_check = curry(check_measure, class = "MeasureClassif"), tags = "train"),
         ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", default = "warn", tags = "train",
-          function(x) assert(check_string(x), check_integerish(x)))
+          function(x) check_string(x) %check&&% check_integerish(x))
       ))
       ps$values = list(measure = "classif.ce", optimizer = "nloptr", log_level = "warn")
       super$initialize(
@@ -132,7 +132,7 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
         ParamUty$new("measure", custom_check = curry(check_measure, class = "MeasureRegr"), tags = "train"),
         ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", default = "warn", tags = "train",
-          function(x) assert(check_string(x), check_integerish(x)))
+          function(x) check_string(x) %check&&% check_integerish(x))
       ))
       ps$values = list(measure = "regr.mse", optimizer = "nloptr", log_level = "warn")
       super$initialize(
@@ -210,4 +210,28 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       lgr$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
       unlist(inst$result_x_domain)
+}
+
+
+# Check whether an object is a measure or convertable to one via `msr()`
+check_measure = function(x, class = "Measure") {
+  if (is.character(x)) {
+    if (x %nin% mlr_measures$keys()) "Is a `character` but not a known measure" else TRUE
+  } else {
+    check_r6(x, class)
+  }
+}
+
+
+# Check whether an object is an Optimizer or in a fixed set of optimizers.
+check_optimizer = function(x, class = "Optimizer") {
+  if (is.character(x)) {
+    if (!(x %in% c("gensa", "nloptr", "random_search"))) {
+      paste0("optimizer must be convertable to a bbotk::Optimizer via bbotk::opt().")
+    } else {
+      TRUE
+    }
+  } else {
+    check_r6(optimizer)
+  }
 }
