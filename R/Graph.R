@@ -315,7 +315,7 @@ Graph = R6Class("Graph",
         }
         p
       } else {
-        suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
+        suppressWarnings(graphics::plot(ig, layout = layout))  # suppress partial matching warning
       }
     },
 
