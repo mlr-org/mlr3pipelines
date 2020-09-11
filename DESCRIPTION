@@ -84,9 +84,6 @@ Suggests:
     vtreat
 RdMacros:
     mlr3misc
-Remotes:
-    mlr-org/mlr3,
-    Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
