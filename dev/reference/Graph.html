@@ -255,7 +255,8 @@ The <code><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'
 Print a representation of the <code>Graph</code> on the console. Output is a table with one row for each contained <code><a href='PipeOp.html'>PipeOp</a></code> and
 columns <code>ID</code> (<code>$id</code> of <code>PipeOp</code>), <code>State</code> (short representation of <code>$state</code> of <code><a href='PipeOp.html'>PipeOp</a></code>), <code>sccssors</code> (<code><a href='PipeOp.html'>PipeOp</a></code>s that
 take their input directly from the <code><a href='PipeOp.html'>PipeOp</a></code> on this line), and <code>prdcssors</code> (the <code><a href='PipeOp.html'>PipeOp</a></code>s that produce the data
-that is read as input by the <code><a href='PipeOp.html'>PipeOp</a></code> on this line).</p></li>
+that is read as input by the <code><a href='PipeOp.html'>PipeOp</a></code> on this line). If <code>dot</code> is <code>TRUE</code>, print a DOT representation of the <code>Graph</code> on the console.
+The DOT output can be named via the argument <code>dotname</code> and the <code>fontsize</code> can also be specified.</p></li>
 <li><p><code>set_names(old, new)</code> <br />
 (<code>character</code>, <code>character</code>) -&gt; <code>self</code> <br />
 Rename <code><a href='PipeOp.html'>PipeOp</a></code>s: Change ID of each <code><a href='PipeOp.html'>PipeOp</a></code> as identified by <code>old</code> to the corresponding item in <code>new</code>. This should be used
