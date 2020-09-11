@@ -46,14 +46,14 @@ Factorization rank, i.e., number of components. Default is \code{2}. See \code{\
 \item \code{method} :: \code{character(1)}\cr
 Specification of the NMF algorithm. Default is \code{"brunet"}. See \code{\link[NMF:nmf]{nmf()}}.
 \item \code{seed} :: \code{numeric(1)}\cr
-Specification of the starting point. Default is \code{NULL}. See \code{\link[NMF:nmf]{nmf()}}.
+Specification of the starting point. See \code{\link[NMF:nmf]{nmf()}}.
 \item \code{nrun} :: \code{integer(1)}\cr
 Number of runs to performs. More than a single run allows for the computation of a consensus
 matrix which will also be stored in the \verb{$state}. See \code{\link[NMF:nmf]{nmf()}}.
-\item \code{options} :: \code{list()}\cr
-Named list of additional parameters. See \code{.options} in \code{\link[NMF:nmf]{nmf()}}.
-Note that the parameters \code{parallel} and \code{parallel.required} are always set to \code{FALSE} and
-cannot be changed.
+\item \code{options} :: named \code{list}\cr
+Named list of additional parameters. Default is \code{list()}. See \code{.options} in \code{\link[NMF:nmf]{nmf()}}.
+Initialized to parameters \code{parallel} and \code{parallel.required} set to \code{FALSE}, as it is recommended
+to use \code{mlr3}'s \code{future}-based parallelization.
 }
 }
 

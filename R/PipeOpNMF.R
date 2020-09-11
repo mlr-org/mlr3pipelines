@@ -36,14 +36,14 @@
 #' * `method` :: `character(1)`\cr
 #'   Specification of the NMF algorithm. Default is `"brunet"`. See [`nmf()`][NMF::nmf].
 #' * `seed` :: `numeric(1)`\cr
-#'   Specification of the starting point. Default is `NULL`. See [`nmf()`][NMF::nmf].
+#'   Specification of the starting point. See [`nmf()`][NMF::nmf].
 #' * `nrun` :: `integer(1)`\cr
 #'   Number of runs to performs. More than a single run allows for the computation of a consensus
 #'   matrix which will also be stored in the `$state`. See [`nmf()`][NMF::nmf].
-#' * `options` :: `list()`\cr
-#'   Named list of additional parameters. See `.options` in [`nmf()`][NMF::nmf].
-#'   Note that the parameters `parallel` and `parallel.required` are always set to `FALSE` and
-#'   cannot be changed.
+#' * `options` :: named `list`\cr
+#'   Named list of additional parameters. Default is `list()`. See `.options` in [`nmf()`][NMF::nmf].
+#'   Initialized to parameters `parallel` and `parallel.required` set to `FALSE`, as it is recommended 
+#'   to use `mlr3`'s `future`-based parallelization.
 #'
 #' @section Internals:
 #' Uses the [`nmf`][NMF::nmf] function as well as [`basis`][NMF::basis], [`coef`][NMF::coef] and
@@ -70,16 +70,16 @@ PipeOpNMF = R6Class("PipeOpNMF",
   public = list(
     initialize = function(id = "nmf", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamInt$new("rank", lower = 1L, upper = Inf, default = 2L, tags = c("train", "nmf")),
+        ParamInt$new("rank", lower = 1L, upper = Inf, tags = c("train", "nmf")),
         ParamFct$new("method", default = "brunet", tags = c("train", "nmf"),
           levels = c("brunet", "lee", "ls-nmf", "nsNMF", "offset", "pe-nmf", "snmf/r", "snmf/l")),
-        ParamDbl$new("seed", lower = -Inf, upper = Inf, special_vals = list(NULL), default = NULL,
+        ParamDbl$new("seed", lower = -Inf, upper = Inf, special_vals = list(NULL),
           tags = c("train", "nmf")),
         ParamInt$new("nrun", lower = 1L, upper = Inf, default = 1L, tags = c("train", "nmf")),
-        ParamUty$new("options", default = list(), tags = c("train", "nmf"),
+        ParamUty$new("options", tags = c("train", "nmf"),
           custom_check = function(x) check_list(x, any.missing = FALSE, names = "unique"))
       ))
-      ps$values = list(rank = 2L, method = "brunet", nrun = 1L, options = list())
+      ps$values = list(rank = 2L, options = list(parallel = FALSE, parallel.required = FALSE))
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
     }
   ),
@@ -90,8 +90,6 @@ PipeOpNMF = R6Class("PipeOpNMF",
 
       # handling of additional options
       args = self$param_set$get_values(tags = "nmf")
-      args$options$parallel = FALSE
-      args$options$parallel.required = FALSE
       names(args)[which(names(args) == "options")] = ".options"
 
       nmf = mlr3misc::invoke(NMF::nmf,

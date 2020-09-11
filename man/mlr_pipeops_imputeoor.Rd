@@ -49,14 +49,14 @@ The \verb{$state$model} contains either \code{".MISSING"} used for \code{charact
 The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
 \itemize{
 \item \code{min} :: \code{logical(1)} \cr
-Should \code{integer} and \code{numeric} features be shifted below the minimum? Default is TRUE. If FALSE
+Should \code{integer} and \code{numeric} features be shifted below the minimum? Initialized to TRUE. If FALSE
 they are shifted above the maximum. See also the description above.
 \item \code{offset} :: \code{numeric(1)} \cr
 Numerical non-negative offset as used in the description above for \code{integer} and \code{numeric}
-features. Default is 1.
+features. Initialized to 1.
 \item \code{multiplier} :: \code{numeric(1)} \cr
 Numerical non-negative multiplier as used in the description above for \code{integer} and \code{numeric}
-features. Default is 1.
+features. Initialized to 1.
 }
 }
 
