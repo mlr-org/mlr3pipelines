@@ -194,14 +194,14 @@ Factorization rank, i.e., number of components. Default is <code>2</code>. See <
 <li><p><code>method</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Specification of the NMF algorithm. Default is <code>"brunet"</code>. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
 <li><p><code>seed</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Specification of the starting point. Default is <code>NULL</code>. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+Specification of the starting point. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
 <li><p><code>nrun</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
 Number of runs to performs. More than a single run allows for the computation of a consensus
 matrix which will also be stored in the <code>$state</code>. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>options</code> :: <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code><br />
-Named list of additional parameters. See <code>.options</code> in <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.
-Note that the parameters <code>parallel</code> and <code>parallel.required</code> are always set to <code>FALSE</code> and
-cannot be changed.</p></li>
+<li><p><code>options</code> :: named <code>list</code><br />
+Named list of additional parameters. Default is <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>. See <code>.options</code> in <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.
+Initialized to parameters <code>parallel</code> and <code>parallel.required</code> set to <code>FALSE</code>, as it is recommended
+to use <code>mlr3</code>'s <code>future</code>-based parallelization.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -340,7 +340,7 @@ cannot be changed.</p></li>
 #&gt;   Iterations: 440 
 #&gt;   Timing:
 #&gt;      user  system elapsed 
-#&gt;     0.097   0.016   0.113 </div></pre>
+#&gt;     0.107   0.000   0.107 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
