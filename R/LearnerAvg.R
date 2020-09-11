@@ -232,6 +232,6 @@ check_optimizer = function(x, class = "Optimizer") {
       TRUE
     }
   } else {
-    check_r6(optimizer)
+    check_r6(x)
   }
 }
