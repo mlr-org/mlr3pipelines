@@ -248,7 +248,7 @@ The base implementation returns <code><a href='https://rdrr.io/r/base/list.html'
 Called by <code>PipeOpTargetTrafo</code>'s implementation of <code>private$.train()</code> and
 <code>private$.predict()</code>. Takes a single <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as input and modifies it.
 This should typically consist of calculating a new target and modifying the
-<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> by using the <code>[convert_task]</code> function. <code>.transform()</code> will be called during training and
+<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> by using the <code><a href='https://mlr3.mlr-org.com/reference/convert_task.html'>convert_task</a></code> function. <code>.transform()</code> will be called during training and
 prediction because the target (and if needed also type) of the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> must be transformed
 both times. Note that unlike <code>$.train()</code>, the argument is <em>not</em> a list but a singular
 <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, and the return object is also <em>not</em> a list but a singular <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.
