@@ -75,10 +75,10 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   public = list(
     initialize = function(id = "tunethreshold", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = check_measure_or_character, tags = "train"),
+        ParamUty$new("measure", custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
         ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", tags = "train",
-          function(x) check_string(x) %check&&% check_integerish(x))
+          function(x) check_string(x) %check||% check_integerish(x))
       ))
       ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
