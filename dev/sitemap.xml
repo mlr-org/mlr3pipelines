@@ -22,9 +22,6 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/PipeOpImpute.html</loc>
   </url>
   <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/PipeOpProxy.html</loc>
-  </url>
-  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/PipeOpTargetTrafo.html</loc>
   </url>
   <url>
@@ -221,6 +218,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_pca.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_proxy.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/mlr_pipeops_quantilebin.html</loc>

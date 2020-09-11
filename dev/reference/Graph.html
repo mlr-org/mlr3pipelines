@@ -250,9 +250,9 @@ are therefore unambiguous, they can be omitted (i.e. left as <code>NULL</code>).
 Plot the <code>Graph</code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
 the <code>visNetwork</code> package for <code>html = TRUE</code> producing a <code><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlWidget</a></code>.
 The <code><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlWidget</a></code> can be rescaled using <code><a href='https://rdrr.io/pkg/visNetwork/man/visOptions.html'>visOptions</a></code>.</p></li>
-<li><p><code><a href='https://rdrr.io/r/base/print.html'>print()</a></code> <br />
-() -&gt; <code>NULL</code> <br />
-Print a representation of the <code>Graph</code> on the console. Output is a table with one row for each contained <code><a href='PipeOp.html'>PipeOp</a></code> and
+<li><p><code><a href='https://rdrr.io/r/base/print.html'>print(dot = FALSE, dotname = "dot", fontsize = 24L)</a></code> <br />
+(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>) -&gt; <code>NULL</code> <br />
+Print a representation of the <code>Graph</code> on the console. If <code>dot</code> is <code>FALSE</code>, output is a table with one row for each contained <code><a href='PipeOp.html'>PipeOp</a></code> and
 columns <code>ID</code> (<code>$id</code> of <code>PipeOp</code>), <code>State</code> (short representation of <code>$state</code> of <code><a href='PipeOp.html'>PipeOp</a></code>), <code>sccssors</code> (<code><a href='PipeOp.html'>PipeOp</a></code>s that
 take their input directly from the <code><a href='PipeOp.html'>PipeOp</a></code> on this line), and <code>prdcssors</code> (the <code><a href='PipeOp.html'>PipeOp</a></code>s that produce the data
 that is read as input by the <code><a href='PipeOp.html'>PipeOp</a></code> on this line). If <code>dot</code> is <code>TRUE</code>, print a DOT representation of the <code>Graph</code> on the console.

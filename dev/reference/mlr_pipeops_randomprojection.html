@@ -222,7 +222,6 @@ Approach, Pg. 234.</p>
     <div class='dont-index'><p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
 <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
@@ -266,6 +265,7 @@ Approach, Pg. 234.</p>
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_proxy.html'>mlr_pipeops_proxy</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
@@ -310,25 +310,25 @@ Approach, Pg. 234.</p>
 #&gt; 148: virginica          5.2         2.0          6.5         3.0
 #&gt; 149: virginica          5.4         2.3          6.2         3.4
 #&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='kw'>pop</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-</div><div class='output co'>#&gt;        Species        PR1      PR2
-#&gt;   1:    setosa  1.7589182 1.527126
-#&gt;   2:    setosa  1.6574919 1.594524
-#&gt;   3:    setosa  1.6154625 1.406222
-#&gt;   4:    setosa  1.3991160 1.443240
-#&gt;   5:    setosa  1.6976284 1.446097
+</div><div class='output co'>#&gt;        Species       PR1       PR2
+#&gt;   1:    setosa -4.369718 -2.979254
+#&gt;   2:    setosa -4.136399 -2.711716
+#&gt;   3:    setosa -4.013726 -2.738403
+#&gt;   4:    setosa -3.959843 -2.527172
+#&gt;   5:    setosa -4.317203 -2.960870
 #&gt;  ---                              
-#&gt; 146: virginica -0.1369878 1.846045
-#&gt; 147: virginica -0.2352984 2.071930
-#&gt; 148: virginica -0.2846103 1.980150
-#&gt; 149: virginica -0.6015154 1.526166
-#&gt; 150: virginica -0.5743921 1.818145</div><div class='input'>
+#&gt; 146: virginica -4.699451 -2.220728
+#&gt; 147: virginica -4.552502 -1.787682
+#&gt; 148: virginica -4.755272 -1.975737
+#&gt; 149: virginica -4.453833 -1.968926
+#&gt; 150: virginica -4.444246 -1.636225</div><div class='input'>
 <span class='kw'>pop</span><span class='op'>$</span><span class='kw'>state</span>
 </div><div class='output co'>#&gt; $projection
-#&gt;                      PR1        PR2
-#&gt; Petal.Length -0.80550244  0.2624371
-#&gt; Petal.Width   0.10362243 -0.7686832
-#&gt; Sepal.Length  0.58267917  0.4824969
-#&gt; Sepal.Width  -0.03021903 -0.3277951
+#&gt;                     PR1        PR2
+#&gt; Petal.Length -0.1764286  0.6345601
+#&gt; Petal.Width   0.6583502 -0.4742909
+#&gt; Sepal.Length -0.7084212 -0.5135163
+#&gt; Sepal.Width  -0.1832685 -0.3296705
 #&gt; 
 #&gt; $dt_columns
 #&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
