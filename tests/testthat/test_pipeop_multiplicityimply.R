@@ -55,3 +55,15 @@ test_that("multiplicityimply - train and predict", {
   expect_equal(pout[[1]][[1]], t1)
   expect_equal(pout[[1]][[2]], t2)
 })
+
+test_that("multiplicityimply innum names are used", {
+  po = PipeOpMultiplicityImply$new(2)
+  expect_names(names(po$train(list(1, 2))[[1]]), "unnamed")
+  expect_names(names(po$predict(list(1, 2))[[1]]), "unnamed")
+  expect_equal(po$input$name, c("input1", "input2"))
+
+  po = PipeOpMultiplicityImply$new(c("a", "b"))
+  expect_equal(unclass(po$train(list(1, 2))[[1]]), list(a = 1, b = 2))
+  expect_equal(unclass(po$predict(list(3, 4))[[1]]), list(a = 3, b = 4))
+  expect_equal(po$input$name, c("a", "b"))
+})

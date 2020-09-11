@@ -281,18 +281,17 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTargetTrafo`], as well as:
-#' * `trafo` :: `function` `data.table` -> `data.table`\cr
+#' * `trafo` :: `function` `data.table` -> `data.table` | named `list`\cr
 #'   Transformation function for the target. Should only be a function of the target, i.e., taking a
 #'   single `data.table` argument, typically with one column. The return value is used as the new
 #'   target of the resulting [`Task`][mlr3::Task]. To change target names, change the column name of the data
 #'   using e.g. [`setnames()`][data.table::setnames].\cr
-#'   Note that this function also gets called during prediction and should thus gracefully handle
-#'   `NA` values.\cr
+#'   Note that this function also gets called during prediction and should thus gracefully handle `NA` values.\cr
 #'   Initialized to `identity()`.
-#' * `inverter` :: `function` `data.table` -> `data.table`\cr
-#'   Inversion of the transformation function for the target. Called with the `$data$tab` slot of a
-#'   [`Prediction`][mlr3::Prediction] (a `data.table`), without the `$row_id` and `$truth` columns,
-#'   and should return a `data.table` that contains the new relevant columns of a
+#' * `inverter` :: `function` `data.table` -> `data.table` | named `list`\cr
+#'   Inversion of the transformation function for the target. Called on the `$data` slot of a
+#'   [`Prediction`][mlr3::Prediction], i.e., a [`PredictionData`][mlr3::PredictionData] object, without the `$row_ids` and `$truth` slots,
+#'   and should return a `data.table` or named `list` that contains the new relevant slots of a
 #'   [`Prediction`][mlr3::Prediction] (e.g., `$response`). Initialized to `identity()`.
 #'
 #' @section Internals:
@@ -377,11 +376,11 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
 
     .invert = function(prediction, predict_phase_state) {
       type = private$.new_task_type %??% prediction$task_type
-      pred = prediction$data$tab
-      pred$row_id = NULL
-      pred$truth = NULL
+      pdata = prediction$data
+      pdata$row_ids = NULL
+      pdata$truth = NULL
       invoke(get(mlr_reflections$task_types[type]$prediction)$new, row_ids = prediction$row_ids,
-        truth = predict_phase_state$truth, .args = self$param_set$values$inverter(pred))
+        truth = predict_phase_state$truth, .args = self$param_set$values$inverter(pdata))
     }
   )
 )

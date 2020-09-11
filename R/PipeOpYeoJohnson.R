@@ -94,7 +94,7 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
     .predict_dt = function(dt, levels) {
       for (j in colnames(dt)) {
         set(dt, j = j,
-          value = predict(self$state$bc[[j]], newdata = dt[[j]]))
+          value = stats::predict(self$state$bc[[j]], newdata = dt[[j]]))
       }
       dt
     }

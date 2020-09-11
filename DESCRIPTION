@@ -47,8 +47,8 @@ Imports:
     data.table,
     digest,
     lgr,
-    mlr3 (>= 0.1.4),
-    mlr3misc (>= 0.1.4),
+    mlr3 (>= 0.6.0),
+    mlr3misc (>= 0.5.0),
     paradox,
     R6,
     withr
@@ -60,6 +60,7 @@ Suggests:
     knitr,
     lme4,
     mlbench,
+    bbotk (>= 0.2.0),
     mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
@@ -75,18 +76,23 @@ Suggests:
     kernlab,
     smotefamily,
     evaluate,
-    kknn
+    NMF,
+    MASS,
+    kknn,
+    GenSA,
+    methods
 RdMacros:
     mlr3misc
 Remotes:
     mlr-org/mlr3,
+    Bioconductor/Biobase,
     r-lib/testthat
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9000
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -105,6 +111,7 @@ Collate:
     'PipeOpClassWeights.R'
     'PipeOpClassifAvg.R'
     'PipeOpColApply.R'
+    'PipeOpColRoles.R'
     'PipeOpCollapseFactors.R'
     'PipeOpCopy.R'
     'PipeOpDateFeatures.R'
@@ -132,11 +139,13 @@ Collate:
     'PipeOpModelMatrix.R'
     'PipeOpMultiplicity.R'
     'PipeOpMutate.R'
+    'PipeOpNMF.R'
     'PipeOpNOP.R'
     'PipeOpOVR.R'
     'PipeOpPCA.R'
     'PipeOpProxy.R'
     'PipeOpQuantileBin.R'
+    'PipeOpRandomProjection.R'
     'PipeOpRandomResponse.R'
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
@@ -151,6 +160,7 @@ Collate:
     'PipeOpTextVectorizer.R'
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
+    'PipeOpTuneThreshold.R'
     'PipeOpUnbranch.R'
     'PipeOpYeoJohnson.R'
     'Selector.R'

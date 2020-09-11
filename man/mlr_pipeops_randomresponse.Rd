@@ -15,7 +15,7 @@ prediction.
 
 For \code{"prob"}, the responses are sampled according to
 the probabilities of the input \code{\link[mlr3:PredictionClassif]{PredictionClassif}}. For \code{"se"},
-responses are randomly drawn according to the \code{rdistfun} parameter (default is \code{rnorm}) by using
+responses are randomly drawn according to the \code{rdistfun} parameter (default is \code{\link{rnorm}}) by using
 the original responses of the input \code{\link[mlr3:PredictionRegr]{PredictionRegr}} as the mean and the
 original standard errors of the input \code{\link[mlr3:PredictionRegr]{PredictionRegr}} as the standard
 deviation (sampling is done observation-wise).
@@ -56,7 +56,7 @@ The \verb{$state} is left empty (\code{list()}).
 A function for generating random responses when the predict type is \code{"se"}. This function must
 accept the arguments \code{n} (integerish number of responses), \code{mean} (\code{numeric} for the mean),
 and \code{sd} (\code{numeric} for the  standard deviation), and must \emph{vectorize} over \code{mean}
-and \code{sd}. Default is \code{rnorm}.
+and \code{sd}. Default is \code{\link{rnorm}}.
 }
 }
 
@@ -111,6 +111,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classweights}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
@@ -136,11 +137,13 @@ Other PipeOps:
 \code{\link{mlr_pipeops_multiplicityexply}},
 \code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
@@ -157,6 +160,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_targettrafoscalerange}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_yeojohnson}},
