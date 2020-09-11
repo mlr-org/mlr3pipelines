@@ -33,7 +33,6 @@ test_that("train and predict", {
   g1x$train(task1)
   expect_equal(g1x$predict(task1)[[1L]], learner1$predict(task1))
 
-  requireNamespace("mlr3learners")
   task2 = mlr_tasks$get("mtcars")
   g2 = mlr3learners::LearnerRegrLM$new() %>>% PipeOpRandomResponse$new()
   g2$pipeops$regr.lm$learner$predict_type = "se"

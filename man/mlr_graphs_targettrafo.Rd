@@ -42,13 +42,13 @@ library("mlr3")
 
 tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
 tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
-tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+tt$param_set$values$targetmutate.inverter = function(x) 2 ^ x
 
 # gives the same as
 g = Graph$new()
 g$add_pipeop(PipeOpTargetMutate$new(param_vals = list(
   trafo = function(x) log(x, base = 2),
-  inverter = function(x) list(response = 2 ^ x$response))
+  inverter = function(x) 2 ^ x)
   )
 )
 g$add_pipeop(LearnerRegrRpart$new())
