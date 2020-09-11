@@ -93,7 +93,6 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
       list(as.Multiplicity(private$.splittask(inputs[[1]], self$state$levels)))
     },
     .splittask = function(task, levels) {
-      new_target = paste0(task$target_names, "_tmp")
       rest = "rest"
       while (rest %in% levels) {
         rest = paste0(rest, ".")
@@ -101,8 +100,8 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
       sapply(levels, function(l) {
         truthcol = task$data(cols = task$target_names)
         truthcol[[1]] = factor(ifelse(truthcol[[1]] == l, l, rest), levels = c(l, rest))
-        ntsk = task$clone(deep = TRUE)$cbind(set_names(truthcol, new_target))
-        convert_task(ntsk, new_target = new_target, drop_original_target = TRUE)
+        ntsk = task$clone(deep = TRUE)$cbind(truthcol)
+        convert_task(ntsk)
       }, simplify = FALSE)
     }
   )
