@@ -81,7 +81,7 @@
 #'   Called by [`PipeOpTargetTrafo`]'s implementation of `private$.train()` and
 #'   `private$.predict()`. Takes a single [`Task`][mlr3::Task] as input and modifies it.
 #'   This should typically consist of calculating a new target and modifying the
-#'   [`Task`][mlr3::Task] by using the `[convert_task]` function. `.transform()` will be called during training and
+#'   [`Task`][mlr3::Task] by using the [`convert_task`][mlr3::convert_task] function. `.transform()` will be called during training and
 #'   prediction because the target (and if needed also type) of the input [`Task`][mlr3::Task] must be transformed
 #'   both times. Note that unlike `$.train()`, the argument is *not* a list but a singular
 #'   [`Task`][mlr3::Task], and the return object is also *not* a list but a singular [`Task`][mlr3::Task].
@@ -133,7 +133,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
     },
 
     .transform = function(task, phase) {
-      # return a modified task, should make use of convert_task()
+      # return a modified task, should make use of mlr3::convert_task()
       stop("Abstract.")
     },
 
@@ -286,14 +286,13 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #'   single `data.table` argument, typically with one column. The return value is used as the new
 #'   target of the resulting [`Task`][mlr3::Task]. To change target names, change the column name of the data
 #'   using e.g. [`setnames()`][data.table::setnames].\cr
-#'   Note that this function also gets called during prediction and should thus gracefully handle
-#'   `NA` values.\cr
+#'   Note that this function also gets called during prediction and should thus gracefully handle `NA` values.\cr
 #'   Initialized to `identity()`.
-#' * `inverter` :: `function` `data.table` -> `data.table`\cr
-#'   Inversion of the transformation function for the target. Called with the `$data$tab` slot of a
-#'   [`Prediction`][mlr3::Prediction] (a `data.table`), without the `$row_id` and `$truth` columns,
-#'   and should return a `data.table` that contains the new relevant columns of a
-#'   [`Prediction`][mlr3::Prediction] (e.g., `$response`). Initialized to `identity()`.
+#' * `inverter` :: `function` `data.table` -> `data.table` | named `list`\cr
+#'   Inversion of the transformation function for the target. Called on a `data.table` created from a [`Prediction`][mlr3::Prediction]
+#'   using `as.data.table()`, without the `$row_ids` and `$truth` columns,
+#'   and should return a `data.table` or named `list` that contains the new relevant slots of a
+#'   [`Prediction`][mlr3::Prediction] subclass (e.g., `$response`, `$prob`, `$se`, ...). Initialized to `identity()`.
 #'
 #' @section Internals:
 #' Overloads [`PipeOpTargetTrafo`]'s `.transform()` and
@@ -372,12 +371,12 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     .transform = function(task, phase) {
       new_target = self$param_set$values$trafo(task$data(cols = task$target_names))
       task$cbind(new_target)
-      convert_task(task, new_target = colnames(new_target), new_type = private$.new_task_type)
+      convert_task(task, target = colnames(new_target), new_type = private$.new_task_type, drop_original_target = TRUE)
     },
 
     .invert = function(prediction, predict_phase_state) {
       type = private$.new_task_type %??% prediction$task_type
-      pred = prediction$data$tab
+      pred = as.data.table(prediction)
       pred$row_id = NULL
       pred$truth = NULL
       invoke(get(mlr_reflections$task_types[type]$prediction)$new, row_ids = prediction$row_ids,
@@ -474,7 +473,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
       new_target = self$state$offset + x * self$state$scale
       setnames(new_target, paste0(colnames(new_target), ".scaled"))
       task$cbind(new_target)
-      convert_task(task, new_target = colnames(new_target))
+      convert_task(task, target = colnames(new_target), drop_original_target = TRUE)
     },
 
     .invert = function(prediction, predict_phase_state) {
@@ -561,10 +560,10 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   public = list(
     initialize = function(id = "update_target", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("trafo", default = identity, tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
+        ParamUty$new("trafo", tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
         ParamUty$new("new_target_name", tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
         ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
-        ParamLgl$new("drop_original_target", default = TRUE, tags = c("train", "predict"))
+        ParamLgl$new("drop_original_target", tags = c("train", "predict"))
         )
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)
@@ -622,10 +621,10 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       list(private$.update_target(intask, drop_levels = FALSE))
     },
 
-    # Updates the target of a task and also the task_type (if needed), uses convert_task
+    # Updates the target of a task and also the task_type (if needed), uses mlr3::convert_task()
     .update_target = function(task, drop_levels) {
       pv = self$param_set$values
-      convert_task(task, new_target = pv$new_target_name,
+      convert_task(task, target = pv$new_target_name,
         new_type = pv$new_task_type, drop_original_target = pv$drop_original_target, drop_levels = drop_levels)
     }
   )

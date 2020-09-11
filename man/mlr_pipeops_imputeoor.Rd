@@ -49,14 +49,14 @@ The \verb{$state$model} contains either \code{".MISSING"} used for \code{charact
 The parameters are the parameters inherited from \code{\link{PipeOpImpute}}, as well as:
 \itemize{
 \item \code{min} :: \code{logical(1)} \cr
-Should \code{integer} and \code{numeric} features be shifted below the minimum? Default is TRUE. If FALSE
+Should \code{integer} and \code{numeric} features be shifted below the minimum? Initialized to TRUE. If FALSE
 they are shifted above the maximum. See also the description above.
 \item \code{offset} :: \code{numeric(1)} \cr
 Numerical non-negative offset as used in the description above for \code{integer} and \code{numeric}
-features. Default is 1.
+features. Initialized to 1.
 \item \code{multiplier} :: \code{numeric(1)} \cr
 Numerical non-negative multiplier as used in the description above for \code{integer} and \code{numeric}
-features. Default is 1.
+features. Initialized to 1.
 }
 }
 
@@ -136,6 +136,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
@@ -156,6 +157,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
+\code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 

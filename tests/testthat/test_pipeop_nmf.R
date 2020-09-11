@@ -1,6 +1,7 @@
 context("PipeOpNMF")
 
-test_that("PipeOpNMF - basic properties", {
+test_that("basic properties", {
+  skip_if_not_installed("NMF")
   op = PipeOpNMF$new()
   task = mlr_tasks$get("iris")
   expect_pipeop(op)
@@ -8,7 +9,8 @@ test_that("PipeOpNMF - basic properties", {
   expect_datapreproc_pipeop_class(PipeOpNMF, task = task, deterministic_train = FALSE)
 })
 
-test_that("PipeOpNMF - feature selector", {
+test_that("feature selector", {
+  skip_if_not_installed("NMF")
   op = PipeOpNMF$new()
   dat = iris
   dat$Sepal.Length[1L] <- -999
@@ -19,7 +21,8 @@ test_that("PipeOpNMF - feature selector", {
 })
 
 
-test_that("PipeOpNMF - parameters", {
+test_that("parameters", {
+  skip_if_not_installed("NMF")
   op = PipeOpNMF$new()
   op$param_set$values$rank = 3L
   op$param_set$values$nrun = 2L

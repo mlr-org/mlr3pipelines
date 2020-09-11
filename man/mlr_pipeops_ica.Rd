@@ -149,6 +149,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
@@ -169,6 +170,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
+\code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }

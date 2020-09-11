@@ -378,3 +378,51 @@ test_that("single pipeop plot", {
   expect_class(p, "htmlwidget")
   expect_class(p, "visNetwork")
 })
+
+test_that("dot output", {
+  gr = Graph$new()$add_pipeop(PipeOpDebugMulti$new(2, 2))
+  gr$add_pipeop(PipeOpDebugMulti$new(2, 3, "debug2"))
+  gr$add_pipeop(PipeOpDebugMulti$new(3, 2, "debug3"))
+  gr$add_edge("debug.multi", "debug3", 1, 2)
+  gr$add_edge("debug.multi", "debug3", "output_2", "input_1")
+  gr$add_edge("debug2", "debug.multi", 2, 1)
+  gr$add_edge("debug2", "debug.multi", "output_1", "input_2")
+  out = capture.output(gr$print(dot = TRUE, dotname = "test", fontsize = 20))
+  expect_true(out[1L] == "digraph test {")
+  expect_true(out[22L] == "}")
+  expect_setequal(c("1 -> 4;", "1 -> 4;", "2 -> 1;", "2 -> 1;", "3 -> 2;", "3 -> 2;",
+    "3 -> 4;", "2 -> 5;", "4 -> 6;", "4 -> 7;",
+    "1 [label=\"debug_multi\",fontsize=20];",
+    "2 [label=\"debug2\",fontsize=20];",
+    "3 [label=\"INPUT\",fontsize=20];",
+    "4 [label=\"debug3\",fontsize=20];",
+    "5 [label=\"OUTPUT",
+    "debug2_output_3\",fontsize=20];",
+    "6 [label=\"OUTPUT",
+    "debug3_output_1\",fontsize=20];",
+    "7 [label=\"OUTPUT",
+    "debug3_output_2\",fontsize=20]"), out[-c(1L, 22L)])
+
+  gr = Graph$new()
+  out = capture.output(print(gr, dot = TRUE))
+  expect_setequal(c("digraph dot {", "", "}"), out)
+
+  gr = Graph$new()$add_pipeop(po("scale"))
+  out = capture.output(gr$print(dot = TRUE))
+  expect_setequal(c("digraph dot {", "1 [label=\"scale\",fontsize=24]", "}"), out)
+
+  gr = po("scale") %>>% po("pca")
+  gr$add_pipeop(po("nop"))
+  out = capture.output(gr$print(dot = TRUE))
+  expect_true(out[1L] == "digraph dot {")
+  expect_true(out[15L] == "}")
+  expect_setequal(c("1 -> 3;", "2 -> 1;", "2 -> 4;", "3 -> 5;", "4 -> 6;",
+    "1 [label=\"scale\",fontsize=24];",
+    "2 [label=\"INPUT\",fontsize=24];",
+    "3 [label=\"pca\",fontsize=24];",
+    "4 [label=\"nop\",fontsize=24];",
+    "5 [label=\"OUTPUT",
+    "pca_output\",fontsize=24];",
+    "6 [label=\"OUTPUT",
+    "nop_output\",fontsize=24]"), out[-c(1L, 15L)])
+})

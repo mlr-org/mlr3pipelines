@@ -83,7 +83,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
   public = list(
     initialize = function(id = "randomresponse", param_vals = list(), packages = character(0L)) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("rdistfun", default = stats::rnorm, tags = c("predict", "required"), custom_check = function(x) {
+        ParamUty$new("rdistfun", tags = c("predict", "required"), custom_check = function(x) {
           check_function(x, args = c("n", "mean", "sd"))
         })
         )
@@ -109,10 +109,15 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
       response = switch(predict_type,
         "prob" = {
           # apply does annoying things if prob has 0 rows
-          values = if (nrow(prediction$data$prob)) apply(prediction$data$prob, 1, function(row) sample(levels(prediction$truth), 1, prob = row))
+          values = if (nrow(prediction$data$prob)) {
+            apply(prediction$data$prob, 1, function(row) sample(levels(prediction$truth), 1, prob = row))
+          }
           factor(values, levels = levels(prediction$truth), ordered = is.ordered(prediction$truth))
         },
-        "se" = prediction$data$tab[, self$param_set$values$rdistfun(n = get(".N"), mean = get("response"), sd = get("se"))]
+        "se" = {
+          tab = as.data.table(prediction)
+          tab[, self$param_set$values$rdistfun(n = get(".N"), mean = get("response"), sd = get("se"))]
+        }
       )
       type = prediction$task_type
       list(get(mlr_reflections$task_types[type]$prediction)$new(row_ids = prediction$row_ids,
