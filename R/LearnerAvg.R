@@ -56,7 +56,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
     initialize = function(id = "classif.avg") {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = curry(check_measure, class = "MeasureClassif"), tags = "train"),
+        ParamUty$new("measure", custom_check = check_measure_or_character, tags = "train"),
         ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", default = "warn", tags = "train",
           function(x) check_string(x) %check&&% check_integerish(x))
@@ -129,7 +129,7 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
     initialize = function(id = "regr.avg") {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = curry(check_measure, class = "MeasureRegr"), tags = "train"),
+        ParamUty$new("measure", custom_check = check_measure_or_character, tags = "train"),
         ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
         ParamUty$new("log_level", default = "warn", tags = "train",
           function(x) check_string(x) %check&&% check_integerish(x))

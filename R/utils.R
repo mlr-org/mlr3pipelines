@@ -47,6 +47,13 @@ task_filter_ex = function(task, row_ids) {
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
 check_function_or_null = function(x) check_function(x, null.ok = TRUE)
 check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE, min.len = 1, lower = 0, upper = 1)
+check_measure_or_character = function(x) {
+  if (is.character(x)) {
+    check_choice(x, mlr_measures$keys())
+  } else {
+    check_measure(x, class = "MeasureClassif")
+  }
+}
 curry = function(fn, ..., varname = "x") {
   arguments = list(...)
   function(x) {
@@ -55,10 +62,12 @@ curry = function(fn, ..., varname = "x") {
   }
 }
 
+
 # 'and' operator for checkmate check_*-functions
 # example:
 # check_numeric(x) %&&% check_true(all(x < 0))
 `%check&&%` = function(lhs, rhs) {
+  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", and ", rhs))
   if (isTRUE(lhs)) rhs else lhs
 }
 
@@ -83,9 +92,4 @@ multiplicity_recurse = function(.multip, .fun, ...) {
   } else {
     .fun(.multip, ...)
   }
-}
-
-`%check&&%` = function(lhs, rhs) {
-  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", and ", rhs))
-  if (isTRUE(lhs)) rhs else lhs
 }
