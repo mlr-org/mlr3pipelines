@@ -5,6 +5,7 @@
 * print() method of Graphs now also allows for printing a DOT representation on the console
 * state of PipeOps now reset to NULL if training fails
 * implemented as_learner.PipeOp
+* LearnerClassifAvg, LearnerRegrAvg use bbotk now
 * Changed PPLs:
   - fix how ppl_robustify detects whether a learner can handle factors
 * Changed PipeOps:
