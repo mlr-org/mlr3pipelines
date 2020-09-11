@@ -208,14 +208,14 @@ The Graph should return <code>NULL</code> during training and a
 #&gt; </div><div class='input'><span class='kw'>g2</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='kw'>task</span>)
 </div><div class='output co'>#&gt; $ovrunite.output
 #&gt; &lt;PredictionClassif&gt; for 178 observations:
-#&gt;     row_id truth response     prob.1     prob.2      prob.3
-#&gt;          1     1        1 0.96527672 0.02617753 0.008545751
-#&gt;          2     1        1 0.96527672 0.02617753 0.008545751
-#&gt;          3     1        1 0.96527672 0.02617753 0.008545751
-#&gt; ---                                                        
-#&gt;        176     3        3 0.15371834 0.02256311 0.823718549
-#&gt;        177     3        3 0.15371834 0.02256311 0.823718549
-#&gt;        178     3        3 0.04538261 0.02545150 0.929165893
+#&gt;     row_id truth response     prob.1     prob.2     prob.3
+#&gt;          1     1        1 0.94252715 0.04134153 0.01613132
+#&gt;          2     1        1 0.94252715 0.04134153 0.01613132
+#&gt;          3     1        1 0.94252715 0.04134153 0.01613132
+#&gt; ---                                                       
+#&gt;        176     3        3 0.05608258 0.03979826 0.90411916
+#&gt;        177     3        3 0.27135681 0.03072168 0.69792150
+#&gt;        178     3        3 0.01269962 0.04162741 0.94567297
 #&gt; </div><div class='input'>
 <span class='co'># Bagging outside OVR</span>
 <span class='kw'>g3</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"replicate"</span>, reps = <span class='fl'>3</span>) <span class='op'>%&gt;&gt;%</span>
@@ -228,13 +228,13 @@ The Graph should return <code>NULL</code> during training and a
 </div><div class='output co'>#&gt; $classifavg.output
 #&gt; &lt;PredictionClassif&gt; for 178 observations:
 #&gt;     row_id truth response     prob.1     prob.2    prob.3
-#&gt;          1     1        1 0.94297897 0.04120693 0.0158141
-#&gt;          2     1        1 0.94297897 0.04120693 0.0158141
-#&gt;          3     1        1 0.94297897 0.04120693 0.0158141
+#&gt;          1     1        1 0.95882795 0.02493035 0.0162417
+#&gt;          2     1        1 0.95882795 0.02493035 0.0162417
+#&gt;          3     1        1 0.95882795 0.02493035 0.0162417
 #&gt; ---                                                      
-#&gt;        176     3        3 0.08503485 0.03972120 0.8752440
-#&gt;        177     3        3 0.08503485 0.03972120 0.8752440
-#&gt;        178     3        3 0.01955021 0.04135189 0.9390979
+#&gt;        176     3        3 0.13587563 0.02183435 0.8422900
+#&gt;        177     3        3 0.13587563 0.02183435 0.8422900
+#&gt;        178     3        3 0.03608536 0.02380071 0.9401139
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

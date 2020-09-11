@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpScale — mlr_pipeops_scale • mlr3pipelines</title>
+<title>PipeOpVtreat — mlr_pipeops_vtreat • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,11 +47,12 @@
 
 
 
-<meta property="og:title" content="PipeOpScale — mlr_pipeops_scale" />
-<meta property="og:description" content="Centers all numeric features to mean = 0 (if center parameter is TRUE) and scales them
-by dividing them by their root-mean-square (if scale parameter is TRUE).
-The root-mean-square here is defined as sqrt(sum(x^2)/(length(x)-1)). If the center parameter
-is TRUE, this corresponds to the sd()." />
+<meta property="og:title" content="PipeOpVtreat — mlr_pipeops_vtreat" />
+<meta property="og:description" content="Provides an interface to the vtreat package.
+PipeOpVtreat naturally works for classification tasks and regression tasks.
+Internally, PipeOpVtreat follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
+vtreat::NumericOutcomeTreatment(), vtreat::BinomialOutcomeTreatment(), or vtreat::MultinomialOutcomeTreatment(), followed by calling
+vtreat::fit_prepare() on the training data and vtreat::prepare() during predicton." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -145,16 +146,17 @@ is TRUE, this corresponds to the sd()." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpScale</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpScale.R'><code>R/PipeOpScale.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_scale.Rd</code></div>
+    <h1>PipeOpVtreat</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpVtreat.R'><code>R/PipeOpVtreat.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_vtreat.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Centers all numeric features to mean = 0 (if <code>center</code> parameter is <code>TRUE</code>) and scales them
-by dividing them by their root-mean-square (if <code>scale</code> parameter is <code>TRUE</code>).</p>
-<p>The root-mean-square here is defined as <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt(sum(x^2)/(length(x)-1))</a></code>. If the <code>center</code> parameter
-is <code>TRUE</code>, this corresponds to the <code><a href='https://rdrr.io/r/stats/sd.html'>sd()</a></code>.</p>
+    <p>Provides an interface to the vtreat package.</p>
+<p><code>PipeOpVtreat</code> naturally works for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a> and <a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>regression tasks</a>.
+Internally, <code>PipeOpVtreat</code> follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
+<code><a href='https://rdrr.io/pkg/vtreat/man/NumericOutcomeTreatment.html'>vtreat::NumericOutcomeTreatment()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/BinomialOutcomeTreatment.html'>vtreat::BinomialOutcomeTreatment()</a></code>, or <code><a href='https://rdrr.io/pkg/vtreat/man/MultinomialOutcomeTreatment.html'>vtreat::MultinomialOutcomeTreatment()</a></code>, followed by calling
+<code><a href='https://rdrr.io/pkg/vtreat/man/fit_prepare.html'>vtreat::fit_prepare()</a></code> on the training data and <code><a href='https://rdrr.io/pkg/vtreat/man/prepare.html'>vtreat::prepare()</a></code> during predicton.</p>
     </div>
 
 
@@ -165,11 +167,11 @@ is <code>TRUE</code>, this corresponds to the <code><a href='https://rdrr.io/r/s
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpScale</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"scale"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<pre><span class='kw'>PipeOpVreat</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"vtreat"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"scale"</code>.</p></li>
+Identifier of resulting object, default <code>"vtreat"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -179,19 +181,16 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected numeric parameters centered and/or scaled.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected features "prepared" by vtreat.
+If vtreat found "no usable vars", the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> is returned unaltered.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
 <p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>center</code> :: <code>numeric</code><br />
-The mean / median (depending on <code>robust</code>) of each numeric feature during training, or 0 if <code>center</code> is <code>FALSE</code>. Will be subtracted during the predict phase.</p></li>
-<li><p><code>scale</code> :: <code>numeric</code><br />
-The value by which features are divided. 1 if <code>scale</code> is <code>FALSE</code><br />
-If <code>robust</code> is <code>FALSE</code>, this is the root mean square, defined as <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt(sum(x^2)/(length(x)-1))</a></code>, of each feature, possibly after centering.
-If <code>robust</code> is <code>TRUE</code>, this is the mean absolute deviation multiplied by 1.4826 (see <a href='https://rdrr.io/r/stats/mad.html'>stats::mad</a> of each feature, possibly after centering.
-This is 1 for features that are constant during training if <code>center</code> is <code>TRUE</code>, to avoid division-by-zero.</p></li>
+<li><p><code>treatment_plan</code> :: object of class <code>vtreat_pipe_step</code> | <code>NULL</code><br />
+The treatment plan as constructed by vtreat based on the training data, i.e., an object of class <code>treatment_plan</code>.
+If vtreat found "no usable vars" and designing the treatment would have failed, this is <code>NULL</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
@@ -199,22 +198,70 @@ This is 1 for features that are constant during training if <code>center</code> 
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>center</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Whether to center  features, i.e. subtract their <code><a href='https://rdrr.io/r/base/mean.html'>mean()</a></code> from them. Default <code>TRUE</code>.</p></li>
+<li><p><code>recommended</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Whether only the "recommended" prepared features should be returned, i.e., non constant
+variables with a significance value smaller than vtreat's threshold. Initialized to <code>TRUE</code>.</p></li>
+<li><p><code>cols_to_copy</code> :: <code>function</code> | <code><a href='Selector.html'>Selector</a></code> <br />
+<code><a href='Selector.html'>Selector</a></code> function, takes a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as argument and returns a <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code> of features to copy.<br />
+See <code><a href='Selector.html'>Selector</a></code> for example functions. Initialized to <code><a href='Selector.html'>selector_none()</a></code>.</p></li>
+<li><p><code>minFraction</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+Minimum frequency a categorical level must have to be converted to an indicator column.</p></li>
+<li><p><code>smFactor</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+Smoothing factor for impact coding models.</p></li>
+<li><p><code>rareCount</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+Allow levels with this count or below to be pooled into a shared rare-level.</p></li>
+<li><p><code>rareSig</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+Suppress levels from pooling at this significance value greater.</p></li>
+<li><p><code>collarProb</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+What fraction of the data (pseudo-probability) to collar data at if <code>doCollar = TRUE</code>.</p></li>
+<li><p><code>doCollar</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code> collar numeric variables by cutting off after a tail-probability specified by <code>collarProb</code> during treatment design.</p></li>
+<li><p><code>codeRestriction</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code><br />
+What types of variables to produce.</p></li>
+<li><p><code>customCoders</code> :: named <code>list</code><br />
+Map from code names to custom categorical variable encoding functions.</p></li>
+<li><p><code>splitFunction</code> :: <code>function</code><br />
+Function taking arguments nSplits, nRows, dframe, and y; returning a user desired split.</p></li>
+<li><p><code>ncross</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+Integer larger than one, number of cross-validation rounds to design.</p></li>
+<li><p><code>forceSplit</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code> force cross-validated significance calculations on all variables.</p></li>
+<li><p><code>catScaling</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code> use <code><a href='https://rdrr.io/r/stats/glm.html'>stats::glm()</a></code> linkspace, if FALSE use <code><a href='https://rdrr.io/r/stats/lm.html'>stats::lm()</a></code> for scaling.</p></li>
+<li><p><code>verbose</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code> print progress.</p></li>
+<li><p><code>use_paralell</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+If <code>TRUE</code> use parallel methods.</p></li>
+<li><p><code>missingness_imputation</code> :: <code>function</code><br />
+Function of signature f(values: numeric, weights: numeric), simple missing value imputer.<br />
+Typically, an imputation via a <code><a href='PipeOp.html'>PipeOp</a></code> should be preferred, see <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p></li>
+<li><p><code>pruneSig</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+Suppress variables with significance above this level.
+Only effects [regression tasks<a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>mlr3::TaskRegr</a> and binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a>.</p></li>
 <li><p><code>scale</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Whether to scale features, i.e. divide them by <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt(sum(x^2)/(length(x)-1))</a></code>. Default <code>TRUE</code>.</p></li>
-<li><p><code>robust</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Whether to use robust scaling; instead of scaling / centering with mean / standard deviation,
-median and median absolute deviation <code><a href='https://rdrr.io/r/stats/mad.html'>mad</a></code> are used.
-Initialized to <code>FALSE</code>.</p></li>
+If <code>TRUE</code> replace numeric variables with single variable model regressions ("move to outcome-scale").
+These have mean zero and (for variables with significant less than 1) slope 1 when regressed (lm for regression problems/glm for classification problems) against outcome.</p></li>
+<li><p><code>varRestriction</code> :: <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code><br />
+List of treated variable names to restrict to.
+Only effects [regression tasks<a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>mlr3::TaskRegr</a> and binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a>.</p></li>
+<li><p><code>trackedValues</code> :: named <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code><br />
+Named list mapping variables to know values, allows warnings upon novel level appearances (see <code><a href='https://rdrr.io/pkg/vtreat/man/track_values.html'>vtreat::track_values()</a></code>).
+Only effects [regression tasks<a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>mlr3::TaskRegr</a> and binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a>.</p></li>
+<li><p><code>y_dependent_treatments</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code><br />
+Character what treatment types to build per-outcome level.
+Only effects multiclass <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a>.</p></li>
+<li><p><code>imputation_map</code> :: named <code>list</code><br />
+List of map from column names to functions of signature f(values: numeric, weights: numeric), simple missing value imputers.<br />
+Typically, an imputation via a <code><a href='PipeOp.html'>PipeOp</a></code> is to be preferred, see <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p></li>
 </ul>
 
+<p>For more information, see <code><a href='https://rdrr.io/pkg/vtreat/man/regression_parameters.html'>vtreat::regression_parameters()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/classification_parameters.html'>vtreat::classification_parameters()</a></code>, or <code><a href='https://rdrr.io/pkg/vtreat/man/multinomial_parameters.html'>vtreat::multinomial_parameters()</a></code>.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Uses the <code><a href='https://rdrr.io/r/base/scale.html'>scale()</a></code> function for <code>robust = FALSE</code> and alternatively subtracts the
-<code>median</code> and divides by <code><a href='https://rdrr.io/r/stats/mad.html'>mad</a></code> for <code>robust = TRUE</code>.</p>
+<p>Follows vtreat's fit/prepare interface. See <code><a href='https://rdrr.io/pkg/vtreat/man/NumericOutcomeTreatment.html'>vtreat::NumericOutcomeTreatment()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/BinomialOutcomeTreatment.html'>vtreat::BinomialOutcomeTreatment()</a></code>,
+<code><a href='https://rdrr.io/pkg/vtreat/man/MultinomialOutcomeTreatment.html'>vtreat::MultinomialOutcomeTreatment()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/fit_prepare.html'>vtreat::fit_prepare()</a></code> and <code><a href='https://rdrr.io/pkg/vtreat/man/prepare.html'>vtreat::prepare()</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -278,6 +325,7 @@ Initialized to <code>FALSE</code>.</p></li>
 <code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code>,
 <code><a href='mlr_pipeops_scalemaxabs.html'>mlr_pipeops_scalemaxabs</a></code>,
 <code><a href='mlr_pipeops_scalerange.html'>mlr_pipeops_scalerange</a></code>,
+<code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
 <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
 <code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
@@ -290,37 +338,36 @@ Initialized to <code>FALSE</code>.</p></li>
 <code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
-<code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
-<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='kw'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2020</span>)
 
-<span class='kw'>pos</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199
-#&gt;   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881
-#&gt;   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751
-#&gt;   4:    setosa   -1.2791040  -1.3110521  -1.50149039  0.09788935
-#&gt;   5:    setosa   -1.3357516  -1.3110521  -1.01843718  1.24503015
-#&gt;  ---                                                            
-#&gt; 146: virginica    0.8168591   1.4439941   1.03453895 -0.13153881
-#&gt; 147: virginica    0.7035638   0.9192234   0.55148575 -1.27867961
-#&gt; 148: virginica    0.8168591   1.0504160   0.79301235 -0.13153881
-#&gt; 149: virginica    0.9301544   1.4439941   0.43072244  0.78617383
-#&gt; 150: virginica    0.7602115   0.7880307   0.06843254 -0.13153881</div><div class='input'>
-<span class='kw'>one_line_of_iris</span> <span class='op'>=</span> <span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>13</span>)
+<span class='kw'>make_data</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>nrows</span>) {
+    <span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(x = <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nrows</span>))
+    <span class='kw'>d</span>[<span class='st'>"y"</span>] <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span>(<span class='kw'>d</span>[[<span class='st'>"x"</span>]]) <span class='op'>+</span> <span class='fl'>0.01</span> <span class='op'>*</span> <span class='kw'>d</span>[[<span class='st'>"x"</span>]] <span class='op'>+</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nrows</span>)
+    <span class='kw'>d</span>[<span class='fl'>4</span><span class='op'>:</span><span class='fl'>10</span>, <span class='st'>"x"</span>] <span class='op'>=</span> <span class='fl'>NA</span>  <span class='co'># introduce NAs</span>
+    <span class='kw'>d</span>[<span class='st'>"xc"</span>] <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"level_"</span>, <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='kw'>d</span><span class='op'>$</span><span class='kw'>y</span> <span class='op'>/</span> <span class='fl'>5</span>, <span class='fl'>1</span>))
+    <span class='kw'>d</span>[<span class='st'>"x2"</span>] <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nrows</span>)
+    <span class='kw'>d</span>[<span class='kw'>d</span>[<span class='st'>"xc"</span>] <span class='op'>==</span> <span class='st'>"level_-1"</span>, <span class='st'>"xc"</span>] <span class='op'>=</span> <span class='fl'>NA</span>  <span class='co'># introduce a NA level</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>d</span>)
+}
 
-<span class='kw'>one_line_of_iris</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt; 1:  setosa          1.4         0.1          4.8           3</div><div class='input'>
-<span class='kw'>pos</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>one_line_of_iris</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt; 1:  setosa    -1.335752   -1.442245    -1.259964  -0.1315388</div></pre>
+<span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>TaskRegr</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"vtreat_regr"</span>, backend = <span class='fu'>make_data</span>(<span class='fl'>100</span>), target = <span class='st'>"y"</span>)
+
+<span class='kw'>pop</span> <span class='op'>=</span> <span class='kw'>PipeOpVtreat</span><span class='op'>$</span><span class='fu'>new</span>()
+<span class='kw'>pop</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))
+</div><div class='output co'>#&gt; $output
+#&gt; &lt;TaskRegr:vtreat_regr&gt; (100 x 8)
+#&gt; * Target: y
+#&gt; * Properties: -
+#&gt; * Features (7):
+#&gt;   - dbl (7): xc_catD, xc_catN, xc_catP, xc_lev_NA, xc_lev_x_level_0_5,
+#&gt;     xc_lev_x_level_1, xc_lev_x_level_minus_0_5
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
