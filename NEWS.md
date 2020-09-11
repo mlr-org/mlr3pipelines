@@ -1,5 +1,6 @@
 # mlr3pipelines 0.2.1-9000
 
+* compatibility with mlr3 0.6
 * NULL input channels accept any kind of input
 * state of PipeOps now reset to NULL if training fails
 * implemented as_learner.PipeOp
