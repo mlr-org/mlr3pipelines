@@ -115,6 +115,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ovrsplit}},
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},

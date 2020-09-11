@@ -59,7 +59,7 @@ cannot be changed.
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf}} function as well as \code{\link[NMF:basis-coef-methods]{basis}}, \code{\link[NMF:basis-coef-methods]{coef}} and
+Uses the \code{\link[NMF:nmf]{nmf}} function as well as \code{\link[NMF:basis]{basis}}, \code{\link[NMF:coef]{coef}} and
 \code{\link[MASS:ginv]{ginv}}.
 }
 
@@ -127,6 +127,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},

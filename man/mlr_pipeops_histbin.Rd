@@ -49,7 +49,7 @@ Either a \code{character(1)} string naming an algorithm to compute the number of
 a \code{numeric(1)} giving the number of breaks for the histogram,
 a vector \code{numeric} giving the breakpoints between the histogram cells, or
 a \code{function} to compute the vector of breakpoints or to compute the number
-of cells. Default is algorithm \code{"Sturges"} (see \code{\link[grDevices:nclass]{grDevices::nclass.Sturges()}}).
+of cells. Default is algorithm \code{"Sturges"} (see \code{\link[grDevices:nclass.Sturges]{grDevices::nclass.Sturges()}}).
 For details see \code{\link[graphics:hist]{hist()}}.
 }
 }
@@ -123,6 +123,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
