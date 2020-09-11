@@ -2,6 +2,7 @@
 
 * compatibility with mlr3 0.6
 * NULL input channels accept any kind of input
+* print() method of Graphs now also allows for printing a DOT representation on the console
 * state of PipeOps now reset to NULL if training fails
 * implemented as_learner.PipeOp
 * Changed PPLs:
