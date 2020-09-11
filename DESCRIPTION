@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.2.1-9000
+Version: 0.3.0
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -92,7 +92,7 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.0.0
 Collate:
     'Graph.R'
     'GraphLearner.R'
