@@ -48,7 +48,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
   if (!is.null(learner)) assert_learner(learner)
   if (is.null(impute_missings)) impute_missings = is.null(task) || (any(task$missings()) && (is.null(learner) || "missings" %nin% learner$properties))
   assert_flag(impute_missings)
-  if (is.null(factors_to_numeric)) factors_to_numeric = is.null(task) || (has_type_feats("factor") && (is.null(learner) || "factors" %nin% learner$properties))
+  if (is.null(factors_to_numeric)) factors_to_numeric = is.null(task) || (has_type_feats("factor") && (is.null(learner) || "factor" %nin% learner$feature_types))
   assert_flag(impute_missings)
   assert_count(max_cardinality)
 
@@ -275,13 +275,13 @@ mlr_graphs$add("branch", pipeline_branch)
 #'
 #' tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
-#' tt$param_set$values$targetmutate.inverter = function(x) 2 ^ x
+#' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
 #'
 #' # gives the same as
 #' g = Graph$new()
 #' g$add_pipeop(PipeOpTargetMutate$new(param_vals = list(
 #'   trafo = function(x) log(x, base = 2),
-#'   inverter = function(x) 2 ^ x)
+#'   inverter = function(x) list(response = 2 ^ x$response))
 #'   )
 #' )
 #' g$add_pipeop(LearnerRegrRpart$new())
