@@ -23,7 +23,7 @@ test_that("PipeOpOVRSplit - train and predict", {
   expect_true(all(pmap_lgl(list(tout[[1]], names(tout[[1]])), .f = function(task, name) {
     expect_task(task)
       all(task$target_names == tsk$target_names) && task$positive == name && task$negative == "rest." &&
-    all.equal(task$truth(), factor(ifelse(tsk$truth() == task$positive, task$positive, "rest."), levels = c(task$positive, "rest.")))
+      all.equal(task$truth(), factor(ifelse(tsk$truth() == task$positive, task$positive, "rest."), levels = c(task$positive, "rest.")))
   })))
 
   pout = predict_pipeop(po, list(tsk))
