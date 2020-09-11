@@ -45,14 +45,13 @@ Transformation function for the target. Should only be a function of the target,
 single \code{data.table} argument, typically with one column. The return value is used as the new
 target of the resulting \code{\link[mlr3:Task]{Task}}. To change target names, change the column name of the data
 using e.g. \code{\link[data.table:setnames]{setnames()}}.\cr
-Note that this function also gets called during prediction and should thus gracefully handle
-\code{NA} values.\cr
+Note that this function also gets called during prediction and should thus gracefully handle \code{NA} values.\cr
 Initialized to \code{identity()}.
-\item \code{inverter} :: \code{function} \code{data.table} -> \code{data.table}\cr
-Inversion of the transformation function for the target. Called with the \verb{$data$tab} slot of a
-\code{\link[mlr3:Prediction]{Prediction}} (a \code{data.table}), without the \verb{$row_id} and \verb{$truth} columns,
-and should return a \code{data.table} that contains the new relevant columns of a
-\code{\link[mlr3:Prediction]{Prediction}} (e.g., \verb{$response}). Initialized to \code{identity()}.
+\item \code{inverter} :: \code{function} \code{data.table} -> \code{data.table} | named \code{list}\cr
+Inversion of the transformation function for the target. Called on a \code{data.table} created from a \code{\link[mlr3:Prediction]{Prediction}}
+using \code{as.data.table()}, without the \verb{$row_ids} and \verb{$truth} columns,
+and should return a \code{data.table} or named \code{list} that contains the new relevant slots of a
+\code{\link[mlr3:Prediction]{Prediction}} subclass (e.g., \verb{$response}, \verb{$prob}, \verb{$se}, ...). Initialized to \code{identity()}.
 }
 }
 
@@ -157,6 +156,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
 \code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
@@ -176,6 +176,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
+\code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }

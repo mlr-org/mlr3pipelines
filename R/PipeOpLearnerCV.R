@@ -173,8 +173,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       if (pv$method != "insample") {
         rdesc = mlr_resamplings$get(pv$method)
         if (pv$method == "cv") rdesc$param_set$values = list(folds = pv$folds)
-        res = resample(task, private$.learner, rdesc)
-        prds = rbindlist(lapply(map(res$data$prediction, "test"), as.data.table))
+        rr = resample(task, private$.learner, rdesc)
+        prds = as.data.table(rr$prediction(predict_sets = "test"))
       } else {
         prds = as.data.table(private$.learner$predict(task))
       }
