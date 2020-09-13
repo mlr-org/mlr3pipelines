@@ -94,7 +94,7 @@ factor variables, no encoding is performed." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1-9000</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.0-9000</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -220,7 +220,8 @@ Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mlr3.mlr-org.com'>mlr3</a></span>)
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://mlr3.mlr-org.com'>mlr3</a></span>)
 <span class='kw'>lrn</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"regr.rpart"</span>)
 <span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>mlr_tasks</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"boston_housing"</span>)
 <span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'>pipeline_robustify</span>(<span class='kw'>task</span>, <span class='kw'>lrn</span>) <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='kw'>lrn</span>)
@@ -229,7 +230,8 @@ Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
 #&gt; * Task: boston_housing
 #&gt; * Learner: fixfactors.removeconstants.regr.rpart
 #&gt; * Warnings: 0 in 0 iterations
-#&gt; * Errors: 0 in 0 iterations</div></pre>
+#&gt; * Errors: 0 in 0 iterations</div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -94,7 +94,7 @@ If `" />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1-9000</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.0-9000</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -318,7 +318,8 @@ is used as input and output during prediction.</p>
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
 
 <span class='co'># Simple Bagging</span>
 <span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span>(<span class='st'>"greplicate"</span>,
@@ -333,7 +334,8 @@ is used as input and output during prediction.</p>
 #&gt; * Task: iris
 #&gt; * Learner: subsample_1.subsample_2.subsample_3.classif.rpart_1.classif.rpart_2.classif.rpart_3.classifavg
 #&gt; * Warnings: 0 in 0 iterations
-#&gt; * Errors: 0 in 0 iterations</div></pre>
+#&gt; * Errors: 0 in 0 iterations</div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
