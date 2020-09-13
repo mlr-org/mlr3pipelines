@@ -1,6 +1,7 @@
 context("GraphLearner")
 
 test_that("basic graphlearner tests", {
+  skip_on_cran()  # takes too long
   task = mlr_tasks$get("iris")
 
   lrn = mlr_learners$get("classif.rpart")
@@ -128,7 +129,7 @@ test_that("graphlearner parameters behave as they should", {
 })
 
 test_that("graphlearner type inference", {
-
+  skip_on_cran()  # takes too long
   # default: classif
   lrn = GraphLearner$new(mlr_pipeops$get("nop"))
   expect_equal(lrn$task_type, "classif")
@@ -196,6 +197,7 @@ test_that("graphlearner type inference", {
 })
 
 test_that("graphlearner type inference - branched", {
+  skip_on_cran()  # takes too long
 
   # default: classif
 
@@ -259,7 +261,7 @@ test_that("graphlearner type inference - branched", {
 })
 
 test_that("graphlearner predict type inference", {
-
+  skip_on_cran()  # takes too long
   # Getter:
 
   # Classification

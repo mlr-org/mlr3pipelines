@@ -63,6 +63,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' library("mlr3")
 #'
 #' # Simple Bagging
@@ -74,6 +75,7 @@
 #'   po("classifavg")
 #'
 #' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+#' }
 PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(

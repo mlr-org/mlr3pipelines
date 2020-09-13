@@ -1,4 +1,6 @@
-# mlr3pipelines 0.2.1-9000
+# mlr3pipelines 0.3.0-9000
+
+# mlr3pipelines 0.3.0
 
 * compatibility with mlr3 0.6
 * NULL input channels accept any kind of input

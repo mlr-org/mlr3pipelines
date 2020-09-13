@@ -39,9 +39,11 @@ This is done as follows:
 }
 }
 \examples{
+\donttest{
 library(mlr3)
 lrn_po = po("learner", lrn("regr.rpart"))
 task = mlr_tasks$get("boston_housing")
 gr = pipeline_bagging(lrn_po, 3, averager = po("regravg"))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
+}
 }
