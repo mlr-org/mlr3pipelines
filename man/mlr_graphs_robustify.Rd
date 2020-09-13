@@ -52,9 +52,11 @@ If a learner is provided, some steps can be left out, i.e. if the learner can de
 factor variables, no encoding is performed.
 }
 \examples{
+\donttest{
 library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
 gr = pipeline_robustify(task, lrn) \%>>\% po("learner", lrn)
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
+}
 }

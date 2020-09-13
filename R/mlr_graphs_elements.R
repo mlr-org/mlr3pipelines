@@ -33,11 +33,13 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \donttest{
 #' library(mlr3)
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
 #' gr = pipeline_robustify(task, lrn) %>>% po("learner", lrn)
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
+#' }
 pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NULL,
   factors_to_numeric = NULL, max_cardinality = 1000) {
 
@@ -129,11 +131,13 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \donttest{
 #' library(mlr3)
 #' lrn_po = po("learner", lrn("regr.rpart"))
 #' task = mlr_tasks$get("boston_housing")
 #' gr = pipeline_bagging(lrn_po, 3, averager = po("regravg"))
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
+#' }
 pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)
