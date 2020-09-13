@@ -84,11 +84,6 @@ shipped with the package, which can also be viewed online:
 
   - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
-  - [Detailed
-    Introduction](https://mlr3pipelines.mlr-org.com/articles/introduction.html),
-    diving into concepts and describing the objects involved
-  - [Comparison](https://mlr3pipelines.mlr-org.com/articles/comparison_mlr3pipelines_mlr_sklearn.html)
-    of `mlr3pipelines` with other packages (not yet authoritative)
 
 ## Bugs, Questions, Feedback
 
