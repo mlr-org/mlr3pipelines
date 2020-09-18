@@ -137,8 +137,8 @@ PipeOpNMF = R6Class("PipeOpNMF",
 
       # handling of parameters
       .args = self$param_set$get_values(tags = "nmf")
-      names(.args)[match(c("pbackend"), names(.args), nomatch = 0L)] = ".pbackend"
-      names(.args)[match(c("callback"), names(.args), nomatch = 0L)] = ".callback"
+      names(.args)[match("pbackend", names(.args), nomatch = 0L)] = ".pbackend"
+      names(.args)[match("callback", names(.args), nomatch = 0L)] = ".callback"
 
       nmf = mlr3misc::invoke(NMF::nmf,
         x = x,
