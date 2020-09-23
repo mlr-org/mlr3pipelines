@@ -121,8 +121,7 @@ expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
 
   uties = ps$params[ps$ids("ParamUty")]
   if (length(uties)) {
-    test_value = NO_DEF  # most custom_checks should fail
-    # FIXME: be more sensitive for the default function(x) TRUE?
+    test_value = NO_DEF  # custom_checks should fail for NO_DEF
     results = map(uties, function(uty) {
       uty$custom_check(test_value)
     })
