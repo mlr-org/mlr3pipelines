@@ -87,10 +87,9 @@ expect_shallow_clone = function(one, two) {
   }
 }
 
-
 # check basic properties of a pipeop object
 # - properties / methods as we need them
-expect_pipeop = function(po) {
+expect_pipeop = function(po, check_ps_default_values = TRUE) {
 
   label = sprintf("pipeop '%s'", po$id)
   expect_class(po, "PipeOp", label = label)
@@ -108,9 +107,40 @@ expect_pipeop = function(po) {
   expect_names(names(po$output), permutation.of = c("name", "train", "predict"))
   expect_int(po$innum, lower = 1)
   expect_int(po$outnum, lower = 1)
-  # at least one of "train" or "predict" must be in every parameter's tag
-  testthat::expect_true(every(po$param_set$tags, function(x) length(intersect(c("train", "predict"), x)) > 0))
+  expect_true(every(po$param_set$tags, function(x) length(intersect(c("train", "predict"), x)) > 0))
+  expect_valid_pipeop_param_set(po, check_ps_default_values = check_ps_default_values)
+}
 
+# autotest for the parmset of a pipeop
+# - at least one of "train" or "predict" must be in every parameter's tag
+# - custom checks of ParamUty return string on failure
+# - either default oder values are set; if both, they differ (only if check_ps_default_values = TRUE)
+expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
+  ps = po$param_set
+  expect_true(every(ps$tags, function(x) length(intersect(c("train", "predict"), x)) > 0L))
+
+  uties = ps$params[ps$ids("ParamUty")]
+  if (length(uties)) {
+    test_value = NO_DEF  # most custom_checks should fail
+    # FIXME: be more sensitive for the default function(x) TRUE?
+    results = map(uties, function(uty) {
+      uty$custom_check(test_value)
+    })
+    expect_true(all(map_lgl(results, function(result) {
+      length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
+    })), label = "custom_check returns string on failure")
+  }
+
+  if (check_ps_default_values) {
+    default = ps$default
+    values = ps$values
+    default_and_values = intersect(names(default), names(values))
+    if (length(default_and_values)) {
+      expect_true(all(pmap_lgl(list(default[default_and_values], values[default_and_values]), function(default, value) {
+        !identical(default, value)
+      })), label = "ParamSet default and values differ")
+    }
+  }
 }
 
 # Thoroughly check that do.call(poclass$new, constargs) creates a pipeop
@@ -118,11 +148,11 @@ expect_pipeop = function(po) {
 # - deep clone works
 # - *_internal checks for classes
 # - *_internal handles NO_OP as it should
-expect_pipeop_class = function(poclass, constargs = list()) {
+expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_values = TRUE) {
   skip_on_cran()
   po = do.call(poclass$new, constargs)
 
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = check_ps_default_values)
 
   poclone = po$clone(deep = TRUE)
   expect_deep_clone(po, poclone)
@@ -141,7 +171,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
   expect_error(po$predict(in_nonnop), "Pipeop .* got NO_OP during train")
 
   # check again with no_op-trained PO
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = check_ps_default_values)
   poclone = po$clone(deep = TRUE)
   expect_deep_clone(po, poclone)
 
@@ -173,7 +203,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
   affect_context_independent = TRUE,
-  tolerance = sqrt(.Machine$double.eps)) {
+  tolerance = sqrt(.Machine$double.eps),
+  check_ps_default_values = TRUE) {
   # NOTE
   # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
   # 'tolerance = tolerance' argument to `expect_equal`.
@@ -182,7 +213,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   original_clone = task$clone(deep = TRUE)
   expect_shallow_clone(task, original_clone)
 
-  expect_pipeop_class(poclass, constargs)
+  expect_pipeop_class(poclass, constargs, check_ps_default_values = check_ps_default_values)
 
   po = do.call(poclass$new, constargs)
   po2 = do.call(poclass$new, constargs)
@@ -388,23 +419,23 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 train_pipeop = function(po, inputs) {
 
   label = sprintf("pipeop '%s'", po$id)
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = FALSE)
   expect_null(po$state, label = label)
   expect_false(po$is_trained, label = label)
   result = po$train(inputs)
   expect_list(result, len = po$outnum, label = label)
   expect_true(!is.null(po$state), label = label)
   expect_true(po$is_trained, label = label)
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = FALSE)
   return(result)
 }
 
 predict_pipeop = function(po, inputs) {
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = FALSE)
   expect_true(po$is_trained)
   result = po$predict(inputs)
   expect_list(result, len = po$outnum)
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = FALSE)
   return(result)
 }
 
