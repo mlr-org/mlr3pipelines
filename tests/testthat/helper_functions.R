@@ -107,7 +107,6 @@ expect_pipeop = function(po, check_ps_default_values = TRUE) {
   expect_names(names(po$output), permutation.of = c("name", "train", "predict"))
   expect_int(po$innum, lower = 1)
   expect_int(po$outnum, lower = 1)
-  expect_true(every(po$param_set$tags, function(x) length(intersect(c("train", "predict"), x)) > 0))
   expect_valid_pipeop_param_set(po, check_ps_default_values = check_ps_default_values)
 }
 
