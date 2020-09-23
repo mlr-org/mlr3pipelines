@@ -113,8 +113,8 @@ expect_pipeop = function(po, check_ps_default_values = TRUE) {
 
 # autotest for the parmset of a pipeop
 # - at least one of "train" or "predict" must be in every parameter's tag
-# - custom checks of ParamUty return string on failure
-# - either default oder values are set; if both, they differ (only if check_ps_default_values = TRUE)
+# - custom_checks of ParamUty return string on failure
+# - either default or values are set; if both, they differ (only if check_ps_default_values = TRUE)
 expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
   ps = po$param_set
   expect_true(every(ps$tags, function(x) length(intersect(c("train", "predict"), x)) > 0L))
