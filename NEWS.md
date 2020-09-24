@@ -1,5 +1,8 @@
 # mlr3pipelines 0.3.0-9000
 
+* Changed PipeOps:
+  - PipeOpNMF: now exposes all parameters previously in .options
+
 # mlr3pipelines 0.3.0
 
 * compatibility with mlr3 0.6
