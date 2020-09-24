@@ -407,54 +407,54 @@ of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
 <span class='kw'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"textvectorizer"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(stopwords_language = <span class='st'>"en"</span>))
 
 <span class='kw'>pos</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.c txt.q
+</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.n
 #&gt;   1:    setosa          1.4         0.2          5.1         3.5     1     1
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0     0     0
+#&gt;   2:    setosa          1.4         0.2          4.9         3.0     1     0
 #&gt;   3:    setosa          1.3         0.2          4.7         3.2     0     0
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1     0     0
+#&gt;   4:    setosa          1.5         0.2          4.6         3.1     0     1
 #&gt;   5:    setosa          1.4         0.2          5.0         3.6     0     0
 #&gt;  ---                                                                        
-#&gt; 146: virginica          5.2         2.3          6.7         3.0     0     0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5     0     0
+#&gt; 146: virginica          5.2         2.3          6.7         3.0     0     1
+#&gt; 147: virginica          5.0         1.9          6.3         2.5     1     1
 #&gt; 148: virginica          5.2         2.0          6.5         3.0     0     0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4     0     0
+#&gt; 149: virginica          5.4         2.3          6.2         3.4     0     1
 #&gt; 150: virginica          5.1         1.8          5.9         3.0     0     0
-#&gt;      txt.f txt.g txt.b txt.v txt.e txt.u txt.y txt.j txt.w txt.z txt.t txt.d
+#&gt;      txt.e txt.x txt.y txt.p txt.j txt.l txt.h txt.v txt.m txt.o txt.r txt.f
 #&gt;   1:     1     0     0     0     0     0     0     0     0     0     0     0
-#&gt;   2:     0     1     1     0     0     0     0     0     0     0     0     0
-#&gt;   3:     0     0     0     1     1     1     0     0     0     0     0     0
-#&gt;   4:     0     0     0     0     1     0     1     1     0     0     0     0
-#&gt;   5:     0     0     0     0     0     0     0     0     1     0     0     0
+#&gt;   2:     1     1     0     0     0     0     0     0     0     0     0     0
+#&gt;   3:     1     0     1     1     0     0     0     0     0     0     0     0
+#&gt;   4:     1     0     0     0     1     0     0     0     0     0     0     0
+#&gt;   5:     0     1     0     0     0     1     1     0     0     0     0     0
 #&gt;  ---                                                                        
-#&gt; 146:     0     0     0     0     0     0     0     0     0     0     0     1
-#&gt; 147:     0     0     0     0     0     0     1     0     0     0     0     0
+#&gt; 146:     0     0     0     0     0     0     1     0     0     0     1     0
+#&gt; 147:     0     0     0     0     0     0     0     0     0     1     0     0
 #&gt; 148:     0     1     0     0     0     0     0     0     0     0     0     0
-#&gt; 149:     0     0     0     1     0     0     0     0     0     0     0     1
-#&gt; 150:     0     0     1     0     0     0     0     0     0     0     0     0
-#&gt;      txt.h txt.p txt.n txt.o txt.r txt.k txt.s txt.l txt.x txt.m
+#&gt; 149:     0     0     0     0     0     0     0     0     0     1     0     0
+#&gt; 150:     0     0     0     0     1     0     0     0     0     0     1     0
+#&gt;      txt.k txt.t txt.s txt.u txt.b txt.z txt.c txt.q txt.g txt.w
 #&gt;   1:     0     0     0     0     0     0     0     0     0     0
 #&gt;   2:     0     0     0     0     0     0     0     0     0     0
 #&gt;   3:     0     0     0     0     0     0     0     0     0     0
 #&gt;   4:     0     0     0     0     0     0     0     0     0     0
 #&gt;   5:     0     0     0     0     0     0     0     0     0     0
 #&gt;  ---                                                            
-#&gt; 146:     0     1     0     0     0     0     0     0     1     0
-#&gt; 147:     0     0     0     0     1     0     0     0     0     0
-#&gt; 148:     0     1     0     0     0     0     0     0     0     0
-#&gt; 149:     0     0     1     0     0     0     0     0     0     0
-#&gt; 150:     1     0     0     0     0     0     1     0     0     0</div><div class='input'>
+#&gt; 146:     0     0     0     0     0     0     0     0     0     0
+#&gt; 147:     0     0     0     0     0     0     0     0     0     0
+#&gt; 148:     0     0     0     0     1     0     0     0     0     1
+#&gt; 149:     0     0     0     1     0     0     0     0     0     0
+#&gt; 150:     0     0     0     0     0     0     1     0     0     0</div><div class='input'>
 <span class='kw'>one_line_of_iris</span> <span class='op'>=</span> <span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>13</span>)
 
 <span class='kw'>one_line_of_iris</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
 </div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width   txt
-#&gt; 1:  setosa          1.4         0.1          4.8           3 n o i</div><div class='input'>
+#&gt; 1:  setosa          1.4         0.1          4.8           3 i k f</div><div class='input'>
 <span class='kw'>pos</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>one_line_of_iris</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
-</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.c txt.q txt.f
+</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.n txt.e
 #&gt; 1:  setosa          1.4         0.1          4.8           3     0     0     0
-#&gt;    txt.g txt.b txt.v txt.e txt.u txt.y txt.j txt.w txt.z txt.t txt.d txt.h
-#&gt; 1:     0     0     0     0     0     0     0     0     0     0     0     0
-#&gt;    txt.p txt.n txt.o txt.r txt.k txt.s txt.l txt.x txt.m
-#&gt; 1:     0     1     1     0     0     0     0     0     0</div></pre>
+#&gt;    txt.x txt.y txt.p txt.j txt.l txt.h txt.v txt.m txt.o txt.r txt.f txt.k
+#&gt; 1:     0     0     0     0     0     0     0     0     0     0     1     1
+#&gt;    txt.t txt.s txt.u txt.b txt.z txt.c txt.q txt.g txt.w
+#&gt; 1:     0     0     0     0     0     0     0     0     0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -303,27 +303,27 @@ doi: <a href='https://doi.org/10.1613/jair.953'>10.1613/jair.953</a>
 <span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>TaskClassif</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"example"</span>, backend = <span class='kw'>data</span>, target = <span class='st'>"result"</span>)
 <span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
 </div><div class='output co'>#&gt;       result          X1         X2
-#&gt;    1:      n 0.392908128 0.96535926
-#&gt;    2:      n 0.883594239 0.07999156
-#&gt;    3:      p 0.521621926 0.64078125
+#&gt;    1:      p 0.546145996 0.67961492
+#&gt;    2:      n 0.079991565 0.61547644
+#&gt;    3:      n 0.643280776 0.03632103
 #&gt;    4:      n 0.731377352 0.32976618
 #&gt;    5:      n 0.004454134 0.94679939
 #&gt;   ---                              
-#&gt;  996:      n 0.560680656 0.76750901
-#&gt;  997:      n 0.752437626 0.84067719
-#&gt;  998:      n 0.629311925 0.85093931
-#&gt;  999:      p 0.607156249 0.52193177
-#&gt; 1000:      n 0.026633458 0.57191021</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()<span class='op'>$</span><span class='kw'>result</span>)
+#&gt;  996:      n 0.629311925 0.85093931
+#&gt;  997:      p 0.607156249 0.52193177
+#&gt;  998:      n 0.026633458 0.57191021
+#&gt;  999:      n 0.380717913 0.93177893
+#&gt; 1000:      n 0.430693496 0.74375332</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()<span class='op'>$</span><span class='kw'>result</span>)
 </div><div class='output co'>#&gt; 
 #&gt;   n   p 
-#&gt; 830 170 </div><div class='input'>
+#&gt; 835 165 </div><div class='input'>
 <span class='co'># Generate synthetic data for minority class</span>
 <span class='kw'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"smote"</span>)
 <span class='kw'>smotedata</span> <span class='op'>=</span> <span class='kw'>pop</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>smotedata</span><span class='op'>$</span><span class='kw'>result</span>)
 </div><div class='output co'>#&gt; 
 #&gt;   n   p 
-#&gt; 830 680 </div></pre>
+#&gt; 835 825 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
