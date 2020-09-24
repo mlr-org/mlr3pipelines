@@ -1,5 +1,7 @@
 # mlr3pipelines 0.3.0-9000
 
+* added an autotest for ParamSets of PipeOps: expect_valid_pipeop_param_set
+
 # mlr3pipelines 0.3.0
 
 * compatibility with mlr3 0.6
