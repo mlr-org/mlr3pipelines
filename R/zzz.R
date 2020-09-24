@@ -14,6 +14,8 @@ register_mlr3 = function() {
   x$pipeops$valid_tags = unique(c(x$pipeops$valid_tags,
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode", "multiplicity")))
+   x$learner_predict_types$classif$impact = "impact"
+   x$learner_predict_types$regr$impact = "impact"
 }
 
 .onLoad = function(libname, pkgname) {  # nocov start

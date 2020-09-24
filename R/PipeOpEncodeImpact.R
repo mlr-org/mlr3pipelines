@@ -236,3 +236,83 @@ get_impact = function(task_type, folds_seq, train_sets, dt, target, smoothing, i
     })
   )
 }
+
+LearnerEncodeImpact = R6Class("LearnerEncodeImpact", inherit = Learner)
+
+LearnerEncodeImpactClassif = R6Class("LearnerEncodeImpactClassif", inherit = LearnerEncodeImpact,
+  public = list(
+    initialize = function(id, param_set = ParamSet$new(), predict_types = "impact", feature_types = character(), properties = character(), data_formats = "data.table", packages = character(), man = NA_character_) {
+      super$initialize(id = id, task_type = "classif", param_set = param_set, feature_types = feature_types,
+        predict_types = predict_types, properties = properties, data_formats = data_formats, packages = packages, man = man)
+    }
+  )
+)
+
+LearnerEncodeImpactClassifSimple = R6Class("LearnerEncodeImpactClassifSimple", inherit = LearnerEncodeImpactClassif,
+  public = list(
+    initialize = function() {
+      ps = ParamSet$new(list(
+        ParamUty$new("affect_columns", custom_check = check_function_or_null, default = selector_all(), tags = "train"),
+        ParamDbl$new("smoothing", lower = 0, upper = Inf, tags = c("train", "required")),
+        ParamLgl$new("impute_zero", tags = c("train", "required"))
+      ))
+      ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
+      super$initialize(
+        id = "encode.impact.classif.simple",
+        feature_types = c("factor", "ordered"),
+        predict_types = "impact",
+        param_set = ps,
+        properties = c("twoclass", "multiclass", "missings"),
+        man = NA_character_
+      )
+    }
+  ),
+
+  private = list(
+    .train = function(task) {
+      # FIXME: affect_columns
+      dt = task$data(cols = task$feature_names)
+      target = task$truth()
+      smoothing = self$param_set$values$smoothing
+      model = sapply(dt, function(col) {
+        sapply(levels(target), function(tl) {
+          tprop = (sum(target == tl) + smoothing) / (length(target) + 2 * smoothing)
+          tplogit = log(tprop / (1 - tprop))
+          map_dbl(c(stats::setNames(levels(col), levels(col)), c(.TEMP.MISSING = NA)),
+            function(cl) {
+              if (!self$param_set$values$impute_zero && is.na(cl)) return(NA_real_)
+              condprob = (sum(target[is.na(cl) | col == cl] == tl, na.rm = TRUE) + smoothing) / (sum(is.na(cl) | col == cl, na.rm = TRUE) + 2 * smoothing)
+              cplogit = log(condprob / (1 - condprob))
+              cplogit - tplogit
+            }
+          )
+        })
+      }, simplify = FALSE)
+      set_class(model, "encode.impact.classif.simple_model")
+    },
+
+    .predict = function(task) {
+      model = self$state$model
+      dt = task$data(cols = task$feature_names)
+      impact = imap(dt, function(curdat, idx) {
+        curdat = as.character(curdat)
+        curdat[is.na(curdat)] = ".TEMP.MISSING"
+        curdat[curdat %nin% rownames(model[[idx]])] = ".TEMP.MISSING"
+        # we only want to "drop" if there are no column names.
+        # otherwise we want the naming scheme <original feature name>.<target level>
+        model[[idx]][match(curdat, rownames(model[[idx]])), , drop = is.null(colnames(model[[idx]]))]
+      })
+      list(impact = impact)
+
+    }
+  )
+)
+
+check_prediction_data.PredictionDataEncodeImpact = function(pdata) {
+  browser()
+  pdata
+}
+
+as_prediction.PredictionDataEncodeImpact = function(x, check = TRUE) {
+  invoke(PredictionEncodeImpact$new, check = check, .args = x)
+}
