@@ -167,7 +167,7 @@ this means e.g. that setting <code>nfeat</code> to 0 will only remove features o
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpFilter</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>filter</span>, id = <span class='kw'>filter</span><span class='op'>$</span><span class='kw'>id</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<pre><span class='va'>PipeOpFilter</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>filter</span>, id <span class='op'>=</span> <span class='va'>filter</span><span class='op'>$</span><span class='va'>id</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>filter</code> :: <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code><br />
@@ -312,41 +312,41 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3filters.mlr-org.com'>"mlr3filters"</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3filters.mlr-org.com'>"mlr3filters"</a></span><span class='op'>)</span>
 
 <span class='co'># setup PipeOpFilter to keep the 5 most important</span>
 <span class='co'># features of the spam task w.r.t. their AUC</span>
-<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"spam"</span>)
-<span class='kw'>filter</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span>(<span class='st'>"auc"</span>)
-<span class='kw'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"filter"</span>, filter = <span class='kw'>filter</span>)
-<span class='kw'>po</span><span class='op'>$</span><span class='kw'>param_set</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span>
+<span class='va'>filter</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span><span class='op'>(</span><span class='st'>"auc"</span><span class='op'>)</span>
+<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"filter"</span>, filter <span class='op'>=</span> <span class='va'>filter</span><span class='op'>)</span>
+<span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span>
 </div><div class='output co'>#&gt; &lt;ParamSetCollection:auc&gt;
 #&gt;                id    class lower upper levels        default value
 #&gt; 1:   filter.nfeat ParamInt     0   Inf        &lt;NoDefault[3]&gt;      
 #&gt; 2:    filter.frac ParamDbl     0     1        &lt;NoDefault[3]&gt;      
 #&gt; 3:  filter.cutoff ParamDbl  -Inf   Inf        &lt;NoDefault[3]&gt;      
-#&gt; 4: affect_columns ParamUty    NA    NA         &lt;Selector[1]&gt;      </div><div class='input'><span class='kw'>po</span><span class='op'>$</span><span class='kw'>param_set</span><span class='op'>$</span><span class='kw'>values</span><span class='op'>$</span><span class='kw'>filter.nfeat</span> <span class='op'>=</span> <span class='fl'>5</span>
+#&gt; 4: affect_columns ParamUty    NA    NA         &lt;Selector[1]&gt;      </div><div class='input'><span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>filter.nfeat</span> <span class='op'>=</span> <span class='fl'>5</span>
 
 <span class='co'># filter the task</span>
-<span class='kw'>filtered_task</span> <span class='op'>=</span> <span class='kw'>po</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]
+<span class='va'>filtered_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
 
 <span class='co'># filtered task + extracted AUC scores</span>
-<span class='kw'>filtered_task</span><span class='op'>$</span><span class='kw'>feature_names</span>
+<span class='va'>filtered_task</span><span class='op'>$</span><span class='va'>feature_names</span>
 </div><div class='output co'>#&gt; [1] "capitalAve"      "capitalLong"     "charDollar"      "charExclamation"
-#&gt; [5] "your"           </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>po</span><span class='op'>$</span><span class='kw'>state</span><span class='op'>$</span><span class='kw'>scores</span>, <span class='fl'>10</span>)
+#&gt; [5] "your"           </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>po</span><span class='op'>$</span><span class='va'>state</span><span class='op'>$</span><span class='va'>scores</span>, <span class='fl'>10</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; charExclamation     capitalLong      capitalAve            your      charDollar 
 #&gt;       0.3290461       0.3041626       0.2882004       0.2801659       0.2721394 
 #&gt;    capitalTotal            free             our             you          remove 
 #&gt;       0.2622801       0.2327285       0.2109325       0.2104681       0.2031303 </div><div class='input'>
 <span class='co'># feature selection embedded in a 3-fold cross validation</span>
 <span class='co'># keep 30% of features based on their AUC score</span>
-<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"spam"</span>)
-<span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"filter"</span>, filter = <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span>(<span class='st'>"auc"</span>), filter.frac = <span class='fl'>0.5</span>) <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>))
-<span class='kw'>learner</span> <span class='op'>=</span> <span class='kw'>GraphLearner</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>gr</span>)
-<span class='kw'>rr</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='kw'>task</span>, <span class='kw'>learner</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"holdout"</span>), store_models = <span class='fl'>TRUE</span>)
-<span class='kw'>rr</span><span class='op'>$</span><span class='kw'>learners</span>[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='kw'>model</span><span class='op'>$</span><span class='kw'>auc</span><span class='op'>$</span><span class='kw'>scores</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span>
+<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"filter"</span>, filter <span class='op'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span><span class='op'>(</span><span class='st'>"auc"</span><span class='op'>)</span>, filter.frac <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>learner</span> <span class='op'>=</span> <span class='va'><a href='mlr_learners_graph.html'>GraphLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>
+<span class='va'>rr</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span><span class='op'>(</span><span class='va'>task</span>, <span class='va'>learner</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span><span class='op'>(</span><span class='st'>"holdout"</span><span class='op'>)</span>, store_models <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>rr</span><span class='op'>$</span><span class='va'>learners</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>model</span><span class='op'>$</span><span class='va'>auc</span><span class='op'>$</span><span class='va'>scores</span>
 </div><div class='output co'>#&gt;   charExclamation       capitalLong        capitalAve              your 
 #&gt;      3.290018e-01      3.084719e-01      2.924356e-01      2.850997e-01 
 #&gt;        charDollar      capitalTotal              free               you 

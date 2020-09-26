@@ -155,8 +155,8 @@ vtreat::fit_prepare() on the training data and vtreat::prepare() during predicto
     <p>Provides an interface to the vtreat package.</p>
 <p><code>PipeOpVtreat</code> naturally works for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a> and <a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>regression tasks</a>.
 Internally, <code>PipeOpVtreat</code> follows the fit/prepare interface of vtreat, i.e., first creating a data treatment transform object via
-<code><a href='https://rdrr.io/pkg/vtreat/man/NumericOutcomeTreatment.html'>vtreat::NumericOutcomeTreatment()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/BinomialOutcomeTreatment.html'>vtreat::BinomialOutcomeTreatment()</a></code>, or <code><a href='https://rdrr.io/pkg/vtreat/man/MultinomialOutcomeTreatment.html'>vtreat::MultinomialOutcomeTreatment()</a></code>, followed by calling
-<code><a href='https://rdrr.io/pkg/vtreat/man/fit_prepare.html'>vtreat::fit_prepare()</a></code> on the training data and <code><a href='https://rdrr.io/pkg/vtreat/man/prepare.html'>vtreat::prepare()</a></code> during predicton.</p>
+<code><a href='https://winvector.github.io/vtreat/reference/NumericOutcomeTreatment.html'>vtreat::NumericOutcomeTreatment()</a></code>, <code><a href='https://winvector.github.io/vtreat/reference/BinomialOutcomeTreatment.html'>vtreat::BinomialOutcomeTreatment()</a></code>, or <code><a href='https://winvector.github.io/vtreat/reference/MultinomialOutcomeTreatment.html'>vtreat::MultinomialOutcomeTreatment()</a></code>, followed by calling
+<code><a href='https://winvector.github.io/vtreat/reference/fit_prepare.html'>vtreat::fit_prepare()</a></code> on the training data and <code><a href='https://winvector.github.io/vtreat/reference/prepare.html'>vtreat::prepare()</a></code> during predicton.</p>
     </div>
 
 
@@ -167,7 +167,7 @@ Internally, <code>PipeOpVtreat</code> follows the fit/prepare interface of vtrea
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpVreat</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"vtreat"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<pre><span class='va'>PipeOpVreat</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"vtreat"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
@@ -245,7 +245,7 @@ These have mean zero and (for variables with significant less than 1) slope 1 wh
 List of treated variable names to restrict to.
 Only effects [regression tasks<a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>mlr3::TaskRegr</a> and binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a>.</p></li>
 <li><p><code>trackedValues</code> :: named <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code><br />
-Named list mapping variables to know values, allows warnings upon novel level appearances (see <code><a href='https://rdrr.io/pkg/vtreat/man/track_values.html'>vtreat::track_values()</a></code>).
+Named list mapping variables to know values, allows warnings upon novel level appearances (see <code><a href='https://winvector.github.io/vtreat/reference/track_values.html'>vtreat::track_values()</a></code>).
 Only effects [regression tasks<a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>mlr3::TaskRegr</a> and binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a>.</p></li>
 <li><p><code>y_dependent_treatments</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code><br />
 Character what treatment types to build per-outcome level.
@@ -255,13 +255,13 @@ List of map from column names to functions of signature f(values: numeric, weigh
 Typically, an imputation via a <code><a href='PipeOp.html'>PipeOp</a></code> is to be preferred, see <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p></li>
 </ul>
 
-<p>For more information, see <code><a href='https://rdrr.io/pkg/vtreat/man/regression_parameters.html'>vtreat::regression_parameters()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/classification_parameters.html'>vtreat::classification_parameters()</a></code>, or <code><a href='https://rdrr.io/pkg/vtreat/man/multinomial_parameters.html'>vtreat::multinomial_parameters()</a></code>.</p>
+<p>For more information, see <code><a href='https://winvector.github.io/vtreat/reference/regression_parameters.html'>vtreat::regression_parameters()</a></code>, <code><a href='https://winvector.github.io/vtreat/reference/classification_parameters.html'>vtreat::classification_parameters()</a></code>, or <code><a href='https://winvector.github.io/vtreat/reference/multinomial_parameters.html'>vtreat::multinomial_parameters()</a></code>.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>Follows vtreat's fit/prepare interface. See <code><a href='https://rdrr.io/pkg/vtreat/man/NumericOutcomeTreatment.html'>vtreat::NumericOutcomeTreatment()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/BinomialOutcomeTreatment.html'>vtreat::BinomialOutcomeTreatment()</a></code>,
-<code><a href='https://rdrr.io/pkg/vtreat/man/MultinomialOutcomeTreatment.html'>vtreat::MultinomialOutcomeTreatment()</a></code>, <code><a href='https://rdrr.io/pkg/vtreat/man/fit_prepare.html'>vtreat::fit_prepare()</a></code> and <code><a href='https://rdrr.io/pkg/vtreat/man/prepare.html'>vtreat::prepare()</a></code>.</p>
+<p>Follows vtreat's fit/prepare interface. See <code><a href='https://winvector.github.io/vtreat/reference/NumericOutcomeTreatment.html'>vtreat::NumericOutcomeTreatment()</a></code>, <code><a href='https://winvector.github.io/vtreat/reference/BinomialOutcomeTreatment.html'>vtreat::BinomialOutcomeTreatment()</a></code>,
+<code><a href='https://winvector.github.io/vtreat/reference/MultinomialOutcomeTreatment.html'>vtreat::MultinomialOutcomeTreatment()</a></code>, <code><a href='https://winvector.github.io/vtreat/reference/fit_prepare.html'>vtreat::fit_prepare()</a></code> and <code><a href='https://winvector.github.io/vtreat/reference/prepare.html'>vtreat::prepare()</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -342,24 +342,24 @@ Typically, an imputation via a <code><a href='PipeOp.html'>PipeOp</a></code> is 
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2020</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2020</span><span class='op'>)</span>
 
-<span class='kw'>make_data</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>nrows</span>) {
-    <span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(x = <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nrows</span>))
-    <span class='kw'>d</span>[<span class='st'>"y"</span>] <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span>(<span class='kw'>d</span>[[<span class='st'>"x"</span>]]) <span class='op'>+</span> <span class='fl'>0.01</span> <span class='op'>*</span> <span class='kw'>d</span>[[<span class='st'>"x"</span>]] <span class='op'>+</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nrows</span>)
-    <span class='kw'>d</span>[<span class='fl'>4</span><span class='op'>:</span><span class='fl'>10</span>, <span class='st'>"x"</span>] <span class='op'>=</span> <span class='fl'>NA</span>  <span class='co'># introduce NAs</span>
-    <span class='kw'>d</span>[<span class='st'>"xc"</span>] <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"level_"</span>, <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='kw'>d</span><span class='op'>$</span><span class='kw'>y</span> <span class='op'>/</span> <span class='fl'>5</span>, <span class='fl'>1</span>))
-    <span class='kw'>d</span>[<span class='st'>"x2"</span>] <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>nrows</span>)
-    <span class='kw'>d</span>[<span class='kw'>d</span>[<span class='st'>"xc"</span>] <span class='op'>==</span> <span class='st'>"level_-1"</span>, <span class='st'>"xc"</span>] <span class='op'>=</span> <span class='fl'>NA</span>  <span class='co'># introduce a NA level</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>d</span>)
-}
+<span class='va'>make_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>d</span><span class='op'>[</span><span class='st'>"y"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>[[</span><span class='st'>"x"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>0.01</span> <span class='op'>*</span> <span class='va'>d</span><span class='op'>[[</span><span class='st'>"x"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>+</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span>
+    <span class='va'>d</span><span class='op'>[</span><span class='fl'>4</span><span class='op'>:</span><span class='fl'>10</span>, <span class='st'>"x"</span><span class='op'>]</span> <span class='op'>=</span> <span class='cn'>NA</span>  <span class='co'># introduce NAs</span>
+    <span class='va'>d</span><span class='op'>[</span><span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"level_"</span>, <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>$</span><span class='va'>y</span> <span class='op'>/</span> <span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>d</span><span class='op'>[</span><span class='st'>"x2"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span>
+    <span class='va'>d</span><span class='op'>[</span><span class='va'>d</span><span class='op'>[</span><span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>==</span> <span class='st'>"level_-1"</span>, <span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>=</span> <span class='cn'>NA</span>  <span class='co'># introduce a NA level</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span>
+<span class='op'>}</span>
 
-<span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>TaskRegr</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"vtreat_regr"</span>, backend = <span class='fu'>make_data</span>(<span class='fl'>100</span>), target = <span class='st'>"y"</span>)
+<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"vtreat_regr"</span>, backend <span class='op'>=</span> <span class='fu'>make_data</span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span>
 
-<span class='kw'>pop</span> <span class='op'>=</span> <span class='kw'>PipeOpVtreat</span><span class='op'>$</span><span class='fu'>new</span>()
-<span class='kw'>pop</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))
+<span class='va'>pop</span> <span class='op'>=</span> <span class='va'>PipeOpVtreat</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $output
 #&gt; &lt;TaskRegr:vtreat_regr&gt; (100 x 8)
 #&gt; * Target: y

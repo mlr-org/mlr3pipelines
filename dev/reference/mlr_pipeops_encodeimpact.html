@@ -173,7 +173,7 @@ this level, and the target's global mean.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpEncodeImpact</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"encodeimpact"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<pre><span class='va'>PipeOpEncodeImpact</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"encodeimpact"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
@@ -300,23 +300,23 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
-<span class='kw'>poe</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"encodeimpact"</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
+<span class='va'>poe</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"encodeimpact"</span><span class='op'>)</span>
 
-<span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>TaskClassif</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"task"</span>,
-  <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
-    x = <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>)),
-    y = <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>))),
-  <span class='st'>"x"</span>)
+<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"task"</span>,
+  <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
+    x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span>,
+    y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='st'>"x"</span><span class='op'>)</span>
 
-<span class='kw'>poe</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+<span class='va'>poe</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    x       y.a       y.b
 #&gt; 1: a  9.498089 -9.498089
 #&gt; 2: a  9.498089 -9.498089
 #&gt; 3: a -1.098546  1.098546
 #&gt; 4: b -1.098546  1.098546
 #&gt; 5: b -1.098546  1.098546</div><div class='input'>
-<span class='kw'>poe</span><span class='op'>$</span><span class='kw'>state</span>
+<span class='va'>poe</span><span class='op'>$</span><span class='va'>state</span>
 </div><div class='output co'>#&gt; $impact
 #&gt; $impact$y
 #&gt;                       a         b

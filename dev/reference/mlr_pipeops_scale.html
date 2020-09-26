@@ -165,7 +165,7 @@ is <code>TRUE</code>, this corresponds to the <code><a href='https://rdrr.io/r/s
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpScale</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"scale"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<pre><span class='va'>PipeOpScale</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"scale"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
@@ -295,12 +295,12 @@ Initialized to <code>FALSE</code>.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='kw'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
-<span class='kw'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>)
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"scale"</span><span class='op'>)</span>
 
-<span class='kw'>pos</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
 #&gt;   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199
 #&gt;   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881
@@ -313,12 +313,12 @@ Initialized to <code>FALSE</code>.</p></li>
 #&gt; 148: virginica    0.8168591   1.0504160   0.79301235 -0.13153881
 #&gt; 149: virginica    0.9301544   1.4439941   0.43072244  0.78617383
 #&gt; 150: virginica    0.7602115   0.7880307   0.06843254 -0.13153881</div><div class='input'>
-<span class='kw'>one_line_of_iris</span> <span class='op'>=</span> <span class='kw'>task</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='fl'>13</span>)
+<span class='va'>one_line_of_iris</span> <span class='op'>=</span> <span class='va'>task</span><span class='op'>$</span><span class='fu'>filter</span><span class='op'>(</span><span class='fl'>13</span><span class='op'>)</span>
 
-<span class='kw'>one_line_of_iris</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+<span class='va'>one_line_of_iris</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width
 #&gt; 1:  setosa          1.4         0.1          4.8           3</div><div class='input'>
-<span class='kw'>pos</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>one_line_of_iris</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+<span class='va'>pos</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>one_line_of_iris</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width
 #&gt; 1:  setosa    -1.335752   -1.442245    -1.259964  -0.1315388</div></pre>
   </div>

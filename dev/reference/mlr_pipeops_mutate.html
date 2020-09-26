@@ -161,7 +161,7 @@ This can add new features, or can change existing features.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpMutate</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"mutate"</span>, param_vals = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<pre><span class='va'>PipeOpMutate</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"mutate"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
@@ -292,18 +292,18 @@ features are changed, precedence is given to the original ones before the newly 
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='kw'>constant</span> <span class='op'>=</span> <span class='fl'>1</span>
-<span class='kw'>pom</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"mutate"</span>)
-<span class='kw'>pom</span><span class='op'>$</span><span class='kw'>param_set</span><span class='op'>$</span><span class='kw'>values</span><span class='op'>$</span><span class='kw'>mutation</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  Sepal.Length_plus_constant = <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>constant</span>,
-  Sepal.Area = <span class='op'>~</span> <span class='kw'>Sepal.Width</span> <span class='op'>*</span> <span class='kw'>Sepal.Length</span>,
-  Petal.Area = <span class='op'>~</span> <span class='kw'>Petal.Width</span> <span class='op'>*</span> <span class='kw'>Petal.Length</span>,
-  Sepal.Area_plus_Petal.Area = <span class='op'>~</span> <span class='kw'>Sepal.Area</span> <span class='op'>+</span> <span class='kw'>Petal.Area</span>
-)
+<span class='va'>constant</span> <span class='op'>=</span> <span class='fl'>1</span>
+<span class='va'>pom</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"mutate"</span><span class='op'>)</span>
+<span class='va'>pom</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>mutation</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  Sepal.Length_plus_constant <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>constant</span>,
+  Sepal.Area <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span> <span class='op'>*</span> <span class='va'>Sepal.Length</span>,
+  Petal.Area <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>,
+  Sepal.Area_plus_Petal.Area <span class='op'>=</span> <span class='op'>~</span> <span class='va'>Sepal.Area</span> <span class='op'>+</span> <span class='va'>Petal.Area</span>
+<span class='op'>)</span>
 
-<span class='kw'>pom</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+<span class='va'>pom</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
 #&gt;   1:    setosa          1.4         0.2          5.1         3.5
 #&gt;   2:    setosa          1.4         0.2          4.9         3.0

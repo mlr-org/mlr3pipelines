@@ -151,7 +151,7 @@
     <p>Create a multiplexed graph.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pipeline_branch</span>(<span class='kw'>graphs</span>, prefix_branchops = <span class='st'>""</span>, prefix_paths = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='va'>graphs</span>, prefix_branchops <span class='op'>=</span> <span class='st'>""</span>, prefix_paths <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,34 +186,34 @@ to the input argument list.</p></td>
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='kw'>po_pca</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>)
-<span class='kw'>po_nop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>)
+<span class='va'>po_pca</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>
+<span class='va'>po_nop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>
 
-<span class='kw'>branches</span> <span class='op'>=</span> <span class='fu'>pipeline_branch</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(pca = <span class='kw'>po_pca</span>, nothing = <span class='kw'>po_nop</span>))
+<span class='va'>branches</span> <span class='op'>=</span> <span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>pca <span class='op'>=</span> <span class='va'>po_pca</span>, nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># gives the same as</span>
-<span class='kw'>branches</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pca"</span>, <span class='st'>"nothing"</span>)
-<span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"branch"</span>, <span class='kw'>branches</span>) <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>po_pca</span>, <span class='kw'>po_nop</span>)) <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"unbranch"</span>, <span class='kw'>branches</span>)
+<span class='va'>branches</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pca"</span>, <span class='st'>"nothing"</span><span class='op'>)</span>
+<span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"branch"</span>, <span class='va'>branches</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>po_pca</span>, <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"unbranch"</span>, <span class='va'>branches</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Graph with 4 PipeOps:
 #&gt;        ID         State sccssors prdcssors
 #&gt;    branch &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          
 #&gt;       pca &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
 #&gt;       nop &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
 #&gt;  unbranch &lt;&lt;UNTRAINED&gt;&gt;            pca,nop</div><div class='input'>
-<span class='fu'>pipeline_branch</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(pca = <span class='kw'>po_pca</span>, nothing = <span class='kw'>po_nop</span>),
-  prefix_branchops = <span class='st'>"br_"</span>, prefix_paths = <span class='st'>"xy_"</span>)
+<span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>pca <span class='op'>=</span> <span class='va'>po_pca</span>, nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span>,
+  prefix_branchops <span class='op'>=</span> <span class='st'>"br_"</span>, prefix_paths <span class='op'>=</span> <span class='st'>"xy_"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Graph with 4 PipeOps:
 #&gt;              ID         State               sccssors              prdcssors
 #&gt;       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       
 #&gt;      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch
 #&gt;  xy_nothing.nop &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch
 #&gt;     br_unbranch &lt;&lt;UNTRAINED&gt;&gt;                        xy_pca.pca,xy_nothi...</div><div class='input'><span class='co'># gives the same as</span>
-<span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"branch"</span>, <span class='kw'>branches</span>, id = <span class='st'>"br_branch"</span>) <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(xy_pca = <span class='kw'>po_pca</span>, xy_nothing = <span class='kw'>po_nop</span>)) <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"unbranch"</span>, <span class='kw'>branches</span>, id = <span class='st'>"br_unbranch"</span>)
+<span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"branch"</span>, <span class='va'>branches</span>, id <span class='op'>=</span> <span class='st'>"br_branch"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>xy_pca <span class='op'>=</span> <span class='va'>po_pca</span>, xy_nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"unbranch"</span>, <span class='va'>branches</span>, id <span class='op'>=</span> <span class='st'>"br_unbranch"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Graph with 4 PipeOps:
 #&gt;              ID         State               sccssors              prdcssors
 #&gt;       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       

@@ -165,7 +165,7 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='kw'>PipeOpRemoveConstants</span><span class='op'>$</span><span class='fu'>new</span>(id = <span class='st'>"removeconstants"</span>)
+<pre><span class='va'>PipeOpRemoveConstants</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"removeconstants"</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
@@ -285,14 +285,14 @@ Default is <code>FALSE</code>.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span>)
-<span class='kw'>data</span> <span class='op'>=</span> <span class='kw'>data.table</span>::<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(y = <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>10</span>), a = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, b = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), c = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each = <span class='fl'>5</span>))
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>, a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span>, c <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='kw'>task</span> <span class='op'>=</span> <span class='kw'>TaskRegr</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"example"</span>, <span class='kw'>data</span>, target = <span class='st'>"y"</span>)
+<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"example"</span>, <span class='va'>data</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span>
 
-<span class='kw'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"removeconstants"</span>)
+<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"removeconstants"</span><span class='op'>)</span>
 
-<span class='kw'>po</span><span class='op'>$</span><span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(task = <span class='kw'>task</span>))[[<span class='fl'>1</span>]]<span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()
+<span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;              y  a c
 #&gt;  1: 0.84982510  1 1
 #&gt;  2: 0.33041754  2 1
@@ -304,7 +304,7 @@ Default is <code>FALSE</code>.</p></li>
 #&gt;  8: 0.80938970  8 2
 #&gt;  9: 0.60619806  9 2
 #&gt; 10: 0.81683238 10 2</div><div class='input'>
-<span class='kw'>po</span><span class='op'>$</span><span class='kw'>state</span>
+<span class='va'>po</span><span class='op'>$</span><span class='va'>state</span>
 </div><div class='output co'>#&gt; $features
 #&gt; [1] "a" "c"
 #&gt; 
