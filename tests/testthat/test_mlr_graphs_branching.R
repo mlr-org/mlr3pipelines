@@ -22,7 +22,7 @@ test_that("Branching Pipeline", {
 
 
 test_that("Branching Pipeline extended tests", {
-
+  skip_on_cran()  # takes too long
   po1 = PipeOpScale$new()
   po2 = PipeOpScale$new("scale2")
   po3 = PipeOpPCA$new()

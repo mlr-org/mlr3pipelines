@@ -84,12 +84,13 @@
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
 #'   the `visNetwork` package for `html = TRUE` producing a [`htmlWidget`][htmlwidgets::htmlwidgets].
 #'   The [`htmlWidget`][htmlwidgets::htmlwidgets] can be rescaled using [`visOptions`][visNetwork::visOptions].
-#' * `print()` \cr
-#'   () -> `NULL` \cr
-#'   Print a representation of the [`Graph`] on the console. Output is a table with one row for each contained [`PipeOp`] and
+#' * `print(dot = FALSE, dotname = "dot", fontsize = 24L)` \cr
+#'   (`logical(1)`, `character(1)`, `integer(1)`) -> `NULL` \cr
+#'   Print a representation of the [`Graph`] on the console. If `dot` is `FALSE`, output is a table with one row for each contained [`PipeOp`] and
 #'   columns `ID` (`$id` of `PipeOp`), `State` (short representation of `$state` of [`PipeOp`]), `sccssors` ([`PipeOp`]s that
 #'   take their input directly from the [`PipeOp`] on this line), and `prdcssors` (the [`PipeOp`]s that produce the data
-#'   that is read as input by the [`PipeOp`] on this line).
+#'   that is read as input by the [`PipeOp`] on this line). If `dot` is `TRUE`, print a DOT representation of the [`Graph`] on the console.
+#'   The DOT output can be named via the argument `dotname` and the `fontsize` can also be specified.
 #' * `set_names(old, new)` \cr
 #'   (`character`, `character`) -> `self` \cr
 #'   Rename [`PipeOp`]s: Change ID of each [`PipeOp`] as identified by `old` to the corresponding item in `new`. This should be used
@@ -295,7 +296,7 @@ Graph = R6Class("Graph",
             }
             txt = paste0("Output:<br>Name: ", out$name, "<br>Train: ", null_str(out$train), "<br>Predict: ", null_str(out$predict))
           } else {
-            txt = paste((gsub("<(.*)>", capture.output(self$pipeops[[node]]), replacement = "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
+            txt = paste((gsub("<(.*)>", utils::capture.output(self$pipeops[[node]]), replacement = "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
           }
           # Deal with special case: multiple edges between two pipeops
           if (length(txt) > 1) txt = paste0(txt, collapse = "<br>")
@@ -314,34 +315,81 @@ Graph = R6Class("Graph",
         }
         p
       } else {
-        suppressWarnings(plot(ig, layout = layout))  # suppress partial matching warning
+        suppressWarnings(graphics::plot(ig, layout = layout))  # suppress partial matching warning
       }
     },
 
-    print = function() {
-      # print table <id>, <state>, where <state> is `class(pipeop$state)`
-      lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
-        data.table(ID = pipeop$id, State = sprintf("<%s>",
-          map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
-      }), use.names = TRUE)
-      if (nrow(lines)) {
-        prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
-        scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
-        lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
-        lines[is.na(lines)] = ""
-        catf("Graph with %s PipeOps:", nrow(lines))
-        ## limit column width ##
+    print = function(dot = FALSE, dotname = "dot", fontsize = 24L) {
+      assert_flag(dot)
+      if (dot) {
+        assert_character(dotname, any.missing = FALSE, len = 1L)
+        assert_count(fontsize, positive = TRUE)
+        if (!length(self$pipeops)) {
+          return(cat(paste0("digraph ", dotname, " {\n", "", "\n}\n")))
+        }
+        if (nrow(self$edges) == 0L) {
+          all_names = gsub("\\.", "_", self$ids(TRUE))
+          dot = paste0(paste0(seq_along(all_names), " [label=", '"', all_names, '"',
+            ",fontsize=", fontsize, ']'),
+            collapse = ";\n")
+        } else {
+          df = self$edges[, list(from = src_id, to = dst_id)]
+          df = rbind(df, self$input[, list(from = "INPUT", to = op.id)])
+          output = self$output
+          if (nrow(output) > 1L) {
+            df = rbind(df, output[, list(from = op.id, to = paste0("OUTPUT\n", name))])
+          } else {
+            df = rbind(df, output[, list(from = op.id, to = "OUTPUT")])
+          }
+          ids = self$ids(TRUE)
+          extra_vertices = setdiff(ids, c(df$from, df$to))
 
-        outwidth = getOption("width") %??% 80  # output width we want (default 80)
-        colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
-        collimit = calculate_collimit(colwidths, outwidth)
-        with_options(list(datatable.prettyprint.char = collimit), {
-          print(lines, row.names = FALSE)
-        })
+          all_names = unique(unlist(df))
+          df = data.table::setDT(mlr3misc::map(df, function(x) match(x, all_names)))
+          gr = paste0(map(seq_len(nrow(df)), function(x) {
+            paste0(df[x, ][[1L]], " -> ", df[x, ][[2L]])
+          }), collapse = ";\n")
+
+          all_names = gsub("\\.", "_", all_names)
+          labels = paste0(unlist(mlr3misc::map(unique(unlist(df)), function(x) {
+            paste0(x, " [label=", '"', all_names[x], '"', ",fontsize=", fontsize, ']')
+          })), collapse = ";\n")
+          dot = paste0(gr, ";\n", labels)
+
+          if (length(extra_vertices)) {
+             ev_names = gsub("\\.", "_", extra_vertices)
+             ev = paste0(paste0(length(all_names) + seq_along(ev_names), " [label=",
+               '"', ev_names, '"', ",fontsize=", fontsize, ']'),
+               collapse = ";\n")
+             dot = paste0(dot, ";\n", ev)
+          }
+        }
+        cat(paste0("digraph ", dotname, " {\n", dot, "\n}\n"))
       } else {
-        cat("Empty Graph.\n")
+        # print table <id>, <state>, where <state> is `class(pipeop$state)`
+        lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
+          data.table(ID = pipeop$id, State = sprintf("<%s>",
+            map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
+        }), use.names = TRUE)
+        if (nrow(lines)) {
+          prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
+          scc = self$edges[, list(sccssors = paste(unique(dst_id), collapse = ",")), by = list(ID = src_id)]
+          lines = scc[prd[lines, on = "ID"], on = "ID"][, c("ID", "State", "sccssors", "prdcssors")]
+          lines[is.na(lines)] = ""
+          catf("Graph with %s PipeOps:", nrow(lines))
+          ## limit column width ##
+
+          outwidth = getOption("width") %??% 80  # output width we want (default 80)
+          colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
+          collimit = calculate_collimit(colwidths, outwidth)
+          with_options(list(datatable.prettyprint.char = collimit), {
+            print(lines, row.names = FALSE)
+          })
+        } else {
+          cat("Empty Graph.\n")
+        }
+        invisible(self)
       }
-      invisible(self)
     },
 
     # Mutator to change PipeOp IDs

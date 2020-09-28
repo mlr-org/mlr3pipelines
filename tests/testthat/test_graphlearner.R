@@ -1,6 +1,7 @@
 context("GraphLearner")
 
 test_that("basic graphlearner tests", {
+  skip_on_cran()  # takes too long
   task = mlr_tasks$get("iris")
 
   lrn = mlr_learners$get("classif.rpart")
@@ -128,7 +129,7 @@ test_that("graphlearner parameters behave as they should", {
 })
 
 test_that("graphlearner type inference", {
-
+  skip_on_cran()  # takes too long
   # default: classif
   lrn = GraphLearner$new(mlr_pipeops$get("nop"))
   expect_equal(lrn$task_type, "classif")
@@ -196,6 +197,7 @@ test_that("graphlearner type inference", {
 })
 
 test_that("graphlearner type inference - branched", {
+  skip_on_cran()  # takes too long
 
   # default: classif
 
@@ -259,7 +261,7 @@ test_that("graphlearner type inference - branched", {
 })
 
 test_that("graphlearner predict type inference", {
-
+  skip_on_cran()  # takes too long
   # Getter:
 
   # Classification
@@ -278,9 +280,9 @@ test_that("graphlearner predict type inference", {
   expect_equal(lrn$predict_type, "prob")
 
   # averager
-  lrn = GraphLearner$new(greplicate(po("subsample") %>>% lrr, 3L) %>>% po("classifavg"))
+  lrn = GraphLearner$new(pipeline_greplicate(po("subsample") %>>% lrr, 3L) %>>% po("classifavg"))
   expect_equal(lrn$predict_type, "response")
-  lrn = GraphLearner$new(greplicate(po("subsample") %>>% lrp, 3L) %>>% po("classifavg"))
+  lrn = GraphLearner$new(pipeline_greplicate(po("subsample") %>>% lrp, 3L) %>>% po("classifavg"))
   expect_equal(lrn$predict_type, "prob")
 
   # branching
@@ -298,9 +300,9 @@ test_that("graphlearner predict type inference", {
   # Regression
   lrrp = po(lrn("regr.featureless", predict_type = "se"))
   lrrr = po(lrn("regr.rpart"))
-  lrn = GraphLearner$new(greplicate(po("subsample") %>>% lrrr, 3L) %>>% po("regravg"))
+  lrn = GraphLearner$new(pipeline_greplicate(po("subsample") %>>% lrrr, 3L) %>>% po("regravg"))
   expect_equal(lrn$predict_type, "response")
-  lrn = GraphLearner$new(greplicate(po("subsample") %>>% lrrp, 3L) %>>% po("regravg"))
+  lrn = GraphLearner$new(pipeline_greplicate(po("subsample") %>>% lrrp, 3L) %>>% po("regravg"))
   expect_equal(lrn$predict_type, "se")
 
   lrn = GraphLearner$new(lrrp %>>% nop)
@@ -331,7 +333,7 @@ test_that("graphlearner predict type inference", {
   expect_equal(lrn$graph$pipeops[[lrp$id]]$predict_type, "response")
 
   # averager
-  lrn = GraphLearner$new(greplicate(po("subsample") %>>% lrp %>>% nop, 3L) %>>% po("classifavg"))
+  lrn = GraphLearner$new(pipeline_greplicate(po("subsample") %>>% lrp %>>% nop, 3L) %>>% po("classifavg"))
   lrn$predict_type = "response"
   expect_equal(lrn$predict_type, "response")
   expect_true(all(map_chr(lrn$graph$pipeops[paste(lrp$id, 1:3, sep = "_")], "predict_type") == "response"))
@@ -351,5 +353,5 @@ test_that("graphlearner predict type inference", {
   expect_equal(lrn$graph$pipeops[[lrr$id]]$predict_type, "prob")
 
   # Errors:
-  expect_error(lrrp = po(lrn("classif.featureless", predict_type = "se")))
+  expect_error({lrrp = po(lrn("classif.featureless", predict_type = "se"))})
 })

@@ -39,14 +39,14 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], as well as:
 #' * `min` :: `logical(1)` \cr
-#'   Should `integer` and `numeric` features be shifted below the minimum? Default is TRUE. If FALSE
+#'   Should `integer` and `numeric` features be shifted below the minimum? Initialized to TRUE. If FALSE
 #'   they are shifted above the maximum. See also the description above.
 #' * `offset` :: `numeric(1)` \cr
 #'   Numerical non-negative offset as used in the description above for `integer` and `numeric`
-#'   features. Default is 1.
+#'   features. Initialized to 1.
 #' * `multiplier` :: `numeric(1)` \cr
 #'   Numerical non-negative multiplier as used in the description above for `integer` and `numeric`
-#'   features. Default is 1.
+#'   features. Initialized to 1.
 #'
 #' @section Internals:
 #' Adds an explicit new `level()` to `factor` and `ordered` features, but not to `character` features.
@@ -80,9 +80,9 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
   public = list(
     initialize = function(id = "imputeoor", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("min", default = TRUE, tags = c("train", "predict")),
-        ParamDbl$new("offset", lower = 0, default = 1, tags = c("train", "predict")),
-        ParamDbl$new("multiplier", lower = 0, default = 1, tags = c("train", "predict")))
+        ParamLgl$new("min", tags = c("train", "predict")),
+        ParamDbl$new("offset", lower = 0, tags = c("train", "predict")),
+        ParamDbl$new("multiplier", lower = 0, tags = c("train", "predict")))
       )
       ps$values = list(min = TRUE, offset = 1, multiplier = 1)
       # this is one of the few imputers that handles 'character' features!

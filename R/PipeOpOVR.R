@@ -100,8 +100,7 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
       sapply(levels, function(l) {
         truthcol = task$data(cols = task$target_names)
         truthcol[[1]] = factor(ifelse(truthcol[[1]] == l, l, rest), levels = c(l, rest))
-        backend = task$clone(deep = TRUE)$cbind(truthcol)$backend
-        TaskClassif$new(sprintf("%s_%s_vs_%s", task$id, l, rest), backend, task$target_names, positive = l)
+        convert_task(task$clone(deep = TRUE)$cbind(truthcol))
       }, simplify = FALSE)
     }
   )
@@ -197,8 +196,8 @@ PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
       if (length(weights) == 1) weights = rep(1, length(inputs))
       assert_numeric(weights, any.missing = FALSE, len = length(inputs))
-      has_probs = every(inputs, function(x) !is.null(x$prob))
-      has_classif_response = every(inputs, function(x) length(x$response) != 0)  # if response is missing this will be an empty factor
+      has_probs = every(inputs, function(x) "prob" %in% x$predict_types)
+      has_classif_response = every(inputs, function(x) "response" %in% x$predict_types)
 
       names(inputs) = map_chr(inputs, function(x) levels(x$truth)[[1]])
 
@@ -215,7 +214,6 @@ PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
       probmat = sweep(probmat, 2, weights, "*")
       probmat = probmat / rowSums(probmat)
       probmat[is.na(probmat)] = 1 / length(inputs)
-
       list(PredictionClassif$new(row_ids = row_ids, truth = truth, prob = pmin(pmax(probmat, 0), 1)))
     }
   )
