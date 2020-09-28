@@ -5,23 +5,18 @@
 \alias{PipeOpEncodeImpact}
 \title{Conditional Target Value Impact Encoding}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Encodes columns of type \code{factor}, and \code{ordered}.
+Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
 
-Impact coding for \link[mlr3:TaskClassif]{classification Tasks} converts factor levels of each
-(factorial) column to the difference between each target level's conditional log-likelihood given
-this level, and the target level's global log-likelihood.
+Impact coding for \link[mlr3:TaskClassif]{classification Tasks} converts factor levels of each (factorial) column
+to the difference between each target level's conditional log-likelihood
+given this level, and the target level's global log-likelihood.
 
-Impact coding for \link[mlr3:TaskRegr]{regression Tasks} converts factor levels of each (factorial)
-column to the difference between the target's conditional mean given this level, and the target's
-global mean.
-
-During training, the impact coding is done using a cross-method. This means that the training
-\code{\link[mlr3:Task]{Task}} is split into several folds via \code{\link[mlr3:mlr_resamplings_cv]{ResamplingCV}} and for
-each fold, impact coding is performed for each test set based on the respective training set.
-This is helpful to prevent nested model bias.
+Impact coding for \link[mlr3:TaskRegr]{regression Tasks} converts factor levels of each (factorial) column
+to the difference between the target's conditional mean given
+this level, and the target's global mean.
 
 Treats new levels during prediction like missing values.
 }
@@ -41,42 +36,31 @@ otherwise be set during construction. Default \code{list()}.
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor}, or \code{ordered} parameters encoded.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor}, \code{character} or
+\code{ordered} parameters encoded.
 }
 
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{train_task_hash} :: \code{character(1)}\cr
-The hash (unique identifier) for the training \code{\link[mlr3:Task]{Task}}.
-\item \code{rsmp_cv_instance} :: a \code{data.table}\cr
-If \code{folds} is larger than one, the resampling instance of the \code{\link[mlr3:mlr_resamplings_cv]{ResamplingCV}} used during training.
-\item \code{impact_predict} :: a named \code{list}\cr
+\item \code{impact} :: a named \code{list}\cr
 A list with an element for each affected feature:\cr
-For regression, each element is a single column matrix of impact values for each level of that feature.\cr
-For classification, this is a list with an element for each \emph{feature level}, which is a vector
-giving the impact of this feature level on each \emph{outcome level}.
-This list is used to encode impact of the prediction \code{\link[mlr3:Task]{Task}}.
-\item \code{impact_cv} :: a \code{list} of named \code{lists}\cr
-A list of length \code{folds} with each element holding a list like \code{impact_predict} above.
-These lists are used to encode impact of the training \code{\link[mlr3:Task]{Task}}.
+For regression each element is a single column matrix of impact values for each level of that feature.\cr
+For classification, it is a list with an element for each \emph{feature level}, which is a vector giving the impact of
+this feature level on each \emph{outcome level}.
 }
 }
 
 \section{Parameters}{
 
 \itemize{
-\item \code{smoothing} :: \code{numeric(1)} \cr
+\item \code{smoothing}  :: \code{numeric(1)} \cr
 A finite positive value used for smoothing. Mostly relevant for \link[mlr3:TaskClassif]{classification Tasks} if
 a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
 Initialized to \code{1e-4}.
 \item \code{impute_zero} :: \code{logical(1)}\cr
-If \code{TRUE}, impute missing values as impact 0; otherwise the respective impact is coded as \code{NA}. Default is \code{FALSE}.
-\item \code{folds} :: \code{integer(1)}\cr
-Number of folds used in the cross-method and passed to \code{\link[mlr3:mlr_resamplings_cv]{ResamplingCV}}. Default is \code{3}.
-If set to \code{1}, no cross-method will be applied during training, i.e., the whole training
-\code{\link[mlr3:Task]{Task}} is used to encode impact during training.
+If \code{TRUE}, impute missing values as impact 0; otherwise the respective impact is coded as \code{NA}. Default \code{FALSE}.
 }
 }
 
@@ -95,10 +79,10 @@ library("mlr3")
 poe = po("encodeimpact")
 
 task = TaskClassif$new("task",
-  backend = data.table::data.table(
-    x = factor(c("a", "a", "b", "b", "b")),
-    y = factor(c("a", "a", "a", "b", "b"))),
-  target = "y")
+  data.table::data.table(
+    x = factor(c("a", "a", "a", "b", "b")),
+    y = factor(c("a", "a", "b", "b", "b"))),
+  "x")
 
 poe$train(list(task))[[1]]$data()
 

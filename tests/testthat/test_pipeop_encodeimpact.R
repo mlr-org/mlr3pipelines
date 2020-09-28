@@ -8,25 +8,13 @@ test_that("PipeOpEncodeImpact", {
 
   t2 = po("histbin")$train(list(tsk("iris")))[[1]]
 
-  expect_datapreproc_pipeop_class(PipeOpEncodeImpact,
-    constargs = list(param_vals = list(folds = 1L)), task = task)
-  expect_datapreproc_pipeop_class(PipeOpEncodeImpact,
-    constargs = list(param_vals = list(folds = 1L)), task = t2)
-  expect_datapreproc_pipeop_class(PipeOpEncodeImpact,
-    constargs = list(param_vals = list(folds = 1L)), task = mlr_tasks$get("iris"))
+  expect_datapreproc_pipeop_class(PipeOpEncodeImpact, task = task)
 
-  expect_datapreproc_pipeop_class(PipeOpEncodeImpact,
-    constargs = list(param_vals = list(folds = 2L)), task = task,
-    predict_like_train = FALSE, deterministic_train = FALSE)
-  expect_datapreproc_pipeop_class(PipeOpEncodeImpact,
-    constargs = list(param_vals = list(folds = 2L)), task = t2,
-    predict_like_train = FALSE, deterministic_train = FALSE)
-  expect_datapreproc_pipeop_class(PipeOpEncodeImpact,
-    constargs = list(param_vals = list(folds = 2L)), task = mlr_tasks$get("iris"),
-    predict_like_train = FALSE, deterministic_train = FALSE)
+  expect_datapreproc_pipeop_class(PipeOpEncodeImpact, task = t2)
+
+  expect_datapreproc_pipeop_class(PipeOpEncodeImpact, task = mlr_tasks$get("iris"))
 
   op = PipeOpEncodeImpact$new()
-  op$param_set$values$folds = 1
   expect_pipeop(op)
 
   nt = train_pipeop(op, inputs = list(task))[[1L]]
@@ -41,7 +29,9 @@ test_that("PipeOpEncodeImpact", {
   # factor cols are removed
   expect_true(all(tsk("iris")$feature_names %nin% fn))
   expect_true("factor" %nin% nt$feature_types$type)
+
 })
+
 
 test_that("PipeOpImpactEncode on Classification", {
 
@@ -53,7 +43,6 @@ test_that("PipeOpImpactEncode on Classification", {
   testtask = TaskClassif$new("test", testdf, "t")
 
   op = PipeOpEncodeImpact$new()
-  op$param_set$values$folds = 1
 
   expect_equal(op$train(list(tsk("iris")))[[1]], tsk("iris"))
 
@@ -68,16 +57,15 @@ test_that("PipeOpImpactEncode on Classification", {
 
   op$train(list(testtask))
 
-  expect_equal(op$state$impact_predict$a, op$state$impact_cv[[1]]$a)  # folds = 1, no cross-method
-  expect_equal(op$state$impact_predict$a, expm)
+  expect_equal(op$state$impact$a, expm)
 
   op$param_set$values$smoothing = 1e-4
   op$train(list(testtask))
-  expect_equal(mean(abs(op$state$impact_predict$a - expm), na.rm = TRUE), 0.5e-4)
+  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE), 0.5e-4)
 
   op$param_set$values$smoothing = 1e-8
   op$train(list(testtask))
-  expect_equal(mean(abs(op$state$impact_predict$a - expm), na.rm = TRUE) * 1e4, 0.5e-4)
+  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE) * 1e4, 0.5e-4)
 
   op$param_set$values$smoothing = 6.362e-9  # similar to what glm uses
   encoded = op$train(list(testtask))[[1]]$data()
@@ -89,12 +77,11 @@ test_that("PipeOpImpactEncode on Classification", {
   expm2 = rbind(expm2, c(NA, NA))
   rownames(expm2) = c("a", "b", ".TEMP.MISSING")
 
-  expect_equal(op$state$impact_predict$b, op$state$impact_cv[[1]]$b)  # folds = 1, no cross-method
-  expect_equal(op$state$impact_predict$b, expm2, tolerance = 1e-5)
+  expect_equal(op$state$impact$b, expm2, tolerance = 1e-5)
 
   expect_equal(encoded,
-    data.table(t = testdf$t, a = op$state$impact_predict$a[testdf$a, ],
-      b = op$state$impact_predict$b[testdf$b, ]))
+    data.table(t = testdf$t, a = op$state$impact$a[testdf$a, ],
+      b = op$state$impact$b[testdf$b, ]))
 
   # test NA handling / imputation
 
@@ -113,6 +100,7 @@ test_that("PipeOpImpactEncode on Classification", {
   encoded = op$train(list(testtask2))[[1]]$data()
 
   expect_equal(as.numeric(as.matrix(encoded)[c(11, 17, 24, 30)]), c(0, 0, 0, 0))  # imputation by 0
+
 })
 
 test_that("PipeOpImpactEncode on Regression", {
@@ -130,16 +118,13 @@ test_that("PipeOpImpactEncode on Regression", {
       t = c(1, 2, 3, 1, 2, 3))
 
   op = PipeOpEncodeImpact$new()
-  op$param_set$values$folds = 1
   op$param_set$values$smoothing = 0
 
   expect_equal(op$train(list(testtask))[[1]]$data(), expect, ignore.col.order = TRUE)
 
-  expect_equal(op$state$impact_predict$a, op$state$impact_cv[[1]]$a)  # folds = 1, no cross-method
-  expect_equal(op$state$impact_predict$b, op$state$impact_cv[[1]]$b)  # folds = 1, no cross-method
 
-  expect_equal(op$state$impact_predict$a, t(t(c(a = 0, b = 0, .TEMP.MISSING = NA))))
-  expect_equal(op$state$impact_predict$b, t(t(c(a = -1/4, b = 1/2, .TEMP.MISSING = NA))))
+  expect_equal(op$state$impact$a, t(t(c(a = 0, b = 0, .TEMP.MISSING = NA))))
+  expect_equal(op$state$impact$b, t(t(c(a = -1/4, b = 1/2, .TEMP.MISSING = NA))))
 
   op$param_set$values$smoothing = 1e-4
   expect_false(isTRUE(all.equal(op$train(list(testtask))[[1]]$data(), expect, ignore.col.order = TRUE, tolerance = 1e-5)))
@@ -180,12 +165,12 @@ test_that("PipeOpImpactEncode on Regression", {
   encoded = op$train(list(testtask2))[[1]]$data()
 
   expect_equal(which(is.na(encoded)), c(11, 18))
+
 })
 
 test_that("PipeOpImpactEncode factor level ``", {
 
   op = PipeOpEncodeImpact$new()
-  op$param_set$values$folds = 1
 
   testdf3 = iris
   levels(testdf3$Species) = c("setosa", "versicolor", "")
@@ -196,69 +181,5 @@ test_that("PipeOpImpactEncode factor level ``", {
   train_out3ref = op$train(list(testtask3ref))[[1L]]
 
   expect_equal(train_out3$data(), train_out3ref$data())
+
 })
-
-test_that("PipeOpImpactEncode cross-method on Classification", {
-  # FIXME: could also add some more technical tests
-
-  library(mlr3learners)
-  set.seed(2409)
-  n = 300L
-  x = as.factor(rep(c("x1", "x2"), each = n / 2L))
-  y = as.factor(c(sample(c("y1", "y2"), size = n / 2L, replace = TRUE, prob = c(0.9, 0.1)), sample(c("y1", "y2"), size = n / 2L, replace = TRUE, prob = c(0.1, 0.9))))
-  z = as.factor(sample(c("z1", "z2", "z3"), size = n, replace = TRUE))
-  dat = data.table(y = y, x = x, z = z)
-
-  task = TaskClassif$new("test", backend = dat, target = "y")
-
-  learner = lrn("classif.log_reg", id = "l")  # baseline
-  graphlearner1 = GraphLearner$new(po("encodeimpact", folds = 1L) %>>% learner, id = "gl1")  # no cross-method
-  graphlearner2 = GraphLearner$new(po("encodeimpact", folds = 2L) %>>% learner, id = "gl2")  # cross-method
-
-  # check if nested resampling for the cross-method would work
-  train = sample(task$row_ids, size = 200L)
-  test = setdiff(task$row_ids, train)
-
-  learner$train(task, row_ids = train)
-  graphlearner1$train(task, row_ids = train)
-  graphlearner2$train(task, row_ids = train)
-
-  ce = c(suppressWarnings(learner$predict(task, row_ids = test)$score(msr("classif.ce"))),
-    suppressWarnings(graphlearner1$predict(task, row_ids = test)$score(msr("classif.ce"))),
-    suppressWarnings(graphlearner2$predict(task, row_ids = test)$score(msr("classif.ce"))))
-  expect_true(all(exp(diff(log(ce))) - 1 < 0.1))  # ratios of mean ce's should be around 1
-})
-
-test_that("PipeOpImpactEncode cross-method on Regression", {
-  # FIXME: could also add some more technical tests
-
-  library(mlr3learners)
-  set.seed(2409)
-  n = 300L
-  x = as.factor(rep(c("x1", "x2"), each = n / 2L))  # x1 ~ N(-5, 2), x2 ~ N(5, 2)
-  y = c(rnorm(n / 2L, mean = -5, sd = 2), rnorm(n / 2L, mean = 5, sd = 2))
-  # aggregate(y ~ x, FUN = mean, data = dat)
-  # aggregate(y ~ x, FUN = sd, data = dat)
-  z = as.factor(sample(c("z1", "z2", "z3"), size = n, replace = TRUE)) # random
-  dat = data.table(y = y, x = x, z = z)
-
-  task = TaskRegr$new("test", backend = dat, target = "y")
-
-  learner = lrn("regr.lm", id = "l")  # baseline
-  graphlearner1 = GraphLearner$new(po("encodeimpact", folds = 1L) %>>% learner, id = "gl1")  # no cross-method
-  graphlearner2 = GraphLearner$new(po("encodeimpact", folds = 2L) %>>% learner, id = "gl2")  # cross-method
-
-  # check if nested resampling for the cross-method would work
-  train = sample(task$row_ids, size = 200L)
-  test = setdiff(task$row_ids, train)
-
-  learner$train(task, row_ids = train)
-  graphlearner1$train(task, row_ids = train)
-  graphlearner2$train(task, row_ids = train)
-
-  mse = c(learner$predict(task, row_ids = test)$score(msr("regr.mse")),
-    graphlearner1$predict(task, row_ids = test)$score(msr("regr.mse")),
-    graphlearner2$predict(task, row_ids = test)$score(msr("regr.mse")))
-  expect_true(all(exp(diff(log(mse))) - 1 < 0.1))  # ratios of mean mse's should be around 1
-})
-
