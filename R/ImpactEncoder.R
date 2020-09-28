@@ -10,6 +10,7 @@ ImpactEncoderClassif = R6Class("ImpactEncoderClassif", inherit = Learner,
       list(response = factor(rep_len(NA_character_, length.out = task$nrow), levels = task$levels(task$target_names)[[1L]]), impact = impact)
     }
   )
+  # FIXME: check for the structure of the model saved during train
 )
 
 ImpactEncoderRegr = R6Class("ImpactEncoderRegr", inherit = Learner,
@@ -24,6 +25,7 @@ ImpactEncoderRegr = R6Class("ImpactEncoderRegr", inherit = Learner,
       list(response = rep_len(NA_real_, length.out = task$nrow), impact = impact)
     }
   )
+  # FIXME: check for the structure of the model saved during train
 )
 
 ImpactEncoderClassifSimple = R6Class("ImpactEncoderClassifSimple", inherit = ImpactEncoderClassif,
