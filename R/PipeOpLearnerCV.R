@@ -110,6 +110,7 @@
 #' graph$pipeops$classif.rpart$learner$predict_type = "prob"
 #'
 #' graph$train(task)
+# FIXME: docs and tests
 PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
@@ -121,11 +122,15 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
+        ParamFct$new("method", levels = c("bootstrap", "custom", "cv", "holdout", "insample", "loo", "repeated_cv", "subsampling"), tags = c("train", "required")),
+        ParamInt$new("repeats", lower = 1L, tags = c("train", "required")),
         ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
-        ParamLgl$new("keep_response", tags = c("train", "required"))
+        ParamDbl$new("ratio", lower = 0, upper = 1, tags = c("train", "required")),
+        ParamLgl$new("keep_response", tags = c("train", "required")),
+        ParamUty$new("train_sets", tags = "train", custom_check = function(x) check_list(types = "atomicvector", any.missing = FALSE)),
+        ParamUty$new("test_sets", tags = "train", custom_check = function(x) check_list(types = "atomicvector", any.missing = FALSE))
       ))
-      private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
+      private$.crossval_param_set$values = list(method = "cv", repeats = 30L, folds = 3, ratio = 2 / 3, keep_response = FALSE)
       private$.crossval_param_set$set_id = "resampling"
       # Dependencies in paradox have been broken from the start and this is known since at least a year:
       # https://github.com/mlr-org/paradox/issues/216
@@ -169,14 +174,45 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       self$state = private$.learner$train(task)$state
       pv = private$.crossval_param_set$values
 
-      # Compute CV Predictions
-      if (pv$method != "insample") {
-        rdesc = mlr_resamplings$get(pv$method)
-        if (pv$method == "cv") rdesc$param_set$values = list(folds = pv$folds)
-        rr = resample(task, private$.learner, rdesc)
-        prds = as.data.table(rr$prediction(predict_sets = "test"))
-      } else {
-        prds = as.data.table(private$.learner$predict(task))
+      if (pv$method == "insample") {
+        return(private$pred_to_task(as.data.table(private$.learner$predict(task)), task))  # early exit
+      }
+
+      # Compute resampled Predictions
+      rdesc = mlr_resamplings$get(pv$method)
+      rdesc$param_set$values = switch(pv$method,
+        "bootstrap" = list(repeats = pv$repeats, ratio = pv$ratio),
+        "custom" = list(),
+        "cv" = list(folds = pv$folds),
+        "holdout" = list(ratio = pv$ratio),
+        "loo" = list(),
+        "repeated_cv" = list(repeats = pv$repeats, folds = pv$folds),
+        "subsampling" = list(repeats = pv$repeats, ratio = pv$ratio))
+      if (pv$method == "custom") {
+        rdesc$instantiate(task, train_sets = private$.crossval_param_set$values$train_sets, test_sets = private$.crossval_param_set$values$test_sets)
+      }
+      rr = resample(task, private$.learner, rdesc)
+      prds = as.data.table(rr$prediction(predict_sets = "test"))
+      nrows_duplicated = length(prds$row_id[duplicated(prds$row_id)])
+      missing_rows = setdiff(task$row_ids, prds$row_id)
+      nrows_missing = length(setdiff(task$row_ids, prds$row_id))
+
+      if (nrows_duplicated || nrows_missing) {  # duplicates or missings
+        SDcols = setdiff(colnames(prds), c("row_id", "truth"))
+        prds_corrected = if (nrows_duplicated) {
+          prds[, map(.SD, aggregation), by = "row_id", .SDcols = SDcols]
+        } else {
+          setNames(data.table(matrix(nrow = 0L, ncol = NCOL(prds))), colnames(prds))
+        }
+        prds_extended = as.list(prds_corrected)[SDcols]
+        prds_extended = map(prds_extended, add_missings, len = nrows_missing)
+        prds_extended[["row_id"]] = c(prds_corrected[["row_id"]], missing_rows)
+        prds = setDT(prds_extended)
+
+        target = task$truth(prds$row_id)
+        if (task$task_type == "classif") {
+          prds$response = factor(prds$response, levels = levels(target), ordered = is.ordered(target))
+        }
       }
 
       private$pred_to_task(prds, task)
@@ -203,5 +239,28 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     .learner = NULL
   )
 )
+
+# Helper function for aggregating predictions if duplicated rows are present:
+#  - handles response, prob etc. naturally
+#  - if x is a factor (e.g., response if classif) take the mode and return this level as a character (factor fix is applied later)
+#  - if x is numeric (e.g., response if regr, or prob or se), take the mean (for prob this is invariant w.r.t to [0, 1] boundaries)
+aggregation = function(x) {
+  if (length(x) == 1L) {
+    return(x)  # early exit
+  }
+  if (is.factor(x)) {
+    tt = table(x)
+    names(tt[which.max(tt)])
+  } else {
+    mean(x, na.rm = TRUE)
+  }
+}
+
+# Helper function to add missings to predictions based on their storage mode
+add_missings = function(x, len) {
+  c(x, switch(typeof(x),
+    "character" = rep_len(NA_character_, length.out = len),
+    "double" = rep_len(NA_real_, length.out = len)))
+}
 
 mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ParamSet$new()))$new()))
