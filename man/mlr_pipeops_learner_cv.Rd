@@ -10,7 +10,7 @@
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
 
-Returns cross-validated predictions during training as a \code{\link[mlr3:Task]{Task}} and stores a model of the
+Returns resampled predictions during training as a \code{\link[mlr3:Task]{Task}} and stores a model of the
 \code{\link[mlr3:Learner]{Learner}} trained on the whole data in \verb{$state}. This is used to create a similar
 \code{\link[mlr3:Task]{Task}} during prediction.
 
@@ -22,7 +22,7 @@ are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} 
 Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
 
 \code{\link{PipeOpLearnerCV}} can be used to create "stacking" or "super learning" \code{\link{Graph}}s that use the output of one \code{\link[mlr3:Learner]{Learner}}
-as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\link{PipeOpLearnerCV}} erases the original input features, it is often
+as features for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\link{PipeOpLearnerCV}} erases the original input features, it is often
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
@@ -30,8 +30,7 @@ useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\lin
 }
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
-\code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a
-\code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
+\code{\link[mlr3:Learner]{Learner}} to use for resampling / prediction.
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
@@ -48,7 +47,7 @@ type given to \code{learner} during construction; both during training and predi
 type given to \code{learner} during construction; both during training and prediction.
 
 The output is a task with the same target as the input task, with features replaced by predictions made by the \code{\link[mlr3:Learner]{Learner}}.
-During training, this prediction is the out-of-sample prediction made by \code{\link[mlr3:resample]{resample}}, during prediction, this is the
+During training, this prediction is the prediction made by \code{\link[mlr3:resample]{resample}}, during prediction, this is the
 ordinary prediction made on the data by a \code{\link[mlr3:Learner]{Learner}} trained on the training phase data.
 }
 
@@ -76,10 +75,24 @@ The parameters are the parameters inherited from the \code{\link{PipeOpTaskPrepr
 Besides that, parameters introduced are:
 \itemize{
 \item \code{resampling.method} :: \code{character(1)}\cr
-Which resampling method do we want to use. Currently only supports \code{"cv"} and \code{"insample"}. \code{"insample"} generates
-predictions with the model trained on all training data.
-\item \code{resampling.folds} :: \code{numeric(1)}\cr
-Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}.
+Which resampling method to use. Supports \code{"cv"},\code{"bootstrap"}, \code{"holdout"}, \code{"loo"}, \code{"repeated_cv"}, \code{"subsampling"}, \code{"custom"} and \code{"insample"}.
+See \code{\link[mlr3:mlr_resamplings]{mlr_resamplings}}.
+\code{"insample"} generates predictions with the model trained on all training data.
+In the case of the resampling method returing multiple predictions per row id, the predictions are aggregated via their mean
+(execpt for the \code{"response"} in the case of a \link[mlr3:TaskClassif]{classification Task} which is aggregated using the mode).
+In the case of the resampling method not returning predictions for all row ids as given in the input \code{\link[mlr3:Task]{Task}}, these predictions are added as missing.
+\item \code{resampling.repeats} :: \code{integer(1)}\cr
+Number of repetitions. Initialized to 30. Only used for \code{resampling.method = "bootstrap"}, or \code{"repeated_cv"}, or \code{"subsampling"}.
+\item \code{resampling.folds} :: \code{integer(1)}\cr
+Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}, or \code{"repeated_cv"}.
+\item \code{resampling.ratio} :: \code{numeric(1)}\cr
+Ratio of observations to put into the training set. Initialized to 2/3. Only used for \code{resampling.method = "bootstrap"}, or \code{"holdout"} or \code{"subsampling"}.
+\item \code{resampling.custom.train_sets} :: \code{list()}\cr
+List with row ids for training, one list element per iteration. Must have the same length as \code{resampling.custom.test_sets}.
+Only used for \code{resampling.method = "custom"}.
+\item \code{resampling.custom.test_sets} :: \code{list()}\cr
+List with row ids for testing, one list element per iteration. Must have the same length as \code{resampling.custom.train_sets}.
+Only used for \code{resampling.method = "custom"}.
 \item \code{keep_response} :: \code{logical(1)}\cr
 Only effective during \code{"prob"} prediction: Whether to keep response values, if available. Initialized to \code{FALSE}.
 }

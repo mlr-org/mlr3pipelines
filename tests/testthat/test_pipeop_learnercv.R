@@ -42,11 +42,11 @@ test_that("PipeOpLearnerCV - param values", {
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
   expect_subset(c("minsplit", "resampling.method", "resampling.folds"), names(polrn$param_set$params))
-  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 3, resampling.keep_response = FALSE, xval = 0))
+  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.repeats = 30, resampling.folds = 3, resampling.ratio = 2/3, resampling.keep_response = FALSE, xval = 0))
   polrn$param_set$values$minsplit = 2
-  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 3, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
+  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.repeats = 30, resampling.folds = 3, resampling.ratio = 2/3, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
   polrn$param_set$values$resampling.folds = 4
-  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 4, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
+  expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.repeats = 30, resampling.folds = 4, resampling.ratio = 2/3, resampling.keep_response = FALSE, minsplit = 2, xval = 0))
 })
 
 test_that("PipeOpLearnerCV - within resampling", {
@@ -97,4 +97,143 @@ test_that("PipeOpLearnerCV - model active binding to state", {
   expect_equal(po$state, train_state)
   expect_null(po$learner$state)
   expect_equal(po$learner_model$state, po$state)
+})
+
+test_that("PipeOpLearnerCV - different methods", {
+  skip_on_cran()  # takes too long
+  # Helper
+  test_valid_resampled_task = function(polrn, task, predict_type) {
+    polrn$param_set$values$resampling.keep_response = FALSE
+    polrn$learner$predict_type = predict_type
+
+    train_out = polrn$train(list(task))[[1]]
+    train_out_data = train_out$data()
+    expect_identical(task$row_ids, train_out$row_ids)
+
+    if (task$task_type == "classif") {
+      if (polrn$learner$predict_type == "response") {
+        feature = train_out$data(cols = grep("*.response", train_out$feature_names, value = TRUE))[[1L]]
+        expect_true(is.factor(feature))
+        expect_identical(task$class_names, levels(feature))
+      } else {  # "prob"
+        features = train_out$data(cols = grep("*.prob*", train_out$feature_names, value = TRUE))
+        sums = rowSums(is.na(features))
+        expect_true(all(sums == 0 | sums == NCOL(features)))  # either all or none missing
+        features = features[sums == 0, ]
+        expect_true(all(apply(features, MARGIN = 2L, function(x) x >= 0 & x <= 1)))  # between 0 and 1
+        expect_equal(rowSums(features), rep_len(1, length.out = NROW(features)))  # sum is 1
+      }
+    } else {  # "regr"
+      if (polrn$learner$predict_type == "response") {
+        feature = train_out$data(cols = grep("*.response", train_out$feature_names, value = TRUE))[[1L]]
+        expect_true(is.numeric(feature))
+      } else {  # "se"
+        features = train_out$data(cols = grep("*.response|*.se", train_out$feature_names, value = TRUE))
+        expect_true(all(apply(features, MARGIN = 2L, is.numeric)))
+      }
+    }
+  }
+
+  polrnc = PipeOpLearnerCV$new(LearnerClassifRpart$new(), param_vals = list(resampling.method = "cv", resampling.folds = 2, resampling.repeats = 2))
+  polrnr = PipeOpLearnerCV$new(mlr3learners::LearnerRegrLM$new(), param_vals = list(resampling.method = "cv", resampling.folds = 2, resampling.repeats = 2))
+
+  set.seed(1234)
+  # faster training
+  taskc = tsk("german_credit")$filter(sample(1000, 50))
+  taskc$select("age")
+  taskr = tsk("boston_housing")$filter(sample(sample(506, 50)))
+  taskr$select("rad")
+
+  # cv (see params above)
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  # bootstrap
+  polrnc$param_set$values$resampling.method = "bootstrap"
+  polrnr$param_set$values$resampling.method = "bootstrap"
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  # holdout
+  polrnc$param_set$values$resampling.method = "holdout"
+  polrnr$param_set$values$resampling.method = "holdout"
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  # loo
+  polrnc$param_set$values$resampling.method = "loo"
+  polrnr$param_set$values$resampling.method = "loo"
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  # repeated_cv
+  polrnc$param_set$values$resampling.method = "repeated_cv"
+  polrnr$param_set$values$resampling.method = "repeated_cv"
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  # subsampling
+  polrnc$param_set$values$resampling.method = "subsampling"
+  polrnr$param_set$values$resampling.method = "subsampling"
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  # custom
+  # classif
+  polrnc$param_set$values$resampling.method = "custom"
+  polrnc$param_set$values$resampling.custom.train_sets = list(taskc$row_ids[1:25], taskc$row_ids[26:50])
+  polrnc$param_set$values$resampling.custom.test_sets = list(taskc$row_ids[1:25], taskc$row_ids[26:50])  # no multiples no missings
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+
+  polrnc$param_set$values$resampling.custom.test_sets = list(taskc$row_ids[1:25], taskc$row_ids[1:50])  # multiples but no missings
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+
+  polrnc$param_set$values$resampling.custom.test_sets = list(taskc$row_ids[1:25], taskc$row_ids[26:45])  # no multiples but missings
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  polrnc$learner$predict_type = "response"
+  feature_out = polrnc$train(list(taskc))[[1L]]$data(cols = "classif.rpart.response")[[1L]]
+  expect_true(all(which(is.na(feature_out)) == 46:50))
+  polrnc$learner$predict_type = "prob"
+  features_out = polrnc$train(list(taskc))[[1L]]$data(cols = c("classif.rpart.prob.good", "classif.rpart.prob.bad"))
+  expect_true(all(which(rowSums(is.na(features_out)) == 2L) == 46:50))
+
+  polrnc$param_set$values$resampling.custom.test_sets = list(taskc$row_ids[1:25], taskc$row_ids[20:45])  # multiples and missings
+  test_valid_resampled_task(polrnc, taskc, "response")
+  test_valid_resampled_task(polrnc, taskc, "prob")
+  polrnc$learner$predict_type = "response"
+  feature_out = polrnc$train(list(taskc))[[1L]]$data(cols = "classif.rpart.response")[[1L]]
+  expect_true(all(which(is.na(feature_out)) == 46:50))
+  polrnc$learner$predict_type = "prob"
+  features_out = polrnc$train(list(taskc))[[1L]]$data(cols = c("classif.rpart.prob.good", "classif.rpart.prob.bad"))
+  expect_true(all(which(rowSums(is.na(features_out)) == 2L) == 46:50))
+
+  # regr
+  polrnr$param_set$values$resampling.method = "custom"
+  polrnr$param_set$values$resampling.custom.train_sets = list(taskr$row_ids[1:25], taskr$row_ids[26:50])
+  polrnr$param_set$values$resampling.custom.test_sets = list(taskr$row_ids[1:25], taskr$row_ids[26:50])  # no multiples no missings
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  polrnr$param_set$values$resampling.custom.test_sets = list(taskr$row_ids[1:25], taskr$row_ids[1:50])  # multiples but no missings
+  test_valid_resampled_task(polrnr, taskr, "se")
+
+  polrnr$param_set$values$resampling.custom.test_sets = list(taskr$row_ids[1:25], taskr$row_ids[26:45])  # no multiples but missings
+  test_valid_resampled_task(polrnr, taskr, "se")
+  polrnr$learner$predict_type = "se"
+  features_out = polrnr$train(list(taskr))[[1L]]$data(cols = c("regr.lm.response", "regr.lm.se"))
+  expect_true(all(which(rowSums(is.na(features_out)) == 2L) == 46:50))
+
+  polrnr$param_set$values$resampling.custom.test_sets = list(taskr$row_ids[1:25], taskr$row_ids[20:45])  # multiples and missings
+  test_valid_resampled_task(polrnr, taskr, "se")
+  polrnr$learner$predict_type = "se"
+  features_out = polrnr$train(list(taskr))[[1L]]$data(cols = c("regr.lm.response", "regr.lm.se"))
+  expect_true(all(which(rowSums(is.na(features_out)) == 2L) == 46:50))
 })
