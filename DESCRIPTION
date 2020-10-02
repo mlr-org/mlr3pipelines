@@ -53,7 +53,6 @@ Imports:
     R6,
     withr
 Suggests:
-    bibtex,
     ggplot2,
     glmnet,
     igraph,
@@ -82,8 +81,6 @@ Suggests:
     GenSA,
     methods,
     vtreat
-RdMacros:
-    mlr3misc
 Remotes:
     mlr-org/mlr3,
     Bioconductor/Biobase
@@ -92,7 +89,7 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.1
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -166,6 +163,7 @@ Collate:
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
+    'bibentries.R'
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'
