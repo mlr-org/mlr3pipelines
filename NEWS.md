@@ -1,4 +1,6 @@
 # mlr3pipelines 0.3.0-9000
+* Changed PipeOps:
+  - PipeOpLearnerCV now also wraps a Resampling allowing for a wider use of resampling methods
 
 # mlr3pipelines 0.3.0
 
