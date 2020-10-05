@@ -6,22 +6,19 @@ test_that("Bagging Pipeline", {
   # classif
   tsk = tsk("iris")
   lrn = lrn("classif.rpart")
-  p = ppl("bagging", graph = po(lrn), averager = po("classifavg"))
+  p = ppl("bagging", graph = po(lrn), averager = po("classifavg", collect_multiplicity = TRUE))
   expect_graph(p)
-  expect_true(length(p$pipeops) == 10 + 10 + 1)
 
   # regr
   tsk = tsk("boston_housing")
   lrn = lrn("regr.rpart")
-  p = ppl("bagging", graph = po(lrn), iterations = 5L, averager = po("regravg"))
+  p = ppl("bagging", graph = po(lrn), iterations = 5L, averager = po("regravg", collect_multiplicity = TRUE))
   expect_graph(p)
-  expect_true(length(p$pipeops) == 5 + 5 + 1)
 
   # graph instead of po(lrn)
   gr = po("pca") %>>% po(lrn)
-  p = pipeline_bagging(graph = gr, iterations = 2L, averager = po("regravg"))
+  p = pipeline_bagging(graph = gr, iterations = 2L, averager = po("regravg", collect_multiplicity = TRUE))
   expect_graph(p)
-  expect_true(length(p$pipeops) == 2 + (2*2) + 1)
   res = resample(tsk$filter(1:50), GraphLearner$new(p), rsmp("holdout"))
   expect_resample_result(res)
 
@@ -30,7 +27,10 @@ test_that("Bagging Pipeline", {
   lrn = lrn("classif.rpart")
   p = pipeline_bagging(graph = po(lrn))
   expect_graph(p)
-  expect_true(length(p$pipeops) == 10 + 10)
-  expect_data_table(p$output, nrows = 10)
+  train_out = p$train(tsk)[[1L]]
+  predict_out = p$predict(tsk)[[1L]]
+  expect_length(train_out, 10L)
+  expect_length(predict_out, 10L)
+  expect_true(all(map_lgl(predict_out, function(x) "PredictionClassif" %in% class(x))))
 })
 
