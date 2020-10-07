@@ -63,7 +63,9 @@ Constructor.
 }
 
 \references{
-\cite{mlr3pipelines}{ledell_2015}
+LeDell, Erin (2015).
+\emph{Scalable Ensemble Learning and Computationally Efficient Variance Estimation}.
+Ph.D. thesis, UC Berkeley.
 }
 \seealso{
 Other Learners: 
