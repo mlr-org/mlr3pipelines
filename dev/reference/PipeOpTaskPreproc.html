@@ -306,7 +306,7 @@ and modifies it (ideally in-place without cloning) while using information in th
 <li><p><code>.train_dt(dt, levels, target)</code> <br />
 (<code>data.table</code>, named <code>list</code>, <code>any</code>) -&gt; <code>data.table</code> | <code>data.frame</code> | <code>matrix</code> <br />
 Train <code>PipeOpTaskPreproc</code> on <code>dt</code>, transform it and store a state in <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href='as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.<br />
 The <code>levels</code> argument is a named list of factor levels for factorial or character features. The <code>target</code> argument
 contains the <code>$truth()</code> information of the training <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>; its type depends on the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
@@ -316,7 +316,7 @@ This method can be overloaded when inheriting from <code>PipeOpTaskPreproc</code
 <li><p><code>.predict_dt(dt, levels)</code> <br />
 (<code>data.table</code>, named <code>list</code>) -&gt; <code>data.table</code> | <code>data.frame</code> | <code>matrix</code> <br />
 Predict on new data in <code>dt</code>, possibly using the stored <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href='as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.<br />
 The <code>levels</code> argument is a named list of factor levels for factorial or character features.<br />
 This method can be overloaded when inheriting <code>PipeOpTaskPreproc</code>, together with <code>private$.train_dt()</code> and optionally

@@ -225,7 +225,7 @@ Set of all required packages for the <code>PipeOp</code>'s <code>$train</code> a
 Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
 <li><p><code>tags</code> ::<code>character</code><br />
 A set of tags associated with the <code>PipeOp</code>. Tags describe a PipeOp's purpose.
-Can be used to filter <code><a href='as.data.table.html'>as.data.table(mlr_pipeops)</a></code>. Default is <code>"abstract"</code>, indicating an abstract <code>PipeOp</code>.</p></li>
+Can be used to filter <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table(mlr_pipeops)</a></code>. Default is <code>"abstract"</code>, indicating an abstract <code>PipeOp</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -285,7 +285,7 @@ Number of output channels. This equals <code>nrow($output)</code>.</p></li>
 Indicate whether the <code>PipeOp</code> was already trained and can therefore be used for prediction.</p></li>
 <li><p><code>tags</code> ::<code>character</code><br />
 A set of tags associated with the <code>PipeOp</code>. Tags describe a PipeOp's purpose.
-Can be used to filter <code><a href='as.data.table.html'>as.data.table(mlr_pipeops)</a></code>.
+Can be used to filter <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table(mlr_pipeops)</a></code>.
 PipeOp tags are inherited and child classes can introduce additional tags.</p></li>
 <li><p><code>hash</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
 Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> and <code>$param_set$values</code>. If a

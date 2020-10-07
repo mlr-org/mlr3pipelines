@@ -40,9 +40,6 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/as.Multiplicity.html</loc>
   </url>
   <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/as.data.table.html</loc>
-  </url>
-  <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/as_graph.html</loc>
   </url>
   <url>
@@ -305,6 +302,9 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/ppl.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/reexports.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/register_autoconvert_function.html</loc>
