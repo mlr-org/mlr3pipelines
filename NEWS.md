@@ -1,4 +1,6 @@
 # mlr3pipelines 0.3.0-9000
+* mlr_graphs:
+  - pipeline_bagging now uses multiplicities internally
 
 # mlr3pipelines 0.3.0
 
