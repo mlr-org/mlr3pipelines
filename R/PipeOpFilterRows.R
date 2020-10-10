@@ -98,7 +98,8 @@ PipeOpFilterRows = R6Class("PipeOpFilterRows",
       row_ids = setdiff(row_ids, na_ids)
 
       if (length(self$param_set$values$filter_formula)) {
-        row_ids = row_ids[which(eval(self$param_set$values$filter_formula[[2L]], envir = task$data(row_ids, cols = task$feature_names)))]
+        frm = self$param_set$values$filter_formula
+        row_ids = row_ids[which(eval(frm[[2L]], envir = task$data(row_ids, cols = task$feature_names), enclos = environment(frm)))]
       }
 
       task$filter(row_ids)

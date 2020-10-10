@@ -32,8 +32,11 @@ test_that("PipeOpFilterRows - filtering", {
     predict_out$data(cols = task_predict$feature_names))
 
   # Works with variables from an env
-  some_test_val = 7
+  env = new.env()
+  assign("some_test_val", 7, envir = env)
+  some_test_val = -100  # this should not be taken!
   filter_formula = ~ pregnant == some_test_val
+  environment(filter_formula) = env
   op$param_set$values$filter_formula = filter_formula
   expect_true(all(op$train(list(task))[[1L]]$data(cols = "pregnant")[[1L]] == 7L))
 })
