@@ -47,6 +47,17 @@ task_filter_ex = function(task, row_ids) {
 # these must be at the root and can not be anonymous functions because all.equal fails otherwise.
 check_function_or_null = function(x) check_function(x, null.ok = TRUE)
 check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE, min.len = 1, lower = 0, upper = 1)
+# function that checks whether something is either of class `cls` or in the
+# dictionary `dict` (in which case it is assumed the right class is created).
+check_class_or_character <- function(cls, dict) {
+  function(x) {
+    if (is.character(x)) {
+      check_choice(x, dict$keys())
+    } else {
+      check_measure(x, class = cls)
+    }
+  }
+}
 curry = function(fn, ..., varname = "x") {
   arguments = list(...)
   function(x) {
@@ -55,16 +66,40 @@ curry = function(fn, ..., varname = "x") {
   }
 }
 
+
 # 'and' operator for checkmate check_*-functions
 # example:
-# check_numeric(x) %&&% check_true(all(x < 0))
-`%&&%` = function(lhs, rhs) {
+# check_numeric(x) %check&&% check_true(all(x < 0))
+`%check&&%` = function(lhs, rhs) {
+  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", and ", rhs))
   if (isTRUE(lhs)) rhs else lhs
 }
+# check_numeric(x) %check||% check_character(x)
+`%check||%` = function(lhs, rhs) {
+  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", or ", rhs))
+  TRUE
+}
+
 
 # perform gsub on names of list
 # `...` are given to `gsub()`
 rename_list = function(x, ...) {
   names(x) = gsub(x = names(x), ...)
   x
+}
+
+# clone a learner and set a state
+clone_with_state = function(learner, state) {
+  lrn = learner$clone(deep = TRUE)
+  lrn$state = state
+  lrn
+}
+
+#' @include multiplicity.R
+multiplicity_recurse = function(.multip, .fun, ...) {
+  if (is.Multiplicity(.multip)) {
+    as.Multiplicity(lapply(.multip, function(m) multiplicity_recurse(.multip = m, .fun = .fun, ...)))
+  } else {
+    .fun(.multip, ...)
+  }
 }

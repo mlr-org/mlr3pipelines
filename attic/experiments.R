@@ -22,23 +22,57 @@ tools::buildVignettes(dir = "mlr3pipelines")
 system.time(testthat::test_package("mlr3pipelines", filter = "pipeop_impute"), gcFirst = FALSE)
 devtools::run_examples("mlr3pipelines")
 
-testthat::test_package("mlr3pipelines", filter = "proxy")
+profvis::profvis(testthat::test_package("mlr3pipelines"))
 
 
 testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 
+testthat::test_package("mlr3pipelines", filter = "multiplicit")
+
+
+ntree <- 10
+mtry <- 2
+
+gr <- po("replicate", reps = ntree) %>>%
+  po("select", selector = function(task) sample(task$feature_names, mtry)) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE)
+
+gr <- po("ovrsplit") %>>% lrn("classif.rpart") %>>% po("ovrunite")
+gr <- po("ovrsplit") %>>%
+  po("replicate", reps = 3) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE) %>>%
+  po("ovrunite")
+
+gr <- po("replicate", reps = 3) %>>%
+  po("ovrsplit") %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("ovrunite") %>>%
+  po("classifavg", collect = TRUE)
+
+library("mlr3learners")
+
+gr <- list(
+    po("nop"),
+    po("learner_cv", lrn("regr.lm")),
+    po("replicate", reps = 3) %>>% po("learner_cv", lrn("regr.ranger"))
+  ) %>>%
+  po("featureunion") %>>% lrn("regr.rpart") %>>% po("regravg", collect = TRUE)
 
 
 
-testthat::test_package("mlr3pipelines", filter = "encode")
+testthat::test_package("mlr3pipelines", filter = "scale")
 
 testthat::test_package("mlr3pipelines", filter = "removeconstants")
 testthat::test_package("mlr3pipelines", filter = "conversion")
 
-devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "pipeop_impute")
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "imputelearner")
+
+devtools::test("mlr3pipelines", stop_on_warning = TRUE, filter = "impute")
 
 
-testthat::test_package("mlr3pipelines", filter = "apply")
+testthat::test_package("mlr3pipelines", filter = "renamecolumns")
 
 
 testthat::test_package("mlr3pipelines", filter = "^_[a-d].*")
@@ -811,3 +845,52 @@ task = mlr_tasks$get("iris")$
 task$data()
 
 cbind(mlr_tasks$get("iris")$data(), data.table(x = 1:150))
+
+
+
+
+po("pca")$train(list(tsk("iris")))[[1]]$data()
+
+
+po("pca")$train(list(Multiplicity(tsk("iris"), tsk("boston_housing"))))
+
+
+gr = po("replicate", reps = 10) %>>% po("subsample") %>>%
+  lrn("classif.rpart") %>>% po("classifavg", collect = TRUE)
+gr$train(tsk("iris"))
+
+gr$predict(tsk("iris"))
+
+gr$state$classif.rpart[1:2]
+
+gr <- po("ovrsplit") %>>% lrn("classif.rpart") %>>% po("ovrunite")
+
+gr <- po("ovrsplit") %>>%
+  po("replicate", reps = 3) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE) %>>%
+  po("ovrunite")
+
+
+gr <-   po("replicate", reps = 3) %>>%
+  po("ovrsplit") %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("ovrunite") %>>%
+  po("classifavg", collect = TRUE)
+
+gr <- list(
+    po("nop"),
+    po("learner_cv", lrn("regr.lm")),
+    po("replicate", reps = 3) %>>% po("learner_cv", lrn("regr.ranger"))
+  ) %>>%
+  po("featureunion") %>>% lrn("regr.rpart") %>>% po("regravg", collect = TRUE)
+
+
+ntree <- 10
+mtry <- 2
+
+gr <- po("replicate", reps = ntree) %>>%
+  po("select", selector = function(task) sample(task$feature_names, mtry)) %>>%
+  po("subsample") %>>% lrn("classif.rpart") %>>%
+  po("classifavg", collect = TRUE)
+

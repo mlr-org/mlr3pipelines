@@ -72,7 +72,7 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
         ParamUty$new("kpar", tags = c("train", "kpca")),
         ParamInt$new("features", default = 0, lower = 0, tags = c("train", "kpca")),
         ParamDbl$new("th", default = 1e-04, lower = 0, tags = c("train", "kpca")),
-        ParamUty$new("na.action", default = na.omit, tags = c("train", "kpca"))
+        ParamUty$new("na.action", default = stats::na.omit, tags = c("train", "kpca"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "kernlab", feature_types = c("numeric", "integer"))

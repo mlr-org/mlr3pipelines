@@ -28,18 +28,18 @@ test_that("PipeOpMissInd", {
   task_no_lgl = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "missing_train", type = "logical")))
+    constargs = list(param_vals = list(which = "missing_train", type = "logical", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "logical")))
+    constargs = list(param_vals = list(which = "all", type = "logical", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "factor")))
+    constargs = list(param_vals = list(which = "all", type = "factor", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
-    constargs = list(param_vals = list(which = "all", type = "numeric")))
+    constargs = list(param_vals = list(which = "all", type = "numeric", affect_columns = NULL)))
 
-  po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical"))
+  po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical", affect_columns = NULL))
 
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
 
@@ -94,7 +94,6 @@ test_that("PipeOpMissInd", {
   expect_null(task_predicted$missing_j)
 })
 
-
 # https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
 test_that("union with missing rows", {
   data("mtcars", package = "datasets")
@@ -122,7 +121,6 @@ test_that("union with missing rows", {
 
 # https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
 test_that("missind on full data returns empty task", {
-  library(mlr3learners)
   task = tsk("iris")
   imp_missind = po("missind")
   imp_missind$train(list(task))

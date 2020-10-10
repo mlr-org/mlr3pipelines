@@ -22,6 +22,9 @@
 #' be converted to [`Graph`]s. This means, in particular, `list`s of [`Graph`]s, [`PipeOp`]s or objects convertible to that, because
 #' [`as_graph()`] automatically applies [`gunion()`] to `list`s. See examples.
 #'
+#' Note that if `g1` is `NULL`, `g2` converted to a [`Graph`] will be returned.
+#' Analogously, if `g2` is `NULL`, `g1` converted to a [`Graph`] will be returned.
+#'
 #' @param g1 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
 #'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put in front of `g2`.
 #' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
@@ -56,6 +59,9 @@
 #'   add_edge(o1$id, o3$id, dst_channel = 1)$
 #'   add_edge(o2$id, o3$id, dst_channel = 2)
 `%>>%` = function(g1, g2) {
+  # neutral elements handling
+  if (is.null(g1)) return(as_graph(g2))
+  if (is.null(g2)) return(as_graph(g1))
 
   g1 = as_graph(g1)
   g2 = as_graph(g2)
@@ -71,11 +77,11 @@
   for (row in seq_len(max(nrow(g1out), nrow(g2in)))) {
     outrow = min(nrow(g1out), row)
     inrow = min(nrow(g2in), row)
-    if (!are_types_compatible(g1out$train[outrow], g2in$train[inrow])) {
+    if (!are_types_compatible(strip_multiplicity_type(g1out$train[outrow]), strip_multiplicity_type(g2in$train[inrow]))) {
       stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
         g1out$op.id[outrow], g1out$train[outrow], g2in$op.id[inrow], g2in$train[inrow])
     }
-    if (!are_types_compatible(g1out$predict[outrow], g2in$predict[inrow])) {
+    if (!are_types_compatible(strip_multiplicity_type(g1out$predict[outrow]), strip_multiplicity_type(g2in$predict[inrow]))) {
       stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
         g1out$op.id[outrow], g1out$predict[outrow], g2in$op.id[inrow], g2in$predict[inrow])
     }
@@ -86,4 +92,8 @@
     g2in[, list(dst_id = get("op.id"), dst_channel = get("channel.name"))])
   g$edges = rbind(g$edges, new_edges)
   g
+}
+
+strip_multiplicity_type = function(type) {
+  gsub("^\\[*|\\]*$", "", type)
 }

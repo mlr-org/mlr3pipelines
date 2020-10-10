@@ -8,10 +8,11 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Linearly transforms numeric data columns so they are between \code{lower} and \code{upper}.
-The formula for this is \eqn{x' = a + x * b},
-where \eqn{b} is \eqn{(upper - lower) / (max(x) - min(x))} and
-\eqn{a} is \eqn{-min(x) * b + lower}.
+Linearly transforms numeric data columns so they are between \code{lower}
+and \code{upper}. The formula for this is \eqn{x' = offset + x * scale},
+where \eqn{scale} is \eqn{(upper - lower) / (max(x) - min(x))} and
+\eqn{offset} is \eqn{-min(x) * scale + lower}. The same transformation is applied during training and
+prediction.
 }
 \section{Construction}{
 \preformatted{PipeOpScaleRange$new(id = "scalerange", param_vals = list())
@@ -34,7 +35,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with scaled numeric featur
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}},
-as well as the two transformation parameters \eqn{a} and \eqn{b} for each numeric
+as well as the two transformation parameters \eqn{scale} and \eqn{offset} for each numeric
 feature.
 }
 
@@ -42,10 +43,10 @@ feature.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{lower}  :: \code{numeric(1)} \cr
-Target value of smallest item of input data. Default is 0.
-\item \code{upper} :: \code{numeric(1)} \cr
-Target value of greatest item of input data. Default is 1.
+\item \code{lower} :: \code{numeric(1)}\cr
+Target value of smallest item of input data. Initialized to 0.
+\item \code{upper} :: \code{numeric(1)}\cr
+Target value of greatest item of input data. Initialized to 1.
 }
 }
 
@@ -69,8 +70,8 @@ pop$state
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -81,47 +82,60 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classweights}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
-\code{\link{mlr_pipeops_filterrows}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
-\code{\link{mlr_pipeops_predictionunion}},
+\code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
-\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
+\code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }

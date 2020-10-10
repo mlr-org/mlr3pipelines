@@ -54,7 +54,7 @@
 #' Note that at least one of `filter.nfeat`, `filter.frac`, or `filter.cutoff` must be given.
 #'
 #' @section Internals:
-#' This does *not* use the `$select_cols` feature of [`PipeOpTaskPreproc`] to select only features compatible with the [`Filter`][mlr3filters::Filter];
+#' This does *not* use the `$.select_cols` feature of [`PipeOpTaskPreproc`] to select only features compatible with the [`Filter`][mlr3filters::Filter];
 #' instead the whole [`Task`][mlr3::Task] is used by `private$.get_state()` and subset internally.
 #'
 #' @section Fields:
@@ -144,8 +144,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
       features = switch(filtercrit,
         cutoff = names(scores)[scores >= critvalue],
-        nfeat = head(names(scores), nfeat),
-        frac = head(names(scores), nfeat),
+        nfeat = utils::head(names(scores), nfeat),
+        frac = utils::head(names(scores), nfeat),
         stop("unknown filter criterion"))
 
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep

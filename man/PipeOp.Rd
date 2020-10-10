@@ -96,12 +96,20 @@ Input channels of \code{\link{PipeOp}}. Column \code{name} gives the names (and 
 \verb{$train()} and \verb{$predict()}. Column \code{train} is the (S3) class that an input object must conform to during
 training, column \code{predict} is the (S3) class that an input object must conform to during prediction. Types
 are checked by the \code{\link{PipeOp}} itself and do not need to be checked by \code{private$.train()} / \code{private$.predict()} code.\cr
-A special name is \code{"..."}, which creates a \emph{vararg} input channel that accepts a variable number of inputs.
+A special name is \code{"..."}, which creates a \emph{vararg} input channel that accepts a variable number of inputs.\cr
+If a row has both \code{train} and \code{predict} values enclosed by square brackets ("\code{[}", "\verb{]}), then this channel is
+\code{\link{Multiplicity}}-aware. If the \code{\link{PipeOp}} receives a \code{\link{Multiplicity}} value on these channels, this \code{\link{Multiplicity}}
+is given to the \code{.train()} and \code{.predict()} functions directly. Otherwise, the \code{\link{Multiplicity}} is transparently
+unpacked and the \code{.train()} and \code{.predict()} functions are called multiple times, once for each \code{\link{Multiplicity}} element.
+The type enclosed by square brackets indicates that only a \code{\link{Multiplicity}} containing values of this type are accepted.
+See \code{\link{Multiplicity}} for more information.
 \item output :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Output channels of \code{\link{PipeOp}}, in the order in which they will be given in the list returned by \verb{$train} and
 \verb{$predict} functions. Column \code{train} is the (S3) class that an output object must conform to during training,
 column \code{predict} is the (S3) class that an output object must conform to during prediction. The \code{\link{PipeOp}} checks
-values returned by \code{private$.train()} and \code{private$.predict()} against these types specifications.
+values returned by \code{private$.train()} and \code{private$.predict()} against these types specifications.\cr
+If a row has both \code{train} and \code{predict} values enclosed by square brackets ("\code{[}", "\verb{]}), then this signals that the channel
+emits a \code{\link{Multiplicity}} of the indicated type. See \code{\link{Multiplicity}} for more information.
 \item \code{innum} :: \code{numeric(1)} \cr
 Number of input channels. This equals \verb{nrow($input)}.
 \item \code{outnum} :: \code{numeric(1)} \cr
@@ -212,8 +220,8 @@ Other mlr3pipelines backend related:
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
@@ -223,34 +231,45 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classweights}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
-\code{\link{mlr_pipeops_filterrows}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
-\code{\link{mlr_pipeops_predictionunion}},
+\code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -258,13 +277,15 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
-\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
+\code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }

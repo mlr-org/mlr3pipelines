@@ -89,7 +89,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         keep = union(keep_fraction, keep_count)
         dont_keep = setdiff(levels(d), keep)
         if (is.ordered(d)) {
-          cmap = setNames(as.list(levels(d)), levels(d))
+          cmap = stats::setNames(as.list(levels(d)), levels(d))
           for (eliminating in dont_keep) {
             position = match(eliminating, names(cmap))
             if (position == 1) {
@@ -103,7 +103,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
             cmap[[position]] = NULL
           }
         } else {
-          cmap = setNames(as.list(keep), keep)
+          cmap = stats::setNames(as.list(keep), keep)
           lowest_kept = keep[length(keep)]
           cmap[[lowest_kept]] = c(lowest_kept, dont_keep)
         }
@@ -120,7 +120,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
       for (n in names(cmaplist)) {
         # don't touch unseen factor levels
         new_lvls = setdiff(levels(dt[[n]]), unlist(cmaplist[[n]], use.names = FALSE))
-        all_lvls = c(cmaplist[[n]], setNames(as.list(new_lvls), new_lvls))
+        all_lvls = c(cmaplist[[n]], stats::setNames(as.list(new_lvls), new_lvls))
         levels(dt[[n]]) = c(
           all_lvls[intersect(levels(dt[[n]]), names(all_lvls))],  # keep all levels in their order, if they were present before
           all_lvls[setdiff(names(all_lvls), levels(dt[[n]]))]     # levels that are missing now get sorted to the back.

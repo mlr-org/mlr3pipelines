@@ -15,6 +15,11 @@
 # returns `TRUE` if there is any overlap in the class hierarchy. Otherwise
 # it returns `FALSE`.
 #
+# If `class2` contains `"NULL"` then this returns `TRUE` because any
+# class can be converted to `"NULL"`.
+#
+# `class1` is the class of the "output" of one `PipeOp`, and `class2`
+# is the "input" of the following `PipeOp`.
 # It may be useful to check that the input class of one `PipeOp` is a strict
 # superclass of the output class of the other `PipeOp`, but that is not done
 # here (yet).
@@ -26,6 +31,9 @@ are_types_compatible = function(class1, class2) {
   assert_string(class1)
   assert_string(class2)
   if ("*" %in% c(class1, class2)) {
+    return(TRUE)
+  }
+  if ("NULL" %in% class2) {
     return(TRUE)
   }
   ch1 = unique(get_class_hierarchy(class1))
@@ -174,7 +182,8 @@ default_acr = list(
   list("Measure", function(x) as_measure(x), packages = "mlr3"),
   list("Learner", function(x) as_learner(x), packages = "mlr3"),
   list("Resampling", function(x) as_resampling(x), packages = "mlr3"),
-  list("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
+  list("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines"),
+  list("NULL", function(x) NULL)
 )
 
 # see add_class_hierarchy_cache()

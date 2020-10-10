@@ -16,7 +16,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpLearner$new(learner, id = if (is.character(learner)) learner else learner$id, param_vals = list())\cr
+#' PipeOpLearner$new(learner, id = NULL, param_vals = list())
 #' ```
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
@@ -57,8 +57,10 @@
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
-#' * `learner`  :: [`Learner`][mlr3::Learner]\cr
+#' * `learner` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
+#' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
@@ -106,6 +108,25 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         }
       }
       private$.learner
+    },
+    learner_model = function(val) {
+      if (!missing(val)) {
+        if (!identical(val, private$.learner)) {
+          stop("$learner is read-only.")
+        }
+      }
+      if (is.null(self$state) || is_noop(self$state)) {
+        private$.learner
+      } else {
+        multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
+      }
+    },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, names(mlr_reflections$learner_predict_types[[private$.learner$task_type]]))
+        private$.learner$predict_type = val
+      }
+      private$.learner$predict_type
     }
   ),
   private = list(
@@ -129,3 +150,8 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 )
 
 mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()))$new()))
+
+#' @export
+as_learner.PipeOp = function(x, clone = FALSE) {
+  as_learner(as_graph(x))
+}

@@ -25,6 +25,7 @@ Create
 \item a \code{PipeOp} from \code{mlr_pipeops} from given ID
 \item a \code{PipeOpLearner} from a \code{Learner} object
 \item a \code{PipeOpFilter} from a \code{Filter} object
+\item a \code{PipeOpSelect} from a \code{Selector} object
 }
 
 The object is initialized with given parameters and \code{param_vals}.

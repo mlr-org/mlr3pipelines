@@ -8,15 +8,21 @@
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
+EXPERIMENTAL, API SUBJECT TO CHANGE
+
 Handles target transformation operations that do not need explicit inversion.
 In case the new target is required during predict, creates a vector of \code{NA}.
-Works similar to \code{\link{PipeOpTargetTrafo}} and \code{\link{PipeOpTargetTrafoSimple}}, but forgoes the
+Works similar to \code{\link{PipeOpTargetTrafo}} and \code{\link{PipeOpTargetMutate}}, but forgoes the
 inversion step.
 In case target after the \code{trafo} is a factor, levels are saved to \verb{$state}.\cr
 
 During prediction: Sets all target values to \code{NA} before calling the \code{trafo} again.
 In case target after the \code{trafo} is a factor, levels saved in the \code{state} are
 set during prediction.
+
+As a special case when \code{trafo} is \code{identity} and \code{new_target_name} matches an existing column
+name of the data of the input \code{\link[mlr3:Task]{Task}}, this column is set as the new target. Depending on
+\code{drop_original_target} the original target is then either dropped or added to the features.
 }
 \section{Construction}{
 \preformatted{PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
@@ -40,21 +46,20 @@ The parameters are the parameters inherited from \code{\link{PipeOpTargetTrafo}}
 Transformation function for the target. Should only be a function of the target, i.e., taking a
 single argument. Default is \code{identity}.
 Note, that the data passed on to the target is a \code{data.table} consisting of all target column.
-\item \code{new_target_name} :: \code{character}\cr
+\item \code{new_target_name} :: \code{character(1)}\cr
 Optionally give the transformed target a new name. By default the original name is used.
 \item \code{new_task_type} :: \code{character(1)}\cr
 Optionally a new task type can be set. Legal types are listed in
 \code{mlr_reflections$task_types$type}.
-#' \code{drop_old_target} :: \code{logical(1)}\cr
+#' \code{drop_original_target} :: \code{logical(1)}\cr
 Whether to drop the original target column. Default: \code{TRUE}.
-If \code{drop_old_target}
 }
 }
 
 \section{State}{
 
 The \verb{$state} is a list of class levels for each target after trafo.
-\code{list(0)} if none of the targets have levels.
+\code{list()} if none of the targets have levels.
 }
 
 \section{Methods}{
@@ -63,12 +68,15 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
-  # Create a binary class task from iris
-  library(mlr3)
-  trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
-  po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
-  po$train(list(tsk("iris")))
-  po$predict(list(tsk("iris")))
+\dontrun{
+# Create a binary class task from iris
+library(mlr3)
+trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
+po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
+po$train(list(tsk("iris")))
+po$predict(list(tsk("iris")))
+}
+# not yet exported
 }
 \seealso{
 Other mlr3pipelines backend related: 
@@ -83,8 +91,8 @@ Other mlr3pipelines backend related:
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -95,34 +103,45 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classweights}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
-\code{\link{mlr_pipeops_filterrows}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
-\code{\link{mlr_pipeops_predictionunion}},
+\code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -130,12 +149,14 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
-\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
+\code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }

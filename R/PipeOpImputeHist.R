@@ -55,20 +55,21 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputehist", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "graphics")
+      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric"))
     }
   ),
   private = list(
-
-    .select_cols = function(task) task$feature_types[get("type") %in% c("numeric", "integer"), get("id")],
 
     .train_imputer = function(feature, type, context) {
       graphics::hist(feature, plot = FALSE)[c("counts", "breaks")]
     },
 
     .impute = function(feature, type, model, context) {
+      if (is.atomic(model)) {  # handle nullmodel
+        return(super$.impute(feature, type, model, context))
+      }
       which.bins = sample.int(length(model$counts), sum(is.na(feature)), replace = TRUE, prob = model$counts)
-      sampled = runif(length(which.bins), model$breaks[which.bins], model$breaks[which.bins + 1L])
+      sampled = stats::runif(length(which.bins), model$breaks[which.bins], model$breaks[which.bins + 1L])
       if (type == "integer") {
         sampled = as.integer(round(sampled))
       }

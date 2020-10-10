@@ -42,7 +42,7 @@ Performs the following steps:
 \itemize{
 \item Drops empty factor levels using \code{\link{PipeOpFixFactors}}
 \item Imputes \code{numeric} features using \code{\link{PipeOpImputeHist}} and \code{\link{PipeOpMissInd}}
-\item Imputes \code{factor} features using \code{\link{PipeOpImputeNewlvl}}
+\item Imputes \code{factor} features using \code{\link{PipeOpImputeOOR}}
 \item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality\verb{ are collapsed using [}PipeOpCollapseFactors`].
 \item If \code{scaling}, numeric features are scaled to mean 0 and standard deviation 1.
 }
@@ -52,9 +52,11 @@ If a learner is provided, some steps can be left out, i.e. if the learner can de
 factor variables, no encoding is performed.
 }
 \examples{
+\donttest{
 library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
 gr = pipeline_robustify(task, lrn) \%>>\% po("learner", lrn)
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
+}
 }

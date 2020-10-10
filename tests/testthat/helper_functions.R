@@ -42,6 +42,9 @@ expect_deep_clone = function(one, two) {
       if (identical(utils::tail(path, 1), c("[element train_task] 'train_task'"))) {
         return(invisible(NULL))  # workaround for https://github.com/mlr-org/mlr3/issues/382
       }
+      if (identical(utils::tail(path, 1), c("[element fallback] 'fallback'"))) {
+        return(invisible(NULL))  # workaround for https://github.com/mlr-org/mlr3/issues/511
+      }
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
       expect_null(visited_b[[addr_a]], label = label)
@@ -169,6 +172,7 @@ expect_pipeop_class = function(poclass, constargs = list()) {
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
+  affect_context_independent = TRUE,
   tolerance = sqrt(.Machine$double.eps)) {
   # NOTE
   # The 'tolerance' parameter is not used in many places yet; if tolerance becomes a problem, add the
@@ -256,10 +260,12 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
   emptytask = task$clone(deep = TRUE)$select(character(0))
 
-  expect_equal(length(po$train(list(emptytask))[[1]]$feature_names), 0)
-  expect_equal(length(po$predict(list(emptytask))[[1]]$feature_names), 0)
+  expect_task(po$train(list(emptytask))[[1]])
+  emptytaskfnames = po$train(list(emptytask))[[1]]$feature_names
+  expect_task(po$predict(list(emptytask))[[1]])
+  expect_equal(emptytaskfnames, po$predict(list(emptytask))[[1]]$feature_names)
 
-  if ("affect_columns" %in% names(po$param_set$params)) {
+  if ("affect_columns" %in% names(po$param_set$params) && affect_context_independent) {
     selector = function(data) data$feature_names[-1]
     po2$param_set$values$affect_columns = selector
     trained.subset = po$train(list(task2))[[1]]
@@ -284,15 +290,15 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     po2$param_set$values$affect_columns = selector
 
     # NOTE: the following should ensure that data has not changed
-    # but number of rows or row indices could change in theory, so the tests will need to be adapted if that is ever the case
+    # but at least one pipeop adds a new column even with 0 affect_cols, so we only check that original task's features have not changed.
     trained = po2$train(list(task))[[1]]
-    expect_equal(trained$data(cols = trained$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal(trained$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
 
     predicted = po2$predict(list(task))[[1]]
-    expect_equal(predicted$data(cols = predicted$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
+    expect_equal(predicted$data(cols = task$feature_names), task$data(cols = task$feature_names), ignore.col.order = TRUE, tolerance = tolerance)
 
     predicted2 = po2$predict(list(emptytask))[[1]]
-    expect_equal(predicted2$feature_names, character(0))
+    expect_equal(sort(predicted2$feature_names), sort(emptytaskfnames))
 
 
     # test affect_columns
@@ -300,8 +306,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
 
     # selecting no columns leaves task unchanged
     po$param_set$values$affect_columns = selector_none()
-    expect_equal(task$data(), po$train(list(task))[[1]]$data())
-    expect_equal(task$data(), po$predict(list(task))[[1]]$data())
+    expect_equal(task$data(), po$train(list(task))[[1]]$data(cols = colnames(task$data())))
+    expect_equal(task$data(), po$predict(list(task))[[1]]$data(cols = colnames(task$data())))
 
     # names of every second task column
     halftasknames = task$feature_names[c(TRUE, FALSE)]
@@ -345,7 +351,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   po$train(list(task))
 
   norowtask = task$clone(deep = TRUE)$filter(integer(0))
-  whichrow = sample(task$nrow, 1)
+  whichrow = task$row_ids[[sample.int(task$nrow, 1)]]
   onerowtask = task$clone(deep = TRUE)$filter(whichrow)
 
 
@@ -479,3 +485,41 @@ touch = function(x) {
   x$param_set
   x
 }
+
+expect_multiplicity = function(x) {
+  expect_true(is.Multiplicity(x))
+}
+
+# the following is a necessary workaround for the new R misbehaving when comparing R6 objects.
+# See https://github.com/r-lib/R6/issues/208
+# This is quite sloppy right now.
+r6_to_list = function(x) {
+  actives = c(".__enclos_env__", names(x[[".__enclos_env__"]][[".__active__"]]))
+  ll = sapply(setdiff(names(x), actives), get, x, simplify = FALSE)
+  ll[[".__enclos_env__"]] = list(`.__active__` = x[[".__enclos_env__"]][[".__active__"]], private = x[[".__enclos_env__"]][["private"]])
+  if (!is.null(x[[".__enclos_env__"]][["super"]])) {
+    ll[[".__enclos_env__"]][["super"]] = r6_to_list(x[[".__enclos_env__"]][["super"]])
+  }
+  ln = names(ll)
+  attributes(ll) = attributes(x)
+  names(ll) = ln
+  ll[sort(names(ll))]
+}
+
+all.equal.R6 = function(target, current, ...) {
+  if (!is.environment(target)) NextMethod()
+  if (!is.environment(current)) NextMethod()
+  if (!inherits(current, "R6")) return("'current' is not an R6 class")
+  # avoid cycles
+  r6_seen = dynGet("__r6_seen__", NULL)
+  if (is.null(r6_seen)) {
+    r6_seen = "__r6_seen__" = new.env(parent = emptyenv())
+  }
+  tca = sprintf("%s__%s", data.table::address(target), data.table::address(current))
+  if (!is.null(r6_seen[[tca]])) return(TRUE)
+  r6_seen[[tca]] = TRUE
+  # call all.equal.list directly because objects still have R6 class
+  base:::all.equal.list(r6_to_list(target), r6_to_list(current),  ...)
+}
+
+registerS3method("all.equal", "R6", all.equal.R6)

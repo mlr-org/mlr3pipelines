@@ -7,7 +7,7 @@
 #' Performs the following steps:
 #' * Drops empty factor levels using [`PipeOpFixFactors`]
 #' * Imputes `numeric` features using [`PipeOpImputeHist`] and [`PipeOpMissInd`]
-#' * Imputes `factor` features using [`PipeOpImputeNewlvl`]
+#' * Imputes `factor` features using [`PipeOpImputeOOR`]
 #' * Encodes `factors` using `one-hot-encoding`. Factors with a cardinality > max_cardinality` are
 #'   collapsed using [`PipeOpCollapseFactors`].
 #' * If `scaling`, numeric features are scaled to mean 0 and standard deviation 1.
@@ -33,11 +33,13 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \donttest{
 #' library(mlr3)
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
 #' gr = pipeline_robustify(task, lrn) %>>% po("learner", lrn)
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
+#' }
 pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NULL,
   factors_to_numeric = NULL, max_cardinality = 1000) {
 
@@ -48,7 +50,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
   if (!is.null(learner)) assert_learner(learner)
   if (is.null(impute_missings)) impute_missings = is.null(task) || (any(task$missings()) && (is.null(learner) || "missings" %nin% learner$properties))
   assert_flag(impute_missings)
-  if (is.null(factors_to_numeric)) factors_to_numeric = is.null(task) || (has_type_feats("factor") && (is.null(learner) || "factors" %nin% learner$properties))
+  if (is.null(factors_to_numeric)) factors_to_numeric = is.null(task) || (has_type_feats("factor") && (is.null(learner) || "factor" %nin% learner$feature_types))
   assert_flag(impute_missings)
   assert_count(max_cardinality)
 
@@ -59,9 +61,9 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
   if (has_type_feats("character") && "character" %nin% learner$feature_types)
     pos = c(pos, po("colapply", id = "char_to_fct", param_vals = list(affect_columns = selector_type("character"), applicator = function(x) as.factor(x))))
 
-  # FIXME: Uncomment once #308 is merged
-  # if (has_type_feats("POSIXct") && "POSIXct" %nin% learner$feature_types))
-  #   pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
+  # Date processing
+   if (has_type_feats("POSIXct") && ("POSIXct" %nin% learner$feature_types))
+     pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
 
   if (impute_missings) {
     # Impute numerics
@@ -73,7 +75,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
         po("featureunion"))
     # Impute factors
     if (has_type_feats(c("factor", "ordered", "character")))
-      pos = c(pos, po("imputenewlvl"))
+      pos = c(pos, po("imputeoor"))
   }
 
   # Fix extra factor levels
@@ -99,6 +101,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
 }
 
 mlr_graphs$add("robustify", pipeline_robustify)
+
 
 
 #' @title Create a bagging learner
@@ -128,11 +131,13 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \donttest{
 #' library(mlr3)
 #' lrn_po = po("learner", lrn("regr.rpart"))
 #' task = mlr_tasks$get("boston_housing")
 #' gr = pipeline_bagging(lrn_po, 3, averager = po("regravg"))
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
+#' }
 pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)
@@ -142,7 +147,7 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   subs = po("subsample", param_vals = list(frac = frac)) %>>% graph
   subs_repls = pipeline_greplicate(subs, iterations)
 
-  if (!is.null(averager)) subs_repls %>>% averager else subs_repls
+  subs_repls %>>% averager
 }
 
 mlr_graphs$add("bagging", pipeline_bagging)
@@ -245,27 +250,27 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
 
 mlr_graphs$add("branch", pipeline_branch)
 
+
+
 #' @title Transform and Re-Transform the Target Variable
 #' @name mlr_graphs_targettrafo
 #' @description
 #' Wraps a [`Graph`] that transforms a target during training and inverts the transformation
 #' during prediction. This is done as follows:
 #' * Specify a transformation and inversion function using any subclass of [`PipeOpTargetTrafo`], defaults to
-#'   [`PipeOpTargetTrafoSimple`], afterwards apply `graph`.
-#' * At the very end, during prediction the transformation is inverted using [`PipeOpTargetInverter`].
-#' * To set a transformation and inversion function for [`PipeOpTargetTrafoSimple`] see the
+#'   [`PipeOpTargetMutate`], afterwards apply `graph`.
+#' * At the very end, during prediction the transformation is inverted using [`PipeOpTargetInvert`].
+#' * To set a transformation and inversion function for [`PipeOpTargetMutate`] see the
 #'   parameters `trafo` and `inverter` of the `param_set` of the resulting [`Graph`].
+#' * Note that the input `graph` is not explicitly checked to actually return a
+#'   [`Prediction`][mlr3::Prediction] during prediction.
 #'
 #' @param graph [`PipeOpLearner`] | [`Graph`] \cr
-#'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for. If this is a [`Graph`],
-#'   the last [`PipeOp`] should be a [`PipeOpLearner`] and the first [`PipeOp`] should accept a
-#'   single [`Task`][mlr3::Task] as input.
+#'   A [`PipeOpLearner`] or [`Graph`] to wrap between a transformation and re-transformation of the target variable.
 #' @param trafo_pipeop [`PipeOp`] \cr
-#'   A [`PipeOp`] that is a subclass of [`PipeOpTargetTrafo`]. Default is
-#'   [`PipeOpTargetTrafoSimple`].
+#'   A [`PipeOp`] that is a subclass of [`PipeOpTargetTrafo`]. Default is [`PipeOpTargetMutate`].
 #' @param id_prefix `character(1)` \cr
-#'   Optional id prefix to prepend to [`PipeOpTargetInverter`] ID. The resulting ID will be
-#'   `"[id_prefix]targetinverter"`. Default is `""`.
+#'   Optional id prefix to prepend to [`PipeOpTargetInvert`] ID. The resulting ID will be `"[id_prefix]targetinvert"`. Default is `""`.
 #'
 #' @return [`Graph`]
 #' @export
@@ -273,47 +278,50 @@ mlr_graphs$add("branch", pipeline_branch)
 #' library("mlr3")
 #'
 #' tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
-#' tt$param_set$values$targettrafosimple.trafo = function(x) log(x, base = 2)
-#' tt$param_set$values$targettrafosimple.inverter = function(x) 2 ^ x
+#' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
+#' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
 #'
 #' # gives the same as
 #' g = Graph$new()
-#' g$add_pipeop(PipeOpTargetTrafoSimple$new(param_vals = list(
+#' g$add_pipeop(PipeOpTargetMutate$new(param_vals = list(
 #'   trafo = function(x) log(x, base = 2),
-#'   inverter = function(x) 2 ^ x)
+#'   inverter = function(x) list(response = 2 ^ x$response))
 #'   )
 #' )
 #' g$add_pipeop(LearnerRegrRpart$new())
-#' g$add_pipeop(PipeOpTargetInverter$new())
-#' g$add_edge(src_id = "targettrafosimple", dst_id = "targetinverter",
+#' g$add_pipeop(PipeOpTargetInvert$new())
+#' g$add_edge(src_id = "targetmutate", dst_id = "targetinvert",
 #'   src_channel = 1, dst_channel = 1)
-#' g$add_edge(src_id = "targettrafosimple", dst_id = "regr.rpart",
+#' g$add_edge(src_id = "targetmutate", dst_id = "regr.rpart",
 #'   src_channel = 2, dst_channel = 1)
-#' g$add_edge(src_id = "regr.rpart", dst_id = "targetinverter",
+#' g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
 #'   src_channel = 1, dst_channel = 2)
-pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetTrafoSimple$new(), id_prefix = "") {
+pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetMutate$new(), id_prefix = "") {
   graph = as_graph(graph)
-  assert_r6(graph$pipeops[length(graph$pipeops)][[1L]], classes = "PipeOpLearner")
   if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
     stopf("First PipeOp of graph should accept a single task as input.")
   }
   assert_r6(trafo_pipeop, classes = "PipeOpTargetTrafo")
   assert_string(id_prefix)
 
-  ids = graph$ids(sorted = FALSE)
-  target_inverter_id = paste0(id_prefix, "targetinverter")
+  input_id = graph$input$op.id
+  output_id = graph$output$op.id
+  trafo_pipeop_id = trafo_pipeop$id
+  target_invert_id = paste0(id_prefix, "targetinvert")
 
   graph$add_pipeop(trafo_pipeop)
-  graph$add_pipeop(PipeOpTargetInverter$new(target_inverter_id))
+  graph$add_pipeop(PipeOpTargetInvert$new(target_invert_id))
 
-  graph$add_edge(src_id = trafo_pipeop$id, dst_id = target_inverter_id, src_channel = 1L, dst_channel = 1L)
-  graph$add_edge(src_id = trafo_pipeop$id, dst_id = ids[1L], src_channel = 2L, dst_channel = 1L)
-  graph$add_edge(src_id = ids[length(ids)], dst_id = target_inverter_id, src_channel = 1L, dst_channel = 2L)
+  graph$add_edge(src_id = trafo_pipeop_id, dst_id = target_invert_id, src_channel = 1L, dst_channel = 1L)
+  graph$add_edge(src_id = trafo_pipeop_id, dst_id = input_id, src_channel = 2L, dst_channel = 1L)
+  graph$add_edge(src_id = output_id, dst_id = target_invert_id, src_channel = 1L, dst_channel = 2L)
 
   graph
 }
 
 mlr_graphs$add("targettrafo", pipeline_targettrafo)
+
+
 
 #' @title Create Disjoint Graph Union of Copies of a Graph
 #'
@@ -345,3 +353,56 @@ pipeline_greplicate = function(graph, n) {
 }
 
 mlr_graphs$add("greplicate", pipeline_greplicate)
+
+
+
+#' @title Create A Graph to Perform "One vs. Rest" classification.
+#'
+#' @description
+#' Create a new [`Graph`] for a [classification Task][mlr3::TaskClassif] to
+#' perform "One vs. Rest" classification.
+#'
+#' @param graph [`Graph`] \cr
+#'   Graph being wrapped between [`PipeOpOVRSplit`] and [`PipeOpOVRUnite`].
+#'   The Graph should return `NULL` during training and a
+#'   [classification Prediction][mlr3::PredictionClassif] during prediction.
+#' @return [`Graph`]
+#' @export
+#' @examples
+#' library("mlr3")
+#'
+#' task = tsk("wine")
+#'
+#' learner = lrn("classif.rpart")
+#' learner$predict_type = "prob"
+#'
+#' # Simple OVR
+#' g1 = pipeline_ovr(learner)
+#' g1$train(task)
+#' g1$predict(task)
+#'
+#' # Bagged Learners
+#' gr = po("replicate", reps = 3) %>>%
+#'   po("subsample") %>>%
+#'   learner %>>%
+#'   po("classifavg", collect_multiplicity = TRUE)
+#' g2 = pipeline_ovr(gr)
+#' g2$train(task)
+#' g2$predict(task)
+#'
+#' # Bagging outside OVR
+#' g3 = po("replicate", reps = 3) %>>%
+#'   pipeline_ovr(po("subsample") %>>% learner) %>>%
+#'   po("classifavg", collect_multiplicity = TRUE)
+#' g3$train(task)
+#' g3$predict(task)
+pipeline_ovr = function(graph) {
+  graph = as_graph(graph)
+  if (graph$output$train != "NULL" || graph$output$predict != "PredictionClassif") {
+    stopf("Graph should return 'NULL' during training and a 'PredictionClassif' during prediction.")
+  }
+  g = graph$clone(deep = TRUE)
+  PipeOpOVRSplit$new() %>>% g %>>% PipeOpOVRUnite$new()
+}
+
+mlr_graphs$add("ovr", pipeline_ovr)
