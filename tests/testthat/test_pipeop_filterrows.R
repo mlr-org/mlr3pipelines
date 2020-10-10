@@ -7,10 +7,6 @@ test_that("PipeOpFilterRows - basic properties", {
   expect_equal(train_pipeop(op, inputs = list(task))[[1L]], task)
   expect_equal(predict_pipeop(op, inputs = list(task))[[1L]], task)
   expect_datapreproc_pipeop_class(PipeOpFilterRows, task = task)
-  expect_datapreproc_pipeop_class(PipeOpFilterRows,
-    constargs = list(param_vals = list(filter_formula = ~ age < median(age),
-      na_selector = selector_all())),
-    task = task)
 })
 
 test_that("PipeOpFilterRows - filtering", {

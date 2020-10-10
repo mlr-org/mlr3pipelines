@@ -5,20 +5,20 @@
 \alias{PipeOpFilterRows}
 \title{PipeOpFilterRows}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}.
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Filter rows of the data of a task. Also directly allows for the removal of rows holding missing
-values. If both filtering and missing value removal is performed, filtering is done after missing
-value removal.
+Filter rows of the data of a \code{\link[mlr3:Task]{Task}}.
+Also directly allows for the removal of rows with missing values with respect to some user-defined features.
+If both row filtering and missing value removal is performed, filtering is done after missing value removal.
 }
 \section{Construction}{
 \preformatted{PipeOpFilterRows$new(id = "filterrows", param_vals = list())
 }
 \itemize{
-\item \code{id} :: \code{character(1)}\cr
+\item \code{id} :: \code{character(1)} \cr
 Identifier of resulting object, default \code{"filterrows"}.
-\item \code{param_vals} :: named \code{list}\cr
+\item \code{param_vals} :: named \code{list} \cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
 be set during construction. Default \code{list()}.
 }
@@ -28,25 +28,17 @@ be set during construction. Default \code{list()}.
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output during training is the input \code{\link[mlr3:Task]{Task}} with rows kept according to the
-filtering (see Parameters) and (possible) rows with missing values removed.
-
-The output during prediction is the unchanged input \code{\link[mlr3:Task]{Task}} if the parameter
-\code{skip_during_predict} is \code{TRUE}. Otherwise it is analogously handled as the output during
-training.
+The output is the input \code{\link[mlr3:Task]{Task}} with rows kept according to the filtering expression and
+rows with missing values with respect to the user-defined features removed.
 }
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}},
-as well as the following elements:
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{na_ids} :: \code{integer}\cr
-The row identifiers that had missing values during training and therefore were removed. See the
-parameter \code{na_column}.
-\item \code{row_ids} :: \code{integer}\cr
-The row identifiers that were kept during training according to the parameters \code{filter},
-\code{na_column} and \code{invert}.
+\item \code{na_selection} :: \code{character} \cr
+A \code{character} vector of all feature names that are checked for missing values in the \code{\link[mlr3:Task]{Task}}.
+Initialized to \code{\link[=selector_none]{selector_none()}}.
 }
 }
 
@@ -54,46 +46,40 @@ The row identifiers that were kept during training according to the parameters \
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{filter} :: \code{NULL} | \code{character(1)} | \code{expression} | \code{integer}\cr
-How the rows of the data of the input \code{\link[mlr3:Task]{Task}} should be filtered. This can be a
-character vector of length 1 indicating a feature column of logicals in the data of the input
-\code{\link[mlr3:Task]{Task}} which forms the basis of the filtering, i.e., all rows that are \code{TRUE}
-with respect to this column are kept in the data of the output \code{\link[mlr3:Task]{Task}}. Moreover,
-this can be an expression that will result in a logical vector of length \verb{$nrow} of the data of
-the input \code{\link[mlr3:Task]{Task}} when evaluated withing the environment of the \verb{$data()} of the
-input \code{\link[mlr3:Task]{Task}}. Finally, this can also be an integerish vector that directly
-specifies the row identifiers of the rows of the data of the input \code{\link[mlr3:Task]{Task}} that
-should be kept. Default is \code{NULL}, i.e., no filtering is done.
-\item \code{na_column} :: \code{character}\cr
-A character vector that specifies the columns of the data of the input \code{\link[mlr3:Task]{Task}}
-that should be checked for missing values. If set to \verb{_all_}, all columns of the data are used. A
-row is removed if at least one missing value is found with respect to the columns specified.
-Default is \code{character(0)}, i.e., no removal of missing values is done.
-\item \code{invert} :: \code{logical(1)}\cr
-Should the filtering rule be set-theoretically inverted? Note that this happens after
-(possible) missing values were removed if \code{na_column} is specified. Default is \code{FALSE}.
-\item \code{skip_during_predict} :: \code{logical(1)}\cr
-Should the filtering and missing value removal steps be skipped during prediction? Default is
-\code{TRUE}, i.e., the input \code{\link[mlr3:Task]{Task}} is returned unaltered during prediction.
+\item \code{filter_formula} :: \code{NULL} | \code{formula} \cr
+Expression of the filtering to be performed, in the form of a \code{formula} that evaluates to \code{TRUE} or \code{FALSE}
+for each row within the data of the \code{\link[mlr3:Task]{Task}}.
+Rows for which the evaluation is \code{TRUE} are kept, others are removed.
+Initialized to \code{NULL}, i.e., no filtering is performed and all rows are kept.
+\item \code{na_selector} :: \code{function} | \code{\link{Selector}} \cr
+\code{\link{Selector}} function, takes a \code{\link[mlr3:Task]{Task}} as an argument and returns a \code{character} vector of features
+to check for missing values.
+Rows with missing values with respect to these features are removed.
+See \code{\link{Selector}} for example functions.
+Initialized to \code{selector_none()}, i.e., no missing value removal is performed.
 }
 }
 
 \section{Internals}{
 
-Uses the \code{\link[base:is.na]{is.na()}} function for the checking of missing values.
+A \code{formula} created using the \code{~} operator always contains a reference to the \code{environment} in which
+the \code{formula} is created. This makes it possible to use variables in the \code{~}-expressions that both
+reference either column names or variable names.
+
+Uses the \code{\link[base:NA]{is.na()}} function for the checking of missing values.
 }
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
 library("mlr3")
 task = tsk("pima")
 po = PipeOpFilterRows$new(param_vals = list(
-  filter = expression(age < median(age) & mass > 30),
-  na_column = "_all_")
+  filter_formula = ~ age < 31 & glucose > median(glucose),
+  na_selector = selector_all())
 )
 po$train(list(task))
 po$state
@@ -102,8 +88,8 @@ po$state
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
-\code{\link{PipeOpProxy}},
 \code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
 \code{\link{mlr_pipeops_boxcox}},
@@ -114,6 +100,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_classweights}},
 \code{\link{mlr_pipeops_colapply}},
 \code{\link{mlr_pipeops_collapsefactors}},
+\code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
 \code{\link{mlr_pipeops_encodeimpact}},
@@ -124,23 +111,34 @@ Other PipeOps:
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
 \code{\link{mlr_pipeops_ica}},
+\code{\link{mlr_pipeops_imputeconstant}},
 \code{\link{mlr_pipeops_imputehist}},
+\code{\link{mlr_pipeops_imputelearner}},
 \code{\link{mlr_pipeops_imputemean}},
 \code{\link{mlr_pipeops_imputemedian}},
 \code{\link{mlr_pipeops_imputemode}},
-\code{\link{mlr_pipeops_imputenewlvl}},
+\code{\link{mlr_pipeops_imputeoor}},
 \code{\link{mlr_pipeops_imputesample}},
 \code{\link{mlr_pipeops_kernelpca}},
 \code{\link{mlr_pipeops_learner}},
 \code{\link{mlr_pipeops_missind}},
 \code{\link{mlr_pipeops_modelmatrix}},
+\code{\link{mlr_pipeops_multiplicityexply}},
+\code{\link{mlr_pipeops_multiplicityimply}},
 \code{\link{mlr_pipeops_mutate}},
+\code{\link{mlr_pipeops_nmf}},
 \code{\link{mlr_pipeops_nop}},
+\code{\link{mlr_pipeops_ovrsplit}},
+\code{\link{mlr_pipeops_ovrunite}},
 \code{\link{mlr_pipeops_pca}},
-\code{\link{mlr_pipeops_predictionunion}},
+\code{\link{mlr_pipeops_proxy}},
 \code{\link{mlr_pipeops_quantilebin}},
+\code{\link{mlr_pipeops_randomprojection}},
+\code{\link{mlr_pipeops_randomresponse}},
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
+\code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_replicate}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
 \code{\link{mlr_pipeops_scale}},
@@ -148,13 +146,15 @@ Other PipeOps:
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
 \code{\link{mlr_pipeops_subsample}},
-\code{\link{mlr_pipeops_targetinverter}},
+\code{\link{mlr_pipeops_targetinvert}},
+\code{\link{mlr_pipeops_targetmutate}},
 \code{\link{mlr_pipeops_targettrafoscalerange}},
-\code{\link{mlr_pipeops_targettrafosimple}},
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
+\code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
+\code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}},
 \code{\link{mlr_pipeops}}
 }
