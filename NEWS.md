@@ -1,6 +1,9 @@
 # mlr3pipelines 0.3.0-9000
+
 * mlr_graphs:
   - pipeline_bagging now uses multiplicities internally
+* Changed PipeOps:
+  - PipeOpFeatureUnion: Fixed a minor bug when checking for duplicates
 
 # mlr3pipelines 0.3.0
 
