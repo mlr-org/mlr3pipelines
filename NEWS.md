@@ -5,6 +5,9 @@
   - fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd
   - PipeOpFeatureUnion: Fixed a minor bug when checking for duplicates
 
+* Changed PipeOps:
+  - PipeOpNMF: now exposes all parameters previously in .options
+
 # mlr3pipelines 0.3.0
 
 * compatibility with mlr3 0.6
