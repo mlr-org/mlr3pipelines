@@ -49,7 +49,7 @@
 
 <meta property="og:title" content="PipeOpNMF — mlr_pipeops_nmf" />
 <meta property="og:description" content="Extracts non-negative components from data by performing non-negative matrix factorization. Only
-affects non-negative numerical features. See NMF::nmf() for details." />
+affects non-negative numerical features. See nmf() for details." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -150,7 +150,7 @@ affects non-negative numerical features. See NMF::nmf() for details." />
 
     <div class="ref-description">
     <p>Extracts non-negative components from data by performing non-negative matrix factorization. Only
-affects non-negative numerical features. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>NMF::nmf()</a></code> for details.</p>
+affects non-negative numerical features. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code> for details.</p>
     </div>
 
 
@@ -183,25 +183,60 @@ non-negative components.</p>
     
 
 <p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
-as well as the elements of the class returned by <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p>
+as well as the elements of the object returned by <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
 <li><p><code>rank</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
-Factorization rank, i.e., number of components. Default is <code>2</code>. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+Factorization rank, i.e., number of components. Initialized to <code>2</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
 <li><p><code>method</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Specification of the NMF algorithm. Default is <code>"brunet"</code>. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>seed</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Specification of the starting point. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+Specification of the NMF algorithm. Initialized to <code>"brunet"</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>seed</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> | object of class <code>NMF</code> | <code>function()</code><br />
+Specification of the starting point.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
 <li><p><code>nrun</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
-Number of runs to performs. More than a single run allows for the computation of a consensus
-matrix which will also be stored in the <code>$state</code>. See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>options</code> :: named <code>list</code><br />
-Named list of additional parameters. Default is <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>. See <code>.options</code> in <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.
-Initialized to parameters <code>parallel</code> and <code>parallel.required</code> set to <code>FALSE</code>, as it is recommended
-to use <code>mlr3</code>'s <code>future</code>-based parallelization.</p></li>
+Number of runs to performs. Default is <code>1</code>.
+More than a single run allows for the computation of a consensus matrix which will also be stored in the <code>$state</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>debug</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Whether to toggle debug mode. Default is <code>FALSE</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>keep.all</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Whether all factorizations are to be saved and returned. Default is <code>FALSE</code>.
+Only has an effect if <code>nrun &gt; 1</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>parallel</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Specification of parallel handling if <code>nrun &gt; 1</code>.
+Initialized to <code>FALSE</code>, as it is recommended to use <code>mlr3</code>'s <code>future</code>-based parallelization.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>parallel.required</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Same as <code>parallel</code>, but an error is thrown if the computation cannot be performed in parallel or
+with the specified number of processors.
+Initialized to <code>FALSE</code>, as it is recommended to use <code>mlr3</code>'s <code>future</code>-based parallelization.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>shared.memory</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Whether shared memory should be enabled.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>simplifyCB</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Whether callback results should be simplified. Default is <code>TRUE</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>track</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Whether error tracking should be enabled. Default is <code>FALSE</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>verbose</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+Specification of verbosity. Default is <code>FALSE</code>.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>pbackend</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code>NULL</code><br />
+Specification of the parallel backend.
+It is recommended to use <code>mlr3</code>'s <code>future</code>-based parallelization.
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
+<li><p><code>callback</code> | <code>function()</code><br />
+Callback function that is called after each run (if <code>nrun &gt; 1</code>).
+See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -340,7 +375,7 @@ to use <code>mlr3</code>'s <code>future</code>-based parallelization.</p></li>
 #&gt;   Iterations: 450 
 #&gt;   Timing:
 #&gt;      user  system elapsed 
-#&gt;     0.107   0.004   0.111 </div></pre>
+#&gt;     0.103   0.008   0.110 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
