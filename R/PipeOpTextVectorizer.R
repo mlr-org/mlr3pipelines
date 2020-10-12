@@ -206,7 +206,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamDbl$new("k_tf", lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight")),
         ParamDbl$new("base_tf", lower = 0, default = 10, tags = c("train", "predict", "dfm_weight")),
 
-        ParamFct$new("return_type", default = "bow", levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
+        ParamFct$new("return_type", levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
         ParamInt$new("sequence_length", default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"))
       ))$
         add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
