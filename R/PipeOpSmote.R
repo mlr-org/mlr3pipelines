@@ -47,7 +47,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @references
-#' \cite{mlr3pipelines}{chawla_2002}
+#' `r tools::toRd(bibentries["chawla_2002"])`
 #'
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
