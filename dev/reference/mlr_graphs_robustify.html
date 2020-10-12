@@ -53,8 +53,9 @@ Performs the following steps:
 Drops empty factor levels using PipeOpFixFactors
 Imputes numeric features using PipeOpImputeHist and PipeOpMissInd
 Imputes factor features using PipeOpImputeOOR
-Encodes factors using one-hot-encoding. Factors with a cardinality &amp;gt; max_cardinality are collapsed using [PipeOpCollapseFactors`].
-If scaling, numeric features are scaled to mean 0 and standard deviation 1.
+Encodes factors using one-hot-encoding. Factors with a cardinality &amp;gt; max_cardinality are
+collapsed using PipeOpCollapseFactors
+If scaling, numeric features are scaled to mean 0 and standard deviation 1
 
 
 The graph is built conservatively, i.e. the function always tries to assure everything works.
@@ -164,8 +165,9 @@ Performs the following steps:</p><ul>
 <li><p>Drops empty factor levels using <code><a href='mlr_pipeops_fixfactors.html'>PipeOpFixFactors</a></code></p></li>
 <li><p>Imputes <code>numeric</code> features using <code><a href='mlr_pipeops_imputehist.html'>PipeOpImputeHist</a></code> and <code><a href='mlr_pipeops_missind.html'>PipeOpMissInd</a></code></p></li>
 <li><p>Imputes <code>factor</code> features using <code><a href='mlr_pipeops_imputeoor.html'>PipeOpImputeOOR</a></code></p></li>
-<li><p>Encodes <code>factors</code> using <code>one-hot-encoding</code>. Factors with a cardinality &gt; max_cardinality<code> are collapsed using [</code>PipeOpCollapseFactors`].</p></li>
-<li><p>If <code>scaling</code>, numeric features are scaled to mean 0 and standard deviation 1.</p></li>
+<li><p>Encodes <code>factors</code> using <code>one-hot-encoding</code>. Factors with a cardinality &gt; max_cardinality are
+collapsed using <code><a href='mlr_pipeops_collapsefactors.html'>PipeOpCollapseFactors</a></code></p></li>
+<li><p>If <code>scaling</code>, numeric features are scaled to mean 0 and standard deviation 1</p></li>
 </ul>
 
 <p>The graph is built conservatively, i.e. the function always tries to assure everything works.
@@ -199,13 +201,13 @@ a more conservative pipeline is built.</p></td>
     <tr>
       <th>impute_missings</th>
       <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> | <code>NULL</code> <br />
-Should missing values be imputed? Defaults to <code>NULL</code>, i.e imputes if the task has
+Should missing values be imputed? Defaults to <code>NULL</code>, i.e. imputes if the task has
 missing values and the learner can not handle them.</p></td>
     </tr>
     <tr>
       <th>factors_to_numeric</th>
       <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> | <code>NULL</code> <br />
-Should factors be encoded? Defaults to <code>NULL</code>, i.e encodes if the task has factors
+Should factors be encoded? Defaults to <code>NULL</code>, i.e. encodes if the task has factors
 and the learner can not handle factors.</p></td>
     </tr>
     <tr>
