@@ -1,5 +1,8 @@
 # mlr3pipelines 0.3.0-9000
 * Changed PipeOps:
+  - PipeOpMissInd now also allows for setting type = integer
+* Changed mlr_graphs:
+  - fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd
   - PipeOpFeatureUnion: Fixed a minor bug when checking for duplicates
 
 # mlr3pipelines 0.3.0
