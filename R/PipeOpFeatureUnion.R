@@ -150,7 +150,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   task = inputs[[1L]]
   ids = task$row_ids
 
-  if (length(inprefix)) { # inprefix has length 0 if innum is 0
+  if (length(inprefix)) {  # inprefix has length 0 if innum is 0
     names(inputs) = inprefix
     if (inprefix[1L] != "") {
       task$rename(task$feature_names, sprintf("%s.%s", inprefix[1L], task$feature_names))
@@ -180,7 +180,13 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
     for(i in seq_along(duplicates)) {
       # this is done by reference and should have good performance
       real_duplicates[i] = sum(duplicated(t(setDT(unlist(map(inputs,
-        .f = function(x) x$data(cols = duplicates[i])), recursive = FALSE))))) > 0L
+        .f = function(x) {
+          if (duplicates[i] %in% x$feature_names) {
+            x$data(cols = duplicates[i])
+          } else {
+            NULL  # if the duplicated column is not present, explicitly return NULL
+          }
+        }), recursive = FALSE))))) > 0L
     }
     if (any(!real_duplicates)) {
       # FIXME: sprintf may not be able to handle large error messages here?
@@ -192,6 +198,11 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   # cbind() with only empty data.tables is problematic, so we have to do voodoo magic here:
   # cbind at least one data.table that is guaranteed not to be empty and subtract that column later
   # again done by reference
-  task$clone(deep = TRUE)$cbind(setDT(unlist(c(list(data.table(x = vector(length = task$nrow))),
-    map(tail(inputs, -1L), .f = function(y) y$data(ids, cols = y$feature_names))), recursive = FALSE))[, -1L])
+  new_features = unlist(c(list(data.table(x = vector(length = task$nrow))),
+    map(tail(inputs, -1L), .f = function(y) y$data(ids, cols = y$feature_names))), recursive = FALSE)
+
+  # we explicitly have to subset to the unique column names, otherwise task$cbind() complains for data.table backends
+  new_features = new_features[unique(names(new_features))]
+
+  task$clone(deep = TRUE)$cbind(setDT(new_features)[, -1L])
 }
