@@ -237,3 +237,22 @@ test_that("featureunion - collect_multiplicity", {
   expect_equal(train_out[[1]]$data, tsk$data)
   expect_equal(predict_out[[1]]$data, tsk$data)
 })
+
+test_that("featureunion - cbind_tasks - duplicates", {
+  # use iris three times, but the third time with a new inprefix;
+  # first task has the same target but a single mew non-overlapping feature
+  task1 = tsk("iris")
+  task1$filter(1:10)
+  task2 = task1$clone(deep = TRUE)
+  task3 = task1$clone(deep = TRUE)
+  inputs = list(TaskClassif$new("test", backend = cbind(task1$data(cols = "Species"), x = 1:10), target = "Species"), task1, task2, task3)
+
+  output = cbind_tasks(inputs, assert_targets_equal = TRUE, inprefix = c("", "", "", "new_iris"))
+  new_iris_names = paste0("new_iris.", task1$feature_names)
+
+  expect_set_equal(output$feature_names, c("x", task1$feature_names, new_iris_names))
+  expect_equal(output$data(cols = c("Species", task1$feature_names)), task1$data())
+  expect_equal(output$data(cols = "x"), inputs[[1L]]$data(cols = "x"))
+  expect_equal(output$data(cols = "x"), inputs[[1L]]$data(cols = "x"))
+  expect_equivalent(output$data(cols = c("Species", new_iris_names)), task1$data())
+})

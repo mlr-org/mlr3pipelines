@@ -86,7 +86,10 @@ new_task$missings()
 new_task$data()
 }
 \references{
-\cite{mlr3pipelines}{ding_2010}
+Ding Y, Simonoff JS (2010).
+\dQuote{An Investigation of Missing Data Methods for Classification Trees Applied to Binary Response Data.}
+\emph{Journal of Machine Learning Research}, \bold{11}(6), 131-170.
+\url{https://jmlr.org/papers/v11/ding10a.html}.
 }
 \seealso{
 Other PipeOps: 
