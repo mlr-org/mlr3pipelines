@@ -155,7 +155,7 @@ test_that("PipeOp to GraphLearner", {
 
   expect_equal(r1, r3)
 
-  po_cv = po("learner_cv", learner = po, param_vals = list(resampling.method = "insample"))
+  po_cv = po("learner_cv", learner = po, resampling = rsmp("insample"))
   expect_true("GraphLearner" %in% class(po_cv$learner))
 
   train_out = po_cv$train(list(task))
