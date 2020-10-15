@@ -141,11 +141,16 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 # handle function environments well.
 check_weights = function(innum) {
   if (innum == 0) {
-    function(x) assert_numeric(x, any.missing = FALSE)
+    function(x) check_numeric(x, any.missing = FALSE)
   } else {
-    function(x)
-      assert(check_numeric(x, len = innum, any.missing = FALSE),
-        check_numeric(x, len = 1, any.missing = FALSE))
+    function(x) {
+      tests = c(test_numeric(x, len = innum, any.missing = FALSE), test_numeric(x, len = 1L, any.missing = FALSE))
+      if (sum(tests) == 0L) {
+        sprintf("Must be of type 'numeric', and length 1 or %s", innum)
+      } else {
+        TRUE
+      }
+    }
   }
 }
 

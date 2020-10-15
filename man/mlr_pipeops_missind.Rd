@@ -43,7 +43,7 @@ The parameters are the parameters inherited from the \code{\link{PipeOpTaskPrepr
 Determines for which features the indicator columns are added. Can either be \code{"missing_train"} (default), adding indicator columns
 for each feature that actually has missing values, or \code{"all"}, adding indicator columns for all features.
 \item \code{type} :: \code{character(1)}\cr
-Determines the type of the newly created columns. Can be one of \code{"numeric"}, \code{"factor"} (default), \code{"logical"}.
+Determines the type of the newly created columns. Can be one of \code{"factor"} (default), \code{"integer"}, \code{"logical"}, \code{"numeric"}.
 }
 }
 

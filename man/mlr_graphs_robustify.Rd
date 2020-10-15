@@ -23,11 +23,11 @@ A learner to create a robustifying pipeline for. Optional, if omitted,
 a more conservative pipeline is built.}
 
 \item{impute_missings}{\code{logical(1)} | \code{NULL} \cr
-Should missing values be imputed? Defaults to \code{NULL}, i.e imputes if the task has
+Should missing values be imputed? Defaults to \code{NULL}, i.e. imputes if the task has
 missing values and the learner can not handle them.}
 
 \item{factors_to_numeric}{\code{logical(1)} | \code{NULL} \cr
-Should factors be encoded? Defaults to \code{NULL}, i.e encodes if the task has factors
+Should factors be encoded? Defaults to \code{NULL}, i.e. encodes if the task has factors
 and the learner can not handle factors.}
 
 \item{max_cardinality}{\code{integer(1)} \cr
@@ -43,8 +43,9 @@ Performs the following steps:
 \item Drops empty factor levels using \code{\link{PipeOpFixFactors}}
 \item Imputes \code{numeric} features using \code{\link{PipeOpImputeHist}} and \code{\link{PipeOpMissInd}}
 \item Imputes \code{factor} features using \code{\link{PipeOpImputeOOR}}
-\item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality\verb{ are collapsed using [}PipeOpCollapseFactors`].
-\item If \code{scaling}, numeric features are scaled to mean 0 and standard deviation 1.
+\item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality are
+collapsed using \code{\link{PipeOpCollapseFactors}}
+\item If \code{scaling}, numeric features are scaled to mean 0 and standard deviation 1
 }
 
 The graph is built conservatively, i.e. the function always tries to assure everything works.

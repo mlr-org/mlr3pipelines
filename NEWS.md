@@ -3,7 +3,15 @@
 * mlr_graphs:
   - pipeline_bagging now uses multiplicities internally
 * Changed PipeOps:
+  - PipeOpMissInd now also allows for setting type = integer
+* Changed mlr_graphs:
+  - fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd
   - PipeOpFeatureUnion: Fixed a minor bug when checking for duplicates
+
+* Changed PipeOps:
+  - PipeOpNMF: now exposes all parameters previously in .options
+
+* added an autotest for ParamSets of PipeOps: expect_valid_pipeop_param_set
 
 # mlr3pipelines 0.3.0
 

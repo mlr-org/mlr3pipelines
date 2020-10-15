@@ -37,6 +37,9 @@ test_that("PipeOpMissInd", {
     constargs = list(param_vals = list(which = "all", type = "factor", affect_columns = NULL)))
 
   expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
+    constargs = list(param_vals = list(which = "all", type = "integer", affect_columns = NULL)))
+
+  expect_datapreproc_pipeop_class(PipeOpMissInd, task = task,
     constargs = list(param_vals = list(which = "all", type = "numeric", affect_columns = NULL)))
 
   po = PipeOpMissInd$new(param_vals = list(which = "all", type = "logical", affect_columns = NULL))
@@ -127,4 +130,5 @@ test_that("missind on full data returns empty task", {
   out = imp_missind$predict(list(task))$output
   expect_task(out)
   expect_data_table(out$data(), ncols = 1L)
+
 })
