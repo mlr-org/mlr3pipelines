@@ -162,7 +162,12 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   g = as_graph(graph, clone = TRUE)
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)
-  if (!is.null(averager)) averager = as_graph(averager, clone = TRUE)
+  if (!is.null(averager)) {
+    if (NROW(averager$input) != 1L || !(grepl("\\[*\\]", x = averager$input$train) && grepl("\\[*\\]", x = averager$input$predict))) {
+      stop("'averager' must collect multiplicities.")
+    }
+    averager = as_graph(averager, clone = TRUE)
+  }
 
   po("replicate", param_vals = list(reps = iterations)) %>>%
     po("subsample", param_vals = list(frac = frac)) %>>%
