@@ -74,11 +74,12 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
         "factor"  # default to factor as in PipeOpMissInd anyways
       } else {
         types = c("factor", "integer", "logical", "numeric")
-        if (length(intersect(types, learner$feature_types)) == 0L) {
+        type_candidates = intersect(types, learner$feature_types)
+        if (length(type_candidates) == 0L) {
           stopf("Learner %s does not support any of the feature types needed for missing indicator columns: %s.",
             learner$id, paste0(types, collapse = ", "))
         } else {
-          learner$feature_types[which(types %in% learner$feature_types)[1L]]  # just take the first supported type
+          type_candidates[[1]]  # just take the first supported type
         }
       }
       pos = c(pos,
