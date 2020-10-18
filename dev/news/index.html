@@ -153,17 +153,14 @@
 <li>Changed PipeOps:
 <ul>
 <li>PipeOpMissInd now also allows for setting type = integer</li>
+<li>PipeOpNMF: now exposes all parameters previously in .options</li>
 </ul>
 </li>
 <li>Changed mlr_graphs:
 <ul>
+<li>pipeline_bagging now uses multiplicities internally</li>
 <li>fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd</li>
 <li>PipeOpFeatureUnion: Fixed a minor bug when checking for duplicates</li>
-</ul>
-</li>
-<li>Changed PipeOps:
-<ul>
-<li>PipeOpNMF: now exposes all parameters previously in .options</li>
 </ul>
 </li>
 <li>added an autotest for ParamSets of PipeOps: expect_valid_pipeop_param_set</li>
