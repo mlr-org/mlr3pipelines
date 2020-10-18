@@ -159,7 +159,7 @@ in conjunction with ResamplingInsample." />
     <div class="ref-description">
     <p>Tunes optimal probability thresholds over different <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>s.</p>
 <p><code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code> <code>predict_type</code>: <code>"prob"</code> is required.
-Thresholds for each learner are optimized using the <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> supplied via
+Thresholds for each learner are optimized using the <code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code> supplied via
 the <code>param_set</code>.
 Defaults to <code><a href='https://rdrr.io/pkg/GenSA/man/GenSA.html'>GenSA</a></code>.
 Returns a single <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>.</p>
@@ -210,10 +210,10 @@ that would otherwise be set during construction. Default <code><a href='https://
 <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> to optimize for.
 Will be converted to a <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> in case it is <code>character</code>.
 Initialized to <code>"classif.ce"</code>, i.e. misclassification error.</p></li>
-<li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-<code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
-If <code>character</code>, converts to <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>
-via <code><a href='https://bbotk.mlr-org.com/reference/opt.html'>opt</a></code>. Initialized to <code><a href='https://bbotk.mlr-org.com/reference/mlr_optimizers_gensa.html'>OptimizerGenSA</a></code>.</p></li>
+<li><p><code>optimizer</code> :: <code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
+If <code>character</code>, converts to <code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code>
+via <code><a href='https://rdrr.io/pkg/bbotk/man/opt.html'>opt</a></code>. Initialized to <code><a href='https://rdrr.io/pkg/bbotk/man/mlr_optimizers_gensa.html'>OptimizerGenSA</a></code>.</p></li>
 <li><p><code>log_level</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
 Set a temporary log-level for <code><a href='https://s-fleck.github.io/lgr/reference/get_logger.html'>lgr::get_logger("bbotk")</a></code>. Initialized to: "warn".</p></li>
 </ul>
@@ -344,7 +344,7 @@ See the <code>optimizer</code> parameter for more info.</p>
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $classif.rpart$train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $classif.rpart$train_task
 #&gt; &lt;TaskClassif:iris&gt; (0 x 5)
