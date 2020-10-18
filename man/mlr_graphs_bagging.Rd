@@ -24,7 +24,9 @@ A \code{\link{PipeOp}} or \code{\link{Graph}} that averages the predictions from
 replicated and subsampled graph's.
 In the simplest case, \code{po("classifavg")} and \code{po("regravg")} can be used
 in order to perform simple averaging of classification and regression
-predictions respectively.\code{If}NULL` (default), no averager is added to the end of the graph.}
+predictions respectively.
+If \code{NULL} (default), no averager is added to the end of the graph.
+Note that setting \code{collect_multipliciy = TRUE} during construction of the averager is required.}
 }
 \value{
 \code{\link{Graph}}
@@ -33,9 +35,10 @@ predictions respectively.\code{If}NULL` (default), no averager is added to the e
 Creates a \code{\link{Graph}} that performs bagging for a supplied graph.
 This is done as follows:
 \itemize{
-\item \code{Subsample} the data in each step using \code{\link{PipeOpSubsample}}, afterwards apply \code{graph}.
-\item Replicate this step \code{iterations} times (in parallel)
-\item Average outputs of replicated \code{graph}s predictions using the \code{averager}.
+\item \code{Subsample} the data in each step using \code{\link{PipeOpSubsample}}, afterwards apply \code{graph}
+\item Replicate this step \code{iterations} times (in parallel via \link[=Multiplicity]{multiplicities})
+\item Average outputs of replicated \code{graph}s predictions using the \code{averager}
+(note that setting \code{collect_multipliciy = TRUE} is required)
 }
 }
 \examples{
@@ -43,7 +46,7 @@ This is done as follows:
 library(mlr3)
 lrn_po = po("learner", lrn("regr.rpart"))
 task = mlr_tasks$get("boston_housing")
-gr = pipeline_bagging(lrn_po, 3, averager = po("regravg"))
+gr = pipeline_bagging(lrn_po, 3, averager = po("regravg", collect_multiplicity = TRUE))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
 }
 }
