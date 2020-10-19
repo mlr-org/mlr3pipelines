@@ -187,13 +187,13 @@ incoming features.</p>
 Will be converted to a <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> in case it is <code>character</code>.
 Initialized to <code>"classif.ce"</code>, i.e. misclassification error for classification
 and <code>"regr.mse"</code>, i.e. mean squared error for regression.</p></li>
-<li><p><code>optimizer</code> :: <code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-<code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
-If <code>character</code>, converts to <code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code>
-via <code><a href='https://rdrr.io/pkg/bbotk/man/opt.html'>opt</a></code>. Initialized to <code><a href='https://rdrr.io/pkg/bbotk/man/OptimizerNLoptr.html'>OptimizerNLoptr</a></code>.
+<li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
+If <code>character</code>, converts to <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>
+via <code><a href='https://bbotk.mlr-org.com/reference/opt.html'>opt</a></code>. Initialized to <code><a href='https://bbotk.mlr-org.com/reference/OptimizerNLoptr.html'>OptimizerNLoptr</a></code>.
 Nloptr hyperparameters are initialized to <code>xtol_rel = 1e-8</code>, <code>algorithm = "NLOPT_LN_COBYLA"</code>
 and equal initial weights for each learner.
-For more fine-grained control, it is recommended to supply a instantiated <code><a href='https://rdrr.io/pkg/bbotk/man/Optimizer.html'>Optimizer</a></code>.</p></li>
+For more fine-grained control, it is recommended to supply a instantiated <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>.</p></li>
 <li><p><code>log_level</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
 Set a temporary log-level for <code><a href='https://s-fleck.github.io/lgr/reference/get_logger.html'>lgr::get_logger("bbotk")</a></code>. Initialized to: "warn".</p></li>
 </ul>
