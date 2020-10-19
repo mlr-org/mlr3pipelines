@@ -98,7 +98,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       } else {
         # 'which' is the feature names of all features that have missing values
         indicand_cols = task$feature_names[map_lgl(task$data(cols = task$feature_names),
-          function(x) any(is.na(x)))]
+          function(x) anyMissing(x))]
       }
       list(indicand_cols = indicand_cols)
     },
