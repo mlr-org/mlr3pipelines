@@ -5,12 +5,10 @@
 \alias{PipeOpFilterRows}
 \title{PipeOpFilterRows}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Filter rows of the data of a \code{\link[mlr3:Task]{Task}}.
-Also directly allows for the removal of rows with missing values with respect to some user-defined features.
-If both row filtering and missing value removal is performed, filtering is done after missing value removal.
 }
 \section{Construction}{
 \preformatted{PipeOpFilterRows$new(id = "filterrows", param_vals = list())
@@ -28,18 +26,13 @@ be set during construction. Default \code{list()}.
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with rows kept according to the filtering expression and
-rows with missing values with respect to the user-defined features removed.
+The output is the input \code{\link[mlr3:Task]{Task}} with rows kept according to the filtering expression.
+Whether filtering is performed during training and/or prediction can be specified via the \code{SDcols} parameter, see below.
 }
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
-\itemize{
-\item \code{na_selection} :: \code{character} \cr
-A \code{character} vector of all feature names that are checked for missing values in the \code{\link[mlr3:Task]{Task}}.
-Initialized to \code{\link[=selector_none]{selector_none()}}.
-}
+The \verb{$state} is left empty (\code{list()}).
 }
 
 \section{Parameters}{
@@ -48,15 +41,17 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{filter_formula} :: \code{NULL} | \code{formula} \cr
 Expression of the filtering to be performed, in the form of a \code{formula} that evaluates to \code{TRUE} or \code{FALSE}
-for each row within the data of the \code{\link[mlr3:Task]{Task}}.
-Rows for which the evaluation is \code{TRUE} are kept, others are removed.
+for each row within the \code{\link{data.table}} \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{\link[mlr3:Task]{Task}}.
+Rows for which the evaluation is \code{TRUE} are kept in the output \code{\link[mlr3:Task]{Task}}, others are removed.
 Initialized to \code{NULL}, i.e., no filtering is performed and all rows are kept.
-\item \code{na_selector} :: \code{function} | \code{\link{Selector}} \cr
-\code{\link{Selector}} function, takes a \code{\link[mlr3:Task]{Task}} as an argument and returns a \code{character} vector of features
-to check for missing values.
-Rows with missing values with respect to these features are removed.
-See \code{\link{Selector}} for example functions.
-Initialized to \code{selector_none()}, i.e., no missing value removal is performed.
+\item \code{SDcols} :: \code{function} | \code{\link{Selector}} \cr
+\code{\link{Selector}} function, takes a \code{\link[mlr3:Task]{Task}} as an argument and returns a \code{character} vector of features.
+This character vector is set as the \code{.SDcols} argument when the formula above is evaluated within the columns of the
+\code{\link{data.table}} \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{\link[mlr3:Task]{Task}}.
+Initialized to \code{\link[=selector_all]{selector_all()}}, i.e., all features can be used as the \code{.SD} variable.
+\item \code{phase} :: \code{character(1)} \cr
+Character specifying the phase when filtering should be performed. Can either be \code{"always"}, \code{"train"}, or \code{"predict"}.
+Initialized to \code{"always"}, i.e., filtering is performed both during training and prediction.
 }
 }
 
@@ -65,24 +60,27 @@ Initialized to \code{selector_none()}, i.e., no missing value removal is perform
 A \code{formula} created using the \code{~} operator always contains a reference to the \code{environment} in which
 the \code{formula} is created. This makes it possible to use variables in the \code{~}-expressions that both
 reference either column names or variable names.
-
-Uses the \code{\link[base:NA]{is.na()}} function for the checking of missing values.
 }
 
 \section{Methods}{
 
-Only methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
 library("mlr3")
 task = tsk("pima")
+# filter based on some formula
 po = PipeOpFilterRows$new(param_vals = list(
-  filter_formula = ~ age < 31 & glucose > median(glucose),
-  na_selector = selector_all())
+  filter_formula = ~ age < 31 & glucose > median(glucose, na.rm = TRUE))
 )
 po$train(list(task))
-po$state
+# missing value removal for all features
+po$param_set$values$filter_formula = ~ !apply(is.na(.SD), MARGIN = 1L, FUN = any)
+po$train(list(task))
+# missing value removal only for some features
+po$param_set$values$SDcols = selector_name(c("mass", "pressure"))
+po$train(list(task))
 }
 \seealso{
 Other PipeOps: 

@@ -19,17 +19,18 @@ test_that("PipeOpFilterRows - filtering", {
   dt_predict = task_predict$data(cols = task_predict$feature_names)
 
   op = PipeOpFilterRows$new(param_vals = list(
-    filter_formula = ~ (age < 31 & glucose > median(glucose)) | pedigree < mean(pedigree)))
+    filter_formula = ~ (age < 31 & glucose > median(glucose, na.rm = TRUE)) |
+      pedigree < mean(pedigree, na.rm = TRUE)))
 
   train_out = op$train(list(task_train))[[1L]]
 
-  expect_equal(dt_train[(age < 31 & glucose > median(glucose)) | pedigree < mean(pedigree), ],
-    train_out$data(cols = task_train$feature_names))
+  expect_equal(dt_train[(age < 31 & glucose > median(glucose, na.rm = TRUE)) |
+    pedigree < mean(pedigree, na.rm = TRUE), ], train_out$data(cols = task_train$feature_names))
 
   predict_out = op$predict(list(task_predict))[[1L]]
 
-  expect_equal(dt_predict[(age < 31 & glucose > median(glucose)) | pedigree < mean(pedigree), ],
-    predict_out$data(cols = task_predict$feature_names))
+  expect_equal(dt_predict[(age < 31 & glucose > median(glucose, na.rm = TRUE)) |
+    pedigree < mean(pedigree, na.rm = TRUE), ], predict_out$data(cols = task_predict$feature_names))
 
   # Works with variables from an env
   env = new.env()
@@ -50,7 +51,7 @@ test_that("PipeOpFilterRows - missing values removal", {
   dt_train = task_train$data(cols = task_train$feature_names)
   dt_predict = task_predict$data(cols = task_predict$feature_names)
 
-  op = PipeOpFilterRows$new(param_vals = list(na_selector = selector_name("insulin")))
+  op = PipeOpFilterRows$new(param_vals = list(filter_formula = ~ !is.na(insulin)))
 
   train_out = op$train(list(task_train))[[1L]]
 
@@ -61,8 +62,13 @@ test_that("PipeOpFilterRows - missing values removal", {
 
   expect_equal(dt_predict[!is.na(insulin), ],
     predict_out$data(cols = task_predict$feature_names))
-})
 
+  op$param_set$values$phase = "train"
+  expect_equal(op$predict(list(task_predict))[[1L]], task_predict)
+
+  op$param_set$values$phase = "predict"
+  expect_equal(op$train(list(task_train))[[1L]], task_train)
+})
 
 test_that("PipeOpFilterRows - filtering and missing values removal", {
   set.seed(3)
@@ -73,18 +79,24 @@ test_that("PipeOpFilterRows - filtering and missing values removal", {
   dt_train = task_train$data(cols = task_train$feature_names)
   dt_predict = task_predict$data(cols = task_predict$feature_names)
 
-  op = PipeOpFilterRows$new(param_vals = list(filter_formula = ~ age > median(age),
-    na_selector = selector_all()))
+  op = PipeOpFilterRows$new(param_vals = list(
+    filter_formula = ~ age > median(age, na.rm = TRUE) &
+      !apply(is.na(.SD), MARGIN = 1L, FUN = any)))
 
   train_out = op$train(list(task_train))[[1L]]
 
-  expect_equal(na.omit(dt_train)[age > median(age)],
+  expect_equal(na.omit(dt_train[age > median(age, na.rm = TRUE)]),
     train_out$data(cols = task_train$feature_names))
 
   predict_out = op$predict(list(task_predict))[[1L]]
 
-  expect_equal(na.omit(dt_predict)[age > median(age)],
+  expect_equal(na.omit(dt_predict[age > median(age, na.rm = TRUE)]),
     predict_out$data(cols = task_predict$feature_names))
+
+  # Test with SDcols selector being explicitly set
+  op$param_set$values$filter_formula = ~ !apply(is.na(.SD), MARGIN = 1L, FUN = any)
+  op$param_set$values$SDcols = selector_name("insulin")
+  expect_equal(op$train(list(task))[[1L]]$data(), task$data()[!is.na(insulin), ])
 })
 
 test_that("PipeOpFilterRows - check_filter_formulae", {
