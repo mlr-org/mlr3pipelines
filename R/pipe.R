@@ -14,7 +14,8 @@
 #' @examples
 #' library("mlr3")
 #'
-#' gr = ppl("bagging", graph = po(lrn("regr.rpart")), averager = po("regravg"))
+#' gr = ppl("bagging", graph = po(lrn("regr.rpart")),
+#'   averager = po("regravg", collect_multiplicity = TRUE))
 ppl = function(key, ...) {
   dictionary_sugar(dict = mlr_graphs, .key = key, ...)
 }

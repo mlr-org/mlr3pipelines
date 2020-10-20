@@ -24,5 +24,6 @@ Creates a \code{\link{Graph}} from \code{\link{mlr_graphs}} from given ID
 \examples{
 library("mlr3")
 
-gr = ppl("bagging", graph = po(lrn("regr.rpart")), averager = po("regravg"))
+gr = ppl("bagging", graph = po(lrn("regr.rpart")),
+  averager = po("regravg", collect_multiplicity = TRUE))
 }
