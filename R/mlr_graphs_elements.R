@@ -8,9 +8,9 @@
 #' * Drops empty factor levels using [`PipeOpFixFactors`]
 #' * Imputes `numeric` features using [`PipeOpImputeHist`] and [`PipeOpMissInd`]
 #' * Imputes `factor` features using [`PipeOpImputeOOR`]
-#' * Encodes `factors` using `one-hot-encoding`. Factors with a cardinality > max_cardinality` are
-#'   collapsed using [`PipeOpCollapseFactors`].
-#' * If `scaling`, numeric features are scaled to mean 0 and standard deviation 1.
+#' * Encodes `factors` using `one-hot-encoding`. Factors with a cardinality > max_cardinality are
+#'   collapsed using [`PipeOpCollapseFactors`]
+#' * If `scaling`, numeric features are scaled to mean 0 and standard deviation 1
 #'
 #' The graph is built conservatively, i.e. the function always tries to assure everything works.
 #' If a learner is provided, some steps can be left out, i.e. if the learner can deal with
@@ -23,10 +23,10 @@
 #'   A learner to create a robustifying pipeline for. Optional, if omitted,
 #'   a more conservative pipeline is built.
 #' @param impute_missings `logical(1)` | `NULL` \cr
-#'   Should missing values be imputed? Defaults to `NULL`, i.e imputes if the task has
+#'   Should missing values be imputed? Defaults to `NULL`, i.e. imputes if the task has
 #'   missing values and the learner can not handle them.
 #' @param factors_to_numeric `logical(1)` | `NULL` \cr
-#'   Should factors be encoded? Defaults to `NULL`, i.e encodes if the task has factors
+#'   Should factors be encoded? Defaults to `NULL`, i.e. encodes if the task has factors
 #'   and the learner can not handle factors.
 #' @param max_cardinality `integer(1)` \cr
 #'   Maximum number of factor levels allowed. See above. Default: 1000.
@@ -58,41 +58,60 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
   pos = list()
 
   # FIXME: Improve this when text-processors are available. See #332 and friends
-  if (has_type_feats("character") && "character" %nin% learner$feature_types)
+  if (has_type_feats("character") && "character" %nin% learner$feature_types) {
     pos = c(pos, po("colapply", id = "char_to_fct", param_vals = list(affect_columns = selector_type("character"), applicator = function(x) as.factor(x))))
+  }
 
   # Date processing
-   if (has_type_feats("POSIXct") && ("POSIXct" %nin% learner$feature_types))
+   if (has_type_feats("POSIXct") && ("POSIXct" %nin% learner$feature_types)) {
      pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
+   }
 
   if (impute_missings) {
     # Impute numerics
-    if (has_type_feats(c("numeric", "integer")))
+    if (has_type_feats(c("numeric", "integer"))) {
+      type = if (is.null(learner)) {
+        "factor"  # default to factor as in PipeOpMissInd anyways
+      } else {
+        types = c("factor", "integer", "logical", "numeric")
+        type_candidates = intersect(types, learner$feature_types)
+        if (length(type_candidates) == 0L) {
+          stopf("Learner %s does not support any of the feature types needed for missing indicator columns: %s.",
+            learner$id, paste0(types, collapse = ", "))
+        } else {
+          type_candidates[[1]]  # just take the first supported type
+        }
+      }
       pos = c(pos,
         gunion(list(
           po("imputehist"),
-          po("missind", param_vals = list(affect_columns = selector_type(c("numeric", "integer")))))) %>>%
+          po("missind", param_vals = list(affect_columns = selector_type(c("numeric", "integer")), type = type)))) %>>%
         po("featureunion"))
+    }
     # Impute factors
-    if (has_type_feats(c("factor", "ordered", "character")))
+    if (has_type_feats(c("factor", "ordered", "character"))) {
       pos = c(pos, po("imputeoor"))
+    }
   }
 
   # Fix extra factor levels
-  if (has_type_feats(c("factor", "ordered")))
+  if (has_type_feats(c("factor", "ordered"))) {
     pos = c(pos, po("fixfactors"))
+  }
 
-  # Ensure all factor levels are encoded during predict.
-  if (impute_missings && has_type_feats(c("factor", "ordered", "character")))
+  # Ensure all factor levels are encoded during predict
+  if (impute_missings && has_type_feats(c("factor", "ordered", "character"))) {
     pos = c(pos, po("imputesample", affect_columns = selector_type(c("factor", "ordered", "character"))))
+  }
 
   # Collapse factors over 1000 levels
   # FIXME: Can be improved after #330 is solved
   if (is.null(task)) {
     pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
   } else {
-    if (any(map_lgl(task$levels(task$feature_types$id[task$feature_types$type == "factor"]), function(x) length(x) > max_cardinality)))
+    if (any(map_lgl(task$levels(task$feature_types$id[task$feature_types$type == "factor"]), function(x) length(x) > max_cardinality))) {
       pos = c(pos, po("collapsefactors", param_vals = list(target_level_count = max_cardinality)))
+    }
   }
 
   if (factors_to_numeric) pos = c(pos, po("encode"))
@@ -109,9 +128,10 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #' @description
 #' Creates a [`Graph`] that performs bagging for a supplied graph.
 #' This is done as follows:
-#' * `Subsample` the data in each step using [`PipeOpSubsample`], afterwards apply `graph`.
-#' * Replicate this step `iterations` times (in parallel)
-#' * Average outputs of replicated `graph`s predictions using the `averager`.
+#' * `Subsample` the data in each step using [`PipeOpSubsample`], afterwards apply `graph`
+#' * Replicate this step `iterations` times (in parallel via [multiplicities][Multiplicity])
+#' * Average outputs of replicated `graph`s predictions using the `averager`
+#'   (note that setting `collect_multipliciy = TRUE` is required)
 #'
 #' @param graph [`PipeOp`] | [`Graph`] \cr
 #'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for.
@@ -126,8 +146,9 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #'   replicated and subsampled graph's.
 #'   In the simplest case, `po("classifavg")` and `po("regravg")` can be used
 #'   in order to perform simple averaging of classification and regression
-#'   predictions respectively.`
+#'   predictions respectively.
 #'   If `NULL` (default), no averager is added to the end of the graph.
+#'   Note that setting `collect_multipliciy = TRUE` during construction of the averager is required.
 #' @return [`Graph`]
 #' @export
 #' @examples
@@ -135,19 +156,24 @@ mlr_graphs$add("robustify", pipeline_robustify)
 #' library(mlr3)
 #' lrn_po = po("learner", lrn("regr.rpart"))
 #' task = mlr_tasks$get("boston_housing")
-#' gr = pipeline_bagging(lrn_po, 3, averager = po("regravg"))
+#' gr = pipeline_bagging(lrn_po, 3, averager = po("regravg", collect_multiplicity = TRUE))
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
 #' }
 pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
+  g = as_graph(graph, clone = TRUE)
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)
-  graph = as_graph(graph)
-  if (!is.null(averager)) averager = as_graph(averager)
+  if (!is.null(averager)) {
+    if (NROW(averager$input) != 1L || !(grepl("\\[*\\]", x = averager$input$train) && grepl("\\[*\\]", x = averager$input$predict))) {
+      stop("'averager' must collect multiplicities.")
+    }
+    averager = as_graph(averager, clone = TRUE)
+  }
 
-  subs = po("subsample", param_vals = list(frac = frac)) %>>% graph
-  subs_repls = pipeline_greplicate(subs, iterations)
-
-  subs_repls %>>% averager
+  po("replicate", param_vals = list(reps = iterations)) %>>%
+    po("subsample", param_vals = list(frac = frac)) %>>%
+    g %>>%
+    averager
 }
 
 mlr_graphs$add("bagging", pipeline_bagging)

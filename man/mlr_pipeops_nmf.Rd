@@ -9,7 +9,7 @@
 }
 \description{
 Extracts non-negative components from data by performing non-negative matrix factorization. Only
-affects non-negative numerical features. See \code{\link[NMF:nmf]{NMF::nmf()}} for details.
+affects non-negative numerical features. See \code{\link[NMF:nmf]{nmf()}} for details.
 }
 \section{Construction}{
 \preformatted{PipeOpNMF$new(id = "nmf", param_vals = list())
@@ -34,7 +34,7 @@ non-negative components.
 \section{State}{
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}},
-as well as the elements of the class returned by \code{\link[NMF:nmf]{nmf()}}.
+as well as the elements of the object returned by \code{\link[NMF:nmf]{nmf()}}.
 }
 
 \section{Parameters}{
@@ -42,25 +42,60 @@ as well as the elements of the class returned by \code{\link[NMF:nmf]{nmf()}}.
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{rank} :: \code{integer(1)}\cr
-Factorization rank, i.e., number of components. Default is \code{2}. See \code{\link[NMF:nmf]{nmf()}}.
+Factorization rank, i.e., number of components. Initialized to \code{2}.
+See \code{\link[NMF:nmf]{nmf()}}.
 \item \code{method} :: \code{character(1)}\cr
-Specification of the NMF algorithm. Default is \code{"brunet"}. See \code{\link[NMF:nmf]{nmf()}}.
-\item \code{seed} :: \code{numeric(1)}\cr
-Specification of the starting point. See \code{\link[NMF:nmf]{nmf()}}.
+Specification of the NMF algorithm. Initialized to \code{"brunet"}.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{seed} :: \code{character(1)} | \code{integer(1)} | \code{list()} | object of class \code{NMF} | \verb{function()}\cr
+Specification of the starting point.
+See \code{\link[NMF:nmf]{nmf()}}.
 \item \code{nrun} :: \code{integer(1)}\cr
-Number of runs to performs. More than a single run allows for the computation of a consensus
-matrix which will also be stored in the \verb{$state}. See \code{\link[NMF:nmf]{nmf()}}.
-\item \code{options} :: named \code{list}\cr
-Named list of additional parameters. Default is \code{list()}. See \code{.options} in \code{\link[NMF:nmf]{nmf()}}.
-Initialized to parameters \code{parallel} and \code{parallel.required} set to \code{FALSE}, as it is recommended
-to use \code{mlr3}'s \code{future}-based parallelization.
+Number of runs to performs. Default is \code{1}.
+More than a single run allows for the computation of a consensus matrix which will also be stored in the \verb{$state}.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{debug} :: \code{logical(1)}\cr
+Whether to toggle debug mode. Default is \code{FALSE}.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{keep.all} :: \code{logical(1)}\cr
+Whether all factorizations are to be saved and returned. Default is \code{FALSE}.
+Only has an effect if \code{nrun > 1}.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{parallel} :: \code{character(1)} | \code{integer(1)} | \code{logical(1)}\cr
+Specification of parallel handling if \code{nrun > 1}.
+Initialized to \code{FALSE}, as it is recommended to use \code{mlr3}'s \code{future}-based parallelization.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{parallel.required} :: \code{character(1)} | \code{integer(1)} | \code{logical(1)}\cr
+Same as \code{parallel}, but an error is thrown if the computation cannot be performed in parallel or
+with the specified number of processors.
+Initialized to \code{FALSE}, as it is recommended to use \code{mlr3}'s \code{future}-based parallelization.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{shared.memory} :: \code{logical(1)}\cr
+Whether shared memory should be enabled.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{simplifyCB} :: \code{logical(1)}\cr
+Whether callback results should be simplified. Default is \code{TRUE}.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{track} :: \code{logical(1)}\cr
+Whether error tracking should be enabled. Default is \code{FALSE}.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{verbose} :: \code{integer(1)} | \code{logical(1)}\cr
+Specification of verbosity. Default is \code{FALSE}.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{pbackend} :: \code{character(1)} | \code{integer(1)} | \code{NULL}\cr
+Specification of the parallel backend.
+It is recommended to use \code{mlr3}'s \code{future}-based parallelization.
+See \code{\link[NMF:nmf]{nmf()}}.
+\item \code{callback} | \verb{function()}\cr
+Callback function that is called after each run (if \code{nrun > 1}).
+See \code{\link[NMF:nmf]{nmf()}}.
 }
 }
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf}} function as well as \code{\link[NMF:basis-coef-methods]{basis}}, \code{\link[NMF:basis-coef-methods]{coef}} and
-\code{\link[MASS:ginv]{ginv}}.
+Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis-coef-methods]{basis()}}, \code{\link[NMF:basis-coef-methods]{coef()}} and
+\code{\link[MASS:ginv]{ginv()}}.
 }
 
 \section{Methods}{

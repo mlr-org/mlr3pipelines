@@ -165,7 +165,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       ..col = NULL  # avoid static checker complaints
 
       imputanda = intask$data(cols = affected_cols)
-      imputanda = imputanda[, map_lgl(imputanda, function(x) any(is.na(x))), with = FALSE]
+      imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]
 
       self$state$model = imap(intask$data(cols = affected_cols), function(col, colname) {
         type = intask$feature_types[colname, get("type")]
@@ -206,7 +206,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       ..col = NULL  # avoid static checker complaints
 
       imputanda = intask$data(cols = self$state$affected_cols)
-      imputanda = imputanda[, map_lgl(imputanda, function(x) any(is.na(x))), with = FALSE]
+      imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]
 
       imap(imputanda, function(col, colname) {
         type = intask$feature_types[colname, get("type")]

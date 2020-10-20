@@ -3,7 +3,7 @@ context("PipeOpLearnerCV")
 test_that("PipeOpLearnerCV - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearnerCV$new(lrn)
-  expect_pipeop(po$clone())
+  expect_pipeop(po$clone(), check_ps_default_values = FALSE)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
 
@@ -29,10 +29,10 @@ test_that("PipeOpLearnerCV - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   iris_with_unambiguous_mode = mlr_tasks$get("iris")$filter(c(1:49, 52:150))  # want featureless learner without randomness
   expect_datapreproc_pipeop_class(PipeOpLearnerCV,
-    list(lrn), iris_with_unambiguous_mode, predict_like_train = FALSE, deterministic_train = FALSE)
+    list(lrn), iris_with_unambiguous_mode, predict_like_train = FALSE, deterministic_train = FALSE, check_ps_default_values = FALSE)
   # 'insample' PipeOpLearnerCV with deterministic Learner is deterministic in every regard!
   expect_datapreproc_pipeop_class(PipeOpLearnerCV,
-    list(lrn, param_vals = list(resampling.method = "insample")), iris_with_unambiguous_mode)
+    list(lrn, param_vals = list(resampling.method = "insample")), iris_with_unambiguous_mode, check_ps_default_values = FALSE)
 
   expect_error(PipeOpLearnerCV$new())
 

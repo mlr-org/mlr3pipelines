@@ -52,19 +52,19 @@ test_that("PipeOpHistBin - not all bins present", {
   dat = iris
   dat$Sepal.Width[[1L]] = 2.13
   task2 = TaskClassif$new("iris2", backend = dat, target = "Species")
-  
+
   op = PipeOpHistBin$new(param_vals = list(breaks = seq(0, 10, by = 0.05)))
   expect_pipeop(op)
-  
+
   # task1 does not have a Sepal.Width value within the interval (2.10, 2.15]
   bin_to_check = cut(c(2.10, 2.2), 2)[1] # (2.10, 2.15]
-  
+
   result1 = op$train(list(task1))
   expect_false(bin_to_check %in% result1[[1L]]$data()$Sepal.Width)
-  
+
   result2 = op$predict(list(task2))
   expect_true(bin_to_check %in% result2[[1L]]$data()$Sepal.Width)
-  
+
   result3 = op$train(list(task2))
   expect_equal(result2[[1L]]$data(), result3[[1L]]$data())
 })

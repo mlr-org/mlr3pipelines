@@ -33,7 +33,7 @@
 #'   Determines for which features the indicator columns are added. Can either be `"missing_train"` (default), adding indicator columns
 #'   for each feature that actually has missing values, or `"all"`, adding indicator columns for all features.
 #' * `type` :: `character(1)`\cr
-#'   Determines the type of the newly created columns. Can be one of `"numeric"`, `"factor"` (default), `"logical"`.
+#'   Determines the type of the newly created columns. Can be one of `"factor"` (default), `"integer"`, `"logical"`, `"numeric"`.
 #'
 #' @section Internals:
 #' This [`PipeOp`] should cover most cases where "dummy columns" or "missing indicators" are desired. Some edge cases:
@@ -79,7 +79,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
     initialize = function(id = "missind", param_vals = list()) {
       ps = ParamSet$new(list(
         ParamFct$new("which", levels = c("missing_train", "all"), tags = c("train", "required")),
-        ParamFct$new("type", levels = c("numeric", "factor", "logical"), tags = c("train", "predict", "required"))
+        ParamFct$new("type", levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
       ))
       ps$values = list(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals, tags = "missings")
@@ -98,7 +98,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       } else {
         # 'which' is the feature names of all features that have missing values
         indicand_cols = task$feature_names[map_lgl(task$data(cols = task$feature_names),
-          function(x) any(is.na(x)))]
+          function(x) anyMissing(x))]
       }
       list(indicand_cols = indicand_cols)
     },
@@ -110,9 +110,10 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
       }
       data_dummy = as.data.table(is.na(task$data(cols = self$state$indicand_cols)))
       data_dummy = switch(self$param_set$values$type,
-        numeric = data_dummy[, lapply(.SD, as.numeric)],
         factor = data_dummy[, lapply(.SD, function(x) factor(ifelse(x, "missing", "present"), levels = c("missing", "present")))],
+        integer = data_dummy[, lapply(.SD, as.integer)],
         logical = data_dummy,
+        numeric = data_dummy[, lapply(.SD, as.numeric)],
         stop("Invalid value of 'type' parameter"))
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
       task$select(character(0))$cbind(data_dummy)

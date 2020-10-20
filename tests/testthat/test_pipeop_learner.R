@@ -3,7 +3,7 @@ context("PipeOpLearner")
 test_that("PipeOpLearner - basic properties", {
   lrn = mlr_learners$get("classif.featureless")
   po = PipeOpLearner$new(lrn)
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = FALSE)
   expect_data_table(po$input, nrows = 1)
   expect_data_table(po$output, nrows = 1)
 
@@ -14,7 +14,7 @@ test_that("PipeOpLearner - basic properties", {
   result = predict_pipeop(po, list(task = task))
   expect_class(result[[1L]], "Prediction")
 
-  expect_pipeop_class(PipeOpLearner, list(lrn))
+  expect_pipeop_class(PipeOpLearner, list(lrn), check_ps_default_values = FALSE)
   expect_error(PipeOpLearner$new())
 })
 
@@ -23,7 +23,7 @@ test_that("PipeOpLearner - param_set and values", {
   po = PipeOpLearner$new(lrn)
 
   # Setting and getting pipeops works
-  expect_pipeop(po)
+  expect_pipeop(po, check_ps_default_values = FALSE)
   expect_equal(po$param_set, po$learner$param_set)
 
 
