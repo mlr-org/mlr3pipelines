@@ -19,13 +19,14 @@ The \code{\link[mlr3:Task]{Task}} gets features depending on the capsuled \code{
 for \verb{$predict.type} \code{"prob"} the \verb{<ID>.prob.<CLASS>} features are created, and for \verb{$predict.type} \code{"se"} the new columns
 are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} of the \code{\link{PipeOpLearnerCV}} object.
 
-In the case of the resampling method returing multiple predictions per row id, the predictions are aggregated via their mean
-(execpt for the \code{"response"} in the case of a \link[mlr3:TaskClassif]{classification Task} which is aggregated using the mode).
+In the case of the resampling method returning multiple predictions per row id, the predictions are aggregated via their mean
+(except for the \code{"response"} in the case of a \link[mlr3:TaskClassif]{classification Task} which is aggregated using the mode).
 In the case of the resampling method not returning predictions for all row ids as given in the input \code{\link[mlr3:Task]{Task}},
 these predictions are added as missing.
 
 Inherits both the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} and
-\code{\link[mlr3:Resampling]{Resampling}} it is constructed from. The parameter ids of the latter one are prefixed with \code{"resampling."}.
+\code{\link[mlr3:Resampling]{Resampling}} it is constructed from. The parameter ids of the latter one are prefixed with \code{"resampling."}
+and the tags of these parameters are extended by \code{"train"}.
 
 \code{\link{PipeOpLearnerCV}} can be used to create "stacking" or "super learning" \code{\link{Graph}}s that use the output of one \code{\link[mlr3:Learner]{Learner}}
 as features for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\link{PipeOpLearnerCV}} erases the original input features, it is often
@@ -38,7 +39,7 @@ useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\lin
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
 \code{\link[mlr3:Learner]{Learner}} to use for resampling / prediction.
 \item \code{resampling} :: \code{\link[mlr3:Resampling]{Resampling}} \cr
-\code{\link[mlr3:Resampling]{Resamling}} to use for resampling. Initialized to 3-fold cross-validation.
+\code{\link[mlr3:Resampling]{Resampling}} to use for resampling. Initialized to 3-fold cross-validation.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr

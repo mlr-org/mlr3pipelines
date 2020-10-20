@@ -2,7 +2,6 @@
 
 * Changed PipeOps:
   - PipeOpLearnerCV now also wraps a Resampling allowing for a wider use of resampling methods
-  - PipeOpNMF: now exposes all parameters previously in .options
   - PipeOpMissInd now also allows for setting type = integer
   - PipeOpNMF: now exposes all parameters previously in .options
 * Changed mlr_graphs:

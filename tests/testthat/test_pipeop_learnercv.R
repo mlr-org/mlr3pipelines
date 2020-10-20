@@ -32,7 +32,7 @@ test_that("PipeOpLearnerCV - basic properties", {
     list(lrn), iris_with_unambiguous_mode, predict_like_train = FALSE, deterministic_train = FALSE, check_ps_default_values = FALSE)
   # 'insample' PipeOpLearnerCV with deterministic Learner is deterministic in every regard!
   expect_datapreproc_pipeop_class(PipeOpLearnerCV,
-    list(lrn, param_vals = list(resampling.method = "insample")), iris_with_unambiguous_mode, check_ps_default_values = FALSE)
+    list(lrn, resampling = rsmp("insample")), iris_with_unambiguous_mode, check_ps_default_values = FALSE)
 
   expect_error(PipeOpLearnerCV$new())
 

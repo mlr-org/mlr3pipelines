@@ -16,13 +16,14 @@
 #' for `$predict.type` `"prob"` the `<ID>.prob.<CLASS>` features are created, and for `$predict.type` `"se"` the new columns
 #' are `<ID>.response` and `<ID>.se`. `<ID>` denotes the `$id` of the [`PipeOpLearnerCV`] object.
 #'
-#' In the case of the resampling method returing multiple predictions per row id, the predictions are aggregated via their mean
-#' (execpt for the `"response"` in the case of a [classification Task][mlr3::TaskClassif] which is aggregated using the mode).
+#' In the case of the resampling method returning multiple predictions per row id, the predictions are aggregated via their mean
+#' (except for the `"response"` in the case of a [classification Task][mlr3::TaskClassif] which is aggregated using the mode).
 #' In the case of the resampling method not returning predictions for all row ids as given in the input [`Task`][mlr3::Task],
 #' these predictions are added as missing.
 #'
 #' Inherits both the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] and
-#' [`Resampling`][mlr3::Resampling] it is constructed from. The parameter ids of the latter one are prefixed with `"resampling."`.
+#' [`Resampling`][mlr3::Resampling] it is constructed from. The parameter ids of the latter one are prefixed with `"resampling."`
+#' and the tags of these parameters are extended by `"train"`.
 #'
 #' [`PipeOpLearnerCV`] can be used to create "stacking" or "super learning" [`Graph`]s that use the output of one [`Learner`][mlr3::Learner]
 #' as features for another [`Learner`][mlr3::Learner]. Because the [`PipeOpLearnerCV`] erases the original input features, it is often
@@ -36,7 +37,7 @@
 #' * `learner` :: [`Learner`][mlr3::Learner] \cr
 #'   [`Learner`][mlr3::Learner] to use for resampling / prediction.
 #' * `resampling` :: [`Resampling`][mlr3::Resampling] \cr
-#'   [`Resamling`][mlr3::Resampling] to use for resampling. Initialized to 3-fold cross-validation.
+#'   [`Resampling`][mlr3::Resampling] to use for resampling. Initialized to 3-fold cross-validation.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of the resulting object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
@@ -124,8 +125,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.resampling = as_resampling(resampling, clone = TRUE)
       private$.resampling$param_set$set_id = "resampling"
 
+      # tags of resampling parameters should include "train"; we fix this here
+      for (i in seq_along(private$.resampling$param_set$params)) {
+        private$.resampling$param_set$params[[i]]$tags = c("train", private$.resampling$param_set$params[[i]]$tags)
+      }
+
+
       id = id %??% private$.learner$id
-      # FIXME: probably should restrict to only classif and regr
+      # FIXME: probably should restrict to only classif and regr because of the potential aggregation being done below
       task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
 
       private$.additional_param_set = ParamSet$new(params = list(
@@ -234,7 +241,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         prds_corrected$response = factor(prds_corrected$response, levels = levels(target), ordered = is.ordered(target))
       }
 
-      # FIXME: safety cheks?
+      # FIXME: do we need additional safety checks here?
 
       private$pred_to_task(prds_corrected, task)
     },
@@ -262,7 +269,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   )
 )
 
-# Helper function to add missings to predictions based on their storage mode
+# helper function to add missings to predictions based on their storage mode
 add_missings = function(x, len) {
   c(x, switch(typeof(x),
     "character" = rep_len(NA_character_, length.out = len),
