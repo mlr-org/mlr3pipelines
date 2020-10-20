@@ -50,17 +50,18 @@ get_r6_inheritance = function(classname) {
   if (!exists(classname, mode = "environment")) {
     return(NULL)
   }
-  gen = get(classname, mode = "environment")
-  if ("R6ClassGenerator" %nin% class(gen)) {
-    return(NULL)
-  }
-  recurse_classname = function(gen) {
-    if (is.null(gen)) {
+  unique(unlist(map(getAnywhere(classname)$objs, function(gen) {
+    if ("R6ClassGenerator" %nin% class(gen)) {
       return(NULL)
     }
-    c(gen$classname, recurse_classname(gen$get_inherit()))
-  }
-  recurse_classname(gen)
+    recurse_classname = function(gen) {
+      if (is.null(gen)) {
+        return(NULL)
+      }
+      c(gen$classname, recurse_classname(gen$get_inherit()))
+    }
+    recurse_classname(gen)
+  })))
 }
 
 get_class_hierarchy = function(classname) {
