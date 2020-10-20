@@ -40,6 +40,11 @@ test_that("PipeOpFilterRows - filtering", {
   environment(filter_formula) = env
   op$param_set$values$filter_formula = filter_formula
   expect_true(all(op$train(list(task))[[1L]]$data(cols = "pregnant")[[1L]] == 7L))
+
+  filter_formula = ~ pregnant == some_test_val & !apply(is.na(.SD), MARGIN = 1L, FUN = any)
+  environment(filter_formula) = env
+  op$param_set$values$filter_formula = filter_formula
+  expect_equal(op$train(list(task))[[1L]]$data(), na.omit(task$data())[pregnant == 7, ])
 })
 
 test_that("PipeOpFilterRows - missing values removal", {

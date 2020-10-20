@@ -27,12 +27,12 @@ be set during construction. Default \code{list()}.
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with rows kept according to the filtering expression.
-Whether filtering is performed during training and/or prediction can be specified via the \code{SDcols} parameter, see below.
+Whether filtering is performed during training and/or prediction can be specified via the \code{phase} parameter, see below.
 }
 
 \section{State}{
 
-The \verb{$state} is left empty (\code{list()}).
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}.
 }
 
 \section{Parameters}{
@@ -41,12 +41,12 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{filter_formula} :: \code{NULL} | \code{formula} \cr
 Expression of the filtering to be performed, in the form of a \code{formula} that evaluates to \code{TRUE} or \code{FALSE}
-for each row within the \code{\link{data.table}} \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{\link[mlr3:Task]{Task}}.
+for each row within the frame of the \code{\link{data.table}} \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{\link[mlr3:Task]{Task}}.
 Rows for which the evaluation is \code{TRUE} are kept in the output \code{\link[mlr3:Task]{Task}}, others are removed.
 Initialized to \code{NULL}, i.e., no filtering is performed and all rows are kept.
 \item \code{SDcols} :: \code{function} | \code{\link{Selector}} \cr
 \code{\link{Selector}} function, takes a \code{\link[mlr3:Task]{Task}} as an argument and returns a \code{character} vector of features.
-This character vector is set as the \code{.SDcols} argument when the formula above is evaluated within the columns of the
+This character vector is set as the \code{.SDcols} argument when the formula above is evaluated within the frame of the
 \code{\link{data.table}} \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{\link[mlr3:Task]{Task}}.
 Initialized to \code{\link[=selector_all]{selector_all()}}, i.e., all features can be used as the \code{.SD} variable.
 \item \code{phase} :: \code{character(1)} \cr

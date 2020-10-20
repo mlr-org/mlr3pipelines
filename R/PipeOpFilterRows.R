@@ -22,21 +22,21 @@
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
 #' The output is the input [`Task`][mlr3::Task] with rows kept according to the filtering expression.
-#' Whether filtering is performed during training and/or prediction can be specified via the `SDcols` parameter, see below.
+#' Whether filtering is performed during training and/or prediction can be specified via the `phase` parameter, see below.
 #'
 #' @section State:
-#' The `$state` is left empty (`list()`).
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `filter_formula` :: `NULL` | `formula` \cr
 #'   Expression of the filtering to be performed, in the form of a `formula` that evaluates to `TRUE` or `FALSE`
-#'   for each row within the [`data.table`] [`DataBackend`][mlr3::DataBackend] of the [`Task`][mlr3::Task].
+#'   for each row within the frame of the [`data.table`] [`DataBackend`][mlr3::DataBackend] of the [`Task`][mlr3::Task].
 #'   Rows for which the evaluation is `TRUE` are kept in the output [`Task`][mlr3::Task], others are removed.
 #'   Initialized to `NULL`, i.e., no filtering is performed and all rows are kept.
 #' * `SDcols` :: `function` | [`Selector`] \cr
 #'   [`Selector`] function, takes a [`Task`][mlr3::Task] as an argument and returns a `character` vector of features.
-#'   This character vector is set as the `.SDcols` argument when the formula above is evaluated within the columns of the
+#'   This character vector is set as the `.SDcols` argument when the formula above is evaluated within the frame of the
 #'   [`data.table`] [`DataBackend`][mlr3::DataBackend] of the [`Task`][mlr3::Task].
 #'   Initialized to [`selector_all()`], i.e., all features can be used as the `.SD` variable.
 #' * `phase` :: `character(1)` \cr
@@ -83,7 +83,7 @@ PipeOpFilterRows = R6Class("PipeOpFilterRows",
   ),
   private = list(
     .train_task = function(task) {
-      self$state = list(NULL)
+      self$state = list()
       if (self$param_set$values$phase %in% c("always", "train") && length(self$param_set$values$filter_formula)) {
         filter_task(task, frm = self$param_set$values$filter_formula, SDcols = self$param_set$values$SDcols(task))
       } else {
@@ -114,17 +114,16 @@ check_filter_formulae = function(x) {
 }
 
 # helper function to filter a task based on a formula
-# the formula is evaluated within the data.table backend of a task where .SDcols is set to SDcols
+# the formula is evaluated within the frame of the data.table backend of a task where .SDcols is set to SDcols
 # (but only if required)
 # @param task [Task]
 # @param frm [formula]
 # @param SDcols [character]
 filter_task = function(task, frm, SDcols) {
-  taskdata = task$data()
   row_ids = if (any(grepl(".SD", x = frm[[2L]]))) {
-    task$row_ids[which(task$data()[, eval(frm[[2L]], envir = NULL, enclos = environment(frm)), .SDcols = SDcols])]
+    task$row_ids[which(task$data()[, (eval(frm[[2L]], envir = as.list(environment(frm)))), .SDcols = SDcols])]
   } else {
-    task$row_ids[which(task$data()[, eval(frm[[2L]], enclos = environment(frm))])]
+    task$row_ids[which(task$data()[, (eval(frm[[2L]], envir = as.list(environment(frm))))])]
   }
   task$filter(row_ids)
 }
