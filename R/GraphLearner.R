@@ -74,14 +74,16 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
-      param_vals = insert_named(self$graph$param_set$values, param_vals)
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
         properties = mlr_reflections$learner_properties[[task_type]])
-      self$graph$param_set$values = param_vals
-      if(!is.null(predict_type)) self$predict_type = predict_type
+
+      if (length(param_vals)) {
+        self$graph$param_set$values = insert_named(self$graph$param_set$values, param_vals)
+      }
+      if (!is.null(predict_type)) self$predict_type = predict_type
     }
   ),
   active = list(
