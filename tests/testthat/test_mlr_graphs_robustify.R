@@ -90,4 +90,11 @@ test_that("Robustify Pipeline", {
   expect_true("removeconstants" %in% names(p$pipeops))
   expect_true("datefeatures" %in% names(p$pipeops))
   expect_true(length(p$pipeops) == 3)
+
+  # use correct type for encoding missings depending on learner feature types
+  types = c("factor", "integer", "logical", "numeric")
+  expect_true(all(map_lgl(types, function(type) {
+    p = pipeline_robustify(learner = LearnerClassif$new("test", feature_types = type), impute_missings = TRUE)
+    expect_true(type == p$param_set$values$missind.type)
+  })))
 })
