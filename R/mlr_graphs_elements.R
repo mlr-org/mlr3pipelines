@@ -47,7 +47,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
     if (is.null(task)) if_null else any(types %in% task$feature_types$type)
   }
   if (!is.null(task)) assert_task(task)
-  if (!is.null(learner)) assert_learner(learner)
+  if (!is.null(learner)) learner = assert_learner(learner$clone(deep = TRUE))
   if (is.null(impute_missings)) impute_missings = is.null(task) || (any(task$missings()) && (is.null(learner) || "missings" %nin% learner$properties))
   assert_flag(impute_missings)
   if (is.null(factors_to_numeric)) factors_to_numeric = is.null(task) || (has_type_feats("factor") && (is.null(learner) || "factor" %nin% learner$feature_types))
@@ -233,7 +233,7 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
     check_list(graphs, min.len = 1, any.missing = FALSE, names = "unnamed")
   )
 
-  graphs = lapply(graphs, as_graph)
+  graphs = lapply(graphs, as_graph, clone = TRUE)
   imap(graphs, function(g, idx) {
     if (nrow(g$output) != 1) {
       stopf("Graph %s must have exactly one output channel", idx)
@@ -323,11 +323,11 @@ mlr_graphs$add("branch", pipeline_branch)
 #' g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
 #'   src_channel = 1, dst_channel = 2)
 pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetMutate$new(), id_prefix = "") {
-  graph = as_graph(graph)
+  graph = as_graph(graph, clone = TRUE)
   if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
     stopf("First PipeOp of graph should accept a single task as input.")
   }
-  assert_r6(trafo_pipeop, classes = "PipeOpTargetTrafo")
+  trafo_pipeop = assert_r6(trafo_pipeop$clone(deep = TRUE), classes = "PipeOpTargetTrafo")
   assert_string(id_prefix)
 
   input_id = graph$input$op.id
@@ -368,7 +368,7 @@ mlr_graphs$add("targettrafo", pipeline_targettrafo)
 #' po_pca = po("pca")
 #' pipeline_greplicate(po_pca, n = 2)
 pipeline_greplicate = function(graph, n) {
-  graph = as_graph(graph)
+  graph = as_graph(graph, clone = TRUE)
   n = assert_count(n, positive = TRUE, coerce = TRUE)
   x = map(seq_len(n), function(i) {
     g = graph$clone(deep = TRUE)
@@ -423,7 +423,7 @@ mlr_graphs$add("greplicate", pipeline_greplicate)
 #' g3$train(task)
 #' g3$predict(task)
 pipeline_ovr = function(graph) {
-  graph = as_graph(graph)
+  graph = as_graph(graph, clone = TRUE)
   if (graph$output$train != "NULL" || graph$output$predict != "PredictionClassif") {
     stopf("Graph should return 'NULL' during training and a 'PredictionClassif' during prediction.")
   }
