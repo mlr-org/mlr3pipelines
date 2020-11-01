@@ -97,4 +97,7 @@ test_that("Robustify Pipeline", {
     p = pipeline_robustify(learner = LearnerClassif$new("test", feature_types = type), impute_missings = TRUE)
     expect_true(type == p$param_set$values$missind.type)
   })))
+  unsupported_types = setdiff(mlr_reflections$task_feature_types, types)
+  expect_error(pipeline_robustify(learner = LearnerClassif$new("test", feature_types = unsupported_types), impute_missings = TRUE),
+    regexp = "does not support any of the feature types needed for missing indicator columns")
 })
