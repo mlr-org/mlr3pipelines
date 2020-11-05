@@ -13,7 +13,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpEnsemble$new(outnum, id = "copy", param_vals = list())
+#' PipeOpCopy$new(outnum, id = "copy", param_vals = list())
 #' ```
 #'
 #' * `outnum` :: `numeric(1)`\cr
