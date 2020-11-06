@@ -1,5 +1,8 @@
 # mlr3pipelines 0.3.0-9000
 
+* PipeOps are now encapsulated during train and predict and gained the active bindings
+  timings, log, warnings, errors
+* GraphLearners gained the timing_pipeops active binding
 * Changed PipeOps:
   - PipeOpMissInd now also allows for setting type = integer
   - PipeOpNMF: now exposes all parameters previously in .options
