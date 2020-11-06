@@ -149,7 +149,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("learner", PipeOpLearner,
+  list(R6Class("Learner",
+    public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()),
+    active = list(encapsulate = function() c(train = "non", predict = "none")))$new()))
 
 #' @export
 as_learner.PipeOp = function(x, clone = FALSE) {
