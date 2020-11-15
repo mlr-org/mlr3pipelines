@@ -13,6 +13,7 @@
 * Performance improvements for GraphLearner
 * GraphLearner allows custom id
 * Use parallel tests
+* Removed bibtex dependency
 
 # mlr3pipelines 0.3.0
 

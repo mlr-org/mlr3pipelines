@@ -82,10 +82,11 @@ Suggests:
     methods,
     vtreat
 Remotes:
-    mlr-org/mlr3,
     Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
+Config/testthat/edition: 3
+Config/testthat/parallel: true
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
