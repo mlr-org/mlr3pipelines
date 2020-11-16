@@ -94,7 +94,7 @@ drop_original_target the original target is then either dropped or added to the 
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -181,8 +181,9 @@ name of the data of the input <code><a href='https://mlr3.mlr-org.com/reference/
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpUpdateTarget</span>$<span class='fu'>new</span>(<span class='no'>id</span>, <span class='kw'>param_set</span> <span class='kw'>=</span> <span class='no'>ParamSet</span>$<span class='fu'>new</span>(),
-  <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))</pre>
+<pre><span class='va'>PipeOpUpdateTarget</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>id</span>, param_set <span class='op'>=</span> <span class='va'>ParamSet</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>,
+  param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, packages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object. See <code>$id</code> slot of <code><a href='PipeOp.html'>PipeOp</a></code>.</p></li>
@@ -234,7 +235,6 @@ Whether to drop the original target column. Default: <code>TRUE</code>.</p></li>
 <p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
 <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
@@ -247,6 +247,7 @@ Whether to drop the original target column. Default: <code>TRUE</code>.</p></li>
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -272,11 +273,14 @@ Whether to drop the original target column. Default: <code>TRUE</code>.</p></li>
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_proxy.html'>mlr_pipeops_proxy</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomprojection.html'>mlr_pipeops_randomprojection</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
@@ -294,20 +298,23 @@ Whether to drop the original target column. Default: <code>TRUE</code>.</p></li>
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
+<code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Create a binary class task from iris</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mlr3</span>)
-<span class='no'>trafo_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) {<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='no'>x</span>$<span class='no'>Species</span> <span class='kw'>==</span> <span class='st'>"setosa"</span>, <span class='st'>"setosa"</span>, <span class='st'>"other"</span>))}
-<span class='no'>po</span> <span class='kw'>=</span> <span class='no'>PipeOpUpdateTarget</span>$<span class='fu'>new</span>(<span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>trafo</span> <span class='kw'>=</span> <span class='no'>trafo_fun</span>, <span class='kw'>new_target_name</span> <span class='kw'>=</span> <span class='st'>"setosa"</span>))
-<span class='no'>po</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)))
-<span class='no'>po</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)))
-}
-<span class='co'># not yet exported</span></div></pre>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com'>mlr3</a></span><span class='op'>)</span>
+<span class='va'>trafo_fun</span> <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>==</span> <span class='st'>"setosa"</span>, <span class='st'>"setosa"</span>, <span class='st'>"other"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>}</span>
+<span class='va'>po</span> <span class='op'>=</span> <span class='va'>PipeOpUpdateTarget</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>trafo <span class='op'>=</span> <span class='va'>trafo_fun</span>, new_target_name <span class='op'>=</span> <span class='st'>"setosa"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>po</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='co'># not yet exported</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -323,7 +330,7 @@ Whether to drop the original target column. Default: <code>TRUE</code>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -84,7 +84,7 @@ Each PipeOp has an associated help page, see mlr_pipeops_[id]." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -186,7 +186,7 @@ when it needs to be constructed for <code>as.data.table</code> <code><a href='Pi
     
 
 <ul>
-<li><p><code><a href='as.data.table.html'>as.data.table(dict)</a></code><br />
+<li><p><code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table(dict)</a></code><br />
 <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code> -&gt; <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table::data.table</a></code><br />
 Returns a <code>data.table</code> with columns <code>key</code> (<code>character</code>), <code>packages</code> (<code>character</code>),
 <code>input.num</code> (<code>integer</code>), <code>output.num</code> (<code>integer</code>), <code>input.type.train</code> (<code>character</code>),
@@ -206,7 +206,6 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
 <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
@@ -219,6 +218,7 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -244,11 +244,14 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_proxy.html'>mlr_pipeops_proxy</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomprojection.html'>mlr_pipeops_randomprojection</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
@@ -266,30 +269,35 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
+<code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code></p>
 <p>Other Dictionaries: 
 <code><a href='mlr_graphs.html'>mlr_graphs</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='no'>mlr_pipeops</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>))</div><div class='output co'>#&gt; PipeOp: &lt;classif.rpart&gt; (not trained)
+<span class='va'>mlr_pipeops</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; PipeOp: &lt;classif.rpart&gt; (not trained)
 #&gt; values: &lt;xval=0&gt;
 #&gt; Input channels &lt;name [train type, predict type]&gt;:
 #&gt;   input [TaskClassif,TaskClassif]
 #&gt; Output channels &lt;name [train type, predict type]&gt;:
 #&gt;   output [NULL,PredictionClassif]</div><div class='input'>
 <span class='co'># equivalent:</span>
-<span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"learner"</span>, <span class='kw'>learner</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>))</div><div class='output co'>#&gt; PipeOp: &lt;classif.rpart&gt; (not trained)
+<span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, learner <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; PipeOp: &lt;classif.rpart&gt; (not trained)
 #&gt; values: &lt;xval=0&gt;
 #&gt; Input channels &lt;name [train type, predict type]&gt;:
 #&gt;   input [TaskClassif,TaskClassif]
 #&gt; Output channels &lt;name [train type, predict type]&gt;:
 #&gt;   output [NULL,PredictionClassif]</div><div class='input'>
 <span class='co'># all PipeOps currently in the dictionary:</span>
-<span class='fu'><a href='as.data.table.html'>as.data.table</a></span>(<span class='no'>mlr_pipeops</span>)[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"key"</span>, <span class='st'>"input.num"</span>, <span class='st'>"output.num"</span>, <span class='st'>"packages"</span>)]</div><div class='output co'>#&gt;                       key input.num output.num           packages
+<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>mlr_pipeops</span><span class='op'>)</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"key"</span>, <span class='st'>"input.num"</span>, <span class='st'>"output.num"</span>, <span class='st'>"packages"</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;                       key input.num output.num           packages
 #&gt;  1:                boxcox         1          1      bestNormalize
 #&gt;  2:                branch         1         NA                   
 #&gt;  3:                 chunk         1         NA                   
@@ -298,57 +306,62 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 #&gt;  6:          classweights         1          1                   
 #&gt;  7:              colapply         1          1                   
 #&gt;  8:       collapsefactors         1          1                   
-#&gt;  9:                  copy         1         NA                   
-#&gt; 10:          datefeatures         1          1                   
-#&gt; 11:                encode         1          1              stats
-#&gt; 12:          encodeimpact         1          1                   
-#&gt; 13:            encodelmer         1          1        lme4,nloptr
-#&gt; 14:          featureunion        NA          1                   
-#&gt; 15:                filter         1          1                   
-#&gt; 16:            fixfactors         1          1                   
-#&gt; 17:               histbin         1          1           graphics
-#&gt; 18:                   ica         1          1            fastICA
-#&gt; 19:        imputeconstant         1          1                   
-#&gt; 20:            imputehist         1          1           graphics
-#&gt; 21:         imputelearner         1          1                   
-#&gt; 22:            imputemean         1          1                   
-#&gt; 23:          imputemedian         1          1              stats
-#&gt; 24:            imputemode         1          1                   
-#&gt; 25:             imputeoor         1          1                   
-#&gt; 26:          imputesample         1          1                   
-#&gt; 27:             kernelpca         1          1            kernlab
-#&gt; 28:               learner         1          1                   
-#&gt; 29:            learner_cv         1          1                   
-#&gt; 30:               missind         1          1                   
-#&gt; 31:           modelmatrix         1          1              stats
-#&gt; 32:     multiplicityexply         1         NA                   
-#&gt; 33:     multiplicityimply        NA          1                   
-#&gt; 34:                mutate         1          1                   
-#&gt; 35:                   nop         1          1                   
-#&gt; 36:              ovrsplit         1          1                   
-#&gt; 37:              ovrunite         1          1                   
-#&gt; 38:                   pca         1          1                   
-#&gt; 39:                 proxy        NA          1                   
-#&gt; 40:           quantilebin         1          1              stats
-#&gt; 41:        randomresponse         1          1                   
-#&gt; 42:               regravg        NA          1                   
-#&gt; 43:       removeconstants         1          1                   
-#&gt; 44:         renamecolumns         1          1                   
-#&gt; 45:             replicate         1          1                   
-#&gt; 46:                 scale         1          1                   
-#&gt; 47:           scalemaxabs         1          1                   
-#&gt; 48:            scalerange         1          1                   
-#&gt; 49:                select         1          1                   
-#&gt; 50:                 smote         1          1        smotefamily
-#&gt; 51:           spatialsign         1          1                   
-#&gt; 52:             subsample         1          1                   
-#&gt; 53:          targetinvert         2          1                   
-#&gt; 54:          targetmutate         1          2                   
-#&gt; 55: targettrafoscalerange         1          2                   
-#&gt; 56:        textvectorizer         1          1 quanteda,stopwords
-#&gt; 57:             threshold         1          1                   
-#&gt; 58:              unbranch        NA          1                   
-#&gt; 59:            yeojohnson         1          1      bestNormalize
+#&gt;  9:              colroles         1          1                   
+#&gt; 10:                  copy         1         NA                   
+#&gt; 11:          datefeatures         1          1                   
+#&gt; 12:                encode         1          1              stats
+#&gt; 13:          encodeimpact         1          1                   
+#&gt; 14:            encodelmer         1          1        lme4,nloptr
+#&gt; 15:          featureunion        NA          1                   
+#&gt; 16:                filter         1          1                   
+#&gt; 17:            fixfactors         1          1                   
+#&gt; 18:               histbin         1          1           graphics
+#&gt; 19:                   ica         1          1            fastICA
+#&gt; 20:        imputeconstant         1          1                   
+#&gt; 21:            imputehist         1          1           graphics
+#&gt; 22:         imputelearner         1          1                   
+#&gt; 23:            imputemean         1          1                   
+#&gt; 24:          imputemedian         1          1              stats
+#&gt; 25:            imputemode         1          1                   
+#&gt; 26:             imputeoor         1          1                   
+#&gt; 27:          imputesample         1          1                   
+#&gt; 28:             kernelpca         1          1            kernlab
+#&gt; 29:               learner         1          1                   
+#&gt; 30:            learner_cv         1          1                   
+#&gt; 31:               missind         1          1                   
+#&gt; 32:           modelmatrix         1          1              stats
+#&gt; 33:     multiplicityexply         1         NA                   
+#&gt; 34:     multiplicityimply        NA          1                   
+#&gt; 35:                mutate         1          1                   
+#&gt; 36:                   nmf         1          1           MASS,NMF
+#&gt; 37:                   nop         1          1                   
+#&gt; 38:              ovrsplit         1          1                   
+#&gt; 39:              ovrunite         1          1                   
+#&gt; 40:                   pca         1          1                   
+#&gt; 41:                 proxy        NA          1                   
+#&gt; 42:           quantilebin         1          1              stats
+#&gt; 43:      randomprojection         1          1                   
+#&gt; 44:        randomresponse         1          1                   
+#&gt; 45:               regravg        NA          1                   
+#&gt; 46:       removeconstants         1          1                   
+#&gt; 47:         renamecolumns         1          1                   
+#&gt; 48:             replicate         1          1                   
+#&gt; 49:                 scale         1          1                   
+#&gt; 50:           scalemaxabs         1          1                   
+#&gt; 51:            scalerange         1          1                   
+#&gt; 52:                select         1          1                   
+#&gt; 53:                 smote         1          1        smotefamily
+#&gt; 54:           spatialsign         1          1                   
+#&gt; 55:             subsample         1          1                   
+#&gt; 56:          targetinvert         2          1                   
+#&gt; 57:          targetmutate         1          2                   
+#&gt; 58: targettrafoscalerange         1          2                   
+#&gt; 59:        textvectorizer         1          1 quanteda,stopwords
+#&gt; 60:             threshold         1          1                   
+#&gt; 61:         tunethreshold         1          1              bbotk
+#&gt; 62:              unbranch        NA          1                   
+#&gt; 63:                vtreat         1          1             vtreat
+#&gt; 64:            yeojohnson         1          1      bestNormalize
 #&gt;                       key input.num output.num           packages</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -365,7 +378,7 @@ Returns a <code>data.table</code> with columns <code>key</code> (<code>character
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

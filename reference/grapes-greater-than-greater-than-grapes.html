@@ -102,7 +102,7 @@ Analogously, if g2 is NULL, g1 converted to a Graph will be returned." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -189,7 +189,7 @@ be converted to <code><a href='Graph.html'>Graph</a></code>s. This means, in par
 Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted to a <code><a href='Graph.html'>Graph</a></code> will be returned.</p>
     </div>
 
-    <pre class="usage"><span class='no'>g1</span> <span class='kw'>%&gt;&gt;%</span> <span class='no'>g2</span></pre>
+    <pre class="usage"><span class='va'>g1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>g2</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -221,30 +221,31 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
 <code><a href='pipeline_greplicate.html'>pipeline_greplicate</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>o1</span> <span class='kw'>=</span> <span class='no'>PipeOpScale</span>$<span class='fu'>new</span>()
-<span class='no'>o2</span> <span class='kw'>=</span> <span class='no'>PipeOpPCA</span>$<span class='fu'>new</span>()
-<span class='no'>o3</span> <span class='kw'>=</span> <span class='no'>PipeOpFeatureUnion</span>$<span class='fu'>new</span>(<span class='fl'>2</span>)
+    <pre class="examples"><div class='input'><span class='va'>o1</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_scale.html'>PipeOpScale</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>o2</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_pca.html'>PipeOpPCA</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>o3</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span>
 
 <span class='co'># The following two are equivalent:</span>
-<span class='no'>pipe1</span> <span class='kw'>=</span> <span class='no'>o1</span> <span class='kw'>%&gt;&gt;%</span> <span class='no'>o2</span>
+<span class='va'>pipe1</span> <span class='op'>=</span> <span class='va'>o1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o2</span>
 
-<span class='no'>pipe2</span> <span class='kw'>=</span> <span class='no'>Graph</span>$<span class='fu'>new</span>()$
-  <span class='fu'>add_pipeop</span>(<span class='no'>o1</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))$
-  <span class='fu'>add_pipeop</span>(<span class='no'>o2</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))$
-  <span class='fu'>add_edge</span>(<span class='no'>o1</span>$<span class='no'>id</span>, <span class='no'>o2</span>$<span class='no'>id</span>)
+<span class='va'>pipe2</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span>
 
 <span class='co'># Note automatical gunion() of lists.</span>
 <span class='co'># The following three are equivalent:</span>
-<span class='no'>graph1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>o1</span>, <span class='no'>o2</span>) <span class='kw'>%&gt;&gt;%</span> <span class='no'>o3</span>
+<span class='va'>graph1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>o1</span>, <span class='va'>o2</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o3</span>
 
-<span class='no'>graph2</span> <span class='kw'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>o1</span>, <span class='no'>o2</span>)) <span class='kw'>%&gt;&gt;%</span> <span class='no'>o3</span>
+<span class='va'>graph2</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>o1</span>, <span class='va'>o2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o3</span>
 
-<span class='no'>graph3</span> <span class='kw'>=</span> <span class='no'>Graph</span>$<span class='fu'>new</span>()$
-  <span class='fu'>add_pipeop</span>(<span class='no'>o1</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))$
-  <span class='fu'>add_pipeop</span>(<span class='no'>o2</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))$
-  <span class='fu'>add_pipeop</span>(<span class='no'>o3</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))$
-  <span class='fu'>add_edge</span>(<span class='no'>o1</span>$<span class='no'>id</span>, <span class='no'>o3</span>$<span class='no'>id</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>1</span>)$
-  <span class='fu'>add_edge</span>(<span class='no'>o2</span>$<span class='no'>id</span>, <span class='no'>o3</span>$<span class='no'>id</span>, <span class='kw'>dst_channel</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div></pre>
+<span class='va'>graph3</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o3</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -260,7 +261,7 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpProxy — PipeOpProxy • mlr3pipelines</title>
+<title>PipeOpRandomProjection — mlr_pipeops_randomprojection • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +47,13 @@
 
 
 
-<meta property="og:title" content="PipeOpProxy — PipeOpProxy" />
-<meta property="og:description" content="Wraps another PipeOp or Graph as determined by the content hyperparameter.
-Input is routed through the content and the contents' output is returned.
-The content hyperparameter can be changed during tuning, this is useful as an alternative to PipeOpBranch." />
+<meta property="og:title" content="PipeOpRandomProjection — mlr_pipeops_randomprojection" />
+<meta property="og:description" content="Projects numeric features onto a randomly sampled subspace. All numeric features
+(or the ones selected by affect_columns) are replaced by numeric features
+PR1, PR2, ... PRn
+Samples with features that contain missing values result in all PR1..PRn being
+NA for that sample, so it is advised to do imputation before random projections
+if missing values can be expected." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -85,7 +88,7 @@ The content hyperparameter can be changed during tuning, this is useful as an al
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -144,80 +147,76 @@ The content hyperparameter can be changed during tuning, this is useful as an al
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpProxy</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpProxy.R'><code>R/PipeOpProxy.R</code></a></small>
-    <div class="hidden name"><code>PipeOpProxy.Rd</code></div>
+    <h1>PipeOpRandomProjection</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRandomProjection.R'><code>R/PipeOpRandomProjection.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_randomprojection.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Wraps another <code><a href='PipeOp.html'>PipeOp</a></code> or <code><a href='Graph.html'>Graph</a></code> as determined by the <code>content</code> hyperparameter.
-Input is routed through the <code>content</code> and the <code>content</code>s' output is returned.
-The <code>content</code> hyperparameter can be changed during tuning, this is useful as an alternative to <code><a href='mlr_pipeops_branch.html'>PipeOpBranch</a></code>.</p>
+    <p>Projects numeric features onto a randomly sampled subspace. All numeric features
+(or the ones selected by <code>affect_columns</code>) are replaced by numeric features
+<code>PR1</code>, <code>PR2</code>, ... <code>PRn</code></p>
+<p>Samples with features that contain missing values result in all <code>PR1</code>..<code>PRn</code> being
+NA for that sample, so it is advised to do imputation <em>before</em> random projections
+if missing values can be expected.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>Abstract <code>R6Class</code> inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpProxy</span>$<span class='fu'>new</span>(<span class='kw'>innum</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>outnum</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"proxy"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='va'>PipeOpRandomProjection</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"randomprojection"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
 <ul>
-<li><p><code>innum</code> :: <code>numeric(1)\cr Determines the number of input channels. If </code>innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.</p></li>
-<li><p><code>outnum</code> :: `numeric(1)<br />
-Determines the number of output channels.</p></li>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object. See <code>$id</code> slot of <code><a href='PipeOp.html'>PipeOp</a></code>.</p></li>
+Identifier of resulting object, default <code>"randomprojection"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
-be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings that
+would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p><code>PipeOpProxy</code> has multiple input channels depending on the <code>innum</code> construction argument, named
-<code>"input1"</code>, <code>"input2"</code>, ... if <code>innum</code> is nonzero; if <code>innum</code> is 0, there is only one <em>vararg</em>
-input channel named <code>"..."</code>.</p>
-<p><code>PipeOpProxy</code> has multiple output channels depending on the <code>outnum</code> construction argument,
-named <code>"output1"</code>, <code>"output2"</code>, ...
-The output is determined by the output of the <code>content</code> operation (a <code><a href='PipeOp.html'>PipeOp</a></code> or <code><a href='Graph.html'>Graph</a></code>).</p>
+<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with affected numeric features
+projected onto a random subspace.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is the trained <code>content</code> <code><a href='PipeOp.html'>PipeOp</a></code> or <code><a href='Graph.html'>Graph</a></code>.</p>
+<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
+as well as an element <code>$projection</code>, a <code>matrix</code>.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<ul>
-<li><p><code>content</code> :: <code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='Graph.html'>Graph</a></code><br />
-The <code><a href='PipeOp.html'>PipeOp</a></code> or <code><a href='Graph.html'>Graph</a></code> that is being proxied (or an object that is
-converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_graph.html'>as_graph()</a></code>). Defaults to an instance of
-<code><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</a></code> (combines all input if they are <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s).</p></li>
+<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
+<li><p><code>rank</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+The dimension of the subspace to project onto. Initialized to 1.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
 
-<p>The <code>content</code> will internally be coerced to a graph via
-<code><a href='as_graph.html'>as_graph()</a></code> prior to train and predict.</p>
-<p>The default value for <code>content</code> is <code><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</a></code>,</p>
-    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
-
-    
-
-<p>Fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>If there are <code>n</code> (affected) numeric features in the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>,
+then <code>$state$projection</code> is a <code>rank</code> x <code>m</code> <code>matrix</code>. The output is calculated as
+<code>input %*% state$projection</code>.</p>
+<p>The random projection matrix is obtained through Gram-Schmidt orthogonalization
+from a matrix with values standard normally distributed, which gives a distribution
+that is rotation invariant, as per Eaton: Multivariate Statistics, A Vector Space
+Approach, Pg. 234.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -235,6 +234,7 @@ converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -260,10 +260,12 @@ converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_proxy.html'>mlr_pipeops_proxy</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
@@ -282,31 +284,73 @@ converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
+<code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3learners"</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1234</span>)
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>)
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"randomprojection"</span>, rank <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='co'># use a proxy for preprocessing and a proxy for learning, i.e.,</span>
-<span class='co'># no preprocessing and classif.kknn</span>
-<span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"proxy"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"preproc"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>content</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>))) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"proxy"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"learner"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>content</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.kknn"</span>)))
-<span class='no'>rr_kknn</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='kw'>learner</span> <span class='kw'>=</span> <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>g</span>), <span class='kw'>resampling</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"cv"</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='fl'>3</span>))
-<span class='no'>rr_kknn</span>$<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>msr</a></span>(<span class='st'>"classif.ce"</span>))</div><div class='output co'>#&gt; classif.ce 
-#&gt; 0.05333333 </div><div class='input'>
-<span class='co'># use pca for preprocessing and classif.rpart as the learner</span>
-<span class='no'>g</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>preproc.content</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>)
-<span class='no'>g</span>$<span class='no'>param_set</span>$<span class='no'>values</span>$<span class='no'>learner.content</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>)
-<span class='no'>rr_pca_rpart</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span>(<span class='no'>task</span>, <span class='kw'>learner</span> <span class='kw'>=</span> <span class='no'>GraphLearner</span>$<span class='fu'>new</span>(<span class='no'>g</span>), <span class='kw'>resampling</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span>(<span class='st'>"cv"</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='fl'>3</span>))
-<span class='no'>rr_pca_rpart</span>$<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>msr</a></span>(<span class='st'>"classif.ce"</span>))</div><div class='output co'>#&gt; classif.ce 
-#&gt; 0.06666667 </div></pre>
+<span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
+#&gt;   1:    setosa          1.4         0.2          5.1         3.5
+#&gt;   2:    setosa          1.4         0.2          4.9         3.0
+#&gt;   3:    setosa          1.3         0.2          4.7         3.2
+#&gt;   4:    setosa          1.5         0.2          4.6         3.1
+#&gt;   5:    setosa          1.4         0.2          5.0         3.6
+#&gt;  ---                                                            
+#&gt; 146: virginica          5.2         2.3          6.7         3.0
+#&gt; 147: virginica          5.0         1.9          6.3         2.5
+#&gt; 148: virginica          5.2         2.0          6.5         3.0
+#&gt; 149: virginica          5.4         2.3          6.2         3.4
+#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        Species        PR1         PR2
+#&gt;   1:    setosa -0.4955681  0.08462260
+#&gt;   2:    setosa -0.4393064 -0.20005991
+#&gt;   3:    setosa -0.4473164  0.04980026
+#&gt;   4:    setosa -0.5784827 -0.11250409
+#&gt;   5:    setosa -0.5324336  0.17917992
+#&gt;  ---                                 
+#&gt; 146: virginica -1.1222825 -3.65834408
+#&gt; 147: virginica -1.2540461 -3.64088523
+#&gt; 148: virginica -1.3710303 -3.50942034
+#&gt; 149: virginica -1.4194810 -3.37473384
+#&gt; 150: virginica -1.5565183 -3.22398959</div><div class='input'>
+<span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
+</div><div class='output co'>#&gt; $projection
+#&gt;                     PR1        PR2
+#&gt; Petal.Length -0.6572081 -0.6074552
+#&gt; Petal.Width   0.7071921 -0.3172657
+#&gt; Sepal.Length  0.1829506 -0.2687201
+#&gt; Sepal.Width  -0.1857038  0.6768531
+#&gt; 
+#&gt; $dt_columns
+#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
+#&gt; 
+#&gt; $affected_cols
+#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
+#&gt; 
+#&gt; $intasklayout
+#&gt;              id    type
+#&gt; 1: Petal.Length numeric
+#&gt; 2:  Petal.Width numeric
+#&gt; 3: Sepal.Length numeric
+#&gt; 4:  Sepal.Width numeric
+#&gt; 
+#&gt; $outtasklayout
+#&gt;     id    type
+#&gt; 1: PR1 numeric
+#&gt; 2: PR2 numeric
+#&gt; 
+#&gt; $outtaskshell
+#&gt; Empty data.table (0 rows and 3 cols): Species,PR1,PR2
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -322,7 +366,7 @@ converted to a <code><a href='Graph.html'>Graph</a></code> by <code><a href='as_
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

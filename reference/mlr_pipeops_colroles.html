@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpSpatialSign — mlr_pipeops_spatialsign • mlr3pipelines</title>
+<title>PipeOpColRoles — mlr_pipeops_colroles • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,8 +47,8 @@
 
 
 
-<meta property="og:title" content="PipeOpSpatialSign — mlr_pipeops_spatialsign" />
-<meta property="og:description" content="Normalizes the data row-wise. This is a natural generalization of the &quot;sign&quot; function to higher dimensions." />
+<meta property="og:title" content="PipeOpColRoles — mlr_pipeops_colroles" />
+<meta property="og:description" content="Changes the column roles of the input Task according to new_role." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -142,13 +142,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpSpatialSign</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpSpatialSign.R'><code>R/PipeOpSpatialSign.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_spatialsign.Rd</code></div>
+    <h1>PipeOpColRoles</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpColRoles.R'><code>R/PipeOpColRoles.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_colroles.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Normalizes the data row-wise. This is a natural generalization of the "sign" function to higher dimensions.</p>
+    <p>Changes the column roles of the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> according to <code>new_role</code>.</p>
     </div>
 
 
@@ -159,13 +159,14 @@
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='va'>PipeOpSpatialSign</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"spatialsign"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<pre><span class='va'>PipeOpColRoles</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"colroles"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"spatialsign"</code>.</p></li>
+Identifier of resulting object, default <code>"colroles"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
+be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
@@ -173,7 +174,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected numeric features replaced by their normalized versions.</p>
+<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with transformed column roles according to <code>new_role</code>.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -184,11 +185,13 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>length</code>  :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Length to scale rows to. Default is 1.</p></li>
-<li><p><code>norm</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Norm to use. Rows are scaled to <code>sum(x^norm)^(1/norm) == length</code> for finite <code>norm</code>, or to <code>max(abs(x)) == length</code>
-if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
+<li><p><code>new_role</code> :: <code>list</code><br />
+Named list of new column roles. The names must match the column names of the input task that
+will later be trained/predicted on. Each entry of the list must contain a character vector with
+possible values of <code><a href='https://mlr3.mlr-org.com/reference/mlr_reflections.html'>mlr_reflections$task_col_roles</a></code>. If the value is
+given as <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code>, the column will be dropped from the input task. Changing the role of a
+column results in this column loosing its previous role(s). Setting a new target variable or
+changing the role of an existing target variable is not supported.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -213,7 +216,6 @@ if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
-<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -257,6 +259,7 @@ if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
 <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
+<code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
 <code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
 <code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
@@ -273,36 +276,23 @@ if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"boston_housing"</span><span class='op'>)</span>
+<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"colroles"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  new_role <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>cmedv <span class='op'>=</span> <span class='st'>"order"</span><span class='op'>)</span>
+<span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"spatialsign"</span><span class='op'>)</span>
-
-<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa    0.2206435  0.03152050    0.8037728   0.5516088
-#&gt;   2:    setosa    0.2366094  0.03380134    0.8281329   0.5070201
-#&gt;   3:    setosa    0.2227517  0.03426949    0.8053331   0.5483119
-#&gt;   4:    setosa    0.2608794  0.03478392    0.8000302   0.5391508
-#&gt;   5:    setosa    0.2214702  0.03163860    0.7909650   0.5694948
-#&gt;  ---                                                            
-#&gt; 146: virginica    0.5600146  0.24769876    0.7215572   0.3230853
-#&gt; 147: virginica    0.5790902  0.22005426    0.7296536   0.2895451
-#&gt; 148: virginica    0.5732312  0.22047353    0.7165390   0.3307103
-#&gt; 149: virginica    0.5876164  0.25028107    0.6746707   0.3699807
-#&gt; 150: virginica    0.5966647  0.21058754    0.6902592   0.3509792</div></pre>
+<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $output
+#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 18)
+#&gt; * Target: medv
+#&gt; * Properties: -
+#&gt; * Features (17):
+#&gt;   - dbl (12): age, b, crim, dis, indus, lat, lon, lstat, nox, ptratio,
+#&gt;     rm, zn
+#&gt;   - int (3): rad, tax, tract
+#&gt;   - fct (2): chas, town
+#&gt; * Order by: cmedv
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

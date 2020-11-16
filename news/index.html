@@ -82,7 +82,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -145,9 +145,67 @@
       <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="mlr3pipelines-031" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.1">
+<a href="#mlr3pipelines-031" class="anchor"></a>mlr3pipelines 0.3.1<small> Unreleased </small>
+</h1>
+<ul>
+<li>Changed PipeOps:
+<ul>
+<li>PipeOpMissInd now also allows for setting type = integer</li>
+<li>PipeOpNMF: now exposes all parameters previously in .options</li>
+</ul>
+</li>
+<li>Changed mlr_graphs:
+<ul>
+<li>pipeline_bagging now uses multiplicities internally</li>
+<li>fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd</li>
+<li>PipeOpFeatureUnion: Fixed a minor bug when checking for duplicates</li>
+</ul>
+</li>
+<li>added an autotest for ParamSets of PipeOps: expect_valid_pipeop_param_set</li>
+<li>More informative error message when PipeOp input value has wrong type</li>
+<li>Fix automatic detection of R6 type hierarchy</li>
+<li>Performance improvements for GraphLearner</li>
+<li>GraphLearner allows custom id</li>
+<li>Use parallel tests</li>
+<li>Removed bibtex dependency</li>
+</ul>
+</div>
+    <div id="mlr3pipelines-030" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.0">
+<a href="#mlr3pipelines-030" class="anchor"></a>mlr3pipelines 0.3.0<small> 2020-09-13 </small>
+</h1>
+<ul>
+<li>compatibility with mlr3 0.6</li>
+<li>NULL input channels accept any kind of input</li>
+<li>print() method of Graphs now also allows for printing a DOT representation on the console</li>
+<li>state of PipeOps now reset to NULL if training fails</li>
+<li>implemented as_learner.PipeOp</li>
+<li>LearnerClassifAvg, LearnerRegrAvg use bbotk now</li>
+<li>Changed PPLs:
+<ul>
+<li>fix how ppl_robustify detects whether a learner can handle factors</li>
+</ul>
+</li>
+<li>Changed PipeOps:
+<ul>
+<li>PipeOpTextVectorizer can now return an “integer sequence representation”.</li>
+</ul>
+</li>
+<li>New PipeOps:
+<ul>
+<li>PipeOpNMF</li>
+<li>PipeOpColRoles</li>
+<li>PipeOpVtreat</li>
+</ul>
+</li>
+<li>various bugfixes</li>
+</ul>
+</div>
     <div id="mlr3pipelines-021" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.1">
-<a href="#mlr3pipelines-021" class="anchor"></a>mlr3pipelines 0.2.1<small> Unreleased </small>
+<a href="#mlr3pipelines-021" class="anchor"></a>mlr3pipelines 0.2.1<small> 2020-08-18 </small>
 </h1>
 <ul>
 <li>New feature: Multiplicities: implicit repetition of operations</li>
@@ -220,9 +278,10 @@
 <a href="#mlr3pipelines-013" class="anchor"></a>mlr3pipelines 0.1.3<small> 2020-04-06 </small>
 </h1>
 <ul>
-<li>small test fix for R 4.0 (necessary for stringsAsFactors option default change in 3.6 -&gt; 4.0)</li>
-<li>predict() generic for Graph</li>
-<li>Migrated last vignette to “mlr3 Book”</li>
+<li><p>small test fix for R 4.0 (necessary for stringsAsFactors option default change in 3.6 -&gt; 4.0)</p></li>
+<li><p>predict() generic for Graph</p></li>
+<li><p>Migrated last vignette to “mlr3 Book”</p></li>
+<li><p>Compact in-memory representation of R6 objects to save space when saving objects via saveRDS(), serialize() etc.</p></li>
 </ul>
 </div>
     <div id="mlr3pipelines-012" class="section level1">
@@ -276,7 +335,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

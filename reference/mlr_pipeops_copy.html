@@ -87,7 +87,7 @@ specify which PipeOp gets connected to which." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -167,7 +167,8 @@ specify which <code><a href='PipeOp.html'>PipeOp</a></code> gets connected to wh
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpEnsemble</span>$<span class='fu'>new</span>(<span class='no'>outnum</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"copy"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='va'>PipeOpCopy</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>outnum</span>, id <span class='op'>=</span> <span class='st'>"copy"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
 <ul>
 <li><p><code>outnum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
 Number of output channels, and therefore number of copies being made.</p></li>
@@ -181,9 +182,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p><code>PipeOpCopy</code> has one input channel named <code>"input"</code>, taking any input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>) both during training and prediction.</p>
+<p><code>PipeOpCopy</code> has one input channel named <code>"input"</code>, taking any input (<code>"*"</code>) both during training and prediction.</p>
 <p><code>PipeOpCopy</code> has multiple output channels depending on the <code>outnum</code> construction argument, named <code>"output1"</code>, <code>"output2"</code>, ...
-All output channels produce the object given as input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>).</p>
+All output channels produce the object given as input (<code>"*"</code>).</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -216,7 +217,6 @@ before</p>
     <div class='dont-index'><p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
 <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
@@ -229,6 +229,7 @@ before</p>
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
 <code><a href='mlr_pipeops_encodelmer.html'>mlr_pipeops_encodelmer</a></code>,
@@ -253,11 +254,14 @@ before</p>
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_proxy.html'>mlr_pipeops_proxy</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomprojection.html'>mlr_pipeops_randomprojection</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
@@ -275,8 +279,10 @@ before</p>
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
+<code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
 <p>Other Placeholder Pipeops: 
@@ -285,11 +291,12 @@ before</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The following copies the output of 'scale' automatically to both</span>
 <span class='co'># 'pca' and 'nop'</span>
-<span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>),
-    <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>)
-  ))</div><div class='output co'>#&gt; Graph with 3 PipeOps:
+<span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"scale"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>,
+    <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>
+  <span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Graph with 3 PipeOps:
 #&gt;     ID         State sccssors prdcssors
 #&gt;  scale &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          
 #&gt;    pca &lt;&lt;UNTRAINED&gt;&gt;              scale
@@ -306,15 +313,16 @@ before</p>
 <span class='co'># &gt;     po("imputemean")</span>
 <span class='co'># &gt;   ))</span>
 <span class='co'># Instead, the 'copy' operator makes clear which output gets copied.</span>
-<span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"scale"</span>) <span class='kw'>%&gt;&gt;%</span> <span class='no'>mlr_pipeops</span>$<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"copy"</span>, <span class='kw'>outnum</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"select"</span>)
-)) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>),
-    <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>),
-    <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"imputemean"</span>)
-  ))</div><div class='output co'>#&gt; Graph with 6 PipeOps:
+<span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"scale"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>mlr_pipeops</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"copy"</span>, outnum <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"select"</span><span class='op'>)</span>
+<span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>,
+    <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>,
+    <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputemean"</span><span class='op'>)</span>
+  <span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Graph with 6 PipeOps:
 #&gt;          ID         State   sccssors prdcssors
 #&gt;       scale &lt;&lt;UNTRAINED&gt;&gt;       copy          
 #&gt;      select &lt;&lt;UNTRAINED&gt;&gt; imputemean          
@@ -337,7 +345,7 @@ before</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

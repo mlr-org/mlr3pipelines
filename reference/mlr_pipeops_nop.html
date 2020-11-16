@@ -84,7 +84,7 @@ Can be useful during Graph construction using the %&amp;gt;&amp;gt;%-operator to
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -161,7 +161,8 @@ Can be useful during <code><a href='Graph.html'>Graph</a></code> construction us
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpNOP</span>$<span class='fu'>new</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"nop"</span>, <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+<pre><span class='va'>PipeOpNOP</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"nop"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"nop"</code>.</p></li>
@@ -173,8 +174,8 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p><code>PipeOpNOP</code> has one input channel named <code>"input"</code>, taking any input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>) both during training and prediction.</p>
-<p><code>PipeOpNOP</code> has one output channel named <code>"output"</code>, producing the object given as input (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>"*"</a></code>) without changes.</p>
+<p><code>PipeOpNOP</code> has one input channel named <code>"input"</code>, taking any input (<code>"*"</code>) both during training and prediction.</p>
+<p><code>PipeOpNOP</code> has one output channel named <code>"output"</code>, producing the object given as input (<code>"*"</code>) without changes.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -205,7 +206,6 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     <div class='dont-index'><p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
 <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>,
@@ -218,6 +218,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -243,10 +244,13 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_proxy.html'>mlr_pipeops_proxy</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomprojection.html'>mlr_pipeops_randomprojection</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
@@ -264,29 +268,33 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
+<code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p>
 <p>Other Placeholder Pipeops: 
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='no'>nop</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"nop"</span>)
+<span class='va'>nop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>
 
-<span class='no'>nop</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fl'>1</span>))</div><div class='output co'>#&gt; $output
+<span class='va'>nop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $output
 #&gt; [1] 1
 #&gt; </div><div class='input'>
 <span class='co'># use `gunion` and `%&gt;&gt;%` to create a "bypass"</span>
 <span class='co'># next to "pca"</span>
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"pca"</span>),
-  <span class='no'>nop</span>
-)) <span class='kw'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"featureunion"</span>)
+<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>,
+  <span class='va'>nop</span>
+<span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span><span class='op'>)</span>
 
-<span class='no'>gr</span>$<span class='fu'>train</span>(<span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"iris"</span>))<span class='kw'>[[</span><span class='fl'>1</span>]]$<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>()</div><div class='output co'>#&gt;        Species       PC1         PC2         PC3          PC4 Petal.Length
+<span class='va'>gr</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        Species       PC1         PC2         PC3          PC4 Petal.Length
 #&gt;   1:    setosa -2.684126  0.31939725 -0.02791483 -0.002262437          1.4
 #&gt;   2:    setosa -2.714142 -0.17700123 -0.21046427 -0.099026550          1.4
 #&gt;   3:    setosa -2.888991 -0.14494943  0.01790026 -0.019968390          1.3
@@ -325,7 +333,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

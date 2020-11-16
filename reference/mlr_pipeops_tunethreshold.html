@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpSpatialSign — mlr_pipeops_spatialsign • mlr3pipelines</title>
+<title>PipeOpTuneThreshold — mlr_pipeops_tunethreshold • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,8 +47,17 @@
 
 
 
-<meta property="og:title" content="PipeOpSpatialSign — mlr_pipeops_spatialsign" />
-<meta property="og:description" content="Normalizes the data row-wise. This is a natural generalization of the &quot;sign&quot; function to higher dimensions." />
+<meta property="og:title" content="PipeOpTuneThreshold — mlr_pipeops_tunethreshold" />
+<meta property="og:description" content="Tunes optimal probability thresholds over different PredictionClassifs.
+mlr3::Learner predict_type: &quot;prob&quot; is required.
+Thresholds for each learner are optimized using the Optimizer supplied via
+the param_set.
+Defaults to GenSA.
+Returns a single PredictionClassif.
+This PipeOp should be used in conjunction with PipeOpLearnerCV in order to
+optimize thresholds of cross-validated predictions.
+In order to optimize thresholds without cross-validation, use PipeOpLearnerCV
+in conjunction with ResamplingInsample." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -142,60 +151,84 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpSpatialSign</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpSpatialSign.R'><code>R/PipeOpSpatialSign.R</code></a></small>
-    <div class="hidden name"><code>mlr_pipeops_spatialsign.Rd</code></div>
+    <h1>PipeOpTuneThreshold</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpTuneThreshold.R'><code>R/PipeOpTuneThreshold.R</code></a></small>
+    <div class="hidden name"><code>mlr_pipeops_tunethreshold.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Normalizes the data row-wise. This is a natural generalization of the "sign" function to higher dimensions.</p>
+    <p>Tunes optimal probability thresholds over different <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>s.</p>
+<p><code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code> <code>predict_type</code>: <code>"prob"</code> is required.
+Thresholds for each learner are optimized using the <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> supplied via
+the <code>param_set</code>.
+Defaults to <code><a href='https://rdrr.io/pkg/GenSA/man/GenSA.html'>GenSA</a></code>.
+Returns a single <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>.</p>
+<p>This PipeOp should be used in conjunction with <code><a href='mlr_pipeops_learner_cv.html'>PipeOpLearnerCV</a></code> in order to
+optimize thresholds of cross-validated predictions.
+In order to optimize thresholds without cross-validation, use <code><a href='mlr_pipeops_learner_cv.html'>PipeOpLearnerCV</a></code>
+in conjunction with <code><a href='https://mlr3.mlr-org.com/reference/mlr_resamplings_insample.html'>ResamplingInsample</a></code>.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='va'>PipeOpSpatialSign</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"spatialsign"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<pre>* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \cr
+  (`character(1)`, `list`) -&gt; `self` \cr
 </pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-Identifier of resulting object, default <code>"spatialsign"</code>.</p></li>
+Identifier of resulting object. Default: "tunethreshold".</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
-List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+List of hyperparameter settings, overwriting the hyperparameter settings
+that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected numeric features replaced by their normalized versions.</p>
+<p>Input and output channels are inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
+<p>The <code>$state</code> is a named <code>list</code> with elements</p><ul>
+<li><p><code>thresholds</code> :: <code>numeric</code> learned thresholds</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>length</code>  :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Length to scale rows to. Default is 1.</p></li>
-<li><p><code>norm</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-Norm to use. Rows are scaled to <code>sum(x^norm)^(1/norm) == length</code> for finite <code>norm</code>, or to <code>max(abs(x)) == length</code>
-if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
+<p>The parameters are the parameters inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
+<li><p><code>measure</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code>  | <code>character</code><br />
+<code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> to optimize for.
+Will be converted to a <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> in case it is <code>character</code>.
+Initialized to <code>"classif.ce"</code>, i.e. misclassification error.</p></li>
+<li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
+If <code>character</code>, converts to <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>
+via <code><a href='https://bbotk.mlr-org.com/reference/opt.html'>opt</a></code>. Initialized to <code><a href='https://bbotk.mlr-org.com/reference/mlr_optimizers_gensa.html'>OptimizerGenSA</a></code>.</p></li>
+<li><p><code>log_level</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+Set a temporary log-level for <code><a href='https://s-fleck.github.io/lgr/reference/get_logger.html'>lgr::get_logger("bbotk")</a></code>. Initialized to: "warn".</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
+
+    
+
+<p>Uses the <code>optimizer</code> provided as a <code>param_val</code> in order to find an optimal threshold.
+See the <code>optimizer</code> parameter for more info.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>Only methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other PipeOps: 
@@ -257,13 +290,13 @@ if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
 <code><a href='mlr_pipeops_scale.html'>mlr_pipeops_scale</a></code>,
 <code><a href='mlr_pipeops_select.html'>mlr_pipeops_select</a></code>,
 <code><a href='mlr_pipeops_smote.html'>mlr_pipeops_smote</a></code>,
+<code><a href='mlr_pipeops_spatialsign.html'>mlr_pipeops_spatialsign</a></code>,
 <code><a href='mlr_pipeops_subsample.html'>mlr_pipeops_subsample</a></code>,
 <code><a href='mlr_pipeops_targetinvert.html'>mlr_pipeops_targetinvert</a></code>,
 <code><a href='mlr_pipeops_targetmutate.html'>mlr_pipeops_targetmutate</a></code>,
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
-<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
 <code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
@@ -274,6 +307,8 @@ if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
 <span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"tunethreshold"</span><span class='op'>)</span>
 
 <span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
@@ -287,22 +322,63 @@ if <code>norm</code> is <code>Inf</code>. Default is 2.</p></li>
 #&gt; 147: virginica          5.0         1.9          6.3         2.5
 #&gt; 148: virginica          5.2         2.0          6.5         3.0
 #&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"spatialsign"</span><span class='op'>)</span>
-
-<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa    0.2206435  0.03152050    0.8037728   0.5516088
-#&gt;   2:    setosa    0.2366094  0.03380134    0.8281329   0.5070201
-#&gt;   3:    setosa    0.2227517  0.03426949    0.8053331   0.5483119
-#&gt;   4:    setosa    0.2608794  0.03478392    0.8000302   0.5391508
-#&gt;   5:    setosa    0.2214702  0.03163860    0.7909650   0.5694948
-#&gt;  ---                                                            
-#&gt; 146: virginica    0.5600146  0.24769876    0.7215572   0.3230853
-#&gt; 147: virginica    0.5790902  0.22005426    0.7296536   0.2895451
-#&gt; 148: virginica    0.5732312  0.22047353    0.7165390   0.3307103
-#&gt; 149: virginica    0.5876164  0.25028107    0.6746707   0.3699807
-#&gt; 150: virginica    0.5966647  0.21058754    0.6902592   0.3509792</div></pre>
+#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $tunethreshold.output
+#&gt; NULL
+#&gt; </div><div class='input'>
+<span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
+</div><div class='output co'>#&gt; $classif.rpart
+#&gt; $classif.rpart$model
+#&gt; n= 150 
+#&gt; 
+#&gt; node), split, n, loss, yval, (yprob)
+#&gt;       * denotes terminal node
+#&gt; 
+#&gt; 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  
+#&gt;   2) Petal.Length&lt; 2.45 50   0 setosa (1.00000000 0.00000000 0.00000000) *
+#&gt;   3) Petal.Length&gt;=2.45 100  50 versicolor (0.00000000 0.50000000 0.50000000)  
+#&gt;     6) Petal.Width&lt; 1.75 54   5 versicolor (0.00000000 0.90740741 0.09259259) *
+#&gt;     7) Petal.Width&gt;=1.75 46   1 virginica (0.00000000 0.02173913 0.97826087) *
+#&gt; 
+#&gt; $classif.rpart$log
+#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
+#&gt; 
+#&gt; $classif.rpart$train_time
+#&gt; [1] 0.006
+#&gt; 
+#&gt; $classif.rpart$train_task
+#&gt; &lt;TaskClassif:iris&gt; (0 x 5)
+#&gt; * Target: Species
+#&gt; * Properties: multiclass
+#&gt; * Features (4):
+#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
+#&gt; 
+#&gt; $classif.rpart$affected_cols
+#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
+#&gt; 
+#&gt; $classif.rpart$intasklayout
+#&gt;              id    type
+#&gt; 1: Petal.Length numeric
+#&gt; 2:  Petal.Width numeric
+#&gt; 3: Sepal.Length numeric
+#&gt; 4:  Sepal.Width numeric
+#&gt; 
+#&gt; $classif.rpart$outtasklayout
+#&gt;                               id    type
+#&gt; 1:     classif.rpart.prob.setosa numeric
+#&gt; 2: classif.rpart.prob.versicolor numeric
+#&gt; 3:  classif.rpart.prob.virginica numeric
+#&gt; 
+#&gt; $classif.rpart$outtaskshell
+#&gt; Empty data.table (0 rows and 4 cols): Species,classif.rpart.prob.setosa,classif.rpart.prob.versicolor,classif.rpart.prob.virginica
+#&gt; 
+#&gt; 
+#&gt; $tunethreshold
+#&gt; $tunethreshold$threshold
+#&gt;     setosa versicolor  virginica 
+#&gt;  0.5134816  0.8486673  0.2710435 
+#&gt; 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

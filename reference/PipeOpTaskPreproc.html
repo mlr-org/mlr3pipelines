@@ -101,7 +101,7 @@ the PipeOpTaskPreprocSimple class can be used instead." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -195,8 +195,9 @@ the <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></co
     <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
 
     
-<pre><span class='no'>PipeOpTaskPreproc</span>$<span class='fu'>new</span>(<span class='no'>id</span>, <span class='kw'>param_set</span> <span class='kw'>=</span> <span class='no'>ParamSet</span>$<span class='fu'>new</span>(), <span class='kw'>param_vals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>can_subset_cols</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>packages</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>task_type</span> <span class='kw'>=</span> <span class='st'>"Task"</span>, <span class='kw'>tags</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>feature_types</span> <span class='kw'>=</span> <span class='no'>mlr_reflections</span>$<span class='no'>task_feature_types</span>)</pre>
+<pre><span class='va'>PipeOpTaskPreproc</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>id</span>, param_set <span class='op'>=</span> <span class='va'>ParamSet</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, can_subset_cols <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  packages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, task_type <span class='op'>=</span> <span class='st'>"Task"</span>, tags <span class='op'>=</span> <span class='cn'>NULL</span>, feature_types <span class='op'>=</span> <span class='va'>mlr_reflections</span><span class='op'>$</span><span class='va'>task_feature_types</span><span class='op'>)</span>
+</pre>
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object. See <code>$id</code> slot of <code><a href='PipeOp.html'>PipeOp</a></code>.</p></li>
@@ -305,9 +306,10 @@ and modifies it (ideally in-place without cloning) while using information in th
 <li><p><code>.train_dt(dt, levels, target)</code> <br />
 (<code>data.table</code>, named <code>list</code>, <code>any</code>) -&gt; <code>data.table</code> | <code>data.frame</code> | <code>matrix</code> <br />
 Train <code>PipeOpTaskPreproc</code> on <code>dt</code>, transform it and store a state in <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href='as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.<br />
-The <code>levels</code> argument is a named list of factor levels for factorial or character features. The <code>target</code> argument
+The <code>levels</code> argument is a named list of factor levels for factorial or character features.
+If the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> inherits from <code><a href='https://mlr3.mlr-org.com/reference/TaskSupervised.html'>TaskSupervised</a></code>, the <code>target</code> argument
 contains the <code>$truth()</code> information of the training <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>; its type depends on the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
 type being trained on.<br />
 This method can be overloaded when inheriting from <code>PipeOpTaskPreproc</code>, together with <code>private$.predict_dt()</code> and optionally
@@ -315,7 +317,7 @@ This method can be overloaded when inheriting from <code>PipeOpTaskPreproc</code
 <li><p><code>.predict_dt(dt, levels)</code> <br />
 (<code>data.table</code>, named <code>list</code>) -&gt; <code>data.table</code> | <code>data.frame</code> | <code>matrix</code> <br />
 Predict on new data in <code>dt</code>, possibly using the stored <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href='as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.<br />
 The <code>levels</code> argument is a named list of factor levels for factorial or character features.<br />
 This method can be overloaded when inheriting <code>PipeOpTaskPreproc</code>, together with <code>private$.train_dt()</code> and optionally
@@ -345,7 +347,6 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 <p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
-<code><a href='PipeOpProxy.html'>PipeOpProxy</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
 <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>,
 <code><a href='PipeOp.html'>PipeOp</a></code>,
@@ -357,6 +358,7 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 <code><a href='mlr_pipeops_classweights.html'>mlr_pipeops_classweights</a></code>,
 <code><a href='mlr_pipeops_colapply.html'>mlr_pipeops_colapply</a></code>,
 <code><a href='mlr_pipeops_collapsefactors.html'>mlr_pipeops_collapsefactors</a></code>,
+<code><a href='mlr_pipeops_colroles.html'>mlr_pipeops_colroles</a></code>,
 <code><a href='mlr_pipeops_copy.html'>mlr_pipeops_copy</a></code>,
 <code><a href='mlr_pipeops_datefeatures.html'>mlr_pipeops_datefeatures</a></code>,
 <code><a href='mlr_pipeops_encodeimpact.html'>mlr_pipeops_encodeimpact</a></code>,
@@ -382,11 +384,14 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 <code><a href='mlr_pipeops_multiplicityexply.html'>mlr_pipeops_multiplicityexply</a></code>,
 <code><a href='mlr_pipeops_multiplicityimply.html'>mlr_pipeops_multiplicityimply</a></code>,
 <code><a href='mlr_pipeops_mutate.html'>mlr_pipeops_mutate</a></code>,
+<code><a href='mlr_pipeops_nmf.html'>mlr_pipeops_nmf</a></code>,
 <code><a href='mlr_pipeops_nop.html'>mlr_pipeops_nop</a></code>,
 <code><a href='mlr_pipeops_ovrsplit.html'>mlr_pipeops_ovrsplit</a></code>,
 <code><a href='mlr_pipeops_ovrunite.html'>mlr_pipeops_ovrunite</a></code>,
 <code><a href='mlr_pipeops_pca.html'>mlr_pipeops_pca</a></code>,
+<code><a href='mlr_pipeops_proxy.html'>mlr_pipeops_proxy</a></code>,
 <code><a href='mlr_pipeops_quantilebin.html'>mlr_pipeops_quantilebin</a></code>,
+<code><a href='mlr_pipeops_randomprojection.html'>mlr_pipeops_randomprojection</a></code>,
 <code><a href='mlr_pipeops_randomresponse.html'>mlr_pipeops_randomresponse</a></code>,
 <code><a href='mlr_pipeops_regravg.html'>mlr_pipeops_regravg</a></code>,
 <code><a href='mlr_pipeops_removeconstants.html'>mlr_pipeops_removeconstants</a></code>,
@@ -404,8 +409,10 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 <code><a href='mlr_pipeops_targettrafoscalerange.html'>mlr_pipeops_targettrafoscalerange</a></code>,
 <code><a href='mlr_pipeops_textvectorizer.html'>mlr_pipeops_textvectorizer</a></code>,
 <code><a href='mlr_pipeops_threshold.html'>mlr_pipeops_threshold</a></code>,
+<code><a href='mlr_pipeops_tunethreshold.html'>mlr_pipeops_tunethreshold</a></code>,
 <code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code>,
 <code><a href='mlr_pipeops_updatetarget.html'>mlr_pipeops_updatetarget</a></code>,
+<code><a href='mlr_pipeops_vtreat.html'>mlr_pipeops_vtreat</a></code>,
 <code><a href='mlr_pipeops_yeojohnson.html'>mlr_pipeops_yeojohnson</a></code>,
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
@@ -424,7 +431,7 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

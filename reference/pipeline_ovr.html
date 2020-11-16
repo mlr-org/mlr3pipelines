@@ -84,7 +84,7 @@ perform &quot;One vs. Rest&quot; classification." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.2.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -153,7 +153,7 @@ perform &quot;One vs. Rest&quot; classification." />
 perform "One vs. Rest" classification.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pipeline_ovr</span>(<span class='no'>graph</span>)</pre>
+    <pre class="usage"><span class='fu'>pipeline_ovr</span><span class='op'>(</span><span class='va'>graph</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,18 +172,20 @@ The Graph should return <code>NULL</code> during training and a
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"mlr3"</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='no'>task</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span>(<span class='st'>"wine"</span>)
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"wine"</span><span class='op'>)</span>
 
-<span class='no'>learner</span> <span class='kw'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span>(<span class='st'>"classif.rpart"</span>)
-<span class='no'>learner</span>$<span class='no'>predict_type</span> <span class='kw'>=</span> <span class='st'>"prob"</span>
+<span class='va'>learner</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span>
+<span class='va'>learner</span><span class='op'>$</span><span class='va'>predict_type</span> <span class='op'>=</span> <span class='st'>"prob"</span>
 
 <span class='co'># Simple OVR</span>
-<span class='no'>g1</span> <span class='kw'>=</span> <span class='fu'>pipeline_ovr</span>(<span class='no'>learner</span>)
-<span class='no'>g1</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
+<span class='va'>g1</span> <span class='op'>=</span> <span class='fu'>pipeline_ovr</span><span class='op'>(</span><span class='va'>learner</span><span class='op'>)</span>
+<span class='va'>g1</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $ovrunite.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>g1</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
+#&gt; </div><div class='input'><span class='va'>g1</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $ovrunite.output
 #&gt; &lt;PredictionClassif&gt; for 178 observations:
 #&gt;     row_id truth response     prob.1     prob.2     prob.3
 #&gt;          1     1        1 0.93301153 0.04437722 0.02261125
@@ -195,40 +197,44 @@ The Graph should return <code>NULL</code> during training and a
 #&gt;        178     3        3 0.01729144 0.04484461 0.93786395
 #&gt; </div><div class='input'>
 <span class='co'># Bagged Learners</span>
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"replicate"</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"subsample"</span>) <span class='kw'>%&gt;&gt;%</span>
-  <span class='no'>learner</span> <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"classifavg"</span>, <span class='kw'>collect_multiplicity</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>g2</span> <span class='kw'>=</span> <span class='fu'>pipeline_ovr</span>(<span class='no'>gr</span>)
-<span class='no'>g2</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
+<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"replicate"</span>, reps <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"subsample"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='va'>learner</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"classifavg"</span>, collect_multiplicity <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>g2</span> <span class='op'>=</span> <span class='fu'>pipeline_ovr</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>
+<span class='va'>g2</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $ovrunite.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>g2</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $ovrunite.output
+#&gt; </div><div class='input'><span class='va'>g2</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $ovrunite.output
 #&gt; &lt;PredictionClassif&gt; for 178 observations:
-#&gt;     row_id truth response     prob.1     prob.2      prob.3
-#&gt;          1     1        1 0.96626001 0.02999479 0.003745194
-#&gt;          2     1        1 0.95880254 0.03662447 0.004572985
-#&gt;          3     1        1 0.94668082 0.04740067 0.005918517
-#&gt; ---                                                        
-#&gt;        176     3        3 0.33734056 0.02111932 0.641540116
-#&gt;        177     3        3 0.23736170 0.02430570 0.738332594
-#&gt;        178     3        3 0.02661413 0.03102234 0.942363524
+#&gt;     row_id truth response     prob.1     prob.2     prob.3
+#&gt;          1     1        1 0.94252715 0.04134153 0.01613132
+#&gt;          2     1        1 0.94252715 0.04134153 0.01613132
+#&gt;          3     1        1 0.94252715 0.04134153 0.01613132
+#&gt; ---                                                       
+#&gt;        176     3        3 0.05608258 0.03979826 0.90411916
+#&gt;        177     3        3 0.27135681 0.03072168 0.69792150
+#&gt;        178     3        3 0.01269962 0.04162741 0.94567297
 #&gt; </div><div class='input'>
 <span class='co'># Bagging outside OVR</span>
-<span class='no'>g3</span> <span class='kw'>=</span> <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"replicate"</span>, <span class='kw'>reps</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'>pipeline_ovr</span>(<span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"subsample"</span>) <span class='kw'>%&gt;&gt;%</span> <span class='no'>learner</span>) <span class='kw'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span>(<span class='st'>"classifavg"</span>, <span class='kw'>collect_multiplicity</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>g3</span>$<span class='fu'>train</span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $classifavg.output
+<span class='va'>g3</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"replicate"</span>, reps <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'>pipeline_ovr</span><span class='op'>(</span><span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"subsample"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>learner</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"classifavg"</span>, collect_multiplicity <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>g3</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $classifavg.output
 #&gt; NULL
-#&gt; </div><div class='input'><span class='no'>g3</span>$<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>task</span>)</div><div class='output co'>#&gt; $classifavg.output
+#&gt; </div><div class='input'><span class='va'>g3</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $classifavg.output
 #&gt; &lt;PredictionClassif&gt; for 178 observations:
-#&gt;     row_id truth response     prob.1     prob.2      prob.3
-#&gt;          1     1        1 0.96962334 0.02633903 0.004037635
-#&gt;          2     1        1 0.96962334 0.02633903 0.004037635
-#&gt;          3     1        1 0.96962334 0.02633903 0.004037635
-#&gt; ---                                                        
-#&gt;        176     3        3 0.17080787 0.02262046 0.806571671
-#&gt;        177     3        3 0.17080787 0.02262046 0.806571671
-#&gt;        178     3        3 0.03921399 0.02538650 0.935399510
+#&gt;     row_id truth response     prob.1     prob.2    prob.3
+#&gt;          1     1        1 0.95882795 0.02493035 0.0162417
+#&gt;          2     1        1 0.95882795 0.02493035 0.0162417
+#&gt;          3     1        1 0.95882795 0.02493035 0.0162417
+#&gt; ---                                                      
+#&gt;        176     3        3 0.13587563 0.02183435 0.8422900
+#&gt;        177     3        3 0.13587563 0.02183435 0.8422900
+#&gt;        178     3        3 0.03608536 0.02380071 0.9401139
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -245,7 +251,7 @@ The Graph should return <code>NULL</code> during training and a
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
