@@ -75,6 +75,8 @@ po$train(list(Multiplicity(task1, task2)))
 po$predict(list(Multiplicity(task1, task2)))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

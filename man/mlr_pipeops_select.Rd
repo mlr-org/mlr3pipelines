@@ -83,6 +83,8 @@ pos$param_set$values$selector = selector_grep("^r")
 pos$train(list(task))[[1]]$feature_names
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

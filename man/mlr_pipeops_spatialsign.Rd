@@ -62,6 +62,8 @@ pop = po("spatialsign")
 pop$train(list(task))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

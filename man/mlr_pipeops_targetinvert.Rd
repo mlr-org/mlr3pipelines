@@ -62,6 +62,8 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

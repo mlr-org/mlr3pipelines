@@ -92,6 +92,8 @@ Ding Y, Simonoff JS (2010).
 \url{https://jmlr.org/papers/v11/ding10a.html}.
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

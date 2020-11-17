@@ -81,6 +81,8 @@ po$train(list(task1, task2))
 po$predict(list(task1, task2))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

@@ -68,6 +68,8 @@ pop$train(list(task))[[1]]$data()
 pop$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

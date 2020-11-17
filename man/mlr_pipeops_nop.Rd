@@ -71,6 +71,8 @@ gr = gunion(list(
 gr$train(tsk("iris"))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

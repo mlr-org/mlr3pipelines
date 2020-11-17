@@ -64,6 +64,8 @@ pop = po("colroles", param_vals = list(
 pop$train(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

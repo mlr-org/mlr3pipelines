@@ -84,6 +84,8 @@ result = opb$train(list(task))[[1L]]
 result$weights
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

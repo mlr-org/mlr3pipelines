@@ -126,6 +126,8 @@ Helper function that packages \code{.invert()} that can later be used for the in
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOpTaskPreprocSimple}},

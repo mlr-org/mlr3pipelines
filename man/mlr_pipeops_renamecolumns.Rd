@@ -72,6 +72,8 @@ pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL"))
 pop$train(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

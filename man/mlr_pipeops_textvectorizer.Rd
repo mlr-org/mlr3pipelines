@@ -172,6 +172,8 @@ one_line_of_iris$data()
 pos$predict(list(one_line_of_iris))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

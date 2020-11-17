@@ -124,6 +124,8 @@ from which values are sampled to impute missing values of \code{feature}. \code{
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpTargetTrafo}},

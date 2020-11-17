@@ -92,6 +92,8 @@ rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("
 rr_pca_rpart$aggregate(msr("classif.ce"))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

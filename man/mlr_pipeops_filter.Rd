@@ -118,6 +118,8 @@ rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 rr$learners[[1]]$model$auc$scores
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

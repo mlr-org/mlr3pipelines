@@ -78,6 +78,8 @@ new_task$missings()
 new_task$data(cols = "glucose")[[1]]
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

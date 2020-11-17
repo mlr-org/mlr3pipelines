@@ -96,6 +96,8 @@ lrn_po$train(list(task))
 lrn_po$predict(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

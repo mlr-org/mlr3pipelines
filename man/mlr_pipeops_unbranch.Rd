@@ -74,6 +74,8 @@ pou = po("unbranch")
 pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

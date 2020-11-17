@@ -81,6 +81,8 @@ gr = ppl("greplicate",
 resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
