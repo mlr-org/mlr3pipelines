@@ -74,6 +74,7 @@
 #' rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
 #' rr_pca_rpart$aggregate(msr("classif.ce"))
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpProxy = R6Class("PipeOpProxy",

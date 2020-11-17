@@ -40,15 +40,18 @@
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
-#' @family PipeOps
-#' @export
-#' @examples
+#'
+#'#' @examples
 #' library("mlr3")
 #' t = tsk("german_credit")
 #' gr = po(lrn("classif.rpart", predict_type = "prob")) %>>%
 #'   po("threshold", param_vals = list(thresholds = 0.9))
 #' gr$train(t)
 #' gr$predict(t)
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @include PipeOp.R
+#' @export
 PipeOpThreshold = R6Class("PipeOpThreshold",
   inherit = PipeOp,
   public = list(

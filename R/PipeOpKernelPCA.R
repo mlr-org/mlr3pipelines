@@ -60,6 +60,7 @@
 #' task$data()
 #' pop$train(list(task))[[1]]$data()
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpKernelPCA = R6Class("PipeOpKernelPCA",

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_encodelmer}
 \alias{mlr_pipeops_encodelmer}
 \alias{PipeOpEncodeLmer}
-\title{Impact Encoding with Random Intercept Models}
+\title{PipeOpEncodeLmer}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

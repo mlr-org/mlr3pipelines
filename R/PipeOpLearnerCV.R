@@ -86,7 +86,7 @@
 #'
 #' @family Pipeops
 #' @family Meta PipeOps
-#' @export
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

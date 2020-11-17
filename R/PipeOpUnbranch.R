@@ -50,15 +50,16 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @family PipeOps
-#' @family Path Branching
-#' @include PipeOp.R
-#' @export
 #' @examples
 #' # See PipeOpBranch for a complete branching example
 #' pou = po("unbranch")
 #'
 #' pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
+#' @family PipeOps
+#' @family Path Branching
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @include PipeOp.R
+#' @export
 PipeOpUnbranch = R6Class("PipeOpUnbranch",
   inherit = PipeOp,
   public = list(

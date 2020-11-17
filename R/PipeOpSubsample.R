@@ -57,6 +57,7 @@
 #' pos$train(list(tsk("iris")))
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpSubsample = R6Class("PipeOpSubsample",

@@ -208,6 +208,8 @@ posum$train(list(1, 2))
 posum$predict(list(NULL, NULL))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOpTargetTrafo}},

@@ -112,6 +112,7 @@
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @family Target Trafo PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
@@ -223,6 +224,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
@@ -338,6 +340,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 #' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
@@ -446,6 +449,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' ttscalerange$predict(task)
 #' ttscalerange$state$regr.rpart
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
@@ -542,9 +546,6 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @family mlr3pipelines backend related
-#' @family PipeOps
-#' @include PipeOp.R
 #' @examples
 #' \dontrun{
 #' # Create a binary class task from iris
@@ -554,6 +555,11 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' po$train(list(tsk("iris")))
 #' po$predict(list(tsk("iris")))
 #' }
+#'
+#' @family mlr3pipelines backend related
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @include PipeOp.R
 #' # not yet exported
 PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   inherit = PipeOp,

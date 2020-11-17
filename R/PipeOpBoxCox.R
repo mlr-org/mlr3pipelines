@@ -59,6 +59,7 @@
 #' pop$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @export
 PipeOpBoxCox = R6Class("PipeOpBoxCox",
   inherit = PipeOpTaskPreproc,

@@ -73,6 +73,7 @@
 #' new_task$data()
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeOOR = R6Class("PipeOpImputeOOR",

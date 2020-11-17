@@ -158,6 +158,7 @@
 #'
 #' pos$predict(list(one_line_of_iris))[[1]]$data()
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",

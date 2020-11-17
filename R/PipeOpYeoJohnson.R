@@ -60,6 +60,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",

@@ -62,6 +62,7 @@
 #' new_task$data(cols = "glucose")[[1]]
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeConstant = R6Class("PipeOpImputeConstant",

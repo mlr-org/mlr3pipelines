@@ -76,6 +76,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",

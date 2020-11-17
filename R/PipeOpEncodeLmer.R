@@ -1,4 +1,4 @@
-#' @title Impact Encoding with Random Intercept Models
+#' @title PipeOpEncodeLmer
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encodelmer
@@ -68,6 +68,7 @@
 #' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_encodeimpact}
 \alias{mlr_pipeops_encodeimpact}
 \alias{PipeOpEncodeImpact}
-\title{Conditional Target Value Impact Encoding}
+\title{PipeOpEncodeImpact}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -66,7 +66,7 @@ If \code{TRUE}, impute missing values as impact 0; otherwise the respective impa
 
 \section{Internals}{
 
-Uses laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification Task}.
+Uses Laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification Task}.
 }
 
 \section{Methods}{

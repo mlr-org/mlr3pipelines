@@ -154,6 +154,7 @@
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
@@ -398,6 +399,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' @family PipeOps
 #' @family mlr3pipelines backend related
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @export
 PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 

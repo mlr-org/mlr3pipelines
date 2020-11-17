@@ -175,6 +175,8 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOpTargetTrafo}},

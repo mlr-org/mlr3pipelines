@@ -45,6 +45,7 @@
 #'
 #' @family PipeOps
 #' @family Selectors
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
