@@ -76,7 +76,6 @@ po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name
 po$train(list(tsk("iris")))
 po$predict(list(tsk("iris")))
 }
-
 }
 \seealso{
 https://mlr3book.mlr-org.com/list-pipeops.html

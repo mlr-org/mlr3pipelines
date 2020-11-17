@@ -86,7 +86,6 @@ task$data()
 pop$train(task)
 
 pop$state
-
 }
 \seealso{
 https://mlr3book.mlr-org.com/list-pipeops.html

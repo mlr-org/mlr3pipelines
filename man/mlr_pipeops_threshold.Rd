@@ -56,16 +56,16 @@ Only fields inherited from \code{\link{PipeOp}}.
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOp}}.
+}
 
-#' @examples
+\examples{
 library("mlr3")
 t = tsk("german_credit")
 gr = po(lrn("classif.rpart", predict_type = "prob")) \%>>\%
-po("threshold", param_vals = list(thresholds = 0.9))
+  po("threshold", param_vals = list(thresholds = 0.9))
 gr$train(t)
 gr$predict(t)
 }
-
 \seealso{
 https://mlr3book.mlr-org.com/list-pipeops.html
 

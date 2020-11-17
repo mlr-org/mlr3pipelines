@@ -41,7 +41,7 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#'#' @examples
+#' @examples
 #' library("mlr3")
 #' t = tsk("german_credit")
 #' gr = po(lrn("classif.rpart", predict_type = "prob")) %>>%

@@ -555,7 +555,6 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' po$train(list(tsk("iris")))
 #' po$predict(list(tsk("iris")))
 #' }
-#'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
