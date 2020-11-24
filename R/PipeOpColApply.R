@@ -31,12 +31,7 @@
 #' The output is the input [`Task`][mlr3::Task] with features changed according to the `applicator` parameter.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from
-#' [`PipeOpTaskPreprocSimple`].
-#' * `emptydt` :: [`data.table`]\cr
-#'   An empty [`data.table`] with columns of names and types from *output* features after training. This is used
-#'   to produce a correct type conversion during prediction, even when the input has zero length and
-#'   `applicator` is therefore not called.
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`].
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
