@@ -5,6 +5,7 @@
 * Changed PipeOps:
   - PipeOpMissInd now also allows for setting type = integer
   - PipeOpNMF: now exposes all parameters previously in .options
+  - PipeOpColApply: now inherits from PipeOpTaskPreprocSimple and allows for an applicator function with multiple columns as a return value
 * Changed mlr_graphs:
   - pipeline_bagging now uses multiplicities internally
   - fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd

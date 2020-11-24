@@ -119,13 +119,82 @@ test_that("apply results look as they should", {
 })
 
 test_that("empty task", {
+
   task = tsk("iris")$filter(0L)
   po = PipeOpColApply$new()
   po$param_set$values$applicator = function(x) as.integer(x)
+
   train_out = po$train(list(task))[[1L]]
   expect_data_table(train_out$data(), nrows = 0L)
   expect_true(all(train_out$feature_types$type == "integer"))
+
   predict_out = po$predict(list(task))[[1L]]
   expect_data_table(predict_out$data(), nrows = 0L)
   expect_true(all(predict_out$feature_types$type == "integer"))
+})
+
+test_that("multiple column output", {
+
+  task = tsk("iris")
+  po = PipeOpColApply$new()
+
+  # cbind, not named (.V1, .V2 is due to as.data.table coercion within $transform_dt)
+  po$param_set$values$applicator = function(x) cbind(floor(x), ceiling(x))
+  train_out = po$train(list(task))[[1L]]
+  expect_setequal(train_out$feature_names, as.vector(t(outer(task$feature_names, c(".V1", ".V2"), FUN = "paste0"))))
+  expect_equal(
+    train_out$data(cols = train_out$feature_names),
+    as.data.table(map(task$data(cols = task$feature_names), .f = function(x) cbind(floor(x), ceiling(x))))
+  )
+  expect_equal(train_out, po$predict(list(task))[[1L]])
+
+  # cbind, named
+  po$param_set$values$applicator = function(x) cbind(floor = floor(x), ceiling = ceiling(x))
+  train_out = po$train(list(task))[[1L]]
+  expect_setequal(train_out$feature_names, as.vector(t(outer(task$feature_names, c(".floor", ".ceiling"), FUN = "paste0"))))
+  expect_equal(
+    train_out$data(cols = train_out$feature_names),
+    as.data.table(map(task$data(cols = task$feature_names), .f = function(x) cbind(floor = floor(x), ceiling = ceiling(x))))
+  )
+  expect_equal(train_out, po$predict(list(task))[[1L]])
+
+  # data.frame, not named (data.frame does its own automatic column name generation)
+  po$param_set$values$applicator = function(x) data.frame(floor(x), ceiling(x))
+  train_out = po$train(list(task))[[1L]]
+  expect_setequal(train_out$feature_names, as.vector(t(outer(task$feature_names, c(".floor.x.", ".ceiling.x."), FUN = "paste0"))))
+  expect_equal(
+    train_out$data(cols = train_out$feature_names),
+    as.data.table(map(task$data(cols = task$feature_names), .f = function(x) data.frame(floor(x), ceiling(x))))
+  )
+  expect_equal(train_out, po$predict(list(task))[[1L]])
+
+  # data.frame, named
+  po$param_set$values$applicator = function(x) data.frame(floor = floor(x), ceiling = ceiling(x))
+  train_out = po$train(list(task))[[1L]]
+  expect_setequal(train_out$feature_names, as.vector(t(outer(task$feature_names, c(".floor", ".ceiling"), FUN = "paste0"))))
+  expect_equal(
+    train_out$data(cols = train_out$feature_names),
+    as.data.table(map(task$data(cols = task$feature_names), .f = function(x) data.frame(floor = floor(x), ceiling = ceiling(x))))
+  )
+  expect_equal(train_out, po$predict(list(task))[[1L]])
+
+  # data.table, not named (data.table does its own automatic column name generation)
+  po$param_set$values$applicator = function(x) data.table(floor(x), ceiling(x))
+  train_out = po$train(list(task))[[1L]]
+  expect_setequal(train_out$feature_names, as.vector(t(outer(task$feature_names, c(".V1", ".V2"), FUN = "paste0"))))
+  expect_equal(
+    train_out$data(cols = train_out$feature_names),
+    as.data.table(map(task$data(cols = task$feature_names), .f = function(x) data.table(floor(x), ceiling(x))))
+  )
+  expect_equal(train_out, po$predict(list(task))[[1L]])
+
+  # data.table, named
+  po$param_set$values$applicator = function(x) data.table(floor = floor(x), ceiling = ceiling(x))
+  train_out = po$train(list(task))[[1L]]
+  expect_setequal(train_out$feature_names, as.vector(t(outer(task$feature_names, c(".floor", ".ceiling"), FUN = "paste0"))))
+  expect_equal(
+    train_out$data(cols = train_out$feature_names),
+    as.data.table(map(task$data(cols = task$feature_names), .f = function(x) data.table(floor = floor(x), ceiling = ceiling(x))))
+  )
+  expect_equal(train_out, po$predict(list(task))[[1L]])
 })
