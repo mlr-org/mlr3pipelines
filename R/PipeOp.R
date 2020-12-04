@@ -458,6 +458,7 @@ multiplicity_type_nesting_level = function(str, varname) {
 # @param poid: `character(1)`: character id of the PipeOp
 # @return `list`
 unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid) {
+  assert_list(input)
   unpacking = mapply(multiplicity_nests_deeper_than, input, expected_nesting_level)
   if (!any(unpacking)) {
     return(NULL)  # no unpacking

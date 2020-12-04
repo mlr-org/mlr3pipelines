@@ -1,4 +1,6 @@
-# mlr3pipelines 0.3.0-9000
+# mlr3pipelines 0.3.1-9000
+
+# mlr3pipelines 0.3.1
 
 * PipeOps are now encapsulated during train and predict and gained the active bindings
   timings, log, warnings, errors
@@ -11,6 +13,12 @@
   - fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd
   - PipeOpFeatureUnion: Fixed a minor bug when checking for duplicates
 * added an autotest for ParamSets of PipeOps: expect_valid_pipeop_param_set
+* More informative error message when PipeOp input value has wrong type
+* Fix automatic detection of R6 type hierarchy
+* Performance improvements for GraphLearner
+* GraphLearner allows custom id
+* Use parallel tests
+* Removed bibtex dependency
 
 # mlr3pipelines 0.3.0
 

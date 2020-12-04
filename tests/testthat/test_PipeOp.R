@@ -25,6 +25,7 @@ test_that("PipeOp - General functions", {
   expect_output(expect_equal(po_1$predict(list(1)), list(output = 1)), "Predicting debug.basic")
   expect_equal(names(po_1$timings), c("train", "predict"))
   expect_true(sum(is.na(po_1$timings)) == 0L)
+  expect_error(po_1$train(tsk("iris")), regexp = "Must be of type 'list'")
 })
 
 

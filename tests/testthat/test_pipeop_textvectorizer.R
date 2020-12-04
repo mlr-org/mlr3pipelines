@@ -269,6 +269,6 @@ test_that("PipeOpTextVectorizer - factor sequence", {
   op = PipeOpTextVectorizer$new(param_vals = list(stopwords_language = "none", return_type = "factor_sequence", sequence_length = 4L))
   result = op$train(list(task$clone()$filter(2:3)))[[1]]
   prd = op$predict(list(task$clone()$filter(rows = 1L)))[[1]]
-  expect_true(all(is.na(prd$data()[, paste0("txt.V", 1:4)])))
+  expect_true(all(is.na(prd$data()[, paste0("txt.V", 1:4)])), info = paste(capture.output(print(prd$data())), collapse = "\n"))
   expect_true(prd$nrow == 1L)
 })
