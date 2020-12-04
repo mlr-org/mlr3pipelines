@@ -50,7 +50,7 @@ get_r6_inheritance = function(classname) {
   if (!exists(classname, mode = "environment")) {
     return(NULL)
   }
-  unique(unlist(map(getAnywhere(classname)$objs, function(gen) {
+  unique(unlist(map(utils::getAnywhere(classname)$objs, function(gen) {
     if ("R6ClassGenerator" %nin% class(gen)) {
       return(NULL)
     }

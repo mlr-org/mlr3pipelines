@@ -147,7 +147,8 @@ and modifies it (ideally in-place without cloning) while using information in th
 Train \code{\link{PipeOpTaskPreproc}} on \code{dt}, transform it and store a state in \verb{$state}. A transformed object must be returned
 that can be converted to a \code{data.table} using \code{\link{as.data.table}}. \code{dt} does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.\cr
-The \code{levels} argument is a named list of factor levels for factorial or character features. The \code{target} argument
+The \code{levels} argument is a named list of factor levels for factorial or character features.
+If the input \code{\link[mlr3:Task]{Task}} inherits from \code{\link[mlr3:TaskSupervised]{TaskSupervised}}, the \code{target} argument
 contains the \verb{$truth()} information of the training \code{\link[mlr3:Task]{Task}}; its type depends on the \code{\link[mlr3:Task]{Task}}
 type being trained on.\cr
 This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreproc}}, together with \code{private$.predict_dt()} and optionally

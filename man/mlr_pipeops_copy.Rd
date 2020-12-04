@@ -15,7 +15,7 @@ Graphs using the \code{\link{\%>>\%}}-operator, \code{PipeOpCopy} can be helpful
 specify which \code{\link{PipeOp}} gets connected to which.
 }
 \section{Construction}{
-\preformatted{PipeOpEnsemble$new(outnum, id = "copy", param_vals = list())
+\preformatted{PipeOpCopy$new(outnum, id = "copy", param_vals = list())
 }
 \itemize{
 \item \code{outnum} :: \code{numeric(1)}\cr

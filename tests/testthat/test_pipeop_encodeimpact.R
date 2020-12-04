@@ -61,11 +61,11 @@ test_that("PipeOpImpactEncode on Classification", {
 
   op$param_set$values$smoothing = 1e-4
   op$train(list(testtask))
-  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE), 0.5e-4)
+  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE), 1e-4 / 2 - 1e-4^2 * 3 / 8)
 
   op$param_set$values$smoothing = 1e-8
   op$train(list(testtask))
-  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE) * 1e4, 0.5e-4)
+  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE), 0)  # equal to 0 within tolerance
 
   op$param_set$values$smoothing = 6.362e-9  # similar to what glm uses
   encoded = op$train(list(testtask))[[1]]$data()

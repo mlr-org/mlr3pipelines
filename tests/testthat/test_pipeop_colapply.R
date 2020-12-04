@@ -117,3 +117,15 @@ test_that("apply results look as they should", {
     cbind(as.data.table(do.call(cbind, lapply(iris[1:2], as.character))), iris[3:4])
   )
 })
+
+test_that("empty task", {
+  task = tsk("iris")$filter(0L)
+  po = PipeOpColApply$new()
+  po$param_set$values$applicator = function(x) as.integer(x)
+  train_out = po$train(list(task))[[1L]]
+  expect_data_table(train_out$data(), nrows = 0L)
+  expect_true(all(train_out$feature_types$type == "integer"))
+  predict_out = po$predict(list(task))[[1L]]
+  expect_data_table(predict_out$data(), nrows = 0L)
+  expect_true(all(predict_out$feature_types$type == "integer"))
+})
