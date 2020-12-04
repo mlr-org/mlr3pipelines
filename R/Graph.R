@@ -98,6 +98,7 @@
 #' * `update_ids(prefix = "", postfix = "")` \cr
 #'   (`character`, `character`) -> `self` \cr
 #'   Pre- or postfix [`PipeOp`]'s existing ids. Both `prefix` and `postfix` default to `""`, i.e. no changes.
+#' * FIXME: replace_subgraph
 #' * `train(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> named `list`\cr
 #'   Train [`Graph`] by traversing the [`Graph`]s' edges and calling all the [`PipeOp`]'s `$train` methods in turn.
@@ -242,6 +243,55 @@ Graph = R6Class("Graph",
         self$edges = old_edges
       })
       self$ids(sorted = TRUE)  # if we fail here, edges get reset.
+      on.exit()
+      invisible(self)
+    },
+
+    replace_subgraph = function(ids, substitute) {
+      assert_subset(ids, choices = self$ids(TRUE), empty.ok = FALSE)
+      substitute = as_graph(substitute, clone = TRUE)
+      substitute_ids = substitute$ids(TRUE)
+      if (length(substitute_ids) != length(ids)) {
+        stopf("Number of ids to replace differs from the number of PipeOps in the substitute")
+      }
+      if (length(substitute_ids) > 1L) {
+        topo_order = match(ids, self$ids(TRUE))
+        if (!identical(topo_order, sort(topo_order, decreasing =  FALSE))) {
+          stopf("ids must be topologically sorted.")
+        }
+      }
+
+      old_pipeops = self$pipeops
+      old_edges = self$edges
+
+      # if we fail, pipeops and edges get reset
+      on.exit({
+        self$pipeops = old_pipeops
+        self$edges = old_edges
+      })
+
+      # drop the old pipeops
+      self$pipeops[ids] = NULL
+      # FIXME: do we also need to drop the respective params or is this handled automatically?
+
+      # add all substitute pipeops
+      substitute_ids = substitute$ids(TRUE)
+      for (i in seq_along(substitute_ids)) {
+        self$add_pipeop(substitute$pipeops[[substitute_ids[i]]])
+      }
+
+      # add all edges connecting to or from the substitute pipeops
+      edges_to_add_ids = self$edges$src_id %in% ids | self$edges$dst_id %in% ids
+      edges_to_add = self$edges[edges_to_add_ids, ]
+      for (i in seq_along(ids)) {
+        edges_to_add$src_id[ids[i] == edges_to_add$src_id] = substitute_ids[i]
+        edges_to_add$dst_id[ids[i] == edges_to_add$dst_id] = substitute_ids[i]
+      }
+      self$edges = self$edges[!edges_to_add_ids, ]  # subset the original edges to the ones that are not to be replaced
+      for (j in seq_len(nrow(edges_to_add))) {
+        self$add_edge(edges_to_add[j, ][["src_id"]], dst_id = edges_to_add[j, ][["dst_id"]], src_channel = edges_to_add[j, ][["src_channel"]], dst_channel = edges_to_add[j, ][["dst_channel"]])
+      }
+
       on.exit()
       invisible(self)
     },

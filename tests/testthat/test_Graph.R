@@ -426,3 +426,72 @@ test_that("dot output", {
     "6 [label=\"OUTPUT",
     "nop_output\",fontsize=24]"), out[-c(1L, 15L)])
 })
+
+test_that("replace_subgraph", {
+  task = tsk("iris")
+
+  # Basics
+  gr = Graph$new()$add_pipeop(PipeOpDebugMulti$new(2, 2))
+  expect_error(gr$replace_subgraph("id_not_present", PipeOpDebugMulti$new(2, 2)),
+    regexp = "Assertion on 'ids' failed")
+  expect_error(gr$replace_subgraph("debug.multi", NULL),
+    regexp = "op can not be converted to PipeOp")
+  expect_error(gr$replace_subgraph("debug.multi", PipeOpDebugMulti$new(2, 2, id = "dm1") %>>% PipeOpDebugMulti$new(2, 2, id = "dm2")),
+    regexp = "Number of ids to replace differs from the number of PipeOps in the substitute")
+  address_old = address(gr)
+  gr_old = gr$clone(deep = TRUE)
+  output = gr$replace_subgraph("debug.multi", substitute = PipeOpDebugMulti$new(2, 2))
+  expect_identical(output, gr)
+  expect_true(address_old == address(gr))  # in place modification
+  expect_deep_clone(gr_old, gr)  # replacing with exactly the same pipeop is the same as a deep clone
+
+  gr = PipeOpDebugMulti$new(2, 2, id = "dm1") %>>% PipeOpDebugMulti$new(2, 2, id = "dm2")
+  gr_old = gr$clone(deep = TRUE)
+  expect_error(gr$replace_subgraph("dm2", substitute = PipeOpDebugMulti$new(1, 2)),
+    regexp = "One of the following must apply")
+  expect_equal(gr$pipeops, gr_old$pipeops)
+  expect_equal(gr$edges, gr_old$edges)
+  expect_deep_clone(gr_old, gr)  # nothing changed due to reset
+
+  # Linear Graph
+  gr = po("scale") %>>% po("pca") %>>% lrn("classif.rpart")
+  gr_new = gr$clone(deep = TRUE)
+  gr_new$replace_subgraph("scale", substitute = po("scalemaxabs"))
+  expect_true(all(gr_new$ids(TRUE) == c("scalemaxabs", "pca", "classif.rpart")))
+  expect_null(gr_new$train(task)[[1L]])
+  expect_prediction_classif(gr_new$predict(task)[[1L]])
+
+  gr_new = gr$clone(deep = TRUE)
+  gr_new$replace_subgraph(c("scale", "pca"), substitute = po("scalemaxabs") %>>% po("ica"))
+  expect_true(all(gr_new$ids(TRUE) == c("scalemaxabs", "ica", "classif.rpart")))
+  expect_null(gr_new$train(task)[[1L]])
+  expect_prediction_classif(gr_new$predict(task)[[1L]])
+
+  gr_new = gr$clone(deep = TRUE)
+  expect_error(gr_new$replace_subgraph(c("pca", "scale"), substitute = po("scalemaxabs") %>>% po("ica")),
+    regexp = "ids must be topologically sorted")
+
+  # Non linear Graph
+  gr = po("scale") %>>%
+    po("branch", c("pca", "ica")) %>>% gunion(list(po("pca"), po("ica"))) %>>% po("unbranch") %>>%
+    lrn("classif.rpart")
+  gr_new = gr$clone(deep = TRUE)
+  gr_new$replace_subgraph("ica", substitute = po("pca", id = "pca2"))
+  expect_true(all(gr_new$ids(TRUE) == c("scale", "branch", "pca", "pca2", "unbranch", "classif.rpart")))
+  expect_null(gr_new$train(task)[[1L]])
+  state1 = gr_new$state
+  gr_new$param_set$values$branch.selection = "ica"
+  expect_null(gr_new$train(task)[[1L]])
+  state2 = gr_new$state
+  expect_true(test_r6(state1$pca2, classes = "NO_OP"))
+  expect_true(test_r6(state2$pca, classes = "NO_OP"))
+  expect_class(state1$pca, classes = "prcomp")
+  expect_class(state2$pca2, classes = "prcomp")
+  expect_prediction_classif(gr_new$predict(task)[[1L]])
+
+  # ppl with multiplicities
+  gr = po("scale") %>>% ppl("bagging", graph = lrn("classif.rpart"), averager = po("classifavg", collect_multiplicity = TRUE))
+  gr_new = gr$clone(deep = TRUE)
+  # FIXME:
+  gr_new$replace_subgraph("classif.rpart", substitute = lrn("classif.rpart"))
+})
