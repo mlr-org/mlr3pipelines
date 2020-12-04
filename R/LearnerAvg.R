@@ -46,7 +46,7 @@
 #'   Constructor.
 #'
 #' @references
-#' \cite{mlr3pipelines}{ledell_2015}
+#' `r format_bib("ledell_2015")`
 #'
 #' @family Learners
 #' @family Ensembles

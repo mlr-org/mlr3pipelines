@@ -78,7 +78,10 @@ smotedata = pop$train(list(task))[[1]]$data()
 table(smotedata$result)
 }
 \references{
-\cite{mlr3pipelines}{chawla_2002}
+Chawla NV, Bowyer KW, Hall LO, Kegelmeyer WP (2002).
+\dQuote{SMOTE: Synthetic Minority Over-sampling Technique.}
+\emph{Journal of Artificial Intelligence Research}, \bold{16}, 321--357.
+\doi{10.1613/jair.953}.
 }
 \seealso{
 Other PipeOps: 

@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.3.0-9000
+Version: 0.3.1-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -53,7 +53,6 @@ Imports:
     R6,
     withr
 Suggests:
-    bibtex,
     ggplot2,
     glmnet,
     igraph,
@@ -82,17 +81,16 @@ Suggests:
     GenSA,
     methods,
     vtreat
-RdMacros:
-    mlr3misc
 Remotes:
-    mlr-org/mlr3,
     Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
+Config/testthat/edition: 3
+Config/testthat/parallel: true
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.1
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -166,6 +164,7 @@ Collate:
     'PipeOpYeoJohnson.R'
     'Selector.R'
     'assert_graph.R'
+    'bibentries.R'
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'

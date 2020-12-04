@@ -4,10 +4,12 @@ test_that("PipeOpFilter", {
   task = mlr_tasks$get("boston_housing")
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5, na.rm = TRUE)), task = task)
+    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = task,
+    check_ps_default_values = FALSE)
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
-    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5, na.rm = TRUE)), task = mlr_tasks$get("iris"))
+    list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = mlr_tasks$get("iris"),
+    check_ps_default_values = FALSE)
 
   po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
 

@@ -127,7 +127,8 @@
 #'   Train [`PipeOpTaskPreproc`] on `dt`, transform it and store a state in `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
 #'   is possible and encouraged to change it in-place.\cr
-#'   The `levels` argument is a named list of factor levels for factorial or character features. The `target` argument
+#'   The `levels` argument is a named list of factor levels for factorial or character features.
+#'   If the input [`Task`][mlr3::Task] inherits from [`TaskSupervised`][mlr3::TaskSupervised], the `target` argument
 #'   contains the `$truth()` information of the training [`Task`][mlr3::Task]; its type depends on the [`Task`][mlr3::Task]
 #'   type being trained on.\cr
 #'   This method can be overloaded when inheriting from [`PipeOpTaskPreproc`], together with `private$.predict_dt()` and optionally
@@ -256,8 +257,13 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
-      target = task$truth()
-      dt = as.data.table(private$.train_dt(dt, task$levels(cols), target))
+
+      dt = if (test_r6(task, classes = "TaskSupervised")) {
+        as.data.table(private$.train_dt(dt, task$levels(cols), task$truth()))
+      } else {
+        as.data.table(private$.train_dt(dt, task$levels(cols)))
+      }
+
       self$state$dt_columns = dt_columns
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
@@ -411,8 +417,12 @@ PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
         return(list(dt_columns = dt_columns))
       }
       dt = task$data(cols = cols)
-      target = task$truth()
-      c(private$.get_state_dt(dt, task$levels(cols), target), list(dt_columns = dt_columns))
+
+      if (test_r6(task, classes = "TaskSupervised")) {
+        c(private$.get_state_dt(dt, task$levels(cols), task$truth()), list(dt_columns = dt_columns))
+      } else {
+        c(private$.get_state_dt(dt, task$levels(cols)), list(dt_columns = dt_columns))
+      }
     },
 
     .transform = function(task) {

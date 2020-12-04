@@ -57,7 +57,7 @@
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @references
-#' \cite{mlr3pipelines}{ding_2010}
+#' `r format_bib("ding_2010")`
 #'
 #' @examples
 #' library("mlr3")

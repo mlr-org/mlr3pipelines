@@ -44,7 +44,8 @@ test_that("PipeOpImputeLearner", {
     constargs = list("learner" = lrn("regr.rpart")),
     task = task,
     predict_rows_independent = FALSE,
-    affect_context_independent = FALSE)
+    affect_context_independent = FALSE,
+    check_ps_default_values = FALSE)
 
   mdata = data.table(
     stringsAsFactors = FALSE,
@@ -63,11 +64,13 @@ test_that("PipeOpImputeLearner", {
 
   expect_datapreproc_pipeop_class(PipeOpImputeLearner, task = task,
     affect_context_independent = FALSE, predict_rows_independent = FALSE,
-    constargs = list("learner" = lrn("regr.rpart")))
+    constargs = list("learner" = lrn("regr.rpart")),
+    check_ps_default_values = FALSE)
 
   expect_datapreproc_pipeop_class(PipeOpImputeLearner, task = task,
     affect_context_independent = FALSE, predict_rows_independent = FALSE,
-    constargs = list("learner" = lrn("classif.rpart")))
+    constargs = list("learner" = lrn("classif.rpart")),
+    check_ps_default_values = FALSE)
 })
 
 test_that("Test imputation matches, edge cases", {

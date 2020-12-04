@@ -3,6 +3,11 @@ title: "mlr3pipelines reference"
 author: "Martin Binder"
 ---
 
+```{r, include = FALSE}
+library("mlr3")
+library("mlr3pipelines")
+```
+
 # Creating a `PipeOp`
 
 Every `PipeOp` has a class name (the same as `class(p)[[1]]`) and a name inside the `po()` / `mlr_pipeops` dictionary, which is often the class name in lowercase without the `PipeOp` prefix.
@@ -63,7 +68,7 @@ p = mlr_pipeops$get("learner_cv", l)
 p = po("learner_cv", l)  # preferred
 ```
 and
-```{r}
+```{r, error = TRUE}
 p = po("learner_cv", l, predict_type = "prob", cp = 0.05)
 ```
 
