@@ -82,7 +82,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1-9000</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.2-9000</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -145,10 +145,23 @@
       <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="mlr3pipelines-031-9000" class="section level1">
-<h1 class="page-header" data-toc-text="0.3.1-9000">
-<a href="#mlr3pipelines-031-9000" class="anchor"></a>mlr3pipelines 0.3.1-9000<small> Unreleased </small>
+    <div id="mlr3pipelines-032-9000" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.2-9000">
+<a href="#mlr3pipelines-032-9000" class="anchor"></a>mlr3pipelines 0.3.2-9000<small> Unreleased </small>
 </h1>
+</div>
+    <div id="mlr3pipelines-032" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.2">
+<a href="#mlr3pipelines-032" class="anchor"></a>mlr3pipelines 0.3.2<small> 2020-12-17 </small>
+</h1>
+<ul>
+<li>Bugfix: Make as.data.table(mlr_pipeops) work with paradox 0.6</li>
+<li>Changed PipeOps:
+<ul>
+<li>PipeOpColApply: now allows for an applicator function with multiple columns as a return value; also inherits from PipeOpTaskPreprocSimple now</li>
+</ul>
+</li>
+</ul>
 </div>
     <div id="mlr3pipelines-031" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.1">
@@ -159,7 +172,6 @@
 <ul>
 <li>PipeOpMissInd now also allows for setting type = integer</li>
 <li>PipeOpNMF: now exposes all parameters previously in .options</li>
-<li>PipeOpColApply: now inherits from PipeOpTaskPreprocSimple and allows for an applicator function with multiple columns as a return value</li>
 </ul>
 </li>
 <li>Changed mlr_graphs:
