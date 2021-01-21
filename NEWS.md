@@ -1,11 +1,15 @@
-# mlr3pipelines 0.3.1-9000
+# mlr3pipelines 0.3.2-9000
+
+# mlr3pipelines 0.3.2
+* Bugfix: Make as.data.table(mlr_pipeops) work with paradox 0.6
+* Changed PipeOps:
+  - PipeOpColApply: now allows for an applicator function with multiple columns as a return value; also inherits from PipeOpTaskPreprocSimple now
 
 # mlr3pipelines 0.3.1
 
 * Changed PipeOps:
   - PipeOpMissInd now also allows for setting type = integer
   - PipeOpNMF: now exposes all parameters previously in .options
-  - PipeOpColApply: now inherits from PipeOpTaskPreprocSimple and allows for an applicator function with multiple columns as a return value
 * Changed mlr_graphs:
   - pipeline_bagging now uses multiplicities internally
   - fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd
