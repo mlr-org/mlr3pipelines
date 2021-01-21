@@ -1,3 +1,5 @@
+# mlr3pipelines 0.3.2-9000
+
 # mlr3pipelines 0.3.2
 * Bugfix: Make as.data.table(mlr_pipeops) work with paradox 0.6
 * Changed PipeOps:
