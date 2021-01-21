@@ -81,6 +81,8 @@ Suggests:
     GenSA,
     methods,
     vtreat
+Remotes:
+    Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
