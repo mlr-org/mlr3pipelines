@@ -5,11 +5,11 @@
 \alias{PipeOpColApply}
 \title{PipeOpColApply}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Applies a function to each column of a task. Use the \code{affect_columns} parameter inherited from
-\code{\link{PipeOpTaskPreproc}} to limit the columns this function should be applied to. This can be used
+\code{\link{PipeOpTaskPreprocSimple}} to limit the columns this function should be applied to. This can be used
 for simple parameter transformations or type conversions (e.g. \code{as.numeric}).
 
 The same function is applied during training and prediction. One important relationship for
@@ -32,48 +32,40 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 \section{Input and Output Channels}{
 
-Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
+Input and output channels are inherited from \code{\link{PipeOpTaskPreprocSimple}}.
 
 The output is the input \code{\link[mlr3:Task]{Task}} with features changed according to the \code{applicator} parameter.
 }
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
-\itemize{
-\item \code{emptydt} :: \code{\link{data.table}}\cr
-An empty \code{\link{data.table}} with columns of names and types from \emph{output} features after training. This is used
-to produce a correct type conversion during prediction, even when the input has zero length and
-\code{applicator} is therefore not called.
-}
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreprocSimple}}.
 }
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
+The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as:
 \itemize{
 \item \code{applicator} :: \code{function}\cr
-Function to apply to each column of the task. The return value must have the
-same length as the input, i.e. vectorize over the input. A typical example would be \code{as.numeric}.
-Use \code{\link[base:Vectorize]{Vectorize}} to create a vectorizing function from any function that
-ordinarily only takes one element input.\cr
-The \code{applicator} is not called during prediction if the input task has no rows; instead the
-types of affected features are changed to the result types of the \code{applicator} call during training.
-Initialized to the \code{identity()}-function.
+Function to apply to each column of the task.
+The return value should be a \code{vector} of the same length as the input, i.e., the function vectorizes over the input.
+A typical example would be \code{as.numeric}.\cr
+The return value can also be a \code{matrix}, \code{data.frame}, or \code{\link{data.table}}.
+In this case, the length of the input must match the number of returned rows.
+The names of the resulting features of the output \code{\link[mlr3:Task]{Task}} is based on the (column) name(s) of the return value of the applicator function,
+prefixed with the original feature name separated by a dot (\code{.}).
+Use \code{\link[base:Vectorize]{Vectorize}} to create a vectorizing function from any function that ordinarily only takes one element input.\cr
 }
 }
 
 \section{Internals}{
 
-\code{\link{PipeOpColApply}} can not inherit from \code{\link{PipeOpTaskPreprocSimple}}, because if \code{applicator} is given
-and the prediction data has 0 rows, then the resulting \code{\link{data.table}} does not know
-what the column types should be. Column type conformity between training and prediction is enforced
-by simply saving a copy of an empty \code{\link{data.table}} in the \verb{$state$emptydt} slot.
+Calls \code{\link[mlr3misc:compat-map]{map}} on the data, using the value of \code{applicator} as \code{f.} and coerces the output via \code{\link{as.data.table}}.
 }
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Only fields inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \section{Methods}{
@@ -89,7 +81,7 @@ poca = po("colapply", applicator = as.character)
 poca$train(list(task))[[1]]  # types are converted
 
 # function that does not vectorize
-f = function(x) {
+f1 = function(x) {
   # we could use `ifelse` here, but that is not the point
   if (x > 1) {
     "a"
@@ -97,11 +89,19 @@ f = function(x) {
     "b"
   }
 }
-poca$param_set$values$applicator = Vectorize(f)
+poca$param_set$values$applicator = Vectorize(f1)
 poca$train(list(task))[[1]]$data()
 
-# only affect Petal.* columns:
+# only affect Petal.* columns
 poca$param_set$values$affect_columns = selector_grep("^Petal")
+poca$train(list(task))[[1]]$data()
+
+# function returning multiple columns
+f2 = function(x) {
+  cbind(floor = floor(x), ceiling = ceiling(x))
+}
+poca$param_set$values$applicator = f2
+poca$param_set$values$affect_columns = selector_all()
 poca$train(list(task))[[1]]$data()
 }
 \seealso{
