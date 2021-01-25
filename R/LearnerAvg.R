@@ -188,14 +188,15 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       if (inherits(optimizer, "character")) {
         optimizer = bbotk::opt(optimizer)
         if (inherits(optimizer, "OptimizerNLoptr")) {
-          optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", x0 = rep(1/n_weights, n_weights))
+          optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", start_values = "center")
         }
       }
       measure = pars$measure
       if (is.character(measure)) measure = msr(measure)
+      codomain = ParamSet$new(list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
       objfun = bbotk::ObjectiveRFun$new(
         fun = function(xs) learneravg_objfun(xs, task = task, measure = measure, avg_weight_fun = self$weighted_average_prediction, data = data),
-        domain = ps
+        domain = ps, codomain = codomain
       )
       inst = bbotk::OptimInstanceSingleCrit$new(
         objective = objfun,
