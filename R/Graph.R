@@ -70,6 +70,10 @@
 #'   will not be connected within the [`Graph`] at first.\cr
 #'   Instead of supplying a [`PipeOp`] directly, an object that can naturally be converted to a [`PipeOp`] can also
 #'   be supplied, e.g. a [`Learner`][mlr3::Learner] or a [`Filter`][mlr3filters::Filter]; see [`as_pipeop()`].
+#' * `remove_pipeop(id)` \cr
+#'   (`character(1)`) -> `self` \cr
+#'   Mutates [`Graph`] by removing the [`PipeOp`] with the matching id from the [`Graph`].
+#'   Corresponding edges are also removed as well as the corresponding [`ParamSet`][paradox::ParamSet].
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
 #'   (`character(1)`, `character(1)`,
 #'   `character(1)` | `numeric(1)` | `NULL`,
@@ -79,6 +83,9 @@
 #'   channel `dst_channel` (identified by its name or number as listed in the [`PipeOp`]'s `$input`).
 #'   If source or destination [`PipeOp`] have only one input / output channel and `src_channel` / `dst_channel`
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
+#' * `replace_subgraph(ids, substitute)` \cr
+#'   (`character()`, [`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) -> `self` \cr
+#'   Replace a subgraph specified via ids with the substitute subgraph.
 #' * `plot(html)` \cr
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
@@ -98,7 +105,6 @@
 #' * `update_ids(prefix = "", postfix = "")` \cr
 #'   (`character`, `character`) -> `self` \cr
 #'   Pre- or postfix [`PipeOp`]'s existing ids. Both `prefix` and `postfix` default to `""`, i.e. no changes.
-#' * FIXME: replace_subgraph
 #' * `train(input, single_input = TRUE)` \cr
 #'   (`any`, `logical(1)`) -> named `list`\cr
 #'   Train [`Graph`] by traversing the [`Graph`]s' edges and calling all the [`PipeOp`]'s `$train` methods in turn.
@@ -247,52 +253,112 @@ Graph = R6Class("Graph",
       invisible(self)
     },
 
-    replace_subgraph = function(ids, substitute) {
-      assert_subset(ids, choices = self$ids(TRUE), empty.ok = FALSE)
-      substitute = as_graph(substitute, clone = TRUE)
-      substitute_ids = substitute$ids(TRUE)
-      if (length(substitute_ids) != length(ids)) {
-        stopf("Number of ids to replace differs from the number of PipeOps in the substitute")
-      }
-      if (length(substitute_ids) > 1L) {
-        topo_order = match(ids, self$ids(TRUE))
-        if (!identical(topo_order, sort(topo_order, decreasing =  FALSE))) {
-          stopf("ids must be topologically sorted.")
-        }
-      }
+    remove_pipeop = function(id) {
+      assert_subset(id, choices = self$ids(TRUE), empty.ok = FALSE)
+      self$pipeops[[id]] = NULL
+      self$edges = self$edges[src_id != id & dst_id != id]
 
+      if (!is.null(private$.param_set)) {
+        # param_set is built on-demand; if it has not been requested before, its value may be NULL
+        # and we don't need to remove anything.
+        private$.param_set$remove_sets(id)
+      }
+      invisible(self)
+    },
+
+    replace_subgraph = function(ids, substitute) {
+      # if this fails, pipeops, edges and param_set get reset
       old_pipeops = self$pipeops
       old_edges = self$edges
-
-      # if we fail, pipeops and edges get reset
+      old_ps = private$.param_set
       on.exit({
         self$pipeops = old_pipeops
         self$edges = old_edges
+        private$.param_set = old_ps
       })
 
-      # drop the old pipeops
-      self$pipeops[ids] = NULL
-      # FIXME: do we also need to drop the respective params or is this handled automatically?
+      assert_subset(ids, choices = self$ids(TRUE), empty.ok = FALSE)
+      ids = self$ids(TRUE)[match(ids, self$ids(TRUE))]  # always reorder ids topologically
+      substitute = as_graph(substitute, clone = TRUE)
 
-      # add all substitute pipeops
-      substitute_ids = substitute$ids(TRUE)
-      for (i in seq_along(substitute_ids)) {
-        self$add_pipeop(substitute$pipeops[[substitute_ids[i]]])
+      # check whether the input of the substitute is a vararg channel
+      if (any(strip_multiplicity_type(substitute$input$channel.name) == "...")) {
+        stopf("Using a substitute with a vararg input channel is not supported (yet).")
       }
 
-      # add all edges connecting to or from the substitute pipeops
-      edges_to_add_ids = self$edges$src_id %in% ids | self$edges$dst_id %in% ids
-      edges_to_add = self$edges[edges_to_add_ids, ]
-      for (i in seq_along(ids)) {
-        edges_to_add$src_id[ids[i] == edges_to_add$src_id] = substitute_ids[i]
-        edges_to_add$dst_id[ids[i] == edges_to_add$dst_id] = substitute_ids[i]
-      }
-      self$edges = self$edges[!edges_to_add_ids, ]  # subset the original edges to the ones that are not to be replaced
-      for (j in seq_len(nrow(edges_to_add))) {
-        self$add_edge(edges_to_add[j, ][["src_id"]], dst_id = edges_to_add[j, ][["dst_id"]], src_channel = edges_to_add[j, ][["src_channel"]], dst_channel = edges_to_add[j, ][["dst_channel"]])
+      # check whether the last id that is to be replaced connects to a varag channel
+      if (nrow(self$edges)) {  # this can be a data table with zero rows
+        type = self$edges[src_id == range(ids)[2L], dst_channel]
+        if (length(type)) {  # can be of length 0 if this is the end of the graph
+          if (strip_multiplicity_type(type) == "...") {
+            stopf("Replacing a Subgraph that is connected to a vararg channel is not supported (yet).")
+          }
+        }
       }
 
-      on.exit()
+      input_orig = self$input
+      output_orig = self$output
+
+      for (id in ids) {
+        self$remove_pipeop(id)  # also handles param_set
+      }
+
+      input = self$input[name != input_orig$name]
+      output = self$output[name != output_orig$name]
+
+      for (pipeop in substitute$pipeops) {
+        self$add_pipeop(pipeop)  # also handles param_set
+      }
+      if (nrow(substitute$edges)) {
+        self$edges = rbind(self$edges, substitute$edges)
+      }
+
+      # build edges from free output channels of substitute and free input channels of self
+      n_input = nrow(input)
+      if (n_input) {
+        if (nrow(substitute$output) != n_input) {
+          stopf("PipeOps to be connected have mismatching number of inputs / outputs.")
+        }
+        for (row in seq_len(n_input)) {
+          if (!are_types_compatible(strip_multiplicity_type(substitute$output$train[row]), strip_multiplicity_type(input$train[row]))) {
+            stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
+              substitute$output$op.id[row], substitute$output$train[row], input$op.id[row], input$train[row])
+          }
+          if (!are_types_compatible(strip_multiplicity_type(substitute$output$predict[row]), strip_multiplicity_type(input$predict[row]))) {
+            stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
+              substitute$output$op.id[row], substitute$output$predict[row], input$op.id[row], input$predict[row])
+          }
+        }
+        new_edges = cbind(substitute$output[, list(src_id = get("op.id"), src_channel = get("channel.name"))], input[, list(dst_id = get("op.id"), dst_channel = get("channel.name"))])
+        self$edges = rbind(self$edges, new_edges)
+      }
+
+      # build edges from free output channels of self and free input channels of substitute
+      n_output = nrow(output)
+      if (n_output) {
+        if (n_output != nrow(substitute$input)) {
+          stopf("PipeOps to be connected have mismatching number of inputs / outputs.")
+        }
+        for (row in seq_len(n_output)) {
+          if (!are_types_compatible(strip_multiplicity_type(output$train[row]), strip_multiplicity_type(substitute$input$train[row]))) {
+            stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
+              output$op.id[row], output$train[row], substitute$input$op.id[row], substitute$input$train[row])
+          }
+          if (!are_types_compatible(strip_multiplicity_type(output$predict[row]), strip_multiplicity_type(substitute$input$predict[row]))) {
+            stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
+              output$op.id[row], output$predict[row], substitute$input$op.id[row], substitute$input$predict[row])
+          }
+        }
+        new_edges = cbind(output[, list(src_id = get("op.id"), src_channel = get("channel.name"))], substitute$input[, list(dst_id = get("op.id"), dst_channel = get("channel.name"))])
+        self$edges = rbind(self$edges, new_edges)
+      }
+
+      # check if valid DAG
+      tryCatch(self$ids(TRUE), error = function(error_condition) {
+        stopf("Failed to infer new Graph structure. Resetting.")
+      })
+
+      on.exit({})
       invisible(self)
     },
 
