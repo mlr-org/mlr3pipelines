@@ -82,6 +82,10 @@ Mutates \code{\link{Graph}} by adding a \code{\link{PipeOp}} to the \code{\link{
 will not be connected within the \code{\link{Graph}} at first.\cr
 Instead of supplying a \code{\link{PipeOp}} directly, an object that can naturally be converted to a \code{\link{PipeOp}} can also
 be supplied, e.g. a \code{\link[mlr3:Learner]{Learner}} or a \code{\link[mlr3filters:Filter]{Filter}}; see \code{\link[=as_pipeop]{as_pipeop()}}.
+\item \code{remove_pipeop(id)} \cr
+(\code{character(1)}) -> \code{self} \cr
+Mutates \code{\link{Graph}} by removing the \code{\link{PipeOp}} with the matching id from the \code{\link{Graph}}.
+Corresponding edges are also removed as well as the corresponding \code{\link[paradox:ParamSet]{ParamSet}}.
 \item \code{add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)} \cr
 (\code{character(1)}, \code{character(1)},
 \code{character(1)} | \code{numeric(1)} | \code{NULL},
@@ -91,6 +95,9 @@ Add an edge from \code{\link{PipeOp}} \code{src_id}, and its channel \code{src_c
 channel \code{dst_channel} (identified by its name or number as listed in the \code{\link{PipeOp}}'s \verb{$input}).
 If source or destination \code{\link{PipeOp}} have only one input / output channel and \code{src_channel} / \code{dst_channel}
 are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
+\item \code{replace_subgraph(ids, substitute)} \cr
+(\code{character()}, \code{\link{Graph}} | \code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}) -> \code{self} \cr
+Mutates \code{\link{Graph}} by replace a subgraph specified via ids with the substitute subgraph.
 \item \code{plot(html)} \cr
 (\code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or

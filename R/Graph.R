@@ -85,7 +85,7 @@
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
 #' * `replace_subgraph(ids, substitute)` \cr
 #'   (`character()`, [`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) -> `self` \cr
-#'   Replace a subgraph specified via ids with the substitute subgraph.
+#'   Mutates [`Graph`] by replace a subgraph specified via ids with the substitute subgraph.
 #' * `plot(html)` \cr
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
