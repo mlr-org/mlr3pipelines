@@ -26,7 +26,7 @@
 #' @section Fields:
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
 #'   Contains all [`PipeOp`]s in the [`Graph`], named by the [`PipeOp`]'s `$id`s.
-#' * `edges` :: [`data.table`]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
+#' * `edges` :: [`data.table`] with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
 #'   Table of connections between the [`PipeOp`]s. A [`data.table`]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
 #'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
 #'   respective [`PipeOp`]s.
@@ -85,7 +85,8 @@
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
 #' * `replace_subgraph(ids, substitute)` \cr
 #'   (`character()`, [`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) -> `self` \cr
-#'   Mutates [`Graph`] by replace a subgraph specified via ids with the substitute subgraph.
+#'   Mutates [`Graph`] by replacing a subgraph specified via ids with the supplied substitute subgraph.
+#'   Note that the supplied ids are always reordered in topological order with respect to the [`Graph`].
 #' * `plot(html)` \cr
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
@@ -281,20 +282,23 @@ Graph = R6Class("Graph",
       ids = self$ids(TRUE)[match(ids, self$ids(TRUE))]  # always reorder ids topologically
       substitute = as_graph(substitute, clone = TRUE)
 
+      # FIXME: check that ids are actually a valid subgraph of graph
+
+      # FIXME:
       # check whether the input of the substitute is a vararg channel
-      if (any(strip_multiplicity_type(substitute$input$channel.name) == "...")) {
-        stopf("Using a substitute with a vararg input channel is not supported (yet).")
-      }
+      #if (any(strip_multiplicity_type(substitute$input$channel.name) == "...")) {
+      #  stopf("Using a substitute with a vararg input channel is not supported (yet).")
+      #}
 
       # check whether the last id that is to be replaced connects to a varag channel
-      if (nrow(self$edges)) {  # this can be a data table with zero rows
-        type = self$edges[src_id == range(ids)[2L], dst_channel]
-        if (length(type)) {  # can be of length 0 if this is the end of the graph
-          if (strip_multiplicity_type(type) == "...") {
-            stopf("Replacing a Subgraph that is connected to a vararg channel is not supported (yet).")
-          }
-        }
-      }
+      #if (nrow(self$edges)) {  # this can be a data table with zero rows
+      #  type = self$edges[src_id == range(ids)[2L], dst_channel]
+      #  if (length(type)) {  # can be of length 0 if this is the end of the graph
+      #    if (strip_multiplicity_type(type) == "...") {
+      #      stopf("Replacing a Subgraph that is connected to a vararg channel is not supported (yet).")
+      #    }
+      #  }
+      #}
 
       input_orig = self$input
       output_orig = self$output
@@ -313,12 +317,11 @@ Graph = R6Class("Graph",
         self$edges = rbind(self$edges, substitute$edges)
       }
 
+      # FIXME: this reuses a lot of `%>>%`, we could write a general helper
       # build edges from free output channels of substitute and free input channels of self
       n_input = nrow(input)
       if (n_input) {
-        if (nrow(substitute$output) != n_input) {
-          stopf("PipeOps to be connected have mismatching number of inputs / outputs.")
-        }
+        # FIXME: check number of inputs / outputs
         for (row in seq_len(n_input)) {
           if (!are_types_compatible(strip_multiplicity_type(substitute$output$train[row]), strip_multiplicity_type(input$train[row]))) {
             stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
@@ -336,9 +339,7 @@ Graph = R6Class("Graph",
       # build edges from free output channels of self and free input channels of substitute
       n_output = nrow(output)
       if (n_output) {
-        if (n_output != nrow(substitute$input)) {
-          stopf("PipeOps to be connected have mismatching number of inputs / outputs.")
-        }
+        # FIXME: check number of inputs / outputs
         for (row in seq_len(n_output)) {
           if (!are_types_compatible(strip_multiplicity_type(output$train[row]), strip_multiplicity_type(substitute$input$train[row]))) {
             stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
@@ -354,9 +355,9 @@ Graph = R6Class("Graph",
       }
 
       # check if valid DAG
-      tryCatch(self$ids(TRUE), error = function(error_condition) {
+      invisible(tryCatch(self$ids(TRUE), error = function(error_condition) {
         stopf("Failed to infer new Graph structure. Resetting.")
-      })
+      }))
 
       on.exit({})
       invisible(self)

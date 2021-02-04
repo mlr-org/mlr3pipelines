@@ -34,7 +34,7 @@ the \code{\link{PipeOp}} results along the edges as input to other \code{\link{P
 \itemize{
 \item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
 Contains all \code{\link{PipeOp}}s in the \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s.
-\item \code{edges} :: \code{\link{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
+\item \code{edges} :: \code{\link{data.table}} with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
 Table of connections between the \code{\link{PipeOp}}s. A \code{\link{data.table}}. \code{src_id} and \code{dst_id} are \verb{$id}s of \code{\link{PipeOp}}s that must be present in
 the \verb{$pipeops} list. \code{src_channel} and \code{dst_channel} must respectively be \verb{$output} and \verb{$input} channel names of the
 respective \code{\link{PipeOp}}s.
@@ -97,7 +97,8 @@ If source or destination \code{\link{PipeOp}} have only one input / output chann
 are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
 \item \code{replace_subgraph(ids, substitute)} \cr
 (\code{character()}, \code{\link{Graph}} | \code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}) -> \code{self} \cr
-Mutates \code{\link{Graph}} by replace a subgraph specified via ids with the substitute subgraph.
+Mutates \code{\link{Graph}} by replacing a subgraph specified via ids with the supplied substitute subgraph.
+Note that the supplied ids are always reordered in topological order with respect to the \code{\link{Graph}}.
 \item \code{plot(html)} \cr
 (\code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
