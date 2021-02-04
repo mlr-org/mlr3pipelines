@@ -1,4 +1,5 @@
 # mlr3pipelines 0.3.2-9000
+* Bugfix: Make add_edge of Graphs work with Multiplicities
 
 # mlr3pipelines 0.3.2
 * Bugfix: Make as.data.table(mlr_pipeops) work with paradox 0.6
