@@ -31,8 +31,7 @@ test_that("PipeOpTextVectorizer - basic properties", {
   # verify for first row
   strs = unlist(strsplit(dt[1, ][["txt"]], fixed = TRUE, split = " "))
   dt2 = result$data()
-  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] == 1))
-
+  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] >= 1L))
   expect_datapreproc_pipeop_class(PipeOpTextVectorizer, task = task)
 
   prd = op$predict(list(task$filter(rows = integer(0))))[[1]]
@@ -139,7 +138,7 @@ test_that("PipeOpTextVectorizer - bigrams", {
   # verify for first row
   strs = unlist(strsplit(dt[1, ][["txt"]], fixed = TRUE, split = " "))
   dt2 = result$data()
-  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] == 1))
+  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] >= 1L))
 })
 
 
