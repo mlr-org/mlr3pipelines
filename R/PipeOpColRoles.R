@@ -1,4 +1,4 @@
-#' @title PipeOpColRoles
+#' @title Change Column Roles of a Task
 #'
 #' @usage NULL
 #' @name mlr_pipeops_colroles

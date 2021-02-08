@@ -1,4 +1,4 @@
-#' @title PipeOpTargetTrafo
+#' @title Target Transformation Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
@@ -176,7 +176,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   )
 )
 
-#' @title PipeOpTargetInvert
+#' @title Invert Target Transformations
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetinvert
@@ -251,7 +251,7 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
 
 mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 
-#' @title PipeOpTargetMutate
+#' @title Transform a Target by a Function
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetmutate
@@ -390,7 +390,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
 
 mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 
-#' @title PipeOpTargetTrafoScaleRange
+#' @title Linearly Transform a Numeric Target to Match Given Boundaries
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targettrafoscalerange
@@ -490,7 +490,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
 
 mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 
-#' @title PipeOpUpdateTarget
+#' @title Transform a Target without an Explicit Inversion
 #' @usage NULL
 #' @name mlr_pipeops_updatetarget
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].

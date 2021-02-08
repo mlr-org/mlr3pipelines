@@ -1,4 +1,4 @@
-#' @title PipeOpProxy
+#' @title Wrap another PipeOp or Graph as a Hyperparameter
 #'
 #' @usage NULL
 #' @name mlr_pipeops_proxy

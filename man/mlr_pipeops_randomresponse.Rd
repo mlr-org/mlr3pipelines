@@ -3,14 +3,14 @@
 \name{mlr_pipeops_randomresponse}
 \alias{mlr_pipeops_randomresponse}
 \alias{PipeOpRandomResponse}
-\title{PipeOpRandomResponse}
+\title{Generate a Randomized Response Prediction}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Takes in a \code{\link[mlr3:Prediction]{Prediction}} of \code{predict_type} \code{"prob"}
 (for \code{\link[mlr3:PredictionClassif]{PredictionClassif}}) or \code{"se"}
-(for \code{\link[mlr3:PredictionRegr]{PredictionRegr}}). and generates a randomized \code{"response"}
+(for \code{\link[mlr3:PredictionRegr]{PredictionRegr}}) and generates a randomized \code{"response"}
 prediction.
 
 For \code{"prob"}, the responses are sampled according to

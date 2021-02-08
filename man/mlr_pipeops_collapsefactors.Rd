@@ -3,7 +3,7 @@
 \name{mlr_pipeops_collapsefactors}
 \alias{mlr_pipeops_collapsefactors}
 \alias{PipeOpCollapseFactors}
-\title{PipeOpCollapseFactors}
+\title{Collapse Factors}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

@@ -1,4 +1,4 @@
-#' @title PipeOpQuantileBin
+#' @title Split Numeric Features into Quantile Bins
 #'
 #' @usage NULL
 #' @name mlr_pipeops_quantilebin

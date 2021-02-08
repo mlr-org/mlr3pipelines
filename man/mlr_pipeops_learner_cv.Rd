@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner_cv}
 \alias{mlr_pipeops_learner_cv}
 \alias{PipeOpLearnerCV}
-\title{PipeOpLearnerCV}
+\title{Wrap a Learner into a PipeOp with Cross-validated Predictions as Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

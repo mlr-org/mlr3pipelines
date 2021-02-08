@@ -3,7 +3,7 @@
 \name{mlr_pipeops_smote}
 \alias{mlr_pipeops_smote}
 \alias{PipeOpSmote}
-\title{PipeOpSmote}
+\title{SMOTE Balancing}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

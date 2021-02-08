@@ -3,7 +3,7 @@
 \name{mlr_pipeops_histbin}
 \alias{mlr_pipeops_histbin}
 \alias{PipeOpHistBin}
-\title{PipeOpHistBin}
+\title{Split Numeric Features into Equally Spaced Bins}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

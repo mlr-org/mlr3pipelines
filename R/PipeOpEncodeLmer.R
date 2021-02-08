@@ -1,4 +1,4 @@
-#' @title PipeOpEncodeLmer
+#' @title Impact Encoding with Random Intercept Models
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encodelmer

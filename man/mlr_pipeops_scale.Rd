@@ -3,7 +3,7 @@
 \name{mlr_pipeops_scale}
 \alias{mlr_pipeops_scale}
 \alias{PipeOpScale}
-\title{PipeOpScale}
+\title{Center and Scale Numeric Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

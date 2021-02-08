@@ -1,4 +1,4 @@
-#' @title PipeOpRenameColumns
+#' @title Rename Columns
 #'
 #' @usage NULL
 #' @name mlr_pipeops_renamecolumns

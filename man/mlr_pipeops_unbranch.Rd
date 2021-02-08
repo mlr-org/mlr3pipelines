@@ -3,7 +3,7 @@
 \name{mlr_pipeops_unbranch}
 \alias{mlr_pipeops_unbranch}
 \alias{PipeOpUnbranch}
-\title{PipeOpUnbranch}
+\title{Unbranch Different Paths}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

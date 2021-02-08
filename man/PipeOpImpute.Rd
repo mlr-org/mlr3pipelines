@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpImpute.R
 \name{PipeOpImpute}
 \alias{PipeOpImpute}
-\title{PipeOpImpute}
+\title{Imputation Base Class}
 \format{
 Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

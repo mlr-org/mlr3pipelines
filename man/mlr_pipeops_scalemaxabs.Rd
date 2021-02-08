@@ -3,7 +3,7 @@
 \name{mlr_pipeops_scalemaxabs}
 \alias{mlr_pipeops_scalemaxabs}
 \alias{PipeOpScaleMaxAbs}
-\title{PipeOpScaleMaxAbs}
+\title{Scale Numeric Features with Respect to their Maximum Absolute Value}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

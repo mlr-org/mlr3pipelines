@@ -1,4 +1,4 @@
-#' @title PipeOpFilter
+#' @title Feature Filtering
 #'
 #' @usage NULL
 #' @name mlr_pipeops_filter

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_multiplicityexply}
 \alias{mlr_pipeops_multiplicityexply}
 \alias{PipeOpMultiplicityExply}
-\title{PipeOpMultiplicityExply}
+\title{Explicate a Multiplicity}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

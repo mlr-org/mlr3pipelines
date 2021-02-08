@@ -3,7 +3,7 @@
 \name{mlr_pipeops_targetinvert}
 \alias{mlr_pipeops_targetinvert}
 \alias{PipeOpTargetInvert}
-\title{PipeOpTargetInvert}
+\title{Invert Target Transformations}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

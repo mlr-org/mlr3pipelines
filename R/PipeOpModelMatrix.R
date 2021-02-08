@@ -1,4 +1,4 @@
-#' @title PipeOpModelMatrix
+#' @title Transform Columns by Constructing a Model Matrix
 #'
 #' @usage NULL
 #' @name mlr_pipeops_modelmatrix

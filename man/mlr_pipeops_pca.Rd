@@ -3,7 +3,7 @@
 \name{mlr_pipeops_pca}
 \alias{mlr_pipeops_pca}
 \alias{PipeOpPCA}
-\title{PipeOpPCA}
+\title{Principle Component Analysis}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

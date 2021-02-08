@@ -1,4 +1,4 @@
-#' @title PipeOpImputeOOR
+#' @title Out of Range Imputation
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputeoor

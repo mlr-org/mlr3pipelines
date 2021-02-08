@@ -3,7 +3,7 @@
 \name{mlr_pipeops_tunethreshold}
 \alias{mlr_pipeops_tunethreshold}
 \alias{PipeOpTuneThreshold}
-\title{PipeOpTuneThreshold}
+\title{Tune the Threshold of a Classification Prediction}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

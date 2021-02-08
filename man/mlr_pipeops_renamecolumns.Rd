@@ -3,7 +3,7 @@
 \name{mlr_pipeops_renamecolumns}
 \alias{mlr_pipeops_renamecolumns}
 \alias{PipeOpRenameColumns}
-\title{PipeOpRenameColumns}
+\title{Rename Columns}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.
 }

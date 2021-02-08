@@ -1,4 +1,4 @@
-#' @title PipeOpFeatureUnion
+#' @title Aggregate Features from Multiple Inputs
 #'
 #' @usage NULL
 #' @name mlr_pipeops_featureunion

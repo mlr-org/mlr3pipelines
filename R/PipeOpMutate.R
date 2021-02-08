@@ -1,4 +1,4 @@
-#' @title PipeOpMutate
+#' @title Add Features According to Expressions
 #'
 #' @usage NULL
 #' @name mlr_pipeops_mutate

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_colapply}
 \alias{mlr_pipeops_colapply}
 \alias{PipeOpColApply}
-\title{PipeOpColApply}
+\title{Apply a Function to each Column of a Task}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

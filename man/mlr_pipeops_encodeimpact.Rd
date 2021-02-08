@@ -3,7 +3,7 @@
 \name{mlr_pipeops_encodeimpact}
 \alias{mlr_pipeops_encodeimpact}
 \alias{PipeOpEncodeImpact}
-\title{PipeOpEncodeImpact}
+\title{Conditional Target Value Impact Encoding}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

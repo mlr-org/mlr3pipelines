@@ -3,12 +3,12 @@
 \name{mlr_pipeops_ica}
 \alias{mlr_pipeops_ica}
 \alias{PipeOpICA}
-\title{PipeOpICA}
+\title{Independent Component Analysis}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Extracts statistically independent components from data.  Only affects numerical features.
+Extracts statistically independent components from data. Only affects numerical features.
 See \link[fastICA:fastICA]{fastICA::fastICA} for details.
 }
 \section{Construction}{

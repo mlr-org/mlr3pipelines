@@ -1,4 +1,4 @@
-#' @title PipeOpCopy
+#' @title Copy Input Multiple Times
 #'
 #' @usage NULL
 #' @name mlr_pipeops_copy

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_threshold}
 \alias{mlr_pipeops_threshold}
 \alias{PipeOpThreshold}
-\title{PipeOpThreshold}
+\title{Change the Threshold of a Classification Prediction}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputesample}
 \alias{mlr_pipeops_imputesample}
 \alias{PipeOpImputeSample}
-\title{PipeOpImputeSample}
+\title{Impute Features by Sampling}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }

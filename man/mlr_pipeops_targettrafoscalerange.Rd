@@ -3,7 +3,7 @@
 \name{mlr_pipeops_targettrafoscalerange}
 \alias{mlr_pipeops_targettrafoscalerange}
 \alias{PipeOpTargetTrafoScaleRange}
-\title{PipeOpTargetTrafoScaleRange}
+\title{Linearly Transform a Numeric Target to Match Given Boundaries}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }

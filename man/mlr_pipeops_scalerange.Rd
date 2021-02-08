@@ -3,7 +3,7 @@
 \name{mlr_pipeops_scalerange}
 \alias{mlr_pipeops_scalerange}
 \alias{PipeOpScaleRange}
-\title{PipeOpScaleRange}
+\title{Linearly Transform Numeric Features to Match Given Boundaries}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

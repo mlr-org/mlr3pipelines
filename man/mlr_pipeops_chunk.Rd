@@ -3,7 +3,7 @@
 \name{mlr_pipeops_chunk}
 \alias{mlr_pipeops_chunk}
 \alias{PipeOpChunk}
-\title{PipeOpChunk}
+\title{Chunk Input into Multiple Outputs}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

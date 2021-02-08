@@ -3,7 +3,7 @@
 \name{mlr_pipeops_multiplicityimply}
 \alias{mlr_pipeops_multiplicityimply}
 \alias{PipeOpMultiplicityImply}
-\title{PipeOpMultiplicityImply}
+\title{Implicate a Multiplicity}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

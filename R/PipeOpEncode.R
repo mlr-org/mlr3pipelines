@@ -1,4 +1,4 @@
-#' @title PipeOpEncode
+#' @title Factor Encoding
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encode

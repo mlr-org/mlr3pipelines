@@ -1,4 +1,4 @@
-#' @title PipeOpRegrAvg
+#' @title Weighted Prediction Averaging
 #'
 #' @usage NULL
 #' @name mlr_pipeops_regravg

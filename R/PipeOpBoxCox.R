@@ -1,4 +1,4 @@
-#' @title PipeOpBoxCox
+#' @title Box-Cox Transformation of Numeric Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_boxcox

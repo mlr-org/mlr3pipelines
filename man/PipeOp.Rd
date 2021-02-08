@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOp.R
 \name{PipeOp}
 \alias{PipeOp}
-\title{PipeOp}
+\title{PipeOp Base Class}
 \format{
 Abstract \code{\link{R6Class}}.
 }

@@ -1,4 +1,4 @@
-#' @title PipeOpDateFeatures
+#' @title Preprocess Date Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_datefeatures

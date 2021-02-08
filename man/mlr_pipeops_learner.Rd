@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner}
 \alias{mlr_pipeops_learner}
 \alias{PipeOpLearner}
-\title{PipeOpLearner}
+\title{Wrap a Learner into a PipeOp}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

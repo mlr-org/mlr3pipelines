@@ -3,7 +3,7 @@
 \name{mlr_pipeops_colroles}
 \alias{mlr_pipeops_colroles}
 \alias{PipeOpColRoles}
-\title{PipeOpColRoles}
+\title{Change Column Roles of a Task}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

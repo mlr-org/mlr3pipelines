@@ -3,7 +3,7 @@
 \name{mlr_pipeops_classbalancing}
 \alias{mlr_pipeops_classbalancing}
 \alias{PipeOpClassBalancing}
-\title{PipeOpClassBalancing}
+\title{Class Balancing}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

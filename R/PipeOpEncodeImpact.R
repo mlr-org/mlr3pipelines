@@ -1,4 +1,4 @@
-#' @title PipeOpEncodeImpact
+#' @title Conditional Target Value Impact Encoding
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encodeimpact

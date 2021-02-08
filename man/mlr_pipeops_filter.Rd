@@ -3,7 +3,7 @@
 \name{mlr_pipeops_filter}
 \alias{mlr_pipeops_filter}
 \alias{PipeOpFilter}
-\title{PipeOpFilter}
+\title{Feature Filtering}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

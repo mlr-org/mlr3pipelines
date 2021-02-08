@@ -1,4 +1,4 @@
-#' @title PipeOpScale
+#' @title Center and Scale Numeric Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scale

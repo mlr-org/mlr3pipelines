@@ -1,4 +1,4 @@
-#' @title PipeOpBranch
+#' @title Path Branching
 #'
 #' @usage NULL
 #' @name mlr_pipeops_branch

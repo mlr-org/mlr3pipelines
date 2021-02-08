@@ -3,7 +3,7 @@
 \name{mlr_pipeops_targetmutate}
 \alias{mlr_pipeops_targetmutate}
 \alias{PipeOpTargetMutate}
-\title{PipeOpTargetMutate}
+\title{Transform a Target by a Function}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }

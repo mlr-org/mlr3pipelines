@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputeoor}
 \alias{mlr_pipeops_imputeoor}
 \alias{PipeOpImputeOOR}
-\title{PipeOpImputeOOR}
+\title{Out of Range Imputation}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }

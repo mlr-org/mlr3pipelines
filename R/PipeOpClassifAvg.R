@@ -1,4 +1,4 @@
-#' @title PipeOpClassifAvg
+#' @title Majority Vote Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classifavg

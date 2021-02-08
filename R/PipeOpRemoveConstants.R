@@ -1,4 +1,4 @@
-#' @title PipeOpRemoveConstants
+#' @title Remove Constant Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_removeconstants

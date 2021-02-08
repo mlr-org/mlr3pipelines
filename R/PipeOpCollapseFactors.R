@@ -1,4 +1,4 @@
-#' @title PipeOpCollapseFactors
+#' @title Collapse Factors
 #'
 #' @usage NULL
 #' @name mlr_pipeops_collapsefactors

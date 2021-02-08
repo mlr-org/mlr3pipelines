@@ -3,7 +3,7 @@
 \name{mlr_pipeops_replicate}
 \alias{mlr_pipeops_replicate}
 \alias{PipeOpReplicate}
-\title{PipeOpReplicate}
+\title{Replicate the Input as a Multiplicity}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

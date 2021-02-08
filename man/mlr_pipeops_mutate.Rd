@@ -3,7 +3,7 @@
 \name{mlr_pipeops_mutate}
 \alias{mlr_pipeops_mutate}
 \alias{PipeOpMutate}
-\title{PipeOpMutate}
+\title{Add Features According to Expressions}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

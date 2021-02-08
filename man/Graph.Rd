@@ -2,7 +2,7 @@
 % Please edit documentation in R/Graph.R
 \name{Graph}
 \alias{Graph}
-\title{Graph}
+\title{Graph Base Class}
 \format{
 \link{R6Class} Graph
 

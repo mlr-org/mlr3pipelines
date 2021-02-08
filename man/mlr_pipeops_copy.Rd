@@ -3,7 +3,7 @@
 \name{mlr_pipeops_copy}
 \alias{mlr_pipeops_copy}
 \alias{PipeOpCopy}
-\title{PipeOpCopy}
+\title{Copy Input Multiple Times}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

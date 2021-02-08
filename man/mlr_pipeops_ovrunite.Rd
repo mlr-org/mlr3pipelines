@@ -3,7 +3,7 @@
 \name{mlr_pipeops_ovrunite}
 \alias{mlr_pipeops_ovrunite}
 \alias{PipeOpOVRUnite}
-\title{PipeOpOVRUnite}
+\title{Unite Binary Classification Tasks}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }

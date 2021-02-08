@@ -1,4 +1,4 @@
-#' @title PipeOpLearnerCV
+#' @title Wrap a Learner into a PipeOp with Cross-validated Predictions as Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner_cv

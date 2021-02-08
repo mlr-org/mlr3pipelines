@@ -1,4 +1,4 @@
-#' @title PipeOpThreshold
+#' @title Change the Threshold of a Classification Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_threshold

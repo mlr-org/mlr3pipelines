@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpTaskPreproc.R
 \name{PipeOpTaskPreproc}
 \alias{PipeOpTaskPreproc}
-\title{PipeOpTaskPreproc}
+\title{Task Preprocessing Base Class}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }

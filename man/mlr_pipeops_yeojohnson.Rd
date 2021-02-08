@@ -3,7 +3,7 @@
 \name{mlr_pipeops_yeojohnson}
 \alias{mlr_pipeops_yeojohnson}
 \alias{PipeOpYeoJohnson}
-\title{PipeOpYeoJohnson}
+\title{Yeo-Johnson Transformation of Numeric Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

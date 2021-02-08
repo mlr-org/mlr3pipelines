@@ -3,7 +3,7 @@
 \name{mlr_pipeops_encode}
 \alias{mlr_pipeops_encode}
 \alias{PipeOpEncode}
-\title{PipeOpEncode}
+\title{Factor Encoding}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

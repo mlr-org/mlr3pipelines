@@ -1,4 +1,4 @@
-#' @title PipeOpClassWeights
+#' @title Class Weights for Sample Weighting
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classweights

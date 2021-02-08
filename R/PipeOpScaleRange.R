@@ -1,4 +1,4 @@
-#' @title PipeOpScaleRange
+#' @title Linearly Transform Numeric Features to Match Given Boundaries
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scalerange

@@ -1,4 +1,4 @@
-#' @title PipeOpSpatialSign
+#' @title Normalize Data Row-wise
 #'
 #' @usage NULL
 #' @name mlr_pipeops_spatialsign

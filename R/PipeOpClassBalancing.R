@@ -1,4 +1,4 @@
-#' @title PipeOpClassBalancing
+#' @title Class Balancing
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classbalancing

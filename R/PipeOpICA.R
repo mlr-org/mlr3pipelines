@@ -1,11 +1,11 @@
-#' @title PipeOpICA
+#' @title Independent Component Analysis
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ica
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Extracts statistically independent components from data.  Only affects numerical features.
+#' Extracts statistically independent components from data. Only affects numerical features.
 #' See [fastICA::fastICA] for details.
 #'
 #' @section Construction:

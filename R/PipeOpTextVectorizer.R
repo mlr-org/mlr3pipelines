@@ -1,4 +1,4 @@
-#' @title PipeOpTextVectorizer
+#' @title Bag-of-word Representation of Character Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_textvectorizer

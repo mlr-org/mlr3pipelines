@@ -1,4 +1,4 @@
-#' @title PipeOpPCA
+#' @title Principle Component Analysis
 #'
 #' @usage NULL
 #' @name mlr_pipeops_pca

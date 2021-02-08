@@ -1,4 +1,4 @@
-#' @title PipeOpLearner
+#' @title Wrap a Learner into a PipeOp
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner

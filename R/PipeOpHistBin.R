@@ -1,4 +1,4 @@
-#' @title PipeOpHistBin
+#' @title Split Numeric Features into Equally Spaced Bins
 #'
 #' @usage NULL
 #' @name mlr_pipeops_histbin

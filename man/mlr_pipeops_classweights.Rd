@@ -3,7 +3,7 @@
 \name{mlr_pipeops_classweights}
 \alias{mlr_pipeops_classweights}
 \alias{PipeOpClassWeights}
-\title{PipeOpClassWeights}
+\title{Class Weights for Sample Weighting}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

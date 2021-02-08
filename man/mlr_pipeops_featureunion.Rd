@@ -3,7 +3,7 @@
 \name{mlr_pipeops_featureunion}
 \alias{mlr_pipeops_featureunion}
 \alias{PipeOpFeatureUnion}
-\title{PipeOpFeatureUnion}
+\title{Aggregate Features from Multiple Inputs}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

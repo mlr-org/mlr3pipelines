@@ -3,7 +3,7 @@
 \name{mlr_pipeops_regravg}
 \alias{mlr_pipeops_regravg}
 \alias{PipeOpRegrAvg}
-\title{PipeOpRegrAvg}
+\title{Weighted Prediction Averaging}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }

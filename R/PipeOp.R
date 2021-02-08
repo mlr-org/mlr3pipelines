@@ -1,7 +1,7 @@
 #' @include utils.R
 #' @include mlr_pipeops.R
 #'
-#' @title PipeOp
+#' @title PipeOp Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`].

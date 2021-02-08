@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputemean}
 \alias{mlr_pipeops_imputemean}
 \alias{PipeOpImputeMean}
-\title{PipeOpImputeMean}
+\title{Impute Numerical Features by their Mean}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_boxcox}
 \alias{mlr_pipeops_boxcox}
 \alias{PipeOpBoxCox}
-\title{PipeOpBoxCox}
+\title{Box-Cox Transformation of Numeric Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

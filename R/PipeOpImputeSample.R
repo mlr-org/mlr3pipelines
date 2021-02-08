@@ -1,4 +1,4 @@
-#' @title PipeOpImputeSample
+#' @title Impute Features by Sampling
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputesample

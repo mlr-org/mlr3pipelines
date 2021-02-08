@@ -1,4 +1,4 @@
-#' @title PipeOpImpute
+#' @title Imputation Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`] object inheriting from [`PipeOp`].

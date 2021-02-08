@@ -1,4 +1,4 @@
-#' @title PipeOpRandomProjection
+#' @title Project Numeric Features onto a Randomly Sampled Subspace
 #'
 #' @usage NULL
 #' @name mlr_pipeops_randomprojection

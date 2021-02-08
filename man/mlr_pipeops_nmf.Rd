@@ -3,7 +3,7 @@
 \name{mlr_pipeops_nmf}
 \alias{mlr_pipeops_nmf}
 \alias{PipeOpNMF}
-\title{PipeOpNMF}
+\title{Non-negative Matrix Factorization}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

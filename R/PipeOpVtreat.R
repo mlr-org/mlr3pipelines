@@ -1,4 +1,4 @@
-#' @title PipeOpVtreat
+#' @title Interface to the vtreat Package
 #'
 #' @usage NULL
 #' @name mlr_pipeops_vtreat

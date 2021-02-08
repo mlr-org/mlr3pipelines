@@ -1,4 +1,4 @@
-#' @title PipeOpSelect
+#' @title Remove Features Depending on a Selector
 #'
 #' @usage NULL
 #' @name mlr_pipeops_select

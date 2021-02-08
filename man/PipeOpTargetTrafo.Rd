@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpTrafo.R
 \name{PipeOpTargetTrafo}
 \alias{PipeOpTargetTrafo}
-\title{PipeOpTargetTrafo}
+\title{Target Transformation Base Class}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }

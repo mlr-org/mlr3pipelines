@@ -1,4 +1,4 @@
-#' @title PipeOpImputeMedian
+#' @title Impute Numerical Features by their Median
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemedian

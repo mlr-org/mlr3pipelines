@@ -1,4 +1,4 @@
-#' @title PipeOpImputeMean
+#' @title Impute Numerical Features by their Mean
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemean

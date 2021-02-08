@@ -1,4 +1,4 @@
-#' @title PipeOpSmote
+#' @title SMOTE Balancing
 #'
 #' @usage NULL
 #' @name mlr_pipeops_smote

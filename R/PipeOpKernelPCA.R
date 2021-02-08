@@ -1,4 +1,4 @@
-#' @title PipeOpKernelPCA
+#' @title Kernelized Principle Component Analysis
 #'
 #' @usage NULL
 #' @name mlr_pipeops_kernelpca

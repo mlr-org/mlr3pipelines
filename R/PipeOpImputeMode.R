@@ -1,4 +1,4 @@
-#' @title PipeOpImputeMode
+#' @title Impute Features by their Mode
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemode

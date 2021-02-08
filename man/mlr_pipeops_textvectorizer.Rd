@@ -3,7 +3,7 @@
 \name{mlr_pipeops_textvectorizer}
 \alias{mlr_pipeops_textvectorizer}
 \alias{PipeOpTextVectorizer}
-\title{PipeOpTextVectorizer}
+\title{Bag-of-word Representation of Character Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

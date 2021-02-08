@@ -1,4 +1,4 @@
-#' @title PipeOpImputeLearner
+#' @title Impute Features by Fitting a Learner
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputelearner

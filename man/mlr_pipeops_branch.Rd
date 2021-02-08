@@ -3,7 +3,7 @@
 \name{mlr_pipeops_branch}
 \alias{mlr_pipeops_branch}
 \alias{PipeOpBranch}
-\title{PipeOpBranch}
+\title{Path Branching}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

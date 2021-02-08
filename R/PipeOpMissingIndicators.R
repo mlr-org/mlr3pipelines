@@ -1,4 +1,4 @@
-#' @title PipeOpMissInd
+#' @title Add Missing Indicator Columns
 #'
 #' @usage NULL
 #' @name mlr_pipeops_missind

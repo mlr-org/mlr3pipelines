@@ -1,4 +1,4 @@
-#' @title PipeOpFixFactors
+#' @title Fix Factor Levels
 #'
 #' @usage NULL
 #' @name mlr_pipeops_fixfactors

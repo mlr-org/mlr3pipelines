@@ -1,4 +1,4 @@
-#' @title PipeOpEnsemble
+#' @title Ensembling Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].

@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpEnsemble.R
 \name{PipeOpEnsemble}
 \alias{PipeOpEnsemble}
-\title{PipeOpEnsemble}
+\title{Ensembling Base Class}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }

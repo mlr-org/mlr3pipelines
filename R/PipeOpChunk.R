@@ -1,4 +1,4 @@
-#' @title PipeOpChunk
+#' @title Chunk Input into Multiple Outputs
 #'
 #' @usage NULL
 #' @name mlr_pipeops_chunk

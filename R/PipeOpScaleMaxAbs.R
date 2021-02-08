@@ -1,4 +1,4 @@
-#' @title PipeOpScaleMaxAbs
+#' @title Scale Numeric Features with Respect to their Maximum Absolute Value
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scalemaxabs

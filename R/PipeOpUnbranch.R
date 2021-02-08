@@ -1,4 +1,4 @@
-#' @title PipeOpUnbranch
+#' @title Unbranch Different Paths
 #'
 #' @usage NULL
 #' @name mlr_pipeops_unbranch

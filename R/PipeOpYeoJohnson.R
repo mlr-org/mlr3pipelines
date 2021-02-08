@@ -1,4 +1,4 @@
-#' @title PipeOpYeoJohnson
+#' @title Yeo-Johnson Transformation of Numeric Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_yeojohnson

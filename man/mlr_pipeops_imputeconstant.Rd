@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputeconstant}
 \alias{mlr_pipeops_imputeconstant}
 \alias{PipeOpImputeConstant}
-\title{PipeOpImputeConstant}
+\title{Impute Features by a Constant}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }

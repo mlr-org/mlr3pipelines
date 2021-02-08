@@ -3,7 +3,7 @@
 \name{mlr_pipeops_proxy}
 \alias{mlr_pipeops_proxy}
 \alias{PipeOpProxy}
-\title{PipeOpProxy}
+\title{Wrap another PipeOp or Graph as a Hyperparameter}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }

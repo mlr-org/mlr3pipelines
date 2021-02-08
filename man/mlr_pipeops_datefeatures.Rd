@@ -3,7 +3,7 @@
 \name{mlr_pipeops_datefeatures}
 \alias{mlr_pipeops_datefeatures}
 \alias{PipeOpDateFeatures}
-\title{PipeOpDateFeatures}
+\title{Preprocess Date Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

@@ -1,4 +1,4 @@
-#' @title PipeOpSubsample
+#' @title Subsampling
 #'
 #' @usage NULL
 #' @name mlr_pipeops_subsample

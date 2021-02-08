@@ -1,4 +1,4 @@
-#' @title PipeOpTaskPreproc
+#' @title Task Preprocessing Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
@@ -288,8 +288,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   )
 )
 
-#' @title PipeOpTaskPreprocSimple
-#'
+#' @title Simple Task Preprocessing Base Class
+#
 #' @usage NULL
 #' @format Abstract [`R6Class`] inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'

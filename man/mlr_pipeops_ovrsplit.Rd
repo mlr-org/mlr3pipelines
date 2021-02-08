@@ -3,7 +3,7 @@
 \name{mlr_pipeops_ovrsplit}
 \alias{mlr_pipeops_ovrsplit}
 \alias{PipeOpOVRSplit}
-\title{PipeOpOVRSplit}
+\title{Split a Classification Task into Binary Classification Tasks}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }

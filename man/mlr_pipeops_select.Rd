@@ -3,7 +3,7 @@
 \name{mlr_pipeops_select}
 \alias{mlr_pipeops_select}
 \alias{PipeOpSelect}
-\title{PipeOpSelect}
+\title{Remove Features Depending on a Selector}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

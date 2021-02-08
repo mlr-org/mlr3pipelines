@@ -1,4 +1,4 @@
-#' @title PipeOpNOP
+#' @title Simply Push Input Forward
 #'
 #' @usage NULL
 #' @name mlr_pipeops_nop

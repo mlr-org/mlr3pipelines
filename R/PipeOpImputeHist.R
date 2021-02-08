@@ -1,4 +1,4 @@
-#' @title PipeOpImputeHist
+#' @title Impute Numerical Features by Histogram
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputehist

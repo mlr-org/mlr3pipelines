@@ -3,7 +3,7 @@
 \name{mlr_pipeops_vtreat}
 \alias{mlr_pipeops_vtreat}
 \alias{PipeOpVtreat}
-\title{PipeOpVtreat}
+\title{Interface to the vtreat Package}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

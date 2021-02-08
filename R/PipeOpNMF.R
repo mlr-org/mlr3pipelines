@@ -1,4 +1,4 @@
-#' @title PipeOpNMF
+#' @title Non-negative Matrix Factorization
 #'
 #' @usage NULL
 #' @name mlr_pipeops_nmf

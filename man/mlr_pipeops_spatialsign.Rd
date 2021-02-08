@@ -3,7 +3,7 @@
 \name{mlr_pipeops_spatialsign}
 \alias{mlr_pipeops_spatialsign}
 \alias{PipeOpSpatialSign}
-\title{PipeOpSpatialSign}
+\title{Normalize Data Row-wise}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

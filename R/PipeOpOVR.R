@@ -1,4 +1,4 @@
-#' @title PipeOpOVRSplit
+#' @title Split a Classification Task into Binary Classification Tasks
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrsplit
@@ -109,7 +109,7 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
 
 mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 
-#' @title PipeOpOVRUnite
+#' @title Unite Binary Classification Tasks
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrunite

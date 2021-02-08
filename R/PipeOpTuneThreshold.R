@@ -1,4 +1,4 @@
-#' @title PipeOpTuneThreshold
+#' @title Tune the Threshold of a Classification Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_tunethreshold

@@ -1,4 +1,4 @@
-#' @title PipeOpColApply
+#' @title Apply a Function to each Column of a Task
 #'
 #' @usage NULL
 #' @name mlr_pipeops_colapply

@@ -1,4 +1,4 @@
-#' @title PipeOpMultiplicityImply
+#' @title Implicate a Multiplicity
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityimply
@@ -108,7 +108,7 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
 
 mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 
-#' @title PipeOpMultiplicityExply
+#' @title Explicate a Multiplicity
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityexply
@@ -199,7 +199,7 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
 
 mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 
-#' @title PipeOpReplicate
+#' @title Replicate the Input as a Multiplicity
 #'
 #' @usage NULL
 #' @name mlr_pipeops_replicate

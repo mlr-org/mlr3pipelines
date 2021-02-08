@@ -3,7 +3,7 @@
 \name{mlr_pipeops_updatetarget}
 \alias{mlr_pipeops_updatetarget}
 \alias{PipeOpUpdateTarget}
-\title{PipeOpUpdateTarget}
+\title{Transform a Target without an Explicit Inversion}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }

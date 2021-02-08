@@ -3,7 +3,7 @@
 \name{mlr_pipeops_nop}
 \alias{mlr_pipeops_nop}
 \alias{PipeOpNOP}
-\title{PipeOpNOP}
+\title{Simply Push Input Forward}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }

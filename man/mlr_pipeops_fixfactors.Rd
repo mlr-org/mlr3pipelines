@@ -3,7 +3,7 @@
 \name{mlr_pipeops_fixfactors}
 \alias{mlr_pipeops_fixfactors}
 \alias{PipeOpFixFactors}
-\title{PipeOpFixFactors}
+\title{Fix Factor Levels}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }

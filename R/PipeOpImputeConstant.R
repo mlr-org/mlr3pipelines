@@ -1,4 +1,4 @@
-#' @title PipeOpImputeConstant
+#' @title Impute Features by a Constant
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputeconstant
