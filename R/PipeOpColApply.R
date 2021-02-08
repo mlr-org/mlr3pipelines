@@ -31,19 +31,22 @@
 #' The output is the input [`Task`][mlr3::Task] with features changed according to the `applicator` parameter.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`], as well as:
-#' * `emptydt` :: [`data.table`]\cr
-#'   An empty [`data.table`] with columns of names and types from *output* features after training. This is used
-#'   to produce a correct type conversion during prediction, even when the input has zero length and
-#'   `applicator` is therefore not called.
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`].
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
 #' * `applicator` :: `function`\cr
-#'   Function to apply to each column of the task. The return value must have the
-#'   same length as the input, i.e. vectorize over the input. A typical example would be `as.numeric`.
-#'   Use [`Vectorize`][base::Vectorize] to create a vectorizing function from any function that
-#'   ordinarily only takes one element input.\cr
+#'   Function to apply to each column of the task.
+#'   The return value should be a `vector` of the same length as the input, i.e., the function vectorizes over the input.
+#'   A typical example would be `as.numeric`.\cr
+#'   The return value can also be a `matrix`, `data.frame`, or [`data.table`].
+#'   In this case, the length of the input must match the number of returned rows.
+#'   The names of the resulting features of the output [`Task`][mlr3::Task] is based on the (column) name(s) of the return value of the applicator function,
+#'   prefixed with the original feature name separated by a dot (`.`).
+#'   Use [`Vectorize`][base::Vectorize] to create a vectorizing function from any function that ordinarily only takes one element input.\cr
+#'
+#' @section Internals:
+#' Calls [`map`][mlr3misc::map] on the data, using the value of `applicator` as `f.` and coerces the output via [`as.data.table`].
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -63,7 +66,7 @@
 #' poca$train(list(task))[[1]]  # types are converted
 #'
 #' # function that does not vectorize
-#' f = function(x) {
+#' f1 = function(x) {
 #'   # we could use `ifelse` here, but that is not the point
 #'   if (x > 1) {
 #'     "a"
@@ -71,11 +74,19 @@
 #'     "b"
 #'   }
 #' }
-#' poca$param_set$values$applicator = Vectorize(f)
+#' poca$param_set$values$applicator = Vectorize(f1)
 #' poca$train(list(task))[[1]]$data()
 #'
-#' # only affect Petal.* columns:
+#' # only affect Petal.* columns
 #' poca$param_set$values$affect_columns = selector_grep("^Petal")
+#' poca$train(list(task))[[1]]$data()
+#'
+#' # function returning multiple columns
+#' f2 = function(x) {
+#'   cbind(floor = floor(x), ceiling = ceiling(x))
+#' }
+#' poca$param_set$values$applicator = f2
+#' poca$param_set$values$affect_columns = selector_all()
 #' poca$train(list(task))[[1]]$data()
 PipeOpColApply = R6Class("PipeOpColApply",
   inherit = PipeOpTaskPreprocSimple,
@@ -95,8 +106,7 @@ PipeOpColApply = R6Class("PipeOpColApply",
     },
 
     .transform_dt = function(dt, levels) {
-      applicator = self$param_set$values$applicator
-      dt[, names(dt) := lapply(dt, applicator)]
+      as.data.table(map(dt, .f = self$param_set$values$applicator))
     }
   )
 )

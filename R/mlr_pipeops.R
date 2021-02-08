@@ -50,7 +50,8 @@ mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
     add = function(key, value, metainf = NULL) {
       ret = super$add(key, value)
       if (!is.null(metainf)) {
-        assign(x = key, value = metainf, envir = self$metainf)
+        # we save the *expression*, not the value, because we could otherwise get version conflicts from objects.
+        assign(x = key, value = substitute(metainf), envir = self$metainf)
       }
       invisible(self)
     },
@@ -69,8 +70,9 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
   setkeyv(map_dtr(x$keys(), function(key) {
     metainf = x$metainf[[key]]
     if (!is.null(metainf)) {
-      meta_one = lapply(metainf, function(x) if (identical(x, "N")) 1 else x)
-      meta_two = lapply(metainf, function(x) if (identical(x, "N")) 2 else x)
+      metainfval = eval(metainf, envir = topenv())
+      meta_one = lapply(metainfval, function(x) if (identical(x, "N")) 1 else x)
+      meta_two = lapply(metainfval, function(x) if (identical(x, "N")) 2 else x)
       l1 = do.call(x$get, c(list(key), meta_one))
       l2 = do.call(x$get, c(list(key), meta_two))
     } else {
