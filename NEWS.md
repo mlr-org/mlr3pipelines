@@ -1,4 +1,7 @@
-# mlr3pipelines 0.3.2-9000
+# mlr3pipelines 0.3.3
+
+* Bugfix: fix rare issue in randomized test
+* Compatibility with bbotk 0.3.0
 
 # mlr3pipelines 0.3.2
 * Bugfix: Make as.data.table(mlr_pipeops) work with paradox 0.6
