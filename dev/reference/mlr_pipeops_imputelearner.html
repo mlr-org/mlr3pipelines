@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpImputeLearner — mlr_pipeops_imputelearner • mlr3pipelines</title>
+<title>Impute Features by Fitting a Learner — mlr_pipeops_imputelearner • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,7 +47,7 @@
 
 
 
-<meta property="og:title" content="PipeOpImputeLearner — mlr_pipeops_imputelearner" />
+<meta property="og:title" content="Impute Features by Fitting a Learner — mlr_pipeops_imputelearner" />
 <meta property="og:description" content="Impute features by fitting a Learner for each feature.
 Uses the features indicated by the context_columns parameter as features to train the imputation Learner.
 Note this parameter is part of the PipeOpImpute base class and explained there.
@@ -147,7 +147,7 @@ features of type factor, ordered and logical." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpImputeLearner</h1>
+    <h1>Impute Features by Fitting a Learner</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImputeLearner.R'><code>R/PipeOpImputeLearner.R</code></a></small>
     <div class="hidden name"><code>mlr_pipeops_imputelearner.Rd</code></div>
     </div>
@@ -229,7 +229,8 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 <p>Only methods inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: 
+    <div class='dont-index'><p>https://mlr3book.mlr-org.com/list-pipeops.html</p>
+<p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
@@ -354,7 +355,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $age$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.005
 #&gt; 
 #&gt; $age$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -388,7 +389,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $glucose$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.005
 #&gt; 
 #&gt; $glucose$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -425,7 +426,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $insulin$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.004
 #&gt; 
 #&gt; $insulin$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -466,7 +467,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $mass$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.005
 #&gt; 
 #&gt; $mass$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -533,7 +534,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $pregnant$train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.004
 #&gt; 
 #&gt; $pregnant$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -572,7 +573,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $pressure$train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.004
 #&gt; 
 #&gt; $pressure$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -611,7 +612,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $triceps$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.004
 #&gt; 
 #&gt; $triceps$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
