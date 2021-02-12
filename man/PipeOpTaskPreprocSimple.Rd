@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpTaskPreproc.R
 \name{PipeOpTaskPreprocSimple}
 \alias{PipeOpTaskPreprocSimple}
-\title{PipeOpTaskPreprocSimple}
+\title{Simple Task Preprocessing Base Class}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -127,6 +127,8 @@ can be overloaded.
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

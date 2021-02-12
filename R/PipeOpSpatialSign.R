@@ -1,4 +1,4 @@
-#' @title PipeOpSpatialSign
+#' @title Normalize Data Row-wise
 #'
 #' @usage NULL
 #' @name mlr_pipeops_spatialsign
@@ -48,6 +48,7 @@
 #'
 #' pop$train(list(task))[[1]]$data()
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpSpatialSign = R6Class("PipeOpSpatialSign",

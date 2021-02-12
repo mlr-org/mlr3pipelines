@@ -1,4 +1,4 @@
-#' @title PipeOpImputeMean
+#' @title Impute Numerical Features by their Mean
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemean
@@ -49,6 +49,7 @@
 #' po$state$model
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeMean = R6Class("PipeOpImputeMean",

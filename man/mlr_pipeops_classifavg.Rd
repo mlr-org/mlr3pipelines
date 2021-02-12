@@ -3,7 +3,7 @@
 \name{mlr_pipeops_classifavg}
 \alias{mlr_pipeops_classifavg}
 \alias{PipeOpClassifAvg}
-\title{PipeOpClassifAvg}
+\title{Majority Vote Prediction}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
@@ -90,6 +90,8 @@ resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 }
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

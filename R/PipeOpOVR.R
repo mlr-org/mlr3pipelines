@@ -1,4 +1,4 @@
-#' @title PipeOpOVRSplit
+#' @title Split a Classification Task into Binary Classification Tasks
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrsplit
@@ -64,6 +64,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -108,7 +109,7 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
 
 mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 
-#' @title PipeOpOVRUnite
+#' @title Unite Binary Classification Tasks
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrunite
@@ -169,6 +170,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' @family Ensembles
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_mutate}
 \alias{mlr_pipeops_mutate}
 \alias{PipeOpMutate}
-\title{PipeOpMutate}
+\title{Add Features According to Expressions}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -86,6 +86,8 @@ pom$param_set$values$mutation = list(
 pom$train(list(tsk("iris")))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

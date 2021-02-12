@@ -3,7 +3,7 @@
 \name{mlr_pipeops_branch}
 \alias{mlr_pipeops_branch}
 \alias{PipeOpBranch}
-\title{PipeOpBranch}
+\title{Path Branching}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -96,6 +96,8 @@ gr$param_set$values$branch.selection = "nothing"
 gr$train(tsk("iris"))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

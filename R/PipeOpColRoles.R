@@ -1,4 +1,4 @@
-#' @title PipeOpColRoles
+#' @title Change Column Roles of a Task
 #'
 #' @usage NULL
 #' @name mlr_pipeops_colroles
@@ -49,6 +49,7 @@
 #'
 #' pop$train(list(task))
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpColRoles = R6Class("PipeOpColRoles",

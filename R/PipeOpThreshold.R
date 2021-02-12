@@ -1,4 +1,4 @@
-#' @title PipeOpThreshold
+#' @title Change the Threshold of a Classification Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_threshold
@@ -40,8 +40,7 @@
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
-#' @family PipeOps
-#' @export
+#'
 #' @examples
 #' library("mlr3")
 #' t = tsk("german_credit")
@@ -49,6 +48,10 @@
 #'   po("threshold", param_vals = list(thresholds = 0.9))
 #' gr$train(t)
 #' gr$predict(t)
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @include PipeOp.R
+#' @export
 PipeOpThreshold = R6Class("PipeOpThreshold",
   inherit = PipeOp,
   public = list(

@@ -1,4 +1,4 @@
-#' @title PipeOpFixFactors
+#' @title Fix Factor Levels
 #'
 #' @usage NULL
 #' @name mlr_pipeops_fixfactors
@@ -42,6 +42,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

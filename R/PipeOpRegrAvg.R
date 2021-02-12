@@ -1,4 +1,4 @@
-#' @title PipeOpRegrAvg
+#' @title Weighted Prediction Averaging
 #'
 #' @usage NULL
 #' @name mlr_pipeops_regravg
@@ -53,6 +53,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_encode}
 \alias{mlr_pipeops_encode}
 \alias{PipeOpEncode}
-\title{PipeOpEncode}
+\title{Factor Encoding}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -97,6 +97,8 @@ poe$param_set$values$method = "sum"
 poe$train(list(task))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

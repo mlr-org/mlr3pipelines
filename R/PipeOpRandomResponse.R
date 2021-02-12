@@ -1,4 +1,4 @@
-#' @title PipeOpRandomResponse
+#' @title Generate a Randomized Response Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_randomresponse
@@ -7,7 +7,7 @@
 #' @description
 #' Takes in a [`Prediction`][mlr3::Prediction] of `predict_type` `"prob"`
 #' (for [`PredictionClassif`][mlr3::PredictionClassif]) or `"se"`
-#' (for [`PredictionRegr`][mlr3::PredictionRegr]). and generates a randomized `"response"`
+#' (for [`PredictionRegr`][mlr3::PredictionRegr]) and generates a randomized `"response"`
 #' prediction.
 #'
 #' For `"prob"`, the responses are sampled according to
@@ -59,6 +59,7 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples

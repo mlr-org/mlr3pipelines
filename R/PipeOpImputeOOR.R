@@ -1,4 +1,4 @@
-#' @title PipeOpImputeOOR
+#' @title Out of Range Imputation
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputeoor
@@ -73,6 +73,7 @@
 #' new_task$data()
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeOOR = R6Class("PipeOpImputeOOR",

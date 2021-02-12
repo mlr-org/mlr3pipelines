@@ -1,4 +1,4 @@
-#' @title PipeOpTuneThreshold
+#' @title Tune the Threshold of a Classification Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_tunethreshold
@@ -56,8 +56,6 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @family PipeOps
-#' @export
 #' @examples
 #' library("mlr3")
 #'
@@ -69,6 +67,9 @@
 #' pop$train(task)
 #'
 #' pop$state
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @export
 PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   inherit = PipeOp,
 
