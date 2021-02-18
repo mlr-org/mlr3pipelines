@@ -194,9 +194,13 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       if (!self$param_set$values$resampling.keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
       }
-      renaming = setdiff(colnames(prds), "row_id")
+      renaming = setdiff(colnames(prds), c("row_id", "row_ids"))
       setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))
-      setnames(prds, "row_id", task$backend$primary_key)
+
+      # This can be simplified for mlr3 >= 0.11.0;
+      # will be always "row_ids"
+      row_id_col = intersect(colnames(prds), c("row_id", "row_ids"))
+      setnames(prds, old = row_id_col, new = task$backend$primary_key)
       task$select(character(0))$cbind(prds)
     },
     .crossval_param_set = NULL,
