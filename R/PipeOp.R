@@ -328,7 +328,7 @@ PipeOp = R6Class("PipeOp",
         # objects.
         # In the following we also avoid accessing `val$hash` twice, because it could
         # potentially be an expensive AB.
-        if (is.environment(val) && !is.null({vhash = val$hash})) {
+        if (is.environment(val) && !is.null({vhash = get0("hash", val, mode = "any", inherits = FALSE, ifnotfound = NULL)})) {
           vhash
         } else {
           val
