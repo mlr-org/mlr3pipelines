@@ -83,7 +83,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
 
       new_role_names = names(new_role)
       ids = task$col_info$id
-      ids = ids[ids != "..row_id"]
+      ids = ids[ids != "..row_ids"]
       # names of "new_role" must be a subset of the column names of the task
       assert_subset(new_role_names, choices = ids, empty.ok = FALSE)
 

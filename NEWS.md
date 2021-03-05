@@ -1,6 +1,7 @@
-# mlr3pipelines 0.3.3-9000
+# mlr3pipelines 0.3.4
 
 * Stability: PipeOps don't crash when they have python/reticulate hyperparameter values.
+* Documentation: Titles of PipeOp documentation articles reworked.
 
 # mlr3pipelines 0.3.3
 
