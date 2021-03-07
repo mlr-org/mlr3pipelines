@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner}
 \alias{mlr_pipeops_learner}
 \alias{PipeOpLearner}
-\title{PipeOpLearner}
+\title{Wrap a Learner into a PipeOp}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -96,6 +96,8 @@ lrn_po$train(list(task))
 lrn_po$predict(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

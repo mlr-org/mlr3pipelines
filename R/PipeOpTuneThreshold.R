@@ -1,4 +1,4 @@
-#' @title PipeOpTuneThreshold
+#' @title Tune the Threshold of a Classification Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_tunethreshold
@@ -56,8 +56,6 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @family PipeOps
-#' @export
 #' @examples
 #' library("mlr3")
 #'
@@ -69,6 +67,9 @@
 #' pop$train(task)
 #'
 #' pop$state
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @export
 PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   inherit = PipeOp,
 
@@ -115,9 +116,10 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       ps = private$.make_param_set(pred)
       measure = self$param_set$values$measure
       if (is.character(measure)) measure = msr(measure) else measure
+      codomain = ParamSet$new(list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
       objfun = bbotk::ObjectiveRFun$new(
         fun = function(xs) private$.objfun(xs, pred = pred, measure = measure),
-        domain = ps
+        domain = ps, codomain = codomain
       )
       inst = bbotk::OptimInstanceSingleCrit$new(
         objective = objfun,

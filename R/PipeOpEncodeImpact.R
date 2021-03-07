@@ -51,7 +51,7 @@
 #'   If `TRUE`, impute missing values as impact 0; otherwise the respective impact is coded as `NA`. Default `FALSE`.
 #'
 #' @section Internals:
-#' Uses laplace smoothing, mostly to avoid infinite values for [classification Task][mlr3::TaskClassif].
+#' Uses Laplace smoothing, mostly to avoid infinite values for [classification Task][mlr3::TaskClassif].
 #'
 #' @section Methods:
 #' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -70,6 +70,7 @@
 #'
 #' poe$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",

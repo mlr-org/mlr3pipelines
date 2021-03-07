@@ -1,4 +1,4 @@
-#' @title PipeOpQuantileBin
+#' @title Split Numeric Features into Quantile Bins
 #'
 #' @usage NULL
 #' @name mlr_pipeops_quantilebin
@@ -49,6 +49,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpQuantileBin = R6Class("PipeOpQuantileBin",

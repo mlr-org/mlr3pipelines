@@ -3,7 +3,7 @@
 \name{mlr_pipeops_modelmatrix}
 \alias{mlr_pipeops_modelmatrix}
 \alias{PipeOpModelMatrix}
-\title{PipeOpModelMatrix}
+\title{Transform Columns by Constructing a Model Matrix}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -69,6 +69,8 @@ pop$train(list(task))[[1]]$data()
 
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

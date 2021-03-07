@@ -1,4 +1,4 @@
-#' @title PipeOpNOP
+#' @title Simply Push Input Forward
 #'
 #' @usage NULL
 #' @name mlr_pipeops_nop
@@ -54,6 +54,7 @@
 #' gr$train(tsk("iris"))[[1]]$data()
 #' @family PipeOps
 #' @family Placeholder Pipeops
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpNOP = R6Class("PipeOpNOP",

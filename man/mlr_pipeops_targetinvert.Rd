@@ -3,7 +3,7 @@
 \name{mlr_pipeops_targetinvert}
 \alias{mlr_pipeops_targetinvert}
 \alias{PipeOpTargetInvert}
-\title{PipeOpTargetInvert}
+\title{Invert Target Transformations}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -62,6 +62,8 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

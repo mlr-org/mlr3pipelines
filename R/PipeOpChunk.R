@@ -1,4 +1,4 @@
-#' @title PipeOpChunk
+#' @title Chunk Input into Multiple Outputs
 #'
 #' @usage NULL
 #' @name mlr_pipeops_chunk
@@ -45,6 +45,7 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples

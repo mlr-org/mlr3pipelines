@@ -1,4 +1,4 @@
-#' @title PipeOpHistBin
+#' @title Split Numeric Features into Equally Spaced Bins
 #'
 #' @usage NULL
 #' @name mlr_pipeops_histbin
@@ -57,6 +57,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpHistBin = R6Class("PipeOpHistBin",

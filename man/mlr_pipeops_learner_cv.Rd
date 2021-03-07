@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner_cv}
 \alias{mlr_pipeops_learner_cv}
 \alias{PipeOpLearnerCV}
-\title{PipeOpLearnerCV}
+\title{Wrap a Learner into a PipeOp with Cross-validated Predictions as Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -135,6 +135,8 @@ graph$pipeops$classif.rpart$learner$predict_type = "prob"
 graph$train(task)
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other Meta PipeOps: 
 \code{\link{mlr_pipeops_learner}}
 }

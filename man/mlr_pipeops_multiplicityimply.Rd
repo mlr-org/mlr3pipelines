@@ -3,7 +3,7 @@
 \name{mlr_pipeops_multiplicityimply}
 \alias{mlr_pipeops_multiplicityimply}
 \alias{PipeOpMultiplicityImply}
-\title{PipeOpMultiplicityImply}
+\title{Implicate a Multiplicity}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -81,6 +81,8 @@ po$train(list(task1, task2))
 po$predict(list(task1, task2))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

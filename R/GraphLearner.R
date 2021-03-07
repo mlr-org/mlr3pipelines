@@ -1,4 +1,4 @@
-#' @title GraphLearner
+#' @title Encapsulate a Graph as a Learner
 #'
 #' @name mlr_learners_graph
 #' @format [`R6Class`] object inheriting from [`mlr3::Learner`].

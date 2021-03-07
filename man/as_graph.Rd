@@ -2,7 +2,7 @@
 % Please edit documentation in R/assert_graph.R
 \name{as_graph}
 \alias{as_graph}
-\title{Conversion to mlr3pipeline Graph}
+\title{Conversion to mlr3pipelines Graph}
 \usage{
 as_graph(x, clone = FALSE)
 }

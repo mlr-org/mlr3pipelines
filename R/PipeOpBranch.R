@@ -1,4 +1,4 @@
-#' @title PipeOpBranch
+#' @title Path Branching
 #'
 #' @usage NULL
 #' @name mlr_pipeops_branch
@@ -62,6 +62,7 @@
 #'
 #' @family PipeOps
 #' @family Path Branching
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples
