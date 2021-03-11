@@ -15,9 +15,6 @@
 * Changed PipeOps:
   - PipeOpColApply: now allows for an applicator function with multiple columns as a return value; also inherits from PipeOpTaskPreprocSimple now
 
- New PipeOps:
-  - PipeOpFilterRows
-
 # mlr3pipelines 0.3.1
 
 * Changed PipeOps:

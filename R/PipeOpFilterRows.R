@@ -29,7 +29,7 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `filter_formula` :: `NULL` | `formula` \cr
+#' * `filter_formula` :: `formula` | `NULL` \cr
 #'   Expression of the filtering to be performed, in the form of a `formula` that evaluates to `TRUE` or `FALSE`
 #'   for each row within the frame of the [`data.table`] [`DataBackend`][mlr3::DataBackend] of the [`Task`][mlr3::Task].
 #'   Rows for which the evaluation is `TRUE` are kept in the output [`Task`][mlr3::Task], others are removed.
@@ -73,9 +73,9 @@ PipeOpFilterRows = R6Class("PipeOpFilterRows",
   public = list(
     initialize = function(id = "filterrows", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("filter_formula", tags = c("train", "predict"), custom_check = check_filter_formulae),
-        ParamUty$new("SDcols", tags = c("train", "predict"), custom_check = check_function),
-        ParamFct$new("phase", levels = c("always", "train", "predict"), tags = c("train", "predict"))
+        ParamUty$new("filter_formula", tags = c("train", "predict", "required"), custom_check = check_filter_formulae),
+        ParamUty$new("SDcols", tags = c("train", "predict", "required"), custom_check = check_function),
+        ParamFct$new("phase", levels = c("always", "train", "predict"), tags = c("train", "predict", "required"))
       ))
       ps$values = list(filter_formula = NULL, SDcols = selector_all(), phase = "always")
       super$initialize(id, param_set = ps, param_vals = param_vals)
