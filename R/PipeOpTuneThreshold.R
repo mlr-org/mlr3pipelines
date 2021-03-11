@@ -143,7 +143,12 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     },
     .task_to_prediction = function(input) {
       prob = as.matrix(input$data(cols = input$feature_names))
-      colnames(prob) = unlist(input$levels())
+      # setting the column names the following way is safer
+      nms = map_chr(strsplit(colnames(prob), "\\."), function(x) x[length(x)])
+      if (!setequal(nms, input$levels(input$target_names)[[input$target_names]])) {
+        stopf("Cannot assign correct class levels to probability columns.")
+      }
+      colnames(prob) = map_chr(strsplit(colnames(prob), "\\."), function(x) x[length(x)])
       PredictionClassif$new(input, row_ids = input$row_ids, truth = input$truth(),
         response = factor(colnames(prob)[max.col(prob, ties.method = "random")], levels = unlist(input$levels())),
         prob = prob)

@@ -1,4 +1,4 @@
-#' @title Wrap a Learner into a PipeOp with Cross-validated Predictions as Features
+#' @title Wrap a Learner into a PipeOp with Resampled Predictions as Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner_cv
@@ -16,10 +16,10 @@
 #' for `$predict.type` `"prob"` the `<ID>.prob.<CLASS>` features are created, and for `$predict.type` `"se"` the new columns
 #' are `<ID>.response` and `<ID>.se`. `<ID>` denotes the `$id` of the [`PipeOpLearnerCV`] object.
 #'
-#' In the case of the resampling method returning multiple predictions per row id, the predictions are aggregated via their mean
-#' (except for the `"response"` in the case of a [classification Task][mlr3::TaskClassif] which is aggregated using the mode).
-#' In the case of the resampling method not returning predictions for all row ids as given in the input [`Task`][mlr3::Task],
-#' these predictions are added as missing.
+#' In the case of the resampling method returning multiple predictions per row id, the predictions
+#' are returned unaltered. The output [`Task`][mlr3::Task] always gains a `row_reference` column
+#' named `pre.<ID>` indicating the original row id prior to the resampling process. [`PipeOpAggregate`] should then
+#' be used to aggregate these multiple predictions per row id.
 #'
 #' Inherits both the `$param_set` (and therefore `$param_set$values`) from the [`Learner`][mlr3::Learner] and
 #' [`Resampling`][mlr3::Resampling] it is constructed from. The parameter ids of the latter one are prefixed with `"resampling."`
@@ -50,7 +50,7 @@
 #' [`PipeOpLearnerCV`] has one output channel named `"output"`, producing a [`Task`][mlr3::Task] specific to the [`Learner`][mlr3::Learner]
 #' type given to `learner` during construction; both during training and prediction.
 #'
-#' The output is a task with the same target as the input task, with features replaced by predictions made by the [`Learner`][mlr3::Learner].
+#' The output is a [`Task`][mlr3::Task] with the same target as the input [`Task`][mlr3::Task], with features replaced by predictions made by the [`Learner`][mlr3::Learner].
 #' During training, this prediction is the out-of-sample prediction made by [`resample`][mlr3::resample], during prediction, this is the
 #' ordinary prediction made on the data by a [`Learner`][mlr3::Learner] trained on the training phase data.
 #'
@@ -101,7 +101,7 @@
 #' task = tsk("iris")
 #' learner = lrn("classif.rpart")
 #'
-#' lrncv_po = po("learner_cv", learner)
+#' lrncv_po = po("learner_cv", learner, rsmp("cv"))
 #' lrncv_po$learner$predict_type = "response"
 #'
 #' nop = mlr_pipeops$get("nop")
@@ -131,8 +131,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       }
 
 
-      id = id %??% private$.learner$id
-      # FIXME: probably should restrict to only classif and regr because of the potential aggregation being done below
+      id = id %??% self$learner$id
       task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
 
       private$.additional_param_set = ParamSet$new(params = list(
@@ -179,93 +178,52 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   private = list(
     .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
-
-      # Train a learner for predicting
+      # train a learner for predicting
       self$state = private$.learner$train(task)$state
 
-      # Compute resampled Predictions
+      # compute resampled predictions
       rr = resample(task, private$.learner, private$.resampling)
       prds = as.data.table(rr$prediction(predict_sets = "test"))
 
-      # Some resamplings will result in rows being sampled multiple times and some being missing
-      nrows_multiple = length(prds$row_id[duplicated(prds$row_id)])
-      missing_rows = setdiff(task$row_ids, prds$row_id)
-      nrows_missing = length(missing_rows)
-
-      if (!nrows_multiple && !nrows_missing) {
-        return(private$pred_to_task(prds, task))  # early exit
-      }
-
-      task_type = task$task_type
-      prds_names = colnames(prds)
-
-      prds_corrected = if (nrows_multiple) {
-        # classif: prob, regr: response, (se)
-        SDcols_multiple = setdiff(prds_names, if (task_type == "classif") c("row_id", "truth", "response") else c("row_id", "truth"))
-
-        # aggregation functions:
-        #  - mean for prob, response (regr), se
-        #  - mode for response (classif)
-        prds_corrected = prds[, map(.SD, function(x) {
-          if (length(x) == 1L) return(x)  # early exit
-          mean(x, na.rm = TRUE)
-        }), by = "row_id", .SDcols = SDcols_multiple]
-
-        if (NROW(prds_corrected) == 0L) prds_corrected = unique(prds[, "row_id"])
-
-        if (task_type == "classif") {
-          cbind(prds_corrected, prds[, map(.SD, function(x) {
-            if (length(x) == 1L) return(as.character(x))  # early exit
-            tt = table(x)
-            names(tt[which.max(tt)])
-          }), by = "row_id", .SDcols = "response"][, "response"])
-        } else {
-          prds_corrected
-        }
-      } else {
-        if (task_type == "classif") {
-          prds[, "response" := as.character(response)]
-        }
-        prds[, !"truth"]
-      }
-
-      if (nrows_missing) {
-        SDcols_missing = setdiff(prds_names, "truth")
-        # add missings
-        prds_corrected = prds_corrected[, map(.SD, add_missings, len = nrows_missing), .SDcols = SDcols_missing]
-        prds_corrected$row_id[is.na(prds_corrected$row_id)] = missing_rows
-      }
-
-      if (task_type == "classif") {
-        target = task$truth(prds_corrected$row_id)
-        prds_corrected$response = factor(prds_corrected$response, levels = levels(target), ordered = is.ordered(target))
-      }
-
-      # FIXME: do we need additional safety checks here?
-
-      private$pred_to_task(prds_corrected, task)
+      private$.pred_to_task(prds, task)
     },
 
     .predict_task = function(task) {
       on.exit({private$.learner$state = NULL})
       private$.learner$state = self$state
-      prediction = as.data.table(private$.learner$predict(task))
-      private$pred_to_task(prediction, task)
+      prds = as.data.table(private$.learner$predict(task))
+      private$.pred_to_task(prds, task)
     },
 
-    pred_to_task = function(prds, task) {
-      if (!is.null(prds$truth)) prds[, truth := NULL]
+    .pred_to_task = function(prds, task) {
       if (!self$param_set$values$keep_response && self$learner$predict_type == "prob") {
         prds[, response := NULL]
       }
-      renaming = setdiff(colnames(prds), c("row_id", "row_ids"))
-      setnames(prds, renaming, sprintf("%s.%s", self$id, renaming))
+      renaming = setdiff(colnames(prds), c("row_ids", "truth"))
+      setnames(prds, old = renaming, new = sprintf("%s.%s", self$id, renaming))
+      setnames(prds, old = "truth", new = task$target_names)
+      row_reference = paste0("pre.", self$id)
+      while (row_reference %in% task$col_info$id) {
+        row_reference = paste0(row_reference, ".")
+      }
+      setnames(prds, old = "row_ids", new = row_reference)
 
-      # This can be simplified for mlr3 >= 0.11.0;
-      # will be always "row_ids"
-      row_id_col = intersect(colnames(prds), c("row_id", "row_ids"))
-      setnames(prds, old = row_id_col, new = task$backend$primary_key)
-      task$select(character(0))$cbind(prds)
+      # the following is needed to pertain correct row ids in the case of e.g. cv
+      # here we do not necessarily apply PipeOpAggregate later
+      backend = if (identical(sort(prds[[row_reference]]), sort(task$row_ids))) {
+        set(prds, j = task$backend$primary_key, value = prds[[row_reference]])
+        as_data_backend(prds, primary_key = task$backend$primary_key)
+      } else {
+        as_data_backend(prds)
+      }
+
+      # get task_type from mlr_reflections and call constructor
+      constructor = get(mlr_reflections$task_types[["task"]][chmatch(task$task_type, table = mlr_reflections$task_types[["type"]], nomatch = 0L)][[1L]])
+      newtask = invoke(constructor$new, id = task$id, backend = backend, target = task$target_names, .args = task$extra_args)
+      newtask$extra_args = task$extra_args
+      newtask$set_col_roles(row_reference, "row_reference")
+
+      newtask
     },
     .additional_param_set = NULL,
     .learner = NULL,
@@ -273,12 +231,5 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   )
 )
 
-# helper function to add missings to predictions based on their storage mode
-add_missings = function(x, len) {
-  c(x, switch(typeof(x),
-    "character" = rep_len(NA_character_, length.out = len),
-    "double" = rep_len(NA_real_, length.out = len),
-    "integer" = rep_len(NA_integer_, length.out = len)))
-}
-
 mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ParamSet$new()))$new()))
+

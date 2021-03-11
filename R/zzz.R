@@ -15,6 +15,9 @@ register_mlr3 = function() {
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
      "multiplicity")))
+  if (!all(grepl("row_reference", x$task_col_roles))) {
+    x$task_col_roles = map(x$task_col_roles, function(col_roles) c(col_roles, "row_reference"))
+  }
 }
 
 .onLoad = function(libname, pkgname) {  # nocov start

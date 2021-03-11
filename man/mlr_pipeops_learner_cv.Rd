@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner_cv}
 \alias{mlr_pipeops_learner_cv}
 \alias{PipeOpLearnerCV}
-\title{Wrap a Learner into a PipeOp with Cross-validated Predictions as Features}
+\title{Wrap a Learner into a PipeOp with Resampled Predictions as Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -19,10 +19,10 @@ The \code{\link[mlr3:Task]{Task}} gets features depending on the capsuled \code{
 for \verb{$predict.type} \code{"prob"} the \verb{<ID>.prob.<CLASS>} features are created, and for \verb{$predict.type} \code{"se"} the new columns
 are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} of the \code{\link{PipeOpLearnerCV}} object.
 
-In the case of the resampling method returning multiple predictions per row id, the predictions are aggregated via their mean
-(except for the \code{"response"} in the case of a \link[mlr3:TaskClassif]{classification Task} which is aggregated using the mode).
-In the case of the resampling method not returning predictions for all row ids as given in the input \code{\link[mlr3:Task]{Task}},
-these predictions are added as missing.
+In the case of the resampling method returning multiple predictions per row id, the predictions
+are returned unaltered. The output \code{\link[mlr3:Task]{Task}} always gains a \code{row_reference} column
+named \verb{pre.<ID>} indicating the original row id prior to the resampling process. \code{\link{PipeOpAggregate}} should then
+be used to aggregate these multiple predictions per row id.
 
 Inherits both the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} and
 \code{\link[mlr3:Resampling]{Resampling}} it is constructed from. The parameter ids of the latter one are prefixed with \code{"resampling."}
@@ -55,7 +55,7 @@ type given to \code{learner} during construction; both during training and predi
 \code{\link{PipeOpLearnerCV}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-The output is a task with the same target as the input task, with features replaced by predictions made by the \code{\link[mlr3:Learner]{Learner}}.
+The output is a \code{\link[mlr3:Task]{Task}} with the same target as the input \code{\link[mlr3:Task]{Task}}, with features replaced by predictions made by the \code{\link[mlr3:Learner]{Learner}}.
 During training, this prediction is the out-of-sample prediction made by \code{\link[mlr3:resample]{resample}}, during prediction, this is the
 ordinary prediction made on the data by a \code{\link[mlr3:Learner]{Learner}} trained on the training phase data.
 }
@@ -118,7 +118,7 @@ library("mlr3")
 task = tsk("iris")
 learner = lrn("classif.rpart")
 
-lrncv_po = po("learner_cv", learner)
+lrncv_po = po("learner_cv", learner, rsmp("cv"))
 lrncv_po$learner$predict_type = "response"
 
 nop = mlr_pipeops$get("nop")

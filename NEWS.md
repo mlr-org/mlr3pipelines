@@ -1,4 +1,8 @@
 # mlr3pipelines 0.3.4-9000
+* Changed PipeOps:
+  - PipeOpLearnerCV now also wraps a Resampling allowing for a wider use of resampling methods
+* New PipeOps:
+  - PipeOpAggregate
 
 # mlr3pipelines 0.3.4
 
@@ -18,7 +22,6 @@
 # mlr3pipelines 0.3.1
 
 * Changed PipeOps:
-  - PipeOpLearnerCV now also wraps a Resampling allowing for a wider use of resampling methods
   - PipeOpMissInd now also allows for setting type = integer
   - PipeOpNMF: now exposes all parameters previously in .options
 * Changed mlr_graphs:

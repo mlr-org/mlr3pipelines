@@ -47,7 +47,7 @@ Imports:
     data.table,
     digest,
     lgr,
-    mlr3 (>= 0.6.0),
+    mlr3 (>= 0.11.0),
     mlr3misc (>= 0.7.0),
     paradox,
     R6,
@@ -102,6 +102,7 @@ Collate:
     'LearnerAvg.R'
     'NO_OP.R'
     'PipeOpTaskPreproc.R'
+    'PipeOpAggregate.R'
     'PipeOpBoxCox.R'
     'PipeOpBranch.R'
     'PipeOpChunk.R'
