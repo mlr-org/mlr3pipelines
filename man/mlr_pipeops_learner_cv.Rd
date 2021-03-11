@@ -3,14 +3,14 @@
 \name{mlr_pipeops_learner_cv}
 \alias{mlr_pipeops_learner_cv}
 \alias{PipeOpLearnerCV}
-\title{Wrap a Learner into a PipeOp with Cross-validated Predictions as Features}
+\title{Wrap a Learner into a PipeOp with Resampled Predictions as Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
+Wraps a \code{\link[mlr3:Learner]{mlr3::Learner}} and \code{\link[mlr3:Resampling]{mlr3::Resampling}} into a \code{\link{PipeOp}}.
 
-Returns cross-validated predictions during training as a \code{\link[mlr3:Task]{Task}} and stores a model of the
+Returns resampled predictions during training as a \code{\link[mlr3:Task]{Task}} and stores a model of the
 \code{\link[mlr3:Learner]{Learner}} trained on the whole data in \verb{$state}. This is used to create a similar
 \code{\link[mlr3:Task]{Task}} during prediction.
 
@@ -19,20 +19,28 @@ The \code{\link[mlr3:Task]{Task}} gets features depending on the capsuled \code{
 for \verb{$predict.type} \code{"prob"} the \verb{<ID>.prob.<CLASS>} features are created, and for \verb{$predict.type} \code{"se"} the new columns
 are \verb{<ID>.response} and \verb{<ID>.se}. \verb{<ID>} denotes the \verb{$id} of the \code{\link{PipeOpLearnerCV}} object.
 
-Inherits the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} it is constructed from.
+In the case of the resampling method returning multiple predictions per row id, the predictions
+are returned unaltered. The output \code{\link[mlr3:Task]{Task}} always gains a \code{row_reference} column
+named \verb{pre.<ID>} indicating the original row id prior to the resampling process. \code{\link{PipeOpAggregate}} should then
+be used to aggregate these multiple predictions per row id.
+
+Inherits both the \verb{$param_set} (and therefore \verb{$param_set$values}) from the \code{\link[mlr3:Learner]{Learner}} and
+\code{\link[mlr3:Resampling]{Resampling}} it is constructed from. The parameter ids of the latter one are prefixed with \code{"resampling."}
+and the tags of these parameters are extended by \code{"train"}.
 
 \code{\link{PipeOpLearnerCV}} can be used to create "stacking" or "super learning" \code{\link{Graph}}s that use the output of one \code{\link[mlr3:Learner]{Learner}}
-as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\link{PipeOpLearnerCV}} erases the original input features, it is often
+as features for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\link{PipeOpLearnerCV}} erases the original input features, it is often
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
-\preformatted{PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
+\preformatted{PipeOpLearnerCV$new(learner, resampling = rsmp("cv", folds = 3), id = NULL, param_vals = list())
 }
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
-\code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a
-\code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
-\item \code{id} :: \code{character(1)}
+\code{\link[mlr3:Learner]{Learner}} to use for resampling / prediction.
+\item \code{resampling} :: \code{\link[mlr3:Resampling]{Resampling}} \cr
+\code{\link[mlr3:Resampling]{Resampling}} to use for resampling. Initialized to 3-fold cross-validation.
+\item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
@@ -47,7 +55,7 @@ type given to \code{learner} during construction; both during training and predi
 \code{\link{PipeOpLearnerCV}} has one output channel named \code{"output"}, producing a \code{\link[mlr3:Task]{Task}} specific to the \code{\link[mlr3:Learner]{Learner}}
 type given to \code{learner} during construction; both during training and prediction.
 
-The output is a task with the same target as the input task, with features replaced by predictions made by the \code{\link[mlr3:Learner]{Learner}}.
+The output is a \code{\link[mlr3:Task]{Task}} with the same target as the input \code{\link[mlr3:Task]{Task}}, with features replaced by predictions made by the \code{\link[mlr3:Learner]{Learner}}.
 During training, this prediction is the out-of-sample prediction made by \code{\link[mlr3:resample]{resample}}, during prediction, this is the
 ordinary prediction made on the data by a \code{\link[mlr3:Learner]{Learner}} trained on the training phase data.
 }
@@ -72,14 +80,10 @@ Prediction time, in seconds.
 
 \section{Parameters}{
 
-The parameters are the parameters inherited from the \code{\link{PipeOpTaskPreproc}}, as well as the parameters of the \code{\link[mlr3:Learner]{Learner}} wrapped by this object.
+The parameters are the parameters inherited from the \code{\link{PipeOpTaskPreproc}}, as well as the parameters of the \code{\link[mlr3:Learner]{Learner}} and
+\code{\link[mlr3:Resampling]{Resampling}} wrapped by this object.
 Besides that, parameters introduced are:
 \itemize{
-\item \code{resampling.method} :: \code{character(1)}\cr
-Which resampling method do we want to use. Currently only supports \code{"cv"} and \code{"insample"}. \code{"insample"} generates
-predictions with the model trained on all training data.
-\item \code{resampling.folds} :: \code{numeric(1)}\cr
-Number of cross validation folds. Initialized to 3. Only used for \code{resampling.method = "cv"}.
 \item \code{keep_response} :: \code{logical(1)}\cr
 Only effective during \code{"prob"} prediction: Whether to keep response values, if available. Initialized to \code{FALSE}.
 }
@@ -98,6 +102,8 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
 \item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. This learner contains the model if the \code{PipeOp} is trained. Read-only.
+\item \code{resampling} :: \code{\link[mlr3:Resampling]{Resampling}}\cr
+\code{\link[mlr3:Resampling]{Resampling}} that is being wrapped. Read-only.
 }
 }
 
@@ -112,7 +118,7 @@ library("mlr3")
 task = tsk("iris")
 learner = lrn("classif.rpart")
 
-lrncv_po = po("learner_cv", learner)
+lrncv_po = po("learner_cv", learner, rsmp("cv"))
 lrncv_po$learner$predict_type = "response"
 
 nop = mlr_pipeops$get("nop")
