@@ -134,11 +134,11 @@ mlr_pipeops$add("aggregate", PipeOpAggregate)
 # @param x [list] whatever `aggregation` is being set to
 # checks that `aggregation` is
 # * a named list of `formula`
-# * that each element has only a lhs
+# * that each element has only a rhs
 check_aggregation_formulae = function(x) {
   check_list(x, types = "formula", names = "unique") %check&&%
     Reduce(`%check&&%`, lapply(x, function(xel) {
-      if (length(xel) != 2) {
+      if (length(xel) != 2L) {
         return(sprintf("formula %s must not have a left hand side.",
           deparse(xel, nlines = 1L, width.cutoff = 500L)))
       }
