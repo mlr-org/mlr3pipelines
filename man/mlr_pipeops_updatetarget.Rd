@@ -3,7 +3,7 @@
 \name{mlr_pipeops_updatetarget}
 \alias{mlr_pipeops_updatetarget}
 \alias{PipeOpUpdateTarget}
-\title{PipeOpUpdateTarget}
+\title{Transform a Target without an Explicit Inversion}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
@@ -76,9 +76,10 @@ po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name
 po$train(list(tsk("iris")))
 po$predict(list(tsk("iris")))
 }
-# not yet exported
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOpTargetTrafo}},

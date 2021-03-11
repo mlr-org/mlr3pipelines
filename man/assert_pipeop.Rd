@@ -2,7 +2,7 @@
 % Please edit documentation in R/assert_graph.R
 \name{assert_pipeop}
 \alias{assert_pipeop}
-\title{Assertion for mlr3pipeline PipeOp}
+\title{Assertion for mlr3pipelines PipeOp}
 \usage{
 assert_pipeop(x)
 }

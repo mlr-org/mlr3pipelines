@@ -3,7 +3,7 @@
 \name{mlr_pipeops_threshold}
 \alias{mlr_pipeops_threshold}
 \alias{PipeOpThreshold}
-\title{PipeOpThreshold}
+\title{Change the Threshold of a Classification Prediction}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
@@ -67,6 +67,8 @@ gr$train(t)
 gr$predict(t)
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

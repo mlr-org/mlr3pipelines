@@ -1,4 +1,4 @@
-#' @title PipeOpClassBalancing
+#' @title Class Balancing
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classbalancing
@@ -76,6 +76,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

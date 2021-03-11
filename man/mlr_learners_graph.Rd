@@ -3,7 +3,7 @@
 \name{mlr_learners_graph}
 \alias{mlr_learners_graph}
 \alias{GraphLearner}
-\title{GraphLearner}
+\title{Encapsulate a Graph as a Learner}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link[mlr3:Learner]{mlr3::Learner}}.
 }

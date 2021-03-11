@@ -1,4 +1,4 @@
-#' @title PipeOpScale
+#' @title Center and Scale Numeric Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scale
@@ -67,6 +67,7 @@
 #'
 #' pos$predict(list(one_line_of_iris))[[1]]$data()
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpScale = R6Class("PipeOpScale",

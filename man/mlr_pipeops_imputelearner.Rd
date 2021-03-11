@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputelearner}
 \alias{mlr_pipeops_imputelearner}
 \alias{PipeOpImputeLearner}
-\title{PipeOpImputeLearner}
+\title{Impute Features by Fitting a Learner}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
@@ -92,6 +92,8 @@ new_task$missings()
 po$state$model
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

@@ -1,4 +1,4 @@
-#' @title PipeOpImputeHist
+#' @title Impute Numerical Features by Histogram
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputehist
@@ -49,6 +49,7 @@
 #' po$state$model
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeHist = R6Class("PipeOpImputeHist",

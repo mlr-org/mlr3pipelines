@@ -1,4 +1,4 @@
-#' @title PipeOpRandomProjection
+#' @title Project Numeric Features onto a Randomly Sampled Subspace
 #'
 #' @usage NULL
 #' @name mlr_pipeops_randomprojection
@@ -63,6 +63,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpRandomProjection = R6Class("PipeOpRandomProjection",

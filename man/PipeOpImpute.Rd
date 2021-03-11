@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpImpute.R
 \name{PipeOpImpute}
 \alias{PipeOpImpute}
-\title{PipeOpImpute}
+\title{Imputation Base Class}
 \format{
 Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -124,6 +124,8 @@ from which values are sampled to impute missing values of \code{feature}. \code{
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpTargetTrafo}},

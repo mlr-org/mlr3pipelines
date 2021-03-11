@@ -1,4 +1,4 @@
-#' @title PipeOpVtreat
+#' @title Interface to the vtreat Package
 #'
 #' @usage NULL
 #' @name mlr_pipeops_vtreat
@@ -121,6 +121,7 @@
 #' pop = PipeOpVtreat$new()
 #' pop$train(list(task))
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpVtreat = R6Class("PipeOpVtreat",
@@ -161,7 +162,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
       ))
       ps$add_dep("collarProb", on = "doCollar", cond = CondEqual$new(TRUE))
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"))
     }
   ),
   private = list(

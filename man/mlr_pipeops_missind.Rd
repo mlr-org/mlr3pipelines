@@ -3,7 +3,7 @@
 \name{mlr_pipeops_missind}
 \alias{mlr_pipeops_missind}
 \alias{PipeOpMissInd}
-\title{PipeOpMissInd}
+\title{Add Missing Indicator Columns}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -92,6 +92,8 @@ impgraph = list(
 tail(impgraph$train(task)[[1]]$data())
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

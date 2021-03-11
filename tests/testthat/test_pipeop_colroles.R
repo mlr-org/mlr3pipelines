@@ -34,7 +34,7 @@ test_that("PipeOpColRoles - functionality works", {
   train_out = train_pipeop(op, inputs = list(task))$output
   expect_equal(train_out$col_roles,
     list(feature = c("Sepal.Length", "Sepal.Width"), target = "Species", name = "Petal.Length",
-      order = "Petal.Length", stratum = character(), group = character(), weight = character()
+      order = "Petal.Length", stratum = character(), group = character(), weight = character(), uri = character(0)
     )
   )
   expect_equal(train_out$row_names$row_name, task$data(cols = "Petal.Length")[[1L]])

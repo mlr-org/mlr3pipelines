@@ -3,7 +3,7 @@
 \name{mlr_pipeops_regravg}
 \alias{mlr_pipeops_regravg}
 \alias{PipeOpRegrAvg}
-\title{PipeOpRegrAvg}
+\title{Weighted Prediction Averaging}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
@@ -81,6 +81,8 @@ gr = ppl("greplicate",
 resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

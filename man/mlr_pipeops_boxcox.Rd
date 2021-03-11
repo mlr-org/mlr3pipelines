@@ -3,7 +3,7 @@
 \name{mlr_pipeops_boxcox}
 \alias{mlr_pipeops_boxcox}
 \alias{PipeOpBoxCox}
-\title{PipeOpBoxCox}
+\title{Box-Cox Transformation of Numeric Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -76,6 +76,8 @@ pop$train(list(task))[[1]]$data()
 pop$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_nmf}
 \alias{mlr_pipeops_nmf}
 \alias{PipeOpNMF}
-\title{PipeOpNMF}
+\title{Non-negative Matrix Factorization}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -115,6 +115,8 @@ pop$train(list(task))[[1]]$data()
 pop$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

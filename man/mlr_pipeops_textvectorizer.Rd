@@ -3,7 +3,7 @@
 \name{mlr_pipeops_textvectorizer}
 \alias{mlr_pipeops_textvectorizer}
 \alias{PipeOpTextVectorizer}
-\title{PipeOpTextVectorizer}
+\title{Bag-of-word Representation of Character Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -172,6 +172,8 @@ one_line_of_iris$data()
 pos$predict(list(one_line_of_iris))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

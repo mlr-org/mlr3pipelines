@@ -3,7 +3,7 @@
 \name{mlr_pipeops_featureunion}
 \alias{mlr_pipeops_featureunion}
 \alias{PipeOpFeatureUnion}
-\title{PipeOpFeatureUnion}
+\title{Aggregate Features from Multiple Inputs}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -109,6 +109,8 @@ po = po("featureunion", innum = c("a", "b"))
 po$train(list(task2, task3))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

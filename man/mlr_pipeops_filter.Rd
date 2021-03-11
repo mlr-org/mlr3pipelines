@@ -3,7 +3,7 @@
 \name{mlr_pipeops_filter}
 \alias{mlr_pipeops_filter}
 \alias{PipeOpFilter}
-\title{PipeOpFilter}
+\title{Feature Filtering}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -118,6 +118,8 @@ rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 rr$learners[[1]]$model$auc$scores
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

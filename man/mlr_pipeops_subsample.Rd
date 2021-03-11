@@ -3,7 +3,7 @@
 \name{mlr_pipeops_subsample}
 \alias{mlr_pipeops_subsample}
 \alias{PipeOpSubsample}
-\title{PipeOpSubsample}
+\title{Subsampling}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -77,6 +77,8 @@ pos$train(list(tsk("iris")))
 
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

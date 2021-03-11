@@ -3,7 +3,7 @@
 \name{mlr_pipeops_kernelpca}
 \alias{mlr_pipeops_kernelpca}
 \alias{PipeOpKernelPCA}
-\title{PipeOpKernelPCA}
+\title{Kernelized Principle Component Analysis}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -77,6 +77,8 @@ task$data()
 pop$train(list(task))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

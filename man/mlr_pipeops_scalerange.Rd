@@ -3,7 +3,7 @@
 \name{mlr_pipeops_scalerange}
 \alias{mlr_pipeops_scalerange}
 \alias{PipeOpScaleRange}
-\title{PipeOpScaleRange}
+\title{Linearly Transform Numeric Features to Match Given Boundaries}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -67,6 +67,8 @@ pop$train(list(task))[[1]]$data()
 pop$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

@@ -1,4 +1,4 @@
-#' @title PipeOpSelect
+#' @title Remove Features Depending on a Selector
 #'
 #' @usage NULL
 #' @name mlr_pipeops_select
@@ -45,6 +45,7 @@
 #'
 #' @family PipeOps
 #' @family Selectors
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

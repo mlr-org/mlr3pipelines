@@ -1,4 +1,4 @@
-#' @title PipeOpRenameColumns
+#' @title Rename Columns
 #'
 #' @usage NULL
 #' @name mlr_pipeops_renamecolumns
@@ -47,6 +47,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

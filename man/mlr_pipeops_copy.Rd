@@ -3,7 +3,7 @@
 \name{mlr_pipeops_copy}
 \alias{mlr_pipeops_copy}
 \alias{PipeOpCopy}
-\title{PipeOpCopy}
+\title{Copy Input Multiple Times}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -94,6 +94,8 @@ gunion(list(
   ))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

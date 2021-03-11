@@ -1,4 +1,4 @@
-#' @title PipeOpColRoles
+#' @title Change Column Roles of a Task
 #'
 #' @usage NULL
 #' @name mlr_pipeops_colroles
@@ -49,6 +49,7 @@
 #'
 #' pop$train(list(task))
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpColRoles = R6Class("PipeOpColRoles",
@@ -82,7 +83,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
 
       new_role_names = names(new_role)
       ids = task$col_info$id
-      ids = ids[ids != "..row_id"]
+      ids = ids[ids != "..row_ids"]
       # names of "new_role" must be a subset of the column names of the task
       assert_subset(new_role_names, choices = ids, empty.ok = FALSE)
 

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_unbranch}
 \alias{mlr_pipeops_unbranch}
 \alias{PipeOpUnbranch}
-\title{PipeOpUnbranch}
+\title{Unbranch Different Paths}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -74,6 +74,8 @@ pou = po("unbranch")
 pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

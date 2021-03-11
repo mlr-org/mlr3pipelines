@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpTrafo.R
 \name{PipeOpTargetTrafo}
 \alias{PipeOpTargetTrafo}
-\title{PipeOpTargetTrafo}
+\title{Target Transformation Base Class}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
@@ -126,6 +126,8 @@ Helper function that packages \code{.invert()} that can later be used for the in
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOpTaskPreprocSimple}},

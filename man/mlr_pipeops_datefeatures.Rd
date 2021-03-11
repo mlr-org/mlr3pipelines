@@ -3,7 +3,7 @@
 \name{mlr_pipeops_datefeatures}
 \alias{mlr_pipeops_datefeatures}
 \alias{PipeOpDateFeatures}
-\title{PipeOpDateFeatures}
+\title{Preprocess Date Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -111,6 +111,8 @@ pop$train(list(task))
 pop$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

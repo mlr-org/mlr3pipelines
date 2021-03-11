@@ -3,7 +3,7 @@
 \name{mlr_pipeops_quantilebin}
 \alias{mlr_pipeops_quantilebin}
 \alias{PipeOpQuantileBin}
-\title{PipeOpQuantileBin}
+\title{Split Numeric Features into Quantile Bins}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -68,6 +68,8 @@ pop$train(list(task))[[1]]$data()
 pop$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

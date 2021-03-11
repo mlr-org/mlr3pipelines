@@ -3,7 +3,7 @@
 \name{mlr_pipeops_removeconstants}
 \alias{mlr_pipeops_removeconstants}
 \alias{PipeOpRemoveConstants}
-\title{PipeOpRemoveConstants}
+\title{Remove Constant Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -73,6 +73,8 @@ po$train(list(task = task))[[1]]$data()
 po$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

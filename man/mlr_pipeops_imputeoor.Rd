@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputeoor}
 \alias{mlr_pipeops_imputeoor}
 \alias{PipeOpImputeOOR}
-\title{PipeOpImputeOOR}
+\title{Out of Range Imputation}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
@@ -92,6 +92,8 @@ Ding Y, Simonoff JS (2010).
 \url{https://jmlr.org/papers/v11/ding10a.html}.
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
