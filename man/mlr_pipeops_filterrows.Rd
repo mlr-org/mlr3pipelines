@@ -39,7 +39,7 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{filter_formula} :: \code{NULL} | \code{formula} \cr
+\item \code{filter_formula} :: \code{formula} | \code{NULL} \cr
 Expression of the filtering to be performed, in the form of a \code{formula} that evaluates to \code{TRUE} or \code{FALSE}
 for each row within the frame of the \code{\link{data.table}} \code{\link[mlr3:DataBackend]{DataBackend}} of the \code{\link[mlr3:Task]{Task}}.
 Rows for which the evaluation is \code{TRUE} are kept in the output \code{\link[mlr3:Task]{Task}}, others are removed.
