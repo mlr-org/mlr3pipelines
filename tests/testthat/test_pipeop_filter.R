@@ -15,7 +15,7 @@ test_that("PipeOpFilter", {
 
   expect_equal(po$id, mlr3filters::FilterVariance$new()$id)
 
-  expect_error(po$train(list(task)), "Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given..*none")
+  expect_error(po$train(list(task)), "Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given.*none")
 
   po$param_set$values = list(filter.nfeat = 1, filter.frac = 1, na.rm = TRUE)
   expect_error(po$train(list(task)), "Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given.*nfeat, frac")
@@ -83,4 +83,9 @@ test_that("PipeFilter permuted", {
   po = po("filter", filter = mlr3filters::FilterAUC$new(), filter.permuted = 100)
   out = po$train(list(task))[[1]]
   expect_equal(out$feature_names, task$feature_names)
+
+  task$select(setdiff(task$feature_names, c("x1", "x2")))
+  po = po("filter", filter = mlr3filters::FilterAUC$new(), filter.permuted = 1)
+  out = po$train(list(task))[[1]]
+  expect_equal(out$feature_names, character())
 })
