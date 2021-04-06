@@ -156,7 +156,7 @@ the &quot;prediction&quot; as a single element, and should return a list with a 
 function. Typically should be used in combination with a subclass of <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>.</p>
 <p>During prediction phase the function supplied through <code>"fun"</code> is called with a <code>list</code> containing
 the <code>"prediction"</code> as a single element, and should return a <code>list</code> with a single element
-(a <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code>) that is returned by <code>PipeOpTargetInvert</code>.</p>
+(a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>) that is returned by <code>PipeOpTargetInvert</code>.</p>
     </div>
 
 
@@ -182,9 +182,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 <p><code>PipeOpTargetInvert</code> has two input channels named <code>"fun"</code> and <code>"prediction"</code>. During
 training, both take <code>NULL</code> as input. During prediction, <code>"fun"</code> takes a function and
-<code>"prediction"</code> takes a <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code>.</p>
+<code>"prediction"</code> takes a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>.</p>
 <p><code>PipeOpTargetInvert</code> has one output channel named <code>"output"</code> and returns <code>NULL</code> during
-training and a <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> during prediction.</p>
+training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> during prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     

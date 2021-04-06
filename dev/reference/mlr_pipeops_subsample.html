@@ -151,9 +151,9 @@ negligible cost of predictive performance." />
     </div>
 
     <div class="ref-description">
-    <p>Subsamples a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> to use a fraction of the rows.</p>
-<p>Sampling happens only during training phase. Subsampling a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> may be
-beneficial for training time at possibly (depending on original <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> size)
+    <p>Subsamples a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> to use a fraction of the rows.</p>
+<p>Sampling happens only during training phase. Subsampling a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> may be
+beneficial for training time at possibly (depending on original <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> size)
 negligible cost of predictive performance.</p>
     </div>
 
@@ -179,7 +179,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output during training is the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with added or removed rows according to the sampling.
+<p>The output during training is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with added or removed rows according to the sampling.
 The output during prediction is the unchanged input.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -192,9 +192,9 @@ The output during prediction is the unchanged input.</p>
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>; however, the <code>affect_columns</code> parameter is <em>not</em> present. Further parameters are:</p><ul>
 <li><p><code>frac</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
-Fraction of rows in the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> to keep. May only be greater than 1 if <code>replace</code> is <code>TRUE</code>. Initialized to <code>(1 - exp(-1)) == 0.6321</code>.</p></li>
+Fraction of rows in the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> to keep. May only be greater than 1 if <code>replace</code> is <code>TRUE</code>. Initialized to <code>(1 - exp(-1)) == 0.6321</code>.</p></li>
 <li><p><code>stratify</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Should the subsamples be stratified by target? Initialized to <code>FALSE</code>. May only be <code>TRUE</code> for <code><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></code> input.</p></li>
+Should the subsamples be stratified by target? Initialized to <code>FALSE</code>. May only be <code>TRUE</code> for <code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code> input.</p></li>
 <li><p><code>replace</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
 Sample with replacement? Initialized to <code>FALSE</code>.</p></li>
 </ul>
@@ -296,7 +296,7 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 
 <span class='va'>pos</span> <span class='op'>=</span> <span class='va'>mlr_pipeops</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"subsample"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>frac <span class='op'>=</span> <span class='fl'>0.7</span>, stratify <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $output
 #&gt; &lt;TaskClassif:iris&gt; (105 x 5)
 #&gt; * Target: Species

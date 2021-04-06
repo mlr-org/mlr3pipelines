@@ -152,9 +152,9 @@ must be adjusted for this PipeOp to be useful." />
     </div>
 
     <div class="ref-description">
-    <p>Adds a class weight column to the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> that different <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>s may be
+    <p>Adds a class weight column to the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that different <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>s may be
 able to use for sample weighting. Sample weights are added to each sample according to the target class.</p>
-<p>Only binary <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification tasks</a> are supported.</p>
+<p>Only binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a> are supported.</p>
 <p>Caution: when constructed naively without parameter, the weights are all set to 1. The <code>minor_weight</code> parameter
 must be adjusted for this <code><a href='PipeOp.html'>PipeOp</a></code> to be useful.</p>
     </div>
@@ -180,9 +180,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>. Instead of a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, a
-<code><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></code> is used as input and output during training and prediction.</p>
-<p>The output during training is the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with added weights column according to target class.
+<p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>. Instead of a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, a
+<code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code> is used as input and output during training and prediction.</p>
+<p>The output during training is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with added weights column according to target class.
 The output during prediction is the unchanged input.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -202,7 +202,7 @@ Weight given to samples of the minor class. Major class samples have weight 1. I
 
     
 
-<p>Introduces, or overwrites, the "weights" column in the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>. However, the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> method needs to
+<p>Introduces, or overwrites, the "weights" column in the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. However, the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> method needs to
 respect weights for this to have an effect.</p>
 <p>The newly introduced column is named <code>.WEIGHTS</code>; there will be a naming conflict if this column already exists and is <em>not</em> a
 weight column itself.</p>
@@ -294,7 +294,7 @@ weight column itself.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span>
 <span class='va'>opb</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"classweights"</span><span class='op'>)</span>
 
 <span class='co'># task weights</span>

@@ -158,15 +158,15 @@ may change." />
     </div>
 
     <div class="ref-description">
-    <p>Perform "One vs. Rest" classification by (weighted) majority vote prediction from <a href='https://rdrr.io/pkg/mlr3/man/PredictionClassif.html'>classification Predictions</a>. This works in combination with <code><a href='mlr_pipeops_ovrsplit.html'>PipeOpOVRSplit</a></code>.</p>
+    <p>Perform "One vs. Rest" classification by (weighted) majority vote prediction from <a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>classification Predictions</a>. This works in combination with <code><a href='mlr_pipeops_ovrsplit.html'>PipeOpOVRSplit</a></code>.</p>
 <p>Weights can be set as a parameter; if none are provided, defaults to equal weights for each
 prediction.</p>
-<p>Always returns a <code>"prob"</code> prediction, regardless of the incoming <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>'s
+<p>Always returns a <code>"prob"</code> prediction, regardless of the incoming <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s
 <code>$predict_type</code>. The label of the class with the highest predicted probability is selected as the
 <code>"response"</code> prediction.</p>
 <p>Missing values during prediction are treated as each class label being equally likely.</p>
 <p>This <code><a href='PipeOp.html'>PipeOp</a></code> uses a <code><a href='Multiplicity.html'>Multiplicity</a></code> input, which is created by <code><a href='mlr_pipeops_ovrsplit.html'>PipeOpOVRSplit</a></code> and causes
-<code><a href='PipeOp.html'>PipeOp</a></code>s on the way to this <code><a href='PipeOp.html'>PipeOp</a></code> to be called once for each individual <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>binary Task</a>.</p>
+<code><a href='PipeOp.html'>PipeOp</a></code>s on the way to this <code><a href='PipeOp.html'>PipeOp</a></code> to be called once for each individual <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>binary Task</a>.</p>
 <p>Note that <code><a href='Multiplicity.html'>Multiplicity</a></code> is currently an experimental features and the implementation or UI
 may change.</p>
     </div>
@@ -193,7 +193,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>. Instead of a
-<code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code>, a <code><a href='https://rdrr.io/pkg/mlr3/man/PredictionClassif.html'>PredictionClassif</a></code> is used as
+<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>, a <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code> is used as
 input and output during prediction and <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>'s <code>collect</code> parameter is initialized
 with <code>TRUE</code> to allow for collecting a <code><a href='Multiplicity.html'>Multiplicity</a></code> input.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
@@ -320,8 +320,8 @@ with <code>TRUE</code> to allow for collecting a <code><a href='Multiplicity.htm
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com'>mlr3</a></span><span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"ovrsplit"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"ovrunite"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"ovrsplit"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"ovrunite"</span><span class='op'>)</span>
 <span class='va'>gr</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $ovrunite.output
 #&gt; NULL

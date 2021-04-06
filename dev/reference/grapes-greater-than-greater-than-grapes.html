@@ -182,7 +182,7 @@ channel 1, channel 2 to 2 etc.</p>
 <p>This operator always created deep copies of its input arguments, so they cannot be modified by reference afterwards.
 To access individual <code><a href='PipeOp.html'>PipeOp</a></code>s after composition, use the resulting <code><a href='Graph.html'>Graph</a></code>'s <code>$pipeops</code> list.</p>
 <p>Both arguments of <code>%&gt;&gt;%</code> are automatically converted to <code><a href='Graph.html'>Graph</a></code>s using <code><a href='as_graph.html'>as_graph()</a></code>; this means that objects on either side may be objects
-that can be automatically converted to <code><a href='PipeOp.html'>PipeOp</a></code>s (such as <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>s or <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>s), or that can
+that can be automatically converted to <code><a href='PipeOp.html'>PipeOp</a></code>s (such as <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>s or <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>s), or that can
 be converted to <code><a href='Graph.html'>Graph</a></code>s. This means, in particular, <code>list</code>s of <code><a href='Graph.html'>Graph</a></code>s, <code><a href='PipeOp.html'>PipeOp</a></code>s or objects convertible to that, because
 <code><a href='as_graph.html'>as_graph()</a></code> automatically applies <code><a href='gunion.html'>gunion()</a></code> to <code>list</code>s. See examples.</p>
 <p>Note that if <code>g1</code> is <code>NULL</code>, <code>g2</code> converted to a <code><a href='Graph.html'>Graph</a></code> will be returned.
@@ -196,12 +196,12 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>g1</th>
-      <td><p>(<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>list</code> | <code>...</code>) <br />
+      <td><p>(<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>list</code> | <code>...</code>) <br />
 <code><a href='Graph.html'>Graph</a></code> / <code><a href='PipeOp.html'>PipeOp</a></code> / object-convertible-to-<code><a href='PipeOp.html'>PipeOp</a></code> to put in front of <code>g2</code>.</p></td>
     </tr>
     <tr>
       <th>g2</th>
-      <td><p>(<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>list</code> | <code>...</code>) <br />
+      <td><p>(<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>list</code> | <code>...</code>) <br />
 <code><a href='Graph.html'>Graph</a></code> / <code><a href='PipeOp.html'>PipeOp</a></code> / object-convertible-to-<code><a href='PipeOp.html'>PipeOp</a></code> to put after  <code>g1</code>.</p></td>
     </tr>
     </table>

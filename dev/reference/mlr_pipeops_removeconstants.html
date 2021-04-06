@@ -151,7 +151,7 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
     </div>
 
     <div class="ref-description">
-    <p>Remove constant features from a <a href='https://rdrr.io/pkg/mlr3/man/Task.html'>mlr3::Task</a>.
+    <p>Remove constant features from a <a href='https://mlr3.mlr-org.com/reference/Task.html'>mlr3::Task</a>.
 For each feature, calculates the ratio of features which differ from their mode value.
 All features with a ratio below a settable threshold are removed from the task.
 Missing values can be ignored or treated as a regular value distinct from non-missing values.</p>
@@ -289,7 +289,7 @@ Default is <code>FALSE</code>.</p></li>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 <span class='va'>data</span> <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>, a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span>, c <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://rdrr.io/pkg/mlr3/man/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"example"</span>, <span class='va'>data</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"example"</span>, <span class='va'>data</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span>
 
 <span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"removeconstants"</span><span class='op'>)</span>
 

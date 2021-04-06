@@ -153,9 +153,9 @@ and tuning." />
     </div>
 
     <div class="ref-description">
-    <p>Wraps an <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>mlr3::Learner</a></code> into a <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
-<p>Inherits the <code>$param_set</code> (and therefore <code>$param_set$values</code>) from the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> it is constructed from.</p>
-<p>Using <code>PipeOpLearner</code>, it is possible to embed <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>mlr3::Learner</a></code>s into <code><a href='Graph.html'>Graph</a></code>s, which themselves can be
+    <p>Wraps an <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code> into a <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+<p>Inherits the <code>$param_set</code> (and therefore <code>$param_set$values</code>) from the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> it is constructed from.</p>
+<p>Using <code>PipeOpLearner</code>, it is possible to embed <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code>s into <code><a href='Graph.html'>Graph</a></code>s, which themselves can be
 turned into Learners using <code><a href='mlr_learners_graph.html'>GraphLearner</a></code>. This way, preprocessing and ensemble methods can be included
 into a machine learning pipeline which then can be handled as singular object for resampling, benchmarking
 and tuning.</p>
@@ -172,10 +172,10 @@ and tuning.</p>
 <pre><span class='va'>PipeOpLearner</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>learner</span>, id <span class='op'>=</span> <span class='cn'>NULL</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>learner</code> :: <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-<code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> to wrap, or a string identifying a <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> in the <code><a href='https://rdrr.io/pkg/mlr3/man/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.</p></li>
+<li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> to wrap, or a string identifying a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> in the <code><a href='https://mlr3.mlr-org.com/reference/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.</p></li>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-Identifier of the resulting  object, internally defaulting to the <code>id</code> of the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> being wrapped.</p></li>
+Identifier of the resulting  object, internally defaulting to the <code>id</code> of the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> being wrapped.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -184,19 +184,19 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p><code>PipeOpLearner</code> has one input channel named <code>"input"</code>, taking a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> specific to the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>
+<p><code>PipeOpLearner</code> has one input channel named <code>"input"</code>, taking a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> specific to the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>
 type given to <code>learner</code> during construction; both during training and prediction.</p>
-<p><code>PipeOpLearner</code> has one output channel named <code>"output"</code>, producing <code>NULL</code> during training and a <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> subclass
-during prediction; this subclass is specific to the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> type given to <code>learner</code> during construction.</p>
-<p>The output during prediction is the <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> on the prediction input data, produced by the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>
+<p><code>PipeOpLearner</code> has one output channel named <code>"output"</code>, producing <code>NULL</code> during training and a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> subclass
+during prediction; this subclass is specific to the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> type given to <code>learner</code> during construction.</p>
+<p>The output during prediction is the <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> on the prediction input data, produced by the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>
 trained on the training input data.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> object. It is a named <code>list</code> with members:</p><ul>
+<p>The <code>$state</code> is set to the <code>$state</code> slot of the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> object. It is a named <code>list</code> with members:</p><ul>
 <li><p><code>model</code> :: <code>any</code><br />
-Model created by the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>'s <code>$.train()</code> function.</p></li>
+Model created by the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s <code>$.train()</code> function.</p></li>
 <li><p><code>train_log</code> :: <code>data.table</code> with columns <code>class</code> (<code>character</code>), <code>msg</code> (<code>character</code>)<br />
 Errors logged during training.</p></li>
 <li><p><code>train_time</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
@@ -211,7 +211,7 @@ Prediction time, in seconds.</p></li>
 
     
 
-<p>The parameters are exactly the parameters of the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> wrapped by this object.</p>
+<p>The parameters are exactly the parameters of the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> wrapped by this object.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
@@ -222,10 +222,10 @@ Prediction time, in seconds.</p></li>
     
 
 <p>Fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
-<li><p><code>learner</code> :: <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code><br />
-<code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> that is being wrapped. Read-only.</p></li>
-<li><p><code>learner_model</code> :: <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code><br />
-<code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> that is being wrapped. This learner contains the model if the <code>PipeOp</code> is trained. Read-only.</p></li>
+<li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code><br />
+<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> that is being wrapped. Read-only.</p></li>
+<li><p><code>learner_model</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code><br />
+<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> that is being wrapped. This learner contains the model if the <code>PipeOp</code> is trained. Read-only.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -313,8 +313,8 @@ Prediction time, in seconds.</p></li>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>learner</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, cp <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>learner</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, cp <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
 <span class='va'>lrn_po</span> <span class='op'>=</span> <span class='va'>mlr_pipeops</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='va'>learner</span><span class='op'>)</span>
 
 <span class='va'>lrn_po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>

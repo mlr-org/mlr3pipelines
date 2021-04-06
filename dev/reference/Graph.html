@@ -154,9 +154,9 @@ dependency structure (although the PipeOps for this would need to be written)." 
 
     <div class="ref-description">
     <p>A <code>Graph</code> is a representation of a machine learning pipeline graph. It can be <em>trained</em>, and subsequently used for <em>prediction</em>.</p>
-<p>A <code>Graph</code> is most useful when used together with <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> objects encapsulated as <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code>. In this case,
-the <code>Graph</code> produces <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> data during its <code>$predict()</code> phase and can be used as a <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>
-itself (using the <code><a href='mlr_learners_graph.html'>GraphLearner</a></code> wrapper). However, the <code>Graph</code> can also be used without <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> objects to simply
+<p>A <code>Graph</code> is most useful when used together with <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> objects encapsulated as <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code>. In this case,
+the <code>Graph</code> produces <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> data during its <code>$predict()</code> phase and can be used as a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>
+itself (using the <code><a href='mlr_learners_graph.html'>GraphLearner</a></code> wrapper). However, the <code>Graph</code> can also be used without <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> objects to simply
 perform preprocessing of data, and, in principle, does not even need to handle data at all but can be used for general processes with
 dependency structure (although the <code><a href='PipeOp.html'>PipeOp</a></code>s for this would need to be written).</p>
     </div>
@@ -231,11 +231,11 @@ Whether to store intermediate results in the <code><a href='PipeOp.html'>PipeOp<
 Get IDs of all <code><a href='PipeOp.html'>PipeOp</a></code>s. This is in order that <code><a href='PipeOp.html'>PipeOp</a></code>s were added if
 <code>sorted</code> is <code>FALSE</code>, and topologically sorted if <code>sorted</code> is <code>TRUE</code>.</p></li>
 <li><p><code>add_pipeop(op)</code> <br />
-(<code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>...</code>) -&gt; <code>self</code> <br />
+(<code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>...</code>) -&gt; <code>self</code> <br />
 Mutates <code>Graph</code> by adding a <code><a href='PipeOp.html'>PipeOp</a></code> to the <code>Graph</code>. This does not add any edges, so the new <code><a href='PipeOp.html'>PipeOp</a></code>
 will not be connected within the <code>Graph</code> at first.<br />
 Instead of supplying a <code><a href='PipeOp.html'>PipeOp</a></code> directly, an object that can naturally be converted to a <code><a href='PipeOp.html'>PipeOp</a></code> can also
-be supplied, e.g. a <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> or a <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>; see <code><a href='as_pipeop.html'>as_pipeop()</a></code>.</p></li>
+be supplied, e.g. a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> or a <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>; see <code><a href='as_pipeop.html'>as_pipeop()</a></code>.</p></li>
 <li><p><code>add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)</code> <br />
 (<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>,
 <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>NULL</code>,
@@ -272,7 +272,7 @@ Return a named <code>list</code> of outputs for each unconnected
 member of each <code><a href='PipeOp.html'>PipeOp</a></code>s will be set and the <code>$is_trained</code> slot of the <code>Graph</code> (and each individual <code>PipeOp</code>) will
 consequently be set to <code>TRUE</code>.<br />
 If <code>single_input</code> is <code>TRUE</code>, the <code>input</code> value will be sent to each unconnected <code><a href='PipeOp.html'>PipeOp</a></code>'s input channel
-(as listed in the <code>Graph</code>'s <code>$input</code>). Typically, <code>input</code> should be a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, although this is dependent
+(as listed in the <code>Graph</code>'s <code>$input</code>). Typically, <code>input</code> should be a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, although this is dependent
 on the <code><a href='PipeOp.html'>PipeOp</a></code>s in the <code>Graph</code>. If <code>single_input</code> is <code>FALSE</code>, then
 <code>input</code> should be a <code>list</code> with the same length as the <code>Graph</code>'s <code>$input</code> table has rows; each list item will be sent
 to a corresponding input channel of the <code>Graph</code>. If <code>input</code> is a named <code>list</code>, names must correspond to input channel
@@ -307,7 +307,7 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 #&gt; 1: scale.input  Task    Task scale        input</div><div class='input'><span class='va'>g</span><span class='op'>$</span><span class='va'>output</span>
 </div><div class='output co'>#&gt;          name train predict op.id channel.name
 #&gt; 1: pca.output  Task    Task   pca       output</div><div class='input'>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
 <span class='va'>trained</span> <span class='op'>=</span> <span class='va'>g</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
 <span class='va'>trained</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        Species        PC1         PC2         PC3         PC4

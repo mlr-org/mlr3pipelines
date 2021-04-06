@@ -157,16 +157,16 @@ in conjunction with ResamplingInsample." />
     </div>
 
     <div class="ref-description">
-    <p>Tunes optimal probability thresholds over different <code><a href='https://rdrr.io/pkg/mlr3/man/PredictionClassif.html'>PredictionClassif</a></code>s.</p>
-<p><code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>mlr3::Learner</a></code> <code>predict_type</code>: <code>"prob"</code> is required.
+    <p>Tunes optimal probability thresholds over different <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>s.</p>
+<p><code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code> <code>predict_type</code>: <code>"prob"</code> is required.
 Thresholds for each learner are optimized using the <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> supplied via
 the <code>param_set</code>.
 Defaults to <code><a href='https://rdrr.io/pkg/GenSA/man/GenSA.html'>GenSA</a></code>.
-Returns a single <code><a href='https://rdrr.io/pkg/mlr3/man/PredictionClassif.html'>PredictionClassif</a></code>.</p>
+Returns a single <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>.</p>
 <p>This PipeOp should be used in conjunction with <code><a href='mlr_pipeops_learner_cv.html'>PipeOpLearnerCV</a></code> in order to
 optimize thresholds of cross-validated predictions.
 In order to optimize thresholds without cross-validation, use <code><a href='mlr_pipeops_learner_cv.html'>PipeOpLearnerCV</a></code>
-in conjunction with <code><a href='https://rdrr.io/pkg/mlr3/man/mlr_resamplings_insample.html'>ResamplingInsample</a></code>.</p>
+in conjunction with <code><a href='https://mlr3.mlr-org.com/reference/mlr_resamplings_insample.html'>ResamplingInsample</a></code>.</p>
     </div>
 
 
@@ -206,9 +206,9 @@ that would otherwise be set during construction. Default <code><a href='https://
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
-<li><p><code>measure</code> :: <code><a href='https://rdrr.io/pkg/mlr3/man/Measure.html'>Measure</a></code>  | <code>character</code><br />
-<code><a href='https://rdrr.io/pkg/mlr3/man/Measure.html'>Measure</a></code> to optimize for.
-Will be converted to a <code><a href='https://rdrr.io/pkg/mlr3/man/Measure.html'>Measure</a></code> in case it is <code>character</code>.
+<li><p><code>measure</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code>  | <code>character</code><br />
+<code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> to optimize for.
+Will be converted to a <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> in case it is <code>character</code>.
 Initialized to <code>"classif.ce"</code>, i.e. misclassification error.</p></li>
 <li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
@@ -307,8 +307,8 @@ See the <code>optimizer</code> parameter for more info.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
   <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"tunethreshold"</span><span class='op'>)</span>
 
 <span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>

@@ -184,12 +184,12 @@ List of hyperparameter settings, overwriting the hyperparameter settings given i
 The subclass should have its own <code>param_vals</code> parameter and pass it on to <code>super$initialize()</code>.
 Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 <li><p><code>task_type_in</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-The class of <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> that should be accepted as input. This
-should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
+The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input. This
+should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
 <code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
 <li><p><code>task_type_out</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-The class of <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> that is produced as output. This
-should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
+The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that is produced as output. This
+should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
 <code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is the value of <code>task_type_in</code>.</p></li>
 <li><p>packages :: <code>character</code><br />
 Set of all required packages for the <code><a href='PipeOp.html'>PipeOp</a></code>'s methods. See <code>$packages</code> slot. Default is
@@ -202,12 +202,12 @@ Tags of the resulting <code>PipeOp</code>. This is added to the tag <code>"targe
 
     
 
-<p><code>PipeOpTargetTrafo</code> has one input channels named <code>"input"</code> taking a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> (or whatever class
+<p><code>PipeOpTargetTrafo</code> has one input channels named <code>"input"</code> taking a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> (or whatever class
 was specified by the <code>task_type</code> during construction) both during training and prediction.</p>
 <p><code>PipeOpTargetTrafo</code> has two output channels named <code>"fun"</code> and <code>"output"</code>. During training,
 <code>"fun"</code> returns <code>NULL</code> and during prediction, <code>"fun"</code> returns a function that can later be used
 to invert the transformation done during training according to the overloaded <code>.train_invert()</code>
-and <code>.invert()</code> functions. <code>"output"</code> returns the modified input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> (or <code>task_type</code>)
+and <code>.invert()</code> functions. <code>"output"</code> returns the modified input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> (or <code>task_type</code>)
 according to the overloaded <code><a href='https://rdrr.io/r/base/transform.html'>transform()</a></code> function both during training and prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -222,7 +222,7 @@ according to the overloaded <code><a href='https://rdrr.io/r/base/transform.html
 <p><code>PipeOpTargetTrafo</code> is an abstract class inheriting from <code><a href='PipeOp.html'>PipeOp</a></code>. It implements the
 <code>private$.train()</code> and <code>private$.predict()</code> functions. These functions perform checks and go on
 to call <code>.get_state()</code>, <code>.transform()</code>, <code>.train_invert()</code>. <code>.invert()</code> is packaged and sent along
-the <code>"fun"</code> output to be applied to a <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> by <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>.
+the <code>"fun"</code> output to be applied to a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> by <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>.
 A subclass of <code>PipeOpTargetTrafo</code> should implement these functions and be used in combination
 with <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
@@ -236,22 +236,22 @@ with <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>
 
 <p>Methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
 <li><p><code>.get_state(task)</code><br />
-(<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>) -&gt; <code>list</code><br />
+(<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>) -&gt; <code>list</code><br />
 Called by <code>PipeOpTargetTrafo</code>'s implementation of <code>private$.train()</code>. Takes a single
-<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> as input and returns a <code>list</code> to set the <code>$state</code>.
+<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as input and returns a <code>list</code> to set the <code>$state</code>.
 <code>.get_state()</code> will be called a single time during <em>training</em> right before
 <code>.transform()</code> is called. The return value (i.e. the <code>$state</code>) should contain info needed in
 <code>.transform()</code> as well as in <code>.invert()</code>.<br />
 The base implementation returns <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> and should be overloaded if setting the state is desired.</p></li>
 <li><p><code>.transform(task, phase)</code><br />
-(<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>) -&gt; <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code><br />
+(<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>) -&gt; <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code><br />
 Called by <code>PipeOpTargetTrafo</code>'s implementation of <code>private$.train()</code> and
-<code>private$.predict()</code>. Takes a single <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> as input and modifies it.
+<code>private$.predict()</code>. Takes a single <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as input and modifies it.
 This should typically consist of calculating a new target and modifying the
-<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> by using the <code><a href='https://rdrr.io/pkg/mlr3/man/convert_task.html'>convert_task</a></code> function. <code>.transform()</code> will be called during training and
-prediction because the target (and if needed also type) of the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> must be transformed
+<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> by using the <code><a href='https://mlr3.mlr-org.com/reference/convert_task.html'>convert_task</a></code> function. <code>.transform()</code> will be called during training and
+prediction because the target (and if needed also type) of the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> must be transformed
 both times. Note that unlike <code>$.train()</code>, the argument is <em>not</em> a list but a singular
-<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, and the return object is also <em>not</em> a list but a singular <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>.
+<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, and the return object is also <em>not</em> a list but a singular <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.
 The <code>phase</code> argument is <code>"train"</code> during training phase and <code>"predict"</code> during prediction phase
 and can be used to enable different behaviour during training and prediction. When <code>phase</code> is
 <code>"train"</code>, the <code>$state</code> slot (as previously set by <code>.get_state()</code>) may also be modified, alternatively
@@ -259,19 +259,19 @@ or in addition to overloading <code>.get_state()</code>.<br />
 The input should <em>not</em> be cloned and if possible should be changed in-place.<br />
 This function is abstract and should be overloaded by inheriting classes.</p></li>
 <li><p><code>.train_invert(task)</code><br />
-(<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>) -&gt; <code>any</code><br />
+(<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>) -&gt; <code>any</code><br />
 Called by <code>PipeOpTargetTrafo</code>'s implementation of <code>private$.predict()</code>. Takes a single
-<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> as input and returns an arbitrary value that will be given as
-<code>predict_phase_state</code> to <code>.invert()</code>. This should not modify the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> .<br />
-The base implementation returns a list with a single element, the <code>$truth</code> column of the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>,
+<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as input and returns an arbitrary value that will be given as
+<code>predict_phase_state</code> to <code>.invert()</code>. This should not modify the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> .<br />
+The base implementation returns a list with a single element, the <code>$truth</code> column of the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>,
 and should be overloaded if a more training-phase-dependent state is desired.</p></li>
 <li><p><code>.invert(prediction, predict_phase_state)</code><br />
-(<code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code>, <code>any</code>) -&gt; <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code><br />
-Takes a <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> and a <code>predict_phase_state</code>
+(<code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>, <code>any</code>) -&gt; <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code><br />
+Takes a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> and a <code>predict_phase_state</code>
 object as input and inverts the prediction. This function is sent as <code>"fun"</code> to
 <code><a href='mlr_pipeops_targetinvert.html'>PipeOpTargetInvert</a></code>.<br />
 This function is abstract and should be overloaded by inheriting classes. Care should be
-taken that the <code>predict_type</code> of the <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> being inverted is handled well.</p></li>
+taken that the <code>predict_type</code> of the <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> being inverted is handled well.</p></li>
 <li><p><code>.invert_help(predict_phase_state)</code><br />
 (<code>predict_phase_state</code> object) -&gt; <code>function</code><br />
 Helper function that packages <code>.invert()</code> that can later be used for the inversion.</p></li>
