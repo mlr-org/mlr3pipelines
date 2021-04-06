@@ -177,8 +177,8 @@ used for imputation inference. This should generally be <code>FALSE</code> if im
 Set of all required packages for the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>private$.train</code> and <code>private$.predict</code> methods. See <code>$packages</code> slot.
 Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
 <li><p><code>task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
-should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
+The class of <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
+should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
 <code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
 <li><p><code>feature_types</code> :: <code>character</code><br />
 Feature types affected by the <code>PipeOp</code>. See <code>private$.select_cols()</code> for more information.</p></li>
@@ -188,11 +188,11 @@ Feature types affected by the <code>PipeOp</code>. See <code>private$.select_col
 
     
 
-<p><code>PipeOpImpute</code> has one input channel named <code>"input"</code>, taking a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, or a subclass of
-<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> if the <code>task_type</code> construction argument is given as such; both during training and prediction.</p>
-<p><code>PipeOpImpute</code> has one output channel named <code>"output"</code>, producing a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, or a subclass;
-the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> type is the same as for input; both during training and prediction.</p>
-<p>The output <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> is the modified input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with features imputed according to the <code>private$.impute()</code> function.</p>
+<p><code>PipeOpImpute</code> has one input channel named <code>"input"</code>, taking a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, or a subclass of
+<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> if the <code>task_type</code> construction argument is given as such; both during training and prediction.</p>
+<p><code>PipeOpImpute</code> has one output channel named <code>"output"</code>, producing a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>, or a subclass;
+the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> type is the same as for input; both during training and prediction.</p>
+<p>The output <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> is the modified input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with features imputed according to the <code>private$.impute()</code> function.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -203,13 +203,13 @@ Names of features being selected by the <code>affect_columns</code> parameter.</
 <li><p><code>context_cols</code> :: <code>character</code><br />
 Names of features being selected by the <code>context_columns</code> parameter.</p></li>
 <li><p><code>intasklayout</code> :: <code>data.table</code><br />
-Copy of the training <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
-the prediction <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> has the same features, feature layout, and feature types as during training.</p></li>
+Copy of the training <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
+the prediction <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> has the same features, feature layout, and feature types as during training.</p></li>
 <li><p><code>outtasklayout</code> :: <code>data.table</code><br />
-Copy of the trained <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
-the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> resulting from the prediction operation has the same features, feature layout, and feature types as after training.</p></li>
+Copy of the trained <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>'s <code>$feature_types</code> slot. This is used during prediction to ensure that
+the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> resulting from the prediction operation has the same features, feature layout, and feature types as after training.</p></li>
 <li><p><code>model</code> :: named <code>list</code><br />
-Model used for imputation. This is a list named by <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> features, containing the result of the <code>private$.train_imputer()</code> or
+Model used for imputation. This is a list named by <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> features, containing the result of the <code>private$.train_imputer()</code> or
 <code>private$.train_nullmodel()</code> function for each one.</p></li>
 </ul>
 
@@ -220,13 +220,13 @@ Model used for imputation. This is a list named by <code><a href='https://mlr3.m
 <ul>
 <li><p><code>affect_columns</code> :: <code>function</code> | <code><a href='Selector.html'>Selector</a></code> | <code>NULL</code> <br />
 What columns the <code>PipeOpImpute</code> should operate on.
-The parameter must be a <code><a href='Selector.html'>Selector</a></code> function, which takes a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as argument and returns a <code>character</code>
+The parameter must be a <code><a href='Selector.html'>Selector</a></code> function, which takes a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> as argument and returns a <code>character</code>
 of features to use.<br />
 See <code><a href='Selector.html'>Selector</a></code> for example functions. Defaults to <code>NULL</code>, which selects all features.</p></li>
 <li><p><code>context_columns</code> :: <code>function</code> | <code><a href='Selector.html'>Selector</a></code> | <code>NULL</code> <br />
 What columns the <code>PipeOpImpute</code> imputation may depend on. This parameter is only present if the constructor is called with
 the <code>whole_task_dependent</code> argument set to <code>TRUE</code>.<br />
-The parameter must be a <code><a href='Selector.html'>Selector</a></code> function, which takes a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as argument and returns a <code>character</code>
+The parameter must be a <code><a href='Selector.html'>Selector</a></code> function, which takes a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> as argument and returns a <code>character</code>
 of features to use.<br />
 See <code><a href='Selector.html'>Selector</a></code> for example functions. Defaults to <code>NULL</code>, which selects all features.</p></li>
 </ul>
@@ -247,7 +247,7 @@ See <code><a href='Selector.html'>Selector</a></code> for example functions. Def
 
 <p>Methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
 <li><p><code>.select_cols(task)</code> <br />
-(<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>) -&gt; <code>character</code> <br />
+(<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>) -&gt; <code>character</code> <br />
 Selects which columns the <code><a href='PipeOp.html'>PipeOp</a></code> operates on. In contrast to
 the <code>affect_columns</code> parameter. <code>private$.select_cols()</code> is for the <em>inheriting class</em> to determine which columns
 the operator should function on, e.g. based on feature type, while <code>affect_columns</code> is a way for the <em>user</em>

@@ -156,10 +156,10 @@ Treats new levels during prediction like missing values." />
 
     <div class="ref-description">
     <p>Encodes columns of type <code>factor</code>, <code>character</code> and <code>ordered</code>.</p>
-<p>Impact coding for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Tasks</a> converts factor levels of each (factorial) column
+<p>Impact coding for <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Tasks</a> converts factor levels of each (factorial) column
 to the difference between each target level's conditional log-likelihood
 given this level, and the target level's global log-likelihood.</p>
-<p>Impact coding for <a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>regression Tasks</a> converts factor levels of each (factorial) column
+<p>Impact coding for <a href='https://rdrr.io/pkg/mlr3/man/TaskRegr.html'>regression Tasks</a> converts factor levels of each (factorial) column
 to the difference between the target's conditional mean given
 this level, and the target's global mean.</p>
 <p>Treats new levels during prediction like missing values.</p>
@@ -188,7 +188,7 @@ otherwise be set during construction. Default <code><a href='https://rdrr.io/r/b
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected <code>factor</code>, <code>character</code> or
+<p>The output is the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with all affected <code>factor</code>, <code>character</code> or
 <code>ordered</code> parameters encoded.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -208,7 +208,7 @@ this feature level on each <em>outcome level</em>.</p></li>
 
 <ul>
 <li><p><code>smoothing</code>  :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
-A finite positive value used for smoothing. Mostly relevant for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Tasks</a> if
+A finite positive value used for smoothing. Mostly relevant for <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Tasks</a> if
 a factor does not coincide with a target factor level (and would otherwise give an infinite logit value).
 Initialized to <code>1e-4</code>.</p></li>
 <li><p><code>impute_zero</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
@@ -219,7 +219,7 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 
     
 
-<p>Uses Laplace smoothing, mostly to avoid infinite values for <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Task</a>.</p>
+<p>Uses Laplace smoothing, mostly to avoid infinite values for <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Task</a>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -304,7 +304,7 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 <span class='va'>poe</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"encodeimpact"</span><span class='op'>)</span>
 
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"task"</span>,
+<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"task"</span>,
   <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
     x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span>,
     y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,

@@ -157,13 +157,13 @@ may change." />
     </div>
 
     <div class="ref-description">
-    <p>Splits a <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Task</a> into several binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Tasks</a> to perform "One vs. Rest" classification. This works in combination
+    <p>Splits a <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Task</a> into several binary <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Tasks</a> to perform "One vs. Rest" classification. This works in combination
 with <code><a href='mlr_pipeops_ovrunite.html'>PipeOpOVRUnite</a></code>.</p>
-<p>For each target level a new binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Task</a> is constructed with
+<p>For each target level a new binary <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Task</a> is constructed with
 the respective target level being the positive class and all other target levels being the
 new negative class <code>"rest"</code>.</p>
 <p>This <code><a href='PipeOp.html'>PipeOp</a></code> creates a <code><a href='Multiplicity.html'>Multiplicity</a></code>, which means that subsequent <code><a href='PipeOp.html'>PipeOp</a></code>s are executed
-multiple times, once for each created <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>binary Task</a>, until a <code><a href='mlr_pipeops_ovrunite.html'>PipeOpOVRUnite</a></code>
+multiple times, once for each created <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>binary Task</a>, until a <code><a href='mlr_pipeops_ovrunite.html'>PipeOpOVRUnite</a></code>
 is reached.</p>
 <p>Note that <code><a href='Multiplicity.html'>Multiplicity</a></code> is currently an experimental features and the implementation or UI
 may change.</p>
@@ -190,16 +190,16 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p><code>PipeOpOVRSplit</code> has one input channel named <code>"input"</code> taking a <code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code>
+<p><code>PipeOpOVRSplit</code> has one input channel named <code>"input"</code> taking a <code><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></code>
 both during training and prediction.</p>
 <p><code>PipeOpOVRSplit</code> has one output channel named <code>"output"</code> returning a <code><a href='Multiplicity.html'>Multiplicity</a></code> of
-<code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code>s both during training and prediction, i.e., the newly
-constructed binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Tasks</a>.</p>
+<code><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></code>s both during training and prediction, i.e., the newly
+constructed binary <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Tasks</a>.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
-<p>The <code>$state</code> contains the original target levels of the <code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code> supplied
+<p>The <code>$state</code> contains the original target levels of the <code><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></code> supplied
 during training.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
@@ -211,9 +211,9 @@ during training.</p>
     
 
 <p>The original target levels stored in the <code>$state</code> are also used during prediction when creating the new
-binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification Tasks</a>.</p>
+binary <a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>classification Tasks</a>.</p>
 <p>The names of the element of the output <code><a href='Multiplicity.html'>Multiplicity</a></code> are given by the levels of the target.</p>
-<p>If a target level <code>"rest"</code> is present in the input <code><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></code>, the
+<p>If a target level <code>"rest"</code> is present in the input <code><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></code>, the
 negative class will be labeled as <code>"rest." (using as many </code>"."` postfixes needed to yield a
 valid label).</p>
 <p>Should be used in combination with <code><a href='mlr_pipeops_ovrunite.html'>PipeOpOVRUnite</a></code>.</p>
@@ -320,7 +320,7 @@ valid label).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com'>mlr3</a></span><span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
 <span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"ovrsplit"</span><span class='op'>)</span>
 <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $output

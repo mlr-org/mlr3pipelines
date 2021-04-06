@@ -153,8 +153,8 @@ features of type factor, ordered and logical." />
     </div>
 
     <div class="ref-description">
-    <p>Impute features by fitting a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> for each feature.
-Uses the features indicated by the <code>context_columns</code> parameter as features to train the imputation <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>.
+    <p>Impute features by fitting a <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> for each feature.
+Uses the features indicated by the <code>context_columns</code> parameter as features to train the imputation <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>.
 Note this parameter is part of the <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code> base class and explained there.</p>
 <p>Additionally, only features supported by the learner can be imputed; i.e. learners of type
 <code>regr</code> can only impute features of type <code>integer</code> and <code>numeric</code>, while <code>classif</code> can impute
@@ -174,9 +174,9 @@ features of type <code>factor</code>, <code>ordered</code> and <code>logical</co
 <ul>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
 Identifier of resulting object, default <code>"impute."</code>, followed by the <code>id</code> of the <code>Learner</code>.</p></li>
-<li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
-<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> to wrap, or a string identifying a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> in the <code><a href='https://mlr3.mlr-org.com/reference/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.
-The <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> needs to be able to handle missing values, i.e. have the <code>missings</code> property.</p></li>
+<li><p><code>learner</code> :: <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> to wrap, or a string identifying a <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> in the <code><a href='https://rdrr.io/pkg/mlr3/man/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.
+The <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> needs to be able to handle missing values, i.e. have the <code>missings</code> property.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -186,20 +186,20 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with missing values from all affected features imputed by the trained model.</p>
+<p>The output is the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with missing values from all affected features imputed by the trained model.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
 
 <p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
-<p>The <code>$state$models</code> is a named <code>list</code> of <code>models</code> created by the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>'s <code>$.train()</code> function
+<p>The <code>$state$models</code> is a named <code>list</code> of <code>models</code> created by the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>'s <code>$.train()</code> function
 for each column. If a column consists of missing values only during training, the <code>model</code> is <code>0</code> or the levels of the
 feature; these are used for sampling during prediction.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
-<p>The parameters are the parameters inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>, in addition to the parameters of the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>
+<p>The parameters are the parameters inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>, in addition to the parameters of the <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code>
 used for imputation.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
@@ -207,17 +207,17 @@ used for imputation.</p>
 
 <p>Uses the <code>$train</code> and <code>$predict</code> functions of the provided learner. Features that are entirely <code>NA</code> are imputed as <code>0</code>
 or randomly sampled from available (<code>factor</code> / <code>logical</code>) levels.</p>
-<p>The <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> does <em>not</em> necessarily need to handle missing values in cases
+<p>The <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> does <em>not</em> necessarily need to handle missing values in cases
 where <code>context_columns</code> is chosen well (or there is only one column with missing values present).</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
 
 <p>Fields inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
-<li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code><br />
-<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> that is being wrapped. Read-only.</p></li>
-<li><p><code>learner_models</code> :: <code>list</code> of <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code>NULL</code><br />
-<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> that is being wrapped. This list is named by features for which a <code>Learner</code> was fitted, and
+<li><p><code>learner</code> :: <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code><br />
+<code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> that is being wrapped. Read-only.</p></li>
+<li><p><code>learner_models</code> :: <code>list</code> of <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> | <code>NULL</code><br />
+<code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> that is being wrapped. This list is named by features for which a <code>Learner</code> was fitted, and
 contains the same <code>Learner</code>, but with different respective models for each feature. If this <code>PipeOp</code> is not trained,
 this is an empty <code>list</code>. For features that were entirely <code>NA</code> during training, the <code>list</code> contains <code>NULL</code> elements.</p></li>
 </ul>
@@ -314,13 +314,13 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span>
 <span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
 #&gt;        0        0        5      374       11        0        0       35 
 #&gt;  triceps 
 #&gt;      227 </div><div class='input'>
-<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputelearner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"regr.rpart"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputelearner"</span>, <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"regr.rpart"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
 <span class='va'>new_task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
@@ -389,7 +389,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $glucose$train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $glucose$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -503,7 +503,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $pedigree$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.008
 #&gt; 
 #&gt; $pedigree$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -534,7 +534,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $pregnant$train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.007
 #&gt; 
 #&gt; $pregnant$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
@@ -612,7 +612,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $triceps$train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $triceps$train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)

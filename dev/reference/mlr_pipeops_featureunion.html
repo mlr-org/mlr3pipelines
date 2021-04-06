@@ -159,9 +159,9 @@ single time to the output task." />
 
     <div class="ref-description">
     <p>Aggregates features from all input tasks by <code><a href='https://rdrr.io/r/base/cbind.html'>cbind()</a></code>ing them together into a single
-<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.</p>
-<p><code><a href='https://mlr3.mlr-org.com/reference/DataBackend.html'>DataBackend</a></code> primary keys and <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> targets have to be equal
-across all <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s. Only the target column(s) of the first <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
+<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>.</p>
+<p><code><a href='https://rdrr.io/pkg/mlr3/man/DataBackend.html'>DataBackend</a></code> primary keys and <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> targets have to be equal
+across all <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>s. Only the target column(s) of the first <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>
 are kept.</p>
 <p>If <code>assert_targets_equal</code> is <code>TRUE</code> then target column names are compared and an error is thrown
 if they differ across inputs.</p>
@@ -209,12 +209,12 @@ the default.</p></li>
 
 <p><code>PipeOpFeatureUnion</code> has multiple input channels depending on the <code>innum</code> construction
 argument, named <code>"input1"</code>, <code>"input2"</code>, ... if <code>innum</code> is nonzero; if <code>innum</code> is 0, there is
-only one <em>vararg</em> input channel named <code>"..."</code>. All input channels take a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
+only one <em>vararg</em> input channel named <code>"..."</code>. All input channels take a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>
 both during training and prediction.</p>
-<p><code>PipeOpFeatureUnion</code> has one output channel named <code>"output"</code>, producing a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
+<p><code>PipeOpFeatureUnion</code> has one output channel named <code>"output"</code>, producing a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>
 both during training and prediction.</p>
-<p>The output is a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> constructed by <code><a href='https://rdrr.io/r/base/cbind.html'>cbind()</a></code>ing all features from all input
-<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s, both during training and prediction.</p>
+<p>The output is a <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> constructed by <code><a href='https://rdrr.io/r/base/cbind.html'>cbind()</a></code>ing all features from all input
+<code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>s, both during training and prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
     
@@ -229,8 +229,8 @@ both during training and prediction.</p>
 
     
 
-<p><code>PipeOpFeatureUnion</code> uses the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> <code>$cbind()</code> method to bind the input values
-beyond the first input to the first <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. This means if the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s
+<p><code>PipeOpFeatureUnion</code> uses the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> <code>$cbind()</code> method to bind the input values
+beyond the first input to the first <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>. This means if the <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code>s
 are database-backed, all of them except the first will be fetched into R memory for this. This
 behaviour may change in the future.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
@@ -331,7 +331,7 @@ behaviour may change in the future.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
-<span class='va'>task1</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>task1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
 <span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
   <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>,
   <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>
@@ -346,8 +346,8 @@ behaviour may change in the future.</p>
 #&gt;   - dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width,
 #&gt;     Sepal.Length, Sepal.Width
 #&gt; </div><div class='input'>
-<span class='va'>task2</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>task3</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>task2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
+<span class='va'>task3</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
 <span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span>, innum <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task2</span>, <span class='va'>task3</span><span class='op'>)</span><span class='op'>)</span>

@@ -156,14 +156,14 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
     </div>
 
     <div class="ref-description">
-    <p>A <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> that encapsulates a <code><a href='Graph.html'>Graph</a></code> to be used in
-<a href='https://mlr3.mlr-org.com/reference/mlr3-package.html'>mlr3</a> resampling and benchmarks.</p>
-<p>The Graph must return a single <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> on its <code>$predict()</code>
+    <p>A <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> that encapsulates a <code><a href='Graph.html'>Graph</a></code> to be used in
+<a href='https://rdrr.io/pkg/mlr3/man/mlr3-package.html'>mlr3</a> resampling and benchmarks.</p>
+<p>The Graph must return a single <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code> on its <code>$predict()</code>
 call. The result of the <code>$train()</code> call is discarded, only the
 internal state changes during training are used.</p>
 <p>The <code>predict_type</code> of a <code>GraphLearner</code> can be obtained or set via it's <code>predict_type</code> active binding.
 Setting a new predict type will try to set the <code>predict_type</code> in all relevant
-<code><a href='PipeOp.html'>PipeOp</a></code> / <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> encapsulated within the <code><a href='Graph.html'>Graph</a></code>.
+<code><a href='PipeOp.html'>PipeOp</a></code> / <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>Learner</a></code> encapsulated within the <code><a href='Graph.html'>Graph</a></code>.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the <code><a href='Graph.html'>Graph</a></code>.</p>
     </div>
 
@@ -171,7 +171,7 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object inheriting from <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code>.</p>
+    <p><code>R6Class</code> object inheriting from <code><a href='https://rdrr.io/pkg/mlr3/man/Learner.html'>mlr3::Learner</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other Learners: 

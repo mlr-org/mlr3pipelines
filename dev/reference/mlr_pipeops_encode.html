@@ -183,7 +183,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected <code>factor</code>, <code>character</code> or <code>ordered</code> parameters encoded according to the <code>method</code>
+<p>The output is the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with all affected <code>factor</code>, <code>character</code> or <code>ordered</code> parameters encoded according to the <code>method</code>
 parameter.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -299,7 +299,7 @@ Initialized to <code>"one-hot"</code>. One of:</p><ul>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
 <span class='va'>data</span> <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"task"</span>, <span class='va'>data</span>, <span class='st'>"x"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"task"</span>, <span class='va'>data</span>, <span class='st'>"x"</span><span class='op'>)</span>
 
 <span class='va'>poe</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"encode"</span><span class='op'>)</span>
 

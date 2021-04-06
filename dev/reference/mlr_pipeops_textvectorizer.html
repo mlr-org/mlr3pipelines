@@ -229,7 +229,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with all affected features converted to a bag-of-words
+<p>The output is the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with all affected features converted to a bag-of-words
 representation.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -403,7 +403,7 @@ of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
 <span class='va'>dt</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
   txt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>150</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span>, <span class='fl'>3</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>cbind</span><span class='op'>(</span><span class='va'>dt</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>cbind</span><span class='op'>(</span><span class='va'>dt</span><span class='op'>)</span>
 
 <span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"textvectorizer"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>stopwords_language <span class='op'>=</span> <span class='st'>"en"</span><span class='op'>)</span><span class='op'>)</span>
 

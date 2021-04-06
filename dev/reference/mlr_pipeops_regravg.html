@@ -154,7 +154,7 @@ Defaults to equal weights for each model." />
     </div>
 
     <div class="ref-description">
-    <p>Perform (weighted) prediction averaging from regression <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>s by connecting
+    <p>Perform (weighted) prediction averaging from regression <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code>s by connecting
 <code>PipeOpRegrAvg</code> to multiple <code><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></code> outputs.</p>
 <p>The resulting <code>"response"</code> prediction is a weighted average of the incoming <code>"response"</code> predictions.
 <code>"se"</code> prediction is currently not aggregated but discarded if present.</p>
@@ -191,7 +191,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
     
 
-<p>Input and output channels are inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>. Instead of a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code>, a <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code>
+<p>Input and output channels are inherited from <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>. Instead of a <code><a href='https://rdrr.io/pkg/mlr3/man/Prediction.html'>Prediction</a></code>, a <code><a href='https://rdrr.io/pkg/mlr3/man/PredictionRegr.html'>PredictionRegr</a></code>
 is used as input and output during prediction.</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
 
@@ -314,12 +314,12 @@ is used as input and output during prediction.</p>
 <span class='co'># Simple Bagging</span>
 <span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span><span class='op'>(</span><span class='st'>"greplicate"</span>,
   <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"subsample"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span><span class='op'>)</span>,
   n <span class='op'>=</span> <span class='fl'>5</span>
 <span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
   <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"classifavg"</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>, <span class='va'><a href='mlr_learners_graph.html'>GraphLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span><span class='op'>(</span><span class='st'>"holdout"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/resample.html'>resample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>, <span class='va'><a href='mlr_learners_graph.html'>GraphLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/mlr3/man/mlr_sugar.html'>rsmp</a></span><span class='op'>(</span><span class='st'>"holdout"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
 #&gt; * Task: iris
 #&gt; * Learner: subsample_1.subsample_2.subsample_3.subsample_4.subsample_5.classif.rpart_1.classif.rpart_2.classif.rpart_3.classif.rpart_4.classif.rpart_5.classifavg

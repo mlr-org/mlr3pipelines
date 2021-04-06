@@ -200,7 +200,7 @@ be set during construction. Default <code><a href='https://rdrr.io/r/base/list.h
     
 
 <p>Input and output channels are inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>.</p>
-<p>The output is the input <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> with date-related features computed and added to the
+<p>The output is the input <code><a href='https://rdrr.io/pkg/mlr3/man/Task.html'>Task</a></code> with date-related features computed and added to the
 feature set of the output task and the <code>POSIXct</code> columns of the data removed from the
 feature set (depending on the value of <code>keep_date_var</code>).</p>
     <h2 class="hasAnchor" id="state"><a class="anchor" href="#state"></a>State</h2>
@@ -338,7 +338,7 @@ Default TRUE.</p></li>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>date</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span><span class='st'>"2020-02-01"</span><span class='op'>)</span>, to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span><span class='st'>"2020-02-29"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"hour"</span><span class='op'>)</span>,
  size <span class='op'>=</span> <span class='fl'>150L</span><span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"iris_date"</span>, backend <span class='op'>=</span> <span class='va'>dat</span>, target <span class='op'>=</span> <span class='st'>"Species"</span><span class='op'>)</span>
+<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://rdrr.io/pkg/mlr3/man/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"iris_date"</span>, backend <span class='op'>=</span> <span class='va'>dat</span>, target <span class='op'>=</span> <span class='st'>"Species"</span><span class='op'>)</span>
 <span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"datefeatures"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>cyclic <span class='op'>=</span> <span class='cn'>FALSE</span>, minute <span class='op'>=</span> <span class='cn'>FALSE</span>, second <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $output
