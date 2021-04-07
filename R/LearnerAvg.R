@@ -10,7 +10,7 @@
 #' Used in the context of computing weighted averages of predictions.
 #'
 #' Predictions are averaged using `weights` (in order of appearance in the data) which are optimized using
-#' nonlinear optimization from the package "nloptr" for a measure provided in `measure` (defaults to `classif.acc`
+#' nonlinear optimization from the package "nloptr" for a measure provided in `measure` (defaults to `classif.ce`
 #' for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`).
 #' Learned weights can be obtained from `$model`.
 #' Using non-linear optimization is implemented in the SuperLearner R package.
