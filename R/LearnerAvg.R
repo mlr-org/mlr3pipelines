@@ -10,11 +10,11 @@
 #' Used in the context of computing weighted averages of predictions.
 #'
 #' Predictions are averaged using `weights` (in order of appearance in the data) which are optimized using
-#' nonlinear optimization from the package "nloptr" for a measure provided in `measure` (defaults to `classif.acc`
-#' for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`).
+#' nonlinear optimization from the package \CRANpkg{nloptr} for a measure provided in
+#' `measure`.
 #' Learned weights can be obtained from `$model`.
-#' Using non-linear optimization is implemented in the SuperLearner R package.
-#' For a more detailed analysis the reader is referred to LeDell (2015).
+#' Using non-linear optimization is implemented in the \CRANpkg{SuperLearner} R package.
+#' For a more detailed analysis the reader is referred to `r cite_bib("ledell_2015")`.
 #'
 #' Note, that weights always sum to 1 by dividing through sum(weights) before weighting
 #' incoming features.
