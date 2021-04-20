@@ -13,10 +13,13 @@
 #' nonlinear optimization from the package "nloptr" for a measure provided in `measure` (defaults to `classif.ce`
 #' for `LearnerClassifAvg` and `regr.mse` for `LearnerRegrAvg`).
 #' Learned weights can be obtained from `$model`.
-#' Using non-linear optimization is implemented in the SuperLearner R package.
-#' For a more detailed analysis the reader is referred to LeDell (2015).
+#' This Learner implements and generalizes an approach proposed in LeDell (2015) that uses non-linear
+#' optimization in order to learn base-learner weights that optimize a given performance metric (e.g `AUC`).
+#' The approach is similar but not exactly the same as the one implemented as `AUC` in the SuperLearner
+#' R package (when `metric` is "classif.auc").
+#' For a more detailed analysis and the general idea, the reader is referred to LeDell (2015).
 #'
-#' Note, that weights always sum to 1 by dividing through sum(weights) before weighting
+#' Note, that weights always sum to 1 by division by `sum(weights)` before weighting
 #' incoming features.
 #'
 #' @section Parameters:
