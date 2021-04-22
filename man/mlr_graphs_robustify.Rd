@@ -45,7 +45,6 @@ Performs the following steps:
 \item Imputes \code{factor} features using \code{\link{PipeOpImputeOOR}}
 \item Encodes \code{factors} using \code{one-hot-encoding}. Factors with a cardinality > max_cardinality are
 collapsed using \code{\link{PipeOpCollapseFactors}}
-\item If \code{scaling}, numeric features are scaled to mean 0 and standard deviation 1
 }
 
 The graph is built conservatively, i.e. the function always tries to assure everything works.
