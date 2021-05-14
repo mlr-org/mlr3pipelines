@@ -43,15 +43,20 @@
 #' used by this object. Besides, parameters introduced are:
 #' * `filter.nfeat` :: `numeric(1)` \cr
 #'   Number of features to select.
-#'   Mutually exclusive with `frac` and `cutoff`.
+#'   Mutually exclusive with `frac`, `cutoff`, and `permuted`.
 #' * `filter.frac` :: `numeric(1)` \cr
 #'   Fraction of features to keep.
-#'   Mutually exclusive with `nfeat` and `cutoff`.
+#'   Mutually exclusive with `nfeat`, `cutoff`, and `permuted`.
 #' * `filter.cutoff` :: `numeric(1)` \cr
 #'   Minimum value of filter heuristic for which to keep features.
-#'   Mutually exclusive with `nfeat` and `frac`.
+#'   Mutually exclusive with `nfeat`, `frac`, and `permuted`.
+#' * `filter.permuted` :: `integer(1)` \cr
+#'   If this parameter is set, a random permutation of each feature is added to the task before
+#'   applying the filter. All features selected before the `permuted`-th permuted features is selected
+#'   are kept. This is similar to the approach in `r cite_bib("wu2007", "thomas2017")`.
+#'   Mutually exclusive with `nfeat`, `frac`, and `cutoff`.
 #'
-#' Note that at least one of `filter.nfeat`, `filter.frac`, or `filter.cutoff` must be given.
+#' Note that at least one of `filter.nfeat`, `filter.frac`, `filter.cutoff`, and `filter.permuted` must be given.
 #'
 #' @section Internals:
 #' This does *not* use the `$.select_cols` feature of [`PipeOpTaskPreproc`] to select only features compatible with the [`Filter`][mlr3filters::Filter];
@@ -65,6 +70,9 @@
 #'
 #' @section Methods:
 #' Methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @references
+#' `r format_bib("wu2007", "thomas2017")`
 #'
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
@@ -109,7 +117,8 @@ PipeOpFilter = R6Class("PipeOpFilter",
       private$.outer_param_set = ParamSet$new(list(
         ParamInt$new("nfeat", lower = 0, tags = "train"),
         ParamDbl$new("frac", lower = 0, upper = 1, tags = "train"),
-        ParamDbl$new("cutoff", tags = "train")
+        ParamDbl$new("cutoff", tags = "train"),
+        ParamInt$new("permuted", lower = 1, tags = "train")
       ))
       private$.outer_param_set$set_id = "filter"
       super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
@@ -121,10 +130,10 @@ PipeOpFilter = R6Class("PipeOpFilter",
     .get_state = function(task) {
       # reset filter on exit, the user should not even feel the temptation to not use the `$state`
       on.exit({self$filter$scores = structure(numeric(0), .Names = character(0))})
-      filtercrit = c("nfeat", "frac", "cutoff")
+      filtercrit = c("nfeat", "frac", "cutoff", "permuted")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {
-        stopf("Exactly one of 'nfeat', 'frac', 'cutoff' must be given. Instead given: %s",
+        stopf("Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given. Instead given: %s",
           if (length(filtercrit) == 0) "none" else str_collapse(filtercrit))
       }
       critvalue = private$.outer_param_set$values[[filtercrit]]
@@ -138,7 +147,14 @@ PipeOpFilter = R6Class("PipeOpFilter",
       nfeat = switch(filtercrit,
         nfeat = critvalue,
         frac = round(length(filtertask$feature_names) * critvalue),
+        permuted = length(task$feature_names) + critvalue,
         NULL)
+
+      if (filtercrit == "permuted") {
+        permuted = map_dtc(filtertask$data(cols = task$feature_names), shuffle)
+        setnames(permuted, sprintf(".__permuted__%s", names(permuted)))
+        filtertask$cbind(permuted)
+      }
 
       self$filter$calculate(filtertask, nfeat)
       scores = self$filter$scores
@@ -147,6 +163,10 @@ PipeOpFilter = R6Class("PipeOpFilter",
         cutoff = names(scores)[scores >= critvalue],
         nfeat = utils::head(names(scores), nfeat),
         frac = utils::head(names(scores), nfeat),
+        permuted = {
+          idx = wf(cumsum(startsWith(names(scores), ".__permuted__")) == critvalue)
+          head(names(scores), if (length(idx)) idx - 1L else Inf)
+        },
         stop("unknown filter criterion"))
 
       # the features only relate to the features in `filtertask`, we want a vector of *all* features to keep
@@ -154,7 +174,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
       # we don't use 'scores', but maybe the user cares.
       # In particular, the user can *not* rely on the self$filter object being set, because
-      # `$state` is the only place that the user may rely on being changed after `$traion()`.
+      # `$state` is the only place that the user may rely on being changed after `$train()`.
       list(scores = scores, features = features)
     },
 
