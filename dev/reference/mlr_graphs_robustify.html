@@ -55,7 +55,6 @@ Imputes numeric features using PipeOpImputeHist and PipeOpMissInd
 Imputes factor features using PipeOpImputeOOR
 Encodes factors using one-hot-encoding. Factors with a cardinality &amp;gt; max_cardinality are
 collapsed using PipeOpCollapseFactors
-If scaling, numeric features are scaled to mean 0 and standard deviation 1
 
 
 The graph is built conservatively, i.e. the function always tries to assure everything works.
@@ -167,7 +166,6 @@ Performs the following steps:</p><ul>
 <li><p>Imputes <code>factor</code> features using <code><a href='mlr_pipeops_imputeoor.html'>PipeOpImputeOOR</a></code></p></li>
 <li><p>Encodes <code>factors</code> using <code>one-hot-encoding</code>. Factors with a cardinality &gt; max_cardinality are
 collapsed using <code><a href='mlr_pipeops_collapsefactors.html'>PipeOpCollapseFactors</a></code></p></li>
-<li><p>If <code>scaling</code>, numeric features are scaled to mean 0 and standard deviation 1</p></li>
 </ul>
 
 <p>The graph is built conservatively, i.e. the function always tries to assure everything works.

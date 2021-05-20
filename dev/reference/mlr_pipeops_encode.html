@@ -203,7 +203,7 @@ columns to the new columns that replace the old discrete feature. See <code><a h
 <li><p><code>method</code>  :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
 Initialized to <code>"one-hot"</code>. One of:</p><ul>
 <li><p><code>"one-hot"</code>: create a new column for each factor level.</p></li>
-<li><p><code>"treatment"</code>: create $n-1$ columns leaving out the first factor level of each factor variable (see <code><a href='https://rdrr.io/r/stats/contrast.html'>stats::contr.treatment()</a></code>).</p></li>
+<li><p><code>"treatment"</code>: create \(n-1\) columns leaving out the first factor level of each factor variable (see <code><a href='https://rdrr.io/r/stats/contrast.html'>stats::contr.treatment()</a></code>).</p></li>
 <li><p><code>"helmert"</code>: create columns according to Helmert contrasts (see <code><a href='https://rdrr.io/r/stats/contrast.html'>stats::contr.helmert()</a></code>).</p></li>
 <li><p><code>"poly"</code>: create columns with contrasts based on orthogonal polynomials (see <code><a href='https://rdrr.io/r/stats/contrast.html'>stats::contr.poly()</a></code>).</p></li>
 <li><p><code>"sum"</code>: create columns with contrasts summing to zero, (see <code><a href='https://rdrr.io/r/stats/contrast.html'>stats::contr.sum()</a></code>).</p></li>
