@@ -54,7 +54,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 Initialized to \code{"one-hot"}. One of:
 \itemize{
 \item \code{"one-hot"}: create a new column for each factor level.
-\item \code{"treatment"}: create $n-1$ columns leaving out the first factor level of each factor variable (see \code{stats::contr.treatment()}).
+\item \code{"treatment"}: create \eqn{n-1} columns leaving out the first factor level of each factor variable (see \code{stats::contr.treatment()}).
 \item \code{"helmert"}: create columns according to Helmert contrasts (see \code{stats::contr.helmert()}).
 \item \code{"poly"}: create columns with contrasts based on orthogonal polynomials (see \code{stats::contr.poly()}).
 \item \code{"sum"}: create columns with contrasts summing to zero, (see \code{stats::contr.sum()}).
