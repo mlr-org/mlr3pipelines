@@ -120,6 +120,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
 \code{\link{mlr_pipeops_featureunion}},
+\code{\link{mlr_pipeops_filterrows}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},

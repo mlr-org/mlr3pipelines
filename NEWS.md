@@ -1,4 +1,6 @@
 # mlr3pipelines 0.3.4-9000
+* New PipeOps:
+  - PipeOpFilterRows
 
 # mlr3pipelines 0.3.4
 
