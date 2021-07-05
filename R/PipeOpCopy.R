@@ -1,4 +1,4 @@
-#' @title PipeOpCopy
+#' @title Copy Input Multiple Times
 #'
 #' @usage NULL
 #' @name mlr_pipeops_copy
@@ -78,6 +78,7 @@
 #'   ))
 #' @family PipeOps
 #' @family Placeholder Pipeops
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpCopy = R6Class("PipeOpCopy",

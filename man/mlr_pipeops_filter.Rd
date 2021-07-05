@@ -3,7 +3,7 @@
 \name{mlr_pipeops_filter}
 \alias{mlr_pipeops_filter}
 \alias{PipeOpFilter}
-\title{PipeOpFilter}
+\title{Feature Filtering}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -56,16 +56,21 @@ used by this object. Besides, parameters introduced are:
 \itemize{
 \item \code{filter.nfeat} :: \code{numeric(1)} \cr
 Number of features to select.
-Mutually exclusive with \code{frac} and \code{cutoff}.
+Mutually exclusive with \code{frac}, \code{cutoff}, and \code{permuted}.
 \item \code{filter.frac} :: \code{numeric(1)} \cr
 Fraction of features to keep.
-Mutually exclusive with \code{nfeat} and \code{cutoff}.
+Mutually exclusive with \code{nfeat}, \code{cutoff}, and \code{permuted}.
 \item \code{filter.cutoff} :: \code{numeric(1)} \cr
 Minimum value of filter heuristic for which to keep features.
-Mutually exclusive with \code{nfeat} and \code{frac}.
+Mutually exclusive with \code{nfeat}, \code{frac}, and \code{permuted}.
+\item \code{filter.permuted} :: \code{integer(1)} \cr
+If this parameter is set, a random permutation of each feature is added to the task before
+applying the filter. All features selected before the \code{permuted}-th permuted features is selected
+are kept. This is similar to the approach in Wu (2007) and Thomas (2017).
+Mutually exclusive with \code{nfeat}, \code{frac}, and \code{cutoff}.
 }
 
-Note that at least one of \code{filter.nfeat}, \code{filter.frac}, or \code{filter.cutoff} must be given.
+Note that at least one of \code{filter.nfeat}, \code{filter.frac}, \code{filter.cutoff}, and \code{filter.permuted} must be given.
 }
 
 \section{Internals}{
@@ -117,7 +122,20 @@ learner = GraphLearner$new(gr)
 rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 rr$learners[[1]]$model$auc$scores
 }
+\references{
+Wu Y, Boos DD, Stefanski LA (2007).
+\dQuote{Controlling Variable Selection by the Addition of Pseudovariables.}
+\emph{Journal of the American Statistical Association}, \bold{102}(477), 235--243.
+\doi{10.1198/016214506000000843}.
+
+Thomas J, Hepp T, Mayr A, Bischl B (2017).
+\dQuote{Probing for Sparse and Fast Variable Selection with Model-Based Boosting.}
+\emph{Computational and Mathematical Methods in Medicine}, \bold{2017}, 1--8.
+\doi{10.1155/2017/1421409}.
+}
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

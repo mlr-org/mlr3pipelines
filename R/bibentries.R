@@ -28,5 +28,29 @@ bibentries = c(
     author    = "LeDell, Erin",
     year      = "2015",
     school    = "UC Berkeley"
+  ),
+
+  thomas2017  = bibentry("article",
+    doi       = "10.1155/2017/1421409",
+    year      = "2017",
+    publisher = "Hindawi Limited",
+    volume    = "2017",
+    pages     = "1--8",
+    author    = "Janek Thomas and Tobias Hepp and Andreas Mayr and Bernd Bischl",
+    title     = "Probing for Sparse and Fast Variable Selection with Model-Based Boosting",
+    journal   = "Computational and Mathematical Methods in Medicine"
+  ),
+
+  wu2007      = bibentry("article",
+    doi       = "10.1198/016214506000000843",
+    year      = "2007",
+    month     = "3",
+    publisher = "Informa {UK} Limited",
+    volume    = "102",
+    number    = "477",
+    pages     = "235--243",
+    author    = "Yujun Wu and Dennis D Boos and Leonard A Stefanski",
+    title     = "Controlling Variable Selection by the Addition of Pseudovariables",
+    journal   = "Journal of the American Statistical Association"
   )
 )

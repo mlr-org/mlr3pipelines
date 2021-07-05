@@ -1,4 +1,4 @@
-#' @title Assertion for mlr3pipeline Graph
+#' @title Assertion for mlr3pipelines Graph
 #'
 #' @description
 #' Function that checks that a given object is a `Graph` and
@@ -12,7 +12,7 @@ assert_graph = function(x) {
   assert_r6(x, "Graph")
 }
 
-#' @title Conversion to mlr3pipeline Graph
+#' @title Conversion to mlr3pipelines Graph
 #'
 #' @description
 #' The argument is turned into a [`Graph`] if possible.
@@ -60,7 +60,7 @@ as_graph.Graph = function(x, clone = FALSE) {
   x
 }
 
-#' @title Assertion for mlr3pipeline PipeOp
+#' @title Assertion for mlr3pipelines PipeOp
 #'
 #' @description
 #' Function that checks that a given object is a `PipeOp` and
@@ -75,7 +75,7 @@ assert_pipeop = function(x) {
   invisible(x)
 }
 
-#' @title Conversion to mlr3pipeline PipeOp
+#' @title Conversion to mlr3pipelines PipeOp
 #'
 #' @description
 #' The argument is turned into a [`PipeOp`]

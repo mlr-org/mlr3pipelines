@@ -66,7 +66,7 @@ If \code{TRUE}, impute missing values as impact 0; otherwise the respective impa
 
 \section{Internals}{
 
-Uses laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification Task}.
+Uses Laplace smoothing, mostly to avoid infinite values for \link[mlr3:TaskClassif]{classification Task}.
 }
 
 \section{Methods}{
@@ -89,6 +89,8 @@ poe$train(list(task))[[1]]$data()
 poe$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

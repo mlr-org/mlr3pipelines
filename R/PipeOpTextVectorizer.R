@@ -1,4 +1,4 @@
-#' @title PipeOpTextVectorizer
+#' @title Bag-of-word Representation of Character Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_textvectorizer
@@ -158,6 +158,7 @@
 #'
 #' pos$predict(list(one_line_of_iris))[[1]]$data()
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_randomprojection}
 \alias{mlr_pipeops_randomprojection}
 \alias{PipeOpRandomProjection}
-\title{PipeOpRandomProjection}
+\title{Project Numeric Features onto a Randomly Sampled Subspace}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -80,6 +80,8 @@ pop$train(list(task))[[1]]$data()
 pop$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

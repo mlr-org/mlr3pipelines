@@ -1,4 +1,4 @@
-#' @title PipeOpColApply
+#' @title Apply a Function to each Column of a Task
 #'
 #' @usage NULL
 #' @name mlr_pipeops_colapply
@@ -55,6 +55,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

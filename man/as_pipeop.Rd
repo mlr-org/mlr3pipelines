@@ -2,7 +2,7 @@
 % Please edit documentation in R/assert_graph.R
 \name{as_pipeop}
 \alias{as_pipeop}
-\title{Conversion to mlr3pipeline PipeOp}
+\title{Conversion to mlr3pipelines PipeOp}
 \usage{
 as_pipeop(x, clone = FALSE)
 }

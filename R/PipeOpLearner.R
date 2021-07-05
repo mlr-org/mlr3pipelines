@@ -1,4 +1,4 @@
-#' @title PipeOpLearner
+#' @title Wrap a Learner into a PipeOp
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner
@@ -67,6 +67,7 @@
 #'
 #' @family PipeOps
 #' @family Meta PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples

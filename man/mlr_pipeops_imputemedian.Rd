@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputemedian}
 \alias{mlr_pipeops_imputemedian}
 \alias{PipeOpImputeMedian}
-\title{PipeOpImputeMedian}
+\title{Impute Numerical Features by their Median}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
@@ -63,6 +63,8 @@ new_task$missings()
 po$state$model
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

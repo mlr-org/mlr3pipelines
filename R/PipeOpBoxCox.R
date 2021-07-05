@@ -1,4 +1,4 @@
-#' @title PipeOpBoxCox
+#' @title Box-Cox Transformation of Numeric Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_boxcox
@@ -59,6 +59,7 @@
 #' pop$state
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @export
 PipeOpBoxCox = R6Class("PipeOpBoxCox",
   inherit = PipeOpTaskPreproc,
