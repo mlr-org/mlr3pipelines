@@ -116,3 +116,16 @@ test_that("PipeOp - evaluate_multiplicities", {
   expect_error(po$train(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "Error")
   expect_equal(po$state, NULL)  # state is completely reset to NULL
 })
+
+test_that("Graph - add_edge", {
+  learner = lrn("classif.rpart")
+  g1 = PipeOpOVRSplit$new() %>>% learner %>>% PipeOpOVRUnite$new()
+  g2 = Graph$new()
+  g2$add_pipeop(PipeOpOVRSplit$new())
+  g2$add_pipeop(learner)
+  g2$add_pipeop(PipeOpOVRUnite$new())
+  g2$add_edge("ovrsplit", "classif.rpart")
+  g2$add_edge("classif.rpart", "ovrunite")
+  expect_identical(g1$edges, g2$edges)
+})
+

@@ -1,4 +1,5 @@
-# mlr3pipelines 0.3.4-9000
+# mlr3pipelines 0.3.5
+* Bugfix: Make add_edge of Graphs work with Multiplicities
 
 # mlr3pipelines 0.3.4
 
