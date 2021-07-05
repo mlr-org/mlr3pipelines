@@ -30,7 +30,7 @@ test_that("basic graphlearner tests", {
   resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
   set.seed(1)
   resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
-  expect_equal(resgraphlrn$data$prediction, resjustlrn$data$prediction)
+  expect_equal(resgraphlrn$prediction(), resjustlrn$prediction())
 
   gr2 = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
   glrn2 = GraphLearner$new(gr2)
