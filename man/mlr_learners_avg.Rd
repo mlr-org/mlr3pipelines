@@ -20,6 +20,7 @@ Computes a weighted average of inputs.
 Used in the context of computing weighted averages of predictions.
 
 Predictions are averaged using \code{weights} (in order of appearance in the data) which are optimized using
+
 nonlinear optimization from the package "nloptr" for a measure provided in \code{measure} (defaults to \code{classif.ce}
 for \code{LearnerClassifAvg} and \code{regr.mse} for \code{LearnerRegrAvg}).
 Learned weights can be obtained from \verb{$model}.
