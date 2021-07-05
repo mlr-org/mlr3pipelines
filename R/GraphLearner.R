@@ -61,7 +61,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
             prdcssrs = graph$edges[dst_id == x$id, ]$src_id
             if (length(prdcssrs)) {
               # all non-null elements
-              task_types = keep(map(graph$pipeops[prdcssrs], get_po_task_type), Negate(is.null))
+              task_types = discard(map(graph$pipeops[prdcssrs], get_po_task_type), is.null)
               if (length(unique(task_types)) == 1L) {
                 return(unlist(unique(task_types)))
               }
@@ -88,7 +88,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   ),
   active = list(
     hash = function() {
-      self$graph$hash
+      digest(list(self$id, self$graph$hash), algo = "xxhash64")
     },
     predict_type = function(rhs) {
       if (!missing(rhs)) {
@@ -133,7 +133,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
         if (length(prdcssrs)) {
           # all non-null elements
-          predict_types = keep(map(self$graph$pipeops[prdcssrs], get_po_predict_type), Negate(is.null))
+          predict_types = discard(map(self$graph$pipeops[prdcssrs], get_po_predict_type), is.null)
           if (length(unique(predict_types)) == 1L)
             return(unlist(unique(predict_types)))
         }

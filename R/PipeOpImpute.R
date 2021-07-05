@@ -252,7 +252,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       if (length(model) == 1) {
         feature[is.na(feature)] = model
       } else {
-        outlen = sum(is.na(feature))
+        outlen = count_missing(feature)
         feature[is.na(feature)] = sample(model, outlen, replace = TRUE, prob = attr(model, "probabilities"))
       }
       feature

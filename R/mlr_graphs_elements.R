@@ -10,7 +10,6 @@
 #' * Imputes `factor` features using [`PipeOpImputeOOR`]
 #' * Encodes `factors` using `one-hot-encoding`. Factors with a cardinality > max_cardinality are
 #'   collapsed using [`PipeOpCollapseFactors`]
-#' * If `scaling`, numeric features are scaled to mean 0 and standard deviation 1
 #'
 #' The graph is built conservatively, i.e. the function always tries to assure everything works.
 #' If a learner is provided, some steps can be left out, i.e. if the learner can deal with

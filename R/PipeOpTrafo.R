@@ -592,7 +592,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         if (!is.null(pv$new_target_name)) {
           setnames(new_target, colnames(new_target), pv$new_target_name)
         }
-        self$state = keep(map(new_target, levels), Negate(is.null))
+        self$state = discard(map(new_target, levels), is.null)
         intask$cbind(new_target)
       } else {
         self$state = list()
