@@ -30,12 +30,12 @@ test_that("PipeOpColRoles - changing the role of a target fails", {
 
 test_that("PipeOpColRoles - functionality works", {
   task = mlr_tasks$get("iris")
-  op = PipeOpColRoles$new(param_vals = list(new_role = list(Petal.Length = c("name", "order"), Petal.Width = character())))
+  op = PipeOpColRoles$new(param_vals = list(new_role = list(Petal.Length = c("name", "order"), Petal.Width = character(0))))
   train_out = train_pipeop(op, inputs = list(task))$output
   col_roles_actual = train_out$col_roles
   col_roles_expected = list(
     feature = c("Sepal.Length", "Sepal.Width"), target = "Species", name = "Petal.Length",
-    order = "Petal.Length", stratum = character(), group = character(), weight = character())
+    order = "Petal.Length", stratum = character(0), group = character(0), weight = character(0))
   expect_equal(train_out$col_roles[names(col_roles_expected)], col_roles_expected)
   expect_equal(train_out$row_names$row_name, task$data(cols = "Petal.Length")[[1L]])
   expect_true("Petal.Width" %nin% colnames(train_out$data()))
