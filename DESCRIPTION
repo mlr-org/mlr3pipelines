@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.3.5
+Version: 0.3.5-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -81,6 +81,8 @@ Suggests:
     GenSA,
     methods,
     vtreat
+Remotes:
+    Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
