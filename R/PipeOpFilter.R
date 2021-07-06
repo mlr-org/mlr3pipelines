@@ -165,7 +165,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         frac = utils::head(names(scores), nfeat),
         permuted = {
           idx = wf(cumsum(startsWith(names(scores), ".__permuted__")) == critvalue)
-          head(names(scores), if (length(idx)) idx - 1L else Inf)
+          utils::head(names(scores), if (length(idx)) idx - 1L else Inf)
         },
         stop("unknown filter criterion"))
 
