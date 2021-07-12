@@ -1,6 +1,8 @@
 context("PipeOpVtreat")
 
 test_that("PipeOpVtreat - basic properties", {
+  skip_if_not_installed("vtreat")
+
   expect_pipeop(PipeOpVtreat$new())
 
   task_regr = mlr_tasks$get("boston_housing")
@@ -14,6 +16,8 @@ test_that("PipeOpVtreat - basic properties", {
 })
 
 test_that("PipeOpVtreat - Regression", {
+  skip_if_not_installed("vtreat")
+
   op = PipeOpVtreat$new()
 
   # clean task simply passes through
@@ -61,6 +65,8 @@ test_that("PipeOpVtreat - Regression", {
 })
 
 test_that("PipeOpVtreat - Binary Classification", {
+  skip_if_not_installed("vtreat")
+
   op = PipeOpVtreat$new()
 
   # clean task simply passes through
@@ -109,6 +115,8 @@ test_that("PipeOpVtreat - Binary Classification", {
 })
 
 test_that("PipeOpVtreat - Multiclass Classification", {
+  skip_if_not_installed("vtreat")
+
   op = PipeOpVtreat$new()
 
   # clean task simply passes through
@@ -157,6 +165,8 @@ test_that("PipeOpVtreat - Multiclass Classification", {
 })
 
 test_that("PipeOpVtreat - Edge Cases", {
+  skip_if_not_installed("vtreat")
+
   op = PipeOpVtreat$new()
 
   set.seed(3)

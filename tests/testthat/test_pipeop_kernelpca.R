@@ -2,6 +2,8 @@ context("PipeOpKernelPCA")
 
 
 test_that("PipeOpKernelPCA - basic properties", {
+  skip_if_not_installed("kernlab")
+
   task = mlr_tasks$get("iris")
 
   expect_datapreproc_pipeop_class(PipeOpKernelPCA, task = task,
@@ -17,6 +19,8 @@ test_that("PipeOpKernelPCA - basic properties", {
 })
 
 test_that("PipeOpKernelPCA - compare to kernlab::kpca", {
+  skip_if_not_installed("kernlab")
+
   task = mlr_tasks$get("iris")
   op = PipeOpKernelPCA$new()
   expect_pipeop(op)
