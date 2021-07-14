@@ -76,8 +76,8 @@ jobs:
         uses: pat-s/always-upload-cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
-          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
+          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{matrix.config.mlr3 }}-${{steps.date.outputs.date}}
+          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-${{matrix.config.mlr3 }}-${{steps.date.outputs.date}}
 
       - name: "[Stage] [Linux] Install required system libs"
         if: runner.os == 'Linux'
