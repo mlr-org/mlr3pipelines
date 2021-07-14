@@ -124,7 +124,7 @@ test_that("graphlearner parameters behave as they should", {
 
   gl$param_set$values$classif.debug.warning_predict = 0
 
-  expect_mapequal(gl$param_set$values, 
+  expect_equal(gl$param_set$values,
     list(classif.debug.message_predict = 0, classif.debug.message_train = 1, classif.debug.warning_predict = 0, classif.debug.warning_train = 1))
 })
 
