@@ -431,3 +431,60 @@ pipeline_ovr = function(graph) {
 }
 
 mlr_graphs$add("ovr", pipeline_ovr)
+
+
+#' @title Create A Graph to Perform Stacking.
+#' 
+#' @description 
+#' Create a new [`Graph`] for stacking. A stacked learner uses predictions of
+#' several base learners and fits a super learner using these predictions as
+#' features in order to predict the outcome.
+#' 
+#' @param base_learners list of [mlr3::Learner]\cr
+#' A list of base learners.
+#' @param super_learner [mlr3::Learner]\cr
+#' The super learner that makes the final prediction based on the base learners.
+#' @param method `character(1)`\cr
+#' `"cv"` for building a super learner using cross-validated predictions of the
+#' base learners or `"insample"` for building a super learner using the
+#' predictions of the base learners trained on all trainig data.
+#' @param folds `ìnteger(1)`\cr
+#' Number of cross-validation folds. Only used for `method = "cv"`.
+#' @param use_features `logical(1)`\cr
+#' Whether the original features should also be passed to the super learner.
+#' @return [`Graph`]
+#' 
+#' @export 
+#' @examples
+#' if (requireNamespace("ranger") && requireNamespace("kknn")) {
+#' library(mlr3)
+#' library(mlr3learners)
+#' 
+#' base_learners = list(
+#'   lrn("classif.ranger", predict_type = "prob"),
+#'   lrn("classif.kknn", predict_type = "prob")
+#' )
+#' super_learner = lrn("classif.log_reg")
+#' 
+#' graph_stack = pipeline_stacking(base_learners, super_learner)
+#' graph_learner = as_learner(graph_stack)
+#' graph_learner$train(tsk("iris"))
+#' }
+pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3, use_features = TRUE) {
+  assert_learners(base_learners)
+  assert_learner(super_learner)
+  assert_choice(method, c("cv", "insample"))
+  assert_flag(use_features)
+
+  base_learners_cv = map(base_learners, function(learner) {
+    po("learner_cv", learner, resampling.method = method, resampling.folds = folds)
+  })
+
+  if (use_features) base_learners_cv = c(base_learners_cv, po("nop"))
+
+  gunion(base_learners_cv) %>>%
+     po("featureunion") %>>%
+     super_learner
+}
+
+mlr_graphs$add("stacking", pipeline_stacking)
