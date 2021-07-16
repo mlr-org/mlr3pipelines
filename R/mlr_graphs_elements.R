@@ -456,12 +456,12 @@ mlr_graphs$add("ovr", pipeline_ovr)
 #' 
 #' @export 
 #' @examples
-#' if (requireNamespace("ranger") && requireNamespace("kknn")) {
+#' if (requireNamespace("kknn")) {
 #' library(mlr3)
 #' library(mlr3learners)
 #' 
 #' base_learners = list(
-#'   lrn("classif.ranger", predict_type = "prob"),
+#'   lrn("classif.rpart", predict_type = "prob"),
 #'   lrn("classif.kknn", predict_type = "prob")
 #' )
 #' super_learner = lrn("classif.log_reg")
