@@ -440,18 +440,19 @@ mlr_graphs$add("ovr", pipeline_ovr)
 #' several base learners and fits a super learner using these predictions as
 #' features in order to predict the outcome.
 #' 
-#' @param base_learners list of [mlr3::Learner]\cr
-#' A list of base learners.
-#' @param super_learner [mlr3::Learner]\cr
-#' The super learner that makes the final prediction based on the base learners.
+#' @param base_learners `list` of [`Learner`][mlr3::Learner]\cr
+#'   A list of base learners.
+#' @param super_learner [`Learner`][mlr3::Learner]\cr
+#'   The super learner that makes the final prediction based on the base learners.
 #' @param method `character(1)`\cr
-#' `"cv"` for building a super learner using cross-validated predictions of the
-#' base learners or `"insample"` for building a super learner using the
-#' predictions of the base learners trained on all trainig data.
+#'   `"cv"` (default) for building a super learner using cross-validated predictions of the
+#'   base learners or `"insample"` for building a super learner using the
+#'   predictions of the base learners trained on all trainig data.
 #' @param folds `ìnteger(1)`\cr
-#' Number of cross-validation folds. Only used for `method = "cv"`.
+#'   Number of cross-validation folds. Only used for `method = "cv"`. Default 3.
 #' @param use_features `logical(1)`\cr
-#' Whether the original features should also be passed to the super learner.
+#'   Whether the original features should also be passed to the super learner.
+#'   Default `TRUE`.
 #' @return [`Graph`]
 #' 
 #' @export 
@@ -476,9 +477,9 @@ pipeline_stacking = function(base_learners, super_learner, method = "cv", folds 
   assert_choice(method, c("cv", "insample"))
   assert_flag(use_features)
 
-  base_learners_cv = map(base_learners, function(learner) {
-    po("learner_cv", learner, resampling.method = method, resampling.folds = folds)
-  })
+  base_learners_cv = map(base_learners, po,
+    .obj = "learner_cv", resampling.method = method, resampling.folds = folds
+  )
 
   if (use_features) base_learners_cv = c(base_learners_cv, po("nop"))
 
