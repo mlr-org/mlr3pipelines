@@ -447,7 +447,7 @@ mlr_graphs$add("ovr", pipeline_ovr)
 #' @param method `character(1)`\cr
 #'   `"cv"` (default) for building a super learner using cross-validated predictions of the
 #'   base learners or `"insample"` for building a super learner using the
-#'   predictions of the base learners trained on all trainig data.
+#'   predictions of the base learners trained on all training data.
 #' @param folds `ìnteger(1)`\cr
 #'   Number of cross-validation folds. Only used for `method = "cv"`. Default 3.
 #' @param use_features `logical(1)`\cr
