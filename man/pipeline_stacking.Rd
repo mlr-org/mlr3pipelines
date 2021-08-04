@@ -13,22 +13,23 @@ pipeline_stacking(
 )
 }
 \arguments{
-\item{base_learners}{list of \link[mlr3:Learner]{mlr3::Learner}\cr
+\item{base_learners}{\code{list} of \code{\link[mlr3:Learner]{Learner}}\cr
 A list of base learners.}
 
-\item{super_learner}{\link[mlr3:Learner]{mlr3::Learner}\cr
+\item{super_learner}{\code{\link[mlr3:Learner]{Learner}}\cr
 The super learner that makes the final prediction based on the base learners.}
 
 \item{method}{\code{character(1)}\cr
-\code{"cv"} for building a super learner using cross-validated predictions of the
+\code{"cv"} (default) for building a super learner using cross-validated predictions of the
 base learners or \code{"insample"} for building a super learner using the
-predictions of the base learners trained on all trainig data.}
+predictions of the base learners trained on all training data.}
 
 \item{folds}{\code{ìnteger(1)}\cr
-Number of cross-validation folds. Only used for \code{method = "cv"}.}
+Number of cross-validation folds. Only used for \code{method = "cv"}. Default 3.}
 
 \item{use_features}{\code{logical(1)}\cr
-Whether the original features should also be passed to the super learner.}
+Whether the original features should also be passed to the super learner.
+Default \code{TRUE}.}
 }
 \value{
 \code{\link{Graph}}
