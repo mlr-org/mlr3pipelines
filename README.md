@@ -1,6 +1,5 @@
 
-mlr3pipelines <img src="man/figures/logo.png" align="right" />
-==============================================================
+# mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
 Package website: [release](https://mlr3pipelines.mlr-org.com/) \|
 [dev](https://mlr3pipelines.mlr-org.com/dev/)
@@ -15,8 +14,7 @@ Dataflow Programming for Machine Learning in R.
 [![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
 <!-- badges: end -->
 
-What is `mlr3pipelines`?
-------------------------
+## What is `mlr3pipelines`?
 
 Watch our “WhyR 2020” Webinar Presentation on Youtube for an
 introduction! Find the slides
@@ -39,28 +37,33 @@ processing units.
 In principle, *mlr3pipelines* is about defining singular data and model
 manipulation steps as “PipeOps”:
 
-    pca        = po("pca")
-    filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
-    learner_po = po("learner", learner = lrn("classif.rpart"))
+``` r
+pca        = po("pca")
+filter     = po("filter", filter = mlr3filters::flt("variance"), filter.frac = 0.5)
+learner_po = po("learner", learner = lrn("classif.rpart"))
+```
 
 These pipeops can then be combined together to define machine learning
 pipelines. These can be wrapped in a `GraphLearner` that behave like any
 other `Learner` in `mlr3`.
 
-    graph = pca %>>% filter %>>% learner_po
-    glrn = GraphLearner$new(graph)
+``` r
+graph = pca %>>% filter %>>% learner_po
+glrn = GraphLearner$new(graph)
+```
 
 This learner can be used for resampling, benchmarking, and even tuning.
 
-    resample(tsk("iris"), glrn, rsmp("cv"))
-    #> <ResampleResult> of 10 iterations
-    #> * Task: iris
-    #> * Learner: pca.variance.classif.rpart
-    #> * Warnings: 0 in 0 iterations
-    #> * Errors: 0 in 0 iterations
+``` r
+resample(tsk("iris"), glrn, rsmp("cv"))
+#> <ResampleResult> of 10 iterations
+#> * Task: iris
+#> * Learner: pca.variance.classif.rpart
+#> * Warnings: 0 in 0 iterations
+#> * Errors: 0 in 0 iterations
+```
 
-Feature Overview
-----------------
+## Feature Overview
 
 Single computational steps can be represented as so-called **PipeOps**,
 which can then be connected with directed edges in a **Graph**. The
@@ -76,8 +79,7 @@ are:
     by hyperparameters)
 -   Ensemble methods and aggregation of predictions
 
-Documentation
--------------
+## Documentation
 
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
@@ -85,8 +87,7 @@ shipped with the package, which can also be viewed online:
 -   [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
 
-Bugs, Questions, Feedback
--------------------------
+## Bugs, Questions, Feedback
 
 *mlr3pipelines* is a free and open source software project that
 encourages participation and feedback. If you have any issues,
@@ -102,8 +103,23 @@ response may sometimes be delayed by a few days, and some feature
 suggestions may be rejected if they are deemed too tangential to the
 vision behind the project.
 
-Similar Projects
-----------------
+## Citing mlr3pipelines
+
+If you use mlr3pipelines, please cite our [JMLR
+article](http://jmlr.org/papers/v22/21-0281.html):
+
+    @Article{mlr3pipelines,
+      title = {{mlr3pipelines} - Flexible Machine Learning Pipelines in R},
+      author = {Martin Binder and Florian Pfisterer and Michel Lang and Lennart Schneider and Lars Kotthoff and Bernd Bischl},
+      journal = {Journal of Machine Learning Research},
+      year = {2021},
+      volume = {22},
+      number = {184},
+      pages = {1-7},
+      url = {http://jmlr.org/papers/v22/21-0281.html},
+    }
+
+## Similar Projects
 
 A predecessor to this package is the
 [*mlrCPO*-package](https://github.com/mlr-org/mlrCPO), which works with
