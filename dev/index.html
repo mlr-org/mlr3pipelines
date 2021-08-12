@@ -119,19 +119,22 @@
 <p><a href="https://www.youtube.com/watch?v=4r8K3GO5wk4"><img src="https://img.youtube.com/vi/4r8K3GO5wk4/0.jpg" alt="WhyR 2020 mlr3pipelines"></a></p>
 <p><strong><code>mlr3pipelines</code></strong> is a <a href="https://en.wikipedia.org/wiki/Dataflow_programming">dataflow programming</a> toolkit for machine learning in R utilising the <strong><a href="https://github.com/mlr-org/mlr3">mlr3</a></strong> package. Machine learning workflows can be written as directed “Graphs” that represent data flows between preprocessing, model fitting, and ensemble learning units in an expressive and intuitive language. Using methods from the <strong><a href="https://github.com/mlr-org/mlr3tuning">mlr3tuning</a></strong> package, it is even possible to simultaneously optimize parameters of multiple processing units.</p>
 <p>In principle, <em>mlr3pipelines</em> is about defining singular data and model manipulation steps as “PipeOps”:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pca        =<span class="st"> </span><span class="kw">po</span>(<span class="st">"pca"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>filter     =<span class="st"> </span><span class="kw">po</span>(<span class="st">"filter"</span>, <span class="dt">filter =</span> mlr3filters<span class="op">::</span><span class="kw">flt</span>(<span class="st">"variance"</span>), <span class="dt">filter.frac =</span> <span class="fl">0.5</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>learner_po =<span class="st"> </span><span class="kw">po</span>(<span class="st">"learner"</span>, <span class="dt">learner =</span> <span class="kw">lrn</span>(<span class="st">"classif.rpart"</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pca</span>        <span class="op">=</span> <span class="fu"><a href="reference/po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span>
+<span class="va">filter</span>     <span class="op">=</span> <span class="fu"><a href="reference/po.html">po</a></span><span class="op">(</span><span class="st">"filter"</span>, filter <span class="op">=</span> <span class="fu">mlr3filters</span><span class="fu">::</span><span class="fu"><a href="https://mlr3filters.mlr-org.com/reference/flt.html">flt</a></span><span class="op">(</span><span class="st">"variance"</span><span class="op">)</span>, filter.frac <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">learner_po</span> <span class="op">=</span> <span class="fu"><a href="reference/po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, learner <span class="op">=</span> <span class="fu">lrn</span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>These pipeops can then be combined together to define machine learning pipelines. These can be wrapped in a <code>GraphLearner</code> that behave like any other <code>Learner</code> in <code>mlr3</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>graph =<span class="st"> </span>pca <span class="op">%&gt;&gt;%</span><span class="st"> </span>filter <span class="op">%&gt;&gt;%</span><span class="st"> </span>learner_po</span>
-<span id="cb2-2"><a href="#cb2-2"></a>glrn =<span class="st"> </span>GraphLearner<span class="op">$</span><span class="kw">new</span>(graph)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">graph</span> <span class="op">=</span> <span class="va">pca</span> <span class="op">%&gt;&gt;%</span> <span class="va">filter</span> <span class="op">%&gt;&gt;%</span> <span class="va">learner_po</span>
+<span class="va">glrn</span> <span class="op">=</span> <span class="va"><a href="reference/mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span></code></pre></div>
 <p>This learner can be used for resampling, benchmarking, and even tuning.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">resample</span>(<span class="kw">tsk</span>(<span class="st">"iris"</span>), glrn, <span class="kw">rsmp</span>(<span class="st">"cv"</span>))</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; * Task: iris</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; * Learner: pca.variance.classif.rpart</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; * Errors: 0 in 0 iterations</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">resample</span><span class="op">(</span><span class="fu">tsk</span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span>, <span class="va">glrn</span>, <span class="fu">rsmp</span><span class="op">(</span><span class="st">"cv"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span>
+<span class="co">#&gt; * Task: iris</span>
+<span class="co">#&gt; * Learner: pca.variance.classif.rpart</span>
+<span class="co">#&gt; * Warnings: 0 in 0 iterations</span>
+<span class="co">#&gt; * Errors: 0 in 0 iterations</span></code></pre></div>
 </div>
 <div id="feature-overview" class="section level2">
 <h2 class="hasAnchor">
@@ -162,6 +165,21 @@
 <p><em>mlr3pipelines</em> is a free and open source software project that encourages participation and feedback. If you have any issues, questions, suggestions or feedback, please do not hesitate to open an “issue” about it on the GitHub page!</p>
 <p>In case of problems / bugs, it is often helpful if you provide a “minimum working example” that showcases the behaviour (but don’t worry about this if the bug is obvious).</p>
 <p>Please understand that the resources of the project are limited: response may sometimes be delayed by a few days, and some feature suggestions may be rejected if they are deemed too tangential to the vision behind the project.</p>
+</div>
+<div id="citing-mlr3pipelines" class="section level2">
+<h2 class="hasAnchor">
+<a href="#citing-mlr3pipelines" class="anchor"></a>Citing mlr3pipelines</h2>
+<p>If you use mlr3pipelines, please cite our <a href="http://jmlr.org/papers/v22/21-0281.html">JMLR article</a>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">@</span>Article{mlr3pipelines,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  title =<span class="st"> </span>{{mlr3pipelines} <span class="op">-</span><span class="st"> </span>Flexible Machine Learning Pipelines <span class="cf">in</span> R},</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  author =<span class="st"> </span>{Martin Binder and Florian Pfisterer and Michel Lang and Lennart Schneider and Lars Kotthoff and Bernd Bischl},</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  journal =<span class="st"> </span>{Journal of Machine Learning Research},</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  year =<span class="st"> </span>{<span class="dv">2021</span>},</span>
+<span id="cb4-6"><a href="#cb4-6"></a>  volume =<span class="st"> </span>{<span class="dv">22</span>},</span>
+<span id="cb4-7"><a href="#cb4-7"></a>  number =<span class="st"> </span>{<span class="dv">184</span>},</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  pages =<span class="st"> </span>{<span class="dv">1-7</span>},</span>
+<span id="cb4-9"><a href="#cb4-9"></a>  url =<span class="st"> </span>{http<span class="op">:</span><span class="er">//</span>jmlr.org<span class="op">/</span>papers<span class="op">/</span>v22<span class="op">/</span><span class="dv">21</span><span class="fl">-0281.</span>html},</span>
+<span id="cb4-10"><a href="#cb4-10"></a>}</span></code></pre></div>
 </div>
 <div id="similar-projects" class="section level2">
 <h2 class="hasAnchor">
