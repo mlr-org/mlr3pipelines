@@ -35,7 +35,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 
 The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{bins} :: \code{list} \cr
+\item \code{breaks} :: \code{list} \cr
 List of intervals representing the bins for each numeric feature.
 }
 }
@@ -44,7 +44,7 @@ List of intervals representing the bins for each numeric feature.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{bins} :: \code{character(1)} | \code{numeric} | \code{function} \cr
+\item \code{breaks} :: \code{character(1)} | \code{numeric} | \code{function} \cr
 Either a \code{character(1)} string naming an algorithm to compute the number of cells,
 a \code{numeric(1)} giving the number of breaks for the histogram,
 a vector \code{numeric} giving the breakpoints between the histogram cells, or
