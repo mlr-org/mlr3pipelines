@@ -168,30 +168,31 @@ features in order to predict the outcome.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>base_learners</th>
-      <td><p>list of <a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a><br />
+      <td><p><code>list</code> of <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code><br />
 A list of base learners.</p></td>
     </tr>
     <tr>
       <th>super_learner</th>
-      <td><p><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a><br />
+      <td><p><code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code><br />
 The super learner that makes the final prediction based on the base learners.</p></td>
     </tr>
     <tr>
       <th>method</th>
       <td><p><code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
-<code>"cv"</code> for building a super learner using cross-validated predictions of the
+<code>"cv"</code> (default) for building a super learner using cross-validated predictions of the
 base learners or <code>"insample"</code> for building a super learner using the
-predictions of the base learners trained on all trainig data.</p></td>
+predictions of the base learners trained on all training data.</p></td>
     </tr>
     <tr>
       <th>folds</th>
       <td><p><code>ìnteger(1)</code><br />
-Number of cross-validation folds. Only used for <code>method = "cv"</code>.</p></td>
+Number of cross-validation folds. Only used for <code>method = "cv"</code>. Default 3.</p></td>
     </tr>
     <tr>
       <th>use_features</th>
       <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Whether the original features should also be passed to the super learner.</p></td>
+Whether the original features should also be passed to the super learner.
+Default <code>TRUE</code>.</p></td>
     </tr>
     </table>
 
