@@ -80,6 +80,13 @@ In case of problems / bugs, it is often helpful if you provide a "minimum workin
 
 Please understand that the resources of the project are limited: response may sometimes be delayed by a few days, and some feature suggestions may be rejected if they are deemed too tangential to the vision behind the project.
 
+## Citing mlr3pipelines
+
+If you use mlr3pipelines, please cite our [JMLR article](http://jmlr.org/papers/v22/21-0281.html):
+```{r echo = FALSE, comment = ""}
+toBibtex(citation("mlr3pipelines"))
+```
+
 ## Similar Projects
 
 A predecessor to this package is the [*mlrCPO*-package](https://github.com/mlr-org/mlrCPO), which works with *mlr* 2.x. Other packages that provide, to varying degree, some preprocessing functionality or machine learning domain specific language, are the *[caret](https://github.com/topepo/caret)* package and the related *[recipes](https://recipes.tidymodels.org/)* project, and the *[dplyr](https://github.com/tidyverse/dplyr)* package.
