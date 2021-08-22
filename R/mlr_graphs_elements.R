@@ -434,12 +434,12 @@ mlr_graphs$add("ovr", pipeline_ovr)
 
 
 #' @title Create A Graph to Perform Stacking.
-#' 
-#' @description 
+#'
+#' @description
 #' Create a new [`Graph`] for stacking. A stacked learner uses predictions of
 #' several base learners and fits a super learner using these predictions as
 #' features in order to predict the outcome.
-#' 
+#'
 #' @param base_learners `list` of [`Learner`][mlr3::Learner]\cr
 #'   A list of base learners.
 #' @param super_learner [`Learner`][mlr3::Learner]\cr
@@ -454,22 +454,22 @@ mlr_graphs$add("ovr", pipeline_ovr)
 #'   Whether the original features should also be passed to the super learner.
 #'   Default `TRUE`.
 #' @return [`Graph`]
-#' 
-#' @export 
+#'
+#' @export
 #' @examples
 #' if (requireNamespace("kknn")) {
 #' library(mlr3)
 #' library(mlr3learners)
-#' 
+#'
 #' base_learners = list(
 #'   lrn("classif.rpart", predict_type = "prob"),
 #'   lrn("classif.kknn", predict_type = "prob")
 #' )
 #' super_learner = lrn("classif.log_reg")
-#' 
+#'
 #' graph_stack = pipeline_stacking(base_learners, super_learner)
 #' graph_learner = as_learner(graph_stack)
-#' graph_learner$train(tsk("iris"))
+#' graph_learner$train(tsk("pima"))
 #' }
 pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3, use_features = TRUE) {
   assert_learners(base_learners)

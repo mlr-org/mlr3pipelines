@@ -52,6 +52,6 @@ super_learner = lrn("classif.log_reg")
 
 graph_stack = pipeline_stacking(base_learners, super_learner)
 graph_learner = as_learner(graph_stack)
-graph_learner$train(tsk("iris"))
+graph_learner$train(tsk("pima"))
 }
 }
