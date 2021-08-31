@@ -109,6 +109,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
       }
+      if (name == "state") {
+        value$log = copy(value$log)
+      }
       value
     },
 

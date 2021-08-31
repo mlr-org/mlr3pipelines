@@ -4,7 +4,7 @@ test_that("Multiplicity class and methods", {
   mp = Multiplicity(0)
   expect_multiplicity(mp)
   expect_equal(mp, as.Multiplicity(0))
-  expect_error(assert_multiplicity(0, .var.name = "x"), regexp = "Must inherit from class 'Multiplicity'")
+  expect_error(assert_multiplicity(0, .var.name = "x"), regexp = "inherit from class 'Multiplicity'")
   expect_multiplicity(assert_multiplicity(mp))
   nmp = Multiplicity(Multiplicity(0))
   expect_multiplicity(assert_multiplicity(nmp))

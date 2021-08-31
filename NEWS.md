@@ -1,5 +1,8 @@
 # mlr3pipelines 0.3.5-9000
 
+# mlr3pipelines 0.3.5-1
+
+* Fixed: Compatibility with upcoming mlr3 version.
 
 # mlr3pipelines 0.3.5
 
