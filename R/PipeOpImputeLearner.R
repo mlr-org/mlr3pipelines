@@ -122,16 +122,20 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     .learner = NULL,
 
     .train_imputer = function(feature, type, context) {
-      on.exit({private$.learner$state = NULL})
+      on.exit({
+        private$.learner$state = NULL
+      })
       task = private$.create_imputation_task(feature, context)
       private$.learner$train(task, row_ids = which(!is.na(feature)))$state
     },
 
     .impute = function(feature, type, model, context) {
-      if (is.atomic(model)) {  # handle nullmodel, making use of the fact that `Learner$state` is always a list
+      if (is.atomic(model)) { # handle nullmodel, making use of the fact that `Learner$state` is always a list
         return(super$.impute(feature, type, model, context))
       }
-      on.exit({private$.learner$state = NULL})
+      on.exit({
+        private$.learner$state = NULL
+      })
 
       private$.learner$state = model
 
@@ -168,7 +172,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
 
     .convert_to_type = function(feature, type) {
       # Convert an imputed feature to its original type
-      if(type == "integer"){
+      if (type == "integer") {
         feature = round(feature)
       }
       if (type == "logical") feature = as.logical(feature) # FIXME mlr-org/mlr3#475

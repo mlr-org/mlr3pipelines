@@ -40,7 +40,7 @@ as_graph = function(x, clone = FALSE) {
 
 #' @export
 as_graph.default = function(x, clone = FALSE) {
-  x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically for convertability
+  x = Graph$new()$add_pipeop(x) # add_pipeop checks automatically for convertability
   if (clone) {
     x = x$clone(deep = TRUE)
   }
@@ -49,7 +49,7 @@ as_graph.default = function(x, clone = FALSE) {
 
 #' @export
 as_graph.list = function(x, clone = FALSE) {
-  gunion(x)  # gunion itself will convert individual members of x
+  gunion(x) # gunion itself will convert individual members of x
 }
 
 #' @export
@@ -122,4 +122,3 @@ as_pipeop.Learner = function(x, clone = FALSE) {
 as_pipeop.Filter = function(x, clone = FALSE) {
   PipeOpFilter$new(x)
 }
-

@@ -121,15 +121,14 @@ test_that("Autoconversion utility functions work", {
 
   register_autoconvert_function("test_hyperclass", bfun)
 
-  expect_identical(get_autoconverter("test_subclass")$fun, bfun)  # does the test_hyperclass conversion, because subclass before superclass
-  expect_identical(get_autoconverter("test_superclass")$fun, afun)  # converts to "test", because distance to "test_hyperclass" is larger
-  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun)  # actually registered to bfun
-  expect_identical(get_autoconverter("test_megaclass")$fun, bfun)  # converts to "test_hyperclass" because distance to "test" is larger
+  expect_identical(get_autoconverter("test_subclass")$fun, bfun) # does the test_hyperclass conversion, because subclass before superclass
+  expect_identical(get_autoconverter("test_superclass")$fun, afun) # converts to "test", because distance to "test_hyperclass" is larger
+  expect_identical(get_autoconverter("test_hyperclass")$fun, bfun) # actually registered to bfun
+  expect_identical(get_autoconverter("test_megaclass")$fun, bfun) # converts to "test_hyperclass" because distance to "test" is larger
 
-  reset_autoconvert_register()  # check that reset actually empties the register to default
+  reset_autoconvert_register() # check that reset actually empties the register to default
 
   expect_set_equal(map_chr(default_acr, 1), names(autoconvert_register))
-
 
 })
 
@@ -148,10 +147,11 @@ test_that("Autoconversion for pipeops works", {
 
   po1 = R6Class("test", inherit = PipeOp,
     public = list(
-      initialize = function()
+      initialize = function() {
         super$initialize("test",
           input = data.table(name = "in", train = "*", predict = "*"),
-          output = data.table(name = "out", train = "Task", predict  = "Task"))),
+          output = data.table(name = "out", train = "Task", predict = "Task"))
+      }),
     private = list(
       .train = function(...) {
         self$state = list()
@@ -160,11 +160,13 @@ test_that("Autoconversion for pipeops works", {
       .predict = function(...) list(tsk("iris"))
     )
   )$new()
-  po2 <- R6Class("test", inherit = PipeOp,
+  po2 = R6Class("test", inherit = PipeOp,
     public = list(
-      initialize = function() super$initialize("test2",
-        input = data.table(name = "in", train = "NULL", predict = "Task"),
-        output = data.table(name = "out", train = "*", predict = "*"))),
+      initialize = function() {
+        super$initialize("test2",
+          input = data.table(name = "in", train = "NULL", predict = "Task"),
+          output = data.table(name = "out", train = "*", predict = "*"))
+      }),
     private = list(
       .train = function(inp) self$state = inp,
       .predict = function(inp) inp

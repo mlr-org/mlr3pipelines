@@ -62,15 +62,15 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
   }
 
   # Date processing
-   if (has_type_feats("POSIXct") && ("POSIXct" %nin% learner$feature_types)) {
-     pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
-   }
+  if (has_type_feats("POSIXct") && ("POSIXct" %nin% learner$feature_types)) {
+    pos = c(pos, po("datefeatures", param_vals = list(affect_columns = selector_type("POSIXct"))))
+  }
 
   if (impute_missings) {
     # Impute numerics
     if (has_type_feats(c("numeric", "integer"))) {
       type = if (is.null(learner)) {
-        "factor"  # default to factor as in PipeOpMissInd anyways
+        "factor" # default to factor as in PipeOpMissInd anyways
       } else {
         types = c("factor", "integer", "logical", "numeric")
         type_candidates = intersect(types, learner$feature_types)
@@ -78,14 +78,14 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
           stopf("Learner %s does not support any of the feature types needed for missing indicator columns: %s.",
             learner$id, paste0(types, collapse = ", "))
         } else {
-          type_candidates[[1]]  # just take the first supported type
+          type_candidates[[1]] # just take the first supported type
         }
       }
       pos = c(pos,
         gunion(list(
           po("imputehist"),
           po("missind", param_vals = list(affect_columns = selector_type(c("numeric", "integer")), type = type)))) %>>%
-        po("featureunion"))
+          po("featureunion"))
     }
     # Impute factors
     if (has_type_feats(c("factor", "ordered", "character"))) {
@@ -268,7 +268,7 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
     pmap(list(
       src_id = branch_id, dst_id = gin$op.id,
       src_channel = branch_chan, dst_channel = gin$channel.name),
-      graph$add_edge)
+    graph$add_edge)
   })
   graph
 }
@@ -304,15 +304,13 @@ mlr_graphs$add("branch", pipeline_branch)
 #'
 #' tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
-#' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+#' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2^x$response)
 #'
 #' # gives the same as
 #' g = Graph$new()
 #' g$add_pipeop(PipeOpTargetMutate$new(param_vals = list(
 #'   trafo = function(x) log(x, base = 2),
-#'   inverter = function(x) list(response = 2 ^ x$response))
-#'   )
-#' )
+#'   inverter = function(x) list(response = 2^x$response))))
 #' g$add_pipeop(LearnerRegrRpart$new())
 #' g$add_pipeop(PipeOpTargetInvert$new())
 #' g$add_edge(src_id = "targetmutate", dst_id = "targetinvert",
@@ -458,18 +456,18 @@ mlr_graphs$add("ovr", pipeline_ovr)
 #' @export
 #' @examples
 #' if (requireNamespace("kknn")) {
-#' library(mlr3)
-#' library(mlr3learners)
+#'   library(mlr3)
+#'   library(mlr3learners)
 #'
-#' base_learners = list(
-#'   lrn("classif.rpart", predict_type = "prob"),
-#'   lrn("classif.kknn", predict_type = "prob")
-#' )
-#' super_learner = lrn("classif.log_reg")
+#'   base_learners = list(
+#'     lrn("classif.rpart", predict_type = "prob"),
+#'     lrn("classif.kknn", predict_type = "prob")
+#'   )
+#'   super_learner = lrn("classif.log_reg")
 #'
-#' graph_stack = pipeline_stacking(base_learners, super_learner)
-#' graph_learner = as_learner(graph_stack)
-#' graph_learner$train(tsk("german_credit"))
+#'   graph_stack = pipeline_stacking(base_learners, super_learner)
+#'   graph_learner = as_learner(graph_stack)
+#'   graph_learner$train(tsk("german_credit"))
 #' }
 pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3, use_features = TRUE) {
   assert_learners(base_learners)
@@ -484,8 +482,8 @@ pipeline_stacking = function(base_learners, super_learner, method = "cv", folds 
   if (use_features) base_learners_cv = c(base_learners_cv, po("nop"))
 
   gunion(base_learners_cv) %>>%
-     po("featureunion") %>>%
-     super_learner
+    po("featureunion") %>>%
+    super_learner
 }
 
 mlr_graphs$add("stacking", pipeline_stacking)

@@ -118,8 +118,8 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         state$control = sapply(colnames(dt), function(cname) {
           sapply(state$target_levels, function(lvl) {
             private$fit_lmer(dt[[cname]], bin_targets[[lvl]], self$param_set$values$fast_optim, task_type)
-            }, simplify = FALSE)
           }, simplify = FALSE)
+        }, simplify = FALSE)
       }
       # FIXME: We currently do not implement cross-validated encodings
       state
@@ -178,7 +178,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
     get_coefs = function(mod) {
       coefs = invoke(stats::coef, mod, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))$lvl
       lvls = rownames(coefs)
-      coefs = coefs[,1]
+      coefs = coefs[, 1]
       names(coefs) = lvls
       intercept = unname(lme4::fixef(mod))
       # replace missing coefs with intercept value

@@ -64,10 +64,10 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
   public = list(
     initialize = function(id = "removeconstants", param_vals = list()) {
       ps = ParamSet$new(list(
-          ParamDbl$new("ratio", lower = 0, upper = 1, tags = c("train", "required", "constant_check")),
-          ParamDbl$new("rel_tol", lower = 0, tags = c("required", "constant_check", "train")),
-          ParamDbl$new("abs_tol", lower = 0, tags = c("required", "constant_check", "train")),
-          ParamLgl$new("na_ignore", tags = c("train", "required", "constant_check"))
+        ParamDbl$new("ratio", lower = 0, upper = 1, tags = c("train", "required", "constant_check")),
+        ParamDbl$new("rel_tol", lower = 0, tags = c("required", "constant_check", "train")),
+        ParamDbl$new("abs_tol", lower = 0, tags = c("required", "constant_check", "train")),
+        ParamLgl$new("na_ignore", tags = c("train", "required", "constant_check"))
       ))
       ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify")
@@ -94,9 +94,13 @@ is_constant_enough = function(x, ratio, rel_tol, abs_tol, na_ignore) {
   if (na_ignore) {
     x = x[!is.na(x)]
   }
-  if (!length(x)) return(TRUE)
+  if (!length(x)) {
+    return(TRUE)
+  }
   required_size = length(x) - floor(length(x) * ratio)
-  if (required_size <= 1) return(TRUE)
+  if (required_size <= 1) {
+    return(TRUE)
+  }
 
   if (is.numeric(x)) {
     # consider non-finite values first (as if they are distinct)
@@ -104,7 +108,9 @@ is_constant_enough = function(x, ratio, rel_tol, abs_tol, na_ignore) {
     x_nonf = x[!is.finite(x)]
     if (length(x_nonf)) {
       tbl = as.data.table(x_nonf)[, .N, by = list(x_nonf)]
-      if (max(tbl$N) >= required_size) return(TRUE)
+      if (max(tbl$N) >= required_size) {
+        return(TRUE)
+      }
     }
 
     # now consider finite values: sort them and see if items that are

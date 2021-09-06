@@ -12,7 +12,7 @@ bibentries = c(
     journal   = "Journal of Artificial Intelligence Research"
   ),
 
-  ding_2010   = bibentry("article",
+  ding_2010 = bibentry("article",
     author    = "Yufeng Ding and Jeffrey S. Simonoff",
     title     = "An Investigation of Missing Data Methods for Classification Trees Applied to Binary Response Data",
     journal   = "Journal of Machine Learning Research",
@@ -30,7 +30,7 @@ bibentries = c(
     school    = "UC Berkeley"
   ),
 
-  thomas2017  = bibentry("article",
+  thomas2017 = bibentry("article",
     doi       = "10.1155/2017/1421409",
     year      = "2017",
     publisher = "Hindawi Limited",
@@ -41,7 +41,7 @@ bibentries = c(
     journal   = "Computational and Mathematical Methods in Medicine"
   ),
 
-  wu2007      = bibentry("article",
+  wu2007 = bibentry("article",
     doi       = "10.1198/016214506000000843",
     year      = "2007",
     month     = "3",

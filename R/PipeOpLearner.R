@@ -134,7 +134,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     .learner = NULL,
 
     .train = function(inputs) {
-      on.exit({private$.learner$state = NULL})
+      on.exit({
+        private$.learner$state = NULL
+      })
       task = inputs[[1L]]
       self$state = private$.learner$train(task)$state
 
@@ -142,7 +144,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     },
 
     .predict = function(inputs) {
-      on.exit({private$.learner$state = NULL})
+      on.exit({
+        private$.learner$state = NULL
+      })
       task = inputs[[1]]
       private$.learner$state = self$state
       list(private$.learner$predict(task))

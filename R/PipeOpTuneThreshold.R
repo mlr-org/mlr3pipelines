@@ -89,7 +89,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       )
     },
     train = function(input) {
-      if(!all(input[[1]]$feature_types$type == "numeric")) {
+      if (!all(input[[1]]$feature_types$type == "numeric")) {
         stop("PipeOpTuneThreshold requires predicted probabilities! Set learner predict_type to 'prob'")
       }
       pred = private$.task_to_prediction(input[[1]])
@@ -124,9 +124,8 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       inst = bbotk::OptimInstanceSingleCrit$new(
         objective = objfun,
         terminator = bbotk::trm("combo", terminators = list(
-          bbotk::trm("stagnation", iters = 20*ncol(pred$prob)),
-          bbotk::trm("evals", n_evals = 50*ncol(pred$prob)))
-        )
+          bbotk::trm("stagnation", iters = 20 * ncol(pred$prob)),
+          bbotk::trm("evals", n_evals = 50 * ncol(pred$prob))))
       )
       lgr = lgr::get_logger("bbotk")
       old_threshold = lgr$threshold
@@ -137,8 +136,9 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     },
     .make_param_set = function(pred) {
       ps = ParamSet$new(params = list())
-      for(cn in colnames(pred$prob))
+      for (cn in colnames(pred$prob)) {
         ps$add(ParamDbl$new(id = cn, lower = 0, upper = 1))
+      }
       return(ps)
     },
     .task_to_prediction = function(input) {

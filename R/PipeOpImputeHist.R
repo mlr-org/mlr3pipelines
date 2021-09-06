@@ -66,7 +66,7 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
     },
 
     .impute = function(feature, type, model, context) {
-      if (is.atomic(model)) {  # handle nullmodel
+      if (is.atomic(model)) { # handle nullmodel
         return(super$.impute(feature, type, model, context))
       }
       which.bins = sample.int(length(model$counts), count_missing(feature), replace = TRUE, prob = model$counts)

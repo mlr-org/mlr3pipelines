@@ -109,15 +109,19 @@ print.Selector = function(x, ...) {
 
 #' @describeIn Selector `selector_all` selects all features.
 #' @export
-selector_all = function() make_selector(function(task) {
+selector_all = function() {
+  make_selector(function(task) {
     task$feature_names
   }, "selector_all()")
+}
 
 #' @describeIn Selector `selector_none` selects none of the  features.
 #' @export
-selector_none = function() make_selector(function(task) {
-  character(0)
-}, "selector_none()")
+selector_none = function() {
+  make_selector(function(task) {
+    character(0)
+  }, "selector_none()")
+}
 
 #' @describeIn Selector `selector_type` selects features according to type. Legal types are listed in `mlr_reflections$task_feature_types`.
 #' @param types (`character`) \cr
@@ -225,10 +229,12 @@ selector_setdiff = function(selector_x, selector_y) {
 
 #' @describeIn Selector `selector_missing` selects features with missing values.
 #' @export
-selector_missing = function() make_selector(function(task) {
-  missings = task$missings()
-  names(missings)[missings != 0]
-}, "selector_missing()")
+selector_missing = function() {
+  make_selector(function(task) {
+    missings = task$missings()
+    names(missings)[missings != 0]
+  }, "selector_missing()")
+}
 
 #' @describeIn Selector `selector_cardinality_greater_than` selects categorical features with cardinality
 #' greater then a given threshold.

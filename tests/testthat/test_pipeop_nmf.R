@@ -13,8 +13,8 @@ test_that("feature selector", {
   skip_if_not_installed("NMF")
   op = PipeOpNMF$new()
   dat = iris
-  dat$Sepal.Length[1L] <- -999
-  dat$test <- rep.int(c(TRUE, FALSE), times = 75L)
+  dat$Sepal.Length[1L] = -999
+  dat$test = rep.int(c(TRUE, FALSE), times = 75L)
   task = TaskClassif$new("test", backend = dat, target = "Species")
   train_out = op$train(list(task))[[1L]]
   expect_setequal(c("Sepal.Length", "test", paste0("NMF", 1:2)), train_out$feature_names)

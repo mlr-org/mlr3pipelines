@@ -76,7 +76,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
     prepare_data = function(task) {
       data = task$data(cols = task$feature_names)
       fcts = map_lgl(data, is.factor)
-      assert_true(all(fcts) || !any(fcts))  # TODO: nicer error message
+      assert_true(all(fcts) || !any(fcts)) # TODO: nicer error message
 
       if (all(fcts) != (self$predict_type == "response")) {
         stopf("Trying to predict %s, but incoming data has %sfactors", self$predict_type, if (all(fcts)) "only " else "no ")
@@ -103,7 +103,7 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
       prob = NULL
       response = NULL
       if (self$predict_type == "response") {
-        response = factor(task$class_names[max.col(weighted_factor_mean(data, weights, task$class_names))], levels = task$class_names)  # ties broken at random
+        response = factor(task$class_names[max.col(weighted_factor_mean(data, weights, task$class_names))], levels = task$class_names) # ties broken at random
       } else {
         prob = weighted_matrix_sum(data, weights)
         prob = pmin(pmax(prob, 0), 1)
@@ -174,46 +174,46 @@ mlr_learners_classif.avg = NULL
 
 optimize_weights_learneravg = function(self, task, n_weights, data) {
 
-      # objective function to optimize
-      learneravg_objfun = function(x, task, measure, avg_weight_fun, data) {
-        # This is the objective function we minimize using nlopt
-        prd = avg_weight_fun(task, unlist(x), data)
-        res = prd$score(measure)
-        if (measure$minimize) res else -res
-      }
+  # objective function to optimize
+  learneravg_objfun = function(x, task, measure, avg_weight_fun, data) {
+    # This is the objective function we minimize using nlopt
+    prd = avg_weight_fun(task, unlist(x), data)
+    res = prd$score(measure)
+    if (measure$minimize) res else -res
+  }
 
-      pars = self$param_set$get_values(tags = "train")
-      ps = ParamSet$new(params = imap(data, function(x, n) {
-        if (is.numeric(n)) n = paste0("w.", n)
-        ParamDbl$new(id = n, lower = 0, upper = 1)
-      }))
-      optimizer = pars$optimizer
-      if (inherits(optimizer, "character")) {
-        optimizer = bbotk::opt(optimizer)
-        if (inherits(optimizer, "OptimizerNLoptr")) {
-          optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", start_values = "center")
-        }
-      }
-      measure = pars$measure
-      if (is.character(measure)) measure = msr(measure)
-      codomain = ParamSet$new(list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
-      objfun = bbotk::ObjectiveRFun$new(
-        fun = function(xs) learneravg_objfun(xs, task = task, measure = measure, avg_weight_fun = self$weighted_average_prediction, data = data),
-        domain = ps, codomain = codomain
-      )
-      inst = bbotk::OptimInstanceSingleCrit$new(
-        objective = objfun,
-        terminator = bbotk::trm("combo", terminators = list(
-          bbotk::trm("stagnation", iters = 20 * n_weights),
-          bbotk::trm("evals", n_evals = 50 * n_weights)
-        ))
-      )
-      lgr = lgr::get_logger("bbotk")
-      old_threshold = lgr$threshold
-      on.exit(lgr$set_threshold(old_threshold))
-      lgr$set_threshold(self$param_set$values$log_level)
-      optimizer$optimize(inst)
-      unlist(inst$result_x_domain)
+  pars = self$param_set$get_values(tags = "train")
+  ps = ParamSet$new(params = imap(data, function(x, n) {
+    if (is.numeric(n)) n = paste0("w.", n)
+    ParamDbl$new(id = n, lower = 0, upper = 1)
+  }))
+  optimizer = pars$optimizer
+  if (inherits(optimizer, "character")) {
+    optimizer = bbotk::opt(optimizer)
+    if (inherits(optimizer, "OptimizerNLoptr")) {
+      optimizer$param_set$values = list(xtol_rel = 1e-8, algorithm = "NLOPT_LN_COBYLA", start_values = "center")
+    }
+  }
+  measure = pars$measure
+  if (is.character(measure)) measure = msr(measure)
+  codomain = ParamSet$new(list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
+  objfun = bbotk::ObjectiveRFun$new(
+    fun = function(xs) learneravg_objfun(xs, task = task, measure = measure, avg_weight_fun = self$weighted_average_prediction, data = data),
+    domain = ps, codomain = codomain
+  )
+  inst = bbotk::OptimInstanceSingleCrit$new(
+    objective = objfun,
+    terminator = bbotk::trm("combo", terminators = list(
+      bbotk::trm("stagnation", iters = 20 * n_weights),
+      bbotk::trm("evals", n_evals = 50 * n_weights)
+    ))
+  )
+  lgr = lgr::get_logger("bbotk")
+  old_threshold = lgr$threshold
+  on.exit(lgr$set_threshold(old_threshold))
+  lgr$set_threshold(self$param_set$values$log_level)
+  optimizer$optimize(inst)
+  unlist(inst$result_x_domain)
 }
 
 

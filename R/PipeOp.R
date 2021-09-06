@@ -157,7 +157,7 @@
 #' # as well as a letter of the alphabet corresponding to that sum during $predict().
 #'
 #' PipeOpSumLetter = R6::R6Class("sumletter",
-#'   inherit = PipeOp,  # inherit from PipeOp
+#'   inherit = PipeOp, # inherit from PipeOp
 #'   public = list(
 #'     initialize = function(id = "posum", param_vals = list()) {
 #'       super$initialize(id, param_vals = param_vals,
@@ -242,7 +242,7 @@ PipeOp = R6Class("PipeOp",
     },
 
     train = function(input) {
-      self$state = NULL  # reset to untrained state first
+      self$state = NULL # reset to untrained state first
       require_namespaces(self$packages)
 
       if (every(input, is_noop)) {
@@ -254,10 +254,12 @@ PipeOp = R6Class("PipeOp",
         return(evaluate_multiplicities(self, unpacked, "train", NULL))
       }
       input = check_types(self, input, "input", "train")
-      on.exit({self$state = NULL})  # if any of the followi fails, make sure to reset self$state
+      on.exit({
+        self$state = NULL
+      }) # if any of the followi fails, make sure to reset self$state
       output = private$.train(input)
       output = check_types(self, output, "output", "train")
-      on.exit()  # don't reset state any more
+      on.exit() # don't reset state any more
       output
     },
     predict = function(input) {
@@ -328,7 +330,9 @@ PipeOp = R6Class("PipeOp",
         # objects.
         # In the following we also avoid accessing `val$hash` twice, because it could
         # potentially be an expensive AB.
-        if (is.environment(val) && !is.null({vhash = get0("hash", val, mode = "any", inherits = FALSE, ifnotfound = NULL)})) {
+        if (is.environment(val) && !is.null({
+          vhash = get0("hash", val, mode = "any", inherits = FALSE, ifnotfound = NULL)
+        })) {
           vhash
         } else {
           val
@@ -340,7 +344,7 @@ PipeOp = R6Class("PipeOp",
   private = list(
     deep_clone = function(name, value) {
       if (!is.null(private$.param_set_source)) {
-        private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
+        private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
         if (name == ".param_set_source") {
           value = lapply(value, function(x) {
             if (inherits(x, "R6")) x$clone(deep = TRUE) else x
@@ -405,8 +409,12 @@ check_types = function(self, data, direction, operation) {
     if (is.Multiplicity(data_element)) {
       stopf("%s contained Multiplicity when it shouldn't have.", data_element)
     }
-    if (typereq == "*") return(data_element)
-    if (typereq %in% class(data_element)) return(data_element)
+    if (typereq == "*") {
+      return(data_element)
+    }
+    if (typereq %in% class(data_element)) {
+      return(data_element)
+    }
     autoconverter = get_autoconverter(typereq)
     msg = ""
     if (!is.null(autoconverter)) {
@@ -453,7 +461,7 @@ unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid
   assert_list(input)
   unpacking = mapply(multiplicity_nests_deeper_than, input, expected_nesting_level)
   if (!any(unpacking)) {
-    return(NULL)  # no unpacking
+    return(NULL) # no unpacking
   }
   prototype_index = which(unpacking)[[1]]
   prototype = input[[prototype_index]]
@@ -481,7 +489,9 @@ unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid
 # @param instate: typically `self$state`
 evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
   force(instate)
-  on.exit({self$state = instate})
+  on.exit({
+    self$state = instate
+  })
   if (!is.null(instate)) {
     if (!is.Multiplicity(instate)) {
       stopf("PipeOp %s received multiplicity input but state was not a multiplicity.", self$id)
@@ -494,7 +504,9 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
     self$state = if (!is.null(instate)) instate[[reference]]
     list(output = self[[evalcall]](input), state = self$state)
   })
-  on.exit({self$state = as.Multiplicity(map(result, "state"))})
+  on.exit({
+    self$state = as.Multiplicity(map(result, "state"))
+  })
 
   map(transpose_list(map(result, "output")), as.Multiplicity)
 }

@@ -123,4 +123,3 @@ PipeOpBranch = R6Class("PipeOpBranch",
 )
 
 mlr_pipeops$add("branch", PipeOpBranch, list("N"))
-

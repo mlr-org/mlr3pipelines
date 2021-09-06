@@ -15,7 +15,7 @@ test_that("PipeOpClassWeights", {
   op = PipeOpClassWeights$new()
   task = mlr_tasks$get("pima")
 
-  op$param_set$values = list(minor_weight =  3)
+  op$param_set$values = list(minor_weight = 3)
   nt = op$train(list(task))[[1L]]
   expect_equal(nt$data(), task$data())
 

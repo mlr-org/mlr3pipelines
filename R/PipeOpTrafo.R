@@ -313,8 +313,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
 #'   trafo = function(x) log(x, base = 2),
-#'   inverter = function(x) list(response = 2 ^ x$response))
-#' )
+#'   inverter = function(x) list(response = 2^x$response)))
 #' # Note that this example is ill-equipped to work with
 #' # `predict_type == "se"` predictions.
 #'
@@ -335,10 +334,10 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' g$train(task)
 #' g$predict(task)
 #'
-#' #syntactic sugar using ppl():
+#' # syntactic sugar using ppl():
 #' tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
-#' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+#' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2^x$response)
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
@@ -442,7 +441,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' po$train(list(task))
 #' po$predict(list(task))
 #'
-#' #syntactic sugar for a graph using ppl():
+#' # syntactic sugar for a graph using ppl():
 #' ttscalerange = ppl("targettrafo", trafo_pipeop = PipeOpTargetTrafoScaleRange$new(),
 #'   graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 #' ttscalerange$train(task)
@@ -550,7 +549,9 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' \dontrun{
 #' # Create a binary class task from iris
 #' library(mlr3)
-#' trafo_fun = function(x) {factor(ifelse(x$Species == "setosa", "setosa", "other"))}
+#' trafo_fun = function(x) {
+#'   factor(ifelse(x$Species == "setosa", "setosa", "other"))
+#' }
 #' po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
 #' po$train(list(tsk("iris")))
 #' po$predict(list(tsk("iris")))
@@ -569,8 +570,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         ParamUty$new("new_target_name", tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
         ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
         ParamLgl$new("drop_original_target", tags = c("train", "predict"))
-        )
-      )
+      ))
       ps$values = list(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
@@ -584,7 +584,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       pv = self$param_set$values
       if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
         self$state = list()
-        return(list(private$.update_target(intask, drop_levels = TRUE)))  # early exit
+        return(list(private$.update_target(intask, drop_levels = TRUE))) # early exit
       }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         # Apply fun to target, rename, cbind and convert task if required
@@ -604,23 +604,26 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       intask = inputs[[1]]$clone(deep = TRUE)
       pv = self$param_set$values
       if (identical(pv$trafo, identity) && (pv$new_target_name %in% unlist(intask$col_roles, use.names = FALSE))) {
-        return(list(private$.update_target(intask, drop_levels = FALSE)))  # early exit
+        return(list(private$.update_target(intask, drop_levels = FALSE))) # early exit
       }
       if (!identical(pv$trafo, identity) || !is.null(pv$new_target_name)) {
         new_target = intask$data(cols = intask$target_names)
-        if (!pv$drop_original_target)
+        if (!pv$drop_original_target) {
           # During predict, if original target is not dropped, set the new target to NA and then call the trafo
           new_target = set(new_target, j = intask$target_names, value = NA)
+        }
         new_target = data.table(pv$trafo(new_target))
         # Rename, cbind and convert
         setnames(new_target, colnames(new_target), self$param_set$values$new_target_name)
         # Make sure levels match target levels
-        if (length(self$state))
+        if (length(self$state)) {
           new_target = imap_dtc(new_target, function(x, nms) {
-            if(nms %in% names(self$state))
+            if (nms %in% names(self$state)) {
               levels(x) = self$state[[nms]]
+            }
             return(x)
-        })
+          })
+        }
         intask$cbind(new_target)
       }
       list(private$.update_target(intask, drop_levels = FALSE))

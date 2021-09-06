@@ -65,7 +65,7 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
       if (self$param_set$values$droplevels) {
         dt = droplevels(dt)
       }
-      list(levels = lapply(dt, function(x) levels(x)))  # explicitly access the "levels" function
+      list(levels = lapply(dt, function(x) levels(x))) # explicitly access the "levels" function
     },
 
     .transform = function(task) {
@@ -96,7 +96,7 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
 mlr_pipeops$add("fixfactors", PipeOpFixFactors)
 
 # FIXME: from mlr3; should probably go to mlr3misc
-ujoin = function (x, y, key) {
+ujoin = function(x, y, key) {
   cn = setdiff(intersect(names(x), names(y)), key)
   expr = parse(text = paste0("`:=`(", paste0(sprintf("%1$s=i.%1$s",
     cn), collapse = ","), ")"))

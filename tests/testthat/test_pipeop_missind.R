@@ -102,13 +102,13 @@ test_that("union with missing rows", {
   data("mtcars", package = "datasets")
   data = mtcars[, 1:3]
   # Train task
-  task_mtcars = TaskRegr$new(id="cars", backend = data, target = "mpg")
+  task_mtcars = TaskRegr$new(id = "cars", backend = data, target = "mpg")
   # Prediction
-  data2 = task_mtcars$data()[12:12,]
-  data2[1:1, cyl:=NA]
+  data2 = task_mtcars$data()[12:12, ]
+  data2[1:1, cyl := NA]
 
   imp_missind = po("missind")
-  imp_num =  po("imputehist", param_vals = list(affect_columns = selector_type("numeric")))
+  imp_num = po("imputehist", param_vals = list(affect_columns = selector_type("numeric")))
   learner = lrn("regr.rpart")
 
   g1 = gunion(list(imp_num, imp_missind)) %>>% po("featureunion")
@@ -116,7 +116,7 @@ test_that("union with missing rows", {
   out = g1$predict(TaskRegr$new("t2", data2, target = "mpg"))[[1]]$data()
   assert_true(!any(is.na(out)))
 
-  g2= gunion(list(imp_missind, imp_num)) %>>% po("featureunion")
+  g2 = gunion(list(imp_missind, imp_num)) %>>% po("featureunion")
   g2$train(task_mtcars)
   out = g2$predict(TaskRegr$new("t2", data2, target = "mpg"))[[1]]$data()
   assert_true(!any(is.na(out)))

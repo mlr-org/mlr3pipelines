@@ -30,4 +30,3 @@ test_that("Other maxabs", {
   names(resdt.min) = NULL
   expect_equal(resdt.min, rep(0.2, 4))
 })
-
