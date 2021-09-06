@@ -3,7 +3,7 @@ do_package_checks()
 
 # dependency of NMF
 # installing from GH avoids using a static Bioconductor version
-get_stage("install") %>%
+get_stage("before_install") %>%
   add_step(step_install_github("Bioconductor/Biobase"))
 
 if (ci_on_ghactions() && identical(ci_get_env("MLR3"), "devel")) {
