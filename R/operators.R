@@ -60,8 +60,12 @@
 #'   add_edge(o2$id, o3$id, dst_channel = 2)
 `%>>%` = function(g1, g2) {
   # neutral elements handling
-  if (is.null(g1)) return(as_graph(g2))
-  if (is.null(g2)) return(as_graph(g1))
+  if (is.null(g1)) {
+    return(as_graph(g2))
+  }
+  if (is.null(g2)) {
+    return(as_graph(g1))
+  }
 
   g1 = as_graph(g1)
   g2 = as_graph(g2)

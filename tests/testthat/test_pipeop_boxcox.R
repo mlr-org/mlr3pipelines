@@ -24,7 +24,7 @@ test_that("PipeOpBoxCox - receive expected result", {
   lambda.id = lambda != 0
 
   x = task$data()[[2]]
-  x.trans = if (lambda.id) ((x^lambda) - 1)/lambda else log(x)
+  x.trans = if (lambda.id) ((x^lambda) - 1) / lambda else log(x)
   expect_equal(x.trans, result[[1]]$data()[[2]])
   expect_equal(x.trans, result.pred[[1]]$data()[[2]])
 

@@ -86,7 +86,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         dtable = table(d)
         fractions = sort(dtable, decreasing = TRUE) / sum(!is.na(d))
         keep_fraction = names(fractions)[fractions >= keep_fraction]
-        keep_count = names(fractions)[seq_len(target_count)]  # at this point we know there are more levels than target_count
+        keep_count = names(fractions)[seq_len(target_count)] # at this point we know there are more levels than target_count
         keep = union(keep_fraction, keep_count)
         dont_keep = setdiff(levels(d), keep)
         if (is.ordered(d)) {
@@ -123,8 +123,8 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         new_lvls = setdiff(levels(dt[[n]]), unlist(cmaplist[[n]], use.names = FALSE))
         all_lvls = c(cmaplist[[n]], stats::setNames(as.list(new_lvls), new_lvls))
         levels(dt[[n]]) = c(
-          all_lvls[intersect(levels(dt[[n]]), names(all_lvls))],  # keep all levels in their order, if they were present before
-          all_lvls[setdiff(names(all_lvls), levels(dt[[n]]))]     # levels that are missing now get sorted to the back.
+          all_lvls[intersect(levels(dt[[n]]), names(all_lvls))], # keep all levels in their order, if they were present before
+          all_lvls[setdiff(names(all_lvls), levels(dt[[n]]))] # levels that are missing now get sorted to the back.
         )
       }
       task$select(setdiff(task$feature_names, names(cmaplist)))$cbind(dt)

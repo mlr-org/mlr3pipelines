@@ -79,13 +79,13 @@ PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
   ),
   private = list(
     .get_state_dt = function(dt, levels, target) {
-      m <- ncol(dt)
-      r <- self$param_set$values$rank
+      m = ncol(dt)
+      r = self$param_set$values$rank
       # we want to cope with a possible case of rank > m
       # In that case, we need a square matrix here.
       if (r > 0) {
         projection = qr.Q(qr(matrix(stats::rnorm(max(m, r) * r), ncol = r)))[seq_len(m), ]
-        projection = as.matrix(projection, nrow = m)  # for rank 1 case
+        projection = as.matrix(projection, nrow = m) # for rank 1 case
       } else {
         projection = matrix(0, nrow = m, ncol = r)
       }

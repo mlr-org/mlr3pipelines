@@ -75,5 +75,5 @@ test_that("Errors during training set $state to NULL", {
   expect_null(po$state)
   po$state = list("not_null")
   expect_error(po$train(list(mlr_tasks$get("iris"))), regexp = "abstract")
-  expect_null(po$state)  # state is completely reset to NULL
+  expect_null(po$state) # state is completely reset to NULL
 })

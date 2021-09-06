@@ -36,9 +36,9 @@ test_that("PipeOpEncodeImpact", {
 test_that("PipeOpImpactEncode on Classification", {
 
   testdf = data.frame(
-      a = factor(c("a", "b", "a", "b", "a", "b")),
-      b = factor(c("a", "b", "b", "a", "a", "a")),
-      t = factor(c("x", "x", "x", "y", "y", "y")))
+    a = factor(c("a", "b", "a", "b", "a", "b")),
+    b = factor(c("a", "b", "b", "a", "a", "a")),
+    t = factor(c("x", "x", "x", "y", "y", "y")))
 
   testtask = TaskClassif$new("test", testdf, "t")
 
@@ -65,9 +65,9 @@ test_that("PipeOpImpactEncode on Classification", {
 
   op$param_set$values$smoothing = 1e-8
   op$train(list(testtask))
-  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE), 0)  # equal to 0 within tolerance
+  expect_equal(mean(abs(op$state$impact$a - expm), na.rm = TRUE), 0) # equal to 0 within tolerance
 
-  op$param_set$values$smoothing = 6.362e-9  # similar to what glm uses
+  op$param_set$values$smoothing = 6.362e-9 # similar to what glm uses
   encoded = op$train(list(testtask))[[1]]$data()
 
   expm2 = sapply(c("x", "y"), function(x) {
@@ -86,36 +86,36 @@ test_that("PipeOpImpactEncode on Classification", {
   # test NA handling / imputation
 
   testdf2 = data.frame(
-      a = factor(c("a", "b", "a", "b", NA, "b")),
-      b = factor(c("a", "b", "b", "a", "a", NA)),
-      t = factor(c("x", "x", "x", "y", "y", "y")))
+    a = factor(c("a", "b", "a", "b", NA, "b")),
+    b = factor(c("a", "b", "b", "a", "a", NA)),
+    t = factor(c("x", "x", "x", "y", "y", "y")))
 
   testtask2 = TaskClassif$new("test2", testdf2, "t")
   op$param_set$values$impute_zero = FALSE
   encoded = op$train(list(testtask2))[[1]]$data()
 
-  expect_equal(which(is.na(encoded)), c(11, 17, 24, 30))  # there are 6 rows, cols 2 & 3 have row 5 NA, cols 4 & 5 have row 6 NA
+  expect_equal(which(is.na(encoded)), c(11, 17, 24, 30)) # there are 6 rows, cols 2 & 3 have row 5 NA, cols 4 & 5 have row 6 NA
 
   op$param_set$values$impute_zero = TRUE
   encoded = op$train(list(testtask2))[[1]]$data()
 
-  expect_equal(as.numeric(as.matrix(encoded)[c(11, 17, 24, 30)]), c(0, 0, 0, 0))  # imputation by 0
+  expect_equal(as.numeric(as.matrix(encoded)[c(11, 17, 24, 30)]), c(0, 0, 0, 0)) # imputation by 0
 
 })
 
 test_that("PipeOpImpactEncode on Regression", {
 
   testdf = data.frame(
-      a = factor(c("a", "b", "a", "b", "a", "b")),
-      b = factor(c("a", "b", "b", "a", "a", "a")),
-      t = c(1, 2, 3, 1, 2, 3))
+    a = factor(c("a", "b", "a", "b", "a", "b")),
+    b = factor(c("a", "b", "b", "a", "a", "a")),
+    t = c(1, 2, 3, 1, 2, 3))
 
   testtask = TaskRegr$new("test", testdf, "t")
 
   expect = data.table(
-      a = c(0, 0, 0, 0, 0, 0),
-      b = c(-1, 2, 2, -1, -1, -1) / 4,
-      t = c(1, 2, 3, 1, 2, 3))
+    a = c(0, 0, 0, 0, 0, 0),
+    b = c(-1, 2, 2, -1, -1, -1) / 4,
+    t = c(1, 2, 3, 1, 2, 3))
 
   op = PipeOpEncodeImpact$new()
   op$param_set$values$smoothing = 0
@@ -124,7 +124,7 @@ test_that("PipeOpImpactEncode on Regression", {
 
 
   expect_equal(op$state$impact$a, t(t(c(a = 0, b = 0, .TEMP.MISSING = NA))))
-  expect_equal(op$state$impact$b, t(t(c(a = -1/4, b = 1/2, .TEMP.MISSING = NA))))
+  expect_equal(op$state$impact$b, t(t(c(a = -1 / 4, b = 1 / 2, .TEMP.MISSING = NA))))
 
   op$param_set$values$smoothing = 1e-4
   expect_false(isTRUE(all.equal(op$train(list(testtask))[[1]]$data(), expect, ignore.col.order = TRUE, tolerance = 1e-5)))
@@ -139,9 +139,9 @@ test_that("PipeOpImpactEncode on Regression", {
   op$train(list(testtask))
 
   testdf2 = data.frame(
-      a = factor(c("a", "b", "a", "b", NA, "b")),
-      b = factor(c("a", "b", "b", "a", "a", NA)),
-      t = c(1, 2, 3, 1, 2, 3))
+    a = factor(c("a", "b", "a", "b", NA, "b")),
+    b = factor(c("a", "b", "b", "a", "a", NA)),
+    t = c(1, 2, 3, 1, 2, 3))
 
   testtask2 = TaskRegr$new("test2", testdf2, "t")
 

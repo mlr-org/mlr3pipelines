@@ -5,16 +5,14 @@ test_that("Target Trafo Pipeline", {
 
   tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
   tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
-  tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+  tt$param_set$values$targetmutate.inverter = function(x) list(response = 2^x$response)
   expect_graph(tt)
   expect_true(length(tt$pipeops) == 1 + 1 + 1)
 
   g = Graph$new()
   g$add_pipeop(PipeOpTargetMutate$new(param_vals = list(
     trafo = function(x) log(x, base = 2),
-    inverter = function(x) list(response = 2 ^ x$response))
-    )
-  )
+    inverter = function(x) list(response = 2^x$response))))
   g$add_pipeop(LearnerRegrRpart$new())
   g$add_pipeop(PipeOpTargetInvert$new())
   g$add_edge(src_id = "targetmutate", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
@@ -31,7 +29,7 @@ test_that("Target Trafo Pipeline", {
 
   tt_g = ppl("targettrafo", graph = PipeOpPCA$new() %>>% PipeOpLearner$new(LearnerRegrRpart$new()))
   tt_g$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
-  tt_g$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+  tt_g$param_set$values$targetmutate.inverter = function(x) list(response = 2^x$response)
 
   expect_graph(tt_g)
   expect_true(length(tt_g$pipeops) == 1 + 1 + 1 + 1)
@@ -45,21 +43,21 @@ test_that("Target Trafo Pipeline", {
 })
 
 test_that("More Complex Target Trafo Pipelines", {
- task = tsk("mtcars")
- tt = pipeline_targettrafo((po("select") %>>% ppl("branch", list(lrn("regr.featureless"), lrn("regr.rpart")))))
- expect_equal(tt$input$op.id, "targetmutate")
- expect_equal(tt$output$op.id, "targetinvert")
+  task = tsk("mtcars")
+  tt = pipeline_targettrafo((po("select") %>>% ppl("branch", list(lrn("regr.featureless"), lrn("regr.rpart")))))
+  expect_equal(tt$input$op.id, "targetmutate")
+  expect_equal(tt$output$op.id, "targetinvert")
 
- tt$param_set$values$targetmutate.trafo = function(x) exp(x)
- tt$param_set$values$targetmutate.inverter = function(x) log(x)
+  tt$param_set$values$targetmutate.trafo = function(x) exp(x)
+  tt$param_set$values$targetmutate.inverter = function(x) log(x)
 
- train_tt1 = tt$train(task)
- expect_null(train_tt1[[1L]])
- predict_tt1 = tt$predict(task)
- expect_equal(unique(predict_tt1[[1L]]$response)[1L], log(mean(exp(task$data(cols = "mpg")[[1L]]))))
+  train_tt1 = tt$train(task)
+  expect_null(train_tt1[[1L]])
+  predict_tt1 = tt$predict(task)
+  expect_equal(unique(predict_tt1[[1L]]$response)[1L], log(mean(exp(task$data(cols = "mpg")[[1L]]))))
 
- tt$param_set$values$branch.selection = 2L
- train_tt2 = tt$train(task)
- expect_null(train_tt2[[1L]])
- predict_tt2 = tt$predict(task)
+  tt$param_set$values$branch.selection = 2L
+  train_tt2 = tt$train(task)
+  expect_null(train_tt2[[1L]])
+  predict_tt2 = tt$predict(task)
 })

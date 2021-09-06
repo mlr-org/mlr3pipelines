@@ -72,7 +72,7 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
       norm = self$param_set$values$norm
       t(apply(dt, 1, function(x) {
         if (is.finite(norm)) {
-          len = sum(abs(x) ^ norm) ^ (1 / norm)
+          len = sum(abs(x)^norm)^(1 / norm)
         } else {
           len = max(abs(x))
         }

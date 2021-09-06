@@ -62,7 +62,7 @@
 #' # Simple Bagging
 #' gr = ppl("greplicate",
 #'   po("subsample") %>>%
-#'   po("learner", lrn("classif.rpart")),
+#'     po("learner", lrn("classif.rpart")),
 #'   n = 5
 #' ) %>>%
 #'   po("classifavg")

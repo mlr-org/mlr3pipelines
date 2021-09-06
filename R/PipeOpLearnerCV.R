@@ -137,7 +137,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
       super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
     }
-
   ),
   active = list(
     learner = function(val) {
@@ -163,7 +162,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   ),
   private = list(
     .train_task = function(task) {
-      on.exit({private$.learner$state = NULL})
+      on.exit({
+        private$.learner$state = NULL
+      })
 
       # Train a learner for predicting
       self$state = private$.learner$train(task)$state
@@ -183,7 +184,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     },
 
     .predict_task = function(task) {
-      on.exit({private$.learner$state = NULL})
+      on.exit({
+        private$.learner$state = NULL
+      })
       private$.learner$state = self$state
       prediction = as.data.table(private$.learner$predict(task))
       private$pred_to_task(prediction, task)

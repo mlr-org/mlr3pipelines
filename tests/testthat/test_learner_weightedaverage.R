@@ -1,7 +1,7 @@
 context("WeightedAverage Learner")
 
 test_that("LearnerClassifAvg", {
-  skip_on_cran()  # takes too long
+  skip_on_cran() # takes too long
   lrn = LearnerClassifAvg$new()
   expect_learner(lrn)
   df = data.frame(x = matrix(sample(c("a", "b", "c"), 100, replace = TRUE), nrow = 10), y = as.factor(sample(c("a", "b", "c"), 10, replace = TRUE)), stringsAsFactors = TRUE)
@@ -53,7 +53,7 @@ test_that("LearnerClassifAvg", {
 })
 
 test_that("LearnerRegrAvg", {
-  skip_on_cran()  # takes too long
+  skip_on_cran() # takes too long
   lrn = LearnerRegrAvg$new()
   expect_learner(lrn)
   df = data.frame(x = matrix(rnorm(100), nrow = 10), y = rnorm(100))
@@ -100,7 +100,7 @@ test_that("LearnerRegrAvg", {
 })
 
 test_that("LearnerClassifAvg Pipeline", {
-  skip_on_cran()  # takes too long
+  skip_on_cran() # takes too long
   tsk = mlr_tasks$get("iris")
   # Works for response
   # TODO: this is a bit of a deep problem: https://github.com/mlr-org/mlr3pipelines/issues/216
@@ -120,8 +120,8 @@ test_that("LearnerClassifAvg Pipeline", {
 
   lrn = LearnerClassifAvg$new()
   graph = gunion(list(
-      PipeOpLearnerCV$new(lrn("classif.rpart")),
-      PipeOpLearnerCV$new(lrn("classif.featureless")))) %>>%
+    PipeOpLearnerCV$new(lrn("classif.rpart")),
+    PipeOpLearnerCV$new(lrn("classif.featureless")))) %>>%
     PipeOpFeatureUnion$new() %>>%
     PipeOpLearner$new(lrn)
   expect_graph(graph)
@@ -146,7 +146,7 @@ test_that("LearnerClassifAvg Pipeline", {
 })
 
 test_that("LearnerRegrAvg Pipeline", {
-  skip_on_cran()  # takes too long
+  skip_on_cran() # takes too long
   tsk = mlr_tasks$get("boston_housing")
   # Works for response
   # TODO: this is a bit of a deep problem: https://github.com/mlr-org/mlr3pipelines/issues/216

@@ -112,7 +112,7 @@ PipeOpMutate = R6Class("PipeOpMutate",
       if (ncol(newdata) && nrow(newdata) != task$nrow) {
         stopf("PipeOpMutate expression result has %s rows but must have %s rows.", nrow(newdata), task$nrow)
       }
-      if (ncol(newdata)) task$cbind(newdata)  # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
+      if (ncol(newdata)) task$cbind(newdata) # TODO: test if we can live without the `if()` here, but there seems to be a problem with 0-row data.tables
       task
     }
   )

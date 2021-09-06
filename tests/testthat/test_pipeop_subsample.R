@@ -29,11 +29,11 @@ test_that("PipeOpSubsample works unstratified", {
   expect_true(pnew[[1]]$nrow == task$nrow)
   expect_equal(pnew[[1]], task)
 
-  task = mlr_tasks$get("iris")$filter(1L)  # actually has to be an int m(
+  task = mlr_tasks$get("iris")$filter(1L) # actually has to be an int m(
   po = PipeOpSubsample$new()
   tnew = train_pipeop(po, list(task))
 
-  task = mlr_tasks$get("boston_housing")$filter(1L)  # actually has to be an int m(
+  task = mlr_tasks$get("boston_housing")$filter(1L) # actually has to be an int m(
   po = PipeOpSubsample$new()
   po$param_set$values = list(stratify = TRUE, frac = 0.6)
   expect_error(train_pipeop(po, list(task)))
@@ -78,7 +78,7 @@ test_that("PipeOpSubsample works stratified", {
 test_that("task filter utility function", {
   task = mlr_tasks$get("iris")
 
-  rowidx = as.integer(c(1, 2, 3, 2, 1, 2, 3, 2, 1))  # annoying and unnecessary mlr3 type strictness
+  rowidx = as.integer(c(1, 2, 3, 2, 1, 2, 3, 2, 1)) # annoying and unnecessary mlr3 type strictness
 
   tfiltered = task_filter_ex(task$clone(), rowidx)
 

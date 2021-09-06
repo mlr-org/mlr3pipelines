@@ -37,20 +37,20 @@ expect_deep_clone = function(one, two) {
         return(invisible(NULL))
       }
       if (length(path) > 1 && R6::is.R6(a) && "clone" %nin% names(a)) {
-        return(invisible(NULL))  # don't check if smth is not cloneable
+        return(invisible(NULL)) # don't check if smth is not cloneable
       }
       if (identical(utils::tail(path, 1), c("[element train_task] 'train_task'"))) {
-        return(invisible(NULL))  # workaround for https://github.com/mlr-org/mlr3/issues/382
+        return(invisible(NULL)) # workaround for https://github.com/mlr-org/mlr3/issues/382
       }
       if (identical(utils::tail(path, 1), c("[element fallback] 'fallback'"))) {
-        return(invisible(NULL))  # workaround for https://github.com/mlr-org/mlr3/issues/511
+        return(invisible(NULL)) # workaround for https://github.com/mlr-org/mlr3/issues/511
       }
       label = sprintf("Object addresses differ at path %s", paste0(path, collapse = "->"))
       expect_true(addr_a != addr_b, label = label)
       expect_null(visited_b[[addr_a]], label = label)
     } else {
-      a <- unclass(a)
-      b <- unclass(b)
+      a = unclass(a)
+      b = unclass(b)
     }
 
     # recurse
@@ -120,12 +120,12 @@ expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
 
   uties = ps$params[ps$ids("ParamUty")]
   if (length(uties)) {
-    test_value = NO_DEF  # custom_checks should fail for NO_DEF
+    test_value = NO_DEF # custom_checks should fail for NO_DEF
     results = map(uties, function(uty) {
       uty$custom_check(test_value)
     })
     expect_true(all(map_lgl(results, function(result) {
-      length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
+      length(result) == 1L && (is.character(result) || result == TRUE) # result == TRUE is necessary because default is function(x) TRUE
     })), label = "custom_check returns string on failure")
   }
 
@@ -411,7 +411,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
     }
   }
 
-  expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
+  expect_shallow_clone(task, original_clone) # test that task was not changed by all the training / prediction
 }
 
 train_pipeop = function(po, inputs) {
@@ -538,17 +538,21 @@ r6_to_list = function(x) {
 all.equal.R6 = function(target, current, ...) {
   if (!is.environment(target)) NextMethod()
   if (!is.environment(current)) NextMethod()
-  if (!inherits(current, "R6")) return("'current' is not an R6 class")
+  if (!inherits(current, "R6")) {
+    return("'current' is not an R6 class")
+  }
   # avoid cycles
   r6_seen = dynGet("__r6_seen__", NULL)
   if (is.null(r6_seen)) {
     r6_seen = "__r6_seen__" = new.env(parent = emptyenv())
   }
   tca = sprintf("%s__%s", data.table::address(target), data.table::address(current))
-  if (!is.null(r6_seen[[tca]])) return(TRUE)
+  if (!is.null(r6_seen[[tca]])) {
+    return(TRUE)
+  }
   r6_seen[[tca]] = TRUE
   # call all.equal.list directly because objects still have R6 class
-  base:::all.equal.list(r6_to_list(target), r6_to_list(current),  ...)
+  base:::all.equal.list(r6_to_list(target), r6_to_list(current), ...)
 }
 
 registerS3method("all.equal", "R6", all.equal.R6)

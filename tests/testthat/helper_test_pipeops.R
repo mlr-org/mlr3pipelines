@@ -6,7 +6,8 @@ PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
-    }),
+    }
+  ),
   private = list(
     .train = function(inputs) {
       catf("Training %s", self$id)
@@ -47,7 +48,8 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       super$initialize(id, ParamSet$new(list(p)),
         input = data.table(name = inputs, train = "*", predict = "*"),
         output = data.table(name = outputs, train = "*", predict = "*"))
-    }),
+    }
+  ),
   private = list(
     .train = function(inputs) {
       catf("Training %s with input %s", self$id, deparse_list_safe(inputs))
@@ -72,8 +74,9 @@ VarargPipeop = R6Class("VarargPipeop",
         input = data.table(name = c("...", rep_suffix("input", innum)), train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
-    }),
-    private = list(
+    }
+  ),
+  private = list(
     .train = function(inputs) {
       self$state = inputs
       list(inputs)

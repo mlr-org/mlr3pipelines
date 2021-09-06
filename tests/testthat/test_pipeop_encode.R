@@ -117,7 +117,4 @@ test_that("PipeOpEncode", {
   check_dat(op$train(list(natask))[[1]]$data())
   check_dat(op$predict(list(natask))[[1]]$data())
 
-
 })
-
-

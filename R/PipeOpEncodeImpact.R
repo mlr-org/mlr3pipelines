@@ -95,27 +95,33 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
 
       # different funs depending on task.type
       list(impact = switch(task_type,
-        classif = sapply(dt, function(col)
+        classif = sapply(dt, function(col) {
           sapply(levels(target), function(tl) {
             tprop = (sum(target == tl) + smoothing) / (length(target) + 2 * smoothing)
             tplogit = log(tprop / (1 - tprop))
             map_dbl(c(stats::setNames(levels(col), levels(col)), c(.TEMP.MISSING = NA)),
               function(cl) {
-                if (!self$param_set$values$impute_zero && is.na(cl)) return(NA_real_)
+                if (!self$param_set$values$impute_zero && is.na(cl)) {
+                  return(NA_real_)
+                }
                 condprob = (sum(target[is.na(cl) | col == cl] == tl, na.rm = TRUE) + smoothing) /
                   (sum(is.na(cl) | col == cl, na.rm = TRUE) + 2 * smoothing)
                 cplogit = log(condprob / (1 - condprob))
                 cplogit - tplogit
-              })
-          }), simplify = FALSE),
+              }
+            )
+          })
+        }, simplify = FALSE),
         regr = {
           meanimp = mean(target)
-          sapply(dt, function(col)
+          sapply(dt, function(col) {
             t(t(c(sapply(levels(col), function(lvl) {
               (sum(target[col == lvl], na.rm = TRUE) + smoothing * meanimp) /
                 (sum(col == lvl, na.rm = TRUE) + smoothing) - meanimp
-            }), if (self$param_set$values$impute_zero) c(.TEMP.MISSING = 0) else c(.TEMP.MISSING = NA)))), simplify = FALSE)
-        }))
+            }), if (self$param_set$values$impute_zero) c(.TEMP.MISSING = 0) else c(.TEMP.MISSING = NA))))
+          }, simplify = FALSE)
+        }
+      ))
     },
 
     .transform_dt = function(dt, levels) {
