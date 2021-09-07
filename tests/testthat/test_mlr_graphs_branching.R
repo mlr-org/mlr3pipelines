@@ -22,7 +22,7 @@ test_that("Branching Pipeline", {
 
 
 test_that("Branching Pipeline extended tests", {
-  skip_on_cran() # takes too long
+  skip_on_cran()  # takes too long
   po1 = PipeOpScale$new()
   po2 = PipeOpScale$new("scale2")
   po3 = PipeOpPCA$new()
@@ -107,11 +107,11 @@ test_that("Branching Pipeline extended tests", {
   expect_graph_equal(
     pipeline_branch(list(gunion(list(po1, po3)) %>>% pofu, po2)),
     gunion(list(
-      PipeOpBranch$new(2),
-      gunion(list(
-        gunion(list(po1, po3)) %>>% pofu,
-        po2)) %>>%
-        PipeOpUnbranch$new(2)))$
+        PipeOpBranch$new(2),
+        gunion(list(
+            gunion(list(po1, po3)) %>>% pofu,
+            po2)) %>>%
+          PipeOpUnbranch$new(2)))$
       add_edge("branch", "scale", src_channel = "output1")$
       add_edge("branch", "pca", src_channel = "output1")$
       add_edge("branch", "scale2", src_channel = "output2")

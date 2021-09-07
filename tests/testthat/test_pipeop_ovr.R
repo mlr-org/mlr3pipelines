@@ -22,7 +22,7 @@ test_that("PipeOpOVRSplit - train and predict", {
   expect_named(tout[[1]], tsk$class_names)
   expect_true(all(pmap_lgl(list(tout[[1]], names(tout[[1]])), .f = function(task, name) {
     expect_task(task)
-    all(task$target_names == tsk$target_names) && task$positive == name && task$negative == "rest." &&
+      all(task$target_names == tsk$target_names) && task$positive == name && task$negative == "rest." &&
       all.equal(task$truth(), factor(ifelse(tsk$truth() == task$positive, task$positive, "rest."), levels = c(task$positive, "rest.")))
   })))
 
@@ -84,7 +84,7 @@ test_that("PipeOpOVRUnite- train and predict", {
   tin[[1]] = PredictionClassif$new(row_ids = tin[[1]]$row_ids, truth = tin[[1]]$truth, response = na_response)
   pout = po$predict(list(as.Multiplicity(tin)))
   expect_prediction_classif(pout[[1]])
-  expect_equal(pout[[1]]$prob[1, ], c(a = 1 / 3, b = 1 / 3, c = 1 / 3))
+  expect_equal(pout[[1]]$prob[1, ], c(a = 1/3, b = 1/3, c = 1/3))
 
   # error handling
   tin[[1]] = PredictionClassif$new(row_ids = tin[[1]]$row_ids, truth = tin[[1]]$truth)
@@ -123,7 +123,7 @@ test_that("PipeOpOVRSplit and PipeOpOVRUnite - train and predict", {
 
   # setting weights to zero results in uniform probs
   gr$param_set$values$ovrunite.weights = rep(0, 3)
-  expect_true(all.equal(unique(gr$predict(tsk0)[[1]]$prob), t(c(a = 1 / 3, b = 1 / 3, c = 1 / 3))))
+  expect_true(all.equal(unique(gr$predict(tsk0)[[1]]$prob), t(c(a = 1/3, b = 1/3, c = 1/3))))
 })
 
 test_that("PipeOpOVRSplit and PipeOpOVRUnite - task size", {

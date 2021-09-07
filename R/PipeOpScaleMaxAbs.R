@@ -64,7 +64,7 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
-      lapply(dt, function(x) {
+      lapply(dt, function(x){
         s = max(abs(range(x, na.rm = TRUE, finite = TRUE)))
         if (s == 0) {
           s = 1

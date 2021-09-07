@@ -55,7 +55,7 @@
 #' library("mlr3")
 #'
 #' task = tsk("iris")
-#' pop = po("kernelpca", features = 3) # only keep top 3 components
+#' pop = po("kernelpca", features = 3)  # only keep top 3 components
 #'
 #' task$data()
 #' pop$train(list(task))[[1]]$data()
@@ -94,3 +94,5 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
 )
 
 mlr_pipeops$add("kernelpca", PipeOpKernelPCA)
+
+

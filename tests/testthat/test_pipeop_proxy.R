@@ -56,7 +56,7 @@ test_that("PipeOpProxy - PCA proxied", {
 test_that("PipeOpProxy - Graph proxied", {
   pop = PipeOpProxy$new(param_vals = list(content =
     PipeOpScale$new() %>>%
-      PipeOpPCA$new(param_vals = list(center = TRUE, scale. = TRUE, rank. = 1L))))
+    PipeOpPCA$new(param_vals = list(center = TRUE, scale. = TRUE, rank. = 1L))))
   gr = PipeOpScale$new() %>>%
     PipeOpPCA$new(param_vals = list(center = TRUE, scale. = TRUE, rank. = 1L))
   task1 = mlr_tasks$get("iris")
@@ -104,14 +104,14 @@ Predicting debug2 with input list\\(input_1 = 4\\) and state list\\(input_1 = 2\
   tsk3 = po("ica")$train(list(tsk1))[[1]]
 
   expect_output(
-    expect_equal(pop$train(list(1, tsk1, tsk2, tsk3, 2)),
-      list(output1 = 2, output2 = po("featureunion")$train(list(tsk1, tsk2, tsk3))[[1]], output3 = 3)),
+      expect_equal(pop$train(list(1, tsk1, tsk2, tsk3, 2)),
+        list(output1 = 2, output2 = po("featureunion")$train(list(tsk1, tsk2, tsk3))[[1]], output3 = 3)),
     "^Training debug1 with input list\\(input_1 = 1\\)
 Training debug2 with input list\\(input_1 = 2\\)$")
 
   expect_output(
-    expect_equal(pop$train(list(1, tsk2, 2)),
-      list(output1 = 2, output2 = tsk2, output3 = 3)),
+      expect_equal(pop$train(list(1, tsk2, 2)),
+        list(output1 = 2, output2 = tsk2, output3 = 3)),
     "^Training debug1 with input list\\(input_1 = 1\\)
 Training debug2 with input list\\(input_1 = 2\\)$")
 

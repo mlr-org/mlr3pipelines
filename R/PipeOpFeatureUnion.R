@@ -151,7 +151,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   task = inputs[[1L]]
   ids = task$row_ids
 
-  if (length(inprefix)) { # inprefix has length 0 if innum is 0
+  if (length(inprefix)) {  # inprefix has length 0 if innum is 0
     names(inputs) = inprefix
     if (inprefix[1L] != "") {
       task$rename(task$feature_names, sprintf("%s.%s", inprefix[1L], task$feature_names))
@@ -178,17 +178,16 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   # check whether the duplicated feature names are actually true duplicates (by value)
   if (length(duplicates)) {
     real_duplicates = logical(length(duplicates))
-    for (i in seq_along(duplicates)) {
+    for(i in seq_along(duplicates)) {
       # this is done by reference and should have good performance
       real_duplicates[i] = sum(duplicated(t(setDT(unlist(map(inputs,
         .f = function(x) {
           if (duplicates[i] %in% x$feature_names) {
             x$data(cols = duplicates[i])
           } else {
-            NULL # if the duplicated column is not present, explicitly return NULL
+            NULL  # if the duplicated column is not present, explicitly return NULL
           }
-        }
-      ), recursive = FALSE))))) > 0L
+        }), recursive = FALSE))))) > 0L
     }
     if (any(!real_duplicates)) {
       # FIXME: sprintf may not be able to handle large error messages here?

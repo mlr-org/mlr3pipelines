@@ -2,7 +2,7 @@ context("tunethreshold")
 
 test_that("threshold works for multiclass", {
   t = tsk("iris")
-  po_cv = po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"))
+  po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"))
   res = po_cv$train(list(t))
   po_thr = po("tunethreshold")
   expect_pipeop(po_thr)
@@ -18,7 +18,7 @@ test_that("threshold works for multiclass", {
 
 test_that("threshold works for binary", {
   t = tsk("pima")
-  po_cv = po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"))
+  po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"))
   res = po_cv$train(list(t))
   po_thr = po("tunethreshold")
   expect_pipeop(po_thr)
@@ -30,7 +30,7 @@ test_that("threshold works for binary", {
   out = po_thr$predict(res2)[[1]]
   expect_prediction(out)
   expect_true(out$score() < 0.33)
-  po_cv = po("learner_cv", learner = lrn("classif.rpart", predict_type = "response")) %>>%
+  po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "response")) %>>%
     po("tunethreshold")
   expect_error(po_cv$train(t), "prob")
 })

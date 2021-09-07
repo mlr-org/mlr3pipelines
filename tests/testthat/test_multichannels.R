@@ -8,7 +8,7 @@ test_that("adding multiple edges to output channels works", {
 
   expect_output(print(graph), c("scale.*subsample,pca.*\n.*subsample.*scale.*\n.*pca.*scale"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
@@ -82,7 +82,7 @@ test_that("multiple edges on output channel copies, as expected", {
   expect_equal(sapply(stsk$data(cols = stsk$feature_names), function(x) sum(x^2) / (length(x) - 1)),
     c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
-  expect_identical(tsk0, tsk1) # input task not changed
+  expect_identical(tsk0, tsk1)  # input task not changed
 
   expect_deep_clone(tsk0, tsk_clone)
 
@@ -96,7 +96,7 @@ test_that("adding multiple edges to vararg input channel works", {
 
   expect_output(print(graph), c("scale.*vararg.*\n.*pca.*vararg.*\n.*vararg.*scale,pca"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
@@ -115,7 +115,7 @@ test_that("adding multiple edges to vararg input channel works", {
 
   expect_output(print(graph), c("scale.*vararg.*\n.*pca.*vararg.*\n.*subsample.*vararg.*\n.*select.*vararg.*\n.*vararg.*scale,pca,subsample,select"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   graph$plot()
   dev.off()
 
@@ -176,7 +176,7 @@ test_that("vararg passes args through as it should", {
   expect_equal(sapply(stsk$data(cols = stsk$feature_names), function(x) sum(x^2) / (length(x) - 1)),
     c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
-  expect_identical(tsk0, tsk1) # input task not changed
+  expect_identical(tsk0, tsk1)  # input task not changed
   expect_deep_clone(tsk0, tsk_clone)
 
 
@@ -189,7 +189,7 @@ test_that("vararg passes args through as it should", {
     add_edge("nop3", "vararg", dst_channel = "...")$
     add_edge("nop2", "vararg", dst_channel = "input1")
 
-  # FIXME: check the following warning
+    # FIXME: check the following warning
   expect_equal(suppressWarnings(nullgraph$train(list(1, 2, 3), single_input = FALSE))[[1]], list(`...` = 1, `...` = 3, input1 = 2))
 
 })

@@ -29,14 +29,14 @@ test_that("PipeOpVtreat - Regression", {
   # toy task as here: https://github.com/WinVector/vtreat/blob/master/Examples/Regression/Regression_FP.md
   set.seed(2020)
 
-  make_data = function(nrows) {
-    d = data.frame(x = 5 * rnorm(nrows))
-    d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
-    d[4:10, "x"] = NA # introduce NAs
-    d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
-    d["x2"] = rnorm(nrows)
-    d[d["xc"] == "level_-1", "xc"] = NA # introduce a NA level
-    return(d)
+  make_data <- function(nrows) {
+      d <- data.frame(x = 5 * rnorm(nrows))
+      d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
+      d[4:10, "x"] = NA  # introduce NAs
+      d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
+      d["x2"] = rnorm(nrows)
+      d[d["xc"] == "level_-1", "xc"] = NA  # introduce a NA level
+      return(d)
   }
 
   task = TaskRegr$new("vtreat_regr", backend = make_data(100), target = "y")
@@ -78,15 +78,15 @@ test_that("PipeOpVtreat - Binary Classification", {
   # toy task as here: https://github.com/WinVector/vtreat/blob/master/Examples/Classification/Classification_FP.md
   set.seed(2020)
 
-  make_data = function(nrows) {
-    d = data.frame(x = 5 * rnorm(nrows))
-    d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
-    d[4:10, "x"] = NA # introduce NAs
-    d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
-    d["x2"] = rnorm(nrows)
-    d[d["xc"] == "level_-1", "xc"] = NA # introduce a NA level
-    d["yc"] = as.factor(d[["y"]] > 0.5)
-    return(d)
+  make_data <- function(nrows) {
+      d <- data.frame(x = 5 * rnorm(nrows))
+      d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
+      d[4:10, "x"] = NA  # introduce NAs
+      d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
+      d["x2"] = rnorm(nrows)
+      d[d["xc"] == "level_-1", "xc"] = NA  # introduce a NA level
+      d["yc"] = as.factor(d[["y"]] > 0.5)
+      return(d)
   }
 
   task = TaskClassif$new("vtreat_binary", backend = make_data(100), target = "yc")
@@ -128,15 +128,15 @@ test_that("PipeOpVtreat - Multiclass Classification", {
   # toy task as here: https://github.com/WinVector/vtreat/blob/master/Examples/Multinomial/MultinomialExample_FP.md
   set.seed(2020)
 
-  make_data = function(nrows) {
-    d = data.frame(x = 5 * rnorm(nrows))
-    d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
-    d[4:10, "x"] = NA # introduce NAs
-    d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
-    d["x2"] = rnorm(nrows)
-    d[d["xc"] == "level_-1", "xc"] = NA # introduce a NA level
-    d["yc"] = as.factor(ifelse(d[["y"]] > 0.5, "large", ifelse(d[["y"]] < -0.5, "small", "liminal")))
-    return(d)
+  make_data <- function(nrows) {
+      d <- data.frame(x = 5 * rnorm(nrows))
+      d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
+      d[4:10, "x"] = NA  # introduce NAs
+      d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
+      d["x2"] = rnorm(nrows)
+      d[d["xc"] == "level_-1", "xc"] = NA  # introduce a NA level
+      d["yc"] = as.factor(ifelse(d[["y"]] > 0.5, "large", ifelse(d[["y"]] < -0.5, "small", "liminal")))
+      return(d)
   }
 
   task = TaskClassif$new("vtreat_multi", backend = make_data(100), target = "yc")
@@ -188,3 +188,4 @@ test_that("PipeOpVtreat - Edge Cases", {
   train_out2 = po$train(list(task))[[1L]]
   predict_out2 = po$predict(list(task))[[1L]]
 })
+

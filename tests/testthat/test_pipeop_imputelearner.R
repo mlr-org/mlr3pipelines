@@ -37,7 +37,7 @@ test_that("PipeOpImputeLearner - simple tests", {
 })
 
 test_that("PipeOpImputeLearner", {
-  skip_on_cran() # slow test, so we don't do it on cran
+  skip_on_cran()  # slow test, so we don't do it on cran
 
   task = mlr_tasks$get("pima")
   expect_datapreproc_pipeop_class(PipeOpImputeLearner,

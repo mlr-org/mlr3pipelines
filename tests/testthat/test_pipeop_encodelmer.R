@@ -89,9 +89,7 @@ test_that("PipeOpEncodeLmer Edge Cases", {
 
 
 test_that("Confirms to sensible values", {
-  logit = function(x) {
-    exp(-x) / (1 + exp(-x))
-  }
+  logit = function(x) {exp(-x) / (1+exp(-x))}
 
   data = data.table::data.table(y = factor(sample_n_letters(200, 2)))
   data$x = factor(ifelse(data$y == "b", "b", "a"))
@@ -121,7 +119,7 @@ test_that("Confirms to sensible values", {
   op = PipeOpEncodeLmer$new()
   expect_pipeop(op)
 
-  nt = suppressWarnings(train_pipeop(op, inputs = list(task))[[1L]]) # suppress warnings about failures to converge
+  nt = suppressWarnings(train_pipeop(op, inputs = list(task))[[1L]])  # suppress warnings about failures to converge
   yh = nt$data()$y
   expect_true(cor(data$x, yh) > 0.9)
   expect_true("factor" %nin% nt$feature_types$type)

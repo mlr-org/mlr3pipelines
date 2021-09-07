@@ -26,7 +26,7 @@ test_that("PipeOpFilter", {
 
   tt = po$train(list(task))[[1]]
 
-  expect_deep_clone(po$filter, orig_filter) # po$filter not changed by train
+  expect_deep_clone(po$filter, orig_filter)  # po$filter not changed by train
 
   expect_set_equal(tt$feature_names, c("chas", "town", "tract"))
 
@@ -52,7 +52,7 @@ test_that("PipeOpFilter parameters", {
   expect_set_equal(c("filter.nfeat", "filter.frac", "filter.cutoff", "filter.permuted"),
     grep("^filter\\.", names(po$param_set$params), value = TRUE))
 
-  po = po$clone(deep = TRUE) # cloning often breaks param connection
+  po = po$clone(deep = TRUE)  # cloning often breaks param connection
 
   po$param_set$values$na.rm = FALSE
   expect_equal(po$filter$param_set$values$na.rm, FALSE)

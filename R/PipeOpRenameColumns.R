@@ -74,7 +74,7 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   private = list(
     .transform = function(task) {
       if (!length(self$param_set$values$renaming)) {
-        return(task) # early exit
+        return(task)  # early exit
       }
       innames = names(self$param_set$values$renaming)
       nontargets = task$col_roles

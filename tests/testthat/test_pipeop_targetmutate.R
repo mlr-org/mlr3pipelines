@@ -38,35 +38,36 @@ test_that("PipeOpTargetMutate - basic properties", {
 })
 
 test_that("PipeOpTargetMutate - log base 2 trafo", {
-  g = Graph$new()
-  g$add_pipeop(PipeOpTargetMutate$new("logtrafo",
-    param_vals = list(
-      trafo = function(x) log(x, base = 2),
-      inverter = function(x) list(response = 2^x$response))
-  ))
-  g$add_pipeop(LearnerRegrRpart$new())
-  g$add_pipeop(PipeOpTargetInvert$new())
-  g$add_edge(src_id = "logtrafo", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
-  g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
-  g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
+ g = Graph$new()
+ g$add_pipeop(PipeOpTargetMutate$new("logtrafo",
+   param_vals = list(
+     trafo = function(x) log(x, base = 2),
+     inverter = function(x) list(response = 2 ^ x$response))
+   )
+ )
+ g$add_pipeop(LearnerRegrRpart$new())
+ g$add_pipeop(PipeOpTargetInvert$new())
+ g$add_edge(src_id = "logtrafo", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
+ g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
+ g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
 
-  task = mlr_tasks$get("boston_housing")
-  train_out = g$train(task)
-  predict_out = g$predict(task)
+ task = mlr_tasks$get("boston_housing")
+ train_out = g$train(task)
+ predict_out = g$predict(task)
 
-  dat = task$data()
-  dat$medv = log(dat$medv, base = 2)
-  task_log = TaskRegr$new("boston_housing_log", backend = dat, target = "medv")
+ dat = task$data()
+ dat$medv = log(dat$medv, base = 2)
+ task_log = TaskRegr$new("boston_housing_log", backend = dat, target = "medv")
 
-  learner = LearnerRegrRpart$new()
-  learner$train(task_log)
+ learner = LearnerRegrRpart$new()
+ learner$train(task_log)
 
-  learner_predict_out = learner$predict(task_log)
-  expect_equal(2^learner_predict_out$truth, predict_out[[1L]]$truth)
-  expect_equal(2^learner_predict_out$response, predict_out[[1L]]$response)
+ learner_predict_out = learner$predict(task_log)
+ expect_equal(2 ^ learner_predict_out$truth, predict_out[[1L]]$truth)
+ expect_equal(2 ^ learner_predict_out$response, predict_out[[1L]]$response)
 })
 
-#' test_that("PipeOpTargetMutate - Regr -> Classif", {
+#'test_that("PipeOpTargetMutate - Regr -> Classif", {
 #' g = Graph$new()
 #' g$add_pipeop(PipeOpTargetMutate$new("regr_classif",
 #'   param_vals = list(
@@ -90,9 +91,9 @@ test_that("PipeOpTargetMutate - log base 2 trafo", {
 #' expect_true("medv" %nin% g$state$classif.rpart$train_task$feature_names)
 #' predict_out = g$predict(task)
 #' expect_number(predict_out[[1]]$score(msr("classif.ce")), lower = 0, upper = 1)
-#' })
+#'})
 
-#' test_that("PipeOpTargetMutate - Classif -> Regr", {
+#'test_that("PipeOpTargetMutate - Classif -> Regr", {
 #' # quite nonsense but lets us test classif to regr
 #' g = Graph$new()
 #' g$add_pipeop(PipeOpTargetMutate$new("classif_regr",
@@ -115,4 +116,4 @@ test_that("PipeOpTargetMutate - log base 2 trafo", {
 #' expect_true("Species" %nin% g$state$regr.rpart$train_task$feature_names)
 #' predict_out = g$predict(task)
 #' expect_number(predict_out[[1]]$score(msr("regr.mse")))
-#' })
+#'})

@@ -42,14 +42,15 @@
 #' library("mlr3")
 #'
 #' task = tsk("iris")
-#' pop = po("modelmatrix", formula = ~ .^2)
+#' pop = po("modelmatrix", formula = ~ .  ^ 2)
 #'
 #' task$data()
 #' pop$train(list(task))[[1]]$data()
 #'
-#' pop$param_set$values$formula = ~ 0 + .^2
+#' pop$param_set$values$formula = ~ 0 + . ^ 2
 #'
 #' pop$train(list(task))[[1]]$data()
+#'
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R

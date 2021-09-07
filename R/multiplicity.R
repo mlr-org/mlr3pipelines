@@ -91,10 +91,8 @@ assert_multiplicity = function(x, .var.name, check_nesting = FALSE) {
   assert_class(x, "Multiplicity", .var.name = .var.name)
   assert(check_list(x, names = "unnamed"), check_list(x, names = "unique"))
   checkmnl = function(x) {
-    if (!is.Multiplicity(x)) {
-      return(0L)
-    }
-    levels = unique(unlist(map(x, checkmnl))) # don't map_int because Multiplicity() exists which would return NULL or integer(0)
+    if (!is.Multiplicity(x)) return(0L)
+    levels = unique(unlist(map(x, checkmnl)))  # don't map_int because Multiplicity() exists which would return NULL or integer(0)
     if (length(levels) > 1) {
       stopf("Inconsistent multiplicity nesting level in %s", .var.name)
     }
@@ -108,12 +106,8 @@ assert_multiplicity = function(x, .var.name, check_nesting = FALSE) {
 # Assumes multiplicity is well-formed. Use assert_multiplicity to check well-formedness
 multiplicity_nests_deeper_than = function(x, cutoff) {
   cutoff = assert_count(cutoff)
-  if (!is.Multiplicity(x)) {
-    return(FALSE)
-  }
-  if (!cutoff) {
-    return(TRUE)
-  }
+  if (!is.Multiplicity(x)) return(FALSE)
+  if (!cutoff) return(TRUE)
   ret = NA
   for (element in x) {
     ret = multiplicity_nests_deeper_than(element, cutoff - 1L)

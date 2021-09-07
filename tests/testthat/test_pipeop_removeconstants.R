@@ -25,12 +25,12 @@ test_that("PipeOpRemoveConstants removes expected cols", {
 
   expect_set_equal(cn, setdiff(task$feature_names, c("xx", "yy")))
 
-  po$param_set$values$ratio = 1 / 505.9999
+  po$param_set$values$ratio = 1/505.9999
 
   cn = po$train(list(task))[[1]]$feature_names
   expect_set_equal(cn, setdiff(task$feature_names, c("xx", "yy", "xx1", "yy1")))
 
-  po$param_set$values$ratio = 1 / 506.0001
+  po$param_set$values$ratio = 1/506.0001
 
   cn = po$train(list(task))[[1]]$feature_names
   expect_set_equal(cn, setdiff(task$feature_names, c("xx", "yy")))
@@ -58,20 +58,20 @@ test_that("PipeOpRemoveConstants removes expected cols", {
   iris.na[1, 1] = NA
   iris.na[[2]] = NA_integer_
 
-  test_dropping(iris.na, iris.na[c(1, 3:5)], list(na_ignore = FALSE))
-  test_dropping(iris.na, iris.na[3:5], list(na_ignore = FALSE, ratio = 0.01))
-  test_dropping(iris.na, iris.na[3:5], list(na_ignore = TRUE))
-  test_dropping(iris.na, iris.na[3:5], list(na_ignore = TRUE, abs_tol = 0, rel_tol = 0))
+  test_dropping(iris.na , iris.na[c(1, 3:5)], list(na_ignore = FALSE))
+  test_dropping(iris.na , iris.na[3:5], list(na_ignore = FALSE, ratio = 0.01))
+  test_dropping(iris.na , iris.na[3:5], list(na_ignore = TRUE))
+  test_dropping(iris.na , iris.na[3:5], list(na_ignore = TRUE, abs_tol = 0, rel_tol = 0))
 
   iris.na[[2]][1:3] = 1:3
-  test_dropping(iris.na, iris.na[c(1, 2:5)], list(na_ignore = FALSE))
-  test_dropping(iris.na, iris.na[2:5], list(na_ignore = FALSE, ratio = 0.01))
-  test_dropping(iris.na, iris.na[3:5], list(na_ignore = FALSE, ratio = 0.03))
-  test_dropping(iris.na, iris.na[2:5], list(na_ignore = TRUE))
-  test_dropping(iris.na, iris.na[2:5], list(na_ignore = TRUE, ratio = 0.03))
+  test_dropping(iris.na , iris.na[c(1, 2:5)], list(na_ignore = FALSE))
+  test_dropping(iris.na , iris.na[2:5], list(na_ignore = FALSE, ratio = 0.01))
+  test_dropping(iris.na , iris.na[3:5], list(na_ignore = FALSE, ratio = 0.03))
+  test_dropping(iris.na , iris.na[2:5], list(na_ignore = TRUE))
+  test_dropping(iris.na , iris.na[2:5], list(na_ignore = TRUE, ratio = 0.03))
 
   minus.iris = iris
   for (i in 1:4) minus.iris[i] = minus.iris[i] * -1
-  test_dropping(minus.iris, minus.iris, list())
+  test_dropping(minus.iris , minus.iris, list())
 
 })

@@ -155,7 +155,7 @@ Graph = R6Class("Graph",
       }
 
       tmp = self$edges[, list(parents = list(unique(src_id))), by = list(id = dst_id)]
-      orphans = setdiff(names(self$pipeops), self$edges$dst_id) # the ones without parents
+      orphans = setdiff(names(self$pipeops), self$edges$dst_id)  # the ones without parents
       if (length(orphans)) {
         # if orphans is empty either the Graph is empty (won't happen here) or has cycles, in
         # which case we still call topo_sort to get unified error messages.
@@ -241,7 +241,7 @@ Graph = R6Class("Graph",
       on.exit({
         self$edges = old_edges
       })
-      self$ids(sorted = TRUE) # if we fail here, edges get reset.
+      self$ids(sorted = TRUE)  # if we fail here, edges get reset.
       on.exit()
       invisible(self)
     },
@@ -272,7 +272,7 @@ Graph = R6Class("Graph",
       ig = igraph::add_vertices(ig, length(extra_vertices), name = extra_vertices)
       layout = igraph::layout_with_sugiyama(ig)$layout
       if (!is.matrix(layout)) {
-        layout = t(layout) # bug in igraph, dimension is dropped
+        layout = t(layout)  # bug in igraph, dimension is dropped
       }
       if (html) {
         require_namespaces("visNetwork")
@@ -290,9 +290,9 @@ Graph = R6Class("Graph",
             txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
           } else if (grepl("<OUTPUT>", node)) {
             if (nrow(self$output) > 1) {
-              out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node), ] # Deal with multiple outputs
+              out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node), ]  # Deal with multiple outputs
             } else {
-              out = self$output # Standard case, single output
+              out = self$output  # Standard case, single output
             }
             txt = paste0("Output:<br>Name: ", out$name, "<br>Train: ", null_str(out$train), "<br>Predict: ", null_str(out$predict))
           } else {
@@ -304,7 +304,7 @@ Graph = R6Class("Graph",
         })
         ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
         edges = NROW(ig_data$edges)
-        if (edges) ig_data$edges$color = "lightblue" # Only if more than one pipeop
+        if (edges) ig_data$edges$color = "lightblue"  # Only if more than one pipeop
         # Visualize the nodes
         p = visNetwork::visNetwork(nodes = ig_data$nodes, edges = ig_data$edges, height = "400px", width = "50%")
         if (edges) { # Only if more than one pipeop
@@ -315,7 +315,7 @@ Graph = R6Class("Graph",
         }
         p
       } else {
-        suppressWarnings(graphics::plot(ig, layout = layout)) # suppress partial matching warning
+        suppressWarnings(graphics::plot(ig, layout = layout))  # suppress partial matching warning
       }
     },
 
@@ -330,8 +330,8 @@ Graph = R6Class("Graph",
         if (nrow(self$edges) == 0L) {
           all_names = gsub("\\.", "_", self$ids(TRUE))
           dot = paste0(paste0(seq_along(all_names), " [label=", '"', all_names, '"',
-            ",fontsize=", fontsize, "]"),
-          collapse = ";\n")
+            ",fontsize=", fontsize, ']'),
+            collapse = ";\n")
         } else {
           df = self$edges[, list(from = src_id, to = dst_id)]
           df = rbind(df, self$input[, list(from = "INPUT", to = op.id)])
@@ -352,16 +352,16 @@ Graph = R6Class("Graph",
 
           all_names = gsub("\\.", "_", all_names)
           labels = paste0(unlist(mlr3misc::map(unique(unlist(df)), function(x) {
-            paste0(x, " [label=", '"', all_names[x], '"', ",fontsize=", fontsize, "]")
+            paste0(x, " [label=", '"', all_names[x], '"', ",fontsize=", fontsize, ']')
           })), collapse = ";\n")
           dot = paste0(gr, ";\n", labels)
 
           if (length(extra_vertices)) {
-            ev_names = gsub("\\.", "_", extra_vertices)
-            ev = paste0(paste0(length(all_names) + seq_along(ev_names), " [label=",
-              '"', ev_names, '"', ",fontsize=", fontsize, "]"),
-            collapse = ";\n")
-            dot = paste0(dot, ";\n", ev)
+             ev_names = gsub("\\.", "_", extra_vertices)
+             ev = paste0(paste0(length(all_names) + seq_along(ev_names), " [label=",
+               '"', ev_names, '"', ",fontsize=", fontsize, ']'),
+               collapse = ";\n")
+             dot = paste0(dot, ";\n", ev)
           }
         }
         cat(paste0("digraph ", dotname, " {\n", dot, "\n}\n"))
@@ -379,8 +379,8 @@ Graph = R6Class("Graph",
           catf("Graph with %s PipeOps:", nrow(lines))
           ## limit column width ##
 
-          outwidth = getOption("width") %??% 80 # output width we want (default 80)
-          colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE)) # original width of columns
+          outwidth = getOption("width") %??% 80  # output width we want (default 80)
+          colwidths = map_int(lines, function(x) max(nchar(x), na.rm = TRUE))  # original width of columns
           collimit = calculate_collimit(colwidths, outwidth)
           with_options(list(datatable.prettyprint.char = collimit), {
             print(lines, row.names = FALSE)
@@ -463,7 +463,7 @@ Graph = R6Class("Graph",
 
   private = list(
     deep_clone = function(name, value) {
-      private$.param_set = NULL # required to keep clone identical to original, otherwise tests get really ugly
+      private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
       switch(name,
         edges = copy(value),
         pipeops = map(value, function(x) x$clone(deep = TRUE)),
@@ -580,7 +580,7 @@ graph_reduce = function(self, input, fun, single_input) {
   }
 
   # get the topo-sorted pipeop ids
-  ids = self$ids(sorted = TRUE) # won't contain __initial__  or __terminal__ which are only in our local copy
+  ids = self$ids(sorted = TRUE)  # won't contain __initial__  or __terminal__ which are only in our local copy
 
   # walk over ids, learning each operator
   for (id in ids) {

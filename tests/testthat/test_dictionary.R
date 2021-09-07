@@ -69,11 +69,11 @@ test_that("Dictionary contains all PipeOps", {
   # the loop now checks whether we can construct each pipeop from the dictionary *and* by itself
   for (idx in seq_along(dictnames)) {
 
-    pogen = get(pipeops[idx], pkgenv) # the constructor, as found in the package namespace
-    dictname = dictnames[idx] # the "key" in the mlr_pipeops dictionary
-    args = initargs[[pipeops[idx]]] %??% list() # the required arguments, if any. e.g. 'outnum' for PipeOpCopy.
+    pogen = get(pipeops[idx], pkgenv)  # the constructor, as found in the package namespace
+    dictname = dictnames[idx]  # the "key" in the mlr_pipeops dictionary
+    args = initargs[[pipeops[idx]]] %??% list()  # the required arguments, if any. e.g. 'outnum' for PipeOpCopy.
 
-    test_obj = do.call(pogen$new, args) # test_obj: PipeOp object, constructed from constructor
+    test_obj = do.call(pogen$new, args)  # test_obj: PipeOp object, constructed from constructor
 
     # check that mlr_pipeops key is the default ID
     if (pipeops[idx] %nin% unequal_id) {
@@ -95,9 +95,9 @@ test_that("Dictionary contains all PipeOps", {
     # However, for ParamUty we can't do that, so if there are only 'ParamUty' parameter we skip this part.
     eligibleparams = test_obj$param_set$params[test_obj$param_set$class != "ParamUty"]
     eligibleparams = discard(eligibleparams, function(p) {
-      # filter out discrete params with only one level, or the numeric parameters with $lower == $upper
-      # The use '&&' here is intentional, because numeric parameters have 0 levels, and discrete parameters have $lower == $upper (== NA)
-      length(p$levels) < 2 && isTRUE(all.equal(p$lower, p$upper))
+        # filter out discrete params with only one level, or the numeric parameters with $lower == $upper
+        # The use '&&' here is intentional, because numeric parameters have 0 levels, and discrete parameters have $lower == $upper (== NA)
+        length(p$levels) < 2 && isTRUE(all.equal(p$lower, p$upper))
     })
     if (length(eligibleparams)) {
       testingparam = eligibleparams[[1]]
@@ -153,13 +153,13 @@ test_that("data.table of pipeops looks as it should", {
 
 test_that("GraphLearner is in mlr_learners", {
 
-  expect_data_table(as.data.table(mlr_learners)) # can construct mlr_learners table
+  expect_data_table(as.data.table(mlr_learners))  # can construct mlr_learners table
 
   # unfortunately we don't add GraphLearner to mlr_learners
-  # expect_equal(
+  #expect_equal(
   #  mlr_learners$get("graph", graph = PipeOpLearner$new(lrn("classif.rpart"))),
   #  GraphLearner$new(Graph$new()$add_pipeop(PipeOpLearner$new(lrn("classif.rpart"))))
-  # )
+  #)
 
   # FIXME: depends on mlr-org/mlr3#328
   # expect_error(mlr_learners$get("graph"), "'graph'.*'graph'")  # Needs the argument 'graph' to construct 'graph'

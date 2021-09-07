@@ -56,7 +56,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
               stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
             }
             if (length(task_type) == 1) {
-              return(task_type) # early exit
+              return(task_type)  # early exit
             }
             prdcssrs = graph$edges[dst_id == x$id, ]$src_id
             if (length(prdcssrs)) {
@@ -70,7 +70,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
           }
           task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
         }
-        task_type = c(task_type, "classif")[1L] # final fallback
+        task_type = c(task_type, "classif")[1L]  # final fallback
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
@@ -116,17 +116,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
 
     .train = function(task) {
-      on.exit({
-        self$graph$state = NULL
-      })
+      on.exit({self$graph$state = NULL})
       self$graph$train(task)
       state = self$graph$state
       state
     },
     .predict = function(task) {
-      on.exit({
-        self$graph$state = NULL
-      })
+      on.exit({self$graph$state = NULL})
       self$graph$state = self$model
       prediction = self$graph$predict(task)
       assert_list(prediction, types = "Prediction", len = 1,
@@ -136,25 +132,21 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     get_predict_type = function() {
       # recursively walk backwards through the graph
       get_po_predict_type = function(x) {
-        if (!is.null(x$predict_type)) {
-          return(x$predict_type)
-        }
+        if (!is.null(x$predict_type)) return(x$predict_type)
         prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
         if (length(prdcssrs)) {
           # all non-null elements
           predict_types = discard(map(self$graph$pipeops[prdcssrs], get_po_predict_type), is.null)
-          if (length(unique(predict_types)) == 1L) {
+          if (length(unique(predict_types)) == 1L)
             return(unlist(unique(predict_types)))
-          }
         }
         return(NULL)
       }
       predict_type = get_po_predict_type(self$graph$pipeops[[self$graph$rhs]])
-      if (is.null(predict_type)) {
+      if (is.null(predict_type))
         mlr_reflections$learner_predict_types[[self$task_type]][[1]]
-      } else {
+      else
         predict_type
-      }
     },
     set_predict_type = function(predict_type) {
       # recursively walk backwards through the graph

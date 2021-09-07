@@ -4,8 +4,8 @@ rep_suffix = function(x, n) {
 }
 
 calculate_collimit = function(colwidths, outwidth) {
-  margin = length(colwidths) + 4 # columns are separated by one space, with some breathing room
-  numcols = length(colwidths) # number of columns that we expect to limit
+  margin = length(colwidths) + 4  # columns are separated by one space, with some breathing room
+  numcols = length(colwidths)  # number of columns that we expect to limit
   repeat {
     # collimit: the width at which we limit data.table column output. If some columns are very
     # small, we can be more generous for other columns.
@@ -21,7 +21,7 @@ calculate_collimit = function(colwidths, outwidth) {
       break
     }
   }
-  collimit - 3 # subtracting 3 here because data.table adds "..." whenever it truncates a string
+  collimit - 3  # subtracting 3 here because data.table adds "..." whenever it truncates a string
 }
 
 # same as task$filter(), but allows duplicate row IDs
@@ -49,7 +49,7 @@ check_function_or_null = function(x) check_function(x, null.ok = TRUE)
 check_numeric_valid_threshold = function(x) check_numeric(x, any.missing = FALSE, min.len = 1, lower = 0, upper = 1)
 # function that checks whether something is either of class `cls` or in the
 # dictionary `dict` (in which case it is assumed the right class is created).
-check_class_or_character = function(cls, dict) {
+check_class_or_character <- function(cls, dict) {
   function(x) {
     if (is.character(x)) {
       check_choice(x, dict$keys())
@@ -71,16 +71,12 @@ curry = function(fn, ..., varname = "x") {
 # example:
 # check_numeric(x) %check&&% check_true(all(x < 0))
 `%check&&%` = function(lhs, rhs) {
-  if (!isTRUE(lhs) && !isTRUE(rhs)) {
-    return(paste0(lhs, ", and ", rhs))
-  }
+  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", and ", rhs))
   if (isTRUE(lhs)) rhs else lhs
 }
 # check_numeric(x) %check||% check_character(x)
 `%check||%` = function(lhs, rhs) {
-  if (!isTRUE(lhs) && !isTRUE(rhs)) {
-    return(paste0(lhs, ", or ", rhs))
-  }
+  if (!isTRUE(lhs) && !isTRUE(rhs)) return(paste0(lhs, ", or ", rhs))
   TRUE
 }
 

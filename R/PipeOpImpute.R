@@ -133,6 +133,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         packages = packages, tags = "missings"
       )
     }
+
   ),
   active = list(
     feature_types = function(types) {
@@ -162,7 +163,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         self$state$context_cols = context_cols
       }
 
-      ..col = NULL # avoid static checker complaints
+      ..col = NULL  # avoid static checker complaints
 
       imputanda = intask$data(cols = affected_cols)
       imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]
@@ -203,7 +204,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         context_data = intask$data(cols = self$state$context_cols)
       }
 
-      ..col = NULL # avoid static checker complaints
+      ..col = NULL  # avoid static checker complaints
 
       imputanda = intask$data(cols = self$state$affected_cols)
       imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]
@@ -256,5 +257,6 @@ PipeOpImpute = R6Class("PipeOpImpute",
       }
       feature
     }
+
   )
 )

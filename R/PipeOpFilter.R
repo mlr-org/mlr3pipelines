@@ -129,9 +129,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
     .get_state = function(task) {
       # reset filter on exit, the user should not even feel the temptation to not use the `$state`
-      on.exit({
-        self$filter$scores = structure(numeric(0), .Names = character(0))
-      })
+      on.exit({self$filter$scores = structure(numeric(0), .Names = character(0))})
       filtercrit = c("nfeat", "frac", "cutoff", "permuted")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
       if (length(filtercrit) != 1) {

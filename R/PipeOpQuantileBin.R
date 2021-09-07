@@ -58,7 +58,7 @@ PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
     initialize = function(id = "quantilebin", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamInt$new("numsplits", lower = 2, special_vals = list(NULL), tags = "train")
-      ))
+        ))
       ps$values = list(numsplits = 2L)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
     }
@@ -66,10 +66,9 @@ PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
-      bins = lapply(dt, function(d) {
+      bins = lapply(dt, function(d)
         unique(c(-Inf, stats::quantile(d, (1:(self$param_set$values$numsplits - 1)) /
-          self$param_set$values$numsplits, na.rm = TRUE), Inf))
-      })
+            self$param_set$values$numsplits, na.rm = TRUE), Inf)))
       list(bins = bins)
     },
 

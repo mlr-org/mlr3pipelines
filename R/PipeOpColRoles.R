@@ -78,7 +78,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
       new_role = self$param_set$values$new_role
 
       if (is.null(new_role)) {
-        return(task) # early exit
+        return(task)  # early exit
       }
 
       new_role_names = names(new_role)
@@ -97,7 +97,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
 
       # add the new role(s)
       all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
-      for (role in all_col_roles) {
+      for(role in all_col_roles) {
         task$col_roles[[role]] = union(task$col_roles[[role]],
           y = names(which(unlist(map(new_role, .f = function(x) role %in% x)))))
       }

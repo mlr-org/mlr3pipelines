@@ -83,7 +83,8 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       ps = ParamSet$new(params = list(
         ParamLgl$new("min", tags = c("train", "predict")),
         ParamDbl$new("offset", lower = 0, tags = c("train", "predict")),
-        ParamDbl$new("multiplier", lower = 0, tags = c("train", "predict"))))
+        ParamDbl$new("multiplier", lower = 0, tags = c("train", "predict")))
+      )
       ps$values = list(min = TRUE, offset = 1, multiplier = 1)
       # this is one of the few imputers that handles 'character' features!
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("character", "factor", "integer", "numeric", "ordered"))
@@ -92,7 +93,7 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
   private = list(
     .train_imputer = function(feature, type, context) {
       if (type %in% c("factor", "ordered", "character")) {
-        return(".MISSING") # early exit
+        return(".MISSING")  # early exit
       }
 
       offset = self$param_set$values$offset + self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))

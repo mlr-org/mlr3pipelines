@@ -55,7 +55,8 @@
 #'
 #' # impute missing values of the numeric feature "glucose" by the constant value -999
 #' po = po("imputeconstant", param_vals = list(
-#'   constant = -999, affect_columns = selector_name("glucose")))
+#'   constant = -999, affect_columns = selector_name("glucose"))
+#' )
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #' new_task$data(cols = "glucose")[[1]]

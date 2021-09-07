@@ -167,8 +167,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
     initialize = function(id = "textvectorizer", param_vals = list()) {
       ps = ParamSet$new(params = list(
         ParamFct$new("stopwords_language", tags = c("train", "predict"),
-          levels = c("da", "de", "en", "es", "fi", "fr", "hu", "ir", "it",
-            "nl", "no", "pt", "ro", "ru", "sv", "smart", "none")),
+          levels = c("da", "de",    "en",   "es",    "fi",   "fr",   "hu",     "ir",   "it",
+                     "nl", "no",    "pt",   "ro",    "ru",   "sv" ,   "smart", "none")),
         ParamUty$new("extra_stopwords", tags = c("train", "predict"), custom_check = check_character),
 
         ParamLgl$new("tolower", default = TRUE, tags = c("train", "predict", "dfm")),
@@ -230,10 +230,10 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
     .train_dt = function(dt, levels, target) {
       colwise_results = sapply(dt, function(column) {
         tkn = private$.transform_tokens(column)
-        tdm = private$.transform_bow(tkn, trim = TRUE) # transform to BOW (bag of words), return term count matrix
+        tdm = private$.transform_bow(tkn, trim = TRUE)  # transform to BOW (bag of words), return term count matrix
         state = list(
-          tdm = quanteda::dfm_subset(tdm, FALSE), # empty tdm so we have vocab of training data
-          docfreq = invoke(quanteda::docfreq, .args = c(list(x = tdm), # column weights
+          tdm = quanteda::dfm_subset(tdm, FALSE),  # empty tdm so we have vocab of training data
+          docfreq = invoke(quanteda::docfreq, .args = c(list(x = tdm),  # column weights
             rename_list(self$param_set$get_values(tags = "docfreq"), "_df$", "")))
         )
         if (self$param_set$values$return_type == "bow") {
@@ -253,8 +253,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         if (nrow(dt)) {
           tkn = private$.transform_tokens(column)
           tdm = private$.transform_bow(tkn, trim = TRUE)
-          tdm = rbind(tdm, state$tdm) # make sure all columns occur
-          tdm = tdm[, colnames(state$tdm)] # Ensure only train-time features are pased on
+          tdm = rbind(tdm, state$tdm)  # make sure all columns occur
+          tdm = tdm[, colnames(state$tdm)]  # Ensure only train-time features are pased on
 
           if (self$param_set$values$return_type == "bow") {
             tdm = quanteda::convert(private$.transform_tfidf(tdm, state$docfreq), "matrix")
@@ -304,7 +304,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       tokens = unname(unclass(tkn))
       dict = attr(tokens, "types")
       dict = setkeyv(data.table(k = dict, v = seq_along(dict)), "k")
-      dict = dict[dt][pv$min_termfreq < get("frequency") & get("frequency") < pv$max_termfreq, ]
+      dict = dict[dt][pv$min_termfreq < get("frequency") & get("frequency") < pv$max_termfreq,]
 
       # pad or cut x to length l
       pad0 = function(x, l) {
@@ -324,9 +324,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       tokens
     },
     .transform_tfidf = function(tdm, docfreq) {
-      if (!quanteda::nfeat(tdm)) {
-        return(tdm)
-      }
+      if (!quanteda::nfeat(tdm)) return(tdm)
       # code copied from quanteda:::dfm_tfidf.dfm (adapting here to avoid train/test leakage)
       x = invoke(quanteda::dfm_weight, .args = c(list(x = tdm),
         rename_list(self$param_set$get_values("dfm_weight"), "_tf$", "")))

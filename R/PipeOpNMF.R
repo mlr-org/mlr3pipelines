@@ -122,8 +122,8 @@ PipeOpNMF = R6Class("PipeOpNMF",
         ParamLgl$new("simplifyCB", default = TRUE, tags = c("train", "nmf.options")),
         ParamLgl$new("track", default = FALSE, tags = c("train", "nmf.options")),
         ParamUty$new("verbose", default = FALSE, tags = c("train", "nmf.options")),
-        ParamUty$new("pbackend", tags = c("train", "nmf")), # .pbackend
-        ParamUty$new("callback", tags = c("train", "nmf")) # .callback
+        ParamUty$new("pbackend", tags = c("train", "nmf")),  # .pbackend
+        ParamUty$new("callback", tags = c("train", "nmf"))  # .callback
       ))
       ps$add_dep("keep.all", on = "nrun", cond = CondLarger$new(1))
       ps$add_dep("callback", on = "keep.all", cond = CondEqual$new(TRUE))
@@ -134,7 +134,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
   private = list(
 
     .train_dt = function(dt, levels, target) {
-      x = t(as.matrix(dt)) # nmf expects a matrix with the rows holding the features
+      x = t(as.matrix(dt))  # nmf expects a matrix with the rows holding the features
 
       # handling of parameters
       .args = self$param_set$get_values(tags = "nmf")
@@ -151,7 +151,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
 
       self$state = nmf
       # here we have two options? return directly h or do what we do during prediction
-      # h = t(mlr3misc::invoke(NMF::coef, object = nmf))
+      #h = t(mlr3misc::invoke(NMF::coef, object = nmf))
       w = mlr3misc::invoke(NMF::basis, object = nmf)
       h_ = t(mlr3misc::invoke(MASS::ginv, X = w) %*% x)
       colnames(h_) = paste0("NMF", seq_len(self$param_set$values$rank))
@@ -169,7 +169,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
     .select_cols = function(task) {
       # only use non-negative numerical features
       features = task$feature_types[get("type") %in% self$feature_types, get("id")]
-      non_negative = map(task$data(cols = features), function(x) all(x >= 0)) # could also be more precise
+      non_negative = map(task$data(cols = features), function(x) all(x >= 0))  # could also be more precise
       names(non_negative[unlist(non_negative)])
     }
   )

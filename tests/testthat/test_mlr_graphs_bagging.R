@@ -2,7 +2,7 @@ context("ppl - pipeline_bagging")
 
 
 test_that("Bagging Pipeline", {
-  skip_on_cran() # takes too long
+  skip_on_cran()  # takes too long
 
   expect_error(ppl("bagging", graph = lrn("classif.rpart"), averager = po("classifavg", collect_multiplicity = FALSE)),
     regexp = "must collect multiplicities")
@@ -38,3 +38,4 @@ test_that("Bagging Pipeline", {
   expect_length(predict_out, 10L)
   expect_true(all(map_lgl(predict_out, function(x) "PredictionClassif" %in% class(x))))
 })
+

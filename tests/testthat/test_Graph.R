@@ -78,7 +78,7 @@ test_that("complex graph", {
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"),
     info = paste0("'", lines, "'", collapse = "', '"))
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
 
@@ -147,7 +147,7 @@ test_that("input / output lists and naming", {
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
 
-  pdf(file = NULL) # don't show plot. It is annoying.
+  pdf(file = NULL)  # don't show plot. It is annoying.
   gr$plot()
   dev.off()
 
@@ -200,7 +200,7 @@ test_that("edges that introduce loops cannot be added", {
 
   expect_error(g$add_edge("p1", "p1", 1, 1), "Cycle detected")
 
-  expect_deep_clone(g, gclone) # check that edges did not change
+  expect_deep_clone(g, gclone)  # check that edges did not change
 
   g$add_edge("p1", "p2")
 
@@ -209,7 +209,7 @@ test_that("edges that introduce loops cannot be added", {
 
   expect_error(g$add_edge("p2", "p1", 1, 1), "Cycle detected")
 
-  expect_deep_clone(g, gclone) # check that edges did not change
+  expect_deep_clone(g, gclone)  # check that edges did not change
 })
 
 
@@ -266,8 +266,8 @@ test_that("Graph printer aux function calculates col widths well", {
   set.seed(8008135)
 
   effective_outwidth = function(colwidths, collimit) {
-    colwidths[colwidths > collimit] = collimit + 3 # this is how data.table does it
-    sum(colwidths + 1) + 4 # add 1 spacer between columns, and an extra margin of 4
+    colwidths[colwidths > collimit] = collimit + 3  # this is how data.table does it
+    sum(colwidths + 1) + 4  # add 1 spacer between columns, and an extra margin of 4
   }
 
   test_outlimit = function(colwidths, outwidth) {
@@ -363,7 +363,7 @@ test_that("Graph with vararg input", {
   gr = gunion(list(PipeOpNOP$new(), gr, PipeOpNOP$new(id = "nop2"), PipeOpNOP$new(id = "nop3")))
 
   expect_equal(list(nop.output = 1, featureunion.output = tcombined, nop2.output = 2, nop3.output = 3),
-    gr$train(list(1, t1, t2, 2, 3), single_input = FALSE))
+               gr$train(list(1, t1, t2, 2, 3), single_input = FALSE))
 })
 
 test_that("single pipeop plot", {

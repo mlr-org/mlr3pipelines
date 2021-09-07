@@ -1,7 +1,7 @@
 context("GraphLearner")
 
 test_that("basic graphlearner tests", {
-  skip_on_cran() # takes too long
+  skip_on_cran()  # takes too long
   task = mlr_tasks$get("iris")
 
   lrn = mlr_learners$get("classif.rpart")
@@ -39,8 +39,8 @@ test_that("basic graphlearner tests", {
   expect_true(run_experiment(task, glrn)$ok)
   glrn2$train(task)
   glrn2_clone$state = glrn2$state
-  #  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
-  #  glrn2_clone$state$model$classif.rpart$log = glrn2_clone$state$model$classif.rpart$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
+#  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
+#  glrn2_clone$state$model$classif.rpart$log = glrn2_clone$state$model$classif.rpart$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
   expect_deep_clone(glrn2_clone, glrn2$clone(deep = TRUE))
   expect_prediction_classif({
     graphpred2 = glrn2$predict(task)
@@ -129,7 +129,7 @@ test_that("graphlearner parameters behave as they should", {
 })
 
 test_that("graphlearner type inference", {
-  skip_on_cran() # takes too long
+  skip_on_cran()  # takes too long
   # default: classif
   lrn = GraphLearner$new(mlr_pipeops$get("nop"))
   expect_equal(lrn$task_type, "classif")
@@ -197,15 +197,15 @@ test_that("graphlearner type inference", {
 })
 
 test_that("graphlearner type inference - branched", {
-  skip_on_cran() # takes too long
+  skip_on_cran()  # takes too long
 
   # default: classif
 
   lrn = GraphLearner$new(gunion(list(
-    mlr_pipeops$get(id = "l1", "learner", lrn("classif.rpart")),
-    po("nop") %>>% mlr_pipeops$get(id = "l2", "learner", lrn("classif.rpart"))
+      mlr_pipeops$get(id = "l1", "learner", lrn("classif.rpart")),
+      po("nop") %>>% mlr_pipeops$get(id = "l2", "learner", lrn("classif.rpart"))
 
-  )) %>>%
+    )) %>>%
     po("classifavg") %>>%
     po(id = "n2", "nop"))
   expect_equal(lrn$task_type, "classif")
@@ -232,9 +232,9 @@ test_that("graphlearner type inference - branched", {
 
   # inference when multiple input, but one is a Task
   lrn = GraphLearner$new(gunion(list(
-    mlr_pipeops$get(id = "l1", "learner", lrn("regr.rpart")),
-    po("nop") %>>% mlr_pipeops$get(id = "l2", "learner", lrn("regr.rpart"))
-  )) %>>%
+      mlr_pipeops$get(id = "l1", "learner", lrn("regr.rpart")),
+      po("nop") %>>% mlr_pipeops$get(id = "l2", "learner", lrn("regr.rpart"))
+    )) %>>%
     po("regravg") %>>%
     po(id = "n2", "nop"))
   expect_equal(lrn$task_type, "regr")
@@ -261,7 +261,7 @@ test_that("graphlearner type inference - branched", {
 })
 
 test_that("graphlearner predict type inference", {
-  skip_on_cran() # takes too long
+  skip_on_cran()  # takes too long
   # Getter:
 
   # Classification
@@ -353,7 +353,5 @@ test_that("graphlearner predict type inference", {
   expect_equal(lrn$graph$pipeops[[lrr$id]]$predict_type, "prob")
 
   # Errors:
-  expect_error({
-    lrrp = po(lrn("classif.featureless", predict_type = "se"))
-  })
+  expect_error({lrrp = po(lrn("classif.featureless", predict_type = "se"))})
 })

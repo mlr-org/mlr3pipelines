@@ -106,14 +106,14 @@
 #'
 #' set.seed(2020)
 #'
-#' make_data = function(nrows) {
-#'   d = data.frame(x = 5 * rnorm(nrows))
-#'   d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
-#'   d[4:10, "x"] = NA # introduce NAs
-#'   d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
-#'   d["x2"] = rnorm(nrows)
-#'   d[d["xc"] == "level_-1", "xc"] = NA # introduce a NA level
-#'   return(d)
+#' make_data <- function(nrows) {
+#'     d <- data.frame(x = 5 * rnorm(nrows))
+#'     d["y"] = sin(d[["x"]]) + 0.01 * d[["x"]] + 0.1 * rnorm(nrows)
+#'     d[4:10, "x"] = NA  # introduce NAs
+#'     d["xc"] = paste0("level_", 5 * round(d$y / 5, 1))
+#'     d["x2"] = rnorm(nrows)
+#'     d[d["xc"] == "level_-1", "xc"] = NA  # introduce a NA level
+#'     return(d)
 #' }
 #'
 #' task = TaskRegr$new("vtreat_regr", backend = make_data(100), target = "y")
@@ -135,7 +135,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         ParamDbl$new("minFraction", lower = 0, upper = 1, default = 0.02, tags = c("train", "regression", "classification", "multinomial")),
         ParamDbl$new("smFactor", lower = 0, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
         ParamInt$new("rareCount", lower = 0L, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
-        ParamDbl$new("rareSig", lower = 0, upper = 1, special_vals = list(NULL), tags = c("train", "regression", "classification", "multinomial")), # default NULL for regression, classification, 1 for multinomial
+        ParamDbl$new("rareSig", lower = 0, upper = 1, special_vals = list(NULL), tags = c("train", "regression", "classification", "multinomial")),  # default NULL for regression, classification, 1 for multinomial
         ParamDbl$new("collarProb", lower = 0, upper = 1, default = 0, tags = c("train", "regression", "classification", "multinomial")),
         ParamLgl$new("doCollar", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
         ParamUty$new("codeRestriction", default = NULL, custom_check = function(x) checkmate::check_character(x, any.missing = FALSE, null.ok = TRUE),
@@ -145,7 +145,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
           tags = c("train", "regression", "classification", "multinomial")),
         ParamInt$new("ncross", lower = 2L, upper = Inf, default = 3L, tags = c("train", "regression", "classification", "multinomial")),
         ParamLgl$new("forceSplit", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
-        ParamLgl$new("catScaling", tags = c("train", "regression", "classification", "multinomial")), # default TRUE for regression, classification, FALSE for multinomial
+        ParamLgl$new("catScaling", tags = c("train", "regression", "classification", "multinomial")),  # default TRUE for regression, classification, FALSE for multinomial
         ParamLgl$new("verbose", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
         ParamLgl$new("use_paralell", default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
         ParamUty$new("missingness_imputation", default = NULL, custom_check = function(x) checkmate::check_function(x, args = c("values", "weights"), null.ok = TRUE),
@@ -171,7 +171,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       var_list = task$feature_names
       if (length(var_list) == 0L) {
-        return(task) # early exit
+        return(task)  # early exit
       }
 
       if (length(self$param_set$values$imputation_map)) {
@@ -223,29 +223,29 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
 
       if (is.null(vtreat_res)) {
         self$state = list(NULL)
-        return(task) # early exit
+        return(task)  # early exit
       }
 
       self$state$treatment_plan = vtreat_res$treatments
 
       d_prepared = data.table::setDT(vtreat_res$cross_frame)
 
-      feature_subset = self$state$treatment_plan$get_feature_names() # subset to vtreat features
+      feature_subset = self$state$treatment_plan$get_feature_names()  # subset to vtreat features
       if (self$param_set$values$recommended) {
         score_frame = mlr3misc::invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
-        feature_subset = feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]] # subset to only recommended
+        feature_subset = feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]]  # subset to only recommended
       }
-      feature_subset = c(feature_subset, self$param_set$values$cols_to_copy(task)) # respect cols_to_copy
+      feature_subset = c(feature_subset, self$param_set$values$cols_to_copy(task))  # respect cols_to_copy
 
-      task$select(cols = character()) # drop all original features
-      task$cbind(d_prepared[, feature_subset, with = FALSE]) # cbind the new features
+      task$select(cols = character())  # drop all original features
+      task$cbind(d_prepared[, feature_subset, with = FALSE])  # cbind the new features
 
       task
     },
 
     .predict_task = function(task) {
       if (is.null(self$state$treatment_plan) || (length(task$feature_names) == 0L)) {
-        return(task) # early exit
+        return(task)  # early exit
       }
 
       # the following exception handling is necessary because vtreat sometimes fails with "no usable vars" if the data is already "clean" enough
@@ -262,15 +262,15 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         }
       )
 
-      feature_subset = self$state$treatment_plan$get_feature_names() # subset to vtreat features
+      feature_subset = self$state$treatment_plan$get_feature_names()  # subset to vtreat features
       if (self$param_set$values$recommended) {
         score_frame = mlr3misc::invoke(vtreat::get_score_frame, vps = self$state$treatment_plan)
-        feature_subset = feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]] # subset to only recommended
+        feature_subset = feature_subset[feature_subset %in% score_frame$varName[score_frame$recommended]]  # subset to only recommended
       }
-      feature_subset = c(feature_subset, self$param_set$values$cols_to_copy(task)) # respect cols_to_copy
+      feature_subset = c(feature_subset, self$param_set$values$cols_to_copy(task))  # respect cols_to_copy
 
-      task$select(cols = character()) # drop all original features
-      task$cbind(d_prepared[, feature_subset, with = FALSE]) # cbind the new features
+      task$select(cols = character())  # drop all original features
+      task$cbind(d_prepared[, feature_subset, with = FALSE])  # cbind the new features
 
       task
     },

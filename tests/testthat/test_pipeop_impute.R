@@ -1,7 +1,7 @@
 context("PipeOpImpute")
 
 test_that("PipeOpImpute", {
-  skip_on_cran() # slow test, so we don't do it on cran
+  skip_on_cran()  # slow test, so we don't do it on cran
   # create bogus impute pipeop that behaves like the old impute pipeop. This lets us do tests quickly. FIXME needs to be cleaned up. a lot.
 
   PipeOpTestImpute = R6Class("PipeOpTestImpute", inherit = PipeOpTaskPreprocSimple,
@@ -156,11 +156,11 @@ test_that("PipeOpImpute", {
 
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task,
-    deterministic_train = FALSE, deterministic_predict = FALSE,
-    constargs = list(param_vals = list(
-      method_num = "constant",
-      method_fct = "constant",
-      add_dummy = "all")))
+  deterministic_train = FALSE, deterministic_predict = FALSE,
+  constargs = list(param_vals = list(
+    method_num = "constant",
+    method_fct = "constant",
+    add_dummy = "all")))
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, task = task_no_lgl,
     deterministic_train = FALSE, deterministic_predict = FALSE,
@@ -271,13 +271,13 @@ test_that("PipeOpImpute", {
   pmap(list(map_chr(map(mdata[, -"t"], class), 1L), colnames(mdata[, -"t"])), function(type, name) {
     po$param_set$values$affect_columns = selector_type(type)
     cst = switch(type,
-      factor = factor("a"),
-      integer = 0L,
-      logical = c(TRUE, FALSE),
-      numeric = 0,
-      ordered = ordered("a"),
-      character = ".MISSING"
-    )
+        factor = factor("a"),
+        integer = 0L,
+        logical = c(TRUE, FALSE),
+        numeric = 0,
+        ordered = ordered("a"),
+        character = ".MISSING"
+      )
     out1 = po$train(list(task))[[1]]$data()
     out2 = po$predict(list(task))[[1]]$data()
     expect_true(all(out1[[name]] %in% cst))
@@ -291,7 +291,7 @@ test_that("PipeOpImpute", {
 test_that("More tests for PipeOpImputeMode", {
   set.seed(1)
   dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
-    x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
+  x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
   dat[c(1L, 10L), ] = NA
   task = TaskRegr$new("task", backend = dat, target = "y")
 
@@ -317,64 +317,64 @@ test_that("More tests for PipeOpImputeMode", {
 })
 
 test_that("More tests for PipeOpImputeConstant", {
-  set.seed(1)
-  dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
-    x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L),
-    x7 = as.POSIXct(1L:10L, origin = "1960-01-01", tz = "GMT"), stringsAsFactors = FALSE)
-  dat[1L, ] = NA
-  task = TaskRegr$new("task", backend = dat, target = "y")
+ set.seed(1)
+ dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
+   x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L),
+   x7 = as.POSIXct(1L:10L, origin = "1960-01-01", tz = "GMT"), stringsAsFactors = FALSE)
+ dat[1L, ] = NA
+ task = TaskRegr$new("task", backend = dat, target = "y")
 
-  po = PipeOpImputeConstant$new(param_vals = list(constant = "test"))
+ po = PipeOpImputeConstant$new(param_vals = list(constant = "test"))
 
-  expect_error(po$train(list(task)))
+ expect_error(po$train(list(task)))
 
-  po$param_set$values$affect_columns = selector_type("character")
-  train_out = po$train(list(task))[[1L]]
-  expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
-  expect_equal(train_out$data(cols = "x1")[[1L]][1L], "test")
+ po$param_set$values$affect_columns = selector_type("character")
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(train_out$feature_types, task$feature_types)
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x1")[[1L]][1L], "test")
 
-  po$param_set$values = list(constant = -999, check_levels = TRUE, affect_columns = selector_type("numeric"))
-  train_out = po$train(list(task))[[1L]]
-  expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
-  expect_equal(train_out$data(cols = "x2")[[1L]][1L], -999)
+ po$param_set$values = list(constant = -999, check_levels = TRUE, affect_columns = selector_type("numeric"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(train_out$feature_types, task$feature_types)
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x2")[[1L]][1L], -999)
 
-  po$param_set$values = list(constant = "test", check_levels = TRUE, affect_columns = selector_type("factor"))
-  expect_error(po$train(list(task))[[1L]])
-  po$param_set$values$check_levels = FALSE
-  train_out = po$train(list(task))[[1L]]
-  expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
-  expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
-  po$param_set$values$constant = factor("test", levels = c("test", "another"))
-  expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
+ po$param_set$values = list(constant = "test", check_levels = TRUE, affect_columns = selector_type("factor"))
+ expect_error(po$train(list(task))[[1L]])
+ po$param_set$values$check_levels = FALSE
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(train_out$feature_types, task$feature_types)
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
+ po$param_set$values$constant = factor("test", levels = c("test", "another"))
+ expect_equal(po$train(list(task))[[1L]]$data(cols = "x3")[[1L]][1L], factor("test", levels = c("1", "2", "test")))
 
-  po$param_set$values = list(constant = "test", check_levels = TRUE, affect_columns = selector_type("ordered"))
-  expect_error(po$train(list(task))[[1L]])
-  po$param_set$values$check_levels = FALSE
-  train_out = po$train(list(task))[[1L]]
-  expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
-  expect_equal(po$train(list(task))[[1L]]$data(cols = "x4")[[1L]][1L], ordered("test", levels = c("1", "2", "3", "4", "5", "test")))
-  po$param_set$values$constant = factor("test", levels = c("test", "another"))
-  expect_equal(po$train(list(task))[[1L]]$data(cols = "x4")[[1L]][1L], ordered("test", levels = c("1", "2", "3", "4", "5", "test")))
+ po$param_set$values = list(constant = "test", check_levels = TRUE, affect_columns = selector_type("ordered"))
+ expect_error(po$train(list(task))[[1L]])
+ po$param_set$values$check_levels = FALSE
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(train_out$feature_types, task$feature_types)
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(po$train(list(task))[[1L]]$data(cols = "x4")[[1L]][1L], ordered("test", levels = c("1", "2", "3", "4", "5", "test")))
+ po$param_set$values$constant = factor("test", levels = c("test", "another"))
+ expect_equal(po$train(list(task))[[1L]]$data(cols = "x4")[[1L]][1L], ordered("test", levels = c("1", "2", "3", "4", "5", "test")))
 
-  po$param_set$values = list(constant = -999, check_levels = TRUE, affect_columns = selector_type("integer"))
-  train_out = po$train(list(task))[[1L]]
-  expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
-  expect_equal(train_out$data(cols = "x5")[[1L]][1L], -999)
+ po$param_set$values = list(constant = -999, check_levels = TRUE, affect_columns = selector_type("integer"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(train_out$feature_types, task$feature_types)
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x5")[[1L]][1L], -999)
 
-  po$param_set$values = list(constant = TRUE, check_levels = TRUE, affect_columns = selector_type("logical"))
-  train_out = po$train(list(task))[[1L]]
-  expect_equal(train_out$feature_types, task$feature_types)
-  expect_equal(sum(train_out$missings()), 7L)
-  expect_equal(train_out$data(cols = "x6")[[1L]][1L], TRUE)
+ po$param_set$values = list(constant = TRUE, check_levels = TRUE, affect_columns = selector_type("logical"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(train_out$feature_types, task$feature_types)
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x6")[[1L]][1L], TRUE)
 
-  pos_impute = as.POSIXct(1000000, origin = "1960-01-01", tz = "GMT")
-  po$param_set$values = list(constant = pos_impute, check_levels = TRUE, affect_columns = selector_type("POSIXct"))
-  train_out = po$train(list(task))[[1L]]
-  expect_equal(sum(train_out$missings()), 7L)
-  expect_equal(train_out$data(cols = "x7")[[1L]][1L], pos_impute)
+ pos_impute = as.POSIXct(1000000, origin = "1960-01-01", tz = "GMT")
+ po$param_set$values = list(constant = pos_impute, check_levels = TRUE, affect_columns = selector_type("POSIXct"))
+ train_out = po$train(list(task))[[1L]]
+ expect_equal(sum(train_out$missings()), 7L)
+ expect_equal(train_out$data(cols = "x7")[[1L]][1L], pos_impute)
 })

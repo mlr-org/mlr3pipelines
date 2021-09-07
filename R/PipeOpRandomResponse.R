@@ -87,7 +87,8 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
         ParamUty$new("rdistfun", tags = c("predict", "required"), custom_check = function(x) {
           check_function(x, args = c("n", "mean", "sd"))
         })
-      ))
+        )
+      )
       ps$values = list(rdistfun = stats::rnorm)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = packages,
         input = data.table(name = "input", train = "NULL", predict = "Prediction"),
@@ -104,7 +105,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
       prediction = inputs[[1L]]
       predict_type = intersect(prediction$predict_types, c("prob", "se"))
       if (!length(predict_type)) {
-        return(list(prediction)) # early exit for predict_types that are neither "prob" nor "se"
+        return(list(prediction))  # early exit for predict_types that are neither "prob" nor "se"
       }
       response = switch(predict_type,
         "prob" = {

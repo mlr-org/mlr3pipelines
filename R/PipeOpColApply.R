@@ -63,7 +63,7 @@
 #'
 #' task = tsk("iris")
 #' poca = po("colapply", applicator = as.character)
-#' poca$train(list(task))[[1]] # types are converted
+#' poca$train(list(task))[[1]]  # types are converted
 #'
 #' # function that does not vectorize
 #' f1 = function(x) {

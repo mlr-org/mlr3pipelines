@@ -1,9 +1,7 @@
 context("PipeOpUpdateTarget")
 
 test_that("update target multi to binary", {
-  trafo_fun = function(x) {
-    factor(ifelse(x == "setosa", "setosa", "other"))
-  }
+  trafo_fun = function(x) {factor(ifelse(x == "setosa", "setosa", "other"))}
   pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "setosa"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("iris")))[[1]]
@@ -19,9 +17,7 @@ test_that("update target multi to binary", {
 })
 
 test_that("update target regr to classif", {
-  trafo_fun = function(x) {
-    factor(ifelse(x < 25, "<25", ">=25"))
-  }
+  trafo_fun = function(x) {factor(ifelse(x < 25, "<25", ">=25"))}
   pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "threshold_25", new_task_type = "classif"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("boston_housing")))[[1]]
@@ -39,9 +35,7 @@ test_that("update target regr to classif", {
 test_that("update target classif to regr", {
   # this is e.g. used in mlr3ordinal for casting
   # orginal to regr
-  trafo_fun = function(x) {
-    map_dtc(x, as.numeric)
-  }
+  trafo_fun = function(x) {map_dtc(x, as.numeric)}
   pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "quality", new_task_type = "regr"))
   expect_pipeop(pom)
   newtsk = pom$train(list(tsk("wine")))[[1]]

@@ -151,7 +151,7 @@ test_that("PipeOpDateFeatures - automatic NA handling", {
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE))
   output = train_pipeop(po, inputs = list(task))$output
-  expect_true(all(is.na(output$data(rows = 1L, cols = output$feature_names[-(1L:4L)]))))
+  expect_true(all(is.na(output$data(rows = 1L, cols = output$feature_names[- (1L:4L)]))))
 })
 
 test_that("PipeOpDateFeatures - constant dates", {
@@ -160,7 +160,7 @@ test_that("PipeOpDateFeatures - constant dates", {
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
   po = PipeOpDateFeatures$new(param_vals = list(cyclic = TRUE))
   output = train_pipeop(po, inputs = list(task))$output
-  expect_true(all(apply(output$data(cols = output$feature_names[-(1L:4L)]), 2, duplicated)[-1L, ]))
+  expect_true(all(apply(output$data(cols = output$feature_names[- (1L:4L)]), 2, duplicated)[-1L, ]))
 })
 
 test_that("PipeOpDateFeatures - no year but day_of_year and day_of_month", {
@@ -190,7 +190,7 @@ test_that("PipeOpDateFeatures - only year and cyclic", {
   po$param_set$values$minute = FALSE
   po$param_set$values$second = FALSE
   po$param_set$values$is_day = FALSE
-  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)
+  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)  
 })
 
 test_that("PipeOpDateFeatures - two POSIXct variables", {
@@ -205,13 +205,13 @@ test_that("PipeOpDateFeatures - two POSIXct variables", {
   expect_identical(train_pipeop(po, inputs = list(task))$output$feature_names,
     c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width", "date1", "date2",
       c(paste0(rep(c("date1.", "date2."), each = 10L),
-        c("year", "month", "week_of_year", "day_of_year", "day_of_month", "day_of_week",
-          "hour", "minute", "second", "is_day")),
-      paste0(rep(c("date1.", "date2."), each = 16L),
-        c("month_sin", "month_cos", "week_of_year_sin", "week_of_year_cos",
-          "day_of_year_sin", "day_of_year_cos", "day_of_month_sin", "day_of_month_cos",
-          "day_of_week_sin", "day_of_week_cos",
-          "hour_sin", "hour_cos", "minute_sin", "minute_cos", "second_sin", "second_cos"))
+          c("year", "month", "week_of_year", "day_of_year", "day_of_month", "day_of_week",
+            "hour", "minute", "second", "is_day")),
+        paste0(rep(c("date1.", "date2."), each = 16L),
+          c("month_sin", "month_cos", "week_of_year_sin", "week_of_year_cos",
+            "day_of_year_sin", "day_of_year_cos", "day_of_month_sin", "day_of_month_cos",
+            "day_of_week_sin", "day_of_week_cos",
+            "hour_sin", "hour_cos", "minute_sin", "minute_cos", "second_sin", "second_cos"))
       )
     )
   )

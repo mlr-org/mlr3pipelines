@@ -41,7 +41,7 @@ test_that("mutate", {
   # Works with variables from an env
   env = new.env()
   assign("some_test_val", 7, envir = env)
-  some_test_val = -100 # this should not be taken!
+  some_test_val = -100  # this should not be taken!
   al = list(Sepal.PlusVal = ~ Sepal.Length + some_test_val)
   environment(al[[1]]) = env
   op$param_set$values$mutation = al
@@ -79,7 +79,7 @@ test_that("mutate", {
 
   # Give Precedence to the original variables before the newly constructed ones
   op$param_set$values$mutation = list(
-    Petal.Length = ~1,
+    Petal.Length = ~ 1,
     Petal.Length_half = ~ Petal.Length / 2,
     Petal.Length_quart = ~ Petal.Length_half / 2
   )

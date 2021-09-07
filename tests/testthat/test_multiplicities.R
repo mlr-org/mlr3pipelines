@@ -59,7 +59,7 @@ test_that("PipeOp - unpack_multiplicities", {
 })
 
 test_that("PipeOp - evaluate_multiplicities", {
-  # toy PipeOp only for testing
+# toy PipeOp only for testing
   PipeOpTestMultiplicites = R6Class("PipeOpTestMultiplicites", inherit = PipeOp,
     public = list(
       initialize = function(num, id = "multiplicities", param_vals = list()) {
@@ -114,7 +114,7 @@ test_that("PipeOp - evaluate_multiplicities", {
   old_state = po$state
   po$param_set$values$state = "error"
   expect_error(po$train(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "Error")
-  expect_equal(po$state, NULL) # state is completely reset to NULL
+  expect_equal(po$state, NULL)  # state is completely reset to NULL
 })
 
 test_that("Graph - add_edge", {
@@ -128,3 +128,4 @@ test_that("Graph - add_edge", {
   g2$add_edge("classif.rpart", "ovrunite")
   expect_identical(g1$edges, g2$edges)
 })
+
