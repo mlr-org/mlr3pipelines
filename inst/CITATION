@@ -15,7 +15,7 @@ bibentry(
   volume = 22,
   number = 184,
   pages = "1-7",
-  url = "http://jmlr.org/papers/v22/21-0281.html"
+  url = "https://jmlr.org/papers/v22/21-0281.html"
 )
 
 # vim: ft=r

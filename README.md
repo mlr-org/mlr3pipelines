@@ -106,7 +106,7 @@ vision behind the project.
 ## Citing mlr3pipelines
 
 If you use mlr3pipelines, please cite our [JMLR
-article](http://jmlr.org/papers/v22/21-0281.html):
+article](https://jmlr.org/papers/v22/21-0281.html):
 
     @Article{mlr3pipelines,
       title = {{mlr3pipelines} - Flexible Machine Learning Pipelines in R},
@@ -116,7 +116,7 @@ article](http://jmlr.org/papers/v22/21-0281.html):
       volume = {22},
       number = {184},
       pages = {1-7},
-      url = {http://jmlr.org/papers/v22/21-0281.html},
+      url = {https://jmlr.org/papers/v22/21-0281.html},
     }
 
 ## Similar Projects

@@ -82,7 +82,7 @@ Please understand that the resources of the project are limited: response may so
 
 ## Citing mlr3pipelines
 
-If you use mlr3pipelines, please cite our [JMLR article](http://jmlr.org/papers/v22/21-0281.html):
+If you use mlr3pipelines, please cite our [JMLR article](https://jmlr.org/papers/v22/21-0281.html):
 ```{r echo = FALSE, comment = ""}
 toBibtex(citation("mlr3pipelines"))
 ```
