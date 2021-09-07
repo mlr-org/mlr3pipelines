@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpRandomResponse — mlr_pipeops_randomresponse • mlr3pipelines</title>
+<title>Generate a Randomized Response Prediction — mlr_pipeops_randomresponse • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +47,10 @@
 
 
 
-<meta property="og:title" content="PipeOpRandomResponse — mlr_pipeops_randomresponse" />
+<meta property="og:title" content="Generate a Randomized Response Prediction — mlr_pipeops_randomresponse" />
 <meta property="og:description" content="Takes in a Prediction of predict_type &quot;prob&quot;
 (for PredictionClassif) or &quot;se&quot;
-(for PredictionRegr). and generates a randomized &quot;response&quot;
+(for PredictionRegr) and generates a randomized &quot;response&quot;
 prediction.
 For &quot;prob&quot;, the responses are sampled according to
 the probabilities of the input PredictionClassif. For &quot;se&quot;,
@@ -92,14 +92,14 @@ deviation (sampling is done observation-wise)." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
+    <span class="fa fa-file-alt"></span>
      
     Reference
   </a>
@@ -109,26 +109,26 @@ deviation (sampling is done observation-wise)." />
 </li>
 <li>
   <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
+    <span class="fa fa-link"></span>
      
     mlr3book
   </a>
 </li>
         <li>
   <a href="https://github.com/mlr-org/mlr3pipelines/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
-    <span class="fa fa fa fa-comments"></span>
+    <span class="fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fab fa fab fa-stack-overflow"></span>
+    <span class="fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -151,7 +151,7 @@ deviation (sampling is done observation-wise)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpRandomResponse</h1>
+    <h1>Generate a Randomized Response Prediction</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpRandomResponse.R'><code>R/PipeOpRandomResponse.R</code></a></small>
     <div class="hidden name"><code>mlr_pipeops_randomresponse.Rd</code></div>
     </div>
@@ -159,7 +159,7 @@ deviation (sampling is done observation-wise)." />
     <div class="ref-description">
     <p>Takes in a <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> of <code>predict_type</code> <code>"prob"</code>
 (for <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>) or <code>"se"</code>
-(for <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code>). and generates a randomized <code>"response"</code>
+(for <code><a href='https://mlr3.mlr-org.com/reference/PredictionRegr.html'>PredictionRegr</a></code>) and generates a randomized <code>"response"</code>
 prediction.</p>
 <p>For <code>"prob"</code>, the responses are sampled according to
 the probabilities of the input <code><a href='https://mlr3.mlr-org.com/reference/PredictionClassif.html'>PredictionClassif</a></code>. For <code>"se"</code>,
@@ -233,7 +233,8 @@ and <code>sd</code>. Default is <code><a href='https://rdrr.io/r/stats/Normal.ht
 <p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: 
+    <div class='dont-index'><p>https://mlr3book.mlr-org.com/list-pipeops.html</p>
+<p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
@@ -319,14 +320,14 @@ and <code>sd</code>. Default is <code><a href='https://rdrr.io/r/stats/Normal.ht
 <span class='va'>g1</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $randomresponse.output
 #&gt; &lt;PredictionClassif&gt; for 150 observations:
-#&gt;     row_id     truth  response
-#&gt;          1    setosa    setosa
-#&gt;          2    setosa    setosa
-#&gt;          3    setosa    setosa
-#&gt; ---                           
-#&gt;        148 virginica virginica
-#&gt;        149 virginica virginica
-#&gt;        150 virginica virginica
+#&gt;     row_ids     truth  response
+#&gt;           1    setosa    setosa
+#&gt;           2    setosa    setosa
+#&gt;           3    setosa    setosa
+#&gt; ---                            
+#&gt;         148 virginica virginica
+#&gt;         149 virginica virginica
+#&gt;         150 virginica virginica
 #&gt; </div><div class='input'>
 <span class='va'>task2</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"mtcars"</span><span class='op'>)</span>
 <span class='va'>g2</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3learners.mlr-org.com/reference/mlr_learners_regr.lm.html'>LearnerRegrLM</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>PipeOpRandomResponse</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
@@ -338,14 +339,14 @@ and <code>sd</code>. Default is <code><a href='https://rdrr.io/r/stats/Normal.ht
 <span class='va'>g2</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $randomresponse.output
 #&gt; &lt;PredictionRegr&gt; for 32 observations:
-#&gt;     row_id truth response
-#&gt;          1  21.0 23.76570
-#&gt;          2  21.0 21.28602
-#&gt;          3  22.8 27.52332
-#&gt; ---                      
-#&gt;         30  19.7 16.99001
-#&gt;         31  15.0 13.88306
-#&gt;         32  21.4 22.80808
+#&gt;     row_ids truth response
+#&gt;           1  21.0 23.76570
+#&gt;           2  21.0 21.28602
+#&gt;           3  22.8 27.52332
+#&gt; ---                       
+#&gt;          30  19.7 16.99001
+#&gt;          31  15.0 13.88306
+#&gt;          32  21.4 22.80808
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpImputeLearner — mlr_pipeops_imputelearner • mlr3pipelines</title>
+<title>Impute Features by Fitting a Learner — mlr_pipeops_imputelearner • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,7 +47,7 @@
 
 
 
-<meta property="og:title" content="PipeOpImputeLearner — mlr_pipeops_imputelearner" />
+<meta property="og:title" content="Impute Features by Fitting a Learner — mlr_pipeops_imputelearner" />
 <meta property="og:description" content="Impute features by fitting a Learner for each feature.
 Uses the features indicated by the context_columns parameter as features to train the imputation Learner.
 Note this parameter is part of the PipeOpImpute base class and explained there.
@@ -88,14 +88,14 @@ features of type factor, ordered and logical." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
+    <span class="fa fa-file-alt"></span>
      
     Reference
   </a>
@@ -105,26 +105,26 @@ features of type factor, ordered and logical." />
 </li>
 <li>
   <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
+    <span class="fa fa-link"></span>
      
     mlr3book
   </a>
 </li>
         <li>
   <a href="https://github.com/mlr-org/mlr3pipelines/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
-    <span class="fa fa fa fa-comments"></span>
+    <span class="fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fab fa fab fa-stack-overflow"></span>
+    <span class="fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -147,7 +147,7 @@ features of type factor, ordered and logical." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpImputeLearner</h1>
+    <h1>Impute Features by Fitting a Learner</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpImputeLearner.R'><code>R/PipeOpImputeLearner.R</code></a></small>
     <div class="hidden name"><code>mlr_pipeops_imputelearner.Rd</code></div>
     </div>
@@ -229,7 +229,8 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 <p>Only methods inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: 
+    <div class='dont-index'><p>https://mlr3book.mlr-org.com/list-pipeops.html</p>
+<p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
@@ -354,10 +355,10 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $age$train_time
-#&gt; [1] 0.007
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $age$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):
@@ -391,7 +392,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; [1] 0.006
 #&gt; 
 #&gt; $glucose$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):
@@ -425,10 +426,10 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $insulin$train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $insulin$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):
@@ -469,7 +470,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; [1] 0.007
 #&gt; 
 #&gt; $mass$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):
@@ -505,7 +506,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; [1] 0.007
 #&gt; 
 #&gt; $pedigree$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):
@@ -536,7 +537,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; [1] 0.006
 #&gt; 
 #&gt; $pregnant$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):
@@ -572,10 +573,10 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $pressure$train_time
-#&gt; [1] 0.007
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $pressure$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):
@@ -611,10 +612,10 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $triceps$train_time
-#&gt; [1] 0.006
+#&gt; [1] 0.005
 #&gt; 
 #&gt; $triceps$train_task
-#&gt; &lt;TaskRegr:imputing&gt; (0 x 8)
+#&gt; &lt;TaskRegr:imputing&gt; (768 x 8)
 #&gt; * Target: .impute_col
 #&gt; * Properties: -
 #&gt; * Features (7):

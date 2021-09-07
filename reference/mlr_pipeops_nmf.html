@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpNMF — mlr_pipeops_nmf • mlr3pipelines</title>
+<title>Non-negative Matrix Factorization — mlr_pipeops_nmf • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,7 +47,7 @@
 
 
 
-<meta property="og:title" content="PipeOpNMF — mlr_pipeops_nmf" />
+<meta property="og:title" content="Non-negative Matrix Factorization — mlr_pipeops_nmf" />
 <meta property="og:description" content="Extracts non-negative components from data by performing non-negative matrix factorization. Only
 affects non-negative numerical features. See nmf() for details." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
@@ -84,14 +84,14 @@ affects non-negative numerical features. See nmf() for details." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
+    <span class="fa fa-file-alt"></span>
      
     Reference
   </a>
@@ -101,26 +101,26 @@ affects non-negative numerical features. See nmf() for details." />
 </li>
 <li>
   <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
+    <span class="fa fa-link"></span>
      
     mlr3book
   </a>
 </li>
         <li>
   <a href="https://github.com/mlr-org/mlr3pipelines/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
-    <span class="fa fa fa fa-comments"></span>
+    <span class="fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fab fa fab fa-stack-overflow"></span>
+    <span class="fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -143,7 +143,7 @@ affects non-negative numerical features. See nmf() for details." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpNMF</h1>
+    <h1>Non-negative Matrix Factorization</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpNMF.R'><code>R/PipeOpNMF.R</code></a></small>
     <div class="hidden name"><code>mlr_pipeops_nmf.Rd</code></div>
     </div>
@@ -243,7 +243,7 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 
     
 
-<p>Uses the <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code> function as well as <code>basis()</code>, <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> and
+<p>Uses the <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code> function as well as <code><a href='https://rdrr.io/pkg/NMF/man/basis-coef-methods.html'>basis()</a></code>, <code><a href='https://rdrr.io/pkg/NMF/man/basis-coef-methods.html'>coef()</a></code> and
 <code><a href='https://rdrr.io/pkg/MASS/man/ginv.html'>ginv()</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
@@ -252,7 +252,8 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 <p>Only methods inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: 
+    <div class='dont-index'><p>https://mlr3book.mlr-org.com/list-pipeops.html</p>
+<p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
@@ -325,38 +326,18 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"NMF"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
 <span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
 <span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nmf"</span><span class='op'>)</span>
 
 <span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species      NMF1       NMF2
-#&gt;   1:    setosa 0.8290139 0.03579919
-#&gt;   2:    setosa 0.7425097 0.06914820
-#&gt;   3:    setosa 0.7587001 0.03754975
-#&gt;   4:    setosa 0.7137460 0.07715860
-#&gt;   5:    setosa 0.8317556 0.02832131
-#&gt;  ---                               
-#&gt; 146: virginica 0.4031991 0.86828720
-#&gt; 147: virginica 0.3400982 0.83741979
-#&gt; 148: virginica 0.3994916 0.84480031
-#&gt; 149: virginica 0.3823531 0.87108386
-#&gt; 150: virginica 0.3591966 0.80980611</div><div class='input'>
+<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
+
 <span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
-</div><div class='output co'>#&gt; &lt;Object of class: NMFfit&gt;
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: NMF</span></div><div class='output co'>#&gt; &lt;Object of class: NMFfit&gt;
 #&gt;  # Model:
 #&gt;   &lt;Object of class:NMFstd&gt;
 #&gt;   features: 4 
@@ -375,7 +356,7 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 #&gt;   Iterations: 450 
 #&gt;   Timing:
 #&gt;      user  system elapsed 
-#&gt;     0.109   0.016   0.125 </div></pre>
+#&gt;     0.115   0.016   0.130 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

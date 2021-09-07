@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpFilter — mlr_pipeops_filter • mlr3pipelines</title>
+<title>Feature Filtering — mlr_pipeops_filter • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,7 +47,7 @@
 
 
 
-<meta property="og:title" content="PipeOpFilter — mlr_pipeops_filter" />
+<meta property="og:title" content="Feature Filtering — mlr_pipeops_filter" />
 <meta property="og:description" content="Feature filtering using a mlr3filters::Filter object, see the
 mlr3filters package.
 If a Filter can only operate on a subset of columns based on column type, then only these features are considered and filtered.
@@ -87,14 +87,14 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
+    <span class="fa fa-file-alt"></span>
      
     Reference
   </a>
@@ -104,26 +104,26 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 </li>
 <li>
   <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
+    <span class="fa fa-link"></span>
      
     mlr3book
   </a>
 </li>
         <li>
   <a href="https://github.com/mlr-org/mlr3pipelines/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
-    <span class="fa fa fa fa-comments"></span>
+    <span class="fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fab fa fab fa-stack-overflow"></span>
+    <span class="fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -146,7 +146,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpFilter</h1>
+    <h1>Feature Filtering</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpFilter.R'><code>R/PipeOpFilter.R</code></a></small>
     <div class="hidden name"><code>mlr_pipeops_filter.Rd</code></div>
     </div>
@@ -206,16 +206,21 @@ Names of features that are being kept. Features of types that the <code><a href=
 used by this object. Besides, parameters introduced are:</p><ul>
 <li><p><code>filter.nfeat</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
 Number of features to select.
-Mutually exclusive with <code>frac</code> and <code>cutoff</code>.</p></li>
+Mutually exclusive with <code>frac</code>, <code>cutoff</code>, and <code>permuted</code>.</p></li>
 <li><p><code>filter.frac</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
 Fraction of features to keep.
-Mutually exclusive with <code>nfeat</code> and <code>cutoff</code>.</p></li>
+Mutually exclusive with <code>nfeat</code>, <code>cutoff</code>, and <code>permuted</code>.</p></li>
 <li><p><code>filter.cutoff</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
 Minimum value of filter heuristic for which to keep features.
-Mutually exclusive with <code>nfeat</code> and <code>frac</code>.</p></li>
+Mutually exclusive with <code>nfeat</code>, <code>frac</code>, and <code>permuted</code>.</p></li>
+<li><p><code>filter.permuted</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> <br />
+If this parameter is set, a random permutation of each feature is added to the task before
+applying the filter. All features selected before the <code>permuted</code>-th permuted features is selected
+are kept. This is similar to the approach in Wu (2007) and Thomas (2017).
+Mutually exclusive with <code>nfeat</code>, <code>frac</code>, and <code>cutoff</code>.</p></li>
 </ul>
 
-<p>Note that at least one of <code>filter.nfeat</code>, <code>filter.frac</code>, or <code>filter.cutoff</code> must be given.</p>
+<p>Note that at least one of <code>filter.nfeat</code>, <code>filter.frac</code>, <code>filter.cutoff</code>, and <code>filter.permuted</code> must be given.</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
 
     
@@ -237,9 +242,22 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
     
 
 <p>Methods inherited from <code><a href='PipeOpTaskPreprocSimple.html'>PipeOpTaskPreprocSimple</a></code>/<code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>/<code><a href='PipeOp.html'>PipeOp</a></code>.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Wu Y, Boos DD, Stefanski LA (2007).
+&#8220;Controlling Variable Selection by the Addition of Pseudovariables.&#8221;
+<em>Journal of the American Statistical Association</em>, <b>102</b>(477), 235--243.
+doi: <a href='https://doi.org/10.1198/016214506000000843'>10.1198/016214506000000843</a>
+.</p>
+<p>Thomas J, Hepp T, Mayr A, Bischl B (2017).
+&#8220;Probing for Sparse and Fast Variable Selection with Model-Based Boosting.&#8221;
+<em>Computational and Mathematical Methods in Medicine</em>, <b>2017</b>, 1--8.
+doi: <a href='https://doi.org/10.1155/2017/1421409'>10.1155/2017/1421409</a>
+.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: 
+    <div class='dont-index'><p>https://mlr3book.mlr-org.com/list-pipeops.html</p>
+<p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
@@ -322,11 +340,12 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 <span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"filter"</span>, filter <span class='op'>=</span> <span class='va'>filter</span><span class='op'>)</span>
 <span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span>
 </div><div class='output co'>#&gt; &lt;ParamSetCollection:auc&gt;
-#&gt;                id    class lower upper levels        default value
-#&gt; 1:   filter.nfeat ParamInt     0   Inf        &lt;NoDefault[3]&gt;      
-#&gt; 2:    filter.frac ParamDbl     0     1        &lt;NoDefault[3]&gt;      
-#&gt; 3:  filter.cutoff ParamDbl  -Inf   Inf        &lt;NoDefault[3]&gt;      
-#&gt; 4: affect_columns ParamUty    NA    NA         &lt;Selector[1]&gt;      </div><div class='input'><span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>filter.nfeat</span> <span class='op'>=</span> <span class='fl'>5</span>
+#&gt;                 id    class lower upper nlevels        default value
+#&gt; 1:    filter.nfeat ParamInt     0   Inf     Inf &lt;NoDefault[3]&gt;      
+#&gt; 2:     filter.frac ParamDbl     0     1     Inf &lt;NoDefault[3]&gt;      
+#&gt; 3:   filter.cutoff ParamDbl  -Inf   Inf     Inf &lt;NoDefault[3]&gt;      
+#&gt; 4: filter.permuted ParamInt     1   Inf     Inf &lt;NoDefault[3]&gt;      
+#&gt; 5:  affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt;      </div><div class='input'><span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>filter.nfeat</span> <span class='op'>=</span> <span class='fl'>5</span>
 
 <span class='co'># filter the task</span>
 <span class='va'>filtered_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOpThreshold — mlr_pipeops_threshold • mlr3pipelines</title>
+<title>Change the Threshold of a Classification Prediction — mlr_pipeops_threshold • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,7 +47,7 @@
 
 
 
-<meta property="og:title" content="PipeOpThreshold — mlr_pipeops_threshold" />
+<meta property="og:title" content="Change the Threshold of a Classification Prediction — mlr_pipeops_threshold" />
 <meta property="og:description" content="Change the threshold of a Prediction during the predict step.
 The incoming Learner's $predict_type needs to be &quot;prob&quot;.
 Internally calls PredictionClassif$set_threshold." />
@@ -85,14 +85,14 @@ Internally calls PredictionClassif$set_threshold." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../reference/index.html">
-    <span class="fa fa fa fa-file-alt"></span>
+    <span class="fa fa-file-alt"></span>
      
     Reference
   </a>
@@ -102,26 +102,26 @@ Internally calls PredictionClassif$set_threshold." />
 </li>
 <li>
   <a href="https://mlr3book.mlr-org.com">
-    <span class="fa fa fa fa-link"></span>
+    <span class="fa fa-link"></span>
      
     mlr3book
   </a>
 </li>
         <li>
   <a href="https://github.com/mlr-org/mlr3pipelines/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/">
-    <span class="fa fa fa fa-comments"></span>
+    <span class="fa fa-comments"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stackoverflow.com/questions/tagged/mlr3">
-    <span class="fab fa fab fa-stack-overflow"></span>
+    <span class="fab fa-stack-overflow"></span>
      
   </a>
 </li>
@@ -144,7 +144,7 @@ Internally calls PredictionClassif$set_threshold." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PipeOpThreshold</h1>
+    <h1>Change the Threshold of a Classification Prediction</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/PipeOpThreshold.R'><code>R/PipeOpThreshold.R</code></a></small>
     <div class="hidden name"><code>mlr_pipeops_threshold.Rd</code></div>
     </div>
@@ -210,7 +210,8 @@ at level <code>0.5</code>.</p></li>
 <p>Only methods inherited from <code><a href='PipeOp.html'>PipeOp</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PipeOps: 
+    <div class='dont-index'><p>https://mlr3book.mlr-org.com/list-pipeops.html</p>
+<p>Other PipeOps: 
 <code><a href='PipeOpEnsemble.html'>PipeOpEnsemble</a></code>,
 <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>,
 <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>,
@@ -293,14 +294,14 @@ at level <code>0.5</code>.</p></li>
 #&gt; </div><div class='input'><span class='va'>gr</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $threshold.output
 #&gt; &lt;PredictionClassif&gt; for 1000 observations:
-#&gt;     row_id truth response prob.good  prob.bad
-#&gt;          1  good      bad 0.8767123 0.1232877
-#&gt;          2   bad      bad 0.1388889 0.8611111
-#&gt;          3  good      bad 0.8687090 0.1312910
-#&gt; ---                                          
-#&gt;        998  good      bad 0.8687090 0.1312910
-#&gt;        999   bad      bad 0.3795620 0.6204380
-#&gt;       1000  good      bad 0.7391304 0.2608696
+#&gt;     row_ids truth response prob.good  prob.bad
+#&gt;           1  good      bad 0.8767123 0.1232877
+#&gt;           2   bad      bad 0.1388889 0.8611111
+#&gt;           3  good      bad 0.8687090 0.1312910
+#&gt; ---                                           
+#&gt;         998  good      bad 0.8687090 0.1312910
+#&gt;         999   bad      bad 0.3795620 0.6204380
+#&gt;        1000  good      bad 0.7391304 0.2608696
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
