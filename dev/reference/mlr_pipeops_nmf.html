@@ -84,7 +84,7 @@ affects non-negative numerical features. See nmf() for details." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.5-9000</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6-9000</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -243,7 +243,7 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 
     
 
-<p>Uses the <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code> function as well as <code>basis()</code>, <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> and
+<p>Uses the <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code> function as well as <code><a href='https://rdrr.io/pkg/NMF/man/basis-coef-methods.html'>basis()</a></code>, <code><a href='https://rdrr.io/pkg/NMF/man/basis-coef-methods.html'>coef()</a></code> and
 <code><a href='https://rdrr.io/pkg/MASS/man/ginv.html'>ginv()</a></code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
@@ -326,38 +326,18 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"NMF"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
 
 <span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
 <span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nmf"</span><span class='op'>)</span>
 
 <span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species      NMF1       NMF2
-#&gt;   1:    setosa 0.8290139 0.03579919
-#&gt;   2:    setosa 0.7425097 0.06914820
-#&gt;   3:    setosa 0.7587001 0.03754975
-#&gt;   4:    setosa 0.7137460 0.07715860
-#&gt;   5:    setosa 0.8317556 0.02832131
-#&gt;  ---                               
-#&gt; 146: virginica 0.4031991 0.86828720
-#&gt; 147: virginica 0.3400982 0.83741979
-#&gt; 148: virginica 0.3994916 0.84480031
-#&gt; 149: virginica 0.3823531 0.87108386
-#&gt; 150: virginica 0.3591966 0.80980611</div><div class='input'>
+<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
+
 <span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
-</div><div class='output co'>#&gt; &lt;Object of class: NMFfit&gt;
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: NMF</span></div><div class='output co'>#&gt; &lt;Object of class: NMFfit&gt;
 #&gt;  # Model:
 #&gt;   &lt;Object of class:NMFstd&gt;
 #&gt;   features: 4 
@@ -376,7 +356,7 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 #&gt;   Iterations: 450 
 #&gt;   Timing:
 #&gt;      user  system elapsed 
-#&gt;     0.103   0.016   0.119 </div></pre>
+#&gt;     0.095   0.016   0.111 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
