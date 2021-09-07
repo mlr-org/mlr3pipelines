@@ -1,4 +1,7 @@
-# mlr3pipelines 0.3.5-9000
+# mlr3pipelines 0.3.6
+
+* Bugfix: Make empty Multiplicities work (unless they are nested)
+* Fixed: Compatibility with upcoming bbotk version.
 
 # mlr3pipelines 0.3.5-1
 
