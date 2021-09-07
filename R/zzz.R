@@ -7,6 +7,7 @@
 #' @importFrom utils tail
 #' @importFrom digest digest
 #' @importFrom withr with_options
+#' @importFrom stats setNames
 "_PACKAGE"
 
 register_mlr3 = function() {

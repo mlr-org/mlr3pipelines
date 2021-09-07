@@ -94,7 +94,7 @@ See \code{\link[NMF:nmf]{nmf()}}.
 
 \section{Internals}{
 
-Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis-coef-methods]{basis()}}, \code{\link[NMF:basis-coef-methods]{coef()}} and
+Uses the \code{\link[NMF:nmf]{nmf()}} function as well as \code{\link[NMF:basis]{basis()}}, \code{\link[NMF:coef]{coef()}} and
 \code{\link[MASS:ginv]{ginv()}}.
 }
 
@@ -104,6 +104,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
+if (requireNamespace("NMF")) {
 library("mlr3")
 
 task = tsk("iris")
@@ -113,6 +114,7 @@ task$data()
 pop$train(list(task))[[1]]$data()
 
 pop$state
+}
 }
 \seealso{
 https://mlr3book.mlr-org.com/list-pipeops.html
