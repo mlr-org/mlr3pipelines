@@ -254,7 +254,7 @@ PipeOp = R6Class("PipeOp",
         return(evaluate_multiplicities(self, unpacked, "train", NULL))
       }
       input = check_types(self, input, "input", "train")
-      on.exit({self$state = NULL})  # if any of the followi fails, make sure to reset self$state
+      on.exit({self$state = NULL})  # if any of the following fails, make sure to reset self$state
       output = private$.train(input)
       output = check_types(self, output, "output", "train")
       on.exit()  # don't reset state any more
@@ -495,6 +495,14 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
     list(output = self[[evalcall]](input), state = self$state)
   })
   on.exit({self$state = as.Multiplicity(map(result, "state"))})
+  if (length(unpacked) == 0) {
+    # if input was length-0 multiplicity, then we need to construct output ourselves, because
+    # 'result' is just an empty list missing the necessary info about output channels.
+    # (not necessary for 'state', because it is a list of states, whereas 'output' is a
+    # list (entry for each input multiplicity entry) of lists (entry for each output channel) of outputs
+    sapply(self$output$name, function(x) as.Multiplicity(list()), simplify = FALSE)
+  } else {
 
-  map(transpose_list(map(result, "output")), as.Multiplicity)
+    map(transpose_list(map(result, "output")), as.Multiplicity)
+  }
 }
