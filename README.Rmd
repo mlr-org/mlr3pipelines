@@ -32,7 +32,7 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 ## What is `mlr3pipelines`?
 
 
-Watch our "WhyR 2020" Webinar Presentation on Youtube for an introduction! Find the slides [here](https://github.com/mlr-org/mlr-outreach/raw/master/2020_whyr/slides.pdf).
+Watch our "WhyR 2020" Webinar Presentation on Youtube for an introduction! Find the slides [here](https://raw.githubusercontent.com/mlr-org/mlr-outreach/main/2020_whyr/slides.pdf).
 
 [![WhyR 2020
 mlr3pipelines](https://img.youtube.com/vi/4r8K3GO5wk4/0.jpg)](https://www.youtube.com/watch?v=4r8K3GO5wk4)

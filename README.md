@@ -1,7 +1,7 @@
 
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
-Package website: [release](https://mlr3pipelines.mlr-org.com/) \|
+Package website: [release](https://mlr3pipelines.mlr-org.com/) |
 [dev](https://mlr3pipelines.mlr-org.com/dev/)
 
 Dataflow Programming for Machine Learning in R.
@@ -17,8 +17,8 @@ Dataflow Programming for Machine Learning in R.
 ## What is `mlr3pipelines`?
 
 Watch our “WhyR 2020” Webinar Presentation on Youtube for an
-introduction! Find the slides
-[here](https://github.com/mlr-org/mlr-outreach/raw/master/2020_whyr/slides.pdf).
+introduction\! Find the slides
+[here](https://raw.githubusercontent.com/mlr-org/mlr-outreach/main/2020_whyr/slides.pdf).
 
 [![WhyR 2020
 mlr3pipelines](https://img.youtube.com/vi/4r8K3GO5wk4/0.jpg)](https://www.youtube.com/watch?v=4r8K3GO5wk4)
@@ -70,21 +70,21 @@ which can then be connected with directed edges in a **Graph**. The
 scope of *mlr3pipelines* is still growing; currently supported features
 are:
 
--   Simple data manipulation and preprocessing operations, e.g. PCA,
+  - Simple data manipulation and preprocessing operations, e.g. PCA,
     feature filtering
--   Task subsampling for speed and outcome class imbalance handling
--   *mlr3* *Learner* operations for prediction and stacking
--   Simultaneous path branching (data going both ways)
--   Alternative path branching (data going one specific way, controlled
+  - Task subsampling for speed and outcome class imbalance handling
+  - *mlr3* *Learner* operations for prediction and stacking
+  - Simultaneous path branching (data going both ways)
+  - Alternative path branching (data going one specific way, controlled
     by hyperparameters)
--   Ensemble methods and aggregation of predictions
+  - Ensemble methods and aggregation of predictions
 
 ## Documentation
 
 The easiest way to get started is reading some of the vignettes that are
 shipped with the package, which can also be viewed online:
 
--   [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
+  - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
     with short examples to get started
 
 ## Bugs, Questions, Feedback
@@ -92,11 +92,11 @@ shipped with the package, which can also be viewed online:
 *mlr3pipelines* is a free and open source software project that
 encourages participation and feedback. If you have any issues,
 questions, suggestions or feedback, please do not hesitate to open an
-“issue” about it on the GitHub page!
+“issue” about it on the GitHub page\!
 
 In case of problems / bugs, it is often helpful if you provide a
-“minimum working example” that showcases the behaviour (but don’t worry
-about this if the bug is obvious).
+“minimum working example” that showcases the behaviour (but don’t
+worry about this if the bug is obvious).
 
 Please understand that the resources of the project are limited:
 response may sometimes be delayed by a few days, and some feature
