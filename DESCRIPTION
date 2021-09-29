@@ -167,7 +167,6 @@ Collate:
     'mlr_graphs.R'
     'mlr_graphs_elements.R'
     'operators.R'
-    'pipe.R'
     'po.R'
     'ppl.R'
     'reexports.R'

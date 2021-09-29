@@ -79,6 +79,13 @@ test_that("mlr_pipeops access works", {
     mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99))
   )
 
+  polrn = po(dblrn$new(), key = 99)
+
+  expect_equal(po(polrn), po(dblrn$new(), key = 99))
+
+  expect_equal(po(polrn, key = 100), po(dblrn$new(), key = 100))
+
+  expect_equal(po(polrn, key = 100, id = "test"), po(dblrn$new(), key = 100, id = "test"))
 
 
 })
@@ -94,6 +101,11 @@ test_that("mlr_pipeops multi-access works", {
   expect_equal(
     pos(c("scale", "nop")),
     list(mlr_pipeops$get("scale"), mlr_pipeops$get("nop"))
+  )
+
+  expect_equal(
+    pos(c("scale", original = "nop")),
+    list(mlr_pipeops$get("scale"), original = mlr_pipeops$get("nop", id = "original"))
   )
 
   expect_equal(
@@ -163,7 +175,19 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(pos(character(0)), list())
-  expect_equal(pos(c(x = "nop")), list())
+  expect_equal(pos(c(x = "nop")), list(x = mlr_pipeops$get("nop", id = "x")))
   expect_equal(pos(list()), list())
+
+  polrn = mlr_pipeops$get("learner", dblrn$new())
+  polrn$id = "y"
+  expect_equal(
+    pos(c(x = po("nop"), y = dblrn$new())),
+    list(x = po("nop", id = "x"), y = polrn)
+  )
+
+  expect_equal(
+    pos(list(a = polrn, b = dblrn$new())),
+    list(a = po(dblrn$new(), id = "a"), b = po(dblrn$new(), id = "b"))
+  )
 
 })

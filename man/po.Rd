@@ -24,7 +24,9 @@ given to the \code{param_vals} argument of the constructor.}
 
 \item{.objs}{\code{character} | \code{list}\cr
 Either a \code{character} of \code{\link{PipeOp}}s to look up in \code{\link{mlr_pipeops}},
-or a list of other objects to be converted to a \code{\link{PipeOp}}.}
+or a list of other objects to be converted to a \code{\link{PipeOp}}.
+If this is a named \code{list}, then the names are used as \verb{$id} slot for the resulting
+\code{\link{PipeOp}}s.}
 }
 \value{
 A \code{\link{PipeOp}} (for \code{po()}), or a \code{list} of \code{\link{PipeOp}}s (for \code{pos()}).
@@ -36,6 +38,7 @@ Create
 \item a \code{PipeOpLearner} from a \code{Learner} object
 \item a \code{PipeOpFilter} from a \code{Filter} object
 \item a \code{PipeOpSelect} from a \code{Selector} object
+\item a clone of a \code{PipeOp} from a given \code{PipeOp} (possibly with changed settings)
 }
 
 The object is initialized with given parameters and \code{param_vals}.
@@ -55,5 +58,5 @@ po(lrn("classif.rpart"), cp = 0.3)
 mlr_pipeops$get("learner", lrn("classif.rpart"),
   param_vals = list(cp = 0.3))
 
-pos(c("pca", "nop"))
+pos(c("pca", original = "nop"))
 }
