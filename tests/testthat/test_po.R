@@ -2,6 +2,8 @@ context("mlr_pipeops")
 
 test_that("mlr_pipeops access works", {
 
+  expect_equal(po(), mlr_pipeops)
+
   expect_equal(
     po("scale"),
     mlr_pipeops$get("scale")
@@ -92,6 +94,8 @@ test_that("mlr_pipeops access works", {
 
 
 test_that("mlr_pipeops multi-access works", {
+
+  expect_equal(pos(), mlr_pipeops)
 
   expect_equal(
     pos("scale"),

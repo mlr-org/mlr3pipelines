@@ -56,7 +56,7 @@ pos = function(.objs, ...) {
 #' @export
 po.NULL = function(.obj, ...) {
   # class is NULL if .obj is missing
-  dictionary_sugar(dict = mlr_pipeops)
+  dictionary_sugar_get(dict = mlr_pipeops)
 }
 
 #' @export
@@ -82,7 +82,7 @@ po.PipeOp = function(.obj, ...) {
 
 #' @export
 po.character = function(.obj, ...) {
-  dictionary_sugar(dict = mlr_pipeops, .key = .obj, ...)
+  dictionary_sugar_get(dict = mlr_pipeops, .key = .obj, ...)
 }
 
 #' @export
