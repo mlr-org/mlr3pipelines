@@ -205,8 +205,8 @@ test_that("PipeOpImpute", {
   expect_equal(task_trained$missing_i, c(FALSE, FALSE))
   expect_equal(task_trained$missing_j, c(FALSE, FALSE))
 
-  expect_set_equal(colnames(task_trained), c(letters[1:12], paste0("missing_", letters[c(1:11, 13)])))
-  expect_set_equal(colnames(task_predicted), c(letters[1:12], paste0("missing_", letters[c(1:11, 13)])))
+  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", letters[c(1:11, 13)])))
+  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", letters[c(1:11, 13)])))
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "median", method_fct = "oor", add_dummy = "all"))
@@ -220,8 +220,8 @@ test_that("PipeOpImpute", {
   expect_equal(task_predicted[5:6, ],
     task_trained[1:2])
 
-  expect_set_equal(colnames(task_trained), c(letters[1:12], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
-  expect_set_equal(colnames(task_predicted), c(letters[1:12], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
+  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
+  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
 
   expect_equal(task_trained$d[2], factor(".MISSING", levels = c(letters[1:6], ".MISSING")))
   expect_equal(task_trained$h[2], ".MISSING")
@@ -232,8 +232,8 @@ test_that("PipeOpImpute", {
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task$clone(deep = TRUE)$filter(1:3)))[[1]]$data()
 
-  expect_set_equal(colnames(task_trained), c(letters[1:12], paste0("missing_", c("a", "c", "k", "m"))))
-  expect_set_equal(colnames(task_predicted), c(letters[1:12], paste0("missing_", c("a", "c", "k", "m"))))
+  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", c("a", "c", "k", "m"))))
+  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", c("a", "c", "k", "m"))))
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "median", method_fct = "oor", add_dummy = "none"))

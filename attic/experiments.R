@@ -29,7 +29,7 @@ profvis::profvis(testthat::test_package("mlr3pipelines"))
 
 testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 
-testthat::test_package("mlr3pipelines", filter = "multiplicit")
+testthat::test_package("mlr3pipelines", filter = "impute")
 
 
 ntree <- 10
