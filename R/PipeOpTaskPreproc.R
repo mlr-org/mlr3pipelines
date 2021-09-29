@@ -9,6 +9,12 @@
 #' and expect the column layout of these [`Task`][mlr3::Task]s during input and output
 #' to be the same.
 #'
+#' Prediction-behavior of preprocessing operations should always be independent for each row in the input-[`Task`][mlr3::Task].
+#' This means that the prediction-operation of preprocessing-[`PipeOp`]s should commute with `rbind()`: Running prediction
+#' on an `n`-row [`Task`][mlr3::Task] should result in the same result as `rbind()`-ing the prediction-result from `n`
+#' 1-row [`Task`][mlr3::Task]s with the same content. In the large majority of cases, the number and order of rows
+#' should also not be changed during prediction.
+#'
 #' Users must implement `private$.train_task()` and `private$.predict_task()`, which have a [`Task`][mlr3::Task]
 #' input and should return that [`Task`][mlr3::Task]. The [`Task`][mlr3::Task] should, if possible, be
 #' manipulated in-place, and should not be cloned.
