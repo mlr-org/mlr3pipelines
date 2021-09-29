@@ -162,5 +162,7 @@ test_that("mlr_pipeops multi-access works", {
     list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)), mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
   )
 
+  expect_equal(pos(character(0)), list())
+  expect_equal(pos(list()), list())
 
 })

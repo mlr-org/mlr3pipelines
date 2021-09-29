@@ -169,6 +169,7 @@ Collate:
     'operators.R'
     'pipe.R'
     'po.R'
+    'ppl.R'
     'reexports.R'
     'typecheck.R'
     'zzz.R'
