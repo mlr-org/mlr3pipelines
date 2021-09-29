@@ -163,6 +163,7 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(pos(character(0)), list())
+  expect_equal(pos(c(x = "nop")), list())
   expect_equal(pos(list()), list())
 
 })
