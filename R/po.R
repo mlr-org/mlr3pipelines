@@ -86,7 +86,7 @@ pos.NULL = function(.objs, ...) {
 
 #' @export
 pos.character = function(.objs, ...) {
-  dictionary_sugar_mget(dict = mlr_pipeops, .key = .objs, ...)
+  dictionary_sugar_mget(dict = mlr_pipeops, .keys = .objs, ...)
 }
 
 #' @export
