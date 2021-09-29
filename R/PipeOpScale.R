@@ -47,7 +47,7 @@
 #'   Initialized to `FALSE`.
 #'
 #' @section Internals:
-#' Uses the [`scale()`][base::scale] function for `robust = FALSE` and alternatively subtracts the
+#' Imitates the [`scale()`][base::scale] function for `robust = FALSE` and alternatively subtracts the
 #' `median` and divides by [`mad`][stats::mad] for `robust = TRUE`.
 #'
 #' @section Methods:
@@ -86,16 +86,31 @@ PipeOpScale = R6Class("PipeOpScale",
   private = list(
 
     .train_dt = function(dt, levels, target) {
-      scalefn = if (self$param_set$values$robust) scale_robust else scale
-      sc = invoke(scalefn, as.matrix(dt), .args = self$param_set$get_values(tags = "scale"))
-      self$state = list(
-        center = attr(sc, "scaled:center") %??% 0,
-        scale = attr(sc, "scaled:scale") %??% 1
-      )
-      constfeat = self$state$scale == 0
-      self$state$scale[constfeat] = 1
-      sc[, constfeat] = 0
-      sc
+      pv = self$param_set$get_values(tags = "train")
+      if (pv$center %??% TRUE) {
+        meaning = if (pv$robust) stats::median else mean
+        center = map_dbl(dt, meaning, na.rm = TRUE)
+      } else {
+        center = rep(0, ncol(dt))
+      }
+      dt = as.data.table(pmap(list(dt, center), `-`))
+      if (pv$scale %??% TRUE) {
+        if (pv$robust) {
+          scale = map_dbl(dt, stats::mad, na.rm = TRUE, center = 0)
+        } else {
+          scale = map_dbl(dt, function(feat) {
+            not_na = sum(!is.na(feat))
+            if (not_na == 0) return(1)
+            sqrt(sum(feat^2, na.rm = TRUE) / not_na)
+          })
+        }
+        scale[scale == 0] = 1
+      } else {
+        scale = rep(1, ncol(dt))
+      }
+      dt = as.data.table(pmap(list(dt, scale), `/`))
+      self$state = list(center = center, scale = scale)
+      dt
     },
 
     .predict_dt = function(dt, levels) {
@@ -105,16 +120,3 @@ PipeOpScale = R6Class("PipeOpScale",
 )
 
 mlr_pipeops$add("scale", PipeOpScale)
-
-
-# Robust scale, same interface as `scale` but instead subtracts median and
-# divides by median absolute deviation.
-scale_robust = function(x, center = TRUE, scale = TRUE) {
-  if (center) {
-    center = apply(x, 2, stats::median, na.rm = TRUE)
-  }
-  if (scale) {
-    scale = apply(x, 2, function(col) stats::mad(col, if (!isFALSE(center)) stats::median(col) else 0, na.rm = TRUE))
-  }
-  scale(x, center = center, scale = scale)
-}
