@@ -69,8 +69,7 @@ test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
 
   predict_out1 = learner$predict(taskfull)
 
-  g = Graph$new()
-  g$add_pipeop(po)
+  g = PipeOpFixFactors$new() %>>% po
   g$add_pipeop(LearnerRegrRpart$new())
   g$add_pipeop(PipeOpTargetInvert$new())
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)
