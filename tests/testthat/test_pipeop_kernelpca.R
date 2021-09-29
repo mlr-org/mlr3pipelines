@@ -32,7 +32,7 @@ test_that("PipeOpKernelPCA - compare to kernlab::kpca", {
   set.seed(1234)
   pca = kernlab::kpca(as.matrix(dt))
   expect_equal(dim(result[[1]]$data()[, -1]), dim(kernlab::rotated(pca)))
-  expect_identical(result[[1]]$data()[, -1], as.data.table(kernlab::rotated(pca)))
+  expect_equal(result[[1]]$data()[, -1], as.data.table(kernlab::rotated(pca)))
 
   # Change some parameters
   op2 = PipeOpKernelPCA$new(param_vals = list(kpar = list(sigma = 0.4), features = 4))
