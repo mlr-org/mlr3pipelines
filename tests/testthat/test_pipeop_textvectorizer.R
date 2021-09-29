@@ -71,7 +71,7 @@ test_that("PipeOpTextVectorizer - tfidf works", {
   expect_true(result$ncol > 6)
   expect_true(all(result$feature_types$type == "numeric"))
 
-  trueresult = as.data.table(quanteda::convert(quanteda::dfm_tfidf(quanteda::dfm(dt$txt)), "matrix"))
+  trueresult = as.data.table(quanteda::convert(quanteda::dfm_tfidf(quanteda::dfm(quanteda::tokens(dt$txt))), "matrix"))
   colnames(trueresult) = paste0("txt.", colnames(trueresult))
 
   popresult = result$data(cols = selector_grep("^txt\\.")(result))
