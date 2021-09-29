@@ -17,6 +17,10 @@ The key of the \code{\link{Graph}} in \code{\link{mlr_graphs}}.}
 Additional parameters to give to constructed object.
 This may be an argument of the constructor of the
 underlying function.}
+
+\item{.keys}{\verb{[character]}\cr
+The key of possibly multiple \code{\link{Graph}}s in \code{\link{mlr_graphs}}. If this is named, a
+named \code{list} is returned, but unlike \code{\link[=pos]{pos()}} it will not set any \verb{$id} slots.}
 }
 \value{
 \code{\link{Graph}} (for \code{ppl()}) or \code{list} of \code{\link{Graph}}s (for \code{ppls()}).

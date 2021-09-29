@@ -8,6 +8,9 @@
 #'
 #' @param .key `[character(1)]`\cr
 #'   The key of the [`Graph`] in [`mlr_graphs`].
+#' @param .keys `[character]`\cr
+#'   The key of possibly multiple [`Graph`]s in [`mlr_graphs`]. If this is named, a
+#'   named `list` is returned, but unlike [`pos()`] it will not set any `$id` slots.
 #' @param ... `any`\cr
 #'   Additional parameters to give to constructed object.
 #'   This may be an argument of the constructor of the
