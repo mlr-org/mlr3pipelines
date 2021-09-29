@@ -72,7 +72,11 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
       which.bins = sample.int(length(model$counts), count_missing(feature), replace = TRUE, prob = model$counts)
       sampled = stats::runif(length(which.bins), model$breaks[which.bins], model$breaks[which.bins + 1L])
       if (type == "integer") {
-        sampled = as.integer(round(sampled))
+        sampled = round(sampled)
+        # make sure we get an integer. this is faster than pmin(pmax(...)).
+        sampled[sampled > .Machine$integer.max] = .Machine$integer.max
+        sampled[sampled < -.Machine$integer.max] = -.Machine$integer.max
+        sampled = as.integer(sampled)
       }
       feature[is.na(feature)] = sampled
       feature
