@@ -33,7 +33,7 @@ test_that("PipeOpHistBin - numerics out of range of training data", {
 
   op = PipeOpHistBin$new()
   result1 = op$train(list(task1))
-  ranges = sapply(op$state$bins, FUN = range)
+  ranges = sapply(op$state$breaks, FUN = range)
   expect_equal(ranges[1L, ], rep.int(-Inf, times = 4L))
   expect_equal(ranges[2L, ], rep.int(Inf, times = 4L))
 

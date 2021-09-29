@@ -27,7 +27,7 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `bins` :: `list` \cr
+#' * `breaks` :: `list` \cr
 #'   List of intervals representing the bins for each numeric feature.
 #'
 #' @section Parameters:
@@ -73,18 +73,18 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
-      bins = lapply(seq_col(dt), function(i) {
+      breaks = lapply(seq_col(dt), function(i) {
         breaks = invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$get_values(tags = "hist"))$breaks
         breaks[1L] = -Inf
         breaks[length(breaks)] = Inf
         breaks
       })
-      list(bins = bins)
+      list(breaks = breaks)
     },
 
     .transform_dt = function(dt, levels) {
       as.data.frame(mapply(function(d, b) ordered(cut(d, breaks = b, include.lowest = TRUE)),
-        d = dt, b = self$state$bins, SIMPLIFY = FALSE), row.names = rownames(dt))
+        d = dt, b = self$state$breaks, SIMPLIFY = FALSE), row.names = rownames(dt))
     }
   )
 )
