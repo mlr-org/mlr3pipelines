@@ -13,6 +13,11 @@
 #' `regr` can only impute features of type `integer` and `numeric`, while `classif` can impute
 #' features of type `factor`, `ordered` and `logical`.
 #'
+#' The [`Learner`][mlr3::Learner] used for imputation is trained on all `context_columns`; if these contain missing values,
+#' the [`Learner`][mlr3::Learner] typically either needs to be able to handle missing values itself, or needs to do its
+#' own imputation (see examples).
+#'
+#'
 #'
 #' @section Construction:
 #' ```
@@ -72,7 +77,20 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #'
-#' po$state$model
+#' # '$state' of the "regr.rpart" Learner, trained to predict the 'mass' column:
+#' po$state$model$mass
+#'
+#' library("mlr3learners")
+#' # to use the "regr.kknn" Learner, prefix it with its own imputation method!
+#' # The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this
+#' # trained Learner are then used to impute the missing values in the Task.
+#' po = po("imputelearner",
+#'   po("imputehist") %>>% lrn("regr.kknn")
+#' )
+#'
+#' new_task = po$train(list(task = task))[[1]]
+#' new_task$missings()
+#'
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
