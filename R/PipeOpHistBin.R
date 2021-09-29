@@ -32,7 +32,7 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `bins` :: `character(1)` | `numeric` | `function` \cr
+#' * `breaks` :: `character(1)` | `numeric` | `function` \cr
 #'   Either a `character(1)` string naming an algorithm to compute the number of cells,
 #'   a `numeric(1)` giving the number of breaks for the histogram,
 #'   a vector `numeric` giving the breakpoints between the histogram cells, or
