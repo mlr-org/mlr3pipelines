@@ -20,6 +20,64 @@ Setting a new predict type will try to set the \code{predict_type} in all releva
 \code{\link{PipeOp}} / \code{\link[mlr3:Learner]{Learner}} encapsulated within the \code{\link{Graph}}.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the \code{\link{Graph}}.
 }
+\section{Construction}{
+\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+}
+\itemize{
+\item \code{graph} :: \code{\link{Graph}} | \code{\link{PipeOp}}\cr
+\code{\link{Graph}} to wrap. Can be a \code{\link{PipeOp}}, which is automatically converted to a \code{\link{Graph}}.
+\item \code{id} :: \code{character(1)}
+Identifier of the resulting \code{\link[mlr3:Learner]{Learner}}.
+\item \code{param_vals} :: named \code{list}\cr
+List of hyperparameter settings, overwriting the hyperparameter settings . Default \code{list()}.
+\item \code{task_type} :: \code{character(1)}\cr
+What \code{task_type} the \code{GraphLearner} should have; usually automatically inferred for \code{\link{Graph}}s that are simple enough.
+\item \code{predict_type} :: \code{character(1)}\cr
+What \code{predict_type} the \code{GraphLearner} should have; usually automatically inferred for \code{\link{Graph}}s that are simple enough.
+}
+}
+
+\section{Fields}{
+
+Fields inherited from \code{\link{PipeOp}}, as well as:
+\itemize{
+\item \code{graph} :: \code{\link{Graph}}\cr
+\code{\link{Graph}} that is being wrapped. This field contains the prototype of the \code{\link{Graph}} that is being trained, but does \emph{not}
+contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
+\item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
+\code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
+}
+}
+
+\section{Internals}{
+
+\code{\link[=as_graph]{as_graph()}} is called on the \code{graph} argument, so it can technically also be a \code{list} of things, which is
+automatically converted to a \code{\link{Graph}} via \code{\link[=gunion]{gunion()}}; however, this will usually not result in a valid \code{\link{Graph}} that can
+work as a \code{\link[mlr3:Learner]{Learner}}. \code{graph} can furthermore be a \code{\link[mlr3:Learner]{Learner}}, which is then automatically
+wrapped in a \code{\link{Graph}}, which is then again wrapped in a \code{GraphLearner} object; this usually only adds overhead and is not
+recommended.
+}
+
+\examples{
+library("mlr3")
+
+graph = po("pca") \%>>\% lrn("classif.rpart")
+
+lr = GraphLearner$new(graph)
+lr = as_learner(graph)  # equivalent
+
+lr$train(tsk("iris"))
+
+lr$graph$state  # untrained version!
+# The following is therefore NULL:
+lr$graph$pipeops$classif.rpart$learner_model$model
+
+# To access the trained model from the PipeOpLearner's Learner, use:
+lr$graph_model$pipeops$classif.rpart$learner_model$model
+
+# Feature importance (of principal components):
+lr$graph_model$pipeops$classif.rpart$learner_model$importance()
+}
 \seealso{
 Other Learners: 
 \code{\link{mlr_learners_avg}}
