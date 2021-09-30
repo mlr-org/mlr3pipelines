@@ -103,7 +103,7 @@ PipeOpScale = R6Class("PipeOpScale",
           scale = map_dbl(dt, function(feat) {
             not_na = sum(!is.na(feat))
             if (not_na == 0) return(1)
-            sqrt(sum(feat^2, na.rm = TRUE) / not_na)
+            sqrt(sum(feat^2, na.rm = TRUE) / max(not_na - 1, 1))
           })
         }
         scale[scale == 0] = 1
