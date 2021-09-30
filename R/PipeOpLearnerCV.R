@@ -152,7 +152,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     learner_model = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
-          stop("$learner is read-only.")
+          stop("$learner_model is read-only.")
         }
       }
       if (is.null(self$state) || is_noop(self$state)) {
