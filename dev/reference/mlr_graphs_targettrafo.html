@@ -58,7 +58,8 @@ parameters trafo and inverter of the param_set of the resulting Graph.
 Note that the input graph is not explicitly checked to actually return a
 Prediction during prediction.
 
-" />
+
+All input arguments are cloned and have no references in common with the returned Graph." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -153,7 +154,7 @@ Prediction during prediction.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Transform and Re-Transform the Target Variable</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/mlr_graphs_elements.R'><code>R/mlr_graphs_elements.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_targettrafo.R'><code>R/pipeline_targettrafo.R</code></a></small>
     <div class="hidden name"><code>mlr_graphs_targettrafo.Rd</code></div>
     </div>
 
@@ -169,6 +170,7 @@ parameters <code>trafo</code> and <code>inverter</code> of the <code>param_set</
 <code><a href='https://mlr3.mlr-org.com/reference/Prediction.html'>Prediction</a></code> during prediction.</p></li>
 </ul>
 
+<p>All input arguments are cloned and have no references in common with the returned <code><a href='Graph.html'>Graph</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_targettrafo</span><span class='op'>(</span>

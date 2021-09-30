@@ -48,7 +48,8 @@
 
 
 <meta property="og:title" content="Branch Between Alternative Paths — mlr_graphs_branching" />
-<meta property="og:description" content="Create a multiplexed graph." />
+<meta property="og:description" content="Create a multiplexed graph.
+All input arguments are cloned and have no references in common with the returned Graph." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -143,12 +144,13 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Branch Between Alternative Paths</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/mlr_graphs_elements.R'><code>R/mlr_graphs_elements.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_branch.R'><code>R/pipeline_branch.R</code></a></small>
     <div class="hidden name"><code>mlr_graphs_branching.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Create a multiplexed graph.</p>
+<p>All input arguments are cloned and have no references in common with the returned <code><a href='Graph.html'>Graph</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='va'>graphs</span>, prefix_branchops <span class='op'>=</span> <span class='st'>""</span>, prefix_paths <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>

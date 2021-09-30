@@ -64,8 +64,11 @@ channel 1, channel 2 to 2 etc.
 %&amp;gt;&amp;gt;% always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
 To access individual PipeOps after composition, use the resulting Graph's $pipeops list.
 %&amp;gt;&amp;gt;&amp;gt;%, on the other hand, tries to avoid cloning its first argument: If it is a Graph, then this Graph
-will be modified in-place. It is usually recommended to use %&amp;gt;&amp;gt;%, since the very marginal gain of performance from
-using %&amp;gt;&amp;gt;&amp;gt;% often does not outweigh the risk of modifying objects by-reference that should not be modified. However,
+will be modified in-place.
+When %&amp;gt;&amp;gt;&amp;gt;% fails, then it leaves g1 in an incompletely modified state. It is therefore usually recommended to use
+%&amp;gt;&amp;gt;%, since the very marginal gain of performance from
+using %&amp;gt;&amp;gt;&amp;gt;% often does not outweigh the risk of either modifying objects by-reference that should not be modified or getting
+graphs that are in an incompletely modified state. However,
 when creating long Graphs, chaining with %&amp;gt;&amp;gt;&amp;gt;% instead of %&amp;gt;&amp;gt;% can give noticeable performance benefits
 because %&amp;gt;&amp;gt;% makes a number of clone()-calls that is quadratic in chain length, %&amp;gt;&amp;gt;&amp;gt;% only linear.
 concat_graphs(g1, g2, in_place = FALSE) is equivalent to g1 %&amp;gt;&amp;gt;% g2. concat_graphs(g1, g2, in_place = TRUE) is equivalent to g1 %&amp;gt;&amp;gt;&amp;gt;% g2.
@@ -191,8 +194,11 @@ channel 1, channel 2 to 2 etc.</p>
 <p><code>%&gt;&gt;%</code> always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
 To access individual <code><a href='PipeOp.html'>PipeOp</a></code>s after composition, use the resulting <code><a href='Graph.html'>Graph</a></code>'s <code>$pipeops</code> list.
 <code>%&gt;&gt;&gt;%</code>, on the other hand, tries to avoid cloning its first argument: If it is a <code><a href='Graph.html'>Graph</a></code>, then this <code><a href='Graph.html'>Graph</a></code>
-will be modified in-place. It is usually recommended to use <code>%&gt;&gt;%</code>, since the very marginal gain of performance from
-using <code>%&gt;&gt;&gt;%</code> often does not outweigh the risk of modifying objects by-reference that should not be modified. However,
+will be modified in-place.</p>
+<p>When <code>%&gt;&gt;&gt;%</code> fails, then it leaves <code>g1</code> in an incompletely modified state. It is therefore usually recommended to use
+<code>%&gt;&gt;%</code>, since the very marginal gain of performance from
+using <code>%&gt;&gt;&gt;%</code> often does not outweigh the risk of either modifying objects by-reference that should not be modified or getting
+graphs that are in an incompletely modified state. However,
 when creating long <code><a href='Graph.html'>Graph</a></code>s, chaining with <code>%&gt;&gt;&gt;%</code> instead of <code>%&gt;&gt;%</code> can give noticeable performance benefits
 because <code>%&gt;&gt;%</code> makes a number of <code>clone()</code>-calls that is quadratic in chain length, <code>%&gt;&gt;&gt;%</code> only linear.</p>
 <p><code>concat_graphs(g1, g2, in_place = FALSE)</code> is equivalent to <code>g1 %&gt;&gt;% g2</code>. <code>concat_graphs(g1, g2, in_place = TRUE)</code> is equivalent to <code>g1 %&gt;&gt;&gt;% g2</code>.</p>

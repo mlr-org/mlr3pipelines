@@ -49,7 +49,8 @@
 
 <meta property="og:title" content="Create Disjoint Graph Union of Copies of a Graph — pipeline_greplicate" />
 <meta property="og:description" content="Create a new Graph containing n copies of the input Graph / PipeOp. To avoid ID
-collisions, PipeOp IDs are suffixed with _i where i ranges from 1 to n." />
+collisions, PipeOp IDs are suffixed with _i where i ranges from 1 to n.
+All input arguments are cloned and have no references in common with the returned Graph." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -144,13 +145,14 @@ collisions, PipeOp IDs are suffixed with _i where i ranges from 1 to n." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create Disjoint Graph Union of Copies of a Graph</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/mlr_graphs_elements.R'><code>R/mlr_graphs_elements.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_greplicate.R'><code>R/pipeline_greplicate.R</code></a></small>
     <div class="hidden name"><code>pipeline_greplicate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Create a new <code><a href='Graph.html'>Graph</a></code> containing <code>n</code> copies of the input <code><a href='Graph.html'>Graph</a></code> / <code><a href='PipeOp.html'>PipeOp</a></code>. To avoid ID
 collisions, PipeOp IDs are suffixed with <code>_i</code> where <code>i</code> ranges from 1 to <code>n</code>.</p>
+<p>All input arguments are cloned and have no references in common with the returned <code><a href='Graph.html'>Graph</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_greplicate</span><span class='op'>(</span><span class='va'>graph</span>, <span class='va'>n</span><span class='op'>)</span></pre>
