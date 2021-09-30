@@ -8,15 +8,15 @@ test_that("Robustify Pipeline", {
   tsk = tsk("iris")
   p = pipeline_robustify(task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true("removeconstants" %in% names(p$pipeops))
+  expect_true("removeconstants_postrobustify" %in% names(p$pipeops))
   expect_true("fixfactors" %nin% names(p$pipeops))
-  expect_true(length(p$pipeops) == 2)
+  expect_true(length(p$pipeops) == 3)
 
   tsk = tsk("pima")
   # missings with scaling (rpart can do missings)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true(all(c("removeconstants") %in% names(p$pipeops)))
+  expect_true("removeconstants_postrobustify" %in% names(p$pipeops)))
 
   # with fct
   dt = data.table("fct" = factor(rep_len(letters[1:3], tsk$nrow)))
@@ -87,17 +87,16 @@ test_that("Robustify Pipeline", {
   tsk = TaskClassif$new("iris_date", backend = dat, target = "Species")
   p = pipeline_robustify(task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true("removeconstants" %in% names(p$pipeops))
-  expect_true("datefeatures" %in% names(p$pipeops))
-  expect_true(length(p$pipeops) == 3)
+  expect_true("removeconstants_postrobustify" %in% names(p$pipeops))
+  expect_true("POSIXct_to_dbl" %in% names(p$pipeops))
+  expect_true(length(p$pipeops) == 4)
 
-  # use correct type for encoding missings depending on learner feature types
-  types = c("factor", "integer", "logical", "numeric")
-  expect_true(all(map_lgl(types, function(type) {
-    p = pipeline_robustify(learner = LearnerClassif$new("test", feature_types = type), impute_missings = TRUE)
-    expect_true(type == p$param_set$values$missind.type)
-  })))
-  unsupported_types = setdiff(mlr_reflections$task_feature_types, types)
-  expect_error(pipeline_robustify(learner = LearnerClassif$new("test", feature_types = unsupported_types), impute_missings = TRUE),
-    regexp = "does not support any of the feature types needed for missing indicator columns")
+  p = pipeline_robustify(task = tsk, learner = lrn, POSIXct_action = "datefeatures") %>>% po(lrn)
+  expect_graph(p)
+  expect_true("removeconstants_postrobustify" %in% names(p$pipeops))
+  expect_true("datefeatures" %in% names(p$pipeops))
+  expect_true(length(p$pipeops) == 4)
+
 })
+
+

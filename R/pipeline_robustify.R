@@ -163,13 +163,14 @@ pipeline_robustify = function(task = NULL, learner = NULL,
     stopf("unexpected value of ordered_action: %s", ordered_action)
   )
 
-  imputing = if (has_numbers) po("imputehist") %>>% if (has_logicals) po("imputesample", affect_columns = selector_type("logical"))
+  imputing = if (has_numbers) po("imputehist") %>>% if (has_logicals) po("imputesample", id = "impute_logicals", affect_columns = selector_type("logical"))
   if (is.null(imputing)) imputing = po("nop", id = "missind_bypass")
   pos_impute_1 = if (impute_missings) list(
     if (has_numbers || has_logicals) gunion(list(
       imputing,
-      po("missind", affect_columns = selector_type(c("numeric", "integer", "logical"), type = if (missind_numeric) "numeric" else "factor"))
+      po("missind", affect_columns = selector_type(c("numeric", "integer", "logical")), type = if (missind_numeric) "numeric" else "factor")
     )),
+    if (has_numbers || has_logicals) po("featureunion"),
     if (has_factorials) po("imputeoor")
   )
 
