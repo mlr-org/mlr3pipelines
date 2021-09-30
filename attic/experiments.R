@@ -896,3 +896,15 @@ gr <- po("replicate", reps = ntree) %>>%
   po("subsample") %>>% lrn("classif.rpart") %>>%
   po("classifavg", collect = TRUE)
 
+
+
+`%<>>%` = function(g1, g2) {
+  force(g2)
+  force(g1)
+  cat(sprintf("'%s' >> '%s'\n", g1, g2))
+  paste0(g1, g2)
+}
+
+"one" %<>>% "two" %<>>% "three"
+#> 'one' >> 'two'
+#> 'onetwo' >> 'three'

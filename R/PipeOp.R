@@ -70,6 +70,10 @@
 #' instead, a `$train()` and `$predict()` should be used. The most convenient usage is to add the [`PipeOp`]
 #' to a `Graph` (possibly as singleton in that `Graph`), and using the `Graph`'s `$train()` / `$predict()` methods.
 #'
+#' `private$.train()` and `private$.predict()` should treat their inputs as read-only. If they are [`R6`][R6::R6] objects,
+#' they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
+#' not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.
+#'
 #' @section Fields:
 #' * `id` :: `character`\cr
 #'   ID of the [`PipeOp`]. IDs are user-configurable, and IDs of [`PipeOp`]s must be unique within a [`Graph`]. IDs of
