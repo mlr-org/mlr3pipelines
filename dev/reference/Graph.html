@@ -235,7 +235,9 @@ Get IDs of all <code><a href='PipeOp.html'>PipeOp</a></code>s. This is in order 
 Mutates <code>Graph</code> by adding a <code><a href='PipeOp.html'>PipeOp</a></code> to the <code>Graph</code>. This does not add any edges, so the new <code><a href='PipeOp.html'>PipeOp</a></code>
 will not be connected within the <code>Graph</code> at first.<br />
 Instead of supplying a <code><a href='PipeOp.html'>PipeOp</a></code> directly, an object that can naturally be converted to a <code><a href='PipeOp.html'>PipeOp</a></code> can also
-be supplied, e.g. a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> or a <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>; see <code><a href='as_pipeop.html'>as_pipeop()</a></code>.</p></li>
+be supplied, e.g. a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> or a <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>; see <code><a href='as_pipeop.html'>as_pipeop()</a></code>.
+The argument given as <code>op</code> is always cloned; to access a <code>Graph</code>'s <code><a href='PipeOp.html'>PipeOp</a></code>s by-reference, use <code>$pipeops</code>.<br />
+Note that <code>$add_pipeop()</code> is a relatively low-level operation, it is recommended to build graphs using <code>%&gt;&gt;%</code>.</p></li>
 <li><p><code>add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)</code> <br />
 (<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>,
 <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>NULL</code>,

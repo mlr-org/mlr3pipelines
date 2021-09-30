@@ -186,7 +186,8 @@ useful to use <code><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</
 <ul>
 <li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> <br />
 <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> to use for cross validation / prediction, or a string identifying a
-<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> in the <code><a href='https://mlr3.mlr-org.com/reference/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.</p></li>
+<code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> in the <code><a href='https://mlr3.mlr-org.com/reference/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.
+This argument is always cloned; to access the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> inside <code>PipeOpLearnerCV</code> by-reference, use <code>$learner</code>.<br /></p></li>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
 Identifier of the resulting object, internally defaulting to the <code>id</code> of the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> being wrapped.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />

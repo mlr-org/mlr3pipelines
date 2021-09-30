@@ -52,7 +52,8 @@
 Whenever a Graph or a PipeOp is called with an object
 that does not conform to its declared input type, the &quot;autoconvert
 register&quot; is queried for functions that may turn the object into
-a desired type." />
+a desired type.
+Conversion functions should try to avoid cloning." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -157,6 +158,7 @@ a desired type." />
 that does not conform to its declared input type, the "autoconvert
 register" is queried for functions that may turn the object into
 a desired type.</p>
+<p>Conversion functions should try to avoid cloning.</p>
     </div>
 
     <pre class="usage"><span class='fu'>register_autoconvert_function</span><span class='op'>(</span><span class='va'>cls</span>, <span class='va'>fun</span>, packages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></pre>

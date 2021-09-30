@@ -52,7 +52,9 @@
 converted into Graphs or PipeOps, see as_graph() and as_pipeop()) as inputs and joins
 them in a new Graph.
 The PipeOps of the input Graphs are not joined with new edges across
-Graphs, so if length(graphs) &amp;gt; 1 the resulting Graph will be disconnected." />
+Graphs, so if length(graphs) &amp;gt; 1, the resulting Graph will be disconnected.
+This operation always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
+To access individual PipeOps after composition, use the resulting Graph's $pipeops list." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -156,10 +158,12 @@ Graphs, so if length(graphs) &amp;gt; 1 the resulting Graph will be disconnected
 converted into <code><a href='Graph.html'>Graph</a></code>s or <code><a href='PipeOp.html'>PipeOp</a></code>s, see <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>) as inputs and joins
 them in a new <code><a href='Graph.html'>Graph</a></code>.</p>
 <p>The <code><a href='PipeOp.html'>PipeOp</a></code>s of the input <code><a href='Graph.html'>Graph</a></code>s are not joined with new edges across
-<code><a href='Graph.html'>Graph</a></code>s, so if <code>length(graphs) &gt; 1</code> the resulting <code><a href='Graph.html'>Graph</a></code> will be disconnected.</p>
+<code><a href='Graph.html'>Graph</a></code>s, so if <code>length(graphs) &gt; 1</code>, the resulting <code><a href='Graph.html'>Graph</a></code> will be disconnected.</p>
+<p>This operation always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
+To access individual <code><a href='PipeOp.html'>PipeOp</a></code>s after composition, use the resulting <code><a href='Graph.html'>Graph</a></code>'s <code>$pipeops</code> list.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gunion</span><span class='op'>(</span><span class='va'>graphs</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>gunion</span><span class='op'>(</span><span class='va'>graphs</span>, in_place <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,9 +171,16 @@ them in a new <code><a href='Graph.html'>Graph</a></code>.</p>
     <tr>
       <th>graphs</th>
       <td><p><code>list</code> of (<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code>)<br />
-List of elements with one of the types defined above, which are the
-<code><a href='Graph.html'>Graph</a></code>s to be joined. The list can be named, in which case the
+List of elements which are the
+<code><a href='Graph.html'>Graph</a></code>s to be joined. Elements must be convertible to <code><a href='Graph.html'>Graph</a></code> or <code><a href='PipeOp.html'>PipeOp</a></code> using <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>.
+The list can be named, in which case the
 IDs of the elements are prefixed with the names, separated by a dot (<code>.</code>).</p></td>
+    </tr>
+    <tr>
+      <th>in_place</th>
+      <td><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+Whether to try to avoid cloning the first element of <code>graphs</code>, similar to the difference
+of <code>%&gt;&gt;&gt;%</code> over <code>%&gt;&gt;%</code>. This can only be avoided if <code>graphs[[1]]</code> is already a <code><a href='Graph.html'>Graph</a></code>.</p></td>
     </tr>
     </table>
 
@@ -179,11 +190,11 @@ IDs of the elements are prefixed with the names, separated by a dot (<code>.</co
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other Graph operators: 
-<code>%&gt;&gt;%()</code>,
 <code><a href='as_graph.html'>as_graph</a>()</code>,
 <code><a href='as_pipeop.html'>as_pipeop</a>()</code>,
 <code><a href='assert_graph.html'>assert_graph</a>()</code>,
 <code><a href='assert_pipeop.html'>assert_pipeop</a>()</code>,
+<code><a href='concat_graphs.html'>concat_graphs</a>()</code>,
 <code><a href='greplicate.html'>greplicate</a>()</code>,
 <code><a href='pipeline_greplicate.html'>pipeline_greplicate</a>()</code></p></div>
 

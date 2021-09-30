@@ -171,7 +171,8 @@ this means e.g. that setting <code>nfeat</code> to 0 will only remove features o
 </pre>
 <ul>
 <li><p><code>filter</code> :: <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code><br />
-<code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> used for feature filtering.</p></li>
+<code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> used for feature filtering.
+This argument is always cloned; to access the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> inside <code>PipeOpFilter</code> by-reference, use <code>$filter</code>.<br /></p></li>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
 Identifier of the resulting  object, defaulting to the <code>id</code> of the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> being used.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />

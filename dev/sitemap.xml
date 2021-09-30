@@ -52,10 +52,13 @@
     <loc>https://mlr3pipelines.mlr-org.com//reference/assert_pipeop.html</loc>
   </url>
   <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/filter_noop.html</loc>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/chain_graphs.html</loc>
   </url>
   <url>
-    <loc>https://mlr3pipelines.mlr-org.com//reference/grapes-greater-than-greater-than-grapes.html</loc>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/concat_graphs.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com//reference/filter_noop.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com//reference/greplicate.html</loc>

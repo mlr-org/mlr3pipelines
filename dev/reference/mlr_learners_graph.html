@@ -179,7 +179,8 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
 </pre>
 <ul>
 <li><p><code>graph</code> :: <code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code><br />
-<code><a href='Graph.html'>Graph</a></code> to wrap. Can be a <code><a href='PipeOp.html'>PipeOp</a></code>, which is automatically converted to a <code><a href='Graph.html'>Graph</a></code>.</p></li>
+<code><a href='Graph.html'>Graph</a></code> to wrap. Can be a <code><a href='PipeOp.html'>PipeOp</a></code>, which is automatically converted to a <code><a href='Graph.html'>Graph</a></code>.
+This argument is always cloned; to access the <code><a href='Graph.html'>Graph</a></code> inside <code>GraphLearner</code> by-reference, use <code>$graph</code>.<br /></p></li>
 <li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
 Identifier of the resulting <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />

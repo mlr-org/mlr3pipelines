@@ -238,6 +238,9 @@ the <code>PipeOp</code>'s input channels, and must return a <code>list</code> (n
 channels in <code>$output</code>. The <code>private$.train()</code> and <code>private$.predict()</code> function should not be called by the user;
 instead, a <code>$train()</code> and <code>$predict()</code> should be used. The most convenient usage is to add the <code>PipeOp</code>
 to a <code>Graph</code> (possibly as singleton in that <code>Graph</code>), and using the <code>Graph</code>'s <code>$train()</code> / <code>$predict()</code> methods.</p>
+<p><code>private$.train()</code> and <code>private$.predict()</code> should treat their inputs as read-only. If they are <code><a href='https://r6.r-lib.org/reference/R6Class.html'>R6</a></code> objects,
+they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
+not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     

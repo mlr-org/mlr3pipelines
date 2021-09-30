@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOp Composition Operator — %&gt;&gt;% • mlr3pipelines</title>
+<title>PipeOp Composition Operator — concat_graphs • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +47,11 @@
 
 
 
-<meta property="og:title" content="PipeOp Composition Operator — %&gt;&gt;%" />
-<meta property="og:description" content="This operator &quot;pipes&quot; data from the source g1 into the sink g2. Both source and sink can either be
+<meta property="og:title" content="PipeOp Composition Operator — concat_graphs" />
+<meta property="og:description" content="These operators creates a connection that &quot;pipes&quot; data from the source g1 into the sink g2.
+Both source and sink can either be
 a Graph or a PipeOp (or an object that can be automatically converted into a Graph or PipeOp, see as_graph() and as_pipeop()).
-%&amp;gt;&amp;gt;% tries to automatically match output channels of g1 to input channels of g2; this is only possible if either
+%&amp;gt;&amp;gt;% and %&amp;gt;&amp;gt;&amp;gt;% try to automatically match output channels of g1 to input channels of g2; this is only possible if either
 the number of output channels of g1 (as given by g1$output) is equal to the
 number of input channels of g2 (as given by g2$input), or
 g1 has only one output channel (i.e. g1$output has one line), or
@@ -60,12 +61,19 @@ g2 has only one input channel, which is a vararg channel (i.e. g2$input has one 
 Connections between channels are created in the
 order in which they occur in g1 and g2, respectively: g1's output channel 1 is connected to g2's input
 channel 1, channel 2 to 2 etc.
-This operator always created deep copies of its input arguments, so they cannot be modified by reference afterwards.
+%&amp;gt;&amp;gt;% always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
 To access individual PipeOps after composition, use the resulting Graph's $pipeops list.
+%&amp;gt;&amp;gt;&amp;gt;%, on the other hand, tries to avoid cloning its first argument: If it is a Graph, then this Graph
+will be modified in-place. It is usually recommended to use %&amp;gt;&amp;gt;%, since the very marginal gain of performance from
+using %&amp;gt;&amp;gt;&amp;gt;% often does not outweigh the risk of modifying objects by-reference that should not be modified. However,
+when creating long Graphs, chaining with %&amp;gt;&amp;gt;&amp;gt;% instead of %&amp;gt;&amp;gt;% can give noticeable performance benefits
+because %&amp;gt;&amp;gt;% makes a number of clone()-calls that is quadratic in chain length, %&amp;gt;&amp;gt;&amp;gt;% only linear.
+concat_graphs(g1, g2, in_place = FALSE) is equivalent to g1 %&amp;gt;&amp;gt;% g2. concat_graphs(g1, g2, in_place = TRUE) is equivalent to g1 %&amp;gt;&amp;gt;&amp;gt;% g2.
 Both arguments of %&amp;gt;&amp;gt;% are automatically converted to Graphs using as_graph(); this means that objects on either side may be objects
 that can be automatically converted to PipeOps (such as Learners or Filters), or that can
 be converted to Graphs. This means, in particular, lists of Graphs, PipeOps or objects convertible to that, because
-as_graph() automatically applies gunion() to lists. See examples.
+as_graph() automatically applies gunion() to lists. See examples. If the first argument of %&amp;gt;&amp;gt;&amp;gt;% is not a Graph, then
+it is cloned just as when %&amp;gt;&amp;gt;% is used; %&amp;gt;&amp;gt;&amp;gt;% only avoids clone() if the first argument is a Graph.
 Note that if g1 is NULL, g2 converted to a Graph will be returned.
 Analogously, if g2 is NULL, g1 converted to a Graph will be returned." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
@@ -163,13 +171,14 @@ Analogously, if g2 is NULL, g1 converted to a Graph will be returned." />
     <div class="page-header">
     <h1>PipeOp Composition Operator</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/operators.R'><code>R/operators.R</code></a></small>
-    <div class="hidden name"><code>grapes-greater-than-greater-than-grapes.Rd</code></div>
+    <div class="hidden name"><code>concat_graphs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This operator "pipes" data from the source <code>g1</code> into the sink <code>g2</code>. Both source and sink can either be
+    <p>These operators creates a connection that "pipes" data from the source <code>g1</code> into the sink <code>g2</code>.
+Both source and sink can either be
 a <code><a href='Graph.html'>Graph</a></code> or a <code><a href='PipeOp.html'>PipeOp</a></code> (or an object that can be automatically converted into a <code><a href='Graph.html'>Graph</a></code> or <code><a href='PipeOp.html'>PipeOp</a></code>, see <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>).</p>
-<p><code>%&gt;&gt;%</code> tries to automatically match output channels of <code>g1</code> to input channels of <code>g2</code>; this is only possible if either</p><ul>
+<p><code>%&gt;&gt;%</code> and <code>%&gt;&gt;&gt;%</code> try to automatically match output channels of <code>g1</code> to input channels of <code>g2</code>; this is only possible if either</p><ul>
 <li><p>the number of output channels of <code>g1</code> (as given by <code>g1$output</code>) is equal to the
 number of input channels of <code>g2</code> (as given by <code>g2$input</code>), or</p></li>
 <li><p><code>g1</code> has only one output channel (i.e. <code>g1$output</code> has one line), or</p></li>
@@ -179,17 +188,28 @@ number of input channels of <code>g2</code> (as given by <code>g2$input</code>),
 <p>Connections between channels are created in the
 order in which they occur in <code>g1</code> and <code>g2</code>, respectively: <code>g1</code>'s output channel 1 is connected to <code>g2</code>'s input
 channel 1, channel 2 to 2 etc.</p>
-<p>This operator always created deep copies of its input arguments, so they cannot be modified by reference afterwards.
-To access individual <code><a href='PipeOp.html'>PipeOp</a></code>s after composition, use the resulting <code><a href='Graph.html'>Graph</a></code>'s <code>$pipeops</code> list.</p>
+<p><code>%&gt;&gt;%</code> always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
+To access individual <code><a href='PipeOp.html'>PipeOp</a></code>s after composition, use the resulting <code><a href='Graph.html'>Graph</a></code>'s <code>$pipeops</code> list.
+<code>%&gt;&gt;&gt;%</code>, on the other hand, tries to avoid cloning its first argument: If it is a <code><a href='Graph.html'>Graph</a></code>, then this <code><a href='Graph.html'>Graph</a></code>
+will be modified in-place. It is usually recommended to use <code>%&gt;&gt;%</code>, since the very marginal gain of performance from
+using <code>%&gt;&gt;&gt;%</code> often does not outweigh the risk of modifying objects by-reference that should not be modified. However,
+when creating long <code><a href='Graph.html'>Graph</a></code>s, chaining with <code>%&gt;&gt;&gt;%</code> instead of <code>%&gt;&gt;%</code> can give noticeable performance benefits
+because <code>%&gt;&gt;%</code> makes a number of <code>clone()</code>-calls that is quadratic in chain length, <code>%&gt;&gt;&gt;%</code> only linear.</p>
+<p><code>concat_graphs(g1, g2, in_place = FALSE)</code> is equivalent to <code>g1 %&gt;&gt;% g2</code>. <code>concat_graphs(g1, g2, in_place = TRUE)</code> is equivalent to <code>g1 %&gt;&gt;&gt;% g2</code>.</p>
 <p>Both arguments of <code>%&gt;&gt;%</code> are automatically converted to <code><a href='Graph.html'>Graph</a></code>s using <code><a href='as_graph.html'>as_graph()</a></code>; this means that objects on either side may be objects
 that can be automatically converted to <code><a href='PipeOp.html'>PipeOp</a></code>s (such as <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>s or <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>s), or that can
 be converted to <code><a href='Graph.html'>Graph</a></code>s. This means, in particular, <code>list</code>s of <code><a href='Graph.html'>Graph</a></code>s, <code><a href='PipeOp.html'>PipeOp</a></code>s or objects convertible to that, because
-<code><a href='as_graph.html'>as_graph()</a></code> automatically applies <code><a href='gunion.html'>gunion()</a></code> to <code>list</code>s. See examples.</p>
+<code><a href='as_graph.html'>as_graph()</a></code> automatically applies <code><a href='gunion.html'>gunion()</a></code> to <code>list</code>s. See examples. If the first argument of <code>%&gt;&gt;&gt;%</code> is not a <code><a href='Graph.html'>Graph</a></code>, then
+it is cloned just as when <code>%&gt;&gt;%</code> is used; <code>%&gt;&gt;&gt;%</code> only avoids <code>clone()</code> if the first argument is a <code><a href='Graph.html'>Graph</a></code>.</p>
 <p>Note that if <code>g1</code> is <code>NULL</code>, <code>g2</code> converted to a <code><a href='Graph.html'>Graph</a></code> will be returned.
 Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted to a <code><a href='Graph.html'>Graph</a></code> will be returned.</p>
     </div>
 
-    <pre class="usage"><span class='va'>g1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>g2</span></pre>
+    <pre class="usage"><span class='fu'>concat_graphs</span><span class='op'>(</span><span class='va'>g1</span>, <span class='va'>g2</span>, in_place <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='va'>g1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>g2</span>
+
+<span class='va'>g1</span> <span class='op'>%&gt;&gt;&gt;%</span> <span class='va'>g2</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,6 +223,11 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
       <th>g2</th>
       <td><p>(<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>list</code> | <code>...</code>) <br />
 <code><a href='Graph.html'>Graph</a></code> / <code><a href='PipeOp.html'>PipeOp</a></code> / object-convertible-to-<code><a href='PipeOp.html'>PipeOp</a></code> to put after  <code>g1</code>.</p></td>
+    </tr>
+    <tr>
+      <th>in_place</th>
+      <td><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <code><a href='Graph.html'>Graph</a></code>, then it is cloned regardless.</p></td>
     </tr>
     </table>
 
@@ -229,8 +254,8 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
 <span class='va'>pipe1</span> <span class='op'>=</span> <span class='va'>o1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o2</span>
 
 <span class='va'>pipe2</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>)</span><span class='op'>$</span>
   <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span>
 
 <span class='co'># Note automatical gunion() of lists.</span>
@@ -240,12 +265,36 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
 <span class='va'>graph2</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>o1</span>, <span class='va'>o2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o3</span>
 
 <span class='va'>graph3</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o3</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>)</span><span class='op'>$</span>
+  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o3</span><span class='op'>)</span><span class='op'>$</span>
   <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span>
   <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div></pre>
+
+<span class='va'>pipe1</span> <span class='op'>%&gt;&gt;&gt;%</span> <span class='va'>o3</span>  <span class='co'># modify pipe1 in-place</span>
+</div><div class='output co'>#&gt; Graph with 3 PipeOps:
+#&gt;            ID         State     sccssors prdcssors
+#&gt;         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          
+#&gt;           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale
+#&gt;  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</div><div class='input'>
+<span class='va'>pipe1</span>  <span class='co'># contains o1, o2, and o3 now.</span>
+</div><div class='output co'>#&gt; Graph with 3 PipeOps:
+#&gt;            ID         State     sccssors prdcssors
+#&gt;         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          
+#&gt;           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale
+#&gt;  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</div><div class='input'>
+<span class='va'>o1</span> <span class='op'>%&gt;&gt;&gt;%</span> <span class='va'>o2</span>
+</div><div class='output co'>#&gt; Graph with 2 PipeOps:
+#&gt;     ID         State sccssors prdcssors
+#&gt;  scale &lt;&lt;UNTRAINED&gt;&gt;      pca          
+#&gt;    pca &lt;&lt;UNTRAINED&gt;&gt;              scale</div><div class='input'>
+<span class='va'>o1</span>  <span class='co'># not changed, becuase not a Graph.</span>
+</div><div class='output co'>#&gt; PipeOp: &lt;scale&gt; (not trained)
+#&gt; values: &lt;robust=FALSE&gt;
+#&gt; Input channels &lt;name [train type, predict type]&gt;:
+#&gt;   input [Task,Task]
+#&gt; Output channels &lt;name [train type, predict type]&gt;:
+#&gt;   output [Task,Task]</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

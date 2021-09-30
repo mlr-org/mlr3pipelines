@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create Disjoint Graph Union of Copies of a Graph — pipeline_greplicate • mlr3pipelines</title>
+<title>Chain a Series of Graphs — chain_graphs • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,9 +47,16 @@
 
 
 
-<meta property="og:title" content="Create Disjoint Graph Union of Copies of a Graph — pipeline_greplicate" />
-<meta property="og:description" content="Create a new Graph containing n copies of the input Graph / PipeOp. To avoid ID
-collisions, PipeOp IDs are suffixed with _i where i ranges from 1 to n." />
+<meta property="og:title" content="Chain a Series of Graphs — chain_graphs" />
+<meta property="og:description" content="Takes an arbitrary amount of Graphs or PipeOps (or objects that can be automatically
+converted into Graphs or PipeOps, see as_graph() and as_pipeop()) as inputs and joins
+them in a serial Graph, as if connecting them using %&amp;gt;&amp;gt;%.
+Care is taken to avoid unnecessarily cloning of components. A call of
+chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE) is equivalent to
+g1 %&amp;gt;&amp;gt;% g2 %&amp;gt;&amp;gt;&amp;gt;% g3 %&amp;gt;&amp;gt;&amp;gt;% g4 %&amp;gt;&amp;gt;&amp;gt;% ....
+A call of chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)
+is equivalent to g1 %&amp;gt;&amp;gt;&amp;gt;% g2 %&amp;gt;&amp;gt;&amp;gt;% g3 %&amp;gt;&amp;gt;&amp;gt;% g4 %&amp;gt;&amp;gt;&amp;gt;% ... (differing in the
+first operator being %&amp;gt;&amp;gt;&amp;gt;% as well)." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -143,56 +150,46 @@ collisions, PipeOp IDs are suffixed with _i where i ranges from 1 to n." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create Disjoint Graph Union of Copies of a Graph</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/mlr_graphs_elements.R'><code>R/mlr_graphs_elements.R</code></a></small>
-    <div class="hidden name"><code>pipeline_greplicate.Rd</code></div>
+    <h1>Chain a Series of Graphs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/operators.R'><code>R/operators.R</code></a></small>
+    <div class="hidden name"><code>chain_graphs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a new <code><a href='Graph.html'>Graph</a></code> containing <code>n</code> copies of the input <code><a href='Graph.html'>Graph</a></code> / <code><a href='PipeOp.html'>PipeOp</a></code>. To avoid ID
-collisions, PipeOp IDs are suffixed with <code>_i</code> where <code>i</code> ranges from 1 to <code>n</code>.</p>
+    <p>Takes an arbitrary amount of <code><a href='Graph.html'>Graph</a></code>s or <code><a href='PipeOp.html'>PipeOp</a></code>s (or objects that can be automatically
+converted into <code><a href='Graph.html'>Graph</a></code>s or <code><a href='PipeOp.html'>PipeOp</a></code>s, see <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>) as inputs and joins
+them in a serial <code><a href='Graph.html'>Graph</a></code>, as if connecting them using <code>%&gt;&gt;%</code>.</p>
+<p>Care is taken to avoid unnecessarily cloning of components. A call of
+<code>chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)</code> is equivalent to
+<code>g1 %&gt;&gt;% g2 %&gt;&gt;&gt;% g3 %&gt;&gt;&gt;% g4 %&gt;&gt;&gt;% ...</code>.
+A call of <code>chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)</code>
+is equivalent to <code>g1 %&gt;&gt;&gt;% g2 %&gt;&gt;&gt;% g3 %&gt;&gt;&gt;% g4 %&gt;&gt;&gt;% ...</code> (differing in the
+first operator being <code>%&gt;&gt;&gt;%</code> as well).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pipeline_greplicate</span><span class='op'>(</span><span class='va'>graph</span>, <span class='va'>n</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>chain_graphs</span><span class='op'>(</span><span class='va'>graphs</span>, in_place <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>graph</th>
-      <td><p><code><a href='Graph.html'>Graph</a></code> <br />
-Graph to replicate.</p></td>
+      <th>graphs</th>
+      <td><p><code>list</code> of (<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code>)<br />
+List of elements which are the
+<code><a href='Graph.html'>Graph</a></code>s to be joined. Elements must be convertible to <code><a href='Graph.html'>Graph</a></code> or <code><a href='PipeOp.html'>PipeOp</a></code> using <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>n</th>
-      <td><p><code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>
-Number of copies to create.</p></td>
+      <th>in_place</th>
+      <td><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+Whether to try to avoid cloning the first element of <code>graphs</code>, similar to the difference
+of <code>%&gt;&gt;&gt;%</code> over <code>%&gt;&gt;%</code>. This can only be avoided if <code>graphs[[1]]</code> is already a <code><a href='Graph.html'>Graph</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code><a href='Graph.html'>Graph</a></code> containing <code>n</code> copies of input <code>graph</code>.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p><code><a href='Graph.html'>Graph</a></code> the resulting <code><a href='Graph.html'>Graph</a></code>.</p>
 
-    <div class='dont-index'><p>Other Graph operators: 
-<code><a href='as_graph.html'>as_graph</a>()</code>,
-<code><a href='as_pipeop.html'>as_pipeop</a>()</code>,
-<code><a href='assert_graph.html'>assert_graph</a>()</code>,
-<code><a href='assert_pipeop.html'>assert_pipeop</a>()</code>,
-<code><a href='concat_graphs.html'>concat_graphs</a>()</code>,
-<code><a href='greplicate.html'>greplicate</a>()</code>,
-<code><a href='gunion.html'>gunion</a>()</code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>po_pca</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>
-<span class='fu'>pipeline_greplicate</span><span class='op'>(</span><span class='va'>po_pca</span>, n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Graph with 2 PipeOps:
-#&gt;     ID         State sccssors prdcssors
-#&gt;  pca_1 &lt;&lt;UNTRAINED&gt;&gt;                   
-#&gt;  pca_2 &lt;&lt;UNTRAINED&gt;&gt;                   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

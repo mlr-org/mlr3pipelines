@@ -182,7 +182,9 @@ own imputation (see examples).</p>
 Identifier of resulting object, default <code>"impute."</code>, followed by the <code>id</code> of the <code>Learner</code>.</p></li>
 <li><p><code>learner</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
 <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> to wrap, or a string identifying a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> in the <code><a href='https://mlr3.mlr-org.com/reference/mlr_learners.html'>mlr3::mlr_learners</a></code> <code><a href='https://mlr3misc.mlr-org.com/reference/Dictionary.html'>Dictionary</a></code>.
-The <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> needs to be able to handle missing values, i.e. have the <code>missings</code> property.</p></li>
+The <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> usually needs to be able to handle missing values, i.e. have the <code>missings</code> property, unless care is taken
+that <code>context_columns</code> do not contain missings; see examples.<br />
+This argument is always cloned; to access the <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> inside <code>PipeOpImputeLearner</code> by-reference, use <code>$learner</code>.<br /></p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 </ul>
@@ -365,7 +367,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 #&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
 #&gt; 
 #&gt; $train_time
-#&gt; [1] 0.005
+#&gt; [1] 0.006
 #&gt; 
 #&gt; $train_task
 #&gt; &lt;TaskRegr:imputing&gt; (768 x 8)

@@ -52,6 +52,11 @@
 are operations that have exactly one Task input and one Task output,
 and expect the column layout of these Tasks during input and output
 to be the same.
+Prediction-behavior of preprocessing operations should always be independent for each row in the input-Task.
+This means that the prediction-operation of preprocessing-PipeOps should commute with rbind(): Running prediction
+on an n-row Task should result in the same result as rbind()-ing the prediction-result from n
+1-row Tasks with the same content. In the large majority of cases, the number and order of rows
+should also not be changed during prediction.
 Users must implement private$.train_task() and private$.predict_task(), which have a Task
 input and should return that Task. The Task should, if possible, be
 manipulated in-place, and should not be cloned.
@@ -170,6 +175,11 @@ the PipeOpTaskPreprocSimple class can be used instead." />
 are operations that have exactly one <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> input and one <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> output,
 and expect the column layout of these <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s during input and output
 to be the same.</p>
+<p>Prediction-behavior of preprocessing operations should always be independent for each row in the input-<code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.
+This means that the prediction-operation of preprocessing-<code><a href='PipeOp.html'>PipeOp</a></code>s should commute with <code><a href='https://rdrr.io/r/base/cbind.html'>rbind()</a></code>: Running prediction
+on an <code>n</code>-row <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> should result in the same result as <code><a href='https://rdrr.io/r/base/cbind.html'>rbind()</a></code>-ing the prediction-result from <code>n</code>
+1-row <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>s with the same content. In the large majority of cases, the number and order of rows
+should also not be changed during prediction.</p>
 <p>Users must implement <code>private$.train_task()</code> and <code>private$.predict_task()</code>, which have a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>
 input and should return that <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>. The <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> should, if possible, be
 manipulated in-place, and should not be cloned.</p>
