@@ -540,7 +540,7 @@ graph_reduce = function(self, input, fun, single_input) {
   # create virtual "__initial__" and "__terminal__" nodes with edges to inputs / outputs of graph.
   # if we have `single_input == FALSE` and one(!) vararg channel, we widen the vararg input
   # appropriately.
-  if (!single_input && length(assert_list(input)) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
+  if (!single_input && length(assert_list(input, .var.name = "input when single_input is FALSE")) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
     if (sum("..." == graph_input$channel.name) != 1) {
       stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.")
     }
@@ -561,7 +561,7 @@ graph_reduce = function(self, input, fun, single_input) {
   if (!single_input) {
     # we need the input list length to be equal to the number of channels. This number was
     # already increased appropriately if there is a single vararg channel.
-    assert_list(input, len = nrow(graph_input))
+    assert_list(input, len = nrow(graph_input), .var.name = sprintf("input when single_input is FALSE and there are %s input channels", nrow(graph_input)))
     # input can be a named list (will be distributed to respective edges) or unnamed.
     # if it is named, we check that names are unambiguous.
     if (!is.null(names(input))) {
@@ -569,7 +569,7 @@ graph_reduce = function(self, input, fun, single_input) {
         # FIXME this will unfortunately trigger if there is more than one named input for a vararg channel.
         stopf("'input' must not be a named list because Graph %s input channels have duplicated names.", self$id)
       }
-      assert_names(names(input), subset.of = graph_input$name)
+      assert_names(names(input), subset.of = graph_input$name, .var.name = sprintf("input when it has names and single_input is FALSE"))
       edges[list("__initial__", names(input)), "payload" := list(input), on = c("src_id", "src_channel")]
     } else {
       # don't rely on unique graph_input$name!
