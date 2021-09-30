@@ -43,4 +43,5 @@ gunion = function(graphs, in_place = FALSE) {
     }
     edges
   }), use.names = TRUE)
+  g
 }
