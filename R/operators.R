@@ -148,9 +148,10 @@ strip_multiplicity_type = function(type) {
 #' is equivalent to `g1 %>>>% g2 %>>>% g3 %>>>% g4 %>>>% ...` (differing in the
 #' first operator being `%>>>%` as well).
 #'
-#' @param graphs `list` of ([`Graph`] | [`PipeOp`])\cr
+#' @param graphs `list` of ([`Graph`] | [`PipeOp`] | `NULL` | `...`)\cr
 #'   List of elements which are the
 #'   [`Graph`]s to be joined. Elements must be convertible to [`Graph`] or [`PipeOp`] using [`as_graph()`] and [`as_pipeop()`].
+#'   `NULL` is the neutral element of [`%>>%`] and skipped.
 #' @param in_place (`logical(1)`)\cr
 #'   Whether to try to avoid cloning the first element of `graphs`, similar to the difference
 #'   of [`%>>>%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].
@@ -160,6 +161,7 @@ strip_multiplicity_type = function(type) {
 #'
 chain_graphs = function(graphs, in_place = FALSE) {
   assert_list(graphs)
+  graphs = discard(graphs, is.null)
   if (!length(graphs)) return(Graph$new())
   if (!in_place) {
     # all except the first graph get cloned, so if we are in_place,

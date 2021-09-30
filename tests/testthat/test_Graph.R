@@ -259,6 +259,12 @@ test_that("Empty Graph", {
   expect_equal(Graph$new()$state, list())
 
   expect_equal(Graph$new()$update_ids()$ids(), character(0))
+
+  expect_equal(chain_graphs(list(), in_place = FALSE), Graph$new())
+
+  expect_equal(chain_graphs(list(), in_place = FALSE), Graph$new())
+
+  expect_equal(chain_graphs(list(NULL), in_place = FALSE), Graph$new())
 })
 
 test_that("Graph printer aux function calculates col widths well", {
