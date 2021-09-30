@@ -7,9 +7,10 @@
 gunion(graphs, in_place = FALSE)
 }
 \arguments{
-\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}})\cr
+\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}} | \code{NULL} | \code{...})\cr
 List of elements which are the
 \code{\link{Graph}}s to be joined. Elements must be convertible to \code{\link{Graph}} or \code{\link{PipeOp}} using \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}.
+\code{NULL} values automatically get converted to \code{\link{PipeOpNOP}} with a random ID of the format \verb{nop_********}.
 The list can be named, in which case the
 IDs of the elements are prefixed with the names, separated by a dot (\code{.}).}
 

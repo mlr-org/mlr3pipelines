@@ -19,7 +19,7 @@ Beware that, if \code{chain_graphs()} fails because of id collisions, then \code
 modified state when \code{in_place} is \code{TRUE}.}
 }
 \value{
-\code{\link{Graph}} the resulting \code{\link{Graph}}.
+\code{\link{Graph}} the resulting \code{\link{Graph}}, or \code{NULL} if there are no non-null values in \code{graphs}.
 }
 \description{
 Takes an arbitrary amount of \code{\link{Graph}}s or \code{\link{PipeOp}}s (or objects that can be automatically

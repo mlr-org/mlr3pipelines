@@ -10,28 +10,60 @@ pipeline_robustify(
   learner = NULL,
   impute_missings = NULL,
   factors_to_numeric = NULL,
-  max_cardinality = 1000
+  max_cardinality = 1000,
+  ordered_action = "factor",
+  character_action = "factor",
+  POSIXct_action = "numeric"
 )
 }
 \arguments{
 \item{task}{\code{\link{Task}} \cr
 A \code{\link[mlr3:Task]{Task}} to create a robustifying pipeline for.
-Optional, if omitted, the full pipeline is created.}
+Optional, if omitted, the "worst possible" \code{\link[mlr3:Task]{Task}} is assumed and the full pipeline is created.}
 
 \item{learner}{\code{\link[mlr3:Learner]{Learner}} \cr
 A learner to create a robustifying pipeline for. Optional, if omitted,
-a more conservative pipeline is built.}
+the "worst possible" \code{\link[mlr3:Learner]{Learner}} is assumed and a more conservative pipeline is built.}
 
 \item{impute_missings}{\code{logical(1)} | \code{NULL} \cr
-Should missing values be imputed? Defaults to \code{NULL}, i.e. imputes if the task has
-missing values and the learner can not handle them.}
+Should missing values be imputed? Defaults to \code{NULL}: imputes if the task has
+missing values (or factors that are not encoded to numerics) and the learner can not handle them.}
 
 \item{factors_to_numeric}{\code{logical(1)} | \code{NULL} \cr
-Should factors be encoded? Defaults to \code{NULL}, i.e. encodes if the task has factors
+Should (ordered and unordered) factors be encoded? Defaults to \code{NULL}: encodes if the task has factors (or character columns that get converted to factor)
 and the learner can not handle factors.}
 
 \item{max_cardinality}{\code{integer(1)} \cr
 Maximum number of factor levels allowed. See above. Default: 1000.}
+
+\item{ordered_action}{\code{character(1)}\cr
+How to handle \code{ordered} columns: \code{"factor"} (default) or \code{"factor!"}: convert to \code{factor} columns;
+\code{"numeric"} or \code{"numeric!"}: convert to \code{numeric} columns; \code{"integer"} or \code{"integer!"}: convert to \code{integer} columns; \code{"ignore"} or \code{"ignore!"}: ignore.
+When \code{task} is given and has no \code{ordered} columns, or when \code{learner} is given and can handle \code{ordered}, then
+\code{"factor"}, \code{"numeric"} and \code{"integer"} are treated like \code{"ignore"}. This means it is necessary to add the exclamation point to
+override \code{\link[mlr3:Task]{Task}} or \code{\link[mlr3:Learner]{Learner}} properties when given. \code{"ignore"} and \code{"ignore!"} therefore
+behave completely identically, \code{"ignore!"} is only present for consistency.\cr
+When \code{ordered} features are converted to \code{factor}, then they are treated like \code{factor} features further down in the pipeline,
+and are possibly eventually converted to \code{numeric}s, but in a different way: \code{factor}s get one-hot encoded, \code{ordered_action} = \code{"numeric"}
+converts ordered using \code{as.numeric} to their integer-valued rank.}
+
+\item{character_action}{\code{character(1)}\cr
+How to handle \code{character} columns: \code{"factor"} (default) or \code{"factor!"}: convert to \code{factor} columns;
+\code{"matrix"} or \code{"matrix!"}: Use \code{\link{PipeOpTextVectorizer}}. \code{"ignore"} or \code{"ignore!"}: ignore.
+When \code{task} is given and has no \code{character} columns, or when \code{learner} is given and can handle \code{character}, then
+\code{"factor"} and \code{"matrix"} are treated like \code{"ignore"}. This means it is necessary to add the exclamation point to
+override \code{\link[mlr3:Task]{Task}} or \code{\link[mlr3:Learner]{Learner}} properties when given. \code{"ignore"} and \code{"ignore!"} therefore
+behave completely identically, \code{"ignore!"} is only present for consistency.\cr
+When \code{character} columns are converted to \code{factor}, then they are treated like \code{factor} further down in the pipeline,
+and are possibly eventually converted to \code{numeric}s, using one-hot encoding.}
+
+\item{POSIXct_action}{\code{character(1)}\cr
+How to handle \code{POSIXct} columns: \code{"numeric"} (default) or \code{"numeric!"}: convert to \code{numeric} columns;
+\code{"datefeatures"} or \code{"datefeatures!"}: Use \code{\link{PipeOpDateFeatures}}. \code{"ignore"} or \code{"ignore!"}: ignore.
+When \code{task} is given and has no \code{POSIXct} columns, or when \code{learner} is given and can handle \code{POSIXct}, then
+\code{"numeric"} and \code{"datefeatures"} are treated like \code{"ignore"}. This means it is necessary to add the exclamation point to
+override \code{\link[mlr3:Task]{Task}} or \code{\link[mlr3:Learner]{Learner}} properties when given. \code{"ignore"} and \code{"ignore!"} therefore
+behave completely identically, \code{"ignore!"} is only present for consistency.}
 }
 \value{
 \code{\link{Graph}}
@@ -50,6 +82,8 @@ collapsed using \code{\link{PipeOpCollapseFactors}}
 The graph is built conservatively, i.e. the function always tries to assure everything works.
 If a learner is provided, some steps can be left out, i.e. if the learner can deal with
 factor variables, no encoding is performed.
+
+All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
 \donttest{
