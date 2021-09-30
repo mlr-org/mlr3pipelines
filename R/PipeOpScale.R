@@ -87,6 +87,7 @@ PipeOpScale = R6Class("PipeOpScale",
 
     .train_dt = function(dt, levels, target) {
       pv = self$param_set$get_values(tags = "train")
+      cnames = colnames(dt)
       if (pv$center %??% TRUE) {
         meaning = if (pv$robust) stats::median else mean
         center = map_dbl(dt, meaning, na.rm = TRUE)
@@ -94,6 +95,7 @@ PipeOpScale = R6Class("PipeOpScale",
         center = rep(0, ncol(dt))
       }
       dt = as.data.table(pmap(list(dt, center), `-`))
+      setnames(dt, cnames)
       if (pv$scale %??% TRUE) {
         if (pv$robust) {
           scale = map_dbl(dt, stats::mad, na.rm = TRUE, center = 0)
@@ -109,6 +111,7 @@ PipeOpScale = R6Class("PipeOpScale",
         scale = rep(1, ncol(dt))
       }
       dt = as.data.table(pmap(list(dt, scale), `/`))
+      setnames(dt, cnames)
       self$state = list(center = center, scale = scale)
       dt
     },
