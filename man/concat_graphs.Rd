@@ -45,8 +45,12 @@ channel 1, channel 2 to 2 etc.
 \verb{\%>>\%} always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
 To access individual \code{\link{PipeOp}}s after composition, use the resulting \code{\link{Graph}}'s \verb{$pipeops} list.
 \verb{\%>>>\%}, on the other hand, tries to avoid cloning its first argument: If it is a \code{\link{Graph}}, then this \code{\link{Graph}}
-will be modified in-place. It is usually recommended to use \verb{\%>>\%}, since the very marginal gain of performance from
-using \verb{\%>>>\%} often does not outweigh the risk of modifying objects by-reference that should not be modified. However,
+will be modified in-place.
+
+When \verb{\%>>>\%} fails, then it leaves \code{g1} in an incompletely modified state. It is therefore usually recommended to use
+\verb{\%>>\%}, since the very marginal gain of performance from
+using \verb{\%>>>\%} often does not outweigh the risk of either modifying objects by-reference that should not be modified or getting
+graphs that are in an incompletely modified state. However,
 when creating long \code{\link{Graph}}s, chaining with \verb{\%>>>\%} instead of \verb{\%>>\%} can give noticeable performance benefits
 because \verb{\%>>\%} makes a number of \code{clone()}-calls that is quadratic in chain length, \verb{\%>>>\%} only linear.
 

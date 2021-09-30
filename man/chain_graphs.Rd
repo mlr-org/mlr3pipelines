@@ -7,13 +7,16 @@
 chain_graphs(graphs, in_place = FALSE)
 }
 \arguments{
-\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}})\cr
+\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}} | \code{NULL} | \code{...})\cr
 List of elements which are the
-\code{\link{Graph}}s to be joined. Elements must be convertible to \code{\link{Graph}} or \code{\link{PipeOp}} using \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}.}
+\code{\link{Graph}}s to be joined. Elements must be convertible to \code{\link{Graph}} or \code{\link{PipeOp}} using \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}.
+\code{NULL} is the neutral element of \code{\link{\%>>\%}} and skipped.}
 
 \item{in_place}{(\code{logical(1)})\cr
 Whether to try to avoid cloning the first element of \code{graphs}, similar to the difference
-of \code{\link{\%>>>\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.}
+of \code{\link{\%>>>\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.
+Beware that, if \code{chain_graphs()} fails because of id collisions, then \code{graphs[[1]]} will possibly be in an incompletely
+modified state when \code{in_place} is \code{TRUE}.}
 }
 \value{
 \code{\link{Graph}} the resulting \code{\link{Graph}}.

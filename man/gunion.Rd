@@ -15,7 +15,9 @@ IDs of the elements are prefixed with the names, separated by a dot (\code{.}).}
 
 \item{in_place}{(\code{logical(1)})\cr
 Whether to try to avoid cloning the first element of \code{graphs}, similar to the difference
-of \code{\link{\%>>>\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.}
+of \code{\link{\%>>>\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.\cr
+Unlike \code{\link[=chain_graphs]{chain_graphs()}}, \code{gunion()} does all checks \emph{before} mutating \code{graphs[[1]]}, so it will not leave \code{graphs[[1]]}
+in an incompletely modified state when it fails.}
 }
 \value{
 \code{\link{Graph}} the resulting \code{\link{Graph}}.
