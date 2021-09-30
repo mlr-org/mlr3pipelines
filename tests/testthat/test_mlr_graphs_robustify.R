@@ -16,7 +16,7 @@ test_that("Robustify Pipeline", {
   # missings with scaling (rpart can do missings)
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
-  expect_true("removeconstants_postrobustify" %in% names(p$pipeops)))
+  expect_true("removeconstants_postrobustify" %in% names(p$pipeops))
 
   # with fct
   dt = data.table("fct" = factor(rep_len(letters[1:3], tsk$nrow)))
@@ -101,3 +101,7 @@ test_that("Robustify Pipeline", {
 
 
 
+test_that("Robustify Pipeline Impute Missings", {
+
+
+})
