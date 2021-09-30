@@ -26,6 +26,7 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
 \itemize{
 \item \code{graph} :: \code{\link{Graph}} | \code{\link{PipeOp}}\cr
 \code{\link{Graph}} to wrap. Can be a \code{\link{PipeOp}}, which is automatically converted to a \code{\link{Graph}}.
+This argument is always cloned; to access the \code{\link{Graph}} inside \code{GraphLearner} by-reference, use \verb{$graph}.\cr
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting \code{\link[mlr3:Learner]{Learner}}.
 \item \code{param_vals} :: named \code{list}\cr

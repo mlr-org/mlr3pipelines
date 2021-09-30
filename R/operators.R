@@ -90,7 +90,7 @@ concat_graphs = function(g1, g2, in_place = FALSE) {
   if (nrow(g1out) != 1 && nrow(g1out) != nrow(g2in) && !(nrow(g2in) == 1 && g2in$channel.name == "...")) {
     stopf("Graphs / PipeOps to be connected have mismatching number of inputs / outputs.")
   }
-  g = gunion(list(g1, g2), in_place = in_place))
+  g = gunion(list(g1, g2), in_place = in_place)
 
 
   # check that types agree
@@ -154,7 +154,7 @@ strip_multiplicity_type = function(type) {
 #'
 chain_graphs = function(graphs, in_place = FALSE) {
   assert_list(graphs)
-  if (!length(graphs)) return Graph$new()
+  if (!length(graphs)) return(Graph$new())
   if (!in_place) {
     # all except the first graph get cloned, so if we are in_place,
     # we only need to take care to clone it. We convert it to a Graph,

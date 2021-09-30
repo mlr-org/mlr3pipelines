@@ -12,6 +12,12 @@ are operations that have exactly one \code{\link[mlr3:Task]{Task}} input and one
 and expect the column layout of these \code{\link[mlr3:Task]{Task}}s during input and output
 to be the same.
 
+Prediction-behavior of preprocessing operations should always be independent for each row in the input-\code{\link[mlr3:Task]{Task}}.
+This means that the prediction-operation of preprocessing-\code{\link{PipeOp}}s should commute with \code{rbind()}: Running prediction
+on an \code{n}-row \code{\link[mlr3:Task]{Task}} should result in the same result as \code{rbind()}-ing the prediction-result from \code{n}
+1-row \code{\link[mlr3:Task]{Task}}s with the same content. In the large majority of cases, the number and order of rows
+should also not be changed during prediction.
+
 Users must implement \code{private$.train_task()} and \code{private$.predict_task()}, which have a \code{\link[mlr3:Task]{Task}}
 input and should return that \code{\link[mlr3:Task]{Task}}. The \code{\link[mlr3:Task]{Task}} should, if possible, be
 manipulated in-place, and should not be cloned.

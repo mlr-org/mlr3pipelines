@@ -32,6 +32,7 @@ useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\lin
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
 \code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a
 \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
+This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpLearnerCV} by-reference, use \verb{$learner}.\cr
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr

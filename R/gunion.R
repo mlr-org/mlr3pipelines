@@ -25,7 +25,7 @@
 #' @export
 gunion = function(graphs, in_place = FALSE) {
   assert_list(graphs)
-  if (length(graphs) == 0) return Graph$new()
+  if (length(graphs) == 0) return(Graph$new())
   do_clone = c(!in_place, rep(TRUE, length(graphs) - 1))
   graphs = pmap(list(x = graphs, clone = do_clone), as_graph)
   graphs = Filter(function(x) length(x$pipeops), graphs)
