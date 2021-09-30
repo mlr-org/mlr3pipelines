@@ -18,8 +18,12 @@
 #' `%>>%` always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
 #' To access individual [`PipeOp`]s after composition, use the resulting [`Graph`]'s `$pipeops` list.
 #' `%>>>%`, on the other hand, tries to avoid cloning its first argument: If it is a [`Graph`], then this [`Graph`]
-#' will be modified in-place. It is usually recommended to use `%>>%`, since the very marginal gain of performance from
-#' using `%>>>%` often does not outweigh the risk of modifying objects by-reference that should not be modified. However,
+#' will be modified in-place.
+#'
+#' When `%>>>%` fails, then it leaves `g1` in an incompletely modified state. It is therefore usually recommended to use
+#' `%>>%`, since the very marginal gain of performance from
+#' using `%>>>%` often does not outweigh the risk of either modifying objects by-reference that should not be modified or getting
+#' graphs that are in an incompletely modified state. However,
 #' when creating long [`Graph`]s, chaining with `%>>>%` instead of `%>>%` can give noticeable performance benefits
 #' because `%>>%` makes a number of `clone()`-calls that is quadratic in chain length, `%>>>%` only linear.
 #'
@@ -150,6 +154,8 @@ strip_multiplicity_type = function(type) {
 #' @param in_place (`logical(1)`)\cr
 #'   Whether to try to avoid cloning the first element of `graphs`, similar to the difference
 #'   of [`%>>>%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].
+#'   Beware that, if `chain_graphs()` fails because of id collisions, then `graphs[[1]]` will possibly be in an incompletely
+#'   modified state when `in_place` is `TRUE`.
 #' @return [`Graph`] the resulting [`Graph`].
 #'
 chain_graphs = function(graphs, in_place = FALSE) {
