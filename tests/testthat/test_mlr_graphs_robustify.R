@@ -102,6 +102,72 @@ test_that("Robustify Pipeline", {
 
 
 test_that("Robustify Pipeline Impute Missings", {
+  tmissings = tsk("pima")
+  tnomissings = tsk("iris")
+
+  lmissings = lrn("classif.rpart")
+  lnomissings = lrn("classif.rpart")
+  lnomissings$properties = setdiff(lnomissings$properties, "missings")
+
+  micols = tmissings$missings()[tmissings$missings() != 0]
+  names(micols) = paste0("missing_", names(micols))
+  sort_names = function(x) x[order(names(x))]
+
+  expect_equal(ppl("robustify", learner = lmissings, task = tmissings)$train(tmissings)[[1]]$missings(), tmissings$missings())
+  expect_equal(
+    sort_names(ppl("robustify", learner = lnomissings, task = tmissings)$train(tmissings)[[1]]$missings()),
+    sort_names(c(tmissings$missings(), micols) * 0)
+  )
+
+  expect_equal(
+    sort_names(ppl("robustify", learner = lmissings, task = tmissings, impute_missings = TRUE)$train(tmissings)[[1]]$missings()),
+    sort_names(c(tmissings$missings(), micols) * 0)
+  )
+
+  expect_equal(
+    sort_names(ppl("robustify", learner = lnomissings, task = tnomissings, impute_missings = TRUE)$train(tmissings)[[1]]$missings()),
+    sort_names(c(tmissings$missings(), micols) * 0)
+  )
+
+  expect_equal(ppl("robustify", learner = lnomissings, task = tnomissings)$train(tmissings)[[1]]$missings(), tmissings$missings())
+
+})
+
+makeTypeTask = function(types) {
+  letters5 = paste0(letters, letters, letters, letters, letters)
+  cols = c(
+    if ("integer" %in% types) list(i1 = 1:10, i2 = 10:1),
+    if ("numeric" %in% types) list(n1 = seq(0, 1, length.out = 10), n2 = seq(1, 0, length.out = 10)),
+    if ("logical" %in% types) list(l1 = rep(c(TRUE, FALSE), 5), l2 = rep(c(FALSE, TRUE), 5)),
+    if ("character" %in% types) list(c1 = paste(letters5[1:10], letters5[10:1]), c2 = paste(letters5[11:20], letters5[20:11])),
+    if ("POSIXct" %in% types) list(
+      p1 = seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), length.out = 10),
+      p2 = seq(as.POSIXct("2020-02-29"), to = as.POSIXct("2020-02-01"), length.out = 10)
+    )
+  )
+  TaskRegr$new("typetask", as.data.table(c(cols, list(target = seq(-1, 1, length.out = 10)))), target = "target")
+}
+
+
+test_that("Robustify Pipeline factor to numeric", {
+
+  alltask = makeTypeTask(c("integer", "numeric", "logical", "character", "POSIXct"))
+
+  lfactor = lrn("regr.rpart")
+  lnofactor = lrn("regr.rpart")
+  lnofactor$feature_types = setdiff(lnofactor$feature_types, "factor")
+
+  atft = alltask$feature_types
+  cleanedatft = copy(atft)[type == "character", type := "factor"][type == "POSIXct", type := "numeric"]
+  vectoradft = copy(po("textvectorizer")$train(list(alltask))[[1]]$feature_types)[type == "POSIXct", type := "numeric"]
+
+  expect_equal(ppl("robustify", learner = lfactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, check.attributes = FALSE)
+  expect_equal(ppl("robustify", learner = lnofactor, makeTypeTask("numeric"))$train(alltask)[[1]]$feature_types, atft, check.attributes = FALSE)
+  expect_equal(ppl("robustify", learner = lfactor, alltask)$train(alltask)[[1]]$feature_types, cleanedatft, ignore.row.order = TRUE, check.attributes = FALSE)
+
+
+  expect_equal(ppl("robustify", learner = lnofactor, alltask)$train(alltask)[[1]]$feature_types[, id := gsub("\\.[^.]*$", "", id)], vectoradft, check.attributes = FALSE)
+  expect_equal(ppl("robustify", learner = lnofactor, alltask, character_action = "matrix")$train(alltask)[[1]]$feature_types, vectoradft, check.attributes = FALSE)
 
 
 })
