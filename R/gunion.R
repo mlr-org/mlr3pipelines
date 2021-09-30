@@ -27,21 +27,25 @@ gunion = function(graphs, in_place = FALSE) {
   assert_list(graphs)
   if (length(graphs) == 0) return(Graph$new())
   do_clone = c(!in_place, rep(TRUE, length(graphs) - 1))
-  graphs = pmap(list(x = graphs, clone = do_clone), as_graph)
+  graphs = structure(pmap(list(x = graphs, clone = do_clone), as_graph), names = names(graphs))
   graphs = Filter(function(x) length(x$pipeops), graphs)
 
   g = if (in_place) graphs[[1]] else Graph$new()
 
   g$pipeops = unlist(map(graphs, "pipeops"), recursive = FALSE)
   assert_names(names(g$pipeops), type = "unique", .var.name = "ids of pipe operators of graphs")
-  imap(g$pipeops, function(p, i) p$id = i)
-  g$edges = rbindlist(imap(graphs, function(g, i) {
-    edges = g$edges
-    if (is.character(i) && nchar(i)) {
-      edges[, c("src_id", "dst_id") := lapply(.SD, function(x) sprintf("%s.%s", i, x)),
-        .SDcols = c("src_id", "dst_id")]
-    }
-    edges
-  }), use.names = TRUE)
+  if (!is.null(names(graphs))) imap(g$pipeops, function(p, i) p$id = i)
+  if (is.null(names(graphs))) {
+    g$edges = rbindlist(map(graphs, "edges"))
+  } else {
+    g$edges = rbindlist(imap(graphs, function(g, i) {
+      edges = g$edges
+      if (is.character(i) && nchar(i)) {
+        edges[, c("src_id", "dst_id") := lapply(.SD, function(x) sprintf("%s.%s", i, x)),
+          .SDcols = c("src_id", "dst_id")]
+      }
+      edges
+    }), use.names = TRUE)
+  }
   g
 }
