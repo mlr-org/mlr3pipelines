@@ -43,7 +43,7 @@
 #' g3$train(task)
 #' g3$predict(task)
 pipeline_ovr = function(graph) {
-  graph = PipeOpOVRSplit$new() %>>>% g
+  graph = PipeOpOVRSplit$new() %>>>% graph
   if (graph$output$train != "NULL" || graph$output$predict != "PredictionClassif") {
     stopf("Graph should return 'NULL' during training and a 'PredictionClassif' during prediction.")
   }
