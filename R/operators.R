@@ -84,7 +84,7 @@
 concat_graphs = function(g1, g2, in_place = FALSE) {
   assert_flag(in_place)
   # neutral elements handling
-  if (is.null(g1)) return(as_graph(g2, clone = TRUE))
+  if (is.null(g1)) return(if (!is.null(g2)) as_graph(g2, clone = TRUE))
   if (is.null(g2)) return(as_graph(g1, clone = !in_place))
 
   g1 = as_graph(g1)

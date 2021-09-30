@@ -29,14 +29,14 @@
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as:
 #' * `ratio` :: `numeric(1)`\cr
 #'   Ratio of values which must be different from the mode value in order to keep a feature in the task.
-#'   Default is 0, which means only constant features with exactly one observed level are removed.
+#'   Initialized to 0, which means only constant features with exactly one observed level are removed.
 #' * `rel_tol` :: `numeric(1)`\cr
-#'   Relative tolerance within which to consider a numeric feature constant. Set to 0 to disregard relative tolerance. Default is `1e-8`.
+#'   Relative tolerance within which to consider a numeric feature constant. Set to 0 to disregard relative tolerance. Initialized to `1e-8`.
 #' * `abs_tol` :: `numeric(1)`\cr
-#'   Absolute tolerance within which to consider a numeric feature constant. Set to 0 to disregard absolute tolerance. Default is `1e-8`.
+#'   Absolute tolerance within which to consider a numeric feature constant. Set to 0 to disregard absolute tolerance. Initialized to `1e-8`.
 #' * `na_ignore` :: `logical(1)`\cr
-#'   If `TRUE`, the ratio is calculated after removing all missing values first.
-#'   Default is `FALSE`.
+#'   If `TRUE`, the ratio is calculated after removing all missing values first, so a column can be "constant" even if some but not all values are `NA`.
+#'   Initialized to `TRUE`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
