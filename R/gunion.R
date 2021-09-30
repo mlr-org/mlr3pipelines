@@ -32,6 +32,8 @@ gunion = function(graphs, in_place = FALSE) {
   graphs = structure(pmap(list(x = graphs, clone = do_clone), as_graph), names = names(graphs))
   graphs = Filter(function(x) length(x$pipeops), graphs)
 
+  if (length(graphs) == 0) return(Graph$new())
+
   if (in_place) {
     g = graphs[[1]]
     g$.__enclos_env__$private$.param_set = NULL  # clear param_set cache
