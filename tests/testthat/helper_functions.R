@@ -200,7 +200,7 @@ expect_pipeop_class = function(poclass, constargs = list(), check_ps_default_val
 expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   predict_like_train = TRUE, predict_rows_independent = TRUE,
   deterministic_train = TRUE, deterministic_predict = TRUE,
-  affect_context_independent = TRUE,
+  affect_context_independent = TRUE,  # whether excluding a column does not change what happens to the other columns
   tolerance = sqrt(.Machine$double.eps),
   check_ps_default_values = TRUE) {
   # NOTE

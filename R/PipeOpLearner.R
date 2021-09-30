@@ -21,6 +21,7 @@
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
+#'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearner` by-reference, use `$learner`.\cr
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
@@ -113,7 +114,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     learner_model = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
-          stop("$learner is read-only.")
+          stop("$learner_model is read-only.")
         }
       }
       if (is.null(self$state) || is_noop(self$state)) {

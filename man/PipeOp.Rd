@@ -71,6 +71,10 @@ the \code{\link{PipeOp}}'s input channels, and must return a \code{list} (names 
 channels in \verb{$output}. The \code{private$.train()} and \code{private$.predict()} function should not be called by the user;
 instead, a \verb{$train()} and \verb{$predict()} should be used. The most convenient usage is to add the \code{\link{PipeOp}}
 to a \code{Graph} (possibly as singleton in that \code{Graph}), and using the \code{Graph}'s \verb{$train()} / \verb{$predict()} methods.
+
+\code{private$.train()} and \code{private$.predict()} should treat their inputs as read-only. If they are \code{\link[R6:R6Class]{R6}} objects,
+they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
+not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.
 }
 
 \section{Fields}{

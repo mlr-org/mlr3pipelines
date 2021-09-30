@@ -23,6 +23,7 @@
 #'
 #' * `graph` :: [`Graph`] | [`PipeOp`]\cr
 #'   [`Graph`] to wrap. Can be a [`PipeOp`], which is automatically converted to a [`Graph`].
+#'  This argument is always cloned; to access the [`Graph`] inside `GraphLearner` by-reference, use `$graph`.\cr
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting [`Learner`][mlr3::Learner].
 #' * `param_vals` :: named `list`\cr

@@ -21,6 +21,7 @@ this means e.g. that setting \code{nfeat} to 0 will only remove features of the 
 \itemize{
 \item \code{filter} :: \code{\link[mlr3filters:Filter]{Filter}}\cr
 \code{\link[mlr3filters:Filter]{Filter}} used for feature filtering.
+This argument is always cloned; to access the \code{\link[mlr3filters:Filter]{Filter}} inside \code{PipeOpFilter} by-reference, use \verb{$filter}.\cr
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, defaulting to the \code{id} of the \code{\link[mlr3filters:Filter]{Filter}} being used.
 \item \code{param_vals} :: named \code{list}\cr

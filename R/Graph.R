@@ -70,6 +70,8 @@
 #'   will not be connected within the [`Graph`] at first.\cr
 #'   Instead of supplying a [`PipeOp`] directly, an object that can naturally be converted to a [`PipeOp`] can also
 #'   be supplied, e.g. a [`Learner`][mlr3::Learner] or a [`Filter`][mlr3filters::Filter]; see [`as_pipeop()`].
+#'   The argument given as `op` is always cloned; to access a `Graph`'s [`PipeOp`]s by-reference, use `$pipeops`.\cr
+#'   Note that `$add_pipeop()` is a relatively low-level operation, it is recommended to build graphs using [`%>>%`].
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
 #'   (`character(1)`, `character(1)`,
 #'   `character(1)` | `numeric(1)` | `NULL`,
@@ -165,7 +167,7 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      op = as_pipeop(op)
+      op = as_pipeop(op, clone = TRUE)
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }

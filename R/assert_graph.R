@@ -40,15 +40,14 @@ as_graph = function(x, clone = FALSE) {
 
 #' @export
 as_graph.default = function(x, clone = FALSE) {
-  x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically for convertability
-  if (clone) {
-    x = x$clone(deep = TRUE)
-  }
-  x
+  Graph$new()$add_pipeop(x)  # add_pipeop always clones and checks automatically for convertability
 }
 
 #' @export
 as_graph.list = function(x, clone = FALSE) {
+  if (!clone && length(x) == 1) {
+    return(as_graph(x[[1]], clone = clone))
+  }
   gunion(x)  # gunion itself will convert individual members of x
 }
 

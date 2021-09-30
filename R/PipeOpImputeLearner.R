@@ -17,8 +17,6 @@
 #' the [`Learner`][mlr3::Learner] typically either needs to be able to handle missing values itself, or needs to do its
 #' own imputation (see examples).
 #'
-#'
-#'
 #' @section Construction:
 #' ```
 #' PipeOpImputeLearner$new(learner, id = NULL, param_vals = list())
@@ -28,7 +26,9 @@
 #'   Identifier of resulting object, default `"impute."`, followed by the `id` of the `Learner`.
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
-#'   The [`Learner`][mlr3::Learner] needs to be able to handle missing values, i.e. have the `missings` property.
+#'   The [`Learner`][mlr3::Learner] usually needs to be able to handle missing values, i.e. have the `missings` property, unless care is taken
+#'   that `context_columns` do not contain missings; see examples.\cr
+#'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpImputeLearner` by-reference, use `$learner`.\cr
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -125,7 +125,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     },
     learner_models = function(val) {
       if (!missing(val)) {
-        stop("$learners is read-only.")
+        stop("$learner_models is read-only.")
       }
       if (is.null(self$state) || is_noop(self$state)) {
         list()

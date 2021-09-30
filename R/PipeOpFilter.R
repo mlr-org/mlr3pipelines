@@ -18,6 +18,7 @@
 #' ```
 #' * `filter` :: [`Filter`][mlr3filters::Filter]\cr
 #'   [`Filter`][mlr3filters::Filter] used for feature filtering.
+#'  This argument is always cloned; to access the [`Filter`][mlr3filters::Filter] inside `PipeOpFilter` by-reference, use `$filter`.\cr
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, defaulting to the `id` of the [`Filter`][mlr3filters::Filter] being used.
 #' * `param_vals` :: named `list`\cr

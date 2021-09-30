@@ -87,7 +87,7 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -165,8 +165,14 @@ Collate:
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'
-    'mlr_graphs_elements.R'
     'operators.R'
+    'pipeline_bagging.R'
+    'pipeline_branch.R'
+    'pipeline_greplicate.R'
+    'pipeline_ovr.R'
+    'pipeline_robustify.R'
+    'pipeline_stacking.R'
+    'pipeline_targettrafo.R'
     'po.R'
     'ppl.R'
     'reexports.R'
