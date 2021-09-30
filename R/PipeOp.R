@@ -242,6 +242,7 @@ PipeOp = R6Class("PipeOp",
     },
 
     train = function(input) {
+      assert_list(input, .var.name = sprintf("input to PipeOp %s's $train()", self$id))
       self$state = NULL  # reset to untrained state first
       require_namespaces(self$packages)
 
@@ -261,6 +262,8 @@ PipeOp = R6Class("PipeOp",
       output
     },
     predict = function(input) {
+      assert_list(input, .var.name = sprintf("input to PipeOp %s's $predict()", self$id))
+
       # need to load packages in train *and* predict, because they might run in different R instances
       require_namespaces(self$packages)
 
@@ -383,11 +386,12 @@ assert_connection_table = function(table) {
 # @return an instance of data, possibly converted, with names added according to `$input`/`$output` "name" column
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
+  description = sprintf("%s of PipeOp %s's $%s()", direction, self$id, operation)
   if (direction == "input" && "..." %in% typetable$name) {
-    assert_list(data, min.len = nrow(typetable) - 1)
+    assert_list(data, min.len = nrow(typetable) - 1, .var.name = description)
     typetable = typetable[rep(1:.N, ifelse(get("name") == "...", length(data) - nrow(typetable) + 1, 1))]
   } else {
-    assert_list(data, len = nrow(typetable))
+    assert_list(data, len = nrow(typetable), .var.name = description)
   }
 
   check_item = function(data_element, typereq, varname) {
@@ -403,7 +407,7 @@ check_types = function(self, data, direction, operation) {
       return(data_element)
     }
     if (is.Multiplicity(data_element)) {
-      stopf("%s contained Multiplicity when it shouldn't have.", data_element)
+      stopf("Problem with %s: %s contained Multiplicity when it shouldn't have.", varname, data_element)
     }
     if (typereq == "*") return(data_element)
     if (typereq %in% class(data_element)) return(data_element)
@@ -422,8 +426,8 @@ check_types = function(self, data, direction, operation) {
 
   for (idx in seq_along(data)) {
     data[idx] = list(check_item(data[[idx]], typetable[[operation]][[idx]],
-      varname = sprintf("%s %s (\"%s\") of PipeOp %s",
-        direction, idx, self$input$name[[idx]], self$id)))
+      varname = sprintf("%s %s (\"%s\") of PipeOp %s's $%s()",
+        direction, idx, self$input$name[[idx]], self$id, operation)))
   }
   names(data) = typetable$name
   data
@@ -484,10 +488,10 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
   on.exit({self$state = instate})
   if (!is.null(instate)) {
     if (!is.Multiplicity(instate)) {
-      stopf("PipeOp %s received multiplicity input but state was not a multiplicity.", self$id)
+      stopf("PipeOp %s received multiplicity input on %s but state was not a multiplicity.", self$id, evalcall)
     }
     if (length(instate) != length(unpacked) || !identical(names(instate), names(unpacked))) {
-      stopf("PipeOp %s received multiplicity input but state had different length / names than input.", self$id)
+      stopf("PipeOp %s received multiplicity input on %s but state had different length / names than input.", self$id, evalcall)
     }
   }
   result = imap(unpacked, function(input, reference) {
