@@ -1,11 +1,12 @@
 #' @include mlr_graphs.R
 
-
 #' @title Create A Graph to Perform "One vs. Rest" classification.
 #'
 #' @description
 #' Create a new [`Graph`] for a [classification Task][mlr3::TaskClassif] to
 #' perform "One vs. Rest" classification.
+#'
+#' All input arguments are cloned and have no references in common with the returned [`Graph`].
 #'
 #' @param graph [`Graph`] \cr
 #'   Graph being wrapped between [`PipeOpOVRSplit`] and [`PipeOpOVRUnite`].
@@ -42,12 +43,11 @@
 #' g3$train(task)
 #' g3$predict(task)
 pipeline_ovr = function(graph) {
-  graph = as_graph(graph)
+  graph = PipeOpOVRSplit$new() %>>>% g
   if (graph$output$train != "NULL" || graph$output$predict != "PredictionClassif") {
     stopf("Graph should return 'NULL' during training and a 'PredictionClassif' during prediction.")
   }
-  g = graph$clone(deep = TRUE)
-  PipeOpOVRSplit$new() %>>% g %>>% PipeOpOVRUnite$new()
+  graph %>>>% PipeOpOVRUnite$new()
 }
 
 mlr_graphs$add("ovr", pipeline_ovr)

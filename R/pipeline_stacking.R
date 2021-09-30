@@ -1,12 +1,13 @@
 #' @include mlr_graphs.R
 
-
 #' @title Create A Graph to Perform Stacking.
 #'
 #' @description
 #' Create a new [`Graph`] for stacking. A stacked learner uses predictions of
 #' several base learners and fits a super learner using these predictions as
 #' features in order to predict the outcome.
+#'
+#' All input arguments are cloned and have no references in common with the returned [`Graph`].
 #'
 #' @param base_learners `list` of [`Learner`][mlr3::Learner]\cr
 #'   A list of base learners.
@@ -51,8 +52,8 @@ pipeline_stacking = function(base_learners, super_learner, method = "cv", folds 
 
   if (use_features) base_learners_cv = c(base_learners_cv, po("nop"))
 
-  gunion(base_learners_cv) %>>%
-     po("featureunion") %>>%
+  gunion(base_learners_cv, in_place = TRUE) %>>>%
+     po("featureunion") %>>>%
      super_learner
 }
 

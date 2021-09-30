@@ -13,6 +13,8 @@
 #' * Note that the input `graph` is not explicitly checked to actually return a
 #'   [`Prediction`][mlr3::Prediction] during prediction.
 #'
+#' All input arguments are cloned and have no references in common with the returned [`Graph`].
+#'
 #' @param graph [`PipeOpLearner`] | [`Graph`] \cr
 #'   A [`PipeOpLearner`] or [`Graph`] to wrap between a transformation and re-transformation of the target variable.
 #' @param trafo_pipeop [`PipeOp`] \cr
@@ -45,7 +47,7 @@
 #' g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
 #'   src_channel = 1, dst_channel = 2)
 pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetMutate$new(), id_prefix = "") {
-  graph = as_graph(graph)
+  graph = as_graph(graph, clone = TRUE)
   if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {
     stopf("First PipeOp of graph should accept a single task as input.")
   }

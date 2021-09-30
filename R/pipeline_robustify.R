@@ -15,6 +15,8 @@
 #' If a learner is provided, some steps can be left out, i.e. if the learner can deal with
 #' factor variables, no encoding is performed.
 #'
+#' All input arguments are cloned and have no references in common with the returned [`Graph`].
+#'
 #' @param task [`Task`] \cr
 #'   A [`Task`][mlr3::Task] to create a robustifying pipeline for.
 #'   Optional, if omitted, the full pipeline is created.
@@ -115,7 +117,7 @@ pipeline_robustify = function(task = NULL, learner = NULL, impute_missings = NUL
 
   if (factors_to_numeric) pos = c(pos, po("encode"))
   pos = c(pos, po("removeconstants"))
-  as_graph(Reduce(`%>>%`, pos))
+  chain_graphs(pos, in_place = TRUE)
 }
 
 mlr_graphs$add("robustify", pipeline_robustify)

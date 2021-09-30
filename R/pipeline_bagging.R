@@ -10,6 +10,8 @@
 #' * Average outputs of replicated `graph`s predictions using the `averager`
 #'   (note that setting `collect_multipliciy = TRUE` is required)
 #'
+#' All input arguments are cloned and have no references in common with the returned [`Graph`].
+#'
 #' @param graph [`PipeOp`] | [`Graph`] \cr
 #'   A [`PipeOpLearner`] or [`Graph`] to create a robustifying pipeline for.
 #'   Outputs from the replicated `graph`s are connected with the `averager`.
@@ -37,7 +39,7 @@
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
 #' }
 pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
-  g = as_graph(graph, clone = TRUE)
+  g = as_graph(graph)
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)
   if (!is.null(averager)) {
@@ -47,9 +49,9 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
     averager = as_graph(averager, clone = TRUE)
   }
 
-  po("replicate", param_vals = list(reps = iterations)) %>>%
-    po("subsample", param_vals = list(frac = frac)) %>>%
-    g %>>%
+  po("replicate", param_vals = list(reps = iterations)) %>>>%
+    po("subsample", param_vals = list(frac = frac)) %>>>%
+    g %>>>%
     averager
 }
 

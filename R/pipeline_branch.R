@@ -1,11 +1,11 @@
 #' @include mlr_graphs.R
 
-
-
 #' @title Branch Between Alternative Paths
 #' @name mlr_graphs_branching
 #' @description
 #' Create a multiplexed graph.
+#'
+#' All input arguments are cloned and have no references in common with the returned [`Graph`].
 #'
 #' @param graphs `list` of [`Graph`] \cr
 #'   Multiple graphs, possibly named. They all must have exactly
@@ -78,7 +78,7 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
     poname_prefix = ""
   }
 
-  graph = gunion(graphs) %>>% PipeOpUnbranch$new(branches, id = paste0(prefix_branchops, "unbranch"))
+  graph = gunion(graphs) %>>>% PipeOpUnbranch$new(branches, id = paste0(prefix_branchops, "unbranch"))
 
   branch_id = paste0(prefix_branchops, "branch")
   po_branch = PipeOpBranch$new(branches, id = branch_id)

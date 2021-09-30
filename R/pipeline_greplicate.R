@@ -6,6 +6,8 @@
 #' Create a new [`Graph`] containing `n` copies of the input [`Graph`] / [`PipeOp`]. To avoid ID
 #' collisions, PipeOp IDs are suffixed with `_i` where `i` ranges from 1 to `n`.
 #'
+#' All input arguments are cloned and have no references in common with the returned [`Graph`].
+#'
 #' @param graph [`Graph`] \cr
 #'   Graph to replicate.
 #' @param n `integer(1)`
@@ -26,7 +28,7 @@ pipeline_greplicate = function(graph, n) {
     g$update_ids(postfix = paste0("_", i))
   })
 
-  gunion(x)
+  gunion(x, in_place = TRUE)
 }
 
 mlr_graphs$add("greplicate", pipeline_greplicate)
