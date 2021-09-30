@@ -43,6 +43,21 @@ test_that("gunion", {
 test_that("empty gunion", {
   expect_equal(gunion(list()), Graph$new())
   expect_equal(gunion(list(), in_place = TRUE), Graph$new())
+
+  gg = gunion(list(NULL), in_place = TRUE)
+
+  gg$set_names(names(gg$pipeops), "nop")
+  expect_equal(gg, as_graph(po("nop")))
+
+  gg = gunion(list(NULL, NULL), in_place = TRUE)
+
+  gg$set_names(names(gg$pipeops), c("nop1", "nop2"))
+  expect_equal(touch(gg), touch(gunion(unname(pos(c(nop1 = "nop", nop2 = "nop"))))))
+
+  gg = gunion(list(NULL, list(), NULL), in_place = TRUE)
+
+  gg$set_names(names(gg$pipeops), c("nop1", "nop2"))
+  expect_equal(touch(gg), touch(gunion(unname(pos(c(nop1 = "nop", nop2 = "nop"))))))
 })
 
 test_that("named gunion", {
@@ -79,5 +94,18 @@ test_that("named gunion", {
       add_edge("subsample", "featureunion", dst_channel = "input3")$
       add_edge("z.featureunion", "featureunion", dst_channel = "input4"))
   )
+
+  gg = gunion(list(x = NULL, y = po("scale")))
+
+  expect_set_equal(gsub("_.*", "", names(gg$pipeops)), c("x.nop", "y.scale"))
+
+  gg$set_names(names(gg$pipeops), c("op1", "op2"))
+
+  expect_equal(gg,
+    Graph$new()$
+    add_pipeop(po("nop", id = "op1"))$
+    add_pipeop(po("scale", id = "op2"))
+  )
+
 
 })

@@ -80,7 +80,7 @@ pipeline_robustify = function(task = NULL, learner = NULL,
   # Also add a "!" if not already present.
   check_action = function(x_action, x_type) {
     if (x_action == "ignore") x_action = "ignore!"
-    if (x_action %in% c("matrix", "factor")) {
+    if (!grepl("!$", x_action)) {
       # note that learner$properties is NULL when learner is NULL, so is.null(learner) always defaults to properties being absent.
       learner_not_handles_x = x_type %nin% learner$feature_types
       task_has_x = has_type_feats(x_type)

@@ -157,12 +157,12 @@ strip_multiplicity_type = function(type) {
 #'   of [`%>>>%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].
 #'   Beware that, if `chain_graphs()` fails because of id collisions, then `graphs[[1]]` will possibly be in an incompletely
 #'   modified state when `in_place` is `TRUE`.
-#' @return [`Graph`] the resulting [`Graph`].
+#' @return [`Graph`] the resulting [`Graph`], or `NULL` if there are no non-null values in `graphs`.
 #'
 chain_graphs = function(graphs, in_place = FALSE) {
   assert_list(graphs)
   graphs = discard(graphs, is.null)
-  if (!length(graphs)) return(Graph$new())
+  if (!length(graphs)) return(NULL)
   if (!in_place) {
     # all except the first graph get cloned, so if we are in_place,
     # we only need to take care to clone it. We convert it to a Graph,

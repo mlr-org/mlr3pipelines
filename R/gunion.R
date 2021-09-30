@@ -11,9 +11,10 @@
 #' This operation always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
 #' To access individual [`PipeOp`]s after composition, use the resulting [`Graph`]'s `$pipeops` list.
 #'
-#' @param graphs `list` of ([`Graph`] | [`PipeOp`])\cr
+#' @param graphs `list` of ([`Graph`] | [`PipeOp`] | `NULL` | `...`)\cr
 #'   List of elements which are the
 #'   [`Graph`]s to be joined. Elements must be convertible to [`Graph`] or [`PipeOp`] using [`as_graph()`] and [`as_pipeop()`].
+#'   `NULL` values automatically get converted to [`PipeOpNOP`] with a random ID of the format `nop_********`.
 #'   The list can be named, in which case the
 #'   IDs of the elements are prefixed with the names, separated by a dot (`.`).
 #' @param in_place (`logical(1)`)\cr
@@ -28,6 +29,7 @@
 gunion = function(graphs, in_place = FALSE) {
   assert_list(graphs)
   if (length(graphs) == 0) return(Graph$new())
+  graphs = map_if(graphs, is.null, function(x) po("nop", id = paste0("nop_", paste(sample(c(letters, 0:9), 8, TRUE), collapse = ""))))
   do_clone = c(!in_place, rep(TRUE, length(graphs) - 1))
   graphs = structure(pmap(list(x = graphs, clone = do_clone), as_graph), names = names(graphs))
   graphs = Filter(function(x) length(x$pipeops), graphs)
