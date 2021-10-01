@@ -77,3 +77,47 @@ test_that("Errors during training set $state to NULL", {
   expect_error(po$train(list(mlr_tasks$get("iris"))), regexp = "abstract")
   expect_null(po$state)  # state is completely reset to NULL
 })
+
+test_that("Informative error and warning messages", {
+
+  gr = as_graph(lrn("classif.debug"))
+
+  gr$param_set$values$classif.debug.warning_train = 1
+  gr$param_set$values$classif.debug.warning_predict = 1
+
+  expect_warning(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$", all = TRUE)
+
+  expect_warning(suppressWarnings(gr$train(tsk("iris"))), NA)
+
+  expect_warning(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$", all = TRUE)
+
+  expect_warning(suppressWarnings(gr$predict(tsk("iris"))), NA)
+
+
+  gr$param_set$values$classif.debug.warning_train = 0
+  gr$param_set$values$classif.debug.warning_predict = 0
+  gr$param_set$values$classif.debug.error_train = 1
+  gr$param_set$values$classif.debug.error_predict = 1
+
+  expect_error(gr$train(tsk("iris")), "This happened PipeOp classif.debug's \\$train\\(\\)$")
+
+  expect_error(gr$predict(tsk("iris")), "This happened PipeOp classif.debug's \\$predict\\(\\)$")
+
+  potest = R6::R6Class("potest", inherit = PipeOp,
+    private = list(
+      .train = function(input) {
+        self$state = list()
+        suppressWarnings(warning("test"))
+        list(1)
+      },
+      .predict = function(input) {
+        suppressWarnings(warning("test"))
+        list(1)
+      }
+    )
+  )$new(id = "potest", input = data.table(name = "input", train = "*", predict = "*"), output = data.table(name = "input", train = "*", predict = "*"))
+
+  expect_warning(potest$train(list(1)), NA)
+  expect_warning(potest$predict(list(1)), NA)
+
+})

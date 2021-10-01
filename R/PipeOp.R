@@ -266,8 +266,9 @@ PipeOp = R6Class("PipeOp",
         e$message = sprintf("%s\nThis happened PipeOp %s's $train()", e$message, self$id)
         stop(e)
       }, warning = function(w) {
-        w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
+        w$message = sprintf("%s\nThis happened PipeOp %s's $train()", w$message, self$id)
         warning(w)
+        invokeRestart("muffleWarning")
       })
       output = check_types(self, output, "output", "train")
       on.exit()  # don't reset state any more
@@ -298,6 +299,7 @@ PipeOp = R6Class("PipeOp",
       }, warning = function(w) {
         w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
         warning(w)
+        invokeRestart("muffleWarning")
       })
       output = check_types(self, output, "output", "predict")
       output
