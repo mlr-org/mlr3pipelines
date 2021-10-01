@@ -260,7 +260,9 @@ in the <code>$param_set$values</code> slot; these are automatically checked agai
 <li><p><code>state</code> :: <code>any</code> | <code>NULL</code><br />
 Method-dependent state obtained during training step, and usually required for the prediction step. This is <code>NULL</code>
 if and only if the <code>PipeOp</code> has not been trained. The <code>$state</code> is the <em>only</em> slot that can be reliably modified during
-<code>$train()</code>, because <code>private$.train()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).</p></li>
+<code>$train()</code>, because <code>private$.train()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).
+<code>$state</code> should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
+not of <code>PipeOp</code> or <code>mlr3pipelines</code>, but of the way the system as a whole works, together with <code><a href='mlr_learners_graph.html'>GraphLearner</a></code> and <code>mlr3</code>.</p></li>
 <li><p>input :: <code>data.table</code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br />
 Input channels of <code>PipeOp</code>. Column <code>name</code> gives the names (and order) of values in the list given to
 <code>$train()</code> and <code>$predict()</code>. Column <code>train</code> is the (S3) class that an input object must conform to during
