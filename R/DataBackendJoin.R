@@ -36,7 +36,7 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
       index_table = merge(data.table(rownames_b1, joinby_b1), data.table(rownames_b2, joinby_b2), by.x = "joinby_b1", by.y = "joinby_b2",
         all.x = type %in% c("left", "outer"), all.y = type %in% c("right", "outer"), sort = FALSE, allow.cartesian = TRUE)
 
-      index_table[, c("joinby_b1", "joinby_b2") := NULL]
+      index_table[, "joinby_b1" := NULL]
 
       pk = "..row_id"
       index = 0
@@ -47,8 +47,8 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
 
       super$initialize(list(
         b1 = b1, b2 = b2,
-        colnames_b1 = setdiff(colnames_b1, colnames_b2)
-        allcolnames = union(colnames_b1, colnames_b2, b1_index_colname, b2_index_colname, pk),
+        colnames_b1 = setdiff(colnames_b1, colnames_b2),
+        allcolnames = unique(c(colnames_b1, colnames_b2, b1_index_colname, b2_index_colname, pk)),
         index_table = index_table,
         b1_index_colname = b1_index_colname,
         b2_index_colname = b2_index_colname,
@@ -85,7 +85,7 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
         data[, (d$b1_index_colname) := rownames_b1]
       }
       data[, intersect(cols, names(data)), with = FALSE]
-    }
+    },
 
     head = function(n = 6L) {
       rows = head(self$rownames, n)
@@ -106,7 +106,7 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
       res = c(d1, d2)
       res[match(cols, names(res), nomatch = 0)]
     },
-    missings = functionrows, cols) {
+    missings = function(rows, cols) {
       indices = private$.data$index_table[rows]
       b1_rows = indices[!is.na(rownames_b1), rownames_b1]
       b2_rows = indices[!is.na(rownames_b2), rownames_b2]
@@ -121,7 +121,7 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
   active = list(
     rownames = function() seq_len(nrow(private$.data$index_table)),
     colnames = function() private$.data$allcolnames,
-    nrow = function() nrow(private$.data$index_table)
+    nrow = function() nrow(private$.data$index_table),
     ncol = function() length(private$.data$allcolnames)
   ),
   private = list(
