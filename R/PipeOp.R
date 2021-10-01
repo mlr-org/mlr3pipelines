@@ -90,6 +90,8 @@
 #'   Method-dependent state obtained during training step, and usually required for the prediction step. This is `NULL`
 #'   if and only if the [`PipeOp`] has not been trained. The `$state` is the *only* slot that can be reliably modified during
 #'   `$train()`, because `private$.train()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
+#'   `$state` should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
+#'   not of [`PipeOp`] or `mlr3pipelines`, but of the way the system as a whole works, together with [`GraphLearner`] and `mlr3`.
 #' * input :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Input channels of [`PipeOp`]. Column `name` gives the names (and order) of values in the list given to
 #'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
