@@ -260,7 +260,15 @@ PipeOp = R6Class("PipeOp",
       }
       input = check_types(self, input, "input", "train")
       on.exit({self$state = NULL})  # if any of the following fails, make sure to reset self$state
-      output = private$.train(input)
+      withCallingHandlers({
+        output = private$.train(input)
+      }, error = function(e) {
+        e$message = sprintf("%s\nThis happened PipeOp %s's $train()", e$message, self$id)
+        stop(e)
+      }, warning = function(w) {
+        w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
+        warning(w)
+      })
       output = check_types(self, output, "output", "train")
       on.exit()  # don't reset state any more
       output
@@ -282,7 +290,15 @@ PipeOp = R6Class("PipeOp",
         return(evaluate_multiplicities(self, unpacked, "predict", self$state))
       }
       input = check_types(self, input, "input", "predict")
-      output = private$.predict(input)
+      withCallingHandlers({
+        output = private$.predict(input)
+      }, error = function(e) {
+        e$message = sprintf("%s\nThis happened PipeOp %s's $predict()", e$message, self$id)
+        stop(e)
+      }, warning = function(w) {
+        w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
+        warning(w)
+      })
       output = check_types(self, output, "output", "predict")
       output
     }

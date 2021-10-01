@@ -117,7 +117,9 @@ PipeOpProxy = R6Class("PipeOpProxy",
     .param_set_source = NULL,
     .id = NULL,
     .train = function(input) {
-      content = as_graph(self$param_set$values$content, clone = TRUE)
+      content = as_graph(self$param_set$values$content)
+      prestate = content$state
+      on.exit({content$state = prestate})
       if (length(input) > 1) {
         output = content$train(unname(input), single_input = FALSE)
       } else {
@@ -128,7 +130,9 @@ PipeOpProxy = R6Class("PipeOpProxy",
       output
     },
     .predict = function(input) {
-      content = as_graph(self$param_set$values$content, clone = TRUE)
+      content = as_graph(self$param_set$values$content)
+      prestate = content$state
+      on.exit({content$state = prestate})
       content$state = self$state
       if (length(input) > 1) {
         output = content$predict(unname(input), single_input = FALSE)

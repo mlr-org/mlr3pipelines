@@ -116,3 +116,64 @@ Training debug2 with input list\\(input_1 = 2\\)$")
 Training debug2 with input list\\(input_1 = 2\\)$")
 
 })
+
+
+test_that("Cloning as expected", {
+
+  gr = PipeOpProxy$new() %>>% LearnerClassifRpart$new()
+
+  default_content = gr$param_set$values$proxy.content
+
+  gr_clone = gr$clone(deep = FALSE)
+  gr_deep_clone = gr$clone(deep = TRUE)
+
+  expect_deep_clone(gr, gr_deep_clone)
+
+  expect_identical(default_content, gr$param_set$values$proxy.content)
+  expect_deep_clone(default_content, gr_deep_clone$param_set$values$proxy.content)
+
+  gr$param_set$values$proxy.content = PipeOpPCA$new()
+
+  gr$param_set$values$proxy.content$train(list(tsk("iris")))
+
+  popca = po("pca")
+  popca$train(list(tsk("iris")))
+
+  expect_equal(gr$param_set$values$proxy.content$state, popca$state)
+
+  expect_equal(gr$param_set$values$proxy.content, gr_clone$param_set$values$proxy.content)
+
+  gr$param_set$values$proxy.content$param_set$values$center = TRUE
+
+  expect_equal(gr$param_set$values$proxy.content, gr_clone$param_set$values$proxy.content)
+
+  expect_equal(gr_deep_clone$param_set$values$proxy.content, default_content)
+
+  gr$train(tsk("iris")$filter(1:100))
+
+  expect_equal(gr$param_set$values$proxy.content$state, popca$state)
+
+  popca$train(list(tsk("iris")$filter(1:100)))
+
+  expect_equal(gr$state$proxy$pca, popca$state)
+
+  lg = GraphLearner$new(gr)
+
+  lg$train(tsk("breast_cancer"))
+
+  popca$train(list(tsk("breast_cancer")))
+  expect_equal(lg$graph_model$state$proxy$pca, popca$state)
+
+
+  popca$train(list(tsk("iris")))
+  expect_equal(lg$param_set$values$proxy.content$state, popca$state)
+
+  expect_prediction(lg$predict(tsk("breast_cancer")$filter(1:10)))
+
+  lg2 = lg$clone(deep = TRUE)
+
+  expect_deep_clone(lg, lg2)
+
+  expect_deep_clone(lg$param_set$values$proxy.content, lg2$param_set$values$proxy.content)
+
+})
