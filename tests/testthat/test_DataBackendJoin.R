@@ -13,9 +13,15 @@ test_that("DataBackendJoin works as expected", {
 
 
 
-  dbj <- DataBackendJoin$new(d1b, d2b)
+  dbj <- DataBackendJoin$new(d1b, d2b, type = "outer")
 
   expect_backend(dbj)
+
+  expect_identical(dbj$distinct(1:2, dbj$colnames), list(x = c("a", "c"), y = "z", z = 1:2, id = c(10L, 20L), a = character(0), idx = 20L, ..row_id = 1:2))
+  expect_identical(dbj$distinct(1:2, dbj$colnames, na_rm = FALSE), list(x = c("a", "c"), y = c("z", NA), z = 1:2, id = c(10L, 20L), a = NA_character_, idx = c(20L, NA), ..row_id = 1:2))
+
+  expect_identical(dbj$missings(1:2, dbj$colnames), c(x = 0L, y = 1L, z = 0L, id = 0L, a = 2L, idx = 1L, ..row_id = 0L))
+  expect_identical(dbj$missings(c(1:2, 2:1), dbj$colnames), 2L * c(x = 0L, y = 1L, z = 0L, id = 0L, a = 2L, idx = 1L, ..row_id = 0L))
 
   expect_identical(dbj$data(1:3, c("x", "y", "id", "a", "idx")),
     data.table(x = letters[1:4][-2], y = c(NA, letters[26:25]), id = (1:3) * 10L, a = c(NA, NA, "zZ"), idx = c(NA, (2:3) * 10L))
