@@ -90,6 +90,8 @@
 #'   Method-dependent state obtained during training step, and usually required for the prediction step. This is `NULL`
 #'   if and only if the [`PipeOp`] has not been trained. The `$state` is the *only* slot that can be reliably modified during
 #'   `$train()`, because `private$.train()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
+#'   `$state` should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
+#'   not of [`PipeOp`] or `mlr3pipelines`, but of the way the system as a whole works, together with [`GraphLearner`] and `mlr3`.
 #' * input :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Input channels of [`PipeOp`]. Column `name` gives the names (and order) of values in the list given to
 #'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
@@ -260,7 +262,16 @@ PipeOp = R6Class("PipeOp",
       }
       input = check_types(self, input, "input", "train")
       on.exit({self$state = NULL})  # if any of the following fails, make sure to reset self$state
-      output = private$.train(input)
+      withCallingHandlers({
+        output = private$.train(input)
+      }, error = function(e) {
+        e$message = sprintf("%s\nThis happened PipeOp %s's $train()", e$message, self$id)
+        stop(e)
+      }, warning = function(w) {
+        w$message = sprintf("%s\nThis happened PipeOp %s's $train()", w$message, self$id)
+        warning(w)
+        invokeRestart("muffleWarning")
+      })
       output = check_types(self, output, "output", "train")
       on.exit()  # don't reset state any more
       output
@@ -282,7 +293,16 @@ PipeOp = R6Class("PipeOp",
         return(evaluate_multiplicities(self, unpacked, "predict", self$state))
       }
       input = check_types(self, input, "input", "predict")
-      output = private$.predict(input)
+      withCallingHandlers({
+        output = private$.predict(input)
+      }, error = function(e) {
+        e$message = sprintf("%s\nThis happened PipeOp %s's $predict()", e$message, self$id)
+        stop(e)
+      }, warning = function(w) {
+        w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
+        warning(w)
+        invokeRestart("muffleWarning")
+      })
       output = check_types(self, output, "output", "predict")
       output
     }
