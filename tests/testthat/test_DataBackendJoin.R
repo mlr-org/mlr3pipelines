@@ -135,9 +135,4 @@ test_that("DataBackendJoin errors", {
   expect_error(DataBackendJoin$new(d1b, d2b, type = "inner", b2_index_colname = "a"), "already a non-primary-key")
   expect_error(DataBackendJoin$new(d1b, d2b, type = "inner", b1_index_colname = "n", b2_index_colname = "n"), "must be different")
 
-
-
-
-
-
 })
