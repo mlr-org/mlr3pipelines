@@ -53,18 +53,20 @@ DataBackendMultiCbind = R6Class("DataBackendMultiCbind", inherit = DataBackend, 
         allrows[[i]] = datas[[i]][[pk]]
       }
       presentrows = unique(unlist(allrows))
+      join = list(presentrows)
       result = do.call(cbind, pmap(list(datas, pks, include_pk), function(data, pk, include) {
         if (include) {
-          result = data[J(presentrows), on = pk, nomatch = NA]
-          droppk = result[[pk]] %nin% data[[pk]]
-          result[droppk, (pk) := NA]
+          result = data[join, on = pk, nomatch = NA]
+          set(result, result[[pk]] %nin% data[[pk]], pk, NA)
         } else {
-          data[J(presentrows), -pk, on = pk, with = FALSE, nomatch = NA]
+          data[join, -pk, on = pk, with = FALSE, nomatch = NA]
         }
       }))
       sbk = self$primary_key
-      result[, (sbk) := presentrows]
-      result[J(rows), intersect(cols, colnames(result)), with = FALSE, on = sbk, nomatch = NULL]
+
+      set(result, , sbk, presentrows)
+      join = list(rows)
+      result[join, intersect(cols, colnames(result)), with = FALSE, on = sbk, nomatch = NULL]
     },
     head = function(n = 6L) {
       rows = head(self$rownames, n)

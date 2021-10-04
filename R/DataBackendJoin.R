@@ -38,7 +38,7 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
       index_table = merge(data.table(rownames_b1, joinby_b1), data.table(rownames_b2, joinby_b2), by.x = "joinby_b1", by.y = "joinby_b2",
         all.x = type %in% c("left", "outer"), all.y = type %in% c("right", "outer"), sort = FALSE, allow.cartesian = TRUE)
 
-      index_table[, "joinby_b1" := NULL]
+      set(index_table, , "joinby_b1", NULL)
 
       pk = "..row_id"
       index = 0
@@ -77,26 +77,27 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
       }
       setkeyv(data, NULL)
       if (d$pk %in% cols) {
-        data[, (d$pk) := rows]
+        set(data, , d$pk, rows)
       }
       if (!is.null(d$b2_index_colname) && d$b2_index_colname %in% cols) {
         rownames_b2 = indices$rownames_b2
-        data[, (d$b2_index_colname) := rownames_b2]
+        set(data, , d$b2_index_colname, rownames_b2)
       }
       if (!is.null(d$b1_index_colname) && d$b1_index_colname %in% cols) {
         rownames_b1 = indices$rownames_b1
-        data[, (d$b1_index_colname) := rownames_b1]
+        set(data, ,d$b1_index_colname, rownames_b1)
       }
       data[, intersect(cols, names(data)), with = FALSE]
     },
 
     head = function(n = 6L) {
-      rows = head(self$rownames, n)
+      rows = first(self$rownames, n)
       self$data(rows = rows, cols = self$colnames)
     },
     distinct = function(rows, cols, na_rm = TRUE) {
       d = private$.data
       indices = d$index_table[rows]
+      rownames_b1 = rownames_b2 = NULL
       b1_rows = indices[!is.na(rownames_b1), rownames_b1]
       b2_rows = indices[!is.na(rownames_b2), rownames_b2]
       d2 = private$.data$b2$distinct(rows = b2_rows, cols = cols, na_rm = na_rm)
@@ -124,6 +125,7 @@ DataBackendJoin = R6Class("DataBackendJoin", inherit = DataBackend, cloneable = 
     missings = function(rows, cols) {
       d = private$.data
       indices = d$index_table[rows]
+      rownames_b1 = rownames_b2 = NULL
       b1_rows = indices[!is.na(rownames_b1), rownames_b1]
       b2_rows = indices[!is.na(rownames_b2), rownames_b2]
       m2 = private$.data$b2$missings(b2_rows, cols)
