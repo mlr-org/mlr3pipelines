@@ -12,8 +12,11 @@
 #' across all [`Task`][mlr3::Task]s. Only the target column(s) of the first [`Task`][mlr3::Task]
 #' are kept.
 #'
-#' If `assert_targets_equal` is `TRUE` then target column names are compared and an error is thrown
-#' if they differ across inputs.
+#' `PipeOpFeatureUnion` tries to merge columns that are identical, while preventing accidental
+#' overwrites of columns that contain differing data. This is controlled using the `feature_clash`
+#' (for columns containing features, weights etc.) and `target_clash` (for tharget columns)
+#' hyperparameters. The `assert_target_equal` construction parameter / field can still be used
+#' as well but is deprecated and will generate a warning.
 #'
 #' If input tasks share some feature names but these features are not identical an error is thrown.
 #' This check is performed by first comparing the features names and if duplicates are found, also
@@ -41,6 +44,7 @@
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
 #'   be set during construction. Default `list()`.
 #' * `assert_targets_equal` :: `logical(1)`\cr
+#'   DEPRECATED; use `target_clash` hyperparameter instead.\cr
 #'   If `assert_targets_equal` is `TRUE` (Default), task target column names are checked for
 #'   agreement. Disagreeing target column names are usually a bug, so this should often be left at
 #'   the default.
@@ -61,7 +65,33 @@
 #' The `$state` is left empty (`list()`).
 #'
 #' @section Parameters:
-#' [`PipeOpFeatureUnion`] has no Parameters.
+#' * `target_clash` :: `character(1)`\cr
+#'   How to handle target columns that differ between input [`Task`][mlr3::Task]s. `"allow_same_hash"`
+#'   checks the names and `$col_hashes` and throws an error if they disagree. `"allow_same_content"` (default) is
+#'   more permissive: If `$col_hashes` disagree, then it checks the target content, if the content of both
+#'   columns agree, then merging of tasks is still allowed. This avoids some rare false-positives, but in cases
+#'   where hashes *do* disagree this may be slow for [`Task`][mlr3::Task]s with many rows or targets.
+#'   `"ignore"` does not check for target agreement and overwrites the target with the target of the *rightmost* /
+#'   highest numbered input [`Task`][mlr3::Task]. Use with caution. This is the only option that allows feature-union of [`Task`][mlr3::Task]s
+#'   that differ in the names of their target column (and all target columns except the rightmost / highest numbered input
+#'   [`Task`][mlr3::Task]'s target are dropped in that case).\cr
+#'   The deprecated field `assert_targets_equal` sets this value to `"allow_same_content"` (i.e. default) when `TRUE` and to
+#'   `"ignore"` when `FALSE`.
+#' * `feature_clash` :: `character(1)`\cr
+#'   How to handle non-target columns that have the same name but differ between input [`Task`][mlr3::Task]s. `"allow_same_hash"`
+#'   checks the names and `$col_hashes` and throws an error if they disagree. `"allow_same_content"` (default) is
+#'   more permissive: If `$col_hashes` disagree, then it checks the column content, if the content of both
+#'   columns agree, then merging of tasks is still allowed. This avoids some rare false-positives, but in cases
+#'   where hashes *do* disagree this may be slow for large [`Task`][mlr3::Task]s.
+#'   `"ignore"` does not check for column data agreement and overwrites columns of the same name with the values of the *rightmost* /
+#'   highest numbered input [`Task`][mlr3::Task].\cr
+#'   Some column roles (`"group"`, `"weight"`, `"name"`) do not allow more than one column role present in a [`Task`][mlr3::Task] (see
+#'   `$col_roles` documentation there). When up to one [`Task`][mlr3::Task] has a column of these column role, it is taken for the
+#'   resulting [`Task`][mlr3::Task] without any issue. When more than one [`Task`][mlr3::Task] has a column with one of these roles,
+#'   but with the same name, the `feature_clash` policy applies as described above. When more than one [`Task`][mlr3::Task] has a
+#'   column with one of these roles, but they have *different* names, then an error is thrown when `feature_clash` is not `"ignore"`.
+#'   When it is `"ignore"`, the *rightmost* / highest numbered input [`Task`][mlr3::Task]'s column is used and all others of this
+#'   role are discarded.
 #'
 #' @section Internals:
 #' [`PipeOpFeatureUnion`] uses the [`Task`][mlr3::Task] `$cbind()` method to bind the input values
@@ -99,21 +129,26 @@
 PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
   inherit = PipeOp,
   public = list(
-    assert_targets_equal = NULL,
+
     inprefix = NULL,
     initialize = function(innum = 0L, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(), assert_targets_equal = TRUE) {
       assert(
         check_int(innum, lower = 0L),
         check_character(innum, min.len = 1L, any.missing = FALSE)
       )
+      params = ps(
+        target_clash = p_fct(c("allow_same_hash", "allow_same_content", "ignore")),
+        feature_clash = p_fct(c("forbid", "allow_same_hash", "allow_same_content", "ignore"))
+      )
+      params$values = list(target_clash = "allow_same_content", feature_clash = "allow_same_content")
+
       if (is.numeric(innum)) {
         self$inprefix = rep("", innum)
       } else {
         self$inprefix = innum
         innum = length(innum)
       }
-      assert_flag(assert_targets_equal)
-      self$assert_targets_equal = assert_targets_equal
+
       inname = if (innum) rep_suffix("input", innum) else "..."
       intype = "Task"
       private$.collect = assert_flag(collect_multiplicity)
@@ -129,9 +164,25 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
         output = data.table(name = "output", train = "Task", predict = "Task"),
         tags = "ensemble"
       )
+
+      # the following is DEPRECATED
+      if (!missing(assert_targets_equal)) {
+        # do this after init so the AB can modify self$param_set
+        assert_flag(assert_targets_equal)
+        self$assert_targets_equal = assert_targets_equal
+      }
+    }
+  ),
+  active = list(
+    assert_targets_equal = function(rhs) {
+      if (!missing(rhs)) private$.assert_targets_equal = rhs
+      self$param_set$values$target_clash = if (private$.assert_targets_equal) "allow_same_content" else "ignore"
+      warning("PipeOpFeatureUnion assert_targets_equal is deprecated. Use the 'target_clash' hyperparameter.")
+      private$.assert_targets_equal
     }
   ),
   private = list(
+    .assert_targets_equal = NULL,
     .train = function(inputs) {
       self$state = list()
       if (private$.collect) inputs = unclass(inputs[[1]])
