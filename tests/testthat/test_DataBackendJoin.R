@@ -126,8 +126,8 @@ test_that("DataBackendJoin errors", {
   d1b <- DataBackendDataTable$new(d1, "id")
   d2b <- DataBackendDataTable$new(d2, "idx")
 
-  expect_error(DataBackendJoin$new(d1b, d2b, by_b1 = "n"), "by_b1.*of set.*but is 'n'")
-  expect_error(DataBackendJoin$new(d1b, d2b, by_b2 = "n"), "by_b2.*of set.*but is 'n'")
+  expect_error(DataBackendJoin$new(d1b, d2b, type = "outer", by_b1 = "n"), "by_b1.*of set.*but is 'n'")
+  expect_error(DataBackendJoin$new(d1b, d2b, type = "outer", by_b2 = "n"), "by_b2.*of set.*but is 'n'")
 
   expect_error(DataBackendJoin$new(d1b, d2b, type = "inner", b1_index_colname = "x"), "already a non-primary-key")
   expect_error(DataBackendJoin$new(d1b, d2b, type = "inner", b1_index_colname = "a"), "already a non-primary-key")
