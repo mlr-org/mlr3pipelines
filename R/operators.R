@@ -103,6 +103,8 @@
 #' o1 %>>>% o2
 #'
 #' o1  # not changed, becuase not a Graph.
+#'
+#' concat_graphs(glist = list(o1, o2, o3))
 concat_graphs = function(g1, g2, glist, in_place = FALSE) {
   if (!missing(glist)) {
     if (!missing(g1) || !missing(g2)) stop("When glist is given, g1 and g2 must not be given")
@@ -113,8 +115,10 @@ concat_graphs = function(g1, g2, glist, in_place = FALSE) {
   if (is.null(g1)) return(if (!is.null(g2)) as_graph(g2, clone = TRUE))
   if (is.null(g2)) return(as_graph(g1, clone = !in_place))
 
-  g1 = as_graph(g1)
-  g2 = as_graph(g2)
+  # one idea would be to not clone here, and let `gunion()` decide whether to clone. However,
+  # that would lead to `PipeOp`s being cloned twice, so we clone here explicitly and tell gunion to do things in-place.
+  g1 = as_graph(g1, clone = !in_place)
+  g2 = as_graph(g2, clone = TRUE)
   g1out = g1$output
   g2in = g2$input
   if (nrow(g1out) != 1 && nrow(g1out) != nrow(g2in) && !(nrow(g2in) == 1 && g2in$channel.name == "...")) {
@@ -140,7 +144,7 @@ concat_graphs = function(g1, g2, glist, in_place = FALSE) {
   new_edges = cbind(g1out[, list(src_id = get("op.id"), src_channel = get("channel.name"))],
     g2in[, list(dst_id = get("op.id"), dst_channel = get("channel.name"))])
 
-  g = gunion(list(g1, g2), in_place = in_place)
+  g = gunion(list(g1, g2), in_place = c(TRUE, TRUE))  # at this point graphs are already cloned.
   g$edges = rbind(g$edges, new_edges)
   g
 }

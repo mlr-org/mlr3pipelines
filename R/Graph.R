@@ -485,7 +485,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     return(data.table(name = character(), train = character(),
       predict = character(), op.id = character(), channel.name = character()))
   }
-  map_dtr(pipeops, function(po) {
+  ret = map_dtr(pipeops, function(po) {
 
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
     # (and factor 2 faster than a naive data.table implementation below).
@@ -494,10 +494,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df = as.data.frame(po[[direction]], stringsAsFactors = FALSE)
     rows = df$name %nin% channels[ids == po$id]
     if (!any(rows)) {
-      return(data.frame(name = character(),
-        train = character(), predict = character(),
-        op.id = character(), channel.name = character(),
-        stringsAsFactors = FALSE))
+      return(NULL)
     }
     df$op.id = po$id
     df = df[rows,
@@ -506,6 +503,12 @@ graph_channels = function(ids, channels, pipeops, direction) {
     names(df)[5] = "channel.name"
     df
   })
+
+  if (!nrow(ret)) {
+    return(data.table(name = character(), train = character(), predict = character(),
+      op.id = character(), channel.name = character()))
+  }
+  ret
 }
 
 graph_channels_dt = function(ids, channels, pipeops, direction) {
