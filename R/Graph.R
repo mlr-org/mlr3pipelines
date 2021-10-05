@@ -81,6 +81,11 @@
 #'   channel `dst_channel` (identified by its name or number as listed in the [`PipeOp`]'s `$input`).
 #'   If source or destination [`PipeOp`] have only one input / output channel and `src_channel` / `dst_channel`
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
+#' * `chain(gs, clone = TRUE)` \cr
+#'   (`list` of `Graph`s, `logical(1)`) -> `self` \cr
+#'   Takes a list of `Graph`s or [`PipeOp`]s (or objects that can be automatically converted into `Graph`s or [`PipeOp`]s,
+#'   see [`as_graph()`] and [`as_pipeop()`]) as inputs and joins them in a serial `Graph` coming after `self`, as if
+#'   connecting them using [`%>>%`].
 #' * `plot(html)` \cr
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
@@ -246,6 +251,11 @@ Graph = R6Class("Graph",
       self$ids(sorted = TRUE)  # if we fail here, edges get reset.
       on.exit()
       invisible(self)
+    },
+
+    chain = function(gs, clone = TRUE) {
+      assert_list(gs)
+      chain_graphs(c(list(gs), gs), in_place = TRUE)
     },
 
     plot = function(html = FALSE) {
