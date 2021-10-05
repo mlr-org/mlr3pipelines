@@ -5,7 +5,7 @@
 #' Both source and sink can either be
 #' a [`Graph`] or a [`PipeOp`] (or an object that can be automatically converted into a [`Graph`] or [`PipeOp`], see [`as_graph()`] and [`as_pipeop()`]).
 #'
-#' `%>>%` and `%>>>%` try to automatically match output channels of `g1` to input channels of `g2`; this is only possible if either
+#' `%>>%` and `%>>!%` try to automatically match output channels of `g1` to input channels of `g2`; this is only possible if either
 #' * the number of output channels of `g1` (as given by `g1$output`) is equal to the
 #' number of input channels of `g2` (as given by `g2$input`), or
 #' * `g1` has only one output channel (i.e. `g1$output` has one line), or
@@ -17,23 +17,23 @@
 #'
 #' `%>>%` always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
 #' To access individual [`PipeOp`]s after composition, use the resulting [`Graph`]'s `$pipeops` list.
-#' `%>>>%`, on the other hand, tries to avoid cloning its first argument: If it is a [`Graph`], then this [`Graph`]
+#' `%>>!%`, on the other hand, tries to avoid cloning its first argument: If it is a [`Graph`], then this [`Graph`]
 #' will be modified in-place.
 #'
-#' When `%>>>%` fails, then it leaves `g1` in an incompletely modified state. It is therefore usually recommended to use
+#' When `%>>!%` fails, then it leaves `g1` in an incompletely modified state. It is therefore usually recommended to use
 #' `%>>%`, since the very marginal gain of performance from
-#' using `%>>>%` often does not outweigh the risk of either modifying objects by-reference that should not be modified or getting
+#' using `%>>!%` often does not outweigh the risk of either modifying objects by-reference that should not be modified or getting
 #' graphs that are in an incompletely modified state. However,
-#' when creating long [`Graph`]s, chaining with `%>>>%` instead of `%>>%` can give noticeable performance benefits
-#' because `%>>%` makes a number of `clone()`-calls that is quadratic in chain length, `%>>>%` only linear.
+#' when creating long [`Graph`]s, chaining with `%>>!%` instead of `%>>%` can give noticeable performance benefits
+#' because `%>>%` makes a number of `clone()`-calls that is quadratic in chain length, `%>>!%` only linear.
 #'
-#' `concat_graphs(g1, g2, in_place = FALSE)` is equivalent to `g1 %>>% g2`. `concat_graphs(g1, g2, in_place = TRUE)` is equivalent to `g1 %>>>% g2`.
+#' `concat_graphs(g1, g2, in_place = FALSE)` is equivalent to `g1 %>>% g2`. `concat_graphs(g1, g2, in_place = TRUE)` is equivalent to `g1 %>>!% g2`.
 #'
 #' Both arguments of `%>>%` are automatically converted to [`Graph`]s using [`as_graph()`]; this means that objects on either side may be objects
 #' that can be automatically converted to [`PipeOp`]s (such as [`Learner`][mlr3::Learner]s or [`Filter`][mlr3filters::Filter]s), or that can
 #' be converted to [`Graph`]s. This means, in particular, `list`s of [`Graph`]s, [`PipeOp`]s or objects convertible to that, because
-#' [`as_graph()`] automatically applies [`gunion()`] to `list`s. See examples. If the first argument of `%>>>%` is not a [`Graph`], then
-#' it is cloned just as when `%>>%` is used; `%>>>%` only avoids `clone()` if the first argument is a [`Graph`].
+#' [`as_graph()`] automatically applies [`gunion()`] to `list`s. See examples. If the first argument of `%>>!%` is not a [`Graph`], then
+#' it is cloned just as when `%>>%` is used; `%>>!%` only avoids `clone()` if the first argument is a [`Graph`].
 #'
 #' Note that if `g1` is `NULL`, `g2` converted to a [`Graph`] will be returned.
 #' Analogously, if `g2` is `NULL`, `g1` converted to a [`Graph`] will be returned.
@@ -44,10 +44,10 @@
 #'
 #' Care is taken to avoid unnecessarily cloning of components. A call of
 #' `chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)` is equivalent to
-#' `g1 %>>% g2 %>>>% g3 %>>>% g4 %>>>% ...`.
+#' `g1 %>>% g2 %>>!% g3 %>>!% g4 %>>!% ...`.
 #' A call of `chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)`
-#' is equivalent to `g1 %>>>% g2 %>>>% g3 %>>>% g4 %>>>% ...` (differing in the
-#' first operator being `%>>>%` as well).
+#' is equivalent to `g1 %>>!% g2 %>>!% g3 %>>!% g4 %>>!% ...` (differing in the
+#' first operator being `%>>!%` as well).
 #'
 #' `concat_graphs(glist = <list>)` (implicitly with `in_place = FALSE`) is a safe way of generating large linear pipelines quickly, while
 #' still avoiding to change any of its inputs by reference, and avoiding the risk of ending up with broken objects.
@@ -63,7 +63,7 @@
 #'   When `g1` and `g2` are given: Whether to try to avoid cloning `g1`. If `g1` is not a [`Graph`], then it is cloned regardless.\n
 #'   When `glist` is given instead:
 #'   Whether to try to avoid cloning the first element of `glist`, similar to the difference
-#'   of `%>>>%` over `%>>%`. This can only be avoided if `glist[[1]]` is already a [`Graph`].
+#'   of `%>>!%` over `%>>%`. This can only be avoided if `glist[[1]]` is already a [`Graph`].
 #'   Beware that, when `in_place` is `TRUE` and if `concat_graphs()` fails because of id collisions, then `glist[[1]]` will possibly be in an incompletely
 #'   modified state.
 #'
@@ -96,11 +96,11 @@
 #'   add_edge(o1$id, o3$id, dst_channel = 1)$
 #'   add_edge(o2$id, o3$id, dst_channel = 2)
 #'
-#' pipe1 %>>>% o3  # modify pipe1 in-place
+#' pipe1 %>>!% o3  # modify pipe1 in-place
 #'
 #' pipe1  # contains o1, o2, and o3 now.
 #'
-#' o1 %>>>% o2
+#' o1 %>>!% o2
 #'
 #' o1  # not changed, becuase not a Graph.
 #'
@@ -157,7 +157,7 @@ concat_graphs = function(g1, g2, glist, in_place = FALSE) {
 
 #' @rdname concat_graphs
 #' @export
-`%>>>%` = function(g1, g2) {
+`%>>!%` = function(g1, g2) {
   concat_graphs(g1, g2, in_place = TRUE)
 }
 
@@ -174,10 +174,10 @@ strip_multiplicity_type = function(type) {
 #'
 #' Care is taken to avoid unnecessarily cloning of components. A call of
 #' `chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)` is equivalent to
-#' `g1 %>>% g2 %>>>% g3 %>>>% g4 %>>>% ...`.
+#' `g1 %>>% g2 %>>!% g3 %>>!% g4 %>>!% ...`.
 #' A call of `chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)`
-#' is equivalent to `g1 %>>>% g2 %>>>% g3 %>>>% g4 %>>>% ...` (differing in the
-#' first operator being `%>>>%` as well).
+#' is equivalent to `g1 %>>!% g2 %>>!% g3 %>>!% g4 %>>!% ...` (differing in the
+#' first operator being `%>>!%` as well).
 #'
 #' @param graphs `list` of ([`Graph`] | [`PipeOp`] | `NULL` | `...`)\cr
 #'   List of elements which are the
@@ -185,7 +185,7 @@ strip_multiplicity_type = function(type) {
 #'   `NULL` is the neutral element of [`%>>%`] and skipped.
 #' @param in_place (`logical(1)`)\cr
 #'   Whether to try to avoid cloning the first element of `graphs`, similar to the difference
-#'   of [`%>>>%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].
+#'   of [`%>>!%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].
 #'   Beware that, if `chain_graphs()` fails because of id collisions, then `graphs[[1]]` will possibly be in an incompletely
 #'   modified state when `in_place` is `TRUE`.
 #' @return [`Graph`] the resulting [`Graph`], or `NULL` if there are no non-null values in `graphs`.
@@ -197,8 +197,8 @@ chain_graphs = function(graphs, in_place = FALSE) {
   if (!in_place) {
     # all except the first graph get cloned, so if we are in_place,
     # we only need to take care to clone it. We convert it to a Graph,
-    # so `%>>>%` will not clone it again.
+    # so `%>>!%` will not clone it again.
     graphs[[1]] = as_graph(graphs[[1]], clone = TRUE)
   }
-  Reduce(`%>>>%`, graphs)
+  Reduce(`%>>!%`, graphs)
 }

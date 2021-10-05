@@ -43,7 +43,7 @@
 #' g3$train(task)
 #' g3$predict(task)
 pipeline_ovr = function(graph) {
-  PipeOpOVRSplit$new() %>>>% graph %>>>% PipeOpOVRUnite$new()
+  PipeOpOVRSplit$new() %>>!% graph %>>!% PipeOpOVRUnite$new()
 }
 
 mlr_graphs$add("ovr", pipeline_ovr)

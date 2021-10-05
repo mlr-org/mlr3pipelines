@@ -19,7 +19,7 @@
 #'   IDs of the elements are prefixed with the names, separated by a dot (`.`).
 #' @param in_place (`logical(1)` | `logical`)\cr
 #'   Whether to try to avoid cloning the first element of `graphs`, similar to the difference
-#'   of [`%>>>%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].\cr
+#'   of [`%>>!%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].\cr
 #'   Unlike [`chain_graphs()`], `gunion()` does all checks *before* mutating `graphs[[1]]`, so it will not leave `graphs[[1]]`
 #'   in an incompletely modified state when it fails.\cr
 #'   `in_place` may also be of length `graph`, in which case it determines for each element of `graphs` whether it is cloned.

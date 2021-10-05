@@ -78,7 +78,7 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
     poname_prefix = ""
   }
 
-  graph = gunion(graphs) %>>>% PipeOpUnbranch$new(branches, id = paste0(prefix_branchops, "unbranch"))
+  graph = gunion(graphs) %>>!% PipeOpUnbranch$new(branches, id = paste0(prefix_branchops, "unbranch"))
 
   branch_id = paste0(prefix_branchops, "branch")
   po_branch = PipeOpBranch$new(branches, id = branch_id)
