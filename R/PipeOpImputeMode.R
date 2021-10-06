@@ -1,4 +1,4 @@
-#' @title PipeOpImputeMode
+#' @title Impute Features by their Mode
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemode
@@ -58,6 +58,7 @@
 #' po$state$model
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeMode = R6Class("PipeOpImputeMode",

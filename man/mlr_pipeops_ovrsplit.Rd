@@ -3,7 +3,7 @@
 \name{mlr_pipeops_ovrsplit}
 \alias{mlr_pipeops_ovrsplit}
 \alias{PipeOpOVRSplit}
-\title{PipeOpOVRSplit}
+\title{Split a Classification Task into Binary Classification Tasks}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
@@ -86,6 +86,8 @@ po$train(list(task))
 po$predict(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

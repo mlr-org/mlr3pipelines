@@ -4,7 +4,7 @@ test_that("OVR Pipeline", {
   task = tsk("wine")
 
   # assertions on graph
-  expect_error(ppl("ovr", lrn("regr.rpart")), regexp = "Graph should return 'NULL' during training and a 'PredictionClassif' during prediction")
+  expect_error(ppl("ovr", lrn("regr.rpart")), regexp = "Output type of PipeOp ovrsplit during training.*TaskClassif.*incompatible")
 
   g = ppl("ovr", lrn("classif.rpart"))
   expect_graph(g)

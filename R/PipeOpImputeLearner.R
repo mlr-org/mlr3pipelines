@@ -1,4 +1,4 @@
-#' @title PipeOpImputeLearner
+#' @title Impute Features by Fitting a Learner
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputelearner
@@ -13,6 +13,9 @@
 #' `regr` can only impute features of type `integer` and `numeric`, while `classif` can impute
 #' features of type `factor`, `ordered` and `logical`.
 #'
+#' The [`Learner`][mlr3::Learner] used for imputation is trained on all `context_columns`; if these contain missing values,
+#' the [`Learner`][mlr3::Learner] typically either needs to be able to handle missing values itself, or needs to do its
+#' own imputation (see examples).
 #'
 #' @section Construction:
 #' ```
@@ -23,7 +26,9 @@
 #'   Identifier of resulting object, default `"impute."`, followed by the `id` of the `Learner`.
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
-#'   The [`Learner`][mlr3::Learner] needs to be able to handle missing values, i.e. have the `missings` property.
+#'   The [`Learner`][mlr3::Learner] usually needs to be able to handle missing values, i.e. have the `missings` property, unless care is taken
+#'   that `context_columns` do not contain missings; see examples.\cr
+#'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpImputeLearner` by-reference, use `$learner`.\cr
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
@@ -72,9 +77,23 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #'
-#' po$state$model
+#' # '$state' of the "regr.rpart" Learner, trained to predict the 'mass' column:
+#' po$state$model$mass
+#'
+#' library("mlr3learners")
+#' # to use the "regr.kknn" Learner, prefix it with its own imputation method!
+#' # The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this
+#' # trained Learner are then used to impute the missing values in the Task.
+#' po = po("imputelearner",
+#'   po("imputehist") %>>% lrn("regr.kknn")
+#' )
+#'
+#' new_task = po$train(list(task = task))[[1]]
+#' new_task$missings()
+#'
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
@@ -106,7 +125,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
     },
     learner_models = function(val) {
       if (!missing(val)) {
-        stop("$learners is read-only.")
+        stop("$learner_models is read-only.")
       }
       if (is.null(self$state) || is_noop(self$state)) {
         list()

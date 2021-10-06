@@ -1,4 +1,4 @@
-#' @title PipeOpNMF
+#' @title Non-negative Matrix Factorization
 #'
 #' @usage NULL
 #' @name mlr_pipeops_nmf
@@ -88,6 +88,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' if (requireNamespace("NMF")) {
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -97,7 +98,9 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
+#' }
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpNMF = R6Class("PipeOpNMF",

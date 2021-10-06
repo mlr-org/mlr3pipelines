@@ -1,4 +1,4 @@
-#' @title PipeOpLearner
+#' @title Wrap a Learner into a PipeOp
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner
@@ -21,6 +21,7 @@
 #'
 #' * `learner` :: [`Learner`][mlr3::Learner] | `character(1)`
 #'   [`Learner`][mlr3::Learner] to wrap, or a string identifying a [`Learner`][mlr3::Learner] in the [`mlr3::mlr_learners`] [`Dictionary`][mlr3misc::Dictionary].
+#'  This argument is always cloned; to access the [`Learner`][mlr3::Learner] inside `PipeOpLearner` by-reference, use `$learner`.\cr
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting  object, internally defaulting to the `id` of the [`Learner`][mlr3::Learner] being wrapped.
 #' * `param_vals` :: named `list`\cr
@@ -67,6 +68,7 @@
 #'
 #' @family PipeOps
 #' @family Meta PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -112,7 +114,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     learner_model = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
-          stop("$learner is read-only.")
+          stop("$learner_model is read-only.")
         }
       }
       if (is.null(self$state) || is_noop(self$state)) {
@@ -150,8 +152,3 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 )
 
 mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()))$new()))
-
-#' @export
-as_learner.PipeOp = function(x, clone = FALSE) {
-  as_learner(as_graph(x))
-}

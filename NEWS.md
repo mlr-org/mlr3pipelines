@@ -1,4 +1,34 @@
-# mlr3pipelines 0.3.2-9000
+# mlr3pipelines 0.3.6-9000
+
+# mlr3pipelines 0.3.6
+
+* Bugfix: Make empty Multiplicities work (unless they are nested)
+* Fixed: Compatibility with upcoming bbotk version.
+* New mlr_graphs: pipeline_stacking
+* Added JMLR-Citation
+
+# mlr3pipelines 0.3.5-1
+
+* Fixed: Compatibility with upcoming mlr3 version.
+
+# mlr3pipelines 0.3.5
+
+* Changed PipeOp: PipeOpFilter gets additional "filter.permuted" hyperparameter.
+* Bugfix: Make add_edge of Graphs work with Multiplicities.
+* Bugfix: Make GraphLearner hash depend on id.
+* Documentation: Clarify documentation of LearnerAvg.
+* Internals: Using more idiomatic internal helper functions.
+* Compatibility with upcoming mlr3 version.
+
+# mlr3pipelines 0.3.4
+
+* Stability: PipeOps don't crash when they have python/reticulate hyperparameter values.
+* Documentation: Titles of PipeOp documentation articles reworked.
+
+# mlr3pipelines 0.3.3
+
+* Bugfix: fix rare issue in randomized test
+* Compatibility with bbotk 0.3.0
 
 # mlr3pipelines 0.3.2
 * Bugfix: Make as.data.table(mlr_pipeops) work with paradox 0.6

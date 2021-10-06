@@ -1,4 +1,4 @@
-#' @title GraphLearner
+#' @title Encapsulate a Graph as a Learner
 #'
 #' @name mlr_learners_graph
 #' @format [`R6Class`] object inheriting from [`mlr3::Learner`].
@@ -15,16 +15,66 @@
 #' Setting a new predict type will try to set the `predict_type` in all relevant
 #' [`PipeOp`] / [`Learner`][mlr3::Learner] encapsulated within the [`Graph`].
 #' Similarly, the predict_type of a Graph will always be the smallest denominator in the [`Graph`].
+#'
+#' @section Construction:
+#' ```
+#' GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+#' ```
+#'
+#' * `graph` :: [`Graph`] | [`PipeOp`]\cr
+#'   [`Graph`] to wrap. Can be a [`PipeOp`], which is automatically converted to a [`Graph`].
+#'  This argument is always cloned; to access the [`Graph`] inside `GraphLearner` by-reference, use `$graph`.\cr
+#' * `id` :: `character(1)`
+#'   Identifier of the resulting [`Learner`][mlr3::Learner].
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings . Default `list()`.
+#' * `task_type` :: `character(1)`\cr
+#'   What `task_type` the `GraphLearner` should have; usually automatically inferred for [`Graph`]s that are simple enough.
+#' * `predict_type` :: `character(1)`\cr
+#'   What `predict_type` the `GraphLearner` should have; usually automatically inferred for [`Graph`]s that are simple enough.
+#'
+#' @section Fields:
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `graph` :: [`Graph`]\cr
+#'   [`Graph`] that is being wrapped. This field contains the prototype of the [`Graph`] that is being trained, but does *not*
+#'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
+#' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
+#'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
+#'
+#' @section Internals:
+#' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
+#' automatically converted to a [`Graph`] via [`gunion()`]; however, this will usually not result in a valid [`Graph`] that can
+#' work as a [`Learner`][mlr3::Learner]. `graph` can furthermore be a [`Learner`][mlr3::Learner], which is then automatically
+#' wrapped in a [`Graph`], which is then again wrapped in a `GraphLearner` object; this usually only adds overhead and is not
+#' recommended.
+#'
 #' @family Learners
 #' @export
+#' @examples
+#' library("mlr3")
+#'
+#' graph = po("pca") %>>% lrn("classif.rpart")
+#'
+#' lr = GraphLearner$new(graph)
+#' lr = as_learner(graph)  # equivalent
+#'
+#' lr$train(tsk("iris"))
+#'
+#' lr$graph$state  # untrained version!
+#' # The following is therefore NULL:
+#' lr$graph$pipeops$classif.rpart$learner_model$model
+#'
+#' # To access the trained model from the PipeOpLearner's Learner, use:
+#' lr$graph_model$pipeops$classif.rpart$learner_model$model
+#'
+#' # Feature importance (of principal components):
+#' lr$graph_model$pipeops$classif.rpart$learner_model$importance()
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
-    graph = NULL,
     initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL) {
-
       graph = as_graph(graph, clone = TRUE)
       id = assert_string(id, null.ok = TRUE) %??% paste(graph$ids(sorted = TRUE), collapse = ".")
-      self$graph = graph
+      private$.graph = graph
       output = graph$output
       if (nrow(output) != 1) {
         stop("'graph' must have exactly one output channel")
@@ -61,7 +111,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
             prdcssrs = graph$edges[dst_id == x$id, ]$src_id
             if (length(prdcssrs)) {
               # all non-null elements
-              task_types = keep(map(graph$pipeops[prdcssrs], get_po_task_type), Negate(is.null))
+              task_types = discard(map(graph$pipeops[prdcssrs], get_po_task_type), is.null)
               if (length(unique(task_types)) == 1L) {
                 return(unlist(unique(task_types)))
               }
@@ -81,14 +131,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         properties = mlr_reflections$learner_properties[[task_type]])
 
       if (length(param_vals)) {
-        self$graph$param_set$values = insert_named(self$graph$param_set$values, param_vals)
+        private$.graph$param_set$values = insert_named(private$.graph$param_set$values, param_vals)
       }
       if (!is.null(predict_type)) self$predict_type = predict_type
     }
   ),
   active = list(
     hash = function() {
-      self$graph$hash
+      digest(list(self$id, self$graph$hash), algo = "xxhash64")
     },
     predict_type = function(rhs) {
       if (!missing(rhs)) {
@@ -101,13 +151,33 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         stop("param_set is read-only.")
       }
       self$graph$param_set
+    },
+    graph = function(rhs) {
+      if (!missing(rhs) && !identical(rhs, private$.graph)) stop("graph is read-only")
+      private$.graph
+    },
+    graph_model = function(rhs) {
+      if (!missing(rhs) && !identical(rhs, private$.graph)) {
+        stop("graph_model is read-only")
+      }
+      if (is.null(self$model)) {
+        private$.graph
+      } else {
+        g = private$.graph$clone(deep = TRUE)
+        g$state = self$model
+        g
+      }
     }
   ),
   private = list(
+    .graph = NULL,
     deep_clone = function(name, value) {
       # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
+      }
+      if (name == "state") {
+        value$log = copy(value$log)
       }
       value
     },
@@ -133,7 +203,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
         if (length(prdcssrs)) {
           # all non-null elements
-          predict_types = keep(map(self$graph$pipeops[prdcssrs], get_po_predict_type), Negate(is.null))
+          predict_types = discard(map(self$graph$pipeops[prdcssrs], get_po_predict_type), is.null)
           if (length(unique(predict_types)) == 1L)
             return(unlist(unique(predict_types)))
         }
@@ -163,4 +233,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' @export
 as_learner.Graph = function(x, clone = FALSE) {
   GraphLearner$new(x)
+}
+
+#' @export
+as_learner.PipeOp = function(x, clone = FALSE) {
+  as_learner(as_graph(x))
 }

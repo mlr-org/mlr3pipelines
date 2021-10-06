@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.3.2-9000
+Version: 0.3.6-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -48,7 +48,7 @@ Imports:
     digest,
     lgr,
     mlr3 (>= 0.6.0),
-    mlr3misc (>= 0.7.0),
+    mlr3misc (>= 0.9.0),
     paradox,
     R6,
     withr
@@ -59,7 +59,7 @@ Suggests:
     knitr,
     lme4,
     mlbench,
-    bbotk (>= 0.2.0),
+    bbotk (>= 0.3.0),
     mlr3filters (>= 0.1.1),
     mlr3learners,
     mlr3measures,
@@ -81,16 +81,13 @@ Suggests:
     GenSA,
     methods,
     vtreat
-Remotes:
-    Bioconductor/Biobase
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-LazyData: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Collate:
     'Graph.R'
     'GraphLearner.R'
@@ -168,10 +165,16 @@ Collate:
     'greplicate.R'
     'gunion.R'
     'mlr_graphs.R'
-    'mlr_graphs_elements.R'
     'operators.R'
-    'pipe.R'
+    'pipeline_bagging.R'
+    'pipeline_branch.R'
+    'pipeline_greplicate.R'
+    'pipeline_ovr.R'
+    'pipeline_robustify.R'
+    'pipeline_stacking.R'
+    'pipeline_targettrafo.R'
     'po.R'
+    'ppl.R'
     'reexports.R'
     'typecheck.R'
     'zzz.R'

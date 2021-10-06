@@ -30,7 +30,7 @@ test_that("basic graphlearner tests", {
   resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
   set.seed(1)
   resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
-  expect_equal(resgraphlrn$data$prediction, resjustlrn$data$prediction)
+  expect_equal(resgraphlrn$prediction(), resjustlrn$prediction())
 
   gr2 = PipeOpScale$new() %>>% PipeOpLearner$new(lrn)
   glrn2 = GraphLearner$new(gr2)
@@ -124,8 +124,8 @@ test_that("graphlearner parameters behave as they should", {
 
   gl$param_set$values$classif.debug.warning_predict = 0
 
-  expect_equal(gl$param_set$values,
-    list(classif.debug.message_train = 1, classif.debug.message_predict = 0, classif.debug.warning_train = 1, classif.debug.warning_predict = 0))
+  expect_mapequal(gl$param_set$values,
+    list(classif.debug.message_predict = 0, classif.debug.message_train = 1, classif.debug.warning_predict = 0, classif.debug.warning_train = 1))
 })
 
 test_that("graphlearner type inference", {
@@ -354,4 +354,39 @@ test_that("graphlearner predict type inference", {
 
   # Errors:
   expect_error({lrrp = po(lrn("classif.featureless", predict_type = "se"))})
+})
+
+
+test_that("GraphLearner model", {
+  graph = po("pca") %>>% lrn("classif.rpart")
+  graph2 = graph$clone(deep = TRUE)
+  graph_orig = graph$clone(deep = TRUE)
+
+  lr = GraphLearner$new(graph)
+
+  expect_equal(lr$graph, graph)
+  expect_equal(lr$graph_model, graph)
+
+  graph2$train(tsk("iris"))
+
+  lr$train(tsk("iris"))
+
+  expect_equal(graph, graph_orig)
+  expect_null(graph$state$pca)
+
+  # behind-the-scenes param_set cache ruins expect_equal if we don't do this:
+  graph_orig$param_set
+
+  expect_equal(lr$graph, graph_orig)
+
+  graph2$state$classif.rpart$train_time = 0
+  lr$state$model$classif.rpart$train_time = 0
+
+  expect_equal(lr$graph_model, graph2)
+
+  imp = graph2$pipeops$classif.rpart$learner_model$importance()
+
+  expect_equal(lr$graph_model$pipeops$classif.rpart$learner_model$importance(), imp)
+
+
 })

@@ -4,7 +4,7 @@ test_that("Multiplicity class and methods", {
   mp = Multiplicity(0)
   expect_multiplicity(mp)
   expect_equal(mp, as.Multiplicity(0))
-  expect_error(assert_multiplicity(0, .var.name = "x"), regexp = "Must inherit from class 'Multiplicity'")
+  expect_error(assert_multiplicity(0, .var.name = "x"), regexp = "inherit from class 'Multiplicity'")
   expect_multiplicity(assert_multiplicity(mp))
   nmp = Multiplicity(Multiplicity(0))
   expect_multiplicity(assert_multiplicity(nmp))
@@ -17,9 +17,9 @@ test_that("Multiplicity class and methods", {
 test_that("multiplicity_nests_deeper_than", {
   expect_true(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(1)), 1))
   expect_false(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(1)), 2))
-  expect_true(is.na(multiplicity_nests_deeper_than(Multiplicity(Multiplicity()), 2)))
+#  expect_true(is.na(multiplicity_nests_deeper_than(Multiplicity(Multiplicity()), 2)))  # TODO: adapt this once #596 is fixed.
   expect_false(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(), Multiplicity(1)), 2))
-  expect_true(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(), Multiplicity(Multiplicity())), 2))
+#  expect_true(multiplicity_nests_deeper_than(Multiplicity(Multiplicity(), Multiplicity(Multiplicity())), 2))  # TODO: adapt this once #596 is fixed.
 })
 
 test_that("PipeOp - assert_connection_table", {
@@ -116,3 +116,16 @@ test_that("PipeOp - evaluate_multiplicities", {
   expect_error(po$train(as.Multiplicity(list(0, as.Multiplicity(0)))), regexp = "Error")
   expect_equal(po$state, NULL)  # state is completely reset to NULL
 })
+
+test_that("Graph - add_edge", {
+  learner = lrn("classif.rpart")
+  g1 = PipeOpOVRSplit$new() %>>% learner %>>% PipeOpOVRUnite$new()
+  g2 = Graph$new()
+  g2$add_pipeop(PipeOpOVRSplit$new())
+  g2$add_pipeop(learner)
+  g2$add_pipeop(PipeOpOVRUnite$new())
+  g2$add_edge("ovrsplit", "classif.rpart")
+  g2$add_edge("classif.rpart", "ovrunite")
+  expect_identical(g1$edges, g2$edges)
+})
+

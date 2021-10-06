@@ -1,4 +1,4 @@
-#' @title PipeOpTuneThreshold
+#' @title Tune the Threshold of a Classification Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_tunethreshold
@@ -56,8 +56,6 @@
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @family PipeOps
-#' @export
 #' @examples
 #' library("mlr3")
 #'
@@ -69,6 +67,9 @@
 #' pop$train(task)
 #'
 #' pop$state
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @export
 PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   inherit = PipeOp,
 
@@ -107,7 +108,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       lvls = colnames(pred$prob)
       res = pred$set_threshold(unlist(xs))$score(measure)
       if (!measure$minimize) res = -res
-      res
+      return(setNames(list(res), measure$id))
     },
     .optimize_objfun = function(pred) {
       optimizer = self$param_set$values$optimizer
@@ -135,10 +136,8 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       unlist(inst$result_x_domain)
     },
     .make_param_set = function(pred) {
-      ps = ParamSet$new(params = list())
-      for(cn in colnames(pred$prob))
-        ps$add(ParamDbl$new(id = cn, lower = 0, upper = 1))
-      return(ps)
+      pset = setNames(map(colnames(pred$prob), function(x) p_dbl(0,1)), colnames(pred$prob))
+      mlr3misc::invoke(paradox::ps, .args = pset)
     },
     .task_to_prediction = function(input) {
       prob = as.matrix(input$data(cols = input$feature_names))

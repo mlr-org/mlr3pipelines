@@ -3,7 +3,7 @@
 \name{mlr_pipeops_targetmutate}
 \alias{mlr_pipeops_targetmutate}
 \alias{PipeOpTargetMutate}
-\title{PipeOpTargetMutate}
+\title{Transform a Target by a Function}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }
@@ -108,6 +108,8 @@ tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

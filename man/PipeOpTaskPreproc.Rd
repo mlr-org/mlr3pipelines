@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpTaskPreproc.R
 \name{PipeOpTaskPreproc}
 \alias{PipeOpTaskPreproc}
-\title{PipeOpTaskPreproc}
+\title{Task Preprocessing Base Class}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
@@ -11,6 +11,12 @@ Base class for handling most "preprocessing" operations. These
 are operations that have exactly one \code{\link[mlr3:Task]{Task}} input and one \code{\link[mlr3:Task]{Task}} output,
 and expect the column layout of these \code{\link[mlr3:Task]{Task}}s during input and output
 to be the same.
+
+Prediction-behavior of preprocessing operations should always be independent for each row in the input-\code{\link[mlr3:Task]{Task}}.
+This means that the prediction-operation of preprocessing-\code{\link{PipeOp}}s should commute with \code{rbind()}: Running prediction
+on an \code{n}-row \code{\link[mlr3:Task]{Task}} should result in the same result as \code{rbind()}-ing the prediction-result from \code{n}
+1-row \code{\link[mlr3:Task]{Task}}s with the same content. In the large majority of cases, the number and order of rows
+should also not be changed during prediction.
 
 Users must implement \code{private$.train_task()} and \code{private$.predict_task()}, which have a \code{\link[mlr3:Task]{Task}}
 input and should return that \code{\link[mlr3:Task]{Task}}. The \code{\link[mlr3:Task]{Task}} should, if possible, be
@@ -175,6 +181,8 @@ If this method is not overloaded, it defaults to selecting of type indicated by 
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOpTargetTrafo}},

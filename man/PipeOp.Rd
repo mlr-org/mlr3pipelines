@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOp.R
 \name{PipeOp}
 \alias{PipeOp}
-\title{PipeOp}
+\title{PipeOp Base Class}
 \format{
 Abstract \code{\link{R6Class}}.
 }
@@ -71,6 +71,10 @@ the \code{\link{PipeOp}}'s input channels, and must return a \code{list} (names 
 channels in \verb{$output}. The \code{private$.train()} and \code{private$.predict()} function should not be called by the user;
 instead, a \verb{$train()} and \verb{$predict()} should be used. The most convenient usage is to add the \code{\link{PipeOp}}
 to a \code{Graph} (possibly as singleton in that \code{Graph}), and using the \code{Graph}'s \verb{$train()} / \verb{$predict()} methods.
+
+\code{private$.train()} and \code{private$.predict()} should treat their inputs as read-only. If they are \code{\link[R6:R6Class]{R6}} objects,
+they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
+not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.
 }
 
 \section{Fields}{
@@ -91,6 +95,8 @@ in the \verb{$param_set$values} slot; these are automatically checked against pa
 Method-dependent state obtained during training step, and usually required for the prediction step. This is \code{NULL}
 if and only if the \code{\link{PipeOp}} has not been trained. The \verb{$state} is the \emph{only} slot that can be reliably modified during
 \verb{$train()}, because \code{private$.train()} may theoretically be executed in a different \code{R}-session (e.g. for parallelization).
+\verb{$state} should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
+not of \code{\link{PipeOp}} or \code{mlr3pipelines}, but of the way the system as a whole works, together with \code{\link{GraphLearner}} and \code{mlr3}.
 \item input :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Input channels of \code{\link{PipeOp}}. Column \code{name} gives the names (and order) of values in the list given to
 \verb{$train()} and \verb{$predict()}. Column \code{train} is the (S3) class that an input object must conform to during
@@ -208,6 +214,8 @@ posum$train(list(1, 2))
 posum$predict(list(NULL, NULL))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
 \code{\link{PipeOpTargetTrafo}},

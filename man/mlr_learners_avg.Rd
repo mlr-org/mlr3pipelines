@@ -20,13 +20,16 @@ Computes a weighted average of inputs.
 Used in the context of computing weighted averages of predictions.
 
 Predictions are averaged using \code{weights} (in order of appearance in the data) which are optimized using
-nonlinear optimization from the package "nloptr" for a measure provided in \code{measure} (defaults to \code{classif.acc}
-for \code{LearnerClassifAvg} and \code{regr.mse} for \code{LearnerRegrAvg}).
+nonlinear optimization from the package \CRANpkg{nloptr} for a measure provided in
+\code{measure}. (defaults to \code{classif.ce} for \code{LearnerClassifAvg} and \code{regr.mse} for \code{LearnerRegrAvg}).
 Learned weights can be obtained from \verb{$model}.
-Using non-linear optimization is implemented in the SuperLearner R package.
-For a more detailed analysis the reader is referred to LeDell (2015).
+This Learner implements and generalizes an approach proposed in LeDell (2015) that uses non-linear
+optimization in order to learn base-learner weights that optimize a given performance metric (e.g \code{AUC}).
+The approach is similar but not exactly the same as the one implemented as \code{AUC} in the \CRANpkg{SuperLearner}
+R package (when \code{metric} is \code{"classif.auc"}).
+For a more detailed analysis and the general idea, the reader is referred to LeDell (2015).
 
-Note, that weights always sum to 1 by dividing through sum(weights) before weighting
+Note, that weights always sum to 1 by division by \code{sum(weights)} before weighting
 incoming features.
 }
 \section{Parameters}{

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_removeconstants}
 \alias{mlr_pipeops_removeconstants}
 \alias{PipeOpRemoveConstants}
-\title{PipeOpRemoveConstants}
+\title{Remove Constant Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -39,14 +39,14 @@ The parameters are the parameters inherited from the \code{\link{PipeOpTaskPrepr
 \itemize{
 \item \code{ratio} :: \code{numeric(1)}\cr
 Ratio of values which must be different from the mode value in order to keep a feature in the task.
-Default is 0, which means only constant features with exactly one observed level are removed.
+Initialized to 0, which means only constant features with exactly one observed level are removed.
 \item \code{rel_tol} :: \code{numeric(1)}\cr
-Relative tolerance within which to consider a numeric feature constant. Set to 0 to disregard relative tolerance. Default is \code{1e-8}.
+Relative tolerance within which to consider a numeric feature constant. Set to 0 to disregard relative tolerance. Initialized to \code{1e-8}.
 \item \code{abs_tol} :: \code{numeric(1)}\cr
-Absolute tolerance within which to consider a numeric feature constant. Set to 0 to disregard absolute tolerance. Default is \code{1e-8}.
+Absolute tolerance within which to consider a numeric feature constant. Set to 0 to disregard absolute tolerance. Initialized to \code{1e-8}.
 \item \code{na_ignore} :: \code{logical(1)}\cr
-If \code{TRUE}, the ratio is calculated after removing all missing values first.
-Default is \code{FALSE}.
+If \code{TRUE}, the ratio is calculated after removing all missing values first, so a column can be "constant" even if some but not all values are \code{NA}.
+Initialized to \code{TRUE}.
 }
 }
 
@@ -73,6 +73,8 @@ po$train(list(task = task))[[1]]$data()
 po$state
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

@@ -4,6 +4,8 @@ test_that("PipeOpImpute", {
   skip_on_cran()  # slow test, so we don't do it on cran
   # create bogus impute pipeop that behaves like the old impute pipeop. This lets us do tests quickly. FIXME needs to be cleaned up. a lot.
 
+  set.seed(1)
+
   PipeOpTestImpute = R6Class("PipeOpTestImpute", inherit = PipeOpTaskPreprocSimple,
     public = list(
       initialize = function(id = "impute", param_vals = list()) {
@@ -92,7 +94,8 @@ test_that("PipeOpImpute", {
     i = letters[1:6],
     j = c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE),
     k = c(TRUE, FALSE, TRUE, FALSE, TRUE, NA),
-    l = factor(letters[rep(1:2, 3)])
+    l = factor(letters[rep(1:2, 3)]),
+    m = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, NA)
   )
 
   task = TaskClassif$new("mdata", as_data_backend(mdata), target = "l")
@@ -182,11 +185,11 @@ test_that("PipeOpImpute", {
 
   task_predicted = po$predict(list(task))[[1]]$data()
 
-  expect_equal(task_trained[1, c("a", "c", "d", "f", "k")],
-    task_trained[2, c("a", "c", "d", "f", "k")])
+  expect_equal(task_trained[1, c("a", "c", "d", "f", "k", "m")],
+    task_trained[2, c("a", "c", "d", "f", "k", "m")])
 
-  expect_equal(task_predicted[c(5:6), c("a", "c", "d", "f", "k")],
-    task_trained[c(1:2), c("a", "c", "d", "f", "k")])
+  expect_equal(task_predicted[c(5:6), c("a", "c", "d", "f", "k", "m")],
+    task_trained[c(1:2), c("a", "c", "d", "f", "k", "m")])
 
   expect_equal(task_trained$missing_a, c(FALSE, TRUE))
   expect_equal(task_trained$missing_c, c(FALSE, TRUE))
@@ -194,6 +197,7 @@ test_that("PipeOpImpute", {
   expect_equal(task_trained$missing_f, c(FALSE, TRUE))
   expect_equal(task_trained$missing_h, c(FALSE, TRUE))
   expect_equal(task_trained$missing_k, c(FALSE, TRUE))
+  expect_equal(task_trained$missing_m, c(FALSE, TRUE))
 
   expect_equal(task_trained$missing_b, c(FALSE, FALSE))
   expect_equal(task_trained$missing_e, c(FALSE, FALSE))
@@ -201,8 +205,8 @@ test_that("PipeOpImpute", {
   expect_equal(task_trained$missing_i, c(FALSE, FALSE))
   expect_equal(task_trained$missing_j, c(FALSE, FALSE))
 
-  expect_set_equal(colnames(task_trained), c(letters[1:12], paste0("missing_", letters[1:11])))
-  expect_set_equal(colnames(task_predicted), c(letters[1:12], paste0("missing_", letters[1:11])))
+  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", letters[c(1:11, 13)])))
+  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", letters[c(1:11, 13)])))
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "median", method_fct = "oor", add_dummy = "all"))
@@ -210,14 +214,14 @@ test_that("PipeOpImpute", {
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task))[[1]]$data()
 
-  expect_equal(task_trained[1, c("a", "c", "k")],
-    task_trained[2, c("a", "c", "k")])
+  expect_equal(task_trained[1, c("a", "c", "k", "m")],
+    task_trained[2, c("a", "c", "k", "m")])
 
   expect_equal(task_predicted[5:6, ],
     task_trained[1:2])
 
-  expect_set_equal(colnames(task_trained), c(letters[1:12], paste0("missing_", c("a", "b", "c", "j", "k"))))
-  expect_set_equal(colnames(task_predicted), c(letters[1:12], paste0("missing_", c("a", "b", "c", "j", "k"))))
+  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
+  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", c("a", "b", "c", "j", "k", "m"))))
 
   expect_equal(task_trained$d[2], factor(".MISSING", levels = c(letters[1:6], ".MISSING")))
   expect_equal(task_trained$h[2], ".MISSING")
@@ -228,8 +232,8 @@ test_that("PipeOpImpute", {
   task_trained = po$train(list(task$clone(deep = TRUE)$filter(5:6)))[[1]]$data()
   task_predicted = po$predict(list(task$clone(deep = TRUE)$filter(1:3)))[[1]]$data()
 
-  expect_set_equal(colnames(task_trained), c(letters[1:12], paste0("missing_", c("a", "c", "k"))))
-  expect_set_equal(colnames(task_predicted), c(letters[1:12], paste0("missing_", c("a", "c", "k"))))
+  expect_set_equal(colnames(task_trained), c(letters[1:13], paste0("missing_", c("a", "c", "k", "m"))))
+  expect_set_equal(colnames(task_predicted), c(letters[1:13], paste0("missing_", c("a", "c", "k", "m"))))
 
   po = PipeOpTestImpute$new(param_vals = list(
     method_num = "median", method_fct = "oor", add_dummy = "none"))
@@ -377,4 +381,22 @@ test_that("More tests for PipeOpImputeConstant", {
  train_out = po$train(list(task))[[1L]]
  expect_equal(sum(train_out$missings()), 7L)
  expect_equal(train_out$data(cols = "x7")[[1L]][1L], pos_impute)
+})
+
+
+test_that("More tests for Integers", {
+  data <- data.table(x = c(-.Machine$integer.max, -10000000L, 0L, 10000000L, .Machine$integer.max, rep(NA, 1001)), t = 1:1006)
+
+  task = TaskRegr$new("task", backend = data, target = "t")
+  pos = list(PipeOpImputeHist$new(), PipeOpImputeMean$new(), PipeOpImputeSample$new(), PipeOpImputeMedian$new(), PipeOpImputeMode$new(), PipeOpImputeOOR$new())
+
+
+  for (po in pos) {
+    result <- po$train(list(task))[[1]]
+
+    expect_integer(result$data()$x, info = po$id)
+    expect_false(any(is.na(result$data()$x)), info = po$id)
+    expect_equal(result$missings(), c(t = 0, x = 0), info = po$id)
+  }
+
 })

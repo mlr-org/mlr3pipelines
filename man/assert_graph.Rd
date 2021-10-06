@@ -2,7 +2,7 @@
 % Please edit documentation in R/assert_graph.R
 \name{assert_graph}
 \alias{assert_graph}
-\title{Assertion for mlr3pipeline Graph}
+\title{Assertion for mlr3pipelines Graph}
 \usage{
 assert_graph(x)
 }
@@ -19,10 +19,10 @@ throws an error if not.
 }
 \seealso{
 Other Graph operators: 
-\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{as_pipeop}()},
 \code{\link{assert_pipeop}()},
+\code{\link{concat_graphs}()},
 \code{\link{greplicate}()},
 \code{\link{gunion}()},
 \code{\link{pipeline_greplicate}()}

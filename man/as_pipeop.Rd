@@ -2,7 +2,7 @@
 % Please edit documentation in R/assert_graph.R
 \name{as_pipeop}
 \alias{as_pipeop}
-\title{Conversion to mlr3pipeline PipeOp}
+\title{Conversion to mlr3pipelines PipeOp}
 \usage{
 as_pipeop(x, clone = FALSE)
 }
@@ -30,10 +30,10 @@ can be converted are for example \code{\link[mlr3:Learner]{Learner}} (using \cod
 }
 \seealso{
 Other Graph operators: 
-\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
+\code{\link{concat_graphs}()},
 \code{\link{greplicate}()},
 \code{\link{gunion}()},
 \code{\link{pipeline_greplicate}()}

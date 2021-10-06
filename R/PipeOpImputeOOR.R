@@ -1,4 +1,4 @@
-#' @title PipeOpImputeOOR
+#' @title Out of Range Imputation
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputeoor
@@ -73,6 +73,7 @@
 #' new_task$data()
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
@@ -94,16 +95,20 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       if (type %in% c("factor", "ordered", "character")) {
         return(".MISSING")  # early exit
       }
-
-      offset = self$param_set$values$offset + self$param_set$values$multiplier * diff(range(feature, na.rm = TRUE))
+      featrange = as.numeric(range(feature, na.rm = TRUE))  # as.numeric to avoid integer overflow
+      offset = self$param_set$values$offset + self$param_set$values$multiplier * (featrange[[2L]] - featrange[[1L]])
       oor = if (self$param_set$values$min) {
-        min(feature, na.rm = TRUE) - offset
+        featrange[[1L]] - offset
       } else {
-        max(feature, na.rm = TRUE) + offset
+        featrange[[2L]] + offset
       }
 
       if (type == "integer") {
-        oor = as.integer(round(oor))
+        oor = round(oor)
+        # make sure we get an integer. this is faster than pmin(pmax(...)).
+        oor[oor > .Machine$integer.max] = .Machine$integer.max
+        oor[oor < -.Machine$integer.max] = -.Machine$integer.max
+        oor = as.integer(oor)
       }
 
       oor

@@ -2,7 +2,7 @@
 % Please edit documentation in R/PipeOpEnsemble.R
 \name{PipeOpEnsemble}
 \alias{PipeOpEnsemble}
-\title{PipeOpEnsemble}
+\title{Ensembling Base Class}
 \format{
 Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
@@ -94,6 +94,8 @@ This method is abstract, it must be implemented by deriving classes.
 }
 
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},

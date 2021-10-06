@@ -1,4 +1,4 @@
-#' @title PipeOpScaleRange
+#' @title Linearly Transform Numeric Features to Match Given Boundaries
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scalerange
@@ -52,6 +52,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpScaleRange = R6Class("PipeOpScaleRange",

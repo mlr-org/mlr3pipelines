@@ -1,4 +1,4 @@
-#' @title PipeOpProxy
+#' @title Wrap another PipeOp or Graph as a Hyperparameter
 #'
 #' @usage NULL
 #' @name mlr_pipeops_proxy
@@ -74,6 +74,7 @@
 #' rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
 #' rr_pca_rpart$aggregate(msr("classif.ce"))
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpProxy = R6Class("PipeOpProxy",
@@ -116,7 +117,9 @@ PipeOpProxy = R6Class("PipeOpProxy",
     .param_set_source = NULL,
     .id = NULL,
     .train = function(input) {
-      content = as_graph(self$param_set$values$content, clone = TRUE)
+      content = as_graph(self$param_set$values$content)
+      prestate = content$state
+      on.exit({content$state = prestate})
       if (length(input) > 1) {
         output = content$train(unname(input), single_input = FALSE)
       } else {
@@ -127,7 +130,9 @@ PipeOpProxy = R6Class("PipeOpProxy",
       output
     },
     .predict = function(input) {
-      content = as_graph(self$param_set$values$content, clone = TRUE)
+      content = as_graph(self$param_set$values$content)
+      prestate = content$state
+      on.exit({content$state = prestate})
       content$state = self$state
       if (length(input) > 1) {
         output = content$predict(unname(input), single_input = FALSE)

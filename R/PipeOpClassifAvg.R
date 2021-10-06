@@ -1,4 +1,4 @@
-#' @title PipeOpClassifAvg
+#' @title Majority Vote Prediction
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classifavg
@@ -59,6 +59,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpEnsemble.R
 #' @export
 #'

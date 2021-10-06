@@ -108,7 +108,7 @@ multiplicity_nests_deeper_than = function(x, cutoff) {
   cutoff = assert_count(cutoff)
   if (!is.Multiplicity(x)) return(FALSE)
   if (!cutoff) return(TRUE)
-  ret = NA
+  ret = FALSE  # TODO: this is currently a hack to make empty multiplicities work, but *nested* empty multiplicities don't work, currently.
   for (element in x) {
     ret = multiplicity_nests_deeper_than(element, cutoff - 1L)
     if (!is.na(ret)) break

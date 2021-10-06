@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner_cv}
 \alias{mlr_pipeops_learner_cv}
 \alias{PipeOpLearnerCV}
-\title{PipeOpLearnerCV}
+\title{Wrap a Learner into a PipeOp with Cross-validated Predictions as Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -32,6 +32,7 @@ useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\lin
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
 \code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a
 \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
+This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpLearnerCV} by-reference, use \verb{$learner}.\cr
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
@@ -129,6 +130,8 @@ graph$pipeops$classif.rpart$learner$predict_type = "prob"
 graph$train(task)
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other Meta PipeOps: 
 \code{\link{mlr_pipeops_learner}}
 }

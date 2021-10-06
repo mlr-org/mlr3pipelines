@@ -1,4 +1,4 @@
-#' @title PipeOpImpute
+#' @title Imputation Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`] object inheriting from [`PipeOp`].
@@ -103,6 +103,7 @@
 #'
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpImpute = R6Class("PipeOpImpute",
@@ -251,7 +252,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       if (length(model) == 1) {
         feature[is.na(feature)] = model
       } else {
-        outlen = sum(is.na(feature))
+        outlen = count_missing(feature)
         feature[is.na(feature)] = sample(model, outlen, replace = TRUE, prob = attr(model, "probabilities"))
       }
       feature

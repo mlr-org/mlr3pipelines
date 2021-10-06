@@ -25,6 +25,8 @@ Whenever a \code{\link{Graph}} or a \code{\link{PipeOp}} is called with an objec
 that does not conform to its declared input type, the "autoconvert
 register" is queried for functions that may turn the object into
 a desired type.
+
+Conversion functions should try to avoid cloning.
 }
 \examples{
 # This lets mlr3pipelines automatically try to convert a string into

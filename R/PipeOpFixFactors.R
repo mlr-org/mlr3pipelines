@@ -1,4 +1,4 @@
-#' @title PipeOpFixFactors
+#' @title Fix Factor Levels
 #'
 #' @usage NULL
 #' @name mlr_pipeops_fixfactors
@@ -42,6 +42,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -61,7 +62,7 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
     .get_state = function(task) {
       # get the levels of the training task
       dt = task$data(cols = private$.select_cols(task))
-      if (self$param_set$values$droplevels) {
+      if (self$param_set$values$droplevels && nrow(dt)) {  # nrow(dt): workaround for https://github.com/Rdatatable/data.table/issues/5184
         dt = droplevels(dt)
       }
       list(levels = lapply(dt, function(x) levels(x)))  # explicitly access the "levels" function

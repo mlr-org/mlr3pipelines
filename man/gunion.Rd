@@ -4,13 +4,21 @@
 \alias{gunion}
 \title{Disjoint Union of Graphs}
 \usage{
-gunion(graphs)
+gunion(graphs, in_place = FALSE)
 }
 \arguments{
-\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}})\cr
-List of elements with one of the types defined above, which are the
-\code{\link{Graph}}s to be joined. The list can be named, in which case the
+\item{graphs}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}} | \code{NULL} | \code{...})\cr
+List of elements which are the
+\code{\link{Graph}}s to be joined. Elements must be convertible to \code{\link{Graph}} or \code{\link{PipeOp}} using \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}.
+\code{NULL} values automatically get converted to \code{\link{PipeOpNOP}} with a random ID of the format \verb{nop_********}.
+The list can be named, in which case the
 IDs of the elements are prefixed with the names, separated by a dot (\code{.}).}
+
+\item{in_place}{(\code{logical(1)})\cr
+Whether to try to avoid cloning the first element of \code{graphs}, similar to the difference
+of \code{\link{\%>>>\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.\cr
+Unlike \code{\link[=chain_graphs]{chain_graphs()}}, \code{gunion()} does all checks \emph{before} mutating \code{graphs[[1]]}, so it will not leave \code{graphs[[1]]}
+in an incompletely modified state when it fails.}
 }
 \value{
 \code{\link{Graph}} the resulting \code{\link{Graph}}.
@@ -21,15 +29,18 @@ converted into \code{\link{Graph}}s or \code{\link{PipeOp}}s, see \code{\link[=a
 them in a new \code{\link{Graph}}.
 
 The \code{\link{PipeOp}}s of the input \code{\link{Graph}}s are not joined with new edges across
-\code{\link{Graph}}s, so if \code{length(graphs) > 1} the resulting \code{\link{Graph}} will be disconnected.
+\code{\link{Graph}}s, so if \code{length(graphs) > 1}, the resulting \code{\link{Graph}} will be disconnected.
+
+This operation always creates deep copies of its input arguments, so they cannot be modified by reference afterwards.
+To access individual \code{\link{PipeOp}}s after composition, use the resulting \code{\link{Graph}}'s \verb{$pipeops} list.
 }
 \seealso{
 Other Graph operators: 
-\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
+\code{\link{concat_graphs}()},
 \code{\link{greplicate}()},
 \code{\link{pipeline_greplicate}()}
 }

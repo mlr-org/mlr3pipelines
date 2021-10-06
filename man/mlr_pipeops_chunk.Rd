@@ -3,7 +3,7 @@
 \name{mlr_pipeops_chunk}
 \alias{mlr_pipeops_chunk}
 \alias{PipeOpChunk}
-\title{PipeOpChunk}
+\title{Chunk Input into Multiple Outputs}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -75,6 +75,8 @@ opc$train(list(task))
 opc$predict(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

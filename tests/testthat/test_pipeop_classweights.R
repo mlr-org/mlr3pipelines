@@ -19,6 +19,6 @@ test_that("PipeOpClassWeights", {
   nt = op$train(list(task))[[1L]]
   expect_equal(nt$data(), task$data())
 
-  expect_equal(nt$weights$weight, ifelse(nt$truth(nt$weights$row_id) == "neg", 1, 3))
+  expect_equal(nt$weights$weight, ifelse(nt$truth(nt$weights$row_ids) == "neg", 1, 3))
 
 })

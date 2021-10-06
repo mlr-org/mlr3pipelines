@@ -16,6 +16,8 @@ devtools::document("mlr3pipelines")
 
 devtools::load_all("mlr3pipelines")
 
+
+
 tools::buildVignettes(dir = "mlr3pipelines")
 
 
@@ -27,7 +29,7 @@ profvis::profvis(testthat::test_package("mlr3pipelines"))
 
 testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 
-testthat::test_package("mlr3pipelines", filter = "multiplicit")
+testthat::test_package("mlr3pipelines", filter = "impute")
 
 
 ntree <- 10
@@ -894,3 +896,15 @@ gr <- po("replicate", reps = ntree) %>>%
   po("subsample") %>>% lrn("classif.rpart") %>>%
   po("classifavg", collect = TRUE)
 
+
+
+`%<>>%` = function(g1, g2) {
+  force(g2)
+  force(g1)
+  cat(sprintf("'%s' >> '%s'\n", g1, g2))
+  paste0(g1, g2)
+}
+
+"one" %<>>% "two" %<>>% "three"
+#> 'one' >> 'two'
+#> 'onetwo' >> 'three'
