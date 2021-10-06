@@ -187,7 +187,7 @@ the <code><a href='PipeOp.html'>PipeOp</a></code> results along the edges as inp
 <ul>
 <li><p><code>pipeops</code> :: named <code>list</code> of <code><a href='PipeOp.html'>PipeOp</a></code> <br />
 Contains all <code><a href='PipeOp.html'>PipeOp</a></code>s in the <code>Graph</code>, named by the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$id</code>s.</p></li>
-<li><p><code>edges</code> :: <code>data.table</code>  with columns <code>src_id</code> (<code>character</code>), <code>src_channel</code> (<code>character</code>), <code>dst_id</code> (<code>character</code>), <code>dst_channel</code> (<code>character</code>)<br />
+<li><p><code>edges</code> :: <code>data.table</code> with columns <code>src_id</code> (<code>character</code>), <code>src_channel</code> (<code>character</code>), <code>dst_id</code> (<code>character</code>), <code>dst_channel</code> (<code>character</code>)<br />
 Table of connections between the <code><a href='PipeOp.html'>PipeOp</a></code>s. A <code>data.table</code>. <code>src_id</code> and <code>dst_id</code> are <code>$id</code>s of <code><a href='PipeOp.html'>PipeOp</a></code>s that must be present in
 the <code>$pipeops</code> list. <code>src_channel</code> and <code>dst_channel</code> must respectively be <code>$output</code> and <code>$input</code> channel names of the
 respective <code><a href='PipeOp.html'>PipeOp</a></code>s.</p></li>
@@ -238,6 +238,10 @@ Instead of supplying a <code><a href='PipeOp.html'>PipeOp</a></code> directly, a
 be supplied, e.g. a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> or a <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>; see <code><a href='as_pipeop.html'>as_pipeop()</a></code>.
 The argument given as <code>op</code> is always cloned; to access a <code>Graph</code>'s <code><a href='PipeOp.html'>PipeOp</a></code>s by-reference, use <code>$pipeops</code>.<br />
 Note that <code>$add_pipeop()</code> is a relatively low-level operation, it is recommended to build graphs using <code>%&gt;&gt;%</code>.</p></li>
+<li><p><code>remove_pipeop(id)</code> <br />
+(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>) -&gt; <code>self</code> <br />
+Mutates <code>Graph</code> by removing the <code><a href='PipeOp.html'>PipeOp</a></code> with the matching id from the <code>Graph</code>.
+Corresponding edges are also removed as well as the corresponding <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code>.</p></li>
 <li><p><code>add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)</code> <br />
 (<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>,
 <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>NULL</code>,
@@ -247,6 +251,10 @@ Add an edge from <code><a href='PipeOp.html'>PipeOp</a></code> <code>src_id</cod
 channel <code>dst_channel</code> (identified by its name or number as listed in the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$input</code>).
 If source or destination <code><a href='PipeOp.html'>PipeOp</a></code> have only one input / output channel and <code>src_channel</code> / <code>dst_channel</code>
 are therefore unambiguous, they can be omitted (i.e. left as <code>NULL</code>).</p></li>
+<li><p><code>replace_subgraph(ids, substitute)</code> <br />
+(<code><a href='https://rdrr.io/r/base/character.html'>character()</a></code>, <code>Graph</code> | <code><a href='PipeOp.html'>PipeOp</a></code> | <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> | <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> | <code>...</code>) -&gt; <code>self</code> <br />
+Mutates <code>Graph</code> by replacing a subgraph specified via ids with the supplied substitute subgraph.
+Note that the supplied ids are always reordered in topological order with respect to the <code>Graph</code>.</p></li>
 <li><p><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot(html)</a></code> <br />
 (<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; <code>NULL</code> <br />
 Plot the <code>Graph</code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
