@@ -1,4 +1,4 @@
-#' @title PipeOpFeatureUnion
+#' @title Aggregate Features from Multiple Inputs
 #'
 #' @usage NULL
 #' @name mlr_pipeops_featureunion
@@ -77,6 +77,7 @@
 #'
 #' @family PipeOps
 #' @family Multiplicity PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples

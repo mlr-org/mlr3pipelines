@@ -28,8 +28,8 @@ test_that("learner conversion in graph creation", {
   gr4 = Graph$new()$add_pipeop(PipeOpLearner$new(mlr_learners$get("classif.rpart")))
 
   expect_equal(gr1, gr2)
-  expect_equal(gr1, gr3)
-  expect_equal(gr1, gr4)
+  expect_equal(touch(gr1), touch(gr3))
+  expect_equal(gr1, touch(gr4))
 
   gr1 = po("scale") %>>% lrn("classif.rpart")
   gr2 = po("scale") %>>% mlr_pipeops$get("learner", lrn("classif.rpart"))

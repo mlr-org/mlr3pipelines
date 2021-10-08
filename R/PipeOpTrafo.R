@@ -1,4 +1,4 @@
-#' @title PipeOpTargetTrafo
+#' @title Target Transformation Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
@@ -112,6 +112,7 @@
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @family Target Trafo PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
@@ -175,7 +176,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   )
 )
 
-#' @title PipeOpTargetInvert
+#' @title Invert Target Transformations
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetinvert
@@ -223,6 +224,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
@@ -249,7 +251,7 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
 
 mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 
-#' @title PipeOpTargetMutate
+#' @title Transform a Target by a Function
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetmutate
@@ -338,6 +340,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 #' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
@@ -377,7 +380,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
     .invert = function(prediction, predict_phase_state) {
       type = private$.new_task_type %??% prediction$task_type
       pred = as.data.table(prediction)
-      pred$row_id = NULL
+      pred$row_ids = NULL
       pred$truth = NULL
       invoke(get(mlr_reflections$task_types[type]$prediction)$new, row_ids = prediction$row_ids,
         truth = predict_phase_state$truth, .args = self$param_set$values$inverter(pred))
@@ -387,7 +390,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
 
 mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 
-#' @title PipeOpTargetTrafoScaleRange
+#' @title Linearly Transform a Numeric Target to Match Given Boundaries
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targettrafoscalerange
@@ -446,6 +449,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' ttscalerange$predict(task)
 #' ttscalerange$state$regr.rpart
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
@@ -486,7 +490,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
 
 mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 
-#' @title PipeOpUpdateTarget
+#' @title Transform a Target without an Explicit Inversion
 #' @usage NULL
 #' @name mlr_pipeops_updatetarget
 #' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
@@ -542,9 +546,6 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
-#' @family mlr3pipelines backend related
-#' @family PipeOps
-#' @include PipeOp.R
 #' @examples
 #' \dontrun{
 #' # Create a binary class task from iris
@@ -554,6 +555,10 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' po$train(list(tsk("iris")))
 #' po$predict(list(tsk("iris")))
 #' }
+#' @family mlr3pipelines backend related
+#' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @include PipeOp.R
 #' # not yet exported
 PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   inherit = PipeOp,
@@ -587,7 +592,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         if (!is.null(pv$new_target_name)) {
           setnames(new_target, colnames(new_target), pv$new_target_name)
         }
-        self$state = keep(map(new_target, levels), Negate(is.null))
+        self$state = discard(map(new_target, levels), is.null)
         intask$cbind(new_target)
       } else {
         self$state = list()

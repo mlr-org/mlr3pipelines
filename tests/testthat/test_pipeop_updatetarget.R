@@ -106,5 +106,5 @@ test_that("make an existing feature a target", {
   expect_equal(newtsk$data()$ash, tsk("wine")$data()$ash)
 
   newtsk2 = pom$predict(list(tsk("wine")))[[1]]
-  expect_equivalent(newtsk, newtsk2)
+  expect_equivalent(newtsk$hash, newtsk2$hash)
 })

@@ -1,4 +1,4 @@
-#' @title PipeOpMutate
+#' @title Add Features According to Expressions
 #'
 #' @usage NULL
 #' @name mlr_pipeops_mutate
@@ -53,6 +53,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

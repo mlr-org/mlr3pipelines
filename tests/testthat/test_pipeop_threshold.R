@@ -76,7 +76,7 @@ test_that("thresholding works for multiclass", {
   expect_error(gr$predict(t), "only supported for binary classification")
   gr$param_set$values$threshold.thresholds = c(a = 1, b = 0.4, c = 0.1)
   gr$train(t)
-  expect_error(gr$predict(t), "Must be a permutation of")
+  expect_error(gr$predict(t), "permutation of")
   gr$param_set$values$threshold.thresholds = c(.1, .1, .1)
   gr$train(t)
   prd = gr$predict(t)

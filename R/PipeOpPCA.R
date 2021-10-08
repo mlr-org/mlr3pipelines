@@ -1,4 +1,4 @@
-#' @title PipeOpPCA
+#' @title Principle Component Analysis
 #'
 #' @usage NULL
 #' @name mlr_pipeops_pca
@@ -61,6 +61,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpPCA = R6Class("PipeOpPCA",

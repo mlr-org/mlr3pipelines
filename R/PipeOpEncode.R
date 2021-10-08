@@ -1,4 +1,4 @@
-#' @title PipeOpEncode
+#' @title Factor Encoding
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encode
@@ -40,7 +40,7 @@
 #' * `method`  :: `character(1)` \cr
 #'   Initialized to `"one-hot"`. One of:
 #'   * `"one-hot"`: create a new column for each factor level.
-#'   * `"treatment"`: create $n-1$ columns leaving out the first factor level of each factor variable (see `stats::contr.treatment()`).
+#'   * `"treatment"`: create \eqn{n-1} columns leaving out the first factor level of each factor variable (see `stats::contr.treatment()`).
 #'   * `"helmert"`: create columns according to Helmert contrasts (see `stats::contr.helmert()`).
 #'   * `"poly"`: create columns with contrasts based on orthogonal polynomials (see `stats::contr.poly()`).
 #'   * `"sum"`: create columns with contrasts summing to zero, (see `stats::contr.sum()`).
@@ -52,6 +52,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

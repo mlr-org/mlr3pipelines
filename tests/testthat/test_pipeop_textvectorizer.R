@@ -1,6 +1,8 @@
 context("PipeOpTextVectorizer")
 
 test_that("PipeOpTextVectorizer - basic properties", {
+  skip_if_not_installed("quanteda")
+
   task = mlr_tasks$get("iris")
   # create hacky text data:
   dt = data.table("txt" = apply(iris, 1, function(x) {
@@ -31,8 +33,7 @@ test_that("PipeOpTextVectorizer - basic properties", {
   # verify for first row
   strs = unlist(strsplit(dt[1, ][["txt"]], fixed = TRUE, split = " "))
   dt2 = result$data()
-  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] == 1))
-
+  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] >= 1L))
   expect_datapreproc_pipeop_class(PipeOpTextVectorizer, task = task)
 
   prd = op$predict(list(task$filter(rows = integer(0))))[[1]]
@@ -42,6 +43,8 @@ test_that("PipeOpTextVectorizer - basic properties", {
 
 
 test_that("PipeOpTextVectorizer - tfidf works", {
+  skip_if_not_installed("quanteda")
+
   task = mlr_tasks$get("iris")
   # create some text data
   dt = data.table("txt" = apply(iris, 1, function(x) {
@@ -68,7 +71,7 @@ test_that("PipeOpTextVectorizer - tfidf works", {
   expect_true(result$ncol > 6)
   expect_true(all(result$feature_types$type == "numeric"))
 
-  trueresult = as.data.table(quanteda::convert(quanteda::dfm_tfidf(quanteda::dfm(dt$txt)), "matrix"))
+  trueresult = as.data.table(quanteda::convert(quanteda::dfm_tfidf(quanteda::dfm(quanteda::tokens(dt$txt))), "matrix"))
   colnames(trueresult) = paste0("txt.", colnames(trueresult))
 
   popresult = result$data(cols = selector_grep("^txt\\.")(result))
@@ -110,6 +113,8 @@ test_that("PipeOpTextVectorizer - tfidf works", {
 })
 
 test_that("PipeOpTextVectorizer - bigrams", {
+  skip_if_not_installed("quanteda")
+
   task = mlr_tasks$get("iris")
   # create hacky text data:
   dt = data.table("txt" = apply(iris, 1, function(x) {
@@ -139,11 +144,13 @@ test_that("PipeOpTextVectorizer - bigrams", {
   # verify for first row
   strs = unlist(strsplit(dt[1, ][["txt"]], fixed = TRUE, split = " "))
   dt2 = result$data()
-  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] == 1))
+  expect_true(all(dt2[1, paste0("txt.", strs), with = FALSE] >= 1L))
 })
 
 
 test_that("PipeOpTextVectorizer - integer sequence", {
+  skip_if_not_installed("quanteda")
+
   task = mlr_tasks$get("iris")
   # create hacky text data:
   dt = data.table("txt" = apply(iris, 1, function(x) {
@@ -212,6 +219,8 @@ test_that("PipeOpTextVectorizer - integer sequence", {
 })
 
 test_that("PipeOpTextVectorizer - factor sequence", {
+  skip_if_not_installed("quanteda")
+
   task = mlr_tasks$get("iris")
   # create hacky text data:
   dt = data.table("txt" = apply(iris, 1, function(x) {

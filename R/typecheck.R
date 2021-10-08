@@ -137,6 +137,8 @@ default_chc = list(
 #' register" is queried for functions that may turn the object into
 #' a desired type.
 #'
+#' Conversion functions should try to avoid cloning.
+#'
 #' @param cls `character(1)` The class that `fun` converts to.
 #' @param fun `function` The conversion function. Must take one
 #'   argument and return an object of class `cls`, or possibly

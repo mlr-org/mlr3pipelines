@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputeconstant}
 \alias{mlr_pipeops_imputeconstant}
 \alias{PipeOpImputeConstant}
-\title{PipeOpImputeConstant}
+\title{Impute Features by a Constant}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
@@ -78,6 +78,8 @@ new_task$missings()
 new_task$data(cols = "glucose")[[1]]
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

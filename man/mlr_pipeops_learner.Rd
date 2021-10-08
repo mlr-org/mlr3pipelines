@@ -3,7 +3,7 @@
 \name{mlr_pipeops_learner}
 \alias{mlr_pipeops_learner}
 \alias{PipeOpLearner}
-\title{PipeOpLearner}
+\title{Wrap a Learner into a PipeOp}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
@@ -23,6 +23,7 @@ and tuning.
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
+This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpLearner} by-reference, use \verb{$learner}.\cr
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, internally defaulting to the \code{id} of the \code{\link[mlr3:Learner]{Learner}} being wrapped.
 \item \code{param_vals} :: named \code{list}\cr
@@ -96,6 +97,8 @@ lrn_po$train(list(task))
 lrn_po$predict(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

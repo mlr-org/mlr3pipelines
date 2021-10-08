@@ -1,4 +1,4 @@
-#' @title PipeOpClassWeights
+#' @title Class Weights for Sample Weighting
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classweights
@@ -50,6 +50,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

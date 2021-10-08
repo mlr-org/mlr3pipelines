@@ -3,7 +3,7 @@
 \name{mlr_pipeops_classweights}
 \alias{mlr_pipeops_classweights}
 \alias{PipeOpClassWeights}
-\title{PipeOpClassWeights}
+\title{Class Weights for Sample Weighting}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -84,6 +84,8 @@ result = opb$train(list(task))[[1L]]
 result$weights
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

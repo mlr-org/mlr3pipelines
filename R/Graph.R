@@ -1,4 +1,4 @@
-#' @title Graph
+#' @title Graph Base Class
 #' @format [R6Class] Graph
 #'
 #' @usage NULL
@@ -70,6 +70,8 @@
 #'   will not be connected within the [`Graph`] at first.\cr
 #'   Instead of supplying a [`PipeOp`] directly, an object that can naturally be converted to a [`PipeOp`] can also
 #'   be supplied, e.g. a [`Learner`][mlr3::Learner] or a [`Filter`][mlr3filters::Filter]; see [`as_pipeop()`].
+#'   The argument given as `op` is always cloned; to access a `Graph`'s [`PipeOp`]s by-reference, use `$pipeops`.\cr
+#'   Note that `$add_pipeop()` is a relatively low-level operation, it is recommended to build graphs using [`%>>%`].
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
 #'   (`character(1)`, `character(1)`,
 #'   `character(1)` | `numeric(1)` | `NULL`,
@@ -165,7 +167,7 @@ Graph = R6Class("Graph",
     },
 
     add_pipeop = function(op) {
-      op = as_pipeop(op)
+      op = as_pipeop(op, clone = TRUE)
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }
@@ -218,11 +220,11 @@ Graph = R6Class("Graph",
       types_src = self$pipeops[[src_id]]$output[get("name") == src_channel, c("train", "predict")]
       types_dst = self$pipeops[[dst_id]]$input[get("name") == dst_channel, c("train", "predict")]
 
-      if (!are_types_compatible(types_src$train, types_dst$train)) {
+      if (!are_types_compatible(strip_multiplicity_type(types_src$train), strip_multiplicity_type(types_dst$train))) {
         stopf("Output type of PipeOp %s during training (%s) incompatible with input type of PipeOp %s (%s)",
           src_id, types_src$train, dst_id, types_dst$train)
       }
-      if (!are_types_compatible(types_src$predict, types_dst$predict)) {
+      if (!are_types_compatible(strip_multiplicity_type(types_src$predict), strip_multiplicity_type(types_dst$predict))) {
         stopf("Output type of PipeOp %s during prediction (%s) incompatible with input type of PipeOp %s (%s)",
           src_id, types_src$predict, dst_id, types_dst$predict)
       }
@@ -540,7 +542,7 @@ graph_reduce = function(self, input, fun, single_input) {
   # create virtual "__initial__" and "__terminal__" nodes with edges to inputs / outputs of graph.
   # if we have `single_input == FALSE` and one(!) vararg channel, we widen the vararg input
   # appropriately.
-  if (!single_input && length(assert_list(input)) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
+  if (!single_input && length(assert_list(input, .var.name = "input when single_input is FALSE")) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
     if (sum("..." == graph_input$channel.name) != 1) {
       stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.")
     }
@@ -561,7 +563,7 @@ graph_reduce = function(self, input, fun, single_input) {
   if (!single_input) {
     # we need the input list length to be equal to the number of channels. This number was
     # already increased appropriately if there is a single vararg channel.
-    assert_list(input, len = nrow(graph_input))
+    assert_list(input, len = nrow(graph_input), .var.name = sprintf("input when single_input is FALSE and there are %s input channels", nrow(graph_input)))
     # input can be a named list (will be distributed to respective edges) or unnamed.
     # if it is named, we check that names are unambiguous.
     if (!is.null(names(input))) {
@@ -569,7 +571,7 @@ graph_reduce = function(self, input, fun, single_input) {
         # FIXME this will unfortunately trigger if there is more than one named input for a vararg channel.
         stopf("'input' must not be a named list because Graph %s input channels have duplicated names.", self$id)
       }
-      assert_names(names(input), subset.of = graph_input$name)
+      assert_names(names(input), subset.of = graph_input$name, .var.name = sprintf("input when it has names and single_input is FALSE"))
       edges[list("__initial__", names(input)), "payload" := list(input), on = c("src_id", "src_channel")]
     } else {
       # don't rely on unique graph_input$name!

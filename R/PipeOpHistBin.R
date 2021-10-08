@@ -1,4 +1,4 @@
-#' @title PipeOpHistBin
+#' @title Split Numeric Features into Equally Spaced Bins
 #'
 #' @usage NULL
 #' @name mlr_pipeops_histbin
@@ -27,12 +27,12 @@
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `bins` :: `list` \cr
+#' * `breaks` :: `list` \cr
 #'   List of intervals representing the bins for each numeric feature.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `bins` :: `character(1)` | `numeric` | `function` \cr
+#' * `breaks` :: `character(1)` | `numeric` | `function` \cr
 #'   Either a `character(1)` string naming an algorithm to compute the number of cells,
 #'   a `numeric(1)` giving the number of breaks for the histogram,
 #'   a vector `numeric` giving the breakpoints between the histogram cells, or
@@ -57,6 +57,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpHistBin = R6Class("PipeOpHistBin",
@@ -72,18 +73,18 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
   private = list(
 
     .get_state_dt = function(dt, levels, target) {
-      bins = lapply(seq_col(dt), function(i) {
+      breaks = lapply(seq_col(dt), function(i) {
         breaks = invoke(graphics::hist, dt[[i]], plot = FALSE, .args = self$param_set$get_values(tags = "hist"))$breaks
         breaks[1L] = -Inf
         breaks[length(breaks)] = Inf
         breaks
       })
-      list(bins = bins)
+      list(breaks = breaks)
     },
 
     .transform_dt = function(dt, levels) {
       as.data.frame(mapply(function(d, b) ordered(cut(d, breaks = b, include.lowest = TRUE)),
-        d = dt, b = self$state$bins, SIMPLIFY = FALSE), row.names = rownames(dt))
+        d = dt, b = self$state$breaks, SIMPLIFY = FALSE), row.names = rownames(dt))
     }
   )
 )

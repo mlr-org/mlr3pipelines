@@ -1,16 +1,63 @@
 context("gunion")
 
 test_that("gunion", {
-  g1 = PipeOpPCA$new() %>>% PipeOpScale$new()
+  g1 = PipeOpPCA$new() %>>% PipeOpScale$new(param_vals = list(scale = FALSE))
   g2 = PipeOpPCA$new(id = "pca2") %>>% PipeOpPCA$new(id = "xx")
   g3 = PipeOpScale$new(id = "blub") %>>% PipeOpScale$new(id = "foo")
   g4 = gunion(list(g1, g2, g3))
   expect_graph(g4)
   expect_set_equal(g4$ids(), c("pca", "pca2", "scale", "xx", "blub", "foo"))
+
+  expect_deep_clone(g1, PipeOpPCA$new() %>>% PipeOpScale$new(param_vals = list(scale = FALSE)))
+
+  params = g4$param_set$params
+
+  g4_2 = gunion(list(g1, g2, g3), in_place = TRUE)
+
+  expect_identical(g4_2, g1)
+  expect_deep_clone(touch(g4_2), touch(g4))
+
+  # make sure param_set was properly built.
+  expect_deep_clone(params, g4_2$param_set$params)
+
+
+  g0 = PipeOpNOP$new()
+  g4 = gunion(list(g0, g2, g3))
+
+  expect_set_equal(g4$ids(), c("nop", "pca2", "xx", "blub", "foo"))
+
+  expect_deep_clone(g0, PipeOpNOP$new())
+
+  g4_2 = gunion(list(g0, g2, g3), in_place = TRUE)
+
+  expect_deep_clone(g0, PipeOpNOP$new())
+  expect_deep_clone(touch(g4_2), touch(g4))
+
+
+
+
+
+
 })
 
 test_that("empty gunion", {
   expect_equal(gunion(list()), Graph$new())
+  expect_equal(gunion(list(), in_place = TRUE), Graph$new())
+
+  gg = gunion(list(NULL), in_place = TRUE)
+
+  gg$set_names(names(gg$pipeops), "nop")
+  expect_equal(gg, as_graph(po("nop")))
+
+  gg = gunion(list(NULL, NULL), in_place = TRUE)
+
+  gg$set_names(names(gg$pipeops), c("nop1", "nop2"))
+  expect_equal(touch(gg), touch(gunion(unname(pos(c(nop1 = "nop", nop2 = "nop"))))))
+
+  gg = gunion(list(NULL, list(), NULL), in_place = TRUE)
+
+  gg$set_names(names(gg$pipeops), c("nop1", "nop2"))
+  expect_equal(touch(gg), touch(gunion(unname(pos(c(nop1 = "nop", nop2 = "nop"))))))
 })
 
 test_that("named gunion", {
@@ -47,5 +94,18 @@ test_that("named gunion", {
       add_edge("subsample", "featureunion", dst_channel = "input3")$
       add_edge("z.featureunion", "featureunion", dst_channel = "input4"))
   )
+
+  gg = gunion(list(x = NULL, y = po("scale")))
+
+  expect_set_equal(gsub("_.*", "", names(gg$pipeops)), c("x.nop", "y.scale"))
+
+  gg$set_names(names(gg$pipeops), c("op1", "op2"))
+
+  expect_equal(gg,
+    Graph$new()$
+    add_pipeop(po("nop", id = "op1"))$
+    add_pipeop(po("scale", id = "op2"))
+  )
+
 
 })

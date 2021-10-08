@@ -3,7 +3,7 @@
 \name{mlr_pipeops_colapply}
 \alias{mlr_pipeops_colapply}
 \alias{PipeOpColApply}
-\title{PipeOpColApply}
+\title{Apply a Function to each Column of a Task}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -105,6 +105,8 @@ poca$param_set$values$affect_columns = selector_all()
 poca$train(list(task))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

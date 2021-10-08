@@ -13,6 +13,9 @@ test_that("Simple ops do what we expect", {
   expect_class(g, "Graph")
   expect_equal(g$rhs[[1]], p3$id)
 
+  g2 = concat_graphs(concat_graphs(p1, p2), p3)
+  expect_equal(g, g2)
+
   expect_graph(p1 %>>% gunion(list(p2, p3)))
   expect_error(gunion(list(p2, p3)) %>>% p1, "mismatching number of inputs / outputs")
 
@@ -71,3 +74,87 @@ test_that("neutral elements", {
   g2 = NULL %>>% p
   expect_equal(g1$pipeops, g2$pipeops)
 })
+
+test_that("triple-arrow", {
+
+  p1 = PipeOpNOP$new("p1")
+  p2 = PipeOpNOP$new("p2")
+  p3 = PipeOpNOP$new("p3")
+
+  gr = as_graph(p1)
+
+  expect_equal(gr$pipeops, list(p1 = p1))
+
+  expect_deep_clone(gr$pipeops$p1, p1)
+
+  p2graph1 = as_graph(p2)
+
+  gr2 = gr %>>>% p2graph1
+
+  expect_equal(gr2$pipeops, list(p1 = p1, p2 = p2))
+
+  expect_deep_clone(p2graph1, as_graph(p2))
+
+
+  expect_identical(gr2, gr)
+
+  expect_deep_clone(gr2$pipeops$p2, p2)
+
+  gr3 = gr %>>>% p3
+
+  expect_identical(gr3, gr)
+  expect_identical(gr2, gr)
+
+  expect_equal(gr3$pipeops, list(p1 = p1, p2 = p2, p3 = p3))
+
+  expect_equal(gr3$edges, data.table(src_id = c("p1", "p2"), src_channel = "output", dst_id = c("p2", "p3"), dst_channel = "input"))
+
+  gr = as_graph(p1)
+
+  gr2_2 = concat_graphs(gr, p2graph1, in_place = TRUE)
+
+  expect_identical(gr2_2, gr)
+  expect_deep_clone(p2graph1, as_graph(p2))
+
+  gr3_2 = concat_graphs(gr, p3, in_place = TRUE)
+
+  expect_identical(gr3_2, gr)
+  expect_identical(gr3_2, gr2_2)
+
+  expect_deep_clone(gr3_2, gr3)
+
+  gr = as_graph(p1)
+
+  gr3_3 = chain_graphs(list(gr, p2graph1, p3))
+
+  expect_deep_clone(gr, as_graph(p1))
+
+  expect_deep_clone(gr3, gr3_3)
+
+  expect_deep_clone(p2graph1, as_graph(p2))
+
+  gr3_3 = chain_graphs(list(gr, p2graph1, p3), in_place = TRUE)
+
+  expect_identical(gr, gr3_3)
+  expect_deep_clone(gr3_3, gr3_2)
+
+  expect_deep_clone(p2graph1, as_graph(p2))
+
+
+  # not mutable in-place
+
+  gr = p1 %>>>% p2graph1
+
+  expect_deep_clone(p1, PipeOpNOP$new("p1"))
+  expect_deep_clone(p2graph1, as_graph(p2))
+  expect_deep_clone(gr, p1 %>>% p2)
+
+
+  gr = chain_graphs(list(p1, p2graph1), in_place = TRUE)
+
+  expect_deep_clone(p1, PipeOpNOP$new("p1"))
+  expect_deep_clone(p2graph1, as_graph(p2))
+  expect_deep_clone(gr, p1 %>>% p2)
+
+})
+

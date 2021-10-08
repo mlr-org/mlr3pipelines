@@ -1,7 +1,7 @@
 #' @include utils.R
 #' @include mlr_pipeops.R
 #'
-#' @title PipeOp
+#' @title PipeOp Base Class
 #'
 #' @usage NULL
 #' @format Abstract [`R6Class`].
@@ -70,6 +70,10 @@
 #' instead, a `$train()` and `$predict()` should be used. The most convenient usage is to add the [`PipeOp`]
 #' to a `Graph` (possibly as singleton in that `Graph`), and using the `Graph`'s `$train()` / `$predict()` methods.
 #'
+#' `private$.train()` and `private$.predict()` should treat their inputs as read-only. If they are [`R6`][R6::R6] objects,
+#' they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
+#' not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.
+#'
 #' @section Fields:
 #' * `id` :: `character`\cr
 #'   ID of the [`PipeOp`]. IDs are user-configurable, and IDs of [`PipeOp`]s must be unique within a [`Graph`]. IDs of
@@ -86,6 +90,8 @@
 #'   Method-dependent state obtained during training step, and usually required for the prediction step. This is `NULL`
 #'   if and only if the [`PipeOp`] has not been trained. The `$state` is the *only* slot that can be reliably modified during
 #'   `$train()`, because `private$.train()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
+#'   `$state` should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
+#'   not of [`PipeOp`] or `mlr3pipelines`, but of the way the system as a whole works, together with [`GraphLearner`] and `mlr3`.
 #' * input :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Input channels of [`PipeOp`]. Column `name` gives the names (and order) of values in the list given to
 #'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
@@ -197,6 +203,7 @@
 #' @name PipeOp
 #' @family mlr3pipelines backend related
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @export
 PipeOp = R6Class("PipeOp",
   public = list(
@@ -241,6 +248,7 @@ PipeOp = R6Class("PipeOp",
     },
 
     train = function(input) {
+      assert_list(input, .var.name = sprintf("input to PipeOp %s's $train()", self$id))
       self$state = NULL  # reset to untrained state first
       require_namespaces(self$packages)
 
@@ -253,13 +261,24 @@ PipeOp = R6Class("PipeOp",
         return(evaluate_multiplicities(self, unpacked, "train", NULL))
       }
       input = check_types(self, input, "input", "train")
-      on.exit({self$state = NULL})  # if any of the followi fails, make sure to reset self$state
-      output = private$.train(input)
+      on.exit({self$state = NULL})  # if any of the following fails, make sure to reset self$state
+      withCallingHandlers({
+        output = private$.train(input)
+      }, error = function(e) {
+        e$message = sprintf("%s\nThis happened PipeOp %s's $train()", e$message, self$id)
+        stop(e)
+      }, warning = function(w) {
+        w$message = sprintf("%s\nThis happened PipeOp %s's $train()", w$message, self$id)
+        warning(w)
+        invokeRestart("muffleWarning")
+      })
       output = check_types(self, output, "output", "train")
       on.exit()  # don't reset state any more
       output
     },
     predict = function(input) {
+      assert_list(input, .var.name = sprintf("input to PipeOp %s's $predict()", self$id))
+
       # need to load packages in train *and* predict, because they might run in different R instances
       require_namespaces(self$packages)
 
@@ -274,7 +293,16 @@ PipeOp = R6Class("PipeOp",
         return(evaluate_multiplicities(self, unpacked, "predict", self$state))
       }
       input = check_types(self, input, "input", "predict")
-      output = private$.predict(input)
+      withCallingHandlers({
+        output = private$.predict(input)
+      }, error = function(e) {
+        e$message = sprintf("%s\nThis happened PipeOp %s's $predict()", e$message, self$id)
+        stop(e)
+      }, warning = function(w) {
+        w$message = sprintf("%s\nThis happened PipeOp %s's $predict()", w$message, self$id)
+        warning(w)
+        invokeRestart("muffleWarning")
+      })
       output = check_types(self, output, "output", "predict")
       output
     }
@@ -327,7 +355,7 @@ PipeOp = R6Class("PipeOp",
         # objects.
         # In the following we also avoid accessing `val$hash` twice, because it could
         # potentially be an expensive AB.
-        if (is.environment(val) && !is.null({vhash = val$hash})) {
+        if (is.environment(val) && !is.null({vhash = get0("hash", val, mode = "any", inherits = FALSE, ifnotfound = NULL)})) {
           vhash
         } else {
           val
@@ -382,11 +410,12 @@ assert_connection_table = function(table) {
 # @return an instance of data, possibly converted, with names added according to `$input`/`$output` "name" column
 check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
+  description = sprintf("%s of PipeOp %s's $%s()", direction, self$id, operation)
   if (direction == "input" && "..." %in% typetable$name) {
-    assert_list(data, min.len = nrow(typetable) - 1)
+    assert_list(data, min.len = nrow(typetable) - 1, .var.name = description)
     typetable = typetable[rep(1:.N, ifelse(get("name") == "...", length(data) - nrow(typetable) + 1, 1))]
   } else {
-    assert_list(data, len = nrow(typetable))
+    assert_list(data, len = nrow(typetable), .var.name = description)
   }
 
   check_item = function(data_element, typereq, varname) {
@@ -402,7 +431,7 @@ check_types = function(self, data, direction, operation) {
       return(data_element)
     }
     if (is.Multiplicity(data_element)) {
-      stopf("%s contained Multiplicity when it shouldn't have.", data_element)
+      stopf("Problem with %s: %s contained Multiplicity when it shouldn't have.", varname, data_element)
     }
     if (typereq == "*") return(data_element)
     if (typereq %in% class(data_element)) return(data_element)
@@ -421,8 +450,8 @@ check_types = function(self, data, direction, operation) {
 
   for (idx in seq_along(data)) {
     data[idx] = list(check_item(data[[idx]], typetable[[operation]][[idx]],
-      varname = sprintf("%s %s (\"%s\") of PipeOp %s",
-        direction, idx, self$input$name[[idx]], self$id)))
+      varname = sprintf("%s %s (\"%s\") of PipeOp %s's $%s()",
+        direction, idx, self$input$name[[idx]], self$id, operation)))
   }
   names(data) = typetable$name
   data
@@ -483,10 +512,10 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
   on.exit({self$state = instate})
   if (!is.null(instate)) {
     if (!is.Multiplicity(instate)) {
-      stopf("PipeOp %s received multiplicity input but state was not a multiplicity.", self$id)
+      stopf("PipeOp %s received multiplicity input on %s but state was not a multiplicity.", self$id, evalcall)
     }
     if (length(instate) != length(unpacked) || !identical(names(instate), names(unpacked))) {
-      stopf("PipeOp %s received multiplicity input but state had different length / names than input.", self$id)
+      stopf("PipeOp %s received multiplicity input on %s but state had different length / names than input.", self$id, evalcall)
     }
   }
   result = imap(unpacked, function(input, reference) {
@@ -494,6 +523,14 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
     list(output = self[[evalcall]](input), state = self$state)
   })
   on.exit({self$state = as.Multiplicity(map(result, "state"))})
+  if (length(unpacked) == 0) {
+    # if input was length-0 multiplicity, then we need to construct output ourselves, because
+    # 'result' is just an empty list missing the necessary info about output channels.
+    # (not necessary for 'state', because it is a list of states, whereas 'output' is a
+    # list (entry for each input multiplicity entry) of lists (entry for each output channel) of outputs
+    sapply(self$output$name, function(x) as.Multiplicity(list()), simplify = FALSE)
+  } else {
 
-  map(transpose_list(map(result, "output")), as.Multiplicity)
+    map(transpose_list(map(result, "output")), as.Multiplicity)
+  }
 }

@@ -3,7 +3,7 @@
 \name{mlr_pipeops_ovrunite}
 \alias{mlr_pipeops_ovrunite}
 \alias{PipeOpOVRUnite}
-\title{PipeOpOVRUnite}
+\title{Unite Binary Classification Tasks}
 \format{
 \code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
@@ -81,6 +81,8 @@ gr$pipeops$classif.rpart$learner$predict_type = "prob"
 gr$predict(task)
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

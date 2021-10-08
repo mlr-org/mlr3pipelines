@@ -1,4 +1,4 @@
-#' @title PipeOpModelMatrix
+#' @title Transform Columns by Constructing a Model Matrix
 #'
 #' @usage NULL
 #' @name mlr_pipeops_modelmatrix
@@ -52,6 +52,7 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpModelMatrix = R6Class("PipeOpModelMatrix",

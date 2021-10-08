@@ -1,4 +1,4 @@
-#' @title PipeOpScaleMaxAbs
+#' @title Scale Numeric Features with Respect to their Maximum Absolute Value
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scalemaxabs
@@ -47,6 +47,7 @@
 #'
 #' pop$state
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",

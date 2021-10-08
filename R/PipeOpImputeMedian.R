@@ -1,4 +1,4 @@
-#' @title PipeOpImputeMedian
+#' @title Impute Numerical Features by their Median
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputemedian
@@ -49,6 +49,7 @@
 #' po$state$model
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeMedian = R6Class("PipeOpImputeMedian",

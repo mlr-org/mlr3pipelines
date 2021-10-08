@@ -3,7 +3,7 @@
 \name{mlr_pipeops_renamecolumns}
 \alias{mlr_pipeops_renamecolumns}
 \alias{PipeOpRenameColumns}
-\title{PipeOpRenameColumns}
+\title{Rename Columns}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.
 }
@@ -72,6 +72,8 @@ pop = po("renamecolumns", param_vals = list(renaming = c("Petal.Length" = "PL"))
 pop$train(list(task))
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

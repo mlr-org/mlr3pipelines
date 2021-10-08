@@ -1,4 +1,4 @@
-#' @title PipeOpImputeSample
+#' @title Impute Features by Sampling
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputesample
@@ -51,6 +51,7 @@
 #'
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeSample = R6Class("PipeOpImputeSample",

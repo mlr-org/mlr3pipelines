@@ -44,7 +44,7 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
   expect_equivalent(predict_out3[[1L]]$response, predict_out4$response)
 
   # fails for other Task's than TaskRegr
-  expect_error(po$train(list(mlr_tasks$get("iris"))), regexp = "Must inherit from class 'TaskRegr'")
+  expect_error(po$train(list(mlr_tasks$get("iris"))), regexp = "inherit from class 'TaskRegr'")
 })
 
 test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
@@ -69,8 +69,7 @@ test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
 
   predict_out1 = learner$predict(taskfull)
 
-  g = Graph$new()
-  g$add_pipeop(po)
+  g = PipeOpFixFactors$new() %>>% po
   g$add_pipeop(LearnerRegrRpart$new())
   g$add_pipeop(PipeOpTargetInvert$new())
   g$add_edge(src_id = "targettrafoscalerange", dst_id = "targetinvert", src_channel = 1L, dst_channel = 1L)

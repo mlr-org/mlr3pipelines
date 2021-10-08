@@ -3,7 +3,7 @@
 \name{mlr_pipeops_imputelearner}
 \alias{mlr_pipeops_imputelearner}
 \alias{PipeOpImputeLearner}
-\title{PipeOpImputeLearner}
+\title{Impute Features by Fitting a Learner}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
@@ -15,6 +15,10 @@ Note this parameter is part of the \code{\link{PipeOpImpute}} base class and exp
 Additionally, only features supported by the learner can be imputed; i.e. learners of type
 \code{regr} can only impute features of type \code{integer} and \code{numeric}, while \code{classif} can impute
 features of type \code{factor}, \code{ordered} and \code{logical}.
+
+The \code{\link[mlr3:Learner]{Learner}} used for imputation is trained on all \code{context_columns}; if these contain missing values,
+the \code{\link[mlr3:Learner]{Learner}} typically either needs to be able to handle missing values itself, or needs to do its
+own imputation (see examples).
 }
 \section{Construction}{
 \preformatted{PipeOpImputeLearner$new(learner, id = NULL, param_vals = list())
@@ -24,7 +28,9 @@ features of type \code{factor}, \code{ordered} and \code{logical}.
 Identifier of resulting object, default \code{"impute."}, followed by the \code{id} of the \code{Learner}.
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
-The \code{\link[mlr3:Learner]{Learner}} needs to be able to handle missing values, i.e. have the \code{missings} property.
+The \code{\link[mlr3:Learner]{Learner}} usually needs to be able to handle missing values, i.e. have the \code{missings} property, unless care is taken
+that \code{context_columns} do not contain missings; see examples.\cr
+This argument is always cloned; to access the \code{\link[mlr3:Learner]{Learner}} inside \code{PipeOpImputeLearner} by-reference, use \verb{$learner}.\cr
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -89,9 +95,24 @@ po = po("imputelearner", lrn("regr.rpart"))
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
 
-po$state$model
+# '$state' of the "regr.rpart" Learner, trained to predict the 'mass' column:
+po$state$model$mass
+
+library("mlr3learners")
+# to use the "regr.kknn" Learner, prefix it with its own imputation method!
+# The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this
+# trained Learner are then used to impute the missing values in the Task.
+po = po("imputelearner",
+  po("imputehist") \%>>\% lrn("regr.kknn")
+)
+
+new_task = po$train(list(task = task))[[1]]
+new_task$missings()
+
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

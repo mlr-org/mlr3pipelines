@@ -3,7 +3,7 @@
 \name{mlr_pipeops_scale}
 \alias{mlr_pipeops_scale}
 \alias{PipeOpScale}
-\title{PipeOpScale}
+\title{Center and Scale Numeric Features}
 \format{
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
@@ -63,7 +63,7 @@ Initialized to \code{FALSE}.
 
 \section{Internals}{
 
-Uses the \code{\link[base:scale]{scale()}} function for \code{robust = FALSE} and alternatively subtracts the
+Imitates the \code{\link[base:scale]{scale()}} function for \code{robust = FALSE} and alternatively subtracts the
 \code{median} and divides by \code{\link[stats:mad]{mad}} for \code{robust = TRUE}.
 }
 
@@ -87,6 +87,8 @@ one_line_of_iris$data()
 pos$predict(list(one_line_of_iris))[[1]]$data()
 }
 \seealso{
+https://mlr3book.mlr-org.com/list-pipeops.html
+
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},

@@ -1,4 +1,4 @@
-#' @title Assertion for mlr3pipeline Graph
+#' @title Assertion for mlr3pipelines Graph
 #'
 #' @description
 #' Function that checks that a given object is a `Graph` and
@@ -12,7 +12,7 @@ assert_graph = function(x) {
   assert_r6(x, "Graph")
 }
 
-#' @title Conversion to mlr3pipeline Graph
+#' @title Conversion to mlr3pipelines Graph
 #'
 #' @description
 #' The argument is turned into a [`Graph`] if possible.
@@ -40,15 +40,14 @@ as_graph = function(x, clone = FALSE) {
 
 #' @export
 as_graph.default = function(x, clone = FALSE) {
-  x = Graph$new()$add_pipeop(x)  # add_pipeop checks automatically for convertability
-  if (clone) {
-    x = x$clone(deep = TRUE)
-  }
-  x
+  Graph$new()$add_pipeop(x)  # add_pipeop always clones and checks automatically for convertability
 }
 
 #' @export
 as_graph.list = function(x, clone = FALSE) {
+  if (!clone && length(x) == 1) {
+    return(as_graph(x[[1]], clone = clone))
+  }
   gunion(x)  # gunion itself will convert individual members of x
 }
 
@@ -60,7 +59,7 @@ as_graph.Graph = function(x, clone = FALSE) {
   x
 }
 
-#' @title Assertion for mlr3pipeline PipeOp
+#' @title Assertion for mlr3pipelines PipeOp
 #'
 #' @description
 #' Function that checks that a given object is a `PipeOp` and
@@ -75,7 +74,7 @@ assert_pipeop = function(x) {
   invisible(x)
 }
 
-#' @title Conversion to mlr3pipeline PipeOp
+#' @title Conversion to mlr3pipelines PipeOp
 #'
 #' @description
 #' The argument is turned into a [`PipeOp`]

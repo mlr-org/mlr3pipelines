@@ -1,4 +1,4 @@
-#' @title PipeOpMultiplicityImply
+#' @title Implicate a Multiplicity
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityimply
@@ -59,6 +59,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -107,7 +108,7 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
 
 mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 
-#' @title PipeOpMultiplicityExply
+#' @title Explicate a Multiplicity
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityexply
@@ -162,6 +163,7 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -197,7 +199,7 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
 
 mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 
-#' @title PipeOpReplicate
+#' @title Replicate the Input as a Multiplicity
 #'
 #' @usage NULL
 #' @name mlr_pipeops_replicate
@@ -243,6 +245,7 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOp.R
 #' @export
 #' @examples

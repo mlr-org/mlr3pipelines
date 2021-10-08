@@ -1,4 +1,4 @@
-#' @title PipeOpImputeHist
+#' @title Impute Numerical Features by Histogram
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputehist
@@ -49,6 +49,7 @@
 #' po$state$model
 #' @family PipeOps
 #' @family Imputation PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeHist = R6Class("PipeOpImputeHist",
@@ -68,10 +69,14 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
       if (is.atomic(model)) {  # handle nullmodel
         return(super$.impute(feature, type, model, context))
       }
-      which.bins = sample.int(length(model$counts), sum(is.na(feature)), replace = TRUE, prob = model$counts)
+      which.bins = sample.int(length(model$counts), count_missing(feature), replace = TRUE, prob = model$counts)
       sampled = stats::runif(length(which.bins), model$breaks[which.bins], model$breaks[which.bins + 1L])
       if (type == "integer") {
-        sampled = as.integer(round(sampled))
+        sampled = round(sampled)
+        # make sure we get an integer. this is faster than pmin(pmax(...)).
+        sampled[sampled > .Machine$integer.max] = .Machine$integer.max
+        sampled[sampled < -.Machine$integer.max] = -.Machine$integer.max
+        sampled = as.integer(sampled)
       }
       feature[is.na(feature)] = sampled
       feature

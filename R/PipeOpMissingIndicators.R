@@ -1,4 +1,4 @@
-#' @title PipeOpMissInd
+#' @title Add Missing Indicator Columns
 #'
 #' @usage NULL
 #' @name mlr_pipeops_missind
@@ -50,6 +50,7 @@
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples

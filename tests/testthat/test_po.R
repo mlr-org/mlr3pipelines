@@ -2,6 +2,8 @@ context("mlr_pipeops")
 
 test_that("mlr_pipeops access works", {
 
+  expect_equal(po(), mlr_pipeops)
+
   expect_equal(
     po("scale"),
     mlr_pipeops$get("scale")
@@ -67,6 +69,129 @@ test_that("mlr_pipeops access works", {
   expect_equal(
     po("select", param_vals = list(selector = selector_all())),
     po(selector_all())
+  )
+
+  expect_equal(
+    po(dblrn$new()),
+    mlr_pipeops$get("learner", dblrn$new())
+  )
+
+  expect_equal(
+    po(dblrn$new(), key = 99),
+    mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99))
+  )
+
+  polrn = po(dblrn$new(), key = 99)
+
+  expect_equal(po(polrn), po(dblrn$new(), key = 99))
+
+  expect_equal(po(polrn, key = 100), po(dblrn$new(), key = 100))
+
+  expect_equal(po(polrn, key = 100, id = "test"), po(dblrn$new(), key = 100, id = "test"))
+
+
+})
+
+
+test_that("mlr_pipeops multi-access works", {
+
+  expect_equal(pos(), mlr_pipeops)
+
+  expect_equal(
+    pos("scale"),
+    list(mlr_pipeops$get("scale"))
+  )
+
+  expect_equal(
+    pos(c("scale", "nop")),
+    list(mlr_pipeops$get("scale"), mlr_pipeops$get("nop"))
+  )
+
+  expect_equal(
+    pos(c("scale", original = "nop")),
+    list(mlr_pipeops$get("scale"), original = mlr_pipeops$get("nop", id = "original"))
+  )
+
+  expect_equal(
+    pos("scale", center = FALSE),
+    list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)))
+  )
+
+  expect_error(pos(c("scale", "nop"), center = FALSE), "set argument.*center.*PipeOpNOP")
+
+  expect_equal(
+    pos(c("scale", "pca"), center = FALSE),
+    list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)), mlr_pipeops$get("pca", param_vals = list(center = FALSE)))
+  )
+
+
+  expect_equal(
+    pos("scale", id = "sx", center = FALSE),
+    list(PipeOpScale$new(id = "sx", param_vals = list(center = FALSE)))
+  )
+
+  expect_equal(
+    pos("copy", 2),
+    list(mlr_pipeops$get("copy", 2))
+  )
+
+  expect_equal(
+    pos("copy", outnum = 2),
+    list(mlr_pipeops$get("copy", outnum = 2))
+  )
+
+  expect_equal(
+    pos("branch", options = 2),
+    list(mlr_pipeops$get("branch", options = 2))
+  )
+
+
+  expect_error(pos("learnerx"), "'learner'")
+
+  # check that we can set the 'key' value
+  dblrn = R6Class("debuglearn", inherit = LearnerClassif,
+    public = list(
+      initialize = function() {
+        super$initialize(id = "debuglearn", param_set = paradox::ParamSet$new()$add(paradox::ParamDbl$new("key")))
+      }
+    )
+  )
+
+  expect_equal(
+    pos("learner", dblrn$new(), key = 99),
+    list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
+  )
+
+
+  expect_equal(
+    po("select", param_vals = list(selector = selector_all())),
+    po(selector_all())
+  )
+
+  expect_equal(
+    pos(list(dblrn$new(), dblrn$new())),
+    list(mlr_pipeops$get("learner", dblrn$new()), mlr_pipeops$get("learner", dblrn$new()))
+  )
+
+  expect_equal(
+    pos(list(dblrn$new(), dblrn$new()), key = 99),
+    list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)), mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
+  )
+
+  expect_equal(pos(character(0)), list())
+  expect_equal(pos(c(x = "nop")), list(x = mlr_pipeops$get("nop", id = "x")))
+  expect_equal(pos(list()), list())
+
+  polrn = mlr_pipeops$get("learner", dblrn$new())
+  polrn$id = "y"
+  expect_equal(
+    pos(c(x = po("nop"), y = dblrn$new())),
+    list(x = po("nop", id = "x"), y = polrn)
+  )
+
+  expect_equal(
+    pos(list(a = polrn, b = dblrn$new())),
+    list(a = po(dblrn$new(), id = "a"), b = po(dblrn$new(), id = "b"))
   )
 
 })

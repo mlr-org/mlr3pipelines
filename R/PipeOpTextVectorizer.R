@@ -1,4 +1,4 @@
-#' @title PipeOpTextVectorizer
+#' @title Bag-of-word Representation of Character Features
 #'
 #' @usage NULL
 #' @name mlr_pipeops_textvectorizer
@@ -158,6 +158,7 @@
 #'
 #' pos$predict(list(one_line_of_iris))[[1]]$data()
 #' @family PipeOps
+#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
@@ -289,7 +290,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       }
       remove = c(remove, pv$extra_stopwords)
       # document-feature matrix
-      tdm = invoke(quanteda::dfm, .args = c(list(x = tkn, remove = remove), self$param_set$get_values(tags = "dfm")))
+      tdm = invoke(quanteda::dfm, .args = c(list(x = quanteda::tokens_remove(x = tkn, remove, valuetype = "fixed")), self$param_set$get_values(tags = "dfm")))
       # trim rare tokens
       if (trim) {
         invoke(quanteda::dfm_trim, .args = c(list(x = tdm), self$param_set$get_values(tags = "dfm_trim")))
