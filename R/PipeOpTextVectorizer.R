@@ -181,6 +181,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamLgl$new("remove_url", default = FALSE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("remove_separators", default = TRUE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("split_hyphens", default = FALSE, tags = c("train", "predict", "tokenizer")),
+        ParamUty$new("missing_token", default = NULL, tags = c("train", "predict")),
 
         ParamUty$new("n", default = 2, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 1, any.missing = FALSE)),
         ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 0, any.missing = FALSE)),
@@ -318,7 +319,14 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       })
       tokens = rbindlist(tokens)
       if (self$param_set$values$return_type == "factor_sequence") {
-        tokens = map_dtc(tokens, factor, levels = dict$v[!is.na(dict$v)], labels = dict$k[!is.na(dict$v)])
+        if (!is.null(self$param_set$values$missing_token)) {
+          levels = c(dict$v[!is.na(dict$v)], 0)
+          labels = c(dict$k[!is.na(dict$v)], as.character(self$param_set$values$missing_token))
+        } else {
+          levels = dict$v[!is.na(dict$v)]
+          labels = dict$k[!is.na(dict$v)]
+        }
+        tokens = map_dtc(tokens, factor, levels = levels, labels = labels)
       }
       tokens
     },
