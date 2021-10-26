@@ -112,8 +112,10 @@ test_that("input / output lists and naming", {
     "list\\(input_1 = 1, input_2 = 2\\)")
 
 
-  expect_error(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_99 = 1), single_input = FALSE),
-    "debug.multi.input_1,debug.multi.input_2")
+  if (packageVersion("checkmate") >= "2.1.0") {
+    expect_error(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_99 = 1), single_input = FALSE),
+      "debug.multi.input_99")
+  }
 
   expect_error(gr$train(list(), single_input = FALSE), "have length 2")
   expect_error(gr$train(list(1, 2, 3), single_input = FALSE), "have length 2")
