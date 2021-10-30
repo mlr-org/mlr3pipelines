@@ -168,7 +168,7 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
 <pre><span class='va'>PipeOpRemoveConstants</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"removeconstants"</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, defaulting to <code>"removeconstants"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -188,14 +188,14 @@ Names of features that are being kept. Features of types that the <code><a href=
     
 
 <p>The parameters are the parameters inherited from the <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>ratio</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>ratio</code> :: <code>numeric(1)</code><br />
 Ratio of values which must be different from the mode value in order to keep a feature in the task.
 Initialized to 0, which means only constant features with exactly one observed level are removed.</p></li>
-<li><p><code>rel_tol</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>rel_tol</code> :: <code>numeric(1)</code><br />
 Relative tolerance within which to consider a numeric feature constant. Set to 0 to disregard relative tolerance. Initialized to <code>1e-8</code>.</p></li>
-<li><p><code>abs_tol</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>abs_tol</code> :: <code>numeric(1)</code><br />
 Absolute tolerance within which to consider a numeric feature constant. Set to 0 to disregard absolute tolerance. Initialized to <code>1e-8</code>.</p></li>
-<li><p><code>na_ignore</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>na_ignore</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code>, the ratio is calculated after removing all missing values first, so a column can be "constant" even if some but not all values are <code>NA</code>.
 Initialized to <code>TRUE</code>.</p></li>
 </ul>
@@ -286,46 +286,48 @@ Initialized to <code>TRUE</code>.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-<span class='va'>data</span> <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>, a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span>, c <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"example"</span>, <span class='va'>data</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span>
-
-<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"removeconstants"</span><span class='op'>)</span>
-
-<span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              y  a c
-#&gt;  1: 0.84982510  1 1
-#&gt;  2: 0.33041754  2 1
-#&gt;  3: 0.36344250  3 1
-#&gt;  4: 0.76530451  4 1
-#&gt;  5: 0.54021206  5 1
-#&gt;  6: 0.06709176  6 2
-#&gt;  7: 0.02093449  7 2
-#&gt;  8: 0.80938970  8 2
-#&gt;  9: 0.60619806  9 2
-#&gt; 10: 0.81683238 10 2</div><div class='input'>
-<span class='va'>po</span><span class='op'>$</span><span class='va'>state</span>
-</div><div class='output co'>#&gt; $features
-#&gt; [1] "a" "c"
-#&gt; 
-#&gt; $affected_cols
-#&gt; [1] "a" "b" "c"
-#&gt; 
-#&gt; $intasklayout
-#&gt;    id    type
-#&gt; 1:  a integer
-#&gt; 2:  b numeric
-#&gt; 3:  c integer
-#&gt; 
-#&gt; $outtasklayout
-#&gt;    id    type
-#&gt; 1:  a integer
-#&gt; 2:  c integer
-#&gt; 
-#&gt; $outtaskshell
-#&gt; Empty data.table (0 rows and 3 cols): y,a,c
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>data</span> <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>, a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span>, c <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"example"</span>, <span class='va'>data</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"removeconstants"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              y  a c</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1: 0.84982510  1 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2: 0.33041754  2 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3: 0.36344250  3 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4: 0.76530451  4 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5: 0.54021206  5 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6: 0.06709176  6 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7: 0.02093449  7 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8: 0.80938970  8 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9: 0.60619806  9 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10: 0.81683238 10 2</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='va'>state</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $features</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "a" "c"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $affected_cols</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "a" "b" "c"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $intasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  a integer</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  b numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:  c integer</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  a integer</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  c integer</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtaskshell</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 3 cols): y,a,c</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

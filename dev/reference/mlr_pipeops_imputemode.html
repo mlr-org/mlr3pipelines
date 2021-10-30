@@ -164,7 +164,7 @@ If multiple modes are present then imputed values are sampled randomly from them
 <pre><span class='va'>PipeOpImputeMode</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"imputemode"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"imputemode"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -287,46 +287,49 @@ if multiple values are missing.</p>
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span>
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#&gt;        0        0        5      374       11        0        0       35 
-#&gt;  triceps 
-#&gt;      227 </div><div class='input'>
-<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputemode"</span><span class='op'>)</span>
-<span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-<span class='va'>new_task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
-#&gt;        0        0        0        0        0        0        0        0 
-#&gt;  triceps 
-#&gt;        0 </div><div class='input'>
-<span class='va'>po</span><span class='op'>$</span><span class='va'>state</span><span class='op'>$</span><span class='va'>model</span>
-</div><div class='output co'>#&gt; $age
-#&gt; [1] 22
-#&gt; 
-#&gt; $glucose
-#&gt; [1] 100  99
-#&gt; 
-#&gt; $insulin
-#&gt; [1] 105
-#&gt; 
-#&gt; $mass
-#&gt; [1] 32
-#&gt; 
-#&gt; $pedigree
-#&gt; [1] 0.254 0.258
-#&gt; 
-#&gt; $pregnant
-#&gt; [1] 1
-#&gt; 
-#&gt; $pressure
-#&gt; [1] 70
-#&gt; 
-#&gt; $triceps
-#&gt; [1] 32
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> diabetes      age  glucose  insulin     mass pedigree pregnant pressure </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0        0        5      374       11        0        0       35 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  triceps </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      227 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputemode"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> diabetes      age pedigree pregnant  glucose  insulin     mass pressure </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0        0        0        0        0        0        0        0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  triceps </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='va'>state</span><span class='op'>$</span><span class='va'>model</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $age</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 22</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $glucose</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 100  99</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $insulin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 105</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $mass</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 32</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $pedigree</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.254 0.258</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $pregnant</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $pressure</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 70</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $triceps</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 32</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

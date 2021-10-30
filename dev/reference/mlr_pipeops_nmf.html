@@ -164,7 +164,7 @@ affects non-negative numerical features. See <code><a href='https://rdrr.io/pkg/
 <pre><span class='va'>PipeOpNMF</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"nmf"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"nmf"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
@@ -189,48 +189,48 @@ as well as the elements of the object returned by <code><a href='https://rdrr.io
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>rank</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+<li><p><code>rank</code> :: <code>integer(1)</code><br />
 Factorization rank, i.e., number of components. Initialized to <code>2</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>method</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>method</code> :: <code>character(1)</code><br />
 Specification of the NMF algorithm. Initialized to <code>"brunet"</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>seed</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> | object of class <code>NMF</code> | <code>function()</code><br />
+<li><p><code>seed</code> :: <code>character(1)</code> | <code>integer(1)</code> | <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> | object of class <code>NMF</code> | <code>function()</code><br />
 Specification of the starting point.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>nrun</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+<li><p><code>nrun</code> :: <code>integer(1)</code><br />
 Number of runs to performs. Default is <code>1</code>.
 More than a single run allows for the computation of a consensus matrix which will also be stored in the <code>$state</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>debug</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>debug</code> :: <code>logical(1)</code><br />
 Whether to toggle debug mode. Default is <code>FALSE</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>keep.all</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>keep.all</code> :: <code>logical(1)</code><br />
 Whether all factorizations are to be saved and returned. Default is <code>FALSE</code>.
 Only has an effect if <code>nrun &gt; 1</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>parallel</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>parallel</code> :: <code>character(1)</code> | <code>integer(1)</code> | <code>logical(1)</code><br />
 Specification of parallel handling if <code>nrun &gt; 1</code>.
 Initialized to <code>FALSE</code>, as it is recommended to use <code>mlr3</code>'s <code>future</code>-based parallelization.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>parallel.required</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>parallel.required</code> :: <code>character(1)</code> | <code>integer(1)</code> | <code>logical(1)</code><br />
 Same as <code>parallel</code>, but an error is thrown if the computation cannot be performed in parallel or
 with the specified number of processors.
 Initialized to <code>FALSE</code>, as it is recommended to use <code>mlr3</code>'s <code>future</code>-based parallelization.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>shared.memory</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>shared.memory</code> :: <code>logical(1)</code><br />
 Whether shared memory should be enabled.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>simplifyCB</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>simplifyCB</code> :: <code>logical(1)</code><br />
 Whether callback results should be simplified. Default is <code>TRUE</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>track</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>track</code> :: <code>logical(1)</code><br />
 Whether error tracking should be enabled. Default is <code>FALSE</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>verbose</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>verbose</code> :: <code>integer(1)</code> | <code>logical(1)</code><br />
 Specification of verbosity. Default is <code>FALSE</code>.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
-<li><p><code>pbackend</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> | <code>NULL</code><br />
+<li><p><code>pbackend</code> :: <code>character(1)</code> | <code>integer(1)</code> | <code>NULL</code><br />
 Specification of the parallel backend.
 It is recommended to use <code>mlr3</code>'s <code>future</code>-based parallelization.
 See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></li>
@@ -326,37 +326,39 @@ See <code><a href='https://rdrr.io/pkg/NMF/man/nmf.html'>nmf()</a></code>.</p></
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"NMF"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nmf"</span><span class='op'>)</span>
-
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: NMF</span></div><div class='output co'>#&gt; &lt;Object of class: NMFfit&gt;
-#&gt;  # Model:
-#&gt;   &lt;Object of class:NMFstd&gt;
-#&gt;   features: 4 
-#&gt;   basis/rank: 2 
-#&gt;   samples: 150 
-#&gt;  # Details:
-#&gt;   algorithm:  brunet 
-#&gt;   seed:  random 
-#&gt;   RNG: 10403L, 148L, ..., 581505866L [f712fcb2e9af94b00ba580916aea483e]
-#&gt;   distance metric:  'KL' 
-#&gt;   residuals:  3.085118 
-#&gt;   miscellaneous: dt_columns=&lt;character&gt;, affected_cols=&lt;character&gt;,
-#&gt;               intasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),
-#&gt;               outtasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),
-#&gt;               outtaskshell=c("&lt;data.table&gt;", "&lt;data.frame&gt;") . (use 'misc(object)')
-#&gt;   Iterations: 450 
-#&gt;   Timing:
-#&gt;      user  system elapsed 
-#&gt;     0.113   0.020   0.133 </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"NMF"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nmf"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required namespace: NMF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;Object of class: NMFfit&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  # Model:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;Object of class:NMFstd&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   features: 4 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   basis/rank: 2 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   samples: 150 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  # Details:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   algorithm:  brunet </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   seed:  random </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   RNG: 10403L, 148L, ..., 581505866L [f712fcb2e9af94b00ba580916aea483e]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   distance metric:  'KL' </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   residuals:  3.085118 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   miscellaneous: dt_columns=&lt;character&gt;, affected_cols=&lt;character&gt;,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               intasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               outtasklayout=c("&lt;data.table&gt;", "&lt;data.frame&gt;"),</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               outtaskshell=c("&lt;data.table&gt;", "&lt;data.frame&gt;") . (use 'misc(object)')</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Iterations: 450 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Timing:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      user  system elapsed </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.086   0.004   0.090 </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

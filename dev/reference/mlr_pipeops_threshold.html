@@ -166,11 +166,11 @@ Internally calls <code>PredictionClassif$set_threshold</code>.</p>
 <pre><span class='va'>PipeOpThreshold</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"threshold"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, default <code>"threshold"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction.
-Defaults to <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(0)</a></code>.</p></li>
+Defaults to <code>numeric(0)</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="input-and-output-channels"><a class="anchor" href="#input-and-output-channels"></a>Input and Output Channels</h2>
@@ -284,25 +284,27 @@ at level <code>0.5</code>.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-<span class='va'>t</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"german_credit"</span><span class='op'>)</span>
-<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"threshold"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>thresholds <span class='op'>=</span> <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>gr</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $threshold.output
-#&gt; NULL
-#&gt; </div><div class='input'><span class='va'>gr</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $threshold.output
-#&gt; &lt;PredictionClassif&gt; for 1000 observations:
-#&gt;     row_ids truth response prob.good  prob.bad
-#&gt;           1  good      bad 0.8767123 0.1232877
-#&gt;           2   bad      bad 0.1388889 0.8611111
-#&gt;           3  good      bad 0.8687090 0.1312910
-#&gt; ---                                           
-#&gt;         998  good      bad 0.8687090 0.1312910
-#&gt;         999   bad      bad 0.3795620 0.6204380
-#&gt;        1000  good      bad 0.7391304 0.2608696
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>t</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"german_credit"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"threshold"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>thresholds <span class='op'>=</span> <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gr</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $threshold.output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='va'>gr</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $threshold.output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;PredictionClassif&gt; for 1000 observations:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     row_ids truth response prob.good  prob.bad</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           1  good      bad 0.8767123 0.1232877</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           2   bad      bad 0.1388889 0.8611111</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           3  good      bad 0.8687090 0.1312910</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---                                           </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         998  good      bad 0.8687090 0.1312910</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         999   bad      bad 0.3795620 0.6204380</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        1000  good      bad 0.7391304 0.2608696</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

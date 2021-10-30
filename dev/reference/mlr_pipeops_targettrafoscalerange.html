@@ -170,7 +170,7 @@ prediction.</p>
 <pre><span class='va'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"targettrafoscalerange"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"targettrafoscalerange"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
@@ -192,9 +192,9 @@ be set during construction. Default <code><a href='https://rdrr.io/r/base/list.h
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTargetTrafo.html'>PipeOpTargetTrafo</a></code>, as well as:</p><ul>
-<li><p><code>lower</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>lower</code> :: <code>numeric(1)</code><br />
 Target value of smallest item of input target. Initialized to 0.</p></li>
-<li><p><code>upper</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>upper</code> :: <code>numeric(1)</code><br />
 Target value of greatest item of input target. Initialized to 1.</p></li>
 </ul>
 
@@ -285,97 +285,102 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com'>mlr3</a></span><span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"boston_housing"</span><span class='op'>)</span>
-<span class='va'>po</span> <span class='op'>=</span> <span class='va'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $fun
-#&gt; NULL
-#&gt; 
-#&gt; $output
-#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
-#&gt; * Target: medv.scaled
-#&gt; * Properties: -
-#&gt; * Features (18):
-#&gt;   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,
-#&gt;     ptratio, rm, zn
-#&gt;   - int (3): rad, tax, tract
-#&gt;   - fct (2): chas, town
-#&gt; </div><div class='input'><span class='va'>po</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $fun
-#&gt; function (inputs) 
-#&gt; {
-#&gt;     assert_list(inputs, len = 1L, types = "Prediction")
-#&gt;     list(private$.invert(inputs[[1L]], predict_phase_state))
-#&gt; }
-#&gt; &lt;bytecode: 0x563011bdd0a0&gt;
-#&gt; &lt;environment: 0x5630158bdba0&gt;
-#&gt; 
-#&gt; $output
-#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
-#&gt; * Target: medv.scaled
-#&gt; * Properties: -
-#&gt; * Features (18):
-#&gt;   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,
-#&gt;     ptratio, rm, zn
-#&gt;   - int (3): rad, tax, tract
-#&gt;   - fct (2): chas, town
-#&gt; </div><div class='input'>
-<span class='co'>#syntactic sugar for a graph using ppl():</span>
-<span class='va'>ttscalerange</span> <span class='op'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span><span class='op'>(</span><span class='st'>"targettrafo"</span>, trafo_pipeop <span class='op'>=</span> <span class='va'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>,
-  graph <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html'>LearnerRegrRpart</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>ttscalerange</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $targetinvert.output
-#&gt; NULL
-#&gt; </div><div class='input'><span class='va'>ttscalerange</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $targetinvert.output
-#&gt; &lt;PredictionRegr&gt; for 506 observations:
-#&gt;     row_ids truth response
-#&gt;           1  24.0 23.72519
-#&gt;           2  21.6 19.55954
-#&gt;           3  34.7 35.10312
-#&gt; ---                       
-#&gt;         504  23.9 23.72519
-#&gt;         505  22.0 23.72519
-#&gt;         506  11.9 19.55954
-#&gt; </div><div class='input'><span class='va'>ttscalerange</span><span class='op'>$</span><span class='va'>state</span><span class='op'>$</span><span class='va'>regr.rpart</span>
-</div><div class='output co'>#&gt; $model
-#&gt; n= 506 
-#&gt; 
-#&gt; node), split, n, deviance, yval
-#&gt;       * denotes terminal node
-#&gt; 
-#&gt;  1) root 506 21.09447000 0.38961790  
-#&gt;    2) cmedv&lt; 27.7 400  4.76453900 0.30601110  
-#&gt;      4) cmedv&lt; 17.35 134  0.62918150 0.17794360  
-#&gt;        8) cmedv&lt; 11.95 42  0.07619577 0.09190476 *
-#&gt;        9) cmedv&gt;=11.95 92  0.10013460 0.21722220 *
-#&gt;      5) cmedv&gt;=17.35 266  0.83043740 0.37052630  
-#&gt;       10) cmedv&lt; 21.65 131  0.11194840 0.32354540 *
-#&gt;       11) cmedv&gt;=21.65 135  0.14876760 0.41611520 *
-#&gt;    3) cmedv&gt;=27.7 106  2.98279700 0.70511530  
-#&gt;      6) cmedv&lt; 39.25 74  0.31924910 0.60438440  
-#&gt;       12) cmedv&lt; 32.6 42  0.03997942 0.55518520 *
-#&gt;       13) cmedv&gt;=32.6 32  0.04417269 0.66895830 *
-#&gt;      7) cmedv&gt;=39.25 32  0.17633330 0.93805560 *
-#&gt; 
-#&gt; $log
-#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
-#&gt; 
-#&gt; $train_time
-#&gt; [1] 0.085
-#&gt; 
-#&gt; $train_task
-#&gt; &lt;TaskRegr:boston_housing&gt; (506 x 19)
-#&gt; * Target: medv.scaled
-#&gt; * Properties: -
-#&gt; * Features (18):
-#&gt;   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,
-#&gt;     ptratio, rm, zn
-#&gt;   - int (3): rad, tax, tract
-#&gt;   - fct (2): chas, town
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com'>mlr3</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"boston_housing"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='va'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $fun</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 19)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Target: medv.scaled</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Properties: -</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Features (18):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     ptratio, rm, zn</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - fct (2): chas, town</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $fun</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function (inputs) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     assert_list(inputs, len = 1L, types = "Prediction")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     list(private$.invert(inputs[[1L]], predict_phase_state))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;bytecode: 0x5588c704daa0&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x5588c51265b0&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 19)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Target: medv.scaled</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Properties: -</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Features (18):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     ptratio, rm, zn</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - fct (2): chas, town</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#syntactic sugar for a graph using ppl():</span></span>
+<span class='r-in'><span class='va'>ttscalerange</span> <span class='op'>=</span> <span class='fu'><a href='ppl.html'>ppl</a></span><span class='op'>(</span><span class='st'>"targettrafo"</span>, trafo_pipeop <span class='op'>=</span> <span class='va'>PipeOpTargetTrafoScaleRange</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  graph <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_learner.html'>PipeOpLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html'>LearnerRegrRpart</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ttscalerange</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $targetinvert.output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='va'>ttscalerange</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $targetinvert.output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;PredictionRegr&gt; for 506 observations:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     row_ids truth response</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           1  24.0 23.72519</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           2  21.6 19.55954</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           3  34.7 35.10312</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---                       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         504  23.9 23.72519</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         505  22.0 23.72519</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         506  11.9 19.55954</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='va'>ttscalerange</span><span class='op'>$</span><span class='va'>state</span><span class='op'>$</span><span class='va'>regr.rpart</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> n= 506 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> node), split, n, deviance, yval</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       * denotes terminal node</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1) root 506 21.09447000 0.38961790  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2) cmedv&lt; 27.7 400  4.76453900 0.30601110  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      4) cmedv&lt; 17.35 134  0.62918150 0.17794360  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        8) cmedv&lt; 11.95 42  0.07619577 0.09190476 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        9) cmedv&gt;=11.95 92  0.10013460 0.21722220 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      5) cmedv&gt;=17.35 266  0.83043740 0.37052630  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       10) cmedv&lt; 21.65 131  0.11194840 0.32354540 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       11) cmedv&gt;=21.65 135  0.14876760 0.41611520 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3) cmedv&gt;=27.7 106  2.98279700 0.70511530  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      6) cmedv&lt; 39.25 74  0.31924910 0.60438440  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       12) cmedv&lt; 32.6 42  0.03997942 0.55518520 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       13) cmedv&gt;=32.6 32  0.04417269 0.66895830 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      7) cmedv&gt;=39.25 32  0.17633330 0.93805560 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $log</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $train_time</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.011</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $train_task</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 19)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Target: medv.scaled</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Properties: -</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Features (18):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - dbl (13): age, b, cmedv, crim, dis, indus, lat, lon, lstat, nox,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     ptratio, rm, zn</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - int (3): rad, tax, tract</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - fct (2): chas, town</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

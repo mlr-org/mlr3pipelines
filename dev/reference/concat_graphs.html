@@ -232,7 +232,7 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
     </tr>
     <tr>
       <th>in_place</th>
-      <td><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+      <td><p>(<code>logical(1)</code>)<br />
 Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <code><a href='Graph.html'>Graph</a></code>, then it is cloned regardless.</p></td>
     </tr>
     </table>
@@ -252,55 +252,59 @@ Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <co
 <code><a href='pipeline_greplicate.html'>pipeline_greplicate</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>o1</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_scale.html'>PipeOpScale</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>o2</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_pca.html'>PipeOpPCA</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>o3</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span>
-
-<span class='co'># The following two are equivalent:</span>
-<span class='va'>pipe1</span> <span class='op'>=</span> <span class='va'>o1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o2</span>
-
-<span class='va'>pipe2</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span>
-
-<span class='co'># Note automatical gunion() of lists.</span>
-<span class='co'># The following three are equivalent:</span>
-<span class='va'>graph1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>o1</span>, <span class='va'>o2</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o3</span>
-
-<span class='va'>graph2</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>o1</span>, <span class='va'>o2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o3</span>
-
-<span class='va'>graph3</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o3</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-
-<span class='va'>pipe1</span> <span class='op'>%&gt;&gt;&gt;%</span> <span class='va'>o3</span>  <span class='co'># modify pipe1 in-place</span>
-</div><div class='output co'>#&gt; Graph with 3 PipeOps:
-#&gt;            ID         State     sccssors prdcssors
-#&gt;         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          
-#&gt;           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale
-#&gt;  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</div><div class='input'>
-<span class='va'>pipe1</span>  <span class='co'># contains o1, o2, and o3 now.</span>
-</div><div class='output co'>#&gt; Graph with 3 PipeOps:
-#&gt;            ID         State     sccssors prdcssors
-#&gt;         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          
-#&gt;           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale
-#&gt;  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</div><div class='input'>
-<span class='va'>o1</span> <span class='op'>%&gt;&gt;&gt;%</span> <span class='va'>o2</span>
-</div><div class='output co'>#&gt; Graph with 2 PipeOps:
-#&gt;     ID         State sccssors prdcssors
-#&gt;  scale &lt;&lt;UNTRAINED&gt;&gt;      pca          
-#&gt;    pca &lt;&lt;UNTRAINED&gt;&gt;              scale</div><div class='input'>
-<span class='va'>o1</span>  <span class='co'># not changed, becuase not a Graph.</span>
-</div><div class='output co'>#&gt; PipeOp: &lt;scale&gt; (not trained)
-#&gt; values: &lt;robust=FALSE&gt;
-#&gt; Input channels &lt;name [train type, predict type]&gt;:
-#&gt;   input [Task,Task]
-#&gt; Output channels &lt;name [train type, predict type]&gt;:
-#&gt;   output [Task,Task]</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>o1</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_scale.html'>PipeOpScale</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>o2</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_pca.html'>PipeOpPCA</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>o3</span> <span class='op'>=</span> <span class='va'><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># The following two are equivalent:</span></span>
+<span class='r-in'><span class='va'>pipe1</span> <span class='op'>=</span> <span class='va'>o1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o2</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pipe2</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Note automatical gunion() of lists.</span></span>
+<span class='r-in'><span class='co'># The following three are equivalent:</span></span>
+<span class='r-in'><span class='va'>graph1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>o1</span>, <span class='va'>o2</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o3</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>graph2</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>o1</span>, <span class='va'>o2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>o3</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>graph3</span> <span class='op'>=</span> <span class='va'><a href='Graph.html'>Graph</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'>o3</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o1</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_edge</span><span class='op'>(</span><span class='va'>o2</span><span class='op'>$</span><span class='va'>id</span>, <span class='va'>o3</span><span class='op'>$</span><span class='va'>id</span>, dst_channel <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pipe1</span> <span class='op'>%&gt;&gt;&gt;%</span> <span class='va'>o3</span>  <span class='co'># modify pipe1 in-place</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Graph with 3 PipeOps:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            ID         State     sccssors prdcssors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pipe1</span>  <span class='co'># contains o1, o2, and o3 now.</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Graph with 3 PipeOps:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            ID         State     sccssors prdcssors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>o1</span> <span class='op'>%&gt;&gt;&gt;%</span> <span class='va'>o2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Graph with 2 PipeOps:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     ID         State sccssors prdcssors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  scale &lt;&lt;UNTRAINED&gt;&gt;      pca          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    pca &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>o1</span>  <span class='co'># not changed, becuase not a Graph.</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PipeOp: &lt;scale&gt; (not trained)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> values: &lt;robust=FALSE&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   input [Task,Task]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   output [Task,Task]</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

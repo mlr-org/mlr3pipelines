@@ -185,23 +185,23 @@ it is called both during training and prediction.</p>
 </pre>
 
 <p>(Construction is identical to <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>.)</p><ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object. See <code>$id</code> slot of <code><a href='PipeOp.html'>PipeOp</a></code>.</p></li>
 <li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
 Parameter space description. This should be created by the subclass and given to <code>super$initialize()</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings given in <code>param_set</code>. The
 subclass should have its own <code>param_vals</code> parameter and pass it on to <code>super$initialize()</code>. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
-<li><p><code>can_subset_cols</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>can_subset_cols</code> :: <code>logical(1)</code><br />
 Whether the <code>affect_columns</code> parameter should be added which lets the user limit the columns that are
 modified by the <code>PipeOpTaskPreprocSimple</code>. This should generally be <code>FALSE</code> if the operation adds or removes
 rows from the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, and <code>TRUE</code> otherwise. Default is <code>TRUE</code>.</p></li>
 <li><p>packages :: <code>character</code><br />
 Set of all required packages for the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>private$.train()</code> and <code>private$.predict()</code> methods. See <code>$packages</code> slot.
-Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
-<li><p><code>task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Default is <code>character(0)</code>.</p></li>
+<li><p><code>task_type</code> :: <code>character(1)</code><br />
 The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
-should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
+should generally be a <code>character(1)</code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
 <code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
 </ul>
 

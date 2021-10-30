@@ -168,7 +168,7 @@ See <code><a href='https://petersonr.github.io/bestNormalize/reference/boxcox.ht
 <pre><span class='va'>PipeOpBoxCox</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"boxcox"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"boxcox"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -191,15 +191,15 @@ as well as a list of class <code>boxcox</code> for each column, which is transfo
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>standardize</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
+<li><p><code>standardize</code> :: <code>logical(1)</code> <br />
 Whether to center and scale the transformed values to attempt a standard
 normal distribution. For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/boxcox.html'>boxcox()</a></code>.</p></li>
-<li><p><code>eps</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>eps</code> :: <code>numeric(1)</code> <br />
 Tolerance parameter to identify if lambda parameter is equal to zero.
 For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/boxcox.html'>boxcox()</a></code>.</p></li>
-<li><p><code>lower</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>lower</code> :: <code>numeric(1)</code> <br />
 Lower value for estimation of lambda parameter. For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/boxcox.html'>boxcox()</a></code>.</p></li>
-<li><p><code>upper</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>upper</code> :: <code>numeric(1)</code> <br />
 Upper value for estimation of lambda parameter. For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/boxcox.html'>boxcox()</a></code>.</p></li>
 </ul>
 
@@ -289,90 +289,93 @@ Upper value for estimation of lambda parameter. For details see <code><a href='h
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"boxcox"</span><span class='op'>)</span>
-
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa   -1.3431567  -1.3850773   -0.8917547  1.01831791
-#&gt;   2:    setosa   -1.3431567  -1.3850773   -1.1812229 -0.08167295
-#&gt;   3:    setosa   -1.4033413  -1.3850773   -1.4845435  0.37307046
-#&gt;   4:    setosa   -1.2832670  -1.3850773   -1.6417967  0.14833599
-#&gt;   5:    setosa   -1.3431567  -1.3850773   -1.0348319  1.22454068
-#&gt;  ---                                                            
-#&gt; 146: virginica    0.8174171   1.2930924    1.0385560 -0.08167295
-#&gt; 147: virginica    0.7075555   0.9020852    0.6097200 -1.32264877
-#&gt; 148: virginica    0.8174171   1.0023867    0.8279148 -0.08167295
-#&gt; 149: virginica    0.9269887   1.2930924    0.4976284  0.80781419
-#&gt; 150: virginica    0.7625234   0.7998822    0.1485189 -0.08167295</div><div class='input'>
-<span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
-</div><div class='output co'>#&gt; $bc
-#&gt; $bc$Petal.Length
-#&gt; Standardized Box Cox Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = 0.931286 
-#&gt;  - mean (before standardization) = 2.58137 
-#&gt;  - sd (before standardization) = 1.627669 
-#&gt; 
-#&gt; $bc$Petal.Width
-#&gt; Standardized Box Cox Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = 0.6433629 
-#&gt;  - mean (before standardization) = 0.08586719 
-#&gt;  - sd (before standardization) = 0.7857394 
-#&gt; 
-#&gt; $bc$Sepal.Length
-#&gt; Standardized Box Cox Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = -0.144751 
-#&gt;  - mean (before standardization) = 1.549011 
-#&gt;  - sd (before standardization) = 0.1094848 
-#&gt; 
-#&gt; $bc$Sepal.Width
-#&gt; Standardized Box Cox Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = 0.2810121 
-#&gt;  - mean (before standardization) = 1.30301 
-#&gt;  - sd (before standardization) = 0.1950175 
-#&gt; 
-#&gt; 
-#&gt; $dt_columns
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#&gt; 
-#&gt; $affected_cols
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#&gt; 
-#&gt; $intasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length numeric
-#&gt; 2:  Petal.Width numeric
-#&gt; 3: Sepal.Length numeric
-#&gt; 4:  Sepal.Width numeric
-#&gt; 
-#&gt; $outtasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length numeric
-#&gt; 2:  Petal.Width numeric
-#&gt; 3: Sepal.Length numeric
-#&gt; 4:  Sepal.Width numeric
-#&gt; 
-#&gt; $outtaskshell
-#&gt; Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"boxcox"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa   -1.3431567  -1.3850773   -0.8917547  1.01831791</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa   -1.3431567  -1.3850773   -1.1812229 -0.08167295</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa   -1.4033413  -1.3850773   -1.4845435  0.37307046</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa   -1.2832670  -1.3850773   -1.6417967  0.14833599</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa   -1.3431567  -1.3850773   -1.0348319  1.22454068</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica    0.8174171   1.2930924    1.0385560 -0.08167295</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica    0.7075555   0.9020852    0.6097200 -1.32264877</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica    0.8174171   1.0023867    0.8279148 -0.08167295</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica    0.9269887   1.2930924    0.4976284  0.80781419</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica    0.7625234   0.7998822    0.1485189 -0.08167295</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Petal.Length</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = 0.931286 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 2.58137 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 1.627669 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Petal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = 0.6433629 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 0.08586719 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 0.7857394 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Sepal.Length</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = -0.144751 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 1.549011 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 0.1094848 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Box Cox Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = 0.2810121 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 1.30301 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 0.1950175 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dt_columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $affected_cols</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $intasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Petal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Petal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Sepal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Petal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Petal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Sepal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtaskshell</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -172,7 +172,7 @@ Ding &amp; Simonoff (2010).</p>
 <pre><span class='va'>PipeOpImputeOOR</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"imputeoor"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"imputeoor"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -190,20 +190,20 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 <p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p>
 <p>The <code>$state$model</code> contains either <code>".MISSING"</code> used for <code>character</code> and <code>factor</code> (also
-<code>ordered</code>) features or <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> indicating the constant value used for imputation of
+<code>ordered</code>) features or <code>numeric(1)</code> indicating the constant value used for imputation of
 <code>integer</code> and <code>numeric</code> features.</p>
     <h2 class="hasAnchor" id="parameters"><a class="anchor" href="#parameters"></a>Parameters</h2>
 
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>, as well as:</p><ul>
-<li><p><code>min</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
+<li><p><code>min</code> :: <code>logical(1)</code> <br />
 Should <code>integer</code> and <code>numeric</code> features be shifted below the minimum? Initialized to TRUE. If FALSE
 they are shifted above the maximum. See also the description above.</p></li>
-<li><p><code>offset</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>offset</code> :: <code>numeric(1)</code> <br />
 Numerical non-negative offset as used in the description above for <code>integer</code> and <code>numeric</code>
 features. Initialized to 1.</p></li>
-<li><p><code>multiplier</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>multiplier</code> :: <code>numeric(1)</code> <br />
 Numerical non-negative multiplier as used in the description above for <code>integer</code> and <code>numeric</code>
 features. Initialized to 1.</p></li>
 </ul>
@@ -311,47 +311,50 @@ For <code>integer</code> and <code>numeric</code> features uses the <code>min</c
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2409</span><span class='op'>)</span>
-<span class='va'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>data</span><span class='op'>$</span><span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span>, size <span class='op'>=</span> <span class='fl'>766</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>data</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>ordered</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, size <span class='op'>=</span> <span class='fl'>767</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"task"</span>, backend <span class='op'>=</span> <span class='va'>data</span>, target <span class='op'>=</span> <span class='st'>"diabetes"</span><span class='op'>)</span>
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#&gt;        0        0        5      374       11        0        0       35 
-#&gt;  triceps        y        z 
-#&gt;      227        2        1 </div><div class='input'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputeoor"</span><span class='op'>)</span>
-<span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-<span class='va'>new_task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; diabetes      age pedigree pregnant  glucose  insulin     mass pressure 
-#&gt;        0        0        0        0        0        0        0        0 
-#&gt;  triceps        y        z 
-#&gt;        0        0        0 </div><div class='input'><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      diabetes age pedigree pregnant glucose insulin mass pressure triceps
-#&gt;   1:      pos  50    0.627        6     148    -819 33.6       72      35
-#&gt;   2:      neg  31    0.351        1      85    -819 26.6       66      29
-#&gt;   3:      pos  32    0.672        8     183    -819 23.3       64     -86
-#&gt;   4:      neg  21    0.167        1      89      94 28.1       66      23
-#&gt;   5:      pos  33    2.288        0     137     168 43.1       40      35
-#&gt;  ---                                                                     
-#&gt; 764:      neg  63    0.171       10     101     180 32.9       76      48
-#&gt; 765:      neg  27    0.340        2     122    -819 36.8       70      27
-#&gt; 766:      neg  30    0.245        5     121     112 26.2       72      23
-#&gt; 767:      pos  47    0.349        1     126    -819 30.1       60     -86
-#&gt; 768:      neg  23    0.315        1      93    -819 30.4       70      31
-#&gt;             y        z
-#&gt;   1: .MISSING .MISSING
-#&gt;   2:        l        9
-#&gt;   3:        q        6
-#&gt;   4:        f        3
-#&gt;   5:        l        3
-#&gt;  ---                  
-#&gt; 764:        o        7
-#&gt; 765:        n        5
-#&gt; 766:        e        6
-#&gt; 767:        c        8
-#&gt; 768: .MISSING        9</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2409</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>data</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>data</span><span class='op'>$</span><span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span>, size <span class='op'>=</span> <span class='fl'>766</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>data</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>ordered</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, size <span class='op'>=</span> <span class='fl'>767</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>TaskClassif</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"task"</span>, backend <span class='op'>=</span> <span class='va'>data</span>, target <span class='op'>=</span> <span class='st'>"diabetes"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> diabetes      age  glucose  insulin     mass pedigree pregnant pressure </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0        0        5      374       11        0        0       35 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  triceps        y        z </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      227        2        1 </span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputeoor"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> diabetes      age pedigree pregnant  glucose  insulin     mass pressure </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0        0        0        0        0        0        0        0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  triceps        y        z </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0        0        0 </span>
+<span class='r-in'><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      diabetes age pedigree pregnant glucose insulin mass pressure triceps</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:      pos  50    0.627        6     148    -819 33.6       72      35</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:      neg  31    0.351        1      85    -819 26.6       66      29</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:      pos  32    0.672        8     183    -819 23.3       64     -86</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:      neg  21    0.167        1      89      94 28.1       66      23</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:      pos  33    2.288        0     137     168 43.1       40      35</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                                     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 764:      neg  63    0.171       10     101     180 32.9       76      48</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 765:      neg  27    0.340        2     122    -819 36.8       70      27</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 766:      neg  30    0.245        5     121     112 26.2       72      23</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 767:      pos  47    0.349        1     126    -819 30.1       60     -86</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 768:      neg  23    0.315        1      93    -819 30.4       70      31</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             y        z</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1: .MISSING .MISSING</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:        l        9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:        q        6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:        f        3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:        l        3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 764:        o        7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 765:        n        5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 766:        e        6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 767:        c        8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 768: .MISSING        9</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -165,14 +165,14 @@ for a <code>PipeOp</code> and requires deriving classes to create the <code>priv
 <p>Note: This object is typically constructed via a derived class, e.g. <code><a href='mlr_pipeops_classifavg.html'>PipeOpClassifAvg</a></code> or <code><a href='mlr_pipeops_regravg.html'>PipeOpRegrAvg</a></code>.</p><pre><span class='va'>PipeOpEnsemble</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>innum <span class='op'>=</span> <span class='fl'>0</span>, collect_multiplicity <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>id</span>, param_set <span class='op'>=</span> <span class='va'>ParamSet</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, packages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, prediction_type <span class='op'>=</span> <span class='st'>"Prediction"</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>innum</code> :: <code>numeric(1)</code><br />
 Determines the number of input channels.
 If <code>innum</code> is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.</p></li>
-<li><p><code>collect_multiplicity</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>collect_multiplicity</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code>, the input is a <code><a href='Multiplicity.html'>Multiplicity</a></code> collecting channel. This means, a
 <code><a href='Multiplicity.html'>Multiplicity</a></code> input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires <code>innum</code> to be 0.
 Default is <code>FALSE</code>.</p></li>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of the resulting  object.</p></li>
 <li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
 ("Hyper"-)Parameters in form of a <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code> for the resulting <code><a href='PipeOp.html'>PipeOp</a></code>.</p></li>
@@ -180,8 +180,8 @@ Identifier of the resulting  object.</p></li>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
 <li><p><code>packages</code> :: <code>character</code><br />
 Set of packages required for this <code>PipeOp</code>. These packages are loaded during <code>$train()</code> and <code>$predict()</code>, but not attached.
-Default <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
-<li><p><code>prediction_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Default <code>character(0)</code>.</p></li>
+<li><p><code>prediction_type</code> :: <code>character(1)</code><br />
 The <code>predict</code> entry of the <code>$input</code> and <code>$output</code> type specifications.
 Should be <code>"Prediction"</code> (default) or one of its subclasses, e.g. <code>"PredictionClassif"</code>, and correspond to the type accepted by
 <code>private$.train()</code> and <code>private$.predict()</code>.</p></li>

@@ -218,7 +218,7 @@ The <code>scheme_df</code> parameter is initialized to <code>"unary"</code>, whi
 <pre><span class='va'>PipeOpTextVectorizer</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"textvectorizer"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"textvectorizer"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -241,73 +241,73 @@ representation.</p>
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>return_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>return_type</code> :: <code>character(1)</code><br />
 Whether to return an integer representation ("integer-sequence") or a Bag-of-words ("bow").
 If set to "integer_sequence", tokens are replaced by an integer and padded/truncated to <code>sequence_length</code>.
 If set to "factor_sequence", tokens are replaced by a factor and padded/truncated to <code>sequence_length</code>.
 If set to 'bow', a possibly weighted bag-of-words matrix is returned.
 Defaults to <code>bow</code>.</p></li>
-<li><p><code>stopwords_language</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>stopwords_language</code> :: <code>character(1)</code><br />
 Language to use for stopword filtering. Needs to be either <code>"none"</code>, a language identifier listed in
-<code><a href='https://rdrr.io/pkg/stopwords/man/stopwords_getlanguages.html'>stopwords::stopwords_getlanguages("snowball")</a></code> (<code>"de"</code>, <code>"en"</code>, ...) or <code>"smart"</code>.
+<code>stopwords::stopwords_getlanguages("snowball")</code> (<code>"de"</code>, <code>"en"</code>, ...) or <code>"smart"</code>.
 <code>"none"</code> disables language-specific stopwords.
-<code>"smart"</code> coresponds to <code><a href='https://rdrr.io/pkg/stopwords/man/stopwords.html'>stopwords::stopwords(source = "smart")</a></code>, which
+<code>"smart"</code> coresponds to <code>stopwords::stopwords(source = "smart")</code>, which
 contains <em>English</em> stopwords and also removes one-character strings. Initialized to <code>"smart"</code>.<br /></p></li>
 <li><p><code>extra_stopwords</code> :: <code>character</code><br />
-Extra stopwords to remove. Must be a <code>character</code> vector containing individual tokens to remove. Initialized to <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.
+Extra stopwords to remove. Must be a <code>character</code> vector containing individual tokens to remove. Initialized to <code>character(0)</code>.
 When <code>n</code> is set to values greater than 1, this can also contain stop-ngrams.</p></li>
-<li><p><code>tolower</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>tolower</code> :: <code>logical(1)</code><br />
 Convert to lower case? See <code><a href='https://quanteda.io/reference/dfm.html'>quanteda::dfm</a></code>. Default: <code>TRUE</code>.</p></li>
-<li><p><code>stem</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>stem</code> :: <code>logical(1)</code><br />
 Perform stemming? See <code><a href='https://quanteda.io/reference/dfm.html'>quanteda::dfm</a></code>. Default: <code>FALSE</code>.</p></li>
-<li><p><code>what</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>what</code> :: <code>character(1)</code><br />
 Tokenization splitter. See <code><a href='https://quanteda.io/reference/tokens.html'>quanteda::tokens</a></code>. Default: <code>word</code>.</p></li>
-<li><p><code>remove_punct</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>remove_punct</code> :: <code>logical(1)</code><br />
 See <code><a href='https://quanteda.io/reference/tokens.html'>quanteda::tokens</a></code>. Default: <code>FALSE</code>.</p></li>
-<li><p><code>remove_url</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>remove_url</code> :: <code>logical(1)</code><br />
 See <code><a href='https://quanteda.io/reference/tokens.html'>quanteda::tokens</a></code>. Default: <code>FALSE</code>.</p></li>
-<li><p><code>remove_symbols</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>remove_symbols</code> :: <code>logical(1)</code><br />
 See <code><a href='https://quanteda.io/reference/tokens.html'>quanteda::tokens</a></code>. Default: <code>FALSE</code>.</p></li>
-<li><p><code>remove_numbers</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>remove_numbers</code> :: <code>logical(1)</code><br />
 See <code><a href='https://quanteda.io/reference/tokens.html'>quanteda::tokens</a></code>. Default: <code>FALSE</code>.</p></li>
-<li><p><code>remove_separators</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>remove_separators</code> :: <code>logical(1)</code><br />
 See <code><a href='https://quanteda.io/reference/tokens.html'>quanteda::tokens</a></code>. Default: <code>TRUE</code>.</p></li>
-<li><p><code>split_hypens</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>split_hypens</code> :: <code>logical(1)</code><br />
 See <code><a href='https://quanteda.io/reference/tokens.html'>quanteda::tokens</a></code>. Default: <code>FALSE</code>.</p></li>
 <li><p><code>n</code> :: <code>integer</code><br />
 Vector of ngram lengths. See <code><a href='https://quanteda.io/reference/tokens_ngrams.html'>quanteda::tokens_ngrams</a></code>. Initialized to 1, deviating from the base function's default.
 Note that this can be a <em>vector</em> of multiple values, to construct ngrams of multiple orders.</p></li>
 <li><p><code>skip</code> :: <code>integer</code><br />
 Vector of skips. See <code><a href='https://quanteda.io/reference/tokens_ngrams.html'>quanteda::tokens_ngrams</a></code>. Default: 0. Note that this can be a <em>vector</em> of multiple values.</p></li>
-<li><p><code>sparsity</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>sparsity</code> :: <code>numeric(1)</code><br />
 Desired sparsity of the 'tfm' matrix. See <code><a href='https://quanteda.io/reference/dfm_trim.html'>quanteda::dfm_trim</a></code>. Default: <code>NULL</code>.</p></li>
-<li><p><code>max_termfreq</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>max_termfreq</code> :: <code>numeric(1)</code><br />
 Maximum term frequency in the 'tfm' matrix. See <code><a href='https://quanteda.io/reference/dfm_trim.html'>quanteda::dfm_trim</a></code>. Default: <code>NULL</code>.</p></li>
-<li><p><code>min_termfreq</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>min_termfreq</code> :: <code>numeric(1)</code><br />
 Minimum term frequency in the 'tfm' matrix. See <code><a href='https://quanteda.io/reference/dfm_trim.html'>quanteda::dfm_trim</a></code>. Default: <code>NULL</code>.</p></li>
-<li><p><code>termfreq_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>termfreq_type</code> :: <code>character(1)</code><br />
 How to asess term frequency. See <code><a href='https://quanteda.io/reference/dfm_trim.html'>quanteda::dfm_trim</a></code>. Default: <code>"count"</code>.</p></li>
-<li><p><code>scheme_df</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
+<li><p><code>scheme_df</code> :: <code>character(1)</code> <br />
 Weighting scheme for document frequency: See <code><a href='https://quanteda.io/reference/docfreq.html'>quanteda::docfreq</a></code>. Initialized to <code>"unary"</code> (1 for each document, deviating from base function default).</p></li>
-<li><p><code>smoothing_df</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>smoothing_df</code> :: <code>numeric(1)</code><br />
 See <code><a href='https://quanteda.io/reference/docfreq.html'>quanteda::docfreq</a></code>. Default: 0.</p></li>
-<li><p><code>k_df</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>k_df</code> :: <code>numeric(1)</code><br />
 <code>k</code> parameter given to <code><a href='https://quanteda.io/reference/docfreq.html'>quanteda::docfreq</a></code> (see there).
 Default is 0.</p></li>
-<li><p><code>threshold_df</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>threshold_df</code> :: <code>numeric(1)</code><br />
 See <code><a href='https://quanteda.io/reference/docfreq.html'>quanteda::docfreq</a></code>. Default: 0. Only considered for <code>scheme_df</code> = <code>"count"</code>.</p></li>
-<li><p><code>base_df</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>base_df</code> :: <code>numeric(1)</code><br />
 The base for logarithms in <code><a href='https://quanteda.io/reference/docfreq.html'>quanteda::docfreq</a></code> (see there). Default: 10.</p></li>
-<li><p><code>scheme_tf</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
+<li><p><code>scheme_tf</code> :: <code>character(1)</code> <br />
 Weighting scheme for term frequency: See <code><a href='https://quanteda.io/reference/dfm_weight.html'>quanteda::dfm_weight</a></code>. Default: <code>"count"</code>.</p></li>
-<li><p><code>k_tf</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>k_tf</code> :: <code>numeric(1)</code><br />
 <code>k</code> parameter given to <code><a href='https://quanteda.io/reference/dfm_weight.html'>quanteda::dfm_weight</a></code> (see there).
 Default behaviour is 0.5.</p></li>
-<li><p><code>base_df</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>base_df</code> :: <code>numeric(1)</code><br />
 The base for logarithms in <code><a href='https://quanteda.io/reference/dfm_weight.html'>quanteda::dfm_weight</a></code> (see there). Default: 10.</p></li>
 </ul>
 
-<p>#' * <code>sequence_length</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+<p>#' * <code>sequence_length</code> :: <code>integer(1)</code><br />
 The length of the integer sequence. Defaults to <code>Inf</code>, i.e. all texts are padded to the length
 of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -397,65 +397,68 @@ of the longest text. Only relevant for "return_type" : "integer_sequence"</p>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://r-datatable.com'>"data.table"</a></span><span class='op'>)</span>
-<span class='co'># create some text data</span>
-<span class='va'>dt</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
-  txt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>150</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span>, <span class='fl'>3</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>cbind</span><span class='op'>(</span><span class='va'>dt</span><span class='op'>)</span>
-
-<span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"textvectorizer"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>stopwords_language <span class='op'>=</span> <span class='st'>"en"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.n
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5     1     1
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0     1     0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2     0     0
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1     0     1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6     0     0
-#&gt;  ---                                                                        
-#&gt; 146: virginica          5.2         2.3          6.7         3.0     0     1
-#&gt; 147: virginica          5.0         1.9          6.3         2.5     1     1
-#&gt; 148: virginica          5.2         2.0          6.5         3.0     0     0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4     0     1
-#&gt; 150: virginica          5.1         1.8          5.9         3.0     0     0
-#&gt;      txt.e txt.x txt.y txt.p txt.j txt.l txt.h txt.v txt.m txt.o txt.r txt.f
-#&gt;   1:     1     0     0     0     0     0     0     0     0     0     0     0
-#&gt;   2:     1     1     0     0     0     0     0     0     0     0     0     0
-#&gt;   3:     1     0     1     1     0     0     0     0     0     0     0     0
-#&gt;   4:     1     0     0     0     1     0     0     0     0     0     0     0
-#&gt;   5:     0     1     0     0     0     1     1     0     0     0     0     0
-#&gt;  ---                                                                        
-#&gt; 146:     0     0     0     0     0     0     1     0     0     0     1     0
-#&gt; 147:     0     0     0     0     0     0     0     0     0     1     0     0
-#&gt; 148:     0     1     0     0     0     0     0     0     0     0     0     0
-#&gt; 149:     0     0     0     0     0     0     0     0     0     1     0     0
-#&gt; 150:     0     0     0     0     1     0     0     0     0     0     1     0
-#&gt;      txt.k txt.t txt.s txt.u txt.b txt.z txt.c txt.q txt.g txt.w
-#&gt;   1:     0     0     0     0     0     0     0     0     0     0
-#&gt;   2:     0     0     0     0     0     0     0     0     0     0
-#&gt;   3:     0     0     0     0     0     0     0     0     0     0
-#&gt;   4:     0     0     0     0     0     0     0     0     0     0
-#&gt;   5:     0     0     0     0     0     0     0     0     0     0
-#&gt;  ---                                                            
-#&gt; 146:     0     0     0     0     0     0     0     0     0     0
-#&gt; 147:     0     0     0     0     0     0     0     0     0     0
-#&gt; 148:     0     0     0     0     1     0     0     0     0     1
-#&gt; 149:     0     0     0     1     0     0     0     0     0     0
-#&gt; 150:     0     0     0     0     0     0     1     0     0     0</div><div class='input'>
-<span class='va'>one_line_of_iris</span> <span class='op'>=</span> <span class='va'>task</span><span class='op'>$</span><span class='fu'>filter</span><span class='op'>(</span><span class='fl'>13</span><span class='op'>)</span>
-
-<span class='va'>one_line_of_iris</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width   txt
-#&gt; 1:  setosa          1.4         0.1          4.8           3 i k f</div><div class='input'>
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>one_line_of_iris</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.n txt.e
-#&gt; 1:  setosa          1.4         0.1          4.8           3     0     0     0
-#&gt;    txt.x txt.y txt.p txt.j txt.l txt.h txt.v txt.m txt.o txt.r txt.f txt.k
-#&gt; 1:     0     0     0     0     0     0     0     0     0     0     1     1
-#&gt;    txt.t txt.s txt.u txt.b txt.z txt.c txt.q txt.g txt.w
-#&gt; 1:     0     0     0     0     0     0     0     0     0</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://r-datatable.com'>"data.table"</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># create some text data</span></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span></span>
+<span class='r-in'>  txt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>150</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span>, <span class='fl'>3</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>cbind</span><span class='op'>(</span><span class='va'>dt</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"textvectorizer"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>stopwords_language <span class='op'>=</span> <span class='st'>"en"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.n</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5     1     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5     1     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      txt.e txt.x txt.y txt.p txt.j txt.l txt.h txt.v txt.m txt.o txt.r txt.f</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:     1     0     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:     1     1     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:     1     0     1     1     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:     1     0     0     0     1     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:     0     1     0     0     0     1     1     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146:     0     0     0     0     0     0     1     0     0     0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147:     0     0     0     0     0     0     0     0     0     1     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148:     0     1     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149:     0     0     0     0     0     0     0     0     0     1     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150:     0     0     0     0     1     0     0     0     0     0     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      txt.k txt.t txt.s txt.u txt.b txt.z txt.c txt.q txt.g txt.w</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146:     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147:     0     0     0     0     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148:     0     0     0     0     1     0     0     0     0     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149:     0     0     0     1     0     0     0     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150:     0     0     0     0     0     0     1     0     0     0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>one_line_of_iris</span> <span class='op'>=</span> <span class='va'>task</span><span class='op'>$</span><span class='fu'>filter</span><span class='op'>(</span><span class='fl'>13</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>one_line_of_iris</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width   txt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  setosa          1.4         0.1          4.8           3 i k f</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>one_line_of_iris</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width txt.d txt.n txt.e</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  setosa          1.4         0.1          4.8           3     0     0     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    txt.x txt.y txt.p txt.j txt.l txt.h txt.v txt.m txt.o txt.r txt.f txt.k</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     0     0     0     0     0     0     0     0     0     0     1     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    txt.t txt.s txt.u txt.b txt.z txt.c txt.q txt.g txt.w</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     0     0     0     0     0     0     0     0     0</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

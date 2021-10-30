@@ -125,7 +125,7 @@
 <span class="va">learner_po</span> <span class="op">=</span> <span class="fu"><a href="reference/po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, learner <span class="op">=</span> <span class="fu">lrn</span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>These pipeops can then be combined together to define machine learning pipelines. These can be wrapped in a <code>GraphLearner</code> that behave like any other <code>Learner</code> in <code>mlr3</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">graph</span> <span class="op">=</span> <span class="va">pca</span> <span class="op">%&gt;&gt;%</span> <span class="va">filter</span> <span class="op">%&gt;&gt;%</span> <span class="va">learner_po</span>
+<code class="sourceCode R"><span class="va">graph</span> <span class="op">=</span> <span class="va">pca</span> <span class="op"><a href="reference/concat_graphs.html">%&gt;&gt;%</a></span> <span class="va">filter</span> <span class="op"><a href="reference/concat_graphs.html">%&gt;&gt;%</a></span> <span class="va">learner_po</span>
 <span class="va">glrn</span> <span class="op">=</span> <span class="va"><a href="reference/mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span></code></pre></div>
 <p>This learner can be used for resampling, benchmarking, and even tuning.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">

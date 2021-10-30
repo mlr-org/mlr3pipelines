@@ -183,21 +183,21 @@ single time to the output task.</p>
   assert_targets_equal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>character</code><br />
+<li><p><code>innum</code> :: <code>numeric(1)</code> | <code>character</code><br />
 Determines the number of input channels.
 If <code>innum</code> is 0 (default), a vararg input channel is created that can take an arbitrary number
 of inputs. If <code>innum</code> is a <code>character</code> vector, the number of input channels is the length of
 <code>innum</code>, and the columns of the result are prefixed with the values.</p></li>
-<li><p><code>collect_multiplicity</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>collect_multiplicity</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code>, the input is a <code><a href='Multiplicity.html'>Multiplicity</a></code> collecting channel. This means, a
 <code><a href='Multiplicity.html'>Multiplicity</a></code> input, instead of multiple normal inputs, is accepted and the members are aggregated. This requires <code>innum</code> to be 0.
 Default is <code>FALSE</code>.</p></li>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of the resulting object, default <code>"featureunion"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
 be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
-<li><p><code>assert_targets_equal</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>assert_targets_equal</code> :: <code>logical(1)</code><br />
 If <code>assert_targets_equal</code> is <code>TRUE</code> (Default), task target column names are checked for
 agreement. Disagreeing target column names are usually a bug, so this should often be left at
 the default.</p></li>
@@ -329,37 +329,39 @@ behaviour may change in the future.</p>
 <code><a href='mlr_pipeops_replicate.html'>mlr_pipeops_replicate</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task1</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>,
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>
-<span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span><span class='op'>)</span>
-
-<span class='va'>gr</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $featureunion.output
-#&gt; &lt;TaskClassif:iris&gt; (150 x 9)
-#&gt; * Target: Species
-#&gt; * Properties: multiclass
-#&gt; * Features (8):
-#&gt;   - dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width,
-#&gt;     Sepal.Length, Sepal.Width
-#&gt; </div><div class='input'>
-<span class='va'>task2</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>task3</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span>, innum <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task2</span>, <span class='va'>task3</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $output
-#&gt; &lt;TaskClassif:iris&gt; (150 x 9)
-#&gt; * Target: Species
-#&gt; * Properties: multiclass
-#&gt; * Features (8):
-#&gt;   - dbl (8): a.Petal.Length, a.Petal.Width, a.Sepal.Length,
-#&gt;     a.Sepal.Width, b.Petal.Length, b.Petal.Width, b.Sepal.Length,
-#&gt;     b.Sepal.Width
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task1</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>gr</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $featureunion.output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 9)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Target: Species</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Properties: multiclass</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Features (8):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - dbl (8): PC1, PC2, PC3, PC4, Petal.Length, Petal.Width,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Sepal.Length, Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task2</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task3</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span>, innum <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task2</span>, <span class='va'>task3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 9)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Target: Species</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Properties: multiclass</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Features (8):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - dbl (8): a.Petal.Length, a.Petal.Width, a.Sepal.Length,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     a.Sepal.Width, b.Petal.Length, b.Petal.Width, b.Sepal.Length,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     b.Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
