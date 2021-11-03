@@ -227,7 +227,7 @@ PipeOp = R6Class("PipeOp",
       self$param_set$values = insert_named(self$param_set$values, param_vals)
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
-      self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
+      self$packages = union("mlr3pipelines", assert_character(packages, any.missing = FALSE, min.chars = 1L))
       self$tags = assert_subset(tags, mlr_reflections$pipeops$valid_tags)
     },
 
