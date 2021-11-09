@@ -1,4 +1,6 @@
-# mlr3pipelines 0.3.6-9000
+# mlr3pipelines 0.3.6-1
+
+* Fix numerics problem in tests
 
 # mlr3pipelines 0.3.6
 
