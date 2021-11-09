@@ -17,26 +17,29 @@
 #'   `NULL` values automatically get converted to [`PipeOpNOP`] with a random ID of the format `nop_********`.
 #'   The list can be named, in which case the
 #'   IDs of the elements are prefixed with the names, separated by a dot (`.`).
-#' @param in_place (`logical(1)`)\cr
+#' @param in_place (`logical(1)` | `logical`)\cr
 #'   Whether to try to avoid cloning the first element of `graphs`, similar to the difference
-#'   of [`%>>>%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].\cr
+#'   of [`%>>!%`] over [`%>>%`]. This can only be avoided if `graphs[[1]]` is already a [`Graph`].\cr
 #'   Unlike [`chain_graphs()`], `gunion()` does all checks *before* mutating `graphs[[1]]`, so it will not leave `graphs[[1]]`
-#'   in an incompletely modified state when it fails.
+#'   in an incompletely modified state when it fails.\cr
+#'   `in_place` may also be of length `graph`, in which case it determines for each element of `graphs` whether it is cloned.
+#'   This is for internal usage and is not recommended.
 #' @return [`Graph`] the resulting [`Graph`].
 #'
 #' @family Graph operators
 #' @export
 gunion = function(graphs, in_place = FALSE) {
   assert_list(graphs)
+  assert(check_flag(in_place), check_logical(in_place, any.missing = FALSE, len = length(graphs)))
   if (length(graphs) == 0) return(Graph$new())
   graphs = map_if(graphs, is.null, function(x) po("nop", id = paste0("nop_", paste(sample(c(letters, 0:9), 8, TRUE), collapse = ""))))
-  do_clone = c(!in_place, rep(TRUE, length(graphs) - 1))
+  do_clone = if (length(in_place) == length(graphs)) !in_place else c(!in_place, rep(TRUE, length(graphs) - 1))
   graphs = structure(pmap(list(x = graphs, clone = do_clone), as_graph), names = names(graphs))
   graphs = Filter(function(x) length(x$pipeops), graphs)
 
   if (length(graphs) == 0) return(Graph$new())
 
-  if (in_place) {
+  if (in_place[[1]]) {
     g = graphs[[1]]
     g$.__enclos_env__$private$.param_set = NULL  # clear param_set cache
   } else {

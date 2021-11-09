@@ -89,7 +89,7 @@ test_that("triple-arrow", {
 
   p2graph1 = as_graph(p2)
 
-  gr2 = gr %>>>% p2graph1
+  gr2 = gr %>>!% p2graph1
 
   expect_equal(gr2$pipeops, list(p1 = p1, p2 = p2))
 
@@ -100,7 +100,7 @@ test_that("triple-arrow", {
 
   expect_deep_clone(gr2$pipeops$p2, p2)
 
-  gr3 = gr %>>>% p3
+  gr3 = gr %>>!% p3
 
   expect_identical(gr3, gr)
   expect_identical(gr2, gr)
@@ -143,7 +143,7 @@ test_that("triple-arrow", {
 
   # not mutable in-place
 
-  gr = p1 %>>>% p2graph1
+  gr = p1 %>>!% p2graph1
 
   expect_deep_clone(p1, PipeOpNOP$new("p1"))
   expect_deep_clone(p2graph1, as_graph(p2))

@@ -19,7 +19,7 @@ Returns a single \code{\link[mlr3:PredictionClassif]{PredictionClassif}}.
 This PipeOp should be used in conjunction with \code{\link{PipeOpLearnerCV}} in order to
 optimize thresholds of cross-validated predictions.
 In order to optimize thresholds without cross-validation, use \code{\link{PipeOpLearnerCV}}
-in conjunction with \code{\link[mlr3:mlr_resamplings_insample]{ResamplingInsample}}.
+in conjunction with \code{\link[mlr3:ResamplingInsample]{ResamplingInsample}}.
 }
 \section{Construction}{
 \preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr

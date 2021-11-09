@@ -6,7 +6,7 @@
 \alias{\%>>>\%}
 \title{PipeOp Composition Operator}
 \usage{
-concat_graphs(g1, g2, in_place = FALSE)
+concat_graphs(g1, g2, glist, in_place = FALSE)
 
 g1 \%>>\% g2
 
@@ -19,8 +19,17 @@ g1 \%>>>\% g2
 \item{g2}{(\code{\link{Graph}} | \code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{list} | \code{...}) \cr
 \code{\link{Graph}} / \code{\link{PipeOp}} / object-convertible-to-\code{\link{PipeOp}} to put after  \code{g1}.}
 
+\item{glist}{\code{list} of (\code{\link{Graph}} | \code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{list} | \code{...})\cr
+List of elements which are the \code{\link{Graph}}s to be joined. Elements must be convertible to \code{\link{Graph}} or \code{\link{PipeOp}} using \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}.
+\code{NULL} is the neutral element of \code{\link{\%>>\%}} and skipped. When this is given, \code{g1} and \code{g2} must not be given.}
+
 \item{in_place}{(\code{logical(1)})\cr
-Whether to try to avoid cloning \code{g1}. If \code{g1} is not a \code{\link{Graph}}, then it is cloned regardless.}
+When \code{g1} and \code{g2} are given: Whether to try to avoid cloning \code{g1}. If \code{g1} is not a \code{\link{Graph}}, then it is cloned regardless.\n
+When \code{glist} is given instead:
+Whether to try to avoid cloning the first element of \code{glist}, similar to the difference
+of \verb{\%>>>\%} over \verb{\%>>\%}. This can only be avoided if \code{glist[[1]]} is already a \code{\link{Graph}}.
+Beware that, when \code{in_place} is \code{TRUE} and if \code{concat_graphs()} fails because of id collisions, then \code{glist[[1]]} will possibly be in an incompletely
+modified state.}
 }
 \value{
 \code{\link{Graph}}: the constructed \code{\link{Graph}}.
@@ -65,6 +74,22 @@ it is cloned just as when \verb{\%>>\%} is used; \verb{\%>>>\%} only avoids \cod
 Note that if \code{g1} is \code{NULL}, \code{g2} converted to a \code{\link{Graph}} will be returned.
 Analogously, if \code{g2} is \code{NULL}, \code{g1} converted to a \code{\link{Graph}} will be returned.
 }
+\section{Chaining Graphs}{
+
+\code{concat_graphs} can also be called with the \code{glist} argument, which takes an arbitrary amount of \code{\link{Graph}}s or \code{\link{PipeOp}}s (or objects that can be automatically
+converted into \code{\link{Graph}}s or \code{\link{PipeOp}}s) and joins them in a serial \code{\link{Graph}}, as if connecting them using \code{\link{\%>>\%}}.
+
+Care is taken to avoid unnecessarily cloning of components. A call of
+\code{chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)} is equivalent to
+\code{g1 \%>>\% g2 \%>>>\% g3 \%>>>\% g4 \%>>>\% ...}.
+A call of \code{chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)}
+is equivalent to \code{g1 \%>>>\% g2 \%>>>\% g3 \%>>>\% g4 \%>>>\% ...} (differing in the
+first operator being \verb{\%>>>\%} as well).
+
+\verb{concat_graphs(glist = <list>)} (implicitly with \code{in_place = FALSE}) is a safe way of generating large linear pipelines quickly, while
+still avoiding to change any of its inputs by reference, and avoiding the risk of ending up with broken objects.
+}
+
 \examples{
 o1 = PipeOpScale$new()
 o2 = PipeOpPCA$new()
