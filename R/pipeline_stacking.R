@@ -52,8 +52,8 @@ pipeline_stacking = function(base_learners, super_learner, method = "cv", folds 
 
   if (use_features) base_learners_cv = c(base_learners_cv, po("nop"))
 
-  gunion(base_learners_cv, in_place = TRUE) %>>>%
-     po("featureunion") %>>>%
+  gunion(base_learners_cv, in_place = TRUE) %>>!%
+     po("featureunion") %>>!%
      super_learner
 }
 

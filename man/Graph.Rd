@@ -93,6 +93,11 @@ Add an edge from \code{\link{PipeOp}} \code{src_id}, and its channel \code{src_c
 channel \code{dst_channel} (identified by its name or number as listed in the \code{\link{PipeOp}}'s \verb{$input}).
 If source or destination \code{\link{PipeOp}} have only one input / output channel and \code{src_channel} / \code{dst_channel}
 are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
+\item \code{chain(gs, clone = TRUE)} \cr
+(\code{list} of \code{Graph}s, \code{logical(1)}) -> \code{self} \cr
+Takes a list of \code{Graph}s or \code{\link{PipeOp}}s (or objects that can be automatically converted into \code{Graph}s or \code{\link{PipeOp}}s,
+see \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}) as inputs and joins them in a serial \code{Graph} coming after \code{self}, as if
+connecting them using \code{\link{\%>>\%}}.
 \item \code{plot(html)} \cr
 (\code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or

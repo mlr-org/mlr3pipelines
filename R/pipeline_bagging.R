@@ -49,9 +49,9 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
     averager = as_graph(averager, clone = TRUE)
   }
 
-  po("replicate", param_vals = list(reps = iterations)) %>>>%
-    po("subsample", param_vals = list(frac = frac)) %>>>%
-    g %>>>%
+  po("replicate", param_vals = list(reps = iterations)) %>>!%
+    po("subsample", param_vals = list(frac = frac)) %>>!%
+    g %>>!%
     averager
 }
 
