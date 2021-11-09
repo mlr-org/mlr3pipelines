@@ -2,6 +2,7 @@ context("PipeOpTextVectorizer")
 
 test_that("PipeOpTextVectorizer - basic properties", {
   skip_if_not_installed("quanteda")
+  suppressWarnings(attachNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   task = mlr_tasks$get("iris")
   # create hacky text data:

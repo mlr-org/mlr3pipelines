@@ -17,10 +17,10 @@ g1 \%>>!\% g2
 \code{\link{Graph}} / \code{\link{PipeOp}} / object-convertible-to-\code{\link{PipeOp}} to put in front of \code{g2}.}
 
 \item{g2}{(\code{\link{Graph}} | \code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{list} | \code{...}) \cr
-\code{\link{Graph}} / \code{\link{PipeOp}} / object-convertible-to-\code{\link{PipeOp}} to put after  \code{g1}.}
+\code{\link{Graph}} / \code{\link{PipeOp}} / object-convertible-to-\code{\link{PipeOp}} to put after \code{g1}.}
 
 \item{in_place}{(\code{logical(1)})\cr
-Whether to try to avoid cloning \code{g1}. If \code{g1} is not a \code{\link{Graph}}, then it is cloned regardless.\n}
+Whether to try to avoid cloning \code{g1}. If \code{g1} is not a \code{\link{Graph}}, then it is cloned regardless.}
 }
 \value{
 \code{\link{Graph}}: the constructed \code{\link{Graph}}.
@@ -107,6 +107,7 @@ Other Graph operators:
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
+\code{\link{chain_graphs}()},
 \code{\link{greplicate}()},
 \code{\link{gunion}()},
 \code{\link{pipeline_greplicate}()}

@@ -153,6 +153,7 @@ test_that("Robustify Pipeline factor to numeric", {
 
   alltask = makeTypeTask(c("integer", "numeric", "logical", "character", "POSIXct"))
 
+  suppressWarnings(attachNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
   lfactor = lrn("regr.rpart")
   lnofactor = lrn("regr.rpart")
   lnofactor$feature_types = setdiff(lnofactor$feature_types, "factor")

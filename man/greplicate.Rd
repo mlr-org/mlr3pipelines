@@ -30,6 +30,7 @@ Other Graph operators:
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
+\code{\link{chain_graphs}()},
 \code{\link{concat_graphs}()},
 \code{\link{gunion}()},
 \code{\link{pipeline_greplicate}()}

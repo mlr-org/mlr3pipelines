@@ -255,7 +255,7 @@ Graph = R6Class("Graph",
 
     chain = function(gs, clone = TRUE) {
       assert_list(gs)
-      chain_graphs(c(list(gs), gs), in_place = TRUE)
+      chain_graphs(c(list(self), gs), in_place = TRUE)
     },
 
     plot = function(html = FALSE) {

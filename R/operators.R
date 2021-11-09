@@ -41,9 +41,9 @@
 #' @param g1 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
 #'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put in front of `g2`.
 #' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
-#'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put after  `g1`.
+#'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put after `g1`.
 #' @param in_place (`logical(1)`)\cr
-#'   Whether to try to avoid cloning `g1`. If `g1` is not a [`Graph`], then it is cloned regardless.\n
+#'   Whether to try to avoid cloning `g1`. If `g1` is not a [`Graph`], then it is cloned regardless.
 #'
 #' @return [`Graph`]: the constructed [`Graph`].
 #' @family Graph operators
@@ -163,6 +163,7 @@ strip_multiplicity_type = function(type) {
 #'   Beware that, if `chain_graphs()` fails because of id collisions, then `graphs[[1]]` will possibly be in an incompletely
 #'   modified state when `in_place` is `TRUE`.
 #' @return [`Graph`] the resulting [`Graph`], or `NULL` if there are no non-null values in `graphs`.
+#' @family Graph operators
 #' @export
 chain_graphs = function(graphs, in_place = FALSE) {
   assert_list(graphs)
