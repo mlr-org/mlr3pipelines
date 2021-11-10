@@ -2,7 +2,7 @@ context("PipeOpTextVectorizer")
 
 test_that("PipeOpTextVectorizer - basic properties", {
   skip_if_not_installed("quanteda")
-  suppressWarnings(attachNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
+  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   task = mlr_tasks$get("iris")
   # create hacky text data:
@@ -45,6 +45,7 @@ test_that("PipeOpTextVectorizer - basic properties", {
 
 test_that("PipeOpTextVectorizer - tfidf works", {
   skip_if_not_installed("quanteda")
+  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   task = mlr_tasks$get("iris")
   # create some text data
@@ -115,6 +116,7 @@ test_that("PipeOpTextVectorizer - tfidf works", {
 
 test_that("PipeOpTextVectorizer - bigrams", {
   skip_if_not_installed("quanteda")
+  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   task = mlr_tasks$get("iris")
   # create hacky text data:
@@ -151,6 +153,7 @@ test_that("PipeOpTextVectorizer - bigrams", {
 
 test_that("PipeOpTextVectorizer - integer sequence", {
   skip_if_not_installed("quanteda")
+  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   task = mlr_tasks$get("iris")
   # create hacky text data:
@@ -221,6 +224,7 @@ test_that("PipeOpTextVectorizer - integer sequence", {
 
 test_that("PipeOpTextVectorizer - factor sequence", {
   skip_if_not_installed("quanteda")
+  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   task = mlr_tasks$get("iris")
   # create hacky text data:
