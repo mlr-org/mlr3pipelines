@@ -86,7 +86,7 @@ values in factorial columns are often indicated by out-of-range imputation (Pipe
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -153,7 +153,7 @@ values in factorial columns are often indicated by out-of-range imputation (Pipe
     <div class="ref-description">
     <p>Add missing indicator columns ("dummy columns") to the <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>.
 Drops original features; should probably be used in combination with <code><a href='mlr_pipeops_featureunion.html'>PipeOpFeatureUnion</a></code> and imputation <code><a href='PipeOp.html'>PipeOp</a></code>s (see examples).</p>
-<p>Note the <code>affect_columns</code> is initialized with <code><a href='Selector.html'>selector_invert(selector_type(c("factor", "ordered", "character")))</a></code>, since missing
+<p>Note the <code>affect_columns</code> is initialized with <code>selector_invert(selector_type(c("factor", "ordered", "character")))</code>, since missing
 values in factorial columns are often indicated by out-of-range imputation (<code><a href='mlr_pipeops_imputeoor.html'>PipeOpImputeOOR</a></code>).</p>
     </div>
 
@@ -168,7 +168,7 @@ values in factorial columns are often indicated by out-of-range imputation (<cod
 <pre><span class='va'>PipeOpMissInd</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"missind"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, defaulting to <code>"missind"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -189,10 +189,10 @@ otherwise it is the names of all features that had missing values during trainin
     
 
 <p>The parameters are the parameters inherited from the <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>which</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>which</code> :: <code>character(1)</code><br />
 Determines for which features the indicator columns are added. Can either be <code>"missing_train"</code> (default), adding indicator columns
 for each feature that actually has missing values, or <code>"all"</code>, adding indicator columns for all features.</p></li>
-<li><p><code>type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>type</code> :: <code>character(1)</code><br />
 Determines the type of the newly created columns. Can be one of <code>"factor"</code> (default), <code>"integer"</code>, <code>"logical"</code>, <code>"numeric"</code>.</p></li>
 </ul>
 
@@ -203,7 +203,7 @@ Determines the type of the newly created columns. Can be one of <code>"factor"</
 <p>This <code><a href='PipeOp.html'>PipeOp</a></code> should cover most cases where "dummy columns" or "missing indicators" are desired. Some edge cases:</p><ul>
 <li><p>If imputation
 for factorial features is performed and only numeric features should gain missing indicators, the <code>affect_columns</code> parameter
-can be set to <code><a href='Selector.html'>selector_type("numeric")</a></code>.</p></li>
+can be set to <code>selector_type("numeric")</code>.</p></li>
 <li><p>If missing indicators should only be added for features that have more than a fraction of <code>x</code> missing values, the
 <code><a href='mlr_pipeops_removeconstants.html'>PipeOpRemoveConstants</a></code> can be used with <code>affect_columns = selector_grep("^missing_")</code> and <code>ratio = x</code>.</p></li>
 </ul>
@@ -294,46 +294,51 @@ can be set to <code><a href='Selector.html'>selector_type("numeric")</a></code>.
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>select</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"insulin"</span>, <span class='st'>"triceps"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/complete.cases.html'>complete.cases</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 394</div><div class='input'><span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; diabetes  insulin  triceps 
-#&gt;        0      374      227 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    diabetes insulin triceps
-#&gt; 1:      neg      NA      NA
-#&gt; 2:      neg     180      48
-#&gt; 3:      neg      NA      27
-#&gt; 4:      neg     112      23
-#&gt; 5:      pos      NA      NA
-#&gt; 6:      neg      NA      31</div><div class='input'>
-<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"missind"</span><span class='op'>)</span>
-<span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    diabetes missing_insulin missing_triceps
-#&gt; 1:      neg         missing         missing
-#&gt; 2:      neg         present         present
-#&gt; 3:      neg         missing         present
-#&gt; 4:      neg         present         present
-#&gt; 5:      pos         missing         missing
-#&gt; 6:      neg         missing         present</div><div class='input'>
-<span class='co'># proper imputation + missing indicators</span>
-
-<span class='va'>impgraph</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputesample"</span><span class='op'>)</span>,
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"missind"</span><span class='op'>)</span>
-<span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>impgraph</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    diabetes insulin triceps missing_insulin missing_triceps
-#&gt; 1:      neg     237      32         missing         missing
-#&gt; 2:      neg     180      48         present         present
-#&gt; 3:      neg      65      27         missing         present
-#&gt; 4:      neg     112      23         present         present
-#&gt; 5:      pos     265      12         missing         missing
-#&gt; 6:      neg     300      31         missing         present</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>select</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"insulin"</span>, <span class='st'>"triceps"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/complete.cases.html'>complete.cases</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 394</span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> diabetes  insulin  triceps </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0      374      227 </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    diabetes insulin triceps</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:      neg      NA      NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      neg     180      48</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:      neg      NA      27</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      neg     112      23</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:      pos      NA      NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:      neg      NA      31</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"missind"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    diabetes missing_insulin missing_triceps</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:      neg         missing         missing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      neg         present         present</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:      neg         missing         present</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      neg         present         present</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:      pos         missing         missing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:      neg         missing         present</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># proper imputation + missing indicators</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>impgraph</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputesample"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"missind"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>impgraph</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    diabetes insulin triceps missing_insulin missing_triceps</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:      neg     237      32         missing         missing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      neg     180      48         present         present</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:      neg      65      27         missing         present</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      neg     112      23         present         present</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:      pos     265      12         missing         missing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:      neg     300      31         missing         present</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

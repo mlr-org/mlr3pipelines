@@ -48,7 +48,8 @@
 
 
 <meta property="og:title" content="Branch Between Alternative Paths — mlr_graphs_branching" />
-<meta property="og:description" content="Create a multiplexed graph." />
+<meta property="og:description" content="Create a multiplexed graph.
+All input arguments are cloned and have no references in common with the returned Graph." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -83,7 +84,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -143,12 +144,13 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Branch Between Alternative Paths</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/mlr_graphs_elements.R'><code>R/mlr_graphs_elements.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_branch.R'><code>R/pipeline_branch.R</code></a></small>
     <div class="hidden name"><code>mlr_graphs_branching.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Create a multiplexed graph.</p>
+<p>All input arguments are cloned and have no references in common with the returned <code><a href='Graph.html'>Graph</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='va'>graphs</span>, prefix_branchops <span class='op'>=</span> <span class='st'>""</span>, prefix_paths <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
@@ -165,18 +167,18 @@ unique names.</p></td>
     </tr>
     <tr>
       <th>prefix_branchops</th>
-      <td><p><code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
+      <td><p><code>character(1)</code> <br />
 Optional id prefix to prepend to <code><a href='mlr_pipeops_branch.html'>PipeOpBranch</a></code> and <code><a href='mlr_pipeops_unbranch.html'>PipeOpUnbranch</a></code> id. Their
 resulting IDs will be <code>"[prefix_branchops]branch"</code> and <code>"[prefix_branchops]unbranch"</code>.
 Default is <code>""</code>.</p></td>
     </tr>
     <tr>
       <th>prefix_paths</th>
-      <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> | <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
+      <td><p><code>logical(1)</code> | <code>character(1)</code> <br />
 Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
 avoid ID clashes in resulting graph. Default <code>FALSE</code>. If this is <code>TRUE</code>, the prefixes
 are taken from the names of the input arguments if present or <code>"poX"</code> where X counts up. If this is
-a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, it is a prefix that is added to the <code>PipeOp</code> IDs <em>additionally</em>
+a <code>character(1)</code>, it is a prefix that is added to the <code>PipeOp</code> IDs <em>additionally</em>
 to the input argument list.</p></td>
     </tr>
     </table>
@@ -186,40 +188,43 @@ to the input argument list.</p></td>
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>po_pca</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span>
-<span class='va'>po_nop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span>
-
-<span class='va'>branches</span> <span class='op'>=</span> <span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>pca <span class='op'>=</span> <span class='va'>po_pca</span>, nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># gives the same as</span>
-<span class='va'>branches</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pca"</span>, <span class='st'>"nothing"</span><span class='op'>)</span>
-<span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"branch"</span>, <span class='va'>branches</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>po_pca</span>, <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"unbranch"</span>, <span class='va'>branches</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Graph with 4 PipeOps:
-#&gt;        ID         State sccssors prdcssors
-#&gt;    branch &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          
-#&gt;       pca &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
-#&gt;       nop &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch
-#&gt;  unbranch &lt;&lt;UNTRAINED&gt;&gt;            pca,nop</div><div class='input'>
-<span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>pca <span class='op'>=</span> <span class='va'>po_pca</span>, nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span>,
-  prefix_branchops <span class='op'>=</span> <span class='st'>"br_"</span>, prefix_paths <span class='op'>=</span> <span class='st'>"xy_"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Graph with 4 PipeOps:
-#&gt;              ID         State               sccssors              prdcssors
-#&gt;       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       
-#&gt;      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch
-#&gt;  xy_nothing.nop &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch
-#&gt;     br_unbranch &lt;&lt;UNTRAINED&gt;&gt;                        xy_pca.pca,xy_nothi...</div><div class='input'><span class='co'># gives the same as</span>
-<span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"branch"</span>, <span class='va'>branches</span>, id <span class='op'>=</span> <span class='st'>"br_branch"</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>xy_pca <span class='op'>=</span> <span class='va'>po_pca</span>, xy_nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"unbranch"</span>, <span class='va'>branches</span>, id <span class='op'>=</span> <span class='st'>"br_unbranch"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Graph with 4 PipeOps:
-#&gt;              ID         State               sccssors              prdcssors
-#&gt;       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       
-#&gt;      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch
-#&gt;  xy_nothing.nop &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch
-#&gt;     br_unbranch &lt;&lt;UNTRAINED&gt;&gt;                        xy_pca.pca,xy_nothi...</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>po_pca</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>po_nop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"nop"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>branches</span> <span class='op'>=</span> <span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>pca <span class='op'>=</span> <span class='va'>po_pca</span>, nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># gives the same as</span></span>
+<span class='r-in'><span class='va'>branches</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pca"</span>, <span class='st'>"nothing"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"branch"</span>, <span class='va'>branches</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>po_pca</span>, <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"unbranch"</span>, <span class='va'>branches</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Graph with 4 PipeOps:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        ID         State sccssors prdcssors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    branch &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       pca &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       nop &lt;&lt;UNTRAINED&gt;&gt; unbranch    branch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  unbranch &lt;&lt;UNTRAINED&gt;&gt;            pca,nop</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>pipeline_branch</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>pca <span class='op'>=</span> <span class='va'>po_pca</span>, nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span>,</span>
+<span class='r-in'>  prefix_branchops <span class='op'>=</span> <span class='st'>"br_"</span>, prefix_paths <span class='op'>=</span> <span class='st'>"xy_"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Graph with 4 PipeOps:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              ID         State               sccssors              prdcssors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  xy_nothing.nop &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     br_unbranch &lt;&lt;UNTRAINED&gt;&gt;                        xy_pca.pca,xy_nothi...</span>
+<span class='r-in'><span class='co'># gives the same as</span></span>
+<span class='r-in'><span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"branch"</span>, <span class='va'>branches</span>, id <span class='op'>=</span> <span class='st'>"br_branch"</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>xy_pca <span class='op'>=</span> <span class='va'>po_pca</span>, xy_nothing <span class='op'>=</span> <span class='va'>po_nop</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"unbranch"</span>, <span class='va'>branches</span>, id <span class='op'>=</span> <span class='st'>"br_unbranch"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Graph with 4 PipeOps:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              ID         State               sccssors              prdcssors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       br_branch &lt;&lt;UNTRAINED&gt;&gt; xy_pca.pca,xy_nothi...                       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      xy_pca.pca &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  xy_nothing.nop &lt;&lt;UNTRAINED&gt;&gt;            br_unbranch              br_branch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     br_unbranch &lt;&lt;UNTRAINED&gt;&gt;                        xy_pca.pca,xy_nothi...</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

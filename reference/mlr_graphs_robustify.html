@@ -59,7 +59,8 @@ collapsed using PipeOpCollapseFactors
 
 The graph is built conservatively, i.e. the function always tries to assure everything works.
 If a learner is provided, some steps can be left out, i.e. if the learner can deal with
-factor variables, no encoding is performed." />
+factor variables, no encoding is performed.
+All input arguments are cloned and have no references in common with the returned Graph." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -94,7 +95,7 @@ factor variables, no encoding is performed." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -154,7 +155,7 @@ factor variables, no encoding is performed." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Robustify a learner</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/mlr_graphs_elements.R'><code>R/mlr_graphs_elements.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/pipeline_robustify.R'><code>R/pipeline_robustify.R</code></a></small>
     <div class="hidden name"><code>mlr_graphs_robustify.Rd</code></div>
     </div>
 
@@ -171,6 +172,7 @@ collapsed using <code><a href='mlr_pipeops_collapsefactors.html'>PipeOpCollapseF
 <p>The graph is built conservatively, i.e. the function always tries to assure everything works.
 If a learner is provided, some steps can be left out, i.e. if the learner can deal with
 factor variables, no encoding is performed.</p>
+<p>All input arguments are cloned and have no references in common with the returned <code><a href='Graph.html'>Graph</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pipeline_robustify</span><span class='op'>(</span>
@@ -178,7 +180,10 @@ factor variables, no encoding is performed.</p>
   learner <span class='op'>=</span> <span class='cn'>NULL</span>,
   impute_missings <span class='op'>=</span> <span class='cn'>NULL</span>,
   factors_to_numeric <span class='op'>=</span> <span class='cn'>NULL</span>,
-  max_cardinality <span class='op'>=</span> <span class='fl'>1000</span>
+  max_cardinality <span class='op'>=</span> <span class='fl'>1000</span>,
+  ordered_action <span class='op'>=</span> <span class='st'>"factor"</span>,
+  character_action <span class='op'>=</span> <span class='st'>"factor"</span>,
+  POSIXct_action <span class='op'>=</span> <span class='st'>"numeric"</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -188,30 +193,65 @@ factor variables, no encoding is performed.</p>
       <th>task</th>
       <td><p><code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> <br />
 A <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> to create a robustifying pipeline for.
-Optional, if omitted, the full pipeline is created.</p></td>
+Optional, if omitted, the "worst possible" <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> is assumed and the full pipeline is created.</p></td>
     </tr>
     <tr>
       <th>learner</th>
       <td><p><code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> <br />
 A learner to create a robustifying pipeline for. Optional, if omitted,
-a more conservative pipeline is built.</p></td>
+the "worst possible" <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> is assumed and a more conservative pipeline is built.</p></td>
     </tr>
     <tr>
       <th>impute_missings</th>
-      <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> | <code>NULL</code> <br />
-Should missing values be imputed? Defaults to <code>NULL</code>, i.e. imputes if the task has
-missing values and the learner can not handle them.</p></td>
+      <td><p><code>logical(1)</code> | <code>NULL</code> <br />
+Should missing values be imputed? Defaults to <code>NULL</code>: imputes if the task has
+missing values (or factors that are not encoded to numerics) and the learner can not handle them.</p></td>
     </tr>
     <tr>
       <th>factors_to_numeric</th>
-      <td><p><code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> | <code>NULL</code> <br />
-Should factors be encoded? Defaults to <code>NULL</code>, i.e. encodes if the task has factors
+      <td><p><code>logical(1)</code> | <code>NULL</code> <br />
+Should (ordered and unordered) factors be encoded? Defaults to <code>NULL</code>: encodes if the task has factors (or character columns that get converted to factor)
 and the learner can not handle factors.</p></td>
     </tr>
     <tr>
       <th>max_cardinality</th>
-      <td><p><code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> <br />
+      <td><p><code>integer(1)</code> <br />
 Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
+    </tr>
+    <tr>
+      <th>ordered_action</th>
+      <td><p><code>character(1)</code><br />
+How to handle <code>ordered</code> columns: <code>"factor"</code> (default) or <code>"factor!"</code>: convert to <code>factor</code> columns;
+<code>"numeric"</code> or <code>"numeric!"</code>: convert to <code>numeric</code> columns; <code>"integer"</code> or <code>"integer!"</code>: convert to <code>integer</code> columns; <code>"ignore"</code> or <code>"ignore!"</code>: ignore.
+When <code>task</code> is given and has no <code>ordered</code> columns, or when <code>learner</code> is given and can handle <code>ordered</code>, then
+<code>"factor"</code>, <code>"numeric"</code> and <code>"integer"</code> are treated like <code>"ignore"</code>. This means it is necessary to add the exclamation point to
+override <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> or <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> properties when given. <code>"ignore"</code> and <code>"ignore!"</code> therefore
+behave completely identically, <code>"ignore!"</code> is only present for consistency.<br />
+When <code>ordered</code> features are converted to <code>factor</code>, then they are treated like <code>factor</code> features further down in the pipeline,
+and are possibly eventually converted to <code>numeric</code>s, but in a different way: <code>factor</code>s get one-hot encoded, <code>ordered_action</code> = <code>"numeric"</code>
+converts ordered using <code>as.numeric</code> to their integer-valued rank.</p></td>
+    </tr>
+    <tr>
+      <th>character_action</th>
+      <td><p><code>character(1)</code><br />
+How to handle <code>character</code> columns: <code>"factor"</code> (default) or <code>"factor!"</code>: convert to <code>factor</code> columns;
+<code>"matrix"</code> or <code>"matrix!"</code>: Use <code><a href='mlr_pipeops_textvectorizer.html'>PipeOpTextVectorizer</a></code>. <code>"ignore"</code> or <code>"ignore!"</code>: ignore.
+When <code>task</code> is given and has no <code>character</code> columns, or when <code>learner</code> is given and can handle <code>character</code>, then
+<code>"factor"</code> and <code>"matrix"</code> are treated like <code>"ignore"</code>. This means it is necessary to add the exclamation point to
+override <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> or <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> properties when given. <code>"ignore"</code> and <code>"ignore!"</code> therefore
+behave completely identically, <code>"ignore!"</code> is only present for consistency.<br />
+When <code>character</code> columns are converted to <code>factor</code>, then they are treated like <code>factor</code> further down in the pipeline,
+and are possibly eventually converted to <code>numeric</code>s, using one-hot encoding.</p></td>
+    </tr>
+    <tr>
+      <th>POSIXct_action</th>
+      <td><p><code>character(1)</code><br />
+How to handle <code>POSIXct</code> columns: <code>"numeric"</code> (default) or <code>"numeric!"</code>: convert to <code>numeric</code> columns;
+<code>"datefeatures"</code> or <code>"datefeatures!"</code>: Use <code><a href='mlr_pipeops_datefeatures.html'>PipeOpDateFeatures</a></code>. <code>"ignore"</code> or <code>"ignore!"</code>: ignore.
+When <code>task</code> is given and has no <code>POSIXct</code> columns, or when <code>learner</code> is given and can handle <code>POSIXct</code>, then
+<code>"numeric"</code> and <code>"datefeatures"</code> are treated like <code>"ignore"</code>. This means it is necessary to add the exclamation point to
+override <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> or <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> properties when given. <code>"ignore"</code> and <code>"ignore!"</code> therefore
+behave completely identically, <code>"ignore!"</code> is only present for consistency.</p></td>
     </tr>
     </table>
 
@@ -220,18 +260,19 @@ Maximum number of factor levels allowed. See above. Default: 1000.</p></td>
     <p><code><a href='Graph.html'>Graph</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com'>mlr3</a></span><span class='op'>)</span>
-<span class='va'>lrn</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"regr.rpart"</span><span class='op'>)</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'>mlr_tasks</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"boston_housing"</span><span class='op'>)</span>
-<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'>pipeline_robustify</span><span class='op'>(</span><span class='va'>task</span>, <span class='va'>lrn</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='va'>lrn</span><span class='op'>)</span>
-<span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span><span class='op'>(</span><span class='va'>task</span>, <span class='va'><a href='mlr_learners_graph.html'>GraphLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span><span class='op'>(</span><span class='st'>"holdout"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;ResampleResult&gt; of 1 iterations
-#&gt; * Task: boston_housing
-#&gt; * Learner: fixfactors.removeconstants.regr.rpart
-#&gt; * Warnings: 0 in 0 iterations
-#&gt; * Errors: 0 in 0 iterations</div><div class='input'><span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://mlr3.mlr-org.com'>mlr3</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>lrn</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"regr.rpart"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='va'>mlr_tasks</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"boston_housing"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gr</span> <span class='op'>=</span> <span class='fu'>pipeline_robustify</span><span class='op'>(</span><span class='va'>task</span>, <span class='va'>lrn</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='va'>lrn</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span><span class='op'>(</span><span class='va'>task</span>, <span class='va'><a href='mlr_learners_graph.html'>GraphLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span><span class='op'>(</span><span class='st'>"holdout"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;ResampleResult&gt; of 1 iterations</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Task: boston_housing</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Learner: removeconstants_prerobustify.fixfactors.removeconstants_postrobustify.regr.rpart</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Warnings: 0 in 0 iterations</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Errors: 0 in 0 iterations</span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

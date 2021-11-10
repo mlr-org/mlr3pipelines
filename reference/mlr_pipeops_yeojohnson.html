@@ -85,7 +85,7 @@ See bestNormalize::yeojohnson() for details." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -166,7 +166,7 @@ See <code><a href='https://petersonr.github.io/bestNormalize/reference/yeojohnso
 <pre><span class='va'>PipeOpYeoJohnson</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"yeojohnson"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"yeojohnson"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -189,16 +189,16 @@ as well as a list of class <code>yeojohnson</code> for each column, which is tra
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>eps</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>eps</code> :: <code>numeric(1)</code> <br />
 Tolerance parameter to identify the lambda parameter as zero.
 For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/yeojohnson.html'>yeojohnson()</a></code>.</p></li>
 <li><p><code>standardize</code> :: <code>logical</code> <br />
 Whether to center and scale the transformed values to attempt a standard
 normal distribution. For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/yeojohnson.html'>yeojohnson()</a></code>.</p></li>
-<li><p><code>lower</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>lower</code> :: <code>numeric(1)</code> <br />
 Lower value for estimation of lambda parameter.
 For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/yeojohnson.html'>yeojohnson()</a></code>.</p></li>
-<li><p><code>upper</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>upper</code> :: <code>numeric(1)</code> <br />
 Upper value for estimation of lambda parameter.
 For details see <code><a href='https://petersonr.github.io/bestNormalize/reference/yeojohnson.html'>yeojohnson()</a></code>.</p></li>
 </ul>
@@ -289,90 +289,93 @@ For details see <code><a href='https://petersonr.github.io/bestNormalize/referen
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"yeojohnson"</span><span class='op'>)</span>
-
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa   -1.3278574  -1.3278174   -0.8926989  1.01949272
-#&gt;   2:    setosa   -1.3278574  -1.3278174   -1.1812158 -0.08164367
-#&gt;   3:    setosa   -1.3813346  -1.3278174   -1.4829526  0.37387369
-#&gt;   4:    setosa   -1.2741721  -1.3278174   -1.6391179  0.14878429
-#&gt;   5:    setosa   -1.3278574  -1.3278174   -1.0353690  1.22553197
-#&gt;  ---                                                            
-#&gt; 146: virginica    0.8157632   1.4105911    1.0393000 -0.08164367
-#&gt; 147: virginica    0.6988626   0.9184998    0.6095086 -1.32389503
-#&gt; 148: virginica    0.8157632   1.0424849    0.8281903 -0.08164367
-#&gt; 149: virginica    0.9330158   1.4105911    0.4971768  0.80900587
-#&gt; 150: virginica    0.7572682   0.7938307    0.1474204 -0.08164367</div><div class='input'>
-<span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
-</div><div class='output co'>#&gt; $bc
-#&gt; $bc$Petal.Length
-#&gt; Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = 1.093219 
-#&gt;  - mean (before standardization) = 4.156174 
-#&gt;  - sd (before standardization) = 2.024973 
-#&gt; 
-#&gt; $bc$Petal.Width
-#&gt; Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = 0.8404896 
-#&gt;  - mean (before standardization) = 1.098253 
-#&gt;  - sd (before standardization) = 0.6787234 
-#&gt; 
-#&gt; $bc$Sepal.Length
-#&gt; Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = -0.3212232 
-#&gt;  - mean (before standardization) = 1.429598 
-#&gt;  - sd (before standardization) = 0.06498438 
-#&gt; 
-#&gt; $bc$Sepal.Width
-#&gt; Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:
-#&gt;  Estimated statistics:
-#&gt;  - lambda = 0.03907448 
-#&gt;  - mean (before standardization) = 1.433769 
-#&gt;  - sd (before standardization) = 0.1131792 
-#&gt; 
-#&gt; 
-#&gt; $dt_columns
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#&gt; 
-#&gt; $affected_cols
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#&gt; 
-#&gt; $intasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length numeric
-#&gt; 2:  Petal.Width numeric
-#&gt; 3: Sepal.Length numeric
-#&gt; 4:  Sepal.Width numeric
-#&gt; 
-#&gt; $outtasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length numeric
-#&gt; 2:  Petal.Width numeric
-#&gt; 3: Sepal.Length numeric
-#&gt; 4:  Sepal.Width numeric
-#&gt; 
-#&gt; $outtaskshell
-#&gt; Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"yeojohnson"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa   -1.3278574  -1.3278174   -0.8926989  1.01949272</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa   -1.3278574  -1.3278174   -1.1812158 -0.08164367</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa   -1.3813346  -1.3278174   -1.4829526  0.37387369</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa   -1.2741721  -1.3278174   -1.6391179  0.14878429</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa   -1.3278574  -1.3278174   -1.0353690  1.22553197</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica    0.8157632   1.4105911    1.0393000 -0.08164367</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica    0.6988626   0.9184998    0.6095086 -1.32389503</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica    0.8157632   1.0424849    0.8281903 -0.08164367</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica    0.9330158   1.4105911    0.4971768  0.80900587</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica    0.7572682   0.7938307    0.1474204 -0.08164367</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Petal.Length</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = 1.093219 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 4.156174 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 2.024973 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Petal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = 0.8404896 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 1.098253 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 0.6787234 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Sepal.Length</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = -0.3212232 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 1.429598 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 0.06498438 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bc$Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Standardized Yeo-Johnson Transformation with 150 nonmissing obs.:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Estimated statistics:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - lambda = 0.03907448 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - mean (before standardization) = 1.433769 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - sd (before standardization) = 0.1131792 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dt_columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $affected_cols</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $intasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Petal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Petal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Sepal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Petal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Petal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Sepal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtaskshell</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -105,7 +105,7 @@ is not intended to be instantiated." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -206,7 +206,7 @@ is not intended to be instantiated.</p>
 <pre><span class='va'>PipeOp</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>id</span>, param_set <span class='op'>=</span> <span class='va'>ParamSet</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>input</span>, <span class='va'>output</span>, packages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object. See <code>$id</code> slot.</p></li>
 <li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code> | <code>list</code> of <code>expression</code><br />
 Parameter space description. This should be created by the subclass and given to <code>super$initialize()</code>.
@@ -222,10 +222,10 @@ Sets the <code>$input</code> slot of the resulting object; see description there
 Sets the <code>$output</code> slot of the resulting object; see description there.</p></li>
 <li><p>packages :: <code>character</code><br />
 Set of all required packages for the <code>PipeOp</code>'s <code>$train</code> and <code>$predict</code> methods. See <code>$packages</code> slot.
-Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
+Default is <code>character(0)</code>.</p></li>
 <li><p><code>tags</code> ::<code>character</code><br />
 A set of tags associated with the <code>PipeOp</code>. Tags describe a PipeOp's purpose.
-Can be used to filter <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table(mlr_pipeops)</a></code>. Default is <code>"abstract"</code>, indicating an abstract <code>PipeOp</code>.</p></li>
+Can be used to filter <code>as.data.table(mlr_pipeops)</code>. Default is <code>"abstract"</code>, indicating an abstract <code>PipeOp</code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -238,6 +238,9 @@ the <code>PipeOp</code>'s input channels, and must return a <code>list</code> (n
 channels in <code>$output</code>. The <code>private$.train()</code> and <code>private$.predict()</code> function should not be called by the user;
 instead, a <code>$train()</code> and <code>$predict()</code> should be used. The most convenient usage is to add the <code>PipeOp</code>
 to a <code>Graph</code> (possibly as singleton in that <code>Graph</code>), and using the <code>Graph</code>'s <code>$train()</code> / <code>$predict()</code> methods.</p>
+<p><code>private$.train()</code> and <code>private$.predict()</code> should treat their inputs as read-only. If they are <code><a href='https://r6.r-lib.org/reference/R6Class.html'>R6</a></code> objects,
+they should be cloned before being manipulated in-place. Objects, or parts of objects, that are not changed, do
+not need to be cloned, and it is legal to return the same identical-by-reference objects to multiple outputs.</p>
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
     
@@ -248,7 +251,7 @@ ID of the <code>PipeOp</code>. IDs are user-configurable, and IDs of <code>PipeO
 <code>PipeOp</code>s must not be changed once they are part of a <code><a href='Graph.html'>Graph</a></code>, instead the <code><a href='Graph.html'>Graph</a></code>'s <code>$set_names()</code> method
 should be used.</p></li>
 <li><p><code>packages</code> :: <code>character</code><br />
-Packages required for the <code>PipeOp</code>. Functions that are not in base R should still be called using <code><a href='https://rdrr.io/r/base/ns-dblcolon.html'>::</a></code>
+Packages required for the <code>PipeOp</code>. Functions that are not in base R should still be called using <code>::</code>
 (or explicitly attached using <code><a href='https://rdrr.io/r/base/library.html'>require()</a></code>) in <code>private$.train()</code> <em>and</em> <code>private$.predict()</code>, but
 packages declared here are checked before any (possibly expensive) processing has started within a <code><a href='Graph.html'>Graph</a></code>.</p></li>
 <li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
@@ -257,14 +260,16 @@ in the <code>$param_set$values</code> slot; these are automatically checked agai
 <li><p><code>state</code> :: <code>any</code> | <code>NULL</code><br />
 Method-dependent state obtained during training step, and usually required for the prediction step. This is <code>NULL</code>
 if and only if the <code>PipeOp</code> has not been trained. The <code>$state</code> is the <em>only</em> slot that can be reliably modified during
-<code>$train()</code>, because <code>private$.train()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).</p></li>
+<code>$train()</code>, because <code>private$.train()</code> may theoretically be executed in a different <code>R</code>-session (e.g. for parallelization).
+<code>$state</code> should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
+not of <code>PipeOp</code> or <code>mlr3pipelines</code>, but of the way the system as a whole works, together with <code><a href='mlr_learners_graph.html'>GraphLearner</a></code> and <code>mlr3</code>.</p></li>
 <li><p>input :: <code>data.table</code> with columns <code>name</code> (<code>character</code>), <code>train</code> (<code>character</code>), <code>predict</code> (<code>character</code>)<br />
 Input channels of <code>PipeOp</code>. Column <code>name</code> gives the names (and order) of values in the list given to
 <code>$train()</code> and <code>$predict()</code>. Column <code>train</code> is the (S3) class that an input object must conform to during
 training, column <code>predict</code> is the (S3) class that an input object must conform to during prediction. Types
 are checked by the <code>PipeOp</code> itself and do not need to be checked by <code>private$.train()</code> / <code>private$.predict()</code> code.<br />
 A special name is <code>"..."</code>, which creates a <em>vararg</em> input channel that accepts a variable number of inputs.<br />
-If a row has both <code>train</code> and <code>predict</code> values enclosed by square brackets ("<code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>", "<code>]</code>), then this channel is
+If a row has both <code>train</code> and <code>predict</code> values enclosed by square brackets ("<code>[</code>", "<code>]</code>), then this channel is
 <code><a href='Multiplicity.html'>Multiplicity</a></code>-aware. If the <code>PipeOp</code> receives a <code><a href='Multiplicity.html'>Multiplicity</a></code> value on these channels, this <code><a href='Multiplicity.html'>Multiplicity</a></code>
 is given to the <code>.train()</code> and <code>.predict()</code> functions directly. Otherwise, the <code><a href='Multiplicity.html'>Multiplicity</a></code> is transparently
 unpacked and the <code>.train()</code> and <code>.predict()</code> functions are called multiple times, once for each <code><a href='Multiplicity.html'>Multiplicity</a></code> element.
@@ -275,19 +280,19 @@ Output channels of <code>PipeOp</code>, in the order in which they will be given
 <code>$predict</code> functions. Column <code>train</code> is the (S3) class that an output object must conform to during training,
 column <code>predict</code> is the (S3) class that an output object must conform to during prediction. The <code>PipeOp</code> checks
 values returned by <code>private$.train()</code> and <code>private$.predict()</code> against these types specifications.<br />
-If a row has both <code>train</code> and <code>predict</code> values enclosed by square brackets ("<code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>", "<code>]</code>), then this signals that the channel
+If a row has both <code>train</code> and <code>predict</code> values enclosed by square brackets ("<code>[</code>", "<code>]</code>), then this signals that the channel
 emits a <code><a href='Multiplicity.html'>Multiplicity</a></code> of the indicated type. See <code><a href='Multiplicity.html'>Multiplicity</a></code> for more information.</p></li>
-<li><p><code>innum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>innum</code> :: <code>numeric(1)</code> <br />
 Number of input channels. This equals <code>nrow($input)</code>.</p></li>
-<li><p><code>outnum</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>outnum</code> :: <code>numeric(1)</code> <br />
 Number of output channels. This equals <code>nrow($output)</code>.</p></li>
-<li><p><code>is_trained</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
+<li><p><code>is_trained</code> :: <code>logical(1)</code> <br />
 Indicate whether the <code>PipeOp</code> was already trained and can therefore be used for prediction.</p></li>
 <li><p><code>tags</code> ::<code>character</code><br />
 A set of tags associated with the <code>PipeOp</code>. Tags describe a PipeOp's purpose.
-Can be used to filter <code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table(mlr_pipeops)</a></code>.
+Can be used to filter <code>as.data.table(mlr_pipeops)</code>.
 PipeOp tags are inherited and child classes can introduce additional tags.</p></li>
-<li><p><code>hash</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
+<li><p><code>hash</code> :: <code>character(1)</code> <br />
 Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> and <code>$param_set$values</code>. If a
 <code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
 binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
@@ -315,7 +320,7 @@ typechecking. It must change the <code>$state</code> value to something non-<cod
 the <code>$output</code> <code>train</code> column. Names of the returned list are ignored.<br />
 The <code>private$.train()</code> method should not be called by a user; instead, the <code>$train()</code> method should be used which does some
 checking and possibly type conversion.</p></li>
-<li><p><code><a href='https://rdrr.io/r/stats/predict.html'>predict(input)</a></code> <br />
+<li><p><code>predict(input)</code> <br />
 (<code>list</code>) -&gt; named <code>list</code><br />
 Predict on new data in <code>input</code>, possibly using the stored <code>$state</code>. Input and output are specified by <code>$input</code> and <code>$output</code>
 in the same way as for <code>$train()</code>, except that
@@ -415,57 +420,60 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># example (bogus) PipeOp that returns the sum of two numbers during $train()</span>
-<span class='co'># as well as a letter of the alphabet corresponding to that sum during $predict().</span>
-
-<span class='va'>PipeOpSumLetter</span> <span class='op'>=</span> <span class='fu'>R6</span><span class='fu'>::</span><span class='kw'><a href='https://r6.r-lib.org/reference/R6Class.html'>R6Class</a></span><span class='op'>(</span><span class='st'>"sumletter"</span>,
-  inherit <span class='op'>=</span> <span class='va'>PipeOp</span>,  <span class='co'># inherit from PipeOp</span>
-  public <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    initialize <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>id</span> <span class='op'>=</span> <span class='st'>"posum"</span>, <span class='va'>param_vals</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-      <span class='va'>super</span><span class='op'>$</span><span class='fu'>initialize</span><span class='op'>(</span><span class='va'>id</span>, param_vals <span class='op'>=</span> <span class='va'>param_vals</span>,
-        <span class='co'># declare "input" and "output" during construction here</span>
-        <span class='co'># training takes two 'numeric' and returns a 'numeric';</span>
-        <span class='co'># prediction takes 'NULL' and returns a 'character'.</span>
-        input <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"input1"</span>, <span class='st'>"input2"</span><span class='op'>)</span>,
-          train <span class='op'>=</span> <span class='st'>"numeric"</span>, predict <span class='op'>=</span> <span class='st'>"NULL"</span><span class='op'>)</span>,
-        output <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"output"</span>,
-          train <span class='op'>=</span> <span class='st'>"numeric"</span>, predict <span class='op'>=</span> <span class='st'>"character"</span><span class='op'>)</span>
-      <span class='op'>)</span>
-    <span class='op'>}</span>
-  <span class='op'>)</span>,
-  private <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    <span class='co'># PipeOp deriving classes must implement .train and</span>
-    <span class='co'># .predict; each taking an input list and returning</span>
-    <span class='co'># a list as output.</span>
-    .train <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span><span class='op'>)</span> <span class='op'>{</span>
-      <span class='va'>sum</span> <span class='op'>=</span> <span class='va'>input</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>input</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span>
-      <span class='va'>self</span><span class='op'>$</span><span class='va'>state</span> <span class='op'>=</span> <span class='va'>sum</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sum</span><span class='op'>)</span>
-    <span class='op'>}</span>,
-    .predict <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span><span class='op'>)</span> <span class='op'>{</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='va'>self</span><span class='op'>$</span><span class='va'>state</span><span class='op'>]</span><span class='op'>)</span>
-    <span class='op'>}</span>
-  <span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>posum</span> <span class='op'>=</span> <span class='va'>PipeOpSumLetter</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>posum</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; PipeOp: &lt;posum&gt; (not trained)
-#&gt; values: &lt;list()&gt;
-#&gt; Input channels &lt;name [train type, predict type]&gt;:
-#&gt;   input1 [numeric,NULL], input2 [numeric,NULL]
-#&gt; Output channels &lt;name [train type, predict type]&gt;:
-#&gt;   output [numeric,character]</div><div class='input'>
-<span class='va'>posum</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $output
-#&gt; [1] 3
-#&gt; </div><div class='input'><span class='co'># note the name 'output' is the name of the output channel specified</span>
-<span class='co'># in the $output data.table.</span>
-
-<span class='va'>posum</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='cn'>NULL</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $output
-#&gt; [1] "c"
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># example (bogus) PipeOp that returns the sum of two numbers during $train()</span></span>
+<span class='r-in'><span class='co'># as well as a letter of the alphabet corresponding to that sum during $predict().</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>PipeOpSumLetter</span> <span class='op'>=</span> <span class='fu'>R6</span><span class='fu'>::</span><span class='kw'><a href='https://r6.r-lib.org/reference/R6Class.html'>R6Class</a></span><span class='op'>(</span><span class='st'>"sumletter"</span>,</span>
+<span class='r-in'>  inherit <span class='op'>=</span> <span class='va'>PipeOp</span>,  <span class='co'># inherit from PipeOp</span></span>
+<span class='r-in'>  public <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    initialize <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>id</span> <span class='op'>=</span> <span class='st'>"posum"</span>, <span class='va'>param_vals</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>      <span class='va'>super</span><span class='op'>$</span><span class='fu'>initialize</span><span class='op'>(</span><span class='va'>id</span>, param_vals <span class='op'>=</span> <span class='va'>param_vals</span>,</span>
+<span class='r-in'>        <span class='co'># declare "input" and "output" during construction here</span></span>
+<span class='r-in'>        <span class='co'># training takes two 'numeric' and returns a 'numeric';</span></span>
+<span class='r-in'>        <span class='co'># prediction takes 'NULL' and returns a 'character'.</span></span>
+<span class='r-in'>        input <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"input1"</span>, <span class='st'>"input2"</span><span class='op'>)</span>,</span>
+<span class='r-in'>          train <span class='op'>=</span> <span class='st'>"numeric"</span>, predict <span class='op'>=</span> <span class='st'>"NULL"</span><span class='op'>)</span>,</span>
+<span class='r-in'>        output <span class='op'>=</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"output"</span>,</span>
+<span class='r-in'>          train <span class='op'>=</span> <span class='st'>"numeric"</span>, predict <span class='op'>=</span> <span class='st'>"character"</span><span class='op'>)</span></span>
+<span class='r-in'>      <span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  private <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='co'># PipeOp deriving classes must implement .train and</span></span>
+<span class='r-in'>    <span class='co'># .predict; each taking an input list and returning</span></span>
+<span class='r-in'>    <span class='co'># a list as output.</span></span>
+<span class='r-in'>    .train <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>      <span class='va'>sum</span> <span class='op'>=</span> <span class='va'>input</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>input</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'>      <span class='va'>self</span><span class='op'>$</span><span class='va'>state</span> <span class='op'>=</span> <span class='va'>sum</span></span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>sum</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span>,</span>
+<span class='r-in'>    .predict <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='va'>self</span><span class='op'>$</span><span class='va'>state</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>posum</span> <span class='op'>=</span> <span class='va'>PipeOpSumLetter</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>posum</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PipeOp: &lt;posum&gt; (not trained)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> values: &lt;list()&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   input1 [numeric,NULL], input2 [numeric,NULL]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   output [numeric,character]</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>posum</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='co'># note the name 'output' is the name of the output channel specified</span></span>
+<span class='r-in'><span class='co'># in the $output data.table.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>posum</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='cn'>NULL</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "c"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

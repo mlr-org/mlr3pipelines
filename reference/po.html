@@ -53,9 +53,13 @@ a PipeOp from mlr_pipeops from given ID
 a PipeOpLearner from a Learner object
 a PipeOpFilter from a Filter object
 a PipeOpSelect from a Selector object
+a clone of a PipeOp from a given PipeOp (possibly with changed settings)
 
 
-The object is initialized with given parameters and param_vals." />
+The object is initialized with given parameters and param_vals.
+po() taks a single obj (PipeOp id, Learner, ...) and converts
+it to a PipeOp. pos() (with plural-s) takes either a character-vector, or a
+list of objects, and creates a list of PipeOps." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -90,7 +94,7 @@ The object is initialized with given parameters and param_vals." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -160,12 +164,18 @@ The object is initialized with given parameters and param_vals." />
 <li><p>a <code>PipeOpLearner</code> from a <code>Learner</code> object</p></li>
 <li><p>a <code>PipeOpFilter</code> from a <code>Filter</code> object</p></li>
 <li><p>a <code>PipeOpSelect</code> from a <code>Selector</code> object</p></li>
+<li><p>a clone of a <code>PipeOp</code> from a given <code>PipeOp</code> (possibly with changed settings)</p></li>
 </ul>
 
 <p>The object is initialized with given parameters and <code>param_vals</code>.</p>
+<p><code>po()</code> taks a single <code>obj</code> (<code>PipeOp</code> id, <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>, ...) and converts
+it to a <code><a href='PipeOp.html'>PipeOp</a></code>. <code>pos()</code> (with plural-s) takes either a <code>character</code>-vector, or a
+list of objects, and creates a <code>list</code> of <code><a href='PipeOp.html'>PipeOp</a></code>s.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>po</span><span class='op'>(</span><span class='va'>.obj</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>po</span><span class='op'>(</span><span class='va'>.obj</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>pos</span><span class='op'>(</span><span class='va'>.objs</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,8 +184,8 @@ The object is initialized with given parameters and param_vals." />
       <th>.obj</th>
       <td><p><code>[any]</code><br />
 The object from which to construct a <code>PipeOp</code>. If this is a
-<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, it is looked up in the <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code> dictionary.
-Otherwise, it is converted to a <code>PipeOp</code>.</p></td>
+<code>character(1)</code>, it is looked up in the <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code> dictionary.
+Otherwise, it is converted to a <code><a href='PipeOp.html'>PipeOp</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -186,35 +196,52 @@ This may be an argument of the constructor of the
 or it may be a parameter value, in which case it is
 given to the <code>param_vals</code> argument of the constructor.</p></td>
     </tr>
+    <tr>
+      <th>.objs</th>
+      <td><p><code>character</code> | <code>list</code><br />
+Either a <code>character</code> of <code><a href='PipeOp.html'>PipeOp</a></code>s to look up in <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code>,
+or a list of other objects to be converted to a <code><a href='PipeOp.html'>PipeOp</a></code>.
+If this is a named <code>list</code>, then the names are used as <code>$id</code> slot for the resulting
+<code><a href='PipeOp.html'>PipeOp</a></code>s.</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code><a href='PipeOp.html'>PipeOp</a></code> (for <code>po()</code>), or a <code>list</code> of <code><a href='PipeOp.html'>PipeOp</a></code>s (for <code>pos()</code>).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='fu'>po</span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span>, cp <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; PipeOp: &lt;classif.rpart&gt; (not trained)
-#&gt; values: &lt;xval=0, cp=0.3&gt;
-#&gt; Input channels &lt;name [train type, predict type]&gt;:
-#&gt;   input [TaskClassif,TaskClassif]
-#&gt; Output channels &lt;name [train type, predict type]&gt;:
-#&gt;   output [NULL,PredictionClassif]</div><div class='input'>
-<span class='fu'>po</span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span>, cp <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; PipeOp: &lt;classif.rpart&gt; (not trained)
-#&gt; values: &lt;xval=0, cp=0.3&gt;
-#&gt; Input channels &lt;name [train type, predict type]&gt;:
-#&gt;   input [TaskClassif,TaskClassif]
-#&gt; Output channels &lt;name [train type, predict type]&gt;:
-#&gt;   output [NULL,PredictionClassif]</div><div class='input'>
-<span class='co'># is equivalent with:</span>
-<span class='va'>mlr_pipeops</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span>,
-  param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>cp <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; PipeOp: &lt;classif.rpart&gt; (not trained)
-#&gt; values: &lt;xval=0, cp=0.3&gt;
-#&gt; Input channels &lt;name [train type, predict type]&gt;:
-#&gt;   input [TaskClassif,TaskClassif]
-#&gt; Output channels &lt;name [train type, predict type]&gt;:
-#&gt;   output [NULL,PredictionClassif]</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>po</span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span>, cp <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> values: &lt;xval=0, cp=0.3&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>po</span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span>, cp <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> values: &lt;xval=0, cp=0.3&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># is equivalent with:</span></span>
+<span class='r-in'><span class='va'>mlr_pipeops</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>cp <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PipeOp: &lt;classif.rpart&gt; (not trained)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> values: &lt;xval=0, cp=0.3&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   input [TaskClassif,TaskClassif]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Output channels &lt;name [train type, predict type]&gt;:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   output [NULL,PredictionClassif]</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>pos</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pca"</span>, original <span class='op'>=</span> <span class='st'>"nop"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in (function (classes, fdef, mtable) {    methods &lt;- .findInheritedMethods(classes, fdef, mtable)    if (length(methods) == 1L)         return(methods[[1L]])    else if (length(methods) == 0L) {        cnames &lt;- paste0("\"", vapply(classes, as.character,             ""), "\"", collapse = ", ")        stop(gettextf("unable to find an inherited method for function %s for signature %s",             sQuote(fdef@generic), sQuote(cnames)), domain = NA)    }    else stop("Internal error in finding inherited methods; didn't return a unique method",         domain = NA)})(list("character"), new("standardGeneric", .Data = function (x) standardGeneric("pos"), generic = structure("pos", package = "BiocGenerics"),     package = "BiocGenerics", group = list(), valueClass = character(0),     signature = "x", default = NULL, skeleton = (function (x)     stop("invalid call in method dispatch to 'pos' (no default method)",         domain = NA))(x)), &lt;environment&gt;):</span> unable to find an inherited method for function ‘pos’ for signature ‘"character"’</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

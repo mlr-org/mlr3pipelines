@@ -86,7 +86,7 @@ binned with the lowest / highest bin respectively." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -168,7 +168,7 @@ binned with the lowest / highest bin respectively.</p>
 <pre><span class='va'>PipeOpHistBin</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"histbin"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"histbin"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -185,7 +185,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
     
 
 <p>The <code>$state</code> is a named <code>list</code> with the <code>$state</code> elements inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>bins</code> :: <code>list</code> <br />
+<li><p><code>breaks</code> :: <code>list</code> <br />
 List of intervals representing the bins for each numeric feature.</p></li>
 </ul>
 
@@ -194,9 +194,9 @@ List of intervals representing the bins for each numeric feature.</p></li>
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>bins</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code>numeric</code> | <code>function</code> <br />
-Either a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> string naming an algorithm to compute the number of cells,
-a <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> giving the number of breaks for the histogram,
+<li><p><code>breaks</code> :: <code>character(1)</code> | <code>numeric</code> | <code>function</code> <br />
+Either a <code>character(1)</code> string naming an algorithm to compute the number of cells,
+a <code>numeric(1)</code> giving the number of breaks for the histogram,
 a vector <code>numeric</code> giving the breakpoints between the histogram cells, or
 a <code>function</code> to compute the vector of breakpoints or to compute the number
 of cells. Default is algorithm <code>"Sturges"</code> (see <code><a href='https://rdrr.io/r/grDevices/nclass.html'>grDevices::nclass.Sturges()</a></code>).
@@ -289,74 +289,77 @@ For details see <code><a href='https://rdrr.io/r/graphics/hist.html'>hist()</a><
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"histbin"</span><span class='op'>)</span>
-
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa   [-Inf,1.5]  [-Inf,0.2]      (5,5.5]   (3.4,3.6]
-#&gt;   2:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]     (2.8,3]
-#&gt;   3:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]     (3,3.2]
-#&gt;   4:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]     (3,3.2]
-#&gt;   5:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]   (3.4,3.6]
-#&gt;  ---                                                            
-#&gt; 146: virginica      (5,5.5]   (2.2,2.4]      (6.5,7]     (2.8,3]
-#&gt; 147: virginica      (4.5,5]     (1.8,2]      (6,6.5]   (2.4,2.6]
-#&gt; 148: virginica      (5,5.5]     (1.8,2]      (6,6.5]     (2.8,3]
-#&gt; 149: virginica      (5,5.5]   (2.2,2.4]      (6,6.5]   (3.2,3.4]
-#&gt; 150: virginica      (5,5.5]   (1.6,1.8]      (5.5,6]     (2.8,3]</div><div class='input'>
-<span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
-</div><div class='output co'>#&gt; $bins
-#&gt; $bins[[1]]
-#&gt;  [1] -Inf  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  5.5  6.0  6.5  Inf
-#&gt; 
-#&gt; $bins[[2]]
-#&gt;  [1] -Inf  0.2  0.4  0.6  0.8  1.0  1.2  1.4  1.6  1.8  2.0  2.2  2.4  Inf
-#&gt; 
-#&gt; $bins[[3]]
-#&gt; [1] -Inf  4.5  5.0  5.5  6.0  6.5  7.0  7.5  Inf
-#&gt; 
-#&gt; $bins[[4]]
-#&gt;  [1] -Inf  2.2  2.4  2.6  2.8  3.0  3.2  3.4  3.6  3.8  4.0  4.2  Inf
-#&gt; 
-#&gt; 
-#&gt; $dt_columns
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#&gt; 
-#&gt; $affected_cols
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#&gt; 
-#&gt; $intasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length numeric
-#&gt; 2:  Petal.Width numeric
-#&gt; 3: Sepal.Length numeric
-#&gt; 4:  Sepal.Width numeric
-#&gt; 
-#&gt; $outtasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length ordered
-#&gt; 2:  Petal.Width ordered
-#&gt; 3: Sepal.Length ordered
-#&gt; 4:  Sepal.Width ordered
-#&gt; 
-#&gt; $outtaskshell
-#&gt; Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"histbin"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa   [-Inf,1.5]  [-Inf,0.2]      (5,5.5]   (3.4,3.6]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]     (2.8,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]     (3,3.2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]     (3,3.2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa   [-Inf,1.5]  [-Inf,0.2]      (4.5,5]   (3.4,3.6]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica      (5,5.5]   (2.2,2.4]      (6.5,7]     (2.8,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica      (4.5,5]     (1.8,2]      (6,6.5]   (2.4,2.6]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica      (5,5.5]     (1.8,2]      (6,6.5]     (2.8,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica      (5,5.5]   (2.2,2.4]      (6,6.5]   (3.2,3.4]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica      (5,5.5]   (1.6,1.8]      (5.5,6]     (2.8,3]</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $breaks</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $breaks[[1]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] -Inf  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  5.5  6.0  6.5  Inf</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $breaks[[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] -Inf  0.2  0.4  0.6  0.8  1.0  1.2  1.4  1.6  1.8  2.0  2.2  2.4  Inf</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $breaks[[3]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -Inf  4.5  5.0  5.5  6.0  6.5  7.0  7.5  Inf</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $breaks[[4]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] -Inf  2.2  2.4  2.6  2.8  3.0  3.2  3.4  3.6  3.8  4.0  4.2  Inf</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dt_columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $affected_cols</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $intasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Petal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Petal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Sepal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Petal.Length ordered</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Petal.Width ordered</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Sepal.Length ordered</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Sepal.Width ordered</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outtaskshell</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

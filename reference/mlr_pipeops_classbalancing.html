@@ -86,7 +86,7 @@ beneficial for classification with imbalanced training data." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -168,7 +168,7 @@ beneficial for classification with imbalanced training data.</p>
 <pre><span class='va'>PipeOpClassBalancing</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"classbalancing"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, default <code>"classbalancing"</code></p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -192,21 +192,21 @@ The output during prediction is the unchanged input.</p>
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>; however, the <code>affect_columns</code> parameter is <em>not</em> present. Further parameters are:</p><ul>
-<li><p><code>ratio</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>ratio</code> :: <code>numeric(1)</code> <br />
 Ratio of number of rows of classes to keep, relative
 to the <code>$reference</code> value. Initialized to 1.</p></li>
-<li><p><code>reference</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>reference</code> :: <code>numeric(1)</code> <br />
 What the <code>$ratio</code> value is measured against. Can be <code>"all"</code> (mean instance count of
 all classes), <code>"major"</code> (instance count of class with most instances), <code>"minor"</code>
 (instance count of class with fewest instances), <code>"nonmajor"</code> (average instance
 count of all classes except the major one), <code>"nonminor"</code> (average instance count
 of all classes except the minor one), and <code>"one"</code> (<code>$ratio</code> determines the number of
 instances to have, per class). Initialized to <code>"all"</code>.</p></li>
-<li><p><code>adjust</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>adjust</code> :: <code>numeric(1)</code> <br />
 Which classes to up / downsample. Can be <code>"all"</code> (up and downsample all to match required
 instance count), <code>"major"</code>, <code>"minor"</code>, <code>"nonmajor"</code>, <code>"nonminor"</code> (see respective values
 for <code>$reference</code>), <code>"upsample"</code> (only upsample), and <code>"downsample"</code>. Initialized to <code>"all"</code>.</p></li>
-<li><p><code>shuffle</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
+<li><p><code>shuffle</code> :: <code>logical(1)</code> <br />
 Whether to shuffle the rows of the resulting task.
 In case the data is upsampled and <code>shuffle = FALSE</code>, the resulting task will have the original
 rows (which were not removed in downsampling) in the original order, followed by all newly added rows
@@ -316,32 +316,35 @@ a new <code>data.table</code> is attached that contains all rows that are being 
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span>
-<span class='va'>opb</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"classbalancing"</span><span class='op'>)</span>
-
-<span class='co'># target class counts</span>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>$</span><span class='fu'>truth</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;    1813    2788 </div><div class='input'>
-<span class='co'># double the instances in the minority class (spam)</span>
-<span class='va'>opb</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ratio <span class='op'>=</span> <span class='fl'>2</span>, reference <span class='op'>=</span> <span class='st'>"minor"</span>,
-  adjust <span class='op'>=</span> <span class='st'>"minor"</span>, shuffle <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='va'>result</span> <span class='op'>=</span> <span class='va'>opb</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1L</span><span class='op'>]</span><span class='op'>]</span>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>$</span><span class='fu'>truth</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;    3626    2788 </div><div class='input'>
-<span class='co'># up or downsample all classes until exactly 20 per class remain</span>
-<span class='va'>opb</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ratio <span class='op'>=</span> <span class='fl'>20</span>, reference <span class='op'>=</span> <span class='st'>"one"</span>,
-  adjust <span class='op'>=</span> <span class='st'>"all"</span>, shuffle <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='va'>result</span> <span class='op'>=</span> <span class='va'>opb</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>$</span><span class='fu'>truth</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt;    spam nonspam 
-#&gt;      20      20 </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>opb</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"classbalancing"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># target class counts</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>$</span><span class='fu'>truth</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    spam nonspam </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    1813    2788 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># double the instances in the minority class (spam)</span></span>
+<span class='r-in'><span class='va'>opb</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ratio <span class='op'>=</span> <span class='fl'>2</span>, reference <span class='op'>=</span> <span class='st'>"minor"</span>,</span>
+<span class='r-in'>  adjust <span class='op'>=</span> <span class='st'>"minor"</span>, shuffle <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>result</span> <span class='op'>=</span> <span class='va'>opb</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1L</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>$</span><span class='fu'>truth</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    spam nonspam </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3626    2788 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># up or downsample all classes until exactly 20 per class remain</span></span>
+<span class='r-in'><span class='va'>opb</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ratio <span class='op'>=</span> <span class='fl'>20</span>, reference <span class='op'>=</span> <span class='st'>"one"</span>,</span>
+<span class='r-in'>  adjust <span class='op'>=</span> <span class='st'>"all"</span>, shuffle <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>result</span> <span class='op'>=</span> <span class='va'>opb</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>$</span><span class='fu'>truth</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    spam nonspam </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      20      20 </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

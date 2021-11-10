@@ -91,7 +91,7 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -172,11 +172,90 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p><code>R6Class</code> object inheriting from <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>mlr3::Learner</a></code>.</p>
+    <h2 class="hasAnchor" id="construction"><a class="anchor" href="#construction"></a>Construction</h2>
+
+    
+<pre><span class='va'>GraphLearner</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>graph</span>, id <span class='op'>=</span> <span class='cn'>NULL</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, task_type <span class='op'>=</span> <span class='cn'>NULL</span>, predict_type <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</pre>
+<ul>
+<li><p><code>graph</code> :: <code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code><br />
+<code><a href='Graph.html'>Graph</a></code> to wrap. Can be a <code><a href='PipeOp.html'>PipeOp</a></code>, which is automatically converted to a <code><a href='Graph.html'>Graph</a></code>.
+This argument is always cloned; to access the <code><a href='Graph.html'>Graph</a></code> inside <code>GraphLearner</code> by-reference, use <code>$graph</code>.<br /></p></li>
+<li><p><code>id</code> :: <code>character(1)</code>
+Identifier of the resulting <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>.</p></li>
+<li><p><code>param_vals</code> :: named <code>list</code><br />
+List of hyperparameter settings, overwriting the hyperparameter settings . Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
+<li><p><code>task_type</code> :: <code>character(1)</code><br />
+What <code>task_type</code> the <code>GraphLearner</code> should have; usually automatically inferred for <code><a href='Graph.html'>Graph</a></code>s that are simple enough.</p></li>
+<li><p><code>predict_type</code> :: <code>character(1)</code><br />
+What <code>predict_type</code> the <code>GraphLearner</code> should have; usually automatically inferred for <code><a href='Graph.html'>Graph</a></code>s that are simple enough.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+
+    
+
+<p>Fields inherited from <code><a href='PipeOp.html'>PipeOp</a></code>, as well as:</p><ul>
+<li><p><code>graph</code> :: <code><a href='Graph.html'>Graph</a></code><br />
+<code><a href='Graph.html'>Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href='Graph.html'>Graph</a></code> that is being trained, but does <em>not</em>
+contain the model. Use <code>graph_model</code> to access the trained <code><a href='Graph.html'>Graph</a></code> after <code>$train()</code>. Read-only.</p></li>
+<li><p><code>graph_model</code> :: <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code><br />
+<code><a href='Graph.html'>Graph</a></code> that is being wrapped. This <code><a href='Graph.html'>Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
+
+    
+
+<p><code><a href='as_graph.html'>as_graph()</a></code> is called on the <code>graph</code> argument, so it can technically also be a <code>list</code> of things, which is
+automatically converted to a <code><a href='Graph.html'>Graph</a></code> via <code><a href='gunion.html'>gunion()</a></code>; however, this will usually not result in a valid <code><a href='Graph.html'>Graph</a></code> that can
+work as a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>. <code>graph</code> can furthermore be a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code>, which is then automatically
+wrapped in a <code><a href='Graph.html'>Graph</a></code>, which is then again wrapped in a <code>GraphLearner</code> object; this usually only adds overhead and is not
+recommended.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other Learners: 
 <code><a href='mlr_learners_avg.html'>mlr_learners_avg</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>graph</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"pca"</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>lr</span> <span class='op'>=</span> <span class='va'>GraphLearner</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>graph</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>lr</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/as_learner.html'>as_learner</a></span><span class='op'>(</span><span class='va'>graph</span><span class='op'>)</span>  <span class='co'># equivalent</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>lr</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>lr</span><span class='op'>$</span><span class='va'>graph</span><span class='op'>$</span><span class='va'>state</span>  <span class='co'># untrained version!</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $pca</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='co'># The following is therefore NULL:</span></span>
+<span class='r-in'><span class='va'>lr</span><span class='op'>$</span><span class='va'>graph</span><span class='op'>$</span><span class='va'>pipeops</span><span class='op'>$</span><span class='va'>classif.rpart</span><span class='op'>$</span><span class='va'>learner_model</span><span class='op'>$</span><span class='va'>model</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># To access the trained model from the PipeOpLearner's Learner, use:</span></span>
+<span class='r-in'><span class='va'>lr</span><span class='op'>$</span><span class='va'>graph_model</span><span class='op'>$</span><span class='va'>pipeops</span><span class='op'>$</span><span class='va'>classif.rpart</span><span class='op'>$</span><span class='va'>learner_model</span><span class='op'>$</span><span class='va'>model</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> n= 150 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> node), split, n, loss, yval, (yprob)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       * denotes terminal node</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2) PC1&lt; -1.553145 50   0 setosa (1.00000000 0.00000000 0.00000000) *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3) PC1&gt;=-1.553145 100  50 versicolor (0.00000000 0.50000000 0.50000000)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     6) PC1&lt; 1.142805 44   1 versicolor (0.00000000 0.97727273 0.02272727) *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     7) PC1&gt;=1.142805 56   7 virginica (0.00000000 0.12500000 0.87500000) *</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Feature importance (of principal components):</span></span>
+<span class='r-in'><span class='va'>lr</span><span class='op'>$</span><span class='va'>graph_model</span><span class='op'>$</span><span class='va'>pipeops</span><span class='op'>$</span><span class='va'>classif.rpart</span><span class='op'>$</span><span class='va'>learner_model</span><span class='op'>$</span><span class='fu'>importance</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       PC1       PC2       PC3       PC4 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 85.795455 18.016529  5.694731  3.254132 </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

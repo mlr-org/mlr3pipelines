@@ -88,7 +88,7 @@ dependency structure (although the PipeOps for this would need to be written)." 
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -191,7 +191,7 @@ Contains all <code><a href='PipeOp.html'>PipeOp</a></code>s in the <code>Graph</
 Table of connections between the <code><a href='PipeOp.html'>PipeOp</a></code>s. A <code>data.table</code>. <code>src_id</code> and <code>dst_id</code> are <code>$id</code>s of <code><a href='PipeOp.html'>PipeOp</a></code>s that must be present in
 the <code>$pipeops</code> list. <code>src_channel</code> and <code>dst_channel</code> must respectively be <code>$output</code> and <code>$input</code> channel names of the
 respective <code><a href='PipeOp.html'>PipeOp</a></code>s.</p></li>
-<li><p><code>is_trained</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
+<li><p><code>is_trained</code> :: <code>logical(1)</code> <br />
 Is the <code>Graph</code>, i.e. are all of its <code><a href='PipeOp.html'>PipeOp</a></code>s, trained, and can the <code>Graph</code> be used for prediction?</p></li>
 <li><p><code>lhs</code> :: <code>character</code> <br />
 Ids of the 'left-hand-side' <code><a href='PipeOp.html'>PipeOp</a></code>s that have some unconnected input channels and therefore act as <code>Graph</code> input layer.</p></li>
@@ -214,10 +214,10 @@ of all <code><a href='PipeOp.html'>PipeOp</a></code>s in the <code>Graph</code>.
 as seen by the <code>Graph</code> have the naming scheme <code>&lt;PipeOp$id&gt;.&lt;PipeOp original parameter name&gt;</code>.
 Changing <code>$param_set$values</code> also propagates the changes directly to the contained
 <code><a href='PipeOp.html'>PipeOp</a></code>s and is an alternative to changing a <code><a href='PipeOp.html'>PipeOp</a></code>s <code>$param_set$values</code> directly.</p></li>
-<li><p><code>hash</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> <br />
+<li><p><code>hash</code> :: <code>character(1)</code> <br />
 Stores a checksum calculated on the <code>Graph</code> configuration, which includes all <code><a href='PipeOp.html'>PipeOp</a></code> hashes
 (and therefore their <code>$param_set$values</code>) and a hash of <code>$edges</code>.</p></li>
-<li><p><code>keep_results</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code> <br />
+<li><p><code>keep_results</code> :: <code>logical(1)</code> <br />
 Whether to store intermediate results in the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$.result</code> slot, mostly for debugging purposes. Default <code>FALSE</code>.</p></li>
 </ul>
 
@@ -227,7 +227,7 @@ Whether to store intermediate results in the <code><a href='PipeOp.html'>PipeOp<
 
 <ul>
 <li><p><code>ids(sorted = FALSE)</code> <br />
-(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; <code>character</code> <br />
+(<code>logical(1)</code>) -&gt; <code>character</code> <br />
 Get IDs of all <code><a href='PipeOp.html'>PipeOp</a></code>s. This is in order that <code><a href='PipeOp.html'>PipeOp</a></code>s were added if
 <code>sorted</code> is <code>FALSE</code>, and topologically sorted if <code>sorted</code> is <code>TRUE</code>.</p></li>
 <li><p><code>add_pipeop(op)</code> <br />
@@ -235,23 +235,30 @@ Get IDs of all <code><a href='PipeOp.html'>PipeOp</a></code>s. This is in order 
 Mutates <code>Graph</code> by adding a <code><a href='PipeOp.html'>PipeOp</a></code> to the <code>Graph</code>. This does not add any edges, so the new <code><a href='PipeOp.html'>PipeOp</a></code>
 will not be connected within the <code>Graph</code> at first.<br />
 Instead of supplying a <code><a href='PipeOp.html'>PipeOp</a></code> directly, an object that can naturally be converted to a <code><a href='PipeOp.html'>PipeOp</a></code> can also
-be supplied, e.g. a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> or a <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>; see <code><a href='as_pipeop.html'>as_pipeop()</a></code>.</p></li>
+be supplied, e.g. a <code><a href='https://mlr3.mlr-org.com/reference/Learner.html'>Learner</a></code> or a <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>; see <code><a href='as_pipeop.html'>as_pipeop()</a></code>.
+The argument given as <code>op</code> is always cloned; to access a <code>Graph</code>'s <code><a href='PipeOp.html'>PipeOp</a></code>s by-reference, use <code>$pipeops</code>.<br />
+Note that <code>$add_pipeop()</code> is a relatively low-level operation, it is recommended to build graphs using <code>%&gt;&gt;%</code>.</p></li>
 <li><p><code>add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)</code> <br />
-(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>,
-<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>NULL</code>,
-<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> | <code>NULL</code>) -&gt; <code>self</code> <br />
+(<code>character(1)</code>, <code>character(1)</code>,
+<code>character(1)</code> | <code>numeric(1)</code> | <code>NULL</code>,
+<code>character(1)</code> | <code>numeric(1)</code> | <code>NULL</code>) -&gt; <code>self</code> <br />
 Add an edge from <code><a href='PipeOp.html'>PipeOp</a></code> <code>src_id</code>, and its channel <code>src_channel</code>
 (identified by its name or number as listed in the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$output</code>), to <code><a href='PipeOp.html'>PipeOp</a></code> <code>dst_id</code>'s
 channel <code>dst_channel</code> (identified by its name or number as listed in the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$input</code>).
 If source or destination <code><a href='PipeOp.html'>PipeOp</a></code> have only one input / output channel and <code>src_channel</code> / <code>dst_channel</code>
 are therefore unambiguous, they can be omitted (i.e. left as <code>NULL</code>).</p></li>
-<li><p><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot(html)</a></code> <br />
-(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; <code>NULL</code> <br />
+<li><p><code>chain(gs, clone = TRUE)</code> <br />
+(<code>list</code> of <code>Graph</code>s, <code>logical(1)</code>) -&gt; <code>self</code> <br />
+Takes a list of <code>Graph</code>s or <code><a href='PipeOp.html'>PipeOp</a></code>s (or objects that can be automatically converted into <code>Graph</code>s or <code><a href='PipeOp.html'>PipeOp</a></code>s,
+see <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>) as inputs and joins them in a serial <code>Graph</code> coming after <code>self</code>, as if
+connecting them using <code>%&gt;&gt;%</code>.</p></li>
+<li><p><code>plot(html)</code> <br />
+(<code>logical(1)</code>) -&gt; <code>NULL</code> <br />
 Plot the <code>Graph</code>, using either the <span class="pkg">igraph</span> package (for <code>html = FALSE</code>, default) or
 the <code>visNetwork</code> package for <code>html = TRUE</code> producing a <code><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlWidget</a></code>.
 The <code><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlWidget</a></code> can be rescaled using <code><a href='https://rdrr.io/pkg/visNetwork/man/visOptions.html'>visOptions</a></code>.</p></li>
-<li><p><code><a href='https://rdrr.io/r/base/print.html'>print(dot = FALSE, dotname = "dot", fontsize = 24L)</a></code> <br />
-(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>) -&gt; <code>NULL</code> <br />
+<li><p><code>print(dot = FALSE, dotname = "dot", fontsize = 24L)</code> <br />
+(<code>logical(1)</code>, <code>character(1)</code>, <code>integer(1)</code>) -&gt; <code>NULL</code> <br />
 Print a representation of the <code>Graph</code> on the console. If <code>dot</code> is <code>FALSE</code>, output is a table with one row for each contained <code><a href='PipeOp.html'>PipeOp</a></code> and
 columns <code>ID</code> (<code>$id</code> of <code>PipeOp</code>), <code>State</code> (short representation of <code>$state</code> of <code><a href='PipeOp.html'>PipeOp</a></code>), <code>sccssors</code> (<code><a href='PipeOp.html'>PipeOp</a></code>s that
 take their input directly from the <code><a href='PipeOp.html'>PipeOp</a></code> on this line), and <code>prdcssors</code> (the <code><a href='PipeOp.html'>PipeOp</a></code>s that produce the data
@@ -265,7 +272,7 @@ instead of changing a <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$id<
 (<code>character</code>, <code>character</code>) -&gt; <code>self</code> <br />
 Pre- or postfix <code><a href='PipeOp.html'>PipeOp</a></code>'s existing ids. Both <code>prefix</code> and <code>postfix</code> default to <code>""</code>, i.e. no changes.</p></li>
 <li><p><code>train(input, single_input = TRUE)</code> <br />
-(<code>any</code>, <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; named <code>list</code><br />
+(<code>any</code>, <code>logical(1)</code>) -&gt; named <code>list</code><br />
 Train <code>Graph</code> by traversing the <code>Graph</code>s' edges and calling all the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$train</code> methods in turn.
 Return a named <code>list</code> of outputs for each unconnected
 <code><a href='PipeOp.html'>PipeOp</a></code> out-channel, named according to the <code>Graph</code>'s <code>$output</code> <code>name</code> column. During training, the <code>$state</code>
@@ -278,8 +285,8 @@ on the <code><a href='PipeOp.html'>PipeOp</a></code>s in the <code>Graph</code>.
 to a corresponding input channel of the <code>Graph</code>. If <code>input</code> is a named <code>list</code>, names must correspond to input channel
 names (<code>$input$name</code>) and inputs will be sent to the channels by name; otherwise they will be sent to the channels
 in order in which they are listed in <code>$input</code>.</p></li>
-<li><p><code><a href='https://rdrr.io/r/stats/predict.html'>predict(input, single_input = TRUE)</a></code> <br />
-(<code>any</code>, <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) -&gt; <code>list</code> of <code>any</code> <br />
+<li><p><code>predict(input, single_input = TRUE)</code> <br />
+(<code>any</code>, <code>logical(1)</code>) -&gt; <code>list</code> of <code>any</code> <br />
 Predict with the <code>Graph</code> by calling all the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>$train</code> methods. Input and output, as well as the function
 of the <code>single_input</code> argument, are analogous to <code>$train()</code>.</p></li>
 </ul>
@@ -296,46 +303,50 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>g</span> <span class='op'>=</span> <span class='va'>Graph</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'><a href='mlr_pipeops_scale.html'>PipeOpScale</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"scale"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'><a href='mlr_pipeops_pca.html'>PipeOpPCA</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"pca"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span>
-  <span class='fu'>add_edge</span><span class='op'>(</span><span class='st'>"scale"</span>, <span class='st'>"pca"</span><span class='op'>)</span>
-<span class='va'>g</span><span class='op'>$</span><span class='va'>input</span>
-</div><div class='output co'>#&gt;           name train predict op.id channel.name
-#&gt; 1: scale.input  Task    Task scale        input</div><div class='input'><span class='va'>g</span><span class='op'>$</span><span class='va'>output</span>
-</div><div class='output co'>#&gt;          name train predict op.id channel.name
-#&gt; 1: pca.output  Task    Task   pca       output</div><div class='input'>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>trained</span> <span class='op'>=</span> <span class='va'>g</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
-<span class='va'>trained</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species        PC1         PC2         PC3         PC4
-#&gt;   1:    setosa -2.2571412 -0.47842383 -0.12727962  0.02408751
-#&gt;   2:    setosa -2.0740130  0.67188269 -0.23382552  0.10266284
-#&gt;   3:    setosa -2.3563351  0.34076642  0.04405390  0.02828231
-#&gt;   4:    setosa -2.2917068  0.59539986  0.09098530 -0.06573534
-#&gt;   5:    setosa -2.3818627 -0.64467566  0.01568565 -0.03580287
-#&gt;  ---                                                         
-#&gt; 146: virginica  1.8642579 -0.38567404  0.25541818  0.38795715
-#&gt; 147: virginica  1.5593565  0.89369285 -0.02628330  0.21945690
-#&gt; 148: virginica  1.5160915 -0.26817075  0.17957678  0.11877324
-#&gt; 149: virginica  1.3682042 -1.00787793  0.93027872  0.02604141
-#&gt; 150: virginica  0.9574485  0.02425043  0.52648503 -0.16253353</div><div class='input'>
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>filter</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>
-<span class='va'>predicted</span> <span class='op'>=</span> <span class='va'>g</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
-<span class='va'>predicted</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Species       PC1         PC2         PC3          PC4
-#&gt;  1:  setosa -2.257141 -0.47842383 -0.12727962  0.024087508
-#&gt;  2:  setosa -2.074013  0.67188269 -0.23382552  0.102662845
-#&gt;  3:  setosa -2.356335  0.34076642  0.04405390  0.028282305
-#&gt;  4:  setosa -2.291707  0.59539986  0.09098530 -0.065735340
-#&gt;  5:  setosa -2.381863 -0.64467566  0.01568565 -0.035802870
-#&gt;  6:  setosa -2.068701 -1.48420530  0.02687825  0.006586116
-#&gt;  7:  setosa -2.435868 -0.04748512  0.33435030 -0.036652767
-#&gt;  8:  setosa -2.225392 -0.22240300 -0.08839935 -0.024529919
-#&gt;  9:  setosa -2.326845  1.11160370  0.14459247 -0.026769540
-#&gt; 10:  setosa -2.177035  0.46744757 -0.25291827 -0.039766068</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>g</span> <span class='op'>=</span> <span class='va'>Graph</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'><a href='mlr_pipeops_scale.html'>PipeOpScale</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"scale"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_pipeop</span><span class='op'>(</span><span class='va'><a href='mlr_pipeops_pca.html'>PipeOpPCA</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"pca"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span></span>
+<span class='r-in'>  <span class='fu'>add_edge</span><span class='op'>(</span><span class='st'>"scale"</span>, <span class='st'>"pca"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>g</span><span class='op'>$</span><span class='va'>input</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           name train predict op.id channel.name</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: scale.input  Task    Task scale        input</span>
+<span class='r-in'><span class='va'>g</span><span class='op'>$</span><span class='va'>output</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          name train predict op.id channel.name</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: pca.output  Task    Task   pca       output</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>trained</span> <span class='op'>=</span> <span class='va'>g</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>trained</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species        PC1         PC2         PC3         PC4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa -2.2571412 -0.47842383 -0.12727962  0.02408751</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa -2.0740130  0.67188269 -0.23382552  0.10266284</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa -2.3563351  0.34076642  0.04405390  0.02828231</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa -2.2917068  0.59539986  0.09098530 -0.06573534</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa -2.3818627 -0.64467566  0.01568565 -0.03580287</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica  1.8642579 -0.38567404  0.25541818  0.38795715</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica  1.5593565  0.89369285 -0.02628330  0.21945690</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica  1.5160915 -0.26817075  0.17957678  0.11877324</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica  1.3682042 -1.00787793  0.93027872  0.02604141</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica  0.9574485  0.02425043  0.52648503 -0.16253353</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>filter</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>predicted</span> <span class='op'>=</span> <span class='va'>g</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>predicted</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Species       PC1         PC2         PC3          PC4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:  setosa -2.257141 -0.47842383 -0.12727962  0.024087508</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:  setosa -2.074013  0.67188269 -0.23382552  0.102662845</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:  setosa -2.356335  0.34076642  0.04405390  0.028282305</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:  setosa -2.291707  0.59539986  0.09098530 -0.065735340</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5:  setosa -2.381863 -0.64467566  0.01568565 -0.035802870</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:  setosa -2.068701 -1.48420530  0.02687825  0.006586116</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:  setosa -2.435868 -0.04748512  0.33435030 -0.036652767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:  setosa -2.225392 -0.22240300 -0.08839935 -0.024529919</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:  setosa -2.326845  1.11160370  0.14459247 -0.026769540</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10:  setosa -2.177035  0.46744757 -0.25291827 -0.039766068</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

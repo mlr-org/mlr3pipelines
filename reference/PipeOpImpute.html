@@ -83,7 +83,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -162,23 +162,23 @@
 <pre>PipeOpImpute$$new(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object. See <code>$id</code> slot of <code><a href='PipeOp.html'>PipeOp</a></code>.</p></li>
 <li><p><code>param_set</code> :: <code><a href='https://paradox.mlr-org.com/reference/ParamSet.html'>ParamSet</a></code><br />
 Parameter space description. This should be created by the subclass and given to <code>super$initialize()</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings given in <code>param_set</code>. The
 subclass should have its own <code>param_vals</code> parameter and pass it on to <code>super$initialize()</code>. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
-<li><p><code>whole_task_dependent</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>whole_task_dependent</code> :: <code>logical(1)</code><br />
 Whether the <code>context_columns</code> parameter should be added which lets the user limit the columns that are
 used for imputation inference. This should generally be <code>FALSE</code> if imputation depends only on individual features
 (e.g. mode imputation), and <code>TRUE</code> if imputation depends on other features as well (e.g. kNN-imputation).</p></li>
 <li><p>packages :: <code>character</code><br />
 Set of all required packages for the <code><a href='PipeOp.html'>PipeOp</a></code>'s <code>private$.train</code> and <code>private$.predict</code> methods. See <code>$packages</code> slot.
-Default is <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p></li>
-<li><p><code>task_type</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+Default is <code>character(0)</code>.</p></li>
+<li><p><code>task_type</code> :: <code>character(1)</code><br />
 The class of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> that should be accepted as input and will be returned as output. This
-should generally be a <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
+should generally be a <code>character(1)</code> identifying a type of <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code>, e.g. <code>"Task"</code>, <code>"TaskClassif"</code> or
 <code>"TaskRegr"</code> (or another subclass introduced by other packages). Default is <code>"Task"</code>.</p></li>
 <li><p><code>feature_types</code> :: <code>character</code><br />
 Feature types affected by the <code>PipeOp</code>. See <code>private$.select_cols()</code> for more information.</p></li>
@@ -255,17 +255,17 @@ to limit the columns that a <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPre
 This method can optionally be overloaded when inheriting <code>PipeOpImpute</code>;
 If this method is not overloaded, it defaults to selecting the columns of type indicated by the <code>feature_types</code> construction argument.</p></li>
 <li><p><code>.train_imputer(feature, type, context)</code><br />
-(<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>data.table</code>) -&gt; <code>any</code><br />
+(<code>atomic</code>, <code>character(1)</code>, <code>data.table</code>) -&gt; <code>any</code><br />
 Abstract function that must be overloaded when inheriting.
 Called once for each feature selected by <code>affect_columns</code> to create the model entry to be used for <code>private$.impute()</code>. This function
 is only called for features with at least one non-missing value.</p></li>
 <li><p><code>.train_nullmodel(feature, type, context)</code><br />
-(<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>data.table</code>) -&gt; <code>any</code><br />
+(<code>atomic</code>, <code>character(1)</code>, <code>data.table</code>) -&gt; <code>any</code><br />
 Like <code>.train_imputer()</code>, but only called for each feature that only contains missing values. This is not an abstract function
-and, if not overloaded, gives a default response of <code>0</code> (<code>integer</code>, <code>numeric</code>), <code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, FALSE)</a></code> (<code>logical</code>), all available levels (<code>factor</code>/<code>ordered</code>),
+and, if not overloaded, gives a default response of <code>0</code> (<code>integer</code>, <code>numeric</code>), <code>c(TRUE, FALSE)</code> (<code>logical</code>), all available levels (<code>factor</code>/<code>ordered</code>),
 or the empty  string (<code>character</code>).</p></li>
 <li><p><code>.impute(feature, type, model, context)</code><br />
-(<code>atomic</code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>any</code>, <code>data.table</code>) -&gt; <code>atomic</code><br />
+(<code>atomic</code>, <code>character(1)</code>, <code>any</code>, <code>data.table</code>) -&gt; <code>atomic</code><br />
 Imputes the features. <code>model</code> is the model created by <code>private$.train_imputer()</code> Default behaviour is to assume <code>model</code> is an atomic vector
 from which values are sampled to impute missing values of <code>feature</code>. <code>model</code> may have an attribute <code>probabilities</code> for non-uniform sampling.</p></li>
 </ul>

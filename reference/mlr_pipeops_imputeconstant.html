@@ -83,7 +83,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -162,7 +162,7 @@
 <pre><span class='va'>PipeOpImputeConstant</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"imputeconstant"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"imputeconstant"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
@@ -187,11 +187,11 @@ the value of the <code>constant</code> parameter.</p>
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>, as well as:</p><ul>
-<li><p><code>constant</code> :: <code><a href='https://rdrr.io/r/base/vector.html'>atomic(1)</a></code><br />
+<li><p><code>constant</code> :: <code>atomic(1)</code><br />
 The constant value that should be used for the imputation, atomic vector of length 1. The
 atomic mode must match the type of the features that will be selected by the <code>affect_columns</code>
 parameter and this will be checked during imputation. Initialized to <code>".MISSING"</code>.</p></li>
-<li><p><code>check_levels</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>check_levels</code> :: <code>logical(1)</code><br />
 Should be checked whether the <code>constant</code> value is a valid level of factorial features (i.e., it
 already is a level)? Raises an error if unsuccesful. This check is only performed for factorial
 features (i.e., <code>factor</code>, <code>ordered</code>; skipped for <code>character</code>). Initialized to <code>TRUE</code>.</p></li>
@@ -293,76 +293,79 @@ if <code>check_levels</code> is <code>FALSE</code> and the level is not already 
 <code><a href='mlr_pipeops_imputesample.html'>mlr_pipeops_imputesample</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span>
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; diabetes      age  glucose  insulin     mass pedigree pregnant pressure 
-#&gt;        0        0        5      374       11        0        0       35 
-#&gt;  triceps 
-#&gt;      227 </div><div class='input'>
-<span class='co'># impute missing values of the numeric feature "glucose" by the constant value -999</span>
-<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputeconstant"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  constant <span class='op'>=</span> <span class='op'>-</span><span class='fl'>999</span>, affect_columns <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_name</a></span><span class='op'>(</span><span class='st'>"glucose"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-<span class='va'>new_task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; diabetes      age  insulin     mass pedigree pregnant pressure  triceps 
-#&gt;        0        0      374       11        0        0       35      227 
-#&gt;  glucose 
-#&gt;        0 </div><div class='input'><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='st'>"glucose"</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;   [1]  148   85  183   89  137  116   78  115  197  125  110  168  139  189  166
-#&gt;  [16]  100  118  107  103  115  126   99  196  119  143  125  147   97  145  117
-#&gt;  [31]  109  158   88   92  122  103  138  102   90  111  180  133  106  171  159
-#&gt;  [46]  180  146   71  103  105  103  101   88  176  150   73  187  100  146  105
-#&gt;  [61]   84  133   44  141  114   99  109  109   95  146  100  139  126  129   79
-#&gt;  [76] -999   62   95  131  112  113   74   83  101  137  110  106  100  136  107
-#&gt;  [91]   80  123   81  134  142  144   92   71   93  122  163  151  125   81   85
-#&gt; [106]  126   96  144   83   95  171  155   89   76  160  146  124   78   97   99
-#&gt; [121]  162  111  107  132  113   88  120  118  117  105  173  122  170   84   96
-#&gt; [136]  125  100   93  129  105  128  106  108  108  154  102   57  106  147   90
-#&gt; [151]  136  114  156  153  188  152   99  109   88  163  151  102  114  100  131
-#&gt; [166]  104  148  120  110  111  102  134   87   79   75  179   85  129  143  130
-#&gt; [181]   87  119 -999   73  141  194  181  128  109  139  111  123  159  135   85
-#&gt; [196]  158  105  107  109  148  113  138  108   99  103  111  196  162   96  184
-#&gt; [211]   81  147  179  140  112  151  109  125   85  112  177  158  119  142  100
-#&gt; [226]   87  101  162  197  117  142  134   79  122   74  171  181  179  164  104
-#&gt; [241]   91   91  139  119  146  184  122  165  124  111  106  129   90   86   92
-#&gt; [256]  113  111  114  193  155  191  141   95  142  123   96  138  128  102  146
-#&gt; [271]  101  108  122   71  106  100  106  104  114  108  146  129  133  161  108
-#&gt; [286]  136  155  119   96  108   78  107  128  128  161  151  146  126  100  112
-#&gt; [301]  167  144   77  115  150  120  161  137  128  124   80  106  155  113  109
-#&gt; [316]  112   99  182  115  194  129  112  124  152  112  157  122  179  102  105
-#&gt; [331]  118   87  180  106   95  165  117  115  152  178  130   95 -999  122   95
-#&gt; [346]  126  139  116   99 -999   92  137   61   90   90  165  125  129   88  196
-#&gt; [361]  189  158  103  146  147   99  124  101   81  133  173  118   84  105  122
-#&gt; [376]  140   98   87  156   93  107  105  109   90  125  119  116  105  144  100
-#&gt; [391]  100  166  131  116  158  127   96  131   82  193   95  137  136   72  168
-#&gt; [406]  123  115  101  197  172  102  112  143  143  138  173   97  144   83  129
-#&gt; [421]  119   94  102  115  151  184   94  181  135   95   99   89   80  139   90
-#&gt; [436]  141  140  147   97  107  189   83  117  108  117  180  100   95  104  120
-#&gt; [451]   82  134   91  119  100  175  135   86  148  134  120   71   74   88  115
-#&gt; [466]  124   74   97  120  154  144  137  119  136  114  137  105  114  126  132
-#&gt; [481]  158  123   85   84  145  135  139  173   99  194   83   89   99  125   80
-#&gt; [496]  166  110   81  195  154  117   84 -999   94   96   75  180  130   84  120
-#&gt; [511]   84  139   91   91   99  163  145  125   76  129   68  124  114  130  125
-#&gt; [526]   87   97  116  117  111  122  107   86   91   77  132  105   57  127  129
-#&gt; [541]  100  128   90   84   88  186  187  131  164  189  116   84  114   88   84
-#&gt; [556]  124   97  110  103   85  125  198   87   99   91   95   99   92  154  121
-#&gt; [571]   78  130  111   98  143  119  108  118  133  197  151  109  121  100  124
-#&gt; [586]   93  143  103  176   73  111  112  132   82  123  188   67   89  173  109
-#&gt; [601]  108   96  124  150  183  124  181   92  152  111  106  174  168  105  138
-#&gt; [616]  106  117   68  112  119  112   92  183   94  108   90  125  132  128   94
-#&gt; [631]  114  102  111  128   92  104  104   94   97  100  102  128  147   90  103
-#&gt; [646]  157  167  179  136  107   91  117  123  120  106  155  101  120  127   80
-#&gt; [661]  162  199  167  145  115  112  145  111   98  154  165   99   68  123   91
-#&gt; [676]  195  156   93  121  101   56  162   95  125  136  129  130  107  140  144
-#&gt; [691]  107  158  121  129   90  142  169   99  127  118  122  125  168  129  110
-#&gt; [706]   80  115  127  164   93  158  126  129  134  102  187  173   94  108   97
-#&gt; [721]   83  114  149  117  111  112  116  141  175   92  130  120  174  106  105
-#&gt; [736]   95  126   65   99  102  120  102  109  140  153  100  147   81  187  162
-#&gt; [751]  136  121  108  181  154  128  137  123  106  190   88  170   89  101  122
-#&gt; [766]  121  126   93</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"pima"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> diabetes      age  glucose  insulin     mass pedigree pregnant pressure </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0        0        5      374       11        0        0       35 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  triceps </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      227 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># impute missing values of the numeric feature "glucose" by the constant value -999</span></span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"imputeconstant"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  constant <span class='op'>=</span> <span class='op'>-</span><span class='fl'>999</span>, affect_columns <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_name</a></span><span class='op'>(</span><span class='st'>"glucose"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>new_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>task <span class='op'>=</span> <span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>missings</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> diabetes      age  insulin     mass pedigree pregnant pressure  triceps </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0        0      374       11        0        0       35      227 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  glucose </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        0 </span>
+<span class='r-in'><span class='va'>new_task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='st'>"glucose"</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   [1]  148   85  183   89  137  116   78  115  197  125  110  168  139  189  166</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [16]  100  118  107  103  115  126   99  196  119  143  125  147   97  145  117</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [31]  109  158   88   92  122  103  138  102   90  111  180  133  106  171  159</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [46]  180  146   71  103  105  103  101   88  176  150   73  187  100  146  105</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [61]   84  133   44  141  114   99  109  109   95  146  100  139  126  129   79</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [76] -999   62   95  131  112  113   74   83  101  137  110  106  100  136  107</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [91]   80  123   81  134  142  144   92   71   93  122  163  151  125   81   85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [106]  126   96  144   83   95  171  155   89   76  160  146  124   78   97   99</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [121]  162  111  107  132  113   88  120  118  117  105  173  122  170   84   96</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [136]  125  100   93  129  105  128  106  108  108  154  102   57  106  147   90</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [151]  136  114  156  153  188  152   99  109   88  163  151  102  114  100  131</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [166]  104  148  120  110  111  102  134   87   79   75  179   85  129  143  130</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [181]   87  119 -999   73  141  194  181  128  109  139  111  123  159  135   85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [196]  158  105  107  109  148  113  138  108   99  103  111  196  162   96  184</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [211]   81  147  179  140  112  151  109  125   85  112  177  158  119  142  100</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [226]   87  101  162  197  117  142  134   79  122   74  171  181  179  164  104</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [241]   91   91  139  119  146  184  122  165  124  111  106  129   90   86   92</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [256]  113  111  114  193  155  191  141   95  142  123   96  138  128  102  146</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [271]  101  108  122   71  106  100  106  104  114  108  146  129  133  161  108</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [286]  136  155  119   96  108   78  107  128  128  161  151  146  126  100  112</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [301]  167  144   77  115  150  120  161  137  128  124   80  106  155  113  109</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [316]  112   99  182  115  194  129  112  124  152  112  157  122  179  102  105</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [331]  118   87  180  106   95  165  117  115  152  178  130   95 -999  122   95</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [346]  126  139  116   99 -999   92  137   61   90   90  165  125  129   88  196</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [361]  189  158  103  146  147   99  124  101   81  133  173  118   84  105  122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [376]  140   98   87  156   93  107  105  109   90  125  119  116  105  144  100</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [391]  100  166  131  116  158  127   96  131   82  193   95  137  136   72  168</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [406]  123  115  101  197  172  102  112  143  143  138  173   97  144   83  129</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [421]  119   94  102  115  151  184   94  181  135   95   99   89   80  139   90</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [436]  141  140  147   97  107  189   83  117  108  117  180  100   95  104  120</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [451]   82  134   91  119  100  175  135   86  148  134  120   71   74   88  115</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [466]  124   74   97  120  154  144  137  119  136  114  137  105  114  126  132</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [481]  158  123   85   84  145  135  139  173   99  194   83   89   99  125   80</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [496]  166  110   81  195  154  117   84 -999   94   96   75  180  130   84  120</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [511]   84  139   91   91   99  163  145  125   76  129   68  124  114  130  125</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [526]   87   97  116  117  111  122  107   86   91   77  132  105   57  127  129</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [541]  100  128   90   84   88  186  187  131  164  189  116   84  114   88   84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [556]  124   97  110  103   85  125  198   87   99   91   95   99   92  154  121</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [571]   78  130  111   98  143  119  108  118  133  197  151  109  121  100  124</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [586]   93  143  103  176   73  111  112  132   82  123  188   67   89  173  109</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [601]  108   96  124  150  183  124  181   92  152  111  106  174  168  105  138</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [616]  106  117   68  112  119  112   92  183   94  108   90  125  132  128   94</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [631]  114  102  111  128   92  104  104   94   97  100  102  128  147   90  103</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [646]  157  167  179  136  107   91  117  123  120  106  155  101  120  127   80</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [661]  162  199  167  145  115  112  145  111   98  154  165   99   68  123   91</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [676]  195  156   93  121  101   56  162   95  125  136  129  130  107  140  144</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [691]  107  158  121  129   90  142  169   99  127  118  122  125  168  129  110</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [706]   80  115  127  164   93  158  126  129  134  102  187  173   94  108   97</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [721]   83  114  149  117  111  112  116  141  175   92  130  120  174  106  105</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [736]   95  126   65   99  102  120  102  109  140  153  100  147   81  187  162</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [751]  136  121  108  181  154  128  137  123  106  190   88  170   89  101  122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [766]  121  126   93</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

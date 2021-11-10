@@ -86,7 +86,7 @@ is TRUE, this corresponds to the sd()." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -153,7 +153,7 @@ is TRUE, this corresponds to the sd()." />
     <div class="ref-description">
     <p>Centers all numeric features to mean = 0 (if <code>center</code> parameter is <code>TRUE</code>) and scales them
 by dividing them by their root-mean-square (if <code>scale</code> parameter is <code>TRUE</code>).</p>
-<p>The root-mean-square here is defined as <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt(sum(x^2)/(length(x)-1))</a></code>. If the <code>center</code> parameter
+<p>The root-mean-square here is defined as <code>sqrt(sum(x^2)/(length(x)-1))</code>. If the <code>center</code> parameter
 is <code>TRUE</code>, this corresponds to the <code><a href='https://rdrr.io/r/stats/sd.html'>sd()</a></code>.</p>
     </div>
 
@@ -168,7 +168,7 @@ is <code>TRUE</code>, this corresponds to the <code><a href='https://rdrr.io/r/s
 <pre><span class='va'>PipeOpScale</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"scale"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"scale"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -189,7 +189,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 The mean / median (depending on <code>robust</code>) of each numeric feature during training, or 0 if <code>center</code> is <code>FALSE</code>. Will be subtracted during the predict phase.</p></li>
 <li><p><code>scale</code> :: <code>numeric</code><br />
 The value by which features are divided. 1 if <code>scale</code> is <code>FALSE</code><br />
-If <code>robust</code> is <code>FALSE</code>, this is the root mean square, defined as <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt(sum(x^2)/(length(x)-1))</a></code>, of each feature, possibly after centering.
+If <code>robust</code> is <code>FALSE</code>, this is the root mean square, defined as <code>sqrt(sum(x^2)/(length(x)-1))</code>, of each feature, possibly after centering.
 If <code>robust</code> is <code>TRUE</code>, this is the mean absolute deviation multiplied by 1.4826 (see <a href='https://rdrr.io/r/stats/mad.html'>stats::mad</a> of each feature, possibly after centering.
 This is 1 for features that are constant during training if <code>center</code> is <code>TRUE</code>, to avoid division-by-zero.</p></li>
 </ul>
@@ -199,11 +199,11 @@ This is 1 for features that are constant during training if <code>center</code> 
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>center</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>center</code> :: <code>logical(1)</code><br />
 Whether to center  features, i.e. subtract their <code><a href='https://rdrr.io/r/base/mean.html'>mean()</a></code> from them. Default <code>TRUE</code>.</p></li>
-<li><p><code>scale</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
-Whether to scale features, i.e. divide them by <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt(sum(x^2)/(length(x)-1))</a></code>. Default <code>TRUE</code>.</p></li>
-<li><p><code>robust</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>scale</code> :: <code>logical(1)</code><br />
+Whether to scale features, i.e. divide them by <code>sqrt(sum(x^2)/(length(x)-1))</code>. Default <code>TRUE</code>.</p></li>
+<li><p><code>robust</code> :: <code>logical(1)</code><br />
 Whether to use robust scaling; instead of scaling / centering with mean / standard deviation,
 median and median absolute deviation <code><a href='https://rdrr.io/r/stats/mad.html'>mad</a></code> are used.
 Initialized to <code>FALSE</code>.</p></li>
@@ -213,7 +213,7 @@ Initialized to <code>FALSE</code>.</p></li>
 
     
 
-<p>Uses the <code><a href='https://rdrr.io/r/base/scale.html'>scale()</a></code> function for <code>robust = FALSE</code> and alternatively subtracts the
+<p>Imitates the <code><a href='https://rdrr.io/r/base/scale.html'>scale()</a></code> function for <code>robust = FALSE</code> and alternatively subtracts the
 <code>median</code> and divides by <code><a href='https://rdrr.io/r/stats/mad.html'>mad</a></code> for <code>robust = TRUE</code>.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
@@ -296,32 +296,35 @@ Initialized to <code>FALSE</code>.</p></li>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"scale"</span><span class='op'>)</span>
-
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199
-#&gt;   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881
-#&gt;   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751
-#&gt;   4:    setosa   -1.2791040  -1.3110521  -1.50149039  0.09788935
-#&gt;   5:    setosa   -1.3357516  -1.3110521  -1.01843718  1.24503015
-#&gt;  ---                                                            
-#&gt; 146: virginica    0.8168591   1.4439941   1.03453895 -0.13153881
-#&gt; 147: virginica    0.7035638   0.9192234   0.55148575 -1.27867961
-#&gt; 148: virginica    0.8168591   1.0504160   0.79301235 -0.13153881
-#&gt; 149: virginica    0.9301544   1.4439941   0.43072244  0.78617383
-#&gt; 150: virginica    0.7602115   0.7880307   0.06843254 -0.13153881</div><div class='input'>
-<span class='va'>one_line_of_iris</span> <span class='op'>=</span> <span class='va'>task</span><span class='op'>$</span><span class='fu'>filter</span><span class='op'>(</span><span class='fl'>13</span><span class='op'>)</span>
-
-<span class='va'>one_line_of_iris</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt; 1:  setosa          1.4         0.1          4.8           3</div><div class='input'>
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>one_line_of_iris</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt; 1:  setosa    -1.335752   -1.442245    -1.259964  -0.1315388</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"scale"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa   -1.2791040  -1.3110521  -1.50149039  0.09788935</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa   -1.3357516  -1.3110521  -1.01843718  1.24503015</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica    0.8168591   1.4439941   1.03453895 -0.13153881</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica    0.7035638   0.9192234   0.55148575 -1.27867961</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica    0.8168591   1.0504160   0.79301235 -0.13153881</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica    0.9301544   1.4439941   0.43072244  0.78617383</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica    0.7602115   0.7880307   0.06843254 -0.13153881</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>one_line_of_iris</span> <span class='op'>=</span> <span class='va'>task</span><span class='op'>$</span><span class='fu'>filter</span><span class='op'>(</span><span class='fl'>13</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>one_line_of_iris</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  setosa          1.4         0.1          4.8           3</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>predict</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>one_line_of_iris</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  setosa    -1.335752   -1.442245    -1.259964  -0.1315388</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

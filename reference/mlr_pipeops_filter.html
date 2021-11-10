@@ -87,7 +87,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -171,8 +171,9 @@ this means e.g. that setting <code>nfeat</code> to 0 will only remove features o
 </pre>
 <ul>
 <li><p><code>filter</code> :: <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code><br />
-<code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> used for feature filtering.</p></li>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>
+<code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> used for feature filtering.
+This argument is always cloned; to access the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> inside <code>PipeOpFilter</code> by-reference, use <code>$filter</code>.<br /></p></li>
+<li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, defaulting to the <code>id</code> of the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code> being used.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -204,16 +205,16 @@ Names of features that are being kept. Features of types that the <code><a href=
 
 <p>The parameters are the parameters inherited from the <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as the parameters of the <code><a href='https://mlr3filters.mlr-org.com/reference/Filter.html'>Filter</a></code>
 used by this object. Besides, parameters introduced are:</p><ul>
-<li><p><code>filter.nfeat</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>filter.nfeat</code> :: <code>numeric(1)</code> <br />
 Number of features to select.
 Mutually exclusive with <code>frac</code>, <code>cutoff</code>, and <code>permuted</code>.</p></li>
-<li><p><code>filter.frac</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>filter.frac</code> :: <code>numeric(1)</code> <br />
 Fraction of features to keep.
 Mutually exclusive with <code>nfeat</code>, <code>cutoff</code>, and <code>permuted</code>.</p></li>
-<li><p><code>filter.cutoff</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code> <br />
+<li><p><code>filter.cutoff</code> :: <code>numeric(1)</code> <br />
 Minimum value of filter heuristic for which to keep features.
 Mutually exclusive with <code>nfeat</code>, <code>frac</code>, and <code>permuted</code>.</p></li>
-<li><p><code>filter.permuted</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code> <br />
+<li><p><code>filter.permuted</code> :: <code>integer(1)</code> <br />
 If this parameter is set, a random permutation of each feature is added to the task before
 applying the filter. All features selected before the <code>permuted</code>-th permuted features is selected
 are kept. This is similar to the approach in Wu (2007) and Thomas (2017).
@@ -330,72 +331,76 @@ doi: <a href='https://doi.org/10.1155/2017/1421409'>10.1155/2017/1421409</a>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3filters.mlr-org.com'>"mlr3filters"</a></span><span class='op'>)</span>
-
-<span class='co'># setup PipeOpFilter to keep the 5 most important</span>
-<span class='co'># features of the spam task w.r.t. their AUC</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span>
-<span class='va'>filter</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span><span class='op'>(</span><span class='st'>"auc"</span><span class='op'>)</span>
-<span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"filter"</span>, filter <span class='op'>=</span> <span class='va'>filter</span><span class='op'>)</span>
-<span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span>
-</div><div class='output co'>#&gt; &lt;ParamSetCollection:auc&gt;
-#&gt;                 id    class lower upper nlevels        default value
-#&gt; 1:    filter.nfeat ParamInt     0   Inf     Inf &lt;NoDefault[3]&gt;      
-#&gt; 2:     filter.frac ParamDbl     0     1     Inf &lt;NoDefault[3]&gt;      
-#&gt; 3:   filter.cutoff ParamDbl  -Inf   Inf     Inf &lt;NoDefault[3]&gt;      
-#&gt; 4: filter.permuted ParamInt     1   Inf     Inf &lt;NoDefault[3]&gt;      
-#&gt; 5:  affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt;      </div><div class='input'><span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>filter.nfeat</span> <span class='op'>=</span> <span class='fl'>5</span>
-
-<span class='co'># filter the task</span>
-<span class='va'>filtered_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-
-<span class='co'># filtered task + extracted AUC scores</span>
-<span class='va'>filtered_task</span><span class='op'>$</span><span class='va'>feature_names</span>
-</div><div class='output co'>#&gt; [1] "capitalAve"      "capitalLong"     "charDollar"      "charExclamation"
-#&gt; [5] "your"           </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>po</span><span class='op'>$</span><span class='va'>state</span><span class='op'>$</span><span class='va'>scores</span>, <span class='fl'>10</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; charExclamation     capitalLong      capitalAve            your      charDollar 
-#&gt;       0.3290461       0.3041626       0.2882004       0.2801659       0.2721394 
-#&gt;    capitalTotal            free             our             you          remove 
-#&gt;       0.2622801       0.2327285       0.2109325       0.2104681       0.2031303 </div><div class='input'>
-<span class='co'># feature selection embedded in a 3-fold cross validation</span>
-<span class='co'># keep 30% of features based on their AUC score</span>
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span>
-<span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"filter"</span>, filter <span class='op'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span><span class='op'>(</span><span class='st'>"auc"</span><span class='op'>)</span>, filter.frac <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>learner</span> <span class='op'>=</span> <span class='va'><a href='mlr_learners_graph.html'>GraphLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>
-<span class='va'>rr</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span><span class='op'>(</span><span class='va'>task</span>, <span class='va'>learner</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span><span class='op'>(</span><span class='st'>"holdout"</span><span class='op'>)</span>, store_models <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>rr</span><span class='op'>$</span><span class='va'>learners</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>model</span><span class='op'>$</span><span class='va'>auc</span><span class='op'>$</span><span class='va'>scores</span>
-</div><div class='output co'>#&gt;   charExclamation       capitalLong        capitalAve              your 
-#&gt;      3.290018e-01      3.084719e-01      2.924356e-01      2.850997e-01 
-#&gt;        charDollar      capitalTotal              free               you 
-#&gt;      2.760477e-01      2.690304e-01      2.328002e-01      2.133331e-01 
-#&gt;               our            remove             money               all 
-#&gt;      2.127344e-01      2.049659e-01      1.848303e-01      1.800999e-01 
-#&gt;                hp            num000          business              over 
-#&gt;      1.768315e-01      1.592152e-01      1.529875e-01      1.490547e-01 
-#&gt;              mail          internet               hpl            george 
-#&gt;      1.395390e-01      1.362281e-01      1.362075e-01      1.341867e-01 
-#&gt;             email           receive           address             order 
-#&gt;      1.316039e-01      1.303801e-01      1.246968e-01      1.142778e-01 
-#&gt;              make           num1999          charHash            credit 
-#&gt;      1.090133e-01      1.049933e-01      1.024926e-01      9.926152e-02 
-#&gt;              will            people              labs         addresses 
-#&gt;      9.423281e-02      9.040350e-02      7.689188e-02      7.541491e-02 
-#&gt;            num650             num85               edu               lab 
-#&gt;      6.979414e-02      6.939648e-02      6.787860e-02      6.004967e-02 
-#&gt;        technology            telnet           meeting              data 
-#&gt;      5.498094e-02      5.137943e-02      4.946566e-02      4.597672e-02 
-#&gt;                pm            report           project            num857 
-#&gt;      3.984151e-02      3.941819e-02      3.742082e-02      3.490039e-02 
-#&gt; charSquarebracket            num415          original        conference 
-#&gt;      3.485239e-02      3.285303e-02      2.864972e-02      2.808021e-02 
-#&gt;                cs                re              font     charSemicolon 
-#&gt;      2.658932e-02      2.658113e-02      2.309021e-02      2.247249e-02 
-#&gt;  charRoundbracket            direct             num3d             table 
-#&gt;      1.810618e-02      1.206585e-02      9.208792e-03      2.783626e-03 
-#&gt;             parts 
-#&gt;      5.883081e-05 </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3filters.mlr-org.com'>"mlr3filters"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># setup PipeOpFilter to keep the 5 most important</span></span>
+<span class='r-in'><span class='co'># features of the spam task w.r.t. their AUC</span></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>filter</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span><span class='op'>(</span><span class='st'>"auc"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>po</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"filter"</span>, filter <span class='op'>=</span> <span class='va'>filter</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;ParamSetCollection:auc&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 id    class lower upper nlevels        default value</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    filter.nfeat ParamInt     0   Inf     Inf &lt;NoDefault[3]&gt;      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     filter.frac ParamDbl     0     1     Inf &lt;NoDefault[3]&gt;      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:   filter.cutoff ParamDbl  -Inf   Inf     Inf &lt;NoDefault[3]&gt;      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: filter.permuted ParamInt     1   Inf     Inf &lt;NoDefault[3]&gt;      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:  affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt;      </span>
+<span class='r-in'><span class='va'>po</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>filter.nfeat</span> <span class='op'>=</span> <span class='fl'>5</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># filter the task</span></span>
+<span class='r-in'><span class='va'>filtered_task</span> <span class='op'>=</span> <span class='va'>po</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># filtered task + extracted AUC scores</span></span>
+<span class='r-in'><span class='va'>filtered_task</span><span class='op'>$</span><span class='va'>feature_names</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "capitalAve"      "capitalLong"     "charDollar"      "charExclamation"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [5] "your"           </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>po</span><span class='op'>$</span><span class='va'>state</span><span class='op'>$</span><span class='va'>scores</span>, <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> charExclamation     capitalLong      capitalAve            your      charDollar </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       0.3290461       0.3041626       0.2882004       0.2801659       0.2721394 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    capitalTotal            free             our             you          remove </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       0.2622801       0.2327285       0.2109325       0.2104681       0.2031303 </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># feature selection embedded in a 3-fold cross validation</span></span>
+<span class='r-in'><span class='co'># keep 30% of features based on their AUC score</span></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"spam"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"filter"</span>, filter <span class='op'>=</span> <span class='fu'><a href='https://mlr3filters.mlr-org.com/reference/flt.html'>flt</a></span><span class='op'>(</span><span class='st'>"auc"</span><span class='op'>)</span>, filter.frac <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>learner</span> <span class='op'>=</span> <span class='va'><a href='mlr_learners_graph.html'>GraphLearner</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rr</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/resample.html'>resample</a></span><span class='op'>(</span><span class='va'>task</span>, <span class='va'>learner</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>rsmp</a></span><span class='op'>(</span><span class='st'>"holdout"</span><span class='op'>)</span>, store_models <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rr</span><span class='op'>$</span><span class='va'>learners</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>model</span><span class='op'>$</span><span class='va'>auc</span><span class='op'>$</span><span class='va'>scores</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   charExclamation       capitalLong        capitalAve              your </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      3.290018e-01      3.084719e-01      2.924356e-01      2.850997e-01 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        charDollar      capitalTotal              free               you </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      2.760477e-01      2.690304e-01      2.328002e-01      2.133331e-01 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               our            remove             money               all </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      2.127344e-01      2.049659e-01      1.848303e-01      1.800999e-01 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                hp            num000          business              over </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      1.768315e-01      1.592152e-01      1.529875e-01      1.490547e-01 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              mail          internet               hpl            george </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      1.395390e-01      1.362281e-01      1.362075e-01      1.341867e-01 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             email           receive           address             order </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      1.316039e-01      1.303801e-01      1.246968e-01      1.142778e-01 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              make           num1999          charHash            credit </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      1.090133e-01      1.049933e-01      1.024926e-01      9.926152e-02 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              will            people              labs         addresses </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      9.423281e-02      9.040350e-02      7.689188e-02      7.541491e-02 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            num650             num85               edu               lab </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      6.979414e-02      6.939648e-02      6.787860e-02      6.004967e-02 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        technology            telnet           meeting              data </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      5.498094e-02      5.137943e-02      4.946566e-02      4.597672e-02 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                pm            report           project            num857 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      3.984151e-02      3.941819e-02      3.742082e-02      3.490039e-02 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> charSquarebracket            num415          original        conference </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      3.485239e-02      3.285303e-02      2.864972e-02      2.808021e-02 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                cs                re              font     charSemicolon </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      2.658932e-02      2.658113e-02      2.309021e-02      2.247249e-02 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  charRoundbracket            direct             num3d             table </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      1.810618e-02      1.206585e-02      9.208792e-03      2.783626e-03 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             parts </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      5.883081e-05 </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

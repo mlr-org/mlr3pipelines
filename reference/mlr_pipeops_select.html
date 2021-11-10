@@ -85,7 +85,7 @@ See Selector for selectors that are provided and how to write custom Selectors."
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -166,7 +166,7 @@ See <code><a href='Selector.html'>Selector</a></code> for selectors that are pro
 <pre><span class='va'>PipeOpSelect</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"select"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"select"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -291,27 +291,31 @@ See <code><a href='Selector.html'>Selector</a></code> for example functions. Def
 <code><a href='Selector.html'>Selector</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"boston_housing"</span><span class='op'>)</span>
-<span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"select"</span><span class='op'>)</span>
-
-<span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_all</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span>
-</div><div class='output co'>#&gt;  [1] "age"     "b"       "chas"    "cmedv"   "crim"    "dis"     "indus"  
-#&gt;  [8] "lat"     "lon"     "lstat"   "nox"     "ptratio" "rad"     "rm"     
-#&gt; [15] "tax"     "town"    "tract"   "zn"     </div><div class='input'>
-<span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_type</a></span><span class='op'>(</span><span class='st'>"factor"</span><span class='op'>)</span>
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span>
-</div><div class='output co'>#&gt; [1] "chas" "town"</div><div class='input'>
-<span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_invert</a></span><span class='op'>(</span><span class='fu'><a href='Selector.html'>selector_type</a></span><span class='op'>(</span><span class='st'>"factor"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span>
-</div><div class='output co'>#&gt;  [1] "age"     "b"       "cmedv"   "crim"    "dis"     "indus"   "lat"    
-#&gt;  [8] "lon"     "lstat"   "nox"     "ptratio" "rad"     "rm"      "tax"    
-#&gt; [15] "tract"   "zn"     </div><div class='input'>
-<span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_grep</a></span><span class='op'>(</span><span class='st'>"^r"</span><span class='op'>)</span>
-<span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span>
-</div><div class='output co'>#&gt; [1] "rad" "rm" </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"boston_housing"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pos</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"select"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_all</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "age"     "b"       "chas"    "cmedv"   "crim"    "dis"     "indus"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] "lat"     "lon"     "lstat"   "nox"     "ptratio" "rad"     "rm"     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15] "tax"     "town"    "tract"   "zn"     </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_type</a></span><span class='op'>(</span><span class='st'>"factor"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "chas" "town"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_invert</a></span><span class='op'>(</span><span class='fu'><a href='Selector.html'>selector_type</a></span><span class='op'>(</span><span class='st'>"factor"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "age"     "b"       "cmedv"   "crim"    "dis"     "indus"   "lat"    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] "lon"     "lstat"   "nox"     "ptratio" "rad"     "rm"      "tax"    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15] "tract"   "zn"     </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='va'>param_set</span><span class='op'>$</span><span class='va'>values</span><span class='op'>$</span><span class='va'>selector</span> <span class='op'>=</span> <span class='fu'><a href='Selector.html'>selector_grep</a></span><span class='op'>(</span><span class='st'>"^r"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pos</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>feature_names</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "rad" "rm" </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

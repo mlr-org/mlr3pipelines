@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>No-Op Sentinel Used for Alternative Branching — NO_OP • mlr3pipelines</title>
+<title>Chain a Series of Graphs — chain_graphs • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,9 +47,16 @@
 
 
 
-<meta property="og:title" content="No-Op Sentinel Used for Alternative Branching — NO_OP" />
-<meta property="og:description" content="Special data type for no-ops. Distinct from NULL for easier debugging
-and distinction from unintentional NULL returns." />
+<meta property="og:title" content="Chain a Series of Graphs — chain_graphs" />
+<meta property="og:description" content="Takes an arbitrary amount of Graphs or PipeOps (or objects that can be automatically
+converted into Graphs or PipeOps, see as_graph() and as_pipeop()) as inputs and joins
+them in a serial Graph, as if connecting them using %&amp;gt;&amp;gt;%.
+Care is taken to avoid unnecessarily cloning of components. A call of
+chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE) is equivalent to
+g1 %&amp;gt;&amp;gt;% g2 %&amp;gt;&amp;gt;!% g3 %&amp;gt;&amp;gt;!% g4 %&amp;gt;&amp;gt;!% ....
+A call of chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)
+is equivalent to g1 %&amp;gt;&amp;gt;!% g2 %&amp;gt;&amp;gt;!% g3 %&amp;gt;&amp;gt;!% g4 %&amp;gt;&amp;gt;!% ... (differing in the
+first operator being %&amp;gt;&amp;gt;!% as well)." />
 <meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -143,31 +150,59 @@ and distinction from unintentional NULL returns." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>No-Op Sentinel Used for Alternative Branching</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/NO_OP.R'><code>R/NO_OP.R</code></a></small>
-    <div class="hidden name"><code>NO_OP.Rd</code></div>
+    <h1>Chain a Series of Graphs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/operators.R'><code>R/operators.R</code></a></small>
+    <div class="hidden name"><code>chain_graphs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Special data type for no-ops. Distinct from <code>NULL</code> for easier debugging
-and distinction from unintentional <code>NULL</code> returns.</p>
+    <p>Takes an arbitrary amount of <code><a href='Graph.html'>Graph</a></code>s or <code><a href='PipeOp.html'>PipeOp</a></code>s (or objects that can be automatically
+converted into <code><a href='Graph.html'>Graph</a></code>s or <code><a href='PipeOp.html'>PipeOp</a></code>s, see <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>) as inputs and joins
+them in a serial <code><a href='Graph.html'>Graph</a></code>, as if connecting them using <code>%&gt;&gt;%</code>.</p>
+<p>Care is taken to avoid unnecessarily cloning of components. A call of
+<code>chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)</code> is equivalent to
+<code>g1 %&gt;&gt;% g2 %&gt;&gt;!% g3 %&gt;&gt;!% g4 %&gt;&gt;!% ...</code>.
+A call of <code>chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)</code>
+is equivalent to <code>g1 %&gt;&gt;!% g2 %&gt;&gt;!% g3 %&gt;&gt;!% g4 %&gt;&gt;!% ...</code> (differing in the
+first operator being <code>%&gt;&gt;!%</code> as well).</p>
     </div>
 
-    <pre class="usage"><span class='va'>NO_OP</span></pre>
+    <pre class="usage"><span class='fu'>chain_graphs</span><span class='op'>(</span><span class='va'>graphs</span>, in_place <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>graphs</th>
+      <td><p><code>list</code> of (<code><a href='Graph.html'>Graph</a></code> | <code><a href='PipeOp.html'>PipeOp</a></code> | <code>NULL</code> | <code>...</code>)<br />
+List of elements which are the
+<code><a href='Graph.html'>Graph</a></code>s to be joined. Elements must be convertible to <code><a href='Graph.html'>Graph</a></code> or <code><a href='PipeOp.html'>PipeOp</a></code> using <code><a href='as_graph.html'>as_graph()</a></code> and <code><a href='as_pipeop.html'>as_pipeop()</a></code>.
+<code>NULL</code> is the neutral element of <code>%&gt;&gt;%</code> and skipped.</p></td>
+    </tr>
+    <tr>
+      <th>in_place</th>
+      <td><p>(<code>logical(1)</code>)<br />
+Whether to try to avoid cloning the first element of <code>graphs</code>, similar to the difference
+of <code>%&gt;&gt;!%</code> over <code>%&gt;&gt;%</code>. This can only be avoided if <code>graphs[[1]]</code> is already a <code><a href='Graph.html'>Graph</a></code>.
+Beware that, if <code>chain_graphs()</code> fails because of id collisions, then <code>graphs[[1]]</code> will possibly be in an incompletely
+modified state when <code>in_place</code> is <code>TRUE</code>.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>R6</code> object.</p>
+    <p><code><a href='Graph.html'>Graph</a></code> the resulting <code><a href='Graph.html'>Graph</a></code>, or <code>NULL</code> if there are no non-null values in <code>graphs</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Path Branching: 
-<code><a href='filter_noop.html'>filter_noop</a>()</code>,
-<code><a href='is_noop.html'>is_noop</a>()</code>,
-<code><a href='mlr_pipeops_branch.html'>mlr_pipeops_branch</a></code>,
-<code><a href='mlr_pipeops_unbranch.html'>mlr_pipeops_unbranch</a></code></p>
-<p>Other Special Graph Messages: 
-<code><a href='Multiplicity.html'>Multiplicity</a>()</code></p></div>
+    <div class='dont-index'><p>Other Graph operators: 
+<code><a href='as_graph.html'>as_graph</a>()</code>,
+<code><a href='as_pipeop.html'>as_pipeop</a>()</code>,
+<code><a href='assert_graph.html'>assert_graph</a>()</code>,
+<code><a href='assert_pipeop.html'>assert_pipeop</a>()</code>,
+<code><a href='concat_graphs.html'>concat_graphs</a>()</code>,
+<code><a href='greplicate.html'>greplicate</a>()</code>,
+<code><a href='gunion.html'>gunion</a>()</code>,
+<code><a href='pipeline_greplicate.html'>pipeline_greplicate</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

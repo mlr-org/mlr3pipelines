@@ -87,7 +87,7 @@ vtreat::fit_prepare() on the training data and vtreat::prepare() during predicto
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -170,7 +170,7 @@ Internally, <code>PipeOpVtreat</code> follows the fit/prepare interface of vtrea
 <pre><span class='va'>PipeOpVreat</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"vtreat"</span>, param_vals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object, default <code>"vtreat"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></li>
@@ -198,23 +198,23 @@ If vtreat found "no usable vars" and designing the treatment would have failed, 
     
 
 <p>The parameters are the parameters inherited from <code><a href='PipeOpTaskPreproc.html'>PipeOpTaskPreproc</a></code>, as well as:</p><ul>
-<li><p><code>recommended</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>recommended</code> :: <code>logical(1)</code><br />
 Whether only the "recommended" prepared features should be returned, i.e., non constant
 variables with a significance value smaller than vtreat's threshold. Initialized to <code>TRUE</code>.</p></li>
 <li><p><code>cols_to_copy</code> :: <code>function</code> | <code><a href='Selector.html'>Selector</a></code> <br />
 <code><a href='Selector.html'>Selector</a></code> function, takes a <code><a href='https://mlr3.mlr-org.com/reference/Task.html'>Task</a></code> as argument and returns a <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code> of features to copy.<br />
 See <code><a href='Selector.html'>Selector</a></code> for example functions. Initialized to <code><a href='Selector.html'>selector_none()</a></code>.</p></li>
-<li><p><code>minFraction</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>minFraction</code> :: <code>numeric(1)</code><br />
 Minimum frequency a categorical level must have to be converted to an indicator column.</p></li>
-<li><p><code>smFactor</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>smFactor</code> :: <code>numeric(1)</code><br />
 Smoothing factor for impact coding models.</p></li>
-<li><p><code>rareCount</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+<li><p><code>rareCount</code> :: <code>integer(1)</code><br />
 Allow levels with this count or below to be pooled into a shared rare-level.</p></li>
-<li><p><code>rareSig</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>rareSig</code> :: <code>numeric(1)</code><br />
 Suppress levels from pooling at this significance value greater.</p></li>
-<li><p><code>collarProb</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>collarProb</code> :: <code>numeric(1)</code><br />
 What fraction of the data (pseudo-probability) to collar data at if <code>doCollar = TRUE</code>.</p></li>
-<li><p><code>doCollar</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>doCollar</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code> collar numeric variables by cutting off after a tail-probability specified by <code>collarProb</code> during treatment design.</p></li>
 <li><p><code>codeRestriction</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character()</a></code><br />
 What types of variables to produce.</p></li>
@@ -222,23 +222,23 @@ What types of variables to produce.</p></li>
 Map from code names to custom categorical variable encoding functions.</p></li>
 <li><p><code>splitFunction</code> :: <code>function</code><br />
 Function taking arguments nSplits, nRows, dframe, and y; returning a user desired split.</p></li>
-<li><p><code>ncross</code> :: <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
+<li><p><code>ncross</code> :: <code>integer(1)</code><br />
 Integer larger than one, number of cross-validation rounds to design.</p></li>
-<li><p><code>forceSplit</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>forceSplit</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code> force cross-validated significance calculations on all variables.</p></li>
-<li><p><code>catScaling</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>catScaling</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code> use <code><a href='https://rdrr.io/r/stats/glm.html'>stats::glm()</a></code> linkspace, if FALSE use <code><a href='https://rdrr.io/r/stats/lm.html'>stats::lm()</a></code> for scaling.</p></li>
-<li><p><code>verbose</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>verbose</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code> print progress.</p></li>
-<li><p><code>use_paralell</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>use_paralell</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code> use parallel methods.</p></li>
 <li><p><code>missingness_imputation</code> :: <code>function</code><br />
 Function of signature f(values: numeric, weights: numeric), simple missing value imputer.<br />
 Typically, an imputation via a <code><a href='PipeOp.html'>PipeOp</a></code> should be preferred, see <code><a href='PipeOpImpute.html'>PipeOpImpute</a></code>.</p></li>
-<li><p><code>pruneSig</code> :: <code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code><br />
+<li><p><code>pruneSig</code> :: <code>numeric(1)</code><br />
 Suppress variables with significance above this level.
 Only effects [regression tasks<a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>mlr3::TaskRegr</a> and binary <a href='https://mlr3.mlr-org.com/reference/TaskClassif.html'>classification tasks</a>.</p></li>
-<li><p><code>scale</code> :: <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code><br />
+<li><p><code>scale</code> :: <code>logical(1)</code><br />
 If <code>TRUE</code> replace numeric variables with single variable model regressions ("move to outcome-scale").
 These have mean zero and (for variables with significant less than 1) slope 1 when regressed (lm for regression problems/glm for classification problems) against outcome.</p></li>
 <li><p><code>varRestriction</code> :: <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code><br />
@@ -343,32 +343,33 @@ Typically, an imputation via a <code><a href='PipeOp.html'>PipeOp</a></code> is 
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2020</span><span class='op'>)</span>
-
-<span class='va'>make_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='va'>d</span><span class='op'>[</span><span class='st'>"y"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>[[</span><span class='st'>"x"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>0.01</span> <span class='op'>*</span> <span class='va'>d</span><span class='op'>[[</span><span class='st'>"x"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>+</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span>
-    <span class='va'>d</span><span class='op'>[</span><span class='fl'>4</span><span class='op'>:</span><span class='fl'>10</span>, <span class='st'>"x"</span><span class='op'>]</span> <span class='op'>=</span> <span class='cn'>NA</span>  <span class='co'># introduce NAs</span>
-    <span class='va'>d</span><span class='op'>[</span><span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"level_"</span>, <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>$</span><span class='va'>y</span> <span class='op'>/</span> <span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='va'>d</span><span class='op'>[</span><span class='st'>"x2"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span>
-    <span class='va'>d</span><span class='op'>[</span><span class='va'>d</span><span class='op'>[</span><span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>==</span> <span class='st'>"level_-1"</span>, <span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>=</span> <span class='cn'>NA</span>  <span class='co'># introduce a NA level</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"vtreat_regr"</span>, backend <span class='op'>=</span> <span class='fu'>make_data</span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span>
-
-<span class='va'>pop</span> <span class='op'>=</span> <span class='va'>PipeOpVtreat</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $output
-#&gt; &lt;TaskRegr:vtreat_regr&gt; (100 x 8)
-#&gt; * Target: y
-#&gt; * Properties: -
-#&gt; * Features (7):
-#&gt;   - dbl (7): xc_catD, xc_catN, xc_catP, xc_lev_NA, xc_lev_x_level_0_5,
-#&gt;     xc_lev_x_level_1, xc_lev_x_level_minus_0_5
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>2020</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>make_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>d</span><span class='op'>[</span><span class='st'>"y"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>[[</span><span class='st'>"x"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>0.01</span> <span class='op'>*</span> <span class='va'>d</span><span class='op'>[[</span><span class='st'>"x"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>+</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>d</span><span class='op'>[</span><span class='fl'>4</span><span class='op'>:</span><span class='fl'>10</span>, <span class='st'>"x"</span><span class='op'>]</span> <span class='op'>=</span> <span class='cn'>NA</span>  <span class='co'># introduce NAs</span></span>
+<span class='r-in'>    <span class='va'>d</span><span class='op'>[</span><span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"level_"</span>, <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>$</span><span class='va'>y</span> <span class='op'>/</span> <span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>d</span><span class='op'>[</span><span class='st'>"x2"</span><span class='op'>]</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>nrows</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>d</span><span class='op'>[</span><span class='va'>d</span><span class='op'>[</span><span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>==</span> <span class='st'>"level_-1"</span>, <span class='st'>"xc"</span><span class='op'>]</span> <span class='op'>=</span> <span class='cn'>NA</span>  <span class='co'># introduce a NA level</span></span>
+<span class='r-in'>    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='va'><a href='https://mlr3.mlr-org.com/reference/TaskRegr.html'>TaskRegr</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"vtreat_regr"</span>, backend <span class='op'>=</span> <span class='fu'>make_data</span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, target <span class='op'>=</span> <span class='st'>"y"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='va'>PipeOpVtreat</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskRegr:vtreat_regr&gt; (100 x 8)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Target: y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Properties: -</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Features (7):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - dbl (7): xc_catD, xc_catN, xc_catP, xc_lev_NA, xc_lev_x_level_0_5,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     xc_lev_x_level_1, xc_lev_x_level_minus_0_5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

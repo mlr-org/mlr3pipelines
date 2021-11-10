@@ -115,7 +115,7 @@ number of elements." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -203,7 +203,7 @@ of these mechanisms makes it possible for parts of a <code><a href='Graph.html'>
 many times if "sandwiched" between <code>Multiplicity</code> creating and collecting <code><a href='PipeOp.html'>PipeOp</a></code>s.</p>
 <p>Whether a <code><a href='PipeOp.html'>PipeOp</a></code> creates or collects a <code>Multiplicity</code> is indicated by the <code>$input</code>
 or <code>$output</code> slot (which indicate names and types of in/out channels). If the <code>train</code> and
-<code>predict</code> types of an input or output are surrounded by square brackets ("<code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>", "<code>]</code>"), then
+<code>predict</code> types of an input or output are surrounded by square brackets ("<code>[</code>", "<code>]</code>"), then
 this channel handles a <code>Multiplicity</code> explicitly. Depending on the function of the <code><a href='PipeOp.html'>PipeOp</a></code>,
 it will usually collect (input channel) or create (output channel) a <code>Multiplicity</code>.
 <code><a href='PipeOp.html'>PipeOp</a></code>s without this indicator are <code>Multiplicity</code> agnostic and blindly execute their

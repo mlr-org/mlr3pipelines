@@ -82,7 +82,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -145,9 +145,43 @@
       <small>Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="mlr3pipelines-037" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.7">
+<a href="#mlr3pipelines-037" class="anchor"></a>mlr3pipelines 0.3.7<small> Unreleased </small>
+</h1>
+<ul>
+<li>New operator %&gt;&gt;!% that modifies Graphs in-place.</li>
+<li>New methods chain_graphs(), concat_graphs(), Graph$chain() as alternatives for %&gt;&gt;% and %&gt;&gt;!%.</li>
+<li>New methods pos() and ppls() which create lists of PipeOps/Graphs and can be seen as “plural” forms of po() and ppl().</li>
+<li>po() S3-method for PipeOp class that clones a PipeOp object and optionally modifies its attributes.</li>
+<li>Graph$add_pipeop() now clones the PipeOp being added.</li>
+<li>Documentation: Clarified documentation about cloning of input arguments in several places.</li>
+<li>Performance enhancements for Graph concatenation.</li>
+<li>More informative error outputs.</li>
+<li>New attribute graph_model GraphLearner class, which gets the trained graph.</li>
+<li>as_learner() S3-method for PipeOp class that turns wraps a PipeOp in a Graph and turns that into a Learner.</li>
+<li>Changed PipeOps:
+<ul>
+<li>PipeOpHistBin: renamed ‘bins’ Param to ‘breaks’</li>
+<li>PipeOpImputeHist: fix handling of integer features spanning the entire represented integer range</li>
+<li>PipeOpImputeOOR: fix handling of integer features spanning the entire represented integer range</li>
+<li>PipeOpProxy: Avoid unnecessary clone</li>
+<li>PipeOpScale: Performance improvement</li>
+</ul>
+</li>
+</ul>
+</div>
+    <div id="mlr3pipelines-036-1" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.6-1">
+<a href="#mlr3pipelines-036-1" class="anchor"></a>mlr3pipelines 0.3.6-1<small> 2021-10-06 </small>
+</h1>
+<ul>
+<li>Fix numerics problem in tests</li>
+</ul>
+</div>
     <div id="mlr3pipelines-036" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.6">
-<a href="#mlr3pipelines-036" class="anchor"></a>mlr3pipelines 0.3.6<small> Unreleased </small>
+<a href="#mlr3pipelines-036" class="anchor"></a>mlr3pipelines 0.3.6<small> 2021-09-07 </small>
 </h1>
 <ul>
 <li>Bugfix: Make empty Multiplicities work (unless they are nested)</li>

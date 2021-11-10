@@ -92,7 +92,7 @@ in conjunction with ResamplingInsample." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -181,7 +181,7 @@ in conjunction with <code><a href='https://mlr3.mlr-org.com/reference/mlr_resamp
   (`character(1)`, `list`) -&gt; `self` \cr
 </pre>
 <ul>
-<li><p><code>id</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>id</code> :: <code>character(1)</code><br />
 Identifier of resulting object. Default: "tunethreshold".</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br />
 List of hyperparameter settings, overwriting the hyperparameter settings
@@ -210,12 +210,12 @@ that would otherwise be set during construction. Default <code><a href='https://
 <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> to optimize for.
 Will be converted to a <code><a href='https://mlr3.mlr-org.com/reference/Measure.html'>Measure</a></code> in case it is <code>character</code>.
 Initialized to <code>"classif.ce"</code>, i.e. misclassification error.</p></li>
-<li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>|<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code><br />
+<li><p><code>optimizer</code> :: <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>|<code>character(1)</code><br />
 <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code> used to find optimal thresholds.
 If <code>character</code>, converts to <code><a href='https://bbotk.mlr-org.com/reference/Optimizer.html'>Optimizer</a></code>
 via <code><a href='https://bbotk.mlr-org.com/reference/opt.html'>opt</a></code>. Initialized to <code><a href='https://bbotk.mlr-org.com/reference/mlr_optimizers_gensa.html'>OptimizerGenSA</a></code>.</p></li>
-<li><p><code>log_level</code> :: <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code><br />
-Set a temporary log-level for <code><a href='https://s-fleck.github.io/lgr/reference/get_logger.html'>lgr::get_logger("bbotk")</a></code>. Initialized to: "warn".</p></li>
+<li><p><code>log_level</code> :: <code>character(1)</code> | <code>integer(1)</code><br />
+Set a temporary log-level for <code>lgr::get_logger("bbotk")</code>. Initialized to: "warn".</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="internals"><a class="anchor" href="#internals"></a>Internals</h2>
@@ -305,81 +305,84 @@ See the <code>optimizer</code> parameter for more info.</p>
 <code><a href='mlr_pipeops.html'>mlr_pipeops</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span>
-
-<span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span>
-<span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;&gt;%</span>
-  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"tunethreshold"</span><span class='op'>)</span>
-
-<span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        Species Petal.Length Petal.Width Sepal.Length Sepal.Width
-#&gt;   1:    setosa          1.4         0.2          5.1         3.5
-#&gt;   2:    setosa          1.4         0.2          4.9         3.0
-#&gt;   3:    setosa          1.3         0.2          4.7         3.2
-#&gt;   4:    setosa          1.5         0.2          4.6         3.1
-#&gt;   5:    setosa          1.4         0.2          5.0         3.6
-#&gt;  ---                                                            
-#&gt; 146: virginica          5.2         2.3          6.7         3.0
-#&gt; 147: virginica          5.0         1.9          6.3         2.5
-#&gt; 148: virginica          5.2         2.0          6.5         3.0
-#&gt; 149: virginica          5.4         2.3          6.2         3.4
-#&gt; 150: virginica          5.1         1.8          5.9         3.0</div><div class='input'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $tunethreshold.output
-#&gt; NULL
-#&gt; </div><div class='input'>
-<span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span>
-</div><div class='output co'>#&gt; $classif.rpart
-#&gt; $classif.rpart$model
-#&gt; n= 150 
-#&gt; 
-#&gt; node), split, n, loss, yval, (yprob)
-#&gt;       * denotes terminal node
-#&gt; 
-#&gt; 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  
-#&gt;   2) Petal.Length&lt; 2.45 50   0 setosa (1.00000000 0.00000000 0.00000000) *
-#&gt;   3) Petal.Length&gt;=2.45 100  50 versicolor (0.00000000 0.50000000 0.50000000)  
-#&gt;     6) Petal.Width&lt; 1.75 54   5 versicolor (0.00000000 0.90740741 0.09259259) *
-#&gt;     7) Petal.Width&gt;=1.75 46   1 virginica (0.00000000 0.02173913 0.97826087) *
-#&gt; 
-#&gt; $classif.rpart$log
-#&gt; Empty data.table (0 rows and 3 cols): stage,class,msg
-#&gt; 
-#&gt; $classif.rpart$train_time
-#&gt; [1] 0.005
-#&gt; 
-#&gt; $classif.rpart$train_task
-#&gt; &lt;TaskClassif:iris&gt; (150 x 5)
-#&gt; * Target: Species
-#&gt; * Properties: multiclass
-#&gt; * Features (4):
-#&gt;   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width
-#&gt; 
-#&gt; $classif.rpart$affected_cols
-#&gt; [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" 
-#&gt; 
-#&gt; $classif.rpart$intasklayout
-#&gt;              id    type
-#&gt; 1: Petal.Length numeric
-#&gt; 2:  Petal.Width numeric
-#&gt; 3: Sepal.Length numeric
-#&gt; 4:  Sepal.Width numeric
-#&gt; 
-#&gt; $classif.rpart$outtasklayout
-#&gt;                               id    type
-#&gt; 1:     classif.rpart.prob.setosa numeric
-#&gt; 2: classif.rpart.prob.versicolor numeric
-#&gt; 3:  classif.rpart.prob.virginica numeric
-#&gt; 
-#&gt; $classif.rpart$outtaskshell
-#&gt; Empty data.table (0 rows and 4 cols): Species,classif.rpart.prob.setosa,classif.rpart.prob.versicolor,classif.rpart.prob.virginica
-#&gt; 
-#&gt; 
-#&gt; $tunethreshold
-#&gt; $tunethreshold$threshold
-#&gt;     setosa versicolor  virginica 
-#&gt;  0.5134816  0.8486673  0.2710435 
-#&gt; 
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"tunethreshold"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4:    setosa          1.5         0.2          4.6         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5:    setosa          1.4         0.2          5.0         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  ---                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 146: virginica          5.2         2.3          6.7         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 147: virginica          5.0         1.9          6.3         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 148: virginica          5.2         2.0          6.5         3.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 149: virginica          5.4         2.3          6.2         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $tunethreshold.output</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pop</span><span class='op'>$</span><span class='va'>state</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> n= 150 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> node), split, n, loss, yval, (yprob)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       * denotes terminal node</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2) Petal.Length&lt; 2.45 50   0 setosa (1.00000000 0.00000000 0.00000000) *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3) Petal.Length&gt;=2.45 100  50 versicolor (0.00000000 0.50000000 0.50000000)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     6) Petal.Width&lt; 1.75 54   5 versicolor (0.00000000 0.90740741 0.09259259) *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     7) Petal.Width&gt;=1.75 46   1 virginica (0.00000000 0.02173913 0.97826087) *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$log</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$train_time</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.006</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$train_task</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Target: Species</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Properties: multiclass</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Features (4):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$affected_cols</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$intasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Petal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Petal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Sepal.Length numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Sepal.Width numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$outtasklayout</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                               id    type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     classif.rpart.prob.setosa numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: classif.rpart.prob.versicolor numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:  classif.rpart.prob.virginica numeric</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$outtaskshell</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 4 cols): Species,classif.rpart.prob.setosa,classif.rpart.prob.versicolor,classif.rpart.prob.virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $tunethreshold</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $tunethreshold$threshold</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     setosa versicolor  virginica </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  0.5134816  0.8486673  0.2710435 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
