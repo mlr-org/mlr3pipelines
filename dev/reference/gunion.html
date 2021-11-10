@@ -89,7 +89,7 @@ To access individual PipeOps after composition, use the resulting Graph's $pipeo
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6-9000</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6-1</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -179,11 +179,13 @@ IDs of the elements are prefixed with the names, separated by a dot (<code>.</co
     </tr>
     <tr>
       <th>in_place</th>
-      <td><p>(<code>logical(1)</code>)<br />
+      <td><p>(<code>logical(1)</code> | <code>logical</code>)<br />
 Whether to try to avoid cloning the first element of <code>graphs</code>, similar to the difference
-of <code>%&gt;&gt;&gt;%</code> over <code>%&gt;&gt;%</code>. This can only be avoided if <code>graphs[[1]]</code> is already a <code><a href='Graph.html'>Graph</a></code>.<br />
+of <code>%&gt;&gt;!%</code> over <code>%&gt;&gt;%</code>. This can only be avoided if <code>graphs[[1]]</code> is already a <code><a href='Graph.html'>Graph</a></code>.<br />
 Unlike <code><a href='chain_graphs.html'>chain_graphs()</a></code>, <code>gunion()</code> does all checks <em>before</em> mutating <code>graphs[[1]]</code>, so it will not leave <code>graphs[[1]]</code>
-in an incompletely modified state when it fails.</p></td>
+in an incompletely modified state when it fails.<br />
+<code>in_place</code> may also be of length <code>graph</code>, in which case it determines for each element of <code>graphs</code> whether it is cloned.
+This is for internal usage and is not recommended.</p></td>
     </tr>
     </table>
 
@@ -197,6 +199,7 @@ in an incompletely modified state when it fails.</p></td>
 <code><a href='as_pipeop.html'>as_pipeop</a>()</code>,
 <code><a href='assert_graph.html'>assert_graph</a>()</code>,
 <code><a href='assert_pipeop.html'>assert_pipeop</a>()</code>,
+<code><a href='chain_graphs.html'>chain_graphs</a>()</code>,
 <code><a href='concat_graphs.html'>concat_graphs</a>()</code>,
 <code><a href='greplicate.html'>greplicate</a>()</code>,
 <code><a href='pipeline_greplicate.html'>pipeline_greplicate</a>()</code></p></div>
