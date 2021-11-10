@@ -81,8 +81,6 @@
 #' o1 %>>!% o2
 #'
 #' o1  # not changed, becuase not a Graph.
-#'
-#' concat_graphs(glist = list(o1, o2, o3))
 concat_graphs = function(g1, g2, in_place = FALSE) {
   assert_flag(in_place)
   # neutral elements handling

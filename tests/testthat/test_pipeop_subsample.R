@@ -50,7 +50,7 @@ test_that("PipeOpSubsample works stratified", {
   expect_true(tnew[[1]]$nrow == ceiling(task$nrow * 0.6))
   # Proportions as expected
   expect_equal(table(tnew[[1]]$data(cols = tnew[[1]]$target_names)),
-    table(rep(c("setosa", "versicolor", "virginica"), 30)))
+    table(list(Species = rep(c("setosa", "versicolor", "virginica"), 30))))
 
   po = PipeOpSubsample$new()
   po$param_set$values = list(stratify = TRUE, frac = 0.6, replace = TRUE)
@@ -60,7 +60,7 @@ test_that("PipeOpSubsample works stratified", {
   expect_true(tnew[[1]]$nrow == ceiling(task$nrow * 0.6))
   # Proportions as expected
   expect_equal(table(tnew[[1]]$data(cols = tnew[[1]]$target_names)),
-    table(rep(c("setosa", "versicolor", "virginica"), 30)))
+    table(list(Species = rep(c("setosa", "versicolor", "virginica"), 30))))
 
   po = PipeOpSubsample$new()
   po$param_set$values = list(stratify = TRUE, frac = 2, replace = TRUE)
@@ -70,7 +70,7 @@ test_that("PipeOpSubsample works stratified", {
   expect_true(tnew[[1]]$nrow == ceiling(task$nrow * 2))
   # Proportions as expected
   expect_equal(table(tnew[[1]]$data(cols = tnew[[1]]$target_names)),
-    table(rep(c("setosa", "versicolor", "virginica"), 100)))
+    table(list(Species = rep(c("setosa", "versicolor", "virginica"), 100))))
 })
 
 

@@ -98,8 +98,6 @@ pipe1  # contains o1, o2, and o3 now.
 o1 \%>>!\% o2
 
 o1  # not changed, becuase not a Graph.
-
-concat_graphs(glist = list(o1, o2, o3))
 }
 \seealso{
 Other Graph operators: 
