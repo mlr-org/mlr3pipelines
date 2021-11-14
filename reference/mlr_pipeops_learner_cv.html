@@ -94,7 +94,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.4.0</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -279,7 +279,7 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 <span class='r-in'><span class='va'>graph</span> <span class='op'>=</span> <span class='fu'><a href='gunion.html'>gunion</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
 <span class='r-in'>  <span class='va'>lrncv_po</span>,</span>
 <span class='r-in'>  <span class='va'>nop</span></span>
-<span class='r-in'><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='%>>%.html'>%&gt;&gt;%</a></span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"featureunion"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>graph</span><span class='op'>$</span><span class='fu'>train</span><span class='op'>(</span><span class='va'>task</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $featureunion.output</span>

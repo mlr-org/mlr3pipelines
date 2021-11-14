@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PipeOp Composition Operator — concat_graphs • mlr3pipelines</title>
+<title>PipeOp Composition Operator — %&gt;&gt;% • mlr3pipelines</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,7 +47,7 @@
 
 
 
-<meta property="og:title" content="PipeOp Composition Operator — concat_graphs" />
+<meta property="og:title" content="PipeOp Composition Operator — %&gt;&gt;%" />
 <meta property="og:description" content="These operators creates a connection that &quot;pipes&quot; data from the source g1 into the sink g2.
 Both source and sink can either be
 a Graph or a PipeOp (or an object that can be automatically converted into a Graph or PipeOp, see as_graph() and as_pipeop()).
@@ -113,7 +113,7 @@ Analogously, if g2 is NULL, g1 converted to a Graph will be returned." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.7</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.4.0</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -174,7 +174,7 @@ Analogously, if g2 is NULL, g1 converted to a Graph will be returned." />
     <div class="page-header">
     <h1>PipeOp Composition Operator</h1>
     <small class="dont-index">Source: <a href='https://github.com/mlr-org/mlr3pipelines/blob/master/R/operators.R'><code>R/operators.R</code></a></small>
-    <div class="hidden name"><code>concat_graphs.Rd</code></div>
+    <div class="hidden name"><code>grapes-greater-than-greater-than-grapes.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -211,9 +211,9 @@ it is cloned just as when <code>%&gt;&gt;%</code> is used; <code>%&gt;&gt;!%</co
 Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted to a <code><a href='Graph.html'>Graph</a></code> will be returned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>concat_graphs</span><span class='op'>(</span><span class='va'>g1</span>, <span class='va'>g2</span>, in_place <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+    <pre class="usage"><span class='va'>g1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>g2</span>
 
-<span class='va'>g1</span> <span class='op'>%&gt;&gt;%</span> <span class='va'>g2</span>
+<span class='fu'>concat_graphs</span><span class='op'>(</span><span class='va'>g1</span>, <span class='va'>g2</span>, in_place <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='va'>g1</span> <span class='op'>%&gt;&gt;!%</span> <span class='va'>g2</span></pre>
 
