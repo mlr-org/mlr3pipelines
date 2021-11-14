@@ -1,4 +1,4 @@
-# mlr3pipelines 0.3.7
+# mlr3pipelines 0.4.0
 
 * New operator %>>!% that modifies Graphs in-place.
 * New methods chain_graphs(), concat_graphs(), Graph$chain() as alternatives for %>>% and %>>!%.
