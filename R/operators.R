@@ -81,6 +81,12 @@
 #' o1 %>>!% o2
 #'
 #' o1  # not changed, becuase not a Graph.
+`%>>%` = function(g1, g2) {
+  concat_graphs(g1, g2, in_place = FALSE)
+}
+
+#' @rdname grapes-greater-than-greater-than-grapes
+#' @export
 concat_graphs = function(g1, g2, in_place = FALSE) {
   assert_flag(in_place)
   # neutral elements handling
@@ -121,13 +127,8 @@ concat_graphs = function(g1, g2, in_place = FALSE) {
   g
 }
 
-#' @rdname concat_graphs
-#' @export
-`%>>%` = function(g1, g2) {
-  concat_graphs(g1, g2, in_place = FALSE)
-}
 
-#' @rdname concat_graphs
+#' @rdname grapes-greater-than-greater-than-grapes
 #' @export
 `%>>!%` = function(g1, g2) {
   concat_graphs(g1, g2, in_place = TRUE)

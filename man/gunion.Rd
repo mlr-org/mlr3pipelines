@@ -38,12 +38,12 @@ To access individual \code{\link{PipeOp}}s after composition, use the resulting 
 }
 \seealso{
 Other Graph operators: 
+\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
 \code{\link{chain_graphs}()},
-\code{\link{concat_graphs}()},
 \code{\link{greplicate}()},
 \code{\link{pipeline_greplicate}()}
 }

@@ -26,12 +26,12 @@ of using pipeline_greplicate / ppl("greplicate").
 }
 \seealso{
 Other Graph operators: 
+\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
 \code{\link{chain_graphs}()},
-\code{\link{concat_graphs}()},
 \code{\link{gunion}()},
 \code{\link{pipeline_greplicate}()}
 }
