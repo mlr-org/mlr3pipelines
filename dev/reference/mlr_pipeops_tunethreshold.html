@@ -92,7 +92,7 @@ in conjunction with ResamplingInsample." />
 
       <div class="navbar-brand-container">
         <a href="https://mlr-org.com"><img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/logo.png" id="hexlogo" alt="mlr-org" /></a>
-        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.3.6-1</small></a>
+        <a class="navbar-brand" href="../index.html">mlr3pipelines <small>v0.4.0-9000</small></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -308,7 +308,7 @@ See the <code>optimizer</code> parameter for more info.</p>
     <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://mlr3.mlr-org.com'>"mlr3"</a></span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>task</span> <span class='op'>=</span> <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>tsk</a></span><span class='op'>(</span><span class='st'>"iris"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='concat_graphs.html'>%&gt;&gt;%</a></span></span>
+<span class='r-in'><span class='va'>pop</span> <span class='op'>=</span> <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"learner_cv"</span>, <span class='fu'><a href='https://mlr3.mlr-org.com/reference/mlr_sugar.html'>lrn</a></span><span class='op'>(</span><span class='st'>"classif.rpart"</span>, predict_type <span class='op'>=</span> <span class='st'>"prob"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='%>>%.html'>%&gt;&gt;%</a></span></span>
 <span class='r-in'>  <span class='fu'><a href='po.html'>po</a></span><span class='op'>(</span><span class='st'>"tunethreshold"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>task</span><span class='op'>$</span><span class='fu'>data</span><span class='op'>(</span><span class='op'>)</span></span>
@@ -347,7 +347,18 @@ See the <code>optimizer</code> parameter for more info.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$train_time</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.005</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.004</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$param_vals</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$param_vals$xval</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$task_hash</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "1d905eab9a25710b"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$task_prototype</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $classif.rpart$train_task</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5)</span>
