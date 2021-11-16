@@ -14,11 +14,13 @@ List of elements which are the
 The list can be named, in which case the
 IDs of the elements are prefixed with the names, separated by a dot (\code{.}).}
 
-\item{in_place}{(\code{logical(1)})\cr
+\item{in_place}{(\code{logical(1)} | \code{logical})\cr
 Whether to try to avoid cloning the first element of \code{graphs}, similar to the difference
-of \code{\link{\%>>>\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.\cr
+of \code{\link{\%>>!\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.\cr
 Unlike \code{\link[=chain_graphs]{chain_graphs()}}, \code{gunion()} does all checks \emph{before} mutating \code{graphs[[1]]}, so it will not leave \code{graphs[[1]]}
-in an incompletely modified state when it fails.}
+in an incompletely modified state when it fails.\cr
+\code{in_place} may also be of length \code{graph}, in which case it determines for each element of \code{graphs} whether it is cloned.
+This is for internal usage and is not recommended.}
 }
 \value{
 \code{\link{Graph}} the resulting \code{\link{Graph}}.
@@ -36,11 +38,12 @@ To access individual \code{\link{PipeOp}}s after composition, use the resulting 
 }
 \seealso{
 Other Graph operators: 
+\code{\link{\%>>\%}()},
 \code{\link{as_graph}()},
 \code{\link{as_pipeop}()},
 \code{\link{assert_graph}()},
 \code{\link{assert_pipeop}()},
-\code{\link{concat_graphs}()},
+\code{\link{chain_graphs}()},
 \code{\link{greplicate}()},
 \code{\link{pipeline_greplicate}()}
 }

@@ -1,3 +1,22 @@
+# mlr3pipelines 0.4.0
+
+* New operator %>>!% that modifies Graphs in-place.
+* New methods chain_graphs(), concat_graphs(), Graph$chain() as alternatives for %>>% and %>>!%.
+* New methods pos() and ppls() which create lists of PipeOps/Graphs and can be seen as "plural" forms of po() and ppl().
+* po() S3-method for PipeOp class that clones a PipeOp object and optionally modifies its attributes.
+* Graph$add_pipeop() now clones the PipeOp being added.
+* Documentation: Clarified documentation about cloning of input arguments in several places.
+* Performance enhancements for Graph concatenation.
+* More informative error outputs.
+* New attribute graph_model GraphLearner class, which gets the trained graph.
+* as_learner() S3-method for PipeOp class that turns wraps a PipeOp in a Graph and turns that into a Learner.
+* Changed PipeOps:
+  - PipeOpHistBin: renamed 'bins' Param to 'breaks'
+  - PipeOpImputeHist: fix handling of integer features spanning the entire represented integer range
+  - PipeOpImputeOOR: fix handling of integer features spanning the entire represented integer range
+  - PipeOpProxy: Avoid unnecessary clone
+  - PipeOpScale: Performance improvement
+
 # mlr3pipelines 0.3.6-1
 
 * Fix numerics problem in tests

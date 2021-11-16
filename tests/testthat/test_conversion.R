@@ -36,6 +36,11 @@ test_that("learner conversion in graph creation", {
   gr3 = po("scale") %>>% LearnerClassifRpart$new()
   gr4 = po("scale") %>>% PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 
+  gr1$param_set
+  gr2$param_set
+  gr3$param_set
+  gr4$param_set
+
   expect_equal(gr1, gr2)
   expect_equal(gr1, gr3)
   expect_equal(gr1, gr4)

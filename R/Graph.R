@@ -81,6 +81,11 @@
 #'   channel `dst_channel` (identified by its name or number as listed in the [`PipeOp`]'s `$input`).
 #'   If source or destination [`PipeOp`] have only one input / output channel and `src_channel` / `dst_channel`
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
+#' * `chain(gs, clone = TRUE)` \cr
+#'   (`list` of `Graph`s, `logical(1)`) -> `self` \cr
+#'   Takes a list of `Graph`s or [`PipeOp`]s (or objects that can be automatically converted into `Graph`s or [`PipeOp`]s,
+#'   see [`as_graph()`] and [`as_pipeop()`]) as inputs and joins them in a serial `Graph` coming after `self`, as if
+#'   connecting them using [`%>>%`].
 #' * `plot(html)` \cr
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
@@ -246,6 +251,11 @@ Graph = R6Class("Graph",
       self$ids(sorted = TRUE)  # if we fail here, edges get reset.
       on.exit()
       invisible(self)
+    },
+
+    chain = function(gs, clone = TRUE) {
+      assert_list(gs)
+      chain_graphs(c(list(self), gs), in_place = TRUE)
     },
 
     plot = function(html = FALSE) {
@@ -485,7 +495,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     return(data.table(name = character(), train = character(),
       predict = character(), op.id = character(), channel.name = character()))
   }
-  map_dtr(pipeops, function(po) {
+  ret = map_dtr(pipeops, function(po) {
 
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
     # (and factor 2 faster than a naive data.table implementation below).
@@ -494,10 +504,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df = as.data.frame(po[[direction]], stringsAsFactors = FALSE)
     rows = df$name %nin% channels[ids == po$id]
     if (!any(rows)) {
-      return(data.frame(name = character(),
-        train = character(), predict = character(),
-        op.id = character(), channel.name = character(),
-        stringsAsFactors = FALSE))
+      return(NULL)
     }
     df$op.id = po$id
     df = df[rows,
@@ -506,6 +513,12 @@ graph_channels = function(ids, channels, pipeops, direction) {
     names(df)[5] = "channel.name"
     df
   })
+
+  if (!nrow(ret)) {
+    return(data.table(name = character(), train = character(), predict = character(),
+      op.id = character(), channel.name = character()))
+  }
+  ret
 }
 
 graph_channels_dt = function(ids, channels, pipeops, direction) {
