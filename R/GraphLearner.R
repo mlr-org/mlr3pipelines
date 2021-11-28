@@ -211,7 +211,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       predict_type = get_po_predict_type(self$graph$pipeops[[self$graph$rhs]])
       if (is.null(predict_type))
-        mlr_reflections$learner_predict_types[[self$task_type]][[1]]
+        names(mlr_reflections$learner_predict_types[[self$task_type]])[1L]
       else
         predict_type
     },
