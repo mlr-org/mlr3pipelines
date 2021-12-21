@@ -146,7 +146,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       on.exit({private$.learner$state = NULL})
       task = inputs[[1]]
       private$.learner$state = self$state
-      list(private$.learner$predict(task))
+      pred = list(private$.learner$predict(task))
+      self$state = private$.learner$state
+      pred
     }
   )
 )

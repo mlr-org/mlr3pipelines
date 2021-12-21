@@ -185,6 +185,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .train = function(task) {
       on.exit({self$graph$state = NULL})
       self$graph$train(task)
+      self$state$log = map_dtr(self$graph$state, 'log')
       state = self$graph$state
       state
     },
@@ -192,6 +193,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       on.exit({self$graph$state = NULL})
       self$graph$state = self$model
       prediction = self$graph$predict(task)
+      self$state$log = map_dtr(self$graph$state, 'log')
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
