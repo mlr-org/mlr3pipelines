@@ -11,7 +11,7 @@ test_that("PipeOpKernelPCA - basic properties", {
 
   op = PipeOpKernelPCA$new()
   expect_pipeop(op)
-  set.seed(1234)
+  withr::local_seed(1234)
   result = op$train(list(task))
 
   expect_task(result[[1]])
@@ -24,12 +24,12 @@ test_that("PipeOpKernelPCA - compare to kernlab::kpca", {
   task = mlr_tasks$get("iris")
   op = PipeOpKernelPCA$new()
   expect_pipeop(op)
-  set.seed(1234)
+  withr::local_seed(1234)
   result = op$train(list(task))
 
   # Default parameters
   dt = task$data()[, 2:5]
-  set.seed(1234)
+  withr::local_seed(1234)
   pca = kernlab::kpca(as.matrix(dt))
   expect_equal(dim(result[[1]]$data()[, -1]), dim(kernlab::rotated(pca)))
   expect_equal(result[[1]]$data()[, -1], as.data.table(kernlab::rotated(pca)))
@@ -37,9 +37,9 @@ test_that("PipeOpKernelPCA - compare to kernlab::kpca", {
   # Change some parameters
   op2 = PipeOpKernelPCA$new(param_vals = list(kpar = list(sigma = 0.4), features = 4))
   expect_pipeop(op2)
-  set.seed(1234)
+  withr::local_seed(1234)
   result2 = op2$train(list(task))
-  set.seed(1234)
+  withr::local_seed(1234)
   pca2 = kernlab::kpca(as.matrix(dt), kpar = list(sigma = 0.4), features = 4)
   expect_true(all.equal(dim(kernlab::rotated(pca2)), dim(result2[[1]]$data()[, -1])))
   dtres = as.matrix(result2[[1]]$data()[, -1])

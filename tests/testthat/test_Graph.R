@@ -273,7 +273,7 @@ test_that("Empty Graph", {
 
 test_that("Graph printer aux function calculates col widths well", {
   skip_on_cran()
-  set.seed(8008135)
+  withr::local_seed(8008135)
 
   effective_outwidth = function(colwidths, collimit) {
     colwidths[colwidths > collimit] = collimit + 3  # this is how data.table does it
