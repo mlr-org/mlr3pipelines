@@ -6,7 +6,7 @@ test_that("PipeOpScaleMaxAbs - basic properties", {
   expect_pipeop(op)
   expect_datapreproc_pipeop_class(PipeOpScaleMaxAbs, task = task)
 
-  set.seed(1234)
+  withr::local_seed(1234)
   result = op$train(list(task))
   resdt = result[[1]]$data()
 
@@ -21,7 +21,7 @@ test_that("Other maxabs", {
   task = mlr_tasks$get("iris")
 
   op = PipeOpScaleMaxAbs$new(param_vals = list(maxabs = 0.6))
-  set.seed(1234)
+  withr::local_seed(1234)
   result = op$train(list(task))
   resdt = result[[1]]$data()
   expect_true(all(sapply(resdt[, 2:5], max) == 0.6))

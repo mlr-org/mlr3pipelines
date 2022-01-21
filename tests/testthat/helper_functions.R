@@ -482,7 +482,7 @@ expect_graph = function(g, n_nodes = NULL, n_edges = NULL) {
 
 make_prediction_obj_classif = function(n = 100, noise = TRUE, predict_types = "response",
   seed = 1444L, nclasses = 3L) {
-  if (!noise) set.seed(seed)
+  if (!noise) withr::local_seed(seed)
   response = prob = NULL
   lvls = letters[seq_len(nclasses)]
   truth = sample(lvls, n, replace = TRUE)

@@ -2,7 +2,7 @@ context("PipeOpDateFeatures")
 
 test_that("PipeOpDateFeatures - basic properties", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -15,7 +15,7 @@ test_that("PipeOpDateFeatures - basic properties", {
 
 test_that("PipeOpDateFeatures - finds POSIXct column", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -25,7 +25,7 @@ test_that("PipeOpDateFeatures - finds POSIXct column", {
 
 test_that("PipeOpDateFeatures - unaltered if no POSIXct column", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = iris, target = "Species")
@@ -36,7 +36,7 @@ test_that("PipeOpDateFeatures - unaltered if no POSIXct column", {
 
 test_that("PipeOpDateFeatures - unaltered if no features specified", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -49,7 +49,7 @@ test_that("PipeOpDateFeatures - unaltered if no features specified", {
 
 test_that("PipeOpDateFeatures - correct basic features", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -70,7 +70,7 @@ test_that("PipeOpDateFeatures - correct basic features", {
 
 test_that("PipeOpDateFeatures - correct cyclic features", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -112,7 +112,7 @@ test_that("PipeOpDateFeatures - correct cyclic features", {
 
 test_that("PipeOpDateFeatures - feature selection works", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -134,7 +134,7 @@ test_that("PipeOpDateFeatures - feature selection works", {
 
 test_that("PipeOpDateFeatures - keep_date_var works", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -144,7 +144,7 @@ test_that("PipeOpDateFeatures - keep_date_var works", {
 
 test_that("PipeOpDateFeatures - automatic NA handling", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   dat$date[1L] = NA
@@ -165,7 +165,7 @@ test_that("PipeOpDateFeatures - constant dates", {
 
 test_that("PipeOpDateFeatures - no year but day_of_year and day_of_month", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -175,7 +175,7 @@ test_that("PipeOpDateFeatures - no year but day_of_year and day_of_month", {
 
 test_that("PipeOpDateFeatures - only year and cyclic", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   task = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -190,12 +190,12 @@ test_that("PipeOpDateFeatures - only year and cyclic", {
   po$param_set$values$minute = FALSE
   po$param_set$values$second = FALSE
   po$param_set$values$is_day = FALSE
-  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)  
+  expect_true("date.year" %in% train_pipeop(po, inputs = list(task))$output$feature_names)
 })
 
 test_that("PipeOpDateFeatures - two POSIXct variables", {
   dat = iris
-  set.seed(1)
+  withr::local_seed(1)
   dat$date1 = sample(seq(as.POSIXct("2020-01-31"), to = as.POSIXct("2020-03-01"), by = "sec"),
     size = 150L)
   dat$date2 = sample(seq(as.POSIXct("2020-02-29"), to = as.POSIXct("2020-04-01"), by = "sec"),

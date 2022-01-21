@@ -25,10 +25,10 @@ test_that("basic graphlearner tests", {
   })
   expect_equal(graphpred, lrn$predict(task))
 
-  set.seed(1)
+  withr::local_seed(1)
   lrn = mlr_learners$get("classif.rpart")
   resgraphlrn = resample(task, lrn, mlr_resamplings$get("cv"))
-  set.seed(1)
+  withr::local_seed(1)
   resjustlrn = resample(task, lrn, mlr_resamplings$get("cv"))
   expect_equal(resgraphlrn$prediction(), resjustlrn$prediction())
 

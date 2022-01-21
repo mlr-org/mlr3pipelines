@@ -8,7 +8,7 @@ test_that("PipeOpICA - basic properties", {
 
   op = PipeOpICA$new()
   expect_pipeop(op)
-  set.seed(1234)
+  withr::local_seed(1234)
   result = op$train(list(task))
 
   expect_task(result[[1]])
@@ -20,13 +20,13 @@ test_that("PipeOpICA - compare to fastICA", {
   task = mlr_tasks$get("iris")
   op = PipeOpICA$new()
   expect_pipeop(op)
-  set.seed(1234)
+  withr::local_seed(1234)
   result = op$train(list(task))
 
   dt = task$data()[, 2:5]
   n.comp = ncol(dt)
   method = "C"
-  set.seed(1234)
+  withr::local_seed(1234)
   fica = fastICA::fastICA(dt, n.comp = n.comp, method = method)
   expect_equal(dim(fica$S), dim(result[[1]]$data()[, 2:5]))
   expect_true(all(c("K", "W", "A", "center") %in% names(op$state)))
@@ -38,9 +38,9 @@ test_that("PipeOpICA - compare to fastICA", {
   # Change some parameters
   op2 = PipeOpICA$new(param_vals = list(method = "R", alpha = 2))
   expect_pipeop(op2, check_ps_default_values = FALSE)
-  set.seed(1234)
+  withr::local_seed(1234)
   result2 = op2$train(list(task))
-  set.seed(1234)
+  withr::local_seed(1234)
   fica2 = fastICA::fastICA(dt, n.comp = n.comp,
     alpha = 2, method = "R")
   expect_equal(dim(fica2$S), dim(result2[[1]]$data()[, 2:5]))

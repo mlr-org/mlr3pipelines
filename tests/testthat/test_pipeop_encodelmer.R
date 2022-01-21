@@ -5,7 +5,7 @@ sample_n_letters = function(n, l = 3) {
 }
 
 test_that("PipeOpEncodeLmer regr", {
-  set.seed(8008135)
+  withr::local_seed(8008135)
   task = mlr_tasks$get("boston_housing")
   chaslevels = task$levels()$chas
   townlevels = task$levels()$town
@@ -25,7 +25,7 @@ test_that("PipeOpEncodeLmer regr", {
 
 
 test_that("PipeOpEncodeLmer multi and binaryclass", {
-  set.seed(8008135)
+  withr::local_seed(8008135)
 
   # Multiclass
   task = mlr3::TaskClassif$new("task",
@@ -68,7 +68,7 @@ test_that("PipeOpEncodeLmer multi and binaryclass", {
 })
 
 test_that("PipeOpEncodeLmer Edge Cases", {
-  set.seed(8008135)
+  withr::local_seed(8008135)
   task = mlr3::TaskClassif$new("task",
     data.table::data.table(x = sample_n_letters(10, 2), y = 1:10, z = 1:10), "x")
 

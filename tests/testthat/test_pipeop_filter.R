@@ -64,7 +64,7 @@ test_that("PipeOpFilter parameters", {
 
 
 test_that("PipeFilter permuted", {
-  set.seed(1)
+  withr::local_seed(1)
   N = 50
   task = tgen("2dnormals")$generate(N)
 

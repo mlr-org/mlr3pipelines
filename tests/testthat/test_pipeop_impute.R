@@ -4,7 +4,7 @@ test_that("PipeOpImpute", {
   skip_on_cran()  # slow test, so we don't do it on cran
   # create bogus impute pipeop that behaves like the old impute pipeop. This lets us do tests quickly. FIXME needs to be cleaned up. a lot.
 
-  set.seed(1)
+  withr::local_seed(1)
 
   PipeOpTestImpute = R6Class("PipeOpTestImpute", inherit = PipeOpTaskPreprocSimple,
     public = list(
@@ -293,7 +293,7 @@ test_that("PipeOpImpute", {
 })
 
 test_that("More tests for PipeOpImputeMode", {
-  set.seed(1)
+  withr::local_seed(1)
   dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
   x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L), stringsAsFactors = FALSE)
   dat[c(1L, 10L), ] = NA
@@ -321,7 +321,7 @@ test_that("More tests for PipeOpImputeMode", {
 })
 
 test_that("More tests for PipeOpImputeConstant", {
- set.seed(1)
+  withr::local_seed(1)
  dat = data.frame(y = rnorm(10L), x1 = as.character(1L:10L), x2 = rnorm(10L), x3 = factor(rep(c(1L, 2L), each = 5L)),
    x4 = ordered(rep(1L:5L, times = 2L)), x5 = 1L:10L, x6 = rep(c(TRUE, FALSE), times = 5L),
    x7 = as.POSIXct(1L:10L, origin = "1960-01-01", tz = "GMT"), stringsAsFactors = FALSE)

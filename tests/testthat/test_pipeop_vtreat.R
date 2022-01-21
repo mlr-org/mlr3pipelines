@@ -27,7 +27,7 @@ test_that("PipeOpVtreat - Regression", {
   expect_null(op$state$treatment_plan)
 
   # toy task as here: https://github.com/WinVector/vtreat/blob/master/Examples/Regression/Regression_FP.md
-  set.seed(2020)
+  withr::local_seed(2020)
 
   make_data <- function(nrows) {
       d <- data.frame(x = 5 * rnorm(nrows))
@@ -76,7 +76,7 @@ test_that("PipeOpVtreat - Binary Classification", {
   expect_null(op$state$treatment_plan)
 
   # toy task as here: https://github.com/WinVector/vtreat/blob/master/Examples/Classification/Classification_FP.md
-  set.seed(2020)
+  withr::local_seed(2020)
 
   make_data <- function(nrows) {
       d <- data.frame(x = 5 * rnorm(nrows))
@@ -126,7 +126,7 @@ test_that("PipeOpVtreat - Multiclass Classification", {
   expect_null(op$state$treatment_plan)
 
   # toy task as here: https://github.com/WinVector/vtreat/blob/master/Examples/Multinomial/MultinomialExample_FP.md
-  set.seed(2020)
+  withr::local_seed(2020)
 
   make_data <- function(nrows) {
       d <- data.frame(x = 5 * rnorm(nrows))
@@ -169,7 +169,7 @@ test_that("PipeOpVtreat - Edge Cases", {
 
   op = PipeOpVtreat$new()
 
-  set.seed(3)
+  withr::local_seed(3)
   dat = data.table(y = rnorm(12), x = as.factor(rep(c("a", "b", "c"), 4L)),
     weights = rep(c(1L, 2L), 6L))
 
