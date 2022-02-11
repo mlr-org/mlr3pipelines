@@ -134,7 +134,7 @@ should also not be changed during prediction.</p>
 input and should return that <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>. The <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> should, if possible, be
 manipulated in-place, and should not be cloned.</p>
 <p>Alternatively, the <code>private$.train_dt()</code> and <code>private$.predict_dt()</code> functions can be implemented, which operate on
-<code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></code> objects instead. This should generally only be done if all
+<code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> objects instead. This should generally only be done if all
 data is in some way altered (e.g. PCA changing all columns to principal components) and not if only
 a few columns are added or removed (e.g. feature selection) because this should be done at the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>-level
 with <code>private$.train_task()</code>. The <code>private$.select_cols()</code> function can be overloaded for <code>private$.train_dt()</code> and <code>private$.predict_dt()</code>
@@ -261,7 +261,7 @@ and modifies it (ideally in-place without cloning) while using information in th
 <li><p><code>.train_dt(dt, levels, target)</code> <br>
 (<code>data.table</code>, named <code>list</code>, <code>any</code>) -&gt; <code>data.table</code> | <code>data.frame</code> | <code>matrix</code> <br>
 Train <code>PipeOpTaskPreproc</code> on <code>dt</code>, transform it and store a state in <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.<br>
 The <code>levels</code> argument is a named list of factor levels for factorial or character features.
 If the input <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> inherits from <code><a href="https://mlr3.mlr-org.com/reference/TaskSupervised.html" class="external-link">TaskSupervised</a></code>, the <code>target</code> argument
@@ -272,7 +272,7 @@ This method can be overloaded when inheriting from <code>PipeOpTaskPreproc</code
 <li><p><code>.predict_dt(dt, levels)</code> <br>
 (<code>data.table</code>, named <code>list</code>) -&gt; <code>data.table</code> | <code>data.frame</code> | <code>matrix</code> <br>
 Predict on new data in <code>dt</code>, possibly using the stored <code>$state</code>. A transformed object must be returned
-that can be converted to a <code>data.table</code> using <code><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
+that can be converted to a <code>data.table</code> using <code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></code>. <code>dt</code> does not need to be copied deliberately, it
 is possible and encouraged to change it in-place.<br>
 The <code>levels</code> argument is a named list of factor levels for factorial or character features.<br>
 This method can be overloaded when inheriting <code>PipeOpTaskPreproc</code>, together with <code>private$.train_dt()</code> and optionally
