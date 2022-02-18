@@ -120,7 +120,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
           }
           task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
         }
-        task_type = c(task_type, "classif")[1L]  # final fallback
+        task_type = c(task_type, "classif")[[1]]  # final fallback
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
@@ -211,7 +211,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       predict_type = get_po_predict_type(self$graph$pipeops[[self$graph$rhs]])
       if (is.null(predict_type))
-        names(mlr_reflections$learner_predict_types[[self$task_type]])[1L]
+        names(mlr_reflections$learner_predict_types[[self$task_type]])[[1]]
       else
         predict_type
     },
