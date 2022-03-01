@@ -24,7 +24,7 @@ The super learner that makes the final prediction based on the base learners.}
 base learners or \code{"insample"} for building a super learner using the
 predictions of the base learners trained on all training data.}
 
-\item{folds}{\code{ìnteger(1)}\cr
+\item{folds}{\code{integer(1)}\cr
 Number of cross-validation folds. Only used for \code{method = "cv"}. Default 3.}
 
 \item{use_features}{\code{logical(1)}\cr

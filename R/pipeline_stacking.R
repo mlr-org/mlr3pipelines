@@ -17,7 +17,7 @@
 #'   `"cv"` (default) for building a super learner using cross-validated predictions of the
 #'   base learners or `"insample"` for building a super learner using the
 #'   predictions of the base learners trained on all training data.
-#' @param folds `ìnteger(1)`\cr
+#' @param folds `integer(1)`\cr
 #'   Number of cross-validation folds. Only used for `method = "cv"`. Default 3.
 #' @param use_features `logical(1)`\cr
 #'   Whether the original features should also be passed to the super learner.
