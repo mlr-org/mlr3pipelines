@@ -1,7 +1,7 @@
 #' @include mlr_graphs.R
 
 #' @title Create A Graph to Perform Stacking.
-#'
+#' @name mlr_graphs_stacking
 #' @description
 #' Create a new [`Graph`] for stacking. A stacked learner uses predictions of
 #' several base learners and fits a super learner using these predictions as

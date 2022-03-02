@@ -1,7 +1,7 @@
 #' @include mlr_graphs.R
 
 #' @title Create A Graph to Perform "One vs. Rest" classification.
-#'
+#' @name mlr_graphs_ovr
 #' @description
 #' Create a new [`Graph`] for a [classification Task][mlr3::TaskClassif] to
 #' perform "One vs. Rest" classification.

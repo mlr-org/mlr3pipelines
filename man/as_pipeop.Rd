@@ -37,6 +37,6 @@ Other Graph operators:
 \code{\link{chain_graphs}()},
 \code{\link{greplicate}()},
 \code{\link{gunion}()},
-\code{\link{pipeline_greplicate}()}
+\code{\link{mlr_graphs_greplicate}}
 }
 \concept{Graph operators}

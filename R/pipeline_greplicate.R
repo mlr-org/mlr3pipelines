@@ -1,7 +1,7 @@
 #' @include mlr_graphs.R
 
 #' @title Create Disjoint Graph Union of Copies of a Graph
-#'
+#' @name mlr_graphs_greplicate
 #' @description
 #' Create a new [`Graph`] containing `n` copies of the input [`Graph`] / [`PipeOp`]. To avoid ID
 #' collisions, PipeOp IDs are suffixed with `_i` where `i` ranges from 1 to `n`.
