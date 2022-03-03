@@ -97,7 +97,16 @@
     <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_branching.html</loc>
   </url>
   <url>
+    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_greplicate.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_ovr.html</loc>
+  </url>
+  <url>
     <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_robustify.html</loc>
+  </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_stacking.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_targettrafo.html</loc>
@@ -305,15 +314,6 @@
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_yeojohnson.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/pipeline_greplicate.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/pipeline_ovr.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/pipeline_stacking.html</loc>
   </url>
   <url>
     <loc>https://mlr3pipelines.mlr-org.com/dev/reference/po.html</loc>
