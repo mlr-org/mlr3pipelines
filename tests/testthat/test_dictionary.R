@@ -80,6 +80,9 @@ test_that("Dictionary contains all PipeOps", {
       expect_equal(test_obj$id, dictname)
     }
 
+    # check that man exists
+    expect_man_exists(test_obj)
+
     # check that mlr_pipeops$get() gives the same object as PipeOpXXX$new() does
     expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj, info = dictname)
 
@@ -132,7 +135,7 @@ test_that("data.table of pipeops looks as it should", {
   potable = as.data.table(mlr_pipeops)
 
   expect_set_equal(colnames(potable),
-    c("key", "packages", "tags", "feature_types",
+    c("key", "label", "packages", "tags", "feature_types",
       "input.num", "output.num",
       "input.type.train", "input.type.predict",
       "output.type.train", "output.type.predict"))
