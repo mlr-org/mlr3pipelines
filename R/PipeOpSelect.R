@@ -73,7 +73,8 @@ PipeOpSelect = R6Class("PipeOpSelect",
         ParamUty$new("selector", custom_check = check_function, tags = c("train", "required"))
       ))
       ps$values = list(selector = selector_all())
-      super$initialize(id, ps, param_vals = param_vals, tags = "feature selection")
+      super$initialize(id, ps, param_vals = param_vals, tags = "feature selection",
+        label = "Remove Features Depending on a Selector", man = "mlr3pipelines::mlr_pipeops_select")
     }
   ),
   private = list(

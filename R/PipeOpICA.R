@@ -104,8 +104,8 @@ PipeOpICA = R6Class("PipeOpICA",
         ParamUty$new("w.init", default = NULL, tags = c("train", "ica"))
       ))
       ps$values = list(method = "C")
-      super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "fastICA", feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "fastICA",
+        feature_types = c("numeric", "integer"), label = "Independent Component Analysis", man = "mlr3pipelines::mlr_pipeops_ica")
     }
   ),
   private = list(

@@ -169,7 +169,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
   public = list(
     initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
-      packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types) {
+      packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types,
+      label = NA_character_, man = NA_character_) {
       if (can_subset_cols) {
         acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, default = selector_all(), tags = "train")
         if (inherits(param_set, "ParamSet")) {
@@ -183,7 +184,8 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = task_type, predict = task_type),
-        packages = packages, tags = c(tags, "data transform")
+        packages = packages, tags = c(tags, "data transform"), label = label,
+        man = man
       )
     }
   ),

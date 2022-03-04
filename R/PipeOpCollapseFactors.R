@@ -64,7 +64,8 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
         ParamInt$new("target_level_count", 2, tags = c("train", "predict"))
       ))
       ps$values = list(no_collapse_above_prevalence = 1, target_level_count = 2)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"),
+        label = "Collapse Factors", man = "mlr3pipelines::mlr_pipeops_collapsefactors")
     }
   ),
   private = list(

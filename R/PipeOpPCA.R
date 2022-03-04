@@ -73,7 +73,8 @@ PipeOpPCA = R6Class("PipeOpPCA",
         ParamLgl$new("scale.", default = FALSE, tags = c("train", "pca")),
         ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
+        label = "Principle Component Analysis", man = "mlr3pipelines::mlr_pipeops_pca")
     }
   ),
   private = list(

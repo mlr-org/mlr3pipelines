@@ -92,6 +92,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
 
     list(
       key = key,
+      label = l1$label,
       packages = list(l1$packages),
       tags = list(l1$tags),
       feature_types = ft,

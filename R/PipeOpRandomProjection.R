@@ -74,7 +74,9 @@ PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
         ParamInt$new("rank", lower = 0, tags = "train")
       ))
       ps$values = list(rank = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
+        label = "Project Numeric Features onto a Randomly Sampled Subspace",
+        man = "mlr3pipelines::mlr_pipeops_randomprojection")
     }
   ),
   private = list(

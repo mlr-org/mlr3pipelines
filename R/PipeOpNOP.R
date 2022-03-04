@@ -64,7 +64,7 @@ PipeOpNOP = R6Class("PipeOpNOP",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*"),
-        tags = "meta"
+        tags = "meta", label = "Simply Push Input Forward", man = "mlr3pipelines::mlr_pipeops_nop"
       )
     }
   ),

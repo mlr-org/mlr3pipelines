@@ -75,7 +75,8 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
         ParamDbl$new("minor_weight", lower = 0, upper = Inf, tags = "train")
       ))
       ps$values = list(minor_weight = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data",
+        label = "Class Weights for Sample Weighting", man = "mlr3pipelines::mlr_pipeops_classweights")
     }
   ),
   private = list(

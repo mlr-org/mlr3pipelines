@@ -78,7 +78,7 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = options, train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*"),
-        tags = "meta"
+        tags = "meta", label = "Unbranch Different Paths", man = "mlr3pipelines::mlr_pipeops_unbranch"
       )
     }
   ),
