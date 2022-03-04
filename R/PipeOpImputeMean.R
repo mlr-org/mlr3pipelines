@@ -56,7 +56,8 @@ PipeOpImputeMean = R6Class("PipeOpImputeMean",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemean", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types= c("numeric", "integer"))
+      super$initialize(id, param_vals = param_vals, feature_types= c("numeric", "integer"),
+        label = "Impute Numerical Features by their Mean", man = "mlr3pipelines::mlr_pipeops_imputemean")
     }
   ),
   private = list(

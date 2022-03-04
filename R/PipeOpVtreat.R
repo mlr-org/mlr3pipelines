@@ -162,7 +162,8 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
       ))
       ps$add_dep("collarProb", on = "doCollar", cond = CondEqual$new(TRUE))
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"),
+        label = "Interface to the vtreat Package", man = "mlr3pipelines::mlr_pipeops_vtreat")
     }
   ),
   private = list(

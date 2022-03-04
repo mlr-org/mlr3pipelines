@@ -70,7 +70,8 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
         ParamLgl$new("replace", tags = "train")
       ))
       ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
+        label = "Subsampling", man = "mlr3pipelines::mlr_pipeops_subsample")
     }
   ),
   private = list(

@@ -78,7 +78,8 @@ PipeOpMutate = R6Class("PipeOpMutate",
         ParamLgl$new("delete_originals", tags = c("train", "predict", "required"))
       ))
       ps$values = list(mutation = list(), delete_originals = FALSE)
-      super$initialize(id, ps, param_vals = param_vals)
+      super$initialize(id, ps, param_vals = param_vals, label = "Add Features According to Expressions",
+        man = "mlr3pipelines::mlr_pipeops_mutate")
     }
   ),
   private = list(

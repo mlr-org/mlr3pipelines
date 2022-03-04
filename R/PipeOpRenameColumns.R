@@ -68,7 +68,8 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
         ParamLgl$new("ignore_missing", tags = c("train", "predict", "required"))
       ))
       ps$values = list(renaming = character(0), ignore_missing = FALSE)
-      super$initialize(id, ps, param_vals = param_vals, can_subset_cols = FALSE)
+      super$initialize(id, ps, param_vals = param_vals, can_subset_cols = FALSE,
+        label = "Rename Columns", man = "mlr3pipelines::mlr_pipeops_renamecolumns")
     }
   ),
   private = list(

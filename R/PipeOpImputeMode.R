@@ -65,7 +65,8 @@ PipeOpImputeMode = R6Class("PipeOpImputeMode",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputemode", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"))
+      super$initialize(id, param_vals = param_vals, feature_types = c("factor", "integer", "logical", "numeric", "ordered"),
+        label = "Impute Features by their Mode", man = "mlr3pipelines::mlr_pipeops_imputemode")
     }
   ),
   private = list(

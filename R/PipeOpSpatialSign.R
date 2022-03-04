@@ -60,7 +60,8 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
         ParamDbl$new("norm", tags = c("train", "predict"), lower = 0)
       ))
       ps$values = list(norm = 2, length = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
+        label = "Normalize Data Row-wise", man = "mlr3pipelines::mlr_pipeops_spatialsign")
     }
   ),
   private = list(

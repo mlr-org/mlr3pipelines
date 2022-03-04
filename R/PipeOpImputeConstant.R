@@ -74,7 +74,8 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
         ParamLgl$new("check_levels", tags = c("train", "required"))
       ))
       ps$values = list(constant = ".MISSING", check_levels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"),
+        label = "Impute Features by a Constant", man = "mlr3pipelines::mlr_pipeops_imputeconstant")
     }
   ),
   private = list(

@@ -222,7 +222,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         add_dep("sequence_length", "return_type", CondAnyOf$new(c("integer_sequence", "factor_sequence")))
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character",
+        label = "Bag-of-word Representation of Character Features", man = "mlr3pipelines::mlr_pipeops_textvectorizer")
     }
   ),
   private = list(
