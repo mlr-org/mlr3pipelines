@@ -213,8 +213,10 @@ PipeOp = R6Class("PipeOp",
     output = NULL,
     .result = NULL,
     tags = NULL,
+    label = NULL,
+    man = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract", label = NA_character_, man = NA_character_) {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -229,6 +231,8 @@ PipeOp = R6Class("PipeOp",
       self$output = assert_connection_table(output)
       self$packages = union("mlr3pipelines", assert_character(packages, any.missing = FALSE, min.chars = 1L))
       self$tags = assert_subset(tags, mlr_reflections$pipeops$valid_tags)
+      self$label = assert_string(label, na.ok = TRUE)
+      self$man = assert_string(man, na.ok = TRUE)
     },
 
     print = function(...) {
