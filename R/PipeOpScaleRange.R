@@ -64,9 +64,7 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
         ParamDbl$new("upper", tags = c("required", "train"))
       ))
       ps$values = list(lower = 0, upper = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
-        label = "Linearly Transform Numeric Features to Match Given Boundaries",
-        man = "mlr3pipelines::mlr_pipeops_scalerange")
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),
   private = list(

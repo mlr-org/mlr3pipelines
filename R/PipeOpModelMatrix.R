@@ -62,8 +62,7 @@ PipeOpModelMatrix = R6Class("PipeOpModelMatrix",
       ps = ParamSet$new(params = list(
         ParamUty$new("formula", tags = c("train", "predict"), custom_check = check_formula)
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats",
-        label = "Transform Columns by Constructing a Model Matrix", man = "mlr3pipelines::mlr_pipeops_modelmatrix")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
     }
   ),
   private = list(

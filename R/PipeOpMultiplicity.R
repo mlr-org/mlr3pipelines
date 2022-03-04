@@ -88,7 +88,7 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = "output", train = "[*]", predict = "[*]"),
-        tags = "multiplicity", label = "Implicate a Multiplicity", man = "mlr3pipelines::mlr_pipeops_multiplicityimply"
+        tags = "multiplicity"
       )
     }
   ),
@@ -181,7 +181,7 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "[*]", predict = "[*]"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
-        tags = "multiplicity", label = "Explicate a Multiplicity", man = "mlr3pipelines::mlr_pipeops_multiplicityexply"
+        tags = "multiplicity"
       )
     }
   ),
@@ -265,8 +265,7 @@ PipeOpReplicate = R6Class("PipeOpReplicate",
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "[*]", predict = "[*]"),
-        tags = "multiplicity", label = "Replicate the Input as a Multiplicity",
-        man = "mlr3pipelines::mlr_pipeops_replicate"
+        tags = "multiplicity"
       )
     }
   ),

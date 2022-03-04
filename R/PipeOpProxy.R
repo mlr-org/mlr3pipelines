@@ -108,7 +108,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
-        tags = "meta", label = "Wrap another PipeOp or Graph as a Hyperparameter", man = "mlr3pipelines::mlr_pipeops_proxy"
+        tags = "meta"
       )
     }
   ),

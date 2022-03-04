@@ -76,8 +76,7 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
         ParamUty$new("na.action", default = stats::na.omit, tags = c("train", "kpca"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "kernlab", feature_types = c("numeric", "integer"),
-        label = "Kernelized Principle Component Analysis", man = "mlr3pipelines::mlr_pipeops_kernelpca")
+        packages = "kernlab", feature_types = c("numeric", "integer"))
     }
   ),
   private = list(

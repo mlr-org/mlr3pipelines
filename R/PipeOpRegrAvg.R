@@ -73,8 +73,7 @@ PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
 
   public = list(
     initialize = function(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list(), ...) {
-      super$initialize(innum, collect_multiplicity, id, param_vals = param_vals, prediction_type = "PredictionRegr",
-        label = "Weighted Prediction Averaging", man = "mlr3pipelines::mlr_pipeops_regravg", ...)
+      super$initialize(innum, collect_multiplicity, id, param_vals = param_vals, prediction_type = "PredictionRegr", ...)
     }
   ),
   private = list(

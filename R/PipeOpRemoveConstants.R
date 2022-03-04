@@ -70,8 +70,7 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
           ParamLgl$new("na_ignore", tags = c("train", "required", "constant_check"))
       ))
       ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify",
-        label = "Remove Constant Features", man = "mlr3pipelines::mlr_pipeops_removeconstants")
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify")
     }
   ),
   private = list(

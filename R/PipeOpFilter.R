@@ -122,8 +122,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
         ParamInt$new("permuted", lower = 1, tags = "train")
       ))
       private$.outer_param_set$set_id = "filter"
-      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection",
-        label = "Feature Filtering", man = "mlr3pipelines::mlr_pipeops_filter")
+      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
     }
   ),
   private = list(

@@ -92,8 +92,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
         ParamLgl$new("fast_optim", tags = c("train", "required"))
       ))
       ps$values = list(fast_optim = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"),
-        label = "Impact Encoding with Random Intercept Models", man = "mlr3pipelines::mlr_pipeops_encodelmer")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"))
     }
   ),
   private = list(

@@ -72,7 +72,7 @@ PipeOpChunk = R6Class("PipeOpChunk",
         param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = rep_suffix("output", outnum), train = "Task", predict = "Task"),
-        tags = "meta", label = "Chunk Input into Multiple Outputs", man = "mlr3pipelines::mlr_pipeops_chunk"
+        tags = "meta"
       )
     }
   ),

@@ -110,7 +110,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOp,
   public = list(
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types, label = NA_character_, man = NA_character_) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
       # add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
       addparams = list(ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train"))
       if (whole_task_dependent) {
@@ -130,7 +130,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = task_type, predict = task_type),
-        packages = packages, tags = "missings", label = label, man = man
+        packages = packages, tags = "missings"
       )
     }
 

@@ -82,7 +82,7 @@
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL, label = NA_character_, man = NA_character_) {
+    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
       assert_integerish(innum, lower = 0)
       param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
       param_set$values$weights = 1
@@ -99,7 +99,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = packages,
         input = data.table(name = inname, train = intype[[1]], predict = intype[[2]]),
         output = data.table(name = "output", train = "NULL", predict = prediction_type),
-        tags = c(tags, "ensemble"), label = label, man = man
+        tags = c(tags, "ensemble")
       )
     }
   ),

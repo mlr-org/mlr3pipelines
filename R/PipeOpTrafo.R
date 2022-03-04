@@ -118,11 +118,11 @@
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL, label = NA_character_, man = NA_character_) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type_in, predict = task_type_in),
         output = data.table(name = c("fun", "output"), train = c("NULL", task_type_out), predict = c("function", task_type_out)),
-        packages = packages, tags = c(tags, "target transform"), label = label, man = man
+        packages = packages, tags = c(tags, "target transform")
       )
     }
   ),
@@ -233,8 +233,7 @@ PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
     initialize = function(id = "targetinvert", param_vals = list()) {
       super$initialize(id = id, param_vals = param_vals,
         input = data.table(name = c("fun", "prediction"), train = c("NULL", "NULL"), predict = c("function", "Prediction")),
-        output = data.table(name = "output", train = "NULL", predict = "Prediction"),
-        label = "Invert Target Transformations", man = "mlr3pipelines::mlr_pipeops_targetinvert"
+        output = data.table(name = "output", train = "NULL", predict = "Prediction")
       )
     }
   ),
@@ -358,8 +357,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
       # see https://github.com/mlr-org/paradox/issues/216 and related comment in PipeOpLearnerCV
 
       ps$values = list(trafo = identity, inverter = identity)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals,
-        label = "Transform a Target by a Function", man = "mlr3pipelines::mlr_pipeops_targetmutate")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals)
     }
   ),
   active = list(
@@ -463,9 +461,7 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
         ParamDbl$new("upper", tags = c("required", "train"))
       ))
       ps$values = list(lower = 0, upper = 1)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr",
-        label = "Linearly Transform a Numeric Target to Match Given Boundaries",
-        man = "mlr3pipelines::mlr_pipeops_targettrafoscalerange")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr")
     }
   ),
   private = list(
@@ -578,8 +574,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
       ps$values = list(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "Task", predict = "Task"),
-        output = data.table(name = "output", train = "Task", predict = "Task"),
-        label = "Transform a Target without an Explicit Inversion", man = "mlr3pipelines::mlr_pipeops_updatetarget"
+        output = data.table(name = "output", train = "Task", predict = "Task")
       )
     }
   ),

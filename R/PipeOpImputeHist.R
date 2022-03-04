@@ -56,8 +56,7 @@ PipeOpImputeHist = R6Class("PipeOpImputeHist",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputehist", param_vals = list()) {
-      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric"),
-        label = "Impute Numerical Features by Histogram", man = "mlr3pipelines::mlr_pipeops_imputehist")
+      super$initialize(id, param_vals = param_vals, packages = "graphics", feature_types = c("integer", "numeric"))
     }
   ),
   private = list(

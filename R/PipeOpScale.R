@@ -80,8 +80,7 @@ PipeOpScale = R6Class("PipeOpScale",
         ParamLgl$new("robust", tags = c("train", "required"))
       ))
       ps$values = list(robust = FALSE)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
-        label = "Center and Scale Numeric Features", man = "mlr3pipelines::mlr_pipeops_scale")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),
   private = list(

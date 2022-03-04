@@ -136,8 +136,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # in PipeOp ParamSets.
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
-      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"),
-        label = "Wrap a Learner into a PipeOp with Cross-validated Predictions as Features", man = "mlr3pipelines::mlr_pipeops_learner_cv")
+      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
     }
 
   ),
