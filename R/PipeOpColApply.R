@@ -96,7 +96,7 @@ PipeOpColApply = R6Class("PipeOpColApply",
         ParamUty$new("applicator", custom_check = check_function, tags = c("train", "predict"))
       ))
       ps$values = list(applicator = identity)
-      super$initialize(id, ps, param_vals = param_vals)
+      super$initialize(id, ps, param_vals = param_vals, label = "Apply a Function to each Column of a Task", man = "mlr3pipelines::mlr_pipeops_colapply")
     }
   ),
   private = list(

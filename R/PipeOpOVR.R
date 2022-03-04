@@ -80,7 +80,9 @@ PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "TaskClassif", predict = "TaskClassif"),
         output = data.table(name = "output", train = "[TaskClassif]", predict = "[TaskClassif]"),
-        tags = c("target transform", "multiplicity")
+        tags = c("target transform", "multiplicity"),
+        label = "Split a Classification Task into Binary Classification Tasks",
+        man = "mlr3pipelines::mlr_pipeops_ovrsplit"
       )
     }
   ),
@@ -185,7 +187,8 @@ PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
   inherit = PipeOpEnsemble,
   public = list(
     initialize = function(id = "ovrunite", param_vals = list()) {
-      super$initialize(0, TRUE, id, param_vals = param_vals, prediction_type = "PredictionClassif", tags = "multiplicity")
+      super$initialize(0, TRUE, id, param_vals = param_vals, prediction_type = "PredictionClassif", tags = "multiplicity",
+        label = "Unite Binary Classification Tasks", man = "mlr3pipelines::mlr_pipeops_ovrunite")
     }
   ),
   private = list(

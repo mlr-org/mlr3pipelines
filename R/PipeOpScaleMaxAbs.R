@@ -58,7 +58,8 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
         ParamDbl$new("maxabs", lower = 0, tags = c("required", "train", "predict"))
       ))
       ps$values = list(maxabs = 1)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"),
+        label = "Scale Numeric Features with Respect to their Maximum Absolute Value", man = "mlr3pipelines::mlr_pipeops_scalemaxabs")
     }
   ),
   private = list(

@@ -55,7 +55,8 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
         ParamLgl$new("droplevels", tags = c("train", "predict"))
       ))
       ps$values = list(droplevels = TRUE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", feature_types = c("factor", "ordered"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", feature_types = c("factor", "ordered"),
+        label = "Fix Factor Levels", man = "mlr3pipelines::mlr_pipeops_fixfactors")
     }
   ),
   private = list(

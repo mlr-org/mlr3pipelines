@@ -115,7 +115,8 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
       ps$values = list(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
         month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,
         day_of_week = TRUE, hour = TRUE, minute = TRUE, second = TRUE, is_day = TRUE)
-      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct")
+      super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = "POSIXct",
+        label = "Preprocess Date Features", man = "mlr3pipelines::mlr_pipeops_datefeatures")
     }
   ),
   private = list(

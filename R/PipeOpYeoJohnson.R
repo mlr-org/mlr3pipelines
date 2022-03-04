@@ -74,7 +74,8 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
         ParamDbl$new("upper", tags = c("train", "yj"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "bestNormalize", feature_types = c("numeric", "integer"))
+        packages = "bestNormalize", feature_types = c("numeric", "integer"),
+        label = "Yeo-Johnson Transformation of Numeric Features", man = "mlr3pipelines::mlr_pipeops_yeojohnson")
     }
   ),
   private = list(

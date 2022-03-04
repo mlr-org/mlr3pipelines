@@ -72,7 +72,12 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
         ParamDbl$new("upper", tags = c("train", "boxcox"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "bestNormalize", feature_types = c("numeric", "integer"))
+        packages = "bestNormalize", feature_types = c("numeric", "integer"),
+        label = "Box-Cox Transformation of Numeric Features", man = "mlr3pipelines::mlr_pipeops_boxcox")
+    },
+
+    help = function() {
+      open_help(self$man)
     }
   ),
   private = list(
