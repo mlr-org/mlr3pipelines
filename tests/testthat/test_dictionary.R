@@ -81,7 +81,7 @@ test_that("Dictionary contains all PipeOps", {
     }
 
     # check that man exists
-    expect_man_exists(test_obj)
+    expect_man_exists(test_obj$man)
 
     # check that mlr_pipeops$get() gives the same object as PipeOpXXX$new() does
     expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj, info = dictname)
