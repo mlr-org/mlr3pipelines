@@ -78,8 +78,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
         ParamInt$new("dup_size", lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data",
-        label = "SMOTE Balancing", man = "mlr3pipelines::mlr_pipeops_smote")
+        packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data")
     }
   ),
   private = list(

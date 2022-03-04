@@ -130,8 +130,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
       ps$add_dep("keep.all", on = "nrun", cond = CondLarger$new(1))
       ps$add_dep("callback", on = "keep.all", cond = CondEqual$new(TRUE))
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"),
-        label = "Non-negative Matrix Factorization", man = "mlr3pipelines::mlr_pipeops_nmf")
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
     }
   ),
   private = list(

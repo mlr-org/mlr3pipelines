@@ -87,8 +87,7 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       )
       ps$values = list(min = TRUE, offset = 1, multiplier = 1)
       # this is one of the few imputers that handles 'character' features!
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("character", "factor", "integer", "numeric", "ordered"),
-        label = "Out of Range Imputation", man = "mlr3pipelines::mlr_pipeops_imputeoor")
+      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("character", "factor", "integer", "numeric", "ordered"))
     }
   ),
   private = list(

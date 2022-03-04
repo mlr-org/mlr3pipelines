@@ -60,8 +60,7 @@ PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
         ParamInt$new("numsplits", lower = 2, special_vals = list(NULL), tags = "train")
         ))
       ps$values = list(numsplits = 2L)
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"),
-        label = "Split Numeric Features into Quantile Bins", man = "mlr3pipelines::mlr_pipeops_quantilebin")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
     }
   ),
   private = list(

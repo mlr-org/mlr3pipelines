@@ -1,7 +1,7 @@
 #' @include mlr_graphs.R
 
 #' @title Branch Between Alternative Paths
-#' @name mlr_graphs_branch
+#' @name mlr_graphs_branching
 #' @description
 #' Create a multiplexed graph.
 #'

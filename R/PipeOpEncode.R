@@ -86,8 +86,7 @@ PipeOpEncode = R6Class("PipeOpEncode",
         ParamFct$new("method", levels = c("one-hot", "treatment", "helmert", "poly", "sum"), tags = c("train", "predict"))
       ))
       ps$values = list(method = "one-hot")
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", tags = "encode", feature_types = c("factor", "ordered"),
-        label = "Factor Encoding", man = "mlr3pipelines::mlr_pipeops_encode")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", tags = "encode", feature_types = c("factor", "ordered"))
     }
   ),
   private = list(

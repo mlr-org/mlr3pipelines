@@ -70,8 +70,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
           check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
         })
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
-        label = "Change Column Roles of a Task", man = "mlr3pipelines::mlr_pipeops_colroles")
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     }
   ),
   private = list(

@@ -67,8 +67,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
       ps = ParamSet$new(params = list(
         ParamUty$new("breaks", default = "Sturges", tags = c("train", "hist"))
       ))
-      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"),
-        label = "Split Numeric Features into Equally Spaced Bins", man = "mlr3pipelines::mlr_pipeops_histbin")
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"))
     }
   ),
   private = list(

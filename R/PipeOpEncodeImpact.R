@@ -82,8 +82,7 @@ PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
         ParamLgl$new("impute_zero", tags = c("train", "required"))
       ))
       ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
-      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"),
-        label = "Conditional Target Value Impact Encoding", man = "mlr3pipelines::mlr_pipeops_encodeimpact")
+      super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"))
     }
   ),
   private = list(

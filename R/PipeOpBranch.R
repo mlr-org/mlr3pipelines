@@ -102,7 +102,7 @@ PipeOpBranch = R6Class("PipeOpBranch",
       super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = options, train = "*", predict = "*"),
-        tags = "meta", label = "Path Branching", man = "mlr3pipelines::mlr_pipeops_branch"
+        tags = "meta"
       )
     }
   ),

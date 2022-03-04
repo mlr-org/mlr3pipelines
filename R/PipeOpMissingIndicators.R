@@ -83,7 +83,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         ParamFct$new("type", levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
       ))
       ps$values = list(which = "missing_train", type = "factor")
-      super$initialize(id, ps, param_vals = param_vals, tags = "missings", label = "Add Missing Indicator Columns", man = "mlr3pipelines::mlr_pipeops_missind")
+      super$initialize(id, ps, param_vals = param_vals, tags = "missings")
       if ("affect_columns" %nin% names(param_vals)) {
         # can't put this in `ps$values` because it is a PipeOpTaskPreproc param
         self$param_set$values$affect_columns = selector_invert(selector_type(c("factor", "ordered", "character")))
