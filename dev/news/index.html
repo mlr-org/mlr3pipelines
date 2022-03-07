@@ -82,18 +82,18 @@
 <li>New methods <code><a href="../reference/chain_graphs.html">chain_graphs()</a></code>, <code><a href="../reference/grapes-greater-than-greater-than-grapes.html">concat_graphs()</a></code>, <code>Graph$chain()</code> as alternatives for <code>%&gt;&gt;%</code> and <code>%&gt;&gt;!%</code>.</li>
 <li>New methods <code><a href="../reference/po.html">pos()</a></code> and <code><a href="../reference/ppl.html">ppls()</a></code> which create lists of PipeOps/Graphs and can be seen as “plural” forms of <code><a href="../reference/po.html">po()</a></code> and <code><a href="../reference/ppl.html">ppl()</a></code>.</li>
 <li>
-<code><a href="../reference/po.html">po()</a></code> S3-method for PipeOp class that clones a PipeOp object and optionally modifies its attributes.</li>
+<code><a href="../reference/po.html">po()</a></code> S3-method for <code>PipeOp</code> class that clones a PipeOp object and optionally modifies its attributes.</li>
 <li>
 <code>Graph$add_pipeop()</code> now clones the PipeOp being added.</li>
 <li>Documentation: Clarified documentation about cloning of input arguments in several places.</li>
 <li>Performance enhancements for Graph concatenation.</li>
 <li>More informative error outputs.</li>
-<li>New attribute graph_model <code>GraphLearner</code> class, which gets the trained graph.</li>
+<li>New attribute <code>graph_model</code> in <code>GraphLearner</code> class, which gets the trained Graph.</li>
 <li>
-<code><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner()</a></code> S3-method for PipeOp class that turns wraps a PipeOp in a Graph and turns that into a Learner.</li>
+<code><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner()</a></code> S3-method for <code>PipeOp</code> class that wraps a <code>PipeOp</code> in a <code>Graph</code> and turns that into a <code>Learner</code>.</li>
 <li>Changed PipeOps:
 <ul><li>
-<code>PipeOpHistBin</code>: renamed <code>'bins'</code> Param to <code>'breaks'</code>
+<code>PipeOpHistBin</code>: renamed <code>bins</code> Param to <code>breaks</code>
 </li>
 <li>
 <code>PipeOpImputeHist</code>: fix handling of integer features spanning the entire represented integer range</li>
@@ -113,21 +113,22 @@
 <h2 class="pkg-version" data-toc-text="0.3.6" id="mlr3pipelines-036">mlr3pipelines 0.3.6<a class="anchor" aria-label="anchor" href="#mlr3pipelines-036"></a></h2><p class="text-muted">CRAN release: 2021-09-07</p>
 <ul><li>Bugfix: Make empty Multiplicities work (unless they are nested)</li>
 <li>Fixed: Compatibility with upcoming <code>bbotk</code> version.</li>
-<li>New mlr_graphs: pipeline_stacking</li>
+<li>New <code>mlr_graphs</code>: <code>pipeline_stacking</code>
+</li>
 <li>Added JMLR-Citation</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.5-1" id="mlr3pipelines-035-1">mlr3pipelines 0.3.5-1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-035-1"></a></h2><p class="text-muted">CRAN release: 2021-08-05</p>
-<ul><li>Fixed: Compatibility with upcoming mlr3 version.</li>
+<ul><li>Fixed: Compatibility with upcoming <code>mlr3</code> version.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.5" id="mlr3pipelines-035">mlr3pipelines 0.3.5<a class="anchor" aria-label="anchor" href="#mlr3pipelines-035"></a></h2><p class="text-muted">CRAN release: 2021-07-06</p>
-<ul><li>Changed PipeOp: <code>PipeOpFilter</code> gets additional “filter.permuted” hyperparameter.</li>
-<li>Bugfix: Make add_edge of Graphs work with Multiplicities.</li>
-<li>Bugfix: Make <code>GraphLearner</code> hash depend on id.</li>
+<ul><li>Changed PipeOp: <code>PipeOpFilter</code> gets additional <code>filter.permuted</code> hyperparameter.</li>
+<li>Bugfix: Make <code>add_edge</code> of Graphs work with Multiplicities.</li>
+<li>Bugfix: Make <code>GraphLearner</code> hash depend on <code>id</code>.</li>
 <li>Documentation: Clarify documentation of <code>LearnerAvg</code>.</li>
 <li>Internals: Using more idiomatic internal helper functions.</li>
-<li>Compatibility with upcoming mlr3 version.</li>
+<li>Compatibility with upcoming <code>mlr3</code> version.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.4" id="mlr3pipelines-034">mlr3pipelines 0.3.4<a class="anchor" aria-label="anchor" href="#mlr3pipelines-034"></a></h2><p class="text-muted">CRAN release: 2021-03-05</p>
@@ -137,11 +138,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.3" id="mlr3pipelines-033">mlr3pipelines 0.3.3<a class="anchor" aria-label="anchor" href="#mlr3pipelines-033"></a></h2><p class="text-muted">CRAN release: 2021-02-09</p>
 <ul><li>Bugfix: fix rare issue in randomized test</li>
-<li>Compatibility with bbotk 0.3.0</li>
+<li>Compatibility with <code>bbotk</code> 0.3.0</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="mlr3pipelines-032">mlr3pipelines 0.3.2<a class="anchor" aria-label="anchor" href="#mlr3pipelines-032"></a></h2><p class="text-muted">CRAN release: 2020-12-17</p>
-<ul><li>Bugfix: Make <code>as.data.table(mlr_pipeops)</code> work with paradox 0.6</li>
+<ul><li>Bugfix: Make <code>as.data.table(mlr_pipeops)</code> work with <code>paradox</code> 0.6</li>
 <li>Changed PipeOps:
 <ul><li>
 <code>PipeOpColApply</code>: now allows for an applicator function with multiple columns as a return value; also inherits from <code>PipeOpTaskPreprocSimple</code> now</li>
@@ -153,12 +154,14 @@
 <ul><li>
 <code>PipeOpMissInd</code> now also allows for setting type = integer</li>
 <li>
-<code>PipeOpNMF</code>: now exposes all parameters previously in .options</li>
+<code>PipeOpNMF</code>: now exposes all parameters previously in <code>.options</code>
+</li>
 </ul></li>
-<li>Changed mlr_graphs:
+<li>Changed <code>mlr_graphs</code>:
 <ul><li>
 <code>pipeline_bagging</code> now uses multiplicities internally</li>
-<li>fix how pipeline_robustify determines the type of newly created columns when using PipeOpMissInd</li>
+<li>fix how <code>pipeline_robustify</code> determines the type of newly created columns when using <code>PipeOpMissInd</code>
+</li>
 <li>
 <code>PipeOpFeatureUnion</code>: Fixed a minor bug when checking for duplicates</li>
 </ul></li>
@@ -169,17 +172,20 @@
 <li>Performance improvements for <code>GraphLearner</code>
 </li>
 <li>
-<code>GraphLearner</code> allows custom id</li>
+<code>GraphLearner</code> allows custom <code>id</code>
+</li>
 <li>Use parallel tests</li>
 <li>Removed bibtex dependency</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="mlr3pipelines-030">mlr3pipelines 0.3.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-030"></a></h2><p class="text-muted">CRAN release: 2020-09-13</p>
-<ul><li>compatibility with mlr3 0.6</li>
-<li>NULL input channels accept any kind of input</li>
+<ul><li>compatibility with <code>mlr3</code> 0.6</li>
+<li>
+<code>NULL</code> input channels accept any kind of input</li>
 <li>
 <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method of Graphs now also allows for printing a DOT representation on the console</li>
-<li>state of PipeOps now reset to NULL if training fails</li>
+<li>
+<code>state</code> of PipeOps is now reset to <code>NULL</code> when training fails</li>
 <li>implemented <code>as_learner.PipeOp</code>
 </li>
 <li>
@@ -201,7 +207,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="mlr3pipelines-021">mlr3pipelines 0.2.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-021"></a></h2><p class="text-muted">CRAN release: 2020-08-18</p>
 <ul><li>New feature: Multiplicities: implicit repetition of operations</li>
-<li>new mlr_graphs:
+<li>new <code>mlr_graphs</code>:
 <ul><li><code>pipeline_bagging</code></li>
 <li><code>pipeline_branch</code></li>
 <li><code>pipeline_greplicate</code></li>
@@ -242,7 +248,8 @@
 <li>
 <code>PipeOpHistBin</code>: Bugfix: handle test set data out of training set range</li>
 <li>
-<code>PipeOpLearnerCV</code>: Allow returning trainingset prediction during train()</li>
+<code>PipeOpLearnerCV</code>: Allow returning trainingset prediction during <code>train()</code>
+</li>
 <li>
 <code>PipeOpMutate</code>: Allow referencing newly created columns</li>
 <li>
@@ -257,36 +264,39 @@
 <li>NULL is neutral element of <code>%&gt;&gt;%</code>
 </li>
 <li>
-<code>PipeOpTaskPreproc</code> now has feature_types slot</li>
+<code>PipeOpTaskPreproc</code> now has <code>feature_types</code> slot</li>
 <li>
 <code>PipeOpTaskPreproc(Simple)</code> internal API changed: use <code>.train_task()</code>, <code>.predict_task()</code>, <code>.train_dt()</code>, <code>.predict_dt()</code>, <code>.select_cols()</code>, <code>.get_state()</code>, <code>.transform()</code>, <code>.get_state_dt()</code>, <code>.transform_dt()</code> instead of the old methods without dot prefix</li>
 <li>PipeOp now has tags slot</li>
 <li>PipeOp internal API changed: use <code>.train()</code>, <code>.predict()</code> instead of <code>train_internal()</code>, <code>predict_internal()</code>
 </li>
-<li>Graph new method <code>update_ids()</code>
+<li>
+<code>Graph</code> new method <code>update_ids()</code>
 </li>
-<li>Graph methods <code>train(single_input = FALSE)</code> and <code>predict(single_input = FALSE)</code> now handle vararg channels correctly.</li>
+<li>
+<code>Graph</code> methods <code>train(single_input = FALSE)</code> and <code>predict(single_input = FALSE)</code> now handle vararg channels correctly.</li>
 <li>Obsoleted <code><a href="../reference/greplicate.html">greplicate()</a></code>; use <code>pipeline_greplicate</code> / <code>ppl("greplicate")</code> instead.</li>
 <li>
-<code><a href="../reference/po.html">po()</a></code> now automatically converts Selector to <code>PipeOpSelect</code>
+<code><a href="../reference/po.html">po()</a></code> now automatically converts <code>Selector</code> to <code>PipeOpSelect</code>
 </li>
 <li>
 <code><a href="../reference/po.html">po()</a></code> prints available <code>mlr_pipeops</code> dictionary content</li>
 <li>
 <code>mlr_graphs</code> dictionary of useful Graphs, with short form accessor <code><a href="../reference/ppl.html">ppl()</a></code>
 </li>
-<li>Work with new mlr3 version 0.4.0</li>
+<li>Work with new <code>mlr3</code> version 0.4.0</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.3" id="mlr3pipelines-013">mlr3pipelines 0.1.3<a class="anchor" aria-label="anchor" href="#mlr3pipelines-013"></a></h2><p class="text-muted">CRAN release: 2020-04-06</p>
-<ul><li><p>small test fix for R 4.0 (necessary for stringsAsFactors option default change in 3.6 -&gt; 4.0)</p></li>
-<li><p><code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> generic for Graph</p></li>
-<li><p>Migrated last vignette to “mlr3 Book”</p></li>
-<li><p>Compact in-memory representation of R6 objects to save space when saving objects via <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code>, <code><a href="https://rdrr.io/r/base/serialize.html" class="external-link">serialize()</a></code> etc.</p></li>
+<ul><li>small test fix for R 4.0 (necessary for <code>stringsAsFactors</code> option default change in 3.6 -&gt; 4.0)</li>
+<li>
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> generic for Graph</li>
+<li>Migrated last vignette to “mlr3 Book”</li>
+<li>Compact in-memory representation of R6 objects to save space when saving objects via <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code>, <code><a href="https://rdrr.io/r/base/serialize.html" class="external-link">serialize()</a></code> etc.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="mlr3pipelines-012">mlr3pipelines 0.1.2<a class="anchor" aria-label="anchor" href="#mlr3pipelines-012"></a></h2><p class="text-muted">CRAN release: 2019-12-10</p>
-<ul><li>Work with new mlr3 version 0.1.5 (handling of character columns changed)</li>
+<ul><li>Work with new <code>mlr3</code> version 0.1.5 (handling of character columns changed)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="mlr3pipelines-011">mlr3pipelines 0.1.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-011"></a></h2><p class="text-muted">CRAN release: 2019-10-29</p>
