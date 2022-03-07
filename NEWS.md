@@ -1,6 +1,8 @@
 # mlr3pipelines 0.4.0-9000
 
-* `PipeOpLearner` `packages` slot is set to the `Learner`'s `packages`
+* `GraphLearner` can be created without cloning `Graph` (for internal use).
+* `predict.Graph` throws helpful error when it cannot create a fitting `Task`.
+* `PipeOpLearner` `packages` slot is set to the `Learner`'s `packages`.
 * Bugfix: `PipeOp` `train()` and `predict()` report correct channel name when output has wrong type.
 
 # mlr3pipelines 0.4.0
