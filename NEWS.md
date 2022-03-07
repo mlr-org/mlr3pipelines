@@ -4,6 +4,7 @@
 * `predict.Graph` throws helpful error when it cannot create a fitting `Task`.
 * `PipeOpLearner` `packages` slot is set to the `Learner`'s `packages`.
 * Bugfix: `PipeOp` `train()` and `predict()` report correct channel name when output has wrong type.
+* Bugfix: More accurate type inference when constructing Graphs.
 
 # mlr3pipelines 0.4.0
 

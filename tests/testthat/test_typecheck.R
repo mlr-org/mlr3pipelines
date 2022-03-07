@@ -178,3 +178,35 @@ test_that("Autoconversion for pipeops works", {
   expect_equal(graph$predict(1), list(test2.out = tsk("iris")))
 
 })
+
+
+
+test_that("R6 inheritance inference works with packages that are not loaded", {
+  skip_if_not_installed("mlr3learners")
+
+  library("mlr3learners")
+  inheritance = mlr3pipelines:::get_r6_inheritance("LearnerClassifRanger")
+  expect_character(inheritance, any.missing = FALSE, min.len = 2)
+  expect_subset(c("LearnerClassifRanger", "Learner"), inheritance)
+  unloadNamespace("mlr3learners")
+
+  inheritance = mlr3pipelines:::get_r6_inheritance("LearnerClassifRanger")
+  expect_null(inheritance)
+
+  loadNamespace("mlr3learners")
+  inheritance = mlr3pipelines:::get_r6_inheritance("LearnerClassifRanger")
+  expect_character(inheritance, any.missing = FALSE, min.len = 2)
+  expect_subset(c("LearnerClassifRanger", "Learner"), inheritance)
+
+  # from another R session. This may fail when mlr3pipelines is only loaded with load_all but not installed.
+  skip_if_not_installed("future")
+  future::plan("multisession")
+  inheritance = future::value(future::future({
+    loadNamespace("mlr3learners")
+    mlr3pipelines:::get_r6_inheritance("LearnerClassifRanger")
+  }))
+  expect_character(inheritance, any.missing = FALSE, min.len = 2)
+  expect_subset(c("LearnerClassifRanger", "Learner"), inheritance)
+
+  future::plan("sequential")
+})

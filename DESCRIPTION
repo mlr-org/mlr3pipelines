@@ -80,7 +80,8 @@ Suggests:
     kknn,
     GenSA,
     methods,
-    vtreat
+    vtreat,
+    future
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
