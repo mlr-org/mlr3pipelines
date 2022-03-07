@@ -181,7 +181,7 @@ test_that("Autoconversion for pipeops works", {
 
 
 
-expect_that("R6 inheritance inference works with packages that are not loaded", {
+test_that("R6 inheritance inference works with packages that are not loaded", {
   skip_if_not_installed("mlr3learners")
 
   library("mlr3learners")
