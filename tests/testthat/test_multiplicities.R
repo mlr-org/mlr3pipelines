@@ -129,3 +129,22 @@ test_that("Graph - add_edge", {
   expect_identical(g1$edges, g2$edges)
 })
 
+
+test_that("Multiplicity checking", {
+  p = po("pca")
+
+  expect_error(p$train(list(x = 1)), "Assertion on 'input 1 \\(\"input\"\\) of PipeOp pca's \\$train\\(\\)")
+  expect_task(p$train(list(x = tsk("iris")))[[1]])
+
+  expect_task(p$predict(list(x = tsk("iris")))[[1]])
+  expect_error(p$predict(list(x = 1)), "Assertion on 'input 1 \\(\"input\"\\) of PipeOp pca's \\$predict\\(\\)")
+
+  p$output$predict = "numeric"
+
+  expect_task(p$train(list(x = tsk("iris")))[[1]])
+  expect_error(p$predict(list(x = tsk("iris")))[[1]], "Assertion on 'output 1 \\(\"output\"\\) of PipeOp pca's \\$predict\\(\\)")
+
+  p$output$train = "numeric"
+  expect_error(p$train(list(x = tsk("iris")))[[1]], "Assertion on 'output 1 \\(\"output\"\\) of PipeOp pca's \\$train\\(\\)")
+
+})
