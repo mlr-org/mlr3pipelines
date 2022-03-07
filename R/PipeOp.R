@@ -451,7 +451,7 @@ check_types = function(self, data, direction, operation) {
   for (idx in seq_along(data)) {
     data[idx] = list(check_item(data[[idx]], typetable[[operation]][[idx]],
       varname = sprintf("%s %s (\"%s\") of PipeOp %s's $%s()",
-        direction, idx, self$input$name[[idx]], self$id, operation)))
+        direction, idx, self[[direction]]$name[[idx]], self$id, operation)))
   }
   names(data) = typetable$name
   data
