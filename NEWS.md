@@ -1,5 +1,7 @@
 # mlr3pipelines 0.4.0-9000
 
+* `PipeOpLearner` `packages` slot is set to the `Learner`'s `packages`
+
 # mlr3pipelines 0.4.0
 
 * New operator `%>>!%` that modifies Graphs in-place.
