@@ -74,3 +74,12 @@ test_that("PipeOpLearner - model active binding to state", {
   expect_null(po$learner$state)
   expect_equal(po$learner_model$state, po$state)
 })
+
+test_that("packages", {
+
+  expect_set_equal(
+    c("mlr3pipelines", lrn("classif.rpart")$packages),
+    po("learner", learner = lrn("classif.rpart"))$packages
+  )
+
+})
