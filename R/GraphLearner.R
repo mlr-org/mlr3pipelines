@@ -16,6 +16,9 @@
 #' [`PipeOp`] / [`Learner`][mlr3::Learner] encapsulated within the [`Graph`].
 #' Similarly, the predict_type of a Graph will always be the smallest denominator in the [`Graph`].
 #'
+#' A `GraphLearner` is always constructed in an untrained state. When the `graph` argument has a
+#' non-`NULL` `$state`, it is ignored.
+#'
 #' @section Construction:
 #' ```
 #' GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
@@ -23,7 +26,7 @@
 #'
 #' * `graph` :: [`Graph`] | [`PipeOp`]\cr
 #'   [`Graph`] to wrap. Can be a [`PipeOp`], which is automatically converted to a [`Graph`].
-#'  This argument is always cloned; to access the [`Graph`] inside `GraphLearner` by-reference, use `$graph`.\cr
+#'  This argument is usually cloned, unless `clone_graph` is `FALSE`; to access the [`Graph`] inside `GraphLearner` by-reference, use `$graph`.\cr
 #' * `id` :: `character(1)`
 #'   Identifier of the resulting [`Learner`][mlr3::Learner].
 #' * `param_vals` :: named `list`\cr
@@ -32,6 +35,10 @@
 #'   What `task_type` the `GraphLearner` should have; usually automatically inferred for [`Graph`]s that are simple enough.
 #' * `predict_type` :: `character(1)`\cr
 #'   What `predict_type` the `GraphLearner` should have; usually automatically inferred for [`Graph`]s that are simple enough.
+#' * `clone_graph` :: `logical(1)`\cr
+#'   Whether to clone `graph` upon construction. Unintentionally changing `graph` by reference can lead to unexpected behaviour,
+#'   so `TRUE` (default) is recommended. In particular, note that the `$state` of `$graph` is set to `NULL` by reference on
+#'   construction of `GraphLearner`, during `$train()`, and during `$predict()` when `clone_graph` is `FALSE`.
 #'
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
@@ -71,10 +78,13 @@
 #' lr$graph_model$pipeops$classif.rpart$learner_model$importance()
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
-    initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL) {
-      graph = as_graph(graph, clone = TRUE)
+    initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE) {
+      graph = as_graph(graph, clone = assert_flag(clone_graph))
+      graph$state = NULL
+
       id = assert_string(id, null.ok = TRUE) %??% paste(graph$ids(sorted = TRUE), collapse = ".")
       private$.graph = graph
+
       output = graph$output
       if (nrow(output) != 1) {
         stop("'graph' must have exactly one output channel")
@@ -84,43 +94,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
 
       if (is.null(task_type)) {
-        # check the high level input and output
-        class_table = mlr_reflections$task_types
-        input = graph$input
-        task_type = c(
-          match(c(output$train, output$predict), class_table$prediction),
-          match(c(input$train, input$predict), class_table$task))
-        task_type = unique(class_table$type[stats::na.omit(task_type)])
-        if (length(task_type) > 1L) {
-          stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
-        }
-        if (length(task_type) == 0L) {
-          # recursively walk backwards through the graph
-          # FIXME: think more about target transformation graphs here
-          get_po_task_type = function(x) {
-            task_type = c(
-              match(c(x$output$train, x$output$predict), class_table$prediction),
-              match(c(x$input$train, x$input$predict), class_table$task))
-            task_type = unique(class_table$type[stats::na.omit(task_type)])
-            if (length(task_type) > 1) {
-              stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
-            }
-            if (length(task_type) == 1) {
-              return(task_type)  # early exit
-            }
-            prdcssrs = graph$edges[dst_id == x$id, ]$src_id
-            if (length(prdcssrs)) {
-              # all non-null elements
-              task_types = discard(map(graph$pipeops[prdcssrs], get_po_task_type), is.null)
-              if (length(unique(task_types)) == 1L) {
-                return(unlist(unique(task_types)))
-              }
-            }
-            return(NULL)
-          }
-          task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
-        }
-        task_type = c(task_type, "classif")[[1]]  # final fallback
+        task_type = infer_task_type(graph)
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
@@ -232,10 +206,52 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
 #' @export
 as_learner.Graph = function(x, clone = FALSE) {
-  GraphLearner$new(x)
+  GraphLearner$new(x, clone_graph = clone)
 }
 
 #' @export
 as_learner.PipeOp = function(x, clone = FALSE) {
-  as_learner(as_graph(x))
+  as_learner(as_graph(x, clone = FALSE), clone = clone)
+}
+
+
+infer_task_type = function(graph) {
+  output = graph$output
+  # check the high level input and output
+  class_table = mlr_reflections$task_types
+  input = graph$input
+  task_type = c(
+    match(c(output$train, output$predict), class_table$prediction),
+    match(c(input$train, input$predict), class_table$task))
+  task_type = unique(class_table$type[stats::na.omit(task_type)])
+  if (length(task_type) > 1L) {
+    stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
+  }
+  if (length(task_type) == 0L) {
+    # recursively walk backwards through the graph
+    # FIXME: think more about target transformation graphs here
+    get_po_task_type = function(x) {
+      task_type = c(
+        match(c(x$output$train, x$output$predict), class_table$prediction),
+        match(c(x$input$train, x$input$predict), class_table$task))
+      task_type = unique(class_table$type[stats::na.omit(task_type)])
+      if (length(task_type) > 1) {
+        stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
+      }
+      if (length(task_type) == 1) {
+        return(task_type)  # early exit
+      }
+      prdcssrs = graph$edges[dst_id == x$id, ]$src_id
+      if (length(prdcssrs)) {
+        # all non-null elements
+        task_types = discard(map(graph$pipeops[prdcssrs], get_po_task_type), is.null)
+        if (length(unique(task_types)) == 1L) {
+          return(unlist(unique(task_types)))
+        }
+      }
+      return(NULL)
+    }
+    task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
+  }
+  c(task_type, "classif")[[1]]  # "classif" as final fallback
 }

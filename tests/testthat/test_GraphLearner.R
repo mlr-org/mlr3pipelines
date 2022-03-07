@@ -72,6 +72,51 @@ test_that("basic graphlearner tests", {
   expect_equal(dbmodels$task_predict$data(), scalediris$data())
 })
 
+test_that("GraphLearner clone_graph FALSE", {
+
+  # prepare graph
+  gr1 = po("pca") %>>% lrn("classif.rpart")
+  gr1$train(tsk("iris"))
+  expect_true(gr1$is_trained)
+
+  gl = GraphLearner$new(gr1, clone_graph = FALSE)
+
+  # graph is not cloned
+  expect_identical(gl$graph, gr1)
+
+  # GraphLearner$initialize resets graph state
+  expect_false(gr1$is_trained)
+
+  # compare result of training with a subset of iris
+  gl$train(tsk("iris")$filter(1:110))
+
+  # gr1 state is not set by this
+  expect_false(gr1$is_trained)
+
+  # train gr1 with a *different* task than gl
+  gr1$train(tsk("iris"))
+
+  # simulate pipeline with iris subset to get expected GraphLearner prediction result
+  pp = po("pca")
+  expected_prediction = lrn("classif.rpart")$train(pp$train(list(tsk("iris")$filter(1:110)))[[1]])$predict(pp$predict(list(tsk("iris")))[[1]])
+
+  # check that predicting on iris subset gives different result from gr1$predict()
+  expect_false(isTRUE(all.equal(gr1$predict(tsk("iris"))[[1]], expected_prediction)))
+  expect_true(gr1$is_trained)
+
+  # check that the GraphLearner predicts what we expect
+  expect_true(isTRUE(all.equal(gl$predict(tsk("iris")), expected_prediction)))
+
+  expect_false(gr1$is_trained)  # predicting with GraphLearner resets Graph state
+
+  expect_identical(gl$graph, gr1)
+
+  # check that as_learner respects `clone` now
+  gl = as_learner(gr1, clone = FALSE)
+  expect_identical(gl$graph, gr1)
+
+})
+
 test_that("graphlearner parameters behave as they should", {
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
