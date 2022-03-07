@@ -42,6 +42,6 @@ Other Graph operators:
 \code{\link{assert_pipeop}()},
 \code{\link{greplicate}()},
 \code{\link{gunion}()},
-\code{\link{pipeline_greplicate}()}
+\code{\link{mlr_graphs_greplicate}}
 }
 \concept{Graph operators}

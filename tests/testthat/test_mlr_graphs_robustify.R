@@ -82,6 +82,7 @@ test_that("Robustify Pipeline", {
   # date features
   dat = iris
   set.seed(1)
+  lrn = lrn("classif.rpart")
   dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
    size = 150L)
   tsk = TaskClassif$new("iris_date", backend = dat, target = "Species")
