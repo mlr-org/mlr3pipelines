@@ -112,7 +112,7 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
     
 <div class="sourceCode"><pre><code><span class="va"><a href="../reference/mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span>, id <span class="op">=</span> <span class="cn">NULL</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, task_type <span class="op">=</span> <span class="cn">NULL</span>, predict_type <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 <ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code> | <code><a href="PipeOp.html">PipeOp</a></code><br><code><a href="Graph.html">Graph</a></code> to wrap. Can be a <code><a href="PipeOp.html">PipeOp</a></code>, which is automatically converted to a <code><a href="Graph.html">Graph</a></code>.
-This argument is always cloned; to access the <code><a href="Graph.html">Graph</a></code> inside <code>GraphLearner</code> by-reference, use <code>$graph</code>.<br></p></li>
+This argument is usually cloned, unless <code>clone_graph</code> is <code>FALSE</code>; to access the <code><a href="Graph.html">Graph</a></code> inside <code>GraphLearner</code> by-reference, use <code>$graph</code>.<br></p></li>
 <li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
@@ -121,6 +121,9 @@ List of hyperparameter settings, overwriting the hyperparameter settings . Defau
 What <code>task_type</code> the <code>GraphLearner</code> should have; usually automatically inferred for <code><a href="Graph.html">Graph</a></code>s that are simple enough.</p></li>
 <li><p><code>predict_type</code> :: <code>character(1)</code><br>
 What <code>predict_type</code> the <code>GraphLearner</code> should have; usually automatically inferred for <code><a href="Graph.html">Graph</a></code>s that are simple enough.</p></li>
+<li><p><code>clone_graph</code> :: <code>logical(1)</code><br>
+Whether to clone <code>graph</code> upon construction. Unintentionally changing <code>graph</code> by reference can lead to unexpected behaviour,
+so <code>TRUE</code> (default) is recommended.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
