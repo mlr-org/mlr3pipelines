@@ -667,7 +667,21 @@ predict.Graph = function(object, newdata, ...) {
   plain = "Task" %nin% class(newdata)
   if (plain) {
     assert_data_frame(newdata)
-    newdata = TaskRegr$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = NA_real_)), "...dummytarget...")
+    task_type = infer_task_type(object)
+    targetcol = switch(task_type,
+      regr = NA_real_,
+      # could insert other supported types here.
+      # classif does not work, because we would need to know target levels.
+      NA
+    )
+    constructor = get(mlr_reflections$task_types[task_type, "task", on = "type"][[1L]])
+    newdata = withCallingHandlers(constructor$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = targetcol)), target = "...dummytarget..."),
+      error = function(e) {
+        e$message = sprintf("Could not create a %s-task for plain prediction data; call predict() with a mlr3 Task object, or use GraphLearner instead of Graph.\nError: %s",
+          task_type, e$message)
+        stop(e)
+      }
+    )
   }
   result = object$predict(newdata)
   assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)

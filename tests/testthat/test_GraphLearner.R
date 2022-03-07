@@ -390,3 +390,31 @@ test_that("GraphLearner model", {
 
 
 })
+
+test_that("predict() function for Graph", {
+
+  lx = as_graph(lrn("classif.rpart"))
+
+  lx$train(tsk("iris"))
+
+  p1 = lx$pipeops$classif.rpart$learner_model$predict(tsk("iris"))
+
+  expect_equal(predict(lx, tsk("iris")), p1)
+
+  expect_error(predict(lx, iris[1:4]), "Could not create a classif-task for plain prediction data")
+
+  lx = as_graph(lrn("regr.rpart"))
+
+  lx$train(tsk("boston_housing"))
+
+  p1 = lx$pipeops$regr.rpart$learner_model$predict(tsk("boston_housing"))
+
+  expect_equal(predict(lx, tsk("boston_housing")), p1)
+
+  expect_equal(
+    predict(lx, tsk("boston_housing")$data(cols = tsk("boston_housing")$feature_names)),
+    p1$response
+  )
+
+
+})
