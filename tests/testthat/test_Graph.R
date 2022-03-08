@@ -438,8 +438,16 @@ test_that("dot output", {
 })
 
 test_that("help() call", {
-  expect_equal(
-    help("Graph", package = "mlr3pipelines"),
-    (po("scale") %>>% po("nop"))$help()
-  )
+  if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
+    # c() to drop attributes
+    expect_equal(
+      c(help("Graph", package = "mlr3pipelines")),
+      c((po("scale") %>>% po("nop"))$help())
+    )
+  } else {
+    expect_equal(
+      help("Graph", package = "mlr3pipelines"),
+      (po("scale") %>>% po("nop"))$help()
+    )
+  }
 })
