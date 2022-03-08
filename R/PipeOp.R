@@ -129,6 +129,8 @@
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
+#' * `man` :: `character(1)`\cr
+#'   Identifying string of the help page that shows with `help()`.
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -158,6 +160,10 @@
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Prints the [`PipeOp`]s most salient information: `$id`, `$is_trained`, `$param_set$values`, `$input` and `$output`.
+#' * `help(help_type)` \cr
+#'   (`character(1)`) -> help file\cr
+#'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
+#'   as the `help_type` argument of R's `help()`.
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
 #' # as well as a letter of the alphabet corresponding to that sum during $predict().
