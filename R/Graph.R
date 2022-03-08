@@ -149,6 +149,7 @@ Graph = R6Class("Graph",
     pipeops = NULL,
     edges = NULL,
     keep_results = NULL,
+    man = "mlr3pipelines::Graph",
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
@@ -432,6 +433,10 @@ Graph = R6Class("Graph",
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
+    },
+    help = function(help_type = getOption("help_type")) {
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
+      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
     }
   ),
 
@@ -691,3 +696,4 @@ predict.Graph = function(object, newdata, ...) {
   }
   result
 }
+

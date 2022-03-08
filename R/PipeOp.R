@@ -305,6 +305,10 @@ PipeOp = R6Class("PipeOp",
       })
       output = check_types(self, output, "output", "predict")
       output
+    },
+    help = function(help_type = getOption("help_type")) {
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
+      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
     }
   ),
 
@@ -361,6 +365,10 @@ PipeOp = R6Class("PipeOp",
           val
         }
       })), algo = "xxhash64")
+    },
+    man = function(x) {
+      if (!missing(x)) stop("man is read-only")
+      paste0(topenv(self$.__enclos_env__)$.__NAMESPACE__.$spec[["name"]], "::", class(self)[[1]])
     }
   ),
 
@@ -534,3 +542,4 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
     map(transpose_list(map(result, "output")), as.Multiplicity)
   }
 }
+

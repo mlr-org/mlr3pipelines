@@ -70,7 +70,8 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
         param_set = ps,
         predict_types = c("response", "prob"),
         feature_types = c("integer", "numeric", "factor"),
-        properties = c("twoclass", "multiclass")
+        properties = c("twoclass", "multiclass"),
+        man = "mlr3pipelines::LearnerClassifAvg"
       )
     },
     prepare_data = function(task) {
@@ -142,7 +143,8 @@ LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
         id = id,
         param_set = ps,
         predict_types = "response",
-        feature_types = c("integer", "numeric")
+        feature_types = c("integer", "numeric"),
+        man = "mlr3pipelines::LearnerRegrAvg"
       )
     },
     prepare_data = function(task) {
