@@ -436,3 +436,10 @@ test_that("dot output", {
     "6 [label=\"OUTPUT",
     "nop_output\",fontsize=24]"), out[-c(1L, 15L)])
 })
+
+test_that("help() call", {
+  expect_equal(
+    help("Graph", package = "mlr3pipelines"),
+    (po("scale") %>>% po("nop"))$help()
+  )
+})
