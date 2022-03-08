@@ -127,7 +127,7 @@ test_that("Dictionary contains all PipeOps", {
 
 
       # $help() works and gives expected result
-      expect_equal(gen_constructed$man, paste0("mlr3pipelines", pipeops[idx]))
+      expect_equal(gen_constructed$man, paste0("mlr3pipelines::", pipeops[idx]))
 
       if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
         expect_equal(
