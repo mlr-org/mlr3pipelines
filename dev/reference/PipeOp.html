@@ -246,6 +246,8 @@ binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS
 If the <code><a href="Graph.html">Graph</a></code>'s <code>$keep_results</code> flag is set to <code>TRUE</code>, then the intermediate Results of <code>$train()</code> and <code>$predict()</code>
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 and done, if requested, by the <code><a href="Graph.html">Graph</a></code> backend itself; it should <em>not</em> be done explicitly by <code>private$.train()</code> or <code>private$.predict()</code>.</p></li>
+<li><p><code>man</code> :: <code>character(1)</code><br>
+Identifying string of the help page that shows with <code>help()</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
@@ -278,6 +280,10 @@ Just as <code>private$.train()</code>, <code>private$.predict()</code> should no
 <li><p><code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> <br>
 () -&gt; <code>NULL</code> <br>
 Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <code>$is_trained</code>, <code>$param_set$values</code>, <code>$input</code> and <code>$output</code>.</p></li>
+<li><p><code>help(help_type)</code> <br>
+(<code>character(1)</code>) -&gt; help file<br>
+Displays the help file of the concrete <code>PipeOp</code> instance. <code>help_type</code> is one of <code>"text"</code>, <code>"html"</code>, <code>"pdf"</code> and behaves
+as the <code>help_type</code> argument of R's <code>help()</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
