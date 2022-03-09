@@ -58,6 +58,8 @@
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
+#' * `man` :: `character(1)`\cr
+#'   Identifying string of the help page that shows with `help()`.
 #'
 #' @section Methods:
 #' * `ids(sorted = FALSE)` \cr
@@ -123,6 +125,10 @@
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
 #'   Predict with the [`Graph`] by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
+#' * `help(help_type)` \cr
+#'   (`character(1)`) -> help file\cr
+#'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
+#'   as the `help_type` argument of R's `help()`.
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
@@ -149,6 +155,7 @@ Graph = R6Class("Graph",
     pipeops = NULL,
     edges = NULL,
     keep_results = NULL,
+    man = "mlr3pipelines::Graph",
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
@@ -432,6 +439,10 @@ Graph = R6Class("Graph",
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
+    },
+    help = function(help_type = getOption("help_type")) {
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
+      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
     }
   ),
 
@@ -691,3 +702,4 @@ predict.Graph = function(object, newdata, ...) {
   }
   result
 }
+

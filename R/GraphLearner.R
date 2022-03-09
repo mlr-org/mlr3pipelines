@@ -102,7 +102,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = mlr_reflections$learner_properties[[task_type]])
+        properties = mlr_reflections$learner_properties[[task_type]],
+        man = "mlr3pipelines::GraphLearner"
+      )
 
       if (length(param_vals)) {
         private$.graph$param_set$values = insert_named(private$.graph$param_set$values, param_vals)

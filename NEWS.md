@@ -1,5 +1,6 @@
 # mlr3pipelines 0.4.0-9000
 
+* `$help()` function for all PipeOps as well as `Graph`, `GraphLearner` and all Learners.
 * `GraphLearner` can be created without cloning `Graph` (for internal use).
 * `predict.Graph` throws helpful error when it cannot create a fitting `Task`.
 * `PipeOpLearner` `packages` slot is set to the `Learner`'s `packages`.

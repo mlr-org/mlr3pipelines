@@ -124,6 +124,30 @@ test_that("Dictionary contains all PipeOps", {
       test_obj$param_set$values[[testingparam$id]] = val
       expect_equal(touch(dict_constructed), test_obj)
       expect_equal(touch(gen_constructed), test_obj)
+
+
+      # $help() works and gives expected result
+      expect_equal(gen_constructed$man, paste0("mlr3pipelines::", pipeops[idx]))
+
+      if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
+        expect_equal(
+          c(help(pipeops[idx], package = "mlr3pipelines")),
+          c(gen_constructed$help()), info = paste("help for", dictname)
+        )
+
+        expect_equal(
+            # use c() to strip all attributes; they indicate the actual help()-call which is obviously different here.
+          c(help(paste0("mlr_pipeops_", dictname), package = "mlr3pipelines")),
+          c(gen_constructed$help()),
+          info = paste("help for", dictname, "II")
+        )
+      } else {
+        expect_equal(
+          help(pipeops[idx], package = "mlr3pipelines"),
+          gen_constructed$help(), info = paste("help for", dictname)
+        )
+
+      }
     }
   }
 })
