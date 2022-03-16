@@ -144,13 +144,13 @@ The Graph should return <code>NULL</code> during training and a
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ovrunite.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 178 observations:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response     prob.1     prob.2     prob.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.95825502 0.02309984 0.01864514</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.95825502 0.02309984 0.01864514</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.95825502 0.02309984 0.01864514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.94566233 0.04245538 0.01188229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.94566233 0.04245538 0.01188229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.94566233 0.04245538 0.01188229</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.05655224 0.02301758 0.92043017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.05655224 0.02301758 0.92043017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.02735895 0.02372982 0.94891123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.26771751 0.03257048 0.69971201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.26771751 0.03257048 0.69971201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.03451366 0.04294293 0.92254341</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Bagging outside OVR</span></span>
@@ -164,14 +164,14 @@ The Graph should return <code>NULL</code> during training and a
 <span class="r-in"><span class="va">g3</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $classifavg.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 178 observations:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response    prob.1     prob.2     prob.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.9362102 0.04324746 0.02054235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.9362102 0.04324746 0.02054235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.9362102 0.04324746 0.02054235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response     prob.1     prob.2    prob.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.97167672 0.02832328 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.97167672 0.02832328 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.97167672 0.02832328 0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---                                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.0496084 0.04203258 0.90835902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.0496084 0.04203258 0.90835902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.0496084 0.04203258 0.90835902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.28331252 0.01941065 0.6972768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.28331252 0.01941065 0.6972768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.01901296 0.02758743 0.9533996</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
