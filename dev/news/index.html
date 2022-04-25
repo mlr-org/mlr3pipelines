@@ -101,8 +101,7 @@
 <li>New attribute <code>graph_model</code> in <code>GraphLearner</code> class, which gets the trained Graph.</li>
 <li>
 <code><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner()</a></code> S3-method for <code>PipeOp</code> class that wraps a <code>PipeOp</code> in a <code>Graph</code> and turns that into a <code>Learner</code>.</li>
-<li>Changed PipeOps:
-<ul><li>
+<li>Changed PipeOps:<ul><li>
 <code>PipeOpHistBin</code>: renamed <code>bins</code> Param to <code>breaks</code>
 </li>
 <li>
@@ -117,8 +116,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.6-1" id="mlr3pipelines-036-1">mlr3pipelines 0.3.6-1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-036-1"></a></h2><p class="text-muted">CRAN release: 2021-10-06</p>
-<ul><li>Fix numerics problem in tests</li>
-</ul></div>
+<ul><li>Fix numerics problem in tests</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.6" id="mlr3pipelines-036">mlr3pipelines 0.3.6<a class="anchor" aria-label="anchor" href="#mlr3pipelines-036"></a></h2><p class="text-muted">CRAN release: 2021-09-07</p>
 <ul><li>Bugfix: Make empty Multiplicities work (unless they are nested)</li>
@@ -129,8 +127,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.5-1" id="mlr3pipelines-035-1">mlr3pipelines 0.3.5-1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-035-1"></a></h2><p class="text-muted">CRAN release: 2021-08-05</p>
-<ul><li>Fixed: Compatibility with upcoming <code>mlr3</code> version.</li>
-</ul></div>
+<ul><li>Fixed: Compatibility with upcoming <code>mlr3</code> version.</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.5" id="mlr3pipelines-035">mlr3pipelines 0.3.5<a class="anchor" aria-label="anchor" href="#mlr3pipelines-035"></a></h2><p class="text-muted">CRAN release: 2021-07-06</p>
 <ul><li>Changed PipeOp: <code>PipeOpFilter</code> gets additional <code>filter.permuted</code> hyperparameter.</li>
@@ -153,22 +150,18 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="mlr3pipelines-032">mlr3pipelines 0.3.2<a class="anchor" aria-label="anchor" href="#mlr3pipelines-032"></a></h2><p class="text-muted">CRAN release: 2020-12-17</p>
 <ul><li>Bugfix: Make <code>as.data.table(mlr_pipeops)</code> work with <code>paradox</code> 0.6</li>
-<li>Changed PipeOps:
-<ul><li>
-<code>PipeOpColApply</code>: now allows for an applicator function with multiple columns as a return value; also inherits from <code>PipeOpTaskPreprocSimple</code> now</li>
-</ul></li>
+<li>Changed PipeOps:<ul><li>
+<code>PipeOpColApply</code>: now allows for an applicator function with multiple columns as a return value; also inherits from <code>PipeOpTaskPreprocSimple</code> now</li></ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="mlr3pipelines-031">mlr3pipelines 0.3.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-031"></a></h2><p class="text-muted">CRAN release: 2020-11-16</p>
-<ul><li>Changed PipeOps:
-<ul><li>
+<ul><li>Changed PipeOps:<ul><li>
 <code>PipeOpMissInd</code> now also allows for setting type = integer</li>
 <li>
 <code>PipeOpNMF</code>: now exposes all parameters previously in <code>.options</code>
 </li>
 </ul></li>
-<li>Changed <code>mlr_graphs</code>:
-<ul><li>
+<li>Changed <code>mlr_graphs</code>:<ul><li>
 <code>pipeline_bagging</code> now uses multiplicities internally</li>
 <li>fix how <code>pipeline_robustify</code> determines the type of newly created columns when using <code>PipeOpMissInd</code>
 </li>
@@ -200,15 +193,10 @@
 </li>
 <li>
 <code>LearnerClassifAvg</code>, <code>LearnerRegrAvg</code> use <code>bbotk</code> now</li>
-<li>Changed PPLs:
-<ul><li>fix how <code>ppl_robustify</code> detects whether a learner can handle factors</li>
-</ul></li>
-<li>Changed PipeOps:
-<ul><li>
-<code>PipeOpTextVectorizer</code> can now return an “integer sequence representation”.</li>
-</ul></li>
-<li>New PipeOps:
-<ul><li><code>PipeOpNMF</code></li>
+<li>Changed PPLs:<ul><li>fix how <code>ppl_robustify</code> detects whether a learner can handle factors</li></ul></li>
+<li>Changed PipeOps:<ul><li>
+<code>PipeOpTextVectorizer</code> can now return an “integer sequence representation”.</li></ul></li>
+<li>New PipeOps:<ul><li><code>PipeOpNMF</code></li>
 <li><code>PipeOpColRoles</code></li>
 <li><code>PipeOpVtreat</code></li>
 </ul></li>
@@ -217,16 +205,14 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="mlr3pipelines-021">mlr3pipelines 0.2.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-021"></a></h2><p class="text-muted">CRAN release: 2020-08-18</p>
 <ul><li>New feature: Multiplicities: implicit repetition of operations</li>
-<li>new <code>mlr_graphs</code>:
-<ul><li><code>pipeline_bagging</code></li>
+<li>new <code>mlr_graphs</code>:<ul><li><code>pipeline_bagging</code></li>
 <li><code>pipeline_branch</code></li>
 <li><code>pipeline_greplicate</code></li>
 <li><code>pipeline_robustify</code></li>
 <li><code>pipeline_targettrafo</code></li>
 <li><code>pipeline_ovr</code></li>
 </ul></li>
-<li>New PipeOps:
-<ul><li>
+<li>New PipeOps:<ul><li>
 <code>PipeOpOVRSplit</code>, <code>PipeOpOVRUnite</code>
 </li>
 <li><code>PipeOpReplicate</code></li>
@@ -248,12 +234,9 @@
 <li><code>PipeOpTextVectorizer</code></li>
 <li><code>PipeOpThreshold</code></li>
 </ul></li>
-<li>Renamed PipeOps:
-<ul><li>
-<code>PipeOpImputeNewlvl</code> –&gt; <code>PipeOpImputeOOR</code> (with additional functionality for continuous values)</li>
-</ul></li>
-<li>Changed PipeOps:
-<ul><li>
+<li>Renamed PipeOps:<ul><li>
+<code>PipeOpImputeNewlvl</code> –&gt; <code>PipeOpImputeOOR</code> (with additional functionality for continuous values)</li></ul></li>
+<li>Changed PipeOps:<ul><li>
 <code>PipeOpFeatureUnion</code>: Bugfix: avoid silently overwriting features when names clash</li>
 <li>
 <code>PipeOpHistBin</code>: Bugfix: handle test set data out of training set range</li>
@@ -267,8 +250,7 @@
 <li>
 <code>PipeOpLearner</code>, <code>PipeOpLearnerCV</code>: <code>learner_models</code> for access to learner with model slot</li>
 </ul></li>
-<li>New Selectors:
-<ul><li><code>selector_missing</code></li>
+<li>New Selectors:<ul><li><code>selector_missing</code></li>
 <li><code>selector_cardinality_greater_than</code></li>
 </ul></li>
 <li>NULL is neutral element of <code>%&gt;&gt;%</code>
@@ -306,23 +288,17 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="mlr3pipelines-012">mlr3pipelines 0.1.2<a class="anchor" aria-label="anchor" href="#mlr3pipelines-012"></a></h2><p class="text-muted">CRAN release: 2019-12-10</p>
-<ul><li>Work with new <code>mlr3</code> version 0.1.5 (handling of character columns changed)</li>
-</ul></div>
+<ul><li>Work with new <code>mlr3</code> version 0.1.5 (handling of character columns changed)</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="mlr3pipelines-011">mlr3pipelines 0.1.1<a class="anchor" aria-label="anchor" href="#mlr3pipelines-011"></a></h2><p class="text-muted">CRAN release: 2019-10-29</p>
 <ul><li>Better html graphics for linear Graphs</li>
-<li>New PipeOps:
-<ul><li><code>PipeOpEncodeImpact</code></li>
-</ul></li>
-<li>Changed PipeOp Behaviour:
-<ul><li>
-<code>PipeOpEncode</code>: handle NAs</li>
-</ul></li>
+<li>New PipeOps:<ul><li><code>PipeOpEncodeImpact</code></li></ul></li>
+<li>Changed PipeOp Behaviour:<ul><li>
+<code>PipeOpEncode</code>: handle NAs</li></ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="mlr3pipelines-010">mlr3pipelines 0.1.0<a class="anchor" aria-label="anchor" href="#mlr3pipelines-010"></a></h2><p class="text-muted">CRAN release: 2019-10-06</p>
-<ul><li>Initial upload to CRAN.</li>
-</ul></div>
+<ul><li>Initial upload to CRAN.</li></ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
@@ -332,7 +308,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>
