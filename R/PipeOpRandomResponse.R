@@ -121,7 +121,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
         }
       )
       type = prediction$task_type
-      list(get(mlr_reflections$task_types[type]$prediction)$new(row_ids = prediction$row_ids,
+      list(get(mlr_reflections$task_types[type][1]$prediction)$new(row_ids = prediction$row_ids,
         truth = prediction$truth, response = response))
     }
   )
