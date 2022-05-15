@@ -1,4 +1,4 @@
-# mlr3pipelines 0.4.1
+# mlr3pipelines 0.4.0-9000
 
 * `$help()` function for all PipeOps as well as `Graph`, `GraphLearner` and all Learners.
 * `GraphLearner` can be created without cloning `Graph` (for internal use).
