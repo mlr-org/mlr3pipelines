@@ -183,7 +183,7 @@ test_that("Autoconversion for pipeops works", {
 
 test_that("R6 inheritance inference works with packages that are not loaded", {
   skip_if_not_installed("mlr3learners")
-
+  skip_on_cran()
   library("mlr3learners")
   inheritance = mlr3pipelines:::get_r6_inheritance("LearnerClassifRanger")
   expect_character(inheritance, any.missing = FALSE, min.len = 2)
