@@ -382,7 +382,7 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
       pred = as.data.table(prediction)
       pred$row_ids = NULL
       pred$truth = NULL
-      invoke(get(mlr_reflections$task_types[type][1]$prediction)$new, row_ids = prediction$row_ids,
+      invoke(get(mlr_reflections$task_types[type, mult = "false"]$prediction)$new, row_ids = prediction$row_ids,
         truth = predict_phase_state$truth, .args = self$param_set$values$inverter(pred))
     }
   )
