@@ -685,7 +685,7 @@ predict.Graph = function(object, newdata, ...) {
       # classif does not work, because we would need to know target levels.
       NA
     )
-    constructor = get(mlr_reflections$task_types[task_type, "task", on = "type"][[1L]])
+    constructor = get(mlr_reflections$task_types[task_type, "task", on = "type", mult = "first"][[1L]])
     newdata = withCallingHandlers(constructor$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = targetcol)), target = "...dummytarget..."),
       error = function(e) {
         e$message = sprintf("Could not create a %s-task for plain prediction data; call predict() with a mlr3 Task object, or use GraphLearner instead of Graph.\nError: %s",
