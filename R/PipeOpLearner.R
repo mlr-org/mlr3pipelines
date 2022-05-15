@@ -86,8 +86,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       private$.learner = as_learner(learner, clone = TRUE)
       id = id %??% private$.learner$id
       # FIXME: can be changed when mlr-org/mlr3#470 has an answer
-      task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
-      out_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$prediction
+      type = private$.learner$task_type
+      task_type = mlr_reflections$task_types[type, mult = "first"]$task
+      out_type = mlr_reflections$task_types[type, mult = "first"]$prediction
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
