@@ -1,4 +1,4 @@
-# mlr3pipelines 0.4.0-9000
+# mlr3pipelines 0.4.1
 
 * `$help()` function for all PipeOps as well as `Graph`, `GraphLearner` and all Learners.
 * `GraphLearner` can be created without cloning `Graph` (for internal use).
@@ -6,6 +6,7 @@
 * `PipeOpLearner` `packages` slot is set to the `Learner`'s `packages`.
 * Bugfix: `PipeOp` `train()` and `predict()` report correct channel name when output has wrong type.
 * Bugfix: More accurate type inference when constructing Graphs.
+* Stability fix for interaction with packages such as mlr3spatiotempcv that extend existing Task types.
 
 # mlr3pipelines 0.4.0
 

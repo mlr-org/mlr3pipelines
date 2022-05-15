@@ -199,5 +199,5 @@ mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(R6Class("Learner", pu
 
 # See mlr-org/mlr#470
 convert_to_task = function(id = "imputing", data, target, task_type, ...) {
-  get(mlr_reflections$task_types[task_type, ]$task)$new(id = id, backend = data, target = target, ...)
+  get(mlr_reflections$task_types[task_type, mult = "first"]$task)$new(id = id, backend = data, target = target, ...)
 }
