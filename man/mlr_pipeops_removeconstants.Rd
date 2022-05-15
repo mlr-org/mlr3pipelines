@@ -14,8 +14,10 @@ All features with a ratio below a settable threshold are removed from the task.
 Missing values can be ignored or treated as a regular value distinct from non-missing values.
 }
 \section{Construction}{
-\preformatted{PipeOpRemoveConstants$new(id = "removeconstants")
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpRemoveConstants$new(id = "removeconstants")
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, defaulting to \code{"removeconstants"}.

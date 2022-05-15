@@ -16,8 +16,10 @@ If a \code{Filter} can only operate on a subset of columns based on column type,
 this means e.g. that setting \code{nfeat} to 0 will only remove features of the type that the \code{Filter} can work with.
 }
 \section{Construction}{
-\preformatted{PipeOpFilter$new(filter, id = filter$id, param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpFilter$new(filter, id = filter$id, param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{filter} :: \code{\link[mlr3filters:Filter]{Filter}}\cr
 \code{\link[mlr3filters:Filter]{Filter}} used for feature filtering.

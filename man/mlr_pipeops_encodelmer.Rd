@@ -34,8 +34,10 @@ Use the \code{\link{PipeOpTaskPreproc}} \verb{$affect_columns} functionality to 
 columns, or only encode columns of a certain type.
 }
 \section{Construction}{
-\preformatted{PipeOpEncodeLmer$new(id = "encodelmer", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEncodeLmer$new(id = "encodelmer", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"encodelmer"}.

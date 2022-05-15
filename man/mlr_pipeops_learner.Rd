@@ -18,8 +18,10 @@ into a machine learning pipeline which then can be handled as singular object fo
 and tuning.
 }
 \section{Construction}{
-\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.

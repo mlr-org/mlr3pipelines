@@ -12,8 +12,10 @@ Extracts statistically independent components from data. Only affects numerical 
 See \link[fastICA:fastICA]{fastICA::fastICA} for details.
 }
 \section{Construction}{
-\preformatted{PipeOpICA$new(id = "ica", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpICA$new(id = "ica", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"ica"}.

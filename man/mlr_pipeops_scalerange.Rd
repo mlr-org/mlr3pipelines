@@ -15,8 +15,10 @@ where \eqn{scale} is \eqn{(upper - lower) / (max(x) - min(x))} and
 prediction.
 }
 \section{Construction}{
-\preformatted{PipeOpScaleRange$new(id = "scalerange", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpScaleRange$new(id = "scalerange", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"scalerange"}.

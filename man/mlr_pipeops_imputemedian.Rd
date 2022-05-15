@@ -11,8 +11,10 @@
 Impute numerical features by their median.
 }
 \section{Construction}{
-\preformatted{PipeOpImputeMedian$new(id = "imputemedian", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeMedian$new(id = "imputemedian", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputemedian"}.

@@ -14,8 +14,10 @@ Values that fall out of the training data range during prediction are
 binned with the lowest / highest bin respectively.
 }
 \section{Construction}{
-\preformatted{PipeOpHistBin$new(id = "histbin", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpHistBin$new(id = "histbin", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"histbin"}.

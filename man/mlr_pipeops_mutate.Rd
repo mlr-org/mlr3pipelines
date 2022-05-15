@@ -12,8 +12,10 @@ Adds features according to expressions given as formulas that may depend on valu
 This can add new features, or can change existing features.
 }
 \section{Construction}{
-\preformatted{PipeOpMutate$new(id = "mutate", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpMutate$new(id = "mutate", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"mutate"}.

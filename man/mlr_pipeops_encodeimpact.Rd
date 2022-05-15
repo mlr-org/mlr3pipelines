@@ -21,8 +21,10 @@ this level, and the target's global mean.
 Treats new levels during prediction like missing values.
 }
 \section{Construction}{
-\preformatted{PipeOpEncodeImpact$new(id = "encodeimpact", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEncodeImpact$new(id = "encodeimpact", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"encodeimpact"}.

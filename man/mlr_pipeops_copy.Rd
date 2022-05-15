@@ -15,8 +15,10 @@ Graphs using the \code{\link{\%>>\%}}-operator, \code{PipeOpCopy} can be helpful
 specify which \code{\link{PipeOp}} gets connected to which.
 }
 \section{Construction}{
-\preformatted{PipeOpCopy$new(outnum, id = "copy", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpCopy$new(outnum, id = "copy", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{outnum} :: \code{numeric(1)}\cr
 Number of output channels, and therefore number of copies being made.

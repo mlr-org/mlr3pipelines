@@ -38,9 +38,11 @@ that perform essentially the same operation and only need to perform extra work 
 the \code{\link{PipeOpTaskPreprocSimple}} class can be used instead.
 }
 \section{Construction}{
-\preformatted{PipeOpTaskPreproc$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreproc$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
-}
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.

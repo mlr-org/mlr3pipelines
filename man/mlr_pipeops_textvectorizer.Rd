@@ -43,8 +43,10 @@ The pipeop works as follows:
 }
 }
 \section{Construction}{
-\preformatted{PipeOpTextVectorizer$new(id = "textvectorizer", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTextVectorizer$new(id = "textvectorizer", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"textvectorizer"}.

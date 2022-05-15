@@ -15,8 +15,10 @@ beneficial for training time at possibly (depending on original \code{\link[mlr3
 negligible cost of predictive performance.
 }
 \section{Construction}{
-\preformatted{PipeOpSubsample$new(id = "subsample", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpSubsample$new(id = "subsample", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"subsample"}

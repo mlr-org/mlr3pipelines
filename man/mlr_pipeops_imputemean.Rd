@@ -11,8 +11,10 @@
 Impute numerical features by their mean.
 }
 \section{Construction}{
-\preformatted{PipeOpImputeMean$new(id = "imputemean", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeMean$new(id = "imputemean", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputemean"}.

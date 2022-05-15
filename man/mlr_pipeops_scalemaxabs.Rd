@@ -13,8 +13,10 @@ if possible. \code{NA}, \code{Inf} are ignored, and features that are constant 0
 are not scaled.
 }
 \section{Construction}{
-\preformatted{PipeOpScaleMaxAbs$new(id = "scalemaxabs", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpScaleMaxAbs$new(id = "scalemaxabs", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"scalemaxabs"}.

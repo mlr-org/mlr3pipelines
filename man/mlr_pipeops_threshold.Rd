@@ -13,8 +13,10 @@ The incoming \code{\link[mlr3:Learner]{Learner}}'s \verb{$predict_type} needs to
 Internally calls \code{PredictionClassif$set_threshold}.
 }
 \section{Construction}{
-\preformatted{PipeOpThreshold$new(id = "threshold", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpThreshold$new(id = "threshold", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"threshold"}.

@@ -13,8 +13,10 @@ Creates \code{outnum} \code{\link[mlr3:Task]{Task}}s during training, and
 simply passes on the input during \code{outnum} times during prediction.
 }
 \section{Construction}{
-\preformatted{PipeOpChunk$new(outnum, id = "chunk", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpChunk$new(outnum, id = "chunk", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{outnum} :: \code{numeric(1)}\cr
 Number of output channels, and therefore number of chunks created.

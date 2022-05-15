@@ -11,8 +11,10 @@
 Normalizes the data row-wise. This is a natural generalization of the "sign" function to higher dimensions.
 }
 \section{Construction}{
-\preformatted{PipeOpSpatialSign$new(id = "spatialsign", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpSpatialSign$new(id = "spatialsign", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"spatialsign"}.

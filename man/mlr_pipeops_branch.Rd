@@ -16,8 +16,10 @@ paths will be taken for execution. At the end of the different paths, the
 Not to be confused with \code{\link{PipeOpCopy}}, the naming scheme is a bit unfortunate.
 }
 \section{Construction}{
-\preformatted{PipeOpBranch$new(options, id = "branch", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpBranch$new(options, id = "branch", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{options} :: \code{numeric(1)} | \code{character}\cr
 If \code{options} is an integer number, it determines the number of
