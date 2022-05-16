@@ -12,8 +12,10 @@ Impute features by their mode. Supports factors as well as logical and numerical
 If multiple modes are present then imputed values are sampled randomly from them.
 }
 \section{Construction}{
-\preformatted{PipeOpImputeMode$new(id = "imputemode", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeMode$new(id = "imputemode", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputemode"}.

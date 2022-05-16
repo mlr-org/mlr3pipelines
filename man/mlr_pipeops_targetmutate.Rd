@@ -12,8 +12,10 @@ Changes the \emph{target} of a \code{\link[mlr3:Task]{Task}} according to a func
 An inverter-function that undoes the transformation during prediction must also be given.
 }
 \section{Construction}{
-\preformatted{PipeOpTargetMutate$new(id = "targetmutate", param_vals = list(), new_task_type = NULL)
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTargetMutate$new(id = "targetmutate", param_vals = list(), new_task_type = NULL)
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"targetmutate"}.

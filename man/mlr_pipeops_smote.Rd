@@ -16,8 +16,10 @@ It can only be applied to tasks with purely numeric features.
 See \code{\link[smotefamily:SMOTE]{smotefamily::SMOTE}} for details.
 }
 \section{Construction}{
-\preformatted{PipeOpSmote$new(id = "smote", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpSmote$new(id = "smote", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"smote"}.

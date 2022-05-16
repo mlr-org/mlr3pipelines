@@ -24,8 +24,10 @@ it is called both during training and prediction.
 This inherits from \code{\link{PipeOpTaskPreproc}} and behaves essentially the same.
 }
 \section{Construction}{
-\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+}\if{html}{\out{</div>}}
 
 (Construction is identical to \code{\link{PipeOpTaskPreproc}}.)
 \itemize{

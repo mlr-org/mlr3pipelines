@@ -26,8 +26,10 @@ as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\l
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
-\preformatted{PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
 \code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a

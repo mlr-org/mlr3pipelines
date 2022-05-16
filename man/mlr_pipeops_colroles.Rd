@@ -11,8 +11,10 @@
 Changes the column roles of the input \code{\link[mlr3:Task]{Task}} according to \code{new_role}.
 }
 \section{Construction}{
-\preformatted{PipeOpColRoles$new(id = "colroles", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpColRoles$new(id = "colroles", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"colroles"}.

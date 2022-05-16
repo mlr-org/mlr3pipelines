@@ -24,8 +24,10 @@ A \code{GraphLearner} is always constructed in an untrained state. When the \cod
 non-\code{NULL} \verb{$state}, it is ignored.
 }
 \section{Construction}{
-\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{graph} :: \code{\link{Graph}} | \code{\link{PipeOp}}\cr
 \code{\link{Graph}} to wrap. Can be a \code{\link{PipeOp}}, which is automatically converted to a \code{\link{Graph}}.

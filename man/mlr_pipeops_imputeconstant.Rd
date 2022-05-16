@@ -11,8 +11,10 @@
 Impute features by a constant value.
 }
 \section{Construction}{
-\preformatted{PipeOpImputeConstant$new(id = "imputeconstant", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeConstant$new(id = "imputeconstant", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputeconstant"}.

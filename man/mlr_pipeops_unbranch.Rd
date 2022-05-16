@@ -11,8 +11,10 @@
 Used to bring together different paths created by \code{\link{PipeOpBranch}}.
 }
 \section{Construction}{
-\preformatted{PipeOpUnbranch$new(options, id = "unbranch", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpUnbranch$new(options, id = "unbranch", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{options} :: \code{numeric(1)} | \code{character}\cr
 If \code{options} is 0, a vararg input channel is created that can take

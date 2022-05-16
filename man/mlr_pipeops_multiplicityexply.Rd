@@ -18,8 +18,10 @@ Note that \code{\link{Multiplicity}} is currently an experimental features and t
 may change.
 }
 \section{Construction}{
-\preformatted{PipeOpMultiplicityExply$new(outnum , id = "multiplicityexply", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpMultiplicityExply$new(outnum , id = "multiplicityexply", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{outnum} :: \code{numeric(1)} | \code{character}\cr
 Determines the number of output channels.

@@ -26,8 +26,10 @@ Note that \code{\link{Multiplicity}} is currently an experimental features and t
 may change.
 }
 \section{Construction}{
-\preformatted{PipeOpOVRUnite$new(id = "ovrunite", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpOVRUnite$new(id = "ovrunite", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting object, default \code{"ovrunite"}.

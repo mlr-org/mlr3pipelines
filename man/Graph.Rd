@@ -18,8 +18,10 @@ perform preprocessing of data, and, in principle, does not even need to handle d
 dependency structure (although the \code{\link{PipeOp}}s for this would need to be written).
 }
 \section{Construction}{
-\preformatted{Graph$new()
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Graph$new()
+}\if{html}{\out{</div>}}
 }
 
 \section{Internals}{

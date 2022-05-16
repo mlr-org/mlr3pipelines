@@ -15,8 +15,10 @@ Sampling happens only during training phase. Class-balancing a \code{\link[mlr3:
 beneficial for classification with imbalanced training data.
 }
 \section{Construction}{
-\preformatted{PipeOpClassBalancing$new(id = "classbalancing", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpClassBalancing$new(id = "classbalancing", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"classbalancing"}

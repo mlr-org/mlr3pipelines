@@ -18,8 +18,10 @@ Note that \code{\link{Multiplicity}} is currently an experimental features and t
 may change.
 }
 \section{Construction}{
-\preformatted{PipeOpMultiplicityImply$new(innum = 0, id = "multiplicityimply", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpMultiplicityImply$new(innum = 0, id = "multiplicityimply", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{innum} :: \code{numeric(1)} | \code{character}\cr
 Determines the number of input channels.

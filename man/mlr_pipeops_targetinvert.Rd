@@ -16,8 +16,10 @@ the \code{"prediction"} as a single element, and should return a \code{list} wit
 (a \code{\link[mlr3:Prediction]{Prediction}}) that is returned by \code{\link{PipeOpTargetInvert}}.
 }
 \section{Construction}{
-\preformatted{PipeOpTargetInvert$new(id = "targetinvert", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTargetInvert$new(id = "targetinvert", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"targetinvert"}.

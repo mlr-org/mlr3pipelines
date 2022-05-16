@@ -17,8 +17,10 @@ Levels not seen during training are not touched during prediction; Therefore it 
 \code{\link{PipeOpFixFactors}}.
 }
 \section{Construction}{
-\preformatted{PipeOpCollapseFactors$new(id = "collapsefactors", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpCollapseFactors$new(id = "collapsefactors", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"collapsefactors"}.

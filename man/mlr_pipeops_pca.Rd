@@ -12,8 +12,10 @@ Extracts principle components from data. Only affects numerical features.
 See \code{\link[stats:prcomp]{stats::prcomp()}} for details.
 }
 \section{Construction}{
-\preformatted{PipeOpPCA$new(id = "pca", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpPCA$new(id = "pca", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"pca"}.

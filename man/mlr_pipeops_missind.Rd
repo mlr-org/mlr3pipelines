@@ -15,8 +15,10 @@ Note the \code{affect_columns} is initialized with \code{selector_invert(selecto
 values in factorial columns are often indicated by out-of-range imputation (\code{\link{PipeOpImputeOOR}}).
 }
 \section{Construction}{
-\preformatted{PipeOpMissInd$new(id = "missind", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpMissInd$new(id = "missind", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, defaulting to \code{"missind"}.

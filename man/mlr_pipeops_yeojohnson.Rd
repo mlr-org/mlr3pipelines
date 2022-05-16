@@ -13,8 +13,10 @@ the optimal value of lambda for the transformation.
 See \code{\link[bestNormalize:yeojohnson]{bestNormalize::yeojohnson()}} for details.
 }
 \section{Construction}{
-\preformatted{PipeOpYeoJohnson$new(id = "yeojohnson", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpYeoJohnson$new(id = "yeojohnson", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"yeojohnson"}.

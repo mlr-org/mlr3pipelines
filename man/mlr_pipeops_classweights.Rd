@@ -17,8 +17,10 @@ Caution: when constructed naively without parameter, the weights are all set to 
 must be adjusted for this \code{\link{PipeOp}} to be useful.
 }
 \section{Construction}{
-\preformatted{PipeOpClassWeights$new(id = "classweights", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpClassWeights$new(id = "classweights", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting  object, default \code{"classweights"}

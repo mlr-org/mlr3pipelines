@@ -11,8 +11,10 @@
 Splits numeric features into quantile bins.
 }
 \section{Construction}{
-\preformatted{PipeOpQuantileBin$new(id = "quantilebin", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpQuantileBin$new(id = "quantilebin", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"quantilebin"}.

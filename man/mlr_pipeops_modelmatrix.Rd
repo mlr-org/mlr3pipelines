@@ -11,8 +11,10 @@
 Transforms columns using a given \code{formula} using the \code{\link[stats:model.matrix]{stats::model.matrix()}} function.
 }
 \section{Construction}{
-\preformatted{PipeOpModelMatrix$new(id = "modelmatrix", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpModelMatrix$new(id = "modelmatrix", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"modelmatrix"}.
