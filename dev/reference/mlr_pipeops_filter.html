@@ -18,7 +18,7 @@ this means e.g. that setting nfeat to 0 will only remove features of the type th
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.0-9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1-9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,8 +98,9 @@ this means e.g. that setting <code>nfeat</code> to 0 will only remove features o
     <div class="section level2">
     <h2 id="construction">Construction<a class="anchor" aria-label="anchor" href="#construction"></a></h2>
     
-<div class="sourceCode"><pre><code><span class="va"><a href="../reference/mlr_pipeops_filter.html">PipeOpFilter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">filter</span>, id <span class="op">=</span> <span class="va">filter</span><span class="op">$</span><span class="va">id</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<ul><li><p><code>filter</code> :: <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code><br><code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> used for feature filtering.
+
+
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div><ul><li><p><code>filter</code> :: <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code><br><code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> used for feature filtering.
 This argument is always cloned; to access the <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> inside <code>PipeOpFilter</code> by-reference, use <code>$filter</code>.<br></p></li>
 <li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, defaulting to the <code>id</code> of the <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> being used.</p></li>

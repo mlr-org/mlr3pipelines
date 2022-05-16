@@ -30,7 +30,7 @@ non-NULL $state, it is ignored."><meta property="og:image" content="https://mlr3
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.0-9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1-9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,8 +116,9 @@ non-<code>NULL</code> <code>$state</code>, it is ignored.</p>
     <div class="section level2">
     <h2 id="construction">Construction<a class="anchor" aria-label="anchor" href="#construction"></a></h2>
     
-<div class="sourceCode"><pre><code><span class="va"><a href="../reference/mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span>, id <span class="op">=</span> <span class="cn">NULL</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, task_type <span class="op">=</span> <span class="cn">NULL</span>, predict_type <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
-<ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code> | <code><a href="PipeOp.html">PipeOp</a></code><br><code><a href="Graph.html">Graph</a></code> to wrap. Can be a <code><a href="PipeOp.html">PipeOp</a></code>, which is automatically converted to a <code><a href="Graph.html">Graph</a></code>.
+
+
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code> | <code><a href="PipeOp.html">PipeOp</a></code><br><code><a href="Graph.html">Graph</a></code> to wrap. Can be a <code><a href="PipeOp.html">PipeOp</a></code>, which is automatically converted to a <code><a href="Graph.html">Graph</a></code>.
 This argument is usually cloned, unless <code>clone_graph</code> is <code>FALSE</code>; to access the <code><a href="Graph.html">Graph</a></code> inside <code>GraphLearner</code> by-reference, use <code>$graph</code>.<br></p></li>
 <li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>.</p></li>
