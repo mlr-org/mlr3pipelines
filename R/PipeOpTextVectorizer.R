@@ -182,7 +182,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         ParamLgl$new("remove_url", default = FALSE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("remove_separators", default = TRUE, tags = c("train", "predict", "tokenizer")),
         ParamLgl$new("split_hyphens", default = FALSE, tags = c("train", "predict", "tokenizer")),
-        ParamUty$new("missing_token", default = NULL, tags = c("train", "predict")),
+        ParamUty$new("missing_token", default = NULL, tags = c("train", "predict", "tokenizer")),
 
         ParamUty$new("n", default = 2, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 1, any.missing = FALSE)),
         ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 0, any.missing = FALSE)),
