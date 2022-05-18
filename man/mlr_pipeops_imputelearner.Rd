@@ -21,8 +21,10 @@ the \code{\link[mlr3:Learner]{Learner}} typically either needs to be able to han
 own imputation (see examples).
 }
 \section{Construction}{
-\preformatted{PipeOpImputeLearner$new(learner, id = NULL, param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeLearner$new(learner, id = NULL, param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"impute."}, followed by the \code{id} of the \code{Learner}.

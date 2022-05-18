@@ -13,8 +13,10 @@ Input is routed through the \code{content} and the \code{content}s' output is re
 The \code{content} hyperparameter can be changed during tuning, this is useful as an alternative to \code{\link{PipeOpBranch}}.
 }
 \section{Construction}{
-\preformatted{PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpProxy$new(innum = 0, outnum = 1, id = "proxy", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{innum} :: \verb{numeric(1)\\cr Determines the number of input channels. If }innum` is 0 (default), a vararg input channel is created that can take an arbitrary number of inputs.
 \item \code{outnum} :: `numeric(1)\cr

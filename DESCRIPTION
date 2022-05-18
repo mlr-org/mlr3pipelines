@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.3.6-9000
+Version: 0.4.1-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -80,14 +80,15 @@ Suggests:
     kknn,
     GenSA,
     methods,
-    vtreat
+    vtreat,
+    future
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Collate:
     'Graph.R'
     'GraphLearner.R'

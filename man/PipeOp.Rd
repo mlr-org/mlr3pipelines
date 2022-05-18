@@ -37,8 +37,10 @@ This class is an abstract base class that all \code{\link{PipeOp}}s being used i
 is not intended to be instantiated.
 }
 \section{Construction}{
-\preformatted{PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot.
@@ -134,6 +136,8 @@ binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>),
 If the \code{\link{Graph}}'s \verb{$keep_results} flag is set to \code{TRUE}, then the intermediate Results of \verb{$train()} and \verb{$predict()}
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 and done, if requested, by the \code{\link{Graph}} backend itself; it should \emph{not} be done explicitly by \code{private$.train()} or \code{private$.predict()}.
+\item \code{man} :: \code{character(1)}\cr
+Identifying string of the help page that shows with \code{help()}.
 }
 }
 
@@ -167,6 +171,10 @@ Just as \code{private$.train()}, \code{private$.predict()} should not be called 
 \item \code{print()} \cr
 () -> \code{NULL} \cr
 Prints the \code{\link{PipeOp}}s most salient information: \verb{$id}, \verb{$is_trained}, \verb{$param_set$values}, \verb{$input} and \verb{$output}.
+\item \code{help(help_type)} \cr
+(\code{character(1)}) -> help file\cr
+Displays the help file of the concrete \code{PipeOp} instance. \code{help_type} is one of \code{"text"}, \code{"html"}, \code{"pdf"} and behaves
+as the \code{help_type} argument of R's \code{help()}.
 }
 }
 

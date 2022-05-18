@@ -1,7 +1,7 @@
 #' @include mlr_graphs.R
 
 #' @title Create A Graph to Perform "One vs. Rest" classification.
-#'
+#' @name mlr_graphs_ovr
 #' @description
 #' Create a new [`Graph`] for a [classification Task][mlr3::TaskClassif] to
 #' perform "One vs. Rest" classification.
@@ -43,7 +43,7 @@
 #' g3$train(task)
 #' g3$predict(task)
 pipeline_ovr = function(graph) {
-  PipeOpOVRSplit$new() %>>>% graph %>>>% PipeOpOVRUnite$new()
+  PipeOpOVRSplit$new() %>>!% graph %>>!% PipeOpOVRUnite$new()
 }
 
 mlr_graphs$add("ovr", pipeline_ovr)

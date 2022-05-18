@@ -19,14 +19,19 @@ The \code{predict_type} of a \code{\link{GraphLearner}} can be obtained or set v
 Setting a new predict type will try to set the \code{predict_type} in all relevant
 \code{\link{PipeOp}} / \code{\link[mlr3:Learner]{Learner}} encapsulated within the \code{\link{Graph}}.
 Similarly, the predict_type of a Graph will always be the smallest denominator in the \code{\link{Graph}}.
+
+A \code{GraphLearner} is always constructed in an untrained state. When the \code{graph} argument has a
+non-\code{NULL} \verb{$state}, it is ignored.
 }
 \section{Construction}{
-\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{GraphLearner$new(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL)
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{graph} :: \code{\link{Graph}} | \code{\link{PipeOp}}\cr
 \code{\link{Graph}} to wrap. Can be a \code{\link{PipeOp}}, which is automatically converted to a \code{\link{Graph}}.
-This argument is always cloned; to access the \code{\link{Graph}} inside \code{GraphLearner} by-reference, use \verb{$graph}.\cr
+This argument is usually cloned, unless \code{clone_graph} is \code{FALSE}; to access the \code{\link{Graph}} inside \code{GraphLearner} by-reference, use \verb{$graph}.\cr
 \item \code{id} :: \code{character(1)}
 Identifier of the resulting \code{\link[mlr3:Learner]{Learner}}.
 \item \code{param_vals} :: named \code{list}\cr
@@ -35,6 +40,10 @@ List of hyperparameter settings, overwriting the hyperparameter settings . Defau
 What \code{task_type} the \code{GraphLearner} should have; usually automatically inferred for \code{\link{Graph}}s that are simple enough.
 \item \code{predict_type} :: \code{character(1)}\cr
 What \code{predict_type} the \code{GraphLearner} should have; usually automatically inferred for \code{\link{Graph}}s that are simple enough.
+\item \code{clone_graph} :: \code{logical(1)}\cr
+Whether to clone \code{graph} upon construction. Unintentionally changing \code{graph} by reference can lead to unexpected behaviour,
+so \code{TRUE} (default) is recommended. In particular, note that the \verb{$state} of \verb{$graph} is set to \code{NULL} by reference on
+construction of \code{GraphLearner}, during \verb{$train()}, and during \verb{$predict()} when \code{clone_graph} is \code{FALSE}.
 }
 }
 

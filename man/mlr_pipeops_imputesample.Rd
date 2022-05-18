@@ -11,8 +11,10 @@
 Impute features by sampling from non-missing training data.
 }
 \section{Construction}{
-\preformatted{PipeOpImputeSample$new(id = "imputesample", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeSample$new(id = "imputesample", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputesample"}.

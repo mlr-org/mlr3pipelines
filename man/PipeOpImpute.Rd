@@ -10,8 +10,10 @@ Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
 Abstract base class for feature imputation.
 }
 \section{Construction}{
-\preformatted{PipeOpImpute$$new(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImpute$$new(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.

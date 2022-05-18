@@ -17,8 +17,10 @@ NA for that sample, so it is advised to do imputation \emph{before} random proje
 if missing values can be expected.
 }
 \section{Construction}{
-\preformatted{PipeOpRandomProjection$new(id = "randomprojection", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpRandomProjection$new(id = "randomprojection", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"randomprojection"}.

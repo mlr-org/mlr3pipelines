@@ -14,7 +14,7 @@ List of elements which are the
 
 \item{in_place}{(\code{logical(1)})\cr
 Whether to try to avoid cloning the first element of \code{graphs}, similar to the difference
-of \code{\link{\%>>>\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.
+of \code{\link{\%>>!\%}} over \code{\link{\%>>\%}}. This can only be avoided if \code{graphs[[1]]} is already a \code{\link{Graph}}.
 Beware that, if \code{chain_graphs()} fails because of id collisions, then \code{graphs[[1]]} will possibly be in an incompletely
 modified state when \code{in_place} is \code{TRUE}.}
 }
@@ -28,8 +28,20 @@ them in a serial \code{\link{Graph}}, as if connecting them using \code{\link{\%
 
 Care is taken to avoid unnecessarily cloning of components. A call of
 \code{chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)} is equivalent to
-\code{g1 \%>>\% g2 \%>>>\% g3 \%>>>\% g4 \%>>>\% ...}.
+\code{g1 \%>>\% g2 \%>>!\% g3 \%>>!\% g4 \%>>!\% ...}.
 A call of \code{chain_graphs(list(g1, g2, g3, g4, ...), in_place = FALSE)}
-is equivalent to \code{g1 \%>>>\% g2 \%>>>\% g3 \%>>>\% g4 \%>>>\% ...} (differing in the
-first operator being \verb{\%>>>\%} as well).
+is equivalent to \code{g1 \%>>!\% g2 \%>>!\% g3 \%>>!\% g4 \%>>!\% ...} (differing in the
+first operator being \verb{\%>>!\%} as well).
 }
+\seealso{
+Other Graph operators: 
+\code{\link{\%>>\%}()},
+\code{\link{as_graph}()},
+\code{\link{as_pipeop}()},
+\code{\link{assert_graph}()},
+\code{\link{assert_pipeop}()},
+\code{\link{greplicate}()},
+\code{\link{gunion}()},
+\code{\link{mlr_graphs_greplicate}}
+}
+\concept{Graph operators}

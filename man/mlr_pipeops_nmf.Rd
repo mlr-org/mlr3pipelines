@@ -12,8 +12,10 @@ Extracts non-negative components from data by performing non-negative matrix fac
 affects non-negative numerical features. See \code{\link[NMF:nmf]{nmf()}} for details.
 }
 \section{Construction}{
-\preformatted{PipeOpNMF$new(id = "nmf", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpNMF$new(id = "nmf", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"nmf"}.

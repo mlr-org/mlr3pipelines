@@ -12,8 +12,10 @@ Renames the columns of a \code{\link[mlr3:Task]{Task}} both during training and 
 Uses the \verb{$rename()} mutator of the \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
-\preformatted{PipeOpRenameColumns$new(id = "renamecolumns", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpRenameColumns$new(id = "renamecolumns", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"renamecolumns"}.

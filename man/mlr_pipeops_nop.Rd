@@ -12,8 +12,10 @@ Simply pushes the input forward.
 Can be useful during \code{\link{Graph}} construction using the \code{\link{\%>>\%}}-operator to specify which \code{\link{PipeOp}} gets connected to which.
 }
 \section{Construction}{
-\preformatted{PipeOpNOP$new(id = "nop", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpNOP$new(id = "nop", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"nop"}.

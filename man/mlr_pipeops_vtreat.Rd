@@ -16,8 +16,10 @@ Internally, \code{\link{PipeOpVtreat}} follows the fit/prepare interface of vtre
 \code{\link[vtreat:fit_prepare]{vtreat::fit_prepare()}} on the training data and \code{\link[vtreat:prepare]{vtreat::prepare()}} during predicton.
 }
 \section{Construction}{
-\preformatted{PipeOpVreat$new(id = "vtreat", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpVreat$new(id = "vtreat", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"vtreat"}.

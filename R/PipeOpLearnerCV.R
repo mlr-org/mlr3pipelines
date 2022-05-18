@@ -119,7 +119,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       private$.learner$param_set$set_id = ""
       id = id %??% private$.learner$id
       # FIXME: can be changed when mlr-org/mlr3#470 has an answer
-      task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
+      type = private$.learner$task_type
+      task_type = mlr_reflections$task_types[type, mult = "first"]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),

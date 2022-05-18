@@ -82,6 +82,7 @@ test_that("Robustify Pipeline", {
   # date features
   dat = iris
   set.seed(1)
+  lrn = lrn("classif.rpart")
   dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
    size = 150L)
   tsk = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -152,6 +153,9 @@ makeTypeTask = function(types) {
 test_that("Robustify Pipeline factor to numeric", {
 
   alltask = makeTypeTask(c("integer", "numeric", "logical", "character", "POSIXct"))
+
+  skip_if_not_installed("quanteda")
+  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   lfactor = lrn("regr.rpart")
   lnofactor = lrn("regr.rpart")

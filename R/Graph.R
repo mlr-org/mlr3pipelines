@@ -58,6 +58,8 @@
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
+#' * `man` :: `character(1)`\cr
+#'   Identifying string of the help page that shows with `help()`.
 #'
 #' @section Methods:
 #' * `ids(sorted = FALSE)` \cr
@@ -81,6 +83,11 @@
 #'   channel `dst_channel` (identified by its name or number as listed in the [`PipeOp`]'s `$input`).
 #'   If source or destination [`PipeOp`] have only one input / output channel and `src_channel` / `dst_channel`
 #'   are therefore unambiguous, they can be omitted (i.e. left as `NULL`).
+#' * `chain(gs, clone = TRUE)` \cr
+#'   (`list` of `Graph`s, `logical(1)`) -> `self` \cr
+#'   Takes a list of `Graph`s or [`PipeOp`]s (or objects that can be automatically converted into `Graph`s or [`PipeOp`]s,
+#'   see [`as_graph()`] and [`as_pipeop()`]) as inputs and joins them in a serial `Graph` coming after `self`, as if
+#'   connecting them using [`%>>%`].
 #' * `plot(html)` \cr
 #'   (`logical(1)`) -> `NULL` \cr
 #'   Plot the [`Graph`], using either the \pkg{igraph} package (for `html = FALSE`, default) or
@@ -118,6 +125,10 @@
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
 #'   Predict with the [`Graph`] by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
+#' * `help(help_type)` \cr
+#'   (`character(1)`) -> help file\cr
+#'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
+#'   as the `help_type` argument of R's `help()`.
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
@@ -144,6 +155,7 @@ Graph = R6Class("Graph",
     pipeops = NULL,
     edges = NULL,
     keep_results = NULL,
+    man = "mlr3pipelines::Graph",
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
@@ -246,6 +258,11 @@ Graph = R6Class("Graph",
       self$ids(sorted = TRUE)  # if we fail here, edges get reset.
       on.exit()
       invisible(self)
+    },
+
+    chain = function(gs, clone = TRUE) {
+      assert_list(gs)
+      chain_graphs(c(list(self), gs), in_place = TRUE)
     },
 
     plot = function(html = FALSE) {
@@ -422,6 +439,10 @@ Graph = R6Class("Graph",
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
+    },
+    help = function(help_type = getOption("help_type")) {
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
+      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
     }
   ),
 
@@ -485,7 +506,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     return(data.table(name = character(), train = character(),
       predict = character(), op.id = character(), channel.name = character()))
   }
-  map_dtr(pipeops, function(po) {
+  ret = map_dtr(pipeops, function(po) {
 
     # Note: This uses data.frame and is 20% faster than the fastest data.table I could come up with
     # (and factor 2 faster than a naive data.table implementation below).
@@ -494,10 +515,7 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df = as.data.frame(po[[direction]], stringsAsFactors = FALSE)
     rows = df$name %nin% channels[ids == po$id]
     if (!any(rows)) {
-      return(data.frame(name = character(),
-        train = character(), predict = character(),
-        op.id = character(), channel.name = character(),
-        stringsAsFactors = FALSE))
+      return(NULL)
     }
     df$op.id = po$id
     df = df[rows,
@@ -506,6 +524,12 @@ graph_channels = function(ids, channels, pipeops, direction) {
     names(df)[5] = "channel.name"
     df
   })
+
+  if (!nrow(ret)) {
+    return(data.table(name = character(), train = character(), predict = character(),
+      op.id = character(), channel.name = character()))
+  }
+  ret
 }
 
 graph_channels_dt = function(ids, channels, pipeops, direction) {
@@ -654,7 +678,21 @@ predict.Graph = function(object, newdata, ...) {
   plain = "Task" %nin% class(newdata)
   if (plain) {
     assert_data_frame(newdata)
-    newdata = TaskRegr$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = NA_real_)), "...dummytarget...")
+    task_type = infer_task_type(object)
+    targetcol = switch(task_type,
+      regr = NA_real_,
+      # could insert other supported types here.
+      # classif does not work, because we would need to know target levels.
+      NA
+    )
+    constructor = get(mlr_reflections$task_types[task_type, "task", on = "type", mult = "first"][[1L]])
+    newdata = withCallingHandlers(constructor$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = targetcol)), target = "...dummytarget..."),
+      error = function(e) {
+        e$message = sprintf("Could not create a %s-task for plain prediction data; call predict() with a mlr3 Task object, or use GraphLearner instead of Graph.\nError: %s",
+          task_type, e$message)
+        stop(e)
+      }
+    )
   }
   result = object$predict(newdata)
   assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)
@@ -664,3 +702,4 @@ predict.Graph = function(object, newdata, ...) {
   }
   result
 }
+

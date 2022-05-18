@@ -112,8 +112,10 @@ test_that("input / output lists and naming", {
     "list\\(input_1 = 1, input_2 = 2\\)")
 
 
-  expect_error(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_99 = 1), single_input = FALSE),
-    "debug.multi.input_1,debug.multi.input_2")
+  if (packageVersion("checkmate") >= "2.1.0") {
+    expect_error(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_99 = 1), single_input = FALSE),
+      "debug.multi.input_1")
+  }
 
   expect_error(gr$train(list(), single_input = FALSE), "have length 2")
   expect_error(gr$train(list(1, 2, 3), single_input = FALSE), "have length 2")
@@ -433,4 +435,19 @@ test_that("dot output", {
     "pca_output\",fontsize=24];",
     "6 [label=\"OUTPUT",
     "nop_output\",fontsize=24]"), out[-c(1L, 15L)])
+})
+
+test_that("help() call", {
+  if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
+    # c() to drop attributes
+    expect_equal(
+      c(help("Graph", package = "mlr3pipelines")),
+      c((po("scale") %>>% po("nop"))$help())
+    )
+  } else {
+    expect_equal(
+      help("Graph", package = "mlr3pipelines"),
+      (po("scale") %>>% po("nop"))$help()
+    )
+  }
 })

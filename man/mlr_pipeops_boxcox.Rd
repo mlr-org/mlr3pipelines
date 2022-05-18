@@ -14,8 +14,10 @@ and prediction transformation.
 See \code{\link[bestNormalize:boxcox]{bestNormalize::boxcox()}} for details.
 }
 \section{Construction}{
-\preformatted{PipeOpBoxCox$new(id = "boxcox", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpBoxCox$new(id = "boxcox", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"boxcox"}.

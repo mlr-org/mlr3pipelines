@@ -19,8 +19,10 @@ equal weights for each prediction.
 Defaults to equal weights for each model.
 }
 \section{Construction}{
-\preformatted{PipeOpRegrAvg$new(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpRegrAvg$new(innum = 0, collect_multiplicity = FALSE, id = "regravg", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
 Determines the number of input channels.

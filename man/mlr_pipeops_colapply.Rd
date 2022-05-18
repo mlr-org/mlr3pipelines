@@ -20,8 +20,10 @@ not on other components. As a rule of thumb, if the function \code{f} generates 
 from \code{Vectorize(f)}, it is not a function that should be used for \code{applicator}.
 }
 \section{Construction}{
-\preformatted{PipeOpColApply$new(id = "colapply", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpColApply$new(id = "colapply", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"colapply"}.

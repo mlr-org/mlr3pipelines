@@ -25,9 +25,11 @@ name of the data of the input \code{\link[mlr3:Task]{Task}}, this column is set 
 \code{drop_original_target} the original target is then either dropped or added to the features.
 }
 \section{Construction}{
-\preformatted{PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
   param_vals = list(), packages = character(0))
-}
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.

@@ -16,6 +16,8 @@ devtools::document("mlr3pipelines")
 
 devtools::load_all("mlr3pipelines")
 
+Sys.setenv(TESTTHAT_CPUS = 20)
+testthat::test_package("mlr3pipelines")
 
 
 tools::buildVignettes(dir = "mlr3pipelines")
@@ -29,7 +31,8 @@ profvis::profvis(testthat::test_package("mlr3pipelines"))
 
 testthat::test_package("mlr3pipelines", filter = "textvectorizer")
 
-testthat::test_package("mlr3pipelines", filter = "impute")
+
+testthat::test_package("mlr3pipelines", filter = "Graph")
 
 
 ntree <- 10

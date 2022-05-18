@@ -25,8 +25,10 @@ second 21 and second 22 are one second apart, but so are second 60 and second 1 
 minute.
 }
 \section{Construction}{
-\preformatted{PipeOpDateFeatures$new(id = "datefeatures", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpDateFeatures$new(id = "datefeatures", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"datefeatures"}.

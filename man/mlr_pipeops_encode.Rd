@@ -18,8 +18,10 @@ Newly created columns are named via pattern \verb{[column-name].[x]} where \code
 Use the \code{\link{PipeOpTaskPreproc}} \verb{$affect_columns} functionality to only encode a subset of columns, or only encode columns of a certain type.
 }
 \section{Construction}{
-\preformatted{PipeOpEncode$new(id = "encode", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEncode$new(id = "encode", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"encode"}.

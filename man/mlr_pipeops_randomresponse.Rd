@@ -21,8 +21,10 @@ original standard errors of the input \code{\link[mlr3:PredictionRegr]{Predictio
 deviation (sampling is done observation-wise).
 }
 \section{Construction}{
-\preformatted{PipeOpRandomResponse$new(id = "randomresponse", param_vals = list(), packages = character(0))
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpRandomResponse$new(id = "randomresponse", param_vals = list(), packages = character(0))
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of the resulting object, default \code{"randomresponse"}.

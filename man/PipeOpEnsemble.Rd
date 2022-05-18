@@ -12,8 +12,10 @@ for a \code{PipeOp} and requires deriving classes to create the \code{private$we
 }
 \section{Construction}{
 
-Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpClassifAvg}} or \code{\link{PipeOpRegrAvg}}.\preformatted{PipeOpEnsemble$new(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
-}
+Note: This object is typically constructed via a derived class, e.g. \code{\link{PipeOpClassifAvg}} or \code{\link{PipeOpRegrAvg}}.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpEnsemble$new(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
 Determines the number of input channels.

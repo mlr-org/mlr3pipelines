@@ -13,8 +13,10 @@ The \code{selector} parameter gives the features to keep.
 See \code{\link{Selector}} for selectors that are provided and how to write custom \code{\link{Selector}}s.
 }
 \section{Construction}{
-\preformatted{PipeOpSelect$new(id = "select", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpSelect$new(id = "select", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"select"}.

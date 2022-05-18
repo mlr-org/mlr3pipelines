@@ -26,8 +26,10 @@ Defaults to equal weights for each model.
 If `
 }
 \section{Construction}{
-\preformatted{PipeOpClassifAvg$new(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpClassifAvg$new(innum = 0, collect_multiplicity = FALSE, id = "classifavg", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{innum} :: \code{numeric(1)}\cr
 Determines the number of input channels.

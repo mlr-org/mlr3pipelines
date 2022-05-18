@@ -11,8 +11,10 @@
 Impute numerical features by histogram.
 }
 \section{Construction}{
-\preformatted{PipeOpImputeHist$new(id = "imputehist", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeHist$new(id = "imputehist", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputehist"}.

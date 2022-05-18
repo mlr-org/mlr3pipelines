@@ -22,9 +22,11 @@ In order to optimize thresholds without cross-validation, use \code{\link{PipeOp
 in conjunction with \code{\link[mlr3:mlr_resamplings_insample]{ResamplingInsample}}.
 }
 \section{Construction}{
-\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
   (`character(1)`, `list`) -> `self` \\cr
-}
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. Default: "tunethreshold".

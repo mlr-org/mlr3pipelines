@@ -18,8 +18,10 @@ This type of imputation is especially sensible in the context of tree-based meth
 Ding & Simonoff (2010).
 }
 \section{Construction}{
-\preformatted{PipeOpImputeOOR$new(id = "imputeoor", param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpImputeOOR$new(id = "imputeoor", param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"imputeoor"}.

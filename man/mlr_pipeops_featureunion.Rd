@@ -24,9 +24,11 @@ the values of these possibly duplicated features. True duplicated features are o
 single time to the output task.
 }
 \section{Construction}{
-\preformatted{PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
   assert_targets_equal = TRUE)
-}
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{innum} :: \code{numeric(1)} | \code{character}\cr
 Determines the number of input channels.
