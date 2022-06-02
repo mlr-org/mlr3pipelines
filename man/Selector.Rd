@@ -123,7 +123,7 @@ in the \code{\link[mlr3:Task]{Task}}.
 
 For example, a \code{\link{Selector}} that selects all columns is
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{function(task) \{
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{function(task) \{
   task$feature_names
 \}
 }\if{html}{\out{</div>}}
@@ -131,7 +131,7 @@ For example, a \code{\link{Selector}} that selects all columns is
 (this is the \code{selector_all()}-\code{\link{Selector}}.) A \code{\link{Selector}} that selects
 all columns that have names shorter than four letters would be:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{function(task) \{
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{function(task) \{
   task$feature_names[
     nchar(task$feature_names) < 4
   ]
@@ -140,7 +140,7 @@ all columns that have names shorter than four letters would be:
 
 A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:mlr_tasks_iris]{iris task}), if present, is
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{function(task) \{
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{function(task) \{
   intersect(task$feature_names, "Sepal.Length")
 \}
 }\if{html}{\out{</div>}}

@@ -17,14 +17,14 @@
 #' in the [`Task`][mlr3::Task].
 #'
 #' For example, a [`Selector`] that selects all columns is
-#' ```
+#' ```r
 #' function(task) {
 #'   task$feature_names
 #' }
 #' ```
 #' (this is the `selector_all()`-[`Selector`].) A [`Selector`] that selects
 #' all columns that have names shorter than four letters would be:
-#' ```
+#' ```r
 #' function(task) {
 #'   task$feature_names[
 #'     nchar(task$feature_names) < 4
@@ -32,7 +32,7 @@
 #' }
 #' ```
 #' A [`Selector`] that selects only the column `"Sepal.Length"` (as in the [iris task][mlr3::mlr_tasks_iris]), if present, is
-#' ```
+#' ```r
 #' function(task) {
 #'   intersect(task$feature_names, "Sepal.Length")
 #' }
