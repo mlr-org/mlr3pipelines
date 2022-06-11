@@ -103,24 +103,37 @@ features in order to predict the outcome.</p>
     <dl><dt>base_learners</dt>
 <dd><p><code>list</code> of <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br>
 A list of base learners.</p></dd>
+
+
 <dt>super_learner</dt>
 <dd><p><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br>
 The super learner that makes the final prediction based on the base learners.</p></dd>
+
+
 <dt>method</dt>
 <dd><p><code>character(1)</code><br><code>"cv"</code> (default) for building a super learner using cross-validated predictions of the
 base learners or <code>"insample"</code> for building a super learner using the
 predictions of the base learners trained on all training data.</p></dd>
+
+
 <dt>folds</dt>
 <dd><p><code>integer(1)</code><br>
 Number of cross-validation folds. Only used for <code>method = "cv"</code>. Default 3.</p></dd>
+
+
 <dt>use_features</dt>
 <dd><p><code>logical(1)</code><br>
 Whether the original features should also be passed to the super learner.
 Default <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code><a href="Graph.html">Graph</a></code></p>
+    
+
+<p><code><a href="Graph.html">Graph</a></code></p>
+
+
     </div>
 
     <div class="section level2">
@@ -151,7 +164,7 @@ Default <code>TRUE</code>.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

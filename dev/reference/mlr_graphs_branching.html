@@ -93,11 +93,15 @@ All input arguments are cloned and have no references in common with the returne
 Multiple graphs, possibly named. They all must have exactly
 one output. If any of the arguments are named, then all must have
 unique names.</p></dd>
+
+
 <dt>prefix_branchops</dt>
 <dd><p><code>character(1)</code> <br>
 Optional id prefix to prepend to <code><a href="mlr_pipeops_branch.html">PipeOpBranch</a></code> and <code><a href="mlr_pipeops_unbranch.html">PipeOpUnbranch</a></code> id. Their
 resulting IDs will be <code>"[prefix_branchops]branch"</code> and <code>"[prefix_branchops]unbranch"</code>.
 Default is <code>""</code>.</p></dd>
+
+
 <dt>prefix_paths</dt>
 <dd><p><code>logical(1)</code> | <code>character(1)</code> <br>
 Whether to add prefixes to graph IDs when performing gunion. Can be helpful to
@@ -105,10 +109,15 @@ avoid ID clashes in resulting graph. Default <code>FALSE</code>. If this is <cod
 are taken from the names of the input arguments if present or <code>"poX"</code> where X counts up. If this is
 a <code>character(1)</code>, it is a prefix that is added to the <code>PipeOp</code> IDs <em>additionally</em>
 to the input argument list.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code><a href="Graph.html">Graph</a></code></p>
+    
+
+<p><code><a href="Graph.html">Graph</a></code></p>
+
+
     </div>
 
     <div class="section level2">
@@ -160,7 +169,7 @@ to the input argument list.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

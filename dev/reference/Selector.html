@@ -120,39 +120,62 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
     <dl><dt>types</dt>
 <dd><p>(<code>character</code>) <br>
 Type of feature to select</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>(<code>character(1)</code>) <br>
 grep pattern</p></dd>
+
+
 <dt>ignore.case</dt>
 <dd><p>(<code>logical(1)</code>) <br>
 ignore case</p></dd>
+
+
 <dt>perl</dt>
 <dd><p>(<code>logical(1)</code>) <br>
 perl regex</p></dd>
+
+
 <dt>fixed</dt>
 <dd><p>(<code>logical(1)</code>) <br>
 fixed pattern instead of regex</p></dd>
+
+
 <dt>feature_names</dt>
 <dd><p>(<code>character</code>)<br>
 Select features by exact name match.</p></dd>
+
+
 <dt>assert_present</dt>
 <dd><p>(<code>logical(1)</code>)<br>
 Throw an error if <code>feature_names</code> are not all present in the task being operated on.</p></dd>
+
+
 <dt>selector</dt>
 <dd><p>(<code>Selector</code>)<br><code>Selector</code> to invert.</p></dd>
+
+
 <dt>selector_x</dt>
 <dd><p>(<code>Selector</code>)<br>
 First <code>Selector</code> to query.</p></dd>
+
+
 <dt>selector_y</dt>
 <dd><p>(<code>Selector</code>)<br>
 Second <code>Selector</code> to query.</p></dd>
+
+
 <dt>min_cardinality</dt>
 <dd><p>(<code>integer</code>) <br>
 Minimum number of levels required to be selected.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>function</code>: A <code>Selector</code> function that takes a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> and returns the feature names to be processed.</p>
+    
+
+<p><code>function</code>: A <code>Selector</code> function that takes a <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> and returns the feature names to be processed.</p>
     </div>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
@@ -185,12 +208,20 @@ that has one input argument (commonly named <code>task</code>). The function is 
 is operating on. The return value of the function must be a <code>character</code> vector that is a subset of the feature names present
 in the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>.</p>
 <p>For example, a <code>Selector</code> that selects all columns is</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(task) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  task<span class="sc">$</span>feature_names</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre><p></p></div>
 <p>(this is the <code>selector_all()</code>-<code>Selector</code>.) A <code>Selector</code> that selects
 all columns that have names shorter than four letters would be:</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(task) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  task<span class="sc">$</span>feature_names[</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nchar</span>(task<span class="sc">$</span>feature_names) <span class="sc">&lt;</span> <span class="dv">4</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre><p></p></div>
 <p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href="https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html" class="external-link">iris task</a>), if present, is</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(task) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">intersect</span>(task<span class="sc">$</span>feature_names, <span class="st">"Sepal.Length"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre><p></p></div>
 <p>It is preferable to use the <code>Selector</code> construction functions like <code>select_type</code>, <code>select_grep</code> etc. if possible, instead of writing custom <code>Selector</code>s.</p>
     </div>
     <div class="section level2">
@@ -249,7 +280,7 @@ all columns that have names shorter than four letters would be:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

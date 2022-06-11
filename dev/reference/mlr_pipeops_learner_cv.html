@@ -121,7 +121,7 @@ useful to use <code><a href="mlr_pipeops_featureunion.html">PipeOpFeatureUnion</
     
 
 
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div><ul><li><p><code>learner</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> <br><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> to use for cross validation / prediction, or a string identifying a
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpLearnerCV<span class="sc">$</span><span class="fu">new</span>(learner, <span class="at">id =</span> <span class="cn">NULL</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>learner</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> <br><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> to use for cross validation / prediction, or a string identifying a
 <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> in the <code><a href="https://mlr3.mlr-org.com/reference/mlr_learners.html" class="external-link">mlr3::mlr_learners</a></code> <code><a href="https://mlr3misc.mlr-org.com/reference/Dictionary.html" class="external-link">Dictionary</a></code>.
 This argument is always cloned; to access the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> inside <code>PipeOpLearnerCV</code> by-reference, use <code>$learner</code>.<br></p></li>
 <li><p><code>id</code> :: <code>character(1)</code>
@@ -246,7 +246,7 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

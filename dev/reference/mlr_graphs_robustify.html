@@ -131,21 +131,31 @@ factor variables, no encoding is performed.</p>
 <dd><p><code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> <br>
 A <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> to create a robustifying pipeline for.
 Optional, if omitted, the "worst possible" <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> is assumed and the full pipeline is created.</p></dd>
+
+
 <dt>learner</dt>
 <dd><p><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> <br>
 A learner to create a robustifying pipeline for. Optional, if omitted,
 the "worst possible" <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> is assumed and a more conservative pipeline is built.</p></dd>
+
+
 <dt>impute_missings</dt>
 <dd><p><code>logical(1)</code> | <code>NULL</code> <br>
 Should missing values be imputed? Defaults to <code>NULL</code>: imputes if the task has
 missing values (or factors that are not encoded to numerics) and the learner can not handle them.</p></dd>
+
+
 <dt>factors_to_numeric</dt>
 <dd><p><code>logical(1)</code> | <code>NULL</code> <br>
 Should (ordered and unordered) factors be encoded? Defaults to <code>NULL</code>: encodes if the task has factors (or character columns that get converted to factor)
 and the learner can not handle factors.</p></dd>
+
+
 <dt>max_cardinality</dt>
 <dd><p><code>integer(1)</code> <br>
 Maximum number of factor levels allowed. See above. Default: 1000.</p></dd>
+
+
 <dt>ordered_action</dt>
 <dd><p><code>character(1)</code><br>
 How to handle <code>ordered</code> columns: <code>"factor"</code> (default) or <code>"factor!"</code>: convert to <code>factor</code> columns;
@@ -157,6 +167,8 @@ behave completely identically, <code>"ignore!"</code> is only present for consis
 When <code>ordered</code> features are converted to <code>factor</code>, then they are treated like <code>factor</code> features further down in the pipeline,
 and are possibly eventually converted to <code>numeric</code>s, but in a different way: <code>factor</code>s get one-hot encoded, <code>ordered_action</code> = <code>"numeric"</code>
 converts ordered using <code>as.numeric</code> to their integer-valued rank.</p></dd>
+
+
 <dt>character_action</dt>
 <dd><p><code>character(1)</code><br>
 How to handle <code>character</code> columns: <code>"factor"</code> (default) or <code>"factor!"</code>: convert to <code>factor</code> columns;
@@ -167,6 +179,8 @@ override <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="ext
 behave completely identically, <code>"ignore!"</code> is only present for consistency.<br>
 When <code>character</code> columns are converted to <code>factor</code>, then they are treated like <code>factor</code> further down in the pipeline,
 and are possibly eventually converted to <code>numeric</code>s, using one-hot encoding.</p></dd>
+
+
 <dt>POSIXct_action</dt>
 <dd><p><code>character(1)</code><br>
 How to handle <code>POSIXct</code> columns: <code>"numeric"</code> (default) or <code>"numeric!"</code>: convert to <code>numeric</code> columns;
@@ -175,10 +189,15 @@ When <code>task</code> is given and has no <code>POSIXct</code> columns, or when
 <code>"numeric"</code> and <code>"datefeatures"</code> are treated like <code>"ignore"</code>. This means it is necessary to add the exclamation point to
 override <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> or <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> properties when given. <code>"ignore"</code> and <code>"ignore!"</code> therefore
 behave completely identically, <code>"ignore!"</code> is only present for consistency.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code><a href="Graph.html">Graph</a></code></p>
+    
+
+<p><code><a href="Graph.html">Graph</a></code></p>
+
+
     </div>
 
     <div class="section level2">
@@ -206,7 +225,7 @@ behave completely identically, <code>"ignore!"</code> is only present for consis
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

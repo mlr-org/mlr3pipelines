@@ -100,7 +100,7 @@ this means e.g. that setting <code>nfeat</code> to 0 will only remove features o
     
 
 
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div><ul><li><p><code>filter</code> :: <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code><br><code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> used for feature filtering.
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpFilter<span class="sc">$</span><span class="fu">new</span>(filter, <span class="at">id =</span> filter<span class="sc">$</span>id, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>filter</code> :: <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code><br><code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> used for feature filtering.
 This argument is always cloned; to access the <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> inside <code>PipeOpFilter</code> by-reference, use <code>$filter</code>.<br></p></li>
 <li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, defaulting to the <code>id</code> of the <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> being used.</p></li>
@@ -338,7 +338,7 @@ after training; instead, use <code>$state$scores</code>. Read-only.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
