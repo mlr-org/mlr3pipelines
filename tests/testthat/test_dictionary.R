@@ -75,6 +75,8 @@ test_that("Dictionary contains all PipeOps", {
 
     test_obj = do.call(pogen$new, args)  # test_obj: PipeOp object, constructed from constructor
 
+
+
     # check that mlr_pipeops key is the default ID
     if (pipeops[idx] %nin% unequal_id) {
       expect_equal(test_obj$id, dictname)
@@ -128,6 +130,10 @@ test_that("Dictionary contains all PipeOps", {
 
       # $help() works and gives expected result
       expect_equal(gen_constructed$man, paste0("mlr3pipelines::", pipeops[idx]))
+
+      # $label can be retrieved
+      expect_string(gen_constructed$label)
+      expect_false(grepl("^LABEL COULD NOT BE RETRIEVED$", gen_constructed$label))
 
       if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
         expect_equal(
