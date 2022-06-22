@@ -162,7 +162,7 @@ test_that("data.table of pipeops looks as it should", {
   potable = as.data.table(mlr_pipeops)
 
   expect_set_equal(colnames(potable),
-    c("key", "packages", "tags", "feature_types",
+    c("key", "label", "packages", "tags", "feature_types",
       "input.num", "output.num",
       "input.type.train", "input.type.predict",
       "output.type.train", "output.type.predict"))
