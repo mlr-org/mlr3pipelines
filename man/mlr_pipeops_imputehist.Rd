@@ -9,6 +9,12 @@
 }
 \description{
 Impute numerical features by histogram.
+
+During training, a histogram is fitted using R's \code{\link[graphics:hist]{hist()}} function.
+The fitted histogram is then sampled from for imputation. This is an approximation to
+sampling from the empirical training data distribution (i.e. sampling from training data
+with replacement), but is much more memory efficient for large datasets, since the \verb{$state}
+does not need to save the training data.
 }
 \section{Construction}{
 
