@@ -7,6 +7,12 @@
 #' @description
 #' Impute numerical features by histogram.
 #'
+#' During training, a histogram is fitted using R's [`hist()`][graphics::hist] function.
+#' The fitted histogram is then sampled from for imputation. This is an approximation to
+#' sampling from the empirical training data distribution (i.e. sampling from training data
+#' with replacement), but is much more memory efficient for large datasets, since the `$state`
+#' does not need to save the training data.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpImputeHist$new(id = "imputehist", param_vals = list())
