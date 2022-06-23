@@ -381,7 +381,7 @@ PipeOp = R6Class("PipeOp",
       if (is.null(private$.label)) {
         helpinfo = self$help()
         helpcontent = NULL
-        if (inherits(helpinfo, "help_files_with_topic")) {
+        if (inherits(helpinfo, "help_files_with_topic") && length(helpinfo)) {
           ghf = get(".getHelpFile", mode = "function", envir = getNamespace("utils"))
           helpcontent = ghf(helpinfo)
         } else if (inherits(helpinfo, "dev_topic")) {

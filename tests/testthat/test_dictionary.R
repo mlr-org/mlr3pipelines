@@ -3,6 +3,13 @@ context("Dictionary")
 # we check that all pipeops that are exported are also in the dictionary, and can be constructed from there.
 test_that("Dictionary contains all PipeOps", {
   skip_on_cran()
+
+  # make sure all caching private member vars are extended
+  inflate = function(x) {
+    x$label
+    x
+  }
+
   # abstract pipeops that don't need to be in mlr_pipeops
   abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo")
 
@@ -89,8 +96,8 @@ test_that("Dictionary contains all PipeOps", {
     args$id = "TESTID"
     expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
     test_obj$id = "TESTID"
-    expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj, info = dictname)
-    expect_equal(do.call(pogen$new, args), test_obj, info = dictname)
+    expect_equal(inflate(do.call(mlr_pipeops$get, c(list(dictname), args))), test_obj, info = dictname)
+    expect_equal(inflate(do.call(pogen$new, args)), test_obj, info = dictname)
 
     # we now check if hyperparameters can be changed through construction
     # we do this by automatically generating a hyperparameter value that deviates from the automatically constructed one.
@@ -125,7 +132,7 @@ test_that("Dictionary contains all PipeOps", {
       expect_false(isTRUE(all.equal(dict_constructed, test_obj)), dictname)
       test_obj$param_set$values[[testingparam$id]] = val
       expect_equal(touch(dict_constructed), test_obj)
-      expect_equal(touch(gen_constructed), test_obj)
+      expect_equal(inflate(touch(gen_constructed)), test_obj)
 
 
       # $help() works and gives expected result
