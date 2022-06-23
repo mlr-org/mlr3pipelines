@@ -3,6 +3,14 @@ context("Dictionary")
 # we check that all pipeops that are exported are also in the dictionary, and can be constructed from there.
 test_that("Dictionary contains all PipeOps", {
   skip_on_cran()
+
+  # make sure all caching private member vars are extended
+  inflate = function(x) {
+    x$label
+    x$param_set$values$content$label
+    x
+  }
+
   # abstract pipeops that don't need to be in mlr_pipeops
   abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo")
 
@@ -75,6 +83,8 @@ test_that("Dictionary contains all PipeOps", {
 
     test_obj = do.call(pogen$new, args)  # test_obj: PipeOp object, constructed from constructor
 
+
+
     # check that mlr_pipeops key is the default ID
     if (pipeops[idx] %nin% unequal_id) {
       expect_equal(test_obj$id, dictname)
@@ -87,8 +97,8 @@ test_that("Dictionary contains all PipeOps", {
     args$id = "TESTID"
     expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
     test_obj$id = "TESTID"
-    expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj, info = dictname)
-    expect_equal(do.call(pogen$new, args), test_obj, info = dictname)
+    expect_equal(inflate(do.call(mlr_pipeops$get, c(list(dictname), args))), test_obj, info = dictname)
+    expect_equal(inflate(do.call(pogen$new, args)), test_obj, info = dictname)
 
     # we now check if hyperparameters can be changed through construction
     # we do this by automatically generating a hyperparameter value that deviates from the automatically constructed one.
@@ -123,11 +133,15 @@ test_that("Dictionary contains all PipeOps", {
       expect_false(isTRUE(all.equal(dict_constructed, test_obj)), dictname)
       test_obj$param_set$values[[testingparam$id]] = val
       expect_equal(touch(dict_constructed), test_obj)
-      expect_equal(touch(gen_constructed), test_obj)
+      expect_equal(inflate(touch(gen_constructed)), test_obj)
 
 
       # $help() works and gives expected result
       expect_equal(gen_constructed$man, paste0("mlr3pipelines::", pipeops[idx]))
+
+      # $label can be retrieved
+      expect_string(gen_constructed$label)
+      expect_false(grepl("^LABEL COULD NOT BE RETRIEVED$", gen_constructed$label))
 
       if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
         expect_equal(
@@ -156,7 +170,7 @@ test_that("data.table of pipeops looks as it should", {
   potable = as.data.table(mlr_pipeops)
 
   expect_set_equal(colnames(potable),
-    c("key", "packages", "tags", "feature_types",
+    c("key", "label", "packages", "tags", "feature_types",
       "input.num", "output.num",
       "input.type.train", "input.type.predict",
       "output.type.train", "output.type.predict"))

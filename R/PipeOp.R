@@ -375,6 +375,25 @@ PipeOp = R6Class("PipeOp",
     man = function(x) {
       if (!missing(x)) stop("man is read-only")
       paste0(topenv(self$.__enclos_env__)$.__NAMESPACE__.$spec[["name"]], "::", class(self)[[1]])
+    },
+    label = function(x) {
+      if (!missing(x)) stop("label is read-only")
+      if (is.null(private$.label)) {
+        helpinfo = self$help()
+        helpcontent = NULL
+        if (inherits(helpinfo, "help_files_with_topic") && length(helpinfo)) {
+          ghf = get(".getHelpFile", mode = "function", envir = getNamespace("utils"))
+          helpcontent = ghf(helpinfo)
+        } else if (inherits(helpinfo, "dev_topic")) {
+          helpcontent = tools::parse_Rd(helpinfo$path)
+        }
+        if (is.null(helpcontent)) {
+          private$.label = "LABEL COULD NOT BE RETRIEVED"
+        } else {
+          private$.label = Filter(function(x) identical(attr(x, "Rd_tag"), "\\title"), helpcontent)[[1]][[1]][1]
+        }
+      }
+      private$.label
     }
   ),
 
@@ -397,6 +416,7 @@ PipeOp = R6Class("PipeOp",
     .predict = function(input) stop("abstract"),
     .param_set = NULL,
     .param_set_source = NULL,
+    .label = NULL,
     .id = NULL
   )
 )
