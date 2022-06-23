@@ -148,14 +148,14 @@ The Graph should return <code>NULL</code> during training and a
 <span class="r-in"><span class="va">g2</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ovrunite.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 178 observations:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response     prob.1     prob.2     prob.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.96881742 0.01916577 0.01201681</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.96881742 0.01916577 0.01201681</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.96881742 0.01916577 0.01201681</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.06019330 0.01947711 0.92032959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.06019330 0.01947711 0.92032959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.02305604 0.02024676 0.95669720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response     prob.1      prob.2      prob.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.98569953 0.005607494 0.008692974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.98569953 0.005607494 0.008692974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.98569953 0.005607494 0.008692974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.11229468 0.004803972 0.882901353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.11229468 0.004803972 0.882901353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.03428172 0.005226152 0.960492130</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Bagging outside OVR</span></span>
@@ -169,14 +169,14 @@ The Graph should return <code>NULL</code> during training and a
 <span class="r-in"><span class="va">g3</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $classifavg.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionClassif&gt; for 178 observations:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response    prob.1     prob.2     prob.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.9411195 0.04748713 0.01139339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.9411195 0.04748713 0.01139339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.9411195 0.04748713 0.01139339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---                                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.2556945 0.04153699 0.70276847</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.2556945 0.04153699 0.70276847</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.0353444 0.04811046 0.91654513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response     prob.1     prob.2     prob.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1     1        1 0.93297318 0.04353220 0.02349462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           2     1        1 0.93297318 0.04353220 0.02349462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           3     1        1 0.93297318 0.04353220 0.02349462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         176     3        3 0.24871824 0.03360827 0.71767349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         177     3        3 0.24871824 0.03360827 0.71767349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         178     3        3 0.03559523 0.04237138 0.92203339</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
