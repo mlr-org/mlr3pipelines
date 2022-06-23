@@ -38,7 +38,7 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `center` :: `logical(1)`\cr
-#'   Indicating whether the features should be centered. Default is `FALSE`. See [`prcomp()`][stats::prcomp].
+#'   Indicating whether the features should be centered. Default is `TRUE`. See [`prcomp()`][stats::prcomp].
 #' * `scale.` :: `logical(1)`\cr
 #'   Whether to scale features to unit variance before analysis. Default is `FALSE`, but scaling is advisable. See [`prcomp()`][stats::prcomp].
 #' * `rank.` :: `integer(1)`\cr
