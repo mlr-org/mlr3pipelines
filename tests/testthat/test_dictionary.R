@@ -7,6 +7,7 @@ test_that("Dictionary contains all PipeOps", {
   # make sure all caching private member vars are extended
   inflate = function(x) {
     x$label
+    x$param_set$values$content$label
     x
   }
 
