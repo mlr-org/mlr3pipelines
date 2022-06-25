@@ -92,27 +92,27 @@ shown here. Each of these can be called with its arguments to create a <code>Sel
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">selector_all</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">selector_none</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">selector_type</span><span class="op">(</span><span class="va">types</span><span class="op">)</span>
-
-<span class="fu">selector_grep</span><span class="op">(</span><span class="va">pattern</span>, ignore.case <span class="op">=</span> <span class="cn">FALSE</span>, perl <span class="op">=</span> <span class="cn">FALSE</span>, fixed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">selector_name</span><span class="op">(</span><span class="va">feature_names</span>, assert_present <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">selector_invert</span><span class="op">(</span><span class="va">selector</span><span class="op">)</span>
-
-<span class="fu">selector_intersect</span><span class="op">(</span><span class="va">selector_x</span>, <span class="va">selector_y</span><span class="op">)</span>
-
-<span class="fu">selector_union</span><span class="op">(</span><span class="va">selector_x</span>, <span class="va">selector_y</span><span class="op">)</span>
-
-<span class="fu">selector_setdiff</span><span class="op">(</span><span class="va">selector_x</span>, <span class="va">selector_y</span><span class="op">)</span>
-
-<span class="fu">selector_missing</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">selector_cardinality_greater_than</span><span class="op">(</span><span class="va">min_cardinality</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selector_all</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_none</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_type</span><span class="op">(</span><span class="va">types</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_grep</span><span class="op">(</span><span class="va">pattern</span>, ignore.case <span class="op">=</span> <span class="cn">FALSE</span>, perl <span class="op">=</span> <span class="cn">FALSE</span>, fixed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_name</span><span class="op">(</span><span class="va">feature_names</span>, assert_present <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_invert</span><span class="op">(</span><span class="va">selector</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_intersect</span><span class="op">(</span><span class="va">selector_x</span>, <span class="va">selector_y</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_union</span><span class="op">(</span><span class="va">selector_x</span>, <span class="va">selector_y</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_setdiff</span><span class="op">(</span><span class="va">selector_x</span>, <span class="va">selector_y</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_missing</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">selector_cardinality_greater_than</span><span class="op">(</span><span class="va">min_cardinality</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -208,20 +208,20 @@ that has one input argument (commonly named <code>task</code>). The function is 
 is operating on. The return value of the function must be a <code>character</code> vector that is a subset of the feature names present
 in the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code>.</p>
 <p>For example, a <code>Selector</code> that selects all columns is</p>
-<p></p><div class="sourceCode r"><pre><code><span class="kw">function</span><span class="op">(</span><span class="va">task</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">task</span><span class="op">$</span><span class="va">feature_names</span>
-<span class="op">}</span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw">function</span><span class="op">(</span><span class="va">task</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">task</span><span class="op">$</span><span class="va">feature_names</span></span>
+<span><span class="op">}</span></span></code></pre><p></p></div>
 <p>(this is the <code>selector_all()</code>-<code>Selector</code>.) A <code>Selector</code> that selects
 all columns that have names shorter than four letters would be:</p>
-<p></p><div class="sourceCode r"><pre><code><span class="kw">function</span><span class="op">(</span><span class="va">task</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">[</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">4</span>
-  <span class="op">]</span>
-<span class="op">}</span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw">function</span><span class="op">(</span><span class="va">task</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">[</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="va">feature_names</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">4</span></span>
+<span>  <span class="op">]</span></span>
+<span><span class="op">}</span></span></code></pre><p></p></div>
 <p>A <code>Selector</code> that selects only the column <code>"Sepal.Length"</code> (as in the <a href="https://mlr3.mlr-org.com/reference/mlr_tasks_iris.html" class="external-link">iris task</a>), if present, is</p>
-<p></p><div class="sourceCode r"><pre><code><span class="kw">function</span><span class="op">(</span><span class="va">task</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="va">feature_names</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span>
-<span class="op">}</span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw">function</span><span class="op">(</span><span class="va">task</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="va">feature_names</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre><p></p></div>
 <p>It is preferable to use the <code>Selector</code> construction functions like <code>select_type</code>, <code>select_grep</code> etc. if possible, instead of writing custom <code>Selector</code>s.</p>
     </div>
     <div class="section level2">
@@ -232,42 +232,42 @@ all columns that have names shorter than four letters would be:</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">iris_task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">bh_task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"boston_housing"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">sela</span> <span class="op">=</span> <span class="fu">selector_all</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">sela</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">iris_task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bh_task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"boston_housing"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sela</span> <span class="op">=</span> <span class="fu">selector_all</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">sela</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
-<span class="r-in"><span class="fu">sela</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">sela</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "age"     "b"       "chas"    "cmedv"   "crim"    "dis"     "indus"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "lat"     "lon"     "lstat"   "nox"     "ptratio" "rad"     "rm"     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [15] "tax"     "town"    "tract"   "zn"     </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">self</span> <span class="op">=</span> <span class="fu">selector_type</span><span class="op">(</span><span class="st">"factor"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">self</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">self</span> <span class="op">=</span> <span class="fu">selector_type</span><span class="op">(</span><span class="st">"factor"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">self</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
-<span class="r-in"><span class="fu">self</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">self</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "chas" "town"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">selg</span> <span class="op">=</span> <span class="fu">selector_grep</span><span class="op">(</span><span class="st">"a.*i"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">selg</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">selg</span> <span class="op">=</span> <span class="fu">selector_grep</span><span class="op">(</span><span class="st">"a.*i"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">selg</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Width" "Sepal.Width"</span>
-<span class="r-in"><span class="fu">selg</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">selg</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ptratio"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">selgi</span> <span class="op">=</span> <span class="fu">selector_invert</span><span class="op">(</span><span class="va">selg</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">selgi</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">selgi</span> <span class="op">=</span> <span class="fu">selector_invert</span><span class="op">(</span><span class="va">selg</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">selgi</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Sepal.Length"</span>
-<span class="r-in"><span class="fu">selgi</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">selgi</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "age"   "b"     "chas"  "cmedv" "crim"  "dis"   "indus" "lat"   "lon"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [10] "lstat" "nox"   "rad"   "rm"    "tax"   "town"  "tract" "zn"   </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">selgf</span> <span class="op">=</span> <span class="fu">selector_union</span><span class="op">(</span><span class="va">selg</span>, <span class="va">self</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">selgf</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">selgf</span> <span class="op">=</span> <span class="fu">selector_union</span><span class="op">(</span><span class="va">selg</span>, <span class="va">self</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">selgf</span><span class="op">(</span><span class="va">iris_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Width" "Sepal.Width"</span>
-<span class="r-in"><span class="fu">selgf</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">selgf</span><span class="op">(</span><span class="va">bh_task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ptratio" "chas"    "town"   </span>
 </code></pre></div>
     </div>

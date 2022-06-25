@@ -234,24 +234,24 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">poe</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"encodeimpact"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"task"</span>,</span>
-<span class="r-in">  <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
-<span class="r-in">    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="st">"x"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">poe</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"encodeimpact"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va"><a href="https://mlr3.mlr-org.com/reference/TaskClassif.html" class="external-link">TaskClassif</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"task"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"x"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    x       y.a       y.b</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: a  9.498089 -9.498089</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: a  9.498089 -9.498089</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: a -1.098546  1.098546</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4: b -1.098546  1.098546</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5: b -1.098546  1.098546</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">poe</span><span class="op">$</span><span class="va">state</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $impact</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $impact$y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       a         b</span>

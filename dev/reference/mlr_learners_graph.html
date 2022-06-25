@@ -159,28 +159,28 @@ recommended.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">graph</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">lr</span> <span class="op">=</span> <span class="va">GraphLearner</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lr</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>  <span class="co"># equivalent</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">lr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">lr</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">state</span>  <span class="co"># untrained version!</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">graph</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"classif.rpart"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lr</span> <span class="op">=</span> <span class="va">GraphLearner</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lr</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_learner.html" class="external-link">as_learner</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>  <span class="co"># equivalent</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">state</span>  <span class="co"># untrained version!</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pca</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="co"># The following is therefore NULL:</span></span>
-<span class="r-in"><span class="va">lr</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="va">model</span></span>
+<span class="r-in"><span><span class="co"># The following is therefore NULL:</span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="va">model</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># To access the trained model from the PipeOpLearner's Learner, use:</span></span>
-<span class="r-in"><span class="va">lr</span><span class="op">$</span><span class="va">graph_model</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="va">model</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># To access the trained model from the PipeOpLearner's Learner, use:</span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph_model</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="va">model</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> n= 150 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> node), split, n, loss, yval, (yprob)</span>
@@ -191,9 +191,9 @@ recommended.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3) PC1&gt;=-1.553145 100  50 versicolor (0.00000000 0.50000000 0.50000000)  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     6) PC1&lt; 1.142805 44   1 versicolor (0.00000000 0.97727273 0.02272727) *</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     7) PC1&gt;=1.142805 56   7 virginica (0.00000000 0.12500000 0.87500000) *</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Feature importance (of principal components):</span></span>
-<span class="r-in"><span class="va">lr</span><span class="op">$</span><span class="va">graph_model</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="fu">importance</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Feature importance (of principal components):</span></span></span>
+<span class="r-in"><span><span class="va">lr</span><span class="op">$</span><span class="va">graph_model</span><span class="op">$</span><span class="va">pipeops</span><span class="op">$</span><span class="va">classif.rpart</span><span class="op">$</span><span class="va">learner_model</span><span class="op">$</span><span class="fu">importance</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       PC1       PC2       PC3       PC4 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 85.795455 18.016529  5.694731  3.254132 </span>
 </code></pre></div>

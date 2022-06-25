@@ -220,15 +220,15 @@ can be set to <code>selector_type("numeric")</code>.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"pima"</span><span class="op">)</span><span class="op">$</span><span class="fu">select</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insulin"</span>, <span class="st">"triceps"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html" class="external-link">complete.cases</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"pima"</span><span class="op">)</span><span class="op">$</span><span class="fu">select</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insulin"</span>, <span class="st">"triceps"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html" class="external-link">complete.cases</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 394</span>
-<span class="r-in"><span class="va">task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> diabetes  insulin  triceps </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0      374      227 </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    diabetes insulin triceps</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      neg      NA      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      neg     180      48</span>
@@ -236,11 +236,11 @@ can be set to <code>selector_type("numeric")</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:      neg     112      23</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:      pos      NA      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:      neg      NA      31</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"missind"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">new_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"missind"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">new_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    diabetes missing_insulin missing_triceps</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      neg         missing         missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      neg         present         present</span>
@@ -248,15 +248,15 @@ can be set to <code>selector_type("numeric")</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:      neg         present         present</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:      pos         missing         missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:      neg         missing         present</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># proper imputation + missing indicators</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">impgraph</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputesample"</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"missind"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"featureunion"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">impgraph</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># proper imputation + missing indicators</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">impgraph</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputesample"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"missind"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"featureunion"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">impgraph</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    diabetes insulin triceps missing_insulin missing_triceps</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      neg     237      32         missing         missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      neg     180      48         present         present</span>

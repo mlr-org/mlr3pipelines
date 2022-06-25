@@ -244,17 +244,17 @@ object on its output.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pca</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">nop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"nop"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">choices</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pca"</span>, <span class="st">"nothing"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"branch"</span>, <span class="va">choices</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="gunion.html">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pca</span>, <span class="va">nop</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"unbranch"</span>, <span class="va">choices</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">gr</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">branch.selection</span> <span class="op">=</span> <span class="st">"pca"</span></span>
-<span class="r-in"><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pca</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"pca"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nop</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"nop"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">choices</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pca"</span>, <span class="st">"nothing"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"branch"</span>, <span class="va">choices</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="gunion.html">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pca</span>, <span class="va">nop</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"unbranch"</span>, <span class="va">choices</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">branch.selection</span> <span class="op">=</span> <span class="st">"pca"</span></span></span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unbranch.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5): Iris Flowers</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
@@ -262,9 +262,9 @@ object on its output.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Features (4):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (4): PC1, PC2, PC3, PC4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">gr</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">branch.selection</span> <span class="op">=</span> <span class="st">"nothing"</span></span>
-<span class="r-in"><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">branch.selection</span> <span class="op">=</span> <span class="st">"nothing"</span></span></span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unbranch.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5): Iris Flowers</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>

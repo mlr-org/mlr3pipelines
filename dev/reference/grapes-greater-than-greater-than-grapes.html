@@ -167,11 +167,11 @@ Analogously, if <code>g2</code> is <code>NULL</code>, <code>g1</code> converted 
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="va">g1</span> <span class="op">%&gt;&gt;%</span> <span class="va">g2</span>
-
-<span class="fu">concat_graphs</span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, in_place <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">g1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">g2</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="va">g1</span> <span class="op">%&gt;&gt;%</span> <span class="va">g2</span></span>
+<span></span>
+<span><span class="fu">concat_graphs</span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, in_place <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">g1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">g2</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -210,52 +210,52 @@ Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <co
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">o1</span> <span class="op">=</span> <span class="va"><a href="mlr_pipeops_scale.html">PipeOpScale</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">o2</span> <span class="op">=</span> <span class="va"><a href="mlr_pipeops_pca.html">PipeOpPCA</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">o3</span> <span class="op">=</span> <span class="va"><a href="mlr_pipeops_featureunion.html">PipeOpFeatureUnion</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The following two are equivalent:</span></span>
-<span class="r-in"><span class="va">pipe1</span> <span class="op">=</span> <span class="va">o1</span> <span class="op">%&gt;&gt;%</span> <span class="va">o2</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pipe2</span> <span class="op">=</span> <span class="va"><a href="Graph.html">Graph</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o1</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o2</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_edge</span><span class="op">(</span><span class="va">o1</span><span class="op">$</span><span class="va">id</span>, <span class="va">o2</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Note automatical gunion() of lists.</span></span>
-<span class="r-in"><span class="co"># The following three are equivalent:</span></span>
-<span class="r-in"><span class="va">graph1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o1</span>, <span class="va">o2</span><span class="op">)</span> <span class="op">%&gt;&gt;%</span> <span class="va">o3</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">graph2</span> <span class="op">=</span> <span class="fu"><a href="gunion.html">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o1</span>, <span class="va">o2</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;&gt;%</span> <span class="va">o3</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">graph3</span> <span class="op">=</span> <span class="va"><a href="Graph.html">Graph</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o1</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o2</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o3</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_edge</span><span class="op">(</span><span class="va">o1</span><span class="op">$</span><span class="va">id</span>, <span class="va">o3</span><span class="op">$</span><span class="va">id</span>, dst_channel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_edge</span><span class="op">(</span><span class="va">o2</span><span class="op">$</span><span class="va">id</span>, <span class="va">o3</span><span class="op">$</span><span class="va">id</span>, dst_channel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pipe1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o3</span>  <span class="co"># modify pipe1 in-place</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">o1</span> <span class="op">=</span> <span class="va"><a href="mlr_pipeops_scale.html">PipeOpScale</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">o2</span> <span class="op">=</span> <span class="va"><a href="mlr_pipeops_pca.html">PipeOpPCA</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">o3</span> <span class="op">=</span> <span class="va"><a href="mlr_pipeops_featureunion.html">PipeOpFeatureUnion</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The following two are equivalent:</span></span></span>
+<span class="r-in"><span><span class="va">pipe1</span> <span class="op">=</span> <span class="va">o1</span> <span class="op">%&gt;&gt;%</span> <span class="va">o2</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pipe2</span> <span class="op">=</span> <span class="va"><a href="Graph.html">Graph</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o1</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o2</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_edge</span><span class="op">(</span><span class="va">o1</span><span class="op">$</span><span class="va">id</span>, <span class="va">o2</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Note automatical gunion() of lists.</span></span></span>
+<span class="r-in"><span><span class="co"># The following three are equivalent:</span></span></span>
+<span class="r-in"><span><span class="va">graph1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o1</span>, <span class="va">o2</span><span class="op">)</span> <span class="op">%&gt;&gt;%</span> <span class="va">o3</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">graph2</span> <span class="op">=</span> <span class="fu"><a href="gunion.html">gunion</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">o1</span>, <span class="va">o2</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;&gt;%</span> <span class="va">o3</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">graph3</span> <span class="op">=</span> <span class="va"><a href="Graph.html">Graph</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o1</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o2</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va">o3</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_edge</span><span class="op">(</span><span class="va">o1</span><span class="op">$</span><span class="va">id</span>, <span class="va">o3</span><span class="op">$</span><span class="va">id</span>, dst_channel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_edge</span><span class="op">(</span><span class="va">o2</span><span class="op">$</span><span class="va">id</span>, <span class="va">o3</span><span class="op">$</span><span class="va">id</span>, dst_channel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pipe1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o3</span>  <span class="co"># modify pipe1 in-place</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 3 PipeOps:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID         State     sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pipe1</span>  <span class="co"># contains o1, o2, and o3 now.</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pipe1</span>  <span class="co"># contains o1, o2, and o3 now.</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 3 PipeOps:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID         State     sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">o1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o2</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">o1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 2 PipeOps:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ID         State sccssors prdcssors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  scale &lt;&lt;UNTRAINED&gt;&gt;      pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    pca &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">o1</span>  <span class="co"># not changed, becuase not a Graph.</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">o1</span>  <span class="co"># not changed, becuase not a Graph.</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;scale&gt; (not trained)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> values: &lt;robust=FALSE&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Input channels &lt;name [train type, predict type]&gt;:</span>

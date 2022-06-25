@@ -218,11 +218,11 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"boston_housing"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">po</span> <span class="op">=</span> <span class="va">PipeOpTargetTrafoScaleRange</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"boston_housing"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="va">PipeOpTargetTrafoScaleRange</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fun</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -236,15 +236,15 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $fun</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (inputs) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_list(inputs, len = 1L, types = "Prediction")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     list(private$.invert(inputs[[1L]], predict_phase_state))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56317451ebb0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563181241698&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x558ee4e552e0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558edb8a9f40&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:boston_housing&gt; (506 x 19): Boston Housing Prices</span>
@@ -256,15 +256,15 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - int (3): rad, tax, tract</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - fct (2): chas, town</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#syntactic sugar for a graph using ppl():</span></span>
-<span class="r-in"><span class="va">ttscalerange</span> <span class="op">=</span> <span class="fu"><a href="ppl.html">ppl</a></span><span class="op">(</span><span class="st">"targettrafo"</span>, trafo_pipeop <span class="op">=</span> <span class="va">PipeOpTargetTrafoScaleRange</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  graph <span class="op">=</span> <span class="va"><a href="mlr_pipeops_learner.html">PipeOpLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html" class="external-link">LearnerRegrRpart</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ttscalerange</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#syntactic sugar for a graph using ppl():</span></span></span>
+<span class="r-in"><span><span class="va">ttscalerange</span> <span class="op">=</span> <span class="fu"><a href="ppl.html">ppl</a></span><span class="op">(</span><span class="st">"targettrafo"</span>, trafo_pipeop <span class="op">=</span> <span class="va">PipeOpTargetTrafoScaleRange</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  graph <span class="op">=</span> <span class="va"><a href="mlr_pipeops_learner.html">PipeOpLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html" class="external-link">LearnerRegrRpart</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ttscalerange</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $targetinvert.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="va">ttscalerange</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">ttscalerange</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $targetinvert.output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;PredictionRegr&gt; for 506 observations:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     row_ids truth response</span>
@@ -276,7 +276,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         505  22.0 23.72519</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         506  11.9 19.55954</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="va">ttscalerange</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">regr.rpart</span></span>
+<span class="r-in"><span><span class="va">ttscalerange</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">regr.rpart</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> n= 506 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -301,7 +301,7 @@ Target value of greatest item of input target. Initialized to 1.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $train_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals$xval</span>

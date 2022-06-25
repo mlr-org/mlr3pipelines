@@ -227,10 +227,10 @@ both during training and prediction.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># See PipeOpBranch for a complete branching example</span></span>
-<span class="r-in"><span class="va">pou</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"unbranch"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pou</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">NO_OP</span>, <span class="va">NO_OP</span>, <span class="st">"hello"</span>, <span class="va">NO_OP</span>, <span class="va">NO_OP</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># See PipeOpBranch for a complete branching example</span></span></span>
+<span class="r-in"><span><span class="va">pou</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"unbranch"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pou</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">NO_OP</span>, <span class="va">NO_OP</span>, <span class="st">"hello"</span>, <span class="va">NO_OP</span>, <span class="va">NO_OP</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hello"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

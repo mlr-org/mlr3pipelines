@@ -222,26 +222,26 @@ if <code>check_levels</code> is <code>FALSE</code> and the level is not already 
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"pima"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"pima"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> diabetes      age  glucose  insulin     mass pedigree pregnant pressure </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0        0        5      374       11        0        0       35 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  triceps </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      227 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># impute missing values of the numeric feature "glucose" by the constant value -999</span></span>
-<span class="r-in"><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputeconstant"</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  constant <span class="op">=</span> <span class="op">-</span><span class="fl">999</span>, affect_columns <span class="op">=</span> <span class="fu"><a href="Selector.html">selector_name</a></span><span class="op">(</span><span class="st">"glucose"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>task <span class="op">=</span> <span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">new_task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># impute missing values of the numeric feature "glucose" by the constant value -999</span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputeconstant"</span>, param_vals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  constant <span class="op">=</span> <span class="op">-</span><span class="fl">999</span>, affect_columns <span class="op">=</span> <span class="fu"><a href="Selector.html">selector_name</a></span><span class="op">(</span><span class="st">"glucose"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>task <span class="op">=</span> <span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">new_task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> diabetes      age  insulin     mass pedigree pregnant pressure  triceps </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0        0      374       11        0        0       35      227 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  glucose </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0 </span>
-<span class="r-in"><span class="va">new_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"glucose"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span class="r-in"><span><span class="va">new_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"glucose"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1]  148   85  183   89  137  116   78  115  197  125  110  168  139  189  166</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [16]  100  118  107  103  115  126   99  196  119  143  125  147   97  145  117</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [31]  109  158   88   92  122  103  138  102   90  111  180  133  106  171  159</span>
