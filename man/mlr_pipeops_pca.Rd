@@ -52,7 +52,7 @@ The scaling used, or \code{FALSE}.
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
 \item \code{center} :: \code{logical(1)}\cr
-Indicating whether the features should be centered. Default is \code{FALSE}. See \code{\link[stats:prcomp]{prcomp()}}.
+Indicating whether the features should be centered. Default is \code{TRUE}. See \code{\link[stats:prcomp]{prcomp()}}.
 \item \code{scale.} :: \code{logical(1)}\cr
 Whether to scale features to unit variance before analysis. Default is \code{FALSE}, but scaling is advisable. See \code{\link[stats:prcomp]{prcomp()}}.
 \item \code{rank.} :: \code{integer(1)}\cr
