@@ -623,7 +623,8 @@ graph_reduce = function(self, input, fun, single_input) {
       op$.result = output
     }
 
-    edges[list(id, op$output$name), payload := ..output[get("src_channel")], on = c("src_id", "src_channel")]
+    browser()
+    edges[list(id, op$output$name), payload := list(..output[get("src_channel")]), on = c("src_id", "src_channel")]
   }
 
   # get payload of edges that go to terminal node.
