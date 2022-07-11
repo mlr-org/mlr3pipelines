@@ -623,7 +623,6 @@ graph_reduce = function(self, input, fun, single_input) {
       op$.result = output
     }
 
-    browser()
     edges[list(id, op$output$name), "payload" := list(..output[get("src_channel")]), on = c("src_id", "src_channel")]
   }
 
