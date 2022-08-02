@@ -98,50 +98,53 @@ test_that("mlr_pipeops multi-access works", {
   expect_equal(pos(), mlr_pipeops)
 
   expect_equal(
-    pos("scale"),
+    unname(pos("scale")),
     list(mlr_pipeops$get("scale"))
   )
 
   expect_equal(
-    pos(c("scale", "nop")),
+    unname(pos(c("scale", "nop"))),
     list(mlr_pipeops$get("scale"), mlr_pipeops$get("nop"))
   )
 
   expect_equal(
     pos(c("scale", original = "nop")),
-    list(mlr_pipeops$get("scale"), original = mlr_pipeops$get("nop", id = "original"))
+    list(scale = mlr_pipeops$get("scale"), original = mlr_pipeops$get("nop", id = "original"))
   )
 
   expect_equal(
-    pos("scale", center = FALSE),
+    unname(pos("scale", center = FALSE)),
     list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)))
   )
 
-  expect_error(pos(c("scale", "nop"), center = FALSE), "set argument.*center.*PipeOpNOP")
+  expect_error(
+    pos(c("scale", "nop"), center = FALSE),
+    "set argument.*center.*PipeOpNOP"
+  )
 
   expect_equal(
-    pos(c("scale", "pca"), center = FALSE),
+    unname(pos(c("scale", "pca"), center = FALSE)),
     list(mlr_pipeops$get("scale", param_vals = list(center = FALSE)), mlr_pipeops$get("pca", param_vals = list(center = FALSE)))
   )
 
 
   expect_equal(
-    pos("scale", id = "sx", center = FALSE),
+    unname(pos("scale", id = "sx", center = FALSE)),
     list(PipeOpScale$new(id = "sx", param_vals = list(center = FALSE)))
   )
 
   expect_equal(
-    pos("copy", 2),
+    unname(pos("copy", 2)),
     list(mlr_pipeops$get("copy", 2))
   )
 
   expect_equal(
-    pos("copy", outnum = 2),
+    unname(pos("copy", outnum = 2)),
     list(mlr_pipeops$get("copy", outnum = 2))
   )
 
   expect_equal(
-    pos("branch", options = 2),
+    unname(pos("branch", options = 2)),
     list(mlr_pipeops$get("branch", options = 2))
   )
 
@@ -158,7 +161,7 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(
-    pos("learner", dblrn$new(), key = 99),
+    unname(pos("learner", dblrn$new(), key = 99)),
     list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
   )
 
@@ -169,18 +172,18 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(
-    pos(list(dblrn$new(), dblrn$new())),
+    unname(pos(list(dblrn$new(), dblrn$new()))),
     list(mlr_pipeops$get("learner", dblrn$new()), mlr_pipeops$get("learner", dblrn$new()))
   )
 
   expect_equal(
-    pos(list(dblrn$new(), dblrn$new()), key = 99),
+    unname(pos(list(dblrn$new(), dblrn$new()), key = 99)),
     list(mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)), mlr_pipeops$get("learner", dblrn$new(), param_vals = list(key = 99)))
   )
 
-  expect_equal(pos(character(0)), list())
+  expect_equal(unname(pos(character(0))), list())
   expect_equal(pos(c(x = "nop")), list(x = mlr_pipeops$get("nop", id = "x")))
-  expect_equal(pos(list()), list())
+  expect_equal(unname(pos(list())), list())
 
   polrn = mlr_pipeops$get("learner", dblrn$new())
   polrn$id = "y"
