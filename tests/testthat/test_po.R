@@ -108,8 +108,12 @@ test_that("mlr_pipeops multi-access works", {
   )
 
   expect_equal(
-    pos(c("scale", original = "nop")),
-    list(scale = mlr_pipeops$get("scale"), original = mlr_pipeops$get("nop", id = "original"))
+    {
+      tmp = pos(c("scale", original = "nop"))
+      names(tmp)[1] = ""
+      tmp
+    },
+    list(mlr_pipeops$get("scale"), original = mlr_pipeops$get("nop", id = "original"))
   )
 
   expect_equal(
