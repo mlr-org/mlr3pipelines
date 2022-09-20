@@ -1,4 +1,9 @@
-# mlr3pipelines 0.4.1-9000
+# mlr3pipelines 0.4.2
+
+* Documentation: Clarified `PipeOpHistBin` operation.
+* Documentation: Fixed `PipeOpPCA` documentation of `center` default.
+* Added `$label` active binding, setting it to the `help()`-page title by default.
+* Made tests compatible with upcoming mlr3misc update.
 
 # mlr3pipelines 0.4.1
 
