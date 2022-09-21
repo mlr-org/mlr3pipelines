@@ -1,3 +1,5 @@
+# mlr3pipelines 0.4.2-9000
+
 # mlr3pipelines 0.4.2
 
 * Documentation: Clarified `PipeOpHistBin` operation.
