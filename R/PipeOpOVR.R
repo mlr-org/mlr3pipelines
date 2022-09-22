@@ -64,7 +64,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -170,7 +170,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' @family Ensembles
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples

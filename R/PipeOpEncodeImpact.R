@@ -70,7 +70,7 @@
 #'
 #' poe$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",

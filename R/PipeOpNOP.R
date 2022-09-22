@@ -54,7 +54,7 @@
 #' gr$train(tsk("iris"))[[1]]$data()
 #' @family PipeOps
 #' @family Placeholder Pipeops
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpNOP = R6Class("PipeOpNOP",

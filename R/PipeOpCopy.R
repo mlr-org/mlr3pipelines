@@ -78,7 +78,7 @@
 #'   ))
 #' @family PipeOps
 #' @family Placeholder Pipeops
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpCopy = R6Class("PipeOpCopy",
