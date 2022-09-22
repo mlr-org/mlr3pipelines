@@ -75,7 +75,7 @@ po$train(list(task = task))[[1]]$data()
 po$state
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

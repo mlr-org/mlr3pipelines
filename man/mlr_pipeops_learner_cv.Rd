@@ -132,7 +132,7 @@ graph$pipeops$classif.rpart$learner$predict_type = "prob"
 graph$train(task)
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other Meta PipeOps: 
 \code{\link{mlr_pipeops_learner}}

@@ -110,7 +110,7 @@ tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

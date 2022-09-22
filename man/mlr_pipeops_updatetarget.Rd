@@ -80,7 +80,7 @@ po$predict(list(tsk("iris")))
 }
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},

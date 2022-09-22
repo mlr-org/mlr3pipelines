@@ -98,7 +98,7 @@ gr$param_set$values$branch.selection = "nothing"
 gr$train(tsk("iris"))
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

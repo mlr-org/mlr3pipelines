@@ -111,7 +111,7 @@ po = po("featureunion", innum = c("a", "b"))
 po$train(list(task2, task3))
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
