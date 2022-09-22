@@ -180,23 +180,23 @@ Minimum number of levels required to be selected.</p></dd>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
     
-<ul><li><p><code>selector_all</code>: <code>selector_all</code> selects all features.</p></li>
-<li><p><code>selector_none</code>: <code>selector_none</code> selects none of the  features.</p></li>
-<li><p><code>selector_type</code>: <code>selector_type</code> selects features according to type. Legal types are listed in <code>mlr_reflections$task_feature_types</code>.</p></li>
-<li><p><code>selector_grep</code>: <code>selector_grep</code> selects features with names matching the <code><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep()</a></code> pattern.</p></li>
-<li><p><code>selector_name</code>: <code>selector_name</code> selects features with names matching exactly the names listed.</p></li>
-<li><p><code>selector_invert</code>: <code>selector_invert</code> inverts a given <code>Selector</code>: It always selects the features
+<ul><li><p><code>selector_all()</code>: <code>selector_all</code> selects all features.</p></li>
+<li><p><code>selector_none()</code>: <code>selector_none</code> selects none of the  features.</p></li>
+<li><p><code>selector_type()</code>: <code>selector_type</code> selects features according to type. Legal types are listed in <code>mlr_reflections$task_feature_types</code>.</p></li>
+<li><p><code>selector_grep()</code>: <code>selector_grep</code> selects features with names matching the <code><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep()</a></code> pattern.</p></li>
+<li><p><code>selector_name()</code>: <code>selector_name</code> selects features with names matching exactly the names listed.</p></li>
+<li><p><code>selector_invert()</code>: <code>selector_invert</code> inverts a given <code>Selector</code>: It always selects the features
 that would be <em>dropped</em> by the other <code>Selector</code>, and drops the features that
 would be kept.</p></li>
-<li><p><code>selector_intersect</code>: <code>selector_intersect</code> selects the intersection of two <code>Selector</code>s: Only features
+<li><p><code>selector_intersect()</code>: <code>selector_intersect</code> selects the intersection of two <code>Selector</code>s: Only features
 selected by both <code>Selector</code>s are selected in the end.</p></li>
-<li><p><code>selector_union</code>: <code>selector_union</code> selects the union of two <code>Selector</code>s: Features
+<li><p><code>selector_union()</code>: <code>selector_union</code> selects the union of two <code>Selector</code>s: Features
 selected by either <code>Selector</code> are selected in the end.</p></li>
-<li><p><code>selector_setdiff</code>: <code>selector_setdiff</code> selects the setdiff of two <code>Selector</code>s: Features
+<li><p><code>selector_setdiff()</code>: <code>selector_setdiff</code> selects the setdiff of two <code>Selector</code>s: Features
 selected by <code>selector_x</code> are selected, unless they are also selected
 by <code>selector_y</code>.</p></li>
-<li><p><code>selector_missing</code>: <code>selector_missing</code> selects features with missing values.</p></li>
-<li><p><code>selector_cardinality_greater_than</code>: <code>selector_cardinality_greater_than</code> selects categorical features with cardinality
+<li><p><code>selector_missing()</code>: <code>selector_missing</code> selects features with missing values.</p></li>
+<li><p><code>selector_cardinality_greater_than()</code>: <code>selector_cardinality_greater_than</code> selects categorical features with cardinality
 greater then a given threshold.</p></li>
 </ul></div>
     <div class="section level2">
