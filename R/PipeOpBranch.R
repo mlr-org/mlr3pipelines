@@ -62,7 +62,7 @@
 #'
 #' @family PipeOps
 #' @family Path Branching
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples

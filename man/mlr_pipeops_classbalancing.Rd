@@ -118,7 +118,7 @@ result = opb$train(list(task))[[1]]
 table(result$truth())
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

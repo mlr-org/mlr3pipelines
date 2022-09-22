@@ -49,7 +49,7 @@
 #' gr$train(t)
 #' gr$predict(t)
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpThreshold = R6Class("PipeOpThreshold",

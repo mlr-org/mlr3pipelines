@@ -68,7 +68,7 @@
 #'
 #' @family PipeOps
 #' @family Meta PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
