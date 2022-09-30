@@ -202,3 +202,13 @@ test_that("mlr_pipeops multi-access works", {
   )
 
 })
+
+test_that("Incrementing ids works", {
+  x = po("pca_123")
+  expect_true(x$id == "pca_123")
+  expect_r6(x, "PipeOpPCA")
+
+  x = po("learner_1", lrn("regr.rpart"))
+  expect_true(x$id == "regr.rpart_1")
+  expect_r6(x, "PipeOpLearner")
+})

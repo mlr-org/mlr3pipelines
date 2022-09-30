@@ -82,7 +82,7 @@ po.PipeOp = function(.obj, ...) {
 
 #' @export
 po.character = function(.obj, ...) {
-  dictionary_sugar_get(dict = mlr_pipeops, .key = .obj, ...)
+  dictionary_sugar_inc_get(dict = mlr_pipeops, .key = key, ...)
 }
 
 #' @export

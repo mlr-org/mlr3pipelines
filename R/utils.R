@@ -103,3 +103,33 @@ multiplicity_recurse = function(.multip, .fun, ...) {
     .fun(.multip, ...)
   }
 }
+
+#' @title A Quick Way to Initialize Objects from Dictionaries with Incremented ID
+#' @description
+#' Covenience function to obtain dictionary elements with incremented ids for easier avoidance
+#' of ID clashes. This should only be used on dictionaries that ensure that the ids don't end with
+#' the pattern `_<n>`. Where `n` is any number.
+#'
+#' @return An element from the dictionary.
+#'
+#' @examples
+#' dictionary_sugar_get("pca", id = "pca_1")
+#' # is the same as
+#' dictionary_sugar_get_inc("pca_1")
+#'
+#' @export
+dictionary_sugar_inc_get = function(dict, .key, ...) {
+  newkey = gsub("_\\d+$", "", .key)
+  add_suffix = .key != newkey
+  if (add_suffix) {
+    assert_true(!hasArg("id"))
+    suffix = gsub(newkey, "", .key)
+  }
+  obj = mlr3misc::dictionary_sugar_get(dict = dict, .key = newkey, ...)
+
+  if (add_suffix) {
+    obj$id = paste0(obj$id, suffix)
+  }
+  obj
+
+}
