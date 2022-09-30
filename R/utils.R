@@ -138,6 +138,7 @@ dictionary_sugar_inc_get = function(dict, .key, ...) {
 }
 
 #' @name inc_get
+#' @export
 dictionary_sugar_inc_mget = function(dict, .keys, ...) {
   objs = lapply(.keys, dictionary_sugar_inc_get, dict = dict, ...)
   if (!is.null(names(.keys))) {
