@@ -8,7 +8,6 @@
 #' @importFrom digest digest
 #' @importFrom withr with_options
 #' @importFrom stats setNames
-#' @importFrom methods hasArg
 "_PACKAGE"
 
 register_mlr3 = function() {
