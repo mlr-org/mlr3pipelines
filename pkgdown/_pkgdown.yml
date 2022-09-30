@@ -83,6 +83,8 @@ reference:
       - filter_noop
       - starts_with("as.")
       - starts_with("is.")
+      - inc_get
+      - starts_with("is.")
   - title: Abstract PipeOps
     contents:
       - PipeOpEnsemble
