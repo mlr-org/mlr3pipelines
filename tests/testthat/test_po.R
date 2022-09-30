@@ -211,4 +211,7 @@ test_that("Incrementing ids works", {
   x = po("learner_1", lrn("regr.rpart"))
   expect_true(x$id == "regr.rpart_1")
   expect_r6(x, "PipeOpLearner")
+
+  xs = pos(c("pca_1", "pca_2"))
+  assert_true(all(names(xs) == c("pca_1", "pca_2")))
 })

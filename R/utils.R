@@ -113,10 +113,13 @@ multiplicity_recurse = function(.multip, .fun, ...) {
 #' @return An element from the dictionary.
 #'
 #' @examples
-#' dictionary_sugar_get("pca", id = "pca_1")
+#' dictionary_sugar_get(mlr_pipeops, "pca", id = "pca_1")
 #' # is the same as
-#' dictionary_sugar_get_inc("pca_1")
+#' dictionary_sugar_inc_get(mlr_pipeops, "pca_1")
+#' # multiple pipeops
+#' dictionary_sugar_inc_mget(mlr_pipeops, c("pca_1", "pca_2"))
 #'
+#' @rdname inc_get
 #' @export
 dictionary_sugar_inc_get = function(dict, .key, ...) {
   newkey = gsub("_\\d+$", "", .key)
@@ -132,4 +135,18 @@ dictionary_sugar_inc_get = function(dict, .key, ...) {
   }
   obj
 
+}
+
+#' @name inc_get
+dictionary_sugar_inc_mget = function(dict, .keys, ...) {
+  objs = lapply(.keys, dictionary_sugar_inc_get, dict = dict, ...)
+  if (!is.null(names(.keys))) {
+    nn = names2(.keys)
+    ii = which(!is.na(nn))
+    for (i in ii) {
+      objs[[i]]$id = nn[i]
+    }
+  }
+  names(objs) = map_chr(objs, "id")
+  objs
 }
