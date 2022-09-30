@@ -106,7 +106,7 @@ multiplicity_recurse = function(.multip, .fun, ...) {
 
 #' @title A Quick Way to Initialize Objects from Dictionaries with Incremented ID
 #' @description
-#' Covenience wrapper around [mlr3misc::dictionary_sugar_get] and [mlr3misc::dictionary_sugar_inc_mget]
+#' Covenience wrapper around [mlr3misc::dictionary_sugar_get] and [mlr3misc::dictionary_sugar_mget]
 #' to allow easier avoidance of of ID clashes which is for example useful,
 #' when multiple instances of the [PipeOp] are in one [Graph].
 #' Let `<key>` be the key of the objet to retrieve. When passing the `<key>_<n>` to this
@@ -137,7 +137,7 @@ dictionary_sugar_inc_get = function(dict, .key, ...) {
   newkey = gsub("_\\d+$", "", .key)
   add_suffix = .key != newkey
   if (add_suffix) {
-    assert_true(!hasArg("id"))
+    assert_true(!methods::hasArg("id"))
     suffix = gsub(newkey, "", .key)
   }
   obj = mlr3misc::dictionary_sugar_get(dict = dict, .key = newkey, ...)

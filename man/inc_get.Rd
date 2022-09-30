@@ -27,7 +27,7 @@ Keys of the objects to construct - possibly with a suffix like \verb{_n} to modi
 An element from the dictionary.
 }
 \description{
-Covenience wrapper around \link[mlr3misc:dictionary_sugar_get]{mlr3misc::dictionary_sugar_get} and \link[mlr3misc:dictionary_sugar_inc_mget]{mlr3misc::dictionary_sugar_inc_mget}
+Covenience wrapper around \link[mlr3misc:dictionary_sugar_get]{mlr3misc::dictionary_sugar_get} and \link[mlr3misc:dictionary_sugar_get]{mlr3misc::dictionary_sugar_mget}
 to allow easier avoidance of of ID clashes which is for example useful,
 when multiple instances of the \link{PipeOp} are in one \link{Graph}.
 Let \verb{<key>} be the key of the objet to retrieve. When passing the \verb{<key>_<n>} to this
