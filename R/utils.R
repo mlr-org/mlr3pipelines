@@ -106,14 +106,26 @@ multiplicity_recurse = function(.multip, .fun, ...) {
 
 #' @title A Quick Way to Initialize Objects from Dictionaries with Incremented ID
 #' @description
-#' Covenience function to obtain dictionary elements with incremented ids for easier avoidance
-#' of ID clashes. This should only be used on dictionaries that ensure that the ids don't end with
-#' the pattern `_<n>`. Where `n` is any number.
+#' Covenience wrapper around [mlr3misc::dictionary_sugar_get] and [mlr3misc::dictionary_sugar_inc_mget]
+#' to allow easier avoidance of of ID clashes which is for example useful,
+#' when multiple instances of the [PipeOp] are in one [Graph].
+#' Let `<key>` be the key of the objet to retrieve. When passing the `<key>_<n>` to this
+#' function, where `<n>` is any natural numer, the object with key <key> is retrieved and the
+#' suffix `_<n>` is appended to the id after the object is constructed.
+#'
+#' @param dict ([Dictionary])\cr
+#'   Dictionary from which to retrieve an element.
+#' @param .key (`character(1)`)\cr
+#'   Key of the object to construct - possibly with a suffix like `_n` to modify its id.
+#' @param .keys (`character()`)\cr
+#'   Keys of the objects to construct - possibly with a suffix like `_n` to modify its id.
+#' @param ... (any)\cr
+#'   See description of [mlr3misc::dictionary_sugar].
 #'
 #' @return An element from the dictionary.
 #'
 #' @examples
-#' dictionary_sugar_get(mlr_pipeops, "pca", id = "pca_1")
+#' mlr3misc::dictionary_sugar_get(mlr_pipeops, "pca", id = "pca_1")
 #' # is the same as
 #' dictionary_sugar_inc_get(mlr_pipeops, "pca_1")
 #' # multiple pipeops

@@ -10,16 +10,32 @@ dictionary_sugar_inc_get(dict, .key, ...)
 
 dictionary_sugar_inc_mget(dict, .keys, ...)
 }
+\arguments{
+\item{dict}{(\link{Dictionary})\cr
+Dictionary from which to retrieve an element.}
+
+\item{.key}{(\code{character(1)})\cr
+Key of the object to construct - possibly with a suffix like \verb{_n} to modify its id.}
+
+\item{...}{(any)\cr
+See description of \link[mlr3misc:dictionary_sugar_get]{mlr3misc::dictionary_sugar}.}
+
+\item{.keys}{(\code{character()})\cr
+Keys of the objects to construct - possibly with a suffix like \verb{_n} to modify its id.}
+}
 \value{
 An element from the dictionary.
 }
 \description{
-Covenience function to obtain dictionary elements with incremented ids for easier avoidance
-of ID clashes. This should only be used on dictionaries that ensure that the ids don't end with
-the pattern \verb{_<n>}. Where \code{n} is any number.
+Covenience wrapper around \link[mlr3misc:dictionary_sugar_get]{mlr3misc::dictionary_sugar_get} and \link[mlr3misc:dictionary_sugar_inc_mget]{mlr3misc::dictionary_sugar_inc_mget}
+to allow easier avoidance of of ID clashes which is for example useful,
+when multiple instances of the \link{PipeOp} are in one \link{Graph}.
+Let \verb{<key>} be the key of the objet to retrieve. When passing the \verb{<key>_<n>} to this
+function, where \verb{<n>} is any natural numer, the object with key <key> is retrieved and the
+suffix \verb{_<n>} is appended to the id after the object is constructed.
 }
 \examples{
-dictionary_sugar_get(mlr_pipeops, "pca", id = "pca_1")
+mlr3misc::dictionary_sugar_get(mlr_pipeops, "pca", id = "pca_1")
 # is the same as
 dictionary_sugar_inc_get(mlr_pipeops, "pca_1")
 # multiple pipeops
