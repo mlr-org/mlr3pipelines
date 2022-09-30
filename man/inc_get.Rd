@@ -2,9 +2,13 @@
 % Please edit documentation in R/utils.R
 \name{dictionary_sugar_inc_get}
 \alias{dictionary_sugar_inc_get}
+\alias{inc_get}
+\alias{dictionary_sugar_inc_mget}
 \title{A Quick Way to Initialize Objects from Dictionaries with Incremented ID}
 \usage{
 dictionary_sugar_inc_get(dict, .key, ...)
+
+dictionary_sugar_inc_mget(dict, .keys, ...)
 }
 \value{
 An element from the dictionary.
@@ -15,8 +19,10 @@ of ID clashes. This should only be used on dictionaries that ensure that the ids
 the pattern \verb{_<n>}. Where \code{n} is any number.
 }
 \examples{
-dictionary_sugar_get("pca", id = "pca_1")
+dictionary_sugar_get(mlr_pipeops, "pca", id = "pca_1")
 # is the same as
-dictionary_sugar_get_inc("pca_1")
+dictionary_sugar_inc_get(mlr_pipeops, "pca_1")
+# multiple pipeops
+dictionary_sugar_inc_mget(mlr_pipeops, c("pca_1", "pca_2"))
 
 }
