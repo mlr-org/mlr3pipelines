@@ -1,4 +1,5 @@
 # mlr3pipelines 0.4.2-9000
+* `po()`, `pos()` can now construct `PipeOp`s with ID postfix `_<number>` to avoid ID clashes.
 
 # mlr3pipelines 0.4.2
 
