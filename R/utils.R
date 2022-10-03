@@ -104,41 +104,13 @@ multiplicity_recurse = function(.multip, .fun, ...) {
   }
 }
 
-#' @title A Quick Way to Initialize Objects from Dictionaries with Incremented ID
-#' @description
-#' Covenience wrapper around [mlr3misc::dictionary_sugar_get] and [mlr3misc::dictionary_sugar_mget]
-#' to allow easier avoidance of of ID clashes which is for example useful,
-#' when multiple instances of the [PipeOp] are in one [Graph].
-#' Let `<key>` be the key of the objet to retrieve. When passing the `<key>_<n>` to this
-#' function, where `<n>` is any natural numer, the object with key <key> is retrieved and the
-#' suffix `_<n>` is appended to the id after the object is constructed.
-#'
-#' @param dict ([Dictionary])\cr
-#'   Dictionary from which to retrieve an element.
-#' @param .key (`character(1)`)\cr
-#'   Key of the object to construct - possibly with a suffix like `_n` to modify its id.
-#' @param .keys (`character()`)\cr
-#'   Keys of the objects to construct - possibly with a suffix like `_n` to modify its id.
-#' @param ... (any)\cr
-#'   See description of [mlr3misc::dictionary_sugar].
-#'
-#' @return An element from the dictionary.
-#'
-#' @examples
-#' mlr3misc::dictionary_sugar_get(mlr_pipeops, "pca", id = "pca_1")
-#' # is the same as
-#' dictionary_sugar_inc_get(mlr_pipeops, "pca_1")
-#' # multiple pipeops
-#' dictionary_sugar_inc_mget(mlr_pipeops, c("pca_1", "pca_2"))
-#'
-#' @rdname inc_get
-#' @export
+# replace when new mlr3misc version is released https://github.com/mlr-org/mlr3misc/pull/80
 dictionary_sugar_inc_get = function(dict, .key, ...) {
   newkey = gsub("_\\d+$", "", .key)
   add_suffix = .key != newkey
   if (add_suffix) {
     assert_true(!methods::hasArg("id"))
-    suffix = gsub(newkey, "", .key)
+    suffix = regmatches(.key, regexpr("_\\d+$", .key))
   }
   obj = mlr3misc::dictionary_sugar_get(dict = dict, .key = newkey, ...)
 
@@ -149,8 +121,7 @@ dictionary_sugar_inc_get = function(dict, .key, ...) {
 
 }
 
-#' @name inc_get
-#' @export
+# replace when new mlr3misc version is released https://github.com/mlr-org/mlr3misc/pull/80
 dictionary_sugar_inc_mget = function(dict, .keys, ...) {
   objs = lapply(.keys, dictionary_sugar_inc_get, dict = dict, ...)
   if (!is.null(names(.keys))) {
