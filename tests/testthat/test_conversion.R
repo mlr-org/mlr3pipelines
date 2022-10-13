@@ -169,3 +169,13 @@ test_that("PipeOp to GraphLearner", {
   expect_task(predict_out[[1L]])
 
 })
+
+test_that("as_learners works for Graph and PipeOp", {
+  graph = po("nop") %>>% po("learner", lrn("regr.rpart"))
+  learners = as_learners(graph)
+  expect_list(learners, types = "GraphLearner", len = 1L)
+
+  pop = po("learner", lrn("regr.rpart"))
+  learners = as_learners(graph)
+  expect_list(learners, types = "GraphLearner", len = 1L)
+})

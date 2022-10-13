@@ -1,5 +1,6 @@
 # mlr3pipelines 0.4.2-9000
 * `po()`, `pos()` can now construct `PipeOp`s with ID postfix `_<number>` to avoid ID clashes.
+* Add `as_learners` method for `Graph` and `PipeOp`
 
 # mlr3pipelines 0.4.2
 
