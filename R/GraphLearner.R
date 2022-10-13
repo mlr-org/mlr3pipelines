@@ -213,7 +213,7 @@ as_learner.Graph = function(x, clone = FALSE) {
 
 #' @export
 as_learners.Graph = function(x, clone = FALSE) {
-  list(as_learner(x))
+  list(as_learner(x, clone = clone))
 }
 
 #' @export
@@ -223,7 +223,7 @@ as_learner.PipeOp = function(x, clone = FALSE) {
 
 #' @export
 as_learners.PipeOp = function(x, clone = FALSE) {
-  list(as_learner(x))
+  list(as_learner(x, clone = clone))
 }
 
 
