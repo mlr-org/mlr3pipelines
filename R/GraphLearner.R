@@ -110,6 +110,28 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         private$.graph$param_set$values = insert_named(private$.graph$param_set$values, param_vals)
       }
       if (!is.null(predict_type)) self$predict_type = predict_type
+    },
+    base_learner = function(recursive = Inf) {
+      assert(check_numeric(recursive, lower = Inf), check_int(recursive))
+      if (recursive <= 0) return(self)
+      gm = self$graph_model
+      gm_output = gm$output
+      if (nrow(gm_output) != 1) stop("Graph has no unique output.")
+      last_pipeop_id = gm_output$op.id
+
+      # pacify static checks
+      src_id = NULL
+      dst_id = NULL
+
+      repeat {
+        last_pipeop = gm$pipeops[[last_pipeop_id]]
+        learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
+        if (!is.null(learner_model)) break
+        last_pipeop_id = gm$edges[dst_id == last_pipeop_id, src_id]
+        if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
+        if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
+      }
+      learner_model$base_learner(recursive - 1)
     }
   ),
   active = list(
