@@ -113,7 +113,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     base_learner = function(recursive = Inf) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
-      if (recursive < 0) return(self)
+      if (recursive <= 0) return(self)
       gm = self$graph_model
       gm_output = gm$output
       if (nrow(gm_output) != 1) stop("Graph has no unique output.")
@@ -131,7 +131,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
         if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
       }
-      if (recursive == 0) return(learner_model)
       learner_model$base_learner(recursive - 1)
     }
   ),
