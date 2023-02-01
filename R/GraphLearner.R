@@ -132,7 +132,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
       }
       learner_model$base_learner(recursive - 1)
-    }
+    },
+    importance = function(..., recursive = Inf) self$base_learner(recursive = recursive)$importance(...),
+    selected_features = function(..., recursive = Inf) self$base_learner(recursive = recursive)$selected_features(...),
+    oob_error =  function(..., recursive = Inf) self$base_learner(recursive = recursive)$oob_error(...),
+    loglik = function(..., recursive = Inf) self$base_learner(recursive = recursive)$loglik(...)
   ),
   active = list(
     hash = function() {
