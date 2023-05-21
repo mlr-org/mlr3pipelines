@@ -476,6 +476,8 @@ test_that("Same output into multiple channels does not cause a bug", {
     private = list(
       .n = NULL,
       .train = function(inputs) {
+        # set the "wrong" names here, since we need to rely on PipeOp's train/predict to do
+        # the right thing here and ignore our names.
         x = set_names(inputs$input, paste0("output", rev(inputs$input)))
         as.list(x)
       }
