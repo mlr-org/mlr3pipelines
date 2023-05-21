@@ -229,13 +229,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 )
 
 #' @export
-as_learner.Graph = function(x, clone = FALSE) {
+as_learner.Graph = function(x, clone = FALSE, ...) {
   GraphLearner$new(x, clone_graph = clone)
 }
 
 #' @export
-as_learner.PipeOp = function(x, clone = FALSE) {
-  as_learner(as_graph(x, clone = FALSE), clone = clone)
+as_learner.PipeOp = function(x, clone = FALSE, ...) {
+  as_learner(as_graph(x, clone = FALSE, ...), clone = clone)
 }
 
 

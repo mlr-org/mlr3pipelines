@@ -265,7 +265,7 @@ Graph = R6Class("Graph",
       chain_graphs(c(list(self), gs), in_place = TRUE)
     },
 
-    plot = function(html = FALSE) {
+    plot = function(html = FALSE, horizontal = FALSE, ...) {
       assert_flag(html)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
@@ -289,10 +289,7 @@ Graph = R6Class("Graph",
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }
       ig = igraph::add_vertices(ig, length(extra_vertices), name = extra_vertices)
-      layout = igraph::layout_with_sugiyama(ig)$layout
-      if (!is.matrix(layout)) {
-        layout = t(layout)  # bug in igraph, dimension is dropped
-      }
+
       if (html) {
         require_namespaces("visNetwork")
         ig_data = visNetwork::toVisNetworkData(ig)
@@ -334,7 +331,25 @@ Graph = R6Class("Graph",
         }
         p
       } else {
-        suppressWarnings(graphics::plot(ig, layout = layout))  # suppress partial matching warning
+        layout = igraph::layout_with_sugiyama(ig)$layout
+        if (!is.matrix(layout)) {
+          layout = t(layout)  # bug in igraph, dimension is dropped
+        }
+        if (horizontal) {
+          layout = -layout[, 2:1]
+        }
+        layout[, 1] = layout[, 1] * .75
+        layout[, 2] = layout[, 2] * .75
+
+        defaultargs = list(vertex.shape = "crectangle", vertex.size = 60, vertex.size2 = 15 * 2.5, vertex.color = 0,
+          xlim = range(layout[, 1]) + c(-0.3, 0.3),
+          ylim = range(layout[, 2]) + c(-0.1, 0.1),
+          rescale = FALSE,
+          asp = 0.4
+        )
+    #    defaultargs = insert_named(defaultargs, list(...))
+
+        suppressWarnings(invoke(graphics::plot, ig, layout = layout, .args = defaultargs))  # suppress partial matching warning
       }
     },
 
