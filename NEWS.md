@@ -1,3 +1,7 @@
+# mlr3pipelines 0.5.0
+
+* One vignette removed for version 0.1.3 added back here. Welcome home!
+
 # mlr3pipelines 0.4.3
 * `po()`, `pos()` can now construct `PipeOp`s with ID postfix `_<number>` to avoid ID clashes.
 * `GraphLearner` now has method `$base_learner()` that returns the underlying `Learner`, if it can be found by a simple heuristic.
