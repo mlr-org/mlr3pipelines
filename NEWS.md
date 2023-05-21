@@ -1,4 +1,6 @@
-# mlr3pipelines 0.4.1-9000
+# mlr3pipelines 0.5.0
+
+* Bugfix: Make Graph work that have PipeOps with more than one output, where one output was linked to multiple inputs.
 
 # mlr3pipelines 0.4.1
 
