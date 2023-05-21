@@ -59,7 +59,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpEnsemble.R
 #' @export
 #'

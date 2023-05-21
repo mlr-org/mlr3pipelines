@@ -211,3 +211,8 @@ test_that("mlr_graphs dictionary", {
   expect_data_table(dt, col.names = "unique")
   expect_true("key" %in% colnames(dt))
 })
+
+test_that("Cannot add pipeops with keys that invalidates the convenience for id incrementation", {
+  copy = mlr_pipeops$clone(deep = TRUE)
+  expect_error(copy$add("name_1", PipeOp), regexp = "grepl")
+})

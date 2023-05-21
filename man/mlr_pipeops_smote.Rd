@@ -86,7 +86,7 @@ Chawla NV, Bowyer KW, Hall LO, Kegelmeyer WP (2002).
 \doi{10.1613/jair.953}.
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

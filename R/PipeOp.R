@@ -209,7 +209,7 @@
 #' @name PipeOp
 #' @family mlr3pipelines backend related
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @export
 PipeOp = R6Class("PipeOp",
   public = list(

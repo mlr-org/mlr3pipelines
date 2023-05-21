@@ -51,7 +51,7 @@
 #'
 #' @family PipeOps
 #' @family Imputation PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeSample = R6Class("PipeOpImputeSample",

@@ -463,3 +463,54 @@ test_that("predict() function for Graph", {
 
 
 })
+
+test_that("base_learner() works", {
+  # graph containing single PipeOpLearner
+  x = as_learner(as_graph(lrn("classif.rpart")))
+  # untrained
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  # trained:
+  x$train(tsk("iris"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+
+  # graph consisting of PCA, rpart, threshold
+  x = as_learner(po("pca") %>>% lrn("classif.rpart") %>>% po("threshold"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  # trained:
+  x$train(tsk("iris"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+
+  # graph inside a graph
+  x = as_learner(po("pca") %>>% as_learner(po("scale") %>>% lrn("classif.rpart")) %>>% po("threshold"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$graph_model$pipeops$scale.classif.rpart$learner_model)
+  expect_identical(x$base_learner(2), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$scale.classif.rpart$learner_model$graph_model$pipeops$classif.rpart$learner_model)
+  x$train(tsk("iris"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$graph_model$pipeops$scale.classif.rpart$learner_model)
+  expect_identical(x$base_learner(2), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$scale.classif.rpart$learner_model$graph_model$pipeops$classif.rpart$learner_model)
+
+  # branching: currently not supported
+  branching_learner = as_learner(ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
+  expect_error(branching_learner$base_learner(), "Graph has no unique PipeOp containing a Learner")
+
+  # bogus GraphLearner with no PipeOpLearner inside.
+  expect_error(as_learner(po("nop"))$base_learner(), "No Learner PipeOp found.")
+
+})

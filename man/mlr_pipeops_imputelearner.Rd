@@ -113,7 +113,7 @@ new_task$missings()
 
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

@@ -99,7 +99,7 @@ poe$param_set$values$method = "sum"
 poe$train(list(task))[[1]]$data()
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},

@@ -96,7 +96,7 @@ This method is abstract, it must be implemented by deriving classes.
 }
 
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpImpute}},

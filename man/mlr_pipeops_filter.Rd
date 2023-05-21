@@ -137,7 +137,7 @@ Thomas J, Hepp T, Mayr A, Bischl B (2017).
 \doi{10.1155/2017/1421409}.
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
 \code{\link{PipeOpEnsemble}},
