@@ -31,4 +31,9 @@ Authors:
   \item Susanne Dandl \email{dandl.susanne@googlemail.com}
 }
 
+Other contributors:
+\itemize{
+  \item Sebastian Fischer \email{sebf.fischer@gmail.com} (\href{https://orcid.org/0000-0002-9609-3197}{ORCID}) [contributor]
+}
+
 }
