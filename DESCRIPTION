@@ -26,6 +26,11 @@ Authors@R:
              role = "aut",
              email = "michellang@gmail.com",
              comment = c(ORCID = "0000-0001-9754-0393")),
+      person(given = "Sebastian",
+             family = "Fischer",
+             role = "ctb",
+             email = "sebf.fischer@gmail.com",
+             comment = c(ORCID = "0000-0002-9609-3197")),
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
@@ -89,6 +94,7 @@ Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.2.3
+VignetteBuilder: knitr
 Collate:
     'Graph.R'
     'GraphLearner.R'

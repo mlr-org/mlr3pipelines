@@ -1,6 +1,8 @@
 # mlr3pipelines 0.5.0
 
 * Bugfix: `phash` of `GraphLearner` now considers content of Graph, not only IDs.
+* One vignette removed for version 0.1.3 added back here. Welcome home!
+* Bugfix: Make Graph work that have PipeOps with more than one output, where one output was linked to multiple inputs.
 
 # mlr3pipelines 0.4.3
 * `po()`, `pos()` can now construct `PipeOp`s with ID postfix `_<number>` to avoid ID clashes.

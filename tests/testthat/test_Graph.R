@@ -451,3 +451,53 @@ test_that("help() call", {
     )
   }
 })
+
+test_that("Same output into multiple channels does not cause a bug", {
+  PipeOpDebug = R6Class(
+    inherit = PipeOp,
+    public = list(
+      initialize = function(id = "debug", param_vals = list(), n) {
+        output = data.table(
+          name = paste0("output", seq_len(n)),
+          train = rep("numeric", times = n),
+          predict = rep("numeric", times = n)
+        )
+        input = data.table(name = "input", train = "numeric", predict = "numeric")
+        private$.n = n
+        super$initialize(
+          id = id,
+          param_set = ps(),
+          param_vals = param_vals,
+          input = input,
+          output = output
+        )
+      }
+    ),
+    private = list(
+      .n = NULL,
+      .train = function(inputs) {
+        # set the "wrong" names here, since we need to rely on PipeOp's train/predict to do
+        # the right thing here and ignore our names.
+        x = set_names(inputs$input, paste0("output", rev(inputs$input)))
+        as.list(x)
+      }
+    )
+  )
+
+  po1 = PipeOpDebug$new(n = 2L, id = "po1")
+  po2 = PipeOpDebug$new(n = 1L, id = "po2")
+  po3 = PipeOpDebug$new(n = 1L, id = "po3")
+  po4 = PipeOpDebug$new(n = 1L, id = "po4")
+  graph = Graph$new()
+  graph$add_pipeop(po1)
+  graph$add_pipeop(po2)
+  graph$add_pipeop(po3)
+  graph$add_pipeop(po4)
+  graph$add_edge("po1", "po2", "output1", "input")
+  graph$add_edge("po1", "po3", "output2", "input")
+  graph$add_edge("po1", "po4", "output2", "input")
+  res = graph$train(c(1, 2))
+  expect_true(res$po2.output1 == 1)
+  expect_true(res$po3.output1 == 2)
+  expect_true(res$po4.output1 == 2)
+})
