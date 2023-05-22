@@ -7,7 +7,7 @@ regr can only impute features of type integer and numeric, while classif can imp
 features of type factor, ordered and logical.
 The Learner used for imputation is trained on all context_columns; if these contain missing values,
 the Learner typically either needs to be able to handle missing values itself, or needs to do its
-own imputation (see examples)."><title>Impute Features by Fitting a Learner — mlr_pipeops_imputelearner • mlr3pipelines</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Roboto-0.4.1/font.css" rel="stylesheet"><link href="../deps/_JetBrains%20Mono-0.4.1/font.css" rel="stylesheet"><link href="../deps/_Roboto%20Slab-0.4.1/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Impute Features by Fitting a Learner — mlr_pipeops_imputelearner"><meta property="og:description" content="Impute features by fitting a Learner for each feature.
+own imputation (see examples)."><title>Impute Features by Fitting a Learner — mlr_pipeops_imputelearner • mlr3pipelines</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.6/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.6/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.6/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Impute Features by Fitting a Learner — mlr_pipeops_imputelearner"><meta property="og:description" content="Impute features by fitting a Learner for each feature.
 Uses the features indicated by the context_columns parameter as features to train the imputation Learner.
 Note this parameter is part of the PipeOpImpute base class and explained there.
 Additionally, only features supported by the learner can be imputed; i.e. learners of type
@@ -26,7 +26,7 @@ own imputation (see examples)."><meta property="og:image" content="https://mlr3p
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,7 +112,7 @@ own imputation (see examples).</p>
     
 
 
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpImputeLearner<span class="sc">$</span><span class="fu">new</span>(learner, <span class="at">id =</span> <span class="cn">NULL</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"impute."</code>, followed by the <code>id</code> of the <code>Learner</code>.</p></li>
 <li><p><code>learner</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> | <code>character(1)</code>
 <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> to wrap, or a string identifying a <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> in the <code><a href="https://mlr3.mlr-org.com/reference/mlr_learners.html" class="external-link">mlr3::mlr_learners</a></code> <code><a href="https://mlr3misc.mlr-org.com/reference/Dictionary.html" class="external-link">Dictionary</a></code>.
@@ -171,7 +171,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>https://mlr3book.mlr-org.com/list-pipeops.html</p>
+    <div class="dont-index"><p>https://mlr-org.com/pipeops.html</p>
 <p>Other PipeOps: 
 <code><a href="PipeOpEnsemble.html">PipeOpEnsemble</a></code>,
 <code><a href="PipeOpImpute.html">PipeOpImpute</a></code>,
@@ -256,25 +256,25 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"pima"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"pima"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> diabetes      age  glucose  insulin     mass pedigree pregnant pressure </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0        0        5      374       11        0        0       35 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  triceps </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      227 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputelearner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>task <span class="op">=</span> <span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">new_task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputelearner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>task <span class="op">=</span> <span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">new_task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> diabetes      age pedigree pregnant  glucose  insulin     mass pressure </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0        0        0        0        0        0        0        0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  triceps </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># '$state' of the "regr.rpart" Learner, trained to predict the 'mass' column:</span></span>
-<span class="r-in"><span class="va">po</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">mass</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># '$state' of the "regr.rpart" Learner, trained to predict the 'mass' column:</span></span></span>
+<span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="va">state</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">mass</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> n= 757 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -305,7 +305,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $train_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.008</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals$xval</span>
@@ -322,7 +322,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 8 cols): .impute_col,age,glucose,insulin,pedigree,pregnant...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mlr3_version</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘0.13.3’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘0.16.0’</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $train_task</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskRegr:imputing&gt; (768 x 8)</span>
@@ -332,22 +332,22 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (7): age, glucose, insulin, pedigree, pregnant, pressure,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     triceps</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3learners.mlr-org.com" class="external-link">"mlr3learners"</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># to use the "regr.kknn" Learner, prefix it with its own imputation method!</span></span>
-<span class="r-in"><span class="co"># The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this</span></span>
-<span class="r-in"><span class="co"># trained Learner are then used to impute the missing values in the Task.</span></span>
-<span class="r-in"><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputelearner"</span>,</span>
-<span class="r-in">  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.kknn"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>task <span class="op">=</span> <span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">new_task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3learners.mlr-org.com" class="external-link">"mlr3learners"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># to use the "regr.kknn" Learner, prefix it with its own imputation method!</span></span></span>
+<span class="r-in"><span><span class="co"># The "imputehist" PipeOp is used to train "regr.kknn"; predictions of this</span></span></span>
+<span class="r-in"><span><span class="co"># trained Learner are then used to impute the missing values in the Task.</span></span></span>
+<span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputelearner"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputehist"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.kknn"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">new_task</span> <span class="op">=</span> <span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>task <span class="op">=</span> <span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">new_task</span><span class="op">$</span><span class="fu">missings</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> diabetes      age pedigree pregnant  glucose  insulin     mass pressure </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0        0        0        0        0        0        0        0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  triceps </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0 </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -359,7 +359,7 @@ this is an empty <code>list</code>. For features that were entirely <code>NA</co
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>

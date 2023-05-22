@@ -4,7 +4,7 @@ A Graph is most useful when used together with Learner objects encapsulated as P
 the Graph produces Prediction data during its $predict() phase and can be used as a Learner
 itself (using the GraphLearner wrapper). However, the Graph can also be used without Learner objects to simply
 perform preprocessing of data, and, in principle, does not even need to handle data at all but can be used for general processes with
-dependency structure (although the PipeOps for this would need to be written)."><title>Graph Base Class — Graph • mlr3pipelines</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Roboto-0.4.1/font.css" rel="stylesheet"><link href="../deps/_JetBrains%20Mono-0.4.1/font.css" rel="stylesheet"><link href="../deps/_Roboto%20Slab-0.4.1/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Graph Base Class — Graph"><meta property="og:description" content="A Graph is a representation of a machine learning pipeline graph. It can be trained, and subsequently used for prediction.
+dependency structure (although the PipeOps for this would need to be written)."><title>Graph Base Class — Graph • mlr3pipelines</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.6/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.6/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.6/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Graph Base Class — Graph"><meta property="og:description" content="A Graph is a representation of a machine learning pipeline graph. It can be trained, and subsequently used for prediction.
 A Graph is most useful when used together with Learner objects encapsulated as PipeOpLearner. In this case,
 the Graph produces Prediction data during its $predict() phase and can be used as a Learner
 itself (using the GraphLearner wrapper). However, the Graph can also be used without Learner objects to simply
@@ -20,7 +20,7 @@ dependency structure (although the PipeOps for this would need to be written).">
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,7 @@ dependency structure (although the <code><a href="PipeOp.html">PipeOp</a></code>
     
 
 
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Graph<span class="sc">$</span><span class="fu">new</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
@@ -153,7 +153,7 @@ Stores a checksum calculated on the <code>Graph</code> configuration, which incl
 <li><p><code>keep_results</code> :: <code>logical(1)</code> <br>
 Whether to store intermediate results in the <code><a href="PipeOp.html">PipeOp</a></code>'s <code>$.result</code> slot, mostly for debugging purposes. Default <code>FALSE</code>.</p></li>
 <li><p><code>man</code> :: <code>character(1)</code><br>
-Identifying string of the help page that shows with <code>help()</code>.</p></li>
+Identifying string of the help page that shows with <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
@@ -225,7 +225,7 @@ of the <code>single_input</code> argument, are analogous to <code>$train()</code
 <li><p><code>help(help_type)</code> <br>
 (<code>character(1)</code>) -&gt; help file<br>
 Displays the help file of the concrete <code>PipeOp</code> instance. <code>help_type</code> is one of <code>"text"</code>, <code>"html"</code>, <code>"pdf"</code> and behaves
-as the <code>help_type</code> argument of R's <code>help()</code>.</p></li>
+as the <code>help_type</code> argument of R's <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -241,49 +241,49 @@ as the <code>help_type</code> argument of R's <code>help()</code>.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">g</span> <span class="op">=</span> <span class="va">Graph</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va"><a href="mlr_pipeops_scale.html">PipeOpScale</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va"><a href="mlr_pipeops_pca.html">PipeOpPCA</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span></span>
-<span class="r-in">  <span class="fu">add_edge</span><span class="op">(</span><span class="st">"scale"</span>, <span class="st">"pca"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">g</span><span class="op">$</span><span class="va">input</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">=</span> <span class="va">Graph</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va"><a href="mlr_pipeops_scale.html">PipeOpScale</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"scale"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va"><a href="mlr_pipeops_pca.html">PipeOpPCA</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_edge</span><span class="op">(</span><span class="st">"scale"</span>, <span class="st">"pca"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="va">input</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           name train predict op.id channel.name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: scale.input  Task    Task scale        input</span>
-<span class="r-in"><span class="va">g</span><span class="op">$</span><span class="va">output</span></span>
+<span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="va">output</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          name train predict op.id channel.name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: pca.output  Task    Task   pca       output</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">trained</span> <span class="op">=</span> <span class="va">g</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">trained</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">trained</span> <span class="op">=</span> <span class="va">g</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">trained</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species        PC1         PC2         PC3         PC4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -2.2571412 -0.47842383 -0.12727962  0.02408751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -2.0740130  0.67188269 -0.23382552  0.10266284</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -2.3563351  0.34076642  0.04405390  0.02828231</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -2.2917068  0.59539986  0.09098530 -0.06573534</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa -2.3818627 -0.64467566  0.01568565 -0.03580287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -2.2571412 -0.47842383  0.12727962 -0.02408751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -2.0740130  0.67188269  0.23382552 -0.10266284</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -2.3563351  0.34076642 -0.04405390 -0.02828231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:    setosa -2.2917068  0.59539986 -0.09098530  0.06573534</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:    setosa -2.3818627 -0.64467566 -0.01568565  0.03580287</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica  1.8642579 -0.38567404  0.25541818  0.38795715</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica  1.5593565  0.89369285 -0.02628330  0.21945690</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica  1.5160915 -0.26817075  0.17957678  0.11877324</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica  1.3682042 -1.00787793  0.93027872  0.02604141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica  0.9574485  0.02425043  0.52648503 -0.16253353</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">task</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predicted</span> <span class="op">=</span> <span class="va">g</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">predicted</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146: virginica  1.8642579 -0.38567404 -0.25541818 -0.38795715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147: virginica  1.5593565  0.89369285  0.02628330 -0.21945690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148: virginica  1.5160915 -0.26817075 -0.17957678 -0.11877324</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149: virginica  1.3682042 -1.00787793 -0.93027872 -0.02604141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica  0.9574485  0.02425043 -0.52648503  0.16253353</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predicted</span> <span class="op">=</span> <span class="va">g</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predicted</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Species       PC1         PC2         PC3          PC4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  setosa -2.257141 -0.47842383 -0.12727962  0.024087508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  setosa -2.074013  0.67188269 -0.23382552  0.102662845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  setosa -2.356335  0.34076642  0.04405390  0.028282305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  setosa -2.291707  0.59539986  0.09098530 -0.065735340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  setosa -2.381863 -0.64467566  0.01568565 -0.035802870</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  setosa -2.068701 -1.48420530  0.02687825  0.006586116</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  setosa -2.435868 -0.04748512  0.33435030 -0.036652767</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  setosa -2.225392 -0.22240300 -0.08839935 -0.024529919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  setosa -2.326845  1.11160370  0.14459247 -0.026769540</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  setosa -2.177035  0.46744757 -0.25291827 -0.039766068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  setosa -2.257141 -0.47842383  0.12727962 -0.024087508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:  setosa -2.074013  0.67188269  0.23382552 -0.102662845</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  setosa -2.356335  0.34076642 -0.04405390 -0.028282305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:  setosa -2.291707  0.59539986 -0.09098530  0.065735340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  setosa -2.381863 -0.64467566 -0.01568565  0.035802870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  setosa -2.068701 -1.48420530 -0.02687825 -0.006586116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  setosa -2.435868 -0.04748512 -0.33435030  0.036652767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  setosa -2.225392 -0.22240300  0.08839935  0.024529919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  setosa -2.326845  1.11160370 -0.14459247  0.026769540</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  setosa -2.177035  0.46744757  0.25291827  0.039766068</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -295,7 +295,7 @@ as the <code>help_type</code> argument of R's <code>help()</code>.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>
