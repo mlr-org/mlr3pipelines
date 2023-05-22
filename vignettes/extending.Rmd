@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette showcases how the `r mlr3pipelines` package can be extended to include custom `r ref("PipeOp")`s.
+This vignette showcases how the `mlr3pipelines` package can be extended to include custom `r ref("PipeOp")`s.
 To run the following examples, we will need a `r ref("Task")`; we are using the well-known "Iris" task:
 
 ```{r extending-020}
@@ -19,7 +19,7 @@ task = tsk("iris")
 task$data()
 ```
 
-`r mlr3pipelines` is fundamentally built around [`R6`](https://r6.r-lib.org/).
+`mlr3pipelines` is fundamentally built around [`R6`](https://r6.r-lib.org/).
 When planning to create custom `r ref("PipeOp")` objects, it can only help to [familiarize yourself with it](https://adv-r.hadley.nz/r6.html).
 
 In principle, all a `r ref("PipeOp")` must do is inherit from the `r ref("PipeOp")` R6 class and implement the `.train()` and `.predict()` functions.
@@ -250,7 +250,7 @@ When working with numeric data, this argument can be ignored, but it should be u
 This is the first `r ref("PipeOp")` where we will be using the `$state` slot for something useful: We save the centering offset and scaling coefficient and use it in `$.predict()`!
 
 For simplicity, we are not using hyperparameters and will always scale and center all data.
-Compare this `PipeOpScaleAlways` operator to the one defined inside the `r mlr3pipelines` package, `r ref("PipeOpScale")`.
+Compare this `PipeOpScaleAlways` operator to the one defined inside the `mlr3pipelines` package, `r ref("PipeOpScale")`.
 
 ```{r extending-031, tidy = FALSE}
 PipeOpScaleAlways = R6::R6Class("PipeOpScaleAlways",
@@ -282,7 +282,7 @@ PipeOpScaleAlways = R6::R6Class("PipeOpScaleAlways",
 )
 ```
 
-_(Note for the observant: If you check `PipeOpScale.R` from the `r mlr3pipelines` package, you will notice that is uses "`get("type")`" and "`get("id")`" instead of "`type`" and "`id`", because the static code checker on CRAN would otherwise complain about references to undefined variables. This is a "problem" with `data.table` and not exclusive to `r mlr3pipelines`.)_
+_(Note for the observant: If you check `PipeOpScale.R` from the `mlr3pipelines` package, you will notice that is uses "`get("type")`" and "`get("id")`" instead of "`type`" and "`id`", because the static code checker on CRAN would otherwise complain about references to undefined variables. This is a "problem" with `data.table` and not exclusive to `mlr3pipelines`.)_
 
 We can, again, create a new `r ref("Graph")` that uses this `r ref("PipeOp")` to test it.
 Compare the resulting data to the original "iris" `r ref("Task")` data printed at the beginning:
@@ -433,7 +433,7 @@ result_posa_simple$data()
 
 ### Hyperparameters {#ext-pipe-hyperpars}
 
-`r mlr3pipelines` uses the [`r ref_pkg("paradox")`](https://paradox.mlr-org.com) package to define parameter spaces for `r ref("PipeOp")`s.
+`mlr3pipelines` uses the [`r ref_pkg("paradox")`](https://paradox.mlr-org.com) package to define parameter spaces for `r ref("PipeOp")`s.
 Parameters for `r ref("PipeOp")`s can modify their behavior in certain ways, e.g. switch centering or scaling off in the `r ref("PipeOpScale")` operator.
 The unified interface makes it possible to have parameters for whole `r ref("Graph")`s that modify the individual `r ref("PipeOp")`'s behavior.
 The `r ref("Graph")`s, when encapsulated in `r ref("GraphLearner")`s, can even be tuned using the tuning functionality in `r mlr3tuning`.
