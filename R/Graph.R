@@ -56,6 +56,9 @@
 #' * `hash` :: `character(1)` \cr
 #'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
+#' * `phash` :: `character(1)` \cr
+#'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
+#'   *except* their `$param_set$values`, and a hash of `$edges`.
 #' * `keep_results` :: `logical(1)` \cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #' * `man` :: `character(1)`\cr
@@ -475,6 +478,11 @@ Graph = R6Class("Graph",
     hash = function() {
       digest(
         list(map(self$pipeops, "hash"), self$edges),
+        algo = "xxhash64")
+    },
+    phash = function() {
+      digest(
+        list(map(self$pipeops, "phash"), self$edges),
         algo = "xxhash64")
     },
     param_set = function(val) {

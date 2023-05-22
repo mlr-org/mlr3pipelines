@@ -123,7 +123,8 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
       type = prediction$task_type
       list(get(mlr_reflections$task_types[type, mult = "first"]$prediction)$new(row_ids = prediction$row_ids,
         truth = prediction$truth, response = response))
-    }
+    },
+    .additional_phash_input = function() NULL
   )
 )
 

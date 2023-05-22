@@ -4,6 +4,7 @@ context("Dictionary")
 test_that("Dictionary contains all PipeOps", {
   skip_on_cran()
 
+  oldwarn = options(warn = 2)
   # make sure all caching private member vars are extended
   inflate = function(x) {
     x$label
@@ -13,6 +14,9 @@ test_that("Dictionary contains all PipeOps", {
 
   # abstract pipeops that don't need to be in mlr_pipeops
   abstracts = c("PipeOp", "PipeOpEnsemble", "PipeOpTaskPreproc", "PipeOpTaskPreprocSimple", "PipeOpImpute", "PipeOpTargetTrafo")
+
+  # param set values not hashable, because functions
+  pval_unhashable = "missind"
 
   # constructor-args that have no defaults
   initargs = list(
@@ -91,13 +95,26 @@ test_that("Dictionary contains all PipeOps", {
     }
 
     # check that mlr_pipeops$get() gives the same object as PipeOpXXX$new() does
-    expect_equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj, info = dictname)
+    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args))
+    expect_equal(other_obj, test_obj, info = paste(dictname, "$new test"))
+    if (!dictname %in% pval_unhashable) {
+      expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new test"))
+    }
+    expect_equal(other_obj$phash, test_obj$phash, info = paste(dictname, "$new test"))
 
     # check that ID can be changed
     args$id = "TESTID"
-    expect_false(isTRUE(all.equal(do.call(mlr_pipeops$get, c(list(dictname), args)), test_obj)), dictname)
+    other_obj = do.call(mlr_pipeops$get, c(list(dictname), args))
+    expect_false(isTRUE(all.equal(other_obj, test_obj)), info = paste(dictname, "$new id test"))
+    expect_false(isTRUE(all.equal(other_obj$hash, test_obj$hash)), info = paste(dictname, "$new id test"))
+    expect_false(isTRUE(all.equal(other_obj$phash, test_obj$phash)), info = paste(dictname, "$new id test"))
     test_obj$id = "TESTID"
-    expect_equal(inflate(do.call(mlr_pipeops$get, c(list(dictname), args))), test_obj, info = dictname)
+    other_obj = inflate(do.call(mlr_pipeops$get, c(list(dictname), args)))
+    expect_equal(other_obj, test_obj, info = paste(dictname, "$new id test 2"))
+    if (!dictname %in% pval_unhashable) {
+      expect_equal(other_obj$hash, test_obj$hash, info = paste(dictname, "$new id test 2"))
+    }
+    expect_equal(other_obj$phash, test_obj$phash, info = paste(dictname, "$new id test 2"))
     expect_equal(inflate(do.call(pogen$new, args)), test_obj, info = dictname)
 
     # we now check if hyperparameters can be changed through construction
@@ -131,39 +148,43 @@ test_that("Dictionary contains all PipeOps", {
       dict_constructed = do.call(mlr_pipeops$get, c(list(dictname), args))
       gen_constructed = do.call(pogen$new, args)
       expect_false(isTRUE(all.equal(dict_constructed, test_obj)), dictname)
+      expect_false(isTRUE(all.equal(dict_constructed$hash, test_obj$hash)), dictname)
+      # phash should be independent of this!
+      expect_true(isTRUE(all.equal(dict_constructed$phash, test_obj$phash)), dictname)
+
       test_obj$param_set$values[[testingparam$id]] = val
       expect_equal(touch(dict_constructed), test_obj)
       expect_equal(inflate(touch(gen_constructed)), test_obj)
 
+    }
+    # $help() works and gives expected result
+    expect_equal(test_obj$man, paste0("mlr3pipelines::", pipeops[idx]), info = paste(dictname, test_obj$man, "vs", paste0("mlr3pipelines::", pipeops[idx])))
 
-      # $help() works and gives expected result
-      expect_equal(gen_constructed$man, paste0("mlr3pipelines::", pipeops[idx]))
+    # $label can be retrieved
+    expect_string(test_obj$label)
+    help_metainfo = paste(capture.output(print(str(test_obj$help()))), sep = "\n")
+    expect_false(grepl("^LABEL COULD NOT BE RETRIEVED$", test_obj$label), info = paste(dictname, help_metainfo, sep = "\n"))
 
-      # $label can be retrieved
-      expect_string(gen_constructed$label)
-      expect_false(grepl("^LABEL COULD NOT BE RETRIEVED$", gen_constructed$label))
+    if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
+      expect_equal(
+        c(help(pipeops[idx], package = "mlr3pipelines")),
+        c(test_obj$help()), info = paste("help for", dictname)
+      )
 
-      if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
-        expect_equal(
-          c(help(pipeops[idx], package = "mlr3pipelines")),
-          c(gen_constructed$help()), info = paste("help for", dictname)
-        )
-
-        expect_equal(
-            # use c() to strip all attributes; they indicate the actual help()-call which is obviously different here.
-          c(help(paste0("mlr_pipeops_", dictname), package = "mlr3pipelines")),
-          c(gen_constructed$help()),
-          info = paste("help for", dictname, "II")
-        )
-      } else {
-        expect_equal(
-          help(pipeops[idx], package = "mlr3pipelines"),
-          gen_constructed$help(), info = paste("help for", dictname)
-        )
-
-      }
+      expect_equal(
+          # use c() to strip all attributes; they indicate the actual help()-call which is obviously different here.
+        c(help(paste0("mlr_pipeops_", dictname), package = "mlr3pipelines")),
+        c(test_obj$help()),
+        info = paste("help for", dictname, "II")
+      )
+    } else {
+      expect_equal(
+        help(pipeops[idx], package = "mlr3pipelines"),
+        test_obj$help(), info = paste("help for", dictname)
+      )
     }
   }
+  options(warn = oldwarn$warn)
 })
 
 test_that("data.table of pipeops looks as it should", {

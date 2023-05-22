@@ -125,6 +125,10 @@
 #'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set$values`. If a
 #'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#' * `phash` :: `character(1)` \cr
+#'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` but ignoring `$param_set$values`. If a
+#'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
+#'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result` :: `list` \cr
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
@@ -164,6 +168,18 @@
 #'   (`character(1)`) -> help file\cr
 #'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
 #'   as the `help_type` argument of R's `help()`.
+#'
+#' @section Inheriting:
+#' To create your own `PipeOp`, you need to overload the `private$.train()` and `private$.test()` functions.
+#' It is most likely also necessary to overload the `$initialize()` function to do additional initialization.
+#' The `$initialize()` method should have at least the arguments `id` and `param_vals`, which should be passed on to `super$initialize()` unchanged.
+#' `id` should have a useful default value, and `param_vals` should have the default value `list()`, meaning no initialization of hyperparameters.
+#'
+#' If the `$initialize()` method has more arguments, then it is necessary to also overload the `private$.additional_phash_input()` function.
+#' This function should return either all objects, or a hash of all objects, that can change the function or behavior of the `PipeOp` and are independent
+#' of the class, the id, the `$state`, and the `$param_set$values`. The last point is particularly important: changing the `$param_set$values` should
+#' *not* change the return value of `private$.additional_phash_input()`.
+#'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
 #' # as well as a letter of the alphabet corresponding to that sum during $predict().
@@ -370,7 +386,10 @@ PipeOp = R6Class("PipeOp",
         } else {
           val
         }
-      })), algo = "xxhash64")
+      }), private$.additional_phash_input()), algo = "xxhash64")
+    },
+    phash = function() {
+      digest(list(class(self), self$id, private$.additional_phash_input()), algo = "xxhash64")
     },
     man = function(x) {
       if (!missing(x)) stop("man is read-only")
@@ -414,6 +433,17 @@ PipeOp = R6Class("PipeOp",
     },
     .train = function(input) stop("abstract"),
     .predict = function(input) stop("abstract"),
+    .additional_phash_input = function() {
+      if (is.null(self$initialize)) return(NULL)
+      initformals <- names(formals(args(self$initialize)))
+      if (!test_subset(initformals, c("id", "param_vals"))) {
+        warningf("PipeOp %s has construction arguments besides 'id' and 'param_vals' but does not overload the private '.additional_phash_input()' function.
+
+The hash and phash of a PipeOp must differ when it represents a different operation; since %s has construction arguments that could change the operation that is performed by it, it is necessary for the $hash and $phash to reflect this. `.additional_phash_input()` should return all the information (e.g. hashes of encapsulated items) that should additionally be hashed; read the help of ?PipeOp for more information.
+
+This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
+      }
+    },
     .param_set = NULL,
     .param_set_source = NULL,
     .label = NULL,

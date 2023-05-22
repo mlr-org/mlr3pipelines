@@ -102,7 +102,8 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
       if (!private$.named) inputs = unname(inputs)
       list(as.Multiplicity(inputs))
     },
-    .named = NULL
+    .named = NULL,
+    .additional_phash_input = function() self$input$name
   )
 )
 
@@ -193,7 +194,8 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
     .predict = function(inputs) {
       rep_len(inputs, self$outnum)
       unclass(inputs[[1]])
-    }
+    },
+    .additional_phash_input = function() self$output$name
   )
 )
 

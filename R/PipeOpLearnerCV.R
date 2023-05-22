@@ -206,7 +206,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task$select(character(0))$cbind(prds)
     },
     .crossval_param_set = NULL,
-    .learner = NULL
+    .learner = NULL,
+    .additional_phash_input = function() private$.learner$phash
   )
 )
 

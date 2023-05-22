@@ -514,3 +514,59 @@ test_that("base_learner() works", {
   expect_error(as_learner(po("nop"))$base_learner(), "No Learner PipeOp found.")
 
 })
+
+
+test_that("GraphLearner hashes", {
+
+
+  learner1 = as_learner(ppl("robustify") %>>% lrn("regr.rpart"))
+  learner1dash = as_learner(ppl("robustify") %>>% lrn("regr.rpart"))
+
+  expect_string(learner1$hash)
+  expect_string(learner1$phash)
+
+  expect_equal(learner1$hash, learner1dash$hash)
+  expect_equal(learner1$phash, learner1dash$phash)
+
+  learner1dash$graph$pipeops$regr.rpart$param_set$values$xval = 1
+
+  expect_string(all.equal(learner1$hash, learner1dash$hash), "mismatch")
+  expect_equal(learner1$phash, learner1dash$phash)
+
+  learner2 = as_learner(po("pca") %>>% lrn("regr.rpart"))
+
+  expect_string(all.equal(learner1$hash, learner2$hash), "mismatch")
+  expect_string(all.equal(learner1$phash, learner2$phash), "mismatch")
+
+  learner1$id = "myid"
+  learner2$id = "myid"
+
+  expect_string(all.equal(learner1$hash, learner2$hash), "mismatch")
+  expect_string(all.equal(learner1$phash, learner2$phash), "mismatch")
+
+
+  # construction argument dependent hashes
+  expect_string(all.equal(po("copy", 2)$hash, po("copy", 3)$hash), "mismatch")
+
+
+  lr1 <- lrn("classif.rpart")
+  lr2 <- lrn("classif.rpart", fallback = lrn("classif.rpart"))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+  lr1 <- as_learner(as_pipeop(lr1))
+  lr2 <- as_learner(as_pipeop(lr2))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+  lr1 <- as_learner(as_pipeop(lr1))
+  lr2 <- as_learner(as_pipeop(lr2))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+})
+
+

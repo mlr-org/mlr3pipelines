@@ -136,7 +136,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   ),
   active = list(
     hash = function() {
-      digest(list(self$id, self$graph$hash), algo = "xxhash64")
+      digest(list(class(self), self$id, self$graph$hash, private$.predict_type,
+        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
+    },
+    phash = function() {
+      digest(list(class(self), self$id, self$graph$phash, private$.predict_type,
+        self$fallback$hash, self$parallel_predict), algo = "xxhash64")
     },
     predict_type = function(rhs) {
       if (!missing(rhs)) {

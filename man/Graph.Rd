@@ -66,6 +66,9 @@ Changing \verb{$param_set$values} also propagates the changes directly to the co
 \item \code{hash} :: \code{character(1)} \cr
 Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
 (and therefore their \verb{$param_set$values}) and a hash of \verb{$edges}.
+\item \code{phash} :: \code{character(1)} \cr
+Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
+\emph{except} their \verb{$param_set$values}, and a hash of \verb{$edges}.
 \item \code{keep_results} :: \code{logical(1)} \cr
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 \item \code{man} :: \code{character(1)}\cr

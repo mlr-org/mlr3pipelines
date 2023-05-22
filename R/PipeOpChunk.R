@@ -89,7 +89,8 @@ PipeOpChunk = R6Class("PipeOpChunk",
     },
     .predict = function(inputs) {
       rep(inputs, self$outnum)
-    }
+    },
+    .additional_phash_input = function() self$output$name
   )
 )
 

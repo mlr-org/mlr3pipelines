@@ -129,7 +129,18 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 
       list(private$weighted_avg_predictions(inputs, weights, row_ids, truth))
     },
-    .collect = NULL
+    .collect = NULL,
+    .additional_phash_input = function() {
+      retval = list(private$.collect, self$input$name)
+      if (is.null(self$initialize)) return(retval)
+      initformals <- names(formals(args(self$initialize)))
+      if (!test_subset(initformals, c("id", "param_vals", "innum", "collect_multiplicity", "..."))) {
+        warningf("PipeOp %s has construction arguments besides 'id', 'param_vals', 'innum', 'collect_multiplicity' or '...' but .additional_phash_input was not overloaded.
+
+This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
+      }
+      retval
+    }
   )
 )
 
