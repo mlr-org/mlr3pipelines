@@ -34,3 +34,24 @@ test_that("threshold works for binary", {
     po("tunethreshold")
   expect_error(po_cv$train(t), "prob")
 })
+
+test_that("tunethreshold graph works", {
+
+  graph = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>% po("tunethreshold")
+
+  out = graph$train(tsk("pima"))
+
+  expect_null(out$tunethreshold.output)
+
+  out = graph$predict(tsk("pima"))
+
+  expect_prediction(out$tunethreshold.output)
+
+  glrn = as_learner(graph)
+
+  glrn$train(tsk("pima"))
+
+  expect_prediction(glrn$predict(tsk("pima")))
+
+
+})

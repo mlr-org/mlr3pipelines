@@ -364,9 +364,7 @@ PipeOp = R6Class("PipeOp",
     },
     predict_type = function(val) {
       if (!missing(val)) {
-        if (!identical(val, private$.learner)) {
-          stop("$predict_type is read-only.")
-        }
+        stop("$predict_type is read-only.")
       }
       return(NULL)
     },
