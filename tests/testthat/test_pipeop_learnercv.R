@@ -98,3 +98,25 @@ test_that("PipeOpLearnerCV - model active binding to state", {
   expect_null(po$learner$state)
   expect_equal(po$learner_model$state, po$state)
 })
+
+test_that("predict_type", {
+  expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "response"))$predict_type, "response")
+  expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "prob"))$predict_type, "prob")
+
+  lcv <- po("learner_cv", lrn("classif.rpart", predict_type = "prob"))
+
+  lcv$predict_type = "response"
+  expect_equal(lcv$predict_type, "response")
+  expect_equal(lcv$learner$predict_type, "response")
+
+  expect_equal(lcv$train(list(tsk("iris")))[[1]]$feature_names, "classif.rpart.response")
+
+  lcv$predict_type = "prob"
+
+  expect_equal(lcv$predict_type, "prob")
+  expect_equal(lcv$learner$predict_type, "prob")
+
+  expect_subset(c("classif.rpart.prob.virginica", "classif.rpart.prob.setosa", "classif.rpart.prob.versicolor"),
+    lcv$train(list(tsk("iris")))[[1]]$feature_names)
+
+})

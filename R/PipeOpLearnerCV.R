@@ -161,6 +161,13 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       } else {
         multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
       }
+    },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, names(mlr_reflections$learner_predict_types[[private$.learner$task_type]]))
+        private$.learner$predict_type = val
+      }
+      private$.learner$predict_type
     }
   ),
   private = list(

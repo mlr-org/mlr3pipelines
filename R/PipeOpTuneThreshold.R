@@ -89,6 +89,9 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       )
     }
   ),
+  active = list(
+    predict_type = function() "response"  # we are predict type "response" for now, so we don't break things. See discussion in #712
+  ),
   private = list(
     .train = function(input) {
       if(!all(input[[1]]$feature_types$type == "numeric")) {
