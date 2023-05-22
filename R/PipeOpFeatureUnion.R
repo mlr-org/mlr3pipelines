@@ -141,7 +141,8 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       if (private$.collect) inputs = unclass(inputs[[1]])
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     },
-    .collect = NULL
+    .collect = NULL,
+    .additional_phash_input = function() list(private$.collect, self$input$name)
   )
 )
 

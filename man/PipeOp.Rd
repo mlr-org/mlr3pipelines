@@ -132,6 +132,10 @@ PipeOp tags are inherited and child classes can introduce additional tags.
 Checksum calculated on the \code{\link{PipeOp}}, depending on the \code{\link{PipeOp}}'s \code{class} and the slots \verb{$id} and \verb{$param_set$values}. If a
 \code{\link{PipeOp}}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
 binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
+\item \code{phash} :: \code{character(1)} \cr
+Checksum calculated on the \code{\link{PipeOp}}, depending on the \code{\link{PipeOp}}'s \code{class} and the slots \verb{$id} but ignoring \verb{$param_set$values}. If a
+\code{\link{PipeOp}}'s functionality may change depending on more than these values, it should inherit the \verb{$hash} active
+binding and calculate the hash as \verb{digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")}.
 \item \code{.result} :: \code{list} \cr
 If the \code{\link{Graph}}'s \verb{$keep_results} flag is set to \code{TRUE}, then the intermediate Results of \verb{$train()} and \verb{$predict()}
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
@@ -176,6 +180,19 @@ Prints the \code{\link{PipeOp}}s most salient information: \verb{$id}, \verb{$is
 Displays the help file of the concrete \code{PipeOp} instance. \code{help_type} is one of \code{"text"}, \code{"html"}, \code{"pdf"} and behaves
 as the \code{help_type} argument of R's \code{help()}.
 }
+}
+
+\section{Inheriting}{
+
+To create your own \code{PipeOp}, you need to overload the \code{private$.train()} and \code{private$.test()} functions.
+It is most likely also necessary to overload the \verb{$initialize()} function to do additional initialization.
+The \verb{$initialize()} method should have at least the arguments \code{id} and \code{param_vals}, which should be passed on to \code{super$initialize()} unchanged.
+\code{id} should have a useful default value, and \code{param_vals} should have the default value \code{list()}, meaning no initialization of hyperparameters.
+
+If the \verb{$initialize()} method has more arguments, then it is necessary to also overload the \code{private$.additional_phash_input()} function.
+This function should return either all objects, or a hash of all objects, that can change the function or behavior of the \code{PipeOp} and are independent
+of the class, the id, the \verb{$state}, and the \verb{$param_set$values}. The last point is particularly important: changing the \verb{$param_set$values} should
+\emph{not} change the return value of \code{private$.additional_phash_input()}.
 }
 
 \examples{

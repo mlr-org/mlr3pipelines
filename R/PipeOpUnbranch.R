@@ -89,7 +89,8 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
     },
     .predict = function(inputs) {
       filter_noop(inputs)
-    }
+    },
+    .additional_phash_input = function() self$input$name
   )
 )
 

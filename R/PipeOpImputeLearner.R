@@ -191,7 +191,8 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       }
       if (type == "logical") feature = as.logical(feature) # FIXME mlr-org/mlr3#475
       auto_convert(feature, "feature to be imputed", type, levels = levels(feature))
-    }
+    },
+    .additional_phash_input = function() private$.learner$phash
   )
 )
 

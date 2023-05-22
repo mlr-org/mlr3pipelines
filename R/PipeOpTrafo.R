@@ -384,7 +384,8 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
       pred$truth = NULL
       invoke(get(mlr_reflections$task_types[type, mult = "first"]$prediction)$new, row_ids = prediction$row_ids,
         truth = predict_phase_state$truth, .args = self$param_set$values$inverter(pred))
-    }
+    },
+    .additional_phash_input = function() private$.new_task_type
   )
 )
 

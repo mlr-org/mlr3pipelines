@@ -543,4 +543,30 @@ test_that("GraphLearner hashes", {
 
   expect_string(all.equal(learner1$hash, learner2$hash), "mismatch")
   expect_string(all.equal(learner1$phash, learner2$phash), "mismatch")
+
+
+  # construction argument dependent hashes
+  expect_string(all.equal(po("copy", 2)$hash, po("copy", 3)$hash), "mismatch")
+
+
+  lr1 <- lrn("classif.rpart")
+  lr2 <- lrn("classif.rpart", fallback = lrn("classif.rpart"))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+  lr1 <- as_learner(as_pipeop(lr1))
+  lr2 <- as_learner(as_pipeop(lr2))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+  lr1 <- as_learner(as_pipeop(lr1))
+  lr2 <- as_learner(as_pipeop(lr2))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
 })
+
+

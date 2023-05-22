@@ -140,7 +140,8 @@ PipeOpProxy = R6Class("PipeOpProxy",
         # automatically send input to all graph inputs
         output = content$predict(input[[1]])
       }
-    }
+    },
+    .additional_phash_input = function() list(self$input$name, self$output$name)
   )
 )
 
