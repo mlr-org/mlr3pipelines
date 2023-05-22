@@ -1,11 +1,16 @@
 ---
-title: Search Learners
-output: html_document
+title: "Adding new PipeOps"
+author: "Martin Binder"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to mlr3pipelines}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-# Adding new PipeOps {#extending-pipeops}
-
-This section showcases how the `r mlr3pipelines` package can be extended to include custom `r ref("PipeOp")`s.
+This vignette showcases how the `r mlr3pipelines` package can be extended to include custom `r ref("PipeOp")`s.
 To run the following examples, we will need a `r ref("Task")`; we are using the well-known "Iris" task:
 
 ```{r extending-020}
@@ -25,12 +30,6 @@ There are, however, several auxiliary subclasses that can make the creation of *
 A very simple yet useful `r ref("PipeOp")` is `PipeOpCopy`, which takes a single input and creates a variable number of output channels, all of which receive a copy of the input data.
 It is a simple example that showcases the important steps in defining a custom `r ref("PipeOp")`.
 We will show a simplified version here, **`PipeOpCopyTwo`**, that creates exactly two copies of its input data.
-
-The following figure visualizes how our `r ref("PipeOp")` is situated in the `Pipeline` and the significant in- and outputs.
-
-```{r extending-021, echo=FALSE}
-knitr::include_graphics("Figures/po_multi_viz.png")
-```
 
 #### First Steps: Inheriting from `r ref("PipeOp")`
 
