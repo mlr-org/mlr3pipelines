@@ -125,6 +125,10 @@
 #'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set$values`. If a
 #'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#' * `phash` :: `character(1)` \cr
+#'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` but ignoring `$param_set$values`. If a
+#'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
+#'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result` :: `list` \cr
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
@@ -371,6 +375,9 @@ PipeOp = R6Class("PipeOp",
           val
         }
       })), algo = "xxhash64")
+    },
+    phash = function() {
+      digest(list(class(self), self$id), algo = "xxhash64")
     },
     man = function(x) {
       if (!missing(x)) stop("man is read-only")
