@@ -1,3 +1,7 @@
+# mlr3pipelines 0.5.0
+
+* Bugfix: Make Graph work that have PipeOps with more than one output, where one output was linked to multiple inputs.
+
 # mlr3pipelines 0.4.3
 * `po()`, `pos()` can now construct `PipeOp`s with ID postfix `_<number>` to avoid ID clashes.
 * `GraphLearner` now has method `$base_learner()` that returns the underlying `Learner`, if it can be found by a simple heuristic.
