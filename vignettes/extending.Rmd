@@ -433,13 +433,13 @@ result_posa_simple$data()
 
 ### Hyperparameters {#ext-pipe-hyperpars}
 
-`mlr3pipelines` uses the [`r ref_pkg("paradox")`](https://paradox.mlr-org.com) package to define parameter spaces for `PipeOp`s.
+`mlr3pipelines` uses the [`paradox`](https://paradox.mlr-org.com) package to define parameter spaces for `PipeOp`s.
 Parameters for `PipeOp`s can modify their behavior in certain ways, e.g. switch centering or scaling off in the `PipeOpScale` operator.
 The unified interface makes it possible to have parameters for whole `Graph`s that modify the individual `PipeOp`'s behavior.
 The `Graph`s, when encapsulated in `GraphLearner`s, can even be tuned using the tuning functionality in `r mlr3tuning`.
 
 Hyperparameters are declared during initialization, when calling the `PipeOp`'s `$initialize()` function, by giving a `param_set` argument.
-The `param_set` must be a `ParamSet` from the `r ref_pkg("paradox")` package; see [the tuning chapter](#searchspace) or @sec-paradox for more information on how to define parameter spaces.
+The `param_set` must be a `ParamSet` from the [`paradox`](https://paradox.mlr-org.com) package; see its documentation for more information on how to define parameter spaces.
 After construction, the `ParamSet` can be accessed through the `$param_set` slot.
 While it is *possible* to modify this `ParamSet`, using e.g. the `$add()` and `$add_dep()` functions, *after* adding it to the `PipeOp`, it is strongly advised against.
 
