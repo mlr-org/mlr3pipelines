@@ -150,6 +150,9 @@ Changing <code>$param_set$values</code> also propagates the changes directly to 
 <li><p><code>hash</code> :: <code>character(1)</code> <br>
 Stores a checksum calculated on the <code>Graph</code> configuration, which includes all <code><a href="PipeOp.html">PipeOp</a></code> hashes
 (and therefore their <code>$param_set$values</code>) and a hash of <code>$edges</code>.</p></li>
+<li><p><code>phash</code> :: <code>character(1)</code> <br>
+Stores a checksum calculated on the <code>Graph</code> configuration, which includes all <code><a href="PipeOp.html">PipeOp</a></code> hashes
+<em>except</em> their <code>$param_set$values</code>, and a hash of <code>$edges</code>.</p></li>
 <li><p><code>keep_results</code> :: <code>logical(1)</code> <br>
 Whether to store intermediate results in the <code><a href="PipeOp.html">PipeOp</a></code>'s <code>$.result</code> slot, mostly for debugging purposes. Default <code>FALSE</code>.</p></li>
 <li><p><code>man</code> :: <code>character(1)</code><br>

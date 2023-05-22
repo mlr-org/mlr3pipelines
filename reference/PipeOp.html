@@ -243,6 +243,10 @@ PipeOp tags are inherited and child classes can introduce additional tags.</p></
 Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> and <code>$param_set$values</code>. If a
 <code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
 binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
+<li><p><code>phash</code> :: <code>character(1)</code> <br>
+Checksum calculated on the <code>PipeOp</code>, depending on the <code>PipeOp</code>'s <code>class</code> and the slots <code>$id</code> but ignoring <code>$param_set$values</code>. If a
+<code>PipeOp</code>'s functionality may change depending on more than these values, it should inherit the <code>$hash</code> active
+binding and calculate the hash as <code>digest(list(super$hash, &lt;OTHER THINGS&gt;), algo = "xxhash64")</code>.</p></li>
 <li><p><code>.result</code> :: <code>list</code> <br>
 If the <code><a href="Graph.html">Graph</a></code>'s <code>$keep_results</code> flag is set to <code>TRUE</code>, then the intermediate Results of <code>$train()</code> and <code>$predict()</code>
 are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
@@ -286,6 +290,19 @@ Prints the <code>PipeOp</code>s most salient information: <code>$id</code>, <cod
 Displays the help file of the concrete <code>PipeOp</code> instance. <code>help_type</code> is one of <code>"text"</code>, <code>"html"</code>, <code>"pdf"</code> and behaves
 as the <code>help_type</code> argument of R's <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code>.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="inheriting">Inheriting<a class="anchor" aria-label="anchor" href="#inheriting"></a></h2>
+    
+
+<p>To create your own <code>PipeOp</code>, you need to overload the <code>private$.train()</code> and <code>private$.test()</code> functions.
+It is most likely also necessary to overload the <code>$initialize()</code> function to do additional initialization.
+The <code>$initialize()</code> method should have at least the arguments <code>id</code> and <code>param_vals</code>, which should be passed on to <code>super$initialize()</code> unchanged.
+<code>id</code> should have a useful default value, and <code>param_vals</code> should have the default value <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>, meaning no initialization of hyperparameters.</p>
+<p>If the <code>$initialize()</code> method has more arguments, then it is necessary to also overload the <code>private$.additional_phash_input()</code> function.
+This function should return either all objects, or a hash of all objects, that can change the function or behavior of the <code>PipeOp</code> and are independent
+of the class, the id, the <code>$state</code>, and the <code>$param_set$values</code>. The last point is particularly important: changing the <code>$param_set$values</code> should
+<em>not</em> change the return value of <code>private$.additional_phash_input()</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>https://mlr-org.com/pipeops.html</p>
