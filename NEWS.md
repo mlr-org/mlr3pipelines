@@ -1,5 +1,7 @@
 # mlr3pipelines 0.5.0-9000
 
+* `pipeline_bagging()` gets the `replace` argument.
+
 # mlr3pipelines 0.5.0-1
 
 * Bugfix: `PipeOpTuneThreshold` was not overloading the correct `.train` and `.predict` functions.
