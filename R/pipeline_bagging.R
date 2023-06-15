@@ -28,6 +28,9 @@
 #'   predictions respectively.
 #'   If `NULL` (default), no averager is added to the end of the graph.
 #'   Note that setting `collect_multipliciy = TRUE` during construction of the averager is required.
+#' @param replace `logical(1)` \cr
+#'   Whether to sample with replacement.
+#'   Default `FALSE`.
 #' @return [`Graph`]
 #' @export
 #' @examples
@@ -36,9 +39,15 @@
 #' lrn_po = po("learner", lrn("regr.rpart"))
 #' task = mlr_tasks$get("boston_housing")
 #' gr = pipeline_bagging(lrn_po, 3, averager = po("regravg", collect_multiplicity = TRUE))
-#' resample(task, GraphLearner$new(gr), rsmp("holdout"))
+#' resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
+#'
+#' # The original bagging method uses boosting by sampling with replacement.
+#' # This may give better performance but is also slower.
+#' gr = ppl("bagging", lrn_po, frac = 1, replace = TRUE,
+#'   averager = po("regravg", collect_multiplicity = TRUE))
+#' resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #' }
-pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL) {
+pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL, replace = FALSE) {
   g = as_graph(graph)
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)
@@ -50,7 +59,7 @@ pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL)
   }
 
   po("replicate", param_vals = list(reps = iterations)) %>>!%
-    po("subsample", param_vals = list(frac = frac)) %>>!%
+    po("subsample", param_vals = list(frac = frac, replace = replace)) %>>!%
     g %>>!%
     averager
 }
