@@ -1,5 +1,8 @@
 # mlr3pipelines 0.5.0-9000
 
+* Feature: The `Graph`'s `keep_results` can now also be a character vector
+containing the IDs of the `PipeOp`s whose results are being stored.
+
 # mlr3pipelines 0.5.0-1
 
 * Bugfix: `PipeOpTuneThreshold` was not overloading the correct `.train` and `.predict` functions.
