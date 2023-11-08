@@ -40,7 +40,7 @@ as_graph = function(x, clone = FALSE) {
 
 #' @export
 as_graph.default = function(x, clone = FALSE) {
-  Graph$new()$add_pipeop(x)  # add_pipeop always clones and checks automatically for convertability
+  Graph$new()$add_pipeop(x, clone = clone)
 }
 
 #' @export
