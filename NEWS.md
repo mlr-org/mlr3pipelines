@@ -1,4 +1,7 @@
-# mlr3pipelines 0.5.0-9000
+# mlr3pipelines 0.5.0-2
+
+* Avoid unnecessarily large serializations of `ppl("robustify")` pipelines.
+* Made tests and examples compatible with mlr3 update.
 
 # mlr3pipelines 0.5.0-1
 

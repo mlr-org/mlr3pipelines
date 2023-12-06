@@ -2,7 +2,7 @@ context("Selector")
 
 test_that("Selectors work", {
   iris_task = mlr3::mlr_tasks$get("iris")
-  bh_task = mlr3::mlr_tasks$get("boston_housing")
+  bh_task = mlr3::mlr_tasks$get("boston_housing_classic")
   pima_task = mlr3::mlr_tasks$get("pima")
 
   sela = selector_all()

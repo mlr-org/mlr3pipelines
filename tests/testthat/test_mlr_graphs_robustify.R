@@ -44,7 +44,7 @@ test_that("Robustify Pipeline", {
   expect_true(all(c("imputehist", "missind") %in% names(p$pipeops)))
 
   # test on mixed, no missings
-  tsk = tsk("boston_housing")
+  tsk = tsk("boston_housing_classic")
   lrn = lrn("regr.rpart")
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
