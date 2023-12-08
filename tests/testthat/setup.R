@@ -20,3 +20,6 @@ mlr3::mlr_tasks$add("boston_housing_classic", function(id = "boston_housing_clas
   b$hash = "mlr3pipelines::mlr_tasks_boston_housing_classic"
   task
 })
+
+
+data.table::setDTthreads(threads = 0)
