@@ -133,8 +133,23 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     }
   ),
   private = list(
+    .uses_test_set = function() {
+      private$.learner$uses_test_set
+    },
     .learner = NULL,
-
+    .train_predict = function(inputs) {
+      browser()
+      train_task = inputs$input$train$clone(deep = TRUE)
+      predict_task = inputs$input$predict$clone(deep = TRUE)
+      if (!identical(predict_task$backend, train_task$backend)) {
+        train_task$rbind(predict_task$backend)
+      }
+      train_task$row_roles$test = predict_task$row_roles$use
+      list(
+        train = self$train(list(input = train_task)),
+        predict = self$predict(list(input = predict_task))
+      )
+    },
     .train = function(inputs) {
       on.exit({private$.learner$state = NULL})
       task = inputs[[1L]]

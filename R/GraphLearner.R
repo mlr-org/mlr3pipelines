@@ -135,6 +135,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   ),
   active = list(
+    uses_test_set = function(rhs) {
+      assert_ro_binding(rhs)
+      self$graph$uses_test_set
+    },
     hash = function() {
       digest(list(class(self), self$id, self$graph$hash, private$.predict_type,
         self$fallback$hash, self$parallel_predict), algo = "xxhash64")
@@ -185,9 +189,31 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       value
     },
 
+    .train_predict = function(task, reset_graph_state = TRUE) {
+      task_train = task$clone(deep = TRUE)
+      task_predict = task$clone(deep = TRUE)
+      task_predict$row_roles$use = task$row_roles$test
+
+      tasks = list(
+        train = task_train,
+        predict = task_predict
+      )
+      if (reset_graph_state) {
+        on.exit({self$graph$state = NULL})
+      }
+      output = self$graph$train_predict(tasks, single_input = TRUE)[[1]]
+
+      assert_class(output$predict, "Prediction")
+      return(output)
+    },
+
     .train = function(task) {
       on.exit({self$graph$state = NULL})
-      self$graph$train(task)
+      if (self$uses_test_set) {
+        private$.train_predict(task, reset_graph_state = FALSE)
+      } else {
+        self$graph$train(task)
+      }
       state = self$graph$state
       state
     },

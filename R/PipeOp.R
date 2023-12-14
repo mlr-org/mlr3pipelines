@@ -328,6 +328,10 @@ PipeOp = R6Class("PipeOp",
       output = check_types(self, output, "output", "predict")
       output
     },
+    train_predict = function(input) {
+      output = transpose_list(private$.train_predict(input))
+      return(output)
+    },
     help = function(help_type = getOption("help_type")) {
       parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
       match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
@@ -335,6 +339,10 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
+    uses_test_set = function(rhs) {
+      assert_ro_binding(rhs)
+      private$.uses_test_set()
+    },
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
@@ -415,6 +423,9 @@ PipeOp = R6Class("PipeOp",
   ),
 
   private = list(
+    .uses_test_set = function() {
+      FALSE
+    },
     deep_clone = function(name, value) {
       if (!is.null(private$.param_set_source)) {
         private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
@@ -431,6 +442,12 @@ PipeOp = R6Class("PipeOp",
     },
     .train = function(input) stop("abstract"),
     .predict = function(input) stop("abstract"),
+    .train_predict = function(input) {
+      list(
+        train = self$train(map(input, "train")),
+        predict = self$predict(map(input, "predict"))
+      )
+    },
     .additional_phash_input = function() {
       if (is.null(self$initialize)) return(NULL)
       initformals <- names(formals(args(self$initialize)))

@@ -501,3 +501,19 @@ test_that("Same output into multiple channels does not cause a bug", {
   expect_true(res$po3.output1 == 2)
   expect_true(res$po4.output1 == 2)
 })
+
+test_that("Graph train_predict", {
+  skip_if_not_installed("rpart")
+  library("mlr3learners")
+  task_train = tsk("iris")
+  split = partition(task_train)
+  task_train$row_roles$use = split$train
+  task_predict = task_train$clone(deep = TRUE)
+  task_predict$row_roles$use = split$test
+  graph = po("select", selector = selector_name("Sepal.Width")) %>>%
+    LearnerClassifTP$new()
+
+  output = graph$train_predict(list(train = task_train, predict = task_predict))
+
+  expect_permutation(output[[1]]$predict$row_ids, split$test)
+})

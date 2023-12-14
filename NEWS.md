@@ -1,5 +1,8 @@
 # mlr3pipelines 0.5.0-9000
 
+* Feature: Learners that can make use of a test set for validation or early
+stopping can now also do this when being part of a Graph
+
 # mlr3pipelines 0.5.0-1
 
 * Bugfix: `PipeOpTuneThreshold` was not overloading the correct `.train` and `.predict` functions.

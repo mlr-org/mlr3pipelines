@@ -72,7 +72,7 @@
 #' the [`Task`][mlr3::Task] type is the same as for input; both during training and prediction.
 #'
 #' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] according to the overloaded
-#' `private$.train_task()`/`private$.predict_taks()` or `private$.train_dt()`/`private$.predict_dt()` functions.
+#' `private$.train_task()`/`private$.predict_task()` or `private$.train_dt()`/`private$.predict_dt()` functions.
 #'
 #' @section State:
 #' The `$state` is a named `list`; besides members added by inheriting classes, the members are:

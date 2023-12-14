@@ -458,6 +458,11 @@ Graph = R6Class("Graph",
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
     },
+    train_predict = function(input, single_input = TRUE) {
+      graph_load_namespaces(self, "train")
+      graph_load_namespaces(self, "predict")
+      graph_reduce(self, input, "train_predict", single_input = single_input)
+    },
     help = function(help_type = getOption("help_type")) {
       parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
       match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
@@ -465,6 +470,10 @@ Graph = R6Class("Graph",
   ),
 
   active = list(
+    uses_test_set = function(rhs) {
+      assert_ro_binding(rhs)
+      some(self$pipeops, function(pipeop) pipeop$uses_test_set)
+    },
     is_trained = function() all(map_lgl(self$pipeops, "is_trained")),
     lhs = function() unique(self$input$op.id),
     rhs = function() unique(self$output$op.id),

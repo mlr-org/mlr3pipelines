@@ -84,3 +84,18 @@ VarargPipeop = R6Class("VarargPipeop",
     }
   )
 )
+
+LearnerClassifTP = R6::R6Class("LearnerClassifTP",
+  inherit = mlr3::LearnerClassifRpart,
+  private = list(
+    .train = function(task) {
+      test_data = task$data(rows = task$row_roles$test)
+      expect_set_equal(task$backend$rownames, c(task$row_roles$use, task$row_roles$test))
+      if (!length(test_data)) {
+        stop("Test data not present.")
+      }
+      super$.train(task)
+    },
+    .uses_test_set = function() TRUE
+  )
+)

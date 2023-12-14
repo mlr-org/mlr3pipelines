@@ -79,7 +79,7 @@ Defaults to all available feature types.
 the \code{\link[mlr3:Task]{Task}} type is the same as for input; both during training and prediction.
 
 The output \code{\link[mlr3:Task]{Task}} is the modified input \code{\link[mlr3:Task]{Task}} according to the overloaded
-\code{private$.train_task()}/\code{private$.predict_taks()} or \code{private$.train_dt()}/\code{private$.predict_dt()} functions.
+\code{private$.train_task()}/\code{private$.predict_task()} or \code{private$.train_dt()}/\code{private$.predict_dt()} functions.
 }
 
 \section{State}{

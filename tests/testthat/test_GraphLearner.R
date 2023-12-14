@@ -569,4 +569,18 @@ test_that("GraphLearner hashes", {
 
 })
 
+test_that("Graphlearner test_sets", {
+  resampling = rsmp("cv")
+
+  learner = LearnerClassifTP$new()
+  graph = po("select", selector = selector_name("Sepal.Width")) %>>% learner
+
+  learner = as_learner(graph)
+
+  learner$train(tsk("iris"))
+  learner$predict(tsk("iris"))
+
+  rr = resample(tsk("iris"), learner, rsmp("cv"), store_models = TRUE)
+  expect_class(rr, "ResampleResult")
+})
 

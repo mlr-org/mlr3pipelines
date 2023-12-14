@@ -123,3 +123,17 @@ test_that("Informative error and warning messages", {
   expect_warning(potest$predict(list(1)), NA)
 
 })
+
+test_that("train_predict works", {
+  pipeop = po("pca")
+  task_train = tsk("iris")
+  split = partition(task_train)
+  task_predict = task_train$clone(deep = TRUE)
+  task_train$filter(split$train)
+  task_predict$filter(split$test)
+
+  output = pipeop$train_predict(list(input = list(train = task_train, predict = task_predict)))
+  expect_identical(names(output), "output")
+  expect_list(output$output, types = "Task", len = 2L)
+  expect_identical(names(output$output), c("train", "predict"))
+})
