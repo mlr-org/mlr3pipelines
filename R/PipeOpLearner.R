@@ -138,7 +138,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     },
     .learner = NULL,
     .train_predict = function(inputs) {
-      browser()
       train_task = inputs$input$train$clone(deep = TRUE)
       predict_task = inputs$input$predict$clone(deep = TRUE)
       if (!identical(predict_task$backend, train_task$backend)) {
