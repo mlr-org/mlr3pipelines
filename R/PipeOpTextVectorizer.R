@@ -187,7 +187,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         skip = p_uty(default = 0, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 0, any.missing = FALSE)),
 
         sparsity = p_dbl(lower = 0, upper = 1, default = NULL,
-          tags = c("train", "dfm_trim"), special_vals = list(NULL)),
+          tags = c("train", "dfm_trim"), special_vals = list(NULL),
+          depends = return_type == "bow"),
         termfreq_type = p_fct(default = "count", tags = c("train", "dfm_trim"),
           levels = c("count", "prop", "rank", "quantile")),
         min_termfreq = p_dbl(lower = 0, default = NULL,
@@ -197,29 +198,21 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
 
         scheme_df = p_fct(default = "count", tags = c("train", "docfreq"),
           levels = c("count", "inverse", "inversemax", "inverseprob", "unary")),
-        smoothing_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq")),
-        k_df = p_dbl(lower = 0, tags = c("train", "docfreq")),
-        threshold_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq")),
-        base_df = p_dbl(lower = 0, default = 10, tags = c("train", "docfreq")),
+        smoothing_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = scheme_df %in% c("inverse", "inversemax", "inverseprob")),
+        k_df = p_dbl(lower = 0, tags = c("train", "docfreq"), depends = scheme_df %in% c("inverse", "inversemax", "inverseprob")),
+        threshold_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = scheme_df == "count"),
+        base_df = p_dbl(lower = 0, default = 10, tags = c("train", "docfreq"),
+          depends = scheme_df %in% c("inverse", "inversemax", "inverseprob")),
 
-        scheme_tf = p_fct(default = "count", tags = c("train", "predict", "dfm_weight"),
+        scheme_tf = p_fct(default = "count", tags = c("train", "predict", "dfm_weight", depends = return_type == "bow"),
           levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
-        k_tf = p_dbl(lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight")),
-        base_tf = p_dbl(lower = 0, default = 10, tags = c("train", "predict", "dfm_weight")),
+        k_tf = p_dbl(lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight"), depends = scheme_tf == "augmented"),
+        base_tf = p_dbl(lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"), depends = scheme_tf %in% c("logcount", "logave")),
 
         return_type = p_fct(levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
-        sequence_length = p_int(default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"))
-      )$
-        add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("smoothing_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("k_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("threshold_df", "scheme_df", CondEqual$new("count"))$
-        add_dep("k_tf", "scheme_tf", CondEqual$new("augmented"))$
-        add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))$
-        add_dep("scheme_tf", "return_type", CondEqual$new("bow"))$
-        add_dep("sparsity", "return_type", CondEqual$new("bow"))$
-        add_dep("sequence_length", "return_type", CondAnyOf$new(c("integer_sequence", "factor_sequence")))
+        sequence_length = p_int(default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"),
+          depends = return_type %in% c("integer_sequence", "factor_sequence"))
+      )
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")

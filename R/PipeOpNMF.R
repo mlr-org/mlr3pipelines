@@ -125,10 +125,8 @@ PipeOpNMF = R6Class("PipeOpNMF",
         track = p_lgl(default = FALSE, tags = c("train", "nmf.options")),
         verbose = p_uty(default = FALSE, tags = c("train", "nmf.options")),
         pbackend = p_uty(tags = c("train", "nmf")),  # .pbackend
-        callback = p_uty(tags = c("train", "nmf"))  # .callback
+        callback = p_uty(tags = c("train", "nmf"), depends = keep.all == TRUE)  # .callback
       )
-      ps$add_dep("keep.all", on = "nrun", cond = CondLarger$new(1))
-      ps$add_dep("callback", on = "keep.all", cond = CondEqual$new(TRUE))
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
     }
@@ -179,10 +177,11 @@ PipeOpNMF = R6Class("PipeOpNMF",
 
 mlr_pipeops$add("nmf", PipeOpNMF)
 
-CondLarger = R6Class("CondLarger", inherit = Condition,
-  public = list(
-    initialize = function(rhs) super$initialize("larger", rhs),
-    test = function(x) !is.na(x) & x > self$rhs,
-    as_string = function(lhs_chr = "x") sprintf("%s > %s", lhs_chr, as.character(self$rhs))
-  )
-)
+# this is just a really bad idea
+## CondLarger = R6Class("CondLarger", inherit = Condition,
+##   public = list(
+##     initialize = function(rhs) super$initialize("larger", rhs),
+##     test = function(x) !is.na(x) & x > self$rhs,
+##     as_string = function(lhs_chr = "x") sprintf("%s > %s", lhs_chr, as.character(self$rhs))
+##   )
+## )

@@ -45,7 +45,7 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       p = ps(par = p_int(lower = 0, upper = 10, default = 0, tags = c("train", "predict")))
       self$nin = length(inputs)
       self$nout = length(outputs)
-      super$initialize(id, p),
+      super$initialize(id, param_set = p,
         input = data.table(name = inputs, train = "*", predict = "*"),
         output = data.table(name = outputs, train = "*", predict = "*"))
     }),

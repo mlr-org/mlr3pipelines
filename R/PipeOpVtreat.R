@@ -136,7 +136,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         smFactor = p_dbl(lower = 0, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
         rareCount = p_int(lower = 0L, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
         rareSig = p_dbl(lower = 0, upper = 1, special_vals = list(NULL), tags = c("train", "regression", "classification", "multinomial")),  # default NULL for regression, classification, 1 for multinomial
-        collarProb = p_dbl(lower = 0, upper = 1, default = 0, tags = c("train", "regression", "classification", "multinomial")),
+        collarProb = p_dbl(lower = 0, upper = 1, default = 0, tags = c("train", "regression", "classification", "multinomial"), depends = doCollar == TRUE),
         doCollar = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
         codeRestriction = p_uty(default = NULL, custom_check = function(x) checkmate::check_character(x, any.missing = FALSE, null.ok = TRUE),
           tags = c("train", "regression", "classification", "multinomial")),
@@ -160,7 +160,6 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         imputation_map = p_uty(default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "predict"))
         # NOTE: parallelCluster missing intentionally and will be set to NULL
       )
-      ps$add_dep("collarProb", on = "doCollar", cond = CondEqual$new(TRUE))
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"))
     }
