@@ -338,7 +338,7 @@ PipeOp = R6Class("PipeOp",
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        if (!is.null(private$.param_set)) {
+        if (paradox_info$is_old && !is.null(private$.param_set)) {
           # private$.param_set may be NULL if it is constructed dynamically by active binding
           private$.param_set$set_id = val
         }
@@ -353,7 +353,7 @@ PipeOp = R6Class("PipeOp",
         } else {
           private$.param_set = sourcelist[[1]]
         }
-        if (!is.null(self$id)) {
+        if (paradox_info$is_old && !is.null(self$id)) {
           private$.param_set$set_id = self$id
         }
       }

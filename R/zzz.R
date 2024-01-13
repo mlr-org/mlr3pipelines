@@ -18,6 +18,8 @@ register_mlr3 = function() {
      "multiplicity")))
 }
 
+paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
+
 .onLoad = function(libname, pkgname) {  # nocov start
   register_mlr3()
   setHook(packageEvent("mlr3", "onLoad"), function(...) register_mlr3(), action = "append")
@@ -27,6 +29,7 @@ register_mlr3 = function() {
   if (Sys.getenv("IN_PKGDOWN") == "true") {
     lg$set_threshold("warn")
   }
+  paradox_info$is_old = !is.null(ps()$set_id)
 }  # nocov end
 
 .onUnload = function(libpath) { # nocov start
@@ -39,4 +42,4 @@ register_mlr3 = function() {
 # static code checks should not complain about commonly used data.table columns
 utils::globalVariables(c("src_id", "dst_id", "name", "op.id", "response", "truth"))
 
-leanify_package()
+# leanify_package()
