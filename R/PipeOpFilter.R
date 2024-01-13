@@ -82,6 +82,7 @@
 #' @examples
 #' library("mlr3")
 #' library("mlr3filters")
+#' \dontshow{data.table::setDTthreads(1)}
 #'
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC

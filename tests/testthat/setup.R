@@ -22,4 +22,4 @@ mlr3::mlr_tasks$add("boston_housing_classic", function(id = "boston_housing_clas
 })
 
 
-data.table::setDTthreads(threads = 0)
+data.table::setDTthreads(threads = 1)
