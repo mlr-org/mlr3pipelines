@@ -106,10 +106,8 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
     initialize = function(id = "classbalancing", param_vals = list()) {
       ps = ps(
         ratio = p_dbl(lower = 0, upper = Inf, tags = "train"),
-        ParamFct$new("reference",
-          levels = c("all", "major", "minor", "nonmajor", "nonminor", "one"), tags = "train"),
-        ParamFct$new("adjust",
-          levels = c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample"), tags = "train"),
+        reference = p_fct(c("all", "major", "minor", "nonmajor", "nonminor", "one"), tags = "train"),
+        adjust = p_fct(c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample"), tags = "train"),
         shuffle = p_lgl(tags = "train")
       )
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)

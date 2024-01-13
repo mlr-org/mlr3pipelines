@@ -83,7 +83,7 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
       ps = ps(
         min = p_lgl(tags = c("train", "predict")),
         offset = p_dbl(lower = 0, tags = c("train", "predict")),
-        multiplier = p_dbl(lower = 0, tags = c("train", "predict")))
+        multiplier = p_dbl(lower = 0, tags = c("train", "predict"))
       )
       ps$values = list(min = TRUE, offset = 1, multiplier = 1)
       # this is one of the few imputers that handles 'character' features!

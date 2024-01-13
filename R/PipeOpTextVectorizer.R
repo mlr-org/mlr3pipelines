@@ -209,7 +209,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
 
         return_type = p_fct(levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
         sequence_length = p_int(default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"))
-      ))$
+      )$
         add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("smoothing_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
         add_dep("k_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$

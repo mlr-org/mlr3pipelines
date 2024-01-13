@@ -15,7 +15,8 @@ PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
     .predict = function(inputs) {
       catf("Predicting %s", self$id)
       self$state = c(self$state, inputs)
-    }
+    },
+    .additional_phash_input = function() NULL
   )
 )
 
@@ -60,7 +61,8 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
         self$id, deparse_list_safe(inputs), deparse_list_safe(self$state))
       iin = inputs[[1]]
       as.list(iin + seq_len(self$nout))
-    }
+    },
+    .additional_phash_input = function() c(self$nin, self$nout)
   )
 )
 
@@ -81,6 +83,7 @@ VarargPipeop = R6Class("VarargPipeop",
     .predict = function(inputs) {
       self$state = inputs
       list(inputs)
-    }
+    },
+    .additional_phash_input = function() self$input$name
   )
 )

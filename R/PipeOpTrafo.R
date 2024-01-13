@@ -570,7 +570,6 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
         new_target_name = p_uty(tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
         new_task_type = p_uty(tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
         drop_original_target = p_lgl(tags = c("train", "predict"))
-        )
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,
