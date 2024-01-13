@@ -120,7 +120,8 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       ps = private$.make_param_set(pred)
       measure = self$param_set$values$measure
       if (is.character(measure)) measure = msr(measure) else measure
-      codomain = ParamSet$new(params = list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
+      codomain = do.call(ps, structure(list(p_dbl(tags = ifelse(measure$minimize, "minimize", "maximize"))), names = measure$id))
+
       objfun = bbotk::ObjectiveRFun$new(
         fun = function(xs) private$.objfun(xs, pred = pred, measure = measure),
         domain = ps, codomain = codomain

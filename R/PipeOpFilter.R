@@ -195,4 +195,4 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
-mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ps()))$new()))

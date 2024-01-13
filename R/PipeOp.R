@@ -38,7 +38,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
+#' PipeOp$new(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = character(0))
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -236,7 +236,7 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
     tags = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
+    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL

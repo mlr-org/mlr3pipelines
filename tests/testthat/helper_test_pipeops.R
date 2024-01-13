@@ -1,7 +1,7 @@
 PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
   inherit = PipeOp,
   public = list(
-    initialize = function(id = "debug.basic", param_set = ParamSet$new()) {
+    initialize = function(id = "debug.basic", param_set = ps()) {
       super$initialize(id = id, param_set = param_set,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
@@ -42,10 +42,10 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       if (is.numeric(outputs)) {
         outputs = paste0("output_", seq_len(outputs))
       }
-      p = ParamInt$new(id = "par", lower = 0, upper = 10, default = 0, tags = c("train", "predict"))
+      p = ps(par = p_int(lower = 0, upper = 10, default = 0, tags = c("train", "predict")))
       self$nin = length(inputs)
       self$nout = length(outputs)
-      super$initialize(id, ParamSet$new(list(p)),
+      super$initialize(id, p),
         input = data.table(name = inputs, train = "*", predict = "*"),
         output = data.table(name = outputs, train = "*", predict = "*"))
     }),

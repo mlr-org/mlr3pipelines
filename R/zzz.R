@@ -42,4 +42,4 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
 # static code checks should not complain about commonly used data.table columns
 utils::globalVariables(c("src_id", "dst_id", "name", "op.id", "response", "truth"))
 
-# leanify_package()
+leanify_package()

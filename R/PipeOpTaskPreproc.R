@@ -36,7 +36,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTaskPreproc$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+#' PipeOpTaskPreproc$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
 #'   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 #' ```
 #'
@@ -168,14 +168,18 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+    initialize = function(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
       packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types) {
       if (can_subset_cols) {
-        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, default = selector_all(), tags = "train")
+        affectcols_ps = ps(affect_columns = p_uty(custom_check = check_function_or_null, default = selector_all(), tags = "train"))
         if (inherits(param_set, "ParamSet")) {
-          param_set$add(acp)
+          if (paradox_info$is_old) {
+            lapply(affectcols_ps$params, param_set$add)
+          } else {
+            param_set = c(param_set, affectcols_ps)
+          }
         } else {
-          private$.affectcols_ps = ParamSet$new(params = list(acp))
+          private$.affectcols_ps = affectcols_ps
           param_set = c(param_set, alist(private$.affectcols_ps))
         }
       }
@@ -318,7 +322,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTaskPreprocSimple$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+#' PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
 #' ```
 #' (Construction is identical to [`PipeOpTaskPreproc`].)
 #'

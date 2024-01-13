@@ -15,7 +15,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTargetTrafo$new(id, param_set = ParamSet$new(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
+#' PipeOpTargetTrafo$new(id, param_set = ps(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -118,7 +118,7 @@
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
+    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type_in, predict = task_type_in),
         output = data.table(name = c("fun", "output"), train = c("NULL", task_type_out), predict = c("function", task_type_out)),
@@ -515,7 +515,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #'
 #' @section Construction:
 #' ```
-#' PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
+#' PipeOpUpdateTarget$new(id, param_set = ps(),
 #'   param_vals = list(), packages = character(0))
 #' ```
 #'

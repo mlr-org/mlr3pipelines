@@ -185,10 +185,9 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       }
 
       pars = self$param_set$get_values(tags = "train")
-      ps = ParamSet$new(params = imap(data, function(x, n) {
-        if (is.numeric(n)) n = paste0("w.", n)
-        ParamDbl$new(id = n, lower = 0, upper = 1)
-      }))
+      pl = rep(list(p_dbl(0, 1)), length(data))
+      names(pl) = names(data) %??% paste0("w.", seq_along(data))
+      ps = do.call(ps, pl)
       optimizer = pars$optimizer
       if (inherits(optimizer, "character")) {
         optimizer = bbotk::opt(optimizer)
@@ -198,7 +197,7 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       }
       measure = pars$measure
       if (is.character(measure)) measure = msr(measure)
-      codomain = ParamSet$new(params = list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
+      codomain = do.call(paradox::ps, structure(list(p_dbl(tags = ifelse(measure$minimize, "minimize", "maximize"))), names = measure$id))
       objfun = bbotk::ObjectiveRFun$new(
         fun = function(xs) learneravg_objfun(xs, task = task, measure = measure, avg_weight_fun = self$weighted_average_prediction, data = data),
         domain = ps, codomain = codomain
