@@ -125,7 +125,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
         track = p_lgl(default = FALSE, tags = c("train", "nmf.options")),
         verbose = p_uty(default = FALSE, tags = c("train", "nmf.options")),
         pbackend = p_uty(tags = c("train", "nmf")),  # .pbackend
-        callback = p_uty(tags = c("train", "nmf"), depends = keep.all == TRUE)  # .callback
+        callback = p_uty(tags = c("train", "nmf"), depends = quote(keep.all == TRUE))  # .callback
       )
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))

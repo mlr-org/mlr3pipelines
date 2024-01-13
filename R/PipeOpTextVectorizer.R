@@ -188,7 +188,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
 
         sparsity = p_dbl(lower = 0, upper = 1, default = NULL,
           tags = c("train", "dfm_trim"), special_vals = list(NULL),
-          depends = return_type == "bow"),
+          depends = quote(return_type == "bow")),
         termfreq_type = p_fct(default = "count", tags = c("train", "dfm_trim"),
           levels = c("count", "prop", "rank", "quantile")),
         min_termfreq = p_dbl(lower = 0, default = NULL,
@@ -198,20 +198,20 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
 
         scheme_df = p_fct(default = "count", tags = c("train", "docfreq"),
           levels = c("count", "inverse", "inversemax", "inverseprob", "unary")),
-        smoothing_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = scheme_df %in% c("inverse", "inversemax", "inverseprob")),
-        k_df = p_dbl(lower = 0, tags = c("train", "docfreq"), depends = scheme_df %in% c("inverse", "inversemax", "inverseprob")),
-        threshold_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = scheme_df == "count"),
+        smoothing_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = quote(scheme_df %in% c("inverse", "inversemax", "inverseprob"))),
+        k_df = p_dbl(lower = 0, tags = c("train", "docfreq"), depends = quote(scheme_df %in% c("inverse", "inversemax", "inverseprob"))),
+        threshold_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = quote(scheme_df == "count")),
         base_df = p_dbl(lower = 0, default = 10, tags = c("train", "docfreq"),
-          depends = scheme_df %in% c("inverse", "inversemax", "inverseprob")),
+          depends = quote(scheme_df %in% c("inverse", "inversemax", "inverseprob"))),
 
-        scheme_tf = p_fct(default = "count", tags = c("train", "predict", "dfm_weight", depends = return_type == "bow"),
+        scheme_tf = p_fct(default = "count", tags = c("train", "predict", "dfm_weight"), depends = quote(return_type == "bow"),
           levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
-        k_tf = p_dbl(lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight"), depends = scheme_tf == "augmented"),
-        base_tf = p_dbl(lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"), depends = scheme_tf %in% c("logcount", "logave")),
+        k_tf = p_dbl(lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight"), depends = quote(scheme_tf == "augmented")),
+        base_tf = p_dbl(lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"), depends = quote(scheme_tf %in% c("logcount", "logave"))),
 
         return_type = p_fct(levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
         sequence_length = p_int(default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"),
-          depends = return_type %in% c("integer_sequence", "factor_sequence"))
+          depends = quote(return_type %in% c("integer_sequence", "factor_sequence")))
       )
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
