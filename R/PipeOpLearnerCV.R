@@ -125,9 +125,9 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
 
       private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
-        ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
-        ParamLgl$new("keep_response", tags = c("train", "required"))
+        method = p_fct(levels = c("cv", "insample"), tags = c("train", "required")),
+        folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
+        keep_response = p_lgl(tags = c("train", "required"))
       ))
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
       if (paradox_info$is_old) {

@@ -52,7 +52,7 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
   public = list(
     initialize = function(id = "fixfactors", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("droplevels", tags = c("train", "predict"))
+        droplevels = p_lgl(tags = c("train", "predict"))
       ))
       ps$values = list(droplevels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", feature_types = c("factor", "ordered"))

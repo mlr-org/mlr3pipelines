@@ -68,10 +68,10 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
   public = list(
     initialize = function(id = "yeojohnson", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("eps", default = 0.001, lower = 0, tags = c("train", "yj")),
-        ParamLgl$new("standardize", default = TRUE, tags = c("train", "yj")),
-        ParamDbl$new("lower", tags = c("train", "yj")),
-        ParamDbl$new("upper", tags = c("train", "yj"))
+        eps = p_dbl(default = 0.001, lower = 0, tags = c("train", "yj")),
+        standardize = p_lgl(default = TRUE, tags = c("train", "yj")),
+        lower = p_dbl(tags = c("train", "yj")),
+        upper = p_dbl(tags = c("train", "yj"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize", feature_types = c("numeric", "integer"))

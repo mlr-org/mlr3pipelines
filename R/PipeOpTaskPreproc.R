@@ -175,7 +175,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         if (inherits(param_set, "ParamSet")) {
           param_set$add(acp)
         } else {
-          private$.affectcols_ps = ParamSet$new(list(acp))
+          private$.affectcols_ps = ParamSet$new(params = list(acp))
           param_set = c(param_set, alist(private$.affectcols_ps))
         }
       }

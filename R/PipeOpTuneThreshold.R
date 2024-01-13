@@ -76,9 +76,9 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   public = list(
     initialize = function(id = "tunethreshold", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
-        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
-        ParamUty$new("log_level", tags = "train",
+        measure = p_uty(custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
+        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
+        log_level = p_uty(tags = "train",
           function(x) check_string(x) %check||% check_integerish(x))
       ))
       ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
@@ -120,7 +120,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       ps = private$.make_param_set(pred)
       measure = self$param_set$values$measure
       if (is.character(measure)) measure = msr(measure) else measure
-      codomain = ParamSet$new(list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
+      codomain = ParamSet$new(params = list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
       objfun = bbotk::ObjectiveRFun$new(
         fun = function(xs) private$.objfun(xs, pred = pred, measure = measure),
         domain = ps, codomain = codomain

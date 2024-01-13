@@ -122,11 +122,11 @@ PipeOpFilter = R6Class("PipeOpFilter",
           self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
         }
       }
-      private$.outer_param_set = ParamSet$new(list(
-        ParamInt$new("nfeat", lower = 0, tags = "train"),
-        ParamDbl$new("frac", lower = 0, upper = 1, tags = "train"),
-        ParamDbl$new("cutoff", tags = "train"),
-        ParamInt$new("permuted", lower = 1, tags = "train")
+      private$.outer_param_set = ParamSet$new(params = list(
+        nfeat = p_int(lower = 0, tags = "train"),
+        frac = p_dbl(lower = 0, upper = 1, tags = "train"),
+        cutoff = p_dbl(tags = "train"),
+        permuted = p_int(lower = 1, tags = "train")
       ))
       if (paradox_info$is_old) {
         private$.outer_param_set$set_id = "filter"

@@ -58,7 +58,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
     initialize = function(id = "colroles", param_vals = list()) {
       ps = ParamSet$new(params = list(
         # named list, each entry with a vector of roles
-        ParamUty$new("new_role", tags = c("train", "predict"), custom_check = function(x) {
+        new_role = p_uty(tags = c("train", "predict"), custom_check = function(x) {
           first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
           # return the error directly if this failed
           if (is.character(first_check)) {

@@ -70,8 +70,8 @@ PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "randomprojection", param_vals = list()) {
-      ps = ParamSet$new(list(
-        ParamInt$new("rank", lower = 0, tags = "train")
+      ps = ParamSet$new(params = list(
+        rank = p_int(lower = 0, tags = "train")
       ))
       ps$values = list(rank = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))

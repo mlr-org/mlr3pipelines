@@ -86,7 +86,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
       # input can be a vararg input channel
       inname = if (innum) rep_suffix("input", innum) else "..."
       ps = ParamSet$new(params = list(
-        ParamUty$new("content", tags = c("train", "predidct", "required"), custom_check = function(x) {
+        content = p_uty(tags = c("train", "predidct", "required"), custom_check = function(x) {
           # content must be an object that can be coerced to a Graph and the output number must match
           tryCatch({
             graph = as_graph(x)

@@ -84,7 +84,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
   public = list(
     initialize = function(id = "randomresponse", param_vals = list(), packages = character(0L)) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("rdistfun", tags = c("predict", "required"), custom_check = function(x) {
+        rdistfun = p_uty(tags = c("predict", "required"), custom_check = function(x) {
           check_function(x, args = c("n", "mean", "sd"))
         })
         )

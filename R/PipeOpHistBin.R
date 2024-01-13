@@ -65,7 +65,7 @@ PipeOpHistBin = R6Class("PipeOpHistBin",
   public = list(
     initialize = function(id = "histbin", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamUty$new("breaks", default = "Sturges", tags = c("train", "hist"))
+        breaks = p_uty(default = "Sturges", tags = c("train", "hist"))
       ))
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"))
     }

@@ -99,18 +99,18 @@ PipeOpDateFeatures = R6Class("PipeOpDateFeatures",
   public = list(
     initialize = function(id = "datefeatures", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamLgl$new("keep_date_var", tags = c("train", "predict", "required")),
-        ParamLgl$new("cyclic", tags = c("train", "predict", "required")),
-        ParamLgl$new("year", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("month", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("week_of_year", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("day_of_year", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("day_of_month", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("day_of_week", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("hour", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("minute", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("second", tags = c("train", "predict", "datepart", "required")),
-        ParamLgl$new("is_day", tags = c("train", "predict", "datepart", "required"))
+        keep_date_var = p_lgl(tags = c("train", "predict", "required")),
+        cyclic = p_lgl(tags = c("train", "predict", "required")),
+        year = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        month = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        week_of_year = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        day_of_year = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        day_of_month = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        day_of_week = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        hour = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        minute = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        second = p_lgl(tags = c("train", "predict", "datepart", "required")),
+        is_day = p_lgl(tags = c("train", "predict", "datepart", "required"))
       ))
       ps$values = list(keep_date_var = FALSE, cyclic = FALSE, year = TRUE,
         month = TRUE, week_of_year = TRUE, day_of_year = TRUE, day_of_month = TRUE,

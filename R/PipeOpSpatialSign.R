@@ -56,8 +56,8 @@ PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
   public = list(
     initialize = function(id = "spatialsign", param_vals = list()) {
       ps = ParamSet$new(params = list(
-        ParamDbl$new("length", tags = c("train", "predict"), lower = 0),
-        ParamDbl$new("norm", tags = c("train", "predict"), lower = 0)
+        length = p_dbl(tags = c("train", "predict"), lower = 0),
+        norm = p_dbl(tags = c("train", "predict"), lower = 0)
       ))
       ps$values = list(norm = 2, length = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
