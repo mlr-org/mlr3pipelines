@@ -88,9 +88,9 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "encodelmer", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         fast_optim = p_lgl(tags = c("train", "required"))
-      ))
+      )
       ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"))
     }

@@ -83,7 +83,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "randomresponse", param_vals = list(), packages = character(0L)) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         rdistfun = p_uty(tags = c("predict", "required"), custom_check = function(x) {
           check_function(x, args = c("n", "mean", "sd"))
         })

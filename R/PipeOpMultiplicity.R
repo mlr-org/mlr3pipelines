@@ -260,9 +260,9 @@ PipeOpReplicate = R6Class("PipeOpReplicate",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "replicate", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         reps = p_int(lower = 1, tags = c("train", "predict", "required"))
-      ))
+      )
       ps$values = list(reps = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),

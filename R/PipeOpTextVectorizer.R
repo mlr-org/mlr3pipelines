@@ -165,7 +165,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "textvectorizer", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         stopwords_language = p_fct(tags = c("train", "predict"),
           levels = c("da", "de",    "en",   "es",    "fi",   "fr",   "hu",     "ir",   "it",
                      "nl", "no",    "pt",   "ro",    "ru",   "sv" ,   "smart", "none")),

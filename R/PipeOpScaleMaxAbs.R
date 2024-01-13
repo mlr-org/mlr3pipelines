@@ -54,9 +54,9 @@ PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "scalemaxabs", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         maxabs = p_dbl(lower = 0, tags = c("required", "train", "predict"))
-      ))
+      )
       ps$values = list(maxabs = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }

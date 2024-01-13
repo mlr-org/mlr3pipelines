@@ -74,11 +74,11 @@ PipeOpScale = R6Class("PipeOpScale",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "scale", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         center = p_lgl(default = TRUE, tags = c("train", "scale")),
         scale = p_lgl(default = TRUE, tags = c("train", "scale")),
         robust = p_lgl(tags = c("train", "required"))
-      ))
+      )
       ps$values = list(robust = FALSE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }

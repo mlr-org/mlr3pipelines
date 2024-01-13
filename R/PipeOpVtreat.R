@@ -128,7 +128,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "vtreat", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         recommended = p_lgl(tags = c("train", "predict")),
         cols_to_copy = p_uty(custom_check = checkmate::check_function, tags = c("train", "predict")),
         # tags stand for: regression vtreat::regression_parameters() / classification vtreat::classification_parameters() / multinomial vtreat::multinomial_parameters()
@@ -159,7 +159,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         # NOTE: imputation_map is also in multinomial_parameters(); this is redundant so only include it here
         imputation_map = p_uty(default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "predict"))
         # NOTE: parallelCluster missing intentionally and will be set to NULL
-      ))
+      )
       ps$add_dep("collarProb", on = "doCollar", cond = CondEqual$new(TRUE))
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"))

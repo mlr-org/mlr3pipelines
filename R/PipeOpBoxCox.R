@@ -65,12 +65,12 @@ PipeOpBoxCox = R6Class("PipeOpBoxCox",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "boxcox", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         standardize = p_lgl(default = TRUE, tags = c("train", "boxcox")),
         eps = p_dbl(default = 0.001, lower = 0, tags = c("train", "boxcox")),
         lower = p_dbl(tags = c("train", "boxcox")),
         upper = p_dbl(tags = c("train", "boxcox"))
-      ))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize", feature_types = c("numeric", "integer"))
     }

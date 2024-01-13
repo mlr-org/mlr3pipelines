@@ -85,7 +85,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
       assert_int(outnum, lower = 1L)
       # input can be a vararg input channel
       inname = if (innum) rep_suffix("input", innum) else "..."
-      ps = ParamSet$new(params = list(
+      ps = ps(
         content = p_uty(tags = c("train", "predidct", "required"), custom_check = function(x) {
           # content must be an object that can be coerced to a Graph and the output number must match
           tryCatch({
@@ -103,7 +103,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
           },
           error = function(error_condition) "`content` must be an object that can be converted to a Graph")
         })
-      ))
+      )
       ps$values = list(content = PipeOpFeatureUnion$new(innum = innum))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),

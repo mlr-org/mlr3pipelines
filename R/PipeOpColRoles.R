@@ -56,7 +56,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "colroles", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         # named list, each entry with a vector of roles
         new_role = p_uty(tags = c("train", "predict"), custom_check = function(x) {
           first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
@@ -69,7 +69,7 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
           all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
           check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
         })
-      ))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     }
   ),

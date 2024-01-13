@@ -67,12 +67,12 @@ PipeOpYeoJohnson = R6Class("PipeOpYeoJohnson",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "yeojohnson", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         eps = p_dbl(default = 0.001, lower = 0, tags = c("train", "yj")),
         standardize = p_lgl(default = TRUE, tags = c("train", "yj")),
         lower = p_dbl(tags = c("train", "yj")),
         upper = p_dbl(tags = c("train", "yj"))
-      ))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize", feature_types = c("numeric", "integer"))
     }

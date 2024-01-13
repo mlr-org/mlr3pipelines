@@ -71,12 +71,12 @@ PipeOpSmote = R6Class("PipeOpSmote",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "smote", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         K = p_int(lower = 1, default = 5, tags = c("train", "smote")),
         # dup_size = 0 leads to behaviour different from 1, 2, 3, ..., because it means "autodetect",
         # so it is a 'special_vals'.
         dup_size = p_int(lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
-      ))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data")
     }

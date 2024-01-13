@@ -64,11 +64,11 @@ PipeOpSubsample = R6Class("PipeOpSubsample",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "subsample", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         frac = p_dbl(lower = 0, upper = Inf, tags = "train"),
         stratify = p_lgl(tags = "train"),
         replace = p_lgl(tags = "train")
-      ))
+      )
       ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     }

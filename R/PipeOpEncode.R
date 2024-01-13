@@ -82,9 +82,9 @@ PipeOpEncode = R6Class("PipeOpEncode",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "encode", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         method = p_fct(levels = c("one-hot", "treatment", "helmert", "poly", "sum"), tags = c("train", "predict"))
-      ))
+      )
       ps$values = list(method = "one-hot")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", tags = "encode", feature_types = c("factor", "ordered"))
     }

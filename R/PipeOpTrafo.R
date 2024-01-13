@@ -348,10 +348,10 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
   public = list(
     initialize = function(id = "targetmutate", param_vals = list(), new_task_type = NULL) {
       private$.new_task_type = assert_choice(new_task_type, mlr_reflections$task_types$type, null.ok = TRUE)
-      ps = ParamSet$new(params = list(
+      ps = ps(
         trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
         inverter = p_uty(tags = "predict", custom_check = function(x) check_function(x, nargs = 1L))
-      ))
+      )
       # We could add a condition here for new_task_type on trafo and inverter when mlr-org/paradox#278 has an answer.
       # HOWEVER conditions are broken in paradox, it is a terrible idea to use them in PipeOps,
       # see https://github.com/mlr-org/paradox/issues/216 and related comment in PipeOpLearnerCV
@@ -457,10 +457,10 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
   inherit = PipeOpTargetTrafo,
   public = list(
     initialize = function(id = "targettrafoscalerange", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         lower = p_dbl(tags = c("required", "train")),
         upper = p_dbl(tags = c("required", "train"))
-      ))
+      )
       ps$values = list(lower = 0, upper = 1)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr")
     }
@@ -565,7 +565,7 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "update_target", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
         new_target_name = p_uty(tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
         new_task_type = p_uty(tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),

@@ -63,12 +63,12 @@ PipeOpRemoveConstants = R6Class("PipeOpRemoveConstants",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "removeconstants", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
           ratio = p_dbl(lower = 0, upper = 1, tags = c("train", "required", "constant_check")),
           rel_tol = p_dbl(lower = 0, tags = c("required", "constant_check", "train")),
           abs_tol = p_dbl(lower = 0, tags = c("required", "constant_check", "train")),
           na_ignore = p_lgl(tags = c("train", "required", "constant_check"))
-      ))
+      )
       ps$values = list(ratio = 0, rel_tol = 1e-8, abs_tol = 1e-8, na_ignore = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify")
     }

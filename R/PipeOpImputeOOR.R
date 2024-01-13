@@ -80,7 +80,7 @@ PipeOpImputeOOR = R6Class("PipeOpImputeOOR",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputeoor", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         min = p_lgl(tags = c("train", "predict")),
         offset = p_dbl(lower = 0, tags = c("train", "predict")),
         multiplier = p_dbl(lower = 0, tags = c("train", "predict")))

@@ -104,14 +104,14 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
 
   public = list(
     initialize = function(id = "classbalancing", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         ratio = p_dbl(lower = 0, upper = Inf, tags = "train"),
         ParamFct$new("reference",
           levels = c("all", "major", "minor", "nonmajor", "nonminor", "one"), tags = "train"),
         ParamFct$new("adjust",
           levels = c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample"), tags = "train"),
         shuffle = p_lgl(tags = "train")
-      ))
+      )
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }

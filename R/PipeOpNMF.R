@@ -107,7 +107,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "nmf", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         rank = p_int(lower = 1L, upper = Inf, tags = c("train", "nmf")),
         method = p_fct(tags = c("train", "nmf"),
           levels = c("brunet", "lee", "ls-nmf", "nsNMF", "offset", "pe-nmf", "snmf/r", "snmf/l")),
@@ -126,7 +126,7 @@ PipeOpNMF = R6Class("PipeOpNMF",
         verbose = p_uty(default = FALSE, tags = c("train", "nmf.options")),
         pbackend = p_uty(tags = c("train", "nmf")),  # .pbackend
         callback = p_uty(tags = c("train", "nmf"))  # .callback
-      ))
+      )
       ps$add_dep("keep.all", on = "nrun", cond = CondLarger$new(1))
       ps$add_dep("callback", on = "keep.all", cond = CondEqual$new(TRUE))
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)

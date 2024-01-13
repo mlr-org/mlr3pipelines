@@ -90,7 +90,7 @@ PipeOpICA = R6Class("PipeOpICA",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "ica", param_vals = list()) {
-      ps = ParamSet$new(params = list(
+      ps = ps(
         n.comp = p_int(lower = 1, upper = Inf, tags = c("train", "ica")),
         alg.typ = p_fct(levels = c("parallel", "deflation"),
           default = "parallel", tags = c("train", "ica")),
@@ -102,7 +102,7 @@ PipeOpICA = R6Class("PipeOpICA",
         tol = p_dbl(default = 1e-04, lower = 0, tags = c("train", "ica")),
         verbose = p_lgl(default = FALSE, tags = c("train", "ica")),
         w.init = p_uty(default = NULL, tags = c("train", "ica"))
-      ))
+      )
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "fastICA", feature_types = c("numeric", "integer"))
