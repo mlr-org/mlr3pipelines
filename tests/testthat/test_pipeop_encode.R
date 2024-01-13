@@ -1,12 +1,12 @@
 context("PipeOpEncode")
 
 test_that("PipeOpEncode", {
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
 
   td = task$data()
   td$town[1] = NA
   td$chas[2] = NA
-  natask = TaskRegr$new("boston_housing_na", td, task$target_names)
+  natask = TaskRegr$new("boston_housing_classic_na", td, task$target_names)
 
   check_dat = function(dat) {
     expect_true(all(is.na(dat[1, grep("^town\\.", colnames(dat), value = TRUE), with = FALSE])))

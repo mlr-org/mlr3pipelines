@@ -5,7 +5,7 @@ test_that("PipeOpVtreat - basic properties", {
 
   expect_pipeop(PipeOpVtreat$new())
 
-  task_regr = mlr_tasks$get("boston_housing")
+  task_regr = mlr_tasks$get("boston_housing_classic")
   expect_datapreproc_pipeop_class(PipeOpVtreat, task = task_regr, deterministic_train = FALSE, deterministic_predict = FALSE)
 
   task_classiftc = mlr_tasks$get("pima")

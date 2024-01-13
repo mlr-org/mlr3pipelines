@@ -2,7 +2,7 @@ context("ppl - pipeline_branch")
 
 test_that("Branching Pipeline", {
   lrns = map(list(lrn("classif.rpart"), lrn("classif.featureless")), po)
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
   gr = pipeline_branch(lrns)
 
   expect_graph(gr)

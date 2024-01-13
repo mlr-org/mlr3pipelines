@@ -81,11 +81,10 @@ are:
 
 ## Documentation
 
-The easiest way to get started is reading some of the vignettes that are
-shipped with the package, which can also be viewed online:
+A good way to get into `mlr3pipelines` are the following two vignettes:
 
-  - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
-    with short examples to get started
+  - [Sequential Pipelines](https://mlr3book.mlr-org.com/chapters/chapter7/sequential_pipelines.html)
+  - [Non-Sequential Pipelines and Tuning](https://mlr3book.mlr-org.com/chapters/chapter8/non-sequential_pipelines_and_tuning.html)
 
 ## Bugs, Questions, Feedback
 
