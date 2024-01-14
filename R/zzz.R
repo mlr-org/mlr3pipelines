@@ -29,7 +29,7 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
   if (Sys.getenv("IN_PKGDOWN") == "true") {
     lg$set_threshold("warn")
   }
-  paradox_info$is_old = !is.null(ps()$set_id)
+  paradox_info$is_old = "set_id" %in% names(ps())
 }  # nocov end
 
 .onUnload = function(libpath) { # nocov start
