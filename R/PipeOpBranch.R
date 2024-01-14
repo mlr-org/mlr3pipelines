@@ -19,9 +19,9 @@
 #' * `options` :: `numeric(1)` | `character`\cr
 #'   If `options` is an integer number, it determines the number of
 #'   output channels / options that are created, named `output1`...`output<n>`. The
-#'   `$selection` parameter will then be a [`ParamInt`].
+#'   `$selection` parameter will then be an integer.
 #'   If `options` is a `character`, it determines the names of channels directly.
-#'   The `$selection` parameter will then be a [`ParamFct`].
+#'   The `$selection` parameter will then be factorial.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"branch"`.
 #' * `param_vals` :: named `list`\cr
