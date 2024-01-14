@@ -27,7 +27,7 @@ name of the data of the input \code{\link[mlr3:Task]{Task}}, this column is set 
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpUpdateTarget$new(id, param_set = ps(),
   param_vals = list(), packages = character(0))
 }\if{html}{\out{</div>}}
 \itemize{
