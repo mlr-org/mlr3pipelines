@@ -41,7 +41,7 @@ test_that("PipeOpLearnerCV - basic properties", {
 test_that("PipeOpLearnerCV - param values", {
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
-  expect_subset(c("minsplit", "resampling.method", "resampling.folds"), names(polrn$param_set$params))
+  expect_subset(c("minsplit", "resampling.method", "resampling.folds"), polrn$param_set$ids())
   expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 3, resampling.keep_response = FALSE, xval = 0))
   polrn$param_set$values$minsplit = 2
   expect_equal(polrn$param_set$values, list(resampling.method = "cv", resampling.folds = 3, resampling.keep_response = FALSE, minsplit = 2, xval = 0))

@@ -308,7 +308,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_task(po$predict(list(emptytask))[[1]])
   expect_equal(emptytaskfnames, po$predict(list(emptytask))[[1]]$feature_names)
 
-  if ("affect_columns" %in% names(po$param_set$params) && affect_context_independent) {
+  if ("affect_columns" %in% po$param_set$ids() && affect_context_independent) {
     selector = function(data) data$feature_names[-1]
     po2$param_set$values$affect_columns = selector
     trained.subset = po$train(list(task2))[[1]]
