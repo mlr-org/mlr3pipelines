@@ -118,15 +118,29 @@ expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
   ps = po$param_set
   expect_true(every(ps$tags, function(x) length(intersect(c("train", "predict"), x)) > 0L))
 
-  uties = ps$params[ps$ids("ParamUty")]
-  if (length(uties)) {
-    test_value = NO_DEF  # custom_checks should fail for NO_DEF
-    results = map(uties, function(uty) {
-      uty$custom_check(test_value)
-    })
-    expect_true(all(map_lgl(results, function(result) {
-      length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
-    })), label = "custom_check returns string on failure")
+  if (mlr3pipelines:::paradox_info$is_old) {
+    uties = ps$params[ps$ids("ParamUty")]
+    if (length(uties)) {
+      test_value = NO_DEF  # custom_checks should fail for NO_DEF
+      results = map(uties, function(uty) {
+        uty$custom_check(test_value)
+      })
+      expect_true(all(map_lgl(results, function(result) {
+        length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
+      })), label = "custom_check returns string on failure")
+    }
+  } else {
+    uties = ps$ids("ParamUty")
+    if (length(uties)) {
+      test_value = NO_DEF  # custom_checks should fail for NO_DEF
+      results = map(uties, function(uty) {
+        psn = ps$subset(uty, allow_dangling_dependencies = TRUE)
+        psn$check(structure(list(test_value), names = uty))
+      })
+      expect_true(all(map_lgl(results, function(result) {
+        length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
+      })), label = "custom_check returns string on failure")
+    }
   }
 
   if (check_ps_default_values) {
