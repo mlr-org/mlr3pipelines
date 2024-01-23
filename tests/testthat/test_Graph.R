@@ -501,14 +501,3 @@ test_that("Same output into multiple channels does not cause a bug", {
   expect_true(res$po3.output1 == 2)
   expect_true(res$po4.output1 == 2)
 })
-
-test_that("keep_results can be a character vector", {
-  graph = po("pca") %>>% po("ica")
-
-  graph$keep_results = "pca"
-
-  graph$train(tsk("iris"))
-
-  expect_true(is.null(graph$pipeops$ica$.result))
-  expect_class(graph$pipeops$pca$.result[[1L]], "Task")
-})

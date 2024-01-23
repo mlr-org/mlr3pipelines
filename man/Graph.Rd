@@ -69,9 +69,8 @@ Stores a checksum calculated on the \code{\link{Graph}} configuration, which inc
 \item \code{phash} :: \code{character(1)} \cr
 Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
 \emph{except} their \verb{$param_set$values}, and a hash of \verb{$edges}.
-\item \code{keep_results} :: \code{logical(1)} or \code{character()} \cr
+\item \code{keep_results} :: \code{logical(1)}\cr
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
-Can also be a character vector of IDs, in which case only the results of the selected \code{PipeOp}s are stored.
 \item \code{man} :: \code{character(1)}\cr
 Identifying string of the help page that shows with \code{help()}.
 }

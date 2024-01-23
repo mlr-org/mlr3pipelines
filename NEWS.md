@@ -1,10 +1,9 @@
 # mlr3pipelines 0.5.0-9000
 
-* Feature: The `Graph`'s `keep_results` can now also be a character vector
-containing the IDs of the `PipeOp`s whose results are being stored.
 * Feature: The `$add_pipeop()` method got an argument `clone` that is `TRUE` by
 default (previously `PipeOp`s were always cloned)
-* Bugfix: `PipeOpFeatureUnion` in some rare cases dropped variables called `"x"`
+* Bugfix: `PipeOpFeatureUnion` in some rare cases dropped variables called
+`"x"`, this is no longer the case
 
 # mlr3pipelines 0.5.0-1
 

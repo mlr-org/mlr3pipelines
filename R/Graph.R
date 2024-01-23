@@ -59,9 +59,8 @@
 #' * `phash` :: `character(1)` \cr
 #'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
 #'   *except* their `$param_set$values`, and a hash of `$edges`.
-#' * `keep_results` :: `logical(1)` or `character()` \cr
+#' * `keep_results` :: `logical(1)`\cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
-#'   Can also be a character vector of IDs, in which case only the results of the selected `PipeOp`s are stored.
 #' * `man` :: `character(1)`\cr
 #'   Identifying string of the help page that shows with `help()`.
 #'
@@ -644,7 +643,7 @@ graph_reduce = function(self, input, fun, single_input) {
     lg$debug("Running PipeOp '%s$%s()'", id, fun, pipeop = op, input = input)
 
     output = op[[fun]](input)
-    if (isTRUE(self$keep_results) || op$id %in% self$keep_results) {
+    if (self$keep_results) {
       op$.result = output
     }
 

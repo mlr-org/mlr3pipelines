@@ -130,7 +130,7 @@
 #'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result` :: `list` \cr
-#'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE` or contains the ID of this `PipeOp`, then the intermediate Results of `$train()` and `$predict()`
+#'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #' * `man` :: `character(1)`\cr
