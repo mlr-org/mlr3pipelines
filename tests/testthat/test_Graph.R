@@ -510,7 +510,7 @@ test_that("Graph train_predict", {
   task_train$row_roles$use = split$train
   task_predict = task_train$clone(deep = TRUE)
   task_predict$row_roles$use = split$test
-  graph = po("select", selector = selector_name("Sepal.Width")) %>>%
+  graph = po("pca") %>>%
     LearnerClassifTP$new()
 
   output = graph$train_predict(list(train = task_train, predict = task_predict))

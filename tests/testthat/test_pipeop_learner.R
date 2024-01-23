@@ -83,3 +83,7 @@ test_that("packages", {
   )
 
 })
+
+test_that("train_predict", {
+
+})

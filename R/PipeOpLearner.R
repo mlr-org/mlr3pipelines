@@ -133,17 +133,22 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     }
   ),
   private = list(
-    .uses_test_set = function() {
-      private$.learner$uses_test_set
+    .validation = function() {
+      "validation" %in% private$.learner$properties
     },
     .learner = NULL,
     .train_predict = function(inputs) {
       train_task = inputs$input$train$clone(deep = TRUE)
       predict_task = inputs$input$predict$clone(deep = TRUE)
-      if (!identical(predict_task$backend, train_task$backend)) {
-        train_task$rbind(predict_task$backend)
+
+      if (self$validation) {
+        assert_disjunct(train_task$row_roles$use, predict_task$row_roles$use)
+        if (!identical(predict_task$backend, train_task$backend)) {
+          train_task$rbind(predict_task$backend)
+        }
+        train_task$row_roles$test = predict_task$row_roles$use
       }
-      train_task$row_roles$test = predict_task$row_roles$use
+
       list(
         train = self$train(list(input = train_task)),
         predict = self$predict(list(input = predict_task))

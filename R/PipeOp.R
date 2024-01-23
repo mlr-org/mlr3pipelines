@@ -339,9 +339,9 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
-    uses_test_set = function(rhs) {
+    validation = function(rhs) {
       assert_ro_binding(rhs)
-      private$.uses_test_set()
+      private$.validation()
     },
     id = function(val) {
       if (!missing(val)) {
@@ -423,7 +423,7 @@ PipeOp = R6Class("PipeOp",
   ),
 
   private = list(
-    .uses_test_set = function() {
+    .validation = function() {
       FALSE
     },
     deep_clone = function(name, value) {

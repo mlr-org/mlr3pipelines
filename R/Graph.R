@@ -470,9 +470,9 @@ Graph = R6Class("Graph",
   ),
 
   active = list(
-    uses_test_set = function(rhs) {
+    validation = function(rhs) {
       assert_ro_binding(rhs)
-      some(self$pipeops, function(pipeop) pipeop$uses_test_set)
+      some(self$pipeops, function(pipeop) pipeop$validation)
     },
     is_trained = function() all(map_lgl(self$pipeops, "is_trained")),
     lhs = function() unique(self$input$op.id),

@@ -135,9 +135,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   ),
   active = list(
-    uses_test_set = function(rhs) {
+    validation = function(rhs) {
       assert_ro_binding(rhs)
-      self$graph$uses_test_set
+      self$graph$validation
     },
     hash = function() {
       digest(list(class(self), self$id, self$graph$hash, private$.predict_type,
@@ -209,7 +209,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
     .train = function(task) {
       on.exit({self$graph$state = NULL})
-      if (self$uses_test_set) {
+      if (self$validation) {
         private$.train_predict(task, reset_graph_state = FALSE)
       } else {
         self$graph$train(task)

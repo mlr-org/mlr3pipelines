@@ -96,6 +96,6 @@ LearnerClassifTP = R6::R6Class("LearnerClassifTP",
       }
       super$.train(task)
     },
-    .uses_test_set = function() TRUE
+    .validation = function() TRUE
   )
 )
