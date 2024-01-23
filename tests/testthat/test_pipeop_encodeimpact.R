@@ -1,7 +1,7 @@
 context("PipeOpEncodeImpact")
 
 test_that("PipeOpEncodeImpact", {
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
 
   chaslevels = task$levels()$chas
   townlevels = task$levels()$town
@@ -131,7 +131,7 @@ test_that("PipeOpImpactEncode on Regression", {
 
   selector = as_graph(po("select", selector = selector_type("numeric")))
 
-  expect_equal(unname((selector %>>% op)$train(tsk("boston_housing"))), unname(selector$train(tsk("boston_housing"))))
+  expect_equal(unname((selector %>>% op)$train(tsk("boston_housing_classic"))), unname(selector$train(tsk("boston_housing_classic"))))
 
 
   op$param_set$values$smoothing = 1e-10

@@ -15,7 +15,7 @@ test_that("Bagging Pipeline", {
   expect_graph(p)
 
   # regr
-  tsk = tsk("boston_housing")
+  tsk = tsk("boston_housing_classic")
   lrn = lrn("regr.rpart")
   p = ppl("bagging", graph = po(lrn), iterations = 5L, averager = po("regravg", collect_multiplicity = TRUE))
   expect_graph(p)

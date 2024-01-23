@@ -55,6 +55,7 @@
 #' @export
 #' @examples
 #' library("mlr3")
+#' \dontshow{data.table::setDTthreads(1)}
 #'
 #' task = tsk("pima")$select(c("insulin", "triceps"))
 #' sum(complete.cases(task$data()))
