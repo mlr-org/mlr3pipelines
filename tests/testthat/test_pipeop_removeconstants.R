@@ -1,7 +1,7 @@
 context("PipeOpRemoveConstants")
 
 test_that("PipeOpRemoveConstants - basic properties", {
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
   task$cbind(data.table(xx = rep(1, 506), yy = rep("a", 506)))
 
   op = PipeOpRemoveConstants$new()
@@ -13,7 +13,7 @@ test_that("PipeOpRemoveConstants - basic properties", {
 
 test_that("PipeOpRemoveConstants removes expected cols", {
 
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
   task$cbind(data.table(xx = rep(1, 506), yy = rep("a", 506),
     xx1 = c(2, rep(1, 505)), yy1 = c("b", rep("a", 505))))
 

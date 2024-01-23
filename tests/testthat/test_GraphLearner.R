@@ -450,14 +450,14 @@ test_that("predict() function for Graph", {
 
   lx = as_graph(lrn("regr.rpart"))
 
-  lx$train(tsk("boston_housing"))
+  lx$train(tsk("boston_housing_classic"))
 
-  p1 = lx$pipeops$regr.rpart$learner_model$predict(tsk("boston_housing"))
+  p1 = lx$pipeops$regr.rpart$learner_model$predict(tsk("boston_housing_classic"))
 
-  expect_equal(predict(lx, tsk("boston_housing")), p1)
+  expect_equal(predict(lx, tsk("boston_housing_classic")), p1)
 
   expect_equal(
-    predict(lx, tsk("boston_housing")$data(cols = tsk("boston_housing")$feature_names)),
+    predict(lx, tsk("boston_housing_classic")$data(cols = tsk("boston_housing_classic")$feature_names)),
     p1$response
   )
 

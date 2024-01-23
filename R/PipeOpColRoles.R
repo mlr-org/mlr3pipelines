@@ -44,7 +44,7 @@
 #'
 #' task = tsk("boston_housing")
 #' pop = po("colroles", param_vals = list(
-#'   new_role = list(cmedv = "order")
+#'   new_role = list(town = c("order", "feature"))
 #' ))
 #'
 #' pop$train(list(task))
