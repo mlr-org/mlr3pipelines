@@ -20,13 +20,13 @@ test_that("update target regr to classif", {
   trafo_fun = function(x) {factor(ifelse(x < 25, "<25", ">=25"))}
   pom = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name = "threshold_25", new_task_type = "classif"))
   expect_pipeop(pom)
-  newtsk = pom$train(list(tsk("boston_housing")))[[1]]
+  newtsk = pom$train(list(tsk("boston_housing_classic")))[[1]]
   expect_task(newtsk)
   expect_true("threshold_25" %in% newtsk$target_names)
-  expect_true(all((newtsk$data()$threshold_25 == "<25") == (tsk("boston_housing")$data()$medv < 25)))
+  expect_true(all((newtsk$data()$threshold_25 == "<25") == (tsk("boston_housing_classic")$data()$medv < 25)))
   expect_true(pom$is_trained)
 
-  newtsk2 = pom$predict(list(tsk("boston_housing")))[[1]]
+  newtsk2 = pom$predict(list(tsk("boston_housing_classic")))[[1]]
   expect_task(newtsk2)
   expect_true("threshold_25" %in% newtsk2$target_names)
   expect_true(all(levels(newtsk2$data()$threshold_25) == c("<25", ">=25")))

@@ -1,7 +1,7 @@
 context("PipeOpFilter")
 
 test_that("PipeOpFilter", {
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
     list(filter = mlr3filters::FilterVariance$new(), param_vals = list(filter.frac = 0.5)), task = task,

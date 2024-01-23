@@ -116,6 +116,7 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     .optimize_objfun = function(pred) {
       optimizer = self$param_set$values$optimizer
       if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
+      if (inherits(optimizer, "OptimizerGenSA")) optimizer$param_set$values$trace.mat = TRUE  # https://github.com/mlr-org/bbotk/issues/214
       ps = private$.make_param_set(pred)
       measure = self$param_set$values$measure
       if (is.character(measure)) measure = msr(measure) else measure
