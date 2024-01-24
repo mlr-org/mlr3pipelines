@@ -72,7 +72,7 @@
 #' the [`Task`][mlr3::Task] type is the same as for input; both during training and prediction.
 #'
 #' The output [`Task`][mlr3::Task] is the modified input [`Task`][mlr3::Task] according to the overloaded
-#' `private$.train_task()`/`private$.predict_taks()` or `private$.train_dt()`/`private$.predict_dt()` functions.
+#' `private$.train_task()`/`private$.predict_task()` or `private$.train_dt()`/`private$.predict_dt()` functions.
 #'
 #' @section State:
 #' The `$state` is a named `list`; besides members added by inheriting classes, the members are:
@@ -216,6 +216,17 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$intasklayout = intasklayout
       self$state$outtasklayout = copy(intask$feature_types)
       self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
+
+      if (length(intask$row_roles$test)) {
+        prev_use = intask$row_roles$use
+        prev_test = intask$row_roles$test
+        intask$row_roles$use = intask$row_roles$test
+        predict_task = private$.predict_task(intask$clone(deep = TRUE))
+        data = predict_task$data(cols = unlist(predict_task$col_roles))
+        intask$rbind(data)
+        intask$row_roles$test = setdiff(intask$row_roles$use, prev_test)
+        intask$row_roles$use = prev_use
+      }
 
       if (do_subset) {
         # FIXME: this fails if .train_task added a column with the same name
