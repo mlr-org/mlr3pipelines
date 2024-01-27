@@ -199,6 +199,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
+
       do_subset = !is.null(self$param_set$values$affect_columns)
       affected_cols = intask$feature_names
       remove_cols = NULL
@@ -211,7 +212,11 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       }
       intasklayout = copy(intask$feature_types)
 
-      task = intask$clone(deep = TRUE)
+      test_rows_exist = length(intask$row_roles$test) > 0
+      if (test_rows_exist) {
+        predict_task = intask$clone(deep = TRUE)
+      }
+
       intask = private$.train_task(intask)
 
       self$state$affected_cols = affected_cols
@@ -219,11 +224,9 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$outtasklayout = copy(intask$feature_types)
       self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
 
-      test_rows_exist = length(intask$row_roles$test) > 0
 
       if (test_rows_exist) {
-        predict_task = task$clone(deep = TRUE)
-        predict_task$row_roles$use = task$row_roles$test
+        predict_task$row_roles$use = predict_task$row_roles$test
         predict_task = private$.predict_task(predict_task)
 
         # FIXME: These are all the columns that a learner might use.
