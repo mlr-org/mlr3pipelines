@@ -39,7 +39,9 @@ as_graph = function(x, clone = FALSE) {
 }
 
 #' @export
-as_graph.default = function(x, clone = FALSE) {
+as_graph.default = function(x, clone = TRUE) {
+  # different default than other methods for backwards compatibility
+  # previously $add_pipeop() always cloned its input
   Graph$new()$add_pipeop(x, clone = clone)
 }
 
