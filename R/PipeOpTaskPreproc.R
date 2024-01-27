@@ -316,7 +316,6 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
-      print(dt)
       dt = as.data.table(private$.predict_dt(dt, task$levels(cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },
