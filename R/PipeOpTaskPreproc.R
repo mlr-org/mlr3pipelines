@@ -201,6 +201,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       intask = inputs[[1]]$clone(deep = TRUE)
       do_subset = !is.null(self$param_set$values$affect_columns)
       affected_cols = intask$feature_names
+      remove_cols = NULL
       if (do_subset) {
         affected_cols = self$param_set$values$affect_columns(intask)
         assert_subset(affected_cols, intask$feature_names, empty.ok = TRUE)
@@ -210,6 +211,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       }
       intasklayout = copy(intask$feature_types)
 
+      task = intask$clone(deep = TRUE)
       intask = private$.train_task(intask)
 
       self$state$affected_cols = affected_cols
@@ -217,9 +219,42 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$outtasklayout = copy(intask$feature_types)
       self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
 
+      test_rows_exist = length(intask$row_roles$test) > 0
+
+      if (test_rows_exist) {
+        predict_task = task$clone(deep = TRUE)
+        predict_task$row_roles$use = task$row_roles$test
+        predict_task = private$.predict_task(predict_task)
+
+        # FIXME: These are all the columns that a learner might use.
+        # To be on the save side, we could also add all available columns
+        test_cols = unique(c(remove_cols, unlist(predict_task$col_roles)))
+
+        test_data = predict_task$data(cols = test_cols)
+
+        # in some cases (such as class weights, different columns are added during train and predict),
+        # we fill those values with NAs
+        missing_cols = setdiff(unlist(intask$col_roles), colnames(test_data))
+        if (length(missing_cols)) {
+          missing_data = intask$data(intask$row_roles$use[1L], missing_cols)
+          missing_data[1, ] = NA
+          missing_data = missing_data[1, lapply(get(".SD"), function(col) rep(col, nrow(test_data)))]
+          test_data = cbind(missing_data, test_data)
+        }
+
+        # this creates new row_ids for the test data
+        prev_use = intask$row_roles$use
+        intask$rbind(test_data)
+        intask$row_roles$test = setdiff(intask$row_roles$use, prev_use)
+        intask$row_roles$use = prev_use
+      }
       if (do_subset) {
         # FIXME: this fails if .train_task added a column with the same name
-        intask$col_roles$feature = union(intask$col_roles$feature, y = remove_cols)
+        new_features = union(intask$col_roles$feature, y = remove_cols)
+        intask$col_roles$feature = new_features
+        if (test_rows_exist) {
+          intask$col_roles$feature = new_features
+        }
       }
       list(intask)
     },
@@ -281,6 +316,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
         return(task)
       }
       dt = task$data(cols = cols)
+      print(dt)
       dt = as.data.table(private$.predict_dt(dt, task$levels(cols)))
       task$select(setdiff(task$feature_names, cols))$cbind(dt)
     },

@@ -20,5 +20,4 @@ test_that("PipeOpClassWeights", {
   expect_equal(nt$data(), task$data())
 
   expect_equal(nt$weights$weight, ifelse(nt$truth(nt$weights$row_ids) == "neg", 1, 3))
-
 })

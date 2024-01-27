@@ -40,6 +40,7 @@
 #'   so `TRUE` (default) is recommended. In particular, note that the `$state` of `$graph` is set to `NULL` by reference on
 #'   construction of `GraphLearner`, during `$train()`, and during `$predict()` when `clone_graph` is `FALSE`.
 #'
+#' @include utils.R
 #' @section Fields:
 #' Fields inherited from [`PipeOp`], as well as:
 #' * `graph` :: [`Graph`]\cr
@@ -102,7 +103,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = mlr_reflections$learner_properties[[task_type]],
+        properties = setdiff(mlr_reflections$learner_properties[[task_type]], "uses_test_rows"),
         man = "mlr3pipelines::GraphLearner"
       )
 
@@ -173,6 +174,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   ),
   private = list(
+    .contingent_properties = function() {
+      if (some(self$graph$pipeops, uses_test_rows)) "uses_test_rows" else character(0)
+    },
     .graph = NULL,
     deep_clone = function(name, value) {
       # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
@@ -187,6 +191,15 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
     .train = function(task) {
       on.exit({self$graph$state = NULL})
+
+      if (!("uses_test_rows" %in% self$properties)) {
+        # PipeOps like PipeOpTaskPreproc will always make predictions for the test rows during train
+        # To avoid doing this unless we need it, we remove those row roles temporarily if no pipeop needs them
+        on.exit({task$row_roles$test = prev_test}, add = TRUE) # nolint
+        prev_test = task$row_roles$test
+        task$row_roles$test = integer(0)
+      }
+
       self$graph$train(task)
       state = self$graph$state
       state

@@ -570,3 +570,35 @@ test_that("GraphLearner hashes", {
 })
 
 
+test_that("test roles", {
+  LearnerTest = R6Class("LearnerTest",
+    inherit = LearnerClassifFeatureless,
+    private = list(
+      .train = function(task) {
+        taskin = task$clone(deep = TRUE)
+        model = super$.train(task)
+        self$state$task = taskin
+        model
+      }
+    )
+  )
+  task = tsk("iris")
+  task$row_roles$use = c(1:10, 51:60, 101:110)
+  task$row_roles$test = 11
+
+  learner = LearnerTest$new()
+  glrn1 = as_learner(as_graph(learner))
+  expect_false("uses_test_rows" %in% glrn1$properties)
+
+  glrn1$train(task)
+  task1 = glrn1$model$classif.featureles$task
+  expect_true(nrow(task1$data(rows = task1$row_roles$test)) == 0L)
+
+  learner$properties = c(learner$properties, "uses_test_rows")
+  expect_true("uses_test_rows" %in% as_learner(as_graph(learner))$properties)
+
+  glrn2 = as_learner(po("pca") %>>% learner)
+  glrn2$train(task)
+  task2 = glrn2$model$classif.featureles$task
+  expect_true(nrow(task2$data(rows = task2$row_roles$test)) == 1L)
+})

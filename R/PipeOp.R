@@ -335,6 +335,10 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
+    properties = function(rhs) {
+      assert_ro_binding(rhs)
+      character(0)
+    },
     id = function(val) {
       if (!missing(val)) {
         private$.id = val

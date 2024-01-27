@@ -97,6 +97,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     }
   ),
   active = list(
+    properties = function(rhs) {
+      assert_ro_binding(rhs)
+      if ("uses_test_rows" %in% private$.learner$properties) "uses_test_rows" else character(0)
+    },
     id = function(val) {
       if (!missing(val)) {
         private$.id = val

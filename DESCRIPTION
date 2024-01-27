@@ -87,20 +87,22 @@ Suggests:
     methods,
     vtreat,
     future
+Remotes:
+    mlr-org/mlr3@feat/train-predict
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.2.3.9000
 VignetteBuilder: knitr
 Collate:
     'Graph.R'
-    'GraphLearner.R'
-    'mlr_pipeops.R'
     'multiplicity.R'
     'utils.R'
+    'GraphLearner.R'
+    'mlr_pipeops.R'
     'PipeOp.R'
     'PipeOpEnsemble.R'
     'LearnerAvg.R'

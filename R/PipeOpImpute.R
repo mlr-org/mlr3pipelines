@@ -148,6 +148,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
+      task = intask$clone(deep = TRUE)
 
       affected_cols = (self$param_set$values$affect_columns %??% selector_all())(intask)
       affected_cols = intersect(affected_cols, private$.select_cols(intask))
@@ -189,7 +190,28 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       intask$select(setdiff(intask$feature_names, colnames(imputanda)))$cbind(imputanda)
 
+      test_rows_exist = length(task$row_roles$test) > 0
+
       self$state$outtasklayout = copy(intask$feature_types)
+
+      if (test_rows_exist) {
+        # FIXME: This is copy pasta from PipeOpTaskPreproc
+        predict_task = task$clone(deep = TRUE)
+        predict_task$row_roles$use = task$row_roles$test
+        predict_task = private$.predict(list(predict_task))
+
+        test_cols = unique(unlist(intask$col_roles))
+
+        test_data = predict_task[[1]]$data(cols = test_cols)
+        # this creates new row_ids for the test data
+        prev_use = intask$row_roles$use
+        intask$rbind(test_data)
+        intask$row_roles$test = setdiff(intask$row_roles$use, prev_use)
+        intask$row_roles$use = prev_use
+      }
+
+
+
 
       list(intask)
     },

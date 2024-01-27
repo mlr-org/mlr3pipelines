@@ -134,3 +134,7 @@ dictionary_sugar_inc_mget = function(dict, .keys, ...) {
   names(objs) = map_chr(objs, "id")
   objs
 }
+
+uses_test_rows = function(pipeop) {
+  "uses_test_rows" %in% pipeop$properties
+}

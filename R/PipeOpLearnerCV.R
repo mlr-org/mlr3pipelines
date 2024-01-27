@@ -142,6 +142,10 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
 
   ),
   active = list(
+    properties = function(rhs) {
+      assert_ro_binding(rhs)
+      if ("uses_test_rows" %in% private$.learner$properties) "uses_test_rows" else character(0)
+    },
     learner = function(val) {
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
