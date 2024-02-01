@@ -98,11 +98,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
+      properties = mlr_reflections$learner_properties[[task_type]]
+
+      if ("marshal" %nin% graph$properties) {
+        propertiers = setdiff(properties, "marshal")
+      }
+
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = mlr_reflections$learner_properties[[task_type]],
+        properties = properties,
         man = "mlr3pipelines::GraphLearner"
       )
 
@@ -132,9 +138,18 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
       }
       learner_model$base_learner(recursive - 1)
+    },
+    marshal = function() {
+      learner_marshal(self)
+    },
+    unmarshal = function() {
+      learner_unmarshal(self)
     }
   ),
   active = list(
+    marshalled = function(rhs) {
+      learner_marshalled(self)
+    },
     hash = function() {
       digest(list(class(self), self$id, self$graph$hash, private$.predict_type,
         self$fallback$hash, self$parallel_predict), algo = "xxhash64")
@@ -189,6 +204,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       on.exit({self$graph$state = NULL})
       self$graph$train(task)
       state = self$graph$state
+      class(state) = c("graph_learner_model", class(state))
       state
     },
     .predict = function(task) {
@@ -232,6 +248,20 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   )
 )
+
+#' @export
+marshal_model.graph_learner_model = function(model, ...) {
+  model = map(model, marshal_model)
+  class(model) = c("graph_learner_model_marshalled", "list_marshalled", "marshalled")
+  model
+}
+
+#' @export
+unmarshal_model.graph_learner_model_marshalled = function(model, ...) {
+  model = map(model, marshal_model)
+  class(model) = c("graph_learner_model", "list")
+  model
+}
 
 #' @export
 as_learner.Graph = function(x, clone = FALSE, ...) {

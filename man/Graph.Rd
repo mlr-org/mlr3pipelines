@@ -73,6 +73,8 @@ Stores a checksum calculated on the \code{\link{Graph}} configuration, which inc
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 \item \code{man} :: \code{character(1)}\cr
 Identifying string of the help page that shows with \code{help()}.
+\item \code{properties} :: \code{character()}\cr
+The properties of the \code{Graph} is the union of all the properties of its \code{\link{PipeOp}}s.
 }
 }
 
