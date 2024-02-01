@@ -101,7 +101,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       properties = mlr_reflections$learner_properties[[task_type]]
 
       if ("marshal" %nin% graph$properties) {
-        propertiers = setdiff(properties, "marshal")
+        properties = setdiff(properties, "marshal")
       }
 
       super$initialize(id = id, task_type = task_type,
