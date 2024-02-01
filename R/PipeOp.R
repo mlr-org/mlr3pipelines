@@ -136,7 +136,7 @@
 #' * `man` :: `character(1)`\cr
 #'   Identifying string of the help page that shows with `help()`.
 #' * `properties` :: `character()`\cr
-#'   The properties that are this PipeOp has. See `mlr_reflections$pipeops$properties` for available values.
+#'   The properties that this PipeOp has. See `mlr_reflections$pipeops$properties` for available values.
 #'
 #' @section Methods:
 #' * `train(input)`\cr
