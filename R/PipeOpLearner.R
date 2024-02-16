@@ -134,7 +134,13 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   ),
   private = list(
     .learner = NULL,
-
+    .contingent_properties = function() {
+      if ("uses_test_task" %in% private$.learner$properties) {
+        "uses_test_task"
+      } else {
+        character(0)
+      }
+    },
     .train = function(inputs) {
       on.exit({private$.learner$state = NULL})
       task = inputs[[1L]]

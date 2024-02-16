@@ -236,7 +236,7 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
     tags = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract", properties = character(0)) {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -246,6 +246,7 @@ PipeOp = R6Class("PipeOp",
       }
       self$id = assert_string(id)
 
+      private$.properties = sort(assert_subset(properties, mlr_reflections$pipeops$properties))
       self$param_set$values = insert_named(self$param_set$values, param_vals)
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
@@ -335,6 +336,16 @@ PipeOp = R6Class("PipeOp",
   ),
 
   active = list(
+    properties = function(rhs) {
+      if (!missing(rhs)) {
+        private$.properties = sort(assert_subset(rhs, mlr_reflections$pipeops$properties))
+      }
+      contingent_properties = private$.contingent_properties()
+      if (!length(contingent_properties)) {
+        return(private$.properties)
+      }
+      sort(c(private$.properties, contingent_properties))
+    },
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
@@ -415,6 +426,10 @@ PipeOp = R6Class("PipeOp",
   ),
 
   private = list(
+    .contingent_properties = function(rhs) {
+      character(0)
+    },
+    .properties = NULL,
     deep_clone = function(name, value) {
       if (!is.null(private$.param_set_source)) {
         private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly

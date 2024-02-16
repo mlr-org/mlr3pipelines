@@ -55,6 +55,9 @@ test_that("PipeOpImpute", {
     private = list(
       .get_state = function(task) {
         graph = self$build_graph()
+        test_task = task$test_task
+        on.exit({task$test_task = test_task})
+        task$test_task = NULL
         graph$train(task)
         list(gs = graph)
       },
@@ -73,13 +76,14 @@ test_that("PipeOpImpute", {
     )
   )
 
+
+
   task = mlr_tasks$get("pima")
 
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = task)
 
   expect_datapreproc_pipeop_class(PipeOpTestImpute, constargs = list(param_vals = list(innum = c("a", "b", "c", "d", "e"))), task = mlr_tasks$get("iris"))
-
 
 
   mdata = data.frame(stringsAsFactors = FALSE,
@@ -398,5 +402,15 @@ test_that("More tests for Integers", {
     expect_false(any(is.na(result$data()$x)), info = po$id)
     expect_equal(result$missings(), c(t = 0, x = 0), info = po$id)
   }
+
+})
+
+test_that("impute, test rows and affect_columns", {
+  po_impute = po("imputeconstant", affect_columns = selector_name("insulin"), constant = 2)
+  task = tsk("pima")
+  task$partition(1:30, "test")
+  outtrain = po_impute$train(list(task))[[1L]]
+  outpredict = po_impute$predict(list(task$test_task))[[1L]]
+  expect_true(isTRUE(all.equal(outtrain$test_task$data(), outpredict$data())))
 
 })

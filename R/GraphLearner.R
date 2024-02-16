@@ -102,7 +102,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = mlr_reflections$learner_properties[[task_type]],
+        properties = setdiff(mlr_reflections$learner_properties[[task_type]], "uses_test_task"),
         man = "mlr3pipelines::GraphLearner"
       )
 
@@ -173,6 +173,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   ),
   private = list(
+    .contingent_properties = function() {
+      if (some(self$graph$pipeops, function(p) "uses_test_task" %in% p$properties)) {
+        "uses_test_task"
+      } else {
+        character(0)
+      }
+    },
     .graph = NULL,
     deep_clone = function(name, value) {
       # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
@@ -186,7 +193,16 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
 
     .train = function(task) {
-      on.exit({self$graph$state = NULL})
+      if (!"uses_test_task" %in% self$properties) {
+        # remove the test information unless needed, so it is not preprocessed unnecessarily
+        on.exit({
+          prev_test_task = task$test_task
+          on.exit({
+            task$test_task = prev_test_task
+          })
+        }, add = TRUE)
+      }
+      on.exit({self$graph$state = NULL}, add = TRUE)
       self$graph$train(task)
       state = self$graph$state
       state
