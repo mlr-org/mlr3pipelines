@@ -72,7 +72,6 @@ test_that("Robustify Pipeline", {
   dt = tsk$data()
   dt[2, 3] = NA
   tsk2 = TaskRegr$new(id = "bh", dt, target = "medv")
-  lrn$properties = c("multiclass", "twoclass")
   p = ppl("robustify", impute_missings = TRUE) %>>% po(lrn)
   g = GraphLearner$new(p)
   g$train(tsk)

@@ -148,7 +148,6 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
     .train = function(inputs) {
       intask = inputs[[1]]$clone(deep = TRUE)
-
       affected_cols = (self$param_set$values$affect_columns %??% selector_all())(intask)
       affected_cols = intersect(affected_cols, private$.select_cols(intask))
 
@@ -190,6 +189,10 @@ PipeOpImpute = R6Class("PipeOpImpute",
       intask$select(setdiff(intask$feature_names, colnames(imputanda)))$cbind(imputanda)
 
       self$state$outtasklayout = copy(intask$feature_types)
+
+      if (!is.null(intask$test_task)) {
+        intask$test_task = private$.predict(list(intask$test_task))[[1L]]
+      }
 
       list(intask)
     },
