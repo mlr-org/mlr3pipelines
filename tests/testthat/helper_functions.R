@@ -422,7 +422,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_true(n_use >= 4)
   expect_true(task$nrow >= 5)
   # overlay between use and test rows
-  tasktrain$partition(tasktrain$row_roles$use[seq(n_use - 2, n_use)], "test", remove = FALSE)
+  tasktrain$divide(tasktrain$row_roles$use[seq(n_use - 2, n_use)], "test", remove = FALSE)
   tasktrain$row_roles$use = tasktrain$row_roles$use[seq(1, n_use - 2)]
 
   taskpredict = tasktrain$clone(deep = TRUE)

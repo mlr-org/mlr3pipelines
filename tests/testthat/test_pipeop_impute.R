@@ -408,7 +408,7 @@ test_that("More tests for Integers", {
 test_that("impute, test rows and affect_columns", {
   po_impute = po("imputeconstant", affect_columns = selector_name("insulin"), constant = 2)
   task = tsk("pima")
-  task$partition(1:30, "test")
+  task$divide(1:30, "test")
   outtrain = po_impute$train(list(task))[[1L]]
   outpredict = po_impute$predict(list(task$test_task))[[1L]]
   expect_true(isTRUE(all.equal(outtrain$test_task$data(), outpredict$data())))

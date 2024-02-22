@@ -571,7 +571,7 @@ test_that("GraphLearner hashes", {
 test_that("early stopped xgboost learner works in graph", {
   graph = po("pca") %>>% po("select", selector = selector_name("PC1")) %>>% lrn("classif.debug", uses_test_task = TRUE)
   glrn = as_learner(graph)
-  task = tsk("iris")$partition(1:10, "test")
+  task = tsk("iris")$divide(1:10, "test")
   glrn$train(task)
   expect_true("PC1" %in% glrn$model$classif.debug$train_task$test_task$feature_names)
 })

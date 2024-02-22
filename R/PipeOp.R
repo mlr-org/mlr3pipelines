@@ -340,11 +340,11 @@ PipeOp = R6Class("PipeOp",
       if (!missing(rhs)) {
         private$.properties = sort(assert_subset(rhs, mlr_reflections$pipeops$properties))
       }
-      contingent_properties = private$.contingent_properties()
-      if (!length(contingent_properties)) {
+      dependent_properties = private$.dependent_properties()
+      if (!length(dependent_properties)) {
         return(private$.properties)
       }
-      sort(c(private$.properties, contingent_properties))
+      sort(c(private$.properties, dependent_properties))
     },
     id = function(val) {
       if (!missing(val)) {
@@ -426,7 +426,7 @@ PipeOp = R6Class("PipeOp",
   ),
 
   private = list(
-    .contingent_properties = function(rhs) {
+    .dependent_properties = function(rhs) {
       character(0)
     },
     .properties = NULL,

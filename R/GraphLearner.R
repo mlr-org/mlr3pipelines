@@ -173,7 +173,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   ),
   private = list(
-    .contingent_properties = function() {
+    .dependent_properties = function() {
       if (some(self$graph$pipeops, function(p) "uses_test_task" %in% p$properties)) {
         "uses_test_task"
       } else {

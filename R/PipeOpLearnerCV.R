@@ -171,7 +171,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   private = list(
-    .contingent_properties = function() {
+    .dependent_properties = function() {
       if ("uses_test_task" %in% private$.learner$properties) {
         "uses_test_task"
       } else {
