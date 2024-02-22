@@ -576,7 +576,7 @@ test_that("marshal", {
   glrn = as_learner(graph)
   expect_true("marshal" %in% glrn$properties)
 
-  # als checks that it is marshallable
+  # als checks that it is marshalable
   expect_learner(glrn, task)
 
   expect_false("marshal" %in% as_graph(lrn("regr.featureless"))$properties)

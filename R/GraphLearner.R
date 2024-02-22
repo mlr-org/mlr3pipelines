@@ -147,8 +147,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   ),
   active = list(
-    marshalled = function(rhs) {
-      learner_marshalled(self)
+    marshaled = function(rhs) {
+      learner_marshaled(self)
     },
     hash = function() {
       digest(list(class(self), self$id, self$graph$hash, private$.predict_type,
@@ -252,13 +252,15 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' @export
 marshal_model.graph_learner_model = function(model, ...) {
   model = map(model, marshal_model)
-  class(model) = c("graph_learner_model_marshalled", "list_marshalled", "marshalled")
-  model
+  structure(list(
+    marshaled = map(model, marshal_model),
+    packages = "mlr3pipelines"
+  ), class = c("graph_learner_model_marshaled", "list_marshaled", "marshaled"))
 }
 
 #' @export
-unmarshal_model.graph_learner_model_marshalled = function(model, ...) {
-  model = map(model, marshal_model)
+unmarshal_model.graph_learner_model_marshaled = function(model, ...) {
+  model = map(model$marshaled, unmarshal_model)
   class(model) = c("graph_learner_model", "list")
   model
 }
