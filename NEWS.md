@@ -1,5 +1,6 @@
 # mlr3pipelines 0.5.0-9000
 
+* Compatibility with upcoming paradox release
 
 # mlr3pipelines 0.5.0-2
 
