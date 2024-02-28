@@ -15,7 +15,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTargetTrafo$new(id, param_set = ParamSet$new(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
+#' PipeOpTargetTrafo$new(id, param_set = ps(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -118,7 +118,7 @@
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
+    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type_in, predict = task_type_in),
         output = data.table(name = c("fun", "output"), train = c("NULL", task_type_out), predict = c("function", task_type_out)),
@@ -348,10 +348,10 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
   public = list(
     initialize = function(id = "targetmutate", param_vals = list(), new_task_type = NULL) {
       private$.new_task_type = assert_choice(new_task_type, mlr_reflections$task_types$type, null.ok = TRUE)
-      ps = ParamSet$new(list(
-        ParamUty$new("trafo", tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
-        ParamUty$new("inverter", tags = "predict", custom_check = function(x) check_function(x, nargs = 1L))
-      ))
+      ps = ps(
+        trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
+        inverter = p_uty(tags = "predict", custom_check = function(x) check_function(x, nargs = 1L))
+      )
       # We could add a condition here for new_task_type on trafo and inverter when mlr-org/paradox#278 has an answer.
       # HOWEVER conditions are broken in paradox, it is a terrible idea to use them in PipeOps,
       # see https://github.com/mlr-org/paradox/issues/216 and related comment in PipeOpLearnerCV
@@ -457,10 +457,10 @@ PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
   inherit = PipeOpTargetTrafo,
   public = list(
     initialize = function(id = "targettrafoscalerange", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("lower", tags = c("required", "train")),
-        ParamDbl$new("upper", tags = c("required", "train"))
-      ))
+      ps = ps(
+        lower = p_dbl(tags = c("required", "train")),
+        upper = p_dbl(tags = c("required", "train"))
+      )
       ps$values = list(lower = 0, upper = 1)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr")
     }
@@ -515,7 +515,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #'
 #' @section Construction:
 #' ```
-#' PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
+#' PipeOpUpdateTarget$new(id, param_set = ps(),
 #'   param_vals = list(), packages = character(0))
 #' ```
 #'
@@ -565,12 +565,11 @@ PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "update_target", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("trafo", tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
-        ParamUty$new("new_target_name", tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
-        ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
-        ParamLgl$new("drop_original_target", tags = c("train", "predict"))
-        )
+      ps = ps(
+        trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
+        new_target_name = p_uty(tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
+        new_task_type = p_uty(tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
+        drop_original_target = p_lgl(tags = c("train", "predict"))
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,

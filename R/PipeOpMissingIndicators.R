@@ -79,10 +79,10 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "missind", param_vals = list()) {
-      ps = ParamSet$new(list(
-        ParamFct$new("which", levels = c("missing_train", "all"), tags = c("train", "required")),
-        ParamFct$new("type", levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
-      ))
+      ps = ps(
+        which = p_fct(levels = c("missing_train", "all"), tags = c("train", "required")),
+        type = p_fct(levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
+      )
       ps$values = list(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals, tags = "missings")
       if ("affect_columns" %nin% names(param_vals)) {

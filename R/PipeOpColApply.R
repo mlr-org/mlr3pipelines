@@ -92,9 +92,9 @@ PipeOpColApply = R6Class("PipeOpColApply",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "colapply", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("applicator", custom_check = check_function, tags = c("train", "predict"))
-      ))
+      ps = ps(
+        applicator = p_uty(custom_check = check_function, tags = c("train", "predict"))
+      )
       ps$values = list(applicator = identity)
       super$initialize(id, ps, param_vals = param_vals)
     }

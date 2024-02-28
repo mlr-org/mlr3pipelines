@@ -40,7 +40,7 @@ the \code{\link{PipeOpTaskPreprocSimple}} class can be used instead.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreproc$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreproc$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 }\if{html}{\out{</div>}}
 \itemize{

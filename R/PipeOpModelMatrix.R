@@ -59,9 +59,9 @@ PipeOpModelMatrix = R6Class("PipeOpModelMatrix",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "modelmatrix", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("formula", tags = c("train", "predict"), custom_check = check_formula)
-      ))
+      ps = ps(
+        formula = p_uty(tags = c("train", "predict"), custom_check = check_formula)
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats")
     }
   ),

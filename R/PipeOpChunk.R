@@ -64,9 +64,9 @@ PipeOpChunk = R6Class("PipeOpChunk",
   public = list(
     initialize = function(outnum, id = "chunk", param_vals = list()) {
       outnum = assert_int(outnum, lower = 1L)
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("shuffle", tags = "train")
-      ))
+      ps = ps(
+        shuffle = p_lgl(tags = "train")
+      )
       ps$values = list(shuffle = TRUE)
       super$initialize(id,
         param_set = ps, param_vals = param_vals,

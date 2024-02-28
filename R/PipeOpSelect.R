@@ -69,9 +69,9 @@ PipeOpSelect = R6Class("PipeOpSelect",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "select", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("selector", custom_check = check_function, tags = c("train", "required"))
-      ))
+      ps = ps(
+        selector = p_uty(custom_check = check_function, tags = c("train", "required"))
+      )
       ps$values = list(selector = selector_all())
       super$initialize(id, ps, param_vals = param_vals, tags = "feature selection")
     }

@@ -58,12 +58,12 @@
 LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
   public = list(
     initialize = function(id = "classif.avg") {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = check_class_or_character("MeasureClassif", mlr_measures), tags = "train"),
-        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
-        ParamUty$new("log_level", tags = "train",
+      ps = ps(
+        measure = p_uty(custom_check = check_class_or_character("MeasureClassif", mlr_measures), tags = "train"),
+        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
+        log_level = p_uty(tags = "train",
           function(x) check_string(x) %check||% check_integerish(x))
-      ))
+      )
       ps$values = list(measure = "classif.ce", optimizer = "nloptr", log_level = "warn")
       super$initialize(
         id = id,
@@ -132,12 +132,12 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
 LearnerRegrAvg = R6Class("LearnerRegrAvg", inherit = LearnerRegr,
   public = list(
     initialize = function(id = "regr.avg") {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = check_class_or_character("MeasureRegr", mlr_measures), tags = "train"),
-        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
-        ParamUty$new("log_level", tags = "train",
+      ps = ps(
+        measure = p_uty(custom_check = check_class_or_character("MeasureRegr", mlr_measures), tags = "train"),
+        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
+        log_level = p_uty(tags = "train",
           function(x) check_string(x) %check||% check_integerish(x))
-      ))
+      )
       ps$values = list(measure = "regr.mse", optimizer = "nloptr", log_level = "warn")
       super$initialize(
         id = id,
@@ -185,10 +185,9 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       }
 
       pars = self$param_set$get_values(tags = "train")
-      ps = ParamSet$new(params = imap(data, function(x, n) {
-        if (is.numeric(n)) n = paste0("w.", n)
-        ParamDbl$new(id = n, lower = 0, upper = 1)
-      }))
+      pl = rep(list(p_dbl(0, 1)), length(data))
+      names(pl) = names(data) %??% paste0("w.", seq_along(data))
+      ps = do.call(ps, pl)
       optimizer = pars$optimizer
       if (inherits(optimizer, "character")) {
         optimizer = bbotk::opt(optimizer)
@@ -198,7 +197,7 @@ optimize_weights_learneravg = function(self, task, n_weights, data) {
       }
       measure = pars$measure
       if (is.character(measure)) measure = msr(measure)
-      codomain = ParamSet$new(list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
+      codomain = do.call(paradox::ps, structure(list(p_dbl(tags = ifelse(measure$minimize, "minimize", "maximize"))), names = measure$id))
       objfun = bbotk::ObjectiveRFun$new(
         fun = function(xs) learneravg_objfun(xs, task = task, measure = measure, avg_weight_fun = self$weighted_average_prediction, data = data),
         domain = ps, codomain = codomain
