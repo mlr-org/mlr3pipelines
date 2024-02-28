@@ -125,6 +125,7 @@ well-known “Iris” task:</p>
 <span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span>
 <span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa          1.4         0.2          5.1         3.5</span></span>
 <span><span class="co">##   2:    setosa          1.4         0.2          4.9         3.0</span></span>
 <span><span class="co">##   3:    setosa          1.3         0.2          4.7         3.2</span></span>
@@ -301,6 +302,7 @@ graph, and see what happens when we train it on something:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Graph with 1 PipeOps:</span></span>
 <span><span class="co">##        ID         State sccssors prdcssors</span></span>
+<span><span class="co">##    &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span></span>
 <span><span class="co">##  copy.two &lt;&lt;UNTRAINED&gt;&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">=</span> <span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
@@ -401,6 +403,7 @@ values:</p>
 <span><span class="va">sitask</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_task_classif.html" class="external-link">as_task_classif</a></span><span class="op">(</span><span class="va">smalliris</span>, target <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sitask</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##        &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1:     setosa          1.6         0.2           NA         3.2</span></span>
 <span><span class="co">## 2: versicolor          3.9         1.4          5.2          NA</span></span>
 <span><span class="co">## 3: versicolor          4.0         1.3          5.5         2.5</span></span>
@@ -415,6 +418,7 @@ values:</p>
 <span><span class="va">filtered_task</span> <span class="op">=</span> <span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">sitask</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">filtered_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##        &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1: versicolor          4.0         1.3          5.5         2.5</span></span>
 <span><span class="co">## 2:  virginica          5.0         1.5          6.0         2.2</span></span>
 <span><span class="co">## 3:  virginica          5.1         1.8          5.9         3.0</span></span></code></pre>
@@ -501,6 +505,7 @@ original “iris” <code>Task</code> data printed at the beginning:</p>
 <span></span>
 <span><span class="va">result</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span></span>
 <span><span class="co">##   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span></span>
 <span><span class="co">##   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span></span>
@@ -601,6 +606,7 @@ constant:</p>
 <code class="sourceCode R"><span><span class="va">irishead</span> <span class="op">=</span> <span class="va">task</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">irishead</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##     &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1:  setosa          1.4         0.2          5.1         3.5</span></span>
 <span><span class="co">## 2:  setosa          1.4         0.2          4.9         3.0</span></span>
 <span><span class="co">## 3:  setosa          1.3         0.2          4.7         3.2</span></span>
@@ -612,6 +618,7 @@ constant:</p>
 <span></span>
 <span><span class="va">dropped_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Species Petal.Length Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##     &lt;fctr&gt;        &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1:  setosa          1.4          5.1         3.5</span></span>
 <span><span class="co">## 2:  setosa          1.4          4.9         3.0</span></span>
 <span><span class="co">## 3:  setosa          1.3          4.7         3.2</span></span>
@@ -630,14 +637,18 @@ data (the whole Iris <code>Task</code>!) will still drop the
 <span><span class="co">## [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $intasklayout</span></span>
+<span><span class="co">## Key: &lt;id&gt;</span></span>
 <span><span class="co">##              id    type</span></span>
+<span><span class="co">##          &lt;char&gt;  &lt;char&gt;</span></span>
 <span><span class="co">## 1: Petal.Length numeric</span></span>
 <span><span class="co">## 2:  Petal.Width numeric</span></span>
 <span><span class="co">## 3: Sepal.Length numeric</span></span>
 <span><span class="co">## 4:  Sepal.Width numeric</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $outtasklayout</span></span>
+<span><span class="co">## Key: &lt;id&gt;</span></span>
 <span><span class="co">##              id    type</span></span>
+<span><span class="co">##          &lt;char&gt;  &lt;char&gt;</span></span>
 <span><span class="co">## 1: Petal.Length numeric</span></span>
 <span><span class="co">## 2: Sepal.Length numeric</span></span>
 <span><span class="co">## 3:  Sepal.Width numeric</span></span>
@@ -649,6 +660,7 @@ data (the whole Iris <code>Task</code>!) will still drop the
 <span></span>
 <span><span class="va">dropped_predict</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa          1.4          5.1         3.5</span></span>
 <span><span class="co">##   2:    setosa          1.4          4.9         3.0</span></span>
 <span><span class="co">##   3:    setosa          1.3          4.7         3.2</span></span>
@@ -712,6 +724,7 @@ it behaves the same.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_posa</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span></span>
 <span><span class="co">##   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span></span>
 <span><span class="co">##   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span></span>
@@ -726,6 +739,7 @@ it behaves the same.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_posa_simple</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span></span>
 <span><span class="co">##   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span></span>
 <span><span class="co">##   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span></span>
@@ -805,11 +819,24 @@ automatically checked:</p>
 <code class="sourceCode R"><span><span class="va">pss</span> <span class="op">=</span> <span class="fu"><a href="../reference/po.html">po</a></span><span class="op">(</span><span class="st">"scale"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## &lt;ParamSet:scale&gt;</span></span>
-<span><span class="co">##                id    class lower upper nlevels        default value</span></span>
-<span><span class="co">## 1:         center ParamLgl    NA    NA       2           TRUE      </span></span>
-<span><span class="co">## 2:          scale ParamLgl    NA    NA       2           TRUE      </span></span>
-<span><span class="co">## 3:         robust ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt; FALSE</span></span>
-<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt;</span></span></code></pre>
+<span><span class="co">##                id    class lower upper nlevels</span></span>
+<span><span class="co">##            &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;</span></span>
+<span><span class="co">## 1:         center ParamLgl    NA    NA       2</span></span>
+<span><span class="co">## 2:          scale ParamLgl    NA    NA       2</span></span>
+<span><span class="co">## 3:         robust ParamLgl    NA    NA       2</span></span>
+<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf</span></span>
+<span><span class="co">##                                                                                      default</span></span>
+<span><span class="co">##                                                                                       &lt;list&gt;</span></span>
+<span><span class="co">## 1:                                                                                      TRUE</span></span>
+<span><span class="co">## 2:                                                                                      TRUE</span></span>
+<span><span class="co">## 3: &lt;NoDefault&gt;\n  Public:\n    clone: function (deep = FALSE) \n    initialize: function () </span></span>
+<span><span class="co">## 4:                                                                             &lt;Selector[1]&gt;</span></span>
+<span><span class="co">##     value</span></span>
+<span><span class="co">##    &lt;list&gt;</span></span>
+<span><span class="co">## 1:       </span></span>
+<span><span class="co">## 2:       </span></span>
+<span><span class="co">## 3:  FALSE</span></span>
+<span><span class="co">## 4:</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">center</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">)</span></span></code></pre></div>
@@ -854,6 +881,7 @@ original dataset, unchanged.</p>
 <span></span>
 <span><span class="va">result</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa          1.4         0.2          5.1         3.5</span></span>
 <span><span class="co">##   2:    setosa          1.4         0.2          4.9         3.0</span></span>
 <span><span class="co">##   3:    setosa          1.3         0.2          4.7         3.2</span></span>

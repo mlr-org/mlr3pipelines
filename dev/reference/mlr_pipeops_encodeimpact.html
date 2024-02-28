@@ -109,7 +109,7 @@ this level, and the target's global mean.</p>
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpEncodeImpact<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"encodeimpact"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpEncodeImpact<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"encodeimpact"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"encodeimpact"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would
@@ -244,12 +244,13 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 <span class="r-in"><span>  <span class="st">"x"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x       y.a       y.b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a  9.498089 -9.498089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: a  9.498089 -9.498089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: a -1.098546  1.098546</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: b -1.098546  1.098546</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: b -1.098546  1.098546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x       y.a       y.b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;     &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a  9.498089 -9.498089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      a  9.498089 -9.498089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      a -1.098546  1.098546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      b -1.098546  1.098546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      b -1.098546  1.098546</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $impact</span>
@@ -267,13 +268,17 @@ If <code>TRUE</code>, impute missing values as impact 0; otherwise the respectiv
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "y"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id   type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  y factor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id   type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      y factor</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     id    type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: y.a numeric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: y.b numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    y.a numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    y.b numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): x,y.a,y.b</span>

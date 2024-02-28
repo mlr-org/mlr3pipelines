@@ -97,7 +97,7 @@ values in factorial columns are often indicated by out-of-range imputation (<cod
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpMissInd<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"missind"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpMissInd<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"missind"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, defaulting to <code>"missind"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
@@ -231,6 +231,7 @@ can be set to <code>selector_type("numeric")</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0      374      227 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    diabetes insulin triceps</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;fctr&gt;   &lt;num&gt;   &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      neg      NA      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      neg     180      48</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      neg      NA      27</span>
@@ -243,6 +244,7 @@ can be set to <code>selector_type("numeric")</code>.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">new_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    diabetes missing_insulin missing_triceps</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;fctr&gt;          &lt;fctr&gt;          &lt;fctr&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      neg         missing         missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      neg         present         present</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      neg         missing         present</span>
@@ -259,6 +261,7 @@ can be set to <code>selector_type("numeric")</code>.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">impgraph</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    diabetes insulin triceps missing_insulin missing_triceps</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;fctr&gt;   &lt;num&gt;   &lt;num&gt;          &lt;fctr&gt;          &lt;fctr&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      neg     237      32         missing         missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      neg     180      48         present         present</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      neg      65      27         missing         present</span>

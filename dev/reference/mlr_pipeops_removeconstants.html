@@ -97,7 +97,7 @@ Missing values can be ignored or treated as a regular value distinct from non-mi
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpRemoveConstants<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"removeconstants"</span>)</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpRemoveConstants<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"removeconstants"</span>)</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code>
 Identifier of the resulting  object, defaulting to <code>"removeconstants"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
@@ -222,17 +222,18 @@ Initialized to <code>TRUE</code>.</p></li>
 <span class="r-in"><span><span class="va">po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"removeconstants"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>task <span class="op">=</span> <span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              y  a c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 0.84982510  1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 0.33041754  2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 0.36344250  3 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 0.76530451  4 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 0.54021206  5 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 0.06709176  6 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 0.02093449  7 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 0.80938970  8 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 0.60619806  9 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 0.81683238 10 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              y     a     c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt; &lt;int&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 0.84982510     1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 0.33041754     2     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 0.36344250     3     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 0.76530451     4     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 0.54021206     5     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 0.06709176     6     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 0.02093449     7     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 0.80938970     8     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 0.60619806     9     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 0.81683238    10     2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">po</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $features</span>
@@ -242,15 +243,19 @@ Initialized to <code>TRUE</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a" "b" "c"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  a integer</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  b numeric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  c integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c integer</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  a integer</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  c integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      c integer</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): y,a,c</span>

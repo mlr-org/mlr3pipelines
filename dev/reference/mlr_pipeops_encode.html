@@ -103,7 +103,7 @@ Newly created columns are named via pattern <code>[column-name].[x]</code> where
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpEncode<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"encode"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpEncode<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"encode"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"encode"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
@@ -235,39 +235,44 @@ Initialized to <code>"one-hot"</code>. One of:</p><ul><li><p><code>"one-hot"</co
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># poe is initialized with encoding: "one-hot"</span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x y.a y.b y.c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a   1   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: b   0   1   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: c   0   0   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x   y.a   y.b   y.c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     0     0     1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># other kinds of encoding:</span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">method</span> <span class="op">=</span> <span class="st">"treatment"</span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x y.b y.c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: b   1   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: c   0   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x   y.b   y.c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     0     1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">method</span> <span class="op">=</span> <span class="st">"helmert"</span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x y.1 y.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a  -1  -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: b   1  -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: c   0   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x   y.1   y.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a    -1    -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     1    -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     0     2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">method</span> <span class="op">=</span> <span class="st">"poly"</span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x           y.1        y.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a -7.071068e-01  0.4082483</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: b -7.850462e-17 -0.8164966</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: c  7.071068e-01  0.4082483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x           y.1        y.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt;         &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a -7.071068e-01  0.4082483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b -7.850462e-17 -0.8164966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c  7.071068e-01  0.4082483</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">method</span> <span class="op">=</span> <span class="st">"sum"</span></span></span>
 <span class="r-in"><span><span class="va">poe</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x y.1 y.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: a   1   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: b   0   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: c  -1  -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x   y.1   y.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c    -1    -1</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

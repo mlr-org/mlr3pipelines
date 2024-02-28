@@ -104,7 +104,7 @@ dependency structure (although the <code><a href="PipeOp.html">PipeOp</a></code>
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Graph<span class="sc">$</span><span class="fu">new</span>()</span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>Graph<span class="sc">$</span><span class="fu">new</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
@@ -251,16 +251,19 @@ as the <code>help_type</code> argument of R's <code><a href="https://rdrr.io/r/u
 <span class="r-in"><span>  <span class="fu">add_pipeop</span><span class="op">(</span><span class="va"><a href="mlr_pipeops_pca.html">PipeOpPCA</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span></span></span>
 <span class="r-in"><span>  <span class="fu">add_edge</span><span class="op">(</span><span class="st">"scale"</span>, <span class="st">"pca"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="va">input</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           name train predict op.id channel.name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: scale.input  Task    Task scale        input</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           name  train predict  op.id channel.name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;char&gt; &lt;char&gt;  &lt;char&gt; &lt;char&gt;       &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: scale.input   Task    Task  scale        input</span>
 <span class="r-in"><span><span class="va">g</span><span class="op">$</span><span class="va">output</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          name train predict op.id channel.name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: pca.output  Task    Task   pca       output</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          name  train predict  op.id channel.name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt; &lt;char&gt;  &lt;char&gt; &lt;char&gt;       &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: pca.output   Task    Task    pca       output</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">trained</span> <span class="op">=</span> <span class="va">g</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">trained</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species        PC1         PC2         PC3         PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;      &lt;num&gt;       &lt;num&gt;       &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -2.2571412 -0.47842383  0.12727962 -0.02408751</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -2.0740130  0.67188269  0.23382552 -0.10266284</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -2.3563351  0.34076642 -0.04405390 -0.02828231</span>
@@ -277,6 +280,7 @@ as the <code>help_type</code> argument of R's <code><a href="https://rdrr.io/r/u
 <span class="r-in"><span><span class="va">predicted</span> <span class="op">=</span> <span class="va">g</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predicted</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Species       PC1         PC2         PC3          PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;       &lt;num&gt;        &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:  setosa -2.257141 -0.47842383  0.12727962 -0.024087508</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:  setosa -2.074013  0.67188269  0.23382552 -0.102662845</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3:  setosa -2.356335  0.34076642 -0.04405390 -0.028282305</span>

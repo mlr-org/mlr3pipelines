@@ -91,7 +91,7 @@ See <a href="https://rdrr.io/pkg/fastICA/man/fastICA.html" class="external-link"
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpICA<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"ica"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpICA<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"ica"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"ica"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
@@ -247,6 +247,7 @@ Default is <code>NULL</code>.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
@@ -260,6 +261,7 @@ Default is <code>NULL</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species         V1         V2          V3          V4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;      &lt;num&gt;      &lt;num&gt;       &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa  0.2618804  1.3930423  0.01858163  0.37322898</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa  0.3780112  1.3292462 -0.08402269 -0.97539362</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -0.3621013  1.3478643 -0.16088078 -0.34866766</span>
@@ -305,18 +307,22 @@ Default is <code>NULL</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;  &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: Petal.Length numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:  Petal.Width numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: Sepal.Length numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Sepal.Width numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: V1 numeric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: V2 numeric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: V3 numeric</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: V4 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        id    type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     V1 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     V2 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     V3 numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     V4 numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 5 cols): Species,V1,V2,V3,V4</span>

@@ -100,12 +100,12 @@ paths will be taken for execution. At the end of the different paths, the
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpBranch<span class="sc">$</span><span class="fu">new</span>(options, <span class="at">id =</span> <span class="st">"branch"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>options</code> :: <code>numeric(1)</code> | <code>character</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpBranch<span class="sc">$</span><span class="fu">new</span>(options, <span class="at">id =</span> <span class="st">"branch"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>options</code> :: <code>numeric(1)</code> | <code>character</code><br>
 If <code>options</code> is an integer number, it determines the number of
 output channels / options that are created, named <code>output1</code>...<code>output&lt;n&gt;</code>. The
-<code>$selection</code> parameter will then be a <code>ParamInt</code>.
+<code>$selection</code> parameter will then be an integer.
 If <code>options</code> is a <code>character</code>, it determines the names of channels directly.
-The <code>$selection</code> parameter will then be a <code>ParamFct</code>.</p></li>
+The <code>$selection</code> parameter will then be factorial.</p></li>
 <li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"branch"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>

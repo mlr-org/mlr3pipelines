@@ -91,7 +91,7 @@ See <code><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">st
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpPCA<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"pca"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpPCA<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"pca"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"pca"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
@@ -225,6 +225,7 @@ Maximal number of principal components to be used. Default is <code>NULL</code>:
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa          1.4         0.2          5.1         3.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa          1.4         0.2          4.9         3.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa          1.3         0.2          4.7         3.2</span>
@@ -238,6 +239,7 @@ Maximal number of principal components to be used. Default is <code>NULL</code>:
 <span class="r-out co"><span class="r-pr">#&gt;</span> 150: virginica          5.1         1.8          5.9         3.0</span>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species       PC1         PC2         PC3          PC4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;       &lt;num&gt;        &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa -2.684126 -0.31939725  0.02791483 -0.002262437</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa -2.714142  0.17700123  0.21046427 -0.099026550</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa -2.888991  0.14494943 -0.01790026 -0.019968390</span>

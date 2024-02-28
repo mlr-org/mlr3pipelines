@@ -238,6 +238,7 @@ Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <co
 <span class="r-in"><span><span class="va">pipe1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o3</span>  <span class="co"># modify pipe1 in-place</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 3 PipeOps:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID         State     sccssors prdcssors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;        &lt;char&gt;       &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
@@ -245,15 +246,17 @@ Whether to try to avoid cloning <code>g1</code>. If <code>g1</code> is not a <co
 <span class="r-in"><span><span class="va">pipe1</span>  <span class="co"># contains o1, o2, and o3 now.</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 3 PipeOps:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            ID         State     sccssors prdcssors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;        &lt;char&gt;       &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         scale &lt;&lt;UNTRAINED&gt;&gt;          pca          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           pca &lt;&lt;UNTRAINED&gt;&gt; featureunion     scale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  featureunion &lt;&lt;UNTRAINED&gt;&gt;                    pca</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">o1</span> <span class="op">%&gt;&gt;!%</span> <span class="va">o2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 2 PipeOps:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ID         State sccssors prdcssors</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  scale &lt;&lt;UNTRAINED&gt;&gt;      pca          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    pca &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ID         State sccssors prdcssors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   scale &lt;&lt;UNTRAINED&gt;&gt;      pca          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     pca &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">o1</span>  <span class="co"># not changed, becuase not a Graph.</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PipeOp: &lt;scale&gt; (not trained)</span>

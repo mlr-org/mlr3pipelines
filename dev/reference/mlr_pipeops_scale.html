@@ -97,7 +97,7 @@ is <code>TRUE</code>, this corresponds to the <code><a href="https://rdrr.io/r/s
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpScale<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"scale"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpScale<span class="sc">$</span><span class="fu">new</span>(<span class="at">id =</span> <span class="st">"scale"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"scale"</code>.</p></li>
 <li><p><code>param_vals</code> :: named <code>list</code><br>
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></li>
@@ -232,6 +232,7 @@ Initialized to <code>FALSE</code>.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pos</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span>
@@ -248,10 +249,12 @@ Initialized to <code>FALSE</code>.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">one_line_of_iris</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:  setosa          1.4         0.1          4.8           3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pos</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">one_line_of_iris</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:  setosa    -1.335752   -1.442245    -1.259964  -0.1315388</span>
 </code></pre></div>
     </div>

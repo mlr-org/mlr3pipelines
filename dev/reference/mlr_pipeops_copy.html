@@ -100,7 +100,7 @@ specify which <code><a href="PipeOp.html">PipeOp</a></code> gets connected to wh
     
 
 
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>PipeOpCopy<span class="sc">$</span><span class="fu">new</span>(outnum, <span class="at">id =</span> <span class="st">"copy"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>outnum</code> :: <code>numeric(1)</code><br>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>PipeOpCopy<span class="sc">$</span><span class="fu">new</span>(outnum, <span class="at">id =</span> <span class="st">"copy"</span>, <span class="at">param_vals =</span> <span class="fu">list</span>())</span></code></pre><p></p></div><ul><li><p><code>outnum</code> :: <code>numeric(1)</code><br>
 Number of output channels, and therefore number of copies being made.</p></li>
 <li><p><code>id</code> :: <code>character(1)</code><br>
 Identifier of resulting object, default <code>"copy"</code>.</p></li>
@@ -235,10 +235,11 @@ before</p>
 <span class="r-in"><span>    <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"nop"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 3 PipeOps:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ID         State sccssors prdcssors</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  scale &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    pca &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    nop &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ID         State sccssors prdcssors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   scale &lt;&lt;UNTRAINED&gt;&gt;  pca,nop          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     pca &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     nop &lt;&lt;UNTRAINED&gt;&gt;              scale</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The following would not work: the '%&gt;&gt;%'-operator does not know</span></span></span>
 <span class="r-in"><span><span class="co"># which output to connect to which input</span></span></span>
@@ -263,6 +264,7 @@ before</p>
 <span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph with 6 PipeOps:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          ID         State   sccssors prdcssors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;char&gt;        &lt;char&gt;     &lt;char&gt;    &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       scale &lt;&lt;UNTRAINED&gt;&gt;       copy          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      select &lt;&lt;UNTRAINED&gt;&gt; imputemean          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        copy &lt;&lt;UNTRAINED&gt;&gt;    pca,nop     scale</span>
