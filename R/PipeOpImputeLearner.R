@@ -101,7 +101,9 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   public = list(
     initialize = function(learner, id = "imputelearner", param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      private$.learner$param_set$set_id = ""
+      if (paradox_info$is_old) {
+        private$.learner$param_set$set_id = ""
+      }
       id = id %??% private$.learner$id
       feature_types = switch(private$.learner$task_type,
         regr = c("integer", "numeric"),
@@ -196,7 +198,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   )
 )
 
-mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ps()))$new()))
 
 # See mlr-org/mlr#470
 convert_to_task = function(id = "imputing", data, target, task_type, ...) {

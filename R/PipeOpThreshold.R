@@ -56,8 +56,8 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "threshold", param_vals = list()) {
-      param_set = ParamSet$new()
-      param_set$add(ParamUty$new("thresholds", custom_check = check_numeric_valid_threshold, tags = "predict"))
+      param_set = ps(thresholds = p_uty(custom_check = check_numeric_valid_threshold, tags = "predict"))
+
       param_set$values$thresholds = 0.5
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),

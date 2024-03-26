@@ -35,6 +35,9 @@ navbar:
     rss:
       icon: fa-rss
       href: https://mlr-org.com/
+    extending:
+      text: Extending
+      href: extending.html
 
 reference:
   - title: Package

@@ -33,9 +33,17 @@ test_that("PipeOpLearner - param_set and values", {
   })
   po$param_set$values$minsplit = 2L
   expect_equal(po$param_set$values, po$learner$param_set$values)
-  expect_equal(po$param_set$values, list(xval = 0L, minsplit = 2L))
+
+  sortnames = function(x) {
+    if (!is.null(names(x))) {
+      x <- x[order(names(x), decreasing = TRUE)]
+    }
+    x
+  }
+
+  expect_equal(sortnames(po$param_set$values), list(xval = 0L, minsplit = 2L))
   po$param_set$values$maxdepth = 1L
-  expect_equal(po$param_set$values, list(xval = 0L, minsplit = 2L, maxdepth = 1L))
+  expect_equal(sortnames(po$param_set$values), list(xval = 0L, minsplit = 2L, maxdepth = 1L))
   po$param_set$values = list(minsplit = 1L)
   expect_equal(po$param_set$values, list(minsplit = 1L))
   expect_error({

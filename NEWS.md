@@ -1,9 +1,8 @@
 # mlr3pipelines 0.5.0-9000
 
-* Feature: The `$add_pipeop()` method got an argument `clone` that is `TRUE` by
-default (previously `PipeOp`s were always cloned)
-* Bugfix: `PipeOpFeatureUnion` in some rare cases dropped variables called
-`"x"`, this is no longer the case
+* Feature: The `$add_pipeop()` method got an argument `clone` (old behaviour `TRUE` by default)
+* Bugfix: `PipeOpFeatureUnion` in some rare cases dropped variables called `"x"`
+* Compatibility with upcoming paradox release
 
 # mlr3pipelines 0.5.0-2
 

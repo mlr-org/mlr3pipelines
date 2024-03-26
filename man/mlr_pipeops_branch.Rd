@@ -24,9 +24,9 @@ Not to be confused with \code{\link{PipeOpCopy}}, the naming scheme is a bit unf
 \item \code{options} :: \code{numeric(1)} | \code{character}\cr
 If \code{options} is an integer number, it determines the number of
 output channels / options that are created, named \code{output1}...\verb{output<n>}. The
-\verb{$selection} parameter will then be a \code{\link{ParamInt}}.
+\verb{$selection} parameter will then be an integer.
 If \code{options} is a \code{character}, it determines the names of channels directly.
-The \verb{$selection} parameter will then be a \code{\link{ParamFct}}.
+The \verb{$selection} parameter will then be factorial.
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object, default \code{"branch"}.
 \item \code{param_vals} :: named \code{list}\cr

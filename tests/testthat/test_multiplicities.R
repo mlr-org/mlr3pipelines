@@ -64,9 +64,7 @@ test_that("PipeOp - evaluate_multiplicities", {
     public = list(
       initialize = function(num, id = "multiplicities", param_vals = list()) {
         assert_int(num, lower = 1L)
-        ps = ParamSet$new(params = list(
-          ParamUty$new("state", tags = "train")
-        ))
+        ps = ps(state = p_uty(tags = "train"))
         super$initialize(id, param_set = ps, param_vals = param_vals,
           input = data.table(name = rep_suffix("input", num), train = "*", predict = "*"),
           output = data.table(name = rep_suffix("output", num), train = "*", predict = "*"),

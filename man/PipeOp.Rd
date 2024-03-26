@@ -39,7 +39,7 @@ is not intended to be instantiated.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOp$new(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = character(0))
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr

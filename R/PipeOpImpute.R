@@ -8,7 +8,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImpute$$new(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
+#' PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -110,18 +110,22 @@ PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOp,
   public = list(
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
+    initialize = function(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
       # add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
-      addparams = list(ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train"))
+      addparams = list(affect_columns = p_uty(custom_check = check_function_or_null, tags = "train"))
       if (whole_task_dependent) {
-        addparams = c(addparams, list(ParamUty$new("context_columns", custom_check = check_function_or_null, tags = "train")))
+        addparams = c(addparams, list(context_columns = p_uty(custom_check = check_function_or_null, tags = "train")))
       }
-
+      affectcols_ps = do.call(ps, addparams)
       # ParamSetCollection handles adding of new parameters differently
       if (inherits(param_set, "ParamSet")) {
-        lapply(addparams, param_set$add)
+        if (paradox_info$is_old) {
+          lapply(affectcols_ps$params, param_set$add)
+        } else {
+          param_set = c(param_set, affectcols_ps)
+        }
       } else {
-        private$.affectcols_ps = ParamSet$new(addparams)
+        private$.affectcols_ps = affectcols_ps
         param_set = c(param_set, alist(private$.affectcols_ps))
       }
       private$.feature_types = assert_subset(feature_types, mlr_reflections$task_feature_types)

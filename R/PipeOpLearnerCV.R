@@ -116,19 +116,23 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   public = list(
     initialize = function(learner, id = NULL, param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      private$.learner$param_set$set_id = ""
+      if (paradox_info$is_old) {
+        private$.learner$param_set$set_id = ""
+      }
       id = id %??% private$.learner$id
       # FIXME: can be changed when mlr-org/mlr3#470 has an answer
       type = private$.learner$task_type
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
 
-      private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
-        ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
-        ParamLgl$new("keep_response", tags = c("train", "required"))
-      ))
+      private$.crossval_param_set = ps(
+        method = p_fct(levels = c("cv", "insample"), tags = c("train", "required")),
+        folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
+        keep_response = p_lgl(tags = c("train", "required"))
+      )
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
-      private$.crossval_param_set$set_id = "resampling"
+      if (paradox_info$is_old) {
+        private$.crossval_param_set$set_id = "resampling"
+      }
       # Dependencies in paradox have been broken from the start and this is known since at least a year:
       # https://github.com/mlr-org/paradox/issues/216
       # The following would make it _impossible_ to set "method" to "insample", because then "folds"
@@ -137,7 +141,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # in PipeOp ParamSets.
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
-      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
+      super$initialize(id, alist(resampling = private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
     }
 
   ),
@@ -218,4 +222,4 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   )
 )
 
-mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ps()))$new()))

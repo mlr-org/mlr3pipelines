@@ -50,7 +50,7 @@ test_that("PipeOpFilter parameters", {
   po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
 
   expect_set_equal(c("filter.nfeat", "filter.frac", "filter.cutoff", "filter.permuted"),
-    grep("^filter\\.", names(po$param_set$params), value = TRUE))
+    grep("^filter\\.", po$param_set$ids(), value = TRUE))
 
   po = po$clone(deep = TRUE)  # cloning often breaks param connection
 

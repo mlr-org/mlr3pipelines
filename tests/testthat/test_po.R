@@ -55,7 +55,7 @@ test_that("mlr_pipeops access works", {
   dblrn = R6Class("debuglearn", inherit = LearnerClassif,
     public = list(
       initialize = function() {
-        super$initialize(id = "debuglearn", param_set = paradox::ParamSet$new()$add(paradox::ParamDbl$new("key")))
+        super$initialize(id = "debuglearn", param_set = ps(key = p_dbl()))
       }
     )
   )
@@ -159,7 +159,7 @@ test_that("mlr_pipeops multi-access works", {
   dblrn = R6Class("debuglearn", inherit = LearnerClassif,
     public = list(
       initialize = function() {
-        super$initialize(id = "debuglearn", param_set = paradox::ParamSet$new()$add(paradox::ParamDbl$new("key")))
+        super$initialize(id = "debuglearn", param_set = ps(key = p_dbl()))
       }
     )
   )

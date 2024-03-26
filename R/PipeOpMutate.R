@@ -73,10 +73,10 @@ PipeOpMutate = R6Class("PipeOpMutate",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "mutate", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("mutation", custom_check = check_mutation_formulae, tags = c("train", "predict", "required")),
-        ParamLgl$new("delete_originals", tags = c("train", "predict", "required"))
-      ))
+      ps = ps(
+        mutation = p_uty(custom_check = check_mutation_formulae, tags = c("train", "predict", "required")),
+        delete_originals = p_lgl(tags = c("train", "predict", "required"))
+      )
       ps$values = list(mutation = list(), delete_originals = FALSE)
       super$initialize(id, ps, param_vals = param_vals)
     }
