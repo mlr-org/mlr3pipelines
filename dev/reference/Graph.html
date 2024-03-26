@@ -153,7 +153,7 @@ Stores a checksum calculated on the <code>Graph</code> configuration, which incl
 <li><p><code>phash</code> :: <code>character(1)</code> <br>
 Stores a checksum calculated on the <code>Graph</code> configuration, which includes all <code><a href="PipeOp.html">PipeOp</a></code> hashes
 <em>except</em> their <code>$param_set$values</code>, and a hash of <code>$edges</code>.</p></li>
-<li><p><code>keep_results</code> :: <code>logical(1)</code> <br>
+<li><p><code>keep_results</code> :: <code>logical(1)</code><br>
 Whether to store intermediate results in the <code><a href="PipeOp.html">PipeOp</a></code>'s <code>$.result</code> slot, mostly for debugging purposes. Default <code>FALSE</code>.</p></li>
 <li><p><code>man</code> :: <code>character(1)</code><br>
 Identifying string of the help page that shows with <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code>.</p></li>
@@ -166,13 +166,14 @@ Identifying string of the help page that shows with <code><a href="https://rdrr.
 (<code>logical(1)</code>) -&gt; <code>character</code> <br>
 Get IDs of all <code><a href="PipeOp.html">PipeOp</a></code>s. This is in order that <code><a href="PipeOp.html">PipeOp</a></code>s were added if
 <code>sorted</code> is <code>FALSE</code>, and topologically sorted if <code>sorted</code> is <code>TRUE</code>.</p></li>
-<li><p><code>add_pipeop(op)</code> <br>
-(<code><a href="PipeOp.html">PipeOp</a></code> | <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> | <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> | <code>...</code>) -&gt; <code>self</code> <br>
+<li><p><code>add_pipeop(op, clone = TRUE)</code> <br>
+(<code><a href="PipeOp.html">PipeOp</a></code> | <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> | <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code> | <code>...</code>, <code>logical(1)</code>) -&gt; <code>self</code> <br>
 Mutates <code>Graph</code> by adding a <code><a href="PipeOp.html">PipeOp</a></code> to the <code>Graph</code>. This does not add any edges, so the new <code><a href="PipeOp.html">PipeOp</a></code>
 will not be connected within the <code>Graph</code> at first.<br>
 Instead of supplying a <code><a href="PipeOp.html">PipeOp</a></code> directly, an object that can naturally be converted to a <code><a href="PipeOp.html">PipeOp</a></code> can also
 be supplied, e.g. a <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> or a <code><a href="https://mlr3filters.mlr-org.com/reference/Filter.html" class="external-link">Filter</a></code>; see <code><a href="as_pipeop.html">as_pipeop()</a></code>.
-The argument given as <code>op</code> is always cloned; to access a <code>Graph</code>'s <code><a href="PipeOp.html">PipeOp</a></code>s by-reference, use <code>$pipeops</code>.<br>
+The argument given as <code>op</code> is cloned if <code>clone</code> is <code>TRUE</code> (default); to access a <code>Graph</code>'s <code><a href="PipeOp.html">PipeOp</a></code>s
+by-reference, use <code>$pipeops</code>.<br>
 Note that <code>$add_pipeop()</code> is a relatively low-level operation, it is recommended to build graphs using <code>%&gt;&gt;%</code>.</p></li>
 <li><p><code>add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)</code> <br>
 (<code>character(1)</code>, <code>character(1)</code>,
