@@ -101,7 +101,13 @@ This is done as follows:</p><ul><li><p><code>Subsample</code> the data in each s
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pipeline_bagging</span><span class="op">(</span><span class="va">graph</span>, iterations <span class="op">=</span> <span class="fl">10</span>, frac <span class="op">=</span> <span class="fl">0.7</span>, averager <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pipeline_bagging</span><span class="op">(</span></span>
+<span>  <span class="va">graph</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  frac <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  averager <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  replace <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -133,6 +139,12 @@ predictions respectively.
 If <code>NULL</code> (default), no averager is added to the end of the graph.
 Note that setting <code>collect_multipliciy = TRUE</code> during construction of the averager is required.</p></dd>
 
+
+<dt>replace</dt>
+<dd><p><code>logical(1)</code> <br>
+Whether to sample with replacement.
+Default <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -150,12 +162,16 @@ Note that setting <code>collect_multipliciy = TRUE</code> during construction of
 <span class="r-in"><span><span class="va">lrn_po</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"learner"</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.rpart"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="va">mlr_tasks</span><span class="op">$</span><span class="fu">get</span><span class="op">(</span><span class="st">"boston_housing"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu">pipeline_bagging</span><span class="op">(</span><span class="va">lrn_po</span>, <span class="fl">3</span>, averager <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"regravg"</span>, collect_multiplicity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/resample.html" class="external-link">resample</a></span><span class="op">(</span><span class="va">task</span>, <span class="va"><a href="mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">gr</span><span class="op">)</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">rsmp</a></span><span class="op">(</span><span class="st">"holdout"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;ResampleResult&gt; with 1 resampling iterations</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         task_id                             learner_id resampling_id iteration</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  boston_housing replicate.subsample.regr.rpart.regravg       holdout         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  warnings errors</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         0      0</span>
+<span class="r-in"><span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/resample.html" class="external-link">resample</a></span><span class="op">(</span><span class="va">task</span>, <span class="va"><a href="mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">gr</span><span class="op">)</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">rsmp</a></span><span class="op">(</span><span class="st">"holdout"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="fu">aggregate</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> regr.mse </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22.72214 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The original bagging method uses boosting by sampling with replacement.</span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="ppl.html">ppl</a></span><span class="op">(</span><span class="st">"bagging"</span>, <span class="va">lrn_po</span>, frac <span class="op">=</span> <span class="fl">1</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  averager <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"regravg"</span>, collect_multiplicity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/resample.html" class="external-link">resample</a></span><span class="op">(</span><span class="va">task</span>, <span class="va"><a href="mlr_learners_graph.html">GraphLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">gr</span><span class="op">)</span>, <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">rsmp</a></span><span class="op">(</span><span class="st">"holdout"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="fu">aggregate</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> regr.mse </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23.23871 </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
