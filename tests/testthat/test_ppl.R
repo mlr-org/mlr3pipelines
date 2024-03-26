@@ -62,14 +62,13 @@ test_that("mlr3book authors don't sleepwalk through life", {
 
   tasks = tsks(c("breast_cancer", "sonar"))
 
-
   glrn_stack = as_learner(ppl("robustify") %>>% ppl("stacking",
       lrns(c("classif.rpart", "classif.debug")),
-      lrn("classif.log_reg")
+      lrn("classif.rpart", id = "classif.rpart2")
   ))
   glrn_stack$id = "Stack"
 
   learners = c(glrn_stack)
-  bmr = benchmark(benchmark_grid(tasks, learners, rsmp("cv", folds = 3)))
+  bmr = benchmark(benchmark_grid(tasks, learners, rsmp("cv", folds = 2)))
 
 })
