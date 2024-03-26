@@ -39,3 +39,36 @@ test_that("Bagging Pipeline", {
   expect_true(all(map_lgl(predict_out, function(x) "PredictionClassif" %in% class(x))))
 })
 
+test_that("Bagging with replacement", {
+  tsk = tsk("iris")
+  lrn = lrn("classif.rpart")
+  p = ppl("bagging", graph = po(lrn), replace = TRUE, averager = po("classifavg", collect_multiplicity = TRUE))
+  expect_graph(p)
+  res = resample(tsk, GraphLearner$new(p), rsmp("holdout"))
+  expect_resample_result(res)
+
+  tsk$filter(1:140)
+  expect_equal(anyDuplicated(tsk$data()), 0)  # make sure no duplicates
+
+  p = ppl("bagging", iterations = 2, frac = 1,
+    graph = lrn("classif.debug", save_tasks = TRUE),
+    replace = TRUE, averager = po("classifavg", collect_multiplicity = TRUE)
+  )
+  p$train(tsk)
+
+  expect_true(anyDuplicated(p$pipeops$classif.debug$state[[1]]$model$task_train$data()) != 0)
+
+  getOrigId = function(data) {
+    tsk$data()[, origline := .I][data, on = colnames(tsk$data()), origline]
+  }
+  orig_id_1 = getOrigId(p$pipeops$classif.debug$state[[1]]$model$task_train$data())
+  orig_id_2 = getOrigId(p$pipeops$classif.debug$state[[2]]$model$task_train$data())
+
+  expect_equal(length(orig_id_1), 140)
+  expect_equal(length(orig_id_2), 140)
+  # if we sampled the same values twice, the all.equal() would just give TRUE
+  expect_string(all.equal(orig_id_1, orig_id_2))
+
+  expect_true(length(unique(orig_id_1)) < 140)
+  expect_true(length(unique(orig_id_2)) < 140)
+})

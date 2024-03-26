@@ -1,9 +1,10 @@
 # mlr3pipelines 0.5.0-9000
 
-* Changed the ID of `PipeOpFeatureUnion` used in `ppl("robustify")` and `ppl("stacking")`
-* Feature: The `$add_pipeop()` method got an argument `clone` (old behaviour `TRUE` by default)
-* Bugfix: `PipeOpFeatureUnion` in some rare cases dropped variables called `"x"`
-* Compatibility with upcoming paradox release
+* Changed the ID of `PipeOpFeatureUnion` used in `ppl("robustify")` and `ppl("stacking")`.
+* `pipeline_bagging()` gets the `replace` argument (old behaviour `FALSE` by default).
+* Feature: The `$add_pipeop()` method got an argument `clone` (old behaviour `TRUE` by default).
+* Bugfix: `PipeOpFeatureUnion` in some rare cases dropped variables called `"x"`.
+* Compatibility with upcoming paradox release.
 
 # mlr3pipelines 0.5.0-2
 
