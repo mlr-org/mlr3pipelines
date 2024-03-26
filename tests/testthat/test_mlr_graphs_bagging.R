@@ -50,7 +50,7 @@ test_that("Bagging with replacement", {
   tsk$filter(1:140)
   expect_equal(anyDuplicated(tsk$data()), 0)  # make sure no duplicates
 
-  p = ppl("bagging", iterations = 2,
+  p = ppl("bagging", iterations = 2, frac = 1,
     graph = lrn("classif.debug", save_tasks = TRUE),
     replace = TRUE, averager = po("classifavg", collect_multiplicity = TRUE)
   )
