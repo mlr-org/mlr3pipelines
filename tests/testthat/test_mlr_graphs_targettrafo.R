@@ -1,7 +1,7 @@
 context("ppl - pipeline_targettrafo")
 
 test_that("Target Trafo Pipeline", {
-  task = tsk("boston_housing")
+  task = tsk("boston_housing_classic")
 
   tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
   tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)

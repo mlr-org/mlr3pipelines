@@ -38,7 +38,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
+#' PipeOp$new(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = character(0))
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -236,7 +236,7 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
     tags = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
+    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -338,7 +338,7 @@ PipeOp = R6Class("PipeOp",
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        if (!is.null(private$.param_set)) {
+        if (paradox_info$is_old && !is.null(private$.param_set)) {
           # private$.param_set may be NULL if it is constructed dynamically by active binding
           private$.param_set$set_id = val
         }
@@ -353,7 +353,7 @@ PipeOp = R6Class("PipeOp",
         } else {
           private$.param_set = sourcelist[[1]]
         }
-        if (!is.null(self$id)) {
+        if (paradox_info$is_old && !is.null(self$id)) {
           private$.param_set$set_id = self$id
         }
       }

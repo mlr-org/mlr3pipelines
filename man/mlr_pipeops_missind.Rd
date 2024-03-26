@@ -73,6 +73,7 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 
 \examples{
 library("mlr3")
+\dontshow{data.table::setDTthreads(1)}
 
 task = tsk("pima")$select(c("insulin", "triceps"))
 sum(complete.cases(task$data()))

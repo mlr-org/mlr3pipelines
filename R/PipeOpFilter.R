@@ -82,6 +82,7 @@
 #' @examples
 #' library("mlr3")
 #' library("mlr3filters")
+#' \dontshow{data.table::setDTthreads(1)}
 #'
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC
@@ -113,16 +114,24 @@ PipeOpFilter = R6Class("PipeOpFilter",
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
-      self$filter$param_set$set_id = ""
-      map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
-      private$.outer_param_set = ParamSet$new(list(
-        ParamInt$new("nfeat", lower = 0, tags = "train"),
-        ParamDbl$new("frac", lower = 0, upper = 1, tags = "train"),
-        ParamDbl$new("cutoff", tags = "train"),
-        ParamInt$new("permuted", lower = 1, tags = "train")
-      ))
-      private$.outer_param_set$set_id = "filter"
-      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
+      if (paradox_info$is_old) {
+        self$filter$param_set$set_id = ""
+        map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
+      } else {
+        for (pn in self$filter$param_set$ids()) {
+          self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
+        }
+      }
+      private$.outer_param_set = ps(
+        nfeat = p_int(lower = 0, tags = "train"),
+        frac = p_dbl(lower = 0, upper = 1, tags = "train"),
+        cutoff = p_dbl(tags = "train"),
+        permuted = p_int(lower = 1, tags = "train")
+      )
+      if (paradox_info$is_old) {
+        private$.outer_param_set$set_id = "filter"
+      }
+      super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
     }
   ),
   private = list(
@@ -186,4 +195,4 @@ PipeOpFilter = R6Class("PipeOpFilter",
   )
 )
 
-mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ps()))$new()))

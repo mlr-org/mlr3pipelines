@@ -6,7 +6,7 @@ sample_n_letters = function(n, l = 3) {
 
 test_that("PipeOpEncodeLmer regr", {
   set.seed(8008135)
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
   chaslevels = task$levels()$chas
   townlevels = task$levels()$town
 

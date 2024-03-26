@@ -9,12 +9,12 @@ test_that("PipeOpImpute", {
   PipeOpTestImpute = R6Class("PipeOpTestImpute", inherit = PipeOpTaskPreprocSimple,
     public = list(
       initialize = function(id = "impute", param_vals = list()) {
-        ps = ParamSet$new(list(
-          ParamFct$new("method_num", levels = c("median", "mean", "mode", "sample", "hist", "oor", "constant"), tags = c("train", "predict")),
-          ParamFct$new("method_fct", levels = c("oor", "sample", "mode", "constant"), tags = c("train", "predict")),
-          ParamFct$new("add_dummy", levels = c("none", "missing_train", "all"), tags = c("train", "predict")),
-          ParamUty$new("innum", tags = c("train", "predict"))
-        ))
+        ps = ps(
+          method_num = p_fct(c("median", "mean", "mode", "sample", "hist", "oor", "constant"), tags = c("train", "predict")),
+          method_fct = p_fct(c("oor", "sample", "mode", "constant"), tags = c("train", "predict")),
+          add_dummy = p_fct(c("none", "missing_train", "all"), tags = c("train", "predict")),
+          innum = p_uty(tags = c("train", "predict"))
+        )
         ps$values = list(method_num = "median", method_fct = "oor", add_dummy = "missing_train")
         super$initialize(id, ps, param_vals = param_vals)
       },

@@ -123,7 +123,7 @@ test_that("graphlearner parameters behave as they should", {
 
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
-  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
+  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), dbgr$param_set$ids())
 
   dbgr$param_set$values$classif.debug.x = 1
 
@@ -450,14 +450,14 @@ test_that("predict() function for Graph", {
 
   lx = as_graph(lrn("regr.rpart"))
 
-  lx$train(tsk("boston_housing"))
+  lx$train(tsk("boston_housing_classic"))
 
-  p1 = lx$pipeops$regr.rpart$learner_model$predict(tsk("boston_housing"))
+  p1 = lx$pipeops$regr.rpart$learner_model$predict(tsk("boston_housing_classic"))
 
-  expect_equal(predict(lx, tsk("boston_housing")), p1)
+  expect_equal(predict(lx, tsk("boston_housing_classic")), p1)
 
   expect_equal(
-    predict(lx, tsk("boston_housing")$data(cols = tsk("boston_housing")$feature_names)),
+    predict(lx, tsk("boston_housing_classic")$data(cols = tsk("boston_housing_classic")$feature_names)),
     p1$response
   )
 
