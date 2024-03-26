@@ -3,7 +3,7 @@
 #' @description
 #' Creates a [`Graph`] from [`mlr_graphs`] from given ID
 #'
-#' `ppl()` taks a `charcter(1)` and returns a [`Graph`]. `ppls()` takes a `character`
+#' `ppl()` taks a `character(1)` and returns a [`Graph`]. `ppls()` takes a `character`
 #' vector of any list and returns a `list` of possibly muliple [`Graph`]s.
 #'
 #' @param .key `[character(1)]`\cr

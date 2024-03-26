@@ -28,7 +28,7 @@ named \code{list} is returned, but unlike \code{\link[=pos]{pos()}} it will not 
 \description{
 Creates a \code{\link{Graph}} from \code{\link{mlr_graphs}} from given ID
 
-\code{ppl()} taks a \code{charcter(1)} and returns a \code{\link{Graph}}. \code{ppls()} takes a \code{character}
+\code{ppl()} taks a \code{character(1)} and returns a \code{\link{Graph}}. \code{ppls()} takes a \code{character}
 vector of any list and returns a \code{list} of possibly muliple \code{\link{Graph}}s.
 }
 \examples{
