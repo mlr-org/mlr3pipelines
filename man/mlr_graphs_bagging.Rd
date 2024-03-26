@@ -62,7 +62,6 @@ gr = pipeline_bagging(lrn_po, 3, averager = po("regravg", collect_multiplicity =
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 
 # The original bagging method uses boosting by sampling with replacement.
-# This may give better performance but is also slower.
 gr = ppl("bagging", lrn_po, frac = 1, replace = TRUE,
   averager = po("regravg", collect_multiplicity = TRUE))
 resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
