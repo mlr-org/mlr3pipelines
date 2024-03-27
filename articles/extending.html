@@ -14,10 +14,10 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.6/font.css" rel="stylesheet">
-<link href="../deps/JetBrains_Mono-0.4.6/font.css" rel="stylesheet">
-<link href="../deps/Roboto_Slab-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet">
+<link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Adding new PipeOps">
@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,6 +124,7 @@ well-known “Iris” task:</p>
 <span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span>
 <span><span class="va">task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa          1.4         0.2          5.1         3.5</span></span>
 <span><span class="co">##   2:    setosa          1.4         0.2          4.9         3.0</span></span>
 <span><span class="co">##   3:    setosa          1.3         0.2          4.7         3.2</span></span>
@@ -210,10 +211,10 @@ table will have two rows, <code>&lt;"output1", "*", "*"&gt;</code> and
 <code>initialize()</code> will thus look as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">initialize</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span> <span class="op">=</span> <span class="st">"copy.two"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">input</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"input"</span>, train <span class="op">=</span> <span class="st">"*"</span>, predict <span class="op">=</span> <span class="st">"*"</span><span class="op">)</span></span>
+<span>  <span class="va">input</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"input"</span>, train <span class="op">=</span> <span class="st">"*"</span>, predict <span class="op">=</span> <span class="st">"*"</span><span class="op">)</span></span>
 <span>  <span class="co"># the following will create two rows and automatically fill the `train`</span></span>
 <span>  <span class="co"># and `predict` cols with "*"</span></span>
-<span>  <span class="va">output</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
+<span>  <span class="va">output</span> <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"output1"</span>, <span class="st">"output2"</span><span class="op">)</span>,</span>
 <span>    train <span class="op">=</span> <span class="st">"*"</span>, predict <span class="op">=</span> <span class="st">"*"</span></span>
 <span>  <span class="op">)</span></span>
@@ -272,8 +273,8 @@ now:</p>
 <span>  public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span> <span class="op">=</span> <span class="st">"copy.two"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">super</span><span class="op">$</span><span class="fu">initialize</span><span class="op">(</span><span class="va">id</span>,</span>
-<span>        input <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"input"</span>, train <span class="op">=</span> <span class="st">"*"</span>, predict <span class="op">=</span> <span class="st">"*"</span><span class="op">)</span>,</span>
-<span>        output <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"output1"</span>, <span class="st">"output2"</span><span class="op">)</span>,</span>
+<span>        input <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"input"</span>, train <span class="op">=</span> <span class="st">"*"</span>, predict <span class="op">=</span> <span class="st">"*"</span><span class="op">)</span>,</span>
+<span>        output <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"output1"</span>, <span class="st">"output2"</span><span class="op">)</span>,</span>
 <span>                            train <span class="op">=</span> <span class="st">"*"</span>, predict <span class="op">=</span> <span class="st">"*"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
@@ -300,6 +301,7 @@ graph, and see what happens when we train it on something:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Graph with 1 PipeOps:</span></span>
 <span><span class="co">##        ID         State sccssors prdcssors</span></span>
+<span><span class="co">##    &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;</span></span>
 <span><span class="co">##  copy.two &lt;&lt;UNTRAINED&gt;&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">=</span> <span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
@@ -400,6 +402,7 @@ values:</p>
 <span><span class="va">sitask</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_task_classif.html" class="external-link">as_task_classif</a></span><span class="op">(</span><span class="va">smalliris</span>, target <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sitask</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##        &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1:     setosa          1.6         0.2           NA         3.2</span></span>
 <span><span class="co">## 2: versicolor          3.9         1.4          5.2          NA</span></span>
 <span><span class="co">## 3: versicolor          4.0         1.3          5.5         2.5</span></span>
@@ -414,6 +417,7 @@ values:</p>
 <span><span class="va">filtered_task</span> <span class="op">=</span> <span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">sitask</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">filtered_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##        &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1: versicolor          4.0         1.3          5.5         2.5</span></span>
 <span><span class="co">## 2:  virginica          5.0         1.5          6.0         2.2</span></span>
 <span><span class="co">## 3:  virginica          5.1         1.8          5.9         3.0</span></span></code></pre>
@@ -500,6 +504,7 @@ original “iris” <code>Task</code> data printed at the beginning:</p>
 <span></span>
 <span><span class="va">result</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span></span>
 <span><span class="co">##   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span></span>
 <span><span class="co">##   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span></span>
@@ -600,6 +605,7 @@ constant:</p>
 <code class="sourceCode R"><span><span class="va">irishead</span> <span class="op">=</span> <span class="va">task</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">irishead</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##     &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1:  setosa          1.4         0.2          5.1         3.5</span></span>
 <span><span class="co">## 2:  setosa          1.4         0.2          4.9         3.0</span></span>
 <span><span class="co">## 3:  setosa          1.3         0.2          4.7         3.2</span></span>
@@ -611,6 +617,7 @@ constant:</p>
 <span></span>
 <span><span class="va">dropped_task</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Species Petal.Length Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##     &lt;fctr&gt;        &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">## 1:  setosa          1.4          5.1         3.5</span></span>
 <span><span class="co">## 2:  setosa          1.4          4.9         3.0</span></span>
 <span><span class="co">## 3:  setosa          1.3          4.7         3.2</span></span>
@@ -629,14 +636,18 @@ data (the whole Iris <code>Task</code>!) will still drop the
 <span><span class="co">## [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $intasklayout</span></span>
+<span><span class="co">## Key: &lt;id&gt;</span></span>
 <span><span class="co">##              id    type</span></span>
+<span><span class="co">##          &lt;char&gt;  &lt;char&gt;</span></span>
 <span><span class="co">## 1: Petal.Length numeric</span></span>
 <span><span class="co">## 2:  Petal.Width numeric</span></span>
 <span><span class="co">## 3: Sepal.Length numeric</span></span>
 <span><span class="co">## 4:  Sepal.Width numeric</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $outtasklayout</span></span>
+<span><span class="co">## Key: &lt;id&gt;</span></span>
 <span><span class="co">##              id    type</span></span>
+<span><span class="co">##          &lt;char&gt;  &lt;char&gt;</span></span>
 <span><span class="co">## 1: Petal.Length numeric</span></span>
 <span><span class="co">## 2: Sepal.Length numeric</span></span>
 <span><span class="co">## 3:  Sepal.Width numeric</span></span>
@@ -648,6 +659,7 @@ data (the whole Iris <code>Task</code>!) will still drop the
 <span></span>
 <span><span class="va">dropped_predict</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa          1.4          5.1         3.5</span></span>
 <span><span class="co">##   2:    setosa          1.4          4.9         3.0</span></span>
 <span><span class="co">##   3:    setosa          1.3          4.7         3.2</span></span>
@@ -711,6 +723,7 @@ it behaves the same.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_posa</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span></span>
 <span><span class="co">##   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span></span>
 <span><span class="co">##   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span></span>
@@ -725,6 +738,7 @@ it behaves the same.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_posa_simple</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa   -1.3357516  -1.3110521  -0.89767388  1.01560199</span></span>
 <span><span class="co">##   2:    setosa   -1.3357516  -1.3110521  -1.13920048 -0.13153881</span></span>
 <span><span class="co">##   3:    setosa   -1.3923993  -1.3110521  -1.38072709  0.32731751</span></span>
@@ -804,11 +818,24 @@ automatically checked:</p>
 <code class="sourceCode R"><span><span class="va">pss</span> <span class="op">=</span> <span class="fu"><a href="../reference/po.html">po</a></span><span class="op">(</span><span class="st">"scale"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## &lt;ParamSet:scale&gt;</span></span>
-<span><span class="co">##                id    class lower upper nlevels        default value</span></span>
-<span><span class="co">## 1:         center ParamLgl    NA    NA       2           TRUE      </span></span>
-<span><span class="co">## 2:          scale ParamLgl    NA    NA       2           TRUE      </span></span>
-<span><span class="co">## 3:         robust ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt; FALSE</span></span>
-<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt;</span></span></code></pre>
+<span><span class="co">##                id    class lower upper nlevels</span></span>
+<span><span class="co">##            &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;</span></span>
+<span><span class="co">## 1:         center ParamLgl    NA    NA       2</span></span>
+<span><span class="co">## 2:          scale ParamLgl    NA    NA       2</span></span>
+<span><span class="co">## 3:         robust ParamLgl    NA    NA       2</span></span>
+<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf</span></span>
+<span><span class="co">##                                                                                      default</span></span>
+<span><span class="co">##                                                                                       &lt;list&gt;</span></span>
+<span><span class="co">## 1:                                                                                      TRUE</span></span>
+<span><span class="co">## 2:                                                                                      TRUE</span></span>
+<span><span class="co">## 3: &lt;NoDefault&gt;\n  Public:\n    clone: function (deep = FALSE) \n    initialize: function () </span></span>
+<span><span class="co">## 4:                                                                             &lt;Selector[1]&gt;</span></span>
+<span><span class="co">##     value</span></span>
+<span><span class="co">##    &lt;list&gt;</span></span>
+<span><span class="co">## 1:       </span></span>
+<span><span class="co">## 2:       </span></span>
+<span><span class="co">## 3:  FALSE</span></span>
+<span><span class="co">## 4:</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">center</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">)</span></span></code></pre></div>
@@ -853,6 +880,7 @@ original dataset, unchanged.</p>
 <span></span>
 <span><span class="va">result</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##        Species Petal.Length Petal.Width Sepal.Length Sepal.Width</span></span>
+<span><span class="co">##         &lt;fctr&gt;        &lt;num&gt;       &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">##   1:    setosa          1.4         0.2          5.1         3.5</span></span>
 <span><span class="co">##   2:    setosa          1.4         0.2          4.9         3.0</span></span>
 <span><span class="co">##   3:    setosa          1.3         0.2          4.7         3.2</span></span>

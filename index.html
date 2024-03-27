@@ -18,10 +18,10 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.6/font.css" rel="stylesheet">
-<link href="deps/JetBrains_Mono-0.4.6/font.css" rel="stylesheet">
-<link href="deps/Roboto_Slab-0.4.6/font.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.9/font.css" rel="stylesheet">
+<link href="deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet">
+<link href="deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Preprocessing Operators and Pipelines for mlr3">
@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -157,10 +157,10 @@
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>The easiest way to get started is reading some of the vignettes that are shipped with the package, which can also be viewed online:</p>
+<p>A good way to get into <code>mlr3pipelines</code> are the following two vignettes:</p>
 <ul>
-<li>
-<a href="https://mlr3book.mlr-org.com/pipelines.html" class="external-link">Quick Introduction</a>, with short examples to get started</li>
+<li><a href="https://mlr3book.mlr-org.com/chapters/chapter7/sequential_pipelines.html" class="external-link">Sequential Pipelines</a></li>
+<li><a href="https://mlr3book.mlr-org.com/chapters/chapter8/non-sequential_pipelines_and_tuning.html" class="external-link">Non-Sequential Pipelines and Tuning</a></li>
 </ul>
 </div>
 <div class="section level2">
@@ -174,16 +174,16 @@
 <h2 id="citing-mlr3pipelines">Citing mlr3pipelines<a class="anchor" aria-label="anchor" href="#citing-mlr3pipelines"></a>
 </h2>
 <p>If you use mlr3pipelines, please cite our <a href="https://jmlr.org/papers/v22/21-0281.html" class="external-link">JMLR article</a>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Article{mlr3pipelines,</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  title <span class="ot">=</span> {{mlr3pipelines} <span class="sc">-</span> Flexible Machine Learning Pipelines <span class="cf">in</span> R},</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  author <span class="ot">=</span> {Martin Binder and Florian Pfisterer and Michel Lang and Lennart Schneider and Lars Kotthoff and Bernd Bischl},</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  journal <span class="ot">=</span> {Journal of Machine Learning Research},</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2021</span>},</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  volume <span class="ot">=</span> {<span class="dv">22</span>},</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  number <span class="ot">=</span> {<span class="dv">184</span>},</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  pages <span class="ot">=</span> {<span class="dv">1-7</span>},</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>jmlr.org<span class="sc">/</span>papers<span class="sc">/</span>v22<span class="sc">/</span><span class="dv">21</span><span class="fl">-0281.</span>html},</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="sc">@</span>Article{mlr3pipelines,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  title <span class="ot">=</span> {{mlr3pipelines} <span class="sc">-</span> Flexible Machine Learning Pipelines <span class="cf">in</span> R},</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  author <span class="ot">=</span> {Martin Binder and Florian Pfisterer and Michel Lang and Lennart Schneider and Lars Kotthoff and Bernd Bischl},</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  journal <span class="ot">=</span> {Journal of Machine Learning Research},</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2021</span>},</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  volume <span class="ot">=</span> {<span class="dv">22</span>},</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  number <span class="ot">=</span> {<span class="dv">184</span>},</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  pages <span class="ot">=</span> {<span class="dv">1-7</span>},</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>jmlr.org<span class="sc">/</span>papers<span class="sc">/</span>v22<span class="sc">/</span><span class="dv">21</span><span class="fl">-0281.</span>html},</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="similar-projects">Similar Projects<a class="anchor" aria-label="anchor" href="#similar-projects"></a>
