@@ -170,7 +170,7 @@ pipeline_robustify = function(task = NULL, learner = NULL,
       imputing,
       po("missind", affect_columns = selector_type(c("numeric", "integer", "logical")), type = if (missind_numeric) "numeric" else "factor")
     )),
-    if (has_numbers || has_logicals) po("featureunion"),
+    if (has_numbers || has_logicals) po("featureunion", id = "featureunion_robustify"),
     if (has_factorials) po("imputeoor")
   )
 

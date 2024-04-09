@@ -123,7 +123,7 @@ test_that("graphlearner parameters behave as they should", {
 
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
-  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
+  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), dbgr$param_set$ids())
 
   dbgr$param_set$values$classif.debug.x = 1
 

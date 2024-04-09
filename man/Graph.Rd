@@ -69,7 +69,7 @@ Stores a checksum calculated on the \code{\link{Graph}} configuration, which inc
 \item \code{phash} :: \code{character(1)} \cr
 Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
 \emph{except} their \verb{$param_set$values}, and a hash of \verb{$edges}.
-\item \code{keep_results} :: \code{logical(1)} \cr
+\item \code{keep_results} :: \code{logical(1)}\cr
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
 \item \code{man} :: \code{character(1)}\cr
 Identifying string of the help page that shows with \code{help()}.
@@ -83,13 +83,14 @@ Identifying string of the help page that shows with \code{help()}.
 (\code{logical(1)}) -> \code{character} \cr
 Get IDs of all \code{\link{PipeOp}}s. This is in order that \code{\link{PipeOp}}s were added if
 \code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
-\item \code{add_pipeop(op)} \cr
-(\code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}) -> \code{self} \cr
+\item \code{add_pipeop(op, clone = TRUE)} \cr
+(\code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}, \code{logical(1)}) -> \code{self} \cr
 Mutates \code{\link{Graph}} by adding a \code{\link{PipeOp}} to the \code{\link{Graph}}. This does not add any edges, so the new \code{\link{PipeOp}}
 will not be connected within the \code{\link{Graph}} at first.\cr
 Instead of supplying a \code{\link{PipeOp}} directly, an object that can naturally be converted to a \code{\link{PipeOp}} can also
 be supplied, e.g. a \code{\link[mlr3:Learner]{Learner}} or a \code{\link[mlr3filters:Filter]{Filter}}; see \code{\link[=as_pipeop]{as_pipeop()}}.
-The argument given as \code{op} is always cloned; to access a \code{Graph}'s \code{\link{PipeOp}}s by-reference, use \verb{$pipeops}.\cr
+The argument given as \code{op} is cloned if \code{clone} is \code{TRUE} (default); to access a \code{Graph}'s \code{\link{PipeOp}}s
+by-reference, use \verb{$pipeops}.\cr
 Note that \verb{$add_pipeop()} is a relatively low-level operation, it is recommended to build graphs using \code{\link{\%>>\%}}.
 \item \code{add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)} \cr
 (\code{character(1)}, \code{character(1)},

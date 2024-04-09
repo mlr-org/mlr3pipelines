@@ -59,7 +59,7 @@
 #' * `phash` :: `character(1)` \cr
 #'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
 #'   *except* their `$param_set$values`, and a hash of `$edges`.
-#' * `keep_results` :: `logical(1)` \cr
+#' * `keep_results` :: `logical(1)`\cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #' * `man` :: `character(1)`\cr
 #'   Identifying string of the help page that shows with `help()`.
@@ -69,13 +69,14 @@
 #'   (`logical(1)`) -> `character` \cr
 #'   Get IDs of all [`PipeOp`]s. This is in order that [`PipeOp`]s were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
-#' * `add_pipeop(op)` \cr
-#'   ([`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) -> `self` \cr
+#' * `add_pipeop(op, clone = TRUE)` \cr
+#'   ([`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`, `logical(1)`) -> `self` \cr
 #'   Mutates [`Graph`] by adding a [`PipeOp`] to the [`Graph`]. This does not add any edges, so the new [`PipeOp`]
 #'   will not be connected within the [`Graph`] at first.\cr
 #'   Instead of supplying a [`PipeOp`] directly, an object that can naturally be converted to a [`PipeOp`] can also
 #'   be supplied, e.g. a [`Learner`][mlr3::Learner] or a [`Filter`][mlr3filters::Filter]; see [`as_pipeop()`].
-#'   The argument given as `op` is always cloned; to access a `Graph`'s [`PipeOp`]s by-reference, use `$pipeops`.\cr
+#'   The argument given as `op` is cloned if `clone` is `TRUE` (default); to access a `Graph`'s [`PipeOp`]s
+#'   by-reference, use `$pipeops`.\cr
 #'   Note that `$add_pipeop()` is a relatively low-level operation, it is recommended to build graphs using [`%>>%`].
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
 #'   (`character(1)`, `character(1)`,
@@ -181,8 +182,8 @@ Graph = R6Class("Graph",
       topo_sort(tmp)$id
     },
 
-    add_pipeop = function(op) {
-      op = as_pipeop(op, clone = TRUE)
+    add_pipeop = function(op, clone = TRUE) {
+      op = as_pipeop(op, clone = assert_flag(clone))
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }

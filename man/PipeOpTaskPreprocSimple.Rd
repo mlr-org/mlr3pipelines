@@ -26,7 +26,7 @@ This inherits from \code{\link{PipeOpTaskPreproc}} and behaves essentially the s
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
 }\if{html}{\out{</div>}}
 
 (Construction is identical to \code{\link{PipeOpTaskPreproc}}.)

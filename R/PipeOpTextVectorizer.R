@@ -165,61 +165,54 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "textvectorizer", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamFct$new("stopwords_language", tags = c("train", "predict"),
+      ps = ps(
+        stopwords_language = p_fct(tags = c("train", "predict"),
           levels = c("da", "de",    "en",   "es",    "fi",   "fr",   "hu",     "ir",   "it",
                      "nl", "no",    "pt",   "ro",    "ru",   "sv" ,   "smart", "none")),
-        ParamUty$new("extra_stopwords", tags = c("train", "predict"), custom_check = check_character),
+        extra_stopwords = p_uty(tags = c("train", "predict"), custom_check = check_character),
 
-        ParamLgl$new("tolower", default = TRUE, tags = c("train", "predict", "dfm")),
-        ParamLgl$new("stem", default = FALSE, tags = c("train", "predict", "dfm")),
+        tolower = p_lgl(default = TRUE, tags = c("train", "predict", "dfm")),
+        stem = p_lgl(default = FALSE, tags = c("train", "predict", "dfm")),
 
-        ParamFct$new("what", default = "word", tags = c("train", "predict", "tokenizer"),
+        what = p_fct(default = "word", tags = c("train", "predict", "tokenizer"),
           levels = c("word", "word1", "fasterword", "fastestword", "character", "sentence")),
-        ParamLgl$new("remove_punct", default = FALSE, tags = c("train", "predict", "tokenizer")),
-        ParamLgl$new("remove_symbols", default = FALSE, tags = c("train", "predict", "tokenizer")),
-        ParamLgl$new("remove_numbers", default = FALSE, tags = c("train", "predict", "tokenizer")),
-        ParamLgl$new("remove_url", default = FALSE, tags = c("train", "predict", "tokenizer")),
-        ParamLgl$new("remove_separators", default = TRUE, tags = c("train", "predict", "tokenizer")),
-        ParamLgl$new("split_hyphens", default = FALSE, tags = c("train", "predict", "tokenizer")),
+        remove_punct = p_lgl(default = FALSE, tags = c("train", "predict", "tokenizer")),
+        remove_symbols = p_lgl(default = FALSE, tags = c("train", "predict", "tokenizer")),
+        remove_numbers = p_lgl(default = FALSE, tags = c("train", "predict", "tokenizer")),
+        remove_url = p_lgl(default = FALSE, tags = c("train", "predict", "tokenizer")),
+        remove_separators = p_lgl(default = TRUE, tags = c("train", "predict", "tokenizer")),
+        split_hyphens = p_lgl(default = FALSE, tags = c("train", "predict", "tokenizer")),
 
-        ParamUty$new("n", default = 2, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 1, any.missing = FALSE)),
-        ParamUty$new("skip", default = 0, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 0, any.missing = FALSE)),
+        n = p_uty(default = 2, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 1, any.missing = FALSE)),
+        skip = p_uty(default = 0, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 0, any.missing = FALSE)),
 
-        ParamDbl$new("sparsity", lower = 0, upper = 1, default = NULL,
-          tags = c("train", "dfm_trim"), special_vals = list(NULL)),
-        ParamFct$new("termfreq_type", default = "count", tags = c("train", "dfm_trim"),
+        sparsity = p_dbl(lower = 0, upper = 1, default = NULL,
+          tags = c("train", "dfm_trim"), special_vals = list(NULL),
+          depends = quote(return_type == "bow")),
+        termfreq_type = p_fct(default = "count", tags = c("train", "dfm_trim"),
           levels = c("count", "prop", "rank", "quantile")),
-        ParamDbl$new("min_termfreq", lower = 0, default = NULL,
+        min_termfreq = p_dbl(lower = 0, default = NULL,
           tags = c("train", "dfm_trim"), special_vals = list(NULL)),
-        ParamDbl$new("max_termfreq", lower = 0, default = NULL,
+        max_termfreq = p_dbl(lower = 0, default = NULL,
           tags = c("train", "dfm_trim"), special_vals = list(NULL)),
 
-        ParamFct$new("scheme_df", default = "count", tags = c("train", "docfreq"),
+        scheme_df = p_fct(default = "count", tags = c("train", "docfreq"),
           levels = c("count", "inverse", "inversemax", "inverseprob", "unary")),
-        ParamDbl$new("smoothing_df", lower = 0, default = 0, tags = c("train", "docfreq")),
-        ParamDbl$new("k_df", lower = 0, tags = c("train", "docfreq")),
-        ParamDbl$new("threshold_df", lower = 0, default = 0, tags = c("train", "docfreq")),
-        ParamDbl$new("base_df", lower = 0, default = 10, tags = c("train", "docfreq")),
+        smoothing_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = quote(scheme_df %in% c("inverse", "inversemax", "inverseprob"))),
+        k_df = p_dbl(lower = 0, tags = c("train", "docfreq"), depends = quote(scheme_df %in% c("inverse", "inversemax", "inverseprob"))),
+        threshold_df = p_dbl(lower = 0, default = 0, tags = c("train", "docfreq"), depends = quote(scheme_df == "count")),
+        base_df = p_dbl(lower = 0, default = 10, tags = c("train", "docfreq"),
+          depends = quote(scheme_df %in% c("inverse", "inversemax", "inverseprob"))),
 
-        ParamFct$new("scheme_tf", default = "count", tags = c("train", "predict", "dfm_weight"),
+        scheme_tf = p_fct(default = "count", tags = c("train", "predict", "dfm_weight"), depends = quote(return_type == "bow"),
           levels = c("count", "prop", "propmax", "logcount", "boolean", "augmented", "logave")),
-        ParamDbl$new("k_tf", lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight")),
-        ParamDbl$new("base_tf", lower = 0, default = 10, tags = c("train", "predict", "dfm_weight")),
+        k_tf = p_dbl(lower = 0, upper = 1, tags = c("train", "predict", "dfm_weight"), depends = quote(scheme_tf == "augmented")),
+        base_tf = p_dbl(lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"), depends = quote(scheme_tf %in% c("logcount", "logave"))),
 
-        ParamFct$new("return_type", levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
-        ParamInt$new("sequence_length", default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"))
-      ))$
-        add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("smoothing_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("k_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("base_df", "scheme_df", CondAnyOf$new(c("inverse", "inversemax", "inverseprob")))$
-        add_dep("threshold_df", "scheme_df", CondEqual$new("count"))$
-        add_dep("k_tf", "scheme_tf", CondEqual$new("augmented"))$
-        add_dep("base_tf", "scheme_tf", CondAnyOf$new(c("logcount", "logave")))$
-        add_dep("scheme_tf", "return_type", CondEqual$new("bow"))$
-        add_dep("sparsity", "return_type", CondEqual$new("bow"))$
-        add_dep("sequence_length", "return_type", CondAnyOf$new(c("integer_sequence", "factor_sequence")))
+        return_type = p_fct(levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
+        sequence_length = p_int(default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"),
+          depends = quote(return_type %in% c("integer_sequence", "factor_sequence")))
+      )
 
       ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")

@@ -99,7 +99,9 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        private$.learner$param_set$set_id = val
+        if (paradox_info$is_old) {
+          private$.learner$param_set$set_id = val
+        }
       }
       private$.id
     },
@@ -152,4 +154,4 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new(), packages = "mlr3pipelines"))$new()))
+mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new()))
