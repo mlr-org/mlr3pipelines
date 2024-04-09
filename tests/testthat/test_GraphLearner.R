@@ -571,13 +571,27 @@ test_that("GraphLearner hashes", {
 
 test_that("marshal", {
   task = tsk("iris")
-  po_lily = as_pipeop(lrn("classif.lily"))
-  graph = as_graph(po_lily)
-  glrn = as_learner(graph)
-  expect_true("marshal" %in% glrn$properties)
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_true(glrn$marshaled)
+  expect_true(is_marshaled_model(glrn$state$model$marshaled$classif.debug$model))
+  glrn$unmarshal()
+  expect_false(is_marshaled_model(glrn$model))
+  expect_class(glrn$model, "graph_learner_model")
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug$model))
 
-  # als checks that it is marshalable
+  # checks that it is marshalable
+  glrn$train(task)
   expect_learner(glrn, task)
+})
 
-  expect_false("marshal" %in% as_graph(lrn("regr.featureless"))$properties)
+test_that("marshal has no effect when nothing needed marshaling", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.rpart")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_class(glrn$marshal()$model, "graph_learner_model")
+  expect_class(glrn$unmarshal()$model, "graph_learner_model")
+  expect_learner(glrn, task = task)
 })

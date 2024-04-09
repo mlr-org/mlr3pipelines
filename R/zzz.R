@@ -16,8 +16,6 @@ register_mlr3 = function() {
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
      "multiplicity")))
-
-  x$pipeops$properties = "marshal"
 }
 
 .onLoad = function(libname, pkgname) {  # nocov start

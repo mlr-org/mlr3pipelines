@@ -19,5 +19,5 @@ If \code{FALSE} (default), all R6-objects are cloned.}
 Currently unused.}
 }
 \description{
-(Un-) marshal the model of a \code{\link{GraphLearner}}.
+(Un-)marshal the model of a \code{\link{GraphLearner}}.
 }

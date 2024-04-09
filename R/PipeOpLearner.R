@@ -89,12 +89,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       type = private$.learner$task_type
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
       out_type = mlr_reflections$task_types[type, mult = "first"]$prediction
-      properties = if ("marshal" %in% private$.learner$properties) "marshal" else character(0)
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
-        tags = "learner", packages = learner$packages, properties = properties
-      )
+        tags = "learner", packages = learner$packages)
     }
   ),
   active = list(
@@ -154,4 +152,4 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new(), packages = "mlr3pipelines", properties = character()))$new()))
+mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new(), packages = "mlr3pipelines"))$new()))

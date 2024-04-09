@@ -135,8 +135,6 @@
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #' * `man` :: `character(1)`\cr
 #'   Identifying string of the help page that shows with `help()`.
-#' * `properties` :: `character()`\cr
-#'   The properties that this PipeOp has. See `mlr_reflections$pipeops$properties` for available values.
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -238,7 +236,7 @@ PipeOp = R6Class("PipeOp",
     .result = NULL,
     tags = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract", properties = character(0)) {
+    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -248,7 +246,6 @@ PipeOp = R6Class("PipeOp",
       }
       self$id = assert_string(id)
 
-      private$.properties = sort(assert_subset(properties, mlr_reflections$pipeops$properties))
       self$param_set$values = insert_named(self$param_set$values, param_vals)
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
@@ -414,10 +411,6 @@ PipeOp = R6Class("PipeOp",
         }
       }
       private$.label
-    },
-    properties = function(rhs) {
-      assert_ro_binding(rhs)
-      private$.properties
     }
   ),
 
@@ -436,7 +429,6 @@ PipeOp = R6Class("PipeOp",
       }
       value
     },
-    .properties = NULL,
     .train = function(input) stop("abstract"),
     .predict = function(input) stop("abstract"),
     .additional_phash_input = function() {

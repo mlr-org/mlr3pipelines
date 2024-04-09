@@ -63,8 +63,6 @@
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
 #' * `man` :: `character(1)`\cr
 #'   Identifying string of the help page that shows with `help()`.
-#' * `properties` :: `character()`\cr
-#'   The properties of the `Graph` is the union of all the properties of its [`PipeOp`]s.
 #'
 #' @section Methods:
 #' * `ids(sorted = FALSE)` \cr
@@ -506,10 +504,6 @@ Graph = R6Class("Graph",
       } else {
         map(self$pipeops, "state")
       }
-    },
-    properties = function(rhs) {
-      assert_ro_binding(rhs)
-      sort(unique(unlist(map(self$pipeops, "properties"))))
     }
   ),
 

@@ -142,8 +142,6 @@ are saved to this slot, exactly as they are returned by these functions. This is
 and done, if requested, by the \code{\link{Graph}} backend itself; it should \emph{not} be done explicitly by \code{private$.train()} or \code{private$.predict()}.
 \item \code{man} :: \code{character(1)}\cr
 Identifying string of the help page that shows with \code{help()}.
-\item \code{properties} :: \code{character()}\cr
-The properties that this PipeOp has. See \code{mlr_reflections$pipeops$properties} for available values.
 }
 }
 

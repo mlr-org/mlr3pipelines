@@ -122,8 +122,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       type = private$.learner$task_type
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
 
-      properties =if ("marshal" %in% learner$properties) "marshal" else character(0)
-
       private$.crossval_param_set = ParamSet$new(params = list(
         ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
         ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
@@ -139,7 +137,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # in PipeOp ParamSets.
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
-      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"), properties = properties)
+      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
     }
 
   ),
@@ -220,4 +218,4 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   )
 )
 
-mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ParamSet$new(), properties = character()))$new()))
+mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ParamSet$new()))$new()))

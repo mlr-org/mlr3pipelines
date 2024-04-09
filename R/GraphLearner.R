@@ -108,13 +108,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
-      properties = mlr_reflections$learner_properties[[task_type]]
-
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
         packages = graph$packages,
-        properties = properties,
+        properties = mlr_reflections$learner_properties[[task_type]],
         man = "mlr3pipelines::GraphLearner"
       )
 
@@ -258,7 +256,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' @title (Un-)Marshal GraphLearner Model
 #' @name marshal_graph_learner
 #' @description
-#' (Un-) marshal the model of a [`GraphLearner`].
+#' (Un-)marshal the model of a [`GraphLearner`].
 #' @param model (model of [`GraphLearner`])\cr
 #'   The model to be marshaled.
 #' @param ... (any)\cr
@@ -268,27 +266,27 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #'   If `FALSE` (default), all R6-objects are cloned.
 #' @export
 marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
-  if (inplace) {
-    model_marhaled = structure(list(
-      marshaled = map(model, marshal_model, inplace = TRUE),
-      packages = "mlr3pipelines"
-    ), class = c("graph_learner_model_marshaled", "list_marshaled", "marshaled"))
-
-    return(model_marshaled)
+  x = map(model, function(po_state) {
+    po_state$model = if (!is.null(po_state$model)) marshal_model(po_state$model, inplace = inplace, ...)
+    po_state
+  })
+  if (!some(map(x, "model"), is_marshaled_model)) {
+    return(structure(x, class = c("graph_learner_model", "list")))
   }
-
-  model_clone = map(model, if (is.R6(model)) model$clone(deep = TRUE) else model)
-  model_marhaled = structure(list(
-    marshaled = map(model_clone, marshal_model, inplace = FALSE),
-    packages = "mlr3pipelines"
+  structure(list(
+      marshaled = x,
+      packages = "mlr3pipelines"
   ), class = c("graph_learner_model_marshaled", "list_marshaled", "marshaled"))
 }
 
 #' @export
 unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE, ...) {
-  model = map(model$marshaled, unmarshal_model)
-  class(model) = c("graph_learner_model", "list")
-  model
+  structure(
+    map(model$marshaled, function(po_state) {
+      po_state$model = if (!is.null(po_state$model)) unmarshal_model(po_state$model, inplace = inplace, ...)
+      po_state
+    }
+  ), class = c("graph_learner_model", "list"))
 }
 
 #' @export
