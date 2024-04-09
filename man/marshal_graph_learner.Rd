@@ -21,3 +21,4 @@ Currently unused.}
 \description{
 (Un-)marshal the model of a \code{\link{GraphLearner}}.
 }
+\keyword{internal}

@@ -264,6 +264,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' @param inplace (`logical(1)`)\cr
 #'   Whether to marshal in-place.
 #'   If `FALSE` (default), all R6-objects are cloned.
+#' @keywords internal
 #' @export
 marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
   x = map(model, function(po_state) {
