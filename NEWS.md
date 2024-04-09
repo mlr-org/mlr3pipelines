@@ -1,5 +1,7 @@
 # mlr3pipelines 0.5.0-9000
 
+* Added marshaling support to `GraphLearner`
+
 
 # mlr3pipelines 0.5.0-2
 

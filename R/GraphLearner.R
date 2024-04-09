@@ -47,6 +47,16 @@
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
+#' * `marshaled` :: `logical(1)`\cr
+#'   Whether the learner is marshaled. Read-only.
+#'
+#' @section Methods:
+#' * `marshal_model(...)`\cr
+#'   (any) -> `self`\cr
+#'   Marshal the model.
+#' * `unmarshal_model(...)`\cr
+#'   (any) -> `self`\cr
+#'   Unmarshal the model.
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -100,10 +110,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
       properties = mlr_reflections$learner_properties[[task_type]]
 
-      if ("marshal" %nin% graph$properties) {
-        properties = setdiff(properties, "marshal")
-      }
-
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
         predict_types = names(mlr_reflections$learner_predict_types[[task_type]]),
@@ -139,11 +145,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       learner_model$base_learner(recursive - 1)
     },
-    marshal = function() {
-      learner_marshal(self)
+    marshal = function(...) {
+      learner_marshal(.learner = self, ...)
     },
-    unmarshal = function() {
-      learner_unmarshal(self)
+    unmarshal = function(...) {
+      learner_unmarshal(.learner = self, ...)
     }
   ),
   active = list(
@@ -249,17 +255,37 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   )
 )
 
+#' @title (Un-)Marshal GraphLearner Model
+#' @name marshal_graph_learner
+#' @description
+#' (Un-) marshal the model of a [`GraphLearner`].
+#' @param model (model of [`GraphLearner`])\cr
+#'   The model to be marshaled.
+#' @param ... (any)\cr
+#'   Currently unused.
+#' @param inplace (`logical(1)`)\cr
+#'   Whether to marshal in-place.
+#'   If `FALSE` (default), all R6-objects are cloned.
 #' @export
-marshal_model.graph_learner_model = function(model, ...) {
-  model = map(model, marshal_model)
-  structure(list(
-    marshaled = map(model, marshal_model),
+marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
+  if (inplace) {
+    model_marhaled = structure(list(
+      marshaled = map(model, marshal_model, inplace = TRUE),
+      packages = "mlr3pipelines"
+    ), class = c("graph_learner_model_marshaled", "list_marshaled", "marshaled"))
+
+    return(model_marshaled)
+  }
+
+  model_clone = map(model, if (is.R6(model)) model$clone(deep = TRUE) else model)
+  model_marhaled = structure(list(
+    marshaled = map(model_clone, marshal_model, inplace = FALSE),
     packages = "mlr3pipelines"
   ), class = c("graph_learner_model_marshaled", "list_marshaled", "marshaled"))
 }
 
 #' @export
-unmarshal_model.graph_learner_model_marshaled = function(model, ...) {
+unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE, ...) {
   model = map(model$marshaled, unmarshal_model)
   class(model) = c("graph_learner_model", "list")
   model
