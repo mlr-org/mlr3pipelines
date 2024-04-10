@@ -175,6 +175,11 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   private = list(
+    .train = function(inputs) {
+      out = super$.train(inputs)
+      self$state = structure(self$state, class = c("pipeop_learner_cv_state", class(self$state)))
+      return(out)
+    },
     .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
 
@@ -221,5 +226,33 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     .additional_phash_input = function() private$.learner$phash
   )
 )
+
+#' @export
+marshal_model.pipeop_learner_cv_state = function(model, inplace = FALSE, ...) {
+  # Note that a Learner state contains other reference objects, but we don't clone them here, even when inplace
+  # is FALSE. For our use-case this is just not necessary and would cause unnecessary overhead in the mlr3
+  # workhorse function
+  prev_class = class(model)
+  model$model = marshal_model(model$model, inplace = inplace)
+  # only wrap this in a marshaled class if the model was actually marshaled above
+  # (the default marshal method does nothing)
+  if (is_marshaled_model(model$model)) {
+    model = structure(
+      list(marshaled = model, packages = "mlr3pipelines"),
+      class = c(paste0(prev_class, "_marshaled"), "marshaled")
+    )
+  }
+  model
+}
+
+#' @export
+unmarshal_model.pipeop_learner_cv_state_marshaled = function(model, inplace = FALSE, ...) {
+  prev_class = head(class(model), n = -1)
+  state_marshaled = model$marshaled
+  state_marshaled$model = unmarshal_model(state_marshaled$model, inplace = inplace)
+  class(state_marshaled) = gsub(x = prev_class, pattern = "_marshaled$", replacement = "")
+  state_marshaled
+}
+
 
 mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ps()))$new()))

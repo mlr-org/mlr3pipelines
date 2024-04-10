@@ -51,10 +51,10 @@
 #'   Whether the learner is marshaled. Read-only.
 #'
 #' @section Methods:
-#' * `marshal_model(...)`\cr
+#' * `marshal(...)`\cr
 #'   (any) -> `self`\cr
 #'   Marshal the model.
-#' * `unmarshal_model(...)`\cr
+#' * `unmarshal(...)`\cr
 #'   (any) -> `self`\cr
 #'   Unmarshal the model.
 #'
@@ -253,41 +253,24 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
   )
 )
 
-#' @title (Un-)Marshal GraphLearner Model
-#' @name marshal_graph_learner
-#' @description
-#' (Un-)marshal the model of a [`GraphLearner`].
-#' @param model (model of [`GraphLearner`])\cr
-#'   The model to be marshaled.
-#' @param ... (any)\cr
-#'   Currently unused.
-#' @param inplace (`logical(1)`)\cr
-#'   Whether to marshal in-place.
-#'   If `FALSE` (default), all R6-objects are cloned.
-#' @keywords internal
 #' @export
 marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
-  x = map(model, function(po_state) {
-    po_state$model = if (!is.null(po_state$model)) marshal_model(po_state$model, inplace = inplace, ...)
-    po_state
-  })
-  if (!some(map(x, "model"), is_marshaled_model)) {
-    return(structure(x, class = c("graph_learner_model", "list")))
-  }
+  xm = map(.x = model, .f = marshal_model, inplace = inplace, ...)
+  # if none of the states required any marshaling we return the model as-is
+  if (!some(xm, is_marshaled_model)) return(model)
+
   structure(list(
-      marshaled = x,
-      packages = "mlr3pipelines"
+    marshaled = xm,
+    packages = "mlr3pipelines"
   ), class = c("graph_learner_model_marshaled", "list_marshaled", "marshaled"))
 }
 
 #' @export
 unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE, ...) {
   structure(
-    map(model$marshaled, function(po_state) {
-      po_state$model = if (!is.null(po_state$model)) unmarshal_model(po_state$model, inplace = inplace, ...)
-      po_state
-    }
-  ), class = c("graph_learner_model", "list"))
+    map(.x = model$marshaled, .f = unmarshal_model, inplace = inplace, ...),
+    class = gsub(x = head(class(model), n = -1), pattern = "_marshaled$", replacement = "")
+  )
 }
 
 #' @export

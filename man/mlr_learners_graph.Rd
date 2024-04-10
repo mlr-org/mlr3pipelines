@@ -64,10 +64,10 @@ Whether the learner is marshaled. Read-only.
 \section{Methods}{
 
 \itemize{
-\item \code{marshal_model(...)}\cr
+\item \code{marshal(...)}\cr
 (any) -> \code{self}\cr
 Marshal the model.
-\item \code{unmarshal_model(...)}\cr
+\item \code{unmarshal(...)}\cr
 (any) -> \code{self}\cr
 Unmarshal the model.
 }

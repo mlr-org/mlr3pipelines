@@ -120,3 +120,15 @@ test_that("predict_type", {
     lcv$train(list(tsk("iris")))[[1]]$feature_names)
 
 })
+
+test_that("marshal", {
+  task = tsk("iris")
+  po_lrn = as_pipeop(po("learner_cv", learner = lrn("classif.debug")))
+  po_lrn$train(list(task))
+  po_state = po_lrn$state
+  expect_class(po_state, "pipeop_learner_cv_state")
+  po_state_marshaled = marshal_model(po_state, inplace = FALSE)
+  expect_class(po_state_marshaled, "pipeop_learner_cv_state_marshaled")
+  expect_true(is_marshaled_model(po_state_marshaled))
+  expect_equal(po_state, unmarshal_model(po_state_marshaled))
+})

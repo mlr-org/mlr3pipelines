@@ -575,11 +575,13 @@ test_that("marshal", {
   glrn$train(task)
   glrn$marshal()
   expect_true(glrn$marshaled)
-  expect_true(is_marshaled_model(glrn$state$model$marshaled$classif.debug$model))
+  expect_true(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
   glrn$unmarshal()
-  expect_false(is_marshaled_model(glrn$model))
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
   expect_class(glrn$model, "graph_learner_model")
   expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug$model))
+
+  glrn$predict(task)
 
   # checks that it is marshalable
   glrn$train(task)

@@ -84,10 +84,31 @@ test_that("PipeOpLearner - model active binding to state", {
 })
 
 test_that("packages", {
-
   expect_set_equal(
     c("mlr3pipelines", lrn("classif.rpart")$packages),
     po("learner", learner = lrn("classif.rpart"))$packages
   )
+})
 
+test_that("marshal", {
+  task = tsk("iris")
+  po_lrn = as_pipeop(lrn("classif.debug"))
+  po_lrn$train(list(task))
+  po_state = po_lrn$state
+  expect_class(po_state, "pipeop_learner_state")
+  po_state_marshaled = marshal_model(po_state, inplace = FALSE)
+  expect_class(po_state_marshaled, "pipeop_learner_state_marshaled")
+  expect_true(is_marshaled_model(po_state_marshaled))
+  expect_equal(po_state, unmarshal_model(po_state_marshaled))
+})
+
+test_that("multiple marshal round-trips", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  glrn$marshal()$unmarshal()$marshal()$unmarshal()
+  expect_class(glrn$model, "graph_learner_model")
+  expect_class(glrn$model$classif.debug$model, "classif.debug_model")
+
+  expect_learner(glrn, task = task)
 })
