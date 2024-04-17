@@ -155,3 +155,17 @@ test_that("PipeOpImputeLearner - model active binding to state", {
   expect_equal(names(models), names(po$learner_models))
   expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
 })
+
+test_that("marshal", {
+  task = tsk("penguins")
+  po_im = po("imputelearner", learner = lrn("classif.debug"))
+  po_im$train(list(task))
+
+  s = po_im$state
+  expect_class(s, "pipeop_impute_learner_state")
+  sm = marshal_model(s)
+  expect_class(sm, "marshaled")
+  su = unmarshal_model(sm)
+  expect_equal(s, su)
+})
+

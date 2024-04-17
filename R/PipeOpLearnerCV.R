@@ -61,6 +61,8 @@
 #' * `predict_time` :: `NULL` | `numeric(1)`
 #'   Prediction time, in seconds.
 #'
+#' This state is given the class `"pipeop_learner_cv_state"`.
+#'
 #' @section Parameters:
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
 #' Besides that, parameters introduced are:
@@ -142,8 +144,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
       super$initialize(id, alist(resampling = private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
+    },
+    train = function(inputs) {
+      outputs = super$train(inputs)
+      self$state = multiplicity_recurse(self$state, function(state) {
+          structure(state, class = c("pipeop_learner_cv_state", class(state)))
+      })
+      return(outputs)
     }
-
   ),
   active = list(
     learner = function(val) {
@@ -177,7 +185,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   private = list(
     .train = function(inputs) {
       out = super$.train(inputs)
-      self$state = structure(self$state, class = c("pipeop_learner_cv_state", class(self$state)))
       return(out)
     },
     .train_task = function(task) {
@@ -232,14 +239,13 @@ marshal_model.pipeop_learner_cv_state = function(model, inplace = FALSE, ...) {
   # Note that a Learner state contains other reference objects, but we don't clone them here, even when inplace
   # is FALSE. For our use-case this is just not necessary and would cause unnecessary overhead in the mlr3
   # workhorse function
-  prev_class = class(model)
   model$model = marshal_model(model$model, inplace = inplace)
   # only wrap this in a marshaled class if the model was actually marshaled above
   # (the default marshal method does nothing)
   if (is_marshaled_model(model$model)) {
     model = structure(
       list(marshaled = model, packages = "mlr3pipelines"),
-      class = c(paste0(prev_class, "_marshaled"), "marshaled")
+      class = c(paste0(class(model), "_marshaled"), "marshaled")
     )
   }
   model
@@ -247,10 +253,8 @@ marshal_model.pipeop_learner_cv_state = function(model, inplace = FALSE, ...) {
 
 #' @export
 unmarshal_model.pipeop_learner_cv_state_marshaled = function(model, inplace = FALSE, ...) {
-  prev_class = head(class(model), n = -1)
   state_marshaled = model$marshaled
   state_marshaled$model = unmarshal_model(state_marshaled$model, inplace = inplace)
-  class(state_marshaled) = gsub(x = prev_class, pattern = "_marshaled$", replacement = "")
   state_marshaled
 }
 

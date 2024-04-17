@@ -267,6 +267,7 @@ marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
 
 #' @export
 unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE, ...) {
+  # need to re-create the class as it gets lost during marshaling
   structure(
     map(.x = model$marshaled, .f = unmarshal_model, inplace = inplace, ...),
     class = gsub(x = head(class(model), n = -1), pattern = "_marshaled$", replacement = "")

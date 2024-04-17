@@ -52,7 +52,8 @@ test_that("PipeOpLearnerCV - param values", {
 test_that("PipeOpLearnerCV - within resampling", {
   lrn = mlr_learners$get("classif.rpart")
   gr = GraphLearner$new(PipeOpLearnerCV$new(lrn) %>>% po(id = "l2", lrn))
-  resample(tsk("iris"), gr, rsmp("holdout"))
+  rr = resample(tsk("iris"), gr, rsmp("holdout"))
+  expect_class(rr, "ResampleResult")
 })
 
 test_that("PipeOpLearnerCV - insample resampling", {
@@ -131,4 +132,70 @@ test_that("marshal", {
   expect_class(po_state_marshaled, "pipeop_learner_cv_state_marshaled")
   expect_true(is_marshaled_model(po_state_marshaled))
   expect_equal(po_state, unmarshal_model(po_state_marshaled))
+})
+
+test_that("marshal multiplicity", {
+  po = po("learner_cv", learner = lrn("classif.debug"))
+  po$train(list(Multiplicity(tsk("iris"), tsk("sonar"))))
+  s = po$state
+  sm = marshal_model(po$state)
+  expect_class(po$state, "Multiplicity")
+  expect_true(is_marshaled_model(sm$marshaled[[1L]]))
+  expect_true(is_marshaled_model(sm$marshaled[[2L]]))
+
+  su = unmarshal_model(sm)
+  expect_equal(su, s)
+
+  # recursive
+  po = po("learner_cv", learner = lrn("classif.debug"))
+  po$train(list(Multiplicity(Multiplicity(tsk("iris")))))
+  p1 = po$predict(list(Multiplicity(Multiplicity(tsk("iris")))))
+
+  s = po$state
+  sm = marshal_model(po$state)
+  expect_class(po$state, "Multiplicity")
+  expect_true(is_marshaled_model(sm$marshaled[[1L]][[1L]]))
+
+  su = unmarshal_model(sm)
+  expect_equal(su, s)
+
+  po$state = su
+  p2 = po$predict(list(Multiplicity(Multiplicity(tsk("iris")))))
+  expect_equal(p1, p2)
+
+
+  task = tsk("iris")
+  learner = lrn("classif.debug")
+
+  lrncv_po = po("learner_cv", learner)
+  lrncv_po$learner$predict_type = "response"
+
+  nop = mlr_pipeops$get("nop")
+
+  graph = gunion(list(
+    lrncv_po,
+    nop
+  )) %>>% po("featureunion") %>>% lrn("classif.rpart")
+
+  glrn = as_learner(graph)
+  expect_learner(glrn, task)
+
+  p1 = glrn$train(task)$predict(task)
+  p2 = glrn$marshal()$unmarshal()$predict(task)
+  expect_equal(p1, p2)
+
+})
+
+test_that("state class and multiplicity", {
+  po = po("learner_cv", learner = lrn("classif.debug"))
+  po$train(list(Multiplicity(tsk("iris"))))
+  expect_class(po$state, "Multiplicity")
+  expect_class(po$state[[1L]], "pipeop_learner_cv_state")
+
+  # recursive
+  po1 = po("learner_cv", learner = lrn("classif.debug"))
+  po1$train(list(Multiplicity(Multiplicity(tsk("iris")))))
+  expect_class(po1$state, "Multiplicity")
+  expect_class(po1$state[[1L]], "Multiplicity")
+  expect_class(po1$state[[1L]][[1L]], "pipeop_learner_cv_state")
 })
