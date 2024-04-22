@@ -47,6 +47,7 @@ The resulting \code{\link{Graph}} contains a \code{\link{PipeOpColApply}}, follo
 Unlike R's \code{as.factor()} function, \code{ppl("convert_types")} will convert \code{ordered} types into (unordered) \code{factor} vectors.
 }
 \examples{
+library("mlr3")
 
 data_chr = data.table::data.table(
   x = factor(letters[1:3]),

@@ -1,6 +1,8 @@
 # mlr3pipelines 0.5.2
 
-* Added new `ppl("convert_types")`
+* Added new `ppl("convert_types")`.
+* Minor documentation fixes.
+* Test helpers are now available in `inst/`. These are considered experimental and unstable.
 
 # mlr3pipelines 0.5.1
 

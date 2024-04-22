@@ -28,6 +28,7 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' library("mlr3")
 #'
 #' data_chr = data.table::data.table(
 #'   x = factor(letters[1:3]),
