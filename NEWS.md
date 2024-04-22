@@ -1,4 +1,6 @@
-# mlr3pipelines 0.5.1-9000
+# mlr3pipelines 0.5.2
+
+* Added new `ppl("convert_types")`
 
 # mlr3pipelines 0.5.1
 

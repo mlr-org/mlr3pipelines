@@ -10,11 +10,13 @@ data.table::setDTthreads(0)
 data.table::setDTthreads(1)
 Sys.setenv(NOT_CRAN = "true")
 
-devtools::document("mlr3pipelines")
+devtools::document()
 
 # devtools::load_all("paradox")
 
-devtools::load_all("mlr3pipelines")
+devtools::load_all()
+
+devtools::test(filter = "textvectorizer")
 
 Sys.setenv(TESTTHAT_CPUS = 20)
 testthat::test_package("mlr3pipelines")
