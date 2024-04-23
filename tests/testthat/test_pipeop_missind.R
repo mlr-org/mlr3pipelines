@@ -99,6 +99,7 @@ test_that("PipeOpMissInd", {
 
 # https://stackoverflow.com/questions/60512348/how-to-impute-data-with-mlr3-and-predict-with-na-values
 test_that("union with missing rows", {
+  skip_if_not_installed("rpart")
   data("mtcars", package = "datasets")
   data = mtcars[, 1:3]
   # Train task

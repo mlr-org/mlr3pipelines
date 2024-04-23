@@ -1,6 +1,7 @@
 context("mlr_pipeops")
 
 test_that("mlr_pipeops access works", {
+  skip_if_not_installed("rpart")
 
   expect_equal(po(), mlr_pipeops)
 
@@ -204,6 +205,7 @@ test_that("mlr_pipeops multi-access works", {
 })
 
 test_that("Incrementing ids works", {
+  skip_if_not_installed("rpart")
   x = po("pca_123")
   expect_true(x$id == "pca_123")
   expect_r6(x, "PipeOpPCA")

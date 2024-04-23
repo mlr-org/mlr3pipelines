@@ -1,6 +1,7 @@
 context("WeightedAverage Learner")
 
 test_that("LearnerClassifAvg", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   lrn = LearnerClassifAvg$new()
   expect_learner(lrn)
@@ -100,6 +101,7 @@ test_that("LearnerRegrAvg", {
 })
 
 test_that("LearnerClassifAvg Pipeline", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   tsk = mlr_tasks$get("iris")
   # Works for response
@@ -146,6 +148,7 @@ test_that("LearnerClassifAvg Pipeline", {
 })
 
 test_that("LearnerRegrAvg Pipeline", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   tsk = mlr_tasks$get("boston_housing_classic")
   # Works for response

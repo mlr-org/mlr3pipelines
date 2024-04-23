@@ -1,6 +1,7 @@
 context("PipeOpYeoJohnson")
 
 test_that("PipeOpYeoJohnson - general functionality", {
+  skip_if_not_installed("bestNormalize")
   task = mlr_tasks$get("iris")
   op = PipeOpYeoJohnson$new()
   expect_pipeop(op)
@@ -12,6 +13,7 @@ test_that("PipeOpYeoJohnson - general functionality", {
 })
 
 test_that("PipeOpYeoJohnson - receive expected result", {
+  skip_if_not_installed("bestNormalize")
   task = mlr_tasks$get("iris")
   op = PipeOpYeoJohnson$new(param_vals = list(standardize = FALSE))
   result = train_pipeop(op, inputs = list(task))

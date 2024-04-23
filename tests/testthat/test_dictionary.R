@@ -2,6 +2,8 @@ context("Dictionary")
 
 # we check that all pipeops that are exported are also in the dictionary, and can be constructed from there.
 test_that("Dictionary contains all PipeOps", {
+  skip_if_not_installed("mlr3filters")
+  skip_if_not_installed("rpart")
   skip_on_cran()
 
   oldwarn = options(warn = 2)
@@ -218,6 +220,7 @@ test_that("data.table of pipeops looks as it should", {
 })
 
 test_that("GraphLearner is in mlr_learners", {
+  skip_if_not_installed("rpart")
 
   expect_data_table(as.data.table(mlr_learners))  # can construct mlr_learners table
 

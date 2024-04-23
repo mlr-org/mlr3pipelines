@@ -1,6 +1,7 @@
 context("resample")
 
 test_that("PipeOp - Resample", {
+  skip_if_not_installed("rpart")
   task = mlr_tasks$get("iris")
   op1 = PipeOpScale$new()
   lrn = mlr_learners$get("classif.rpart")

@@ -1,6 +1,7 @@
 context("GraphLearner")
 
 test_that("basic graphlearner tests", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   task = mlr_tasks$get("iris")
 
@@ -73,6 +74,7 @@ test_that("basic graphlearner tests", {
 })
 
 test_that("GraphLearner clone_graph FALSE", {
+  skip_if_not_installed("rpart")
 
   # prepare graph
   gr1 = po("pca") %>>% lrn("classif.rpart")
@@ -174,6 +176,7 @@ test_that("graphlearner parameters behave as they should", {
 })
 
 test_that("graphlearner type inference", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   # default: classif
   lrn = GraphLearner$new(mlr_pipeops$get("nop"))
@@ -242,6 +245,7 @@ test_that("graphlearner type inference", {
 })
 
 test_that("graphlearner type inference - branched", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
 
   # default: classif
@@ -306,6 +310,7 @@ test_that("graphlearner type inference - branched", {
 })
 
 test_that("graphlearner predict type inference", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   # Getter:
 
@@ -403,6 +408,7 @@ test_that("graphlearner predict type inference", {
 
 
 test_that("GraphLearner model", {
+  skip_if_not_installed("rpart")
   graph = po("pca") %>>% lrn("classif.rpart")
   graph2 = graph$clone(deep = TRUE)
   graph_orig = graph$clone(deep = TRUE)
@@ -437,6 +443,7 @@ test_that("GraphLearner model", {
 })
 
 test_that("predict() function for Graph", {
+  skip_if_not_installed("rpart")
 
   lx = as_graph(lrn("classif.rpart"))
 
@@ -465,6 +472,7 @@ test_that("predict() function for Graph", {
 })
 
 test_that("base_learner() works", {
+  skip_if_not_installed("rpart")
   # graph containing single PipeOpLearner
   x = as_learner(as_graph(lrn("classif.rpart")))
   # untrained
@@ -517,6 +525,7 @@ test_that("base_learner() works", {
 
 
 test_that("GraphLearner hashes", {
+  skip_if_not_installed("rpart")
 
 
   learner1 = as_learner(ppl("robustify") %>>% lrn("regr.rpart"))
