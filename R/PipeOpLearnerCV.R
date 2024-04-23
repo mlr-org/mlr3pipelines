@@ -183,10 +183,6 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   private = list(
-    .train = function(inputs) {
-      out = super$.train(inputs)
-      return(out)
-    },
     .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
 
