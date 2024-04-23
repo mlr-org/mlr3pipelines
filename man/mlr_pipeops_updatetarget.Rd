@@ -70,6 +70,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 \dontrun{
 # Create a binary class task from iris
 library(mlr3)
@@ -78,6 +79,7 @@ po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name
 po$train(list(tsk("iris")))
 po$predict(list(tsk("iris")))
 }
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

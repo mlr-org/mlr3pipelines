@@ -25,6 +25,7 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
@@ -46,6 +47,7 @@
 #'   src_channel = 2, dst_channel = 1)
 #' g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
 #'   src_channel = 1, dst_channel = 2)
+#' \dontshow{ \} }
 pipeline_targettrafo = function(graph, trafo_pipeop = PipeOpTargetMutate$new(), id_prefix = "") {
   graph = as_graph(graph, clone = TRUE)
   if (graph$pipeops[[graph$input$op.id]]$innum != 1L) {

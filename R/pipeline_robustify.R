@@ -60,6 +60,7 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' \donttest{
 #' library(mlr3)
 #' lrn = lrn("regr.rpart")
@@ -67,6 +68,7 @@
 #' gr = pipeline_robustify(task, lrn) %>>% po("learner", lrn)
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
 #' }
+#' \dontshow{ \} }
 pipeline_robustify = function(task = NULL, learner = NULL,
   impute_missings = NULL, factors_to_numeric = NULL, max_cardinality = 1000,
   ordered_action = "factor", character_action = "factor", POSIXct_action = "numeric") {

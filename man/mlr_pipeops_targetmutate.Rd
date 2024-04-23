@@ -78,6 +78,7 @@ Only methods inherited from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library(mlr3)
 task = tsk("boston_housing")
 po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
@@ -108,6 +109,7 @@ g$predict(task)
 tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -79,6 +79,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library(mlr3)
 library(mlr3learners)
 
@@ -95,6 +96,7 @@ g2$train(task2)
 g2$pipeops$regr.lm$learner$predict_type = "se"
 set.seed(2906)
 g2$predict(task2)
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

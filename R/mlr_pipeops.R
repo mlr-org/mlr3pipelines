@@ -34,6 +34,7 @@
 #' @family Dictionaries
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' mlr_pipeops$get("learner", lrn("classif.rpart"))
@@ -43,6 +44,7 @@
 #'
 #' # all PipeOps currently in the dictionary:
 #' as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
+#' \dontshow{ \} }
 mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(

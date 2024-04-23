@@ -70,6 +70,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 # Simple Bagging
@@ -81,6 +82,7 @@ gr = ppl("greplicate",
   po("classifavg")
 
 resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

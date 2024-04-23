@@ -43,6 +43,7 @@ features in order to predict the outcome.
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 if (requireNamespace("kknn")) {
 library(mlr3)
 library(mlr3learners)
@@ -57,4 +58,5 @@ graph_stack = pipeline_stacking(base_learners, super_learner)
 graph_learner = as_learner(graph_stack)
 graph_learner$train(tsk("german_credit"))
 }
+\dontshow{ \} }
 }
