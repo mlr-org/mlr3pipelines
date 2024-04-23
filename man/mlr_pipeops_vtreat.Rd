@@ -122,6 +122,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
+\dontshow{ if (requireNamespace("vtreat")) \{ }
 library("mlr3")
 
 set.seed(2020)
@@ -140,6 +141,7 @@ task = TaskRegr$new("vtreat_regr", backend = make_data(100), target = "y")
 
 pop = PipeOpVtreat$new()
 pop$train(list(task))
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

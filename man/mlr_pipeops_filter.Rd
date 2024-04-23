@@ -98,6 +98,7 @@ Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpT
 }
 
 \examples{
+\dontshow{ if (requireNamespace("mlr3filters")) \{ }
 \dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 library("mlr3filters")
@@ -126,6 +127,7 @@ gr = po("filter", filter = flt("auc"), filter.frac = 0.5) \%>>\%
 learner = GraphLearner$new(gr)
 rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 rr$learners[[1]]$model$auc$scores
+\dontshow{ \} }
 \dontshow{ \} }
 }
 \references{
