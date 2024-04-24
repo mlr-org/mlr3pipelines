@@ -570,3 +570,9 @@ test_that("GraphLearner hashes", {
 })
 
 
+test_that("set_inner_tuning", {
+  glrn = as_learner(as_pipeop(lrn("classif.debug", validate = 0.2, early_stopping = TRUE)))
+  set_inner_tuning(glrn, disable = TRUE)
+
+})
+

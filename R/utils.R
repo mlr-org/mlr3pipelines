@@ -134,3 +134,10 @@ dictionary_sugar_inc_mget = function(dict, .keys, ...) {
   names(objs) = map_chr(objs, "id")
   objs
 }
+
+check_validate = function(x) {
+  if (test_numeric(x, lower = 0, upper = 1, len = 1L)) {
+    return(TRUE)
+  }
+  check_choice(x, c("inner_valid", "test"), null.ok = TRUE)
+}

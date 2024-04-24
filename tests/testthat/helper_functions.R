@@ -426,6 +426,38 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   }
 
   expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
+
+  # test that predict on test rows during train is the same as predict on the rows
+
+  po = do.call(poclass$new, constargs)
+
+  tasktrain = original_clone$clone(deep = TRUE)
+  n_use = length(tasktrain$row_roles$use)
+  expect_true(n_use >= 4)
+  expect_true(task$nrow >= 5)
+  # overlay between use and test rows
+  tasktrain$divide(tasktrain$row_roles$use[seq(n_use - 2, n_use)], remove = FALSE)
+  tasktrain$row_roles$use = tasktrain$row_roles$use[seq(1, n_use - 2)]
+
+  taskpredict = tasktrain$clone(deep = TRUE)
+  taskpredict$row_roles$use = taskpredict$inner_valid_task$row_roles$use
+  taskpredict$inner_valid_task = NULL
+
+  taskouttrain = po$train(list(tasktrain))[[1L]]
+  taskoutpredict = po$predict(list(taskpredict))[[1L]]
+
+  # other columns like weights are present during traing but not during predict
+  cols = unname(unlist(taskouttrain$col_roles[c("feature", "target")]))
+  dtrain = taskouttrain$inner_validd_task$data(cols = cols)
+  dpredict = taskoutpredict$data(cols = cols)
+  expect_permutation(colnames(dtrain), colnames(dpredict))
+  expect_equal(nrow(dtrain), nrow(dpredict))
+  dtrain = dtrain[, cols, with = FALSE]
+  dpredict = dpredict[, cols, with = FALSE]
+
+  if (deterministic_predict && deterministic_train) {
+    expect_equal(dtrain, dpredict)
+  }
 }
 
 train_pipeop = function(po, inputs) {

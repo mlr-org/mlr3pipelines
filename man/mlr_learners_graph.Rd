@@ -22,6 +22,10 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
 
 A \code{GraphLearner} is always constructed in an untrained state. When the \code{graph} argument has a
 non-\code{NULL} \verb{$state}, it is ignored.
+
+Retrieves the inner validation scores as a named \code{list()}.
+
+Retrieves the inner tuned values as a named \code{list()}.
 }
 \section{Construction}{
 

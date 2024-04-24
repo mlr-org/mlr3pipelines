@@ -170,12 +170,12 @@ predicted[[1]]$data()
 }
 \seealso{
 Other mlr3pipelines backend related: 
-\code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
-\code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreproc}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_graphs}},
-\code{\link{mlr_pipeops_updatetarget}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_updatetarget}}
 }
 \concept{mlr3pipelines backend related}
