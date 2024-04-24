@@ -110,6 +110,7 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 task = tsk("iris")
@@ -130,6 +131,7 @@ graph$train(task)
 graph$pipeops$classif.rpart$learner$predict_type = "prob"
 
 graph$train(task)
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.5.1-9000
+Version: 0.5.2
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -86,14 +86,15 @@ Suggests:
     GenSA,
     methods,
     vtreat,
-    future
+    future,
+    htmlwidgets
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.2.3.9000
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 Collate:
     'Graph.R'
@@ -175,6 +176,7 @@ Collate:
     'operators.R'
     'pipeline_bagging.R'
     'pipeline_branch.R'
+    'pipeline_convert_types.R'
     'pipeline_greplicate.R'
     'pipeline_ovr.R'
     'pipeline_robustify.R'

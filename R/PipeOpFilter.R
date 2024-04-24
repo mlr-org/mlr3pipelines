@@ -80,6 +80,8 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("mlr3filters")) \{ }
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #' library("mlr3filters")
 #' \dontshow{data.table::setDTthreads(1)}
@@ -107,6 +109,8 @@
 #' learner = GraphLearner$new(gr)
 #' rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 #' rr$learners[[1]]$model$auc$scores
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(

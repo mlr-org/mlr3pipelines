@@ -1,6 +1,7 @@
 context("PipeOpSmote")
 
 test_that("PipeOpSmote - basic properties", {
+  skip_if_not_installed("smotefamily")
   set.seed(1234)
   data = smotefamily::sample_generator(1000, ratio = 0.80)
   data$result = as.factor(data$result)
@@ -18,6 +19,7 @@ test_that("PipeOpSmote - basic properties", {
 })
 
 test_that("compare to smotefamily::SMOT", {
+  skip_if_not_installed("smotefamily")
   set.seed(1234)
   data = smotefamily::sample_generator(1000, ratio = 0.80)
   data$result = as.factor(data$result)

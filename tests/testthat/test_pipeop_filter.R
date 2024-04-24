@@ -1,6 +1,7 @@
 context("PipeOpFilter")
 
 test_that("PipeOpFilter", {
+  skip_if_not_installed("mlr3filters")
   task = mlr_tasks$get("boston_housing_classic")
 
   expect_datapreproc_pipeop_class(PipeOpFilter,
@@ -46,6 +47,7 @@ test_that("PipeOpFilter", {
 
 
 test_that("PipeOpFilter parameters", {
+  skip_if_not_installed("mlr3filters")
 
   po = PipeOpFilter$new(mlr3filters::FilterVariance$new())
 
@@ -64,6 +66,7 @@ test_that("PipeOpFilter parameters", {
 
 
 test_that("PipeFilter permuted", {
+  skip_if_not_installed("mlr3filters")
   set.seed(1)
   N = 50
   task = tgen("2dnormals")$generate(N)

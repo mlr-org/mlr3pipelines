@@ -39,6 +39,7 @@ test_that("PipeOpLearnerCV - basic properties", {
 })
 
 test_that("PipeOpLearnerCV - param values", {
+  skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   polrn = PipeOpLearnerCV$new(lrn)
   expect_subset(c("minsplit", "resampling.method", "resampling.folds"), polrn$param_set$ids())
@@ -50,12 +51,14 @@ test_that("PipeOpLearnerCV - param values", {
 })
 
 test_that("PipeOpLearnerCV - within resampling", {
+  skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   gr = GraphLearner$new(PipeOpLearnerCV$new(lrn) %>>% po(id = "l2", lrn))
   resample(tsk("iris"), gr, rsmp("holdout"))
 })
 
 test_that("PipeOpLearnerCV - insample resampling", {
+  skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.featureless")
   iris_with_unambiguous_mode = mlr_tasks$get("iris")$filter(c(1:49, 52:150))  # want featureless learner without randomness
 
@@ -71,6 +74,7 @@ test_that("PipeOpLearnerCV - insample resampling", {
 })
 
 test_that("PipeOpLearnerCV - graph but no id", {
+  skip_if_not_installed("rpart")
   g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
   po = PipeOpLearnerCV$new(g)
   expect_string(po$id)
@@ -100,6 +104,7 @@ test_that("PipeOpLearnerCV - model active binding to state", {
 })
 
 test_that("predict_type", {
+  skip_if_not_installed("rpart")
   expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "response"))$predict_type, "response")
   expect_equal(po("learner_cv", lrn("classif.rpart", predict_type = "prob"))$predict_type, "prob")
 

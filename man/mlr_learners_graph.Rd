@@ -69,6 +69,7 @@ recommended.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 graph = po("pca") \%>>\% lrn("classif.rpart")
@@ -87,6 +88,7 @@ lr$graph_model$pipeops$classif.rpart$learner_model$model
 
 # Feature importance (of principal components):
 lr$graph_model$pipeops$classif.rpart$learner_model$importance()
+\dontshow{ \} }
 }
 \seealso{
 Other Learners: 

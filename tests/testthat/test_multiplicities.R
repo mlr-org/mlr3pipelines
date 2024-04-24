@@ -116,6 +116,7 @@ test_that("PipeOp - evaluate_multiplicities", {
 })
 
 test_that("Graph - add_edge", {
+  skip_if_not_installed("rpart")
   learner = lrn("classif.rpart")
   g1 = PipeOpOVRSplit$new() %>>% learner %>>% PipeOpOVRUnite$new()
   g2 = Graph$new()

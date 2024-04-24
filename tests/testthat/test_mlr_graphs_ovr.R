@@ -1,6 +1,7 @@
 context("ppl - pipeline_ovr")
 
 test_that("OVR Pipeline", {
+  skip_if_not_installed("rpart")
   task = tsk("wine")
 
   # assertions on graph

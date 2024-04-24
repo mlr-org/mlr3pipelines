@@ -2,6 +2,8 @@ context("Dictionary")
 
 # we check that all pipeops that are exported are also in the dictionary, and can be constructed from there.
 test_that("Dictionary contains all PipeOps", {
+  skip_if_not_installed("mlr3filters")
+  skip_if_not_installed("rpart")
   skip_on_cran()
 
   oldwarn = options(warn = 2)
@@ -80,6 +82,7 @@ test_that("Dictionary contains all PipeOps", {
 
   # the loop now checks whether we can construct each pipeop from the dictionary *and* by itself
   for (idx in seq_along(dictnames)) {
+    if (dictnames[[idx]] == "filter") next  # TODO: remove this when https://github.com/mlr-org/mlr3filters/issues/162 is solved
 
     pogen = get(pipeops[idx], pkgenv)  # the constructor, as found in the package namespace
     dictname = dictnames[idx]  # the "key" in the mlr_pipeops dictionary
@@ -217,6 +220,7 @@ test_that("data.table of pipeops looks as it should", {
 })
 
 test_that("GraphLearner is in mlr_learners", {
+  skip_if_not_installed("rpart")
 
   expect_data_table(as.data.table(mlr_learners))  # can construct mlr_learners table
 

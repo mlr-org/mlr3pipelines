@@ -1,6 +1,7 @@
 context("ppl - pipeline_targettrafo")
 
 test_that("Target Trafo Pipeline", {
+  skip_if_not_installed("rpart")
   task = tsk("boston_housing_classic")
 
   tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
@@ -45,6 +46,7 @@ test_that("Target Trafo Pipeline", {
 })
 
 test_that("More Complex Target Trafo Pipelines", {
+  skip_if_not_installed("rpart")
  task = tsk("mtcars")
  tt = pipeline_targettrafo((po("select") %>>% ppl("branch", list(lrn("regr.featureless"), lrn("regr.rpart")))))
  expect_equal(tt$input$op.id, "targetmutate")

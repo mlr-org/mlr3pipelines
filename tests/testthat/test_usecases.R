@@ -19,6 +19,8 @@ test_graph = function(g, n_nodes, n_edges) {
 }
 
 test_that("linear: scale + pca + learn", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("rpart")
   g = PipeOpScale$new() %>>% PipeOpPCA$new() %>>% PipeOpLrnRP
   z = test_graph(g, n_nodes = 3L, n_edges = 2L)
 
@@ -44,6 +46,7 @@ test_that("linear: scale + pca + learn", {
 })
 
 test_that("featureunion", {
+  skip_if_not_installed("rpart")
   g = gunion(list(PipeOpPCA$new(), PipeOpNOP$new())) %>>%
     PipeOpFeatureUnion$new(2L) %>>% PipeOpLrnRP
   z = test_graph(g, n_nodes = 4L, n_edges = 3L)
@@ -60,6 +63,8 @@ test_that("featureunion", {
 # FIXME: have a look at intermediate results in all usecase, we should expect some stuff there
 
 test_that("bagging", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("rpart")
   g = pipeline_greplicate(PipeOpSubsample$new() %>>% PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(innum = 2L)
   g$pipeops$subsample_1$param_set$values$frac = .5
   g$pipeops$subsample_2$param_set$values$frac = .5
@@ -72,6 +77,8 @@ test_that("bagging", {
 
 
 test_that("branching", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("rpart")
   # FIXME: are we REALLY sure that stuff here gets connected in the correct order?
   # i doubt that and this looks really bad and errorprone
   # b) we really want to have an associated order in the graph which is determined by
@@ -100,6 +107,8 @@ test_that("branching", {
 })
 
 test_that("branching with varargs", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("rpart")
   g = PipeOpBranch$new(2L) %>>% gunion(list(PipeOpLrnRP, PipeOpLrnFL)) %>>% PipeOpUnbranch$new()
   z = test_graph(g, n_nodes = 4L, n_edges = 4L)
 
@@ -123,12 +132,14 @@ test_that("branching with varargs", {
 
 
 test_that("task chunking", {
+  skip_if_not_installed("rpart")
   g = PipeOpChunk$new(2L) %>>% pipeline_greplicate(PipeOpLrnRP, 2L) %>>% PipeOpClassifAvg$new(2L)
   z = test_graph(g, n_nodes = 4L, n_edges = 4L)
 })
 
 
 test_that("stacking", {
+  skip_if_not_installed("rpart")
   task = mlr_tasks$get("iris")
 
   lrn1 = mlr_learners$get("classif.rpart")

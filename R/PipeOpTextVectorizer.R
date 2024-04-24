@@ -140,6 +140,8 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("stopwords")) \{ }
+#' \dontshow{ if (requireNamespace("quanteda")) \{ }
 #' library("mlr3")
 #' library("data.table")
 #' # create some text data
@@ -157,6 +159,8 @@
 #' one_line_of_iris$data()
 #'
 #' pos$predict(list(one_line_of_iris))[[1]]$data()
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

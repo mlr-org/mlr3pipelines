@@ -1,6 +1,7 @@
 context("ppl - pipeline_robustify")
 
 test_that("Robustify Pipeline", {
+  skip_if_not_installed("rpart")
   skip_on_cran()
   lrn = lrn("classif.rpart")
 
@@ -103,6 +104,7 @@ test_that("Robustify Pipeline", {
 
 
 test_that("Robustify Pipeline Impute Missings", {
+  skip_if_not_installed("rpart")
   tmissings = tsk("pima")
   tnomissings = tsk("iris")
 
@@ -151,6 +153,7 @@ makeTypeTask = function(types) {
 
 
 test_that("Robustify Pipeline factor to numeric", {
+  skip_if_not_installed("rpart")
 
   alltask = makeTypeTask(c("integer", "numeric", "logical", "character", "POSIXct"))
 

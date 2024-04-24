@@ -155,6 +155,7 @@ test_that("PipeOpTextVectorizer - integer sequence", {
   skip_if_not_installed("quanteda")
   suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
+  set.seed(1)
   task = mlr_tasks$get("iris")
   # create hacky text data:
   dt = data.table("txt" = apply(iris, 1, function(x) {

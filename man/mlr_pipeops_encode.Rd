@@ -8,7 +8,7 @@
 \code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
-Encodes columns of type \code{factor}, \code{character} and \code{ordered}.
+Encodes columns of type \code{factor} and \code{ordered}.
 
 Possible encodings are \code{"one-hot"} encoding, as well as encoding according to \code{stats::contr.helmert()}, \code{stats::contr.poly()},
 \code{stats::contr.sum()} and \code{stats::contr.treatment()}.
@@ -16,6 +16,8 @@ Newly created columns are named via pattern \verb{[column-name].[x]} where \code
 \code{"treatment"} encoding, and an integer sequence otherwise.
 
 Use the \code{\link{PipeOpTaskPreproc}} \verb{$affect_columns} functionality to only encode a subset of columns, or only encode columns of a certain type.
+
+\code{character}-type features can be encoded by converting them \code{factor} features first, using \code{\link[=mlr_graphs_convert_types]{ppl("convert_types", "character", "factor")}}.
 }
 \section{Construction}{
 
@@ -34,7 +36,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpTaskPreproc}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor}, \code{character} or \code{ordered} parameters encoded according to the \code{method}
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected \code{factor} and \code{ordered} parameters encoded according to the \code{method}
 parameter.
 }
 
@@ -97,17 +99,26 @@ poe$train(list(task))[[1]]$data()
 
 poe$param_set$values$method = "sum"
 poe$train(list(task))[[1]]$data()
+
+# converting character-columns
+data_chr = data.table::data.table(x = factor(letters[1:3]), y = letters[1:3])
+task_chr = TaskClassif$new("task_chr", data_chr, "x")
+
+goe = ppl("convert_types", "character", "factor") \%>>\% po("encode")
+
+goe$train(task_chr)[[1]]$data()
 }
 \seealso{
 https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
+\code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
+\code{\link{PipeOpTaskPreprocSimple}},
+\code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -154,9 +165,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
@@ -170,7 +181,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
-\code{\link{mlr_pipeops_yeojohnson}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops_yeojohnson}}
 }
 \concept{PipeOps}

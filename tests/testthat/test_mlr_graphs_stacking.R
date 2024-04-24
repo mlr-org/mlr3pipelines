@@ -1,6 +1,7 @@
 context("ppl - pipeline_stacking")
 
 test_that("Stacking Pipeline", {
+  skip_if_not_installed("rpart")
 
   base_learners = list(
     lrn("classif.rpart", predict_type = "prob", id = "base.rpart")
