@@ -193,7 +193,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       intask$select(setdiff(intask$feature_names, colnames(imputanda)))$cbind(imputanda)
 
-      self$state$outtasklayouto = copy(intask$feature_types)
+      self$state$outtasklayout = copy(intask$feature_types)
 
       if (!is.null(intask$inner_valid_task)) {
         intask$inner_valid_task = private$.predict(list(intask$inner_valid_task))[[1L]]

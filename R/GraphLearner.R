@@ -47,6 +47,12 @@
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
+#' * `inner_tuned_values` :: named `list()` or `NULL`\cr
+#'   The inner tuned parameter values.
+#'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports inner tuning.
+#' * `inner_valid_scores` :: named `list()` or `NULL`\cr
+#'   The inner tuned parameter values.
+#'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -110,7 +116,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       )
 
       properties = setdiff(mlr_reflections$learner_properties[[task_type]],
-        c("validation", "inner_tuning")[!c(private$.validate, inner_tuning)])
+        c("validation", "inner_tuning")[!c(private$.can_validate, inner_tuning)])
 
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
@@ -128,9 +134,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (!is.null(predict_type)) self$predict_type = predict_type
     },
     base_learner = function(recursive = Inf) {
-      self$base_pipeop(recursive = recursive)$learner_model
-    },
-    base_pipeop = function(recursive = Inf) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
       if (recursive <= 0) return(self)
       gm = self$graph_model
@@ -150,30 +153,18 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
         if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
       }
-      last_pipeop$base_pipeop(recursive - 1)
-
-    },
-
-    #' @description
-    #' Retrieves the inner validation scores as a named `list()`.
-    inner_valid_scores = function(rhs) {
-      assert_ro_binding(rhs)
-      if (is.null(self$state)) {
-        stopf("Learner not trained")
-      }
-      self$state$inner_valid_scores
-    },
-    #' @description
-    #' Retrieves the inner tuned values as a named `list()`.
-    inner_tuned_values = function(rhs) {
-      assert_ro_binding(rhs)
-      if (is.null(self$state)) {
-        stopf("Learner not trained")
-      }
-      self$state$inner_tuned_values
+      learner_model$base_learner(recursive - 1)
     }
   ),
   active = list(
+    inner_valid_scores = function(rhs) {
+      assert_ro_binding(rhs)
+      self$state$inner_valid_scores
+    },
+    inner_tuned_values = function(rhs) {
+      assert_ro_binding(rhs)
+      self$state$inner_tuned_values
+    },
     validate = function(rhs) {
       if (!missing(rhs)) {
         if (!private$.can_validate) {
@@ -185,11 +176,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
     },
     hash = function() {
-      digest(list(class(self), self$id, self$graph$hash, private$.predict_type,
+      digest(list(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate,
         self$fallback$hash, self$parallel_predict), algo = "xxhash64")
     },
     phash = function() {
-      digest(list(class(self), self$id, self$graph$phash, private$.predict_type,
+      digest(list(class(self), self$id, self$graph$phash, private$.predict_type, private$.validate,
         self$fallback$hash, self$parallel_predict), algo = "xxhash64")
     },
     predict_type = function(rhs) {
@@ -226,21 +217,34 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .validate = NULL,
     .can_validate = NULL,
     .extract_inner_tuned_values = function() {
+      itvs = unlist(map(
+        learner_wrapping_pipeops(self$graph_model), function(po) {
+          if (exists("inner_tuned_values", po$learner)) {
+            po$learner_model$inner_tuned_values
+          }
+        }
+      ), recursive = FALSE)
 
-
-      warningf("Implementthis")
-      list()
+      if (is.null(itvs) || !length(itvs)) {
+        return(named_list())
+      }
+      itvs
 
     },
     .extract_inner_valid_scores = function() {
-      warningf("Implementthis")
-      list()
-      # map(
-      #   keep(self$graph$pipeops, function(po) inherits(po, "PipeOpLearnerCV") || inherits(po, "PipeOpLearner")),
-      #   function(po) {
-      #     po$inner_
-      #   }
-      # )
+      ivs = unlist(map(
+        learner_wrapping_pipeops(self$graph_model), function(po) {
+          if (exists("inner_valid_scores", po$learner)) {
+            po$learner_model$inner_valid_scores
+          }
+        }
+      ), recursive = FALSE)
+
+      if (is.null(ivs) || !length(ivs)) {
+        return(named_list())
+      }
+      ivs
+
     },
     deep_clone = function(name, value) {
       private$.param_set = NULL
@@ -256,8 +260,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
     .train = function(task) {
       if (!is.null(get0("validate", self))) {
-        some_pipeops_validate = map(
-          filter(self$graph$pipeops, function(po) inherits(po, "PipeOpLearner") || inherits(po, "PipeOpLearnerCV")),
+        some_pipeops_validate = map_lgl(
+          keep(self$graph$pipeops, function(po) inherits(po, "PipeOpLearner") || inherits(po, "PipeOpLearnerCV")),
           function(po) !is.null(get0("validate", po$learner))
         )
 
@@ -319,30 +323,30 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' Configure validation for a graph learner.
 #'
 #' In a [`GraphLearner`], validation can be configured on two levels:
-#' 1. On the [`GraphLearner`] level.
-#' 2. On the level of the [`Learner`]s that are wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`].
-#'
-#' Therefore, enabling validation requires to specify not only how to create the validation set (1), but also which
-#' pipeops should actually use it.
-#' Only the [`GraphLearner`] can specify **how** to create the validation set.
-#' All learners wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`] can only set it to `NULL` (disable) or
-#' `"inner_valid"` (enable).
+#' 1. On the [`GraphLearner`] level, which specifies **how** the validation set is constructed.
+#' 2. On the level of the [`Learner`]s that are wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`], which specifies
+#'    which pipeops actually make use of the validation set.
+#'    All learners wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`] can only set it to `NULL` (disable) or
+#'    `"inner_valid"` (enable).
 #'
 #' @param learner ([`GraphLearner`])\cr
 #'   The graph learner to configure.
 #' @param validate (`numeric(1)`, `"inner_valid"` or `NULL`)\cr
 #'   How to set the `$validate` field of the learner.
-#'   If set to `NULL` all validation is disabled.
+#'   If set to `NULL` all validation is disabled, both on the graph learner level, but also for all pipeops.
 #' @param ids (`NULL` or `character()`)\cr
 #'   For which pipeops to enable validation.
 #'   This parameter is ignored when `validate` is set to `NULL`.
 #'   By default, validation is enabled for the base learner.
 #' @param args (named `list()`)\cr
 #'   Rarely needed.
-#'   A named list of lists, specifying additional argments to be passed to [`set_validate()`] for the pipeops.
-#'   The names must be a subset of `ids`.
+#'   A named list of lists, specifying additional argments to be passed to [`set_validate()`] for the respective pipeops.
+#' @param ... (any)\cr
+#'   Currently unused.
+#'
 #' @export
 #' @examples
+#' library(mlr3)
 #' # simple
 #' glrn = as_learner(po("pca") %>>% lrn("classif.debug"))
 #' set_validate(glrn, 0.3)
@@ -353,13 +357,14 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' glrn$graph$pipeops$classif.debug$learner$validate
 #'
 #' # complex
-#' glrn = as_learner(ppl("stacking", lrns(c("classif.debug", "classif.featureless")), lrn("classif.debug", id = "final")))
+#' glrn = as_learner(ppl("stacking", lrns(c("classif.debug", "classif.featureless")),
+#'   lrn("classif.debug", id = "final")))
 #' set_validate(glrn, 0.2, which = c("classif.debug", "final"))
 #' glrn$validate
 #' glrn$graph$pipeops$classif.debug$learner$validate
 #' glrn$graph$pipeops$final$learner$validate
-set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list()) {
-  if (is.null(learner$validate)) {
+set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(), ...) {
+  if (is.null(validate)) {
     learner$validate = NULL
     walk(learner_wrapping_pipeops(learner), function(po) {
       if (exists("validate", po$learner)) {
@@ -370,7 +375,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   }
 
   if (is.null(ids)) {
-    which = learner$base_pipeop()$id
+    ids = base_pipeop(learner)$id
   } else {
     assert_subset(ids, ids(keep(learner_wrapping_pipeops(learner), function(po) "validation" %in% po$learner$properties)))
     assert_true(length(ids) > 0)
@@ -379,7 +384,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   assert_list(args, types = "list")
   assert_subset(names(args), ids)
 
-  prev_validate_pos = discard(map(learner_wrapping_pipeops(learner), function(po) get0("validate", po$learner), is.null))
+  prev_validate_pos = discard(map(learner_wrapping_pipeops(learner), function(po) get0("validate", po$learner)), is.null)
   prev_validate = learner$validate
 
   on.exit({
@@ -391,7 +396,16 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 
   walk(ids, function(poid) {
     # learner might be another GraphLearner / AutoTuner
-    invoke(set_validate learner = learner$graph$pipeops[[poid]]$learner, validate = "inner_valid", .args = args[[poid]])
+    withCallingHandlers({
+      invoke(set_validate, learner = learner$graph$pipeops[[poid]]$learner, validate = "inner_valid", .args = args[[poid]])
+    }, error = function(e) {
+      e$message = sprintf("Failed to set validate for PipeOp '%s':\n%s", poid, e$message)
+      stop(e)
+    }, warning = function(w) {
+      w$message = sprintf("Failed to set validate for PipeOp '%s':\n%s", po$id, w$message)
+      warning(w)
+      invokeRestart("muffleWarning")
+    })
   })
   on.exit()
 
@@ -399,10 +413,12 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 }
 
 
-#' @title Set Inner Tuning of a GraphLearner
+#' @title Set Inner Tuning for a Graph Learner
 #' @description
 #' First, all values specified by `...` are
 #' All [`PipeOpLearner`] and [`PipeOpLearnerCV`]
+#'
+#' @inheritParams mlr3::set_inner_tuning
 #' @param validate (`numeric(1)`, `"inner_valid"`, or `NULL`)\cr
 #'   How to set the `$validate` field of the learner.
 #' @param args (named `list()`)\cr
@@ -415,7 +431,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 #' @export
 set_inner_tuning.GraphLearner = function(.learner, .disable = FALSE, validate = NA, args = NULL, ...) {
   if (is.null(args)) {
-    args = set_names(list(list()), .learner$base_pipeops()$id
+    args = set_names(list(list()), base_pipeop(.learner)$id)
   }
   all_pipeops = .learner$graph$pipeops
   lrn_pipeops = learner_wrapping_pipeops(all_pipeops)
@@ -433,10 +449,18 @@ set_inner_tuning.GraphLearner = function(.learner, .disable = FALSE, validate = 
   }, add = TRUE)
 
   walk(lrn_pipeops[names(args)], function(po) {
-    browser()
-    invoke(set_inner_tuning, .learner = po$learner,
-      .args = insert_named(list(validate = validate, .disable = .disable), args[[po$id]])
-    )
+    withCallingHandlers({
+      invoke(set_inner_tuning, .learner = po$learner,
+        .args = insert_named(list(validate = validate, .disable = .disable), args[[po$id]])
+      )
+    }, error = function(e) {
+      e$message = sprintf("Failed to set inner tuning for PipeOp '%s':\n%s", po$id, e$message)
+      stop(e)
+    }, warning = function(w) {
+      w$message = sprintf("Failed to set inner tuning for PipeOp '%s':\n%s", po$id, w$message)
+      warning(w)
+      invokeRestart("muffleWarning")
+    })
   })
 
   # Now:

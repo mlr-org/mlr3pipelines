@@ -2,11 +2,17 @@
 % Please edit documentation in R/GraphLearner.R
 \name{set_inner_tuning.GraphLearner}
 \alias{set_inner_tuning.GraphLearner}
-\title{Set Inner Tuning of a GraphLearner}
+\title{Set Inner Tuning for a Graph Learner}
 \usage{
 \method{set_inner_tuning}{GraphLearner}(.learner, .disable = FALSE, validate = NA, args = NULL, ...)
 }
 \arguments{
+\item{.learner}{(\code{\link[mlr3]{Learner}})\cr
+The learner for which to set the inner tuning.}
+
+\item{.disable}{(\code{logical(1)})\cr
+Whether to disable the inner tuning, default is \code{FALSE}.}
+
 \item{validate}{(\code{numeric(1)}, \code{"inner_valid"}, or \code{NULL})\cr
 How to set the \verb{$validate} field of the learner.}
 
@@ -17,6 +23,9 @@ By default, the values \code{.disable} and \code{validate} are used, but can be 
 
 When enabling, the inner tuning of the \verb{$base_learner()} is enabled by default.
 When disabling, all inner tuning is disable by default.}
+
+\item{...}{(any)\cr
+Additional arguments.}
 }
 \description{
 First, all values specified by \code{...} are

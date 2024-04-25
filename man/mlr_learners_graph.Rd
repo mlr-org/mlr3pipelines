@@ -22,10 +22,6 @@ Similarly, the predict_type of a Graph will always be the smallest denominator i
 
 A \code{GraphLearner} is always constructed in an untrained state. When the \code{graph} argument has a
 non-\code{NULL} \verb{$state}, it is ignored.
-
-Retrieves the inner validation scores as a named \code{list()}.
-
-Retrieves the inner tuned values as a named \code{list()}.
 }
 \section{Construction}{
 
@@ -60,6 +56,12 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
 \item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
+\item \code{inner_tuned_values} :: named \code{list()} or \code{NULL}\cr
+The inner tuned parameter values.
+\code{NULL} is returned if the learner is not trained or none of the wrapped learners supports inner tuning.
+\item \code{inner_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The inner tuned parameter values.
+\code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
 }
 }
 

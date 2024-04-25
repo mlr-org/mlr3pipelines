@@ -97,15 +97,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     }
   ),
   active = list(
-    validate = function(rhs) {
-      if (!missing(rhs)) {
-        if (is.null(rhs) || identical(rhs, "inner_valid")) {
-          stopf("The validate field of PipeOpLearner can only be set to NULL or inner_valid. You probably meant to configure the validate field of the GraphLearner")
-        }
-        private$.learner$validate = rhs
-      }
-      private$.learner$validate
-    },
     id = function(val) {
       if (!missing(val)) {
         private$.id = val

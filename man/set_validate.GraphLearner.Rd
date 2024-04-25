@@ -4,7 +4,7 @@
 \alias{set_validate.GraphLearner}
 \title{Configure Validation for a GraphLearner}
 \usage{
-set_validate.GraphLearner(learner, validate, which = NULL)
+\method{set_validate}{GraphLearner}(learner, validate, ids = NULL, args = list(), ...)
 }
 \arguments{
 \item{learner}{(\code{\link{GraphLearner}})\cr
@@ -12,28 +12,34 @@ The graph learner to configure.}
 
 \item{validate}{(\code{numeric(1)}, \code{"inner_valid"} or \code{NULL})\cr
 How to set the \verb{$validate} field of the learner.
-If set to \code{NULL} all validation is disabled.}
+If set to \code{NULL} all validation is disabled, both on the graph learner level, but also for all pipeops.}
 
-\item{which}{(\code{NULL} or \code{character()})\cr
+\item{ids}{(\code{NULL} or \code{character()})\cr
 For which pipeops to enable validation.
 This parameter is ignored when \code{validate} is set to \code{NULL}.
 By default, validation is enabled for the base learner.}
+
+\item{args}{(named \code{list()})\cr
+Rarely needed.
+A named list of lists, specifying additional argments to be passed to \code{\link[=set_validate]{set_validate()}} for the respective pipeops.}
+
+\item{...}{(any)\cr
+Currently unused.}
 }
 \description{
 Configure validation for a graph learner.
 
 In a \code{\link{GraphLearner}}, validation can be configured on two levels:
 \enumerate{
-\item On the \code{\link{GraphLearner}} level.
-\item On the level of the \code{\link{Learner}}s that are wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}}.
+\item On the \code{\link{GraphLearner}} level, which specifies \strong{how} the validation set is constructed.
+\item On the level of the \code{\link{Learner}}s that are wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}}, which specifies
+which pipeops actually make use of the validation set.
+All learners wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}} can only set it to \code{NULL} (disable) or
+\code{"inner_valid"} (enable).
 }
-
-Therefore, enabling validation requires to specify not only how to create the validation set (1), but also for which
-pipeops to then actually usse it (2).
-Moreover, only the \code{\link{GraphLearner}} can specify \strong{how} to create the validation set.
-All \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}} can only set it to \code{NULL} (disable) and \code{"inner_valid"} (enable).
 }
 \examples{
+library(mlr3)
 # simple
 glrn = as_learner(po("pca") \%>>\% lrn("classif.debug"))
 set_validate(glrn, 0.3)
@@ -44,7 +50,8 @@ glrn$validate
 glrn$graph$pipeops$classif.debug$learner$validate
 
 # complex
-glrn = as_learner(ppl("stacking", lrns(c("classif.debug", "classif.featureless")), lrn("classif.debug", id = "final")))
+glrn = as_learner(ppl("stacking", lrns(c("classif.debug", "classif.featureless")),
+  lrn("classif.debug", id = "final")))
 set_validate(glrn, 0.2, which = c("classif.debug", "final"))
 glrn$validate
 glrn$graph$pipeops$classif.debug$learner$validate

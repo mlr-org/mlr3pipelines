@@ -135,14 +135,7 @@ dictionary_sugar_inc_mget = function(dict, .keys, ...) {
   objs
 }
 
-check_validate = function(x) {
-  if (test_numeric(x, lower = 0, upper = 1, len = 1L)) {
-    return(TRUE)
-  }
-  check_choice(x, c("inner_valid", "test"), null.ok = TRUE)
-}
-
-learning_wrapping_pipeops = function(x) {
+learner_wrapping_pipeops = function(x) {
   if (inherits(x, "Graph")) {
     x = x$pipeops
   } else if (inherits(x, "GraphLearner")) {
@@ -152,4 +145,28 @@ learning_wrapping_pipeops = function(x) {
   }
 
   keep(x, function(po) inherits(po, "PipeOpLearner") || inherits(po, "PipeOpLearnerCV"))
+}
+
+
+# get the last PipeOpLearner
+base_pipeop = function(self) {
+  gm = self$graph_model
+  gm_output = gm$output
+  if (nrow(gm_output) != 1) stop("Graph has no unique output.")
+  last_pipeop_id = gm_output$op.id
+
+  # pacify static checks
+  src_id = NULL
+  dst_id = NULL
+
+  repeat {
+    last_pipeop = gm$pipeops[[last_pipeop_id]]
+    learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
+    if (!is.null(learner_model)) break
+    last_pipeop_id = gm$edges[dst_id == last_pipeop_id]
+    if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
+    if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
+  }
+  # New movie idea: "The Last PipeOp"
+  last_pipeop
 }
