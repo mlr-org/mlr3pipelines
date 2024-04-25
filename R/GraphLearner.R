@@ -47,6 +47,8 @@
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
+#' * `marshaled` :: `logical(1)`\cr
+#'   Whether the learner is marshaled.
 #'
 #' @section Methods:
 #' * `marshal(...)`\cr
@@ -55,8 +57,6 @@
 #' * `unmarshal(...)`\cr
 #'   (any) -> `self`\cr
 #'   Unmarshal the model.
-#' * `marshaled()` -> `logical(1)`\cr
-#'   Whether the learner is marshaled.
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -150,12 +150,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     unmarshal = function(...) {
       learner_unmarshal(.learner = self, ...)
-    },
-    marshaled = function() {
-      learner_marshaled(self)
     }
   ),
   active = list(
+    marshaled = function() {
+      learner_marshaled(self)
+    },
     hash = function() {
       digest(list(class(self), self$id, self$graph$hash, private$.predict_type,
         self$fallback$hash, self$parallel_predict), algo = "xxhash64")

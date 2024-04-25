@@ -56,6 +56,8 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
 \item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
+\item \code{marshaled} :: \code{logical(1)}\cr
+Whether the learner is marshaled.
 }
 }
 
@@ -68,8 +70,6 @@ Marshal the model.
 \item \code{unmarshal(...)}\cr
 (any) -> \code{self}\cr
 Unmarshal the model.
-\item \code{marshaled()} -> \code{logical(1)}\cr
-Whether the learner is marshaled.
 }
 }
 
