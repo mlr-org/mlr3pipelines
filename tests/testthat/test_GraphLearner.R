@@ -571,8 +571,8 @@ test_that("GraphLearner hashes", {
 
 
 test_that("set_inner_tuning", {
-  glrn = as_learner(as_pipeop(lrn("classif.debug", validate = 0.2, early_stopping = TRUE)))
-  set_inner_tuning(glrn, disable = TRUE)
-
+  glrn = as_learner(as_pipeop(lrn("classif.debug", validate = 0.2, early_stopping = TRUE, iter = 100)))
+  set_inner_tuning(glrn, .disable = TRUE)
+  expect_equal(glrn$base_learner()$validate, NULL)
+  set_inner_tuning(glrn, validate = 0.2, args = list(classif.debug = list(validate = "inner_valid", iter = 99)))
 })
-

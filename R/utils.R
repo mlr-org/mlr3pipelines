@@ -141,3 +141,15 @@ check_validate = function(x) {
   }
   check_choice(x, c("inner_valid", "test"), null.ok = TRUE)
 }
+
+learning_wrapping_pipeops = function(x) {
+  if (inherits(x, "Graph")) {
+    x = x$pipeops
+  } else if (inherits(x, "GraphLearner")) {
+    x = x$graph$pipeops
+  } else {
+    assert_list(x, types = "PipeOp")
+  }
+
+  keep(x, function(po) inherits(po, "PipeOpLearner") || inherits(po, "PipeOpLearnerCV"))
+}
