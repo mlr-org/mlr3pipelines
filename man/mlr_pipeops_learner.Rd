@@ -89,6 +89,7 @@ Methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 task = tsk("iris")
@@ -97,6 +98,7 @@ lrn_po = mlr_pipeops$get("learner", learner)
 
 lrn_po$train(list(task))
 lrn_po$predict(list(task))
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

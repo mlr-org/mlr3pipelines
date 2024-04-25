@@ -68,6 +68,7 @@
 #' @family Learners
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' graph = po("pca") %>>% lrn("classif.rpart")
@@ -86,6 +87,7 @@
 #'
 #' # Feature importance (of principal components):
 #' lr$graph_model$pipeops$classif.rpart$learner_model$importance()
+#' \dontshow{ \} }
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
     initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE) {

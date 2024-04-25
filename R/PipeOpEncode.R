@@ -5,7 +5,7 @@
 #' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Encodes columns of type `factor`, `character` and `ordered`.
+#' Encodes columns of type `factor` and `ordered`.
 #'
 #' Possible encodings are `"one-hot"` encoding, as well as encoding according to `stats::contr.helmert()`, `stats::contr.poly()`,
 #' `stats::contr.sum()` and `stats::contr.treatment()`.
@@ -13,6 +13,8 @@
 #' `"treatment"` encoding, and an integer sequence otherwise.
 #'
 #' Use the [`PipeOpTaskPreproc`] `$affect_columns` functionality to only encode a subset of columns, or only encode columns of a certain type.
+#'
+#' `character`-type features can be encoded by converting them `factor` features first, using [`ppl("convert_types", "character", "factor")`][mlr_graphs_convert_types].
 #'
 #' @section Construction:
 #' ```
@@ -26,7 +28,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected `factor`, `character` or `ordered` parameters encoded according to the `method`
+#' The output is the input [`Task`][mlr3::Task] with all affected `factor` and `ordered` parameters encoded according to the `method`
 #' parameter.
 #'
 #' @section State:
@@ -78,6 +80,14 @@
 #'
 #' poe$param_set$values$method = "sum"
 #' poe$train(list(task))[[1]]$data()
+#'
+#' # converting character-columns
+#' data_chr = data.table::data.table(x = factor(letters[1:3]), y = letters[1:3])
+#' task_chr = TaskClassif$new("task_chr", data_chr, "x")
+#'
+#' goe = ppl("convert_types", "character", "factor") %>>% po("encode")
+#'
+#' goe$train(task_chr)[[1]]$data()
 PipeOpEncode = R6Class("PipeOpEncode",
   inherit = PipeOpTaskPreprocSimple,
   public = list(

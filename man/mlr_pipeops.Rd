@@ -46,6 +46,7 @@ Returns a \code{data.table} with columns \code{key} (\code{character}), \code{pa
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 mlr_pipeops$get("learner", lrn("classif.rpart"))
@@ -55,6 +56,7 @@ po("learner", learner = lrn("classif.rpart"))
 
 # all PipeOps currently in the dictionary:
 as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
+\dontshow{ \} }
 }
 \seealso{
 Other mlr3pipelines backend related: 

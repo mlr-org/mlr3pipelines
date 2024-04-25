@@ -54,6 +54,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("smotefamily")) \{ }
 #' library("mlr3")
 #'
 #' # Create example task
@@ -67,6 +68,7 @@
 #' pop = po("smote")
 #' smotedata = pop$train(list(task))[[1]]$data()
 #' table(smotedata$result)
+#' \dontshow{ \} }
 PipeOpSmote = R6Class("PipeOpSmote",
   inherit = PipeOpTaskPreproc,
   public = list(

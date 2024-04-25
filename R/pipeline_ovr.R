@@ -15,6 +15,7 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("wine")
@@ -42,6 +43,7 @@
 #'   po("classifavg", collect_multiplicity = TRUE)
 #' g3$train(task)
 #' g3$predict(task)
+#' \dontshow{ \} }
 pipeline_ovr = function(graph) {
   PipeOpOVRSplit$new() %>>!% graph %>>!% PipeOpOVRUnite$new()
 }

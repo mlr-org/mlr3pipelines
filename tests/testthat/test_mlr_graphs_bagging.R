@@ -1,6 +1,7 @@
 context("ppl - pipeline_bagging")
 
 test_that("Bagging Pipeline", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
 
   expect_error(ppl("bagging", graph = lrn("classif.rpart"), averager = po("classifavg", collect_multiplicity = FALSE)),
@@ -39,6 +40,7 @@ test_that("Bagging Pipeline", {
 })
 
 test_that("Bagging with replacement", {
+  skip_if_not_installed("rpart")
   tsk = tsk("iris")
   lrn = lrn("classif.rpart")
   p = ppl("bagging", graph = po(lrn), replace = TRUE, averager = po("classifavg", collect_multiplicity = TRUE))

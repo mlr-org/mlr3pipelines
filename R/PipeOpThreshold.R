@@ -42,12 +42,14 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #' t = tsk("german_credit")
 #' gr = po(lrn("classif.rpart", predict_type = "prob")) %>>%
 #'   po("threshold", param_vals = list(thresholds = 0.9))
 #' gr$train(t)
 #' gr$predict(t)
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOp.R

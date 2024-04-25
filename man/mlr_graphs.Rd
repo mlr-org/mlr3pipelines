@@ -35,6 +35,7 @@ Returns a \code{data.table} with column \code{key} (\code{character}).
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library(mlr3)
 lrn = lrn("regr.rpart")
 task = mlr_tasks$get("boston_housing")
@@ -48,6 +49,7 @@ gr = ppl("robustify", task, lrn) \%>>\% po("learner", lrn)
 
 # all Graphs currently in the dictionary:
 as.data.table(mlr_graphs)
+\dontshow{ \} }
 }
 \seealso{
 Other mlr3pipelines backend related: 

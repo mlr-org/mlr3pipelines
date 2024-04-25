@@ -94,6 +94,7 @@ Training debug2 with input list\\(input_1 = 2\\)$")
 Predicting debug2 with input list\\(input_1 = 4\\) and state list\\(input_1 = 2\\)$")
 
 
+  skip_if_not_installed("fastICA")
   # ---------
   # NOP | feature union | NOP; feature union has vararg
 
@@ -119,6 +120,7 @@ Training debug2 with input list\\(input_1 = 2\\)$")
 
 
 test_that("Cloning as expected", {
+  skip_if_not_installed("rpart")
 
   gr = PipeOpProxy$new() %>>% LearnerClassifRpart$new()
 

@@ -64,6 +64,7 @@
 #' @export
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' \donttest{
 #' library("mlr3")
 #'
@@ -77,6 +78,7 @@
 #'
 #' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 #' }
+#' \dontshow{ \} }
 PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(

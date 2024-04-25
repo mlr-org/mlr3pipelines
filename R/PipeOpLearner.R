@@ -72,6 +72,7 @@
 #' @include PipeOp.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -80,6 +81,7 @@
 #'
 #' lrn_po$train(list(task))
 #' lrn_po$predict(list(task))
+#' \dontshow{ \} }
 PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   public = list(
     initialize = function(learner, id = NULL, param_vals = list()) {

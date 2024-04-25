@@ -93,6 +93,7 @@
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -113,6 +114,7 @@
 #' graph$pipeops$classif.rpart$learner$predict_type = "prob"
 #'
 #' graph$train(task)
+#' \dontshow{ \} }
 PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(

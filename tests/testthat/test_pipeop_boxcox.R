@@ -1,6 +1,7 @@
 context("PipeOpBoxCox")
 
 test_that("PipeOpBoxCox - general functionality", {
+  skip_if_not_installed("bestNormalize")
   task = mlr_tasks$get("iris")
   op = PipeOpBoxCox$new()
   expect_pipeop(op)
@@ -15,6 +16,7 @@ test_that("PipeOpBoxCox - general functionality", {
 })
 
 test_that("PipeOpBoxCox - receive expected result", {
+  skip_if_not_installed("bestNormalize")
   task = mlr_tasks$get("iris")
   op = PipeOpBoxCox$new(param_vals = list(standardize = FALSE))
   result = train_pipeop(op, inputs = list(task))

@@ -70,6 +70,7 @@
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("pima")
@@ -93,6 +94,7 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #'
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @template seealso_pipeopslist

@@ -1,6 +1,7 @@
 context("PipeOpImputeLearner")
 
 test_that("PipeOpImputeLearner - simple tests", {
+  skip_if_not_installed("rpart")
   # Pima has several missings
   task = mlr_tasks$get("pima")
   po = PipeOpImputeLearner$new(learner = lrn("regr.rpart"))
@@ -37,6 +38,7 @@ test_that("PipeOpImputeLearner - simple tests", {
 })
 
 test_that("PipeOpImputeLearner", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # slow test, so we don't do it on cran
 
   task = mlr_tasks$get("pima")

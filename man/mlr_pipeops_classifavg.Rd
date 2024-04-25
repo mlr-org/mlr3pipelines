@@ -77,6 +77,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 \donttest{
 library("mlr3")
 
@@ -90,6 +91,7 @@ gr = ppl("greplicate",
 
 resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 }
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

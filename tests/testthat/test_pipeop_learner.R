@@ -19,6 +19,7 @@ test_that("PipeOpLearner - basic properties", {
 })
 
 test_that("PipeOpLearner - param_set and values", {
+  skip_if_not_installed("rpart")
   lrn = mlr_learners$get("classif.rpart")
   po = PipeOpLearner$new(lrn)
 
@@ -55,6 +56,7 @@ test_that("PipeOpLearner - param_set and values", {
 })
 
 test_that("PipeOpLearner - graph but no id", {
+  skip_if_not_installed("rpart")
   g = PipeOpNOP$new() %>>% PipeOpLearner$new(LearnerClassifRpart$new())
   po = PipeOpLearner$new(g)
   expect_string(po$id)
@@ -84,6 +86,8 @@ test_that("PipeOpLearner - model active binding to state", {
 })
 
 test_that("packages", {
+  skip_if_not_installed("rpart")
+
   expect_set_equal(
     c("mlr3pipelines", lrn("classif.rpart")$packages),
     po("learner", learner = lrn("classif.rpart"))$packages

@@ -49,6 +49,7 @@ test_that("PipeOpFeatureUnion - train and predict", {
 })
 
 test_that("PipeOpFeatureUnion - train and predict II", {
+  skip_if_not_installed("rpart")
   # Define PipeOp's
   scatter = PipeOpCopy$new(2)
   op2a = PipeOpPCA$new()
@@ -129,6 +130,7 @@ test_that("PipeOpFeatureUnion - levels are preserved", {
 })
 
 test_that("feature renaming", {
+  skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpFeatureUnion, list(letters[1:3]))
 
   expect_equal(nrow(PipeOpFeatureUnion$new(c("a", "b", "c"))$input), 3)

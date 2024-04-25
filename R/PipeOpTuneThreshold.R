@@ -57,6 +57,8 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("bbotk")) \{ }
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -67,6 +69,8 @@
 #' pop$train(task)
 #'
 #' pop$state
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @export

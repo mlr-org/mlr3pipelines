@@ -32,6 +32,7 @@
 #' @return A [`PipeOp`] (for `po()`), or a `list` of [`PipeOp`]s (for `pos()`).
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' po("learner", lrn("classif.rpart"), cp = 0.3)
@@ -43,6 +44,7 @@
 #'   param_vals = list(cp = 0.3))
 #'
 #' pos(c("pca", original = "nop"))
+#' \dontshow{ \} }
 po = function(.obj, ...) {
   UseMethod("po")
 }

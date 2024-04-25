@@ -65,6 +65,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
+\dontshow{ if (requireNamespace("smotefamily")) \{ }
 library("mlr3")
 
 # Create example task
@@ -78,6 +79,7 @@ table(task$data()$result)
 pop = po("smote")
 smotedata = pop$train(list(task))[[1]]$data()
 table(smotedata$result)
+\dontshow{ \} }
 }
 \references{
 Chawla NV, Bowyer KW, Hall LO, Kegelmeyer WP (2002).

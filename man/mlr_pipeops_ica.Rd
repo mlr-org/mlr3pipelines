@@ -93,6 +93,7 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
+\dontshow{ if (requireNamespace("fastICA")) \{ }
 library("mlr3")
 
 task = tsk("iris")
@@ -102,6 +103,7 @@ task$data()
 pop$train(list(task))[[1]]$data()
 
 pop$state
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

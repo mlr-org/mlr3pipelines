@@ -1,6 +1,7 @@
 context("PipeOpTargetTrafoScaleRange")
 
 test_that("PipeOpTargetTrafoScaleRange - basic properties", {
+  skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpTargetTrafoScaleRange, list(id = "po"))
 
   po = PipeOpTargetTrafoScaleRange$new()
@@ -48,6 +49,7 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
 })
 
 test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
+  skip_if_not_installed("rpart")
   po = PipeOpTargetTrafoScaleRange$new()
 
   task = mlr_tasks$get("boston_housing_classic")

@@ -14,6 +14,7 @@ test_that("threshold general", {
 
 
 test_that("thresholding works for binary", {
+  skip_if_not_installed("rpart")
   po_lrn = po(lrn("classif.rpart", predict_type = "prob"))
 
   # binary
@@ -63,6 +64,7 @@ test_that("thresholding works for binary", {
 
 
 test_that("thresholding works for multiclass", {
+  skip_if_not_installed("rpart")
   po_lrn = po(lrn("classif.rpart", predict_type = "prob"))
 
   # multiclass
