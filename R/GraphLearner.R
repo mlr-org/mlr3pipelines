@@ -413,98 +413,20 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 }
 
 
-#' @title Set Inner Tuning for a Graph Learner
-#' @description
-#' First, all values specified by `...` are
-#' All [`PipeOpLearner`] and [`PipeOpLearnerCV`]
-#'
-#' @inheritParams mlr3::set_inner_tuning
-#' @param validate (`numeric(1)`, `"inner_valid"`, or `NULL`)\cr
-#'   How to set the `$validate` field of the learner.
-#' @param args (named `list()`)\cr
-#'   Names are ids of the [`GraphLearner`]'s `PipeOps` and values are lists containing arguments passed to the
-#'   respective wrapped [`Learner`].
-#'   By default, the values `.disable` and `validate` are used, but can be overwritten on a per-pipeop basis.
-#'
-#'   When enabling, the inner tuning of the `$base_learner()` is enabled by default.
-#'   When disabling, all inner tuning is disable by default.
 #' @export
-set_inner_tuning.GraphLearner = function(.learner, .disable = FALSE, validate = NA, args = NULL, ...) {
-  if (is.null(args)) {
-    args = set_names(list(list()), base_pipeop(.learner)$id)
-  }
-  all_pipeops = .learner$graph$pipeops
-  lrn_pipeops = learner_wrapping_pipeops(all_pipeops)
-
-  assert_list(args, names = "unique")
-  assert_subset(names(args), ids(lrn_pipeops))
-
-
-  # clean up when something goes wrong
-  prev_pvs = .learner$param_set$values
-  prev_validate = discard(map(lrn_pipeops, function(po) if (exists("validate", po$learner)) po$learner$validate), is.null)
-  on.exit({
-    .learner$param_set$set_values(.values = prev_pvs)
-    iwalk(prev_validate, function(val, poid) .learner$graph$pipeops[[poid]]$learner$validate = val)
-  }, add = TRUE)
-
-  walk(lrn_pipeops[names(args)], function(po) {
-    withCallingHandlers({
-      invoke(set_inner_tuning, .learner = po$learner,
-        .args = insert_named(list(validate = validate, .disable = .disable), args[[po$id]])
+disable_inner_tuning.GraphLearner = function(learner, ids, ...) {
+  if (length(ids)) {
+    walk(learner_wrapping_pipeops(learner$graph$pipeops), function(po) {
+      disable_inner_tuning(
+        learner$graph$pipeops[[po$id]]$learner,
+        ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids],
+        ...
       )
-    }, error = function(e) {
-      e$message = sprintf("Failed to set inner tuning for PipeOp '%s':\n%s", po$id, e$message)
-      stop(e)
-    }, warning = function(w) {
-      w$message = sprintf("Failed to set inner tuning for PipeOp '%s':\n%s", po$id, w$message)
-      warning(w)
-      invokeRestart("muffleWarning")
     })
-  })
-
-  # Now:
-  # Set validate for GraphLearner and verify that the configuration is reasonable
-
-  if (.disable) {
-    .learner$validate = if (identical(validate, NA)) NULL else validate
-    some_pipeops_validate = some(lrn_pipeops, function(po) {
-      if (!exists("validate", po$learner)) {
-        return(FALSE)
-      }
-      !is.null(po$learner$validate)
-    })
-    # if none of the pipeops does validation, we also disable it in the GraphLearner
-    # (unless a value was explicitly specified)
-    if (!some_pipeops_validate && identical(validate, NA)) {
-      .learner$validate = NULL
-    }
-  } else {
-    if (!identical(validate, NA)) {
-      .learner$validate = validate
-    }
-
-    some_pipeops_validate = some(lrn_pipeops, function(po) {
-      if (is.null(get0("validate", po$learner))) return(FALSE)
-      if (is.null(.learner$validate)) {
-        warningf("PipeOp '%s' from GraphLearner '%s' wants a validation set but GraphLearner does not specify one. This likely not what you want.",
-          po$id, .learner$id)
-      }
-      if (!identical(po$learner$validate, "inner_valid")) {
-        warningf("PipeOp '%s' from GraphLearner '%s' specifies validation set other than 'inner_valid'. This is likely not what you want.",
-          po$id, .learner$id)
-      }
-      TRUE
-    })
-
-    if (!is.null(.learner$param_set$values$validate) && !some_pipeops_validate) {
-      warningf("GraphLearner '%s' specifies a validation set, but none of its Learners use it. This is likely not what you want.", .learner$id)
-    }
   }
-
-  on.exit()
-  invisible(.learner)
+  invisible(learner)
 }
+
 
 #' @export
 as_learner.Graph = function(x, clone = FALSE, ...) {
