@@ -62,6 +62,8 @@ The inner tuned parameter values.
 \item \code{inner_valid_scores} :: named \code{list()} or \code{NULL}\cr
 The inner tuned parameter values.
 \code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
+\item \code{validate} :: \code{numeric(1)}, \code{"inner_valid"}, \code{"test"} or \code{NULL}\cr
+How to construct the validation data.
 }
 }
 

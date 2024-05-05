@@ -10,7 +10,7 @@
 \item{learner}{(\code{\link{GraphLearner}})\cr
 The graph learner to configure.}
 
-\item{validate}{(\code{numeric(1)}, \code{"inner_valid"} or \code{NULL})\cr
+\item{validate}{(\code{numeric(1)}, \code{"inner_valid"}, \code{"test"}, or \code{NULL})\cr
 How to set the \verb{$validate} field of the learner.
 If set to \code{NULL} all validation is disabled, both on the graph learner level, but also for all pipeops.}
 
@@ -21,7 +21,8 @@ By default, validation is enabled for the base learner.}
 
 \item{args}{(named \code{list()})\cr
 Rarely needed.
-A named list of lists, specifying additional argments to be passed to \code{\link[=set_validate]{set_validate()}} for the respective pipeops.}
+A named list of lists, specifying additional argments to be passed to \code{\link[=set_validate]{set_validate()}} for the respective learners.
+Names must be a subset of the \code{ids}.}
 
 \item{...}{(any)\cr
 Currently unused.}
@@ -31,11 +32,11 @@ Configure validation for a graph learner.
 
 In a \code{\link{GraphLearner}}, validation can be configured on two levels:
 \enumerate{
-\item On the \code{\link{GraphLearner}} level, which specifies \strong{how} the validation set is constructed.
+\item On the \code{\link{GraphLearner}} level, which specifies \strong{how} the validation set is constructed before entering the graph.
 \item On the level of the \code{\link{Learner}}s that are wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}}, which specifies
 which pipeops actually make use of the validation set.
-All learners wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}} can only set it to \code{NULL} (disable) or
-\code{"inner_valid"} (enable).
+All learners wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}} should in almost all cases either set it
+to \code{NULL} (disable) or \code{"inner_valid"} (enable).
 }
 }
 \examples{
@@ -50,9 +51,9 @@ glrn$validate
 glrn$graph$pipeops$classif.debug$learner$validate
 
 # complex
-glrn = as_learner(ppl("stacking", lrns(c("classif.debug", "classif.featureless")),
+glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
   lrn("classif.debug", id = "final")))
-set_validate(glrn, 0.2, which = c("classif.debug", "final"))
+set_validate(glrn, 0.2, ids = c("classif.debug", "final"))
 glrn$validate
 glrn$graph$pipeops$classif.debug$learner$validate
 glrn$graph$pipeops$final$learner$validate

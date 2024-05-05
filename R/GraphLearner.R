@@ -53,6 +53,8 @@
 #' * `inner_valid_scores` :: named `list()` or `NULL`\cr
 #'   The inner tuned parameter values.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
+#' * `validate` :: `numeric(1)`, `"inner_valid"`, `"test"` or `NULL`\cr
+#'   How to construct the validation data.
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -224,12 +226,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
           }
         }
       ), recursive = FALSE)
-
-      if (is.null(itvs) || !length(itvs)) {
-        return(named_list())
-      }
+      if (is.null(itvs) || !length(itvs)) return(named_list())
       itvs
-
     },
     .extract_inner_valid_scores = function() {
       ivs = unlist(map(
@@ -239,12 +237,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
           }
         }
       ), recursive = FALSE)
-
-      if (is.null(ivs) || !length(ivs)) {
-        return(named_list())
-      }
+      if (is.null(ivs) || !length(ivs)) return(named_list())
       ivs
-
     },
     deep_clone = function(name, value) {
       private$.param_set = NULL
@@ -323,15 +317,15 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' Configure validation for a graph learner.
 #'
 #' In a [`GraphLearner`], validation can be configured on two levels:
-#' 1. On the [`GraphLearner`] level, which specifies **how** the validation set is constructed.
+#' 1. On the [`GraphLearner`] level, which specifies **how** the validation set is constructed before entering the graph.
 #' 2. On the level of the [`Learner`]s that are wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`], which specifies
 #'    which pipeops actually make use of the validation set.
-#'    All learners wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`] can only set it to `NULL` (disable) or
-#'    `"inner_valid"` (enable).
+#'    All learners wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`] should in almost all cases either set it
+#'    to `NULL` (disable) or `"inner_valid"` (enable).
 #'
 #' @param learner ([`GraphLearner`])\cr
 #'   The graph learner to configure.
-#' @param validate (`numeric(1)`, `"inner_valid"` or `NULL`)\cr
+#' @param validate (`numeric(1)`, `"inner_valid"`, `"test"`, or `NULL`)\cr
 #'   How to set the `$validate` field of the learner.
 #'   If set to `NULL` all validation is disabled, both on the graph learner level, but also for all pipeops.
 #' @param ids (`NULL` or `character()`)\cr
@@ -340,7 +334,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #'   By default, validation is enabled for the base learner.
 #' @param args (named `list()`)\cr
 #'   Rarely needed.
-#'   A named list of lists, specifying additional argments to be passed to [`set_validate()`] for the respective pipeops.
+#'   A named list of lists, specifying additional argments to be passed to [`set_validate()`] for the respective learners.
+#'   Names must be a subset of the `ids`.
 #' @param ... (any)\cr
 #'   Currently unused.
 #'
@@ -357,9 +352,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' glrn$graph$pipeops$classif.debug$learner$validate
 #'
 #' # complex
-#' glrn = as_learner(ppl("stacking", lrns(c("classif.debug", "classif.featureless")),
+#' glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
 #'   lrn("classif.debug", id = "final")))
-#' set_validate(glrn, 0.2, which = c("classif.debug", "final"))
+#' set_validate(glrn, 0.2, ids = c("classif.debug", "final"))
 #' glrn$validate
 #' glrn$graph$pipeops$classif.debug$learner$validate
 #' glrn$graph$pipeops$final$learner$validate
@@ -378,7 +373,6 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
     ids = base_pipeop(learner)$id
   } else {
     assert_subset(ids, ids(keep(learner_wrapping_pipeops(learner), function(po) "validation" %in% po$learner$properties)))
-    assert_true(length(ids) > 0)
   }
 
   assert_list(args, types = "list")
@@ -388,8 +382,8 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   prev_validate = learner$validate
 
   on.exit({
-    iwalk(prev_validate_pos, function(val, poid) learner$graph$pipeops[[poid]] = val)
-    learner$valiate = prev_validate
+    iwalk(prev_validate_pos, function(val, poid) learner$graph$pipeops[[poid]]$learner$validate = val)
+    learner$validate = prev_validate
   }, add = TRUE)
 
   learner$validate = validate
@@ -415,15 +409,17 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 
 #' @export
 disable_inner_tuning.GraphLearner = function(learner, ids, ...) {
+  pvs = learner$param_set$values
+  on.exit({learner$param_set$values = pvs}, add = TRUE)
   if (length(ids)) {
     walk(learner_wrapping_pipeops(learner$graph$pipeops), function(po) {
       disable_inner_tuning(
         learner$graph$pipeops[[po$id]]$learner,
-        ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids],
-        ...
+        ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids]
       )
     })
   }
+  on.exit()
   invisible(learner)
 }
 
