@@ -71,7 +71,7 @@ VarargPipeop = R6Class("VarargPipeop",
   public = list(
     initialize = function(id = "vararg", innum = 0, param_vals = list()) {
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = c("...", rep_suffix("input", innum)), train = "*", predict = "*"),
+        input = data.table(name = c("...", mlr3pipelines:::rep_suffix("input", innum)), train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
     }),

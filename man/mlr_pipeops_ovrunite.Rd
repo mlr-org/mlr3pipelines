@@ -74,6 +74,7 @@ Only methods inherited from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library(mlr3)
 task = tsk("iris")
 gr = po("ovrsplit") \%>>\% lrn("classif.rpart") \%>>\% po("ovrunite")
@@ -81,6 +82,7 @@ gr$train(task)
 gr$predict(task)
 gr$pipeops$classif.rpart$learner$predict_type = "prob"
 gr$predict(task)
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

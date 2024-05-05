@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.5.1-9000
+Version: 0.5.2-9000
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -86,7 +86,8 @@ Suggests:
     GenSA,
     methods,
     vtreat,
-    future
+    future,
+    htmlwidgets
 Remotes:
     mlr-org/paradox@feat/inner_valid,
     mlr-org/mlr3@feat/inner_valid
@@ -178,6 +179,7 @@ Collate:
     'operators.R'
     'pipeline_bagging.R'
     'pipeline_branch.R'
+    'pipeline_convert_types.R'
     'pipeline_greplicate.R'
     'pipeline_ovr.R'
     'pipeline_robustify.R'

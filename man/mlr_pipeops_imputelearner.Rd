@@ -88,6 +88,7 @@ Only methods inherited from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 task = tsk("pima")
@@ -111,6 +112,7 @@ po = po("imputelearner",
 new_task = po$train(list(task = task))[[1]]
 new_task$missings()
 
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

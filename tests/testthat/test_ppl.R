@@ -59,6 +59,7 @@ test_that("mlr_pipeops multi-access works", {
 })
 
 test_that("mlr3book authors don't sleepwalk through life", {
+  skip_if_not_installed("rpart")
 
   tasks = tsks(c("breast_cancer", "sonar"))
 

@@ -86,6 +86,7 @@ factor variables, no encoding is performed.
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 \donttest{
 library(mlr3)
 lrn = lrn("regr.rpart")
@@ -93,4 +94,5 @@ task = mlr_tasks$get("boston_housing")
 gr = pipeline_robustify(task, lrn) \%>>\% po("learner", lrn)
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
 }
+\dontshow{ \} }
 }

@@ -32,8 +32,10 @@ Creates a \code{\link{Graph}} from \code{\link{mlr_graphs}} from given ID
 vector of any list and returns a \code{list} of possibly muliple \code{\link{Graph}}s.
 }
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 gr = ppl("bagging", graph = po(lrn("regr.rpart")),
   averager = po("regravg", collect_multiplicity = TRUE))
+\dontshow{ \} }
 }

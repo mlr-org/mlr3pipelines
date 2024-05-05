@@ -1,6 +1,7 @@
 context("PipeOpTargetMutate")
 
 test_that("PipeOpTargetMutate - basic properties", {
+  skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpTargetMutate, list(id = "po"))
 
   po = PipeOpTargetMutate$new("po")
@@ -38,6 +39,7 @@ test_that("PipeOpTargetMutate - basic properties", {
 })
 
 test_that("PipeOpTargetMutate - log base 2 trafo", {
+  skip_if_not_installed("rpart")
  g = Graph$new()
  g$add_pipeop(PipeOpTargetMutate$new("logtrafo",
    param_vals = list(

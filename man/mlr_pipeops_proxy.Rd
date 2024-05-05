@@ -74,6 +74,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 library("mlr3learners")
 
@@ -92,6 +93,7 @@ g$param_set$values$preproc.content = po("pca")
 g$param_set$values$learner.content = lrn("classif.rpart")
 rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
 rr_pca_rpart$aggregate(msr("classif.ce"))
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

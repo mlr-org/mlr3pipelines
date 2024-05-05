@@ -106,6 +106,8 @@ Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}
 }
 
 \examples{
+\dontshow{ if (requireNamespace("NMF")) \{ }
+\dontshow{ if (requireNamespace("MASS")) \{ }
 if (requireNamespace("NMF")) {
 library("mlr3")
 
@@ -117,6 +119,8 @@ pop$train(list(task))[[1]]$data()
 
 pop$state
 }
+\dontshow{ \} }
+\dontshow{ \} }
 }
 \seealso{
 https://mlr-org.com/pipeops.html

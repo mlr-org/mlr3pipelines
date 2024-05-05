@@ -85,6 +85,7 @@ test_that("rename target", {
 })
 
 test_that("update resample and predict_newdata", {
+  skip_if_not_installed("rpart")
   skip_on_cran()
   t = tsk("wine")
   pom = PipeOpUpdateTarget$new(param_vals = list(new_target_name = "type", new_task_type = "classif"))

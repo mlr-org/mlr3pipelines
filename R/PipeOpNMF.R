@@ -88,6 +88,8 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("NMF")) \{ }
+#' \dontshow{ if (requireNamespace("MASS")) \{ }
 #' if (requireNamespace("NMF")) {
 #' library("mlr3")
 #'
@@ -99,6 +101,8 @@
 #'
 #' pop$state
 #' }
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

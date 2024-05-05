@@ -40,6 +40,7 @@ parameters \code{trafo} and \code{inverter} of the \code{param_set} of the resul
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 tt = pipeline_targettrafo(PipeOpLearner$new(LearnerRegrRpart$new()))
@@ -61,4 +62,5 @@ g$add_edge(src_id = "targetmutate", dst_id = "regr.rpart",
   src_channel = 2, dst_channel = 1)
 g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert",
   src_channel = 1, dst_channel = 2)
+\dontshow{ \} }
 }

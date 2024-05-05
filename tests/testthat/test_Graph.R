@@ -1,6 +1,7 @@
 context("Graph")
 
 test_that("linear graph", {
+  skip_if_not_installed("rpart")
   g = Graph$new()
   expect_equal(g$ids(sorted = TRUE), character(0))
 
@@ -78,6 +79,7 @@ test_that("complex graph", {
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"),
     info = paste0("'", lines, "'", collapse = "', '"))
 
+  skip_if_not_installed("igraph")
   pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
@@ -149,6 +151,7 @@ test_that("input / output lists and naming", {
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
 
+  skip_if_not_installed("igraph")
   pdf(file = NULL)  # don't show plot. It is annoying.
   gr$plot()
   dev.off()
@@ -246,6 +249,7 @@ test_that("Empty Graph", {
 
   expect_output(print(Graph$new()), "^Empty Graph\\.$")
 
+  skip_if_not_installed("igraph")
   expect_output(Graph$new()$plot(), "^Empty Graph, not plotting\\.$")
 
   expect_equal(gunion(list()), Graph$new())
@@ -377,6 +381,7 @@ test_that("Graph with vararg input", {
 })
 
 test_that("single pipeop plot", {
+  skip_if_not_installed("igraph")
   imp_num = po("imputehist")
   graph = as_graph(imp_num)
 

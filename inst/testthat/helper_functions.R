@@ -233,10 +233,10 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_equal(po$innum, 1)
   expect_equal(po$outnum, 1)
 
-  expect_true(are_types_compatible(po$input$train, "Task"))
-  expect_true(are_types_compatible(po$input$predict, "Task"))
-  expect_true(are_types_compatible(po$output$train, "Task"))
-  expect_true(are_types_compatible(po$output$predict, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$input$train, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$input$predict, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$output$train, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$output$predict, "Task"))
 
   expect_error(po$train(list(NULL)), "class.*Task.*but has class")
 
