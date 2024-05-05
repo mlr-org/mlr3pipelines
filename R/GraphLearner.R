@@ -54,7 +54,9 @@
 #'   The inner tuned parameter values.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
 #' * `validate` :: `numeric(1)`, `"inner_valid"`, `"test"` or `NULL`\cr
-#'   How to construct the validation data.
+#'   How to construct the validation data. This also has to be configured in the individual learners wrapped by
+#'   `PipeOpLearner`, see [`set_validate.GraphLearner`] on how to configure this.
+#'
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -108,19 +110,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
-
-      private$.can_validate = some(
-        keep(graph$pipeops, function(x) inherits(x, "PipeOpLearner") || inherits(x, "PipeOpLearnerCV")),
-        function(po) "validation" %in% po$learner$properties
-      )
-
-      inner_tuning = some(
-        keep(graph$pipeops, function(x) inherits(x, "PipeOpLearner") || inherits(x, "PipeOpLearnerCV")),
-        function(po) "inner_tuning" %in% po$learner$properties
-      )
+      private$.can_validate = some(learner_wrapping_pipeops(graph), function(po) "validation" %in% po$learner$properties)
+      private$.can_inner_tuning = some(learner_wrapping_pipeops(graph), function(po) "inner_tuning" %in% po$learner$properties)
 
       properties = setdiff(mlr_reflections$learner_properties[[task_type]],
-        c("validation", "inner_tuning")[!c(private$.can_validate, inner_tuning)])
+        c("validation", "inner_tuning")[!c(private$.can_validate, private$.can_inner_tuning)])
 
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
@@ -129,8 +123,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         properties = properties,
         man = "mlr3pipelines::GraphLearner"
       )
-
-      private$.param_set = NULL
 
       if (length(param_vals)) {
         private$.graph$param_set$values = insert_named(private$.graph$param_set$values, param_vals)
@@ -220,7 +212,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .graph = NULL,
     .validate = NULL,
     .can_validate = NULL,
+    .can_inner_tuning = NULL,
     .extract_inner_tuned_values = function() {
+      if (!private$.can_validate) return(NULL)
       itvs = unlist(map(
         learner_wrapping_pipeops(self$graph_model), function(po) {
           if (exists("inner_tuned_values", po$learner)) {
@@ -232,6 +226,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       itvs
     },
     .extract_inner_valid_scores = function() {
+      if (!private$.can_inner_tuning) return(NULL)
       ivs = unlist(map(
         learner_wrapping_pipeops(self$graph_model), function(po) {
           if (exists("inner_valid_scores", po$learner)) {
@@ -256,11 +251,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
     .train = function(task) {
       if (!is.null(get0("validate", self))) {
-        some_pipeops_validate = map_lgl(
-          keep(self$graph$pipeops, function(po) inherits(po, "PipeOpLearner") || inherits(po, "PipeOpLearnerCV")),
-          function(po) !is.null(get0("validate", po$learner))
-        )
-
+        some_pipeops_validate = some(learner_wrapping_pipeops(self), function(po) !is.null(get0("validate", po$learner)))
         if (!some_pipeops_validate) {
           lg$warn("GraphLearner '%s' specifies a validation set, but none of its Learners use it.", self$id)
         }
@@ -321,7 +312,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' In a [`GraphLearner`], validation can be configured on two levels:
 #' 1. On the [`GraphLearner`] level, which specifies **how** the validation set is constructed before entering the graph.
 #' 2. On the level of the [`Learner`]s that are wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`], which specifies
-#'    which pipeops actually make use of the validation set.
+#'    which pipeops actually make use of the validation data.
 #'    All learners wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`] should in almost all cases either set it
 #'    to `NULL` (disable) or `"inner_valid"` (enable).
 #'
@@ -364,9 +355,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   if (is.null(validate)) {
     learner$validate = NULL
     walk(learner_wrapping_pipeops(learner), function(po) {
-      if (exists("validate", po$learner)) {
-        po$learner$validate = NULL
-      }
+      po$learner$validate = NULL
     })
     return(invisible(learner))
   }
@@ -380,7 +369,9 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   assert_list(args, types = "list")
   assert_subset(names(args), ids)
 
-  prev_validate_pos = discard(map(learner_wrapping_pipeops(learner), function(po) get0("validate", po$learner)), is.null)
+  prev_validate_pos = discard(map(learner_wrapping_pipeops(learner), function(po) get0("validate", po$learner, ifnotfound = NA)),
+    function(x) identical(x, NA))
+
   prev_validate = learner$validate
 
   on.exit({
@@ -391,9 +382,9 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   learner$validate = validate
 
   walk(ids, function(poid) {
-    # learner might be another GraphLearner / AutoTuner
+    # learner might be another GraphLearner / AutoTuner so we call into set_validate() again
     withCallingHandlers({
-      invoke(set_validate, learner = learner$graph$pipeops[[poid]]$learner, validate = "inner_valid", .args = args[[poid]])
+      invoke(set_validate, learner = learner$graph$pipeops[[poid]]$learner, .args = insert_named(list(validate = "inner_valid"), args[[poid]]))
     }, error = function(e) {
       e$message = sprintf("Failed to set validate for PipeOp '%s':\n%s", poid, e$message)
       stop(e)
@@ -414,11 +405,8 @@ disable_inner_tuning.GraphLearner = function(learner, ids, ...) {
   pvs = learner$param_set$values
   on.exit({learner$param_set$values = pvs}, add = TRUE)
   if (length(ids)) {
-    walk(learner_wrapping_pipeops(learner$graph$pipeops), function(po) {
-      disable_inner_tuning(
-        learner$graph$pipeops[[po$id]]$learner,
-        ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids]
-      )
+    walk(learner_wrapping_pipeops(learner), function(po) {
+      disable_inner_tuning(po$learner, ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids])
     })
   }
   on.exit()

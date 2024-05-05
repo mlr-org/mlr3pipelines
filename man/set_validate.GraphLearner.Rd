@@ -34,7 +34,7 @@ In a \code{\link{GraphLearner}}, validation can be configured on two levels:
 \enumerate{
 \item On the \code{\link{GraphLearner}} level, which specifies \strong{how} the validation set is constructed before entering the graph.
 \item On the level of the \code{\link{Learner}}s that are wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}}, which specifies
-which pipeops actually make use of the validation set.
+which pipeops actually make use of the validation data.
 All learners wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}} should in almost all cases either set it
 to \code{NULL} (disable) or \code{"inner_valid"} (enable).
 }

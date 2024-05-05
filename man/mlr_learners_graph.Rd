@@ -63,7 +63,8 @@ The inner tuned parameter values.
 The inner tuned parameter values.
 \code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
 \item \code{validate} :: \code{numeric(1)}, \code{"inner_valid"}, \code{"test"} or \code{NULL}\cr
-How to construct the validation data.
+How to construct the validation data. This also has to be configured in the individual learners wrapped by
+\code{PipeOpLearner}, see \code{\link{set_validate.GraphLearner}} on how to configure this.
 }
 }
 
