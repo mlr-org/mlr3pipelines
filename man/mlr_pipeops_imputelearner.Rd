@@ -52,6 +52,8 @@ The \verb{$state} is a named \code{list} with the \verb{$state} elements inherit
 The \verb{$state$models} is a named \code{list} of \code{models} created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function
 for each column. If a column consists of missing values only during training, the \code{model} is \code{0} or the levels of the
 feature; these are used for sampling during prediction.
+
+This state is given the class \code{"pipeop_impute_learner_state"}.
 }
 
 \section{Parameters}{

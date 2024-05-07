@@ -61,6 +61,8 @@
 #' * `predict_time` :: `NULL` | `numeric(1)`
 #'   Prediction time, in seconds.
 #'
+#' This state is given the class `"pipeop_learner_cv_state"`.
+#'
 #' @section Parameters:
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
 #' Besides that, parameters introduced are:
@@ -144,8 +146,14 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
       super$initialize(id, alist(resampling = private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
+    },
+    train = function(inputs) {
+      outputs = super$train(inputs)
+      self$state = multiplicity_recurse(self$state, function(state) {
+          structure(state, class = c("pipeop_learner_cv_state", class(state)))
+      })
+      return(outputs)
     }
-
   ),
   active = list(
     learner = function(val) {
@@ -223,5 +231,30 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     .additional_phash_input = function() private$.learner$phash
   )
 )
+
+#' @export
+marshal_model.pipeop_learner_cv_state = function(model, inplace = FALSE, ...) {
+  # Note that a Learner state contains other reference objects, but we don't clone them here, even when inplace
+  # is FALSE. For our use-case this is just not necessary and would cause unnecessary overhead in the mlr3
+  # workhorse function
+  model$model = marshal_model(model$model, inplace = inplace)
+  # only wrap this in a marshaled class if the model was actually marshaled above
+  # (the default marshal method does nothing)
+  if (is_marshaled_model(model$model)) {
+    model = structure(
+      list(marshaled = model, packages = "mlr3pipelines"),
+      class = c(paste0(class(model), "_marshaled"), "marshaled")
+    )
+  }
+  model
+}
+
+#' @export
+unmarshal_model.pipeop_learner_cv_state_marshaled = function(model, inplace = FALSE, ...) {
+  state_marshaled = model$marshaled
+  state_marshaled$model = unmarshal_model(state_marshaled$model, inplace = inplace)
+  state_marshaled
+}
+
 
 mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ps()))$new()))

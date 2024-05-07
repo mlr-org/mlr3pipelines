@@ -56,7 +56,16 @@
 #' * `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`\cr
 #'   How to construct the validation data. This also has to be configured in the individual learners wrapped by
 #'   `PipeOpLearner`, see [`set_validate.GraphLearner`] on how to configure this.
+#' * `marshaled` :: `logical(1)`\cr
+#'   Whether the learner is marshaled.
 #'
+#' @section Methods:
+#' * `marshal(...)`\cr
+#'   (any) -> `self`\cr
+#'   Marshal the model.
+#' * `unmarshal(...)`\cr
+#'   (any) -> `self`\cr
+#'   Unmarshal the model.
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -150,6 +159,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
       }
       learner_model$base_learner(recursive - 1)
+    },
+    marshal = function(...) {
+      learner_marshal(.learner = self, ...)
+    },
+    unmarshal = function(...) {
+      learner_unmarshal(.learner = self, ...)
     }
   ),
   active = list(
@@ -169,7 +184,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         private$.validate = assert_validate(rhs)
       }
       private$.validate
-
+    },
+    marshaled = function() {
+      learner_marshaled(self)
     },
     hash = function() {
       digest(list(class(self), self$id, self$graph$hash, private$.predict_type, private$.validate,
@@ -260,6 +277,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       on.exit({self$graph$state = NULL})
       self$graph$train(task)
       state = self$graph$state
+      class(state) = c("graph_learner_model", class(state))
       state
     },
     .predict = function(task) {
@@ -413,6 +431,27 @@ disable_internal_tuning.GraphLearner = function(learner, ids, ...) {
   invisible(learner)
 }
 
+
+#' @export
+marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
+  xm = map(.x = model, .f = marshal_model, inplace = inplace, ...)
+  # if none of the states required any marshaling we return the model as-is
+  if (!some(xm, is_marshaled_model)) return(model)
+
+  structure(list(
+    marshaled = xm,
+    packages = "mlr3pipelines"
+  ), class = c("graph_learner_model_marshaled", "list_marshaled", "marshaled"))
+}
+
+#' @export
+unmarshal_model.graph_learner_model_marshaled = function(model, inplace = FALSE, ...) {
+  # need to re-create the class as it gets lost during marshaling
+  structure(
+    map(.x = model$marshaled, .f = unmarshal_model, inplace = inplace, ...),
+    class = gsub(x = head(class(model), n = -1), pattern = "_marshaled$", replacement = "")
+  )
+}
 
 #' @export
 as_learner.Graph = function(x, clone = FALSE, ...) {

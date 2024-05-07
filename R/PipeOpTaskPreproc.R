@@ -187,8 +187,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = task_type, predict = task_type),
-        packages = packages, tags = c(tags, "data transform")
-      )
+        packages = packages, tags = c(tags, "data transform"))
     }
   ),
   active = list(

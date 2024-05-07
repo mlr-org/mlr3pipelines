@@ -1,6 +1,5 @@
 context("ppl - pipeline_bagging")
 
-
 test_that("Bagging Pipeline", {
   skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long

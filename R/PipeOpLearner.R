@@ -94,8 +94,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
-        tags = "learner", packages = learner$packages
-      )
+        tags = "learner", packages = learner$packages)
     }
   ),
   active = list(

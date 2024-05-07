@@ -44,6 +44,8 @@
 #' for each column. If a column consists of missing values only during training, the `model` is `0` or the levels of the
 #' feature; these are used for sampling during prediction.
 #'
+#' This state is given the class `"pipeop_impute_learner_state"`.
+#'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], in addition to the parameters of the [`Learner`][mlr3::Learner]
 #' used for imputation.
@@ -116,6 +118,13 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       )
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         whole_task_dependent = TRUE, feature_types = feature_types)
+    },
+    train = function(inputs) {
+      outputs = super$train(inputs)
+      self$state = multiplicity_recurse(self$state, function(state) {
+        structure(state, class = c("pipeop_impute_learner_state", class(state)))
+      })
+      return(outputs)
     }
   ),
   active = list(
@@ -205,4 +214,26 @@ mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(R6Class("Learner", pu
 # See mlr-org/mlr#470
 convert_to_task = function(id = "imputing", data, target, task_type, ...) {
   get(mlr_reflections$task_types[task_type, mult = "first"]$task)$new(id = id, backend = data, target = target, ...)
+}
+
+#' @export
+marshal_model.pipeop_impute_learner_state = function(model, inplace = FALSE, ...) {
+  prev_class = class(model)
+  model$model = map(model$model, marshal_model, inplace = inplace, ...)
+
+  if (!some(model$model, is_marshaled_model)) {
+    return(model)
+  }
+
+  structure(
+    list(marshaled = model, packages = "mlr3pipelines"),
+    class = c(paste0(prev_class, "_marshaled"), "marshaled")
+  )
+}
+
+#' @export
+unmarshal_model.pipeop_impute_learner_state_marshaled = function(model, inplace = FALSE, ...) {
+  state = model$marshaled
+  state$model = map(state$model, unmarshal_model, inplace = inplace, ...)
+  return(state)
 }

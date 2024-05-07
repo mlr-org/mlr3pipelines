@@ -6,6 +6,8 @@
 * Minor documentation fixes.
 * Test helpers are now available in `inst/`. These are considered experimental and unstable.
 
+* Added marshaling support to `GraphLearner`
+
 # mlr3pipelines 0.5.1
 
 * Changed the ID of `PipeOpFeatureUnion` used in `ppl("robustify")` and `ppl("stacking")`.

@@ -612,7 +612,8 @@ test_that("internal_tuned_values", {
   expect_false("internal_tuning" %in% glrn1$properties)
   expect_equal(glrn1$internal_tuned_values, NULL)
 
-  # learner with internal tuning
+  # learner wQ
+  # ith internal tuning
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
   expect_true("internal_tuning" %in% glrn2$properties)
   expect_equal(glrn2$internal_tuned_values, NULL)
@@ -660,4 +661,35 @@ test_that("set_validate", {
   expect_equal(glrn2$graph$pipeops$polearner$learner$validate, "predefined")
   expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$final$learner$validate, "predefined")
   expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate, NULL)
+})
+
+test_that("marshal", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  p1 = glrn$predict(task)
+  glrn$marshal()
+  expect_true(glrn$marshaled)
+  expect_true(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
+  glrn$unmarshal()
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
+  expect_class(glrn$model, "graph_learner_model")
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug$model))
+
+  p2 = glrn$predict(task)
+  expect_equal(p1$response, p2$response)
+
+  # checks that it is marshalable
+  glrn$train(task)
+  expect_learner(glrn, task)
+})
+
+test_that("marshal has no effect when nothing needed marshaling", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.rpart")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_class(glrn$marshal()$model, "graph_learner_model")
+  expect_class(glrn$unmarshal()$model, "graph_learner_model")
+  expect_learner(glrn, task = task)
 })

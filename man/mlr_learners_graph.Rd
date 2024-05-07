@@ -65,6 +65,20 @@ The internal tuned parameter values.
 \item \code{validate} :: \code{numeric(1)}, \code{"predefined"}, \code{"test"} or \code{NULL}\cr
 How to construct the validation data. This also has to be configured in the individual learners wrapped by
 \code{PipeOpLearner}, see \code{\link{set_validate.GraphLearner}} on how to configure this.
+\item \code{marshaled} :: \code{logical(1)}\cr
+Whether the learner is marshaled.
+}
+}
+
+\section{Methods}{
+
+\itemize{
+\item \code{marshal(...)}\cr
+(any) -> \code{self}\cr
+Marshal the model.
+\item \code{unmarshal(...)}\cr
+(any) -> \code{self}\cr
+Unmarshal the model.
 }
 }
 
