@@ -59,6 +59,7 @@
 #' @examples
 #' \dontshow{ if (requireNamespace("bbotk")) \{ }
 #' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' \dontshow{ if (requireNamespace("GenSA")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -69,6 +70,7 @@
 #' pop$train(task)
 #'
 #' pop$state
+#' \dontshow{ \} }
 #' \dontshow{ \} }
 #' \dontshow{ \} }
 #' @family PipeOps
