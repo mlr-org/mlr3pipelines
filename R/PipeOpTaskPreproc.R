@@ -221,10 +221,10 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$outtasklayout = copy(intask$feature_types)
       self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
 
-      if (!is.null(intask$inner_valid_task)) {
+      if (!is.null(intask$internal_valid_task)) {
         # we call into .predict() and not .predict_task() to not put the burden
         # of subsetting the features etc. on the PipeOp overwriting .predict_task
-        intask$inner_valid_task = private$.predict(list(intask$inner_valid_task))[[1L]]
+        intask$internal_valid_task = private$.predict(list(intask$internal_valid_task))[[1L]]
       }
 
       if (do_subset) {

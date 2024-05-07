@@ -55,9 +55,9 @@ test_that("PipeOpImpute", {
     private = list(
       .get_state = function(task) {
         graph = self$build_graph()
-        inner_valid_task = task$inner_valid_task
-        on.exit({task$inner_valid_task = inner_valid_task})
-        task$inner_valid_task = NULL
+        internal_valid_task = task$internal_valid_task
+        on.exit({task$internal_valid_task = internal_valid_task})
+        task$internal_valid_task = NULL
         graph$train(task)
         list(gs = graph)
       },
@@ -409,6 +409,6 @@ test_that("impute, test rows and affect_columns", {
   task = tsk("pima")
   task$divide(1:30)
   outtrain = po_impute$train(list(task))[[1L]]
-  outpredict = po_impute$predict(list(task$inner_valid_task))[[1L]]
-  expect_true(isTRUE(all.equal(outtrain$inner_valid_task$data(), outpredict$data())))
+  outpredict = po_impute$predict(list(task$internal_valid_task))[[1L]]
+  expect_true(isTRUE(all.equal(outtrain$internal_valid_task$data(), outpredict$data())))
 })

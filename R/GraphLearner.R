@@ -47,13 +47,13 @@
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
 #' * `graph_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Graph`] that is being wrapped. This [`Graph`] contains a trained state after `$train()`. Read-only.
-#' * `inner_tuned_values` :: named `list()` or `NULL`\cr
-#'   The inner tuned parameter values.
-#'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports inner tuning.
-#' * `inner_valid_scores` :: named `list()` or `NULL`\cr
-#'   The inner tuned parameter values.
+#' * `internal_tuned_values` :: named `list()` or `NULL`\cr
+#'   The internal tuned parameter values.
+#'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal tuning.
+#' * `internal_valid_scores` :: named `list()` or `NULL`\cr
+#'   The internal tuned parameter values.
 #'   `NULL` is returned if the learner is not trained or none of the wrapped learners supports internal validation.
-#' * `validate` :: `numeric(1)`, `"inner_valid"`, `"test"` or `NULL`\cr
+#' * `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`\cr
 #'   How to construct the validation data. This also has to be configured in the individual learners wrapped by
 #'   `PipeOpLearner`, see [`set_validate.GraphLearner`] on how to configure this.
 #'
@@ -111,10 +111,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_subset(task_type, mlr_reflections$task_types$type)
 
       private$.can_validate = some(learner_wrapping_pipeops(graph), function(po) "validation" %in% po$learner$properties)
-      private$.can_inner_tuning = some(learner_wrapping_pipeops(graph), function(po) "inner_tuning" %in% po$learner$properties)
+      private$.can_internal_tuning = some(learner_wrapping_pipeops(graph), function(po) "internal_tuning" %in% po$learner$properties)
 
       properties = setdiff(mlr_reflections$learner_properties[[task_type]],
-        c("validation", "inner_tuning")[!c(private$.can_validate, private$.can_inner_tuning)])
+        c("validation", "internal_tuning")[!c(private$.can_validate, private$.can_internal_tuning)])
 
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
@@ -153,13 +153,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     }
   ),
   active = list(
-    inner_valid_scores = function(rhs) {
+    internal_valid_scores = function(rhs) {
       assert_ro_binding(rhs)
-      self$state$inner_valid_scores
+      self$state$internal_valid_scores
     },
-    inner_tuned_values = function(rhs) {
+    internal_tuned_values = function(rhs) {
       assert_ro_binding(rhs)
-      self$state$inner_tuned_values
+      self$state$internal_tuned_values
     },
     validate = function(rhs) {
       if (!missing(rhs)) {
@@ -212,25 +212,25 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .graph = NULL,
     .validate = NULL,
     .can_validate = NULL,
-    .can_inner_tuning = NULL,
-    .extract_inner_tuned_values = function() {
+    .can_internal_tuning = NULL,
+    .extract_internal_tuned_values = function() {
       if (!private$.can_validate) return(NULL)
       itvs = unlist(map(
         learner_wrapping_pipeops(self$graph_model), function(po) {
-          if (exists("inner_tuned_values", po$learner)) {
-            po$learner_model$inner_tuned_values
+          if (exists("internal_tuned_values", po$learner)) {
+            po$learner_model$internal_tuned_values
           }
         }
       ), recursive = FALSE)
       if (is.null(itvs) || !length(itvs)) return(named_list())
       itvs
     },
-    .extract_inner_valid_scores = function() {
-      if (!private$.can_inner_tuning) return(NULL)
+    .extract_internal_valid_scores = function() {
+      if (!private$.can_internal_tuning) return(NULL)
       ivs = unlist(map(
         learner_wrapping_pipeops(self$graph_model), function(po) {
-          if (exists("inner_valid_scores", po$learner)) {
-            po$learner_model$inner_valid_scores
+          if (exists("internal_valid_scores", po$learner)) {
+            po$learner_model$internal_valid_scores
           }
         }
       ), recursive = FALSE)
@@ -314,11 +314,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' 2. On the level of the [`Learner`]s that are wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`], which specifies
 #'    which pipeops actually make use of the validation data.
 #'    All learners wrapped by [`PipeOpLearner`] and [`PipeOpLearnerCV`] should in almost all cases either set it
-#'    to `NULL` (disable) or `"inner_valid"` (enable).
+#'    to `NULL` (disable) or `"predefined"` (enable).
 #'
 #' @param learner ([`GraphLearner`])\cr
 #'   The graph learner to configure.
-#' @param validate (`numeric(1)`, `"inner_valid"`, `"test"`, or `NULL`)\cr
+#' @param validate (`numeric(1)`, `"predefined"`, `"test"`, or `NULL`)\cr
 #'   How to set the `$validate` field of the learner.
 #'   If set to `NULL` all validation is disabled, both on the graph learner level, but also for all pipeops.
 #' @param ids (`NULL` or `character()`)\cr
@@ -384,7 +384,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   walk(ids, function(poid) {
     # learner might be another GraphLearner / AutoTuner so we call into set_validate() again
     withCallingHandlers({
-      invoke(set_validate, learner = learner$graph$pipeops[[poid]]$learner, .args = insert_named(list(validate = "inner_valid"), args[[poid]]))
+      invoke(set_validate, learner = learner$graph$pipeops[[poid]]$learner, .args = insert_named(list(validate = "predefined"), args[[poid]]))
     }, error = function(e) {
       e$message = sprintf("Failed to set validate for PipeOp '%s':\n%s", poid, e$message)
       stop(e)
@@ -401,12 +401,12 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 
 
 #' @export
-disable_inner_tuning.GraphLearner = function(learner, ids, ...) {
+disable_internal_tuning.GraphLearner = function(learner, ids, ...) {
   pvs = learner$param_set$values
   on.exit({learner$param_set$values = pvs}, add = TRUE)
   if (length(ids)) {
     walk(learner_wrapping_pipeops(learner), function(po) {
-      disable_inner_tuning(po$learner, ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids])
+      disable_internal_tuning(po$learner, ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids])
     })
   }
   on.exit()

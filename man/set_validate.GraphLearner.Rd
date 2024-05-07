@@ -10,7 +10,7 @@
 \item{learner}{(\code{\link{GraphLearner}})\cr
 The graph learner to configure.}
 
-\item{validate}{(\code{numeric(1)}, \code{"inner_valid"}, \code{"test"}, or \code{NULL})\cr
+\item{validate}{(\code{numeric(1)}, \code{"predefined"}, \code{"test"}, or \code{NULL})\cr
 How to set the \verb{$validate} field of the learner.
 If set to \code{NULL} all validation is disabled, both on the graph learner level, but also for all pipeops.}
 
@@ -36,7 +36,7 @@ In a \code{\link{GraphLearner}}, validation can be configured on two levels:
 \item On the level of the \code{\link{Learner}}s that are wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}}, which specifies
 which pipeops actually make use of the validation data.
 All learners wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}} should in almost all cases either set it
-to \code{NULL} (disable) or \code{"inner_valid"} (enable).
+to \code{NULL} (disable) or \code{"predefined"} (enable).
 }
 }
 \examples{

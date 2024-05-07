@@ -56,13 +56,13 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
 \item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
-\item \code{inner_tuned_values} :: named \code{list()} or \code{NULL}\cr
-The inner tuned parameter values.
-\code{NULL} is returned if the learner is not trained or none of the wrapped learners supports inner tuning.
-\item \code{inner_valid_scores} :: named \code{list()} or \code{NULL}\cr
-The inner tuned parameter values.
+\item \code{internal_tuned_values} :: named \code{list()} or \code{NULL}\cr
+The internal tuned parameter values.
+\code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal tuning.
+\item \code{internal_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The internal tuned parameter values.
 \code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
-\item \code{validate} :: \code{numeric(1)}, \code{"inner_valid"}, \code{"test"} or \code{NULL}\cr
+\item \code{validate} :: \code{numeric(1)}, \code{"predefined"}, \code{"test"} or \code{NULL}\cr
 How to construct the validation data. This also has to be configured in the individual learners wrapped by
 \code{PipeOpLearner}, see \code{\link{set_validate.GraphLearner}} on how to configure this.
 }

@@ -578,78 +578,78 @@ test_that("GraphLearner hashes", {
 
 })
 
-test_that("validation, inner_valid_scores", {
+test_that("validation, internal_valid_scores", {
   # None of the Learners can do validation -> NULL
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
   expect_false("validation" %in% glrn1$properties)
-  expect_equal(glrn1$inner_valid_scores, NULL)
+  expect_equal(glrn1$internal_valid_scores, NULL)
 
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
   expect_true("validation" %in% glrn2$properties)
   set_validate(glrn2, 0.2)
   expect_equal(glrn2$validate, 0.2)
-  expect_equal(glrn2$graph$pipeops$classif.debug$learner$validate, "inner_valid")
+  expect_equal(glrn2$graph$pipeops$classif.debug$learner$validate, "predefined")
   glrn2$train(tsk("iris"))
-  expect_list(glrn2$inner_valid_scores, types = "numeric")
-  expect_equal(names(glrn2$inner_valid_scores), "classif.debug.acc")
+  expect_list(glrn2$internal_valid_scores, types = "numeric")
+  expect_equal(names(glrn2$internal_valid_scores), "classif.debug.acc")
 
   set_validate(glrn2, NULL)
   glrn2$train(tsk("iris"))
-  expect_true(is.null(glrn2$inner_valid_scores))
+  expect_true(is.null(glrn2$internal_valid_scores))
 
-  # No validation set specified --> No inner_valid_scores
+  # No validation set specified --> No internal_valid_scores
   expect_equal(
-    as_learner(as_graph(lrn("classif.debug")))$train(tsk("iris"))$inner_valid_scores,
+    as_learner(as_graph(lrn("classif.debug")))$train(tsk("iris"))$internal_valid_scores,
     NULL
   )
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
 })
 
-test_that("inner_tuned_values", {
-  # no inner tuning support -> NULL
+test_that("internal_tuned_values", {
+  # no internal tuning support -> NULL
   task = tsk("iris")
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(task)
-  expect_false("inner_tuning" %in% glrn1$properties)
-  expect_equal(glrn1$inner_tuned_values, NULL)
+  expect_false("internal_tuning" %in% glrn1$properties)
+  expect_equal(glrn1$internal_tuned_values, NULL)
 
-  # learner with inner tuning
+  # learner with internal tuning
   glrn2 = as_learner(as_graph(lrn("classif.debug")))
-  expect_true("inner_tuning" %in% glrn2$properties)
-  expect_equal(glrn2$inner_tuned_values, NULL)
+  expect_true("internal_tuning" %in% glrn2$properties)
+  expect_equal(glrn2$internal_tuned_values, NULL)
   glrn2$train(task)
-  expect_equal(glrn2$inner_tuned_values, named_list())
+  expect_equal(glrn2$internal_tuned_values, named_list())
   glrn2$param_set$set_values(classif.debug.early_stopping = TRUE, classif.debug.iter = 1000)
   set_validate(glrn2, 0.2)
   glrn2$train(task)
-  expect_equal(names(glrn2$inner_tuned_values), "classif.debug.iter")
+  expect_equal(names(glrn2$internal_tuned_values), "classif.debug.iter")
 })
 
-test_that("disable_inner_tuning", {
+test_that("disable_internal_tuning", {
   glrn = as_learner(as_pipeop(lrn("classif.debug", iter = 100, early_stopping = TRUE)))
-  disable_inner_tuning(glrn, "classif.debug.iter")
+  disable_internal_tuning(glrn, "classif.debug.iter")
   expect_false(glrn$graph$pipeops$classif.debug$param_set$values$early_stopping)
-  expect_error(disable_inner_tuning(glrn, "classif.debug.abc"), "subset of")
+  expect_error(disable_internal_tuning(glrn, "classif.debug.abc"), "subset of")
 })
 
 test_that("set_validate", {
   glrn = as_learner(as_pipeop(lrn("classif.debug", validate = 0.3)))
   set_validate(glrn, "test")
   expect_equal(glrn$validate, "test")
-  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "inner_valid")
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
   set_validate(glrn, NULL)
   expect_equal(glrn$validate, NULL)
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, NULL)
   set_validate(glrn, 0.2, ids = "classif.debug")
   expect_equal(glrn$validate, 0.2)
-  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "inner_valid")
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
 
 
   glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
     lrn("classif.debug", id = "final")))
   set_validate(glrn, 0.3, ids = c("classif.debug", "final"))
   expect_equal(glrn$validate, 0.3)
-  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "inner_valid")
-  expect_equal(glrn$graph$pipeops$final$learner$validate, "inner_valid")
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
+  expect_equal(glrn$graph$pipeops$final$learner$validate, "predefined")
 
 
   glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
@@ -657,7 +657,7 @@ test_that("set_validate", {
   glrn2 = as_learner(po("learner", glrn, id = "polearner"))
   set_validate(glrn2, validate = 0.25, ids = "polearner", args = list(polearner = list(ids = "final")))
   expect_equal(glrn2$validate, 0.25)
-  expect_equal(glrn2$graph$pipeops$polearner$learner$validate, "inner_valid")
-  expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$final$learner$validate, "inner_valid")
+  expect_equal(glrn2$graph$pipeops$polearner$learner$validate, "predefined")
+  expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$final$learner$validate, "predefined")
   expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate, NULL)
 })
