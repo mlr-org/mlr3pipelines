@@ -80,6 +80,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 \examples{
 \dontshow{ if (requireNamespace("bbotk")) \{ }
 \dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{ if (requireNamespace("GenSA")) \{ }
 library("mlr3")
 
 task = tsk("iris")
@@ -90,6 +91,7 @@ task$data()
 pop$train(task)
 
 pop$state
+\dontshow{ \} }
 \dontshow{ \} }
 \dontshow{ \} }
 }
