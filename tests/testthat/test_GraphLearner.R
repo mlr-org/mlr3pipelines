@@ -626,7 +626,7 @@ test_that("internal_tuned_values", {
 })
 
 test_that("assert_internal_tuning", {
-  glrn = as_learner(as_pipeop(lrn("classif.debug", iter = 100, early_stopping = TRUE)))
+  glrn = as_learner(as_pipeop(lrn("classif.debug", iter = 100, early_stopping = TRUE, validate = 0.2)))
   expect_learner(assert_internal_tuning(glrn, "classif.debug.iter"))
   glrn$param_set$set_values(classif.debug.early_stopping = FALSE)
   expect_error(assert_internal_tuning(glrn, "classif.debug.iter"))
