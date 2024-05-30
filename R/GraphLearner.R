@@ -419,15 +419,12 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 
 
 #' @export
-disable_internal_tuning.GraphLearner = function(learner, ids, ...) {
-  pvs = learner$param_set$values
-  on.exit({learner$param_set$values = pvs}, add = TRUE)
+assert_internal_tuning.GraphLearner = function(learner, ids, ...) {
   if (length(ids)) {
     walk(learner_wrapping_pipeops(learner), function(po) {
-      disable_internal_tuning(po$learner, ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids])
+      assert_internal_tuning(po$learner, ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids])
     })
   }
-  on.exit()
   invisible(learner)
 }
 
