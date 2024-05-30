@@ -272,6 +272,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (!some_pipeops_validate) {
           lg$warn("GraphLearner '%s' specifies a validation set, but none of its Learners use it.", self$id)
         }
+      } else {
+        # otherwise the pipeops will preprocess this unnecessarily
+        if (!is.null(task$internal_valid_task)) {
+          prev_itv = task$internal_valid_task
+          on.exit({task$internal_valid_task = prev_itv}, add = TRUE)
+          task$internal_valid_task = NULL
+        }
       }
 
       on.exit({self$graph$state = NULL})
