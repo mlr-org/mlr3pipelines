@@ -424,18 +424,6 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   invisible(learner)
 }
 
-
-#' @export
-assert_internal_tuning.GraphLearner = function(learner, ids, ...) {
-  if (length(ids)) {
-    walk(learner_wrapping_pipeops(learner), function(po) {
-      assert_internal_tuning(po$learner, ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids])
-    })
-  }
-  invisible(learner)
-}
-
-
 #' @export
 marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
   xm = map(.x = model, .f = marshal_model, inplace = inplace, ...)
