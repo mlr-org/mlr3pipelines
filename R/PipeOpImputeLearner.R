@@ -118,13 +118,6 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       )
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         whole_task_dependent = TRUE, feature_types = feature_types)
-    },
-    train = function(inputs) {
-      outputs = super$train(inputs)
-      self$state = multiplicity_recurse(self$state, function(state) {
-        structure(state, class = c("pipeop_impute_learner_state", class(state)))
-      })
-      return(outputs)
     }
   ),
   active = list(
@@ -151,6 +144,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   ),
   private = list(
     .learner = NULL,
+    .state_class = "pipeop_impute_learner_state",
 
     .train_imputer = function(feature, type, context) {
       on.exit({private$.learner$state = NULL})

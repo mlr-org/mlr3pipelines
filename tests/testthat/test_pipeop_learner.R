@@ -156,6 +156,13 @@ test_that("marshal multiplicity", {
   p2 = glrn$predict(task)
   expect_equal(p1, p2)
   expect_equal(s1, s2)
+
+  # recursive but nothing to do
+  learner = as_learner(as_pipeop(lrn("regr.debug")))
+  learner$train(tsk("mtcars"))
+  learner$marshal()
+  # nothing needed marshaling
+  expect_false(learner$marshaled)
 })
 
 test_that("state class and multiplicity", {
