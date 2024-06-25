@@ -91,10 +91,9 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
     pmap(list(
       src_id = branch_id, dst_id = gin$op.id,
       src_channel = branch_chan, dst_channel = gin$channel.name),
-      graph$add_edge)
+    graph$add_edge)
   })
   graph
 }
 
 mlr_graphs$add("branch", pipeline_branch)
-

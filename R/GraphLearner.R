@@ -272,6 +272,13 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (!some_pipeops_validate) {
           lg$warn("GraphLearner '%s' specifies a validation set, but none of its Learners use it.", self$id)
         }
+      } else {
+        # otherwise the pipeops will preprocess this unnecessarily
+        if (!is.null(task$internal_valid_task)) {
+          prev_itv = task$internal_valid_task
+          on.exit({task$internal_valid_task = prev_itv}, add = TRUE)
+          task$internal_valid_task = NULL
+        }
       }
 
       on.exit({self$graph$state = NULL})
@@ -416,21 +423,6 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
 
   invisible(learner)
 }
-
-
-#' @export
-disable_internal_tuning.GraphLearner = function(learner, ids, ...) {
-  pvs = learner$param_set$values
-  on.exit({learner$param_set$values = pvs}, add = TRUE)
-  if (length(ids)) {
-    walk(learner_wrapping_pipeops(learner), function(po) {
-      disable_internal_tuning(po$learner, ids = po$param_set$ids()[sprintf("%s.%s", po$id, po$param_set$ids()) %in% ids])
-    })
-  }
-  on.exit()
-  invisible(learner)
-}
-
 
 #' @export
 marshal_model.graph_learner_model = function(model, inplace = FALSE, ...) {
