@@ -135,6 +135,16 @@
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
 #' * `man` :: `character(1)`\cr
 #'   Identifying string of the help page that shows with `help()`.
+#' * `properties` :: `character()`\cr
+#'   The properties of the pipeop.
+#'   Currently supported values are:
+#'     * `"validation"`: the `PipeOp` can make use of the `$internal_valid_task` of an [`mlr3::Task`], see [`mlr3::Learner`] for more information.
+#'       `PipeOp`s that have this property, also have a `$validate` field, which controls whether to use the validation task,
+#'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
+#'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters, see [`mlr3::Learner`] for an explanation.
+#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values`.
+#'   
+#'   Programatic access to all available properties is possible via `mlr_reflections$pipeops$properties`.
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -235,8 +245,9 @@ PipeOp = R6Class("PipeOp",
     output = NULL,
     .result = NULL,
     tags = NULL,
+    properties = NULL,
 
-    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
+    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract", properties = character(0)) {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -246,6 +257,7 @@ PipeOp = R6Class("PipeOp",
       }
       self$id = assert_string(id)
 
+      self$properties = assert_subset(properties, mlr_reflections$pipeops$properties)
       self$param_set$values = insert_named(self$param_set$values, param_vals)
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
@@ -596,4 +608,3 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
     map(transpose_list(map(result, "output")), as.Multiplicity)
   }
 }
-

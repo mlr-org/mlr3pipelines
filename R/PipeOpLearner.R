@@ -62,7 +62,17 @@
 #'   [`Learner`][mlr3::Learner] that is being wrapped. Read-only.
 #' * `learner_model` :: [`Learner`][mlr3::Learner]\cr
 #'   [`Learner`][mlr3::Learner] that is being wrapped. This learner contains the model if the `PipeOp` is trained. Read-only.
-#'
+#' * `validate` :: `"predefined"` or `NULL`\cr
+#'    This field can only be set for `Learner`s that have the `"validation"` property.
+#'    Setting the field to `"predefined"` means that the wrapped `Learner` will use the internal validation task,
+#'    otherwise it will be ignored.
+#'    Note that specifying *how* the validation data is created is possible via the `$validate` field of the [`GraphLearner`].
+#'    For each `PipeOp` it is then only possible to either use it (`"predefined"`) or not use it (`NULL`).
+#'    Also see [`set_validate.GraphLearner`] for more information.
+#' * `internal_tuned_values` :: named `list()` or `NULL`\cr
+#'    The internally tuned values if the wrapped `Learner`s supports internal tuning, `NULL` otherwise.
+#' * `internal_valid_scores` :: named `list()` or `NULL`\cr
+#'    The internal validation scores if the wrapped `Learner`s supports internal validation, `NULL` otherwise.
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'
@@ -91,13 +101,38 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       type = private$.learner$task_type
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
       out_type = mlr_reflections$task_types[type, mult = "first"]$prediction
+      properties = c("validation", "internal_tuning")
+      properties = properties[properties %in% learner$properties]
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
-        tags = "learner", packages = learner$packages)
+        tags = "learner", packages = learner$packages, properties = properties)
     }
   ),
   active = list(
+    internal_tuned_values = function(rhs) {
+      assert_ro_binding(rhs)
+      if ("validate" %nin% self$properties) return(NULL)
+      self$learner$internal_tuned_values
+    },
+    internal_valid_scores = function(rhs) {
+      assert_ro_binding(rhs)
+      if ("internal_tuning" %nin% self$properties) return(NULL)
+      self$learner$internal_valid_scores
+    },
+    validate = function(rhs) {
+      if ("validation" %nin% self$properties) {
+        if (!missing(rhs)) {
+          stopf("PipeOp '%s' does not support validation, because the wrapped Learner doesn't.", self$id)
+        }
+        return(NULL)
+      }
+      if (!missing(rhs)) {
+        private$.validate = assert_po_validate(rhs)
+        self$learner$validate = rhs
+      }
+      private$.learner$validate
+    },
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
@@ -137,6 +172,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   ),
   private = list(
     .learner = NULL,
+    .validate = NULL,
 
     .train = function(inputs) {
       on.exit({private$.learner$state = NULL})
@@ -157,3 +193,15 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 )
 
 mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new()))
+
+#' @export
+set_validate.PipeOpLearner = function(learner, validate, ...) {
+  assert_po_validate(validate)
+  on.exit({learner$validate = prev_validate})
+  prev_validate = learner$validate
+  learner$validate = validate
+  set_validate(learner, validate = validate, ...)
+  on.exit()
+  learner$validate = validate
+  invisible(learner)
+}

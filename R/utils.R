@@ -170,3 +170,18 @@ base_pipeop = function(self) {
   # New movie idea: "The Last PipeOp"
   last_pipeop
 }
+
+pos_with_property = function(x, property) {
+  x = if (test_class(x, "GraphLearner")) {
+    x$graph$pipeops
+  } else if(test_class(x, "Graph")) {
+    x$pipeops
+  } else {
+    x
+  }
+  keep(x, function(po) property %in% po$properties)
+}
+
+assert_po_validate = function(rhs) {
+  assert_choice(rhs, "predefined", null.ok = TRUE)
+}

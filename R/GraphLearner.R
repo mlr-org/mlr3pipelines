@@ -56,6 +56,7 @@
 #' * `validate` :: `numeric(1)`, `"predefined"`, `"test"` or `NULL`\cr
 #'   How to construct the validation data. This also has to be configured in the individual learners wrapped by
 #'   `PipeOpLearner`, see [`set_validate.GraphLearner`] on how to configure this.
+#'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
 #'   Whether the learner is marshaled.
 #'
@@ -119,8 +120,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
-      private$.can_validate = some(learner_wrapping_pipeops(graph), function(po) "validation" %in% po$learner$properties)
-      private$.can_internal_tuning = some(learner_wrapping_pipeops(graph), function(po) "internal_tuning" %in% po$learner$properties)
+      private$.can_validate = some(graph$pipeops, function(po) "validation" %in% po$properties)
+      private$.can_validate = some(graph$pipeops, function(po) "internal_tuning" %in% po$properties)
 
       properties = setdiff(mlr_reflections$learner_properties[[task_type]],
         c("validation", "internal_tuning")[!c(private$.can_validate, private$.can_internal_tuning)])
@@ -139,6 +140,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (!is.null(predict_type)) self$predict_type = predict_type
     },
     base_learner = function(recursive = Inf) {
+      self$base_pipeop(recursive = recursive)$learner_model
+    },
+    base_pipeop = function(recursive = Inf) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
       if (recursive <= 0) return(self)
       gm = self$graph_model
@@ -158,7 +162,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
         if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
       }
-      learner_model$base_learner(recursive - 1)
+      learner_model$base_pipeop(recursive - 1)
     },
     marshal = function(...) {
       learner_marshal(.learner = self, ...)
@@ -179,7 +183,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     validate = function(rhs) {
       if (!missing(rhs)) {
         if (!private$.can_validate) {
-          stopf("None of the Learners wrapped by GraphLearner '%s' support validation.", self$id)
+          stopf("None of the PipeOps in Graph '%s' supports validation.", self$id)
         }
         private$.validate = assert_validate(rhs)
       }
@@ -232,30 +236,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .can_internal_tuning = NULL,
     .extract_internal_tuned_values = function() {
       if (!private$.can_validate) return(NULL)
-      itvs = unlist(map(
-        learner_wrapping_pipeops(self$graph_model), function(po) {
-          if (exists("internal_tuned_values", po$learner)) {
-            po$learner_model$internal_tuned_values
-          }
-        }
-      ), recursive = FALSE)
-      if (is.null(itvs) || !length(itvs)) return(named_list())
+      itvs = unlist(map(pos_with_property(self, "internal_tuning"), "internal_tuned_values"), recursive = FALSE)
+      if (!length(itvs)) return(named_list())
       itvs
     },
     .extract_internal_valid_scores = function() {
       if (!private$.can_internal_tuning) return(NULL)
-      ivs = unlist(map(
-        learner_wrapping_pipeops(self$graph_model), function(po) {
-          if (exists("internal_valid_scores", po$learner)) {
-            po$learner_model$internal_valid_scores
-          }
-        }
-      ), recursive = FALSE)
+      its = unlist(map(pos_with_property(self, "validation"), "internal_valid_scores"), recursive = FALSE)
       if (is.null(ivs) || !length(ivs)) return(named_list())
       ivs
     },
     deep_clone = function(name, value) {
-      private$.param_set = NULL
       # FIXME this repairs the mlr3::Learner deep_clone() method which is broken.
       if (is.environment(value) && !is.null(value[[".__enclos_env__"]])) {
         return(value$clone(deep = TRUE))
@@ -268,16 +259,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 
     .train = function(task) {
       if (!is.null(get0("validate", self))) {
-        some_pipeops_validate = some(learner_wrapping_pipeops(self), function(po) !is.null(get0("validate", po$learner)))
+        some_pipeops_validate = some(pos_with_property(self, "validation"), function(po) !is.null(po$validate))
         if (!some_pipeops_validate) {
           lg$warn("GraphLearner '%s' specifies a validation set, but none of its Learners use it.", self$id)
-        }
-      } else {
-        # otherwise the pipeops will preprocess this unnecessarily
-        if (!is.null(task$internal_valid_task)) {
-          prev_itv = task$internal_valid_task
-          on.exit({task$internal_valid_task = prev_itv}, add = TRUE)
-          task$internal_valid_task = NULL
         }
       }
 
@@ -350,6 +334,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #'   For which pipeops to enable validation.
 #'   This parameter is ignored when `validate` is set to `NULL`.
 #'   By default, validation is enabled for the base learner.
+#' @param args_all (`list()`)\cr
+#'  Rarely needed. A named list of parameter values that are passed to all subsequet [`set_validate()`] calls on the individual
+#'  `PipeOp`s.
 #' @param args (named `list()`)\cr
 #'   Rarely needed.
 #'   A named list of lists, specifying additional argments to be passed to [`set_validate()`] for the respective learners.
@@ -376,31 +363,35 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' glrn$validate
 #' glrn$graph$pipeops$classif.debug$learner$validate
 #' glrn$graph$pipeops$final$learner$validate
-set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(), ...) {
+set_validate.GraphLearner = function(learner, validate, ids = NULL, args_all = list(), args = list(), ...) {
   if (is.null(validate)) {
     learner$validate = NULL
-    walk(learner_wrapping_pipeops(learner), function(po) {
-      po$learner$validate = NULL
+    walk(pos_with_property(learner$graph$pipeops, "validation"), function(po) {
+      # disabling needs no extra arguments
+      invoke(set_validate, po, validate = NULL, args_all = args_all, args = args[[po$id]] %??% list())
     })
     return(invisible(learner))
   }
 
   if (is.null(ids)) {
-    ids = base_pipeop(learner)$id
+    ids = learner$base_pipeop(recursive = 1)$id
   } else {
-    assert_subset(ids, ids(keep(learner_wrapping_pipeops(learner), function(po) "validation" %in% po$learner$properties)))
+    assert_subset(ids, ids(pos_with_property(learner$graph$pipeops, "validation")))
   }
 
   assert_list(args, types = "list")
+  assert_list(args_all, types = "list")
   assert_subset(names(args), ids)
 
-  prev_validate_pos = discard(map(learner_wrapping_pipeops(learner), function(po) get0("validate", po$learner, ifnotfound = NA)),
-    function(x) identical(x, NA))
-
+  prev_validate_pos = map(pos_with_property(learner$graph$pipeops, "validation"), "validate")
   prev_validate = learner$validate
-
   on.exit({
-    iwalk(prev_validate_pos, function(val, poid) learner$graph$pipeops[[poid]]$learner$validate = val)
+    iwalk(prev_validate_pos, function(val, poid) {
+      # passing the args here is just a heuristic that can in principle fail, but this should be extremely
+      # rare
+      args = args[[poid]] %??% list()
+      set_validate(learner$graph$pipeops[[poid]], validate = val, args = args, args_all = args_all)
+    })
     learner$validate = prev_validate
   }, add = TRUE)
 
@@ -409,7 +400,8 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args = list(
   walk(ids, function(poid) {
     # learner might be another GraphLearner / AutoTuner so we call into set_validate() again
     withCallingHandlers({
-      invoke(set_validate, learner = learner$graph$pipeops[[poid]]$learner, .args = insert_named(list(validate = "predefined"), args[[poid]]))
+      args = c(args[[poid]], args_all) %??% list()
+      set_validate(learner$graph$pipeops[[poid]], .args = insert_named(list(validate = "predefined"), args))
     }, error = function(e) {
       e$message = sprintf("Failed to set validate for PipeOp '%s':\n%s", poid, e$message)
       stop(e)
