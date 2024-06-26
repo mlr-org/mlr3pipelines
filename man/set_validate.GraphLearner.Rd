@@ -24,7 +24,7 @@ If set to \code{NULL} all validation is disabled, both on the graph learner leve
 \item{ids}{(\code{NULL} or \code{character()})\cr
 For which pipeops to enable validation.
 This parameter is ignored when \code{validate} is set to \code{NULL}.
-By default, validation is enabled for the base learner.}
+By default, validation is enabled for the final \code{PipeOp} in the \code{Graph}.}
 
 \item{args_all}{(\code{list()})\cr
 Rarely needed. A named list of parameter values that are passed to all subsequet \code{\link[=set_validate]{set_validate()}} calls on the individual
@@ -32,8 +32,8 @@ Rarely needed. A named list of parameter values that are passed to all subsequet
 
 \item{args}{(named \code{list()})\cr
 Rarely needed.
-A named list of lists, specifying additional argments to be passed to \code{\link[=set_validate]{set_validate()}} for the respective learners.
-Names must be a subset of the \code{ids}.}
+A named list of lists, specifying additional argments to be passed to \code{\link[=set_validate]{set_validate()}} when calling it on the individual
+\code{PipeOp}s.}
 
 \item{...}{(any)\cr
 Currently unused.}
@@ -44,10 +44,9 @@ Configure validation for a graph learner.
 In a \code{\link{GraphLearner}}, validation can be configured on two levels:
 \enumerate{
 \item On the \code{\link{GraphLearner}} level, which specifies \strong{how} the validation set is constructed before entering the graph.
-\item On the level of the \code{\link{Learner}}s that are wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}}, which specifies
-which pipeops actually make use of the validation data.
-All learners wrapped by \code{\link{PipeOpLearner}} and \code{\link{PipeOpLearnerCV}} should in almost all cases either set it
-to \code{NULL} (disable) or \code{"predefined"} (enable).
+\item On the level of the individual \code{PipeOp}s (such as \code{PipeOpLearner}), which specifies
+which pipeops actually make use of the validation data (set its \verb{$validate} field to \code{"predefined"}) or not (set it to \code{NULL}).
+This can be specified via the argument \code{ids}.
 }
 }
 \examples{
@@ -60,12 +59,4 @@ glrn$graph$pipeops$classif.debug$learner$validate
 set_validate(glrn, NULL)
 glrn$validate
 glrn$graph$pipeops$classif.debug$learner$validate
-
-# complex
-glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
-  lrn("classif.debug", id = "final")))
-set_validate(glrn, 0.2, ids = c("classif.debug", "final"))
-glrn$validate
-glrn$graph$pipeops$classif.debug$learner$validate
-glrn$graph$pipeops$final$learner$validate
 }

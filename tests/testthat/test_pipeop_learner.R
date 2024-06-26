@@ -16,6 +16,8 @@ test_that("PipeOpLearner - basic properties", {
 
   expect_pipeop_class(PipeOpLearner, list(lrn), check_ps_default_values = FALSE)
   expect_error(PipeOpLearner$new())
+
+  expect_pipeop(po("learner", lrn("classif.debug")))
 })
 
 test_that("PipeOpLearner - param_set and values", {
@@ -199,3 +201,4 @@ test_that("internal_tuned_values, internal_valid_scores", {
   expect_list(obj$internal_tuned_values, types = "numeric")
   expect_equal(names(obj$internal_valid_scores), "acc")
 })
+

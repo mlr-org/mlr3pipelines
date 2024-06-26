@@ -138,11 +138,14 @@
 #' * `properties` :: `character()`\cr
 #'   The properties of the pipeop.
 #'   Currently supported values are:
-#'     * `"validation"`: the `PipeOp` can make use of the `$internal_valid_task` of an [`mlr3::Task`], see [`mlr3::Learner`] for more information.
+#'     * `"validation"`: the `PipeOp` can make use of the `$internal_valid_task` of an [`mlr3::Task`].
+#'        This is for example used for `PipeOpLearner`s that wrap a `Learner` with this property, see [`mlr3::Learner`].
 #'       `PipeOp`s that have this property, also have a `$validate` field, which controls whether to use the validation task,
 #'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
-#'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters, see [`mlr3::Learner`] for an explanation.
-#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values`.
+#'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters.
+#'        This works analogously to the internal tuning implementation for [`mlr3::Learner`].
+#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one 
+#'        parameter tagged with `"internal_tuning"`.
 #'        An example for such a `PipeOp` is a `PipeOpLearner` that wraps a `Learner` with the `"internal_tuning"` property.
 #'
 #'   Programatic access to all available properties is possible via `mlr_reflections$pipeops$properties`.

@@ -146,11 +146,14 @@ Identifying string of the help page that shows with \code{help()}.
 The properties of the pipeop.
 Currently supported values are:
 \itemize{
-\item \code{"validation"}: the \code{PipeOp} can make use of the \verb{$internal_valid_task} of an \code{\link[mlr3:Task]{mlr3::Task}}, see \code{\link[mlr3:Learner]{mlr3::Learner}} for more information.
+\item \code{"validation"}: the \code{PipeOp} can make use of the \verb{$internal_valid_task} of an \code{\link[mlr3:Task]{mlr3::Task}}.
+This is for example used for \code{PipeOpLearner}s that wrap a \code{Learner} with this property, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \code{PipeOp}s that have this property, also have a \verb{$validate} field, which controls whether to use the validation task,
 as well as a \verb{$internal_valid_scores} field, which allows to access the internal validation scores after training.
-\item \code{"internal_tuning"}: the \code{PipeOp} is able to internally optimize hyperparameters, see \code{\link[mlr3:Learner]{mlr3::Learner}} for an explanation.
-\code{PipeOp}s with that property also implement the standardized accessor \verb{$internal_tuned_values}.
+\item \code{"internal_tuning"}: the \code{PipeOp} is able to internally optimize hyperparameters.
+This works analogously to the internal tuning implementation for \code{\link[mlr3:Learner]{mlr3::Learner}}.
+\code{PipeOp}s with that property also implement the standardized accessor \verb{$internal_tuned_values} and have at least one
+parameter tagged with \code{"internal_tuning"}.
 An example for such a \code{PipeOp} is a \code{PipeOpLearner} that wraps a \code{Learner} with the \code{"internal_tuning"} property.
 }
 

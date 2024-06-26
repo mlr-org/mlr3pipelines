@@ -89,7 +89,6 @@ Suggests:
     future,
     htmlwidgets
 Remotes:
-    mlr-org/paradox,
     mlr-org/mlr3
 ByteCompile: true
 Encoding: UTF-8

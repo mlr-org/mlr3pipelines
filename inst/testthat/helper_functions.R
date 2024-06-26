@@ -109,12 +109,12 @@ expect_pipeop = function(po, check_ps_default_values = TRUE) {
   expect_int(po$outnum, lower = 1)
   expect_valid_pipeop_param_set(po, check_ps_default_values = check_ps_default_values)
   if ("validation" %in% po$properties) {
-    testthat::expect_true(exists("validate", po))
+    testthat::expect_true(exists("validate", envir = po))
     testthat::expect_true(exists("internal_valid_scores", envir = po))
-    checkmate::expect_function(mlr3misc::get_private(po)$.extract_internal_valid_scores)
   }
   if ("internal_tuning" %in% po$properties) {
-    checkmate::assert_false(exists("internal_tuning", po))
+    checkmate::assert_true(exists("internal_tuned_values", po))
+    testthat::expect_true("internal_tuning" %in% unlist(po$param_set$tags))
   }
 }
 
