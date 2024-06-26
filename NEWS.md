@@ -1,12 +1,13 @@
 # mlr3pipelines 0.5.2-9000
 
+* Added marshaling support to `GraphLearner`
+* Support internal tuning and validation
+
 # mlr3pipelines 0.5.2
 
 * Added new `ppl("convert_types")`.
 * Minor documentation fixes.
 * Test helpers are now available in `inst/`. These are considered experimental and unstable.
-
-* Added marshaling support to `GraphLearner`
 
 # mlr3pipelines 0.5.1
 
