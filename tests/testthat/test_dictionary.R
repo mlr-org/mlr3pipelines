@@ -198,6 +198,7 @@ test_that("Dictionary contains all PipeOps", {
 
 test_that("data.table of pipeops looks as it should", {
   potable = as.data.table(mlr_pipeops)
+  browser()
 
   expect_set_equal(colnames(potable),
     c("key", "label", "packages", "tags", "feature_types",

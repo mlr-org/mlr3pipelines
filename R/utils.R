@@ -147,30 +147,6 @@ learner_wrapping_pipeops = function(x) {
   keep(x, function(po) inherits(po, "PipeOpLearner") || inherits(po, "PipeOpLearnerCV"))
 }
 
-
-# get the last PipeOpLearner
-base_pipeop = function(self) {
-  gm = self$graph_model
-  gm_output = gm$output
-  if (nrow(gm_output) != 1) stop("Graph has no unique output.")
-  last_pipeop_id = gm_output$op.id
-
-  # pacify static checks
-  src_id = NULL
-  dst_id = NULL
-
-  repeat {
-    last_pipeop = gm$pipeops[[last_pipeop_id]]
-    learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
-    if (!is.null(learner_model)) break
-    last_pipeop_id = gm$edges[dst_id == last_pipeop_id]
-    if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
-    if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
-  }
-  # New movie idea: "The Last PipeOp"
-  last_pipeop
-}
-
 pos_with_property = function(x, property) {
   x = if (test_class(x, "GraphLearner")) {
     x$graph$pipeops
@@ -184,4 +160,8 @@ pos_with_property = function(x, property) {
 
 assert_po_validate = function(rhs) {
   assert_choice(rhs, "predefined", null.ok = TRUE)
+}
+
+test_po_validate = function(x) {
+  test_choice(x, "predefined", null.ok = TRUE)
 }

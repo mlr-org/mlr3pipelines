@@ -4,7 +4,14 @@
 \alias{set_validate.GraphLearner}
 \title{Configure Validation for a GraphLearner}
 \usage{
-\method{set_validate}{GraphLearner}(learner, validate, ids = NULL, args = list(), ...)
+\method{set_validate}{GraphLearner}(
+  learner,
+  validate,
+  ids = NULL,
+  args_all = list(),
+  args = list(),
+  ...
+)
 }
 \arguments{
 \item{learner}{(\code{\link{GraphLearner}})\cr
@@ -18,6 +25,10 @@ If set to \code{NULL} all validation is disabled, both on the graph learner leve
 For which pipeops to enable validation.
 This parameter is ignored when \code{validate} is set to \code{NULL}.
 By default, validation is enabled for the base learner.}
+
+\item{args_all}{(\code{list()})\cr
+Rarely needed. A named list of parameter values that are passed to all subsequet \code{\link[=set_validate]{set_validate()}} calls on the individual
+\code{PipeOp}s.}
 
 \item{args}{(named \code{list()})\cr
 Rarely needed.

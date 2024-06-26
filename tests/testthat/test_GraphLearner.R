@@ -579,6 +579,7 @@ test_that("GraphLearner hashes", {
 })
 
 test_that("validation, internal_valid_scores", {
+  expect_error(as_pipeop(lrn("classif.debug", validate = 0.3)), "must either be")
   # None of the Learners can do validation -> NULL
   glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
   expect_false("validation" %in% glrn1$properties)
@@ -626,7 +627,7 @@ test_that("internal_tuned_values", {
 })
 
 test_that("set_validate", {
-  glrn = as_learner(as_pipeop(lrn("classif.debug", validate = 0.3)))
+  glrn = as_learner(as_pipeop(lrn("classif.debug", validate = "predefined")))
   set_validate(glrn, "test")
   expect_equal(glrn$validate, "test")
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
@@ -637,13 +638,12 @@ test_that("set_validate", {
   expect_equal(glrn$validate, 0.2)
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
 
-
-  glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
-    lrn("classif.debug", id = "final")))
+  glrn = as_learner(ppl("branch", list(lrn("classif.debug"), lrn("classif.debug", id = "final"), lrn("classif.featureless"))))
   set_validate(glrn, 0.3, ids = c("classif.debug", "final"))
   expect_equal(glrn$validate, 0.3)
   expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
   expect_equal(glrn$graph$pipeops$final$learner$validate, "predefined")
+  expect_error(set_validate(glrn, 0.2, ids = "classif.featureless"))
 
 
   glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
@@ -654,6 +654,43 @@ test_that("set_validate", {
   expect_equal(glrn2$graph$pipeops$polearner$learner$validate, "predefined")
   expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$final$learner$validate, "predefined")
   expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate, NULL)
+
+  # graphlearner in graphlearner: failure handling
+  glrn = as_learner(po("pca") %>>% lrn("classif.debug"))
+  po_glrn = as_pipeop(glrn)
+  po_glrn$id = "po_glrn"
+  gglrn = as_learner(po_glrn)
+  expect_error(
+    set_validate(gglrn, validate = "test", args = list(po_glrn = list(ids = "pca"))),
+    "Trying to heuristically reset"
+  )
+  expect_equal(gglrn$validate, NULL)
+
+  # base_learner is not final learner
+  glrn = as_learner(lrn("classif.debug") %>>% po("nop"))
+  set_validate(glrn, 0.3)
+  expect_equal(glrn$graph$pipeops$classif.debug$validate, "predefined")
+  set_validate(glrn, NULL)
+  expect_equal(glrn$graph$pipeops$classif.debug$validate, NULL)
+  expect_equal(glrn$validate, NULL)
+
+  # args and args_all
+  bglrn = as_learner(ppl("branch", list(lrn("classif.debug", id = "d1"), lrn("classif.debug", id = "d2"))))
+
+  obj = as_pipeop(bglrn)
+  obj$id = "po_glrn"
+  gglrn = as_learner(obj)
+
+  # args
+  set_validate(gglrn, validate = 0.2, args = list(po_glrn = list(ids = "d1")))
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
+
+  # args all
+  gglrn = as_learner(obj)
+  set_validate(gglrn, validate = 0.2, args_all = list(ids = "d1"))
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
 })
 
 test_that("marshal", {

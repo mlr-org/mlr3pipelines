@@ -171,3 +171,31 @@ test_that("state class and multiplicity", {
   expect_class(po1$state[[1L]], "Multiplicity")
   expect_class(po1$state[[1L]][[1L]], "learner_state")
 })
+
+test_that("validation", {
+  expect_error(po("learner", lrn("classif.debug", validate = 0.3)), "must either be")
+  obj = as_pipeop(lrn("classif.debug"))
+  expect_equal(obj$properties, c("validation", "internal_tuning"))
+  expect_error({obj$validate = 0.3}) # nolint
+  expect_error({obj$validate = "test"}) # nolint
+  set_validate(obj, "predefined")
+  expect_equal(obj$validate, "predefined")
+  expect_equal(obj$learner$validate, "predefined")
+  set_validate(obj, NULL)
+  expect_equal(obj$validate, NULL)
+  expect_equal(obj$learner$validate, NULL)
+  expect_warning({obj$learner$validate = 0.3}, "unexpected behaviour") # nolint
+
+  obj = as_pipeop(as_learner(as_graph(lrn("classif.debug"))))
+  expect_error(set_validate(obj, "predefined", ids = "none_existing"), "Trying to heuristically")
+  expect_equal(obj$validate, NULL)
+})
+
+test_that("internal_tuned_values, internal_valid_scores", {
+  task = tsk("iris")$divide(0.2)
+  obj = as_pipeop(lrn("classif.debug", validate = "predefined", early_stopping = TRUE, iter = 100))
+  obj$train(list(task))
+  expect_int(obj$internal_tuned_values$iter)
+  expect_list(obj$internal_tuned_values, types = "numeric")
+  expect_equal(names(obj$internal_valid_scores), "acc")
+})

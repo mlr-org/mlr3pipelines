@@ -97,12 +97,18 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
     initialize = function(learner, id = NULL, param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
       id = id %??% private$.learner$id
+      if (!test_po_validate(get0("validate", private$.learner))) {
+        stopf(paste0(
+          "Validate field of PipeOp '%s' must either be NULL or 'predefined'.\nTo configure how ",
+          "the validation data is created, set the $validate field of the GraphLearner, e.g. using set_validate()."
+          ), id) # nolint
+      }
       # FIXME: can be changed when mlr-org/mlr3#470 has an answer
       type = private$.learner$task_type
       task_type = mlr_reflections$task_types[type, mult = "first"]$task
       out_type = mlr_reflections$task_types[type, mult = "first"]$prediction
       properties = c("validation", "internal_tuning")
-      properties = properties[properties %in% learner$properties]
+      properties = properties[properties %in% private$.learner$properties]
       super$initialize(id, param_set = alist(private$.learner$param_set), param_vals = param_vals,
         input = data.table(name = "input", train = task_type, predict = task_type),
         output = data.table(name = "output", train = "NULL", predict = out_type),
@@ -112,13 +118,13 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   active = list(
     internal_tuned_values = function(rhs) {
       assert_ro_binding(rhs)
-      if ("validate" %nin% self$properties) return(NULL)
-      self$learner$internal_tuned_values
+      if ("internal_tuning" %nin% self$properties) return(NULL)
+      self$learner_model$internal_tuned_values
     },
     internal_valid_scores = function(rhs) {
       assert_ro_binding(rhs)
-      if ("internal_tuning" %nin% self$properties) return(NULL)
-      self$learner$internal_valid_scores
+      if ("validation" %nin% self$properties) return(NULL)
+      self$learner_model$internal_valid_scores
     },
     validate = function(rhs) {
       if ("validation" %nin% self$properties) {
@@ -128,8 +134,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
         return(NULL)
       }
       if (!missing(rhs)) {
-        private$.validate = assert_po_validate(rhs)
-        self$learner$validate = rhs
+        private$.learner$validate = assert_po_validate(rhs)
       }
       private$.learner$validate
     },
@@ -146,6 +151,14 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       if (!missing(val)) {
         if (!identical(val, private$.learner)) {
           stop("$learner is read-only.")
+        }
+        validate = get0("validate", private$.learner)
+        if (!test_po_validate(validate)) {
+          warningf(paste(sep = "\n",
+            "PipeOpLearner '%s' has its validate field set to a value that is neither NULL nor 'predefined'.",
+            "This will likely lead to unexpected behaviour.",
+            "Configure the $validate field of the GraphLearner to define how the validation data is created."
+            ), self$id)
         }
       }
       private$.learner
@@ -172,7 +185,6 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   ),
   private = list(
     .learner = NULL,
-    .validate = NULL,
 
     .train = function(inputs) {
       on.exit({private$.learner$state = NULL})
@@ -192,16 +204,30 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new()))
+mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(properties = character(0), id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new())) # nolint
 
 #' @export
 set_validate.PipeOpLearner = function(learner, validate, ...) {
   assert_po_validate(validate)
-  on.exit({learner$validate = prev_validate})
+  on.exit({
+    # also does not work in general (e.g. for AutoTuner) and is even less transparent
+    learner$validate = prev_validate
+  })
   prev_validate = learner$validate
-  learner$validate = validate
-  set_validate(learner, validate = validate, ...)
+  withCallingHandlers({
+    set_validate(learner$learner, validate = validate, ...)
+  }, error = function(e) {
+    e$message = sprintf(paste0(
+      "Failed to set validate for Learner '%s':\n%s\n",
+      "Trying to heuristically reset validation to its previous state, please check the results"), learner$id, e$message)
+    stop(e)
+  }, warning = function(w) {
+    w$message = sprintf(paste0(
+      "Failed to set validate for PipeOp '%s':\n%s\n",
+      "Trying to heuristically reset validation to its previous state, please check the results"), learner$id, w$message)
+    warning(w)
+    invokeRestart("muffleWarning")
+  })
   on.exit()
-  learner$validate = validate
   invisible(learner)
 }

@@ -143,7 +143,8 @@
 #'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
 #'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters, see [`mlr3::Learner`] for an explanation.
 #'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values`.
-#'   
+#'        An example for such a `PipeOp` is a `PipeOpLearner` that wraps a `Learner` with the `"internal_tuning"` property.
+#'
 #'   Programatic access to all available properties is possible via `mlr_reflections$pipeops$properties`.
 #'
 #' @section Methods:
