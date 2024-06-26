@@ -246,7 +246,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     .extract_internal_valid_scores = function() {
       if (!private$.can_internal_tuning) return(NULL)
       ivs = unlist(map(pos_with_property(self$graph_model, "validation"), "internal_valid_scores"), recursive = FALSE)
-      if (is.null(ivs) || !length(ivs)) return(named_list())
+      if (!length(ivs)) return(named_list())
       ivs
     },
     deep_clone = function(name, value) {
@@ -349,12 +349,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #' @export
 #' @examples
 #' library(mlr3)
-#' # simple
+#'
 #' glrn = as_learner(po("pca") %>>% lrn("classif.debug"))
 #' set_validate(glrn, 0.3)
 #' glrn$validate
 #' glrn$graph$pipeops$classif.debug$learner$validate
+#'
 #' set_validate(glrn, NULL)
+#' glrn$validate
+#' glrn$graph$pipeops$classif.debug$learner$validate
+#'
+#' set_validate(glrn, 0.2, ids = "classif.debug")
 #' glrn$validate
 #' glrn$graph$pipeops$classif.debug$learner$validate
 set_validate.GraphLearner = function(learner, validate, ids = NULL, args_all = list(), args = list(), ...) {
@@ -363,7 +368,8 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args_all = l
   on.exit({
     iwalk(prev_validate_pos, function(prev_val, poid) {
       # Here we don't call into set_validate() as this also does not ensure that we are able to correctly
-      # reset the configuration to the previous state and is less transparent
+      # reset the configuration to the previous state, is less transparent and might fail again
+      # The error message informs the user about this though via the calling handlers below
       learner$graph$pipeops[[poid]]$validate = prev_val
     })
     learner$validate = prev_validate
@@ -379,7 +385,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args_all = l
   }
 
   if (is.null(ids)) {
-    ids = learner$base_learner(recursive = 1, return_po = TRUE)$id
+    ids = learner$base_learner(return_po = TRUE)$id
   } else {
     assert_subset(ids, ids(pos_with_property(learner$graph$pipeops, "validation")))
   }

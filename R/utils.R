@@ -135,18 +135,6 @@ dictionary_sugar_inc_mget = function(dict, .keys, ...) {
   objs
 }
 
-learner_wrapping_pipeops = function(x) {
-  if (inherits(x, "Graph")) {
-    x = x$pipeops
-  } else if (inherits(x, "GraphLearner")) {
-    x = x$graph$pipeops
-  } else {
-    assert_list(x, types = "PipeOp")
-  }
-
-  keep(x, function(po) inherits(po, "PipeOpLearner") || inherits(po, "PipeOpLearnerCV"))
-}
-
 pos_with_property = function(x, property) {
   x = if (test_class(x, "GraphLearner")) {
     x$graph$pipeops

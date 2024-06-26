@@ -51,12 +51,17 @@ This can be specified via the argument \code{ids}.
 }
 \examples{
 library(mlr3)
-# simple
+
 glrn = as_learner(po("pca") \%>>\% lrn("classif.debug"))
 set_validate(glrn, 0.3)
 glrn$validate
 glrn$graph$pipeops$classif.debug$learner$validate
+
 set_validate(glrn, NULL)
+glrn$validate
+glrn$graph$pipeops$classif.debug$learner$validate
+
+set_validate(glrn, 0.2, ids = "classif.debug")
 glrn$validate
 glrn$graph$pipeops$classif.debug$learner$validate
 }

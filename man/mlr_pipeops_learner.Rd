@@ -88,9 +88,9 @@ Note that specifying \emph{how} the validation data is created is possible via t
 For each \code{PipeOp} it is then only possible to either use it (\code{"predefined"}) or not use it (\code{NULL}).
 Also see \code{\link{set_validate.GraphLearner}} for more information.
 \item \code{internal_tuned_values} :: named \code{list()} or \code{NULL}\cr
-The internally tuned values if the wrapped \code{Learner}s supports internal tuning, \code{NULL} otherwise.
+The internally tuned values if the wrapped \code{Learner} supports internal tuning, \code{NULL} otherwise.
 \item \code{internal_valid_scores} :: named \code{list()} or \code{NULL}\cr
-The internal validation scores if the wrapped \code{Learner}s supports internal validation, \code{NULL} otherwise.
+The internal validation scores if the wrapped \code{Learner} supports internal validation, \code{NULL} otherwise.
 }
 }
 

@@ -70,9 +70,9 @@
 #'    For each `PipeOp` it is then only possible to either use it (`"predefined"`) or not use it (`NULL`).
 #'    Also see [`set_validate.GraphLearner`] for more information.
 #' * `internal_tuned_values` :: named `list()` or `NULL`\cr
-#'    The internally tuned values if the wrapped `Learner`s supports internal tuning, `NULL` otherwise.
+#'    The internally tuned values if the wrapped `Learner` supports internal tuning, `NULL` otherwise.
 #' * `internal_valid_scores` :: named `list()` or `NULL`\cr
-#'    The internal validation scores if the wrapped `Learner`s supports internal validation, `NULL` otherwise.
+#'    The internal validation scores if the wrapped `Learner` supports internal validation, `NULL` otherwise.
 #' @section Methods:
 #' Methods inherited from [`PipeOp`].
 #'
@@ -210,7 +210,7 @@ mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(
 set_validate.PipeOpLearner = function(learner, validate, ...) {
   assert_po_validate(validate)
   on.exit({
-    # also does not work in general (e.g. for AutoTuner) and is even less transparent
+    # don't use set_validate(), as it also does not work in general and might fail again
     learner$validate = prev_validate
   })
   prev_validate = learner$validate
