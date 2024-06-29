@@ -818,32 +818,20 @@ automatically checked:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pss</span> <span class="op">=</span> <span class="fu"><a href="../reference/po.html">po</a></span><span class="op">(</span><span class="st">"scale"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## &lt;ParamSet:scale&gt;</span></span>
-<span><span class="co">##                id    class lower upper nlevels</span></span>
-<span><span class="co">##            &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;</span></span>
-<span><span class="co">## 1:         center ParamLgl    NA    NA       2</span></span>
-<span><span class="co">## 2:          scale ParamLgl    NA    NA       2</span></span>
-<span><span class="co">## 3:         robust ParamLgl    NA    NA       2</span></span>
-<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf</span></span>
-<span><span class="co">##                                                                                      default</span></span>
-<span><span class="co">##                                                                                       &lt;list&gt;</span></span>
-<span><span class="co">## 1:                                                                                      TRUE</span></span>
-<span><span class="co">## 2:                                                                                      TRUE</span></span>
-<span><span class="co">## 3: &lt;NoDefault&gt;\n  Public:\n    clone: function (deep = FALSE) \n    initialize: function () </span></span>
-<span><span class="co">## 4:                                                                             &lt;Selector[1]&gt;</span></span>
-<span><span class="co">##     value</span></span>
-<span><span class="co">##    &lt;list&gt;</span></span>
-<span><span class="co">## 1:       </span></span>
-<span><span class="co">## 2:       </span></span>
-<span><span class="co">## 3:  FALSE</span></span>
-<span><span class="co">## 4:</span></span></code></pre>
+<pre><code><span><span class="co">## &lt;ParamSet(4)&gt;</span></span>
+<span><span class="co">##                id    class lower upper nlevels        default  value</span></span>
+<span><span class="co">##            &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;         &lt;list&gt; &lt;list&gt;</span></span>
+<span><span class="co">## 1:         center ParamLgl    NA    NA       2           TRUE       </span></span>
+<span><span class="co">## 2:          scale ParamLgl    NA    NA       2           TRUE       </span></span>
+<span><span class="co">## 3:         robust ParamLgl    NA    NA       2 &lt;NoDefault[0]&gt;  FALSE</span></span>
+<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">center</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## $robust</span></span>
+<pre><code><span><span class="co">## $center</span></span>
 <span><span class="co">## [1] FALSE</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## $center</span></span>
+<span><span class="co">## $robust</span></span>
 <span><span class="co">## [1] FALSE</span></span></code></pre>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">scale</span> <span class="op">=</span> <span class="st">"TRUE"</span> <span class="co"># bad input is checked!</span></span></code></pre></div>

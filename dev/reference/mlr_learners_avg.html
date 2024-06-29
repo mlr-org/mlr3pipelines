@@ -135,7 +135,7 @@ Initialized to <code>"classif.ce"</code>, i.e. misclassification error for class
 and <code>"regr.mse"</code>, i.e. mean squared error for regression.</p></li>
 <li><p><code>optimizer</code> :: <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code> | <code>character(1)</code><br><code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code> used to find optimal thresholds.
 If <code>character</code>, converts to <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code>
-via <code><a href="https://bbotk.mlr-org.com/reference/opt.html" class="external-link">opt</a></code>. Initialized to <code><a href="https://bbotk.mlr-org.com/reference/mlr_optimizers_nloptr.html" class="external-link">OptimizerNLoptr</a></code>.
+via <code><a href="https://bbotk.mlr-org.com/reference/opt.html" class="external-link">opt</a></code>. Initialized to <code>OptimizerNLoptr</code>.
 Nloptr hyperparameters are initialized to <code>xtol_rel = 1e-8</code>, <code>algorithm = "NLOPT_LN_COBYLA"</code>
 and equal initial weights for each learner.
 For more fine-grained control, it is recommended to supply a instantiated <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code>.</p></li>
