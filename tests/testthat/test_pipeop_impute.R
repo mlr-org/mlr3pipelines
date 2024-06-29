@@ -398,4 +398,5 @@ test_that("More tests for Integers", {
     expect_false(any(is.na(result$data()$x)), info = po$id)
     expect_equal(result$missings(), c(t = 0, x = 0), info = po$id)
   }
+
 })
