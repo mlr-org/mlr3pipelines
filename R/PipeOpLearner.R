@@ -98,10 +98,10 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
       private$.learner = as_learner(learner, clone = TRUE)
       id = id %??% private$.learner$id
       if (!test_po_validate(get0("validate", private$.learner))) {
-        stopf(paste0(
-          "Validate field of PipeOp '%s' must either be NULL or 'predefined'.\nTo configure how ",
-          "the validation data is created, set the $validate field of the GraphLearner, e.g. using set_validate()."
-          ), id) # nolint
+        stopf(
+          "Validate field of PipeOp '%s' must either be NULL or 'predefined'.\nTo configure how the validation data is created, set the $validate field of the GraphLearner, e.g. using set_validate().",  # nolint
+          id
+        )
       }
       # FIXME: can be changed when mlr-org/mlr3#470 has an answer
       type = private$.learner$task_type
