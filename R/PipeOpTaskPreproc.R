@@ -221,10 +221,17 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$outtasklayout = copy(intask$feature_types)
       self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
 
+      if (!is.null(intask$internal_valid_task)) {
+        # we call into .predict() and not .predict_task() to not put the burden
+        # of subsetting the features etc. on the PipeOp overwriting .predict_task
+        intask$internal_valid_task = private$.predict(list(intask$internal_valid_task))[[1L]]
+      }
+
       if (do_subset) {
         # FIXME: this fails if .train_task added a column with the same name
         intask$col_roles$feature = union(intask$col_roles$feature, y = remove_cols)
       }
+
       list(intask)
     },
 

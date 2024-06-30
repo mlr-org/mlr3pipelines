@@ -134,3 +134,22 @@ dictionary_sugar_inc_mget = function(dict, .keys, ...) {
   names(objs) = map_chr(objs, "id")
   objs
 }
+
+pos_with_property = function(x, property) {
+  x = if (test_class(x, "GraphLearner")) {
+    x$graph$pipeops
+  } else if(test_class(x, "Graph")) {
+    x$pipeops
+  } else {
+    x
+  }
+  keep(x, function(po) property %in% po$properties)
+}
+
+assert_po_validate = function(rhs) {
+  assert_choice(rhs, "predefined", null.ok = TRUE)
+}
+
+test_po_validate = function(x) {
+  test_choice(x, "predefined", null.ok = TRUE)
+}

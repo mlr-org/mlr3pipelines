@@ -84,6 +84,7 @@ reference:
       - is_noop
       - NO_OP
       - filter_noop
+      - set_validate.GraphLearner
       - starts_with("as.")
       - starts_with("is.")
       - starts_with("is.")

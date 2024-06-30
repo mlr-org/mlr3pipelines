@@ -55,6 +55,9 @@ test_that("PipeOpImpute", {
     private = list(
       .get_state = function(task) {
         graph = self$build_graph()
+        internal_valid_task = task$internal_valid_task
+        on.exit({task$internal_valid_task = internal_valid_task})
+        task$internal_valid_task = NULL
         graph$train(task)
         list(gs = graph)
       },
@@ -399,4 +402,13 @@ test_that("More tests for Integers", {
     expect_equal(result$missings(), c(t = 0, x = 0), info = po$id)
   }
 
+})
+
+test_that("impute, test rows and affect_columns", {
+  po_impute = po("imputeconstant", affect_columns = selector_name("insulin"), constant = 2)
+  task = tsk("pima")
+  task$divide(ids = 1:30)
+  outtrain = po_impute$train(list(task))[[1L]]
+  outpredict = po_impute$predict(list(task$internal_valid_task))[[1L]]
+  expect_true(isTRUE(all.equal(outtrain$internal_valid_task$data(), outpredict$data())))
 })

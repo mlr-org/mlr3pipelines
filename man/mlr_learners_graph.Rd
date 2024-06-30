@@ -56,6 +56,17 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 contain the model. Use \code{graph_model} to access the trained \code{\link{Graph}} after \verb{$train()}. Read-only.
 \item \code{graph_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link{Graph}} that is being wrapped. This \code{\link{Graph}} contains a trained state after \verb{$train()}. Read-only.
+\item \code{internal_tuned_values} :: named \code{list()} or \code{NULL}\cr
+The internal tuned parameter values collected from all \code{PipeOp}s.
+\code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal tuning.
+\item \code{internal_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The internal validation scores as retrieved from the \code{PipeOps}.
+The names are prefixed with the respective IDs of the \code{PipeOp}s.
+\code{NULL} is returned if the learner is not trained or none of the wrapped learners supports internal validation.
+\item \code{validate} :: \code{numeric(1)}, \code{"predefined"}, \code{"test"} or \code{NULL}\cr
+How to construct the validation data. This also has to be configured for the individual \code{PipeOp}s such as
+\code{PipeOpLearner}, see \code{\link{set_validate.GraphLearner}}.
+For more details on the possible values, see \code{\link[mlr3:Learner]{mlr3::Learner}}.
 \item \code{marshaled} :: \code{logical(1)}\cr
 Whether the learner is marshaled.
 }

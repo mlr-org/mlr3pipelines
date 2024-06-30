@@ -195,6 +195,10 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       self$state$outtasklayout = copy(intask$feature_types)
 
+      if (!is.null(intask$internal_valid_task)) {
+        intask$internal_valid_task = private$.predict(list(intask$internal_valid_task))[[1L]]
+      }
+
       list(intask)
     },
 

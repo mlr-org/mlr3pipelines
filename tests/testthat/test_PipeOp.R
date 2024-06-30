@@ -123,3 +123,18 @@ test_that("Informative error and warning messages", {
   expect_warning(potest$predict(list(1)), NA)
 
 })
+
+test_that("properties", {
+  f = function(properties) {
+    PipeOp$new(
+      id = "potest",
+      input = data.table(name = "input", train = "*", predict = "*"),
+      output = data.table(name = "input", train = "*", predict = "*"),
+      properties = properties
+    )
+  }
+
+  expect_error(f("abc"))
+  po1 = f("validation")
+  expect_equal(po1$properties, "validation")
+})
