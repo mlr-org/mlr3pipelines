@@ -251,7 +251,7 @@ PipeOp = R6Class("PipeOp",
     tags = NULL,
     properties = NULL,
 
-    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract", properties = character(0)) {
+    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0L), tags = "abstract", properties = character(0L)) {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL

@@ -82,7 +82,7 @@
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ps(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
+    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ps(), param_vals = list(), packages = character(0L), prediction_type = "Prediction", tags = NULL) {
       assert_integerish(innum, lower = 0L)
       if (paradox_info$is_old) {
         paux = ps(weights = p_uty(check_weights(innum), tags = "predict"))

@@ -219,7 +219,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # will be always "row_ids"
       row_id_col = intersect(colnames(prds), c("row_id", "row_ids"))
       setnames(prds, old = row_id_col, new = task$backend$primary_key)
-      task$select(character(0))$cbind(prds)
+      task$select(character(0L))$cbind(prds)
     },
     .crossval_param_set = NULL,
     .learner = NULL,
