@@ -310,6 +310,10 @@ PipeOp = R6Class("PipeOp",
         warning(w)
         invokeRestart("muffleWarning")
       })
+      if (!is.null(self$state) && !is.null(private$.state_class)) {
+        class(self$state) = c(private$.state_class, class(self$state))
+      }
+
       output = check_types(self, output, "output", "train")
       on.exit()  # don't reset state any more
       output
@@ -431,6 +435,7 @@ PipeOp = R6Class("PipeOp",
   ),
 
   private = list(
+    .state_class = NULL,
     deep_clone = function(name, value) {
       if (!is.null(private$.param_set_source)) {
         private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly

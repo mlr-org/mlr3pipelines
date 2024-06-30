@@ -118,8 +118,13 @@ multiplicity_nests_deeper_than = function(x, cutoff) {
 
 #' @export
 marshal_model.Multiplicity = function(model, inplace = FALSE, ...) {
+  maybe_marshaled = multiplicity_recurse(model, marshal_model, inplace = inplace, ...)
+  was_marshaled = unlist(multiplicity_recurse(maybe_marshaled, is_marshaled_model))
+  if (!any(was_marshaled)) {
+    return(model)
+  }
   structure(list(
-    marshaled = multiplicity_recurse(model, marshal_model, inplace = inplace, ...),
+    marshaled = maybe_marshaled,
     packages = "mlr3pipelines"
   ), class = c("Multiplicity_marshaled", "marshaled"))
 }

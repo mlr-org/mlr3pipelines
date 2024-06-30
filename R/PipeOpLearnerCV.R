@@ -146,14 +146,8 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
       super$initialize(id, alist(resampling = private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
-    },
-    train = function(inputs) {
-      outputs = super$train(inputs)
-      self$state = multiplicity_recurse(self$state, function(state) {
-          structure(state, class = c("pipeop_learner_cv_state", class(state)))
-      })
-      return(outputs)
     }
+
   ),
   active = list(
     learner = function(val) {
@@ -185,6 +179,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
     }
   ),
   private = list(
+    .state_class = "pipeop_learner_cv_state",
     .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
 

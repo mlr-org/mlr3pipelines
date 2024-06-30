@@ -45,7 +45,7 @@
 #'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
-#'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
+#'    via [`opt`][bbotk::opt]. Initialized to `OptimizerGenSA`.
 #'  * `log_level` :: `character(1)` | `integer(1)`\cr
 #'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
 #'
@@ -59,6 +59,7 @@
 #' @examples
 #' \dontshow{ if (requireNamespace("bbotk")) \{ }
 #' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' \dontshow{ if (requireNamespace("GenSA")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -69,6 +70,7 @@
 #' pop$train(task)
 #'
 #' pop$state
+#' \dontshow{ \} }
 #' \dontshow{ \} }
 #' \dontshow{ \} }
 #' @family PipeOps

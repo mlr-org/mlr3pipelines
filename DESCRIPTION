@@ -96,7 +96,7 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Collate:
     'Graph.R'
