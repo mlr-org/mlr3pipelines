@@ -1,5 +1,7 @@
 # mlr3pipelines 0.5.2-9000
 
+* Compatibility with new `bbotk` release.
+
 # mlr3pipelines 0.5.2
 
 * Added new `ppl("convert_types")`.
