@@ -308,9 +308,9 @@ Graph = R6Class("Graph",
           null_str = function(x) x %??% "NULL"
           if (node == "<INPUT>") {
             txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
-          } else if (grepl("<OUTPUT>", node)) {
+          } else if (grepl("<OUTPUT>", node, fixed = TRUE)) {
             if (nrow(self$output) > 1) {
-              out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node), ]  # Deal with multiple outputs
+              out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node, fixed = TRUE), ]  # Deal with multiple outputs
             } else {
               out = self$output  # Standard case, single output
             }
