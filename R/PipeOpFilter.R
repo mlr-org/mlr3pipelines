@@ -128,7 +128,7 @@ PipeOpFilter = R6Class("PipeOpFilter",
       }
       private$.outer_param_set = ps(
         nfeat = p_int(lower = 0L, tags = "train"),
-        frac = p_dbl(lower = 0L, upper = 1L, tags = "train"),
+        frac = p_dbl(lower = 0, upper = 1, tags = "train"),
         cutoff = p_dbl(tags = "train"),
         permuted = p_int(lower = 1L, tags = "train")
       )
