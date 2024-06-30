@@ -1,6 +1,5 @@
 # mlr3pipelines 0.5.2-9000
 
-
 * Compatibility with new `bbotk` release.
 * Added marshaling support to `GraphLearner`
 * Support internal tuning and validation
