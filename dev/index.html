@@ -127,11 +127,18 @@
 <p>This learner can be used for resampling, benchmarking, and even tuning.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">resample</span><span class="op">(</span><span class="fu">tsk</span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span>, <span class="va">glrn</span>, <span class="fu">rsmp</span><span class="op">(</span><span class="st">"cv"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span></span>
-<span><span class="co">#&gt; * Task: iris</span></span>
-<span><span class="co">#&gt; * Learner: pca.variance.classif.rpart</span></span>
-<span><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></span>
-<span><span class="co">#&gt; * Errors: 0 in 0 iterations</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;ResampleResult&gt; with 10 resampling iterations</span></span>
+<span><span class="co">#&gt;  task_id                 learner_id resampling_id iteration warnings errors</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         1        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         2        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         3        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         4        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         5        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         6        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         7        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         8        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         9        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv        10        0      0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="feature-overview">Feature Overview<a class="anchor" aria-label="anchor" href="#feature-overview"></a>
@@ -224,7 +231,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/mlr-org/mlr3pipelines/actions" class="external-link"><img src="https://github.com/mlr-org/mlr3pipelines/workflows/r-cmd-check/badge.svg?branch=master" alt="tic"></a></li>
+<li><a href="https://github.com/mlr-org/mlr3pipelines/actions/workflows/r-cmd-check.yml" class="external-link"><img src="https://github.com/mlr-org/mlr3pipelines/actions/workflows/r-cmd-check.yml/badge.svg" alt="r-cmd-check"></a></li>
 <li><a href="https://cran.r-project.org/package=mlr3pipelines" class="external-link"><img src="https://www.r-pkg.org/badges/version/mlr3pipelines" alt="CRAN"></a></li>
 <li><a href="https://stackoverflow.com/questions/tagged/mlr3" class="external-link"><img src="https://img.shields.io/badge/stackoverflow-mlr3-orange.svg" alt="StackOverflow"></a></li>
 <li><a href="https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/" class="external-link"><img src="https://img.shields.io/badge/chat-mattermost-orange.svg" alt="Mattermost"></a></li>
