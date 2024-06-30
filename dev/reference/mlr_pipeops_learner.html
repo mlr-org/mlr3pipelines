@@ -155,6 +155,17 @@ Prediction time, in seconds.</p></li>
 
 <p>Fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>, as well as:</p><ul><li><p><code>learner</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that is being wrapped. Read-only.</p></li>
 <li><p><code>learner_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> that is being wrapped. This learner contains the model if the <code>PipeOp</code> is trained. Read-only.</p></li>
+<li><p><code>validate</code> :: <code>"predefined"</code> or <code>NULL</code><br>
+This field can only be set for <code>Learner</code>s that have the <code>"validation"</code> property.
+Setting the field to <code>"predefined"</code> means that the wrapped <code>Learner</code> will use the internal validation task,
+otherwise it will be ignored.
+Note that specifying <em>how</em> the validation data is created is possible via the <code>$validate</code> field of the <code><a href="mlr_learners_graph.html">GraphLearner</a></code>.
+For each <code>PipeOp</code> it is then only possible to either use it (<code>"predefined"</code>) or not use it (<code>NULL</code>).
+Also see <code><a href="set_validate.GraphLearner.html">set_validate.GraphLearner</a></code> for more information.</p></li>
+<li><p><code>internal_tuned_values</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
+The internally tuned values if the wrapped <code>Learner</code> supports internal tuning, <code>NULL</code> otherwise.</p></li>
+<li><p><code>internal_valid_scores</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
+The internal validation scores if the wrapped <code>Learner</code> supports internal validation, <code>NULL</code> otherwise.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
@@ -270,7 +281,7 @@ Prediction time, in seconds.</p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Sebastian Fischer, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown-footer-right">

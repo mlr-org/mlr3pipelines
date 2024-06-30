@@ -342,4 +342,7 @@
   <url>
     <loc>https://mlr3pipelines.mlr-org.com/dev/reference/reset_class_hierarchy_cache.html</loc>
   </url>
+  <url>
+    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/set_validate.GraphLearner.html</loc>
+  </url>
 </urlset>
