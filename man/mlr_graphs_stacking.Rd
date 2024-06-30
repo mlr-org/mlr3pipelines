@@ -9,7 +9,7 @@ pipeline_stacking(
   base_learners,
   super_learner,
   method = "cv",
-  folds = 3,
+  folds = 3L,
   use_features = TRUE
 )
 }

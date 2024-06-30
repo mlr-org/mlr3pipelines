@@ -85,7 +85,7 @@ PipeOpCopy = R6Class("PipeOpCopy",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "copy", param_vals = list()) {
-      assert_int(outnum, lower = 1)
+      assert_int(outnum, lower = 1L)
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),

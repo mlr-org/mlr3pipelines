@@ -42,7 +42,7 @@
 #' graph_learner$train(tsk("german_credit"))
 #' }
 #' \dontshow{ \} }
-pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3, use_features = TRUE) {
+pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3L, use_features = TRUE) {
   assert_learners(base_learners)
   assert_learner(super_learner)
   assert_choice(method, c("cv", "insample"))

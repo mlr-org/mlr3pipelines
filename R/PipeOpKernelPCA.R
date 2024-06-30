@@ -73,7 +73,7 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
         kernel = p_fct(default = "rbfdot", levels = c("rbfdot", "polydot",
           "vanilladot", "tanhdot", "laplacedot", "besseldot", "anovadot", "splinedot"), tags = c("train", "kpca")),
         kpar = p_uty(tags = c("train", "kpca")),
-        features = p_int(default = 0, lower = 0, tags = c("train", "kpca")),
+        features = p_int(default = 0L, lower = 0L, tags = c("train", "kpca")),
         th = p_dbl(default = 1e-04, lower = 0, tags = c("train", "kpca")),
         na.action = p_uty(default = stats::na.omit, tags = c("train", "kpca"))
       )
@@ -85,7 +85,7 @@ PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
     .train_dt = function(dt, levels, target) {
       pcr = invoke(kernlab::kpca, as.matrix(dt), .args = self$param_set$get_values(tags = "kpca"))
       self$state$pcr = pcr
-      self$state$pcr@rotated = matrix(numeric(0))
+      self$state$pcr@rotated = matrix(numeric(0L))
       kernlab::rotated(pcr)
     },
 

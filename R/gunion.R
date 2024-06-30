@@ -31,16 +31,16 @@
 gunion = function(graphs, in_place = FALSE) {
   assert_list(graphs)
   assert(check_flag(in_place), check_logical(in_place, any.missing = FALSE, len = length(graphs)))
-  if (length(graphs) == 0) return(Graph$new())
-  graphs = map_if(graphs, is.null, function(x) po("nop", id = paste0("nop_", paste(sample(c(letters, 0:9), 8, TRUE), collapse = ""))))
-  do_clone = if (length(in_place) == length(graphs)) !in_place else c(!in_place, rep(TRUE, length(graphs) - 1))
+  if (length(graphs) == 0L) return(Graph$new())
+  graphs = map_if(graphs, is.null, function(x) po("nop", id = paste0("nop_", paste(sample(c(letters, 0:9), 8L, TRUE), collapse = ""))))
+  do_clone = if (length(in_place) == length(graphs)) !in_place else c(!in_place, rep(TRUE, length(graphs) - 1L))
   graphs = structure(pmap(list(x = graphs, clone = do_clone), as_graph), names = names(graphs))
   graphs = Filter(function(x) length(x$pipeops), graphs)
 
-  if (length(graphs) == 0) return(Graph$new())
+  if (length(graphs) == 0L) return(Graph$new())
 
-  if (in_place[[1]]) {
-    g = graphs[[1]]
+  if (in_place[[1L]]) {
+    g = graphs[[1L]]
     g$.__enclos_env__$private$.param_set = NULL  # clear param_set cache
   } else {
     g = Graph$new()

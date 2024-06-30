@@ -47,8 +47,8 @@ as_graph.default = function(x, clone = TRUE) {
 
 #' @export
 as_graph.list = function(x, clone = FALSE) {
-  if (!clone && length(x) == 1) {
-    return(as_graph(x[[1]], clone = clone))
+  if (!clone && length(x) == 1L) {
+    return(as_graph(x[[1L]], clone = clone))
   }
   gunion(x)  # gunion itself will convert individual members of x
 }
@@ -103,7 +103,7 @@ as_pipeop = function(x, clone = FALSE) {
 
 #' @export
 as_pipeop.default = function(x, clone = FALSE) {
-  stopf("%s can not be converted to PipeOp", deparse(substitute(x))[1])
+  stopf("%s can not be converted to PipeOp", deparse(substitute(x))[1L])
 }
 
 #' @export

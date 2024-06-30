@@ -99,12 +99,12 @@ PipeOpMutate = R6Class("PipeOpMutate",
       }
       newdata = taskdata[, nms, with = FALSE]
 
-      keep_feats = character(0)
+      keep_feats = character(0L)
       if (!self$param_set$values$delete_originals) {
         keep_feats = setdiff(task$feature_names, colnames(newdata))
       }
       task = task$select(keep_feats)
-      if (nrow(newdata) == 1) {
+      if (nrow(newdata) == 1L) {
         # if the user gave us something like "one = ~ 1" to introduce a constant column, we will only
         # have a single row here and need to copy that.
         newdata = newdata[rep(1, task$nrow)]
@@ -126,9 +126,9 @@ PipeOpMutate = R6Class("PipeOpMutate",
 check_mutation_formulae = function(x) {
   check_list(x, types = "formula", names = "unique") %check&&%
     Reduce(`%check&&%`, lapply(x, function(xel) {
-      if (length(xel) != 2) {
+      if (length(xel) != 2L) {
         return(sprintf("formula %s must not have a left hand side.",
-          deparse(xel, nlines = 1, width.cutoff = 500)))
+          deparse(xel, nlines = 1L, width.cutoff = 500L)))
       }
       TRUE
     }), TRUE)

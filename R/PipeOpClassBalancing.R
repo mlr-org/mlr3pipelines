@@ -123,25 +123,25 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
       tbl = sort(table(truth), decreasing = TRUE)
       reference = switch(self$param_set$values$reference,
         all = mean(tbl),
-        major = tbl[1],
+        major = tbl[1L],
         minor = tbl[length(tbl)],
-        nonmajor = mean(tbl[-1]),
+        nonmajor = mean(tbl[-1L]),
         nonminor = mean(tbl[-length(tbl)]),
         one = 1)
       target_size = round(self$param_set$values$ratio * reference)
 
       adjustable = switch(self$param_set$values$adjust,
         all = names(tbl),
-        major = names(tbl)[1],
+        major = names(tbl)[1L],
         minor = names(tbl)[length(tbl)],
-        nonmajor = names(tbl)[-1],
+        nonmajor = names(tbl)[-1L],
         nonminor = names(tbl)[-length(tbl)],
         upsample = names(tbl)[tbl < target_size],
         downsample = names(tbl)[tbl > target_size])
 
       keep_all = rep(TRUE, length(truth))
       orig_ids = task$row_ids
-      add_ids = integer(0)
+      add_ids = integer(0L)
       for (adjusting in adjustable) {
         if (tbl[adjusting] >= target_size) {
           # downsampling

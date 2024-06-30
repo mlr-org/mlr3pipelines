@@ -65,8 +65,8 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
   public = list(
     initialize = function(options = 0, id = "unbranch", param_vals = list()) {
       assert(
-        check_int(options, lower = 0),
-        check_character(options, min.len = 1, any.missing = FALSE)
+        check_int(options, lower = 0L),
+        check_character(options, min.len = 1L, any.missing = FALSE)
       )
       if (is.numeric(options)) {
         if (options) {

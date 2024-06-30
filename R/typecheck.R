@@ -91,10 +91,10 @@ get_class_hierarchy = function(classname) {
 #'
 #' add_class_hierarchy_cache(c("data.table", "data.frame"))
 add_class_hierarchy_cache = function(hierarchy) {
-  assert_character(hierarchy, any.missing = FALSE, min.len = 1)
-  class_hierarchy_cache[[hierarchy[1]]] = hierarchy
-  if (length(hierarchy) > 1) {
-    add_class_hierarchy_cache(hierarchy[-1])
+  assert_character(hierarchy, any.missing = FALSE, min.len = 1L)
+  class_hierarchy_cache[[hierarchy[1L]]] = hierarchy
+  if (length(hierarchy) > 1L) {
+    add_class_hierarchy_cache(hierarchy[-1L])
   }
 }
 
@@ -150,7 +150,7 @@ default_chc = list(
 #' # a `PipeOp` by querying the [`mlr_pipeops`] [`Dictionary`][mlr3misc::Dictionary].
 #' # This is an example and not necessary, because mlr3pipelines adds it by default.
 #' register_autoconvert_function("PipeOp", function(x) as_pipeop(x), packages = "mlr3pipelines")
-register_autoconvert_function = function(cls, fun, packages = character(0)) {
+register_autoconvert_function = function(cls, fun, packages = character(0L)) {
   assert_string(cls)
   assert_function(fun)
   assert_character(packages, any.missing = FALSE)
@@ -173,7 +173,7 @@ reset_autoconvert_register = function() {
     # fill autoconvert register with given items
     do.call(register_autoconvert_function, item)
     # fill class hierarchy cache with info about autoconvertible classes
-    get_class_hierarchy(item[[1]])
+    get_class_hierarchy(item[[1L]])
   }
 }
 

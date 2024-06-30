@@ -99,7 +99,7 @@ concat_graphs = function(g1, g2, in_place = FALSE) {
   g2 = as_graph(g2, clone = TRUE)
   g1out = g1$output
   g2in = g2$input
-  if (nrow(g1out) != 1 && nrow(g1out) != nrow(g2in) && !(nrow(g2in) == 1 && g2in$channel.name == "...")) {
+  if (nrow(g1out) != 1L && nrow(g1out) != nrow(g2in) && !(nrow(g2in) == 1L && g2in$channel.name == "...")) {
     stopf("Graphs / PipeOps to be connected have mismatching number of inputs / outputs.")
   }
 
@@ -172,7 +172,7 @@ chain_graphs = function(graphs, in_place = FALSE) {
     # all except the first graph get cloned, so if we are in_place,
     # we only need to take care to clone it. We convert it to a Graph,
     # so `%>>!%` will not clone it again.
-    graphs[[1]] = as_graph(graphs[[1]], clone = TRUE)
+    graphs[[1L]] = as_graph(graphs[[1L]], clone = TRUE)
   }
   Reduce(`%>>!%`, graphs)
 }

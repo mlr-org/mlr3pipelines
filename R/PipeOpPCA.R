@@ -71,7 +71,7 @@ PipeOpPCA = R6Class("PipeOpPCA",
       ps = ps(
         center = p_lgl(default = TRUE, tags = c("train", "pca")),
         scale. = p_lgl(default = FALSE, tags = c("train", "pca")),
-        rank. = p_int(default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
+        rank. = p_int(default = NULL, lower = 1L, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }

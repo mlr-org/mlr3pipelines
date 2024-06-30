@@ -202,7 +202,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   # again done by reference
   new_features = unlist(c(list(data.table(x = vector(length = task$nrow))),
     map(tail(inputs, -1L), .f = function(y) y$data(ids, cols = y$feature_names))), recursive = FALSE)
-  names(new_features)[1] = make.unique(rev(names(new_features)))[[length(new_features)]]
+  names(new_features)[1L] = make.unique(rev(names(new_features)))[[length(new_features)]]
 
   # we explicitly have to subset to the unique column names, otherwise task$cbind() complains for data.table backends
   new_features = new_features[unique(names(new_features))]

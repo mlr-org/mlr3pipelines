@@ -104,4 +104,4 @@ PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
 
 mlr_pipeops$add("imputeconstant", PipeOpImputeConstant)
 
-assert_string_or_factor = function(x) assert(check_string(x), check_factor(x, len = 1, any.missing = FALSE))
+assert_string_or_factor = function(x) assert(check_string(x), check_factor(x, len = 1L, any.missing = FALSE))

@@ -95,9 +95,9 @@ PipeOpProxy = R6Class("PipeOpProxy",
             # graph$output access may be slow, so we cache it here
             graph_outnum = nrow(graph$output)
             graph_input = nrow(graph$input)
-            if (graph_outnum != 1 && graph_outnum != outnum) {
+            if (graph_outnum != 1L && graph_outnum != outnum) {
               "Graph's output number must either be 1 or match `outnum`"
-            } else if (innum > 1 && graph_input != innum && (graph_input > innum || "..." %nin% graph$input$name)) {
+            } else if (innum > 1L && graph_input != innum && (graph_input > innum || "..." %nin% graph$input$name)) {
               "Graph's input number when `innum` > 1 must either match `innum` or the Graph must contain a '...' (vararg) channel."
             } else {
               TRUE
@@ -122,11 +122,11 @@ PipeOpProxy = R6Class("PipeOpProxy",
       content = as_graph(self$param_set$values$content)
       prestate = content$state
       on.exit({content$state = prestate})
-      if (length(input) > 1) {
+      if (length(input) > 1L) {
         output = content$train(unname(input), single_input = FALSE)
       } else {
         # automatically send input to all graph inputs
-        output = content$train(input[[1]])
+        output = content$train(input[[1L]])
       }
       self$state = content$state
       output
@@ -136,11 +136,11 @@ PipeOpProxy = R6Class("PipeOpProxy",
       prestate = content$state
       on.exit({content$state = prestate})
       content$state = self$state
-      if (length(input) > 1) {
+      if (length(input) > 1L) {
         output = content$predict(unname(input), single_input = FALSE)
       } else {
         # automatically send input to all graph inputs
-        output = content$predict(input[[1]])
+        output = content$predict(input[[1L]])
       }
     },
     .additional_phash_input = function() list(self$input$name, self$output$name)

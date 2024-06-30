@@ -205,13 +205,13 @@ Graph = R6Class("Graph",
       assert_choice(src_id, names(self$pipeops))
       assert_choice(dst_id, names(self$pipeops))
       if (is.null(src_channel)) {
-        if (length(self$pipeops[[src_id]]$output$name) > 1) {
+        if (length(self$pipeops[[src_id]]$output$name) > 1L) {
           stopf("src_channel must not be NULL if src_id pipeop has more than one output channel.")
         }
         src_channel = 1L
       }
       if (is.null(dst_channel)) {
-        if (length(self$pipeops[[dst_id]]$input$name) > 1) {
+        if (length(self$pipeops[[dst_id]]$input$name) > 1L) {
           stopf("dst_channel must not be NULL if src_id pipeop has more than one input channel.")
         }
         dst_channel = 1L
@@ -225,7 +225,7 @@ Graph = R6Class("Graph",
         src_channel = self$pipeops[[src_id]]$output$name[src_channel]
       }
       assert(
-        check_integerish(dst_channel, lower = 1,
+        check_integerish(dst_channel, lower = 1L,
           upper = nrow(self$pipeops[[dst_id]]$input), any.missing = FALSE),
         check_choice(dst_channel, self$pipeops[[dst_id]]$input$name)
       )
@@ -283,7 +283,7 @@ Graph = R6Class("Graph",
         df = self$edges[, list(from = src_id, to = dst_id)]
         df = rbind(df, self$input[, list(from = "<INPUT>", to = op.id)])
         output = self$output
-        if (nrow(output) > 1) {
+        if (nrow(output) > 1L) {
           # In case we have multiple outputs, we add an output for every final node
           df = rbind(df, output[, list(from = op.id, to = paste0("<OUTPUT>\n", name))])
         } else {
@@ -309,7 +309,7 @@ Graph = R6Class("Graph",
           if (node == "<INPUT>") {
             txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
           } else if (grepl("<OUTPUT>", node)) {
-            if (nrow(self$output) > 1) {
+            if (nrow(self$output) > 1L) {
               out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node), ]  # Deal with multiple outputs
             } else {
               out = self$output  # Standard case, single output
@@ -319,7 +319,7 @@ Graph = R6Class("Graph",
             txt = paste((gsub("<(.*)>", utils::capture.output(self$pipeops[[node]]), replacement = "<b>\\1</b>", perl = TRUE)), collapse = "<br>")
           }
           # Deal with special case: multiple edges between two pipeops
-          if (length(txt) > 1) txt = paste0(txt, collapse = "<br>")
+          if (length(txt) > 1L) txt = paste0(txt, collapse = "<br>")
           return(txt)
         })
         ig_data$nodes$title = paste0("<p>", ig_data$nodes$title, "</p>")
@@ -342,12 +342,12 @@ Graph = R6Class("Graph",
         if (horizontal) {
           layout = -layout[, 2:1]
         }
-        layout[, 1] = layout[, 1] * .75
-        layout[, 2] = layout[, 2] * .75
+        layout[, 1L] = layout[, 1L] * .75
+        layout[, 2L] = layout[, 2L] * .75
 
         defaultargs = list(vertex.shape = "crectangle", vertex.size = 60, vertex.size2 = 15 * 2.5, vertex.color = 0,
-          xlim = range(layout[, 1]) + c(-0.3, 0.3),
-          ylim = range(layout[, 2]) + c(-0.1, 0.1),
+          xlim = range(layout[, 1L]) + c(-0.3, 0.3),
+          ylim = range(layout[, 2L]) + c(-0.1, 0.1),
           rescale = FALSE,
           asp = 0.4
         )
@@ -407,7 +407,7 @@ Graph = R6Class("Graph",
         # print table <id>, <state>, where <state> is `class(pipeop$state)`
         lines = rbindlist(map(self$pipeops[self$ids(sorted = TRUE)], function(pipeop) {
           data.table(ID = pipeop$id, State = sprintf("<%s>",
-            map_values(class(pipeop$state)[1], "NULL", "<UNTRAINED>")))
+            map_values(class(pipeop$state)[1L], "NULL", "<UNTRAINED>")))
         }), use.names = TRUE)
         if (nrow(lines)) {
           prd = self$edges[, list(prdcssors = paste(unique(src_id), collapse = ",")), by = list(ID = dst_id)]
@@ -460,8 +460,8 @@ Graph = R6Class("Graph",
       graph_reduce(self, input, "predict", single_input)
     },
     help = function(help_type = getOption("help_type")) {
-      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
-      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1L]]
+      match.fun("help")(parts[[2L]], package = parts[[1L]], help_type = help_type)
     }
   ),
 
@@ -544,8 +544,8 @@ graph_channels = function(ids, channels, pipeops, direction) {
     df$op.id = po$id
     df = df[rows,
       c("name", "train", "predict", "op.id", "name")]
-    df[[1]] = paste0(po$id, ".", df[[1]])
-    names(df)[5] = "channel.name"
+    df[[1L]] = paste0(po$id, ".", df[[1L]])
+    names(df)[5L] = "channel.name"
     df
   })
 
@@ -595,7 +595,7 @@ graph_reduce = function(self, input, fun, single_input) {
       stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.")
     }
     # repeat the "..." as often as necessary
-    repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1, 1)
+    repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1L, 1L)
     graph_input = graph_input[rep(graph_input$name, repeats), , on = "name"]
   }
 
@@ -678,7 +678,7 @@ graph_load_namespaces = function(self, info) {
       NULL
     }, error = function(e) {
       sprintf("Error loading package %s (required by %s):\n    %s",
-        package, str_collapse(pipeops, n = 4), e$message)
+        package, str_collapse(pipeops, n = 4L), e$message)
     })
   })
   errors = discard(errors, is.null)
@@ -694,7 +694,7 @@ predict.Graph = function(object, newdata, ...) {
     stop("Graph is not trained.")
   }
   output = object$output
-  if (nrow(output) != 1) {
+  if (nrow(output) != 1L) {
     stop("Graph has more than one output channel")
   }
   if (!are_types_compatible(output$predict, "Prediction")) {
@@ -720,7 +720,7 @@ predict.Graph = function(object, newdata, ...) {
     )
   }
   result = object$predict(newdata)
-  assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)
+  assert_list(result, types = "Prediction", any.missing = FALSE, len = 1L)
   result = result[[1]]
   if (plain) {
     result = result$data$response %??% result$data$prob

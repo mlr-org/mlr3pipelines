@@ -48,7 +48,7 @@
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))$aggregate()
 #' }
 #' \dontshow{ \} }
-pipeline_bagging = function(graph, iterations = 10, frac = 0.7, averager = NULL, replace = FALSE) {
+pipeline_bagging = function(graph, iterations = 10L, frac = 0.7, averager = NULL, replace = FALSE) {
   g = as_graph(graph)
   assert_count(iterations)
   assert_number(frac, lower = 0, upper = 1)

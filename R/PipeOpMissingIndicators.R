@@ -108,7 +108,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
     .transform = function(task) {
       if (!length(self$state$indicand_cols)) {
         # need to handle this as special case because cbind for empty tasks is broken
-        return(task$select(character(0)))
+        return(task$select(character(0L)))
       }
       data_dummy = as.data.table(is.na(task$data(cols = self$state$indicand_cols)))
       data_dummy = switch(self$param_set$values$type,
@@ -118,7 +118,7 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
         numeric = data_dummy[, lapply(.SD, as.numeric)],
         stop("Invalid value of 'type' parameter"))
       colnames(data_dummy) = paste0("missing_", colnames(data_dummy))
-      task$select(character(0))$cbind(data_dummy)
+      task$select(character(0L))$cbind(data_dummy)
     }
   )
 )

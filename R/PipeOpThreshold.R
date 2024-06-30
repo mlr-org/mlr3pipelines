@@ -61,7 +61,7 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       param_set = ps(thresholds = p_uty(custom_check = check_numeric_valid_threshold, tags = "predict"))
 
       param_set$values$thresholds = 0.5
-      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
+      super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0L),
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),
         output = data.table(name = "output", train = "NULL", predict = "PredictionClassif"),
         tags = "target transform")
@@ -73,10 +73,10 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
       list(NULL)
     },
     .predict = function(inputs) {
-      prd = inputs[[1]]$clone()
+      prd = inputs[[1L]]$clone()
       thr = self$param_set$values$thresholds
       assert_subset("prob", prd$predict_types)
-      if (length(thr) > 1) {
+      if (length(thr) > 1L) {
         if (length(thr) != length(levels(prd$truth))) {
           stop("'thresholds' parameter must have length one or length equal to number of outcome levels")
         }

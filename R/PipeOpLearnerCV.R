@@ -133,7 +133,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
         keep_response = p_lgl(tags = c("train", "required"))
       )
-      private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
+      private$.crossval_param_set$values = list(method = "cv", folds = 3L, keep_response = FALSE)
       if (paradox_info$is_old) {
         private$.crossval_param_set$set_id = "resampling"
       }
@@ -219,7 +219,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # will be always "row_ids"
       row_id_col = intersect(colnames(prds), c("row_id", "row_ids"))
       setnames(prds, old = row_id_col, new = task$backend$primary_key)
-      task$select(character(0))$cbind(prds)
+      task$select(character(0L))$cbind(prds)
     },
     .crossval_param_set = NULL,
     .learner = NULL,

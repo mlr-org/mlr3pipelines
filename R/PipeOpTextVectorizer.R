@@ -187,8 +187,8 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         remove_separators = p_lgl(default = TRUE, tags = c("train", "predict", "tokenizer")),
         split_hyphens = p_lgl(default = FALSE, tags = c("train", "predict", "tokenizer")),
 
-        n = p_uty(default = 2, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 1, any.missing = FALSE)),
-        skip = p_uty(default = 0, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1, lower = 0, any.missing = FALSE)),
+        n = p_uty(default = 2L, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1L, lower = 1L, any.missing = FALSE)),
+        skip = p_uty(default = 0L, tags = c("train", "predict", "ngrams"), custom_check = curry(check_integerish, min.len = 1L, lower = 0L, any.missing = FALSE)),
 
         sparsity = p_dbl(lower = 0, upper = 1, default = NULL,
           tags = c("train", "dfm_trim"), special_vals = list(NULL),
@@ -214,11 +214,11 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
         base_tf = p_dbl(lower = 0, default = 10, tags = c("train", "predict", "dfm_weight"), depends = quote(scheme_tf %in% c("logcount", "logave"))),
 
         return_type = p_fct(levels = c("bow", "integer_sequence", "factor_sequence"), tags = c("train", "predict")),
-        sequence_length = p_int(default = 0, lower = 0, upper = Inf, tags = c("train", "predict", "integer_sequence"),
+        sequence_length = p_int(default = 0L, lower = 0L, upper = Inf, tags = c("train", "predict", "integer_sequence"),
           depends = quote(return_type %in% c("integer_sequence", "factor_sequence")))
       )
 
-      ps$values = list(stopwords_language = "smart", extra_stopwords = character(0), n = 1, scheme_df = "unary", return_type = "bow")
+      ps$values = list(stopwords_language = "smart", extra_stopwords = character(0L), n = 1L, scheme_df = "unary", return_type = "bow")
       super$initialize(id = id, param_set = ps, param_vals = param_vals, packages = c("quanteda", "stopwords"), feature_types = "character")
     }
   ),
@@ -312,7 +312,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       if (is.null(il)) il = max(map_int(tokens, length))
       tokens = map(tokens, function(x) {
         x = pad0(ifelse(x %in% dict$v, x, 0), il)
-        data.table(matrix(x, nrow = 1))
+        data.table(matrix(x, nrow = 1L))
       })
       tokens = rbindlist(tokens)
       if (self$param_set$values$return_type == "factor_sequence") {

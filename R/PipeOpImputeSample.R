@@ -64,7 +64,7 @@ PipeOpImputeSample = R6Class("PipeOpImputeSample",
   private = list(
     .train_imputer = function(feature, type, context) {
       fvals = feature[!is.na(feature)]
-      if (length(fvals) < 10) {  # don't bother with table if vector is short
+      if (length(fvals) < 10L) {  # don't bother with table if vector is short
         return(fvals)
       }
       tab = data.table(fvals)[, .N, by = "fvals"]

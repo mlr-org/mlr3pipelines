@@ -36,7 +36,7 @@ paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
 .onUnload = function(libpath) { # nocov start
    event = packageEvent("mlr3", "onLoad")
    hooks = getHook(event)
-   pkgname = vapply(hooks[-1], function(x) environment(x)$pkgname, NA_character_)
+   pkgname = vapply(hooks[-1L], function(x) environment(x)$pkgname, NA_character_)
    setHook(event, hooks[pkgname != "mlr3pipelines"], action = "replace")
 } # nocov end
 

@@ -110,7 +110,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOp,
   public = list(
 
-    initialize = function(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
+    initialize = function(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0L), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
       # add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
       addparams = list(affect_columns = p_uty(custom_check = check_function_or_null, tags = "train"))
       if (whole_task_dependent) {
@@ -257,7 +257,7 @@ PipeOpImpute = R6Class("PipeOpImpute",
         # in some edge cases there may be levels during training that are missing during predict.
         levels(feature) = c(levels(feature), as.character(model))
       }
-      if (length(model) == 1) {
+      if (length(model) == 1L) {
         feature[is.na(feature)] = model
       } else {
         outlen = count_missing(feature)
