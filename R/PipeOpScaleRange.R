@@ -71,9 +71,10 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
 
     .get_state_dt = function(dt, levels, target) {
       lapply(dt, function(x) {
-        rng = range(x, na.rm = TRUE, finite = TRUE)
-        scale = (self$param_set$values$upper - self$param_set$values$lower) / diff(rng)
-        offset = -rng[1L] * scale + self$param_set$values$lower
+        lower = min(x, na.rm = TRUE)
+        upper = max(x, na.rm = TRUE)
+        scale = (self$param_set$values$upper - self$param_set$values$lower) / (upper - lower)
+        offset = -lower * scale + self$param_set$values$lower
         c(scale = scale, offset = offset)
       })
     },
