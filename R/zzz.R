@@ -4,7 +4,7 @@
 #' @import paradox
 #' @import mlr3misc
 #' @importFrom R6 R6Class
-#' @importFrom utils tail
+#' @importFrom utils tail head
 #' @importFrom digest digest
 #' @importFrom withr with_options
 #' @importFrom stats setNames

@@ -578,4 +578,33 @@ test_that("GraphLearner hashes", {
 
 })
 
+test_that("marshal", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  p1 = glrn$predict(task)
+  glrn$marshal()
+  expect_true(glrn$marshaled)
+  expect_true(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
+  glrn$unmarshal()
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
+  expect_class(glrn$model, "graph_learner_model")
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug$model))
 
+  p2 = glrn$predict(task)
+  expect_equal(p1$response, p2$response)
+
+  # checks that it is marshalable
+  glrn$train(task)
+  expect_learner(glrn, task)
+})
+
+test_that("marshal has no effect when nothing needed marshaling", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.rpart")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_class(glrn$marshal()$model, "graph_learner_model")
+  expect_class(glrn$unmarshal()$model, "graph_learner_model")
+  expect_learner(glrn, task = task)
+})

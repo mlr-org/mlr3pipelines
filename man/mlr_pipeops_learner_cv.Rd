@@ -71,6 +71,8 @@ Errors logged during prediction.
 \item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
 Prediction time, in seconds.
 }
+
+This state is given the class \code{"pipeop_learner_cv_state"}.
 }
 
 \section{Parameters}{
