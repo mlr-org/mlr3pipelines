@@ -66,7 +66,7 @@ test_that("complex graph", {
       PipeOpDebugBasic$new("basicbottom"))) %>>%
     PipeOpDebugMulti$new(3, 1, "debug3")
 
-  lines = strsplit(capture_output(biggraph$train(1)), "\n")[[1]]
+  lines = strsplit(capture_output(biggraph$train(1)), "\n", fixed = TRUE)[[1]]
 
   expect_set_equal(lines,
     c("Training debug.basic",
@@ -181,7 +181,7 @@ test_that("input / output lists and naming", {
   lines = strsplit(capture_output({
     trained = gr$train(list(debug2.input_2 = 10, debug3.input_3 = 100, debug2.input_1 = 1000), single_input = FALSE)
   }),
-  "\n")[[1]]
+  "\n", fixed = TRUE)[[1]]
 
   expect_equal(lines,
     c("Training debug2 with input list(input_1 = 1000, input_2 = 10)",
@@ -347,7 +347,7 @@ test_that("Namespaces get loaded", {
     "  Error loading package 9422228u (required by nop):",
     "  Error loading package 4rfjfw (required by scale, nop):",
     "  Error loading package 324r32 (required by scale):"),
-  strsplit(res, "\n")[[1]])
+  strsplit(res, "\n", fixed = TRUE)[[1]])
 })
 
 test_that("Graph State", {
