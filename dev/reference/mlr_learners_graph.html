@@ -140,6 +140,19 @@ construction of <code>GraphLearner</code>, during <code>$train()</code>, and dur
 <p>Fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>, as well as:</p><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href="Graph.html">Graph</a></code> that is being trained, but does <em>not</em>
 contain the model. Use <code>graph_model</code> to access the trained <code><a href="Graph.html">Graph</a></code> after <code>$train()</code>. Read-only.</p></li>
 <li><p><code>graph_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This <code><a href="Graph.html">Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.</p></li>
+<li><p><code>marshaled</code> :: <code>logical(1)</code><br>
+Whether the learner is marshaled.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
+    
+
+<ul><li><p><code>marshal(...)</code><br>
+(any) -&gt; <code>self</code><br>
+Marshal the model.</p></li>
+<li><p><code>unmarshal(...)</code><br>
+(any) -&gt; <code>self</code><br>
+Unmarshal the model.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>

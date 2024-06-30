@@ -137,6 +137,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 <p>The <code>$state$models</code> is a named <code>list</code> of <code>models</code> created by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>'s <code>$.train()</code> function
 for each column. If a column consists of missing values only during training, the <code>model</code> is <code>0</code> or the levels of the
 feature; these are used for sampling during prediction.</p>
+<p>This state is given the class <code>"pipeop_impute_learner_state"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
