@@ -144,7 +144,7 @@
 #'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
 #'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters.
 #'        This works analogously to the internal tuning implementation for [`mlr3::Learner`].
-#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one 
+#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one
 #'        parameter tagged with `"internal_tuning"`.
 #'        An example for such a `PipeOp` is a `PipeOpLearner` that wraps a `Learner` with the `"internal_tuning"` property.
 #'
@@ -276,7 +276,7 @@ PipeOp = R6Class("PipeOp",
         if (length(strings) > 6) {
           strings = c(strings[1:5], sprintf("  [... (%s lines omitted)]", length(strings) - 5))
         }
-        gsub("`", " ", paste(strings, collapse = "\n"))
+        gsub("`", " ", paste(strings, collapse = "\n"), fixed = TRUE)
       }
 
       catf("PipeOp: <%s> (%strained)", self$id, if (self$is_trained) "" else "not ")

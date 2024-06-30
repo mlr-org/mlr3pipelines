@@ -22,8 +22,8 @@ test_that("PipeOpModelMatrix - basic properties", {
     df[, name1, with = FALSE] * df[, name2, with = FALSE]
   }
 
-  fn.inter = fn[grep(":", fn)]
-  fn.sing = strsplit(fn.inter, ":")
+  fn.inter = fn[grep(":", fn, fixed = TRUE)]
+  fn.sing = strsplit(fn.inter, ":", fixed = TRUE)
   nt.dat = nt$data()
   sapply(1:3, function(i) {
     expect_true(all(nt.dat[, get(fn.inter[i])] ==

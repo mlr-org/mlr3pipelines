@@ -214,7 +214,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
           weights = task$weights$weight,
           parallelCluster = NULL),
         error = function(error_condition) {
-          if (grepl("no usable vars", x = error_condition$message)) {
+          if (grepl("no usable vars", x = error_condition$message, fixed = TRUE)) {
             NULL
           } else {
             stopf(error_condition$message)
@@ -255,7 +255,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
           treatmentplan = self$state$treatment_plan,
           dframe = task$data())),
         error = function(error_condition) {
-          if (grepl("no useable vars", x = error_condition$message)) {
+          if (grepl("no useable vars", x = error_condition$message, fixed = TRUE)) {
             data.table()
           } else {
             stopf(error_condition$message)

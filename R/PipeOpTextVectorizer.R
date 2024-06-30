@@ -309,7 +309,7 @@ PipeOpTextVectorizer = R6Class("PipeOpTextVectorizer",
       }
 
       il = self$param_set$values$sequence_length
-      if (is.null(il)) il = max(map_int(tokens, length))
+      if (is.null(il)) il = max(lengths(tokens))
       tokens = map(tokens, function(x) {
         x = pad0(ifelse(x %in% dict$v, x, 0), il)
         data.table(matrix(x, nrow = 1))

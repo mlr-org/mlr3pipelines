@@ -238,7 +238,7 @@ selector_missing = function() make_selector(function(task) {
 selector_cardinality_greater_than = function(min_cardinality) {
   assert_int(min_cardinality)
   make_selector(function(task) {
-    levlens = map_int(task$clone(deep = TRUE)$droplevels()$levels(), length)
+    levlens = lengths(task$clone(deep = TRUE)$droplevels()$levels())
     names(levlens[levlens > min_cardinality])
   }, "selector_cardinality_greater_than(%s)", min_cardinality)
 }

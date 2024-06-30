@@ -308,9 +308,9 @@ Graph = R6Class("Graph",
           null_str = function(x) x %??% "NULL"
           if (node == "<INPUT>") {
             txt = paste0("Input:<br>Name: ", self$input$name, "<br>Train: ", null_str(self$input$train), "<br>Predict: ", null_str(self$input$predict))
-          } else if (grepl("<OUTPUT>", node)) {
+          } else if (grepl("<OUTPUT>", node, fixed = TRUE)) {
             if (nrow(self$output) > 1) {
-              out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node), ]  # Deal with multiple outputs
+              out = self$output[self$output$name == gsub("<OUTPUT>\n", "", node, fixed = TRUE), ]  # Deal with multiple outputs
             } else {
               out = self$output  # Standard case, single output
             }
@@ -366,7 +366,7 @@ Graph = R6Class("Graph",
           return(cat(paste0("digraph ", dotname, " {\n", "", "\n}\n")))
         }
         if (nrow(self$edges) == 0L) {
-          all_names = gsub("\\.", "_", self$ids(TRUE))
+          all_names = gsub("\\.", "_", self$ids(TRUE), fixed = TRUE)
           dot = paste0(paste0(seq_along(all_names), " [label=", '"', all_names, '"',
             ",fontsize=", fontsize, ']'),
             collapse = ";\n")
@@ -388,14 +388,14 @@ Graph = R6Class("Graph",
             paste0(df[x, ][[1L]], " -> ", df[x, ][[2L]])
           }), collapse = ";\n")
 
-          all_names = gsub("\\.", "_", all_names)
+          all_names = gsub("\\.", "_", all_names, fixed = TRUE)
           labels = paste0(unlist(mlr3misc::map(unique(unlist(df)), function(x) {
             paste0(x, " [label=", '"', all_names[x], '"', ",fontsize=", fontsize, ']')
           })), collapse = ";\n")
           dot = paste0(gr, ";\n", labels)
 
           if (length(extra_vertices)) {
-             ev_names = gsub("\\.", "_", extra_vertices)
+             ev_names = gsub("\\.", "_", extra_vertices, fixed = TRUE)
              ev = paste0(paste0(length(all_names) + seq_along(ev_names), " [label=",
                '"', ev_names, '"', ",fontsize=", fontsize, ']'),
                collapse = ";\n")
