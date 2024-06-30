@@ -82,9 +82,10 @@ make_selector = function(fun, description, ...) {
 # letters[1:2] --> 'c("a", "b")'
 char_repr = function(x) {
   output = str_collapse(x, sep = ", ", quote = '"')
-  if (length(x) == 0) {
+  n = length(x)
+  if (n == 0L) {
     "character(0)"
-  } else if (length(x) == 1) {
+  } else if (n == 1L) {
     output
   } else {
     sprintf("c(%s)", output)
@@ -116,7 +117,7 @@ selector_all = function() make_selector(function(task) {
 #' @describeIn Selector `selector_none` selects none of the  features.
 #' @export
 selector_none = function() make_selector(function(task) {
-  character(0)
+  character(0L)
 }, "selector_none()")
 
 #' @describeIn Selector `selector_type` selects features according to type. Legal types are listed in `mlr_reflections$task_feature_types`.

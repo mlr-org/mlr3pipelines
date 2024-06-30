@@ -109,7 +109,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       private$.graph = graph
 
       output = graph$output
-      if (nrow(output) != 1) {
+      if (nrow(output) != 1L) {
         stop("'graph' must have exactly one output channel")
       }
       if (!are_types_compatible(output$predict, "Prediction")) {
@@ -146,7 +146,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       if (recursive <= 0) return(self)
       gm = self$graph_model
       gm_output = gm$output
-      if (nrow(gm_output) != 1) stop("Graph has no unique output.")
+      if (nrow(gm_output) != 1L) stop("Graph has no unique output.")
       last_pipeop_id = gm_output$op.id
 
       # pacify static checks
@@ -158,8 +158,8 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
         if (!is.null(learner_model)) break
         last_pipeop_id = gm$edges[dst_id == last_pipeop_id, src_id]
-        if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
-        if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
+        if (length(last_pipeop_id) > 1L) stop("Graph has no unique PipeOp containing a Learner")
+        if (length(last_pipeop_id) == 0L) stop("No Learner PipeOp found.")
       }
       if (return_po) {
         last_pipeop
@@ -278,7 +278,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       on.exit({self$graph$state = NULL})
       self$graph$state = self$model
       prediction = self$graph$predict(task)
-      assert_list(prediction, types = "Prediction", len = 1,
+      assert_list(prediction, types = "Prediction", len = 1L,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
     },
@@ -471,10 +471,10 @@ infer_task_type = function(graph) {
         match(c(x$output$train, x$output$predict), class_table$prediction),
         match(c(x$input$train, x$input$predict), class_table$task))
       task_type = unique(class_table$type[stats::na.omit(task_type)])
-      if (length(task_type) > 1) {
+      if (length(task_type) > 1L) {
         stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
       }
-      if (length(task_type) == 1) {
+      if (length(task_type) == 1L) {
         return(task_type)  # early exit
       }
       prdcssrs = graph$edges[dst_id == x$id, ]$src_id
@@ -489,5 +489,5 @@ infer_task_type = function(graph) {
     }
     task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
   }
-  c(task_type, "classif")[[1]]  # "classif" as final fallback
+  c(task_type, "classif")[[1L]]  # "classif" as final fallback
 }

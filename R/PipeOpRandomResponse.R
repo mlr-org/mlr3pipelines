@@ -112,7 +112,7 @@ PipeOpRandomResponse = R6Class("PipeOpRandomResponse",
         "prob" = {
           # apply does annoying things if prob has 0 rows
           values = if (nrow(prediction$data$prob)) {
-            apply(prediction$data$prob, 1, function(row) sample(levels(prediction$truth), 1, prob = row))
+            apply(prediction$data$prob, 1L, function(row) sample(levels(prediction$truth), 1L, prob = row))
           }
           factor(values, levels = levels(prediction$truth), ordered = is.ordered(prediction$truth))
         },

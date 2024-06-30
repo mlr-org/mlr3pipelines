@@ -100,16 +100,16 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   ),
   private = list(
     .train = function(input) {
-      if(!all(input[[1]]$feature_types$type == "numeric")) {
+      if(!all(input[[1L]]$feature_types$type == "numeric")) {
         stop("PipeOpTuneThreshold requires predicted probabilities! Set learner predict_type to 'prob'")
       }
-      pred = private$.task_to_prediction(input[[1]])
+      pred = private$.task_to_prediction(input[[1L]])
       th = private$.optimize_objfun(pred)
       self$state = list("threshold" = th)
       return(list(NULL))
     },
     .predict = function(input) {
-      pred = private$.task_to_prediction(input[[1]])
+      pred = private$.task_to_prediction(input[[1L]])
       pred$set_threshold(self$state$threshold)
       return(list(pred))
     },

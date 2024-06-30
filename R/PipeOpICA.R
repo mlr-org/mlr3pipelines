@@ -93,14 +93,14 @@ PipeOpICA = R6Class("PipeOpICA",
   public = list(
     initialize = function(id = "ica", param_vals = list()) {
       ps = ps(
-        n.comp = p_int(lower = 1, upper = Inf, tags = c("train", "ica")),
+        n.comp = p_int(lower = 1L, upper = Inf, tags = c("train", "ica")),
         alg.typ = p_fct(levels = c("parallel", "deflation"),
           default = "parallel", tags = c("train", "ica")),
         fun = p_fct(default = "logcosh", levels = c("logcosh", "exp"), tags = c("train", "ica")),
         alpha = p_dbl(default = 1.0, lower = 1, upper = 2, tags = c("train", "ica")),
         method = p_fct(default = "R", levels = c("C", "R"), tags = c("train", "ica")),
         row.norm = p_lgl(default = FALSE, tags = c("train", "ica")),
-        maxit = p_int(default = 200, lower = 1, tags = c("train", "ica")),
+        maxit = p_int(default = 200L, lower = 1L, tags = c("train", "ica")),
         tol = p_dbl(default = 1e-04, lower = 0, tags = c("train", "ica")),
         verbose = p_lgl(default = FALSE, tags = c("train", "ica")),
         w.init = p_uty(default = NULL, tags = c("train", "ica"))

@@ -93,7 +93,7 @@ assert_multiplicity = function(x, .var.name, check_nesting = FALSE) {
   checkmnl = function(x) {
     if (!is.Multiplicity(x)) return(0L)
     levels = unique(unlist(map(x, checkmnl)))  # don't map_int because Multiplicity() exists which would return NULL or integer(0)
-    if (length(levels) > 1) {
+    if (length(levels) > 1L) {
       stopf("Inconsistent multiplicity nesting level in %s", .var.name)
     }
     levels + 1L

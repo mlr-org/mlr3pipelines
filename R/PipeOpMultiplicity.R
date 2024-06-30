@@ -178,7 +178,7 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
   inherit = PipeOp,
   public = list(
     initialize = function(outnum, id = "multiplicityexply", param_vals = list()) {
-      assert_int(outnum, lower = 1)
+      assert_int(outnum, lower = 1L)
       super$initialize(id, param_vals = param_vals,
         input = data.table(name = "input", train = "[*]", predict = "[*]"),
         output = data.table(name = rep_suffix("output", outnum), train = "*", predict = "*"),
@@ -189,11 +189,11 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
   private = list(
     .train = function(inputs) {
       self$state = list()
-      unclass(inputs[[1]])
+      unclass(inputs[[1L]])
     },
     .predict = function(inputs) {
       rep_len(inputs, self$outnum)
-      unclass(inputs[[1]])
+      unclass(inputs[[1L]])
     },
     .additional_phash_input = function() self$output$name
   )
@@ -261,9 +261,9 @@ PipeOpReplicate = R6Class("PipeOpReplicate",
   public = list(
     initialize = function(id = "replicate", param_vals = list()) {
       ps = ps(
-        reps = p_int(lower = 1, tags = c("train", "predict", "required"))
+        reps = p_int(lower = 1L, tags = c("train", "predict", "required"))
       )
-      ps$values = list(reps = 1)
+      ps$values = list(reps = 1L)
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "[*]", predict = "[*]"),

@@ -110,13 +110,13 @@ PipeOpBranch = R6Class("PipeOpBranch",
     .train = function(inputs) {
       self$state = list()
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_set$values$selection]] = inputs[[1]]
+      ret[[self$param_set$values$selection]] = inputs[[1L]]
       ret
     },
     .predict = function(inputs) {
       assert_list(inputs)
       ret = named_list(self$output$name, NO_OP)
-      ret[[self$param_set$values$selection]] = inputs[[1]]
+      ret[[self$param_set$values$selection]] = inputs[[1L]]
       ret
     },
     .additional_phash_input = function() c(class(self$param_set$params$selection), self$output$name)

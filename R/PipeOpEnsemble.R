@@ -83,7 +83,7 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
     initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ps(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
-      assert_integerish(innum, lower = 0)
+      assert_integerish(innum, lower = 0L)
       if (paradox_info$is_old) {
         paux = ps(weights = p_uty(check_weights(innum), tags = "predict"))
         param_set$add(paux$params$weights)
@@ -119,10 +119,10 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
         inputs = unclass(inputs[[1]])
       }
       weights = self$param_set$values$weights
-      row_ids = inputs[[1]]$row_ids
+      row_ids = inputs[[1L]]$row_ids
       map(inputs, function(x) assert_true(identical(row_ids, x$row_ids)))
-      truth = inputs[[1]]$truth
-      if (length(weights) == 1) weights = rep(1, length(inputs))
+      truth = inputs[[1L]]$truth
+      if (length(weights) == 1L) weights = rep(1, length(inputs))
       weights = weights / sum(weights)
       assert_numeric(weights, any.missing = FALSE, len = length(inputs))
 
@@ -176,8 +176,8 @@ check_weights = function(innum) {
 # @param weights [`numeric`]: weights, same length as `matrices`
 # @return `matrix`
 weighted_matrix_sum = function(matrices, weights) {
-  accmat = matrices[[1]] * weights[1]
-  for (idx in seq_along(matrices)[-1]) {
+  accmat = matrices[[1L]] * weights[1L]
+  for (idx in seq_along(matrices)[-1L]) {
     accmat = accmat + matrices[[idx]] * weights[idx]
   }
   accmat

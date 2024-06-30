@@ -110,7 +110,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
       state$target_levels = levels(target)
 
       # one vs rest for multiclass.
-      if (length(state$target_levels) <= 2) {
+      if (length(state$target_levels) <= 2L) {
         state$control = lapply(dt, function(col) {
           private$fit_lmer(col, target, self$param_set$values$fast_optim, task_type)
         })
@@ -130,7 +130,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
     },
 
     .transform_dt = function(dt, levels) {
-      if (length(self$state$target_levels) <= 2) {
+      if (length(self$state$target_levels) <= 2L) {
         dt_new = map_dtc(colnames(dt), function(cname) {
           as.numeric(self$state$control[[cname]][as.character(dt[[cname]])])
         })
@@ -182,7 +182,7 @@ PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
     get_coefs = function(mod) {
       coefs = invoke(stats::coef, mod, .opts = list(warnPartialMatchArgs = FALSE, warnPartialMatchDollar = FALSE))$lvl
       lvls = rownames(coefs)
-      coefs = coefs[,1]
+      coefs = coefs[, 1L]
       names(coefs) = lvls
       intercept = unname(lme4::fixef(mod))
       # replace missing coefs with intercept value

@@ -136,7 +136,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         # tags stand for: regression vtreat::regression_parameters() / classification vtreat::classification_parameters() / multinomial vtreat::multinomial_parameters()
         minFraction = p_dbl(lower = 0, upper = 1, default = 0.02, tags = c("train", "regression", "classification", "multinomial")),
         smFactor = p_dbl(lower = 0, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
-        rareCount = p_int(lower = 0L, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
+        rareCount = p_int(lower = 0L, upper = Inf, default = 0L, tags = c("train", "regression", "classification", "multinomial")),
         rareSig = p_dbl(lower = 0, upper = 1, special_vals = list(NULL), tags = c("train", "regression", "classification", "multinomial")),  # default NULL for regression, classification, 1 for multinomial
         collarProb = p_dbl(lower = 0, upper = 1, default = 0, tags = c("train", "regression", "classification", "multinomial"), depends = quote(doCollar == TRUE)),
         doCollar = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),

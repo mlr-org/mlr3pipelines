@@ -71,7 +71,7 @@ PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
   public = list(
     initialize = function(id = "randomprojection", param_vals = list()) {
       ps = ps(
-        rank = p_int(lower = 0, tags = "train")
+        rank = p_int(lower = 0L, tags = "train")
       )
       ps$values = list(rank = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
@@ -83,7 +83,7 @@ PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
       r <- self$param_set$values$rank
       # we want to cope with a possible case of rank > m
       # In that case, we need a square matrix here.
-      if (r > 0) {
+      if (r > 0L) {
         projection = qr.Q(qr(matrix(stats::rnorm(max(m, r) * r), ncol = r)))[seq_len(m), ]
         projection = as.matrix(projection, nrow = m)  # for rank 1 case
       } else {

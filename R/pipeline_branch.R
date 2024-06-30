@@ -51,13 +51,13 @@ pipeline_branch = function(graphs, prefix_branchops = "", prefix_paths = FALSE) 
     check_string(prefix_paths)
   )
   assert(
-    check_list(graphs, min.len = 1, any.missing = FALSE, names = "unique"),
-    check_list(graphs, min.len = 1, any.missing = FALSE, names = "unnamed")
+    check_list(graphs, min.len = 1L, any.missing = FALSE, names = "unique"),
+    check_list(graphs, min.len = 1L, any.missing = FALSE, names = "unnamed")
   )
 
   graphs = lapply(graphs, as_graph)
   imap(graphs, function(g, idx) {
-    if (nrow(g$output) != 1) {
+    if (nrow(g$output) != 1L) {
       stopf("Graph %s must have exactly one output channel", idx)
     }
   })

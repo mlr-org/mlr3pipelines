@@ -197,7 +197,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
 
     .predict = function(inputs) {
       on.exit({private$.learner$state = NULL})
-      task = inputs[[1]]
+      task = inputs[[1L]]
       private$.learner$state = self$state
       list(private$.learner$predict(task))
     },
@@ -205,7 +205,7 @@ PipeOpLearner = R6Class("PipeOpLearner", inherit = PipeOp,
   )
 )
 
-mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(properties = character(0), id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new())) # nolint
+mlr_pipeops$add("learner", PipeOpLearner, list(R6Class("Learner", public = list(properties = character(0L), id = "learner", task_type = "classif", param_set = ps(), packages = "mlr3pipelines"))$new())) # nolint
 
 #' @export
 set_validate.PipeOpLearner = function(learner, validate, ...) {

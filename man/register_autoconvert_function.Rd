@@ -4,7 +4,7 @@
 \alias{register_autoconvert_function}
 \title{Add Autoconvert Function to Conversion Register}
 \usage{
-register_autoconvert_function(cls, fun, packages = character(0))
+register_autoconvert_function(cls, fun, packages = character(0L))
 }
 \arguments{
 \item{cls}{\code{character(1)} The class that \code{fun} converts to.}

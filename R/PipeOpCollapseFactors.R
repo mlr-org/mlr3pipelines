@@ -61,7 +61,7 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
     initialize = function(id = "collapsefactors", param_vals = list()) {
       ps = ps(
         no_collapse_above_prevalence = p_dbl(0, 1, tags = c("train", "predict")),
-        target_level_count = p_int(2, tags = c("train", "predict"))
+        target_level_count = p_int(2L, tags = c("train", "predict"))
       )
       ps$values = list(no_collapse_above_prevalence = 1, target_level_count = 2)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
@@ -93,12 +93,12 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
           cmap = stats::setNames(as.list(levels(d)), levels(d))
           for (eliminating in dont_keep) {
             position = match(eliminating, names(cmap))
-            if (position == 1) {
-              cmap[[2]] = c(cmap[[2]], eliminating)
-            } else if (position == length(cmap) || dtable[position - 1] < dtable[position + 1]) {
-              cmap[[position - 1]] = c(cmap[[position - 1]], eliminating)
+            if (position == 1L) {
+              cmap[[2L]] = c(cmap[[2L]], eliminating)
+            } else if (position == length(cmap) || dtable[position - 1L] < dtable[position + 1L]) {
+              cmap[[position - 1L]] = c(cmap[[position - 1L]], eliminating)
             } else {
-              cmap[[position + 1]] = c(cmap[[position + 1]], eliminating)
+              cmap[[position + 1L]] = c(cmap[[position + 1L]], eliminating)
             }
             dtable = dtable[-position]
             cmap[[position]] = NULL

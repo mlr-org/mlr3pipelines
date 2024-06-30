@@ -144,7 +144,7 @@
 #'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
 #'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters.
 #'        This works analogously to the internal tuning implementation for [`mlr3::Learner`].
-#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one 
+#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one
 #'        parameter tagged with `"internal_tuning"`.
 #'        An example for such a `PipeOp` is a `PipeOpLearner` that wraps a `Learner` with the `"internal_tuning"` property.
 #'
@@ -273,8 +273,8 @@ PipeOp = R6Class("PipeOp",
       type_table_printout = function(table) {
         strings = do.call(sprintf, cbind(fmt = "%s`[%s,%s]", table[, c("name", "train", "predict")]))
         strings = strwrap(paste(strings, collapse = ", "), indent = 2, exdent = 2)
-        if (length(strings) > 6) {
-          strings = c(strings[1:5], sprintf("  [... (%s lines omitted)]", length(strings) - 5))
+        if (length(strings) > 6L) {
+          strings = c(strings[1:5], sprintf("  [... (%s lines omitted)]", length(strings) - 5L))
         }
         gsub("`", " ", paste(strings, collapse = "\n"))
       }
@@ -349,8 +349,8 @@ PipeOp = R6Class("PipeOp",
       output
     },
     help = function(help_type = getOption("help_type")) {
-      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
-      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1L]]
+      match.fun("help")(parts[[2L]], package = parts[[1L]], help_type = help_type)
     }
   ),
 
@@ -368,10 +368,10 @@ PipeOp = R6Class("PipeOp",
     param_set = function(val) {
       if (is.null(private$.param_set)) {
         sourcelist = lapply(private$.param_set_source, function(x) eval(x))
-        if (length(sourcelist) > 1) {
+        if (length(sourcelist) > 1L) {
           private$.param_set = ParamSetCollection$new(sourcelist)
         } else {
-          private$.param_set = sourcelist[[1]]
+          private$.param_set = sourcelist[[1L]]
         }
         if (paradox_info$is_old && !is.null(self$id)) {
           private$.param_set$set_id = self$id
@@ -474,7 +474,7 @@ This warning will become an error in the future.", class(self)[[1]], class(self)
 # @param table: `data.table`: either input or output
 assert_connection_table = function(table) {
   varname = deparse(substitute(table))
-  assert_data_table(table, .var.name = varname, min.rows = 1)
+  assert_data_table(table, .var.name = varname, min.rows = 1L)
   assert_names(names(table), permutation.of = c("name", "train", "predict"), .var.name = varname)
   assert_character(table$name, any.missing = FALSE, unique = TRUE, .var.name = paste0("'name' column in ", varname))
   if (!all(multiplicity_type_nesting_level(table$train) == multiplicity_type_nesting_level(table$predict))) {
@@ -495,8 +495,8 @@ check_types = function(self, data, direction, operation) {
   typetable = self[[direction]]
   description = sprintf("%s of PipeOp %s's $%s()", direction, self$id, operation)
   if (direction == "input" && "..." %in% typetable$name) {
-    assert_list(data, min.len = nrow(typetable) - 1, .var.name = description)
-    typetable = typetable[rep(1:.N, ifelse(get("name") == "...", length(data) - nrow(typetable) + 1, 1))]
+    assert_list(data, min.len = nrow(typetable) - 1L, .var.name = description)
+    typetable = typetable[rep(1:.N, ifelse(get("name") == "...", length(data) - nrow(typetable) + 1L, 1L))]
   } else {
     assert_list(data, len = nrow(typetable), .var.name = description)
   }
@@ -505,7 +505,7 @@ check_types = function(self, data, direction, operation) {
     if (multiplicity_type_nesting_level(typereq, varname)) {
       # unpack multiplicity
       assert_multiplicity(data_element, varname)
-      typereq = substr(typereq, 2, nchar(typereq) - 1)
+      typereq = substr(typereq, 2L, nchar(typereq) - 1L)
       for (midx in seq_along(data_element)) {
         # recursively call check_item for each multiplicity-item
         data_element[midx] = list(check_item(data_element[[midx]], typereq, sprintf("Multiplicity element %s of %s", midx, varname)))
@@ -566,13 +566,13 @@ unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid
   if (!any(unpacking)) {
     return(NULL)  # no unpacking
   }
-  prototype_index = which(unpacking)[[1]]
+  prototype_index = which(unpacking)[[1L]]
   prototype = input[[prototype_index]]
   if (sum(unpacking) > 1) {
     # check that all elements being unpacked are the same multiplicity (length, names)
     # in the future we may be a bit more lax here and allow "vectorization" or cartesian products, but
     # for that we may rather want to have explicit pipeops
-    for (comparing_index in which(unpacking)[-1]) {
+    for (comparing_index in which(unpacking)[-1L]) {
       comparing = input[[comparing_index]]
       if (length(comparing) != length(prototype) || !identical(names(comparing), names(prototype))) {
         stopf("Input of %s has bad multiplicities: %s has different length and/or names than %s.",
@@ -606,7 +606,7 @@ evaluate_multiplicities = function(self, unpacked, evalcall, instate) {
     list(output = self[[evalcall]](input), state = self$state)
   })
   on.exit({self$state = as.Multiplicity(map(result, "state"))})
-  if (length(unpacked) == 0) {
+  if (length(unpacked) == 0L) {
     # if input was length-0 multiplicity, then we need to construct output ourselves, because
     # 'result' is just an empty list missing the necessary info about output channels.
     # (not necessary for 'state', because it is a list of states, whereas 'output' is a

@@ -127,10 +127,10 @@ PipeOpFilter = R6Class("PipeOpFilter",
         }
       }
       private$.outer_param_set = ps(
-        nfeat = p_int(lower = 0, tags = "train"),
-        frac = p_dbl(lower = 0, upper = 1, tags = "train"),
+        nfeat = p_int(lower = 0L, tags = "train"),
+        frac = p_dbl(lower = 0L, upper = 1L, tags = "train"),
         cutoff = p_dbl(tags = "train"),
-        permuted = p_int(lower = 1, tags = "train")
+        permuted = p_int(lower = 1L, tags = "train")
       )
       if (paradox_info$is_old) {
         private$.outer_param_set$set_id = "filter"
@@ -143,12 +143,12 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
     .get_state = function(task) {
       # reset filter on exit, the user should not even feel the temptation to not use the `$state`
-      on.exit({self$filter$scores = structure(numeric(0), .Names = character(0))})
+      on.exit({self$filter$scores = structure(numeric(0L), .Names = character(0L))})
       filtercrit = c("nfeat", "frac", "cutoff", "permuted")
       filtercrit = Filter(function(name) !is.null(private$.outer_param_set$values[[name]]), filtercrit)
-      if (length(filtercrit) != 1) {
+      if (length(filtercrit) != 1L) {
         stopf("Exactly one of 'nfeat', 'frac', 'cutoff', or 'permuted' must be given. Instead given: %s",
-          if (length(filtercrit) == 0) "none" else str_collapse(filtercrit))
+          if (length(filtercrit) == 0L) "none" else str_collapse(filtercrit))
       }
       critvalue = private$.outer_param_set$values[[filtercrit]]
 

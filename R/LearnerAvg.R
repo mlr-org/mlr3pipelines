@@ -87,10 +87,10 @@ LearnerClassifAvg = R6Class("LearnerClassifAvg", inherit = LearnerClassif,
         map(data, function(x) assert_set_equal(alllevels, levels(x)))
         data
       } else {
-        searchstring = paste0(".prob.", task$class_names[1])
+        searchstring = paste0(".prob.", task$class_names[1L])
         tg = task$feature_names
-        tg = tg[which(substr(tg, nchar(tg) - nchar(searchstring) + 1, nchar(tg)) == searchstring)]
-        inputstreams = substr(tg, 1, nchar(tg) - nchar(searchstring))
+        tg = tg[which(substr(tg, nchar(tg) - nchar(searchstring) + 1L, nchar(tg)) == searchstring)]
+        inputstreams = substr(tg, 1L, nchar(tg) - nchar(searchstring))
         assert_true(length(inputstreams) * length(task$class_names) == ncol(data))
         map(inputstreams, function(sn) {
           mat = as.matrix(data[, paste0(sn, ".prob.", task$class_names), with = FALSE])

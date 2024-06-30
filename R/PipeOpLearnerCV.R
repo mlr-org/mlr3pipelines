@@ -133,7 +133,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
         folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
         keep_response = p_lgl(tags = c("train", "required"))
       )
-      private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
+      private$.crossval_param_set$values = list(method = "cv", folds = 3L, keep_response = FALSE)
       if (paradox_info$is_old) {
         private$.crossval_param_set$set_id = "resampling"
       }
