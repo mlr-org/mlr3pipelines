@@ -4,8 +4,6 @@
 \alias{Graph}
 \title{Graph Base Class}
 \format{
-\link{R6Class} Graph
-
 \code{\link[R6:R6Class]{R6Class}}.
 }
 \description{

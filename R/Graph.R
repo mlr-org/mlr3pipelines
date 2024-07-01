@@ -1,5 +1,4 @@
 #' @title Graph Base Class
-#' @format [R6Class] Graph
 #'
 #' @usage NULL
 #' @format [`R6Class`][R6::R6Class].
