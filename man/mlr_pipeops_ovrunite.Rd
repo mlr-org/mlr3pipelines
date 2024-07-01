@@ -5,7 +5,7 @@
 \alias{PipeOpOVRUnite}
 \title{Unite Binary Classification Tasks}
 \format{
-\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 \description{
 Perform "One vs. Rest" classification by (weighted) majority vote prediction from \link[mlr3:PredictionClassif]{classification Predictions}. This works in combination with \code{\link{PipeOpOVRSplit}}.

@@ -5,7 +5,7 @@
 \alias{PipeOpFeatureUnion}
 \title{Aggregate Features from Multiple Inputs}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing them together into a single

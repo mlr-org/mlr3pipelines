@@ -5,7 +5,7 @@
 \alias{PipeOpEncodeLmer}
 \title{Impact Encoding with Random Intercept Models}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Encodes columns of type \code{factor}, \code{character} and \code{ordered}.

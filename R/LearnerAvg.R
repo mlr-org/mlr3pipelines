@@ -3,7 +3,7 @@
 #' @usage mlr_learners_classif.avg
 #' @name mlr_learners_avg
 #' @aliases mlr_learners_classif.avg
-#' @format [`R6Class`] object inheriting from [`mlr3::LearnerClassif`]/[`mlr3::Learner`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`mlr3::LearnerClassif`]/[`mlr3::Learner`].
 #'
 #' @description
 #' Computes a weighted average of inputs.
@@ -23,7 +23,7 @@
 #' incoming features.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`LearnerClassif`], as well as:
+#' The parameters are the parameters inherited from [`LearnerClassif`][mlr3::LearnerClassif], as well as:
 #'  * `measure` :: [`Measure`][mlr3::Measure] | `character` \cr
 #'    [`Measure`][mlr3::Measure] to optimize for.
 #'    Will be converted to a [`Measure`][mlr3::Measure] in case it is `character`.

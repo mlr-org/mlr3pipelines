@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scale
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Centers all numeric features to mean = 0 (if `center` parameter is `TRUE`) and scales them

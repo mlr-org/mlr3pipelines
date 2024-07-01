@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_tunethreshold
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Tunes optimal probability thresholds over different [`PredictionClassif`][mlr3::PredictionClassif]s.

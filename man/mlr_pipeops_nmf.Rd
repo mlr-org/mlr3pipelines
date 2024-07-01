@@ -5,7 +5,7 @@
 \alias{PipeOpNMF}
 \title{Non-negative Matrix Factorization}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Extracts non-negative components from data by performing non-negative matrix factorization. Only

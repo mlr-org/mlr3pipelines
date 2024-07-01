@@ -5,7 +5,7 @@
 \alias{PipeOpRandomProjection}
 \title{Project Numeric Features onto a Randomly Sampled Subspace}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Projects numeric features onto a randomly sampled subspace. All numeric features

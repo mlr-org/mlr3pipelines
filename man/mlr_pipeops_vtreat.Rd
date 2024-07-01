@@ -5,7 +5,7 @@
 \alias{PipeOpVtreat}
 \title{Interface to the vtreat Package}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Provides an interface to the vtreat package.

@@ -5,7 +5,7 @@
 \alias{PipeOpColApply}
 \title{Apply a Function to each Column of a Task}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Applies a function to each column of a task. Use the \code{affect_columns} parameter inherited from
@@ -52,7 +52,7 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSi
 Function to apply to each column of the task.
 The return value should be a \code{vector} of the same length as the input, i.e., the function vectorizes over the input.
 A typical example would be \code{as.numeric}.\cr
-The return value can also be a \code{matrix}, \code{data.frame}, or \code{\link{data.table}}.
+The return value can also be a \code{matrix}, \code{data.frame}, or \code{\link[data.table:data.table]{data.table}}.
 In this case, the length of the input must match the number of returned rows.
 The names of the resulting features of the output \code{\link[mlr3:Task]{Task}} is based on the (column) name(s) of the return value of the applicator function,
 prefixed with the original feature name separated by a dot (\code{.}).

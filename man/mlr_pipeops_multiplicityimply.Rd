@@ -5,7 +5,7 @@
 \alias{PipeOpMultiplicityImply}
 \title{Implicate a Multiplicity}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Implicate a \code{\link{Multiplicity}} by returning the input(s) converted to a \code{\link{Multiplicity}}.

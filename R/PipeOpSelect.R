@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_select
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Removes features from [`Task`][mlr3::Task] depending on a [`Selector`] function:

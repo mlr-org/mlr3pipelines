@@ -2,7 +2,7 @@
 #' @format [R6Class] Graph
 #'
 #' @usage NULL
-#' @format [`R6Class`].
+#' @format [`R6Class`][R6::R6Class].
 #'
 #' @description
 #' A [`Graph`] is a representation of a machine learning pipeline graph. It can be *trained*, and subsequently used for *prediction*.
@@ -19,15 +19,15 @@
 #' ```
 #'
 #' @section Internals:
-#' A [`Graph`] is made up of a list of [`PipeOp`]s, and a [`data.table`] of edges. Both for training and prediction, the [`Graph`]
+#' A [`Graph`] is made up of a list of [`PipeOp`]s, and a [`data.table`][data.table::data.table] of edges. Both for training and prediction, the [`Graph`]
 #' performs topological sorting of the [`PipeOp`]s and executes their respective `$train()` or `$predict()` functions in order, moving
 #' the [`PipeOp`] results along the edges as input to other [`PipeOp`]s.
 #'
 #' @section Fields:
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
 #'   Contains all [`PipeOp`]s in the [`Graph`], named by the [`PipeOp`]'s `$id`s.
-#' * `edges` :: [`data.table`]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
-#'   Table of connections between the [`PipeOp`]s. A [`data.table`]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
+#' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
+#'   Table of connections between the [`PipeOp`]s. A [`data.table`][data.table::data.table]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
 #'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
 #'   respective [`PipeOp`]s.
 #' * `is_trained` :: `logical(1)` \cr
@@ -36,10 +36,10 @@
 #'   Ids of the 'left-hand-side' [`PipeOp`]s that have some unconnected input channels and therefore act as [`Graph`] input layer.
 #' * `rhs` :: `character` \cr
 #'   Ids of the 'right-hand-side' [`PipeOp`]s that have some unconnected output channels and therefore act as [`Graph`] output layer.
-#' * `input` :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
+#' * `input` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
 #'   Input channels of the [`Graph`]. For each channel lists the name, input type during training, input type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
-#' * `output` :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
+#' * `output` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
 #'   Output channels of the [`Graph`]. For each channel lists the name, output type during training, output type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
 #' * `packages` :: `character`\cr

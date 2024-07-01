@@ -5,7 +5,7 @@
 \alias{PipeOpImputeConstant}
 \title{Impute Features by a Constant}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
 Impute features by a constant value.

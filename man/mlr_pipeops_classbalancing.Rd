@@ -5,7 +5,7 @@
 \alias{PipeOpClassBalancing}
 \title{Class Balancing}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Both undersamples a \code{\link[mlr3:Task]{Task}} to keep only a fraction of the rows of the majority class,
@@ -83,7 +83,7 @@ until the number of samples for these classes equals the "target class count".
 
 Uses \code{task$filter()} to remove rows. When identical rows are added during upsampling, then the \code{task$row_roles$use} can \emph{not} be used
 to duplicate rows because of [inaudible]; instead the \code{task$rbind()} function is used, and
-a new \code{\link{data.table}} is attached that contains all rows that are being duplicated exactly as many times as they are being added.
+a new \code{\link[data.table:data.table]{data.table}} is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 }
 
 \section{Fields}{

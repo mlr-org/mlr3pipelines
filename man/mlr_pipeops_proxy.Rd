@@ -5,7 +5,7 @@
 \alias{PipeOpProxy}
 \title{Wrap another PipeOp or Graph as a Hyperparameter}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Wraps another \code{\link{PipeOp}} or \code{\link{Graph}} as determined by the \code{content} hyperparameter.

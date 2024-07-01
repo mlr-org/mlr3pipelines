@@ -5,7 +5,7 @@
 \alias{PipeOpRemoveConstants}
 \title{Remove Constant Features}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Remove constant features from a \link[mlr3:Task]{mlr3::Task}.

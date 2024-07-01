@@ -5,7 +5,7 @@
 \alias{PipeOpMutate}
 \title{Add Features According to Expressions}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Adds features according to expressions given as formulas that may depend on values of other features.

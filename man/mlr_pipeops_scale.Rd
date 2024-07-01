@@ -5,7 +5,7 @@
 \alias{PipeOpScale}
 \title{Center and Scale Numeric Features}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Centers all numeric features to mean = 0 (if \code{center} parameter is \code{TRUE}) and scales them

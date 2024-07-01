@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_textvectorizer
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Computes a bag-of-word representation from a (set of) columns.

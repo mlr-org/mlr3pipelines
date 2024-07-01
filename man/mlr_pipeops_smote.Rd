@@ -5,7 +5,7 @@
 \alias{PipeOpSmote}
 \title{SMOTE Balancing}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Generates a more balanced data set by creating

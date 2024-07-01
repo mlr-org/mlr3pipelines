@@ -5,7 +5,7 @@
 \alias{PipeOpImputeOOR}
 \title{Out of Range Imputation}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
 Impute factorial features by adding a new level \code{".MISSING"}.

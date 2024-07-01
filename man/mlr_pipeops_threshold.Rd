@@ -5,7 +5,7 @@
 \alias{PipeOpThreshold}
 \title{Change the Threshold of a Classification Prediction}
 \format{
-\code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Change the threshold of a \code{Prediction} during the \code{predict} step.

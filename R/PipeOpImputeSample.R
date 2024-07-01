@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputesample
-#' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
 #' Impute features by sampling from non-missing training data.

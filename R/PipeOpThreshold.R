@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_threshold
-#' @format [`R6Class`] inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Change the threshold of a `Prediction` during the `predict` step.

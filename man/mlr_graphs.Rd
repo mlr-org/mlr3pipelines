@@ -5,7 +5,7 @@
 \alias{mlr_graphs}
 \title{Dictionary of (sub-)graphs}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
 }
 \description{
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{Graph}}.

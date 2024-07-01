@@ -5,7 +5,7 @@
 \alias{PipeOpModelMatrix}
 \title{Transform Columns by Constructing a Model Matrix}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Transforms columns using a given \code{formula} using the \code{\link[stats:model.matrix]{stats::model.matrix()}} function.

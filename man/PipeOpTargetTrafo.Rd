@@ -4,7 +4,7 @@
 \alias{PipeOpTargetTrafo}
 \title{Target Transformation Base Class}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Base class for handling target transformation operations. Target transformations are different

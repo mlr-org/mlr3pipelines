@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_randomresponse
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Takes in a [`Prediction`][mlr3::Prediction] of `predict_type` `"prob"`

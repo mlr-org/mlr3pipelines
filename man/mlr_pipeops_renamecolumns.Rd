@@ -5,7 +5,7 @@
 \alias{PipeOpRenameColumns}
 \title{Rename Columns}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOp}}.
 }
 \description{
 Renames the columns of a \code{\link[mlr3:Task]{Task}} both during training and prediction.

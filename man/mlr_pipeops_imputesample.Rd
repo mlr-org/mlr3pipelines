@@ -5,7 +5,7 @@
 \alias{PipeOpImputeSample}
 \title{Impute Features by Sampling}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
 Impute features by sampling from non-missing training data.

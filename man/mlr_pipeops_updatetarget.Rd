@@ -5,7 +5,7 @@
 \alias{PipeOpUpdateTarget}
 \title{Transform a Target without an Explicit Inversion}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 EXPERIMENTAL, API SUBJECT TO CHANGE

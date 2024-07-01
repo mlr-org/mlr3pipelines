@@ -5,7 +5,7 @@
 \alias{PipeOpImputeMode}
 \title{Impute Features by their Mode}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpImpute}}/\code{\link{PipeOp}}.
 }
 \description{
 Impute features by their mode. Supports factors as well as logical and numerical features.

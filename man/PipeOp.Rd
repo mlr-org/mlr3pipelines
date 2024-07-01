@@ -4,7 +4,7 @@
 \alias{PipeOp}
 \title{PipeOp Base Class}
 \format{
-Abstract \code{\link{R6Class}}.
+Abstract \code{\link[R6:R6Class]{R6Class}}.
 }
 \description{
 A \code{\link{PipeOp}} represents a transformation of a given "input" into a given "output", with two stages: "training"
@@ -52,9 +52,9 @@ These \code{\link[paradox:ParamSet]{ParamSet}} are combined using a \code{\link[
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings given in \code{param_set}. The
 subclass should have its own \code{param_vals} parameter and pass it on to \code{super$initialize()}. Default \code{list()}.
-\item input :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+\item input :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Sets the \verb{$input} slot of the resulting object; see description there.
-\item output :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+\item output :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Sets the \verb{$output} slot of the resulting object; see description there.
 \item packages :: \code{character}\cr
 Set of all required packages for the \code{\link{PipeOp}}'s \verb{$train} and \verb{$predict} methods. See \verb{$packages} slot.
@@ -99,7 +99,7 @@ if and only if the \code{\link{PipeOp}} has not been trained. The \verb{$state} 
 \verb{$train()}, because \code{private$.train()} may theoretically be executed in a different \code{R}-session (e.g. for parallelization).
 \verb{$state} should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
 not of \code{\link{PipeOp}} or \code{mlr3pipelines}, but of the way the system as a whole works, together with \code{\link{GraphLearner}} and \code{mlr3}.
-\item input :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+\item input :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Input channels of \code{\link{PipeOp}}. Column \code{name} gives the names (and order) of values in the list given to
 \verb{$train()} and \verb{$predict()}. Column \code{train} is the (S3) class that an input object must conform to during
 training, column \code{predict} is the (S3) class that an input object must conform to during prediction. Types
@@ -111,7 +111,7 @@ is given to the \code{.train()} and \code{.predict()} functions directly. Otherw
 unpacked and the \code{.train()} and \code{.predict()} functions are called multiple times, once for each \code{\link{Multiplicity}} element.
 The type enclosed by square brackets indicates that only a \code{\link{Multiplicity}} containing values of this type are accepted.
 See \code{\link{Multiplicity}} for more information.
-\item output :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
+\item output :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character})\cr
 Output channels of \code{\link{PipeOp}}, in the order in which they will be given in the list returned by \verb{$train} and
 \verb{$predict} functions. Column \code{train} is the (S3) class that an output object must conform to during training,
 column \code{predict} is the (S3) class that an output object must conform to during prediction. The \code{\link{PipeOp}} checks

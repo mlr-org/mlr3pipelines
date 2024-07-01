@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_subsample
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Subsamples a [`Task`][mlr3::Task] to use a fraction of the rows.
@@ -41,7 +41,7 @@
 #' @section Internals:
 #' Uses `task$filter()` to remove rows. If `replace` is `TRUE` and identical rows are added, then the `task$row_roles$use` can *not* be used
 #' to duplicate rows because of \[inaudible\]; instead the `task$rbind()` function is used, and
-#' a new [`data.table`] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
+#' a new [`data.table`][data.table::data.table] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

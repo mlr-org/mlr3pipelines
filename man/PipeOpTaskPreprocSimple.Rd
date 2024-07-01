@@ -4,7 +4,7 @@
 \alias{PipeOpTaskPreprocSimple}
 \title{Simple Task Preprocessing Base Class}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Base class for handling many "preprocessing" operations
@@ -106,7 +106,7 @@ This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreproc
 alternatively, \code{private$.get_state_dt()} (optional) and \code{private$.transform_dt()} (and possibly \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
 \item \code{.get_state_dt(dt)} \cr
-(\code{\link{data.table}}) -> named \code{list}\cr
+(\code{\link[data.table:data.table]{data.table}}) -> named \code{list}\cr
 Create something that will be stored in \verb{$state} during training phase of \code{PipeOpTaskPreprocSimple}.
 The state can then influence the \code{private$.transform_dt()} function. Note that \code{private$.get_state_dt()} must \emph{return} the state, and
 should not store it in \verb{$state}. If neither \code{private$.get_state()} nor \code{private$.get_state_dt()} are overloaded, the state will
@@ -115,7 +115,7 @@ This method can optionally be overloaded when inheriting from \code{\link{PipeOp
 (and optionally \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{private$.get_state()} (optional) and \code{private$.transform()}
 can be overloaded.
 \item \code{.transform_dt(dt)} \cr
-(\code{\link{data.table}}) -> \code{\link{data.table}} | \code{data.frame} | \code{matrix} \cr
+(\code{\link[data.table:data.table]{data.table}}) -> \code{\link[data.table:data.table]{data.table}} | \code{data.frame} | \code{matrix} \cr
 Predict on new data in \code{dt}, possibly using the stored \verb{$state}. A transformed object must be returned
 that can be converted to a \code{data.table} using \code{\link{as.data.table}}. \code{dt} does not need to be copied deliberately, it
 is possible and encouraged to change it in-place. This method is called both during training and prediction phase,

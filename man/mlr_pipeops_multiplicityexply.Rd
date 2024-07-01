@@ -5,7 +5,7 @@
 \alias{PipeOpMultiplicityExply}
 \title{Explicate a Multiplicity}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Explicate a \code{\link{Multiplicity}} by turning the input \code{\link{Multiplicity}} into multiple outputs.

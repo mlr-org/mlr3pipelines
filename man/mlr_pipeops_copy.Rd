@@ -5,7 +5,7 @@
 \alias{PipeOpCopy}
 \title{Copy Input Multiple Times}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Copies its input \code{outnum} times. This PipeOp usually not needed,

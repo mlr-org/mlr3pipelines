@@ -4,7 +4,7 @@
 \alias{PipeOpEnsemble}
 \title{Ensembling Base Class}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Parent class for \code{\link{PipeOp}}s that aggregate predictions. Implements the \code{private$.train()} and \code{private$.predict()} methods necessary

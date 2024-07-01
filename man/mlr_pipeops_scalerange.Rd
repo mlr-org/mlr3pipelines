@@ -5,7 +5,7 @@
 \alias{PipeOpScaleRange}
 \title{Linearly Transform Numeric Features to Match Given Boundaries}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Linearly transforms numeric data columns so they are between \code{lower}

@@ -5,7 +5,7 @@
 \alias{PipeOpChunk}
 \title{Chunk Input into Multiple Outputs}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Chunks its input into \code{outnum} chunks.

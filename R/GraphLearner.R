@@ -1,7 +1,7 @@
 #' @title Encapsulate a Graph as a Learner
 #'
 #' @name mlr_learners_graph
-#' @format [`R6Class`] object inheriting from [`mlr3::Learner`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`mlr3::Learner`].
 #'
 #' @description
 #' A [`Learner`][mlr3::Learner] that encapsulates a [`Graph`] to be used in
@@ -337,11 +337,11 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
 #'   This parameter is ignored when `validate` is set to `NULL`.
 #'   By default, validation is enabled for the final `PipeOp` in the `Graph`.
 #' @param args_all (`list()`)\cr
-#'  Rarely needed. A named list of parameter values that are passed to all subsequet [`set_validate()`] calls on the individual
+#'  Rarely needed. A named list of parameter values that are passed to all subsequet [`set_validate()`][mlr3::set_validate] calls on the individual
 #'  `PipeOp`s.
 #' @param args (named `list()`)\cr
 #'   Rarely needed.
-#'   A named list of lists, specifying additional argments to be passed to [`set_validate()`] when calling it on the individual
+#'   A named list of lists, specifying additional argments to be passed to [`set_validate()`][mlr3::set_validate] when calling it on the individual
 #'   `PipeOp`s.
 #' @param ... (any)\cr
 #'   Currently unused.

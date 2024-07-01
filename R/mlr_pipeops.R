@@ -1,7 +1,7 @@
 #' @title Dictionary of PipeOps
 #'
 #' @usage NULL
-#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`mlr3misc::Dictionary`].
 #'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].

@@ -5,7 +5,7 @@
 \alias{PipeOpTextVectorizer}
 \title{Bag-of-word Representation of Character Features}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Computes a bag-of-word representation from a (set of) columns.

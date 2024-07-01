@@ -17,7 +17,7 @@
 #'
 #' All input arguments are cloned and have no references in common with the returned [`Graph`].
 #'
-#' @param task [`Task`] \cr
+#' @param task [`Task`][mlr3::Task] \cr
 #'   A [`Task`][mlr3::Task] to create a robustifying pipeline for.
 #'   Optional, if omitted, the "worst possible" [`Task`][mlr3::Task] is assumed and the full pipeline is created.
 #' @param learner [`Learner`][mlr3::Learner] \cr

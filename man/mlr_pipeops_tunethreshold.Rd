@@ -5,7 +5,7 @@
 \alias{PipeOpTuneThreshold}
 \title{Tune the Threshold of a Classification Prediction}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Tunes optimal probability thresholds over different \code{\link[mlr3:PredictionClassif]{PredictionClassif}}s.

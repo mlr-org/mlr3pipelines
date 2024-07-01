@@ -5,7 +5,7 @@
 \alias{PipeOpCollapseFactors}
 \title{Collapse Factors}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Collapses factors of type \code{factor}, \code{ordered}: Collapses the rarest factors in the

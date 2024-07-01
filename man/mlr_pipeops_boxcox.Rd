@@ -5,7 +5,7 @@
 \alias{PipeOpBoxCox}
 \title{Box-Cox Transformation of Numeric Features}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Conducts a Box-Cox transformation on numeric features. The lambda parameter

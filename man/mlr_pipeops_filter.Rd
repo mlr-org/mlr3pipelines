@@ -5,7 +5,7 @@
 \alias{PipeOpFilter}
 \title{Feature Filtering}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Feature filtering using a \code{\link[mlr3filters:Filter]{mlr3filters::Filter}} object, see the

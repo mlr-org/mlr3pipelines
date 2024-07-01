@@ -5,7 +5,7 @@
 \alias{PipeOpNOP}
 \title{Simply Push Input Forward}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Simply pushes the input forward.
