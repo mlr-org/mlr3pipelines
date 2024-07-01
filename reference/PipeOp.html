@@ -54,7 +54,7 @@ is not intended to be instantiated.'><meta property="og:image" content="https://
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,7 +147,7 @@ is not intended to be instantiated.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>Abstract <code>R6Class</code>.</p>
+    <p>Abstract <code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="construction">Construction<a class="anchor" aria-label="anchor" href="#construction"></a></h2>
@@ -253,6 +253,18 @@ are saved to this slot, exactly as they are returned by these functions. This is
 and done, if requested, by the <code><a href="Graph.html">Graph</a></code> backend itself; it should <em>not</em> be done explicitly by <code>private$.train()</code> or <code>private$.predict()</code>.</p></li>
 <li><p><code>man</code> :: <code>character(1)</code><br>
 Identifying string of the help page that shows with <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code>.</p></li>
+<li><p><code>properties</code> :: <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character()</a></code><br>
+The properties of the pipeop.
+Currently supported values are:</p><ul><li><p><code>"validation"</code>: the <code>PipeOp</code> can make use of the <code>$internal_valid_task</code> of an <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">mlr3::Task</a></code>.
+This is for example used for <code>PipeOpLearner</code>s that wrap a <code>Learner</code> with this property, see <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.
+<code>PipeOp</code>s that have this property, also have a <code>$validate</code> field, which controls whether to use the validation task,
+as well as a <code>$internal_valid_scores</code> field, which allows to access the internal validation scores after training.</p></li>
+<li><p><code>"internal_tuning"</code>: the <code>PipeOp</code> is able to internally optimize hyperparameters.
+This works analogously to the internal tuning implementation for <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.
+<code>PipeOp</code>s with that property also implement the standardized accessor <code>$internal_tuned_values</code> and have at least one
+parameter tagged with <code>"internal_tuning"</code>.
+An example for such a <code>PipeOp</code> is a <code>PipeOpLearner</code> that wraps a <code>Learner</code> with the <code>"internal_tuning"</code> property.</p></li>
+</ul><p>Programatic access to all available properties is possible via <code>mlr_reflections$pipeops$properties</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
@@ -449,7 +461,7 @@ of the class, the id, the <code>$state</code>, and the <code>$param_set$values</
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Sebastian Fischer, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown-footer-right">

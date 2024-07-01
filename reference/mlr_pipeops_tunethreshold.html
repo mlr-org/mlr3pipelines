@@ -28,7 +28,7 @@ in conjunction with ResamplingInsample.'><meta property="og:image" content="http
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ in conjunction with <code><a href="https://mlr3.mlr-org.com/reference/mlr_resamp
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p><code>R6Class</code> object inheriting from <code><a href="PipeOp.html">PipeOp</a></code>.</p>
+    <p><code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></code> object inheriting from <code><a href="PipeOp.html">PipeOp</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="construction">Construction<a class="anchor" aria-label="anchor" href="#construction"></a></h2>
@@ -143,7 +143,7 @@ Will be converted to a <code><a href="https://mlr3.mlr-org.com/reference/Measure
 Initialized to <code>"classif.ce"</code>, i.e. misclassification error.</p></li>
 <li><p><code>optimizer</code> :: <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code>|<code>character(1)</code><br><code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code> used to find optimal thresholds.
 If <code>character</code>, converts to <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code>
-via <code><a href="https://bbotk.mlr-org.com/reference/opt.html" class="external-link">opt</a></code>. Initialized to <code><a href="https://bbotk.mlr-org.com/reference/mlr_optimizers_gensa.html" class="external-link">OptimizerGenSA</a></code>.</p></li>
+via <code><a href="https://bbotk.mlr-org.com/reference/opt.html" class="external-link">opt</a></code>. Initialized to <code>OptimizerGenSA</code>.</p></li>
 <li><p><code>log_level</code> :: <code>character(1)</code> | <code>integer(1)</code><br>
 Set a temporary log-level for <code>lgr::get_logger("bbotk")</code>. Initialized to: "warn".</p></li>
 </ul></div>
@@ -240,6 +240,7 @@ See the <code>optimizer</code> parameter for more info.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"bbotk"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> </span></span>
 <span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"rpart"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> </span></span>
+<span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"GenSA"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> </span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://mlr3.mlr-org.com" class="external-link">"mlr3"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span></span></span>
@@ -252,8 +253,10 @@ See the <code>optimizer</code> parameter for more info.</p>
 <span class="r-in"><span><span class="va">pop</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span> <span class="op">}</span> </span></span>
 <span class="r-in"><span> <span class="op">}</span> </span></span>
+<span class="r-in"><span> <span class="op">}</span> </span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> OptimInstanceSingleCrit is deprecated. Use OptimInstanceBatchSingleCrit instead.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> n= 150 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> node), split, n, loss, yval, (yprob)</span>
@@ -265,43 +268,46 @@ See the <code>optimizer</code> parameter for more info.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     6) Petal.Width&lt; 1.75 54   5 versicolor (0.00000000 0.90740741 0.09259259) *</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     7) Petal.Width&gt;=1.75 46   1 virginica (0.00000000 0.02173913 0.97826087) *</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $log</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 3 cols): stage,class,msg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$train_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $train_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$param_vals</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$param_vals$xval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $param_vals$xval</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$task_hash</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "b39ef23a66b1f1ee"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $task_hash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "34a6beb27c3181c3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$feature_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $feature_names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$mlr3_version</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘0.18.0’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $validate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$data_prototype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mlr3_version</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ‘0.20.0’</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $data_prototype</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$task_prototype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $task_prototype</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 5 cols): Species,Petal.Length,Petal.Width,Sepal.Length,Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$train_task</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $train_task</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;TaskClassif:iris&gt; (150 x 5): Iris Flowers</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Target: Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Properties: multiclass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> * Features (4):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   - dbl (4): Petal.Length, Petal.Width, Sepal.Length, Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$affected_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $affected_cols</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Length" "Petal.Width"  "Sepal.Length" "Sepal.Width" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$intasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $intasklayout</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              id    type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;  &lt;char&gt;</span>
@@ -310,7 +316,7 @@ See the <code>optimizer</code> parameter for more info.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: Sepal.Length numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Sepal.Width numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$outtasklayout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtasklayout</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                               id    type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;char&gt;  &lt;char&gt;</span>
@@ -318,9 +324,12 @@ See the <code>optimizer</code> parameter for more info.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: classif.rpart.prob.versicolor numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:  classif.rpart.prob.virginica numeric</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $classif.rpart$outtaskshell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $outtaskshell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empty data.table (0 rows and 4 cols): Species,classif.rpart.prob.setosa,classif.rpart.prob.versicolor,classif.rpart.prob.virginica</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "pipeop_learner_cv_state" "learner_state"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "list"                   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $tunethreshold</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $tunethreshold$threshold</span>
@@ -335,7 +344,7 @@ See the <code>optimizer</code> parameter for more info.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Sebastian Fischer, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown-footer-right">

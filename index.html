@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,11 +126,18 @@
 <p>This learner can be used for resampling, benchmarking, and even tuning.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">resample</span><span class="op">(</span><span class="fu">tsk</span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span>, <span class="va">glrn</span>, <span class="fu">rsmp</span><span class="op">(</span><span class="st">"cv"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;ResampleResult&gt; of 10 iterations</span></span>
-<span><span class="co">#&gt; * Task: iris</span></span>
-<span><span class="co">#&gt; * Learner: pca.variance.classif.rpart</span></span>
-<span><span class="co">#&gt; * Warnings: 0 in 0 iterations</span></span>
-<span><span class="co">#&gt; * Errors: 0 in 0 iterations</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;ResampleResult&gt; with 10 resampling iterations</span></span>
+<span><span class="co">#&gt;  task_id                 learner_id resampling_id iteration warnings errors</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         1        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         2        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         3        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         4        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         5        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         6        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         7        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         8        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv         9        0      0</span></span>
+<span><span class="co">#&gt;     iris pca.variance.classif.rpart            cv        10        0      0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="feature-overview">Feature Overview<a class="anchor" aria-label="anchor" href="#feature-overview"></a>
@@ -215,8 +222,8 @@
 <li>Lennart Schneider <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4152-5308" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Bernd Bischl <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6002-6980" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Michel Lang <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9754-0393" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Sebastian Fischer <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-9609-3197" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Susanne Dandl <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
@@ -227,7 +234,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Sebastian Fischer, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown-footer-right">

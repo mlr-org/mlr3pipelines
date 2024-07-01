@@ -30,7 +30,7 @@ non-NULL $state, it is ignored."><meta property="og:image" content="https://mlr3
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,7 @@ non-<code>NULL</code> <code>$state</code>, it is ignored.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p><code>R6Class</code> object inheriting from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p>
+    <p><code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></code> object inheriting from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="construction">Construction<a class="anchor" aria-label="anchor" href="#construction"></a></h2>
@@ -140,6 +140,30 @@ construction of <code>GraphLearner</code>, during <code>$train()</code>, and dur
 <p>Fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>, as well as:</p><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href="Graph.html">Graph</a></code> that is being trained, but does <em>not</em>
 contain the model. Use <code>graph_model</code> to access the trained <code><a href="Graph.html">Graph</a></code> after <code>$train()</code>. Read-only.</p></li>
 <li><p><code>graph_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This <code><a href="Graph.html">Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.</p></li>
+<li><p><code>internal_tuned_values</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
+The internal tuned parameter values collected from all <code>PipeOp</code>s.
+<code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal tuning.</p></li>
+<li><p><code>internal_valid_scores</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
+The internal validation scores as retrieved from the <code>PipeOps</code>.
+The names are prefixed with the respective IDs of the <code>PipeOp</code>s.
+<code>NULL</code> is returned if the learner is not trained or none of the wrapped learners supports internal validation.</p></li>
+<li><p><code>validate</code> :: <code>numeric(1)</code>, <code>"predefined"</code>, <code>"test"</code> or <code>NULL</code><br>
+How to construct the validation data. This also has to be configured for the individual <code>PipeOp</code>s such as
+<code>PipeOpLearner</code>, see <code><a href="set_validate.GraphLearner.html">set_validate.GraphLearner</a></code>.
+For more details on the possible values, see <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p></li>
+<li><p><code>marshaled</code> :: <code>logical(1)</code><br>
+Whether the learner is marshaled.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
+    
+
+<ul><li><p><code>marshal(...)</code><br>
+(any) -&gt; <code>self</code><br>
+Marshal the model.</p></li>
+<li><p><code>unmarshal(...)</code><br>
+(any) -&gt; <code>self</code><br>
+Unmarshal the model.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
@@ -188,7 +212,7 @@ recommended.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Sebastian Fischer, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown-footer-right">

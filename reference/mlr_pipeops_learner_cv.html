@@ -32,7 +32,7 @@ useful to use PipeOpFeatureUnion to bind the prediction Task to the original inp
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,7 @@ useful to use <code><a href="mlr_pipeops_featureunion.html">PipeOpFeatureUnion</
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p><code>R6Class</code> object inheriting from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>/<code><a href="PipeOp.html">PipeOp</a></code>.</p>
+    <p><code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></code> object inheriting from <code><a href="PipeOpTaskPreproc.html">PipeOpTaskPreproc</a></code>/<code><a href="PipeOp.html">PipeOp</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="construction">Construction<a class="anchor" aria-label="anchor" href="#construction"></a></h2>
@@ -156,7 +156,8 @@ Training time, in seconds.</p></li>
 Errors logged during prediction.</p></li>
 <li><p><code>predict_time</code> :: <code>NULL</code> | <code>numeric(1)</code>
 Prediction time, in seconds.</p></li>
-</ul></div>
+</ul><p>This state is given the class <code>"pipeop_learner_cv_state"</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
     
@@ -236,7 +237,7 @@ Only effective during <code>"prob"</code> prediction: Whether to keep response v
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Sebastian Fischer, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -34,7 +34,7 @@ incoming features.'><meta property="og:image" content="https://mlr3pipelines.mlr
     
     <a class="navbar-brand me-2" href="../index.html">mlr3pipelines</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,7 +123,7 @@ incoming features.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p><code>R6Class</code> object inheriting from <code><a href="https://mlr3.mlr-org.com/reference/LearnerClassif.html" class="external-link">mlr3::LearnerClassif</a></code>/<code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p>
+    <p><code><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></code> object inheriting from <code><a href="https://mlr3.mlr-org.com/reference/LearnerClassif.html" class="external-link">mlr3::LearnerClassif</a></code>/<code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
@@ -135,7 +135,7 @@ Initialized to <code>"classif.ce"</code>, i.e. misclassification error for class
 and <code>"regr.mse"</code>, i.e. mean squared error for regression.</p></li>
 <li><p><code>optimizer</code> :: <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code> | <code>character(1)</code><br><code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code> used to find optimal thresholds.
 If <code>character</code>, converts to <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code>
-via <code><a href="https://bbotk.mlr-org.com/reference/opt.html" class="external-link">opt</a></code>. Initialized to <code><a href="https://bbotk.mlr-org.com/reference/mlr_optimizers_nloptr.html" class="external-link">OptimizerNLoptr</a></code>.
+via <code><a href="https://bbotk.mlr-org.com/reference/opt.html" class="external-link">opt</a></code>. Initialized to <code>OptimizerNLoptr</code>.
 Nloptr hyperparameters are initialized to <code>xtol_rel = 1e-8</code>, <code>algorithm = "NLOPT_LN_COBYLA"</code>
 and equal initial weights for each learner.
 For more fine-grained control, it is recommended to supply a instantiated <code><a href="https://bbotk.mlr-org.com/reference/Optimizer.html" class="external-link">Optimizer</a></code>.</p></li>
@@ -175,7 +175,7 @@ Ph.D. thesis, UC Berkeley.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Susanne Dandl.</p>
+  <p>Developed by Martin Binder, Florian Pfisterer, Lennart Schneider, Bernd Bischl, Michel Lang, Sebastian Fischer, Susanne Dandl.</p>
 </div>
 
 <div class="pkgdown-footer-right">
