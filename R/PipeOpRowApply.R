@@ -70,11 +70,7 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
         applicator = identity,
         col_prefix = ""
       )
-      super$initialize(id, ps, param_vals = param_vals)
-      if ("affect_columns" %nin% names(param_vals)) {
-        # can't put this in `ps$values` because it is a PipeOpTaskPreproc param
-        self$param_set$values$affect_columns = selector_type(c("numeric", "integer"))
-      }
+      super$initialize(id, ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
@@ -85,14 +81,43 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
 
     .transform_dt = function(dt, levels) {
       applicator = self$param_set$values$applicator
+      # FIXME: if user replaces this to be NULL, throws error later (defend against?)
       col_prefix = self$param_set$values$col_prefix
       cnames = colnames(dt)
-      dt = t(apply(dt, 1, applicator))
-      if (!(col_prefix == "")) {
-        cnames = paste(col_prefix, cnames, sep = ".")
+      nc = ncol(dt)
+      nr = nrow(dt)
+
+      res = apply(dt, 1, applicator)
+
+
+      # either change is.atomic check
+      # or do explicit check of output -> look for precedents in code
+
+      if (is.list(res)) stop("Applicator generates a list. Applicator should generate either atomic vector or matrix.")
+
+      # convert res into matrix to allow identical handling of column name(s)
+      if (test_atomic_vector(res)) {
+        res = matrix(res, nrow = 1)  # nrow for faciliation of t() later
       }
-      colnames(dt) = cnames
-      dt
+
+      if (is.matrix(res)) {
+        # matrix needs to be transposed for correct dimensions
+        res = t(res)
+        # for unnamed matrix use either original column names or generate names
+        if (is.null(colnames(res))) {
+          if (ncol(res) == nc) {
+            colnames(res) = cnames
+          } else {
+            colnames(res) = paste0("V", seq_along(ncol(res)))
+          }
+        }
+      }
+
+      # add col_prefix
+      if (col_prefix != "") {
+        colnames(res) <- paste(col_prefix, colnames(res), sep = ".")
+      }
+      res
     }
   )
 )
