@@ -8,120 +8,100 @@ test_that("PipeOpRowApply - basic properties", {
 
   expect_datapreproc_pipeop_class(PipeOpRowApply, task = task)
 
+  expect_equal(op$train(list(task))[[1]]$nrow, task$nrow)
+  expect_equal(op$predict(list(task))[[1]]$nrow, task$nrow)
+
 })
 
-test_that("PipeOpRowApply - transform works as intended")
+test_that("PipeOpRowApply - transform works on task with only numeric features", {
 
-  # general test
   op = PipeOpRowApply$new()
   task = mlr_tasks$get("iris")
 
-  op$param_set$values$applicator = sum
+  # applicator generates matrix with names
+  applicator = function(x) x^2
+  op$param_set$values$applicator = applicator
 
   expect_equal(
     op$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-    as.data.table(apply(iris[1:4], 1, sum))
+    as.data.table(t(apply(iris[1:4], 1, applicator)))
+  )
+  expect_equal(
+    op$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
+    as.data.table(t(apply(iris[1:4], 1, applicator)))
   )
 
-# general tests
-# apply does what it should
-# applicator generates vector (named / unnamed)
-# applicator generates matrix (named / unnamed)
-# error for applicator generates list
-# applicator gibt nicht kompatible nrow?
-# empty task
-# task with one row
-
-
-test_that("apply results look as they should", {
-
-  po = PipeOpRowApply$new()
-  task = mlr_tasks$get("iris")
-
-  po$param_set$values = list(applicator = as.character)
+  # applicator generates matrix without names but same number of columns (should keep names)
+  applicator = scale
+  op$param_set$values$applicator = applicator
+  result = as.data.table(t(apply(iris[1:4], 1, applicator)))
+  setNames(result, colnames(iris[1:4]))
 
   expect_equal(
-    po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
+    op$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
+    result
   )
+  expect_equal(
+    op$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
+    result
+  )
+
+  # applicator generates matrix without names but different number of columns (should generate new names)
+  applicator = function(x) rep(sum(x), 2)
+  op$param_set$values$applicator = applicator
 
   expect_equal(
-    po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
+    op$train(list(task))[[1]]$data(cols = c("V1", "V2")),
+    as.data.table(t(apply(iris[1:4], 1, applicator)))
+  )
+  expect_equal(
+    op$predict(list(task))[[1]]$data(cols = c("V1", "V2")),
+    as.data.table(t(apply(iris[1:4], 1, applicator)))
   )
 
-  po$param_set$values = list(applicator = function(x) x^2)
+
+  # applicator generates vector (should generate new name)
+  applicator = sum
+  op$param_set$values$applicator = applicator
 
   expect_equal(
-    po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
+    op$train(list(task))[[1]]$data(cols = "V1"),
+    as.data.table(t(matrix(apply(iris[1:4], 1, applicator), nrow = 1)))
   )
-
   expect_equal(
-    po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
+    op$predict(list(task))[[1]]$data(cols = "V1"),
+    as.data.table(t(matrix(apply(iris[1:4], 1, applicator), nrow = 1)))
   )
 
-  expect_equal(
-    po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
+  # error if apply generates anything but a matrix or vector (e.g. non-simplifiable list)
+  applicator = function(x) if(mean(x) < 3) c(x[[1]], x[[2]]) else x[[1]]
+  op$param_set$values$applicator = applicator
 
-  )
+  expect_error(op$train(list(task)))
+  expect_error(op$predict(list(task)))
 
-  expect_equal(
-    po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
+  # col_prefix
 
-  )
 
-  tomean = function(x) rep(mean(x), length(x))
-
-  po$param_set$values = list(applicator = tomean)
-
-  expect_equal(
-    po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
-
-  expect_equal(
-    po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
-
-  expect_equal(
-    po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
-
-  expect_equal(
-    po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
-
-  po$param_set$values = list(applicator = as.character, affect_columns = selector_grep("^Sepal"))
-
-  expect_equal(
-    po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
-
-  expect_equal(
-    po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
-
-  po$param_set$values = list(applicator = Vectorize(as.character), affect_columns = selector_grep("^Sepal"))
-
-  expect_equal(
-    po$train(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
-
-  expect_equal(
-    po$predict(list(task))[[1]]$data(cols = colnames(iris[1:4])),
-
-  )
 })
 
-test_that("empty task", {
+
+test_that("PipeOpRowApply - transform works on task with only integer features", {
+
+})
+
+
+test_that("PipeOpRowApply - transform works on task with both numeric and integer features", {
+
+})
+
+
+test_that("PipeOpRowApply - transform works on task with only one row", {
+
+})
+
+
+test_that("PipeOpRowApply - transform works on empty task", {
 
   task = tsk("iris")$filter(0L)
   po = PipeOpRowApply$new()
@@ -134,4 +114,7 @@ test_that("empty task", {
   predict_out = po$predict(list(task))[[1L]]
   expect_data_table(predict_out$data(), nrows = 0L)
   expect_true(all(predict_out$feature_types$type == "integer"))
+
 })
+
+
