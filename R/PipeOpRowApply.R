@@ -7,7 +7,7 @@
 #' @description
 #' Applies a function to each row of a task. Use the `affect_columns` parameter inherited from
 #' [`PipeOpTaskPreprocSimple`] to limit the columns this function should be applied to. This can be used
-#' for row-wise normalization.
+#' for row-wise normalization or creation of new columns from values per row in general.
 #' The same function is applied during training and prediction.
 #'
 #' @section Construction:
@@ -38,6 +38,8 @@
 #'   The names of the resulting features of the output [`Task`][mlr3::Task] is based on the (column) name(s) of the return value of the applicator function,
 #'   prefixed with the original feature name separated by a dot (`.`).
 #'   Use [`Vectorize`][base::Vectorize] to create a vectorizing function from any function that ordinarily only takes one element input.\cr
+#' * `col_prefix` :: `character`\cr
+#'   Optional. Character vector of length one as prefix for newly generated columns.
 #'
 #' @section Internals:
 #' Calls [`apply`] on the data, using the value of `applicator` as `FUN` and coerces the output via [`as.data.table`].
@@ -56,8 +58,8 @@
 #' library("mlr3")
 #'
 #' task = tsk("iris")
-#' poca = po("rowapply", applicator = scale)
-#' poca$train(list(task))[[1]]  # rows are standardized
+#' pora = po("rowapply", applicator = scale)
+#' pora$train(list(task))[[1]]  # rows are standardized
 PipeOpRowApply = R6Class("PipeOpRowApply",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -89,6 +91,8 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
       if (nrow(dt) == 0) {
         dt = dt[NA_integer_]
         was_empty = TRUE
+      } else {
+        was_empty = FALSE
       }
 
       res = apply(dt, 1, applicator)
