@@ -80,13 +80,16 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
     },
 
     .transform_dt = function(dt, levels) {
-      # handle dt with no rows, return unchanged
-      if (nrow(dt) == 0) return(dt)
-
       applicator = self$param_set$values$applicator
       # FIXME: if user replaces this to be NULL, throws error later (defend against?)
       col_prefix = self$param_set$values$col_prefix
       cnames = colnames(dt)
+
+      # handle dt with 0 rows: give filler content to find out what applicator does
+      if (nrow(dt) == 0) {
+        dt = dt[NA_integer_]
+        was_empty = TRUE
+      }
 
       res = apply(dt, 1, applicator)
       if (!(test_atomic_vector(res) | test_matrix(res))) {
@@ -111,6 +114,12 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
       if (col_prefix != "") {
         colnames(res) <- paste(col_prefix, colnames(res), sep = ".")
       }
+
+      # handle dt with 0 rows: remove filler content
+      if (was_empty == TRUE) {
+        res = res[0L, ]
+      }
+
       res
     }
   )

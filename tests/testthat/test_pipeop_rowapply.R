@@ -417,7 +417,7 @@ test_that("PipeOpRowApply - transform works on empty task (no rows)", {
   task = mlr_tasks$get("wine")$filter(0)
 
   # applicator is as.integer
-  applicator = as.integer
+  applicator = function(x) rep(mean(x), 2)
   op$param_set$values$applicator = applicator
 
   expect_equal(
