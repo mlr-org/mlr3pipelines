@@ -83,11 +83,10 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
 
     .transform_dt = function(dt, levels) {
       applicator = self$param_set$values$applicator
-      # FIXME: if user replaces this to be NULL, throws error later (defend against?)
       col_prefix = self$param_set$values$col_prefix
       cnames = colnames(dt)
 
-      # handle dt with 0 rows: give filler content to find out what applicator does
+      # Handle data table with zero rows by adding filler content to emulate column creation later
       if (nrow(dt) == 0) {
         dt = dt[NA_integer_]
         was_empty = TRUE
@@ -99,14 +98,14 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
       if (!(test_atomic_vector(res) | test_matrix(res))) {
         stop("Apply with FUN = applicator and simplified = TRUE should generate either atomic vector or matrix.")
       }
-      # convert res into matrix for identical handling of column names
+      # Convert result to a matrix for consistent column name handling
       if (test_atomic_vector(res)) {
-        res = matrix(res, nrow = 1)  # nrow for faciliation of t() later
+        res = matrix(res, nrow = 1)  # Ensure matrix has one row for correct transposition
       }
-      # matrix needs to be transposed for correct dimensions of Task
+      # Transpose the matrix for correct Task dimensions
       res = t(res)
 
-      # for unnamed matrix use either original column names or generate names
+      # Assign column names if they are missing
       if (is.null(colnames(res))) {
         if (ncol(res) == ncol(dt)) {
           colnames(res) = cnames
@@ -114,12 +113,12 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
           colnames(res) = paste0("V", seq_len(ncol(res)))
         }
       }
-      # add col_prefix
+      # Prepend column prefix if specified
       if (col_prefix != "") {
         colnames(res) <- paste(col_prefix, colnames(res), sep = ".")
       }
 
-      # handle dt with 0 rows: remove filler content
+      # Remove filler content if the original data.table had zero rows
       if (was_empty == TRUE) {
         res = res[0L, ]
       }
