@@ -80,6 +80,9 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
     },
 
     .transform_dt = function(dt, levels) {
+      # handle dt with no rows, return unchanged
+      if (nrow(dt) == 0) return(dt)
+
       applicator = self$param_set$values$applicator
       # FIXME: if user replaces this to be NULL, throws error later (defend against?)
       col_prefix = self$param_set$values$col_prefix
@@ -89,7 +92,7 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
       if (!(test_atomic_vector(res) | test_matrix(res))) {
         stop("Apply with FUN = applicator and simplified = TRUE should generate either atomic vector or matrix.")
       }
-      # convert res into matrix to allow identical handling of column name(s)
+      # convert res into matrix for identical handling of column names
       if (test_atomic_vector(res)) {
         res = matrix(res, nrow = 1)  # nrow for faciliation of t() later
       }
