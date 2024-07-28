@@ -86,7 +86,7 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
 
       # Handle data table with zero rows by adding filler content to emulate column creation later
       if (nrow(dt) == 0) {
-        dt = dt[NA_integer_]  # Adds emtpy row
+        dt = dt[NA_integer_]  # Adds empty row
         was_empty = TRUE
       } else {
         was_empty = FALSE

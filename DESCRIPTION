@@ -153,6 +153,7 @@ Collate:
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
     'PipeOpRenameColumns.R'
+    'PipeOpRowApply.R'
     'PipeOpScale.R'
     'PipeOpScaleMaxAbs.R'
     'PipeOpScaleRange.R'
