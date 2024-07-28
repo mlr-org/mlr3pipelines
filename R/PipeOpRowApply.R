@@ -6,9 +6,7 @@
 #'
 #' @description
 #' Applies a function to each row of a task. Use the `affect_columns` parameter inherited from
-#' [`PipeOpTaskPreprocSimple`] to limit the columns this function should be applied to. This can be used
-#' for row-wise normalization or creation of new columns from values per row in general.
-#' The same function is applied during training and prediction.
+#' [`PipeOpTaskPreprocSimple`] to limit the columns this function should be applied to.
 #'
 #' @section Construction:
 #' ```
@@ -22,7 +20,8 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreprocSimple`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with rows changed according to the `applicator` parameter.
+#' The output is the input [`Task`][mlr3::Task] with the original affected columns replaced by the columns created by
+#' applying `applicator` to each row.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreprocSimple`].
@@ -30,19 +29,18 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
 #' * `applicator` :: `function`\cr
-#'   Function to apply to each row of the task.
+#'   Function to apply to each row in the affected columns of the task.
 #'   The return value should be a `vector` of the same length as the input, i.e., the function vectorizes over the input.
-#'   A typical example would be `scale`.\cr
-#'   The return value can also be a `matrix`, `data.frame`, or [`data.table`][data.table::data.table].
+#'   Alternatively, the return value can be a `matrix`, `data.frame`, or [`data.table`][data.table::data.table].
 #'   In this case, the length of the input must match the number of returned rows.
-#'   The names of the resulting features of the output [`Task`][mlr3::Task] is based on the (column) name(s) of the return value of the applicator function,
-#'   prefixed with the original feature name separated by a dot (`.`).
-#'   Use [`Vectorize`][base::Vectorize] to create a vectorizing function from any function that ordinarily only takes one element input.\cr
-#' * `col_prefix` :: `character`\cr
-#'   Optional. Character vector of length one as prefix for newly generated columns.
+#'   Use [`Vectorize`][base::Vectorize] to create a vectorizing function from any function that ordinarily only takes one element input.
+#'   Default is [identity()][base::identity]
+#' * `col_prefix` :: `character(1)`\cr
+#'   If specified, prefix to be prepended to the column names of affected columns, separated by a dot (`.`). Default is `character(1)`.
 #'
 #' @section Internals:
-#' Calls [`apply`] on the data, using the value of `applicator` as `FUN` and coerces the output via [`as.data.table`].
+#' Calls [`apply`] on the data, using the value of `applicator` as `FUN` and `simplify = TRUE`, then coerces the output via
+#' [`as.data.table()`][data.table::as.data.table].
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -88,7 +86,7 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
 
       # Handle data table with zero rows by adding filler content to emulate column creation later
       if (nrow(dt) == 0) {
-        dt = dt[NA_integer_]
+        dt = dt[NA_integer_]  # Adds emtpy row
         was_empty = TRUE
       } else {
         was_empty = FALSE
