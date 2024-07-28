@@ -146,6 +146,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tunethreshold}},
+\code{\link{mlr_pipeops_umap}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
 \code{\link{mlr_pipeops_yeojohnson}}

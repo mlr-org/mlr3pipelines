@@ -165,6 +165,7 @@ Collate:
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
+    'PipeOpUMAP.R'
     'PipeOpUnbranch.R'
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'
