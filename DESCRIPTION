@@ -87,7 +87,8 @@ Suggests:
     methods,
     vtreat,
     future,
-    htmlwidgets
+    htmlwidgets,
+    uwot (>= 0.2.1)
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
