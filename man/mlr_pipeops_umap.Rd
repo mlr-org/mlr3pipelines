@@ -51,12 +51,84 @@ The scaling used, or \code{FALSE}.
 
 The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}, as well as:
 \itemize{
-\item \code{center} :: \code{logical(1)}\cr
-Indicating whether the features should be centered. Default is \code{TRUE}. See \code{\link[stats:prcomp]{prcomp()}}.
-\item \code{scale.} :: \code{logical(1)}\cr
-Whether to scale features to unit variance before analysis. Default is \code{FALSE}, but scaling is advisable. See \code{\link[stats:prcomp]{prcomp()}}.
-\item \code{rank.} :: \code{integer(1)}\cr
-Maximal number of principal components to be used. Default is \code{NULL}: use all components. See \code{\link[stats:prcomp]{prcomp()}}.
+\item \code{n_neighbors} :: \code{integer(1)}\cr
+Blah
+\item \code{n_components} :: \code{integer(1)}\cr
+Blah
+\item \code{metric} :: \code{character(1)}\cr
+Blah
+\item \code{n_epochs} :: \code{integer(1)}\cr
+Blah
+\item \code{learning_rate} :: \code{numeric(1)}\cr
+Blah
+\item \code{init} :: \code{character(1)}\cr
+Blah
+\item \code{init_sdev} :: \code{character(1)}\cr
+Blah
+\item \code{spread} :: \code{character(1)}\cr
+Blah
+\item \code{min_dist} :: \code{character(1)}\cr
+Blah
+\item \code{set_op_mix_ratio} :: \code{character(1)}\cr
+Blah
+\item \code{local_connectivity} :: \code{character(1)}\cr
+Blah
+\item \code{bandwidth} :: \code{character(1)}\cr
+Blah
+\item \code{repulsion_strength} :: \code{character(1)}\cr
+Blah
+\item \code{a} :: \code{character(1)}\cr
+Blah
+\item \code{b} :: \code{character(1)}\cr
+Blah
+\item \code{nn_method} :: \code{character(1)}\cr
+Blah
+\item \code{n_trees} :: \code{character(1)}\cr
+Blah
+\item \code{search_k} :: \code{character(1)}\cr
+Blah
+\item \code{approx_pow} :: \code{character(1)}\cr
+Blah
+\item \code{y} :: \code{character(1)}\cr
+Blah
+\item \code{target_n_neighbors} :: \code{character(1)}\cr
+Blah
+\item \code{target_metric} :: \code{character(1)}\cr
+Blah
+\item \code{target_weight} :: \code{character(1)}\cr
+Blah
+\item \code{pca} :: \code{character(1)}\cr
+Blah
+\item \code{pca_center} :: \code{character(1)}\cr
+Blah
+\item \code{pca_rand} :: \code{character(1)}\cr
+Blah
+\item \code{fast_sgd} :: \code{character(1)}\cr
+Blah
+\item \code{n_threads} :: \code{character(1)}\cr
+Blah
+\item \code{n_sgd_threads} :: \code{character(1)}\cr
+Blah
+\item \code{grain_size} :: \code{character(1)}\cr
+Blah
+\item \code{verbose} :: \code{character(1)}\cr
+Blah
+\item \code{batch} :: \code{character(1)}\cr
+Blah
+\item \code{opt_args} :: \code{character(1)}\cr
+Blah
+\item \code{epoch_callback} :: \code{character(1)}\cr
+Blah
+\item \code{pca_method} :: \code{character(1)}\cr
+Blah
+\item \code{binary_edge_weights} :: \code{character(1)}\cr
+Blah
+\item \code{dens_scale} :: \code{character(1)}\cr
+Blah
+\item \code{seed} :: \code{character(1)}\cr
+Blah
+\item \code{nn_args} :: \code{character(1)}\cr
+Blah
 }
 }
 

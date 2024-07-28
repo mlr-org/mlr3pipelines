@@ -37,12 +37,84 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `center` :: `logical(1)`\cr
-#'   Indicating whether the features should be centered. Default is `TRUE`. See [`prcomp()`][stats::prcomp].
-#' * `scale.` :: `logical(1)`\cr
-#'   Whether to scale features to unit variance before analysis. Default is `FALSE`, but scaling is advisable. See [`prcomp()`][stats::prcomp].
-#' * `rank.` :: `integer(1)`\cr
-#'   Maximal number of principal components to be used. Default is `NULL`: use all components. See [`prcomp()`][stats::prcomp].
+#' * `n_neighbors` :: `integer(1)`\cr
+#'   Blah
+#' * `n_components` :: `integer(1)`\cr
+#'   Blah
+#' * `metric` :: `character(1)`\cr
+#'   Blah
+#' * `n_epochs` :: `integer(1)`\cr
+#'   Blah
+#' * `learning_rate` :: `numeric(1)`\cr
+#'   Blah
+#' * `init` :: `character(1)`\cr
+#'   Blah
+#' * `init_sdev` :: `character(1)`\cr
+#'   Blah
+#' * `spread` :: `character(1)`\cr
+#'   Blah
+#' * `min_dist` :: `character(1)`\cr
+#'   Blah
+#' * `set_op_mix_ratio` :: `character(1)`\cr
+#'   Blah
+#' * `local_connectivity` :: `character(1)`\cr
+#'   Blah
+#' * `bandwidth` :: `character(1)`\cr
+#'   Blah
+#' * `repulsion_strength` :: `character(1)`\cr
+#'   Blah
+#' * `a` :: `character(1)`\cr
+#'   Blah
+#' * `b` :: `character(1)`\cr
+#'   Blah
+#' * `nn_method` :: `character(1)`\cr
+#'   Blah
+#' * `n_trees` :: `character(1)`\cr
+#'   Blah
+#' * `search_k` :: `character(1)`\cr
+#'   Blah
+#' * `approx_pow` :: `character(1)`\cr
+#'   Blah
+#' * `y` :: `character(1)`\cr
+#'   Blah
+#' * `target_n_neighbors` :: `character(1)`\cr
+#'   Blah
+#' * `target_metric` :: `character(1)`\cr
+#'   Blah
+#' * `target_weight` :: `character(1)`\cr
+#'   Blah
+#' * `pca` :: `character(1)`\cr
+#'   Blah
+#' * `pca_center` :: `character(1)`\cr
+#'   Blah
+#' * `pca_rand` :: `character(1)`\cr
+#'   Blah
+#' * `fast_sgd` :: `character(1)`\cr
+#'   Blah
+#' * `n_threads` :: `character(1)`\cr
+#'   Blah
+#' * `n_sgd_threads` :: `character(1)`\cr
+#'   Blah
+#' * `grain_size` :: `character(1)`\cr
+#'   Blah
+#' * `verbose` :: `character(1)`\cr
+#'   Blah
+#' * `batch` :: `character(1)`\cr
+#'   Blah
+#' * `opt_args` :: `character(1)`\cr
+#'   Blah
+#' * `epoch_callback` :: `character(1)`\cr
+#'   Blah
+#' * `pca_method` :: `character(1)`\cr
+#'   Blah
+#' * `binary_edge_weights` :: `character(1)`\cr
+#'   Blah
+#' * `dens_scale` :: `character(1)`\cr
+#'   Blah
+#' * `seed` :: `character(1)`\cr
+#'   Blah
+#' * `nn_args` :: `character(1)`\cr
+#'   Blah
 #'
 #' @section Internals:
 #' Uses the [`umap()`][uwot::umap] function.
@@ -123,13 +195,13 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         grain_size = p_int(1L, default = 1L, tags = c("train", "umap")),
         verbose = p_lgl(default = TRUE, tags = c("train", "umap")),
         batch = p_lgl(default = FALSE, tags = c("train", "umap")),
-        opt_args = p_uty(default = NULL, tags = c("train", "umap"), custom_check = check_list),
+        opt_args = p_uty(default = NULL, tags = c("train", "umap"), custom_check = crate(function(x) check_list(x, null.ok = TRUE))),
         epoch_callback = p_uty(default = NULL, tags = c("train", "umap"), custom_check = check_function_or_null),
         pca_method = p_fct(c("irlba", "rsvd", "bigstatsr", "svd", "auto"), default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         binary_edge_weights = p_lgl(default = FALSE, tags = c("train", "umap")),
         dens_scale = p_dbl(0, 1, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         seed = p_int(default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
-        nn_args = p_uty(default = NULL, tags = c("train", "umap"), custom_check = check_list)
+        nn_args = p_uty(default = NULL, tags = c("train", "umap"), custom_check = crate(function(x) check_list(x, null.ok = TRUE)))
       )
       ps$set_values(verbose = FALSE)
 
@@ -137,12 +209,10 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
     }
   ),
   private = list(
-
     .train_dt = function(dt, levels, target) {
       params = insert_named(self$param_set$get_values(tags = "umap"), list(ret_model = TRUE))
       umap = invoke(uwot::umap2, dt, .args = params)
       self$state = umap
-      self$state$embedding = NULL
       umap$embedding
     },
 
