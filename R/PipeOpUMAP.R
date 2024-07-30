@@ -29,8 +29,8 @@
 #' These are in particular:
 #' * `embedding` :: `matrix`\cr
 #'   Matrix of embedded coordinates.
-#' * `scale_info` :: `any`\cr
-#'   Blah
+#' * `scale_info` :: named `list()`\cr
+#'   If `scale`is `TRUE`, this gives the scaling attributes (`center`, `scale`, `nzvcols`) of the scaled data.
 #' * `search_k` :: `numeric(1)`\cr
 #'   Number of nodes searched during the neighbor retrieval. Only used if the `nn_method` is `"annoy"`.
 #'   For details, see [uwot::umap2()].
@@ -51,7 +51,8 @@
 #' * `b` :: named `numeric(1)`\cr
 #'   More specific parameters controlling the embedding. For details, see [uwot::umap2()].
 #' * `gamma` :: `numeric(1)`\cr
-#'   Blah
+#'   Repulsion strength. Weighting applied to negative samples in low dimensional embedding optimization.
+#'   For details, see [uwot::umap2()].
 #' * `approx_pow` :: `logical(1)`\cr
 #'   If `TRUE`, use an approximation to the power function in the UMAP gradient. For details, see [uwot::umap2()].
 #' * `metric` :: named `list()`\cr
@@ -67,7 +68,7 @@
 #' * `opt_args` :: named `list()`\cr
 #'   Optimizer parameters, used when `batch = TRUE`. For details, see [uwot::umap2()].
 #' * `num_precomputed_nns` :: `numeric(1)`\cr
-#'   Blah
+#'   Number of precomputed nearest neighbors, via `nn_method`.
 #' * `min_dist` :: `numeric(1)`\cr
 #'   The effective minimum distance between embedded points. For details, see [uwot::umap2()].
 #' * `spread` :: `numeric(1)`\cr
@@ -80,13 +81,13 @@
 #' * `nn_method` :: `any`\cr
 #'   Method for finding nearest neighbors. For details, see [uwot::umap2()].
 #' * `nn_args` :: `list()`\cr
-#'   Blah
+#'   A list containing additional arguments to pass to the nearest neighbor method. For details, see [uwot::umap2()].
 #' * `n_neighbors` :: `numeric(1)`\cr
 #'   The size of the neighborhood used for manifold approximation. For details, see [uwot::umap2()].
 #' * `nn_index` :: named `list()`\cr
-#'   Blah
+#'   Nearest neighbor index that can be used for transformation of new data points.
 #' * `pca_models` :: `list()`\cr
-#'   Blah
+#'   Used PCA models for initialization, `pca` is specified. For details, see [uwot::umap2()].
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:

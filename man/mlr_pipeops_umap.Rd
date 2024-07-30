@@ -39,8 +39,8 @@ These are in particular:
 \itemize{
 \item \code{embedding} :: \code{matrix}\cr
 Matrix of embedded coordinates.
-\item \code{scale_info} :: \code{any}\cr
-Blah
+\item \code{scale_info} :: named \code{list()}\cr
+If \code{scale}is \code{TRUE}, this gives the scaling attributes (\code{center}, \code{scale}, \code{nzvcols}) of the scaled data.
 \item \code{search_k} :: \code{numeric(1)}\cr
 Number of nodes searched during the neighbor retrieval. Only used if the \code{nn_method} is \code{"annoy"}.
 For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
@@ -55,13 +55,14 @@ Initial learning rate. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 The number of negative edge/1-simplex samples used per positive edge/1-simplex sample
 in optimizing the low dimensional embedding. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{method} :: \code{character(1)}\cr
-Blah
+General method used for dimensionality reduction, is always \code{"umap"} for this PipeOp.
 \item \code{a} :: named \code{numeric(1)}\cr
 More specific parameters controlling the embedding. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{b} :: named \code{numeric(1)}\cr
 More specific parameters controlling the embedding. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{gamma} :: \code{numeric(1)}\cr
-Blah
+Repulsion strength. Weighting applied to negative samples in low dimensional embedding optimization.
+For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{approx_pow} :: \code{logical(1)}\cr
 If \code{TRUE}, use an approximation to the power function in the UMAP gradient. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{metric} :: named \code{list()}\cr
@@ -77,7 +78,7 @@ than during the epoch. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{opt_args} :: named \code{list()}\cr
 Optimizer parameters, used when \code{batch = TRUE}. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{num_precomputed_nns} :: \code{numeric(1)}\cr
-Blah
+Number of precomputed nearest neighbors, via \code{nn_method}.
 \item \code{min_dist} :: \code{numeric(1)}\cr
 The effective minimum distance between embedded points. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{spread} :: \code{numeric(1)}\cr
@@ -86,17 +87,17 @@ The effective scale of embedded points. For details, see \code{\link[uwot:umap2]
 If \code{TRUE} then edge weights in the input graph were treated as binary (0/1) rather than real valued.
 For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{seed} :: \code{integer(1)}\cr
-Blah
+Integer seed to use to initialize the random number generator state. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{nn_method} :: \code{any}\cr
 Method for finding nearest neighbors. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{nn_args} :: \code{list()}\cr
-Blah
+A list containing additional arguments to pass to the nearest neighbor method. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_neighbors} :: \code{numeric(1)}\cr
 The size of the neighborhood used for manifold approximation. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{nn_index} :: named \code{list()}\cr
-Blah
+Nearest neighbor index that can be used for transformation of new data points.
 \item \code{pca_models} :: \code{list()}\cr
-Blah
+Used PCA models for initialization, \code{pca} is specified. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 }
 }
 
