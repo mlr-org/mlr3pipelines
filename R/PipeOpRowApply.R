@@ -31,7 +31,7 @@
 #' * `applicator` :: `function`\cr
 #'   Function to apply to each row in the affected columns of the task.
 #'   The return value should be a vector of the same length for every input.
-#'   Initialized as [`identity()`][base::identity]
+#'   Initialized as [`identity()`][base::identity].
 #' * `col_prefix` :: `character(1)`\cr
 #'   If specified, prefix to be prepended to the column names of affected columns, separated by a dot (`.`). Default is `""`.
 #'
@@ -77,28 +77,31 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
     },
 
     .transform_dt = function(dt, levels) {
-      applicator = self$param_set$values$applicator
-      col_prefix = self$param_set$values$col_prefix
+      pv = self$param_set$values
       cnames = colnames(dt)
 
       # Handle data table with zero rows by adding filler content to emulate column creation later
-      if (nrow(dt) == 0) {
+      if (nrow(dt) == 0L) {
         dt = dt[NA_integer_]  # Adds empty row
         was_empty = TRUE
       } else {
         was_empty = FALSE
       }
 
-      res = apply(dt, 1, applicator)
+      res = apply(dt, 1, pv$applicator)
+
+      if (!length(res)) {
+        return(matrix(numeric(0), nrow = nrow(dt)))
+      }
       if (!(test_atomic_vector(res) || test_matrix(res))) {
         stop("Apply with FUN = applicator and simplified = TRUE should generate either atomic vector or matrix.")
       }
       # Convert result to a matrix for consistent column name handling
       if (test_atomic_vector(res)) {
-        res = matrix(res, ncol = 1)  # Ensure matrix has one row for correct transposition
+        res = matrix(res, ncol = 1)
       } else {
-      # Transpose the matrix for correct Task dimensions
-      res = t(res)
+        # Transpose the matrix for correct Task dimensions
+        res = t(res)
       }
       # Assign column names if they are missing
       if (is.null(colnames(res))) {
@@ -109,12 +112,11 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
         }
       }
       # Prepend column prefix if specified
-      if (col_prefix != "") {
-        colnames(res) = paste(col_prefix, colnames(res), sep = ".")
+      if (pv$col_prefix != "") {
+        colnames(res) = paste(pv$col_prefix, colnames(res), sep = ".")
       }
-
       # Remove filler content if the original data.table had zero rows
-      if (was_empty == TRUE) {
+      if (was_empty) {
         res = res[0L, ]
       }
 

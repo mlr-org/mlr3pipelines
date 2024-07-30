@@ -43,13 +43,10 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSi
 \itemize{
 \item \code{applicator} :: \code{function}\cr
 Function to apply to each row in the affected columns of the task.
-The return value should be a \code{vector} of the same length as the input, i.e., the function vectorizes over the input.
-Alternatively, the return value can be a \code{matrix}, \code{data.frame}, or \code{\link[data.table:data.table]{data.table}}.
-In this case, the length of the input must match the number of returned rows.
-Use \code{\link[base:Vectorize]{Vectorize}} to create a vectorizing function from any function that ordinarily only takes one element input.
-Default is \link[base:identity]{identity()}
+The return value should be a vector of the same length for every input.
+Initialized as \code{\link[base:identity]{identity()}}.
 \item \code{col_prefix} :: \code{character(1)}\cr
-If specified, prefix to be prepended to the column names of affected columns, separated by a dot (\code{.}). Default is \code{character(1)}.
+If specified, prefix to be prepended to the column names of affected columns, separated by a dot (\code{.}). Default is \code{""}.
 }
 }
 

@@ -71,6 +71,19 @@ test_that("PipeOpRowApply - transform on task with only numeric features", {
     as.data.table(t(matrix(apply(iris, 1, applicator), nrow = 1)))
   )
 
+  # applicator generates empty output
+  applicator = function(x) numeric(0)
+  op$param_set$values$applicator = applicator
+
+  expect_equal(
+    op$train(list(task))[[1]]$data(),
+    task$data(cols = task$target_names)
+  )
+  expect_equal(
+    op$predict(list(task))[[1]]$data(),
+    task$data(cols = task$target_names)
+  )
+
   # error if apply generates anything but a matrix or vector (e.g. non-simplifiable list)
   applicator = function(x) if(mean(x) < 3) c(x[[1]], x[[2]]) else x[[1]]
   op$param_set$values$applicator = applicator
@@ -92,9 +105,8 @@ test_that("PipeOpRowApply - transform on task with only numeric features", {
 test_that("PipeOpRowApply - transform works on task with only integer features", {
 
   op = PipeOpRowApply$new()
-  task = mlr_tasks$get("german_credit")
-  cnames = c("age", "amount", "duration")
-  task$select(cnames)
+  task = mlr_tasks$get("german_credit")$select(c("age", "amount", "duration"))
+  cnames = task$feature_names
   german_credit = task$data(cols = cnames)
 
   # applicator generates matrix with names
@@ -149,6 +161,19 @@ test_that("PipeOpRowApply - transform works on task with only integer features",
   expect_equal(
     op$predict(list(task))[[1]]$data(cols = "V1"),
     as.data.table(t(matrix(apply(german_credit, 1, applicator), nrow = 1)))
+  )
+
+  # applicator generates empty output
+  applicator = function(x) numeric(0)
+  op$param_set$values$applicator = applicator
+
+  expect_equal(
+    op$train(list(task))[[1]]$data(),
+    task$data(cols = task$target_names)
+  )
+  expect_equal(
+    op$predict(list(task))[[1]]$data(),
+    task$data(cols = task$target_names)
   )
 
   # error if apply generates anything but a matrix or vector (e.g. non-simplifiable list)
@@ -228,6 +253,19 @@ test_that("PipeOpRowApply - transform works on task with both numeric and intege
   expect_equal(
     op$predict(list(task))[[1]]$data(cols = "V1"),
     as.data.table(t(matrix(apply(wine, 1, applicator), nrow = 1)))
+  )
+
+  # applicator generates empty output
+  applicator = function(x) numeric(0)
+  op$param_set$values$applicator = applicator
+
+  expect_equal(
+    op$train(list(task))[[1]]$data(),
+    task$data(cols = task$target_names)
+  )
+  expect_equal(
+    op$predict(list(task))[[1]]$data(),
+    task$data(cols = task$target_names)
   )
 
   # error if apply generates anything but a matrix or vector (e.g. non-simplifiable list)
@@ -441,5 +479,24 @@ test_that("PipeOpRowApply - transform works for only empty predict task (no rows
   expect_data_table(predict_out$data(), nrows = 0)
   expect_set_equal(predict_out$feature_names, cnames)
   expect_true(all(predict_out$feature_types$type == "integer"))
+
+})
+
+test_that("PipeOpRowApply - transform works on task with no numeric or integer columns", {
+
+  op = PipeOpRowApply$new()
+  task = mlr_tasks$get("penguins")$select(c("island", "sex"))
+  cnames = task$feature_names
+
+  op$param_set$values$applicator = as.integer
+
+  expect_equal(
+    op$train(list(task))[[1]],
+    task
+  )
+  expect_equal(
+    op$predict(list(task))[[1]],
+    task
+  )
 
 })
