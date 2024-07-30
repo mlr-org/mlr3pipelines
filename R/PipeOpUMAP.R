@@ -45,7 +45,7 @@
 #'   The number of negative edge/1-simplex samples used per positive edge/1-simplex sample
 #'   in optimizing the low dimensional embedding. For details, see [uwot::umap2()].
 #' * `method` :: `character(1)`\cr
-#'   Blah
+#'   General method used for dimensionality reduction, is always `"umap"` for this PipeOp.
 #' * `a` :: named `numeric(1)`\cr
 #'   More specific parameters controlling the embedding. For details, see [uwot::umap2()].
 #' * `b` :: named `numeric(1)`\cr
@@ -76,7 +76,7 @@
 #'   If `TRUE` then edge weights in the input graph were treated as binary (0/1) rather than real valued.
 #'   For details, see [uwot::umap2()].
 #' * `seed` :: `integer(1)`\cr
-#'   Blah
+#'   Integer seed to use to initialize the random number generator state. For details, see [uwot::umap2()].
 #' * `nn_method` :: `any`\cr
 #'   Method for finding nearest neighbors. For details, see [uwot::umap2()].
 #' * `nn_args` :: `list()`\cr
@@ -241,7 +241,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         metric = p_fct(
           levels = c(
             "euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical",
-            "braycurtis", "canberra", "chebyshev", "dice", "hamming", "hellinger", "jaccard",
+            "braycurtis", "canberra", "chebyshev", "dice", "hellinger", "jaccard",
             "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
             "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
           ),
@@ -282,7 +282,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         search_k = p_int(tags = c("train", "umap")),
         approx_pow = p_lgl(default = FALSE, tags = c("train", "umap")),
         y = p_uty(default = NULL, tags = c("train", "umap")),
-        target_n_neighbors = p_int(tags = c("train", "umap")), # default = n_neighbors
+        target_n_neighbors = p_int(tags = c("train", "umap")),
         target_metric = p_fct(c("euclidean", "cosine", "correlation"), default = "euclidean", tags = c("train", "umap")),
         target_weight = p_dbl(0, 1, default = 0.5, tags = c("train", "umap")),
         pca = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
