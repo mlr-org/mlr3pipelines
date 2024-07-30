@@ -231,10 +231,14 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         n_neighbors = p_int(2L, 100L, default = 15L, tags = c("train", "umap")),
         n_components = p_int(1L, 100L, default = 2L, tags = c("train", "umap")),
         metric = p_fct(
-          c("euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical"),
+          levels = c(
+            "euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical",
+            "braycurtis", "canberra", "chebyshev", "dice", "hamming", "hellinger", "jaccard",
+            "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
+            "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
+          ),
           default = "euclidean",
-          tags = c("train", "umap"),
-          depends = quote(nn_method == "hnsw")
+          tags = c("train", "umap")
         ),
         n_epochs = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         learning_rate = p_dbl(0, default = 1, tags = c("train", "umap")),
