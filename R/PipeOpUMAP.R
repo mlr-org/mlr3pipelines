@@ -142,6 +142,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("uwot")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -151,6 +152,7 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
