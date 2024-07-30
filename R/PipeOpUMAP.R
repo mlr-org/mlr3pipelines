@@ -247,7 +247,11 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
           ),
           default = "euclidean",
           tags = c("train", "umap")
+<<<<<<< HEAD
         ),  # why not all?
+=======
+        ),
+>>>>>>> 56e43fe2fcae286c88e13d0be596cda22849adfb
         n_epochs = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         learning_rate = p_dbl(0, default = 1, tags = c("train", "umap")),
         scale = p_lgl(default = FALSE, special_vals = list("none", "Z", "maxabs", "range", "colrange", NULL), tags = c("train", "umap")),
