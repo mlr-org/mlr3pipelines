@@ -88,7 +88,6 @@ The effective bandwidth of the kernel if we view the algorithm as similar to Lap
 Default is \code{1}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{repulsion_strength} :: \code{numeric(1)}\cr
 Weighting applied to negative samples in low dimensional embedding optimization.
-Values higher than one will result in greater weight being given to negative samples.
 Default is \code{1}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{negative_sample_rate} :: \code{numeric(1)}\cr
 The number of negative edge/1-simplex samples to use per positive edge/1-simplex sample
@@ -107,8 +106,9 @@ Number of nodes to search during the neighbor retrieval. For details see \code{\
 \item \code{approx_pow} :: \code{logical(1)}\cr
 If \code{TRUE}, use an approximation to the power function in the UMAP gradient. Default is \code{FALSE}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
-\item \code{y} :: \code{character(1)}\cr
-Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+\item \code{y} :: \code{any}\cr
+Optional target data for supervised dimension reduction. Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{target_n_neighbors} :: \code{integer(1)}\cr
 Number of nearest neighbors to use to construct the target simplicial set. Default is \code{NULL}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
@@ -119,51 +119,57 @@ For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 Weighting factor between data topology and target topology. Default is \code{0.5}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca} :: \code{integer(1)}\cr
-Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+Redude data to this number of columns using PCA. Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca_center} :: \code{logical(1)}\cr
 If \code{TRUE}, center the columns of X before carrying out PCA. Default is \code{TRUE}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca_rand} :: \code{logical(1)}\cr
-Default is \code{TRUE}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+If \code{TRUE}, use the PCG random number generator (O'Neill, 2014) during optimization.
+Otherwise, use the faster (but probably less statistically good) Tausworthe "taus88" generator.
+Default is \code{TRUE}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{fast_sgd} :: \code{logical(1)}\cr
-Default is \code{FALSE}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+If \code{TRUE}, then the following combination of parameters is set:
+\itemize{
+\item \code{pcg_rand = TRUE}
+\item \code{n_sgd_threads = "auto"}
+\item \code{approx_pow = TRUE}
+Default is \code{FALSE}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+}
 \item \code{n_threads} :: \code{integer(1)}\cr
-Default is \code{NULL}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+Number of threads to use. Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_sgd_threads} :: \code{integer(1)}\cr
-Default is \code{0}.
+Number of threads to use during stochastic gradient descent. Default is \code{0}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{grain_size} :: \code{integer(1)}\cr
-Default is \code{1}.
+The minimum amount of work to do on each thread. Default is \code{1}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{verbose} :: \code{logical(1)}\cr
 Should details be printed? Initialzed to \code{FALSE}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{batch} :: \code{logical(1)}\cr
-Default is \code{FALSE}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+If \code{TRUE}, then embedding coordinates are updated at the end of each epoch rather
+than during the epoch. Default is \code{FALSE}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{opt_args} :: named \code{list()}\cr
-Default is \code{NULL}.
+A list of optimizer parameters, used when \code{batch = TRUE}. Default is \code{NULL}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{epoch_callback} :: \code{function}\cr
-Default is \code{NULL}.
+A function which will be invoked at the end of every epoch. Default is \code{NULL}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca_method} :: \code{character(1)}\cr
-Default is \code{NULL}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+Method to carry out any PCA dimensionality reduction when the \code{pca} is specified.
+Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{binary_edge_weights} :: \code{logical(1)}\cr
-Default is \code{FALSE}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+If TRUE then edge weights in the input graph are treated as binary (0/1) rather than real valued.
+Default is \code{FALSE}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{dens_scale} :: \code{numeric(1)}\cr
-Default is \code{NULL}.
+A scaling factor to apply to the density of the input data. Default is \code{NULL}.
 For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{seed} :: \code{integer(1)}\cr
-Default is \code{NULL}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+Integer seed to use to initialize the random number generator state.
+Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{nn_args} :: named \code{list()}\cr
-Default is \code{NULL}.
-For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
+A list containing additional arguments to pass to the nearest neighbor method.
+Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 }
 }
 

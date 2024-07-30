@@ -74,7 +74,6 @@
 #'   Default is `1`. For details see [uwot::umap2()].
 #' * `repulsion_strength` :: `numeric(1)`\cr
 #'   Weighting applied to negative samples in low dimensional embedding optimization.
-#'   Values higher than one will result in greater weight being given to negative samples.
 #'   Default is `1`. For details see [uwot::umap2()].
 #' * `negative_sample_rate` :: `numeric(1)`\cr
 #'   The number of negative edge/1-simplex samples to use per positive edge/1-simplex sample
@@ -93,8 +92,9 @@
 #' * `approx_pow` :: `logical(1)`\cr
 #'   If `TRUE`, use an approximation to the power function in the UMAP gradient. Default is `FALSE`.
 #'   For details see [uwot::umap2()].
-#' * `y` :: `character(1)`\cr
-#'   Default is `NULL`. For details see [uwot::umap2()].
+#' * `y` :: `any`\cr
+#'   Optional target data for supervised dimension reduction. Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `target_n_neighbors` :: `integer(1)`\cr
 #'   Number of nearest neighbors to use to construct the target simplicial set. Default is `NULL`.
 #'   For details see [uwot::umap2()].
@@ -105,51 +105,55 @@
 #'   Weighting factor between data topology and target topology. Default is `0.5`.
 #'   For details see [uwot::umap2()].
 #' * `pca` :: `integer(1)`\cr
-#'   Default is `NULL`. For details see [uwot::umap2()].
+#'   Redude data to this number of columns using PCA. Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `pca_center` :: `logical(1)`\cr
 #'   If `TRUE`, center the columns of X before carrying out PCA. Default is `TRUE`.
 #'   For details see [uwot::umap2()].
 #' * `pca_rand` :: `logical(1)`\cr
-#'   Default is `TRUE`.
-#'   For details see [uwot::umap2()].
+#'   If `TRUE`, use the PCG random number generator (O'Neill, 2014) during optimization.
+#'   Otherwise, use the faster (but probably less statistically good) Tausworthe "taus88" generator.
+#'   Default is `TRUE`. For details see [uwot::umap2()].
 #' * `fast_sgd` :: `logical(1)`\cr
-#'   Default is `FALSE`.
-#'   For details see [uwot::umap2()].
+#'   If `TRUE`, then the following combination of parameters is set:
+#'   * `pcg_rand = TRUE`
+#'   * `n_sgd_threads = "auto"`
+#'   * `approx_pow = TRUE`
+#'   Default is `FALSE`. For details see [uwot::umap2()].
 #' * `n_threads` :: `integer(1)`\cr
-#'   Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   Number of threads to use. Default is `NULL`. For details see [uwot::umap2()].
 #' * `n_sgd_threads` :: `integer(1)`\cr
-#'   Default is `0`.
+#'   Number of threads to use during stochastic gradient descent. Default is `0`.
 #'   For details see [uwot::umap2()].
 #' * `grain_size` :: `integer(1)`\cr
-#'   Default is `1`.
+#'   The minimum amount of work to do on each thread. Default is `1`.
 #'   For details see [uwot::umap2()].
 #' * `verbose` :: `logical(1)`\cr
 #'   Should details be printed? Initialzed to `FALSE`. For details see [uwot::umap2()].
 #' * `batch` :: `logical(1)`\cr
-#'   Default is `FALSE`.
-#'   For details see [uwot::umap2()].
+#'   If `TRUE`, then embedding coordinates are updated at the end of each epoch rather
+#'   than during the epoch. Default is `FALSE`. For details see [uwot::umap2()].
 #' * `opt_args` :: named `list()`\cr
-#'   Default is `NULL`.
+#'   A list of optimizer parameters, used when `batch = TRUE`. Default is `NULL`.
 #'   For details see [uwot::umap2()].
 #' * `epoch_callback` :: `function`\cr
-#'   Default is `NULL`.
+#'   A function which will be invoked at the end of every epoch. Default is `NULL`.
 #'   For details see [uwot::umap2()].
 #' * `pca_method` :: `character(1)`\cr
-#'   Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   Method to carry out any PCA dimensionality reduction when the `pca` is specified.
+#'   Default is `NULL`. For details see [uwot::umap2()].
 #' * `binary_edge_weights` :: `logical(1)`\cr
-#'   Default is `FALSE`.
-#'   For details see [uwot::umap2()].
+#'   If TRUE then edge weights in the input graph are treated as binary (0/1) rather than real valued.
+#'   Default is `FALSE`. For details see [uwot::umap2()].
 #' * `dens_scale` :: `numeric(1)`\cr
-#'   Default is `NULL`.
+#'   A scaling factor to apply to the density of the input data. Default is `NULL`.
 #'   For details see [uwot::umap2()].
 #' * `seed` :: `integer(1)`\cr
-#'   Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   Integer seed to use to initialize the random number generator state.
+#'   Default is `NULL`. For details see [uwot::umap2()].
 #' * `nn_args` :: named `list()`\cr
-#'   Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   A list containing additional arguments to pass to the nearest neighbor method.
+#'   Default is `NULL`. For details see [uwot::umap2()].
 #'
 #' @section Internals:
 #' Uses the [`umap()`][uwot::umap] function.
