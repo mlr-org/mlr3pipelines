@@ -33,7 +33,7 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the class \link[stats:prcomp]{stats::prcomp},
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the class \link[uwot:umap2]{uwot::umap2},
 with the exception of the \verb{$x} slot. These are in particular:
 \itemize{
 \item \code{sdev} :: \code{numeric}\cr
@@ -53,101 +53,117 @@ The parameters are the parameters inherited from \code{\link{PipeOpTaskPreproc}}
 \itemize{
 \item \code{n_neighbors} :: \code{integer(1)}\cr
 The size of the neighborhood used for manifold approximation. Default is \code{15}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_components} :: \code{integer(1)}\cr
-The dimension of the space to embed into. Default is \code{2}.
+The dimension of the space to embed into. Default is \code{2}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{metric} :: \code{character(1)}\cr
 Type of distance metric to use to find nearest neighbors. Default is \code{"euclidean"}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_epochs} :: \code{integer(1)}\cr
-Number of epochs to use during the optimization of the embedded coordinates.
-By default, this value is set to 500 for datasets containing 10,000 vertices or less,
-and 200 otherwise. If n_epochs = 0, then coordinates determined by "init" will be returned.
+Number of epochs to use during the optimization of the embedded coordinates. Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{learning_rate} :: \code{numeric(1)}\cr
 Initial learning rate used in optimization of the coordinates. Default is \code{1}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{init} :: \code{character(1)} | \code{matrix}\cr
 Type of initialization for the coordinates. Default is \code{"spectral"}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{init_sdev} :: \code{character(1)} | \code{numeric(1)}\cr
 Scales each dimension of the initialized coordinates to this standard deviation.
-Default is \code{"range"}.
+Default is \code{"range"}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{spread} :: \code{numeric(1)}\cr
-The effective scale of embedded points. In combination with \code{min_dist},
-this determines how clustered/clumped the embedded points are. Default is \code{1}.
+The effective scale of embedded points. Default is \code{1}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{min_dist} :: \code{numeric(1)}\cr
 The effective minimum distance between embedded points. Default is \code{0.01}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{set_op_mix_ratio} :: \code{numeric(1)}\cr
 Interpolate between (fuzzy) union and intersection as the set operation used to
 combine local fuzzy simplicial sets to obtain a global fuzzy simplicial sets. Default is \code{1}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{local_connectivity} :: \code{numeric(1)}\cr
 The local connectivity required – i.e. the number of nearest neighbors that should be
-assumed to be connected at a local level. Default is \code{1}.
+assumed to be connected at a local level. Default is \code{1}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{bandwidth} :: \code{numeric(1)}\cr
 The effective bandwidth of the kernel if we view the algorithm as similar to Laplacian Eigenmaps.
-Default is \code{1}.
+Default is \code{1}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{repulsion_strength} :: \code{numeric(1)}\cr
 Weighting applied to negative samples in low dimensional embedding optimization.
 Values higher than one will result in greater weight being given to negative samples.
-Default is \code{1}.
+Default is \code{1}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{negative_sample_rate} :: \code{numeric(1)}\cr
 The number of negative edge/1-simplex samples to use per positive edge/1-simplex sample
-in optimizing the low dimensional embedding. Default is \code{5}.
+in optimizing the low dimensional embedding. Default is \code{5}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{a} :: \code{any}\cr
-More specific parameters controlling the embedding.
-If \code{NULL} these values are set automatically as determined by \code{min_dist} and \code{spread}.
-Default is \code{NULL}.
+More specific parameters controlling the embedding. Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{b} :: \code{any}\cr
-More specific parameters controlling the embedding.
-If \code{NULL} these values are set automatically as determined by \code{min_dist} and \code{spread}.
-Default is \code{NULL}.
+More specific parameters controlling the embedding. Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{nn_method} :: \code{character(1)} | named \code{list()} | matrix\cr
-Method for finding nearest neighbors. Default is \code{NULL}.
+Method for finding nearest neighbors. Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_trees} :: \code{integer(1)}\cr
 Number of trees to build when constructing the nearest neighbor index. Default is \code{50}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{search_k} :: \code{integer(1)}\cr
-Number of nodes to search during the neighbor retrieval.
+Number of nodes to search during the neighbor retrieval. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{approx_pow} :: \code{logical(1)}\cr
-If \code{TRUE}, use an approximation to the power function in the UMAP gradient.
-Ignored if \code{dens_scale} is non-NULL. Default is \code{FALSE}.
+If \code{TRUE}, use an approximation to the power function in the UMAP gradient. Default is \code{FALSE}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{y} :: \code{character(1)}\cr
-Default is \code{NULL}.
+Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{target_n_neighbors} :: \code{integer(1)}\cr
 Number of nearest neighbors to use to construct the target simplicial set. Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{target_metric} :: \code{character(1)}\cr
 The metric used to measure distance for \code{y} if using supervised dimension reduction.
-Used only if \code{y} is numeric.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{target_weight} :: \code{numeric(1)}\cr
 Weighting factor between data topology and target topology. Default is \code{0.5}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca} :: \code{integer(1)}\cr
-Default is \code{NULL}.
+Default is \code{NULL}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca_center} :: \code{logical(1)}\cr
-If \code{TRUE}, center the columns of X before carrying out PCA.
-For binary data, it's recommended to set this to \code{FALSE}. Default is \code{TRUE}.
+If \code{TRUE}, center the columns of X before carrying out PCA. Default is \code{TRUE}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca_rand} :: \code{logical(1)}\cr
 Default is \code{TRUE}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{fast_sgd} :: \code{logical(1)}\cr
 Default is \code{FALSE}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_threads} :: \code{integer(1)}\cr
 Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_sgd_threads} :: \code{integer(1)}\cr
 Default is \code{0}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{grain_size} :: \code{integer(1)}\cr
 Default is \code{1}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{verbose} :: \code{logical(1)}\cr
-Should details be logged to the console? Initialzed to \code{FALSE}.
+Should details be printed? Initialzed to \code{FALSE}. For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{batch} :: \code{logical(1)}\cr
 Default is \code{FALSE}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{opt_args} :: named \code{list()}\cr
 Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{epoch_callback} :: \code{function}\cr
 Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca_method} :: \code{character(1)}\cr
 Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{binary_edge_weights} :: \code{logical(1)}\cr
 Default is \code{FALSE}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{dens_scale} :: \code{numeric(1)}\cr
 Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{seed} :: \code{integer(1)}\cr
 Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{nn_args} :: named \code{list()}\cr
 Default is \code{NULL}.
+For details see \code{\link[uwot:umap2]{uwot::umap2()}}.
 }
 }
 

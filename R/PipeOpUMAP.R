@@ -24,7 +24,7 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their principal components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [stats::prcomp],
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [uwot::umap2],
 #' with the exception of the `$x` slot. These are in particular:
 #' * `sdev` :: `numeric`\cr
 #'   The standard deviations of the principal components.
@@ -39,101 +39,117 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `n_neighbors` :: `integer(1)`\cr
 #'   The size of the neighborhood used for manifold approximation. Default is `15`.
+#'   For details see [uwot::umap2()].
 #' * `n_components` :: `integer(1)`\cr
-#'   The dimension of the space to embed into. Default is `2`.
+#'   The dimension of the space to embed into. Default is `2`. For details see [uwot::umap2()].
 #' * `metric` :: `character(1)`\cr
 #'   Type of distance metric to use to find nearest neighbors. Default is `"euclidean"`.
+#'   For details see [uwot::umap2()].
 #' * `n_epochs` :: `integer(1)`\cr
-#'   Number of epochs to use during the optimization of the embedded coordinates.
-#'   By default, this value is set to 500 for datasets containing 10,000 vertices or less,
-#'   and 200 otherwise. If n_epochs = 0, then coordinates determined by "init" will be returned.
+#'   Number of epochs to use during the optimization of the embedded coordinates. Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `learning_rate` :: `numeric(1)`\cr
 #'   Initial learning rate used in optimization of the coordinates. Default is `1`.
+#'   For details see [uwot::umap2()].
 #' * `init` :: `character(1)` | `matrix`\cr
 #'   Type of initialization for the coordinates. Default is `"spectral"`.
+#'   For details see [uwot::umap2()].
 #' * `init_sdev` :: `character(1)` | `numeric(1)`\cr
 #'   Scales each dimension of the initialized coordinates to this standard deviation.
-#'   Default is `"range"`.
+#'   Default is `"range"`. For details see [uwot::umap2()].
 #' * `spread` :: `numeric(1)`\cr
-#'   The effective scale of embedded points. In combination with `min_dist`,
-#'   this determines how clustered/clumped the embedded points are. Default is `1`.
+#'   The effective scale of embedded points. Default is `1`. For details see [uwot::umap2()].
 #' * `min_dist` :: `numeric(1)`\cr
 #'   The effective minimum distance between embedded points. Default is `0.01`.
+#'   For details see [uwot::umap2()].
 #' * `set_op_mix_ratio` :: `numeric(1)`\cr
 #'   Interpolate between (fuzzy) union and intersection as the set operation used to
 #'   combine local fuzzy simplicial sets to obtain a global fuzzy simplicial sets. Default is `1`.
+#'   For details see [uwot::umap2()].
 #' * `local_connectivity` :: `numeric(1)`\cr
 #'   The local connectivity required – i.e. the number of nearest neighbors that should be
-#'   assumed to be connected at a local level. Default is `1`.
+#'   assumed to be connected at a local level. Default is `1`. For details see [uwot::umap2()].
 #' * `bandwidth` :: `numeric(1)`\cr
 #'   The effective bandwidth of the kernel if we view the algorithm as similar to Laplacian Eigenmaps.
-#'   Default is `1`.
+#'   Default is `1`. For details see [uwot::umap2()].
 #' * `repulsion_strength` :: `numeric(1)`\cr
 #'   Weighting applied to negative samples in low dimensional embedding optimization.
 #'   Values higher than one will result in greater weight being given to negative samples.
-#'   Default is `1`.
+#'   Default is `1`. For details see [uwot::umap2()].
 #' * `negative_sample_rate` :: `numeric(1)`\cr
 #'   The number of negative edge/1-simplex samples to use per positive edge/1-simplex sample
-#'   in optimizing the low dimensional embedding. Default is `5`.
+#'   in optimizing the low dimensional embedding. Default is `5`. For details see [uwot::umap2()].
 #' * `a` :: `any`\cr
-#'   More specific parameters controlling the embedding.
-#'   If `NULL` these values are set automatically as determined by `min_dist` and `spread`.
-#'   Default is `NULL`.
+#'   More specific parameters controlling the embedding. Default is `NULL`. For details see [uwot::umap2()].
 #' * `b` :: `any`\cr
-#'   More specific parameters controlling the embedding.
-#'   If `NULL` these values are set automatically as determined by `min_dist` and `spread`.
-#'   Default is `NULL`.
+#'   More specific parameters controlling the embedding. Default is `NULL`. For details see [uwot::umap2()].
 #' * `nn_method` :: `character(1)` | named `list()` | matrix\cr
-#'   Method for finding nearest neighbors. Default is `NULL`.
+#'   Method for finding nearest neighbors. Default is `NULL`. For details see [uwot::umap2()].
 #' * `n_trees` :: `integer(1)`\cr
 #'   Number of trees to build when constructing the nearest neighbor index. Default is `50`.
+#'   For details see [uwot::umap2()].
 #' * `search_k` :: `integer(1)`\cr
-#'   Number of nodes to search during the neighbor retrieval.
+#'   Number of nodes to search during the neighbor retrieval. For details see [uwot::umap2()].
 #' * `approx_pow` :: `logical(1)`\cr
-#'   If `TRUE`, use an approximation to the power function in the UMAP gradient.
-#'   Ignored if `dens_scale` is non-NULL. Default is `FALSE`.
+#'   If `TRUE`, use an approximation to the power function in the UMAP gradient. Default is `FALSE`.
+#'   For details see [uwot::umap2()].
 #' * `y` :: `character(1)`\cr
-#'   Default is `NULL`.
+#'   Default is `NULL`. For details see [uwot::umap2()].
 #' * `target_n_neighbors` :: `integer(1)`\cr
 #'   Number of nearest neighbors to use to construct the target simplicial set. Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `target_metric` :: `character(1)`\cr
 #'   The metric used to measure distance for `y` if using supervised dimension reduction.
-#'   Used only if `y` is numeric.
+#'   For details see [uwot::umap2()].
 #' * `target_weight` :: `numeric(1)`\cr
 #'   Weighting factor between data topology and target topology. Default is `0.5`.
+#'   For details see [uwot::umap2()].
 #' * `pca` :: `integer(1)`\cr
-#'   Default is `NULL`.
+#'   Default is `NULL`. For details see [uwot::umap2()].
 #' * `pca_center` :: `logical(1)`\cr
-#'   If `TRUE`, center the columns of X before carrying out PCA.
-#'   For binary data, it's recommended to set this to `FALSE`. Default is `TRUE`.
+#'   If `TRUE`, center the columns of X before carrying out PCA. Default is `TRUE`.
+#'   For details see [uwot::umap2()].
 #' * `pca_rand` :: `logical(1)`\cr
 #'   Default is `TRUE`.
+#'   For details see [uwot::umap2()].
 #' * `fast_sgd` :: `logical(1)`\cr
 #'   Default is `FALSE`.
+#'   For details see [uwot::umap2()].
 #' * `n_threads` :: `integer(1)`\cr
 #'   Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `n_sgd_threads` :: `integer(1)`\cr
 #'   Default is `0`.
+#'   For details see [uwot::umap2()].
 #' * `grain_size` :: `integer(1)`\cr
 #'   Default is `1`.
+#'   For details see [uwot::umap2()].
 #' * `verbose` :: `logical(1)`\cr
-#'    Should details be logged to the console? Initialzed to `FALSE`.
+#'   Should details be printed? Initialzed to `FALSE`. For details see [uwot::umap2()].
 #' * `batch` :: `logical(1)`\cr
 #'   Default is `FALSE`.
+#'   For details see [uwot::umap2()].
 #' * `opt_args` :: named `list()`\cr
 #'   Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `epoch_callback` :: `function`\cr
 #'   Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `pca_method` :: `character(1)`\cr
 #'   Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `binary_edge_weights` :: `logical(1)`\cr
 #'   Default is `FALSE`.
+#'   For details see [uwot::umap2()].
 #' * `dens_scale` :: `numeric(1)`\cr
 #'   Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `seed` :: `integer(1)`\cr
 #'   Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #' * `nn_args` :: named `list()`\cr
 #'   Default is `NULL`.
+#'   For details see [uwot::umap2()].
 #'
 #' @section Internals:
 #' Uses the [`umap()`][uwot::umap] function.
