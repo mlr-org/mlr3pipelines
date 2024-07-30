@@ -24,16 +24,62 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their principal components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [uwot::umap2],
-#' with the exception of the `$x` slot. These are in particular:
-#' * `sdev` :: `numeric`\cr
-#'   The standard deviations of the principal components.
-#' * `rotation` :: `matrix`\cr
-#'   The matrix of variable loadings.
-#' * `center` :: `numeric` | `logical(1)`\cr
-#'   The centering used, or `FALSE`.
-#' * `scale` :: `numeric` | `logical(1)`\cr
-#'   The scaling used, or `FALSE`.
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [uwot::umap2].
+#' These are in particular:
+#' * `embedding` :: `matrix`\cr
+#'   Blah
+#' * `scale_info` :: `any`\cr
+#'   Blah
+#' * `search_k` :: `numeric(1)`\cr
+#'   Blah
+#' * `local_connectivity` :: `numeric(1)`\cr
+#'   Blah
+#' * `n_epochs` :: `numeric(1)`\cr
+#'   Blah
+#' * `alpha` :: `numeric(1)`\cr
+#'   Blah
+#' * `negative_sample_rate` :: `numeric(1)`\cr
+#'   Blah
+#' * `method` :: `character(1)`\cr
+#'   Blah
+#' * `a` :: named `numeric(1)`\cr
+#'   Blah
+#' * `b` :: named `numeric(1)`\cr
+#'   Blah
+#' * `gamma` :: `numeric(1)`\cr
+#'   Blah
+#' * `approx_pow` :: `logical(1)`\cr
+#'   Blah
+#' * `metric` :: named `list()`\cr
+#'   Blah
+#' * `norig_col` :: `integer(1)`\cr
+#'   Blah
+#' * `pcg_rand` :: `logical(1)`\cr
+#'   Blah
+#' * `batch` :: `logical(1)`\cr
+#'   Blah
+#' * `opt_args` :: named `list()`\cr
+#'   Blah
+#' * `num_precomputed_nns` :: `numeric(1)`\cr
+#'   Blah
+#' * `min_dist` :: `numeric(1)`\cr
+#'   Blah
+#' * `spread` :: `numeric(1)`\cr
+#'   Blah
+#' * `binary_edge_weights` :: `logical(1)`\cr
+#'   Blah
+#' * `seed` :: `integer(1)`\cr
+#'   Blah
+#' * `nn_method` :: `any`\cr
+#'   Blah
+#' * `nn_args` :: `list()`\cr
+#'   Blah
+#' * `n_neighbors` :: `numeric(1)`\cr
+#'   Blah
+#' * `nn_index` :: named `list()`\cr
+#'   Blah
+#' * `pca_models` :: `list()`\cr
+#'   Blah
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
@@ -253,6 +299,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
     .train_dt = function(dt, levels, target) {
       params = insert_named(self$param_set$get_values(tags = "umap"), list(ret_model = TRUE))
       umap = invoke(uwot::umap2, dt, .args = params)
+      browser()
       self$state = umap
       umap$embedding
     },

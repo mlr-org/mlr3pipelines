@@ -33,17 +33,63 @@ The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric 
 
 \section{State}{
 
-The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the class \link[uwot:umap2]{uwot::umap2},
-with the exception of the \verb{$x} slot. These are in particular:
+The \verb{$state} is a named \code{list} with the \verb{$state} elements inherited from \code{\link{PipeOpTaskPreproc}}, as well as the elements of the class \link[uwot:umap2]{uwot::umap2}.
+These are in particular:
 \itemize{
-\item \code{sdev} :: \code{numeric}\cr
-The standard deviations of the principal components.
-\item \code{rotation} :: \code{matrix}\cr
-The matrix of variable loadings.
-\item \code{center} :: \code{numeric} | \code{logical(1)}\cr
-The centering used, or \code{FALSE}.
-\item \code{scale} :: \code{numeric} | \code{logical(1)}\cr
-The scaling used, or \code{FALSE}.
+\item \code{embedding} :: \code{matrix}\cr
+Blah
+\item \code{scale_info} :: \code{any}\cr
+Blah
+\item \code{search_k} :: \code{numeric(1)}\cr
+Blah
+\item \code{local_connectivity} :: \code{numeric(1)}\cr
+Blah
+\item \code{n_epochs} :: \code{numeric(1)}\cr
+Blah
+\item \code{alpha} :: \code{numeric(1)}\cr
+Blah
+\item \code{negative_sample_rate} :: \code{numeric(1)}\cr
+Blah
+\item \code{method} :: \code{character(1)}\cr
+Blah
+\item \code{a} :: named \code{numeric(1)}\cr
+Blah
+\item \code{b} :: named \code{numeric(1)}\cr
+Blah
+\item \code{gamma} :: \code{numeric(1)}\cr
+Blah
+\item \code{approx_pow} :: \code{logical(1)}\cr
+Blah
+\item \code{metric} :: named \code{list()}\cr
+Blah
+\item \code{norig_col} :: \code{integer(1)}\cr
+Blah
+\item \code{pcg_rand} :: \code{logical(1)}\cr
+Blah
+\item \code{batch} :: \code{logical(1)}\cr
+Blah
+\item \code{opt_args} :: named \code{list()}\cr
+Blah
+\item \code{num_precomputed_nns} :: \code{numeric(1)}\cr
+Blah
+\item \code{min_dist} :: \code{numeric(1)}\cr
+Blah
+\item \code{spread} :: \code{numeric(1)}\cr
+Blah
+\item \code{binary_edge_weights} :: \code{logical(1)}\cr
+Blah
+\item \code{seed} :: \code{integer(1)}\cr
+Blah
+\item \code{nn_method} :: \code{any}\cr
+Blah
+\item \code{nn_args} :: \code{list()}\cr
+Blah
+\item \code{n_neighbors} :: \code{numeric(1)}\cr
+Blah
+\item \code{nn_index} :: named \code{list()}\cr
+Blah
+\item \code{pca_models} :: \code{list()}\cr
+Blah
 }
 }
 
