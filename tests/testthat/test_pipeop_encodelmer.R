@@ -33,7 +33,7 @@ test_that("PipeOpEncodeLmer multi and binaryclass", {
 
   # Multiclass
   task = mlr3::TaskClassif$new("task",
-    data.table::data.table(x = sample_n_letters(20), y = sample_n_letters(20), z = seq_len(20)), "x")
+    data.table::data.table(x = sample_n_letters(40), y = sample_n_letters(40), z = seq_len(40)), "x")
 
   expect_datapreproc_pipeop_class(PipeOpEncodeLmer, task = task)
   op = PipeOpEncodeLmer$new()
