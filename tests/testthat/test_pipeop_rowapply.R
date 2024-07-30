@@ -427,12 +427,12 @@ test_that("PipeOpRowApply - transform works on empty task (no rows)", {
 })
 
 
-test_that("PipeOpRowApply - transform works for only empty predict task (no rows)", {
+test_that("PipeOpRowApply - transform works for empty predict task (no rows)", {
 
   op = PipeOpRowApply$new()
   task_train = mlr_tasks$get("wine")
-  task_predict = task$filter(0)
-  cnames = task$feature_names
+  task_predict = task_train$filter(0)
+  cnames = task_train$feature_names
 
   # applicator generates matrix with names
   applicator = function(x) x^2
