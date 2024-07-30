@@ -30,13 +30,10 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as:
 #' * `applicator` :: `function`\cr
 #'   Function to apply to each row in the affected columns of the task.
-#'   The return value should be a `vector` of the same length as the input, i.e., the function vectorizes over the input.
-#'   Alternatively, the return value can be a `matrix`, `data.frame`, or [`data.table`][data.table::data.table].
-#'   In this case, the length of the input must match the number of returned rows.
-#'   Use [`Vectorize`][base::Vectorize] to create a vectorizing function from any function that ordinarily only takes one element input.
-#'   Default is [identity()][base::identity]
+#'   The return value should be a vector of the same length for every input.
+#'   Initialized as [`identity()`][base::identity]
 #' * `col_prefix` :: `character(1)`\cr
-#'   If specified, prefix to be prepended to the column names of affected columns, separated by a dot (`.`). Default is `character(1)`.
+#'   If specified, prefix to be prepended to the column names of affected columns, separated by a dot (`.`). Default is `""`.
 #'
 #' @section Internals:
 #' Calls [`apply`] on the data, using the value of `applicator` as `FUN` and `simplify = TRUE`, then coerces the output via
@@ -93,16 +90,16 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
       }
 
       res = apply(dt, 1, applicator)
-      if (!(test_atomic_vector(res) | test_matrix(res))) {
+      if (!(test_atomic_vector(res) || test_matrix(res))) {
         stop("Apply with FUN = applicator and simplified = TRUE should generate either atomic vector or matrix.")
       }
       # Convert result to a matrix for consistent column name handling
       if (test_atomic_vector(res)) {
-        res = matrix(res, nrow = 1)  # Ensure matrix has one row for correct transposition
-      }
+        res = matrix(res, ncol = 1)  # Ensure matrix has one row for correct transposition
+      } else {
       # Transpose the matrix for correct Task dimensions
       res = t(res)
-
+      }
       # Assign column names if they are missing
       if (is.null(colnames(res))) {
         if (ncol(res) == ncol(dt)) {
@@ -113,7 +110,7 @@ PipeOpRowApply = R6Class("PipeOpRowApply",
       }
       # Prepend column prefix if specified
       if (col_prefix != "") {
-        colnames(res) <- paste(col_prefix, colnames(res), sep = ".")
+        colnames(res) = paste(col_prefix, colnames(res), sep = ".")
       }
 
       # Remove filler content if the original data.table had zero rows
