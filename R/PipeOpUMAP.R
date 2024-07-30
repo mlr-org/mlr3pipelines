@@ -38,83 +38,102 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `n_neighbors` :: `integer(1)`\cr
-#'   Blah
+#'   The size of the neighborhood used for manifold approximation. Default is `15`.
 #' * `n_components` :: `integer(1)`\cr
-#'   Blah
+#'   The dimension of the space to embed into. Default is `2`.
 #' * `metric` :: `character(1)`\cr
-#'   Blah
+#'   Type of distance metric to use to find nearest neighbors. Default is `"euclidean"`.
 #' * `n_epochs` :: `integer(1)`\cr
-#'   Blah
+#'   Number of epochs to use during the optimization of the embedded coordinates.
+#'   By default, this value is set to 500 for datasets containing 10,000 vertices or less,
+#'   and 200 otherwise. If n_epochs = 0, then coordinates determined by "init" will be returned.
 #' * `learning_rate` :: `numeric(1)`\cr
-#'   Blah
-#' * `init` :: `character(1)`\cr
-#'   Blah
-#' * `init_sdev` :: `character(1)`\cr
-#'   Blah
-#' * `spread` :: `character(1)`\cr
-#'   Blah
-#' * `min_dist` :: `character(1)`\cr
-#'   Blah
-#' * `set_op_mix_ratio` :: `character(1)`\cr
-#'   Blah
-#' * `local_connectivity` :: `character(1)`\cr
-#'   Blah
-#' * `bandwidth` :: `character(1)`\cr
-#'   Blah
-#' * `repulsion_strength` :: `character(1)`\cr
-#'   Blah
-#' * `a` :: `character(1)`\cr
-#'   Blah
-#' * `b` :: `character(1)`\cr
-#'   Blah
-#' * `nn_method` :: `character(1)`\cr
-#'   Blah
-#' * `n_trees` :: `character(1)`\cr
-#'   Blah
-#' * `search_k` :: `character(1)`\cr
-#'   Blah
-#' * `approx_pow` :: `character(1)`\cr
-#'   Blah
+#'   Initial learning rate used in optimization of the coordinates. Default is `1`.
+#' * `init` :: `character(1)` | `matrix`\cr
+#'   Type of initialization for the coordinates. Default is `"spectral"`.
+#' * `init_sdev` :: `character(1)` | `numeric(1)`\cr
+#'   Scales each dimension of the initialized coordinates to this standard deviation.
+#'   Default is `"range"`.
+#' * `spread` :: `numeric(1)`\cr
+#'   The effective scale of embedded points. In combination with `min_dist`,
+#'   this determines how clustered/clumped the embedded points are. Default is `1`.
+#' * `min_dist` :: `numeric(1)`\cr
+#'   The effective minimum distance between embedded points. Default is `0.01`.
+#' * `set_op_mix_ratio` :: `numeric(1)`\cr
+#'   Interpolate between (fuzzy) union and intersection as the set operation used to
+#'   combine local fuzzy simplicial sets to obtain a global fuzzy simplicial sets. Default is `1`.
+#' * `local_connectivity` :: `numeric(1)`\cr
+#'   The local connectivity required – i.e. the number of nearest neighbors that should be
+#'   assumed to be connected at a local level. Default is `1`.
+#' * `bandwidth` :: `numeric(1)`\cr
+#'   The effective bandwidth of the kernel if we view the algorithm as similar to Laplacian Eigenmaps.
+#'   Default is `1`.
+#' * `repulsion_strength` :: `numeric(1)`\cr
+#'   Weighting applied to negative samples in low dimensional embedding optimization.
+#'   Values higher than one will result in greater weight being given to negative samples.
+#'   Default is `1`.
+#' * `negative_sample_rate` :: `numeric(1)`\cr
+#'   The number of negative edge/1-simplex samples to use per positive edge/1-simplex sample
+#'   in optimizing the low dimensional embedding. Default is `5`.
+#' * `a` :: `any`\cr
+#'   More specific parameters controlling the embedding.
+#'   If `NULL` these values are set automatically as determined by `min_dist` and `spread`.
+#'   Default is `NULL`.
+#' * `b` :: `any`\cr
+#'   More specific parameters controlling the embedding.
+#'   If `NULL` these values are set automatically as determined by `min_dist` and `spread`.
+#'   Default is `NULL`.
+#' * `nn_method` :: `character(1)` | named `list()` | matrix\cr
+#'   Method for finding nearest neighbors. Default is `NULL`.
+#' * `n_trees` :: `integer(1)`\cr
+#'   Number of trees to build when constructing the nearest neighbor index. Default is `50`.
+#' * `search_k` :: `integer(1)`\cr
+#'   Number of nodes to search during the neighbor retrieval.
+#' * `approx_pow` :: `logical(1)`\cr
+#'   If `TRUE`, use an approximation to the power function in the UMAP gradient.
+#'   Ignored if `dens_scale` is non-NULL. Default is `FALSE`.
 #' * `y` :: `character(1)`\cr
-#'   Blah
-#' * `target_n_neighbors` :: `character(1)`\cr
-#'   Blah
+#'   Default is `NULL`.
+#' * `target_n_neighbors` :: `integer(1)`\cr
+#'   Number of nearest neighbors to use to construct the target simplicial set. Default is `NULL`.
 #' * `target_metric` :: `character(1)`\cr
-#'   Blah
-#' * `target_weight` :: `character(1)`\cr
-#'   Blah
-#' * `pca` :: `character(1)`\cr
-#'   Blah
-#' * `pca_center` :: `character(1)`\cr
-#'   Blah
-#' * `pca_rand` :: `character(1)`\cr
-#'   Blah
-#' * `fast_sgd` :: `character(1)`\cr
-#'   Blah
-#' * `n_threads` :: `character(1)`\cr
-#'   Blah
-#' * `n_sgd_threads` :: `character(1)`\cr
-#'   Blah
-#' * `grain_size` :: `character(1)`\cr
-#'   Blah
-#' * `verbose` :: `character(1)`\cr
-#'   Blah
-#' * `batch` :: `character(1)`\cr
-#'   Blah
-#' * `opt_args` :: `character(1)`\cr
-#'   Blah
-#' * `epoch_callback` :: `character(1)`\cr
-#'   Blah
+#'   The metric used to measure distance for `y` if using supervised dimension reduction.
+#'   Used only if `y` is numeric.
+#' * `target_weight` :: `numeric(1)`\cr
+#'   Weighting factor between data topology and target topology. Default is `0.5`.
+#' * `pca` :: `integer(1)`\cr
+#'   Default is `NULL`.
+#' * `pca_center` :: `logical(1)`\cr
+#'   If `TRUE`, center the columns of X before carrying out PCA.
+#'   For binary data, it's recommended to set this to `FALSE`. Default is `TRUE`.
+#' * `pca_rand` :: `logical(1)`\cr
+#'   Default is `TRUE`.
+#' * `fast_sgd` :: `logical(1)`\cr
+#'   Default is `FALSE`.
+#' * `n_threads` :: `integer(1)`\cr
+#'   Default is `NULL`.
+#' * `n_sgd_threads` :: `integer(1)`\cr
+#'   Default is `0`.
+#' * `grain_size` :: `integer(1)`\cr
+#'   Default is `1`.
+#' * `verbose` :: `logical(1)`\cr
+#'    Should details be logged to the console? Initialzed to `FALSE`.
+#' * `batch` :: `logical(1)`\cr
+#'   Default is `FALSE`.
+#' * `opt_args` :: named `list()`\cr
+#'   Default is `NULL`.
+#' * `epoch_callback` :: `function`\cr
+#'   Default is `NULL`.
 #' * `pca_method` :: `character(1)`\cr
-#'   Blah
-#' * `binary_edge_weights` :: `character(1)`\cr
-#'   Blah
-#' * `dens_scale` :: `character(1)`\cr
-#'   Blah
-#' * `seed` :: `character(1)`\cr
-#'   Blah
-#' * `nn_args` :: `character(1)`\cr
-#'   Blah
+#'   Default is `NULL`.
+#' * `binary_edge_weights` :: `logical(1)`\cr
+#'   Default is `FALSE`.
+#' * `dens_scale` :: `numeric(1)`\cr
+#'   Default is `NULL`.
+#' * `seed` :: `integer(1)`\cr
+#'   Default is `NULL`.
+#' * `nn_args` :: named `list()`\cr
+#'   Default is `NULL`.
 #'
 #' @section Internals:
 #' Uses the [`umap()`][uwot::umap] function.
@@ -164,10 +183,10 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         spread = p_dbl(default = 1, tags = c("train", "umap")),
         min_dist = p_dbl(default = 0.01, tags = c("train", "umap")),
         set_op_mix_ratio = p_dbl(0, 1, default = 1, tags = c("train", "umap")),
-        local_connectivity = p_dbl(1, default = 1L, tags = c("train", "umap")),
+        local_connectivity = p_dbl(1, default = 1, tags = c("train", "umap")),
         bandwidth = p_dbl(default = 1, tags = c("train", "umap")),
         repulsion_strength = p_dbl(default = 1, tags = c("train", "umap")),
-        negative_sample_rate = p_dbl(default = 5L, tags = c("train", "umap")),
+        negative_sample_rate = p_dbl(default = 5, tags = c("train", "umap")),
         a = p_uty(default = NULL, tags = c("train", "umap")),
         b = p_uty(default = NULL, tags = c("train", "umap")),
         nn_method = p_uty(
@@ -186,7 +205,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         target_n_neighbors = p_int(tags = c("train", "umap")),
         target_metric = p_fct(c("euclidean", "cosine", "correlation"), default = "euclidean", tags = c("train", "umap")),
         target_weight = p_dbl(0, 1, default = 0.5, tags = c("train", "umap")),
-        pca = p_int(1, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
+        pca = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         pca_center = p_lgl(default = TRUE, tags = c("train", "umap")),
         pca_rand = p_lgl(default = TRUE, tags = c("train", "umap")),
         fast_sgd = p_lgl(default = FALSE, tags = c("train", "umap")),
