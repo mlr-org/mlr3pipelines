@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Carry out dimensionality reduction of a dataset using the Uniform Manifold Approximation and Projection (UMAP).
-#' See [uwot::umap2()] for details.
+#' See [uwot::umap2()] For details,.
 #'
 #' @section Construction:
 #' ```
@@ -24,58 +24,65 @@
 #' The output is the input [`Task`][mlr3::Task] with all affected numeric features replaced by their principal components.
 #'
 #' @section State:
-#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the class [uwot::umap2].
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`], as well as the elements of the list
+#' returned from [uwot::umap2].
 #' These are in particular:
 #' * `embedding` :: `matrix`\cr
-#'   Blah
+#'   Matrix of embedded coordinates.
 #' * `scale_info` :: `any`\cr
 #'   Blah
 #' * `search_k` :: `numeric(1)`\cr
-#'   Blah
+#'   Number of nodes searched during the neighbor retrieval. Only used if the `nn_method` is `"annoy"`.
+#'   For details, see [uwot::umap2()].
 #' * `local_connectivity` :: `numeric(1)`\cr
-#'   Blah
+#'   Used local connectivity – i.e. the number of nearest neighbors that should be
+#'   assumed to be connected at a local level. For details, see [uwot::umap2()].
 #' * `n_epochs` :: `numeric(1)`\cr
-#'   Blah
+#'   Number of epochs used during the optimization of the embedded coordinates. For details, see [uwot::umap2()].
 #' * `alpha` :: `numeric(1)`\cr
-#'   Blah
+#'   Initial learning rate. For details, see [uwot::umap2()].
 #' * `negative_sample_rate` :: `numeric(1)`\cr
-#'   Blah
+#'   The number of negative edge/1-simplex samples used per positive edge/1-simplex sample
+#'   in optimizing the low dimensional embedding. For details, see [uwot::umap2()].
 #' * `method` :: `character(1)`\cr
 #'   Blah
 #' * `a` :: named `numeric(1)`\cr
-#'   Blah
+#'   More specific parameters controlling the embedding. For details, see [uwot::umap2()].
 #' * `b` :: named `numeric(1)`\cr
-#'   Blah
+#'   More specific parameters controlling the embedding. For details, see [uwot::umap2()].
 #' * `gamma` :: `numeric(1)`\cr
 #'   Blah
 #' * `approx_pow` :: `logical(1)`\cr
-#'   Blah
+#'   If `TRUE`, use an approximation to the power function in the UMAP gradient. For details, see [uwot::umap2()].
 #' * `metric` :: named `list()`\cr
-#'   Blah
+#'   Type of distance metric used to find nearest neighbors. For details, see [uwot::umap2()].
 #' * `norig_col` :: `integer(1)`\cr
-#'   Blah
+#'   Number of original columns.
 #' * `pcg_rand` :: `logical(1)`\cr
-#'   Blah
+#'   `TRUE`, if the PCG random number generator (O'Neill, 2014) was used during optimization.
+#'   Otherwise, Tausworthe "taus88" generator was used. For details, see [uwot::umap2()].
 #' * `batch` :: `logical(1)`\cr
-#'   Blah
+#'   `TRUE`, if embedding coordinates were updated at the end of each epoch rather
+#'   than during the epoch. For details, see [uwot::umap2()].
 #' * `opt_args` :: named `list()`\cr
-#'   Blah
+#'   Optimizer parameters, used when `batch = TRUE`. For details, see [uwot::umap2()].
 #' * `num_precomputed_nns` :: `numeric(1)`\cr
 #'   Blah
 #' * `min_dist` :: `numeric(1)`\cr
-#'   Blah
+#'   The effective minimum distance between embedded points. For details, see [uwot::umap2()].
 #' * `spread` :: `numeric(1)`\cr
-#'   Blah
+#'   The effective scale of embedded points. For details, see [uwot::umap2()].
 #' * `binary_edge_weights` :: `logical(1)`\cr
-#'   Blah
+#'   If `TRUE` then edge weights in the input graph were treated as binary (0/1) rather than real valued.
+#'   For details, see [uwot::umap2()].
 #' * `seed` :: `integer(1)`\cr
 #'   Blah
 #' * `nn_method` :: `any`\cr
-#'   Blah
+#'   Method for finding nearest neighbors. For details, see [uwot::umap2()].
 #' * `nn_args` :: `list()`\cr
 #'   Blah
 #' * `n_neighbors` :: `numeric(1)`\cr
-#'   Blah
+#'   The size of the neighborhood used for manifold approximation. For details, see [uwot::umap2()].
 #' * `nn_index` :: named `list()`\cr
 #'   Blah
 #' * `pca_models` :: `list()`\cr
@@ -85,124 +92,125 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `n_neighbors` :: `integer(1)`\cr
 #'   The size of the neighborhood used for manifold approximation. Default is `15`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `n_components` :: `integer(1)`\cr
-#'   The dimension of the space to embed into. Default is `2`. For details see [uwot::umap2()].
+#'   The dimension of the space to embed into. Default is `2`. For details, see [uwot::umap2()].
 #' * `metric` :: `character(1)`\cr
 #'   Type of distance metric to use to find nearest neighbors. Default is `"euclidean"`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `n_epochs` :: `integer(1)`\cr
 #'   Number of epochs to use during the optimization of the embedded coordinates. Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `learning_rate` :: `numeric(1)`\cr
 #'   Initial learning rate used in optimization of the coordinates. Default is `1`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `init` :: `character(1)` | `matrix`\cr
 #'   Type of initialization for the coordinates. Default is `"spectral"`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `init_sdev` :: `character(1)` | `numeric(1)`\cr
 #'   Scales each dimension of the initialized coordinates to this standard deviation.
-#'   Default is `"range"`. For details see [uwot::umap2()].
+#'   Default is `"range"`. For details, see [uwot::umap2()].
 #' * `spread` :: `numeric(1)`\cr
-#'   The effective scale of embedded points. Default is `1`. For details see [uwot::umap2()].
+#'   The effective scale of embedded points. Default is `1`. For details, see [uwot::umap2()].
 #' * `min_dist` :: `numeric(1)`\cr
 #'   The effective minimum distance between embedded points. Default is `0.01`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `set_op_mix_ratio` :: `numeric(1)`\cr
 #'   Interpolate between (fuzzy) union and intersection as the set operation used to
 #'   combine local fuzzy simplicial sets to obtain a global fuzzy simplicial sets. Default is `1`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `local_connectivity` :: `numeric(1)`\cr
 #'   The local connectivity required – i.e. the number of nearest neighbors that should be
-#'   assumed to be connected at a local level. Default is `1`. For details see [uwot::umap2()].
+#'   assumed to be connected at a local level. Default is `1`. For details, see [uwot::umap2()].
 #' * `bandwidth` :: `numeric(1)`\cr
 #'   The effective bandwidth of the kernel if we view the algorithm as similar to Laplacian Eigenmaps.
-#'   Default is `1`. For details see [uwot::umap2()].
+#'   Default is `1`. For details, see [uwot::umap2()].
 #' * `repulsion_strength` :: `numeric(1)`\cr
 #'   Weighting applied to negative samples in low dimensional embedding optimization.
-#'   Default is `1`. For details see [uwot::umap2()].
+#'   Default is `1`. For details, see [uwot::umap2()].
 #' * `negative_sample_rate` :: `numeric(1)`\cr
 #'   The number of negative edge/1-simplex samples to use per positive edge/1-simplex sample
-#'   in optimizing the low dimensional embedding. Default is `5`. For details see [uwot::umap2()].
+#'   in optimizing the low dimensional embedding. Default is `5`. For details, see [uwot::umap2()].
 #' * `a` :: `any`\cr
-#'   More specific parameters controlling the embedding. Default is `NULL`. For details see [uwot::umap2()].
+#'   More specific parameters controlling the embedding. Default is `NULL`. For details, see [uwot::umap2()].
 #' * `b` :: `any`\cr
-#'   More specific parameters controlling the embedding. Default is `NULL`. For details see [uwot::umap2()].
+#'   More specific parameters controlling the embedding. Default is `NULL`. For details, see [uwot::umap2()].
 #' * `nn_method` :: `character(1)` | named `list()` | matrix\cr
-#'   Method for finding nearest neighbors. Default is `NULL`. For details see [uwot::umap2()].
+#'   Method for finding nearest neighbors. Default is `NULL`. For details, see [uwot::umap2()].
 #' * `n_trees` :: `integer(1)`\cr
 #'   Number of trees to build when constructing the nearest neighbor index. Default is `50`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `search_k` :: `integer(1)`\cr
-#'   Number of nodes to search during the neighbor retrieval. For details see [uwot::umap2()].
+#'   Number of nodes to search during the neighbor retrieval. Only used if the `nn_method` is `"annoy"`.
+#'   For details, see [uwot::umap2()].
 #' * `approx_pow` :: `logical(1)`\cr
 #'   If `TRUE`, use an approximation to the power function in the UMAP gradient. Default is `FALSE`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `y` :: `any`\cr
 #'   Optional target data for supervised dimension reduction. Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `target_n_neighbors` :: `integer(1)`\cr
-#'   Number of nearest neighbors to use to construct the target simplicial set. Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   Number of nearest neighbors to use to construct the target simplicial set. Default is `n_neighbors`.
+#'   For details, see [uwot::umap2()].
 #' * `target_metric` :: `character(1)`\cr
 #'   The metric used to measure distance for `y` if using supervised dimension reduction.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `target_weight` :: `numeric(1)`\cr
 #'   Weighting factor between data topology and target topology. Default is `0.5`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `pca` :: `integer(1)`\cr
 #'   Redude data to this number of columns using PCA. Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `pca_center` :: `logical(1)`\cr
 #'   If `TRUE`, center the columns of X before carrying out PCA. Default is `TRUE`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `pca_rand` :: `logical(1)`\cr
 #'   If `TRUE`, use the PCG random number generator (O'Neill, 2014) during optimization.
 #'   Otherwise, use the faster (but probably less statistically good) Tausworthe "taus88" generator.
-#'   Default is `TRUE`. For details see [uwot::umap2()].
+#'   Default is `TRUE`. For details, see [uwot::umap2()].
 #' * `fast_sgd` :: `logical(1)`\cr
 #'   If `TRUE`, then the following combination of parameters is set:
 #'   * `pcg_rand = TRUE`
 #'   * `n_sgd_threads = "auto"`
 #'   * `approx_pow = TRUE`
-#'   Default is `FALSE`. For details see [uwot::umap2()].
+#'   Default is `FALSE`. For details, see [uwot::umap2()].
 #' * `n_threads` :: `integer(1)`\cr
-#'   Number of threads to use. Default is `NULL`. For details see [uwot::umap2()].
+#'   Number of threads to use. Default is `NULL`. For details, see [uwot::umap2()].
 #' * `n_sgd_threads` :: `integer(1)`\cr
 #'   Number of threads to use during stochastic gradient descent. Default is `0`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `grain_size` :: `integer(1)`\cr
 #'   The minimum amount of work to do on each thread. Default is `1`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `verbose` :: `logical(1)`\cr
-#'   Should details be printed? Initialzed to `FALSE`. For details see [uwot::umap2()].
+#'   Should details be printed? Initialzed to `FALSE`. For details, see [uwot::umap2()].
 #' * `batch` :: `logical(1)`\cr
 #'   If `TRUE`, then embedding coordinates are updated at the end of each epoch rather
-#'   than during the epoch. Default is `FALSE`. For details see [uwot::umap2()].
+#'   than during the epoch. Default is `FALSE`. For details, see [uwot::umap2()].
 #' * `opt_args` :: named `list()`\cr
 #'   A list of optimizer parameters, used when `batch = TRUE`. Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `epoch_callback` :: `function`\cr
 #'   A function which will be invoked at the end of every epoch. Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `pca_method` :: `character(1)`\cr
 #'   Method to carry out any PCA dimensionality reduction when the `pca` is specified.
-#'   Default is `NULL`. For details see [uwot::umap2()].
+#'   Default is `NULL`. For details, see [uwot::umap2()].
 #' * `binary_edge_weights` :: `logical(1)`\cr
-#'   If TRUE then edge weights in the input graph are treated as binary (0/1) rather than real valued.
-#'   Default is `FALSE`. For details see [uwot::umap2()].
+#'   If `TRUE` then edge weights in the input graph are treated as binary (0/1) rather than real valued.
+#'   Default is `FALSE`. For details, see [uwot::umap2()].
 #' * `dens_scale` :: `numeric(1)`\cr
 #'   A scaling factor to apply to the density of the input data. Default is `NULL`.
-#'   For details see [uwot::umap2()].
+#'   For details, see [uwot::umap2()].
 #' * `seed` :: `integer(1)`\cr
 #'   Integer seed to use to initialize the random number generator state.
-#'   Default is `NULL`. For details see [uwot::umap2()].
+#'   Default is `NULL`. For details, see [uwot::umap2()].
 #' * `nn_args` :: named `list()`\cr
 #'   A list containing additional arguments to pass to the nearest neighbor method.
-#'   Default is `NULL`. For details see [uwot::umap2()].
+#'   Default is `NULL`. For details, see [uwot::umap2()].
 #'
 #' @section Internals:
-#' Uses the [`umap()`][uwot::umap] function.
+#' Uses the [`umap()`][uwot::umap2] function.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -231,11 +239,15 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         n_neighbors = p_int(2L, 100L, default = 15L, tags = c("train", "umap")),
         n_components = p_int(1L, 100L, default = 2L, tags = c("train", "umap")),
         metric = p_fct(
-          c("euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical"),
+          levels = c(
+            "euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical",
+            "braycurtis", "canberra", "chebyshev", "dice", "hamming", "hellinger", "jaccard",
+            "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
+            "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
+          ),
           default = "euclidean",
-          tags = c("train", "umap"),
-          depends = quote(nn_method == "hnsw")
-        ),
+          tags = c("train", "umap")
+        ),  # why not all?
         n_epochs = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         learning_rate = p_dbl(0, default = 1, tags = c("train", "umap")),
         scale = p_lgl(default = FALSE, special_vals = list("none", "Z", "maxabs", "range", "colrange", NULL), tags = c("train", "umap")),
@@ -270,7 +282,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         search_k = p_int(tags = c("train", "umap")),
         approx_pow = p_lgl(default = FALSE, tags = c("train", "umap")),
         y = p_uty(default = NULL, tags = c("train", "umap")),
-        target_n_neighbors = p_int(tags = c("train", "umap")),
+        target_n_neighbors = p_int(tags = c("train", "umap")), # default = n_neighbors
         target_metric = p_fct(c("euclidean", "cosine", "correlation"), default = "euclidean", tags = c("train", "umap")),
         target_weight = p_dbl(0, 1, default = 0.5, tags = c("train", "umap")),
         pca = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
@@ -283,7 +295,11 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         verbose = p_lgl(default = TRUE, tags = c("train", "umap")),
         batch = p_lgl(default = FALSE, tags = c("train", "umap")),
         opt_args = p_uty(default = NULL, tags = c("train", "umap"), custom_check = crate(function(x) check_list(x, null.ok = TRUE))),
-        epoch_callback = p_uty(default = NULL, tags = c("train", "umap"), custom_check = check_function_or_null),
+        epoch_callback = p_uty(
+          default = NULL,
+          tags = c("train", "umap"),
+          custom_check = crate(function(x) check_function(x, args = c("epochs", "n_epochs", "coords"), null.ok = TRUE))
+        ),
         pca_method = p_fct(c("irlba", "rsvd", "bigstatsr", "svd", "auto"), default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         binary_edge_weights = p_lgl(default = FALSE, tags = c("train", "umap")),
         dens_scale = p_dbl(0, 1, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
@@ -299,7 +315,6 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
     .train_dt = function(dt, levels, target) {
       params = insert_named(self$param_set$get_values(tags = "umap"), list(ret_model = TRUE))
       umap = invoke(uwot::umap2, dt, .args = params)
-      browser()
       self$state = umap
       umap$embedding
     },
