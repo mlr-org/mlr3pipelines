@@ -87,7 +87,8 @@ Suggests:
     methods,
     vtreat,
     future,
-    htmlwidgets
+    htmlwidgets,
+    ranger
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
