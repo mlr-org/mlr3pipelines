@@ -299,7 +299,6 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
     .train_dt = function(dt, levels, target) {
       params = insert_named(self$param_set$get_values(tags = "umap"), list(ret_model = TRUE))
       umap = invoke(uwot::umap2, dt, .args = params)
-      browser()
       self$state = umap
       umap$embedding
     },
