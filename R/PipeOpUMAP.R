@@ -210,7 +210,7 @@
 #'   Default is `NULL`. For details, see [uwot::umap2()].
 #'
 #' @section Internals:
-#' Uses the [`umap()`][uwot::umap2] function.
+#' Uses the [umap2()][uwot::umap2] function.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
