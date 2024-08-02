@@ -284,7 +284,16 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         approx_pow = p_lgl(default = FALSE, tags = c("train", "umap")),
         y = p_uty(default = NULL, tags = c("train", "umap")),
         target_n_neighbors = p_int(tags = c("train", "umap")),
-        target_metric = p_fct(c("euclidean", "cosine", "correlation"), default = "euclidean", tags = c("train", "umap")),
+        target_metric =  p_fct(
+          levels = c(
+            "euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical",
+            "braycurtis", "canberra", "chebyshev", "dice", "hellinger", "jaccard",
+            "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
+            "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
+          ),
+          default = "euclidean",
+          tags = c("train", "umap")
+        ),
         target_weight = p_dbl(0, 1, default = 0.5, tags = c("train", "umap")),
         pca = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         pca_center = p_lgl(default = TRUE, tags = c("train", "umap")),
