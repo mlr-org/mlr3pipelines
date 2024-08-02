@@ -290,8 +290,8 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         pca_center = p_lgl(default = TRUE, tags = c("train", "umap")),
         pca_rand = p_lgl(default = TRUE, tags = c("train", "umap")),
         fast_sgd = p_lgl(default = FALSE, tags = c("train", "umap")),
-        n_threads = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
-        n_sgd_threads = p_int(0L, default = 0L, special_vals = list("auto"), tags = c("train", "umap")),
+        n_threads = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "predict", "umap")),
+        n_sgd_threads = p_int(0L, default = 0L, special_vals = list("auto"), tags = c("train", "predict", "umap")),
         grain_size = p_int(1L, default = 1L, tags = c("train", "umap")),
         verbose = p_lgl(default = TRUE, tags = c("train", "umap")),
         batch = p_lgl(default = FALSE, tags = c("train", "umap")),
@@ -314,14 +314,15 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
   ),
   private = list(
     .train_dt = function(dt, levels, target) {
-      params = insert_named(self$param_set$get_values(tags = "umap"), list(ret_model = TRUE))
+      params = insert_named(self$param_set$get_values(tags = c("umap", "train")), list(ret_model = TRUE))
       umap = invoke(uwot::umap2, dt, .args = params)
       self$state = umap
       umap$embedding
     },
 
     .predict_dt = function(dt, levels) {
-      invoke(uwot::umap_transform, dt, self$state)
+      params = self$param_set$get_values(tags = c("umap", "predict"))
+      invoke(uwot::umap_transform, dt, self$state, .args = params)
     }
   )
 )
