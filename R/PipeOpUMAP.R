@@ -282,7 +282,17 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         n_trees = p_int(10L, 100L, default = 50L, tags = c("train", "umap")),
         search_k = p_int(tags = c("train", "umap")),
         approx_pow = p_lgl(default = FALSE, tags = c("train", "umap")),
-        y = p_uty(default = NULL, tags = c("train", "umap")),
+        y = p_uty(
+          default = NULL,
+          tags = c("train", "umap"),
+          custom_check = crate(function(x) {
+            check_atomic_vector(x) %check||%
+              check_matrix(x) %check||%
+              check_data_frame(x) %check||%
+              check_list(x) %check||%
+              check_null(x)
+          })
+        ),
         target_n_neighbors = p_int(tags = c("train", "umap")),
         target_metric =  p_fct(
           levels = c(
