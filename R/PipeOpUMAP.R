@@ -327,7 +327,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
       )
       ps$set_values(verbose = FALSE)
 
-      super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
+      super$initialize(id, param_set = ps, param_vals = param_vals, packages = "uwot", feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
