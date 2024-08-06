@@ -90,7 +90,6 @@ PipeOpSmote = R6Class("PipeOpSmote",
       cols = private$.select_cols(task)
 
       if (!length(cols)) {
-        self$state = list(dt_columns = cols)
         return(task)
       }
       dt = task$data(cols = cols)
