@@ -9,7 +9,7 @@
 }
 \description{
 Carry out dimensionality reduction of a dataset using the Uniform Manifold Approximation and Projection (UMAP).
-See \code{\link[uwot:umap2]{uwot::umap2()}} For details,.
+See \code{\link[uwot:umap2]{uwot::umap2()}} for details.
 }
 \section{Construction}{
 
@@ -119,6 +119,8 @@ For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{learning_rate} :: \code{numeric(1)}\cr
 Initial learning rate used in optimization of the coordinates. Default is \code{1}.
 For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
+\item \code{scale} :: \code{logical(1)} / \code{character(1)}\cr
+Scaling to apply to the data. If \code{TRUE}, data is standardized. Default is \code{FALSE}. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{init} :: \code{character(1)} | \code{matrix}\cr
 Type of initialization for the coordinates. Default is \code{"spectral"}.
 For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
@@ -150,8 +152,9 @@ in optimizing the low dimensional embedding. Default is \code{5}. For details, s
 More specific parameters controlling the embedding. Default is \code{NULL}. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{b} :: \code{any}\cr
 More specific parameters controlling the embedding. Default is \code{NULL}. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
-\item \code{nn_method} :: \code{character(1)} | named \code{list()} | matrix\cr
-Method for finding nearest neighbors. Default is \code{NULL}. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
+\item \code{nn_method} :: \code{character(1)}\cr
+Method for finding nearest neighbors. Note that only values compatible with \code{\link[uwot:umap_transform]{uwot::umap_transform()}} are allowed.
+Default is \code{NULL}. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{n_trees} :: \code{integer(1)}\cr
 Number of trees to build when constructing the nearest neighbor index. Default is \code{50}.
 For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
