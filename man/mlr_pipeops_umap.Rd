@@ -255,7 +255,7 @@ pop$state
 \dontshow{ \} }
 }
 \references{
-McInnes L, Healy J, Melville J, Großberger L (2018).
+McInnes L, Healy J, Melville J, Grossberger L (2018).
 \dQuote{UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.}
 \emph{Journal of Open Source Software}, \bold{3}(29).
 \doi{10.21105/joss.00861}.

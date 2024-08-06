@@ -61,7 +61,7 @@ bibentries = c(
     publisher  = "The Open Journal",
     volume     = "3",
     number     = "29",
-    author     = "Leland McInnes and John Healy and James Melville and Lukas Großberger",
+    author     = "Leland McInnes and John Healy and James Melville and Lukas Grossberger",
     title      = "UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",
     journal    = "Journal of Open Source Software"
   )
