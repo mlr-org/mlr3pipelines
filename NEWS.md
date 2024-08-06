@@ -1,3 +1,7 @@
+# mlr3pipelines 0.6.1
+
+* New PipeOp `PipeOpRowApply` / `po("rowapply")`
+
 # mlr3pipelines 0.6.0
 
 * Compatibility with new `bbotk` release.
