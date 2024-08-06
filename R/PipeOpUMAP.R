@@ -231,6 +231,8 @@
 #'
 #' pop$state
 #' \dontshow{ \} }
+#' @references
+#' `r format_bib("mcinnes_2018")`
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

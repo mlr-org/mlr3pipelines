@@ -254,6 +254,12 @@ pop$train(list(task))[[1]]$data()
 pop$state
 \dontshow{ \} }
 }
+\references{
+McInnes L, Healy J, Melville J, Großberger L (2018).
+\dQuote{UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.}
+\emph{Journal of Open Source Software}, \bold{3}(29).
+\doi{10.21105/joss.00861}.
+}
 \seealso{
 https://mlr-org.com/pipeops.html
 
@@ -312,6 +318,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
