@@ -136,8 +136,9 @@
 #'   More specific parameters controlling the embedding. Default is `NULL`. For details, see [uwot::umap2()].
 #' * `b` :: `any`\cr
 #'   More specific parameters controlling the embedding. Default is `NULL`. For details, see [uwot::umap2()].
-#' * `nn_method` :: `character(1)` | named `list()` | matrix\cr
-#'   Method for finding nearest neighbors. Default is `NULL`. For details, see [uwot::umap2()].
+#' * `nn_method` :: `character(1)`\cr
+#'   Method for finding nearest neighbors. Note that only values compatible with [uwot::umap_transform()] are allowed.
+#'   Default is `NULL`. For details, see [uwot::umap2()].
 #' * `n_trees` :: `integer(1)`\cr
 #'   Number of trees to build when constructing the nearest neighbor index. Default is `50`.
 #'   For details, see [uwot::umap2()].
@@ -292,7 +293,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         target_n_neighbors = p_int(tags = c("train", "umap")),
         target_metric =  p_fct(
           levels = c(
-            "euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical",
+            "euclidean", "cosine", "manhattan", "hamming", "correlation",
             "braycurtis", "canberra", "chebyshev", "dice", "hellinger", "jaccard",
             "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
             "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
