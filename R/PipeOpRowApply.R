@@ -33,11 +33,10 @@
 #'   The return value should be a vector of the same length for every input.
 #'   Initialized as [`identity()`][base::identity].
 #' * `col_prefix` :: `character(1)`\cr
-#'   If specified, prefix to be prepended to the column names of affected columns, separated by a dot (`.`). Default is `""`.
+#'   If specified, prefix to be prepended to the column names of affected columns, separated by a dot (`.`). Initialized as `""`.
 #'
 #' @section Internals:
-#' Calls [`apply`] on the data, using the value of `applicator` as `FUN` and `simplify = TRUE`, then coerces the output via
-#' [`as.data.table()`][data.table::as.data.table].
+#' Calls [`apply`] on the data, using the value of `applicator` as `FUN`.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
