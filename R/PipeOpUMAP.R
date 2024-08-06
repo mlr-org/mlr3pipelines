@@ -6,7 +6,7 @@
 #'
 #' @description
 #' Carry out dimensionality reduction of a dataset using the Uniform Manifold Approximation and Projection (UMAP).
-#' See [uwot::umap2()] For details,.
+#' See [uwot::umap2()] for details.
 #'
 #' @section Construction:
 #' ```
@@ -241,7 +241,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         n_components = p_int(1L, 100L, default = 2L, tags = c("train", "umap")),
         metric = p_fct(
           levels = c(
-            "euclidean", "cosine", "manhattan", "hamming", "correlation", "categorical",
+            "euclidean", "cosine", "manhattan", "hamming", "correlation",
             "braycurtis", "canberra", "chebyshev", "dice", "hellinger", "jaccard",
             "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
             "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
@@ -273,11 +273,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         nn_method = p_uty(
           default = NULL,
           tags = c("train", "umap"),
-          custom_check = crate(function(x) {
-            check_choice(x, c("fnn", "annoy", "hnsw", "nndescent"), null.ok = TRUE) %check||%
-              check_list(x, types = "matrix", len = 2L, names = "idx", "dist") %check||%
-              check_class(x, "dgCMatrix")
-          })
+          custom_check = crate(function(x) check_choice(x, c("annoy", "hnsw", "nndescent"), null.ok = TRUE))
         ),
         n_trees = p_int(10L, 100L, default = 50L, tags = c("train", "umap")),
         search_k = p_int(tags = c("train", "umap")),
