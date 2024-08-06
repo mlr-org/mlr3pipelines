@@ -105,6 +105,8 @@
 #' * `learning_rate` :: `numeric(1)`\cr
 #'   Initial learning rate used in optimization of the coordinates. Default is `1`.
 #'   For details, see [uwot::umap2()].
+#' * `scale` :: `logical(1)` / `character(1)`\cr
+#'   Scaling to apply to the data. If `TRUE`, data is standardized. Default is `FALSE`. For details, see [uwot::umap2()].
 #' * `init` :: `character(1)` | `matrix`\cr
 #'   Type of initialization for the coordinates. Default is `"spectral"`.
 #'   For details, see [uwot::umap2()].
@@ -252,7 +254,7 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         ),
         n_epochs = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         learning_rate = p_dbl(0, default = 1, tags = c("train", "umap")),
-        scale = p_lgl(default = FALSE, special_vals = list("none", "Z", "maxabs", "range", "colrange", NULL), tags = c("train", "umap")),
+        scale = p_lgl(default = FALSE, special_vals = list("none", "Z", "scale", "maxabs", "range", "colrange", NULL), tags = c("train", "umap")),
         init = p_uty(
           default = "spectral",
           tags = c("train", "umap"),
