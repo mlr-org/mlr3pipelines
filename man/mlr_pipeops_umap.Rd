@@ -253,6 +253,7 @@ pop$train(list(task))[[1]]$data()
 
 pop$state
 \dontshow{ \} }
+
 }
 \references{
 McInnes L, Healy J, Melville J, Grossberger L (2018).
