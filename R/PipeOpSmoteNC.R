@@ -1,0 +1,104 @@
+#' @title SMOTENC Balancing
+#'
+#' @usage NULL
+#' @name mlr_pipeops_smotenc
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @description
+#' Generates a more balanced data set by creating synthetic instances of the minority class
+#' for nominal and continuous data using the SMOTENC algorithm.
+#'
+#' The algorithm generates for each minority instance a new data point based on the `k` nearest
+#' neighbors of that data point.
+#' It can only be applied to tasks with numeric features and exactly one factor feature.
+#' See [`themis::smotenc`] for details.
+#'
+#' @section Construction:
+#' ```
+#' PipeOpSmote$new(id = "smote", param_vals = list())
+#' ```
+#'
+#' * `id` :: `character(1)`\cr
+#'   Identifier of resulting object, default `"smote"`.
+#' * `param_vals` :: named `list`\cr
+#'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
+#'
+#' @section Input and Output Channels:
+#' Input and output channels are inherited from [`PipeOpTaskPreproc`].
+#'
+#' The output during training is the input [`Task`][mlr3::Task] with added synthetic rows for the minority class.
+#' The output during prediction is the unchanged input.
+#'
+#' @section State:
+#' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpTaskPreproc`].
+#'
+#' @section Parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
+#' * `var` :: `character(1)`\cr
+#'   Name of the factor column to be used.
+#' * `k` :: `integer(1)`\cr
+#'   Number of nearest neighbors used for generating new values from the minority class. Default is `5`.
+#' * `over_ratio` :: `numeric(1)`\cr
+#'   Ratio of the majority to minority class. Default is `1`. For details, see [`themis::smotenc`].
+#'
+#' @section Fields:
+#' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @section Methods:
+#' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#'
+#' @references
+#' `r format_bib("chawla_2002")`
+#'
+#' @family PipeOps
+#' @template seealso_pipeopslist
+#' @include PipeOpTaskPreproc.R
+#' @export
+#' @examples
+#' \dontshow{ if (requireNamespace("smotefamily")) \{ }
+#' library("mlr3")
+#'
+#' # Create example task
+#'
+#' # Generate synthetic data for minority class
+#'
+#' \dontshow{ \} }
+PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
+  inherit = PipeOpTaskPreproc,
+  public = list(
+    initialize = function(id = "smotenc", param_vals = list()) {
+      ps = ps(
+        var = p_uty(
+          custom_check = crate(function(x) check_factor(x) %check&&% check_choice(x, task$feature_names)),
+          tags = c("train", "smotenc")
+        ),
+        k = p_int(lower = 1, default = 5, tags = c("train", "smotenc")),
+        over_ratio = p_dbl(lower = 0, default = 1, tags = c("train", "smotenc"))
+      )
+      super$initialize(id, param_set = ps, param_vals = param_vals,
+        packages = "themis", can_subset_cols = FALSE, tags = "imbalanced data")
+    }
+  ),
+  private = list(
+
+    .train_task = function(task) {
+      # JUST A ROUGHT DRAFT
+
+      assert_true(all(task$feature_types$type %in% c("numeric", "factor")))
+      cols = private$.select_cols(task)
+
+      if (!length(cols)) {
+        self$state = list(dt_columns = cols)
+        return(task)
+      }
+      dt = task$data(cols = cols)
+
+      # calculate synthetic data
+      st = setDT(invoke(themis::smotenc, X = dt, .args = self$param_set$get_values(tags = "smotenc")))
+
+      task$rbind(st)
+    }
+  )
+)
+
+mlr_pipeops$add("smotenc", PipeOpSmoteNC)
