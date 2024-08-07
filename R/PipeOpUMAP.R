@@ -234,7 +234,6 @@
 #'
 #' pop$state
 #' \dontshow{ \} }
-#'
 #' @family PipeOps
 #' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R

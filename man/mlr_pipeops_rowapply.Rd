@@ -46,14 +46,13 @@ Function to apply to each row in the affected columns of the task.
 The return value should be a vector of the same length for every input.
 Initialized as \code{\link[base:identity]{identity()}}.
 \item \code{col_prefix} :: \code{character(1)}\cr
-If specified, prefix to be prepended to the column names of affected columns, separated by a dot (\code{.}). Default is \code{""}.
+If specified, prefix to be prepended to the column names of affected columns, separated by a dot (\code{.}). Initialized as \code{""}.
 }
 }
 
 \section{Internals}{
 
-Calls \code{\link{apply}} on the data, using the value of \code{applicator} as \code{FUN} and \code{simplify = TRUE}, then coerces the output via
-\code{\link[data.table:as.data.table]{as.data.table()}}.
+Calls \code{\link{apply}} on the data, using the value of \code{applicator} as \code{FUN}.
 }
 
 \section{Fields}{
@@ -144,6 +143,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_textvectorizer}},
 \code{\link{mlr_pipeops_threshold}},
 \code{\link{mlr_pipeops_tunethreshold}},
+\code{\link{mlr_pipeops_umap}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
