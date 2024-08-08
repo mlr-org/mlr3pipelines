@@ -105,7 +105,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
               }
             },
             error = function(error_condition) "`content` must be an object that can be converted to a Graph")
-          }, innum, .parent = topenv()),
+          }, innum, outnum, .parent = topenv()),
           tags = c("train", "predidct", "required")
         )
       )
