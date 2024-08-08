@@ -1,6 +1,7 @@
 # mlr3pipelines 0.6.1
 
 * New PipeOp `PipeOpRowApply` / `po("rowapply")`
+* New PipeOp `PipeOpUMAP` / `po("umap")`
 
 # mlr3pipelines 0.6.0
 

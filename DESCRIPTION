@@ -88,6 +88,7 @@ Suggests:
     vtreat,
     future,
     htmlwidgets,
+    uwot (>= 0.2.1),
     ranger
 ByteCompile: true
 Encoding: UTF-8
@@ -166,6 +167,7 @@ Collate:
     'PipeOpThreshold.R'
     'PipeOpTrafo.R'
     'PipeOpTuneThreshold.R'
+    'PipeOpUMAP.R'
     'PipeOpUnbranch.R'
     'PipeOpVtreat.R'
     'PipeOpYeoJohnson.R'

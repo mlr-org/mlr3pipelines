@@ -52,5 +52,18 @@ bibentries = c(
     author    = "Yujun Wu and Dennis D Boos and Leonard A Stefanski",
     title     = "Controlling Variable Selection by the Addition of Pseudovariables",
     journal   = "Journal of the American Statistical Association"
+  ),
+
+  mcinnes_2018 = bibentry("article",
+    doi        = "10.21105/joss.00861",
+    year       = "2018",
+    month      = "9",
+    publisher  = "The Open Journal",
+    volume     = "3",
+    number     = "29",
+    author     = "Leland McInnes and John Healy and James Melville and Lukas Grossberger",
+    title      = "UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",
+    journal    = "Journal of Open Source Software"
   )
 )
+
