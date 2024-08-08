@@ -261,10 +261,10 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         init = p_uty(
           default = "spectral",
           tags = c("train", "umap"),
-          custom_check = function(x) {
+          custom_check = crate(function(x) {
             choices = c("spectral", "normlaplacian", "random", "lvrandom", "laplacian", "pca", "spca", "agspectral")
             check_choice(x, choices) %check||% check_matrix(x)
-          }
+          }, .parent = topenv())
         ),
         init_sdev = p_uty(default = "range", tags = c("train", "umap")),
         spread = p_dbl(default = 1, tags = c("train", "umap")),
@@ -287,13 +287,13 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         y = p_uty(
           default = NULL,
           tags = c("train", "umap"),
-          custom_check = function(x) {
+          custom_check = crate(function(x) {
             check_atomic_vector(x) %check||%
               check_matrix(x) %check||%
               check_data_frame(x) %check||%
               check_list(x) %check||%
               check_null(x)
-          }
+          }, .parent = topenv())
         ),
         target_n_neighbors = p_int(tags = c("train", "umap")),
         target_metric =  p_fct(
