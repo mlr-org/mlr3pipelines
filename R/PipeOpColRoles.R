@@ -58,17 +58,20 @@ PipeOpColRoles = R6Class("PipeOpColRoles",
     initialize = function(id = "colroles", param_vals = list()) {
       ps = ps(
         # named list, each entry with a vector of roles
-        new_role = p_uty(tags = c("train", "predict"), custom_check = function(x) {
-          first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
-          # return the error directly if this failed
-          if (is.character(first_check)) {
-            return(first_check)
-          }
-          # changing anything target related is not supported
-          # a value of "character()" will lead to the column being dropped
-          all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
-          check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
-        })
+        new_role = p_uty(
+          tags = c("train", "predict"),
+          custom_check = crate(function(x) {
+            first_check = check_list(x, types = "character", any.missing = FALSE, min.len = 1L, names = "named")
+            # return the error directly if this failed
+            if (is.character(first_check)) {
+              return(first_check)
+            }
+            # changing anything target related is not supported
+            # a value of "character()" will lead to the column being dropped
+            all_col_roles = unique(unlist(mlr3::mlr_reflections$task_col_roles))
+            check_subset(unlist(x), all_col_roles[all_col_roles != "target"])
+          }, .parent = topenv())
+        )
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     }

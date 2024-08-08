@@ -61,10 +61,11 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   public = list(
     initialize = function(id = "renamecolumns", param_vals = list()) {
       ps = ps(
-        renaming = p_uty(tags = c("train", "predict", "required"), custom_check = function(x) {
-          check_character(x, any.missing = FALSE, names = "strict") %check&&%
-            check_names(x, type = "strict")
-        }),
+        renaming = p_uty(
+          custom_check = crate(function(x) check_character(x, any.missing = FALSE, names = "strict") %check&&% check_names(x, type = "strict"),
+                               .parent = topenv()),
+          tags = c("train", "predict", "required")
+        ),
         ignore_missing = p_lgl(tags = c("train", "predict", "required"))
       )
       ps$values = list(renaming = character(0), ignore_missing = FALSE)
