@@ -43,7 +43,7 @@
 #' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
 #'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put after `g1`.
 #' @param in_place (`logical(1)`)\cr
-#'   Whether to try to avoid cloning `g1`. If `g1` is not a [`Graph`], then it is cloned regardless.\n
+#'   Whether to try to avoid cloning `g1`. If `g1` is not a [`Graph`], then it is cloned regardless.
 #'
 #' @return [`Graph`]: the constructed [`Graph`].
 #' @family Graph operators
