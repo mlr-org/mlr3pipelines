@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_subsample
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Subsamples a [`Task`][mlr3::Task] to use a fraction of the rows.
@@ -41,7 +41,7 @@
 #' @section Internals:
 #' Uses `task$filter()` to remove rows. If `replace` is `TRUE` and identical rows are added, then the `task$row_roles$use` can *not* be used
 #' to duplicate rows because of \[inaudible\]; instead the `task$rbind()` function is used, and
-#' a new [`data.table`] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
+#' a new [`data.table`][data.table::data.table] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -57,18 +57,18 @@
 #' pos$train(list(tsk("iris")))
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpSubsample = R6Class("PipeOpSubsample",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "subsample", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("frac", lower = 0, upper = Inf, tags = "train"),
-        ParamLgl$new("stratify", tags = "train"),
-        ParamLgl$new("replace", tags = "train")
-      ))
+      ps = ps(
+        frac = p_dbl(lower = 0, upper = Inf, tags = "train"),
+        stratify = p_lgl(tags = "train"),
+        replace = p_lgl(tags = "train")
+      )
       ps$values = list(frac = 1 - exp(-1), stratify = FALSE, replace = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE)
     }

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_missind
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Add missing indicator columns ("dummy columns") to the [`Task`][mlr3::Task].
@@ -50,11 +50,12 @@
 #' Methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
 #' library("mlr3")
+#' \dontshow{data.table::setDTthreads(1)}
 #'
 #' task = tsk("pima")$select(c("insulin", "triceps"))
 #' sum(complete.cases(task$data()))
@@ -78,10 +79,10 @@ PipeOpMissInd = R6Class("PipeOpMissInd",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "missind", param_vals = list()) {
-      ps = ParamSet$new(list(
-        ParamFct$new("which", levels = c("missing_train", "all"), tags = c("train", "required")),
-        ParamFct$new("type", levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
-      ))
+      ps = ps(
+        which = p_fct(levels = c("missing_train", "all"), tags = c("train", "required")),
+        type = p_fct(levels = c("factor", "integer", "logical", "numeric"), tags = c("train", "predict", "required"))
+      )
       ps$values = list(which = "missing_train", type = "factor")
       super$initialize(id, ps, param_vals = param_vals, tags = "missings")
       if ("affect_columns" %nin% names(param_vals)) {

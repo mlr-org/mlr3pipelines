@@ -13,6 +13,8 @@ test_that("basic properties", {
 
 
 test_that("train and predict", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("rpart")
   task1 = mlr_tasks$get("iris")
   task1$row_roles$use = c(1:10, 140:150)
   g1 = LearnerClassifRpart$new() %>>% PipeOpRandomResponse$new()

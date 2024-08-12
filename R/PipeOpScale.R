@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scale
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Centers all numeric features to mean = 0 (if `center` parameter is `TRUE`) and scales them
@@ -67,18 +67,18 @@
 #'
 #' pos$predict(list(one_line_of_iris))[[1]]$data()
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpScale = R6Class("PipeOpScale",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "scale", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE, tags = c("train", "scale")),
-        ParamLgl$new("scale", default = TRUE, tags = c("train", "scale")),
-        ParamLgl$new("robust", tags = c("train", "required"))
-      ))
+      ps = ps(
+        center = p_lgl(default = TRUE, tags = c("train", "scale")),
+        scale = p_lgl(default = TRUE, tags = c("train", "scale")),
+        robust = p_lgl(tags = c("train", "required"))
+      )
       ps$values = list(robust = FALSE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }

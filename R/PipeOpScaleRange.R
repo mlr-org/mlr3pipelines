@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scalerange
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Linearly transforms numeric data columns so they are between `lower`
@@ -52,17 +52,17 @@
 #'
 #' pop$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpScaleRange = R6Class("PipeOpScaleRange",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "scalerange", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("lower", tags = c("required", "train")),
-        ParamDbl$new("upper", tags = c("required", "train"))
-      ))
+      ps = ps(
+        lower = p_dbl(tags = c("required", "train")),
+        upper = p_dbl(tags = c("required", "train"))
+      )
       ps$values = list(lower = 0, upper = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
@@ -71,9 +71,10 @@ PipeOpScaleRange = R6Class("PipeOpScaleRange",
 
     .get_state_dt = function(dt, levels, target) {
       lapply(dt, function(x) {
-        rng = range(x, na.rm = TRUE, finite = TRUE)
-        scale = (self$param_set$values$upper - self$param_set$values$lower) / diff(rng)
-        offset = -rng[1L] * scale + self$param_set$values$lower
+        lower = min(x, na.rm = TRUE)
+        upper = max(x, na.rm = TRUE)
+        scale = (self$param_set$values$upper - self$param_set$values$lower) / (upper - lower)
+        offset = -lower * scale + self$param_set$values$lower
         c(scale = scale, offset = offset)
       })
     },

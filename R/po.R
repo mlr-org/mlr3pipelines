@@ -32,6 +32,7 @@
 #' @return A [`PipeOp`] (for `po()`), or a `list` of [`PipeOp`]s (for `pos()`).
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' po("learner", lrn("classif.rpart"), cp = 0.3)
@@ -43,6 +44,7 @@
 #'   param_vals = list(cp = 0.3))
 #'
 #' pos(c("pca", original = "nop"))
+#' \dontshow{ \} }
 po = function(.obj, ...) {
   UseMethod("po")
 }
@@ -82,7 +84,7 @@ po.PipeOp = function(.obj, ...) {
 
 #' @export
 po.character = function(.obj, ...) {
-  dictionary_sugar_get(dict = mlr_pipeops, .key = .obj, ...)
+  dictionary_sugar_inc_get(dict = mlr_pipeops, .key = .obj, ...)
 }
 
 #' @export
@@ -110,7 +112,7 @@ pos.NULL = function(.objs, ...) {
 
 #' @export
 pos.character = function(.objs, ...) {
-  dictionary_sugar_mget(dict = mlr_pipeops, .keys = .objs, ...)
+  dictionary_sugar_inc_mget(dict = mlr_pipeops, .keys = .objs, ...)
 }
 
 #' @export

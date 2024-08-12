@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_featureunion
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Aggregates features from all input tasks by [cbind()]ing them together into a single
@@ -107,7 +107,7 @@
 #'
 #' @family PipeOps
 #' @family Multiplicity PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -192,7 +192,8 @@ PipeOpFeatureUnion = R6Class("PipeOpFeatureUnion",
       if (private$.collect) inputs = unclass(inputs[[1]])
       list(cbind_tasks(inputs, self$assert_targets_equal, self$inprefix))
     },
-    .collect = NULL
+    .collect = NULL,
+    .additional_phash_input = function() list(private$.collect, self$input$name)
   )
 )
 
@@ -252,6 +253,7 @@ cbind_tasks = function(inputs, assert_targets_equal, inprefix) {
   # again done by reference
   new_features = unlist(c(list(data.table(x = vector(length = task$nrow))),
     map(tail(inputs, -1L), .f = function(y) y$data(ids, cols = y$feature_names))), recursive = FALSE)
+  names(new_features)[1] = make.unique(rev(names(new_features)))[[length(new_features)]]
 
   # we explicitly have to subset to the unique column names, otherwise task$cbind() complains for data.table backends
   new_features = new_features[unique(names(new_features))]

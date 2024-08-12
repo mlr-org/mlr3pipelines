@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_nmf
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Extracts non-negative components from data by performing non-negative matrix factorization. Only
@@ -88,6 +88,8 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("NMF")) \{ }
+#' \dontshow{ if (requireNamespace("MASS")) \{ }
 #' if (requireNamespace("NMF")) {
 #' library("mlr3")
 #'
@@ -99,36 +101,36 @@
 #'
 #' pop$state
 #' }
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpNMF = R6Class("PipeOpNMF",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "nmf", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamInt$new("rank", lower = 1L, upper = Inf, tags = c("train", "nmf")),
-        ParamFct$new("method", tags = c("train", "nmf"),
+      ps = ps(
+        rank = p_int(lower = 1L, upper = Inf, tags = c("train", "nmf")),
+        method = p_fct(tags = c("train", "nmf"),
           levels = c("brunet", "lee", "ls-nmf", "nsNMF", "offset", "pe-nmf", "snmf/r", "snmf/l")),
-        ParamUty$new("seed", tags = c("train", "nmf")),
+        seed = p_uty(tags = c("train", "nmf")),
         # NOTE: rng missing, not well documented
-        ParamInt$new("nrun", lower = 1L, upper = Inf, default = 1L, tags = c("train", "nmf")),
+        nrun = p_int(lower = 1L, upper = Inf, default = 1L, tags = c("train", "nmf")),
         # NOTE: model missing, probably over the top here
         # the following are .options
-        ParamLgl$new("debug", default = FALSE, tags = c("train", "nmf.options")),
-        ParamLgl$new("keep.all", default = FALSE, tags = c("train", "nmf.options")),
-        ParamUty$new("parallel", default = TRUE, tags = c("train", "nmf.options")),
-        ParamUty$new("parallel.required", tags = c("train", "nmf.options")),
-        ParamLgl$new("shared.memory", tags = c("train", "nmf.options")),
-        ParamLgl$new("simplifyCB", default = TRUE, tags = c("train", "nmf.options")),
-        ParamLgl$new("track", default = FALSE, tags = c("train", "nmf.options")),
-        ParamUty$new("verbose", default = FALSE, tags = c("train", "nmf.options")),
-        ParamUty$new("pbackend", tags = c("train", "nmf")),  # .pbackend
-        ParamUty$new("callback", tags = c("train", "nmf"))  # .callback
-      ))
-      ps$add_dep("keep.all", on = "nrun", cond = CondLarger$new(1))
-      ps$add_dep("callback", on = "keep.all", cond = CondEqual$new(TRUE))
+        debug = p_lgl(default = FALSE, tags = c("train", "nmf.options")),
+        keep.all = p_lgl(default = FALSE, tags = c("train", "nmf.options")),
+        parallel = p_uty(default = TRUE, tags = c("train", "nmf.options")),
+        parallel.required = p_uty(tags = c("train", "nmf.options")),
+        shared.memory = p_lgl(tags = c("train", "nmf.options")),
+        simplifyCB = p_lgl(default = TRUE, tags = c("train", "nmf.options")),
+        track = p_lgl(default = FALSE, tags = c("train", "nmf.options")),
+        verbose = p_uty(default = FALSE, tags = c("train", "nmf.options")),
+        pbackend = p_uty(tags = c("train", "nmf")),  # .pbackend
+        callback = p_uty(tags = c("train", "nmf"), depends = quote(keep.all == TRUE))  # .callback
+      )
       ps$values = list(rank = 2L, method = "brunet", parallel = FALSE, parallel.required = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"), packages = c("MASS", "NMF"))
     }
@@ -179,10 +181,11 @@ PipeOpNMF = R6Class("PipeOpNMF",
 
 mlr_pipeops$add("nmf", PipeOpNMF)
 
-CondLarger = R6Class("CondLarger", inherit = Condition,
-  public = list(
-    initialize = function(rhs) super$initialize("larger", rhs),
-    test = function(x) !is.na(x) & x > self$rhs,
-    as_string = function(lhs_chr = "x") sprintf("%s > %s", lhs_chr, as.character(self$rhs))
-  )
-)
+# this is just a really bad idea
+## CondLarger = R6Class("CondLarger", inherit = Condition,
+##   public = list(
+##     initialize = function(rhs) super$initialize("larger", rhs),
+##     test = function(x) !is.na(x) & x > self$rhs,
+##     as_string = function(lhs_chr = "x") sprintf("%s > %s", lhs_chr, as.character(self$rhs))
+##   )
+## )

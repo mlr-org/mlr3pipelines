@@ -17,7 +17,7 @@
 #'
 #' All input arguments are cloned and have no references in common with the returned [`Graph`].
 #'
-#' @param task [`Task`] \cr
+#' @param task [`Task`][mlr3::Task] \cr
 #'   A [`Task`][mlr3::Task] to create a robustifying pipeline for.
 #'   Optional, if omitted, the "worst possible" [`Task`][mlr3::Task] is assumed and the full pipeline is created.
 #' @param learner [`Learner`][mlr3::Learner] \cr
@@ -60,6 +60,7 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' \donttest{
 #' library(mlr3)
 #' lrn = lrn("regr.rpart")
@@ -67,6 +68,7 @@
 #' gr = pipeline_robustify(task, lrn) %>>% po("learner", lrn)
 #' resample(task, GraphLearner$new(gr), rsmp("holdout"))
 #' }
+#' \dontshow{ \} }
 pipeline_robustify = function(task = NULL, learner = NULL,
   impute_missings = NULL, factors_to_numeric = NULL, max_cardinality = 1000,
   ordered_action = "factor", character_action = "factor", POSIXct_action = "numeric") {
@@ -142,23 +144,23 @@ pipeline_robustify = function(task = NULL, learner = NULL,
   pos_removeconstants_1 = pos("removeconstants", id = "removeconstants_prerobustify", na_ignore = FALSE)
 
   pos_character = switch(character_action,
-    `factor!` = pos("colapply", id = "char_to_fct", affect_columns = selector_type("character"), applicator = function(x) as.factor(x)),
+    `factor!` = pos("colapply", id = "char_to_fct", affect_columns = selector_type("character"), applicator = as.factor),
     `matrix!` = pos("textvectorizer"),
     `ignore!` = NULL,
     stopf("unexpected value of character_action: %s", character_action)
   )
 
   pos_POSIXct = switch(POSIXct_action,
-    `numeric!` = pos("colapply", id = "POSIXct_to_dbl", affect_columns = selector_type("POSIXct"), applicator = function(x) as.numeric(x)),
+    `numeric!` = pos("colapply", id = "POSIXct_to_dbl", affect_columns = selector_type("POSIXct"), applicator = as.numeric),
     `datefeatures!` = pos("datefeatures"),
     `ignore!` = NULL,
     stopf("unexpected value of POSIXct_action: %s", POSIXct_action)
   )
 
   pos_ordered = switch(ordered_action,
-    `numeric!` = pos("colapply", id = "ord_to_dbl", affect_columns = selector_type("ordered"), applicator = function(x) as.numeric(x)),
-    `integer!` = pos("colapply", id = "ord_to_int", affect_columns = selector_type("ordered"), applicator = function(x) as.integer(x)),
-    `factor!` = pos("colapply", id = "ord_to_fct", affect_columns = selector_type("ordered"), applicator = function(x) as.factor(x)),
+    `numeric!` = pos("colapply", id = "ord_to_dbl", affect_columns = selector_type("ordered"), applicator = as.numeric),
+    `integer!` = pos("colapply", id = "ord_to_int", affect_columns = selector_type("ordered"), applicator = as.integer),
+    `factor!` = pos("colapply", id = "ord_to_fct", affect_columns = selector_type("ordered"), applicator = as.factor),
     `ignore!` = NULL,
     stopf("unexpected value of ordered_action: %s", ordered_action)
   )
@@ -170,7 +172,7 @@ pipeline_robustify = function(task = NULL, learner = NULL,
       imputing,
       po("missind", affect_columns = selector_type(c("numeric", "integer", "logical")), type = if (missind_numeric) "numeric" else "factor")
     )),
-    if (has_numbers || has_logicals) po("featureunion"),
+    if (has_numbers || has_logicals) po("featureunion", id = "featureunion_robustify"),
     if (has_factorials) po("imputeoor")
   )
 

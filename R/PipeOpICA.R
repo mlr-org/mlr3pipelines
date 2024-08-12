@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ica
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Extracts statistically independent components from data. Only affects numerical features.
@@ -73,6 +73,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("fastICA")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -82,27 +83,28 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpICA = R6Class("PipeOpICA",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "ica", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamInt$new("n.comp", lower = 1, upper = Inf, tags = c("train", "ica")),
-        ParamFct$new("alg.typ", levels = c("parallel", "deflation"),
+      ps = ps(
+        n.comp = p_int(lower = 1, upper = Inf, tags = c("train", "ica")),
+        alg.typ = p_fct(levels = c("parallel", "deflation"),
           default = "parallel", tags = c("train", "ica")),
-        ParamFct$new("fun", default = "logcosh", levels = c("logcosh", "exp"), tags = c("train", "ica")),
-        ParamDbl$new("alpha", default = 1.0, lower = 1, upper = 2, tags = c("train", "ica")),
-        ParamFct$new("method", default = "R", levels = c("C", "R"), tags = c("train", "ica")),
-        ParamLgl$new("row.norm", default = FALSE, tags = c("train", "ica")),
-        ParamInt$new("maxit", default = 200, lower = 1, tags = c("train", "ica")),
-        ParamDbl$new("tol", default = 1e-04, lower = 0, tags = c("train", "ica")),
-        ParamLgl$new("verbose", default = FALSE, tags = c("train", "ica")),
-        ParamUty$new("w.init", default = NULL, tags = c("train", "ica"))
-      ))
+        fun = p_fct(default = "logcosh", levels = c("logcosh", "exp"), tags = c("train", "ica")),
+        alpha = p_dbl(default = 1.0, lower = 1, upper = 2, tags = c("train", "ica")),
+        method = p_fct(default = "R", levels = c("C", "R"), tags = c("train", "ica")),
+        row.norm = p_lgl(default = FALSE, tags = c("train", "ica")),
+        maxit = p_int(default = 200, lower = 1, tags = c("train", "ica")),
+        tol = p_dbl(default = 1e-04, lower = 0, tags = c("train", "ica")),
+        verbose = p_lgl(default = FALSE, tags = c("train", "ica")),
+        w.init = p_uty(default = NULL, tags = c("train", "ica"))
+      )
       ps$values = list(method = "C")
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "fastICA", feature_types = c("numeric", "integer"))

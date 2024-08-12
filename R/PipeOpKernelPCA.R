@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_kernelpca
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Extracts kernel principle components from data. Only affects numerical features.
@@ -52,6 +52,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("kernlab")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -59,22 +60,23 @@
 #'
 #' task$data()
 #' pop$train(list(task))[[1]]$data()
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpKernelPCA = R6Class("PipeOpKernelPCA",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "kernelpca", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamFct$new("kernel", default = "rbfdot", levels = c("rbfdot", "polydot",
+      ps = ps(
+        kernel = p_fct(default = "rbfdot", levels = c("rbfdot", "polydot",
           "vanilladot", "tanhdot", "laplacedot", "besseldot", "anovadot", "splinedot"), tags = c("train", "kpca")),
-        ParamUty$new("kpar", tags = c("train", "kpca")),
-        ParamInt$new("features", default = 0, lower = 0, tags = c("train", "kpca")),
-        ParamDbl$new("th", default = 1e-04, lower = 0, tags = c("train", "kpca")),
-        ParamUty$new("na.action", default = stats::na.omit, tags = c("train", "kpca"))
-      ))
+        kpar = p_uty(tags = c("train", "kpca")),
+        features = p_int(default = 0, lower = 0, tags = c("train", "kpca")),
+        th = p_dbl(default = 1e-04, lower = 0, tags = c("train", "kpca")),
+        na.action = p_uty(default = stats::na.omit, tags = c("train", "kpca"))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "kernlab", feature_types = c("numeric", "integer"))
     }

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_nop
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Simply pushes the input forward.
@@ -54,7 +54,7 @@
 #' gr$train(tsk("iris"))[[1]]$data()
 #' @family PipeOps
 #' @family Placeholder Pipeops
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpNOP = R6Class("PipeOpNOP",

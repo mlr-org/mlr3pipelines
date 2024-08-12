@@ -1,10 +1,10 @@
 url: https://mlr3pipelines.mlr-org.com/
 
 template:
+  bootstrap: 5
+  light-switch: true
+  math-rendering: mathjax
   package: mlr3pkgdowntemplate
-  params:
-    bootswatch: journal
-  default_assets: false
 
 development:
   mode: auto
@@ -17,7 +17,7 @@ toc:
 navbar:
   structure:
     left: [reference, news, book]
-    right: [github, mattermost, stackoverflow, rss]
+    right: [github, mattermost, stackoverflow, rss, lightswitch]
   components:
     home: ~
     reference:
@@ -37,6 +37,9 @@ navbar:
     rss:
       icon: fa-rss
       href: https://mlr-org.com/
+    extending:
+      text: Extending
+      href: extending.html
 
 reference:
   - title: Package
@@ -49,17 +52,26 @@ reference:
       - PipeOpTaskPreproc
       - PipeOpTaskPreprocSimple
       - PipeOpImpute
+      - Multiplicity
   - title: Graph Tools
     contents:
       - "%>>%"
       - gunion
       - greplicate
-      - branch
   - title: PipeOps
     contents:
       - mlr_pipeops
       - po
       - starts_with("mlr_pipeops_")
+      - starts_with("PipeOp")
+  - title: Pipelines
+    contents:
+      - ppl
+      - starts_with("pipeline_")
+  - title: Graphs
+    contents:
+      - starts_with("mlr_graph")
+      - chain_graphs
   - title: Learners
     contents:
       - mlr_learners_graph
@@ -74,6 +86,10 @@ reference:
       - is_noop
       - NO_OP
       - filter_noop
+      - set_validate.GraphLearner
+      - starts_with("as.")
+      - starts_with("is.")
+      - starts_with("is.")
   - title: Abstract PipeOps
     contents:
       - PipeOpEnsemble

@@ -1,7 +1,7 @@
 #' @title Target Transformation Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Base class for handling target transformation operations. Target transformations are different
@@ -15,7 +15,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTargetTrafo$new(id, param_set = ParamSet$new(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
+#' PipeOpTargetTrafo$new(id, param_set = ps(), param_vals = list() packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL)
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -112,13 +112,13 @@
 #' @family mlr3pipelines backend related
 #' @family PipeOps
 #' @family Target Trafo PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
   inherit = PipeOp,
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
+    initialize = function(id, param_set = ps(), param_vals = list(), packages = character(0), task_type_in = "Task", task_type_out = task_type_in, tags = NULL) {
       super$initialize(id = id, param_set = param_set, param_vals = param_vals,
         input = data.table(name = "input", train = task_type_in, predict = task_type_in),
         output = data.table(name = c("fun", "output"), train = c("NULL", task_type_out), predict = c("function", task_type_out)),
@@ -180,7 +180,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetinvert
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Inverts target-transformations done during training based on a supplied inversion
@@ -224,7 +224,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpTargetInvert = R6Class("PipeOpTargetInvert",
@@ -255,7 +255,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetmutate
-#' @format [`R6Class`] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
 #'
 #' @description
 #' Changes the *target* of a [`Task`][mlr3::Task] according to a function given as hyperparameter.
@@ -309,6 +309,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library(mlr3)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetMutate$new("logtrafo", param_vals = list(
@@ -339,8 +340,9 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #' tt = ppl("targettrafo", graph = PipeOpLearner$new(LearnerRegrRpart$new()))
 #' tt$param_set$values$targetmutate.trafo = function(x) log(x, base = 2)
 #' tt$param_set$values$targetmutate.inverter = function(x) list(response = 2 ^ x$response)
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
@@ -348,10 +350,10 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
   public = list(
     initialize = function(id = "targetmutate", param_vals = list(), new_task_type = NULL) {
       private$.new_task_type = assert_choice(new_task_type, mlr_reflections$task_types$type, null.ok = TRUE)
-      ps = ParamSet$new(list(
-        ParamUty$new("trafo", tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
-        ParamUty$new("inverter", tags = "predict", custom_check = function(x) check_function(x, nargs = 1L))
-      ))
+      ps = ps(
+        trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
+        inverter = p_uty(tags = "predict", custom_check = function(x) check_function(x, nargs = 1L))
+      )
       # We could add a condition here for new_task_type on trafo and inverter when mlr-org/paradox#278 has an answer.
       # HOWEVER conditions are broken in paradox, it is a terrible idea to use them in PipeOps,
       # see https://github.com/mlr-org/paradox/issues/216 and related comment in PipeOpLearnerCV
@@ -382,9 +384,10 @@ PipeOpTargetMutate = R6Class("PipeOpTargetMutate",
       pred = as.data.table(prediction)
       pred$row_ids = NULL
       pred$truth = NULL
-      invoke(get(mlr_reflections$task_types[type]$prediction)$new, row_ids = prediction$row_ids,
+      invoke(get(mlr_reflections$task_types[type, mult = "first"]$prediction)$new, row_ids = prediction$row_ids,
         truth = predict_phase_state$truth, .args = self$param_set$values$inverter(pred))
-    }
+    },
+    .additional_phash_input = function() private$.new_task_type
   )
 )
 
@@ -394,7 +397,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targettrafoscalerange
-#' @format [`R6Class`] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
 #'
 #' @description
 #' Linearly transforms a numeric target of a [`TaskRegr`][mlr3::TaskRegr] so it is between `lower`
@@ -435,6 +438,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' Only methods inherited from [`PipeOpTargetTrafo`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library(mlr3)
 #' task = tsk("boston_housing")
 #' po = PipeOpTargetTrafoScaleRange$new()
@@ -448,18 +452,19 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #' ttscalerange$train(task)
 #' ttscalerange$predict(task)
 #' ttscalerange$state$regr.rpart
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpTargetTrafoScaleRange = R6Class("PipeOpTargetTrafoScaleRange",
   inherit = PipeOpTargetTrafo,
   public = list(
     initialize = function(id = "targettrafoscalerange", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("lower", tags = c("required", "train")),
-        ParamDbl$new("upper", tags = c("required", "train"))
-      ))
+      ps = ps(
+        lower = p_dbl(tags = c("required", "train")),
+        upper = p_dbl(tags = c("required", "train"))
+      )
       ps$values = list(lower = 0, upper = 1)
       super$initialize(id = id, param_set = ps, param_vals = param_vals, task_type_in = "TaskRegr")
     }
@@ -493,7 +498,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @title Transform a Target without an Explicit Inversion
 #' @usage NULL
 #' @name mlr_pipeops_updatetarget
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' EXPERIMENTAL, API SUBJECT TO CHANGE
@@ -514,7 +519,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #'
 #' @section Construction:
 #' ```
-#' PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
+#' PipeOpUpdateTarget$new(id, param_set = ps(),
 #'   param_vals = list(), packages = character(0))
 #' ```
 #'
@@ -547,6 +552,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' \dontrun{
 #' # Create a binary class task from iris
 #' library(mlr3)
@@ -555,21 +561,21 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' po$train(list(tsk("iris")))
 #' po$predict(list(tsk("iris")))
 #' }
+#' \dontshow{ \} }
 #' @family mlr3pipelines backend related
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' # not yet exported
 PipeOpUpdateTarget = R6Class("PipeOpUpdateTarget",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "update_target", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("trafo", tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
-        ParamUty$new("new_target_name", tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
-        ParamUty$new("new_task_type", tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
-        ParamLgl$new("drop_original_target", tags = c("train", "predict"))
-        )
+      ps = ps(
+        trafo = p_uty(tags = c("train", "predict"), custom_check = function(x) check_function(x, nargs = 1L)),
+        new_target_name = p_uty(tags = c("train", "predict"), custom_check = function(x) check_character(x, any.missing = FALSE, len = 1L)),
+        new_task_type = p_uty(tags = c("train", "predict"), custom_check = function(x) check_choice(x, choices = mlr_reflections$task_types$type)),
+        drop_original_target = p_lgl(tags = c("train", "predict"))
       )
       ps$values = list(trafo = identity, drop_original_target = TRUE)
       super$initialize(id = id, param_set = ps, param_vals = param_vals,

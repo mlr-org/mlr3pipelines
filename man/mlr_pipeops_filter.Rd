@@ -5,7 +5,7 @@
 \alias{PipeOpFilter}
 \title{Feature Filtering}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Feature filtering using a \code{\link[mlr3filters:Filter]{mlr3filters::Filter}} object, see the
@@ -16,8 +16,10 @@ If a \code{Filter} can only operate on a subset of columns based on column type,
 this means e.g. that setting \code{nfeat} to 0 will only remove features of the type that the \code{Filter} can work with.
 }
 \section{Construction}{
-\preformatted{PipeOpFilter$new(filter, id = filter$id, param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpFilter$new(filter, id = filter$id, param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{filter} :: \code{\link[mlr3filters:Filter]{Filter}}\cr
 \code{\link[mlr3filters:Filter]{Filter}} used for feature filtering.
@@ -96,8 +98,11 @@ Methods inherited from \code{\link{PipeOpTaskPreprocSimple}}/\code{\link{PipeOpT
 }
 
 \examples{
+\dontshow{ if (requireNamespace("mlr3filters")) \{ }
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 library("mlr3filters")
+\dontshow{data.table::setDTthreads(1)}
 
 # setup PipeOpFilter to keep the 5 most important
 # features of the spam task w.r.t. their AUC
@@ -122,6 +127,8 @@ gr = po("filter", filter = flt("auc"), filter.frac = 0.5) \%>>\%
 learner = GraphLearner$new(gr)
 rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 rr$learners[[1]]$model$auc$scores
+\dontshow{ \} }
+\dontshow{ \} }
 }
 \references{
 Wu Y, Boos DD, Stefanski LA (2007).
@@ -135,15 +142,16 @@ Thomas J, Hepp T, Mayr A, Bischl B (2017).
 \doi{10.1155/2017/1421409}.
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
+\code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
+\code{\link{PipeOpTaskPreprocSimple}},
+\code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -155,9 +163,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
@@ -190,9 +198,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
+\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
@@ -206,7 +215,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
-\code{\link{mlr_pipeops_yeojohnson}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops_yeojohnson}}
 }
 \concept{PipeOps}

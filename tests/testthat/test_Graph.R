@@ -1,6 +1,7 @@
 context("Graph")
 
 test_that("linear graph", {
+  skip_if_not_installed("rpart")
   g = Graph$new()
   expect_equal(g$ids(sorted = TRUE), character(0))
 
@@ -78,6 +79,7 @@ test_that("complex graph", {
       "Training debug3 with input list(input_1 = 3, input_2 = 5, input_3 = 5)"),
     info = paste0("'", lines, "'", collapse = "', '"))
 
+  skip_if_not_installed("igraph")
   pdf(file = NULL)  # don't show plot. It is annoying.
   biggraph$plot()
   dev.off()
@@ -112,8 +114,10 @@ test_that("input / output lists and naming", {
     "list\\(input_1 = 1, input_2 = 2\\)")
 
 
-  expect_error(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_99 = 1), single_input = FALSE),
-    "debug.multi.input_1,debug.multi.input_2")
+  if (packageVersion("checkmate") >= "2.1.0") {
+    expect_error(gr$train(list(debug.multi.input_2 = 2, debug.multi.input_99 = 1), single_input = FALSE),
+      "debug.multi.input_1")
+  }
 
   expect_error(gr$train(list(), single_input = FALSE), "have length 2")
   expect_error(gr$train(list(1, 2, 3), single_input = FALSE), "have length 2")
@@ -147,6 +151,7 @@ test_that("input / output lists and naming", {
   # output should be debug2.3, debug3.1, debug3.2
   # (inputs and outputs in PipeOp order first, in channel order second)
 
+  skip_if_not_installed("igraph")
   pdf(file = NULL)  # don't show plot. It is annoying.
   gr$plot()
   dev.off()
@@ -244,6 +249,7 @@ test_that("Empty Graph", {
 
   expect_output(print(Graph$new()), "^Empty Graph\\.$")
 
+  skip_if_not_installed("igraph")
   expect_output(Graph$new()$plot(), "^Empty Graph, not plotting\\.$")
 
   expect_equal(gunion(list()), Graph$new())
@@ -375,6 +381,7 @@ test_that("Graph with vararg input", {
 })
 
 test_that("single pipeop plot", {
+  skip_if_not_installed("igraph")
   imp_num = po("imputehist")
   graph = as_graph(imp_num)
 
@@ -433,4 +440,69 @@ test_that("dot output", {
     "pca_output\",fontsize=24];",
     "6 [label=\"OUTPUT",
     "nop_output\",fontsize=24]"), out[-c(1L, 15L)])
+})
+
+test_that("help() call", {
+  if (identical(help, utils::help)) {  # different behaviour if pkgload / devtools are doing help vs. vanilla R help()
+    # c() to drop attributes
+    expect_equal(
+      c(help("Graph", package = "mlr3pipelines")),
+      c((po("scale") %>>% po("nop"))$help())
+    )
+  } else {
+    expect_equal(
+      help("Graph", package = "mlr3pipelines"),
+      (po("scale") %>>% po("nop"))$help()
+    )
+  }
+})
+
+test_that("Same output into multiple channels does not cause a bug", {
+  PipeOpDebug = R6Class(
+    inherit = PipeOp,
+    public = list(
+      initialize = function(id = "debug", param_vals = list(), n) {
+        output = data.table(
+          name = paste0("output", seq_len(n)),
+          train = rep("numeric", times = n),
+          predict = rep("numeric", times = n)
+        )
+        input = data.table(name = "input", train = "numeric", predict = "numeric")
+        private$.n = n
+        super$initialize(
+          id = id,
+          param_set = ps(),
+          param_vals = param_vals,
+          input = input,
+          output = output
+        )
+      }
+    ),
+    private = list(
+      .n = NULL,
+      .train = function(inputs) {
+        # set the "wrong" names here, since we need to rely on PipeOp's train/predict to do
+        # the right thing here and ignore our names.
+        x = set_names(inputs$input, paste0("output", rev(inputs$input)))
+        as.list(x)
+      }
+    )
+  )
+
+  po1 = PipeOpDebug$new(n = 2L, id = "po1")
+  po2 = PipeOpDebug$new(n = 1L, id = "po2")
+  po3 = PipeOpDebug$new(n = 1L, id = "po3")
+  po4 = PipeOpDebug$new(n = 1L, id = "po4")
+  graph = Graph$new()
+  graph$add_pipeop(po1)
+  graph$add_pipeop(po2)
+  graph$add_pipeop(po3)
+  graph$add_pipeop(po4)
+  graph$add_edge("po1", "po2", "output1", "input")
+  graph$add_edge("po1", "po3", "output2", "input")
+  graph$add_edge("po1", "po4", "output2", "input")
+  res = graph$train(c(1, 2))
+  expect_true(res$po2.output1 == 1)
+  expect_true(res$po3.output1 == 2)
+  expect_true(res$po4.output1 == 2)
 })

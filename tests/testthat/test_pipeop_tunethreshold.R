@@ -1,6 +1,7 @@
 context("tunethreshold")
 
 test_that("threshold works for multiclass", {
+  skip_if_not_installed("rpart")
   t = tsk("iris")
   po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"))
   res = po_cv$train(list(t))
@@ -17,6 +18,7 @@ test_that("threshold works for multiclass", {
 })
 
 test_that("threshold works for binary", {
+  skip_if_not_installed("rpart")
   t = tsk("pima")
   po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob"))
   res = po_cv$train(list(t))
@@ -33,4 +35,26 @@ test_that("threshold works for binary", {
   po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "response")) %>>%
     po("tunethreshold")
   expect_error(po_cv$train(t), "prob")
+})
+
+test_that("tunethreshold graph works", {
+  skip_if_not_installed("rpart")
+
+  graph = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>% po("tunethreshold")
+
+  out = graph$train(tsk("pima"))
+
+  expect_null(out$tunethreshold.output)
+
+  out = graph$predict(tsk("pima"))
+
+  expect_prediction(out$tunethreshold.output)
+
+  glrn = as_learner(graph)
+
+  glrn$train(tsk("pima"))
+
+  expect_prediction(glrn$predict(tsk("pima")))
+
+
 })

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_histbin
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Splits numeric features into equally spaced bins.
@@ -57,16 +57,16 @@
 #'
 #' pop$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpHistBin = R6Class("PipeOpHistBin",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "histbin", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("breaks", default = "Sturges", tags = c("train", "hist"))
-      ))
+      ps = ps(
+        breaks = p_uty(default = "Sturges", tags = c("train", "hist"))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "graphics", feature_types = c("numeric", "integer"))
     }
   ),

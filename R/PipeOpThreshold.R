@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_threshold
-#' @format [`R6Class`] inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Change the threshold of a `Prediction` during the `predict` step.
@@ -42,22 +42,24 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #' t = tsk("german_credit")
 #' gr = po(lrn("classif.rpart", predict_type = "prob")) %>>%
 #'   po("threshold", param_vals = list(thresholds = 0.9))
 #' gr$train(t)
 #' gr$predict(t)
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpThreshold = R6Class("PipeOpThreshold",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "threshold", param_vals = list()) {
-      param_set = ParamSet$new()
-      param_set$add(ParamUty$new("thresholds", custom_check = check_numeric_valid_threshold, tags = "predict"))
+      param_set = ps(thresholds = p_uty(custom_check = check_numeric_valid_threshold, tags = "predict"))
+
       param_set$values$thresholds = 0.5
       super$initialize(id, param_set = param_set, param_vals = param_vals, packages = character(0),
         input = data.table(name = "input", train = "NULL", predict = "PredictionClassif"),

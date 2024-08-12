@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_scalemaxabs
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Scales the numeric data columns so their maximum absolute value is `maxabs`,
@@ -47,16 +47,16 @@
 #'
 #' pop$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpScaleMaxAbs = R6Class("PipeOpScaleMaxAbs",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "scalemaxabs", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("maxabs", lower = 0, tags = c("required", "train", "predict"))
-      ))
+      ps = ps(
+        maxabs = p_dbl(lower = 0, tags = c("required", "train", "predict"))
+      )
       ps$values = list(maxabs = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }

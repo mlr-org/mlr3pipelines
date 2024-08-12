@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_vtreat
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Provides an interface to the vtreat package.
@@ -102,6 +102,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("vtreat")) \{ }
 #' library("mlr3")
 #'
 #' set.seed(2020)
@@ -120,47 +121,47 @@
 #'
 #' pop = PipeOpVtreat$new()
 #' pop$train(list(task))
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpVtreat = R6Class("PipeOpVtreat",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "vtreat", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("recommended", tags = c("train", "predict")),
-        ParamUty$new("cols_to_copy", custom_check = checkmate::check_function, tags = c("train", "predict")),
+      ps = ps(
+        recommended = p_lgl(tags = c("train", "predict")),
+        cols_to_copy = p_uty(custom_check = checkmate::check_function, tags = c("train", "predict")),
         # tags stand for: regression vtreat::regression_parameters() / classification vtreat::classification_parameters() / multinomial vtreat::multinomial_parameters()
-        ParamDbl$new("minFraction", lower = 0, upper = 1, default = 0.02, tags = c("train", "regression", "classification", "multinomial")),
-        ParamDbl$new("smFactor", lower = 0, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
-        ParamInt$new("rareCount", lower = 0L, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
-        ParamDbl$new("rareSig", lower = 0, upper = 1, special_vals = list(NULL), tags = c("train", "regression", "classification", "multinomial")),  # default NULL for regression, classification, 1 for multinomial
-        ParamDbl$new("collarProb", lower = 0, upper = 1, default = 0, tags = c("train", "regression", "classification", "multinomial")),
-        ParamLgl$new("doCollar", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
-        ParamUty$new("codeRestriction", default = NULL, custom_check = function(x) checkmate::check_character(x, any.missing = FALSE, null.ok = TRUE),
+        minFraction = p_dbl(lower = 0, upper = 1, default = 0.02, tags = c("train", "regression", "classification", "multinomial")),
+        smFactor = p_dbl(lower = 0, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
+        rareCount = p_int(lower = 0L, upper = Inf, default = 0, tags = c("train", "regression", "classification", "multinomial")),
+        rareSig = p_dbl(lower = 0, upper = 1, special_vals = list(NULL), tags = c("train", "regression", "classification", "multinomial")),  # default NULL for regression, classification, 1 for multinomial
+        collarProb = p_dbl(lower = 0, upper = 1, default = 0, tags = c("train", "regression", "classification", "multinomial"), depends = quote(doCollar == TRUE)),
+        doCollar = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        codeRestriction = p_uty(default = NULL, custom_check = function(x) checkmate::check_character(x, any.missing = FALSE, null.ok = TRUE),
           tags = c("train", "regression", "classification", "multinomial")),
-        ParamUty$new("customCoders", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification", "multinomial")),
-        ParamUty$new("splitFunction", default = NULL, custom_check = function(x) checkmate::check_function(x, args = c("nSplits", "nRows", "dframe", "y"), null.ok = TRUE),
+        customCoders = p_uty(default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification", "multinomial")),
+        splitFunction = p_uty(default = NULL, custom_check = function(x) checkmate::check_function(x, args = c("nSplits", "nRows", "dframe", "y"), null.ok = TRUE),
           tags = c("train", "regression", "classification", "multinomial")),
-        ParamInt$new("ncross", lower = 2L, upper = Inf, default = 3L, tags = c("train", "regression", "classification", "multinomial")),
-        ParamLgl$new("forceSplit", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
-        ParamLgl$new("catScaling", tags = c("train", "regression", "classification", "multinomial")),  # default TRUE for regression, classification, FALSE for multinomial
-        ParamLgl$new("verbose", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
-        ParamLgl$new("use_paralell", default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
-        ParamUty$new("missingness_imputation", default = NULL, custom_check = function(x) checkmate::check_function(x, args = c("values", "weights"), null.ok = TRUE),
+        ncross = p_int(lower = 2L, upper = Inf, default = 3L, tags = c("train", "regression", "classification", "multinomial")),
+        forceSplit = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        catScaling = p_lgl(tags = c("train", "regression", "classification", "multinomial")),  # default TRUE for regression, classification, FALSE for multinomial
+        verbose = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        use_paralell = p_lgl(default = TRUE, tags = c("train", "regression", "classification", "multinomial")),
+        missingness_imputation = p_uty(default = NULL, custom_check = function(x) checkmate::check_function(x, args = c("values", "weights"), null.ok = TRUE),
           tags = c("train", "regression", "classification", "multinomial")),
-        ParamDbl$new("pruneSig", lower = 0, upper = 1, special_vals = list(NULL), default = NULL, tags = c("train", "regression", "classification")),
-        ParamLgl$new("scale", default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
-        ParamUty$new("varRestriction", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification")),
-        ParamUty$new("trackedValues", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification")),
+        pruneSig = p_dbl(lower = 0, upper = 1, special_vals = list(NULL), default = NULL, tags = c("train", "regression", "classification")),
+        scale = p_lgl(default = FALSE, tags = c("train", "regression", "classification", "multinomial")),
+        varRestriction = p_uty(default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification")),
+        trackedValues = p_uty(default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "regression", "classification")),
         # NOTE: check_for_duplicate_frames not needed
-        ParamUty$new("y_dependent_treatments", default = "catB", custom_check = function(x) checkmate::check_character(x, any.missing = FALSE), tags = c("train", "multinomial")),
+        y_dependent_treatments = p_uty(default = "catB", custom_check = function(x) checkmate::check_character(x, any.missing = FALSE), tags = c("train", "multinomial")),
         # NOTE: imputation_map is also in multinomial_parameters(); this is redundant so only include it here
-        ParamUty$new("imputation_map", default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "predict"))
+        imputation_map = p_uty(default = NULL, custom_check = function(x) checkmate::check_list(x, null.ok = TRUE), tags = c("train", "predict"))
         # NOTE: parallelCluster missing intentionally and will be set to NULL
-      ))
-      ps$add_dep("collarProb", on = "doCollar", cond = CondEqual$new(TRUE))
+      )
       ps$values = list(recommended = TRUE, cols_to_copy = selector_none())
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "vtreat", tags = c("encode", "missings"))
     }

@@ -4,7 +4,7 @@
 #' @title PipeOp Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`].
+#' @format Abstract [`R6Class`][R6::R6Class].
 #'
 #' @description
 #' A [`PipeOp`] represents a transformation of a given "input" into a given "output", with two stages: "training"
@@ -38,7 +38,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOp$new(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = character(0))
+#' PipeOp$new(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = character(0))
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -51,9 +51,9 @@
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings given in `param_set`. The
 #'   subclass should have its own `param_vals` parameter and pass it on to `super$initialize()`. Default `list()`.
-#' * input :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
+#' * input :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Sets the `$input` slot of the resulting object; see description there.
-#' * output :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
+#' * output :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Sets the `$output` slot of the resulting object; see description there.
 #' * packages :: `character`\cr
 #'   Set of all required packages for the [`PipeOp`]'s `$train` and `$predict` methods. See `$packages` slot.
@@ -92,7 +92,7 @@
 #'   `$train()`, because `private$.train()` may theoretically be executed in a different `R`-session (e.g. for parallelization).
 #'   `$state` should furthermore always be set to something with copy-semantics, since it is never cloned. This is a limitation
 #'   not of [`PipeOp`] or `mlr3pipelines`, but of the way the system as a whole works, together with [`GraphLearner`] and `mlr3`.
-#' * input :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
+#' * input :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Input channels of [`PipeOp`]. Column `name` gives the names (and order) of values in the list given to
 #'   `$train()` and `$predict()`. Column `train` is the (S3) class that an input object must conform to during
 #'   training, column `predict` is the (S3) class that an input object must conform to during prediction. Types
@@ -104,7 +104,7 @@
 #'   unpacked and the `.train()` and `.predict()` functions are called multiple times, once for each [`Multiplicity`] element.
 #'   The type enclosed by square brackets indicates that only a [`Multiplicity`] containing values of this type are accepted.
 #'   See [`Multiplicity`] for more information.
-#' * output :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
+#' * output :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`)\cr
 #'   Output channels of [`PipeOp`], in the order in which they will be given in the list returned by `$train` and
 #'   `$predict` functions. Column `train` is the (S3) class that an output object must conform to during training,
 #'   column `predict` is the (S3) class that an output object must conform to during prediction. The [`PipeOp`] checks
@@ -125,10 +125,30 @@
 #'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` and `$param_set$values`. If a
 #'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
 #'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
+#' * `phash` :: `character(1)` \cr
+#'   Checksum calculated on the [`PipeOp`], depending on the [`PipeOp`]'s `class` and the slots `$id` but ignoring `$param_set$values`. If a
+#'   [`PipeOp`]'s functionality may change depending on more than these values, it should inherit the `$hash` active
+#'   binding and calculate the hash as `digest(list(super$hash, <OTHER THINGS>), algo = "xxhash64")`.
 #' * `.result` :: `list` \cr
 #'   If the [`Graph`]'s `$keep_results` flag is set to `TRUE`, then the intermediate Results of `$train()` and `$predict()`
 #'   are saved to this slot, exactly as they are returned by these functions. This is mainly for debugging purposes
 #'   and done, if requested, by the [`Graph`] backend itself; it should *not* be done explicitly by `private$.train()` or `private$.predict()`.
+#' * `man` :: `character(1)`\cr
+#'   Identifying string of the help page that shows with `help()`.
+#' * `properties` :: `character()`\cr
+#'   The properties of the pipeop.
+#'   Currently supported values are:
+#'     * `"validation"`: the `PipeOp` can make use of the `$internal_valid_task` of an [`mlr3::Task`].
+#'        This is for example used for `PipeOpLearner`s that wrap a `Learner` with this property, see [`mlr3::Learner`].
+#'       `PipeOp`s that have this property, also have a `$validate` field, which controls whether to use the validation task,
+#'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
+#'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters.
+#'        This works analogously to the internal tuning implementation for [`mlr3::Learner`].
+#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one 
+#'        parameter tagged with `"internal_tuning"`.
+#'        An example for such a `PipeOp` is a `PipeOpLearner` that wraps a `Learner` with the `"internal_tuning"` property.
+#'
+#'   Programatic access to all available properties is possible via `mlr_reflections$pipeops$properties`.
 #'
 #' @section Methods:
 #' * `train(input)`\cr
@@ -158,6 +178,22 @@
 #' * `print()` \cr
 #'   () -> `NULL` \cr
 #'   Prints the [`PipeOp`]s most salient information: `$id`, `$is_trained`, `$param_set$values`, `$input` and `$output`.
+#' * `help(help_type)` \cr
+#'   (`character(1)`) -> help file\cr
+#'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
+#'   as the `help_type` argument of R's `help()`.
+#'
+#' @section Inheriting:
+#' To create your own `PipeOp`, you need to overload the `private$.train()` and `private$.test()` functions.
+#' It is most likely also necessary to overload the `$initialize()` function to do additional initialization.
+#' The `$initialize()` method should have at least the arguments `id` and `param_vals`, which should be passed on to `super$initialize()` unchanged.
+#' `id` should have a useful default value, and `param_vals` should have the default value `list()`, meaning no initialization of hyperparameters.
+#'
+#' If the `$initialize()` method has more arguments, then it is necessary to also overload the `private$.additional_phash_input()` function.
+#' This function should return either all objects, or a hash of all objects, that can change the function or behavior of the `PipeOp` and are independent
+#' of the class, the id, the `$state`, and the `$param_set$values`. The last point is particularly important: changing the `$param_set$values` should
+#' *not* change the return value of `private$.additional_phash_input()`.
+#'
 #' @examples
 #' # example (bogus) PipeOp that returns the sum of two numbers during $train()
 #' # as well as a letter of the alphabet corresponding to that sum during $predict().
@@ -203,7 +239,7 @@
 #' @name PipeOp
 #' @family mlr3pipelines backend related
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @export
 PipeOp = R6Class("PipeOp",
   public = list(
@@ -213,8 +249,9 @@ PipeOp = R6Class("PipeOp",
     output = NULL,
     .result = NULL,
     tags = NULL,
+    properties = NULL,
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), input, output, packages = character(0), tags = "abstract") {
+    initialize = function(id, param_set = ps(), param_vals = list(), input, output, packages = character(0), tags = "abstract", properties = character(0)) {
       if (inherits(param_set, "ParamSet")) {
         private$.param_set = assert_param_set(param_set)
         private$.param_set_source = NULL
@@ -224,10 +261,11 @@ PipeOp = R6Class("PipeOp",
       }
       self$id = assert_string(id)
 
+      self$properties = assert_subset(properties, mlr_reflections$pipeops$properties)
       self$param_set$values = insert_named(self$param_set$values, param_vals)
       self$input = assert_connection_table(input)
       self$output = assert_connection_table(output)
-      self$packages = assert_character(packages, any.missing = FALSE, unique = TRUE)
+      self$packages = union("mlr3pipelines", assert_character(packages, any.missing = FALSE, min.chars = 1L))
       self$tags = assert_subset(tags, mlr_reflections$pipeops$valid_tags)
     },
 
@@ -272,6 +310,10 @@ PipeOp = R6Class("PipeOp",
         warning(w)
         invokeRestart("muffleWarning")
       })
+      if (!is.null(self$state) && !is.null(private$.state_class)) {
+        class(self$state) = c(private$.state_class, class(self$state))
+      }
+
       output = check_types(self, output, "output", "train")
       on.exit()  # don't reset state any more
       output
@@ -305,6 +347,10 @@ PipeOp = R6Class("PipeOp",
       })
       output = check_types(self, output, "output", "predict")
       output
+    },
+    help = function(help_type = getOption("help_type")) {
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
+      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
     }
   ),
 
@@ -312,7 +358,7 @@ PipeOp = R6Class("PipeOp",
     id = function(val) {
       if (!missing(val)) {
         private$.id = val
-        if (!is.null(private$.param_set)) {
+        if (paradox_info$is_old && !is.null(private$.param_set)) {
           # private$.param_set may be NULL if it is constructed dynamically by active binding
           private$.param_set$set_id = val
         }
@@ -327,7 +373,7 @@ PipeOp = R6Class("PipeOp",
         } else {
           private$.param_set = sourcelist[[1]]
         }
-        if (!is.null(self$id)) {
+        if (paradox_info$is_old && !is.null(self$id)) {
           private$.param_set$set_id = self$id
         }
       }
@@ -338,9 +384,7 @@ PipeOp = R6Class("PipeOp",
     },
     predict_type = function(val) {
       if (!missing(val)) {
-        if (!identical(val, private$.learner)) {
-          stop("$predict_type is read-only.")
-        }
+        stop("$predict_type is read-only.")
       }
       return(NULL)
     },
@@ -360,11 +404,38 @@ PipeOp = R6Class("PipeOp",
         } else {
           val
         }
-      })), algo = "xxhash64")
+      }), private$.additional_phash_input()), algo = "xxhash64")
+    },
+    phash = function() {
+      digest(list(class(self), self$id, private$.additional_phash_input()), algo = "xxhash64")
+    },
+    man = function(x) {
+      if (!missing(x)) stop("man is read-only")
+      paste0(topenv(self$.__enclos_env__)$.__NAMESPACE__.$spec[["name"]], "::", class(self)[[1]])
+    },
+    label = function(x) {
+      if (!missing(x)) stop("label is read-only")
+      if (is.null(private$.label)) {
+        helpinfo = self$help()
+        helpcontent = NULL
+        if (inherits(helpinfo, "help_files_with_topic") && length(helpinfo)) {
+          ghf = get(".getHelpFile", mode = "function", envir = getNamespace("utils"))
+          helpcontent = ghf(helpinfo)
+        } else if (inherits(helpinfo, "dev_topic")) {
+          helpcontent = tools::parse_Rd(helpinfo$path)
+        }
+        if (is.null(helpcontent)) {
+          private$.label = "LABEL COULD NOT BE RETRIEVED"
+        } else {
+          private$.label = Filter(function(x) identical(attr(x, "Rd_tag"), "\\title"), helpcontent)[[1]][[1]][1]
+        }
+      }
+      private$.label
     }
   ),
 
   private = list(
+    .state_class = NULL,
     deep_clone = function(name, value) {
       if (!is.null(private$.param_set_source)) {
         private$.param_set = NULL  # required to keep clone identical to original, otherwise tests get really ugly
@@ -381,8 +452,20 @@ PipeOp = R6Class("PipeOp",
     },
     .train = function(input) stop("abstract"),
     .predict = function(input) stop("abstract"),
+    .additional_phash_input = function() {
+      if (is.null(self$initialize)) return(NULL)
+      initformals <- names(formals(args(self$initialize)))
+      if (!test_subset(initformals, c("id", "param_vals"))) {
+        warningf("PipeOp %s has construction arguments besides 'id' and 'param_vals' but does not overload the private '.additional_phash_input()' function.
+
+The hash and phash of a PipeOp must differ when it represents a different operation; since %s has construction arguments that could change the operation that is performed by it, it is necessary for the $hash and $phash to reflect this. `.additional_phash_input()` should return all the information (e.g. hashes of encapsulated items) that should additionally be hashed; read the help of ?PipeOp for more information.
+
+This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
+      }
+    },
     .param_set = NULL,
     .param_set_source = NULL,
+    .label = NULL,
     .id = NULL
   )
 )
@@ -451,7 +534,7 @@ check_types = function(self, data, direction, operation) {
   for (idx in seq_along(data)) {
     data[idx] = list(check_item(data[[idx]], typetable[[operation]][[idx]],
       varname = sprintf("%s %s (\"%s\") of PipeOp %s's $%s()",
-        direction, idx, self$input$name[[idx]], self$id, operation)))
+        direction, idx, self[[direction]]$name[[idx]], self$id, operation)))
   }
   names(data) = typetable$name
   data

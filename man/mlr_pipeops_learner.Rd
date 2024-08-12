@@ -5,7 +5,7 @@
 \alias{PipeOpLearner}
 \title{Wrap a Learner into a PipeOp}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
@@ -18,8 +18,10 @@ into a machine learning pipeline which then can be handled as singular object fo
 and tuning.
 }
 \section{Construction}{
-\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearner$new(learner, id = NULL, param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} | \code{character(1)}
 \code{\link[mlr3:Learner]{Learner}} to wrap, or a string identifying a \code{\link[mlr3:Learner]{Learner}} in the \code{\link[mlr3:mlr_learners]{mlr3::mlr_learners}} \code{\link[mlr3misc:Dictionary]{Dictionary}}.
@@ -49,11 +51,11 @@ The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learn
 \itemize{
 \item \code{model} :: \code{any}\cr
 Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
-\item \code{train_log} :: \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
+\item \code{train_log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr
 Training time, in seconds.
-\item \code{predict_log} :: \code{NULL} | \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
+\item \code{predict_log} :: \code{NULL} | \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during prediction.
 \item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
 Prediction time, in seconds.
@@ -78,6 +80,17 @@ Fields inherited from \code{\link{PipeOp}}, as well as:
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. Read-only.
 \item \code{learner_model} :: \code{\link[mlr3:Learner]{Learner}}\cr
 \code{\link[mlr3:Learner]{Learner}} that is being wrapped. This learner contains the model if the \code{PipeOp} is trained. Read-only.
+\item \code{validate} :: \code{"predefined"} or \code{NULL}\cr
+This field can only be set for \code{Learner}s that have the \code{"validation"} property.
+Setting the field to \code{"predefined"} means that the wrapped \code{Learner} will use the internal validation task,
+otherwise it will be ignored.
+Note that specifying \emph{how} the validation data is created is possible via the \verb{$validate} field of the \code{\link{GraphLearner}}.
+For each \code{PipeOp} it is then only possible to either use it (\code{"predefined"}) or not use it (\code{NULL}).
+Also see \code{\link{set_validate.GraphLearner}} for more information.
+\item \code{internal_tuned_values} :: named \code{list()} or \code{NULL}\cr
+The internally tuned values if the wrapped \code{Learner} supports internal tuning, \code{NULL} otherwise.
+\item \code{internal_valid_scores} :: named \code{list()} or \code{NULL}\cr
+The internal validation scores if the wrapped \code{Learner} supports internal validation, \code{NULL} otherwise.
 }
 }
 
@@ -87,6 +100,7 @@ Methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 task = tsk("iris")
@@ -95,17 +109,19 @@ lrn_po = mlr_pipeops$get("learner", learner)
 
 lrn_po$train(list(task))
 lrn_po$predict(list(task))
+\dontshow{ \} }
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
+\code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
+\code{\link{PipeOpTaskPreprocSimple}},
+\code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -117,9 +133,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -152,9 +168,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
+\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
@@ -168,8 +185,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
-\code{\link{mlr_pipeops_yeojohnson}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops_yeojohnson}}
 
 Other Meta PipeOps: 
 \code{\link{mlr_pipeops_learner_cv}}

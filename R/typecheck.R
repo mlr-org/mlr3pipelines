@@ -41,15 +41,13 @@ are_types_compatible = function(class1, class2) {
   cpi = intersect(ch1, ch2)
 
   length(cpi) == min(length(ch1), length(ch2))
+
 }
 
 # Try to find the `character` vector of superclass classnames
 # @param classname [character(1)] the class name; the search path is searched for
 #   an R6ClassGenerator by this name, and its super-classes are
 get_r6_inheritance = function(classname) {
-  if (!exists(classname, mode = "environment")) {
-    return(NULL)
-  }
   unique(unlist(map(utils::getAnywhere(classname)$objs, function(gen) {
     if ("R6ClassGenerator" %nin% class(gen)) {
       return(NULL)

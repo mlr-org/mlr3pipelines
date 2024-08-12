@@ -27,7 +27,7 @@ test_that("Wrong affect_columns errors", {
       predict_dt = function(dt, levels) dt
     )
   )
-  tsk = tsk("boston_housing")
+  tsk = tsk("boston_housing_classic")
   po = POPP$new("foo", param_vals = list(affect_columns = is.factor))
   expect_pipeop(po)
   expect_error(po$train(list(tsk)), "affected_cols")

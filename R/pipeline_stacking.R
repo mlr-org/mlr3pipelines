@@ -1,7 +1,7 @@
 #' @include mlr_graphs.R
 
 #' @title Create A Graph to Perform Stacking.
-#'
+#' @name mlr_graphs_stacking
 #' @description
 #' Create a new [`Graph`] for stacking. A stacked learner uses predictions of
 #' several base learners and fits a super learner using these predictions as
@@ -17,7 +17,7 @@
 #'   `"cv"` (default) for building a super learner using cross-validated predictions of the
 #'   base learners or `"insample"` for building a super learner using the
 #'   predictions of the base learners trained on all training data.
-#' @param folds `ìnteger(1)`\cr
+#' @param folds `integer(1)`\cr
 #'   Number of cross-validation folds. Only used for `method = "cv"`. Default 3.
 #' @param use_features `logical(1)`\cr
 #'   Whether the original features should also be passed to the super learner.
@@ -26,6 +26,7 @@
 #'
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' if (requireNamespace("kknn")) {
 #' library(mlr3)
 #' library(mlr3learners)
@@ -40,6 +41,7 @@
 #' graph_learner = as_learner(graph_stack)
 #' graph_learner$train(tsk("german_credit"))
 #' }
+#' \dontshow{ \} }
 pipeline_stacking = function(base_learners, super_learner, method = "cv", folds = 3, use_features = TRUE) {
   assert_learners(base_learners)
   assert_learner(super_learner)
@@ -53,7 +55,7 @@ pipeline_stacking = function(base_learners, super_learner, method = "cv", folds 
   if (use_features) base_learners_cv = c(base_learners_cv, po("nop"))
 
   gunion(base_learners_cv, in_place = TRUE) %>>!%
-     po("featureunion") %>>!%
+     po("featureunion", id = "featureunion_stacking") %>>!%
      super_learner
 }
 

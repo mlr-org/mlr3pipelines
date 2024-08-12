@@ -108,6 +108,14 @@ expect_pipeop = function(po, check_ps_default_values = TRUE) {
   expect_int(po$innum, lower = 1)
   expect_int(po$outnum, lower = 1)
   expect_valid_pipeop_param_set(po, check_ps_default_values = check_ps_default_values)
+  if ("validation" %in% po$properties) {
+    testthat::expect_true(exists("validate", envir = po))
+    testthat::expect_true(exists("internal_valid_scores", envir = po))
+  }
+  if ("internal_tuning" %in% po$properties) {
+    checkmate::assert_true(exists("internal_tuned_values", po))
+    testthat::expect_true("internal_tuning" %in% unlist(po$param_set$tags))
+  }
 }
 
 # autotest for the parmset of a pipeop
@@ -118,15 +126,29 @@ expect_valid_pipeop_param_set = function(po, check_ps_default_values = TRUE) {
   ps = po$param_set
   expect_true(every(ps$tags, function(x) length(intersect(c("train", "predict"), x)) > 0L))
 
-  uties = ps$params[ps$ids("ParamUty")]
-  if (length(uties)) {
-    test_value = NO_DEF  # custom_checks should fail for NO_DEF
-    results = map(uties, function(uty) {
-      uty$custom_check(test_value)
-    })
-    expect_true(all(map_lgl(results, function(result) {
-      length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
-    })), label = "custom_check returns string on failure")
+  if (mlr3pipelines:::paradox_info$is_old) {
+    uties = ps$params[ps$ids("ParamUty")]
+    if (length(uties)) {
+      test_value = NO_DEF  # custom_checks should fail for NO_DEF
+      results = map(uties, function(uty) {
+        uty$custom_check(test_value)
+      })
+      expect_true(all(map_lgl(results, function(result) {
+        length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
+      })), label = "custom_check returns string on failure")
+    }
+  } else {
+    uties = ps$ids("ParamUty")
+    if (length(uties)) {
+      test_value = NO_DEF  # custom_checks should fail for NO_DEF
+      results = map(uties, function(uty) {
+        psn = ps$subset(uty, allow_dangling_dependencies = TRUE)
+        psn$check(structure(list(test_value), names = uty))
+      })
+      expect_true(all(map_lgl(results, function(result) {
+        length(result) == 1L && (is.character(result) || result == TRUE)  # result == TRUE is necessary because default is function(x) TRUE
+      })), label = "custom_check returns string on failure")
+    }
   }
 
   if (check_ps_default_values) {
@@ -219,10 +241,10 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_equal(po$innum, 1)
   expect_equal(po$outnum, 1)
 
-  expect_true(are_types_compatible(po$input$train, "Task"))
-  expect_true(are_types_compatible(po$input$predict, "Task"))
-  expect_true(are_types_compatible(po$output$train, "Task"))
-  expect_true(are_types_compatible(po$output$predict, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$input$train, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$input$predict, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$output$train, "Task"))
+  expect_true(mlr3pipelines:::are_types_compatible(po$output$predict, "Task"))
 
   expect_error(po$train(list(NULL)), "class.*Task.*but has class")
 
@@ -294,7 +316,7 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_task(po$predict(list(emptytask))[[1]])
   expect_equal(emptytaskfnames, po$predict(list(emptytask))[[1]]$feature_names)
 
-  if ("affect_columns" %in% names(po$param_set$params) && affect_context_independent) {
+  if ("affect_columns" %in% po$param_set$ids() && affect_context_independent) {
     selector = function(data) data$feature_names[-1]
     po2$param_set$values$affect_columns = selector
     trained.subset = po$train(list(task2))[[1]]
@@ -412,6 +434,39 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   }
 
   expect_shallow_clone(task, original_clone)  # test that task was not changed by all the training / prediction
+
+  # test that predict on test rows during train is the same as predict on the rows
+
+  po = do.call(poclass$new, constargs)
+
+  tasktrain = original_clone$clone(deep = TRUE)
+  n_use = length(tasktrain$row_roles$use)
+  expect_true(n_use >= 4)
+  expect_true(task$nrow >= 5)
+
+  # overlap between use and test rows
+  tasktrain$divide(ids = tasktrain$row_roles$use[seq(n_use - 2, n_use)], remove = FALSE)
+  tasktrain$row_roles$use = tasktrain$row_roles$use[seq(1, n_use - 2)]
+
+  taskpredict = tasktrain$clone(deep = TRUE)
+  taskpredict$row_roles$use = taskpredict$internal_valid_task$row_roles$use
+  taskpredict$internal_valid_task = NULL
+
+  taskouttrain = po$train(list(tasktrain))[[1L]]
+  taskoutpredict = po$predict(list(taskpredict))[[1L]]
+
+  # other columns like weights are present during traing but not during predict
+  cols = unname(unlist(taskouttrain$col_roles[c("feature", "target")]))
+  dtrain = taskouttrain$internal_valid_task$data(cols = cols)
+  dpredict = taskoutpredict$data(cols = cols)
+  expect_permutation(colnames(dtrain), colnames(dpredict))
+  expect_equal(nrow(dtrain), nrow(dpredict))
+  dtrain = dtrain[, cols, with = FALSE]
+  dpredict = dpredict[, cols, with = FALSE]
+
+  if (deterministic_predict && deterministic_train) {
+    expect_equal(dtrain, dpredict)
+  }
 }
 
 train_pipeop = function(po, inputs) {

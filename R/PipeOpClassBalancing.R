@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classbalancing
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Both undersamples a [`Task`][mlr3::Task] to keep only a fraction of the rows of the majority class,
@@ -67,7 +67,7 @@
 #'
 #' Uses `task$filter()` to remove rows. When identical rows are added during upsampling, then the `task$row_roles$use` can *not* be used
 #' to duplicate rows because of \[inaudible\]; instead the `task$rbind()` function is used, and
-#' a new [`data.table`] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
+#' a new [`data.table`][data.table::data.table] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -76,7 +76,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -104,14 +104,12 @@ PipeOpClassBalancing = R6Class("PipeOpClassBalancing",
 
   public = list(
     initialize = function(id = "classbalancing", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("ratio", lower = 0, upper = Inf, tags = "train"),
-        ParamFct$new("reference",
-          levels = c("all", "major", "minor", "nonmajor", "nonminor", "one"), tags = "train"),
-        ParamFct$new("adjust",
-          levels = c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample"), tags = "train"),
-        ParamLgl$new("shuffle", tags = "train")
-      ))
+      ps = ps(
+        ratio = p_dbl(lower = 0, upper = Inf, tags = "train"),
+        reference = p_fct(c("all", "major", "minor", "nonmajor", "nonminor", "one"), tags = "train"),
+        adjust = p_fct(c("all", "major", "minor", "nonmajor", "nonminor", "upsample", "downsample"), tags = "train"),
+        shuffle = p_lgl(tags = "train")
+      )
       ps$values = list(ratio = 1, reference = "all", adjust = "all", shuffle = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }

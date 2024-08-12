@@ -1,8 +1,7 @@
 #' @title Graph Base Class
-#' @format [R6Class] Graph
 #'
 #' @usage NULL
-#' @format [`R6Class`].
+#' @format [`R6Class`][R6::R6Class].
 #'
 #' @description
 #' A [`Graph`] is a representation of a machine learning pipeline graph. It can be *trained*, and subsequently used for *prediction*.
@@ -19,15 +18,15 @@
 #' ```
 #'
 #' @section Internals:
-#' A [`Graph`] is made up of a list of [`PipeOp`]s, and a [`data.table`] of edges. Both for training and prediction, the [`Graph`]
+#' A [`Graph`] is made up of a list of [`PipeOp`]s, and a [`data.table`][data.table::data.table] of edges. Both for training and prediction, the [`Graph`]
 #' performs topological sorting of the [`PipeOp`]s and executes their respective `$train()` or `$predict()` functions in order, moving
 #' the [`PipeOp`] results along the edges as input to other [`PipeOp`]s.
 #'
 #' @section Fields:
 #' * `pipeops` :: named `list` of [`PipeOp`] \cr
 #'   Contains all [`PipeOp`]s in the [`Graph`], named by the [`PipeOp`]'s `$id`s.
-#' * `edges` :: [`data.table`]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
-#'   Table of connections between the [`PipeOp`]s. A [`data.table`]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
+#' * `edges` :: [`data.table`][data.table::data.table]  with columns `src_id` (`character`), `src_channel` (`character`), `dst_id` (`character`), `dst_channel` (`character`)\cr
+#'   Table of connections between the [`PipeOp`]s. A [`data.table`][data.table::data.table]. `src_id` and `dst_id` are `$id`s of [`PipeOp`]s that must be present in
 #'   the `$pipeops` list. `src_channel` and `dst_channel` must respectively be `$output` and `$input` channel names of the
 #'   respective [`PipeOp`]s.
 #' * `is_trained` :: `logical(1)` \cr
@@ -36,10 +35,10 @@
 #'   Ids of the 'left-hand-side' [`PipeOp`]s that have some unconnected input channels and therefore act as [`Graph`] input layer.
 #' * `rhs` :: `character` \cr
 #'   Ids of the 'right-hand-side' [`PipeOp`]s that have some unconnected output channels and therefore act as [`Graph`] output layer.
-#' * `input` :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
+#' * `input` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
 #'   Input channels of the [`Graph`]. For each channel lists the name, input type during training, input type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
-#' * `output` :: [`data.table`] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
+#' * `output` :: [`data.table`][data.table::data.table] with columns `name` (`character`), `train` (`character`), `predict` (`character`), `op.id` (`character`), `channel.name` (`character`)\cr
 #'   Output channels of the [`Graph`]. For each channel lists the name, output type during training, output type during prediction,
 #'   [`PipeOp`] `$id` of the [`PipeOp`] the channel pertains to, and channel name as the [`PipeOp`] knows it.
 #' * `packages` :: `character`\cr
@@ -56,21 +55,27 @@
 #' * `hash` :: `character(1)` \cr
 #'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
 #'   (and therefore their `$param_set$values`) and a hash of `$edges`.
-#' * `keep_results` :: `logical(1)` \cr
+#' * `phash` :: `character(1)` \cr
+#'   Stores a checksum calculated on the [`Graph`] configuration, which includes all [`PipeOp`] hashes
+#'   *except* their `$param_set$values`, and a hash of `$edges`.
+#' * `keep_results` :: `logical(1)`\cr
 #'   Whether to store intermediate results in the [`PipeOp`]'s `$.result` slot, mostly for debugging purposes. Default `FALSE`.
+#' * `man` :: `character(1)`\cr
+#'   Identifying string of the help page that shows with `help()`.
 #'
 #' @section Methods:
 #' * `ids(sorted = FALSE)` \cr
 #'   (`logical(1)`) -> `character` \cr
 #'   Get IDs of all [`PipeOp`]s. This is in order that [`PipeOp`]s were added if
 #'   `sorted` is `FALSE`, and topologically sorted if `sorted` is `TRUE`.
-#' * `add_pipeop(op)` \cr
-#'   ([`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`) -> `self` \cr
+#' * `add_pipeop(op, clone = TRUE)` \cr
+#'   ([`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `...`, `logical(1)`) -> `self` \cr
 #'   Mutates [`Graph`] by adding a [`PipeOp`] to the [`Graph`]. This does not add any edges, so the new [`PipeOp`]
 #'   will not be connected within the [`Graph`] at first.\cr
 #'   Instead of supplying a [`PipeOp`] directly, an object that can naturally be converted to a [`PipeOp`] can also
 #'   be supplied, e.g. a [`Learner`][mlr3::Learner] or a [`Filter`][mlr3filters::Filter]; see [`as_pipeop()`].
-#'   The argument given as `op` is always cloned; to access a `Graph`'s [`PipeOp`]s by-reference, use `$pipeops`.\cr
+#'   The argument given as `op` is cloned if `clone` is `TRUE` (default); to access a `Graph`'s [`PipeOp`]s
+#'   by-reference, use `$pipeops`.\cr
 #'   Note that `$add_pipeop()` is a relatively low-level operation, it is recommended to build graphs using [`%>>%`].
 #' * `add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)` \cr
 #'   (`character(1)`, `character(1)`,
@@ -123,6 +128,10 @@
 #'   (`any`, `logical(1)`) -> `list` of `any` \cr
 #'   Predict with the [`Graph`] by calling all the [`PipeOp`]'s `$train` methods. Input and output, as well as the function
 #'   of the `single_input` argument, are analogous to `$train()`.
+#' * `help(help_type)` \cr
+#'   (`character(1)`) -> help file\cr
+#'   Displays the help file of the concrete `PipeOp` instance. `help_type` is one of `"text"`, `"html"`, `"pdf"` and behaves
+#'   as the `help_type` argument of R's `help()`.
 #'
 #' @name Graph
 #' @family mlr3pipelines backend related
@@ -149,6 +158,7 @@ Graph = R6Class("Graph",
     pipeops = NULL,
     edges = NULL,
     keep_results = NULL,
+    man = "mlr3pipelines::Graph",
     initialize = function() {
       self$pipeops = list()
       self$edges = setDT(named_list(c("src_id", "src_channel", "dst_id", "dst_channel"), character()))
@@ -171,8 +181,8 @@ Graph = R6Class("Graph",
       topo_sort(tmp)$id
     },
 
-    add_pipeop = function(op) {
-      op = as_pipeop(op, clone = TRUE)
+    add_pipeop = function(op, clone = TRUE) {
+      op = as_pipeop(op, clone = assert_flag(clone))
       if (op$id %in% names(self$pipeops)) {
         stopf("PipeOp with id '%s' already in Graph", op$id)
       }
@@ -255,10 +265,10 @@ Graph = R6Class("Graph",
 
     chain = function(gs, clone = TRUE) {
       assert_list(gs)
-      chain_graphs(c(list(gs), gs), in_place = TRUE)
+      chain_graphs(c(list(self), gs), in_place = TRUE)
     },
 
-    plot = function(html = FALSE) {
+    plot = function(html = FALSE, horizontal = FALSE, ...) {
       assert_flag(html)
       if (!length(self$pipeops)) {
         cat("Empty Graph, not plotting.\n")
@@ -282,10 +292,7 @@ Graph = R6Class("Graph",
         extra_vertices = setdiff(names(self$pipeops), c(df$from, df$to))
       }
       ig = igraph::add_vertices(ig, length(extra_vertices), name = extra_vertices)
-      layout = igraph::layout_with_sugiyama(ig)$layout
-      if (!is.matrix(layout)) {
-        layout = t(layout)  # bug in igraph, dimension is dropped
-      }
+
       if (html) {
         require_namespaces("visNetwork")
         ig_data = visNetwork::toVisNetworkData(ig)
@@ -327,7 +334,25 @@ Graph = R6Class("Graph",
         }
         p
       } else {
-        suppressWarnings(graphics::plot(ig, layout = layout))  # suppress partial matching warning
+        layout = igraph::layout_with_sugiyama(ig)$layout
+        if (!is.matrix(layout)) {
+          layout = t(layout)  # bug in igraph, dimension is dropped
+        }
+        if (horizontal) {
+          layout = -layout[, 2:1]
+        }
+        layout[, 1] = layout[, 1] * .75
+        layout[, 2] = layout[, 2] * .75
+
+        defaultargs = list(vertex.shape = "crectangle", vertex.size = 60, vertex.size2 = 15 * 2.5, vertex.color = 0,
+          xlim = range(layout[, 1]) + c(-0.3, 0.3),
+          ylim = range(layout[, 2]) + c(-0.1, 0.1),
+          rescale = FALSE,
+          asp = 0.4
+        )
+    #    defaultargs = insert_named(defaultargs, list(...))
+
+        suppressWarnings(invoke(graphics::plot, ig, layout = layout, .args = defaultargs))  # suppress partial matching warning
       }
     },
 
@@ -432,6 +457,10 @@ Graph = R6Class("Graph",
     predict = function(input, single_input = TRUE) {
       graph_load_namespaces(self, "predict")
       graph_reduce(self, input, "predict", single_input)
+    },
+    help = function(help_type = getOption("help_type")) {
+      parts = strsplit(self$man, split = "::", fixed = TRUE)[[1]]
+      match.fun("help")(parts[[2]], package = parts[[1]], help_type = help_type)
     }
   ),
 
@@ -449,6 +478,11 @@ Graph = R6Class("Graph",
     hash = function() {
       digest(
         list(map(self$pipeops, "hash"), self$edges),
+        algo = "xxhash64")
+    },
+    phash = function() {
+      digest(
+        list(map(self$pipeops, "phash"), self$edges),
         algo = "xxhash64")
     },
     param_set = function(val) {
@@ -611,7 +645,8 @@ graph_reduce = function(self, input, fun, single_input) {
     if (self$keep_results) {
       op$.result = output
     }
-    edges[list(id, op$output$name), "payload" := list(output), on = c("src_id", "src_channel")]
+
+    edges[list(id, op$output$name), "payload" := list(output[get("src_channel")]), on = c("src_id", "src_channel")]
   }
 
   # get payload of edges that go to terminal node.
@@ -667,7 +702,21 @@ predict.Graph = function(object, newdata, ...) {
   plain = "Task" %nin% class(newdata)
   if (plain) {
     assert_data_frame(newdata)
-    newdata = TaskRegr$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = NA_real_)), "...dummytarget...")
+    task_type = infer_task_type(object)
+    targetcol = switch(task_type,
+      regr = NA_real_,
+      # could insert other supported types here.
+      # classif does not work, because we would need to know target levels.
+      NA
+    )
+    constructor = get(mlr_reflections$task_types[task_type, "task", on = "type", mult = "first"][[1L]])
+    newdata = withCallingHandlers(constructor$new("predicttask", as_data_backend(cbind(newdata, `...dummytarget...` = targetcol)), target = "...dummytarget..."),
+      error = function(e) {
+        e$message = sprintf("Could not create a %s-task for plain prediction data; call predict() with a mlr3 Task object, or use GraphLearner instead of Graph.\nError: %s",
+          task_type, e$message)
+        stop(e)
+      }
+    )
   }
   result = object$predict(newdata)
   assert_list(result, types = "Prediction", any.missing = FALSE, len = 1)
@@ -677,3 +726,4 @@ predict.Graph = function(object, newdata, ...) {
   }
   result
 }
+

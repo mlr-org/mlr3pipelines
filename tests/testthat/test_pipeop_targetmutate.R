@@ -1,6 +1,7 @@
 context("PipeOpTargetMutate")
 
 test_that("PipeOpTargetMutate - basic properties", {
+  skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpTargetMutate, list(id = "po"))
 
   po = PipeOpTargetMutate$new("po")
@@ -17,7 +18,7 @@ test_that("PipeOpTargetMutate - basic properties", {
 
   expect_graph(g)
 
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
   task_copy = task$clone(deep = TRUE)
   address_in = address(task)
   train_out = g$train(task)
@@ -38,6 +39,7 @@ test_that("PipeOpTargetMutate - basic properties", {
 })
 
 test_that("PipeOpTargetMutate - log base 2 trafo", {
+  skip_if_not_installed("rpart")
  g = Graph$new()
  g$add_pipeop(PipeOpTargetMutate$new("logtrafo",
    param_vals = list(
@@ -51,13 +53,13 @@ test_that("PipeOpTargetMutate - log base 2 trafo", {
  g$add_edge(src_id = "logtrafo", dst_id = "regr.rpart", src_channel = 2L, dst_channel = 1L)
  g$add_edge(src_id = "regr.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
 
- task = mlr_tasks$get("boston_housing")
+ task = mlr_tasks$get("boston_housing_classic")
  train_out = g$train(task)
  predict_out = g$predict(task)
 
  dat = task$data()
  dat$medv = log(dat$medv, base = 2)
- task_log = TaskRegr$new("boston_housing_log", backend = dat, target = "medv")
+ task_log = TaskRegr$new("boston_housing_classic_log", backend = dat, target = "medv")
 
  learner = LearnerRegrRpart$new()
  learner$train(task_log)
@@ -81,7 +83,7 @@ test_that("PipeOpTargetMutate - log base 2 trafo", {
 #' g$add_edge(src_id = "regr_classif", dst_id = "classif.rpart", src_channel = 2L, dst_channel = 1L)
 #' g$add_edge(src_id = "classif.rpart", dst_id = "targetinvert", src_channel = 1L, dst_channel = 2L)
 #'
-#' task = mlr_tasks$get("boston_housing")
+#' task = mlr_tasks$get("boston_housing_classic")
 #' task$col_roles$feature = setdiff(task$col_roles$feature, y = "cmedv")
 #' train_out = g$train(task)
 #' expect_r6(g$state$classif.rpart$train_task, classes = "TaskClassif")

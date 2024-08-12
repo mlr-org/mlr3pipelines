@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_proxy
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Wraps another [`PipeOp`] or [`Graph`] as determined by the `content` hyperparameter.
@@ -55,6 +55,7 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #' library("mlr3learners")
 #'
@@ -73,8 +74,9 @@
 #' g$param_set$values$learner.content = lrn("classif.rpart")
 #' rr_pca_rpart = resample(task, learner = GraphLearner$new(g), resampling = rsmp("cv", folds = 3))
 #' rr_pca_rpart$aggregate(msr("classif.ce"))
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpProxy = R6Class("PipeOpProxy",
@@ -85,8 +87,8 @@ PipeOpProxy = R6Class("PipeOpProxy",
       assert_int(outnum, lower = 1L)
       # input can be a vararg input channel
       inname = if (innum) rep_suffix("input", innum) else "..."
-      ps = ParamSet$new(params = list(
-        ParamUty$new("content", tags = c("train", "predidct", "required"), custom_check = function(x) {
+      ps = ps(
+        content = p_uty(tags = c("train", "predidct", "required"), custom_check = function(x) {
           # content must be an object that can be coerced to a Graph and the output number must match
           tryCatch({
             graph = as_graph(x)
@@ -103,7 +105,7 @@ PipeOpProxy = R6Class("PipeOpProxy",
           },
           error = function(error_condition) "`content` must be an object that can be converted to a Graph")
         })
-      ))
+      )
       ps$values = list(content = PipeOpFeatureUnion$new(innum = innum))
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = inname, train = "*", predict = "*"),
@@ -140,7 +142,8 @@ PipeOpProxy = R6Class("PipeOpProxy",
         # automatically send input to all graph inputs
         output = content$predict(input[[1]])
       }
-    }
+    },
+    .additional_phash_input = function() list(self$input$name, self$output$name)
   )
 )
 

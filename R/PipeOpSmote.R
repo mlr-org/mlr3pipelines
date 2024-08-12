@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_smote
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Generates a more balanced data set by creating
@@ -50,10 +50,11 @@
 #' `r format_bib("chawla_2002")`
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("smotefamily")) \{ }
 #' library("mlr3")
 #'
 #' # Create example task
@@ -67,16 +68,17 @@
 #' pop = po("smote")
 #' smotedata = pop$train(list(task))[[1]]$data()
 #' table(smotedata$result)
+#' \dontshow{ \} }
 PipeOpSmote = R6Class("PipeOpSmote",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "smote", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamInt$new("K", lower = 1, default = 5, tags = c("train", "smote")),
+      ps = ps(
+        K = p_int(lower = 1, default = 5, tags = c("train", "smote")),
         # dup_size = 0 leads to behaviour different from 1, 2, 3, ..., because it means "autodetect",
         # so it is a 'special_vals'.
-        ParamInt$new("dup_size", lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
-      ))
+        dup_size = p_int(lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data")
     }

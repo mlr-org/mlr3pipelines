@@ -5,7 +5,7 @@
 \alias{PipeOpUpdateTarget}
 \title{Transform a Target without an Explicit Inversion}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 EXPERIMENTAL, API SUBJECT TO CHANGE
@@ -25,9 +25,11 @@ name of the data of the input \code{\link[mlr3:Task]{Task}}, this column is set 
 \code{drop_original_target} the original target is then either dropped or added to the features.
 }
 \section{Construction}{
-\preformatted{PipeOpUpdateTarget$new(id, param_set = ParamSet$new(),
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpUpdateTarget$new(id, param_set = ps(),
   param_vals = list(), packages = character(0))
-}
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. See \verb{$id} slot of \code{\link{PipeOp}}.
@@ -68,6 +70,7 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 \dontrun{
 # Create a binary class task from iris
 library(mlr3)
@@ -76,26 +79,28 @@ po = PipeOpUpdateTarget$new(param_vals = list(trafo = trafo_fun, new_target_name
 po$train(list(tsk("iris")))
 po$predict(list(tsk("iris")))
 }
+\dontshow{ \} }
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
-\code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
-\code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreproc}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_graphs}},
 \code{\link{mlr_pipeops}}
 
 Other PipeOps: 
+\code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
+\code{\link{PipeOpTaskPreprocSimple}},
+\code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -107,9 +112,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -143,9 +148,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
+\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
@@ -158,8 +164,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_tunethreshold}},
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_vtreat}},
-\code{\link{mlr_pipeops_yeojohnson}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops_yeojohnson}}
 }
 \concept{PipeOps}
 \concept{mlr3pipelines backend related}

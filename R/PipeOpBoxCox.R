@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_boxcox
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Conducts a Box-Cox transformation on numeric features. The lambda parameter
@@ -48,6 +48,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("bestNormalize")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -57,20 +58,21 @@
 #' pop$train(list(task))[[1]]$data()
 #'
 #' pop$state
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @include PipeOpTaskPreproc.R
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @export
 PipeOpBoxCox = R6Class("PipeOpBoxCox",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "boxcox", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("standardize", default = TRUE, tags = c("train", "boxcox")),
-        ParamDbl$new("eps", default = 0.001, lower = 0, tags = c("train", "boxcox")),
-        ParamDbl$new("lower", tags = c("train", "boxcox")),
-        ParamDbl$new("upper", tags = c("train", "boxcox"))
-      ))
+      ps = ps(
+        standardize = p_lgl(default = TRUE, tags = c("train", "boxcox")),
+        eps = p_dbl(default = 0.001, lower = 0, tags = c("train", "boxcox")),
+        lower = p_dbl(tags = c("train", "boxcox")),
+        upper = p_dbl(tags = c("train", "boxcox"))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals,
         packages = "bestNormalize", feature_types = c("numeric", "integer"))
     }

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputelearner
-#' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
 #' Impute features by fitting a [`Learner`][mlr3::Learner] for each feature.
@@ -44,6 +44,8 @@
 #' for each column. If a column consists of missing values only during training, the `model` is `0` or the levels of the
 #' feature; these are used for sampling during prediction.
 #'
+#' This state is given the class `"pipeop_impute_learner_state"`.
+#'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpImpute`], in addition to the parameters of the [`Learner`][mlr3::Learner]
 #' used for imputation.
@@ -68,6 +70,7 @@
 #' Only methods inherited from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("pima")
@@ -91,9 +94,10 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #'
+#' \dontshow{ \} }
 #' @family PipeOps
 #' @family Imputation PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
@@ -101,7 +105,9 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   public = list(
     initialize = function(learner, id = "imputelearner", param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      private$.learner$param_set$set_id = ""
+      if (paradox_info$is_old) {
+        private$.learner$param_set$set_id = ""
+      }
       id = id %??% private$.learner$id
       feature_types = switch(private$.learner$task_type,
         regr = c("integer", "numeric"),
@@ -138,6 +144,7 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
   ),
   private = list(
     .learner = NULL,
+    .state_class = "pipeop_impute_learner_state",
 
     .train_imputer = function(feature, type, context) {
       on.exit({private$.learner$state = NULL})
@@ -191,13 +198,36 @@ PipeOpImputeLearner = R6Class("PipeOpImputeLearner",
       }
       if (type == "logical") feature = as.logical(feature) # FIXME mlr-org/mlr3#475
       auto_convert(feature, "feature to be imputed", type, levels = levels(feature))
-    }
+    },
+    .additional_phash_input = function() private$.learner$phash
   )
 )
 
-mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("imputelearner", PipeOpImputeLearner, list(R6Class("Learner", public = list(id = "learner", task_type = "classif", param_set = ps()))$new()))
 
 # See mlr-org/mlr#470
 convert_to_task = function(id = "imputing", data, target, task_type, ...) {
-  get(mlr_reflections$task_types[task_type, ]$task)$new(id = id, backend = data, target = target, ...)
+  get(mlr_reflections$task_types[task_type, mult = "first"]$task)$new(id = id, backend = data, target = target, ...)
+}
+
+#' @export
+marshal_model.pipeop_impute_learner_state = function(model, inplace = FALSE, ...) {
+  prev_class = class(model)
+  model$model = map(model$model, marshal_model, inplace = inplace, ...)
+
+  if (!some(model$model, is_marshaled_model)) {
+    return(model)
+  }
+
+  structure(
+    list(marshaled = model, packages = "mlr3pipelines"),
+    class = c(paste0(prev_class, "_marshaled"), "marshaled")
+  )
+}
+
+#' @export
+unmarshal_model.pipeop_impute_learner_state_marshaled = function(model, inplace = FALSE, ...) {
+  state = model$marshaled
+  state$model = map(state$model, unmarshal_model, inplace = inplace, ...)
+  return(state)
 }

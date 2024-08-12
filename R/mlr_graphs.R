@@ -1,7 +1,7 @@
 #' @title Dictionary of (sub-)graphs
 #'
 #' @usage NULL
-#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`mlr3misc::Dictionary`].
 #'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`Graph`].
@@ -25,6 +25,7 @@
 #' @family Dictionaries
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library(mlr3)
 #' lrn = lrn("regr.rpart")
 #' task = mlr_tasks$get("boston_housing")
@@ -38,6 +39,7 @@
 #'
 #' # all Graphs currently in the dictionary:
 #' as.data.table(mlr_graphs)
+#' \dontshow{ \} }
 mlr_graphs = R6Class("DictionaryGraph", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(

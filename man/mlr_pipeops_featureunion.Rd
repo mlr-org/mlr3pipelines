@@ -5,7 +5,7 @@
 \alias{PipeOpFeatureUnion}
 \title{Aggregate Features from Multiple Inputs}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing them together into a single
@@ -15,8 +15,11 @@ Aggregates features from all input tasks by \code{\link[=cbind]{cbind()}}ing the
 across all \code{\link[mlr3:Task]{Task}}s. Only the target column(s) of the first \code{\link[mlr3:Task]{Task}}
 are kept.
 
-If \code{assert_targets_equal} is \code{TRUE} then target column names are compared and an error is thrown
-if they differ across inputs.
+\code{PipeOpFeatureUnion} tries to merge columns that are identical, while preventing accidental
+overwrites of columns that contain differing data. This is controlled using the \code{feature_clash}
+(for columns containing features, weights etc.) and \code{target_clash} (for tharget columns)
+hyperparameters. The \code{assert_target_equal} construction parameter / field can still be used
+as well but is deprecated and will generate a warning.
 
 If input tasks share some feature names but these features are not identical an error is thrown.
 This check is performed by first comparing the features names and if duplicates are found, also
@@ -24,9 +27,11 @@ the values of these possibly duplicated features. True duplicated features are o
 single time to the output task.
 }
 \section{Construction}{
-\preformatted{PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpFeatureUnion$new(innum = 0, collect_multiplicity = FALSE, id = "featureunion", param_vals = list(),
   assert_targets_equal = TRUE)
-}
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{innum} :: \code{numeric(1)} | \code{character}\cr
 Determines the number of input channels.
@@ -43,6 +48,7 @@ Identifier of the resulting object, default \code{"featureunion"}.
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise
 be set during construction. Default \code{list()}.
 \item \code{assert_targets_equal} :: \code{logical(1)}\cr
+DEPRECATED; use \code{target_clash} hyperparameter instead.\cr
 If \code{assert_targets_equal} is \code{TRUE} (Default), task target column names are checked for
 agreement. Disagreeing target column names are usually a bug, so this should often be left at
 the default.
@@ -70,7 +76,35 @@ The \verb{$state} is left empty (\code{list()}).
 
 \section{Parameters}{
 
-\code{\link{PipeOpFeatureUnion}} has no Parameters.
+\itemize{
+\item \code{target_clash} :: \code{character(1)}\cr
+How to handle target columns that differ between input \code{\link[mlr3:Task]{Task}}s. \code{"allow_same_hash"}
+checks the names and \verb{$col_hashes} and throws an error if they disagree. \code{"allow_same_content"} (default) is
+more permissive: If \verb{$col_hashes} disagree, then it checks the target content, if the content of both
+columns agree, then merging of tasks is still allowed. This avoids some rare false-positives, but in cases
+where hashes \emph{do} disagree this may be slow for \code{\link[mlr3:Task]{Task}}s with many rows or targets.
+\code{"ignore"} does not check for target agreement and overwrites the target with the target of the \emph{rightmost} /
+highest numbered input \code{\link[mlr3:Task]{Task}}. Use with caution. This is the only option that allows feature-union of \code{\link[mlr3:Task]{Task}}s
+that differ in the names of their target column (and all target columns except the rightmost / highest numbered input
+\code{\link[mlr3:Task]{Task}}'s target are dropped in that case).\cr
+The deprecated field \code{assert_targets_equal} sets this value to \code{"allow_same_content"} (i.e. default) when \code{TRUE} and to
+\code{"ignore"} when \code{FALSE}.
+\item \code{feature_clash} :: \code{character(1)}\cr
+How to handle non-target columns that have the same name but differ between input \code{\link[mlr3:Task]{Task}}s. \code{"allow_same_hash"}
+checks the names and \verb{$col_hashes} and throws an error if they disagree. \code{"allow_same_content"} (default) is
+more permissive: If \verb{$col_hashes} disagree, then it checks the column content, if the content of both
+columns agree, then merging of tasks is still allowed. This avoids some rare false-positives, but in cases
+where hashes \emph{do} disagree this may be slow for large \code{\link[mlr3:Task]{Task}}s.
+\code{"ignore"} does not check for column data agreement and overwrites columns of the same name with the values of the \emph{rightmost} /
+highest numbered input \code{\link[mlr3:Task]{Task}}.\cr
+Some column roles (\code{"group"}, \code{"weight"}, \code{"name"}) do not allow more than one column role present in a \code{\link[mlr3:Task]{Task}} (see
+\verb{$col_roles} documentation there). When up to one \code{\link[mlr3:Task]{Task}} has a column of these column role, it is taken for the
+resulting \code{\link[mlr3:Task]{Task}} without any issue. When more than one \code{\link[mlr3:Task]{Task}} has a column with one of these roles,
+but with the same name, the \code{feature_clash} policy applies as described above. When more than one \code{\link[mlr3:Task]{Task}} has a
+column with one of these roles, but they have \emph{different} names, then an error is thrown when \code{feature_clash} is not \code{"ignore"}.
+When it is \code{"ignore"}, the \emph{rightmost} / highest numbered input \code{\link[mlr3:Task]{Task}}'s column is used and all others of this
+role are discarded.
+}
 }
 
 \section{Internals}{
@@ -109,15 +143,16 @@ po = po("featureunion", innum = c("a", "b"))
 po$train(list(task2, task3))
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
+\code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
+\code{\link{PipeOpTaskPreprocSimple}},
+\code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -129,9 +164,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
 \code{\link{mlr_pipeops_histbin}},
@@ -164,9 +199,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
+\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
@@ -180,8 +216,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
-\code{\link{mlr_pipeops_yeojohnson}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops_yeojohnson}}
 
 Other Multiplicity PipeOps: 
 \code{\link{Multiplicity}()},

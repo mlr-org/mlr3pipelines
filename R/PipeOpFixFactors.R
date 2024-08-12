@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_fixfactors
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Fixes factors of type `factor`, `ordered`: Makes sure the factor levels
@@ -42,7 +42,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -51,9 +51,9 @@ PipeOpFixFactors = R6Class("PipeOpFixFactors",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "fixfactors", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("droplevels", tags = c("train", "predict"))
-      ))
+      ps = ps(
+        droplevels = p_lgl(tags = c("train", "predict"))
+      )
       ps$values = list(droplevels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "robustify", feature_types = c("factor", "ordered"))
     }

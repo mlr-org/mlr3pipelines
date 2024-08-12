@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_renamecolumns
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOp`].
 #'
 #' @description
 #' Renames the columns of a [`Task`][mlr3::Task] both during training and prediction.
@@ -47,7 +47,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -60,13 +60,13 @@ PipeOpRenameColumns = R6Class("PipeOpRenameColumns",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "renamecolumns", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("renaming", tags = c("train", "predict", "required"), custom_check = function(x) {
+      ps = ps(
+        renaming = p_uty(tags = c("train", "predict", "required"), custom_check = function(x) {
           check_character(x, any.missing = FALSE, names = "strict") %check&&%
             check_names(x, type = "strict")
         }),
-        ParamLgl$new("ignore_missing", tags = c("train", "predict", "required"))
-      ))
+        ignore_missing = p_lgl(tags = c("train", "predict", "required"))
+      )
       ps$values = list(renaming = character(0), ignore_missing = FALSE)
       super$initialize(id, ps, param_vals = param_vals, can_subset_cols = FALSE)
     }

@@ -1,6 +1,7 @@
 context("ppl - pipeline_robustify")
 
 test_that("Robustify Pipeline", {
+  skip_if_not_installed("rpart")
   skip_on_cran()
   lrn = lrn("classif.rpart")
 
@@ -44,7 +45,7 @@ test_that("Robustify Pipeline", {
   expect_true(all(c("imputehist", "missind") %in% names(p$pipeops)))
 
   # test on mixed, no missings
-  tsk = tsk("boston_housing")
+  tsk = tsk("boston_housing_classic")
   lrn = lrn("regr.rpart")
   p = ppl("robustify", task = tsk, learner = lrn) %>>% po(lrn)
   expect_graph(p)
@@ -82,6 +83,7 @@ test_that("Robustify Pipeline", {
   # date features
   dat = iris
   set.seed(1)
+  lrn = lrn("classif.rpart")
   dat$date = sample(seq(as.POSIXct("2020-02-01"), to = as.POSIXct("2020-02-29"), by = "hour"),
    size = 150L)
   tsk = TaskClassif$new("iris_date", backend = dat, target = "Species")
@@ -102,6 +104,7 @@ test_that("Robustify Pipeline", {
 
 
 test_that("Robustify Pipeline Impute Missings", {
+  skip_if_not_installed("rpart")
   tmissings = tsk("pima")
   tnomissings = tsk("iris")
 
@@ -150,8 +153,12 @@ makeTypeTask = function(types) {
 
 
 test_that("Robustify Pipeline factor to numeric", {
+  skip_if_not_installed("rpart")
 
   alltask = makeTypeTask(c("integer", "numeric", "logical", "character", "POSIXct"))
+
+  skip_if_not_installed("quanteda")
+  suppressWarnings(loadNamespace("quanteda"))  # TODO: see https://github.com/quanteda/quanteda/issues/2116 , may not be an issue in the future
 
   lfactor = lrn("regr.rpart")
   lnofactor = lrn("regr.rpart")

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_regravg
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
 #' Perform (weighted) prediction averaging from regression [`Prediction`][mlr3::Prediction]s by connecting
@@ -53,10 +53,11 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' # Simple Bagging
@@ -68,6 +69,7 @@
 #'   po("classifavg")
 #'
 #' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
+#' \dontshow{ \} }
 PipeOpRegrAvg = R6Class("PipeOpRegrAvg",
   inherit = PipeOpEnsemble,
 

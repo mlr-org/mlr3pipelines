@@ -1,6 +1,7 @@
 context("PipeOpImputeLearner")
 
 test_that("PipeOpImputeLearner - simple tests", {
+  skip_if_not_installed("rpart")
   # Pima has several missings
   task = mlr_tasks$get("pima")
   po = PipeOpImputeLearner$new(learner = lrn("regr.rpart"))
@@ -37,6 +38,7 @@ test_that("PipeOpImputeLearner - simple tests", {
 })
 
 test_that("PipeOpImputeLearner", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # slow test, so we don't do it on cran
 
   task = mlr_tasks$get("pima")
@@ -155,3 +157,17 @@ test_that("PipeOpImputeLearner - model active binding to state", {
   expect_equal(names(models), names(po$learner_models))
   expect_true(all(pmap_lgl(list(map(models, .f = "model"), map(po$learner_models, .f = "model")), .f = all.equal)))
 })
+
+test_that("marshal", {
+  task = tsk("penguins")
+  po_im = po("imputelearner", learner = lrn("classif.debug"))
+  po_im$train(list(task))
+
+  s = po_im$state
+  expect_class(s, "pipeop_impute_learner_state")
+  sm = marshal_model(s)
+  expect_class(sm, "marshaled")
+  su = unmarshal_model(sm)
+  expect_equal(s, su)
+})
+

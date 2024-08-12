@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputeconstant
-#' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
 #' Impute features by a constant value.
@@ -62,17 +62,17 @@
 #' new_task$data(cols = "glucose")[[1]]
 #' @family PipeOps
 #' @family Imputation PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeConstant = R6Class("PipeOpImputeConstant",
   inherit = PipeOpImpute,
   public = list(
     initialize = function(id = "imputeconstant", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("constant", tags = c("train", "required"), custom_check = check_scalar),
-        ParamLgl$new("check_levels", tags = c("train", "required"))
-      ))
+      ps = ps(
+        constant = p_uty(tags = c("train", "required"), custom_check = check_scalar),
+        check_levels = p_lgl(tags = c("train", "required"))
+      )
       ps$values = list(constant = ".MISSING", check_levels = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("logical", "integer", "numeric", "character", "factor", "ordered", "POSIXct"))
     }

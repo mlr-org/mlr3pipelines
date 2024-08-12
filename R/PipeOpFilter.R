@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_filter
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Feature filtering using a [`mlr3filters::Filter`] object, see the
@@ -76,12 +76,15 @@
 #' `r format_bib("wu2007", "thomas2017")`
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("mlr3filters")) \{ }
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #' library("mlr3filters")
+#' \dontshow{data.table::setDTthreads(1)}
 #'
 #' # setup PipeOpFilter to keep the 5 most important
 #' # features of the spam task w.r.t. their AUC
@@ -106,6 +109,8 @@
 #' learner = GraphLearner$new(gr)
 #' rr = resample(task, learner, rsmp("holdout"), store_models = TRUE)
 #' rr$learners[[1]]$model$auc$scores
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 PipeOpFilter = R6Class("PipeOpFilter",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
@@ -113,16 +118,24 @@ PipeOpFilter = R6Class("PipeOpFilter",
     initialize = function(filter, id = filter$id, param_vals = list()) {
       assert_class(filter, "Filter")
       self$filter = filter$clone(deep = TRUE)
-      self$filter$param_set$set_id = ""
-      map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
-      private$.outer_param_set = ParamSet$new(list(
-        ParamInt$new("nfeat", lower = 0, tags = "train"),
-        ParamDbl$new("frac", lower = 0, upper = 1, tags = "train"),
-        ParamDbl$new("cutoff", tags = "train"),
-        ParamInt$new("permuted", lower = 1, tags = "train")
-      ))
-      private$.outer_param_set$set_id = "filter"
-      super$initialize(id, alist(private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
+      if (paradox_info$is_old) {
+        self$filter$param_set$set_id = ""
+        map(self$filter$param_set$params, function(p) p$tags = union(p$tags, "train"))
+      } else {
+        for (pn in self$filter$param_set$ids()) {
+          self$filter$param_set$tags[[pn]] = union(self$filter$param_set$tags[[pn]] , "train")
+        }
+      }
+      private$.outer_param_set = ps(
+        nfeat = p_int(lower = 0, tags = "train"),
+        frac = p_dbl(lower = 0, upper = 1, tags = "train"),
+        cutoff = p_dbl(tags = "train"),
+        permuted = p_int(lower = 1, tags = "train")
+      )
+      if (paradox_info$is_old) {
+        private$.outer_param_set$set_id = "filter"
+      }
+      super$initialize(id, alist(filter = private$.outer_param_set, self$filter$param_set), param_vals = param_vals, tags = "feature selection")
     }
   ),
   private = list(
@@ -181,8 +194,9 @@ PipeOpFilter = R6Class("PipeOpFilter",
 
     .transform = function(task) {
       task$select(self$state$features)
-    }
+    },
+    .additional_phash_input = function() class(self$filter)
   )
 )
 
-mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ParamSet$new()))$new()))
+mlr_pipeops$add("filter", PipeOpFilter, list(R6Class("Filter", public = list(id = "dummyfilter", param_set = ps()))$new()))

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_tunethreshold
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Tunes optimal probability thresholds over different [`PredictionClassif`][mlr3::PredictionClassif]s.
@@ -45,7 +45,7 @@
 #'  * `optimizer` :: [`Optimizer`][bbotk::Optimizer]|`character(1)`\cr
 #'    [`Optimizer`][bbotk::Optimizer] used to find optimal thresholds.
 #'    If `character`, converts to [`Optimizer`][bbotk::Optimizer]
-#'    via [`opt`][bbotk::opt]. Initialized to [`OptimizerGenSA`][bbotk::OptimizerGenSA].
+#'    via [`opt`][bbotk::opt]. Initialized to `OptimizerGenSA`.
 #'  * `log_level` :: `character(1)` | `integer(1)`\cr
 #'    Set a temporary log-level for `lgr::get_logger("bbotk")`. Initialized to: "warn".
 #'
@@ -57,6 +57,9 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("bbotk")) \{ }
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
+#' \dontshow{ if (requireNamespace("GenSA")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -67,28 +70,36 @@
 #' pop$train(task)
 #'
 #' pop$state
+#' \dontshow{ \} }
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @export
 PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
   inherit = PipeOp,
 
   public = list(
     initialize = function(id = "tunethreshold", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("measure", custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
-        ParamUty$new("optimizer", custom_check = check_optimizer, tags = "train"),
-        ParamUty$new("log_level", tags = "train",
+      ps = ps(
+        measure = p_uty(custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
+        optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
+        log_level = p_uty(tags = "train",
           function(x) check_string(x) %check||% check_integerish(x))
-      ))
+      )
       ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
         input = data.table(name = "input", train = "Task", predict = "Task"),
         output = data.table(name = "output", train = "NULL", predict = "Prediction"),
         tags = "target transform"
       )
-    },
-    train = function(input) {
+    }
+  ),
+  active = list(
+    predict_type = function() "response"  # we are predict type "response" for now, so we don't break things. See discussion in #712
+  ),
+  private = list(
+    .train = function(input) {
       if(!all(input[[1]]$feature_types$type == "numeric")) {
         stop("PipeOpTuneThreshold requires predicted probabilities! Set learner predict_type to 'prob'")
       }
@@ -97,13 +108,11 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       self$state = list("threshold" = th)
       return(list(NULL))
     },
-    predict = function(input) {
+    .predict = function(input) {
       pred = private$.task_to_prediction(input[[1]])
       pred$set_threshold(self$state$threshold)
       return(list(pred))
-    }
-  ),
-  private = list(
+    },
     .objfun = function(xs, pred, measure) {
       lvls = colnames(pred$prob)
       res = pred$set_threshold(unlist(xs))$score(measure)
@@ -113,10 +122,12 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     .optimize_objfun = function(pred) {
       optimizer = self$param_set$values$optimizer
       if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
+      if (inherits(optimizer, "OptimizerGenSA")) optimizer$param_set$values$trace.mat = TRUE  # https://github.com/mlr-org/bbotk/issues/214
       ps = private$.make_param_set(pred)
       measure = self$param_set$values$measure
       if (is.character(measure)) measure = msr(measure) else measure
-      codomain = ParamSet$new(list(ParamDbl$new(id = measure$id, tags = ifelse(measure$minimize, "minimize", "maximize"))))
+      codomain = do.call(paradox::ps, structure(list(p_dbl(tags = ifelse(measure$minimize, "minimize", "maximize"))), names = measure$id))
+
       objfun = bbotk::ObjectiveRFun$new(
         fun = function(xs) private$.objfun(xs, pred = pred, measure = measure),
         domain = ps, codomain = codomain

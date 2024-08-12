@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classweights
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Adds a class weight column to the [`Task`][mlr3::Task] that different [`Learner`][mlr3::Learner]s may be
@@ -50,7 +50,7 @@
 #' Only methods inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -71,9 +71,9 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
   public = list(
     initialize = function(id = "classweights", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("minor_weight", lower = 0, upper = Inf, tags = "train")
-      ))
+      ps = ps(
+        minor_weight = p_dbl(lower = 0, upper = Inf, tags = "train")
+      )
       ps$values = list(minor_weight = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE, task_type = "TaskClassif", tags = "imbalanced data")
     }

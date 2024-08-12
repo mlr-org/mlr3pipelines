@@ -2,10 +2,16 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_imputehist
-#' @format [`R6Class`] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpImpute`]/[`PipeOp`].
 #'
 #' @description
 #' Impute numerical features by histogram.
+#'
+#' During training, a histogram is fitted using R's [`hist()`][graphics::hist] function.
+#' The fitted histogram is then sampled from for imputation. This is an approximation to
+#' sampling from the empirical training data distribution (i.e. sampling from training data
+#' with replacement), but is much more memory efficient for large datasets, since the `$state`
+#' does not need to save the training data.
 #'
 #' @section Construction:
 #' ```
@@ -49,7 +55,7 @@
 #' po$state$model
 #' @family PipeOps
 #' @family Imputation PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpImpute.R
 #' @export
 PipeOpImputeHist = R6Class("PipeOpImputeHist",

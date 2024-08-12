@@ -49,6 +49,7 @@ test_that("PipeOpFeatureUnion - train and predict", {
 })
 
 test_that("PipeOpFeatureUnion - train and predict II", {
+  skip_if_not_installed("rpart")
   # Define PipeOp's
   scatter = PipeOpCopy$new(2)
   op2a = PipeOpPCA$new()
@@ -129,6 +130,7 @@ test_that("PipeOpFeatureUnion - levels are preserved", {
 })
 
 test_that("feature renaming", {
+  skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpFeatureUnion, list(letters[1:3]))
 
   expect_equal(nrow(PipeOpFeatureUnion$new(c("a", "b", "c"))$input), 3)
@@ -256,4 +258,19 @@ test_that("featureunion - cbind_tasks - duplicates", {
   expect_equal(output$data(cols = "x"), inputs[[1L]]$data(cols = "x"))
   expect_equal(output$data(cols = "x"), inputs[[1L]]$data(cols = "x"))
   expect_equivalent(output$data(cols = c("Species", new_iris_names)), task1$data())
+})
+
+test_that("featureunion - does not drop 'x' column", {
+  task1 = as_task_regr(data.table(
+    z = 1:10,
+    y = 1:10
+  ), target = "y")
+
+  task2 = as_task_regr(data.table(
+    x = 1:10,
+    y = 1:10
+  ), target = "y")
+
+  taskout = po("featureunion")$train(list(task1, task2))[[1L]]
+  expect_permutation(taskout$feature_names, c("x", "z"))
 })

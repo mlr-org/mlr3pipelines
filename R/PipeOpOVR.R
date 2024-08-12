@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrsplit
-#' @format [`R6Class`] inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Splits a [classification Task][mlr3::TaskClassif] into several binary [classification
@@ -64,15 +64,17 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library(mlr3)
 #' task = tsk("iris")
 #' po = po("ovrsplit")
 #' po$train(list(task))
 #' po$predict(list(task))
+#' \dontshow{ \} }
 PipeOpOVRSplit = R6Class("PipeOpOVRSplit",
   inherit = PipeOp,
   public = list(
@@ -113,7 +115,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrunite
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
 #' Perform "One vs. Rest" classification by (weighted) majority vote prediction from [classification
@@ -170,10 +172,11 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' @family Ensembles
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpEnsemble.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library(mlr3)
 #' task = tsk("iris")
 #' gr = po("ovrsplit") %>>% lrn("classif.rpart") %>>% po("ovrunite")
@@ -181,6 +184,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #' gr$predict(task)
 #' gr$pipeops$classif.rpart$learner$predict_type = "prob"
 #' gr$predict(task)
+#' \dontshow{ \} }
 PipeOpOVRUnite = R6Class("PipeOpOVRUnite",
   inherit = PipeOpEnsemble,
   public = list(

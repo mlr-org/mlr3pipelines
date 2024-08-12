@@ -4,7 +4,7 @@
 \alias{PipeOpTaskPreprocSimple}
 \title{Simple Task Preprocessing Base Class}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Base class for handling many "preprocessing" operations
@@ -24,8 +24,10 @@ it is called both during training and prediction.
 This inherits from \code{\link{PipeOpTaskPreproc}} and behaves essentially the same.
 }
 \section{Construction}{
-\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+}\if{html}{\out{</div>}}
 
 (Construction is identical to \code{\link{PipeOpTaskPreproc}}.)
 \itemize{
@@ -104,7 +106,7 @@ This method can be overloaded when inheriting from \code{\link{PipeOpTaskPreproc
 alternatively, \code{private$.get_state_dt()} (optional) and \code{private$.transform_dt()} (and possibly \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}})
 can be overloaded.
 \item \code{.get_state_dt(dt)} \cr
-(\code{\link{data.table}}) -> named \code{list}\cr
+(\code{\link[data.table:data.table]{data.table}}) -> named \code{list}\cr
 Create something that will be stored in \verb{$state} during training phase of \code{PipeOpTaskPreprocSimple}.
 The state can then influence the \code{private$.transform_dt()} function. Note that \code{private$.get_state_dt()} must \emph{return} the state, and
 should not store it in \verb{$state}. If neither \code{private$.get_state()} nor \code{private$.get_state_dt()} are overloaded, the state will
@@ -113,7 +115,7 @@ This method can optionally be overloaded when inheriting from \code{\link{PipeOp
 (and optionally \code{private$.select_cols()}, from \code{\link{PipeOpTaskPreproc}}); Alternatively, \code{private$.get_state()} (optional) and \code{private$.transform()}
 can be overloaded.
 \item \code{.transform_dt(dt)} \cr
-(\code{\link{data.table}}) -> \code{\link{data.table}} | \code{data.frame} | \code{matrix} \cr
+(\code{\link[data.table:data.table]{data.table}}) -> \code{\link[data.table:data.table]{data.table}} | \code{data.frame} | \code{matrix} \cr
 Predict on new data in \code{dt}, possibly using the stored \verb{$state}. A transformed object must be returned
 that can be converted to a \code{data.table} using \code{\link{as.data.table}}. \code{dt} does not need to be copied deliberately, it
 is possible and encouraged to change it in-place. This method is called both during training and prediction phase,
@@ -127,14 +129,15 @@ can be overloaded.
 }
 
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
+\code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
+\code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -146,9 +149,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -182,9 +185,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
+\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
@@ -198,17 +202,16 @@ Other PipeOps:
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
-\code{\link{mlr_pipeops_yeojohnson}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops_yeojohnson}}
 
 Other mlr3pipelines backend related: 
 \code{\link{Graph}},
+\code{\link{PipeOp}},
 \code{\link{PipeOpTargetTrafo}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
 \code{\link{mlr_graphs}},
-\code{\link{mlr_pipeops_updatetarget}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_updatetarget}}
 }
 \concept{PipeOps}
 \concept{mlr3pipelines backend related}

@@ -1,6 +1,6 @@
 #' @title No-Op Sentinel Used for Alternative Branching
 #'
-#' @format [`R6`] object.
+#' @format [`R6`][R6::R6] object.
 #'
 #' @description
 #' Special data type for no-ops. Distinct from `NULL` for easier debugging

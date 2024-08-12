@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_select
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Removes features from [`Task`][mlr3::Task] depending on a [`Selector`] function:
@@ -45,7 +45,7 @@
 #'
 #' @family PipeOps
 #' @family Selectors
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -69,9 +69,9 @@ PipeOpSelect = R6Class("PipeOpSelect",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "select", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("selector", custom_check = check_function, tags = c("train", "required"))
-      ))
+      ps = ps(
+        selector = p_uty(custom_check = check_function, tags = c("train", "required"))
+      )
       ps$values = list(selector = selector_all())
       super$initialize(id, ps, param_vals = param_vals, tags = "feature selection")
     }

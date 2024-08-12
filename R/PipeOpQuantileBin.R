@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_quantilebin
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Splits numeric features into quantile bins.
@@ -49,16 +49,16 @@
 #'
 #' pop$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpQuantileBin = R6Class("PipeOpQuantileBin",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "quantilebin", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamInt$new("numsplits", lower = 2, special_vals = list(NULL), tags = "train")
-        ))
+      ps = ps(
+        numsplits = p_int(lower = 2, special_vals = list(NULL), tags = "train")
+        )
       ps$values = list(numsplits = 2L)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "stats", feature_types = c("numeric", "integer"))
     }

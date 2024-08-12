@@ -5,7 +5,7 @@
 \alias{PipeOpLearnerCV}
 \title{Wrap a Learner into a PipeOp with Cross-validated Predictions as Features}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Wraps an \code{\link[mlr3:Learner]{mlr3::Learner}} into a \code{\link{PipeOp}}.
@@ -26,8 +26,10 @@ as feature for another \code{\link[mlr3:Learner]{Learner}}. Because the \code{\l
 useful to use \code{\link{PipeOpFeatureUnion}} to bind the prediction \code{\link[mlr3:Task]{Task}} to the original input \code{\link[mlr3:Task]{Task}}.
 }
 \section{Construction}{
-\preformatted{PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpLearnerCV$new(learner, id = NULL, param_vals = list())
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{learner} :: \code{\link[mlr3:Learner]{Learner}} \cr
 \code{\link[mlr3:Learner]{Learner}} to use for cross validation / prediction, or a string identifying a
@@ -60,15 +62,17 @@ The \verb{$state} is set to the \verb{$state} slot of the \code{\link[mlr3:Learn
 \itemize{
 \item \code{model} :: \code{any}\cr
 Model created by the \code{\link[mlr3:Learner]{Learner}}'s \verb{$.train()} function.
-\item \code{train_log} :: \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
+\item \code{train_log} :: \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during training.
 \item \code{train_time} :: \code{numeric(1)}\cr
 Training time, in seconds.
-\item \code{predict_log} :: \code{NULL} | \code{\link{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
+\item \code{predict_log} :: \code{NULL} | \code{\link[data.table:data.table]{data.table}} with columns \code{class} (\code{character}), \code{msg} (\code{character})\cr
 Errors logged during prediction.
 \item \code{predict_time} :: \code{NULL} | \code{numeric(1)}
 Prediction time, in seconds.
 }
+
+This state is given the class \code{"pipeop_learner_cv_state"}.
 }
 
 \section{Parameters}{
@@ -108,6 +112,7 @@ Methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 task = tsk("iris")
@@ -128,9 +133,10 @@ graph$train(task)
 graph$pipeops$classif.rpart$learner$predict_type = "prob"
 
 graph$train(task)
+\dontshow{ \} }
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other Meta PipeOps: 
 \code{\link{mlr_pipeops_learner}}

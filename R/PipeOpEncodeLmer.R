@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encodelmer
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Encodes columns of type `factor`, `character` and `ordered`.
@@ -68,10 +68,12 @@
 #' Only methods inherited [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("nloptr")) \{ }
+#' \dontshow{ if (requireNamespace("lme4")) \{ }
 #' library("mlr3")
 #' poe = po("encodelmer")
 #'
@@ -84,13 +86,15 @@
 #' poe$train(list(task))[[1]]$data()
 #'
 #' poe$state
+#' \dontshow{ \} }
+#' \dontshow{ \} }
 PipeOpEncodeLmer = R6Class("PipeOpEncodeLmer",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "encodelmer", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("fast_optim", tags = c("train", "required"))
-      ))
+      ps = ps(
+        fast_optim = p_lgl(tags = c("train", "required"))
+      )
       ps$values = list(fast_optim = TRUE)
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = c("lme4", "nloptr"), tags = "encode", feature_types = c("factor", "ordered"))
     }

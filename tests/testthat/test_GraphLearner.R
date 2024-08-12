@@ -1,6 +1,7 @@
 context("GraphLearner")
 
 test_that("basic graphlearner tests", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   task = mlr_tasks$get("iris")
 
@@ -72,13 +73,59 @@ test_that("basic graphlearner tests", {
   expect_equal(dbmodels$task_predict$data(), scalediris$data())
 })
 
+test_that("GraphLearner clone_graph FALSE", {
+  skip_if_not_installed("rpart")
+
+  # prepare graph
+  gr1 = po("pca") %>>% lrn("classif.rpart")
+  gr1$train(tsk("iris"))
+  expect_true(gr1$is_trained)
+
+  gl = GraphLearner$new(gr1, clone_graph = FALSE)
+
+  # graph is not cloned
+  expect_identical(gl$graph, gr1)
+
+  # GraphLearner$initialize resets graph state
+  expect_false(gr1$is_trained)
+
+  # compare result of training with a subset of iris
+  gl$train(tsk("iris")$filter(1:110))
+
+  # gr1 state is not set by this
+  expect_false(gr1$is_trained)
+
+  # train gr1 with a *different* task than gl
+  gr1$train(tsk("iris"))
+
+  # simulate pipeline with iris subset to get expected GraphLearner prediction result
+  pp = po("pca")
+  expected_prediction = lrn("classif.rpart")$train(pp$train(list(tsk("iris")$filter(1:110)))[[1]])$predict(pp$predict(list(tsk("iris")))[[1]])
+
+  # check that predicting on iris subset gives different result from gr1$predict()
+  expect_false(isTRUE(all.equal(gr1$predict(tsk("iris"))[[1]], expected_prediction)))
+  expect_true(gr1$is_trained)
+
+  # check that the GraphLearner predicts what we expect
+  expect_true(isTRUE(all.equal(gl$predict(tsk("iris")), expected_prediction)))
+
+  expect_false(gr1$is_trained)  # predicting with GraphLearner resets Graph state
+
+  expect_identical(gl$graph, gr1)
+
+  # check that as_learner respects `clone` now
+  gl = as_learner(gr1, clone = FALSE)
+  expect_identical(gl$graph, gr1)
+
+})
+
 test_that("graphlearner parameters behave as they should", {
   dblrn = mlr_learners$get("classif.debug")
   dblrn$param_set$values$save_tasks = TRUE
 
   dbgr = PipeOpScale$new() %>>% PipeOpLearner$new(dblrn)
 
-  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), names(dbgr$param_set$params))
+  expect_subset(c("scale.center", "scale.scale", "classif.debug.x"), dbgr$param_set$ids())
 
   dbgr$param_set$values$classif.debug.x = 1
 
@@ -129,6 +176,7 @@ test_that("graphlearner parameters behave as they should", {
 })
 
 test_that("graphlearner type inference", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   # default: classif
   lrn = GraphLearner$new(mlr_pipeops$get("nop"))
@@ -197,6 +245,7 @@ test_that("graphlearner type inference", {
 })
 
 test_that("graphlearner type inference - branched", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
 
   # default: classif
@@ -261,6 +310,7 @@ test_that("graphlearner type inference - branched", {
 })
 
 test_that("graphlearner predict type inference", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   # Getter:
 
@@ -358,6 +408,7 @@ test_that("graphlearner predict type inference", {
 
 
 test_that("GraphLearner model", {
+  skip_if_not_installed("rpart")
   graph = po("pca") %>>% lrn("classif.rpart")
   graph2 = graph$clone(deep = TRUE)
   graph_orig = graph$clone(deep = TRUE)
@@ -389,4 +440,286 @@ test_that("GraphLearner model", {
   expect_equal(lr$graph_model$pipeops$classif.rpart$learner_model$importance(), imp)
 
 
+})
+
+test_that("predict() function for Graph", {
+  skip_if_not_installed("rpart")
+
+  lx = as_graph(lrn("classif.rpart"))
+
+  lx$train(tsk("iris"))
+
+  p1 = lx$pipeops$classif.rpart$learner_model$predict(tsk("iris"))
+
+  expect_equal(predict(lx, tsk("iris")), p1)
+
+  expect_error(predict(lx, iris[1:4]), "Could not create a classif-task for plain prediction data")
+
+  lx = as_graph(lrn("regr.rpart"))
+
+  lx$train(tsk("boston_housing_classic"))
+
+  p1 = lx$pipeops$regr.rpart$learner_model$predict(tsk("boston_housing_classic"))
+
+  expect_equal(predict(lx, tsk("boston_housing_classic")), p1)
+
+  expect_equal(
+    predict(lx, tsk("boston_housing_classic")$data(cols = tsk("boston_housing_classic")$feature_names)),
+    p1$response
+  )
+
+
+})
+
+test_that("base_learner() works", {
+  skip_if_not_installed("rpart")
+  # graph containing single PipeOpLearner
+  x = as_learner(as_graph(lrn("classif.rpart")))
+  # untrained
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  # trained:
+  x$train(tsk("iris"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+
+  # graph consisting of PCA, rpart, threshold
+  x = as_learner(po("pca") %>>% lrn("classif.rpart") %>>% po("threshold"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  # trained:
+  x$train(tsk("iris"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+
+  # graph inside a graph
+  x = as_learner(po("pca") %>>% as_learner(po("scale") %>>% lrn("classif.rpart")) %>>% po("threshold"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$graph_model$pipeops$scale.classif.rpart$learner_model)
+  expect_identical(x$base_learner(2), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$scale.classif.rpart$learner_model$graph_model$pipeops$classif.rpart$learner_model)
+  x$train(tsk("iris"))
+  expect_learner(x$base_learner())
+  expect_identical(x$base_learner(0), x)
+  expect_identical(x$base_learner(1), x$graph_model$pipeops$scale.classif.rpart$learner_model)
+  expect_identical(x$base_learner(2), x$base_learner())
+  expect_identical(x$base_learner(), x$graph_model$pipeops$scale.classif.rpart$learner_model$graph_model$pipeops$classif.rpart$learner_model)
+
+  # branching: currently not supported
+  branching_learner = as_learner(ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
+  expect_error(branching_learner$base_learner(), "Graph has no unique PipeOp containing a Learner")
+
+  # bogus GraphLearner with no PipeOpLearner inside.
+  expect_error(as_learner(po("nop"))$base_learner(), "No Learner PipeOp found.")
+
+})
+
+
+test_that("GraphLearner hashes", {
+  skip_if_not_installed("rpart")
+
+
+  learner1 = as_learner(ppl("robustify") %>>% lrn("regr.rpart"))
+  learner1dash = as_learner(ppl("robustify") %>>% lrn("regr.rpart"))
+
+  expect_string(learner1$hash)
+  expect_string(learner1$phash)
+
+  expect_equal(learner1$hash, learner1dash$hash)
+  expect_equal(learner1$phash, learner1dash$phash)
+
+  learner1dash$graph$pipeops$regr.rpart$param_set$values$xval = 1
+
+  expect_string(all.equal(learner1$hash, learner1dash$hash), "mismatch")
+  expect_equal(learner1$phash, learner1dash$phash)
+
+  learner2 = as_learner(po("pca") %>>% lrn("regr.rpart"))
+
+  expect_string(all.equal(learner1$hash, learner2$hash), "mismatch")
+  expect_string(all.equal(learner1$phash, learner2$phash), "mismatch")
+
+  learner1$id = "myid"
+  learner2$id = "myid"
+
+  expect_string(all.equal(learner1$hash, learner2$hash), "mismatch")
+  expect_string(all.equal(learner1$phash, learner2$phash), "mismatch")
+
+
+  # construction argument dependent hashes
+  expect_string(all.equal(po("copy", 2)$hash, po("copy", 3)$hash), "mismatch")
+
+
+  lr1 <- lrn("classif.rpart")
+  lr2 <- lrn("classif.rpart", fallback = lrn("classif.rpart"))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+  lr1 <- as_learner(as_pipeop(lr1))
+  lr2 <- as_learner(as_pipeop(lr2))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+  lr1 <- as_learner(as_pipeop(lr1))
+  lr2 <- as_learner(as_pipeop(lr2))
+
+  expect_string(all.equal(lr1$hash, lr2$hash), "mismatch")
+  expect_string(all.equal(lr1$phash, lr2$phash), "mismatch")
+
+})
+
+test_that("validation, internal_valid_scores", {
+  expect_error(as_pipeop(lrn("classif.debug", validate = 0.3)), "must either be")
+  # None of the Learners can do validation -> NULL
+  glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(tsk("iris"))
+  expect_false("validation" %in% glrn1$properties)
+  expect_equal(glrn1$internal_valid_scores, NULL)
+
+  glrn2 = as_learner(as_graph(lrn("classif.debug")))
+  expect_true("validation" %in% glrn2$properties)
+  set_validate(glrn2, 0.2)
+  expect_equal(glrn2$validate, 0.2)
+  expect_equal(glrn2$graph$pipeops$classif.debug$learner$validate, "predefined")
+  glrn2$train(tsk("iris"))
+  expect_list(glrn2$internal_valid_scores, types = "numeric")
+  expect_equal(names(glrn2$internal_valid_scores), "classif.debug.acc")
+
+  set_validate(glrn2, NULL)
+  glrn2$train(tsk("iris"))
+  expect_true(is.null(glrn2$internal_valid_scores))
+
+  # No validation set specified --> No internal_valid_scores
+  expect_equal(
+    as_learner(as_graph(lrn("classif.debug")))$train(tsk("iris"))$internal_valid_scores,
+    NULL
+  )
+  glrn2 = as_learner(as_graph(lrn("classif.debug")))
+})
+
+test_that("internal_tuned_values", {
+  # no internal tuning support -> NULL
+  task = tsk("iris")
+  glrn1 = as_learner(as_graph(lrn("classif.rpart")))$train(task)
+  expect_false("internal_tuning" %in% glrn1$properties)
+  expect_equal(glrn1$internal_tuned_values, NULL)
+
+  # learner wQ
+  # ith internal tuning
+  glrn2 = as_learner(as_graph(lrn("classif.debug")))
+  expect_true("internal_tuning" %in% glrn2$properties)
+  expect_equal(glrn2$internal_tuned_values, NULL)
+  glrn2$train(task)
+  expect_equal(glrn2$internal_tuned_values, named_list())
+  glrn2$param_set$set_values(classif.debug.early_stopping = TRUE, classif.debug.iter = 1000)
+  set_validate(glrn2, 0.2)
+  glrn2$train(task)
+  expect_equal(names(glrn2$internal_tuned_values), "classif.debug.iter")
+})
+
+test_that("set_validate", {
+  glrn = as_learner(as_pipeop(lrn("classif.debug", validate = "predefined")))
+  set_validate(glrn, "test")
+  expect_equal(glrn$validate, "test")
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
+  set_validate(glrn, NULL)
+  expect_equal(glrn$validate, NULL)
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, NULL)
+  set_validate(glrn, 0.2, ids = "classif.debug")
+  expect_equal(glrn$validate, 0.2)
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
+
+  glrn = as_learner(ppl("branch", list(lrn("classif.debug"), lrn("classif.debug", id = "final"), lrn("classif.featureless"))))
+  set_validate(glrn, 0.3, ids = c("classif.debug", "final"))
+  expect_equal(glrn$validate, 0.3)
+  expect_equal(glrn$graph$pipeops$classif.debug$learner$validate, "predefined")
+  expect_equal(glrn$graph$pipeops$final$learner$validate, "predefined")
+  expect_error(set_validate(glrn, 0.2, ids = "classif.featureless"))
+
+
+  glrn = as_learner(ppl("stacking", list(lrn("classif.debug"), lrn("classif.featureless")),
+    lrn("classif.debug", id = "final")))
+  glrn2 = as_learner(po("learner", glrn, id = "polearner"))
+  set_validate(glrn2, validate = 0.25, ids = "polearner", args = list(polearner = list(ids = "final")))
+  expect_equal(glrn2$validate, 0.25)
+  expect_equal(glrn2$graph$pipeops$polearner$learner$validate, "predefined")
+  expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$final$learner$validate, "predefined")
+  expect_equal(glrn2$graph$pipeops$polearner$learner$graph$pipeops$classif.debug$learner$validate, NULL)
+
+  # graphlearner in graphlearner: failure handling
+  glrn = as_learner(po("pca") %>>% lrn("classif.debug"))
+  po_glrn = as_pipeop(glrn)
+  po_glrn$id = "po_glrn"
+  gglrn = as_learner(po_glrn)
+  expect_error(
+    set_validate(gglrn, validate = "test", args = list(po_glrn = list(ids = "pca"))),
+    "Trying to heuristically reset"
+  )
+  expect_equal(gglrn$validate, NULL)
+
+  # base_learner is not final learner
+  glrn = as_learner(lrn("classif.debug") %>>% po("nop"))
+  set_validate(glrn, 0.3)
+  expect_equal(glrn$graph$pipeops$classif.debug$validate, "predefined")
+  set_validate(glrn, NULL)
+  expect_equal(glrn$graph$pipeops$classif.debug$validate, NULL)
+  expect_equal(glrn$validate, NULL)
+
+  # args and args_all
+  bglrn = as_learner(ppl("branch", list(lrn("classif.debug", id = "d1"), lrn("classif.debug", id = "d2"))))
+
+  obj = as_pipeop(bglrn)
+  obj$id = "po_glrn"
+  gglrn = as_learner(obj)
+
+  # args
+  set_validate(gglrn, validate = 0.2, args = list(po_glrn = list(ids = "d1")))
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
+
+  # args all
+  gglrn = as_learner(obj)
+  set_validate(gglrn, validate = 0.2, args_all = list(ids = "d1"))
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d1$validate, "predefined")
+  expect_equal(gglrn$graph$pipeops[[1L]]$learner$graph$pipeops$d2$validate, NULL)
+})
+
+test_that("marshal", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.debug")))
+  glrn$train(task)
+  p1 = glrn$predict(task)
+  glrn$marshal()
+  expect_true(glrn$marshaled)
+  expect_true(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
+  glrn$unmarshal()
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug))
+  expect_class(glrn$model, "graph_learner_model")
+  expect_false(is_marshaled_model(glrn$state$model$marshaled$classif.debug$model))
+
+  p2 = glrn$predict(task)
+  expect_equal(p1$response, p2$response)
+
+  # checks that it is marshalable
+  glrn$train(task)
+  expect_learner(glrn, task)
+})
+
+test_that("marshal has no effect when nothing needed marshaling", {
+  task = tsk("iris")
+  glrn = as_learner(as_graph(lrn("classif.rpart")))
+  glrn$train(task)
+  glrn$marshal()
+  expect_class(glrn$marshal()$model, "graph_learner_model")
+  expect_class(glrn$unmarshal()$model, "graph_learner_model")
+  expect_learner(glrn, task = task)
 })

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_branch
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Perform alternative path branching: [`PipeOpBranch`] has multiple output channels
@@ -19,9 +19,9 @@
 #' * `options` :: `numeric(1)` | `character`\cr
 #'   If `options` is an integer number, it determines the number of
 #'   output channels / options that are created, named `output1`...`output<n>`. The
-#'   `$selection` parameter will then be a [`ParamInt`].
+#'   `$selection` parameter will then be an integer.
 #'   If `options` is a `character`, it determines the names of channels directly.
-#'   The `$selection` parameter will then be a [`ParamFct`].
+#'   The `$selection` parameter will then be factorial.
 #' * `id` :: `character(1)`\cr
 #'   Identifier of resulting object, default `"branch"`.
 #' * `param_vals` :: named `list`\cr
@@ -62,7 +62,7 @@
 #'
 #' @family PipeOps
 #' @family Path Branching
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -90,14 +90,14 @@ PipeOpBranch = R6Class("PipeOpBranch",
       )
       if (is.numeric(options)) {
         options = round(options)
-        param = ParamInt$new("selection", lower = 1L, upper = options, tags = c("train", "predict", "required"))
+        param = p_int(lower = 1L, upper = options, tags = c("train", "predict", "required"))
         options = rep_suffix("output", options)
         initval = 1
       } else {
-        param = ParamFct$new("selection", levels = options, tags = c("train", "predict", "required"))
+        param = p_fct(options, tags = c("train", "predict", "required"))
         initval = options[1]
       }
-      ps = ParamSet$new(params = list(param))
+      ps = ps(selection = param)
       ps$values$selection = initval
       super$initialize(id, ps, param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),
@@ -118,7 +118,8 @@ PipeOpBranch = R6Class("PipeOpBranch",
       ret = named_list(self$output$name, NO_OP)
       ret[[self$param_set$values$selection]] = inputs[[1]]
       ret
-    }
+    },
+    .additional_phash_input = function() c(class(self$param_set$params$selection), self$output$name)
   )
 )
 

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_copy
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Copies its input `outnum` times. This PipeOp usually not needed,
@@ -78,7 +78,7 @@
 #'   ))
 #' @family PipeOps
 #' @family Placeholder Pipeops
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpCopy = R6Class("PipeOpCopy",
@@ -100,7 +100,8 @@ PipeOpCopy = R6Class("PipeOpCopy",
     },
     .predict = function(inputs) {
       rep_len(inputs, self$outnum)
-    }
+    },
+    .additional_phash_input = function() self$output$name
   )
 )
 

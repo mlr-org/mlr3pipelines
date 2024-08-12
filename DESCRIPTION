@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.3.6-9000
+Version: 0.6.0
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -26,6 +26,11 @@ Authors@R:
              role = "aut",
              email = "michellang@gmail.com",
              comment = c(ORCID = "0000-0001-9754-0393")),
+      person(given = "Sebastian",
+             family = "Fischer",
+             role = "aut",
+             email = "sebf.fischer@gmail.com",
+             comment = c(ORCID = "0000-0002-9609-3197")),
       person(given = "Susanne",
              family = "Dandl",
              role = "aut",
@@ -47,7 +52,7 @@ Imports:
     data.table,
     digest,
     lgr,
-    mlr3 (>= 0.6.0),
+    mlr3 (>= 0.20.0),
     mlr3misc (>= 0.9.0),
     paradox,
     R6,
@@ -80,14 +85,18 @@ Suggests:
     kknn,
     GenSA,
     methods,
-    vtreat
+    vtreat,
+    future,
+    htmlwidgets,
+    ranger
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE, r6 = FALSE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr
 Collate:
     'DataBackendJoin.R'
     'DataBackendMultiCbind.R'
@@ -147,6 +156,7 @@ Collate:
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
     'PipeOpRenameColumns.R'
+    'PipeOpRowApply.R'
     'PipeOpScale.R'
     'PipeOpScaleMaxAbs.R'
     'PipeOpScaleRange.R'
@@ -170,6 +180,7 @@ Collate:
     'operators.R'
     'pipeline_bagging.R'
     'pipeline_branch.R'
+    'pipeline_convert_types.R'
     'pipeline_greplicate.R'
     'pipeline_ovr.R'
     'pipeline_robustify.R'

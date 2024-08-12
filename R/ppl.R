@@ -3,7 +3,7 @@
 #' @description
 #' Creates a [`Graph`] from [`mlr_graphs`] from given ID
 #'
-#' `ppl()` taks a `charcter(1)` and returns a [`Graph`]. `ppls()` takes a `character`
+#' `ppl()` taks a `character(1)` and returns a [`Graph`]. `ppls()` takes a `character`
 #' vector of any list and returns a `list` of possibly muliple [`Graph`]s.
 #'
 #' @param .key `[character(1)]`\cr
@@ -18,10 +18,12 @@
 #' @return [`Graph`] (for `ppl()`) or `list` of [`Graph`]s (for `ppls()`).
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' gr = ppl("bagging", graph = po(lrn("regr.rpart")),
 #'   averager = po("regravg", collect_multiplicity = TRUE))
+#' \dontshow{ \} }
 ppl = function(.key, ...) {
   dictionary_sugar_get(dict = mlr_graphs, .key = .key, ...)
 }

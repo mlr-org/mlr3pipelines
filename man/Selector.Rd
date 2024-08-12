@@ -84,36 +84,36 @@ shown here. Each of these can be called with its arguments to create a \code{\li
 }
 \section{Functions}{
 \itemize{
-\item \code{selector_all}: \code{selector_all} selects all features.
+\item \code{selector_all()}: \code{selector_all} selects all features.
 
-\item \code{selector_none}: \code{selector_none} selects none of the  features.
+\item \code{selector_none()}: \code{selector_none} selects none of the  features.
 
-\item \code{selector_type}: \code{selector_type} selects features according to type. Legal types are listed in \code{mlr_reflections$task_feature_types}.
+\item \code{selector_type()}: \code{selector_type} selects features according to type. Legal types are listed in \code{mlr_reflections$task_feature_types}.
 
-\item \code{selector_grep}: \code{selector_grep} selects features with names matching the \code{grep()} pattern.
+\item \code{selector_grep()}: \code{selector_grep} selects features with names matching the \code{grep()} pattern.
 
-\item \code{selector_name}: \code{selector_name} selects features with names matching exactly the names listed.
+\item \code{selector_name()}: \code{selector_name} selects features with names matching exactly the names listed.
 
-\item \code{selector_invert}: \code{selector_invert} inverts a given \code{\link{Selector}}: It always selects the features
+\item \code{selector_invert()}: \code{selector_invert} inverts a given \code{\link{Selector}}: It always selects the features
 that would be \emph{dropped} by the other \code{\link{Selector}}, and drops the features that
 would be kept.
 
-\item \code{selector_intersect}: \code{selector_intersect} selects the intersection of two \code{\link{Selector}}s: Only features
+\item \code{selector_intersect()}: \code{selector_intersect} selects the intersection of two \code{\link{Selector}}s: Only features
 selected by both \code{\link{Selector}}s are selected in the end.
 
-\item \code{selector_union}: \code{selector_union} selects the union of two \code{\link{Selector}}s: Features
+\item \code{selector_union()}: \code{selector_union} selects the union of two \code{\link{Selector}}s: Features
 selected by either \code{\link{Selector}} are selected in the end.
 
-\item \code{selector_setdiff}: \code{selector_setdiff} selects the setdiff of two \code{\link{Selector}}s: Features
+\item \code{selector_setdiff()}: \code{selector_setdiff} selects the setdiff of two \code{\link{Selector}}s: Features
 selected by \code{selector_x} are selected, unless they are also selected
 by \code{selector_y}.
 
-\item \code{selector_missing}: \code{selector_missing} selects features with missing values.
+\item \code{selector_missing()}: \code{selector_missing} selects features with missing values.
 
-\item \code{selector_cardinality_greater_than}: \code{selector_cardinality_greater_than} selects categorical features with cardinality
+\item \code{selector_cardinality_greater_than()}: \code{selector_cardinality_greater_than} selects categorical features with cardinality
 greater then a given threshold.
-}}
 
+}}
 \section{Details}{
 
 A \code{\link{Selector}} is a \code{function}
@@ -121,23 +121,29 @@ that has one input argument (commonly named \code{task}). The function is called
 is operating on. The return value of the function must be a \code{character} vector that is a subset of the feature names present
 in the \code{\link[mlr3:Task]{Task}}.
 
-For example, a \code{\link{Selector}} that selects all columns is\preformatted{function(task) \{
+For example, a \code{\link{Selector}} that selects all columns is
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{function(task) \{
   task$feature_names
 \}
-}
+}\if{html}{\out{</div>}}
 
 (this is the \code{selector_all()}-\code{\link{Selector}}.) A \code{\link{Selector}} that selects
-all columns that have names shorter than four letters would be:\preformatted{function(task) \{
+all columns that have names shorter than four letters would be:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{function(task) \{
   task$feature_names[
     nchar(task$feature_names) < 4
   ]
 \}
-}
+}\if{html}{\out{</div>}}
 
-A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:mlr_tasks_iris]{iris task}), if present, is\preformatted{function(task) \{
+A \code{\link{Selector}} that selects only the column \code{"Sepal.Length"} (as in the \link[mlr3:mlr_tasks_iris]{iris task}), if present, is
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{function(task) \{
   intersect(task$feature_names, "Sepal.Length")
 \}
-}
+}\if{html}{\out{</div>}}
 
 It is preferable to use the \code{\link{Selector}} construction functions like \code{select_type}, \code{select_grep} etc. if possible, instead of writing custom \code{\link{Selector}}s.
 }

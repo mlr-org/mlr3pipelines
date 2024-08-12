@@ -1,7 +1,7 @@
 #' @include mlr_graphs.R
 
 #' @title Create A Graph to Perform "One vs. Rest" classification.
-#'
+#' @name mlr_graphs_ovr
 #' @description
 #' Create a new [`Graph`] for a [classification Task][mlr3::TaskClassif] to
 #' perform "One vs. Rest" classification.
@@ -15,6 +15,7 @@
 #' @return [`Graph`]
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("wine")
@@ -42,6 +43,7 @@
 #'   po("classifavg", collect_multiplicity = TRUE)
 #' g3$train(task)
 #' g3$predict(task)
+#' \dontshow{ \} }
 pipeline_ovr = function(graph) {
   PipeOpOVRSplit$new() %>>!% graph %>>!% PipeOpOVRUnite$new()
 }

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_collapsefactors
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Collapses factors of type `factor`, `ordered`: Collapses the rarest factors in the
@@ -50,7 +50,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -59,10 +59,10 @@ PipeOpCollapseFactors = R6Class("PipeOpCollapseFactors",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "collapsefactors", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("no_collapse_above_prevalence", 0, 1, tags = c("train", "predict")),
-        ParamInt$new("target_level_count", 2, tags = c("train", "predict"))
-      ))
+      ps = ps(
+        no_collapse_above_prevalence = p_dbl(0, 1, tags = c("train", "predict")),
+        target_level_count = p_int(2, tags = c("train", "predict"))
+      )
       ps$values = list(no_collapse_above_prevalence = 1, target_level_count = 2)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("factor", "ordered"))
     }

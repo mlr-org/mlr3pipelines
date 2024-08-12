@@ -5,7 +5,7 @@
 \alias{PipeOpTuneThreshold}
 \title{Tune the Threshold of a Classification Prediction}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Tunes optimal probability thresholds over different \code{\link[mlr3:PredictionClassif]{PredictionClassif}}s.
@@ -19,12 +19,14 @@ Returns a single \code{\link[mlr3:PredictionClassif]{PredictionClassif}}.
 This PipeOp should be used in conjunction with \code{\link{PipeOpLearnerCV}} in order to
 optimize thresholds of cross-validated predictions.
 In order to optimize thresholds without cross-validation, use \code{\link{PipeOpLearnerCV}}
-in conjunction with \code{\link[mlr3:ResamplingInsample]{ResamplingInsample}}.
+in conjunction with \code{\link[mlr3:mlr_resamplings_insample]{ResamplingInsample}}.
 }
 \section{Construction}{
-\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{* `PipeOpTuneThreshold$new(id = "tunethreshold", param_vals = list())` \\cr
   (`character(1)`, `list`) -> `self` \\cr
-}
+}\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
 Identifier of resulting object. Default: "tunethreshold".
@@ -58,7 +60,7 @@ Initialized to \code{"classif.ce"}, i.e. misclassification error.
 \item \code{optimizer} :: \code{\link[bbotk:Optimizer]{Optimizer}}|\code{character(1)}\cr
 \code{\link[bbotk:Optimizer]{Optimizer}} used to find optimal thresholds.
 If \code{character}, converts to \code{\link[bbotk:Optimizer]{Optimizer}}
-via \code{\link[bbotk:opt]{opt}}. Initialized to \code{\link[bbotk:mlr_optimizers_gensa]{OptimizerGenSA}}.
+via \code{\link[bbotk:opt]{opt}}. Initialized to \code{OptimizerGenSA}.
 \item \code{log_level} :: \code{character(1)} | \code{integer(1)}\cr
 Set a temporary log-level for \code{lgr::get_logger("bbotk")}. Initialized to: "warn".
 }
@@ -76,6 +78,9 @@ Only methods inherited from \code{\link{PipeOp}}.
 }
 
 \examples{
+\dontshow{ if (requireNamespace("bbotk")) \{ }
+\dontshow{ if (requireNamespace("rpart")) \{ }
+\dontshow{ if (requireNamespace("GenSA")) \{ }
 library("mlr3")
 
 task = tsk("iris")
@@ -86,17 +91,21 @@ task$data()
 pop$train(task)
 
 pop$state
+\dontshow{ \} }
+\dontshow{ \} }
+\dontshow{ \} }
 }
 \seealso{
-https://mlr3book.mlr-org.com/list-pipeops.html
+https://mlr-org.com/pipeops.html
 
 Other PipeOps: 
+\code{\link{PipeOp}},
 \code{\link{PipeOpEnsemble}},
 \code{\link{PipeOpImpute}},
 \code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{PipeOpTaskPreproc}},
-\code{\link{PipeOp}},
+\code{\link{PipeOpTaskPreprocSimple}},
+\code{\link{mlr_pipeops}},
 \code{\link{mlr_pipeops_boxcox}},
 \code{\link{mlr_pipeops_branch}},
 \code{\link{mlr_pipeops_chunk}},
@@ -108,9 +117,9 @@ Other PipeOps:
 \code{\link{mlr_pipeops_colroles}},
 \code{\link{mlr_pipeops_copy}},
 \code{\link{mlr_pipeops_datefeatures}},
+\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_encodeimpact}},
 \code{\link{mlr_pipeops_encodelmer}},
-\code{\link{mlr_pipeops_encode}},
 \code{\link{mlr_pipeops_featureunion}},
 \code{\link{mlr_pipeops_filter}},
 \code{\link{mlr_pipeops_fixfactors}},
@@ -144,9 +153,10 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
+\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
-\code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_select}},
 \code{\link{mlr_pipeops_smote}},
 \code{\link{mlr_pipeops_spatialsign}},
@@ -159,7 +169,6 @@ Other PipeOps:
 \code{\link{mlr_pipeops_unbranch}},
 \code{\link{mlr_pipeops_updatetarget}},
 \code{\link{mlr_pipeops_vtreat}},
-\code{\link{mlr_pipeops_yeojohnson}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops_yeojohnson}}
 }
 \concept{PipeOps}

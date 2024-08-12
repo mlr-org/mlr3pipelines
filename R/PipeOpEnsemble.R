@@ -1,7 +1,7 @@
 #' @title Ensembling Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Parent class for [`PipeOp`]s that aggregate predictions. Implements the `private$.train()` and `private$.predict()` methods necessary
@@ -10,7 +10,7 @@
 #' @section Construction:
 #' Note: This object is typically constructed via a derived class, e.g. [`PipeOpClassifAvg`] or [`PipeOpRegrAvg`].
 #' ```
-#' PipeOpEnsemble$new(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
+#' PipeOpEnsemble$new(innum = 0, collect_multiplicity = FALSE, id, param_set = ps(), param_vals = list(), packages = character(0), prediction_type = "Prediction")
 #' ```
 #'
 #' * `innum` :: `numeric(1)`\cr
@@ -76,15 +76,20 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpEnsemble = R6Class("PipeOpEnsemble",
   inherit = PipeOp,
   public = list(
-    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ParamSet$new(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
+    initialize = function(innum = 0, collect_multiplicity = FALSE, id, param_set = ps(), param_vals = list(), packages = character(0), prediction_type = "Prediction", tags = NULL) {
       assert_integerish(innum, lower = 0)
-      param_set$add(ParamUty$new("weights", custom_check = check_weights(innum), tags = "predict"))
+      if (paradox_info$is_old) {
+        paux = ps(weights = p_uty(check_weights(innum), tags = "predict"))
+        param_set$add(paux$params$weights)
+      } else {
+        param_set = c(param_set, ps(weights = p_uty(check_weights(innum), tags = "predict")))
+      }
       param_set$values$weights = 1
       inname = if (innum) rep_suffix("input", innum) else "..."
       intype = c("NULL", prediction_type)
@@ -129,7 +134,18 @@ PipeOpEnsemble = R6Class("PipeOpEnsemble",
 
       list(private$weighted_avg_predictions(inputs, weights, row_ids, truth))
     },
-    .collect = NULL
+    .collect = NULL,
+    .additional_phash_input = function() {
+      retval = list(private$.collect, self$input$name)
+      if (is.null(self$initialize)) return(retval)
+      initformals <- names(formals(args(self$initialize)))
+      if (!test_subset(initformals, c("id", "param_vals", "innum", "collect_multiplicity", "..."))) {
+        warningf("PipeOp %s has construction arguments besides 'id', 'param_vals', 'innum', 'collect_multiplicity' or '...' but .additional_phash_input was not overloaded.
+
+This warning will become an error in the future.", class(self)[[1]], class(self)[[1]])
+      }
+      retval
+    }
   )
 )
 

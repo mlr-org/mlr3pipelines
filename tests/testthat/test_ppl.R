@@ -57,3 +57,19 @@ test_that("mlr_pipeops multi-access works", {
   expect_equal(ppls(), mlr_graphs)
 
 })
+
+test_that("mlr3book authors don't sleepwalk through life", {
+  skip_if_not_installed("rpart")
+
+  tasks = tsks(c("breast_cancer", "sonar"))
+
+  glrn_stack = as_learner(ppl("robustify") %>>% ppl("stacking",
+      lrns(c("classif.rpart", "classif.debug")),
+      lrn("classif.rpart", id = "classif.rpart2")
+  ))
+  glrn_stack$id = "Stack"
+
+  learners = c(glrn_stack)
+  bmr = benchmark(benchmark_grid(tasks, learners, rsmp("cv", folds = 2)))
+
+})

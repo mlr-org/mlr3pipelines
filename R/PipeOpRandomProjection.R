@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_randomprojection
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Projects numeric features onto a randomly sampled subspace. All numeric features
@@ -63,16 +63,16 @@
 #'
 #' pop$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpRandomProjection = R6Class("PipeOpRandomProjection",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "randomprojection", param_vals = list()) {
-      ps = ParamSet$new(list(
-        ParamInt$new("rank", lower = 0, tags = "train")
-      ))
+      ps = ps(
+        rank = p_int(lower = 0, tags = "train")
+      )
       ps$values = list(rank = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }

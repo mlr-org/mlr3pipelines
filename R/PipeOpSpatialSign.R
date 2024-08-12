@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_spatialsign
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Normalizes the data row-wise. This is a natural generalization of the "sign" function to higher dimensions.
@@ -48,17 +48,17 @@
 #'
 #' pop$train(list(task))[[1]]$data()
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpSpatialSign = R6Class("PipeOpSpatialSign",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "spatialsign", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("length", tags = c("train", "predict"), lower = 0),
-        ParamDbl$new("norm", tags = c("train", "predict"), lower = 0)
-      ))
+      ps = ps(
+        length = p_dbl(tags = c("train", "predict"), lower = 0),
+        norm = p_dbl(tags = c("train", "predict"), lower = 0)
+      )
       ps$values = list(norm = 2, length = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }

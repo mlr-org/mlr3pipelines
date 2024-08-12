@@ -41,7 +41,7 @@
 #' @param g1 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
 #'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put in front of `g2`.
 #' @param g2 ([`Graph`] | [`PipeOp`] | [`Learner`][mlr3::Learner] | [`Filter`][mlr3filters::Filter] | `list` | `...`) \cr
-#'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put after  `g1`.
+#'   [`Graph`] / [`PipeOp`] / object-convertible-to-[`PipeOp`] to put after `g1`.
 #' @param in_place (`logical(1)`)\cr
 #'   Whether to try to avoid cloning `g1`. If `g1` is not a [`Graph`], then it is cloned regardless.\n
 #'
@@ -81,8 +81,12 @@
 #' o1 %>>!% o2
 #'
 #' o1  # not changed, becuase not a Graph.
-#'
-#' concat_graphs(glist = list(o1, o2, o3))
+`%>>%` = function(g1, g2) {
+  concat_graphs(g1, g2, in_place = FALSE)
+}
+
+#' @rdname grapes-greater-than-greater-than-grapes
+#' @export
 concat_graphs = function(g1, g2, in_place = FALSE) {
   assert_flag(in_place)
   # neutral elements handling
@@ -123,13 +127,8 @@ concat_graphs = function(g1, g2, in_place = FALSE) {
   g
 }
 
-#' @rdname concat_graphs
-#' @export
-`%>>%` = function(g1, g2) {
-  concat_graphs(g1, g2, in_place = FALSE)
-}
 
-#' @rdname concat_graphs
+#' @rdname grapes-greater-than-greater-than-grapes
 #' @export
 `%>>!%` = function(g1, g2) {
   concat_graphs(g1, g2, in_place = TRUE)
@@ -163,6 +162,7 @@ strip_multiplicity_type = function(type) {
 #'   Beware that, if `chain_graphs()` fails because of id collisions, then `graphs[[1]]` will possibly be in an incompletely
 #'   modified state when `in_place` is `TRUE`.
 #' @return [`Graph`] the resulting [`Graph`], or `NULL` if there are no non-null values in `graphs`.
+#' @family Graph operators
 #' @export
 chain_graphs = function(graphs, in_place = FALSE) {
   assert_list(graphs)

@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_encodeimpact
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Encodes columns of type `factor`, `character` and `ordered`.
@@ -70,17 +70,17 @@
 #'
 #' poe$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpEncodeImpact = R6Class("PipeOpEncodeImpact",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "encodeimpact", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamDbl$new("smoothing", 0, Inf, tags = c("train", "required")),
-        ParamLgl$new("impute_zero", tags = c("train", "required"))
-      ))
+      ps = ps(
+        smoothing = p_dbl(0, Inf, tags = c("train", "required")),
+        impute_zero = p_lgl(tags = c("train", "required"))
+      )
       ps$values = list(smoothing = 1e-4, impute_zero = FALSE)
       super$initialize(id, param_set = ps, param_vals = param_vals, tags = "encode", feature_types = c("factor", "ordered"))
     }

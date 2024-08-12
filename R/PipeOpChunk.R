@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_chunk
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Chunks its input into `outnum` chunks.
@@ -45,7 +45,7 @@
 #' Only methods inherited from [`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -64,9 +64,9 @@ PipeOpChunk = R6Class("PipeOpChunk",
   public = list(
     initialize = function(outnum, id = "chunk", param_vals = list()) {
       outnum = assert_int(outnum, lower = 1L)
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("shuffle", tags = "train")
-      ))
+      ps = ps(
+        shuffle = p_lgl(tags = "train")
+      )
       ps$values = list(shuffle = TRUE)
       super$initialize(id,
         param_set = ps, param_vals = param_vals,
@@ -89,7 +89,8 @@ PipeOpChunk = R6Class("PipeOpChunk",
     },
     .predict = function(inputs) {
       rep(inputs, self$outnum)
-    }
+    },
+    .additional_phash_input = function() self$output$name
   )
 )
 

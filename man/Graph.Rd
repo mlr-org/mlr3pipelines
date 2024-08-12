@@ -4,9 +4,7 @@
 \alias{Graph}
 \title{Graph Base Class}
 \format{
-\link{R6Class} Graph
-
-\code{\link{R6Class}}.
+\code{\link[R6:R6Class]{R6Class}}.
 }
 \description{
 A \code{\link{Graph}} is a representation of a machine learning pipeline graph. It can be \emph{trained}, and subsequently used for \emph{prediction}.
@@ -18,13 +16,15 @@ perform preprocessing of data, and, in principle, does not even need to handle d
 dependency structure (although the \code{\link{PipeOp}}s for this would need to be written).
 }
 \section{Construction}{
-\preformatted{Graph$new()
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Graph$new()
+}\if{html}{\out{</div>}}
 }
 
 \section{Internals}{
 
-A \code{\link{Graph}} is made up of a list of \code{\link{PipeOp}}s, and a \code{\link{data.table}} of edges. Both for training and prediction, the \code{\link{Graph}}
+A \code{\link{Graph}} is made up of a list of \code{\link{PipeOp}}s, and a \code{\link[data.table:data.table]{data.table}} of edges. Both for training and prediction, the \code{\link{Graph}}
 performs topological sorting of the \code{\link{PipeOp}}s and executes their respective \verb{$train()} or \verb{$predict()} functions in order, moving
 the \code{\link{PipeOp}} results along the edges as input to other \code{\link{PipeOp}}s.
 }
@@ -34,8 +34,8 @@ the \code{\link{PipeOp}} results along the edges as input to other \code{\link{P
 \itemize{
 \item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
 Contains all \code{\link{PipeOp}}s in the \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s.
-\item \code{edges} :: \code{\link{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
-Table of connections between the \code{\link{PipeOp}}s. A \code{\link{data.table}}. \code{src_id} and \code{dst_id} are \verb{$id}s of \code{\link{PipeOp}}s that must be present in
+\item \code{edges} :: \code{\link[data.table:data.table]{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
+Table of connections between the \code{\link{PipeOp}}s. A \code{\link[data.table:data.table]{data.table}}. \code{src_id} and \code{dst_id} are \verb{$id}s of \code{\link{PipeOp}}s that must be present in
 the \verb{$pipeops} list. \code{src_channel} and \code{dst_channel} must respectively be \verb{$output} and \verb{$input} channel names of the
 respective \code{\link{PipeOp}}s.
 \item \code{is_trained} :: \code{logical(1)} \cr
@@ -44,10 +44,10 @@ Is the \code{\link{Graph}}, i.e. are all of its \code{\link{PipeOp}}s, trained, 
 Ids of the 'left-hand-side' \code{\link{PipeOp}}s that have some unconnected input channels and therefore act as \code{\link{Graph}} input layer.
 \item \code{rhs} :: \code{character} \cr
 Ids of the 'right-hand-side' \code{\link{PipeOp}}s that have some unconnected output channels and therefore act as \code{\link{Graph}} output layer.
-\item \code{input} :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
+\item \code{input} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
 Input channels of the \code{\link{Graph}}. For each channel lists the name, input type during training, input type during prediction,
 \code{\link{PipeOp}} \verb{$id} of the \code{\link{PipeOp}} the channel pertains to, and channel name as the \code{\link{PipeOp}} knows it.
-\item \code{output} :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
+\item \code{output} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
 Output channels of the \code{\link{Graph}}. For each channel lists the name, output type during training, output type during prediction,
 \code{\link{PipeOp}} \verb{$id} of the \code{\link{PipeOp}} the channel pertains to, and channel name as the \code{\link{PipeOp}} knows it.
 \item \code{packages} :: \code{character}\cr
@@ -64,8 +64,13 @@ Changing \verb{$param_set$values} also propagates the changes directly to the co
 \item \code{hash} :: \code{character(1)} \cr
 Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
 (and therefore their \verb{$param_set$values}) and a hash of \verb{$edges}.
-\item \code{keep_results} :: \code{logical(1)} \cr
+\item \code{phash} :: \code{character(1)} \cr
+Stores a checksum calculated on the \code{\link{Graph}} configuration, which includes all \code{\link{PipeOp}} hashes
+\emph{except} their \verb{$param_set$values}, and a hash of \verb{$edges}.
+\item \code{keep_results} :: \code{logical(1)}\cr
 Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.result} slot, mostly for debugging purposes. Default \code{FALSE}.
+\item \code{man} :: \code{character(1)}\cr
+Identifying string of the help page that shows with \code{help()}.
 }
 }
 
@@ -76,13 +81,14 @@ Whether to store intermediate results in the \code{\link{PipeOp}}'s \verb{$.resu
 (\code{logical(1)}) -> \code{character} \cr
 Get IDs of all \code{\link{PipeOp}}s. This is in order that \code{\link{PipeOp}}s were added if
 \code{sorted} is \code{FALSE}, and topologically sorted if \code{sorted} is \code{TRUE}.
-\item \code{add_pipeop(op)} \cr
-(\code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}) -> \code{self} \cr
+\item \code{add_pipeop(op, clone = TRUE)} \cr
+(\code{\link{PipeOp}} | \code{\link[mlr3:Learner]{Learner}} | \code{\link[mlr3filters:Filter]{Filter}} | \code{...}, \code{logical(1)}) -> \code{self} \cr
 Mutates \code{\link{Graph}} by adding a \code{\link{PipeOp}} to the \code{\link{Graph}}. This does not add any edges, so the new \code{\link{PipeOp}}
 will not be connected within the \code{\link{Graph}} at first.\cr
 Instead of supplying a \code{\link{PipeOp}} directly, an object that can naturally be converted to a \code{\link{PipeOp}} can also
 be supplied, e.g. a \code{\link[mlr3:Learner]{Learner}} or a \code{\link[mlr3filters:Filter]{Filter}}; see \code{\link[=as_pipeop]{as_pipeop()}}.
-The argument given as \code{op} is always cloned; to access a \code{Graph}'s \code{\link{PipeOp}}s by-reference, use \verb{$pipeops}.\cr
+The argument given as \code{op} is cloned if \code{clone} is \code{TRUE} (default); to access a \code{Graph}'s \code{\link{PipeOp}}s
+by-reference, use \verb{$pipeops}.\cr
 Note that \verb{$add_pipeop()} is a relatively low-level operation, it is recommended to build graphs using \code{\link{\%>>\%}}.
 \item \code{add_edge(src_id, dst_id, src_channel = NULL, dst_channel = NULL)} \cr
 (\code{character(1)}, \code{character(1)},
@@ -93,6 +99,11 @@ Add an edge from \code{\link{PipeOp}} \code{src_id}, and its channel \code{src_c
 channel \code{dst_channel} (identified by its name or number as listed in the \code{\link{PipeOp}}'s \verb{$input}).
 If source or destination \code{\link{PipeOp}} have only one input / output channel and \code{src_channel} / \code{dst_channel}
 are therefore unambiguous, they can be omitted (i.e. left as \code{NULL}).
+\item \code{chain(gs, clone = TRUE)} \cr
+(\code{list} of \code{Graph}s, \code{logical(1)}) -> \code{self} \cr
+Takes a list of \code{Graph}s or \code{\link{PipeOp}}s (or objects that can be automatically converted into \code{Graph}s or \code{\link{PipeOp}}s,
+see \code{\link[=as_graph]{as_graph()}} and \code{\link[=as_pipeop]{as_pipeop()}}) as inputs and joins them in a serial \code{Graph} coming after \code{self}, as if
+connecting them using \code{\link{\%>>\%}}.
 \item \code{plot(html)} \cr
 (\code{logical(1)}) -> \code{NULL} \cr
 Plot the \code{\link{Graph}}, using either the \pkg{igraph} package (for \code{html = FALSE}, default) or
@@ -130,6 +141,10 @@ in order in which they are listed in \verb{$input}.
 (\code{any}, \code{logical(1)}) -> \code{list} of \code{any} \cr
 Predict with the \code{\link{Graph}} by calling all the \code{\link{PipeOp}}'s \verb{$train} methods. Input and output, as well as the function
 of the \code{single_input} argument, are analogous to \verb{$train()}.
+\item \code{help(help_type)} \cr
+(\code{character(1)}) -> help file\cr
+Displays the help file of the concrete \code{PipeOp} instance. \code{help_type} is one of \code{"text"}, \code{"html"}, \code{"pdf"} and behaves
+as the \code{help_type} argument of R's \code{help()}.
 }
 }
 
@@ -153,12 +168,12 @@ predicted[[1]]$data()
 }
 \seealso{
 Other mlr3pipelines backend related: 
-\code{\link{PipeOpTargetTrafo}},
-\code{\link{PipeOpTaskPreprocSimple}},
-\code{\link{PipeOpTaskPreproc}},
 \code{\link{PipeOp}},
+\code{\link{PipeOpTargetTrafo}},
+\code{\link{PipeOpTaskPreproc}},
+\code{\link{PipeOpTaskPreprocSimple}},
 \code{\link{mlr_graphs}},
-\code{\link{mlr_pipeops_updatetarget}},
-\code{\link{mlr_pipeops}}
+\code{\link{mlr_pipeops}},
+\code{\link{mlr_pipeops_updatetarget}}
 }
 \concept{mlr3pipelines backend related}

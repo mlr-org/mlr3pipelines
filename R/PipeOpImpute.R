@@ -1,14 +1,14 @@
 #' @title Imputation Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`] object inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Abstract base class for feature imputation.
 #'
 #' @section Construction:
 #' ```
-#' PipeOpImpute$$new(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
+#' PipeOpImpute$$new(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task")
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
@@ -47,10 +47,10 @@
 #'   Names of features being selected by the `affect_columns` parameter.
 #' * `context_cols` :: `character`\cr
 #'   Names of features being selected by the `context_columns` parameter.
-#' * `intasklayout` :: [`data.table`]\cr
+#' * `intasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the training [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the prediction [`Task`][mlr3::Task] has the same features, feature layout, and feature types as during training.
-#' * `outtasklayout` :: [`data.table`]\cr
+#' * `outtasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 #' * `model` :: named `list`\cr
@@ -87,41 +87,45 @@
 #'   This method can optionally be overloaded when inheriting [`PipeOpImpute`];
 #'   If this method is not overloaded, it defaults to selecting the columns of type indicated by the `feature_types` construction argument.
 #' * `.train_imputer(feature, type, context)`\cr
-#'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
+#'   (`atomic`, `character(1)`, [`data.table`][data.table::data.table]) -> `any`\cr
 #'   Abstract function that must be overloaded when inheriting.
 #'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `private$.impute()`. This function
 #'   is only called for features with at least one non-missing value.
 #' * `.train_nullmodel(feature, type, context)`\cr
-#'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
+#'   (`atomic`, `character(1)`, [`data.table`][data.table::data.table]) -> `any`\cr
 #'   Like `.train_imputer()`, but only called for each feature that only contains missing values. This is not an abstract function
 #'   and, if not overloaded, gives a default response of `0` (`integer`, `numeric`), `c(TRUE, FALSE)` (`logical`), all available levels (`factor`/`ordered`),
 #'   or the empty  string (`character`).
 #' * `.impute(feature, type, model, context)`\cr
-#'   (`atomic`, `character(1)`, `any`, [`data.table`]) -> `atomic`\cr
+#'   (`atomic`, `character(1)`, `any`, [`data.table`][data.table::data.table]) -> `atomic`\cr
 #'   Imputes the features. `model` is the model created by `private$.train_imputer()` Default behaviour is to assume `model` is an atomic vector
 #'   from which values are sampled to impute missing values of `feature`. `model` may have an attribute `probabilities` for non-uniform sampling.
 #'
 #' @family PipeOps
 #' @family Imputation PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpImpute = R6Class("PipeOpImpute",
   inherit = PipeOp,
   public = list(
 
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
+    initialize = function(id, param_set = ps(), param_vals = list(), whole_task_dependent = FALSE, packages = character(0), task_type = "Task", feature_types = mlr_reflections$task_feature_types) {
       # add one or two parameters: affect_columns (always) and context_columns (if whole_task_dependent is TRUE)
-      addparams = list(ParamUty$new("affect_columns", custom_check = check_function_or_null, tags = "train"))
+      addparams = list(affect_columns = p_uty(custom_check = check_function_or_null, tags = "train"))
       if (whole_task_dependent) {
-        addparams = c(addparams, list(ParamUty$new("context_columns", custom_check = check_function_or_null, tags = "train")))
+        addparams = c(addparams, list(context_columns = p_uty(custom_check = check_function_or_null, tags = "train")))
       }
-
+      affectcols_ps = do.call(ps, addparams)
       # ParamSetCollection handles adding of new parameters differently
       if (inherits(param_set, "ParamSet")) {
-        lapply(addparams, param_set$add)
+        if (paradox_info$is_old) {
+          lapply(affectcols_ps$params, param_set$add)
+        } else {
+          param_set = c(param_set, affectcols_ps)
+        }
       } else {
-        private$.affectcols_ps = ParamSet$new(addparams)
+        private$.affectcols_ps = affectcols_ps
         param_set = c(param_set, alist(private$.affectcols_ps))
       }
       private$.feature_types = assert_subset(feature_types, mlr_reflections$task_feature_types)
@@ -190,6 +194,10 @@ PipeOpImpute = R6Class("PipeOpImpute",
       intask$select(setdiff(intask$feature_names, colnames(imputanda)))$cbind(imputanda)
 
       self$state$outtasklayout = copy(intask$feature_types)
+
+      if (!is.null(intask$internal_valid_task)) {
+        intask$internal_valid_task = private$.predict(list(intask$internal_valid_task))[[1L]]
+      }
 
       list(intask)
     },

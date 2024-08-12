@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_colapply
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Applies a function to each column of a task. Use the `affect_columns` parameter inherited from
@@ -39,7 +39,7 @@
 #'   Function to apply to each column of the task.
 #'   The return value should be a `vector` of the same length as the input, i.e., the function vectorizes over the input.
 #'   A typical example would be `as.numeric`.\cr
-#'   The return value can also be a `matrix`, `data.frame`, or [`data.table`].
+#'   The return value can also be a `matrix`, `data.frame`, or [`data.table`][data.table::data.table].
 #'   In this case, the length of the input must match the number of returned rows.
 #'   The names of the resulting features of the output [`Task`][mlr3::Task] is based on the (column) name(s) of the return value of the applicator function,
 #'   prefixed with the original feature name separated by a dot (`.`).
@@ -55,7 +55,7 @@
 #' Only methods inherited from [`PipeOpTaskPreprocSimple`]/[`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
@@ -92,9 +92,9 @@ PipeOpColApply = R6Class("PipeOpColApply",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     initialize = function(id = "colapply", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamUty$new("applicator", custom_check = check_function, tags = c("train", "predict"))
-      ))
+      ps = ps(
+        applicator = p_uty(custom_check = check_function, tags = c("train", "predict"))
+      )
       ps$values = list(applicator = identity)
       super$initialize(id, ps, param_vals = param_vals)
     }

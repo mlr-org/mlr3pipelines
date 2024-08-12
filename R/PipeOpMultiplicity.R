@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityimply
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Implicate a [`Multiplicity`] by returning the input(s) converted to a [`Multiplicity`].
@@ -59,7 +59,7 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -102,7 +102,8 @@ PipeOpMultiplicityImply = R6Class("PipeOpMultiplicityImply",
       if (!private$.named) inputs = unname(inputs)
       list(as.Multiplicity(inputs))
     },
-    .named = NULL
+    .named = NULL,
+    .additional_phash_input = function() self$input$name
   )
 )
 
@@ -112,7 +113,7 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityexply
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Explicate a [`Multiplicity`] by turning the input [`Multiplicity`] into multiple outputs.
@@ -163,7 +164,7 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -193,7 +194,8 @@ PipeOpMultiplicityExply = R6Class("PipeOpMultiplicityExply",
     .predict = function(inputs) {
       rep_len(inputs, self$outnum)
       unclass(inputs[[1]])
-    }
+    },
+    .additional_phash_input = function() self$output$name
   )
 )
 
@@ -203,7 +205,7 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #'
 #' @usage NULL
 #' @name mlr_pipeops_replicate
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Replicate the input as a [`Multiplicity`], causing subsequent [`PipeOp`]s to be executed multiple
@@ -245,7 +247,7 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Experimental Features
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 #' @examples
@@ -258,9 +260,9 @@ PipeOpReplicate = R6Class("PipeOpReplicate",
   inherit = PipeOp,
   public = list(
     initialize = function(id = "replicate", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamInt$new("reps", lower = 1, tags = c("train", "predict", "required"))
-      ))
+      ps = ps(
+        reps = p_int(lower = 1, tags = c("train", "predict", "required"))
+      )
       ps$values = list(reps = 1)
       super$initialize(id, param_set = ps, param_vals = param_vals,
         input = data.table(name = "input", train = "*", predict = "*"),

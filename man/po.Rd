@@ -48,6 +48,7 @@ it to a \code{\link{PipeOp}}. \code{pos()} (with plural-s) takes either a \code{
 list of objects, and creates a \code{list} of \code{\link{PipeOp}}s.
 }
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 library("mlr3")
 
 po("learner", lrn("classif.rpart"), cp = 0.3)
@@ -59,4 +60,5 @@ mlr_pipeops$get("learner", lrn("classif.rpart"),
   param_vals = list(cp = 0.3))
 
 pos(c("pca", original = "nop"))
+\dontshow{ \} }
 }

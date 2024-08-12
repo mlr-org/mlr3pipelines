@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_pca
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Extracts principle components from data. Only affects numerical features.
@@ -38,7 +38,7 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `center` :: `logical(1)`\cr
-#'   Indicating whether the features should be centered. Default is `FALSE`. See [`prcomp()`][stats::prcomp].
+#'   Indicating whether the features should be centered. Default is `TRUE`. See [`prcomp()`][stats::prcomp].
 #' * `scale.` :: `logical(1)`\cr
 #'   Whether to scale features to unit variance before analysis. Default is `FALSE`, but scaling is advisable. See [`prcomp()`][stats::prcomp].
 #' * `rank.` :: `integer(1)`\cr
@@ -61,18 +61,18 @@
 #'
 #' pop$state
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 PipeOpPCA = R6Class("PipeOpPCA",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(id = "pca", param_vals = list()) {
-      ps = ParamSet$new(params = list(
-        ParamLgl$new("center", default = TRUE, tags = c("train", "pca")),
-        ParamLgl$new("scale.", default = FALSE, tags = c("train", "pca")),
-        ParamInt$new("rank.", default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
-      ))
+      ps = ps(
+        center = p_lgl(default = TRUE, tags = c("train", "pca")),
+        scale. = p_lgl(default = FALSE, tags = c("train", "pca")),
+        rank. = p_int(default = NULL, lower = 1, upper = Inf, special_vals = list(NULL), tags = c("train", "pca"))
+      )
       super$initialize(id, param_set = ps, param_vals = param_vals, feature_types = c("numeric", "integer"))
     }
   ),

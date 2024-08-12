@@ -1,6 +1,7 @@
 context("WeightedAverage Learner")
 
 test_that("LearnerClassifAvg", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   lrn = LearnerClassifAvg$new()
   expect_learner(lrn)
@@ -84,7 +85,7 @@ test_that("LearnerRegrAvg", {
   expect_true(all(is.na(prd$se)))
 
   intask = (pipeline_greplicate(PipeOpLearnerCV$new(lrn("regr.featureless", predict_type = "response")), 3) %>>%
-    PipeOpFeatureUnion$new())$train(tsk("boston_housing"))[[1]]
+    PipeOpFeatureUnion$new())$train(tsk("boston_housing_classic"))[[1]]
 
   # Works for accuracy
   lrn = LearnerRegrAvg$new()
@@ -100,6 +101,7 @@ test_that("LearnerRegrAvg", {
 })
 
 test_that("LearnerClassifAvg Pipeline", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
   tsk = mlr_tasks$get("iris")
   # Works for response
@@ -146,8 +148,9 @@ test_that("LearnerClassifAvg Pipeline", {
 })
 
 test_that("LearnerRegrAvg Pipeline", {
+  skip_if_not_installed("rpart")
   skip_on_cran()  # takes too long
-  tsk = mlr_tasks$get("boston_housing")
+  tsk = mlr_tasks$get("boston_housing_classic")
   # Works for response
   # TODO: this is a bit of a deep problem: https://github.com/mlr-org/mlr3pipelines/issues/216
   ## lrn = LearnerRegrAvg$new()

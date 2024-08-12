@@ -26,6 +26,6 @@ test_that("select", {
   expect_set_equal(po$train(list(tsk("iris")))[[1]]$feature_names, c("Sepal.Length", "Sepal.Width", "Petal.Width"))
 
   po$param_set$values$selector = selector_type("factor")
-  expect_set_equal(po$train(list(tsk("boston_housing")))[[1]]$feature_names, c("chas", "town"))
+  expect_set_equal(po$train(list(tsk("boston_housing_classic")))[[1]]$feature_names, c("chas", "town"))
 
 })

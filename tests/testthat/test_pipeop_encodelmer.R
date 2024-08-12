@@ -5,8 +5,10 @@ sample_n_letters = function(n, l = 3) {
 }
 
 test_that("PipeOpEncodeLmer regr", {
+  skip_if_not_installed("nloptr")
+  skip_if_not_installed("lme4")
   set.seed(8008135)
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
   chaslevels = task$levels()$chas
   townlevels = task$levels()$town
 
@@ -25,11 +27,13 @@ test_that("PipeOpEncodeLmer regr", {
 
 
 test_that("PipeOpEncodeLmer multi and binaryclass", {
+  skip_if_not_installed("nloptr")
+  skip_if_not_installed("lme4")
   set.seed(8008135)
 
   # Multiclass
   task = mlr3::TaskClassif$new("task",
-    data.table::data.table(x = sample_n_letters(20), y = sample_n_letters(20), z = seq_len(20)), "x")
+    data.table::data.table(x = sample_n_letters(40), y = sample_n_letters(40), z = seq_len(40)), "x")
 
   expect_datapreproc_pipeop_class(PipeOpEncodeLmer, task = task)
   op = PipeOpEncodeLmer$new()
@@ -68,6 +72,8 @@ test_that("PipeOpEncodeLmer multi and binaryclass", {
 })
 
 test_that("PipeOpEncodeLmer Edge Cases", {
+  skip_if_not_installed("nloptr")
+  skip_if_not_installed("lme4")
   set.seed(8008135)
   task = mlr3::TaskClassif$new("task",
     data.table::data.table(x = sample_n_letters(10, 2), y = 1:10, z = 1:10), "x")
@@ -89,6 +95,8 @@ test_that("PipeOpEncodeLmer Edge Cases", {
 
 
 test_that("Confirms to sensible values", {
+  skip_if_not_installed("nloptr")
+  skip_if_not_installed("lme4")
   logit = function(x) {exp(-x) / (1+exp(-x))}
 
   data = data.table::data.table(y = factor(sample_n_letters(200, 2)))

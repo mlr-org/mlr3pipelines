@@ -1,7 +1,7 @@
 #' @title Dictionary of PipeOps
 #'
 #' @usage NULL
-#' @format [`R6Class`] object inheriting from [`mlr3misc::Dictionary`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`mlr3misc::Dictionary`].
 #'
 #' @description
 #' A simple [`Dictionary`][mlr3misc::Dictionary] storing objects of class [`PipeOp`].
@@ -34,6 +34,7 @@
 #' @family Dictionaries
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' mlr_pipeops$get("learner", lrn("classif.rpart"))
@@ -43,11 +44,13 @@
 #'
 #' # all PipeOps currently in the dictionary:
 #' as.data.table(mlr_pipeops)[, c("key", "input.num", "output.num", "packages")]
+#' \dontshow{ \} }
 mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
   cloneable = FALSE,
   public = list(
     metainf = new.env(parent = emptyenv()),
     add = function(key, value, metainf = NULL) {
+      assert_false(grepl("_\\d+$", key))
       ret = super$add(key, value)
       if (!is.null(metainf)) {
         # we save the *expression*, not the value, because we could otherwise get version conflicts from objects.
@@ -92,6 +95,7 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
 
     list(
       key = key,
+      label = l1$label,
       packages = list(l1$packages),
       tags = list(l1$tags),
       feature_types = ft,

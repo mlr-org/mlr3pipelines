@@ -1,7 +1,7 @@
 #' @title Task Preprocessing Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Base class for handling most "preprocessing" operations. These
@@ -36,7 +36,7 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTaskPreproc$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+#' PipeOpTaskPreproc$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
 #'   packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types)
 #' ```
 #'
@@ -78,10 +78,10 @@
 #' The `$state` is a named `list`; besides members added by inheriting classes, the members are:
 #' * `affect_cols` :: `character`\cr
 #'   Names of features being selected by the `affect_columns` parameter, if present; names of *all* present features otherwise.
-#' * `intasklayout` :: [`data.table`]\cr
+#' * `intasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the training [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the prediction [`Task`][mlr3::Task] has the same features, feature layout, and feature types as during training.
-#' * `outtasklayout` :: [`data.table`]\cr
+#' * `outtasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 #' * `dt_columns` :: `character`\cr
@@ -129,7 +129,7 @@
 #'   and modifies it (ideally in-place without cloning) while using information in the `$state` slot. Works analogously to
 #'   `private$.train_task()`. If `private$.predict_task()` should only be overloaded if `private$.train_task()` is overloaded (i.e. `private$.train_dt()` is *not* used).
 #' * `.train_dt(dt, levels, target)` \cr
-#'   ([`data.table`], named `list`, `any`) -> [`data.table`] | `data.frame` | `matrix` \cr
+#'   ([`data.table`][data.table::data.table], named `list`, `any`) -> [`data.table`][data.table::data.table] | `data.frame` | `matrix` \cr
 #'   Train [`PipeOpTaskPreproc`] on `dt`, transform it and store a state in `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
 #'   is possible and encouraged to change it in-place.\cr
@@ -140,7 +140,7 @@
 #'   This method can be overloaded when inheriting from [`PipeOpTaskPreproc`], together with `private$.predict_dt()` and optionally
 #'   `private$.select_cols()`; alternatively, `private$.train_task()` and `private$.predict_task()` can be overloaded.
 #' * `.predict_dt(dt, levels)` \cr
-#'   ([`data.table`], named `list`) -> [`data.table`] | `data.frame` | `matrix` \cr
+#'   ([`data.table`][data.table::data.table], named `list`) -> [`data.table`][data.table::data.table] | `data.frame` | `matrix` \cr
 #'   Predict on new data in `dt`, possibly using the stored `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
 #'   is possible and encouraged to change it in-place.\cr
@@ -160,7 +160,7 @@
 #'
 #' @family mlr3pipelines backend related
 #' @family PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
@@ -168,14 +168,18 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
   inherit = PipeOp,
 
   public = list(
-    initialize = function(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE,
+    initialize = function(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE,
       packages = character(0), task_type = "Task", tags = NULL, feature_types = mlr_reflections$task_feature_types) {
       if (can_subset_cols) {
-        acp = ParamUty$new("affect_columns", custom_check = check_function_or_null, default = selector_all(), tags = "train")
+        affectcols_ps = ps(affect_columns = p_uty(custom_check = check_function_or_null, default = selector_all(), tags = "train"))
         if (inherits(param_set, "ParamSet")) {
-          param_set$add(acp)
+          if (paradox_info$is_old) {
+            lapply(affectcols_ps$params, param_set$add)
+          } else {
+            param_set = c(param_set, affectcols_ps)
+          }
         } else {
-          private$.affectcols_ps = ParamSet$new(list(acp))
+          private$.affectcols_ps = affectcols_ps
           param_set = c(param_set, alist(private$.affectcols_ps))
         }
       }
@@ -217,10 +221,17 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
       self$state$outtasklayout = copy(intask$feature_types)
       self$state$outtaskshell = intask$data(rows = intask$row_ids[0])
 
+      if (!is.null(intask$internal_valid_task)) {
+        # we call into .predict() and not .predict_task() to not put the burden
+        # of subsetting the features etc. on the PipeOp overwriting .predict_task
+        intask$internal_valid_task = private$.predict(list(intask$internal_valid_task))[[1L]]
+      }
+
       if (do_subset) {
         # FIXME: this fails if .train_task added a column with the same name
         intask$col_roles$feature = union(intask$col_roles$feature, y = remove_cols)
       }
+
       list(intask)
     },
 
@@ -297,7 +308,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #' @title Simple Task Preprocessing Base Class
 #
 #' @usage NULL
-#' @format Abstract [`R6Class`] inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Base class for handling many "preprocessing" operations
@@ -318,7 +329,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' @section Construction:
 #' ```
-#' PipeOpTaskPreprocSimple$new(id, param_set = ParamSet$new(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
+#' PipeOpTaskPreprocSimple$new(id, param_set = ps(), param_vals = list(), can_subset_cols = TRUE, packages = character(0), task_type = "Task")
 #' ```
 #' (Construction is identical to [`PipeOpTaskPreproc`].)
 #'
@@ -383,7 +394,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   alternatively, `private$.get_state_dt()` (optional) and `private$.transform_dt()` (and possibly `private$.select_cols()`, from [`PipeOpTaskPreproc`])
 #'   can be overloaded.
 #' * `.get_state_dt(dt)` \cr
-#'   ([`data.table`]) -> named `list`\cr
+#'   ([`data.table`][data.table::data.table]) -> named `list`\cr
 #'   Create something that will be stored in `$state` during training phase of `PipeOpTaskPreprocSimple`.
 #'   The state can then influence the `private$.transform_dt()` function. Note that `private$.get_state_dt()` must *return* the state, and
 #'   should not store it in `$state`. If neither `private$.get_state()` nor `private$.get_state_dt()` are overloaded, the state will
@@ -392,7 +403,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'   (and optionally `private$.select_cols()`, from [`PipeOpTaskPreproc`]); Alternatively, `private$.get_state()` (optional) and `private$.transform()`
 #'   can be overloaded.
 #' * `.transform_dt(dt)` \cr
-#'   ([`data.table`]) -> [`data.table`] | `data.frame` | `matrix` \cr
+#'   ([`data.table`][data.table::data.table]) -> [`data.table`][data.table::data.table] | `data.frame` | `matrix` \cr
 #'   Predict on new data in `dt`, possibly using the stored `$state`. A transformed object must be returned
 #'   that can be converted to a `data.table` using [`as.data.table`]. `dt` does not need to be copied deliberately, it
 #'   is possible and encouraged to change it in-place. This method is called both during training and prediction phase,
@@ -405,7 +416,7 @@ PipeOpTaskPreproc = R6Class("PipeOpTaskPreproc",
 #'
 #' @family PipeOps
 #' @family mlr3pipelines backend related
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @export
 PipeOpTaskPreprocSimple = R6Class("PipeOpTaskPreprocSimple",
 

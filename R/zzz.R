@@ -4,7 +4,7 @@
 #' @import paradox
 #' @import mlr3misc
 #' @importFrom R6 R6Class
-#' @importFrom utils tail
+#' @importFrom utils tail head
 #' @importFrom digest digest
 #' @importFrom withr with_options
 #' @importFrom stats setNames
@@ -16,7 +16,10 @@ register_mlr3 = function() {
     c("abstract", "meta", "missings", "feature selection", "imbalanced data",
     "data transform", "target transform", "ensemble", "robustify", "learner", "encode",
      "multiplicity")))
+  x$pipeops$properties = c("validation", "internal_tuning")
 }
+
+paradox_info <- list2env(list(is_old = FALSE), parent = emptyenv())
 
 .onLoad = function(libname, pkgname) {  # nocov start
   register_mlr3()
@@ -27,6 +30,7 @@ register_mlr3 = function() {
   if (Sys.getenv("IN_PKGDOWN") == "true") {
     lg$set_threshold("warn")
   }
+  paradox_info$is_old = "set_id" %in% names(ps())
 }  # nocov end
 
 .onUnload = function(libpath) { # nocov start

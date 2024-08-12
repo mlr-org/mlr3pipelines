@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classifavg
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
 #' Perform (weighted) majority vote prediction from classification [`Prediction`][mlr3::Prediction]s by connecting
@@ -59,11 +59,12 @@
 #' @family PipeOps
 #' @family Multiplicity PipeOps
 #' @family Ensembles
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpEnsemble.R
 #' @export
 #'
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' \donttest{
 #' library("mlr3")
 #'
@@ -77,6 +78,7 @@
 #'
 #' resample(tsk("iris"), GraphLearner$new(gr), rsmp("holdout"))
 #' }
+#' \dontshow{ \} }
 PipeOpClassifAvg = R6Class("PipeOpClassifAvg",
   inherit = PipeOpEnsemble,
   public = list(

@@ -17,7 +17,7 @@ pipeline_robustify(
 )
 }
 \arguments{
-\item{task}{\code{\link{Task}} \cr
+\item{task}{\code{\link[mlr3:Task]{Task}} \cr
 A \code{\link[mlr3:Task]{Task}} to create a robustifying pipeline for.
 Optional, if omitted, the "worst possible" \code{\link[mlr3:Task]{Task}} is assumed and the full pipeline is created.}
 
@@ -86,6 +86,7 @@ factor variables, no encoding is performed.
 All input arguments are cloned and have no references in common with the returned \code{\link{Graph}}.
 }
 \examples{
+\dontshow{ if (requireNamespace("rpart")) \{ }
 \donttest{
 library(mlr3)
 lrn = lrn("regr.rpart")
@@ -93,4 +94,5 @@ task = mlr_tasks$get("boston_housing")
 gr = pipeline_robustify(task, lrn) \%>>\% po("learner", lrn)
 resample(task, GraphLearner$new(gr), rsmp("holdout"))
 }
+\dontshow{ \} }
 }

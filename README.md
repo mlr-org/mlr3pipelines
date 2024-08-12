@@ -1,14 +1,14 @@
 
 # mlr3pipelines <img src="man/figures/logo.png" align="right" />
 
-Package website: [release](https://mlr3pipelines.mlr-org.com/) |
+Package website: [release](https://mlr3pipelines.mlr-org.com/) \|
 [dev](https://mlr3pipelines.mlr-org.com/dev/)
 
 Dataflow Programming for Machine Learning in R.
 
 <!-- badges: start -->
 
-[![tic](https://github.com/mlr-org/mlr3pipelines/workflows/tic/badge.svg?branch=master)](https://github.com/mlr-org/mlr3pipelines/actions)
+[![r-cmd-check](https://github.com/mlr-org/mlr3pipelines/actions/workflows/r-cmd-check.yml/badge.svg)](https://github.com/mlr-org/mlr3pipelines/actions/workflows/r-cmd-check.yml)
 [![CRAN](https://www.r-pkg.org/badges/version/mlr3pipelines)](https://cran.r-project.org/package=mlr3pipelines)
 [![StackOverflow](https://img.shields.io/badge/stackoverflow-mlr3-orange.svg)](https://stackoverflow.com/questions/tagged/mlr3)
 [![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
@@ -17,7 +17,7 @@ Dataflow Programming for Machine Learning in R.
 ## What is `mlr3pipelines`?
 
 Watch our “WhyR 2020” Webinar Presentation on Youtube for an
-introduction\! Find the slides
+introduction! Find the slides
 [here](https://raw.githubusercontent.com/mlr-org/mlr-outreach/main/2020_whyr/slides.pdf).
 
 [![WhyR 2020
@@ -56,11 +56,18 @@ This learner can be used for resampling, benchmarking, and even tuning.
 
 ``` r
 resample(tsk("iris"), glrn, rsmp("cv"))
-#> <ResampleResult> of 10 iterations
-#> * Task: iris
-#> * Learner: pca.variance.classif.rpart
-#> * Warnings: 0 in 0 iterations
-#> * Errors: 0 in 0 iterations
+#> <ResampleResult> with 10 resampling iterations
+#>  task_id                 learner_id resampling_id iteration warnings errors
+#>     iris pca.variance.classif.rpart            cv         1        0      0
+#>     iris pca.variance.classif.rpart            cv         2        0      0
+#>     iris pca.variance.classif.rpart            cv         3        0      0
+#>     iris pca.variance.classif.rpart            cv         4        0      0
+#>     iris pca.variance.classif.rpart            cv         5        0      0
+#>     iris pca.variance.classif.rpart            cv         6        0      0
+#>     iris pca.variance.classif.rpart            cv         7        0      0
+#>     iris pca.variance.classif.rpart            cv         8        0      0
+#>     iris pca.variance.classif.rpart            cv         9        0      0
+#>     iris pca.variance.classif.rpart            cv        10        0      0
 ```
 
 ## Feature Overview
@@ -70,33 +77,34 @@ which can then be connected with directed edges in a **Graph**. The
 scope of *mlr3pipelines* is still growing; currently supported features
 are:
 
-  - Simple data manipulation and preprocessing operations, e.g. PCA,
-    feature filtering
-  - Task subsampling for speed and outcome class imbalance handling
-  - *mlr3* *Learner* operations for prediction and stacking
-  - Simultaneous path branching (data going both ways)
-  - Alternative path branching (data going one specific way, controlled
-    by hyperparameters)
-  - Ensemble methods and aggregation of predictions
+- Simple data manipulation and preprocessing operations, e.g. PCA,
+  feature filtering
+- Task subsampling for speed and outcome class imbalance handling
+- *mlr3* *Learner* operations for prediction and stacking
+- Simultaneous path branching (data going both ways)
+- Alternative path branching (data going one specific way, controlled by
+  hyperparameters)
+- Ensemble methods and aggregation of predictions
 
 ## Documentation
 
-The easiest way to get started is reading some of the vignettes that are
-shipped with the package, which can also be viewed online:
+A good way to get into `mlr3pipelines` are the following two vignettes:
 
-  - [Quick Introduction](https://mlr3book.mlr-org.com/pipelines.html),
-    with short examples to get started
+- [Sequential
+  Pipelines](https://mlr3book.mlr-org.com/chapters/chapter7/sequential_pipelines.html)
+- [Non-Sequential Pipelines and
+  Tuning](https://mlr3book.mlr-org.com/chapters/chapter8/non-sequential_pipelines_and_tuning.html)
 
 ## Bugs, Questions, Feedback
 
 *mlr3pipelines* is a free and open source software project that
 encourages participation and feedback. If you have any issues,
 questions, suggestions or feedback, please do not hesitate to open an
-“issue” about it on the GitHub page\!
+“issue” about it on the GitHub page!
 
 In case of problems / bugs, it is often helpful if you provide a
-“minimum working example” that showcases the behaviour (but don’t
-worry about this if the bug is obvious).
+“minimum working example” that showcases the behaviour (but don’t worry
+about this if the bug is obvious).
 
 Please understand that the resources of the project are limited:
 response may sometimes be delayed by a few days, and some feature

@@ -22,6 +22,8 @@ test_that("type conversions in graph creation", {
 })
 
 test_that("learner conversion in graph creation", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("rpart")
   gr1 = Graph$new()$add_pipeop(lrn("classif.rpart"))
   gr2 = Graph$new()$add_pipeop(LearnerClassifRpart$new())
   gr3 = Graph$new()$add_pipeop(mlr_pipeops$get("learner", lrn("classif.rpart")))
@@ -36,6 +38,11 @@ test_that("learner conversion in graph creation", {
   gr3 = po("scale") %>>% LearnerClassifRpart$new()
   gr4 = po("scale") %>>% PipeOpLearner$new(mlr_learners$get("classif.rpart"))
 
+  gr1$param_set
+  gr2$param_set
+  gr3$param_set
+  gr4$param_set
+
   expect_equal(gr1, gr2)
   expect_equal(gr1, gr3)
   expect_equal(gr1, gr4)
@@ -45,6 +52,7 @@ test_that("learner conversion in graph creation", {
 })
 
 test_that("assertions work", {
+  skip_if_not_installed("rpart")
 
   expect_error(as_pipeop("test"))
   expect_error(assert_pipeop(lrn("classif.rpart")))
@@ -85,6 +93,7 @@ test_that("auto-gunion", {
 })
 
 test_that("po for Filter", {
+  skip_if_not_installed("mlr3filters")
   flt = mlr3filters::FilterVariance$new()
   flt$param_set$values$na.rm = TRUE
 
@@ -100,6 +109,7 @@ test_that("po for Filter", {
 })
 
 test_that("po for Learner", {
+  skip_if_not_installed("rpart")
   lrn = LearnerClassifRpart$new()
   lrn$param_set$values$xval = 9
 
@@ -115,6 +125,7 @@ test_that("po for Learner", {
 })
 
 test_that("Graph to GraphLearner", {
+  skip_if_not_installed("rpart")
 
   grph = po("pca") %>>% po(lrn("classif.rpart"))
 
@@ -137,6 +148,7 @@ test_that("Graph to GraphLearner", {
 })
 
 test_that("PipeOp to GraphLearner", {
+  skip_if_not_installed("rpart")
 
   po = po("proxy", param_vals = list(content = lrn("classif.rpart")))
 

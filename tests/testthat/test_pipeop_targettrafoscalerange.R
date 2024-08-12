@@ -1,13 +1,14 @@
 context("PipeOpTargetTrafoScaleRange")
 
 test_that("PipeOpTargetTrafoScaleRange - basic properties", {
+  skip_if_not_installed("rpart")
   expect_pipeop_class(PipeOpTargetTrafoScaleRange, list(id = "po"))
 
   po = PipeOpTargetTrafoScaleRange$new()
 
   expect_pipeop(po)
 
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
   train_out1 = po$train(list(task))
 
   x = task$data(cols = "medv")[[1L]]
@@ -48,9 +49,10 @@ test_that("PipeOpTargetTrafoScaleRange - basic properties", {
 })
 
 test_that("PipeOpTargetTrafoScaleRange - row use subsets", {
+  skip_if_not_installed("rpart")
   po = PipeOpTargetTrafoScaleRange$new()
 
-  task = mlr_tasks$get("boston_housing")
+  task = mlr_tasks$get("boston_housing_classic")
 
   dat_subset = task$data(1:50)
   x = dat_subset$medv

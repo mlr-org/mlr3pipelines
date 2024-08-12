@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner_cv
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Wraps an [`mlr3::Learner`] into a [`PipeOp`].
@@ -52,14 +52,16 @@
 #' [`PipeOpTaskPreproc`]. It is a named `list` with the inherited members, as well as:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
 #'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during prediction.
 #' * `predict_time` :: `NULL` | `numeric(1)`
 #'   Prediction time, in seconds.
+#'
+#' This state is given the class `"pipeop_learner_cv_state"`.
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from the [`PipeOpTaskPreproc`], as well as the parameters of the [`Learner`][mlr3::Learner] wrapped by this object.
@@ -87,10 +89,11 @@
 #'
 #' @family Pipeops
 #' @family Meta PipeOps
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOpTaskPreproc.R
 #' @export
 #' @examples
+#' \dontshow{ if (requireNamespace("rpart")) \{ }
 #' library("mlr3")
 #'
 #' task = tsk("iris")
@@ -111,23 +114,29 @@
 #' graph$pipeops$classif.rpart$learner$predict_type = "prob"
 #'
 #' graph$train(task)
+#' \dontshow{ \} }
 PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
   inherit = PipeOpTaskPreproc,
   public = list(
     initialize = function(learner, id = NULL, param_vals = list()) {
       private$.learner = as_learner(learner, clone = TRUE)
-      private$.learner$param_set$set_id = ""
+      if (paradox_info$is_old) {
+        private$.learner$param_set$set_id = ""
+      }
       id = id %??% private$.learner$id
       # FIXME: can be changed when mlr-org/mlr3#470 has an answer
-      task_type = mlr_reflections$task_types[get("type") == private$.learner$task_type][order(get("package"))][1L]$task
+      type = private$.learner$task_type
+      task_type = mlr_reflections$task_types[type, mult = "first"]$task
 
-      private$.crossval_param_set = ParamSet$new(params = list(
-        ParamFct$new("method", levels = c("cv", "insample"), tags = c("train", "required")),
-        ParamInt$new("folds", lower = 2L, upper = Inf, tags = c("train", "required")),
-        ParamLgl$new("keep_response", tags = c("train", "required"))
-      ))
+      private$.crossval_param_set = ps(
+        method = p_fct(levels = c("cv", "insample"), tags = c("train", "required")),
+        folds = p_int(lower = 2L, upper = Inf, tags = c("train", "required")),
+        keep_response = p_lgl(tags = c("train", "required"))
+      )
       private$.crossval_param_set$values = list(method = "cv", folds = 3, keep_response = FALSE)
-      private$.crossval_param_set$set_id = "resampling"
+      if (paradox_info$is_old) {
+        private$.crossval_param_set$set_id = "resampling"
+      }
       # Dependencies in paradox have been broken from the start and this is known since at least a year:
       # https://github.com/mlr-org/paradox/issues/216
       # The following would make it _impossible_ to set "method" to "insample", because then "folds"
@@ -136,7 +145,7 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       # in PipeOp ParamSets.
       # private$.crossval_param_set$add_dep("folds", "method", CondEqual$new("cv"))  # don't do this.
 
-      super$initialize(id, alist(private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
+      super$initialize(id, alist(resampling = private$.crossval_param_set, private$.learner$param_set), param_vals = param_vals, can_subset_cols = TRUE, task_type = task_type, tags = c("learner", "ensemble"))
     }
 
   ),
@@ -160,9 +169,17 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       } else {
         multiplicity_recurse(self$state, clone_with_state, learner = private$.learner)
       }
+    },
+    predict_type = function(val) {
+      if (!missing(val)) {
+        assert_subset(val, names(mlr_reflections$learner_predict_types[[private$.learner$task_type]]))
+        private$.learner$predict_type = val
+      }
+      private$.learner$predict_type
     }
   ),
   private = list(
+    .state_class = "pipeop_learner_cv_state",
     .train_task = function(task) {
       on.exit({private$.learner$state = NULL})
 
@@ -205,8 +222,34 @@ PipeOpLearnerCV = R6Class("PipeOpLearnerCV",
       task$select(character(0))$cbind(prds)
     },
     .crossval_param_set = NULL,
-    .learner = NULL
+    .learner = NULL,
+    .additional_phash_input = function() private$.learner$phash
   )
 )
 
-mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ParamSet$new()))$new()))
+#' @export
+marshal_model.pipeop_learner_cv_state = function(model, inplace = FALSE, ...) {
+  # Note that a Learner state contains other reference objects, but we don't clone them here, even when inplace
+  # is FALSE. For our use-case this is just not necessary and would cause unnecessary overhead in the mlr3
+  # workhorse function
+  model$model = marshal_model(model$model, inplace = inplace)
+  # only wrap this in a marshaled class if the model was actually marshaled above
+  # (the default marshal method does nothing)
+  if (is_marshaled_model(model$model)) {
+    model = structure(
+      list(marshaled = model, packages = "mlr3pipelines"),
+      class = c(paste0(class(model), "_marshaled"), "marshaled")
+    )
+  }
+  model
+}
+
+#' @export
+unmarshal_model.pipeop_learner_cv_state_marshaled = function(model, inplace = FALSE, ...) {
+  state_marshaled = model$marshaled
+  state_marshaled$model = unmarshal_model(state_marshaled$model, inplace = inplace)
+  state_marshaled
+}
+
+
+mlr_pipeops$add("learner_cv", PipeOpLearnerCV, list(R6Class("Learner", public = list(id = "learner_cv", task_type = "classif", param_set = ps()))$new()))

@@ -1,7 +1,7 @@
 PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
   inherit = PipeOp,
   public = list(
-    initialize = function(id = "debug.basic", param_set = ParamSet$new()) {
+    initialize = function(id = "debug.basic", param_set = ps()) {
       super$initialize(id = id, param_set = param_set,
         input = data.table(name = "input", train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
@@ -15,7 +15,8 @@ PipeOpDebugBasic = R6Class("PipeOpDebugBasic",
     .predict = function(inputs) {
       catf("Predicting %s", self$id)
       self$state = c(self$state, inputs)
-    }
+    },
+    .additional_phash_input = function() NULL
   )
 )
 
@@ -41,10 +42,10 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
       if (is.numeric(outputs)) {
         outputs = paste0("output_", seq_len(outputs))
       }
-      p = ParamInt$new(id = "par", lower = 0, upper = 10, default = 0, tags = c("train", "predict"))
+      p = ps(par = p_int(lower = 0, upper = 10, default = 0, tags = c("train", "predict")))
       self$nin = length(inputs)
       self$nout = length(outputs)
-      super$initialize(id, ParamSet$new(list(p)),
+      super$initialize(id, param_set = p,
         input = data.table(name = inputs, train = "*", predict = "*"),
         output = data.table(name = outputs, train = "*", predict = "*"))
     }),
@@ -60,7 +61,8 @@ PipeOpDebugMulti = R6Class("PipeOpDebugMulti",
         self$id, deparse_list_safe(inputs), deparse_list_safe(self$state))
       iin = inputs[[1]]
       as.list(iin + seq_len(self$nout))
-    }
+    },
+    .additional_phash_input = function() c(self$nin, self$nout)
   )
 )
 
@@ -69,7 +71,7 @@ VarargPipeop = R6Class("VarargPipeop",
   public = list(
     initialize = function(id = "vararg", innum = 0, param_vals = list()) {
       super$initialize(id, param_vals = param_vals,
-        input = data.table(name = c("...", rep_suffix("input", innum)), train = "*", predict = "*"),
+        input = data.table(name = c("...", mlr3pipelines:::rep_suffix("input", innum)), train = "*", predict = "*"),
         output = data.table(name = "output", train = "*", predict = "*")
       )
     }),
@@ -81,6 +83,7 @@ VarargPipeop = R6Class("VarargPipeop",
     .predict = function(inputs) {
       self$state = inputs
       list(inputs)
-    }
+    },
+    .additional_phash_input = function() self$input$name
   )
 )

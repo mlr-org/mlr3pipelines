@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_unbranch
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Used to bring together different paths created by [`PipeOpBranch`].
@@ -57,7 +57,7 @@
 #' pou$train(list(NO_OP, NO_OP, "hello", NO_OP, NO_OP))
 #' @family PipeOps
 #' @family Path Branching
-#' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
+#' @template seealso_pipeopslist
 #' @include PipeOp.R
 #' @export
 PipeOpUnbranch = R6Class("PipeOpUnbranch",
@@ -89,7 +89,8 @@ PipeOpUnbranch = R6Class("PipeOpUnbranch",
     },
     .predict = function(inputs) {
       filter_noop(inputs)
-    }
+    },
+    .additional_phash_input = function() self$input$name
   )
 )
 
