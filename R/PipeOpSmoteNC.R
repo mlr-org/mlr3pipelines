@@ -80,23 +80,22 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       assert_true(any(task$feature_types$type == "numeric") &&
                     all(task$feature_types$type %in% c("numeric", "factor")))
       # Check that only one target column exists (better way?)
-      # Or could it work to have more than one, and user chooses which column he wants to have balanced
-      # Check that target column is factor (check this through Task type Classif?)
-      if (!length(task$target_names)) {
-        stop("SmoteNC does not work for more than one target column")
+      # How to handle if Task has multiple target columns?
+      if (length(task$target_names) > 1L) {
+        stop("SmoteNC does not work for Tasks with more than one target column")
+      }
+      if (!task$task_type == "classif") {
+        stop("SmoteNC only supported for TaskClassif")
       }
 
       cols = private$.select_cols(task)
-      # this drops target column, which we don't want since it is needed as var
-
       if (!length(cols)) {
         self$state = list(dt_columns = cols)
         return(task)
       }
-      dt = task$data(cols = cols)
 
       # calculate synthetic data
-      st = setDT(invoke(themis::smotenc, df = dt, var = task$target_names,
+      st = setDT(invoke(themis::smotenc, df = task$data(), var = task$target_names,
                         .args = self$param_set$get_values(tags = "smotenc")))
 
       task$rbind(st)
