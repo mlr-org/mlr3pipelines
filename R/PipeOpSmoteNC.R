@@ -34,8 +34,6 @@
 #'
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
-#' * `var` :: `character(1)`\cr
-#'   Name of the factor column to be used.
 #' * `k` :: `integer(1)`\cr
 #'   Number of nearest neighbors used for generating new values from the minority class. Default is `5`.
 #' * `over_ratio` :: `numeric(1)`\cr
@@ -68,10 +66,6 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
   public = list(
     initialize = function(id = "smotenc", param_vals = list()) {
       ps = ps(
-        var = p_uty(
-          custom_check = crate(function(x) check_factor(x) %check&&% check_choice(x, task$feature_names)),
-          tags = c("train", "smotenc")
-        ),
         k = p_int(lower = 1, default = 5, tags = c("train", "smotenc")),
         over_ratio = p_dbl(lower = 0, default = 1, tags = c("train", "smotenc"))
       )
@@ -82,10 +76,18 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
   private = list(
 
     .train_task = function(task) {
-      # JUST A ROUGHT DRAFT
+      # Feature types are all numeric or factor with at least one numeric
+      assert_true(any(task$feature_types$type == "numeric") &&
+                    all(task$feature_types$type %in% c("numeric", "factor")))
+      # Check that only one target column exists (better way?)
+      # Or could it work to have more than one, and user chooses which column he wants to have balanced
+      # Check that target column is factor (check this through Task type Classif?)
+      if (!length(task$target_names)) {
+        stop("SmoteNC does not work for more than one target column")
+      }
 
-      assert_true(all(task$feature_types$type %in% c("numeric", "factor")))
       cols = private$.select_cols(task)
+      # this drops target column, which we don't want since it is needed as var
 
       if (!length(cols)) {
         self$state = list(dt_columns = cols)
@@ -94,7 +96,8 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       dt = task$data(cols = cols)
 
       # calculate synthetic data
-      st = setDT(invoke(themis::smotenc, X = dt, .args = self$param_set$get_values(tags = "smotenc")))
+      st = setDT(invoke(themis::smotenc, df = dt, var = task$target_names,
+                        .args = self$param_set$get_values(tags = "smotenc")))
 
       task$rbind(st)
     }
