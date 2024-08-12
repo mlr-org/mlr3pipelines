@@ -16,7 +16,7 @@ test_that("PipeOpSmoteNC - train works as intended", {
   # Do not accept: all categorical, (integers, better not check for this)
   task = mlr_tasks$get("breast_cancer") # nur ordered
   task = mlr_tasks$get("iris") # nur numeric
-  task = mlr_tasks$get("penguins")
+  task = mlr_tasks$get("penguins") # has NAs ...
   cols = setdiff(task$feature_names, c("body_mass", "year", "flipper_length")) # remove integers
   task$select(cols) # numeric + factors
 
