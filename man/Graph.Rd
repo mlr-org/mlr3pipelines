@@ -4,9 +4,7 @@
 \alias{Graph}
 \title{Graph Base Class}
 \format{
-\link{R6Class} Graph
-
-\code{\link{R6Class}}.
+\code{\link[R6:R6Class]{R6Class}}.
 }
 \description{
 A \code{\link{Graph}} is a representation of a machine learning pipeline graph. It can be \emph{trained}, and subsequently used for \emph{prediction}.
@@ -26,7 +24,7 @@ dependency structure (although the \code{\link{PipeOp}}s for this would need to 
 
 \section{Internals}{
 
-A \code{\link{Graph}} is made up of a list of \code{\link{PipeOp}}s, and a \code{\link{data.table}} of edges. Both for training and prediction, the \code{\link{Graph}}
+A \code{\link{Graph}} is made up of a list of \code{\link{PipeOp}}s, and a \code{\link[data.table:data.table]{data.table}} of edges. Both for training and prediction, the \code{\link{Graph}}
 performs topological sorting of the \code{\link{PipeOp}}s and executes their respective \verb{$train()} or \verb{$predict()} functions in order, moving
 the \code{\link{PipeOp}} results along the edges as input to other \code{\link{PipeOp}}s.
 }
@@ -36,8 +34,8 @@ the \code{\link{PipeOp}} results along the edges as input to other \code{\link{P
 \itemize{
 \item \code{pipeops} :: named \code{list} of \code{\link{PipeOp}} \cr
 Contains all \code{\link{PipeOp}}s in the \code{\link{Graph}}, named by the \code{\link{PipeOp}}'s \verb{$id}s.
-\item \code{edges} :: \code{\link{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
-Table of connections between the \code{\link{PipeOp}}s. A \code{\link{data.table}}. \code{src_id} and \code{dst_id} are \verb{$id}s of \code{\link{PipeOp}}s that must be present in
+\item \code{edges} :: \code{\link[data.table:data.table]{data.table}}  with columns \code{src_id} (\code{character}), \code{src_channel} (\code{character}), \code{dst_id} (\code{character}), \code{dst_channel} (\code{character})\cr
+Table of connections between the \code{\link{PipeOp}}s. A \code{\link[data.table:data.table]{data.table}}. \code{src_id} and \code{dst_id} are \verb{$id}s of \code{\link{PipeOp}}s that must be present in
 the \verb{$pipeops} list. \code{src_channel} and \code{dst_channel} must respectively be \verb{$output} and \verb{$input} channel names of the
 respective \code{\link{PipeOp}}s.
 \item \code{is_trained} :: \code{logical(1)} \cr
@@ -46,10 +44,10 @@ Is the \code{\link{Graph}}, i.e. are all of its \code{\link{PipeOp}}s, trained, 
 Ids of the 'left-hand-side' \code{\link{PipeOp}}s that have some unconnected input channels and therefore act as \code{\link{Graph}} input layer.
 \item \code{rhs} :: \code{character} \cr
 Ids of the 'right-hand-side' \code{\link{PipeOp}}s that have some unconnected output channels and therefore act as \code{\link{Graph}} output layer.
-\item \code{input} :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
+\item \code{input} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
 Input channels of the \code{\link{Graph}}. For each channel lists the name, input type during training, input type during prediction,
 \code{\link{PipeOp}} \verb{$id} of the \code{\link{PipeOp}} the channel pertains to, and channel name as the \code{\link{PipeOp}} knows it.
-\item \code{output} :: \code{\link{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
+\item \code{output} :: \code{\link[data.table:data.table]{data.table}} with columns \code{name} (\code{character}), \code{train} (\code{character}), \code{predict} (\code{character}), \code{op.id} (\code{character}), \code{channel.name} (\code{character})\cr
 Output channels of the \code{\link{Graph}}. For each channel lists the name, output type during training, output type during prediction,
 \code{\link{PipeOp}} \verb{$id} of the \code{\link{PipeOp}} the channel pertains to, and channel name as the \code{\link{PipeOp}} knows it.
 \item \code{packages} :: \code{character}\cr

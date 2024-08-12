@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classbalancing
-#' @format [`R6Class`] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
 #' Both undersamples a [`Task`][mlr3::Task] to keep only a fraction of the rows of the majority class,
@@ -67,7 +67,7 @@
 #'
 #' Uses `task$filter()` to remove rows. When identical rows are added during upsampling, then the `task$row_roles$use` can *not* be used
 #' to duplicate rows because of \[inaudible\]; instead the `task$rbind()` function is used, and
-#' a new [`data.table`] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
+#' a new [`data.table`][data.table::data.table] is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].

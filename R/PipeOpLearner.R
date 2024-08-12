@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_learner
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Wraps an [`mlr3::Learner`] into a [`PipeOp`].
@@ -41,11 +41,11 @@
 #' The `$state` is set to the `$state` slot of the [`Learner`][mlr3::Learner] object. It is a named `list` with members:
 #' * `model` :: `any`\cr
 #'   Model created by the [`Learner`][mlr3::Learner]'s `$.train()` function.
-#' * `train_log` :: [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `train_log` :: [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during training.
 #' * `train_time` :: `numeric(1)`\cr
 #'   Training time, in seconds.
-#' * `predict_log` :: `NULL` | [`data.table`] with columns `class` (`character`), `msg` (`character`)\cr
+#' * `predict_log` :: `NULL` | [`data.table`][data.table::data.table] with columns `class` (`character`), `msg` (`character`)\cr
 #'   Errors logged during prediction.
 #' * `predict_time` :: `NULL` | `numeric(1)`
 #'   Prediction time, in seconds.

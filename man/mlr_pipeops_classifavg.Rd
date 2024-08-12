@@ -5,7 +5,7 @@
 \alias{PipeOpClassifAvg}
 \title{Majority Vote Prediction}
 \format{
-\code{\link{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOpEnsemble}}/\code{\link{PipeOp}}.
 }
 \description{
 Perform (weighted) majority vote prediction from classification \code{\link[mlr3:Prediction]{Prediction}}s by connecting
@@ -150,6 +150,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

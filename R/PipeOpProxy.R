@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_proxy
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Wraps another [`PipeOp`] or [`Graph`] as determined by the `content` hyperparameter.

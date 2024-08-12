@@ -1,7 +1,7 @@
 #' @title Ensembling Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Parent class for [`PipeOp`]s that aggregate predictions. Implements the `private$.train()` and `private$.predict()` methods necessary

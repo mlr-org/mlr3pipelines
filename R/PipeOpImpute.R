@@ -1,7 +1,7 @@
 #' @title Imputation Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`] object inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Abstract base class for feature imputation.
@@ -47,10 +47,10 @@
 #'   Names of features being selected by the `affect_columns` parameter.
 #' * `context_cols` :: `character`\cr
 #'   Names of features being selected by the `context_columns` parameter.
-#' * `intasklayout` :: [`data.table`]\cr
+#' * `intasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the training [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the prediction [`Task`][mlr3::Task] has the same features, feature layout, and feature types as during training.
-#' * `outtasklayout` :: [`data.table`]\cr
+#' * `outtasklayout` :: [`data.table`][data.table::data.table]\cr
 #'   Copy of the trained [`Task`][mlr3::Task]'s `$feature_types` slot. This is used during prediction to ensure that
 #'   the [`Task`][mlr3::Task] resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 #' * `model` :: named `list`\cr
@@ -87,17 +87,17 @@
 #'   This method can optionally be overloaded when inheriting [`PipeOpImpute`];
 #'   If this method is not overloaded, it defaults to selecting the columns of type indicated by the `feature_types` construction argument.
 #' * `.train_imputer(feature, type, context)`\cr
-#'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
+#'   (`atomic`, `character(1)`, [`data.table`][data.table::data.table]) -> `any`\cr
 #'   Abstract function that must be overloaded when inheriting.
 #'   Called once for each feature selected by `affect_columns` to create the model entry to be used for `private$.impute()`. This function
 #'   is only called for features with at least one non-missing value.
 #' * `.train_nullmodel(feature, type, context)`\cr
-#'   (`atomic`, `character(1)`, [`data.table`]) -> `any`\cr
+#'   (`atomic`, `character(1)`, [`data.table`][data.table::data.table]) -> `any`\cr
 #'   Like `.train_imputer()`, but only called for each feature that only contains missing values. This is not an abstract function
 #'   and, if not overloaded, gives a default response of `0` (`integer`, `numeric`), `c(TRUE, FALSE)` (`logical`), all available levels (`factor`/`ordered`),
 #'   or the empty  string (`character`).
 #' * `.impute(feature, type, model, context)`\cr
-#'   (`atomic`, `character(1)`, `any`, [`data.table`]) -> `atomic`\cr
+#'   (`atomic`, `character(1)`, `any`, [`data.table`][data.table::data.table]) -> `atomic`\cr
 #'   Imputes the features. `model` is the model created by `private$.train_imputer()` Default behaviour is to assume `model` is an atomic vector
 #'   from which values are sampled to impute missing values of `feature`. `model` may have an attribute `probabilities` for non-uniform sampling.
 #'

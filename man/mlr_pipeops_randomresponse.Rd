@@ -5,7 +5,7 @@
 \alias{PipeOpRandomResponse}
 \title{Generate a Randomized Response Prediction}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Takes in a \code{\link[mlr3:Prediction]{Prediction}} of \code{predict_type} \code{"prob"}
@@ -155,6 +155,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

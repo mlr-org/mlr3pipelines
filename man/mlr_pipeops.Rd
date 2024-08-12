@@ -5,7 +5,7 @@
 \alias{mlr_pipeops}
 \title{Dictionary of PipeOps}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link[mlr3misc:Dictionary]{mlr3misc::Dictionary}}.
 }
 \description{
 A simple \code{\link[mlr3misc:Dictionary]{Dictionary}} storing objects of class \code{\link{PipeOp}}.
@@ -122,6 +122,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

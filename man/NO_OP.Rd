@@ -5,7 +5,7 @@
 \alias{NO_OP}
 \title{No-Op Sentinel Used for Alternative Branching}
 \format{
-\code{\link{R6}} object.
+\code{\link[R6:R6Class]{R6}} object.
 }
 \usage{
 NO_OP

@@ -8,7 +8,7 @@
 \alias{mlr_learners_regr.avg}
 \title{Optimized Weighted Average of Features for Classification and Regression}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link[mlr3:LearnerClassif]{mlr3::LearnerClassif}}/\code{\link[mlr3:Learner]{mlr3::Learner}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link[mlr3:LearnerClassif]{mlr3::LearnerClassif}}/\code{\link[mlr3:Learner]{mlr3::Learner}}.
 }
 \usage{
 mlr_learners_classif.avg
@@ -34,7 +34,7 @@ incoming features.
 }
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{LearnerClassif}}, as well as:
+The parameters are the parameters inherited from \code{\link[mlr3:LearnerClassif]{LearnerClassif}}, as well as:
 \itemize{
 \item \code{measure} :: \code{\link[mlr3:Measure]{Measure}} | \code{character} \cr
 \code{\link[mlr3:Measure]{Measure}} to optimize for.

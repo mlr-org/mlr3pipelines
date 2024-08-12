@@ -5,7 +5,7 @@
 \alias{PipeOpSubsample}
 \title{Subsampling}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 \description{
 Subsamples a \code{\link[mlr3:Task]{Task}} to use a fraction of the rows.
@@ -57,7 +57,7 @@ Sample with replacement? Initialized to \code{FALSE}.
 
 Uses \code{task$filter()} to remove rows. If \code{replace} is \code{TRUE} and identical rows are added, then the \code{task$row_roles$use} can \emph{not} be used
 to duplicate rows because of [inaudible]; instead the \code{task$rbind()} function is used, and
-a new \code{\link{data.table}} is attached that contains all rows that are being duplicated exactly as many times as they are being added.
+a new \code{\link[data.table:data.table]{data.table}} is attached that contains all rows that are being duplicated exactly as many times as they are being added.
 }
 
 \section{Fields}{
@@ -136,6 +136,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

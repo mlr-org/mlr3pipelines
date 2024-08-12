@@ -27,12 +27,12 @@ This parameter is ignored when \code{validate} is set to \code{NULL}.
 By default, validation is enabled for the final \code{PipeOp} in the \code{Graph}.}
 
 \item{args_all}{(\code{list()})\cr
-Rarely needed. A named list of parameter values that are passed to all subsequet \code{\link[=set_validate]{set_validate()}} calls on the individual
+Rarely needed. A named list of parameter values that are passed to all subsequet \code{\link[mlr3:mlr_sugar]{set_validate()}} calls on the individual
 \code{PipeOp}s.}
 
 \item{args}{(named \code{list()})\cr
 Rarely needed.
-A named list of lists, specifying additional argments to be passed to \code{\link[=set_validate]{set_validate()}} when calling it on the individual
+A named list of lists, specifying additional argments to be passed to \code{\link[mlr3:mlr_sugar]{set_validate()}} when calling it on the individual
 \code{PipeOp}s.}
 
 \item{...}{(any)\cr

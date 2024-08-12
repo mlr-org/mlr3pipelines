@@ -4,7 +4,7 @@
 \alias{PipeOpEnsemble}
 \title{Ensembling Base Class}
 \format{
-Abstract \code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Parent class for \code{\link{PipeOp}}s that aggregate predictions. Implements the \code{private$.train()} and \code{private$.predict()} methods necessary
@@ -152,6 +152,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

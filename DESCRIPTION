@@ -1,6 +1,6 @@
 Package: mlr3pipelines
 Title: Preprocessing Operators and Pipelines for 'mlr3'
-Version: 0.5.2-9000
+Version: 0.6.0
 Authors@R:
     c(person(given = "Martin",
              family = "Binder",
@@ -52,7 +52,7 @@ Imports:
     data.table,
     digest,
     lgr,
-    mlr3 (>= 0.19.0),
+    mlr3 (>= 0.20.0),
     mlr3misc (>= 0.9.0),
     paradox,
     R6,
@@ -87,7 +87,8 @@ Suggests:
     methods,
     vtreat,
     future,
-    htmlwidgets
+    htmlwidgets,
+    ranger
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
@@ -153,6 +154,7 @@ Collate:
     'PipeOpRegrAvg.R'
     'PipeOpRemoveConstants.R'
     'PipeOpRenameColumns.R'
+    'PipeOpRowApply.R'
     'PipeOpScale.R'
     'PipeOpScaleMaxAbs.R'
     'PipeOpScaleRange.R'

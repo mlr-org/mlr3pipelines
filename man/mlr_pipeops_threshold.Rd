@@ -5,7 +5,7 @@
 \alias{PipeOpThreshold}
 \title{Change the Threshold of a Classification Prediction}
 \format{
-\code{\link{R6Class}} inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Change the threshold of a \code{Prediction} during the \code{predict} step.
@@ -128,6 +128,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

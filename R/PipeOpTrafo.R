@@ -1,7 +1,7 @@
 #' @title Target Transformation Base Class
 #'
 #' @usage NULL
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Base class for handling target transformation operations. Target transformations are different
@@ -180,7 +180,7 @@ PipeOpTargetTrafo = R6Class("PipeOpTargetTrafo",
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetinvert
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Inverts target-transformations done during training based on a supplied inversion
@@ -255,7 +255,7 @@ mlr_pipeops$add("targetinvert", PipeOpTargetInvert)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targetmutate
-#' @format [`R6Class`] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
 #'
 #' @description
 #' Changes the *target* of a [`Task`][mlr3::Task] according to a function given as hyperparameter.
@@ -397,7 +397,7 @@ mlr_pipeops$add("targetmutate", PipeOpTargetMutate)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_targettrafoscalerange
-#' @format [`R6Class`] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTargetTrafo`]/[`PipeOp`]
 #'
 #' @description
 #' Linearly transforms a numeric target of a [`TaskRegr`][mlr3::TaskRegr] so it is between `lower`
@@ -498,7 +498,7 @@ mlr_pipeops$add("targettrafoscalerange", PipeOpTargetTrafoScaleRange)
 #' @title Transform a Target without an Explicit Inversion
 #' @usage NULL
 #' @name mlr_pipeops_updatetarget
-#' @format Abstract [`R6Class`] inheriting from [`PipeOp`].
+#' @format Abstract [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' EXPERIMENTAL, API SUBJECT TO CHANGE

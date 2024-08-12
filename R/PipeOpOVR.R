@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrsplit
-#' @format [`R6Class`] inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOp`].
 #'
 #' @description
 #' Splits a [classification Task][mlr3::TaskClassif] into several binary [classification
@@ -115,7 +115,7 @@ mlr_pipeops$add("ovrsplit", PipeOpOVRSplit)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_ovrunite
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
 #' Perform "One vs. Rest" classification by (weighted) majority vote prediction from [classification

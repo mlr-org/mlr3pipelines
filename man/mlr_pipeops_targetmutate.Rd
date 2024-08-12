@@ -5,7 +5,7 @@
 \alias{PipeOpTargetMutate}
 \title{Transform a Target by a Function}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }
 \description{
 Changes the \emph{target} of a \code{\link[mlr3:Task]{Task}} according to a function given as hyperparameter.
@@ -169,6 +169,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

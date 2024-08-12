@@ -4,7 +4,7 @@
 \alias{PipeOpImpute}
 \title{Imputation Base Class}
 \format{
-Abstract \code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+Abstract \code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Abstract base class for feature imputation.
@@ -57,10 +57,10 @@ The \verb{$state} is a named \code{list}; besides members added by inheriting cl
 Names of features being selected by the \code{affect_columns} parameter.
 \item \code{context_cols} :: \code{character}\cr
 Names of features being selected by the \code{context_columns} parameter.
-\item \code{intasklayout} :: \code{\link{data.table}}\cr
+\item \code{intasklayout} :: \code{\link[data.table:data.table]{data.table}}\cr
 Copy of the training \code{\link[mlr3:Task]{Task}}'s \verb{$feature_types} slot. This is used during prediction to ensure that
 the prediction \code{\link[mlr3:Task]{Task}} has the same features, feature layout, and feature types as during training.
-\item \code{outtasklayout} :: \code{\link{data.table}}\cr
+\item \code{outtasklayout} :: \code{\link[data.table:data.table]{data.table}}\cr
 Copy of the trained \code{\link[mlr3:Task]{Task}}'s \verb{$feature_types} slot. This is used during prediction to ensure that
 the \code{\link[mlr3:Task]{Task}} resulting from the prediction operation has the same features, feature layout, and feature types as after training.
 \item \code{model} :: named \code{list}\cr
@@ -109,17 +109,17 @@ to limit the columns that a \code{\link{PipeOpTaskPreproc}} should operate on.
 This method can optionally be overloaded when inheriting \code{\link{PipeOpImpute}};
 If this method is not overloaded, it defaults to selecting the columns of type indicated by the \code{feature_types} construction argument.
 \item \code{.train_imputer(feature, type, context)}\cr
-(\code{atomic}, \code{character(1)}, \code{\link{data.table}}) -> \code{any}\cr
+(\code{atomic}, \code{character(1)}, \code{\link[data.table:data.table]{data.table}}) -> \code{any}\cr
 Abstract function that must be overloaded when inheriting.
 Called once for each feature selected by \code{affect_columns} to create the model entry to be used for \code{private$.impute()}. This function
 is only called for features with at least one non-missing value.
 \item \code{.train_nullmodel(feature, type, context)}\cr
-(\code{atomic}, \code{character(1)}, \code{\link{data.table}}) -> \code{any}\cr
+(\code{atomic}, \code{character(1)}, \code{\link[data.table:data.table]{data.table}}) -> \code{any}\cr
 Like \code{.train_imputer()}, but only called for each feature that only contains missing values. This is not an abstract function
 and, if not overloaded, gives a default response of \code{0} (\code{integer}, \code{numeric}), \code{c(TRUE, FALSE)} (\code{logical}), all available levels (\code{factor}/\code{ordered}),
 or the empty  string (\code{character}).
 \item \code{.impute(feature, type, model, context)}\cr
-(\code{atomic}, \code{character(1)}, \code{any}, \code{\link{data.table}}) -> \code{atomic}\cr
+(\code{atomic}, \code{character(1)}, \code{any}, \code{\link[data.table:data.table]{data.table}}) -> \code{atomic}\cr
 Imputes the features. \code{model} is the model created by \code{private$.train_imputer()} Default behaviour is to assume \code{model} is an atomic vector
 from which values are sampled to impute missing values of \code{feature}. \code{model} may have an attribute \code{probabilities} for non-uniform sampling.
 }
@@ -182,6 +182,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

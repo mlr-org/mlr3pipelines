@@ -5,7 +5,7 @@
 \alias{GraphLearner}
 \title{Encapsulate a Graph as a Learner}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link[mlr3:Learner]{mlr3::Learner}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link[mlr3:Learner]{mlr3::Learner}}.
 }
 \description{
 A \code{\link[mlr3:Learner]{Learner}} that encapsulates a \code{\link{Graph}} to be used in

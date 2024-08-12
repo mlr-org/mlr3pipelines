@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_regravg
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
 #' Perform (weighted) prediction averaging from regression [`Prediction`][mlr3::Prediction]s by connecting

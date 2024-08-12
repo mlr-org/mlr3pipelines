@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityimply
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Implicate a [`Multiplicity`] by returning the input(s) converted to a [`Multiplicity`].
@@ -113,7 +113,7 @@ mlr_pipeops$add("multiplicityimply", PipeOpMultiplicityImply)
 #'
 #' @usage NULL
 #' @name mlr_pipeops_multiplicityexply
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Explicate a [`Multiplicity`] by turning the input [`Multiplicity`] into multiple outputs.
@@ -205,7 +205,7 @@ mlr_pipeops$add("multiplicityexply", PipeOpMultiplicityExply, list("N"))
 #'
 #' @usage NULL
 #' @name mlr_pipeops_replicate
-#' @format [`R6Class`] object inheriting from [`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOp`].
 #'
 #' @description
 #' Replicate the input as a [`Multiplicity`], causing subsequent [`PipeOp`]s to be executed multiple

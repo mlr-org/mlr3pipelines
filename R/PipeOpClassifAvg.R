@@ -2,7 +2,7 @@
 #'
 #' @usage NULL
 #' @name mlr_pipeops_classifavg
-#' @format [`R6Class`] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
+#' @format [`R6Class`][R6::R6Class] inheriting from [`PipeOpEnsemble`]/[`PipeOp`].
 #'
 #' @description
 #' Perform (weighted) majority vote prediction from classification [`Prediction`][mlr3::Prediction]s by connecting

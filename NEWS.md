@@ -1,4 +1,8 @@
-# mlr3pipelines 0.5.2-9000
+# mlr3pipelines 0.6.1
+
+* New PipeOp `PipeOpRowApply` / `po("rowapply")`
+
+# mlr3pipelines 0.6.0
 
 * Compatibility with new `bbotk` release.
 * Added marshaling support to `GraphLearner`

@@ -17,7 +17,7 @@ pipeline_robustify(
 )
 }
 \arguments{
-\item{task}{\code{\link{Task}} \cr
+\item{task}{\code{\link[mlr3:Task]{Task}} \cr
 A \code{\link[mlr3:Task]{Task}} to create a robustifying pipeline for.
 Optional, if omitted, the "worst possible" \code{\link[mlr3:Task]{Task}} is assumed and the full pipeline is created.}
 

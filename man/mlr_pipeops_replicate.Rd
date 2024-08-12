@@ -5,7 +5,7 @@
 \alias{PipeOpReplicate}
 \title{Replicate the Input as a Multiplicity}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOp}}.
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOp}}.
 }
 \description{
 Replicate the input as a \code{\link{Multiplicity}}, causing subsequent \code{\link{PipeOp}}s to be executed multiple
@@ -123,6 +123,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_regravg}},
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},

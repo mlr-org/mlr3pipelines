@@ -5,7 +5,7 @@
 \alias{PipeOpTargetTrafoScaleRange}
 \title{Linearly Transform a Numeric Target to Match Given Boundaries}
 \format{
-\code{\link{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
+\code{\link[R6:R6Class]{R6Class}} object inheriting from \code{\link{PipeOpTargetTrafo}}/\code{\link{PipeOp}}
 }
 \description{
 Linearly transforms a numeric target of a \code{\link[mlr3:TaskRegr]{TaskRegr}} so it is between \code{lower}
@@ -135,6 +135,7 @@ Other PipeOps:
 \code{\link{mlr_pipeops_removeconstants}},
 \code{\link{mlr_pipeops_renamecolumns}},
 \code{\link{mlr_pipeops_replicate}},
+\code{\link{mlr_pipeops_rowapply}},
 \code{\link{mlr_pipeops_scale}},
 \code{\link{mlr_pipeops_scalemaxabs}},
 \code{\link{mlr_pipeops_scalerange}},
