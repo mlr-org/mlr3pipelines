@@ -134,7 +134,6 @@ lr$predict_newdata(iris[1:4])
 
 ### cbind backend simplification
 
-
 ## Notes
 
 - task filter: integer ids as reported by backend
@@ -145,6 +144,11 @@ lr$predict_newdata(iris[1:4])
   - setequal factorlevel: convert, otherwise kA
   - maybe happens when there are fewer levels than before (? -- check)
   - predict-newdata
+
+- databackendrename
+- backends are read-only, but want to be able to copy / extend
+- do we want one multicbind, one join?
+- how does this id-stuff work again?
 
 ## Synthesis
 
@@ -171,6 +175,7 @@ lr$predict_newdata(iris[1:4])
 - train() vs predict()
 - predictions
   - see how missing predictions / NAs are handled
+- how does it cope with prediction IDs being wrong?
 
 ### Predictions
 
@@ -185,3 +190,14 @@ lr$predict_newdata(iris[1:4])
 
 - predict cols that are then used as input
 - auto-simplification
+
+## Use Cases
+
+ - operation performed on subset of rows, e.g. subset >> op() | otherop()
+   - join means NAs are introduced
+ - learner_cv makes prediction only for some inputs, or makes multiple predictions
+   - join means NAs on missing predictions?
+   - join aggregation of (learner_cv) predictions?
+   - rows with missing predictions are dropped?
+ - in all of the above: predict just cbinds
+ -
