@@ -2,17 +2,23 @@ context("PipeOpUMAP")
 
 test_that("PipeOpUMAP - basic properties", {
   skip_if_not_installed("uwot")
-  op = PipeOpUMAP$new()
+  skip_if_not_installed("RcppAnnoy")
+  skip_if_not_installed("RcppHNSW")
+  skip_if_not_installed("rnndescent")
+
   task = mlr_tasks$get("iris")$filter(1:30)
 
-  expect_pipeop(op)
-
-  expect_task(op$train(list(task))[[1]])
-  expect_task(op$predict(list(task))[[1]])
+  # Test for different nn_methods since they are relying on different packages and deep clone is impleneted differently
+  expect_datapreproc_pipeop_class(PipeOpUMAP, constargs = list(param_vals = list(nn_method = "annoy")),
+                                  deterministic_train = FALSE, deterministic_predict = FALSE, task = task)
+  expect_datapreproc_pipeop_class(PipeOpUMAP, constargs = list(param_vals = list(nn_method = "hnsw")),
+                                  deterministic_train = FALSE, deterministic_predict = FALSE, task = task)
+  expect_datapreproc_pipeop_class(PipeOpUMAP, constargs = list(param_vals = list(nn_method = "nndescent")),
+                                  deterministic_train = FALSE, deterministic_predict = FALSE, task = task)
 
 })
 
-test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Default Params", {
+test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Default Params, nn_method = annoy", {
   skip_if_not_installed("uwot")
   task = mlr_tasks$get("iris")$filter(1:30)
 
@@ -27,7 +33,7 @@ test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Default
                   "gamma", "approx_pow", "metric", "norig_col", "pcg_rand", "batch", "opt_args", "num_precomputed_nns", "min_dist", "spread",
                   "binary_edge_weights", "seed", "nn_method", "nn_args", "n_neighbors", "nn_index", "pca_models")
   expect_true(all(state_names %in% names(op$state)))
-  state_names_wo_pointers = setdiff(state_names, "nn_index") #  since pointers in element 1 will not be equal
+  state_names_wo_pointers = setdiff(state_names, "nn_index") #  since address in state$nn_index$ann will not be equal
   expect_identical(op$state[state_names_wo_pointers], umap_out[state_names_wo_pointers])
   expect_equal(train_out$data()[, 2:3], as.data.table(umap_out[["embedding"]]))
 
@@ -38,7 +44,7 @@ test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Default
 })
 
 
-test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Changed Params", {
+test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Changed Params, nn_method = annoy", {
   skip_if_not_installed("uwot")
   task = mlr_tasks$get("iris")$filter(1:30)
 
@@ -69,7 +75,7 @@ test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Changed
                   "gamma", "approx_pow", "metric", "norig_col", "pcg_rand", "batch", "opt_args", "num_precomputed_nns", "min_dist", "spread",
                   "binary_edge_weights", "seed", "nn_method", "nn_args", "n_neighbors", "nn_index", "pca_models")
   expect_true(all(state_names %in% names(op$state)))
-  state_names = setdiff(state_names, "nn_index") #  since pointers in state$nn_index$element1 will not be equal
+  state_names = setdiff(state_names, "nn_index") #  since address in state$nn_index$ann will not be equal
   expect_identical(op$state[state_names], umap_out[state_names])
   expect_equal(train_out$data()[, 2:3], as.data.table(umap_out[["embedding"]]))
 
@@ -78,3 +84,6 @@ test_that("PipeOpUMAP - Compare to uwot::umap2 and uwot::umap_transform; Changed
   expect_equal(predict_out$data()[, 2:3], as.data.table(umap_transform_out))
 
 })
+
+# weitere tests für nn_methods
+# for these use options that are specific to that method

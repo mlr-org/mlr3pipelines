@@ -89,6 +89,9 @@ Suggests:
     future,
     htmlwidgets,
     uwot (>= 0.2.1),
+    RcppAnnoy,
+    RcppHNSW,
+    rnndescent,
     ranger
 ByteCompile: true
 Encoding: UTF-8
