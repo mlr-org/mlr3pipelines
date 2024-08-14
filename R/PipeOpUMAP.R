@@ -168,7 +168,7 @@
 #' * `pca_center` :: `logical(1)`\cr
 #'   If `TRUE`, center the columns of X before carrying out PCA. Default is `TRUE`.
 #'   For details, see [uwot::umap2()].
-#' * `pca_rand` :: `logical(1)`\cr
+#' * `pcg_rand` :: `logical(1)`\cr
 #'   If `TRUE`, use the PCG random number generator (O'Neill, 2014) during optimization.
 #'   Otherwise, use the faster (but probably less statistically good) Tausworthe "taus88" generator.
 #'   Default is `TRUE`. For details, see [uwot::umap2()].
@@ -243,8 +243,8 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
   public = list(
     initialize = function(id = "umap", param_vals = list()) {
       ps = ps(
-        n_neighbors = p_int(2L, 100L, default = 15L, tags = c("train", "umap")),
-        n_components = p_int(1L, 100L, default = 2L, tags = c("train", "umap")),
+        n_neighbors = p_int(lower = 1L, default = 15L, tags = c("train", "umap")),
+        n_components = p_int(lower = 1L, default = 2L, tags = c("train", "umap")),
         metric = p_fct(
           levels = c(
             "euclidean", "cosine", "manhattan", "hamming", "correlation",
@@ -255,8 +255,8 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
           default = "euclidean",
           tags = c("train", "umap")
         ),
-        n_epochs = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
-        learning_rate = p_dbl(0, default = 1, tags = c("train", "umap")),
+        n_epochs = p_int(lower = 1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
+        learning_rate = p_dbl(lower = 0, default = 1, tags = c("train", "umap")),
         scale = p_lgl(default = FALSE, special_vals = list("none", "Z", "scale", "maxabs", "range", "colrange", NULL), tags = c("train", "umap")),
         init = p_uty(
           default = "spectral",
@@ -266,11 +266,11 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
             check_choice(x, choices) %check||% check_matrix(x)
           }, .parent = topenv())
         ),
-        init_sdev = p_uty(default = "range", tags = c("train", "umap")),
+        init_sdev = p_dbl(default = "range", special_vals = list("range"), tags = c("train", "umap")),
         spread = p_dbl(default = 1, tags = c("train", "umap")),
         min_dist = p_dbl(default = 0.01, tags = c("train", "umap")),
-        set_op_mix_ratio = p_dbl(0, 1, default = 1, tags = c("train", "umap")),
-        local_connectivity = p_dbl(1, default = 1, tags = c("train", "umap")),
+        set_op_mix_ratio = p_dbl(lower = 0, upper = 1, default = 1, tags = c("train", "umap")),
+        local_connectivity = p_dbl(lower = 1, default = 1, tags = c("train", "umap")),
         bandwidth = p_dbl(default = 1, tags = c("train", "umap")),
         repulsion_strength = p_dbl(default = 1, tags = c("train", "umap")),
         negative_sample_rate = p_dbl(default = 5, tags = c("train", "umap")),
@@ -281,8 +281,9 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
           tags = c("train", "umap"),
           custom_check = crate(function(x) check_choice(x, c("annoy", "hnsw", "nndescent"), null.ok = TRUE))
         ),
-        n_trees = p_int(10L, 100L, default = 50L, tags = c("train", "umap")),
-        search_k = p_int(tags = c("train", "umap")),
+        n_trees = p_int(lower = 1L, default = 50L, tags = c("train", "umap"), depends = quote(nn_method == "annoy")),
+        search_k = p_int(tags = c("train", "umap"), depends = quote(nn_method == "annoy")),
+        # approx_pow is only used if dens_scale is non-NULL
         approx_pow = p_lgl(default = FALSE, tags = c("train", "umap")),
         y = p_uty(
           default = NULL,
@@ -291,11 +292,13 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
             check_atomic_vector(x) %check||%
               check_matrix(x) %check||%
               check_data_frame(x) %check||%
-              check_list(x) %check||%
+              check_list(x, len = 2, names = "unique") %check||%
               check_null(x)
           }, .parent = topenv())
         ),
+        # target_n_neighbors is only used if y is non-NULL and numeric
         target_n_neighbors = p_int(tags = c("train", "umap")),
+        # target_metric is only used if y is non-NULL and numeric
         target_metric =  p_fct(
           levels = c(
             "euclidean", "cosine", "manhattan", "hamming", "correlation",
@@ -306,27 +309,48 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
           default = "euclidean",
           tags = c("train", "umap")
         ),
-        target_weight = p_dbl(0, 1, default = 0.5, tags = c("train", "umap")),
-        pca = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
+        # target_weight is only used if y is non-NULL
+        target_weight = p_dbl(lower = 0, upper = 1, default = 0.5, tags = c("train", "umap")),
+        # pca is ignored if metric is "hamming"
+        pca = p_int(lower = 1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap"),
+                    depends = quote(metric %in% c(
+                      "euclidean", "cosine", "manhattan", "correlation",
+                      "braycurtis", "canberra", "chebyshev", "dice", "hellinger", "jaccard",
+                      "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
+                      "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
+                    ))),
+        # pca_center might only be used if pca is specified (documentation unclear)
         pca_center = p_lgl(default = TRUE, tags = c("train", "umap")),
-        pca_rand = p_lgl(default = TRUE, tags = c("train", "umap")),
+        pcg_rand = p_lgl(default = TRUE, tags = c("train", "umap")),
         fast_sgd = p_lgl(default = FALSE, tags = c("train", "umap")),
-        n_threads = p_int(1L, default = NULL, special_vals = list(NULL), tags = c("train", "predict", "umap")),
-        n_sgd_threads = p_int(0L, default = 0L, special_vals = list("auto"), tags = c("train", "predict", "umap")),
-        grain_size = p_int(1L, default = 1L, tags = c("train", "umap")),
+        n_threads = p_int(lower = 1L, default = NULL, special_vals = list(NULL), tags = c("train", "predict", "umap")),
+        n_sgd_threads = p_int(lower = 0L, default = 0L, special_vals = list("auto"), tags = c("train", "predict", "umap")),
+        grain_size = p_int(lower = 1L, default = 1L, tags = c("train", "umap")),
         verbose = p_lgl(default = TRUE, tags = c("train", "umap")),
         batch = p_lgl(default = FALSE, tags = c("train", "umap")),
-        opt_args = p_uty(default = NULL, tags = c("train", "umap"), custom_check = crate(function(x) check_list(x, null.ok = TRUE))),
+        opt_args = p_uty(
+          default = NULL,
+          tags = c("train", "umap"),
+          custom_check = crate(function(x) check_list(x, types = c("numeric", "character"), min.len = 1, max.len = 5,
+                                                      names = "unique", null.ok = TRUE)),
+          depends = quote(batch == TRUE)
+        ),
         epoch_callback = p_uty(
           default = NULL,
           tags = c("train", "umap"),
           custom_check = crate(function(x) check_function(x, args = c("epochs", "n_epochs", "coords"), null.ok = TRUE))
         ),
+        # pca_method is only used if pca is specified
         pca_method = p_fct(c("irlba", "rsvd", "bigstatsr", "svd", "auto"), default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         binary_edge_weights = p_lgl(default = FALSE, tags = c("train", "umap")),
-        dens_scale = p_dbl(0, 1, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
+        dens_scale = p_dbl(lower = 0, upper = 1, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         seed = p_int(default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
-        nn_args = p_uty(default = NULL, tags = c("train", "umap"), custom_check = crate(function(x) check_list(x, null.ok = TRUE)))
+        nn_args = p_uty(
+          default = NULL,
+          tags = c("train", "umap"),
+          custom_check = crate(function(x) check_list(x, types = c("integer", "numeric", "character"),
+                                                      min.len = 1, max.len = 8, names = "unique", null.ok = TRUE))
+        )
       )
       ps$set_values(verbose = FALSE)
 

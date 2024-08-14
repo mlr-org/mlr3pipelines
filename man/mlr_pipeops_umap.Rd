@@ -182,7 +182,7 @@ For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
 \item \code{pca_center} :: \code{logical(1)}\cr
 If \code{TRUE}, center the columns of X before carrying out PCA. Default is \code{TRUE}.
 For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
-\item \code{pca_rand} :: \code{logical(1)}\cr
+\item \code{pcg_rand} :: \code{logical(1)}\cr
 If \code{TRUE}, use the PCG random number generator (O'Neill, 2014) during optimization.
 Otherwise, use the faster (but probably less statistically good) Tausworthe "taus88" generator.
 Default is \code{TRUE}. For details, see \code{\link[uwot:umap2]{uwot::umap2()}}.
