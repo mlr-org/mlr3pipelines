@@ -2,6 +2,7 @@ context("PipeOpImputeLearner")
 
 test_that("PipeOpImputeLearner - simple tests", {
   skip_if_not_installed("rpart")
+  set.seed(1)
   # Pima has several missings
   task = mlr_tasks$get("pima")
   po = PipeOpImputeLearner$new(learner = lrn("regr.rpart"))
@@ -40,7 +41,7 @@ test_that("PipeOpImputeLearner - simple tests", {
 test_that("PipeOpImputeLearner", {
   skip_if_not_installed("rpart")
   skip_on_cran()  # slow test, so we don't do it on cran
-
+  set.seed(2)
   task = mlr_tasks$get("pima")
   expect_datapreproc_pipeop_class(PipeOpImputeLearner,
     constargs = list("learner" = lrn("regr.rpart")),
