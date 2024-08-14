@@ -368,6 +368,26 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
     .predict_dt = function(dt, levels) {
       params = self$param_set$get_values(tags = c("umap", "predict"))
       invoke(uwot::umap_transform, dt, self$state, .args = params)
+    },
+
+    # We need to overload deep_clone since state$nn_index$ann is a C++ address if nn_method is "annoy" or "hnsw"
+    deep_clone = function(name, value) {
+      if (name == "state" && "NO_OP" %nin% class(value)) {
+        # TODO: Make sure these class names are correct for different options for nn_args
+        # attr(attr(value$nn_index, "class"), "package") might work otherwise
+        if (class(value$nn_index$ann) %in% c("RcppHNSWL2", "Rcpp_AnnoyEuclidean")) {
+          state = value
+          state$nn_index$ann = value$nn_index$ann$copy()
+          state$nn_index$type = value$nn_index$type
+          state$nn_index$metric = value$nn_index$metric
+          state$nn_index$ndim = value$nn_index$ndim
+          state
+        } else {
+          super$deep_clone(name, value)
+        }
+      } else {
+        super$deep_clone(name, value)
+      }
     }
   )
 )
