@@ -88,23 +88,26 @@ PipeOpProxy = R6Class("PipeOpProxy",
       # input can be a vararg input channel
       inname = if (innum) rep_suffix("input", innum) else "..."
       ps = ps(
-        content = p_uty(tags = c("train", "predidct", "required"), custom_check = function(x) {
-          # content must be an object that can be coerced to a Graph and the output number must match
-          tryCatch({
-            graph = as_graph(x)
-            # graph$output access may be slow, so we cache it here
-            graph_outnum = nrow(graph$output)
-            graph_input = nrow(graph$input)
-            if (graph_outnum != 1 && graph_outnum != outnum) {
-              "Graph's output number must either be 1 or match `outnum`"
-            } else if (innum > 1 && graph_input != innum && (graph_input > innum || "..." %nin% graph$input$name)) {
-              "Graph's input number when `innum` > 1 must either match `innum` or the Graph must contain a '...' (vararg) channel."
-            } else {
-              TRUE
-            }
-          },
-          error = function(error_condition) "`content` must be an object that can be converted to a Graph")
-        })
+        content = p_uty(
+          custom_check = crate(function(x) {
+            # content must be an object that can be coerced to a Graph and the output number must match
+            tryCatch({
+              graph = as_graph(x)
+              # graph$output access may be slow, so we cache it here
+              graph_outnum = nrow(graph$output)
+              graph_input = nrow(graph$input)
+              if (graph_outnum != 1 && graph_outnum != outnum) {
+                "Graph's output number must either be 1 or match `outnum`"
+              } else if (innum > 1 && graph_input != innum && (graph_input > innum || "..." %nin% graph$input$name)) {
+                "Graph's input number when `innum` > 1 must either match `innum` or the Graph must contain a '...' (vararg) channel."
+              } else {
+                TRUE
+              }
+            },
+            error = function(error_condition) "`content` must be an object that can be converted to a Graph")
+          }, innum, outnum, .parent = topenv()),
+          tags = c("train", "predidct", "required")
+        )
       )
       ps$values = list(content = PipeOpFeatureUnion$new(innum = innum))
       super$initialize(id, param_set = ps, param_vals = param_vals,
