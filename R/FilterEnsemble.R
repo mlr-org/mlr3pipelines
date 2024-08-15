@@ -49,7 +49,7 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
     },
     set_weights_to_tune = function(normalize_weights = "uniform") {
       assert_choice(normalize_weights, c("uniform", "naive", "no"))
-      self$param_set$set_values(.values = list(weights = get_weights_tunetoken(normalize_weights = normalize_weights)))
+      self$param_set$set_values(.values = list(weights = self$get_weights_tunetoken(normalize_weights = normalize_weights)))
       invisible(self)
     },
     get_weights_search_space = function(weights_param_name = "weights", normalize_weights = "uniform", prefix = "w") {
@@ -67,7 +67,7 @@ FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
         x[innames] = NULL
 
         if (normalize_weights == "uniform") {
-          x[w > 1 - .Machine$double.eps] = 1 - .Machine$double.eps
+          w[w > 1 - .Machine$double.eps] = 1 - .Machine$double.eps
           w = -log1p(-w)
           w = w / max(sum(w), .Machine$double.eps)
         } else if (normalize_weights == "naive") {
