@@ -4,12 +4,24 @@ Impute numerical features by constant values shifted below the minimum or above 
 using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).
 This type of imputation is especially sensible in the context of tree-based methods, see also
-Ding &amp;amp; Simonoff (2010).'><meta property="og:description" content='Impute factorial features by adding a new level ".MISSING".
+Ding &amp;amp; Simonoff (2010).
+If a factor is missing during prediction, but not during training, this adds an unseen level
+".MISSING", which would be a problem for most models. This is why it is recommended to use
+po("fixfactors") and
+po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
+(or some other imputation method) after this imputation method, if missing values are expected during prediction
+in factor columns that had no missing values during training.'><meta property="og:description" content='Impute factorial features by adding a new level ".MISSING".
 Impute numerical features by constant values shifted below the minimum or above the maximum by
 using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).
 This type of imputation is especially sensible in the context of tree-based methods, see also
-Ding &amp;amp; Simonoff (2010).'><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"></head><body>
+Ding &amp;amp; Simonoff (2010).
+If a factor is missing during prediction, but not during training, this adds an unseen level
+".MISSING", which would be a problem for most models. This is why it is recommended to use
+po("fixfactors") and
+po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
+(or some other imputation method) after this imputation method, if missing values are expected during prediction
+in factor columns that had no missing values during training.'><meta property="og:image" content="https://mlr3pipelines.mlr-org.com/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -59,6 +71,12 @@ using \(min(x) - offset - multiplier * diff(range(x))\) or
 \(max(x) + offset + multiplier * diff(range(x))\).</p>
 <p>This type of imputation is especially sensible in the context of tree-based methods, see also
 Ding &amp; Simonoff (2010).</p>
+<p>If a factor is missing during prediction, but not during training, this adds an unseen level
+<code>".MISSING"</code>, which would be a problem for most models. This is why it is recommended to use
+<code><a href="mlr_pipeops_fixfactors.html">po("fixfactors")</a></code> and
+<code><a href="mlr_pipeops_imputesample.html">po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))</a></code>
+(or some other imputation method) after this imputation method, if missing values are expected during prediction
+in factor columns that had no missing values during training.</p>
     </div>
 
 
@@ -260,6 +278,28 @@ For <code>integer</code> and <code>numeric</code> features uses the <code>min</c
 <span class="r-out co"><span class="r-pr">#&gt;</span> 766:        e        6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 767:        c        8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 768: .MISSING        9</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># recommended use when missing values are expected during prediction on</span></span></span>
+<span class="r-in"><span><span class="co"># factor columns that had no missing values during training</span></span></span>
+<span class="r-in"><span><span class="va">gr</span> <span class="op">=</span> <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputeoor"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"fixfactors"</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-greater-than-grapes.html">%&gt;&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="po.html">po</a></span><span class="op">(</span><span class="st">"imputesample"</span>, affect_columns <span class="op">=</span> <span class="fu"><a href="Selector.html">selector_type</a></span><span class="op">(</span>types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"factor"</span>, <span class="st">"ordered"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t1</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_task_classif.html" class="external-link">as_task_classif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>l <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.ordered</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, t <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, target <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t2</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_task_classif.html" class="external-link">as_task_classif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>l <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.ordered</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>, t <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, target <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">t1</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         t     l</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt; &lt;ord&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     c</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># missing values during prediction are sampled randomly</span></span></span>
+<span class="r-in"><span><span class="va">gr</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">t2</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">data</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         t     l</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;fctr&gt; &lt;ord&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      a     a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      b     c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      c     c</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
