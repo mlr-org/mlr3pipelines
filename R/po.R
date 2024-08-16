@@ -43,8 +43,9 @@
 #' mlr_pipeops$get("learner", lrn("classif.rpart"),
 #'   param_vals = list(cp = 0.3))
 #'
-#' pos(c("pca", original = "nop"))
+#' mlr3pipelines::pos(c("pca", original = "nop"))
 #' \dontshow{ \} }
+# mlr3pipelines::pos instead of just pos() because of https://github.com/mlr-org/mlr3pipelines/issues/751
 po = function(.obj, ...) {
   UseMethod("po")
 }
