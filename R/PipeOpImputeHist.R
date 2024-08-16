@@ -7,10 +7,11 @@
 #' @description
 #' Impute numerical features by histogram.
 #'
-#' During training, a histogram is fitted using R's [`hist()`][graphics::hist] function.
-#' The fitted histogram is then sampled from for imputation. This is an approximation to
-#' sampling from the empirical training data distribution (i.e. sampling from training data
-#' with replacement), but is much more memory efficient for large datasets, since the `$state`
+#' During training, a histogram is fitted on each column using R's [`hist()`][graphics::hist] function.
+#' The fitted histogram is then sampled from for imputation. Sampling happens in a two-step process:
+#' First, a bin is sampled from the histogram, then a value is sampled uniformly from the bin.
+#' This is an approximation to sampling from the empirical training data distribution (i.e. sampling
+#' from training data with replacement), but is much more memory efficient for large datasets, since the `$state`
 #' does not need to save the training data.
 #'
 #' @section Construction:
@@ -26,7 +27,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpImpute`].
 #'
-#' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) histogram.
+#' The output is the input [`Task`][mlr3::Task] with all affected numeric features missing values imputed by (column-wise) histogram; see Description for details.
 #'
 #' @section State:
 #' The `$state` is a named `list` with the `$state` elements inherited from [`PipeOpImpute`].
