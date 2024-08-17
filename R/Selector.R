@@ -104,7 +104,9 @@ selector_repr = function(selector) {
 
 #' @export
 print.Selector = function(x, ...) {
+  if (inherits(x, "R6")) return(NextMethod("print"))
   cat(paste0(attr(x, "repr"), "\n"))
+  invisible(x)
 }
 
 #' @describeIn Selector `selector_all` selects all features.
