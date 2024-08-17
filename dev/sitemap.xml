@@ -1,348 +1,119 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/articles/extending.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/Graph.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/NO_OP.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpEnsemble.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpImpute.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTargetTrafo.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreprocSimple.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/Selector.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/add_class_hierarchy_cache.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/as.Multiplicity.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/as_graph.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/as_pipeop.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/assert_graph.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/chain_graphs.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/filter_noop.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/grapes-greater-than-greater-than-grapes.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/greplicate.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/gunion.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/is.Multiplicity.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/is_noop.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr3pipelines-package.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bagging.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_branch.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_convert_types.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_greplicate.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_ovr.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_robustify.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_stacking.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_targettrafo.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_avg.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_graph.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_boxcox.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_branch.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_chunk.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classbalancing.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classifavg.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweights.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colapply.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_collapsefactors.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colroles.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_copy.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_datefeatures.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encode.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodeimpact.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodelmer.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_featureunion.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_fixfactors.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_histbin.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ica.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeconstant.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputehist.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputelearner.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemean.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemedian.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_cv.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_modelmatrix.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityimply.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_mutate.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nmf.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nop.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrsplit.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrunite.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_pca.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_proxy.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_quantilebin.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_randomprojection.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_randomresponse.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_regravg.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_removeconstants.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_renamecolumns.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_replicate.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scale.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scalemaxabs.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scalerange.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_select.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smote.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetinvert.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetmutate.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targettrafoscalerange.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_textvectorizer.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_threshold.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_yeojohnson.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/po.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/ppl.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/register_autoconvert_function.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/reset_autoconvert_register.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/reset_class_hierarchy_cache.html</loc>
-  </url>
-  <url>
-    <loc>https://mlr3pipelines.mlr-org.com/dev/reference/set_validate.GraphLearner.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/LICENSE-text.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/articles/extending.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/articles/index.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/authors.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/index.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/news/index.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/Graph.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/Multiplicity.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/NO_OP.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOp.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpEnsemble.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpImpute.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTargetTrafo.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreproc.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/PipeOpTaskPreprocSimple.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/Selector.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/add_class_hierarchy_cache.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/as.Multiplicity.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/as_graph.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/as_pipeop.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/assert_graph.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/assert_pipeop.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/chain_graphs.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/filter_noop.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/grapes-greater-than-greater-than-grapes.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/greplicate.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/gunion.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/index.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/is.Multiplicity.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/is_noop.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr3pipelines-package.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_bagging.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_branch.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_convert_types.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_greplicate.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_ovr.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_robustify.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_stacking.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_graphs_targettrafo.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_avg.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_learners_graph.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_boxcox.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_branch.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_chunk.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classbalancing.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classifavg.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_classweights.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colapply.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_collapsefactors.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_colroles.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_copy.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_datefeatures.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encode.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodeimpact.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_encodelmer.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_featureunion.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_filter.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_fixfactors.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_histbin.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ica.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeconstant.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputehist.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputelearner.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemean.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemedian.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputemode.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputeoor.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_imputesample.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_kernelpca.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_learner_cv.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_missind.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_modelmatrix.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityexply.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_multiplicityimply.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_mutate.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nmf.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_nop.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrsplit.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_ovrunite.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_pca.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_proxy.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_quantilebin.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_randomprojection.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_randomresponse.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_regravg.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_removeconstants.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_renamecolumns.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_replicate.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_rowapply.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scale.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scalemaxabs.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_scalerange.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_select.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_smote.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_spatialsign.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_subsample.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetinvert.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targetmutate.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_targettrafoscalerange.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_textvectorizer.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_threshold.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_tunethreshold.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_unbranch.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_updatetarget.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_vtreat.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/mlr_pipeops_yeojohnson.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/po.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/ppl.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/reexports.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/register_autoconvert_function.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/reset_autoconvert_register.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/reset_class_hierarchy_cache.html</loc></url>
+<url><loc>https://mlr3pipelines.mlr-org.com/dev/reference/set_validate.GraphLearner.html</loc></url>
 </urlset>
+
