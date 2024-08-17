@@ -58,3 +58,20 @@ test_that("tunethreshold graph works", {
 
 
 })
+
+test_that("threshold works for classes that are not valid R names", {
+  skip_if_not_installed("rpart")
+  ppl = po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>% po("tunethreshold")
+
+  cols = c("0", "1", "-", "_")
+  testtask = as_task_classif(
+    data.frame(x = rep(1:3, each = 24), y = factor(rep(letters[1:3], each = 24)),
+      target = factor(rep(c(cols, make.names(cols)), each = 9))),
+      target = "target", id = "testtask"
+  )
+
+  ppl$train(testtask)
+
+  ppl$predict(testtask)
+
+})
