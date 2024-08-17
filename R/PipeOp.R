@@ -561,10 +561,12 @@ multiplicity_type_nesting_level = function(str, varname) {
 # @param poid: `character(1)`: character id of the PipeOp
 # @return `list`
 unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid) {
-  assert_list(input)
+  # anticipate the possibility of 0-length vararg passes
+  assert_list(input, min.len = sum(inputnames != "..."), .var.name = sprintf("input of %s", poid))
   # in case of varargs, there could be more (or fewer) 'input's than 'expected_nesting_level's,
   # so we have to make sure the positions match.
-  expected_nesting_level = expected_nesting_level[match(names(input), inputnames)]
+  repeats = ifelse(inputnames == "...", length(input) - length(expected_nesting_level) + 1, 1)
+  expected_nesting_level = rep(expected_nesting_level, repeats)
   unpacking = mapply(multiplicity_nests_deeper_than, input, expected_nesting_level)
   if (!any(unpacking)) {
     return(NULL)  # no unpacking

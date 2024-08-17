@@ -629,8 +629,8 @@ test_that("Graph with vararg input", {
   )
 
   expect_equal(
-    g2$train(list(debugvararg2.... = 10000, debugvararg.input = 1, debugvararg2.... = 200, debugvararg2.input = 3, debugvararg2.... = 4), single_input = FALSE),
-    list(debugvararg.output = 1000 * 1, debugvararg2.output = 10000 +1000 * 3 + 200 + 4)
+    g2$train(list(debugvararg2.... = 10000, debugvararg.input = 1, debugvararg2.... = 200, debugvararg2.input = 3, debugvararg2.... = 4, debugvararg.... = 2), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1 + 2, debugvararg2.output = 10000 + 1000 * 3 + 200 + 4)
   )
 
   g3 <- Graph$new()$

@@ -627,6 +627,7 @@ graph_reduce = function(self, input, fun, single_input) {
   } else if (!is.null(names(input))) {
     # input can be a named list (will be distributed to respective edges) or unnamed.
     # if it is named, we check that names are unambiguous.
+    innames_novararg = graph_input$name[graph_input$channel.name != "..."]
 
     # don't use graph_input in the following, since rows with varargs are potentially duplicated.
     # Also don't use innames_novararg, since vararg channels could be duplicately named regardless.
@@ -635,7 +636,6 @@ graph_reduce = function(self, input, fun, single_input) {
         paste0(unique(innames_novararg[duplicated(innames_novararg)]), collapse = ", "))
     }
 
-    innames_novararg = graph_input$name[graph_input$channel.name != "..."]
     input_novararg = input[names(input) %in% innames_novararg]
     assert_names(names(input_novararg), type = "unique", .var.name = "input that does not refer to vararg input channels (when input has names and single_input is FALSE)")
 
