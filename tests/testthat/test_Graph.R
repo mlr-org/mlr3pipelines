@@ -215,6 +215,8 @@ test_that("edges that introduce loops cannot be added", {
   expect_error(g$add_edge("p2", "p1", 1, 1), "Cycle detected")
 
   expect_deep_clone(g, gclone)  # check that edges did not change
+
+
 })
 
 
@@ -505,4 +507,162 @@ test_that("Same output into multiple channels does not cause a bug", {
   expect_true(res$po2.output1 == 1)
   expect_true(res$po3.output1 == 2)
   expect_true(res$po4.output1 == 2)
+})
+
+test_that("Graph with ambiguously named input", {
+  PipeOpDebugInname = R6Class(
+    inherit = PipeOp,
+    public = list(
+      initialize = function(id = "debug", inname = "input", param_vals = list()) {
+        output = data.table(
+          name = "output",
+          train = "numeric",
+          predict = "numeric"
+        )
+        input = data.table(
+          name = inname,
+          train = "numeric",
+          predict = "numeric"
+        )
+        super$initialize(
+          id = id,
+          param_set = ps(),
+          param_vals = param_vals,
+          input = input,
+          output = output
+        )
+      }
+    ),
+    private = list(
+      .train = function(inputs) {
+        list(inputs[[1]] * 10)
+      }
+    )
+  )
+
+  gr = Graph$new()$
+    add_pipeop(PipeOpDebugInname$new(id = "a", inname = "b.c"))$
+    add_pipeop(PipeOpDebugInname$new(id = "a.b", inname = "c"))
+
+  expect_equal(
+    gr$train(list(1, 2), single_input = FALSE),
+    list(a.output = 10, a.b.output = 20)
+  )
+
+  expect_error(gr$train(list(a.b.c = 1, a.b.c = 2), single_input = FALSE),
+    "duplicated names: a.b.c")
+
+})
+
+test_that("Graph with vararg input", {
+  PipeOpDebugVararg = R6Class(
+    inherit = PipeOp,
+    public = list(
+      initialize = function(id = "debugvararg", param_vals = list()) {
+        output = data.table(
+          name = "output",
+          train = "numeric",
+          predict = "numeric"
+        )
+        input = data.table(
+          name = c("input", "..."),
+          train = c("numeric", "numeric"),
+          predict = c("numeric", "numeric")
+        )
+        super$initialize(
+          id = id,
+          param_set = ps(),
+          param_vals = param_vals,
+          input = input,
+          output = output
+        )
+      }
+    ),
+    private = list(
+      .train = function(inputs) {
+        x = 1000 * inputs$input + sum(unlist(inputs[names(inputs) == "..."]))
+        list(output = x)
+      }
+    )
+  )
+
+  g1 <- Graph$new()$
+    add_pipeop(PipeOpDebugVararg$new())
+
+  expect_equal(g1$train(list(1, 2, 3), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1 + 2 + 3))
+
+  expect_equal(g1$train(list(debugvararg.input = 1, debugvararg.... = 2), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1 + 2))
+
+  expect_equal(g1$train(list(debugvararg.... = 2, debugvararg.input = 1), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1 + 2))
+
+  expect_equal(g1$train(list(debugvararg.... = 2, debugvararg.input = 1, debugvararg.... = 3), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1 + 2 + 3))
+
+  expect_error(g1$train(list(debugvararg.input = 1, debugvararg.... = 2, debugvararg.input = 3), single_input = FALSE),
+    "input that does not refer to vararg.*unique names")
+
+  g2 <- Graph$new()$
+    add_pipeop(PipeOpDebugVararg$new())$
+    add_pipeop(PipeOpDebugVararg$new(id = "debugvararg2"))
+
+  expect_error(g2$train(list(1, 2, 3, 4, 5), single_input = FALSE),
+    "more than one input")
+
+  # throw the error even when number of inputs == number of args given
+  expect_error(g2$train(list(1, 2, 3, 4), single_input = FALSE),
+    "more than one input")
+
+  expect_equal(g2$train(1), list(debugvararg.output = 1001, debugvararg2.output = 1001))
+
+  expect_equal(
+    g2$train(list(debugvararg.input = 1, debugvararg.... = 2, debugvararg2.input = 3, debugvararg2.... = 4), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1 + 2, debugvararg2.output = 1000 * 3 + 4)
+  )
+
+  #multi-assignment to multi-vararg
+  expect_equal(
+    g2$train(list(debugvararg.... = 100, debugvararg2.... = 10000, debugvararg.input = 1, debugvararg2.... = 200, debugvararg.... = 2, debugvararg2.input = 3, debugvararg2.... = 4), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1 + 100 + 2, debugvararg2.output = 10000 +1000 * 3 + 200 + 4)
+  )
+
+  expect_equal(
+    g2$train(list(debugvararg2.... = 10000, debugvararg.input = 1, debugvararg2.... = 200, debugvararg2.input = 3, debugvararg2.... = 4), single_input = FALSE),
+    list(debugvararg.output = 1000 * 1, debugvararg2.output = 10000 +1000 * 3 + 200 + 4)
+  )
+
+  g3 <- Graph$new()$
+    add_pipeop(PipeOpDebugVararg$new())$
+    add_pipeop(PipeOpDebugVararg$new(id = "debugvararg2"))$
+    add_pipeop(PipeOpCopy$new(3))$
+    add_edge("copy", "debugvararg", "output1", "...")$
+    add_edge("copy", "debugvararg2", "output1", "...")
+
+  expect_equal(g3$train(list(1, 2, 3), single_input = FALSE),
+    list(debugvararg.output = 1003, debugvararg2.output = 2003, copy.output2 = 3, copy.output3 = 3))
+
+  g3 <- Graph$new()$
+    add_pipeop(PipeOpDebugVararg$new())$
+    add_pipeop(PipeOpDebugVararg$new(id = "debugvararg2"))$
+    add_pipeop(PipeOpCopy$new(3))$
+    add_edge("copy", "debugvararg", "output1", "...")$
+    add_edge("copy", "debugvararg2", "output2", "...")
+
+  expect_equal(g3$train(list(1, 2, 3), single_input = FALSE),
+    list(debugvararg.output = 1003, debugvararg2.output = 2003, copy.output3 = 3))
+
+  g3 <- Graph$new()$
+    add_pipeop(PipeOpDebugVararg$new())$
+    add_pipeop(PipeOpDebugVararg$new(id = "debugvararg2"))$
+    add_pipeop(PipeOpCopy$new(3))$
+    add_edge("copy", "debugvararg", "output1", "...")$
+    add_edge("copy", "debugvararg", "output2", "...")$
+    add_edge("copy", "debugvararg2", "output1", "...")$
+    add_edge("copy", "debugvararg2", "output3", "...")
+
+  expect_equal(g3$train(list(1, 2, 3), single_input = FALSE),
+    list(debugvararg.output = 1006, debugvararg2.output = 2006))
+
 })
