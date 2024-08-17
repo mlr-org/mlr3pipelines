@@ -534,6 +534,12 @@ test_that("GraphLearner hashes", {
   expect_string(learner1$hash)
   expect_string(learner1$phash)
 
+  # to compare hashes, we need to set the function-valued hyperparameters equal;
+  # otherwise, they have different environments and may hash differently.
+
+  funparams = names(which(map_lgl(learner1$param_set$values, is.function)))
+  learner1dash$param_set$set_values(.values = learner1$param_set$values[funparams])
+
   expect_equal(learner1$hash, learner1dash$hash)
   expect_equal(learner1$phash, learner1dash$phash)
 
