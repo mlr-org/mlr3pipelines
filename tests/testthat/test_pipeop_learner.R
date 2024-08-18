@@ -201,7 +201,10 @@ test_that("validation", {
 })
 
 test_that("internal_tuned_values, internal_valid_scores", {
-  task = tsk("iris")$divide(0.2)
+  task = tsk("iris")
+  ids = partition(task)
+  task$internal_valid_task = task$clone(deep = TRUE)$filter(ids$test)
+  task$row_roles$use = ids$train
   obj = as_pipeop(lrn("classif.debug", validate = "predefined", early_stopping = TRUE, iter = 100))
   obj$train(list(task))
   expect_int(obj$internal_tuned_values$iter)
