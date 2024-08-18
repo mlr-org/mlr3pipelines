@@ -138,7 +138,7 @@ test_that("threshold respects minimization / maximization", {
   bmr = benchmark(design, store_models = FALSE, store_backends = FALSE)
 
   # fpr for our constructed learner is < than for the untuned
-  expect_true(diff(bmr$aggregate(msr("classif.fpr"))$classif.tpr) < 0)
+  expect_true(diff(bmr$aggregate(msr("classif.tpr"))$classif.tpr) < 0)
 
   graph = po("learner_cv", resampling.folds = 5, learner = lrn("classif.rpart", predict_type = "prob")) %>>%
     po("tunethreshold", measure = msr("classif.fpr"), optimizer = "random_search")
@@ -155,5 +155,57 @@ test_that("threshold respects minimization / maximization", {
 
   # fpr for our constructed learner is < than for the untuned
   expect_true(diff(bmr$aggregate(msr("classif.fpr"))$classif.fpr) > 0)
+
+})
+
+test_that("threshold works with cost measure", {
+
+  skip_on_cran()
+  set.seed(1)
+
+  demotask = as_task_classif(id = "demotask", data.frame(
+    propensity = rep(seq(0, 1, length.out = 11), each = 10),
+    target = as.factor(upper.tri(matrix(1, nrow = 10, ncol = 11)))
+  ), target = "target", positive = "TRUE")
+
+  # task where 'propensity' gives the probability of 'target == TRUE'
+
+  demotask_large = as_task_classif(id = "demotask2",
+    demotask$data(rows = rep(1:110, 30)),
+    target = "target",
+    positive = "TRUE"
+  )
+
+  task = demotask_large
+  costs1 = matrix(c(0, 10, 1, 0), nrow = 2)
+  costs2 = matrix(c(0, 1, 10, 0), nrow = 2)
+  dimnames(costs1) = list(response = task$class_names, truth = task$class_names)
+  dimnames(costs2) = list(response = task$class_names, truth = task$class_names)
+  mcosts1 = msr("classif.costs", costs = costs1, id = "cost1")
+  mcosts2 = msr("classif.costs", costs = costs2, id = "cost2")
+
+  graph1 = po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob")) %>>%
+    po("tunethreshold", measure = mcosts1, optimizer = "random_search")
+  graph2 = po("learner_cv", learner = lrn("classif.rpart", predict_type = "prob")) %>>%
+    po("tunethreshold", measure = mcosts2, optimizer = "random_search")
+
+  learner1 = GraphLearner$new(graph1, id = "fnr.minimizer")
+  learner2 = GraphLearner$new(graph2, id = "fpr.minimizer")
+  design = benchmark_grid(
+    task,
+    list(learner1, learner2, lrn("classif.rpart")),
+    rsmp("cv", folds = 10)
+  )
+
+  bmr = benchmark(design, store_models = FALSE, store_backends = FALSE)
+
+  aggr = bmr$aggregate(c(msrs(c("classif.fnr", "classif.fpr")), list(mcosts1, mcosts2)))[
+    c("fnr.minimizer", "fpr.minimizer", "classif.rpart"), on = "learner_id"]
+
+
+  expect_equal(order(aggr$classif.fnr), c(1, 3, 2)) # fnr-minimizer first, then base model, then fpr.minimizer
+  expect_equal(order(aggr$classif.fpr), c(2, 3, 1)) # fpr-minimizer first, then base model, then fnr.minimizer
+  expect_equal(order(aggr$cost1), c(1, 3, 2)) # cost1 most satisfied by cost1-minimizing model
+  expect_equal(order(aggr$cost2), c(2, 3, 1)) # cost2 most satisfied by cost2-minimizing model
 
 })
