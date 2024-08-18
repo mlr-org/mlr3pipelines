@@ -72,6 +72,17 @@ Uses the \code{optimizer} provided as a \code{param_val} in order to find an opt
 See the \code{optimizer} parameter for more info.
 }
 
+\section{Fields}{
+
+Fields inherited from \code{\link{PipeOp}}, as well as:
+\itemize{
+\item \code{predict_type} :: \code{character(1)}\cr
+Type of prediction to return. Either \code{"prob"} (default) or \code{"response"}.
+Setting to \code{"response"} should rarely be used; it may potentially save some memory but has
+no other benefits.
+}
+}
+
 \section{Methods}{
 
 Only methods inherited from \code{\link{PipeOp}}.

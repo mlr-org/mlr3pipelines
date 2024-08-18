@@ -15,6 +15,20 @@ test_that("threshold works for multiclass", {
   out = po_thr$predict(res2)[[1]]
   expect_prediction(out)
   expect_true(out$score() < 0.33)
+  expect_set_equal(out$predict_types, c("response", "prob"))
+  expect_data_table(as.data.table(out))
+  expect_names(colnames(as.data.table(out)),
+    permutation.of = c("truth", "response", "prob.setosa", "prob.versicolor", "prob.virginica", "row_ids"))
+  po_thr$predict_type = "response"
+  out = po_thr$predict(res2)[[1]]
+  expect_prediction(out)
+  expect_true(out$score() < 0.33)
+  expect_set_equal(out$predict_types, "response")
+  expect_data_table(as.data.table(out))
+  expect_names(colnames(as.data.table(out)),
+    permutation.of = c("truth", "response", "row_ids"))
+
+
 })
 
 test_that("threshold works for binary", {
@@ -35,6 +49,20 @@ test_that("threshold works for binary", {
   po_cv =  po("learner_cv", learner = lrn("classif.rpart", predict_type = "response")) %>>%
     po("tunethreshold")
   expect_error(po_cv$train(t), "prob")
+
+  expect_set_equal(out$predict_types, c("response", "prob"))
+  expect_data_table(as.data.table(out))
+  expect_names(colnames(as.data.table(out)),
+    permutation.of = c("truth", "response", "prob.pos", "prob.neg", "row_ids"))
+  po_thr$predict_type = "response"
+  out = po_thr$predict(res2)[[1]]
+  expect_prediction(out)
+  expect_true(out$score() < 0.33)
+  expect_set_equal(out$predict_types, "response")
+  expect_data_table(as.data.table(out))
+  expect_names(colnames(as.data.table(out)),
+    permutation.of = c("truth", "response", "row_ids"))
+
 })
 
 test_that("tunethreshold graph works", {
@@ -207,5 +235,35 @@ test_that("threshold works with cost measure", {
   expect_equal(order(aggr$classif.fpr), c(2, 3, 1)) # fpr-minimizer first, then base model, then fnr.minimizer
   expect_equal(order(aggr$cost1), c(1, 3, 2)) # cost1 most satisfied by cost1-minimizing model
   expect_equal(order(aggr$cost2), c(2, 3, 1)) # cost2 most satisfied by cost2-minimizing model
+
+})
+
+
+test_that("threshold graph transparency", {
+
+  lrn_prob = as_learner(
+    po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>%
+      po("tunethreshold")
+  )
+
+  lrn_response = as_learner(
+    po("learner_cv", lrn("classif.rpart", predict_type = "prob")) %>>%
+      po("tunethreshold", predict_type = "response")
+  )
+
+  expect_equal(lrn_prob$predict_type, "prob")
+  expect_equal(lrn_response$predict_type, "response")
+
+  t = tsk("iris")
+
+  pprob = lrn_prob$train(t)$predict(t)
+  expect_set_equal(pprob$predict_types, c("response", "prob"))
+  expect_names(colnames(as.data.table(pprob)),
+    permutation.of = c("truth", "response", "prob.setosa", "prob.versicolor", "prob.virginica", "row_ids"))
+
+  presp = lrn_response$train(t)$predict(t)
+  expect_set_equal(presp$predict_types, "response")
+  expect_names(colnames(as.data.table(presp)),
+    permutation.of = c("truth", "response", "row_ids"))
 
 })
