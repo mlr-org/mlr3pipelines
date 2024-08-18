@@ -72,6 +72,88 @@ test_that("threshold works for classes that are not valid R names", {
 
   ppl$train(testtask)
 
-  ppl$predict(testtask)
+  expect_prediction(ppl$predict(testtask)[[1]])
+
+  expect_numeric(ppl$state$tunethreshold$threshold, len = length(cols) * 2)
+  expect_names(names(ppl$state$tunethreshold$threshold), permutation.of = c(cols, make.names(cols)))
+})
+
+
+test_that("threshold respects minimization / maximization", {
+  skip_on_cran()
+  set.seed(1)
+
+  demotask = as_task_classif(id = "demotask", data.frame(
+    propensity = rep(seq(0, 1, length.out = 11), each = 10),
+    target = as.factor(upper.tri(matrix(1, nrow = 10, ncol = 11)))
+  ), target = "target", positive = "TRUE")
+
+  # task where 'propensity' gives the probability of 'target == TRUE'
+
+  demotask_imbalanced = as_task_classif(id = "demotask2",
+    demotask$data(rows = rep(c(rep(1:10, 30), 1:110), 10)),
+    target = "target",
+    positive = "TRUE"
+  )
+
+  task = demotask_imbalanced
+
+  # classif.bacc: balanced accuracy is maximized.
+  # for optimal accuracy, the decision should be split at propensity ~ 0.5
+  # for balanced accuracy, the decision should be split at a lower propensity: since
+  # there are more 'false' samples, getting more 'true positives' by lowering propensity
+  # decisoin cutoff increases bacc more than getting fewer false negatives decreases it.
+  graph = po("learner_cv", resampling.folds = 5, learner = lrn("classif.rpart", predict_type = "prob")) %>>%
+    po("tunethreshold", measure = msr("classif.bacc"), optimizer = "random_search")
+
+  learner1 = as_learner(graph)
+  learner2 = lrn("classif.rpart")
+
+  design = benchmark_grid(
+    task,
+    list(learner1, learner2),
+    rsmp("repeated_cv", folds = 3, repeats = 3)
+  )
+
+  bmr = benchmark(design, store_models = FALSE, store_backends = FALSE)
+
+  # balanced accuracy after threshold tuning should be greater than balanced accuracy for the untuned learner
+  expect_true(diff(bmr$aggregate(msr("classif.bacc"))$classif.bacc) < 0)
+
+  # more info:
+  # bmr$aggregate(msrs(c("classif.bacc", "classif.acc")))
+
+  # maximize TPR: should get close to 1
+  graph = po("learner_cv", resampling.folds = 5, learner = lrn("classif.rpart", predict_type = "prob")) %>>%
+    po("tunethreshold", measure = msr("classif.tpr"), optimizer = "random_search")
+
+  learner1 = as_learner(graph)
+
+  design = benchmark_grid(
+    task,
+    list(learner1, learner2),
+    rsmp("cv", folds = 3)
+  )
+
+  bmr = benchmark(design, store_models = FALSE, store_backends = FALSE)
+
+  # fpr for our constructed learner is < than for the untuned
+  expect_true(diff(bmr$aggregate(msr("classif.fpr"))$classif.tpr) < 0)
+
+  graph = po("learner_cv", resampling.folds = 5, learner = lrn("classif.rpart", predict_type = "prob")) %>>%
+    po("tunethreshold", measure = msr("classif.fpr"), optimizer = "random_search")
+
+  learner1 = as_learner(graph)
+
+  design = benchmark_grid(
+    task,
+    list(learner1, learner2),
+    rsmp("cv", folds = 3)
+  )
+
+  bmr = benchmark(design, store_models = FALSE, store_backends = FALSE)
+
+  # fpr for our constructed learner is < than for the untuned
+  expect_true(diff(bmr$aggregate(msr("classif.fpr"))$classif.fpr) > 0)
 
 })

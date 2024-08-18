@@ -119,7 +119,6 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       thresholds = unlist(xs)
       names(thresholds) = paramname_to_column_map[names(thresholds)]
       res = pred$set_threshold(thresholds)$score(measure)
-      if (!measure$minimize) res = -res
       return(setNames(list(res), measure$id))
     },
     .optimize_objfun = function(pred) {
