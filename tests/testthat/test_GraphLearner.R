@@ -514,12 +514,12 @@ test_that("base_learner() works", {
   expect_identical(x$base_learner(2), x$base_learner())
   expect_identical(x$base_learner(), x$graph_model$pipeops$scale.classif.rpart$learner_model$graph_model$pipeops$classif.rpart$learner_model)
 
-  # branching: currently not supported
+  # branching: now supported
   branching_learner = as_learner(ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
-  expect_error(branching_learner$base_learner(), "Graph has no unique PipeOp containing a Learner")
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
 
   # bogus GraphLearner with no PipeOpLearner inside.
-  expect_error(as_learner(po("nop"))$base_learner(), "No Learner PipeOp found.")
+  expect_error(as_learner(po("nop"))$base_learner(), "No base learner found in Graph.")
 
   # branching that ends up finding unique pipeop
   # multiplicities

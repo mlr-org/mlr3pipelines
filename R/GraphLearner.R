@@ -82,7 +82,7 @@
 #'   If `return_po` is `FALSE`, this list may contain [`Multiplicity`] objects, which are not unwrapped.
 #'   If `return_all` is `FALSE` and there are multiple possible base learners, an error is thrown.
 #'   This may also happen if only a single [`PipeOpLearner`] is present that was trained with a [`Multiplicity`].\cr
-#'   If `resolve_branching` is `TRUE`, and when a [`PipeOpUnBranch`] is encountered, the
+#'   If `resolve_branching` is `TRUE`, and when a [`PipeOpUnbranch`] is encountered, the
 #'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
 #'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
 #'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.\cr
@@ -204,30 +204,28 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       dst_id = NULL
       src_channel = NULL
       dst_channel = NULL
-      po_unbranch_active_input = NULL  # only call get_pobranch_active_output() if we encounter a PipeOpUnbranch
+      delayedAssign("po_unbranch_active_input", get_po_unbranch_active_input(gm))  # only call get_pobranch_active_output() if we encounter a PipeOpUnbranch
 
-      discover_pipeops = function(current_pipeop) {
+      search_base_learner_pipeops = function(current_pipeop) {
         repeat {
           last_pipeop = gm$pipeops[[current_pipeop]]
           learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
-          if (!is.null(learner_model)) break
-          current_pipeop = gm$edges[dst_id == current_pipeop, src_id]
-          if (length(last_pipeop_id) > 1) {
+          if (!is.null(learner_model)) return(list(last_pipeop))
+          next_pipeop = gm$edges[dst_id == current_pipeop, src_id]
+          if (length(next_pipeop) > 1) {
             # more than one predecessor
-            if (!inherits(gm$pipeops[[current_pipeop]], "PipeOpUnBranch")) {
-              return(unique(unlist(lapply(last_pipeop_id, discover_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
-            }
-            if (is.null(po_unbranch_active_input)) {
-              po_unbranch_active_input = get_pobranch_active_output(gm)
+            if (!inherits(last_pipeop, "PipeOpUnbranch")) {
+              return(unique(unlist(lapply(next_pipeop, search_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
             }
             current_active_input = po_unbranch_active_input[[current_pipeop]]
-            current_pipeop = gm$edges[dst_id == current_pipeop & dst_channel == current_active_input, src_id]
+            next_pipeop = gm$edges[dst_id == current_pipeop & dst_channel == current_active_input, src_id]
           }
-          if (length(last_pipeop_id) == 0) return(list())
+          if (length(next_pipeop) == 0) return(list())
+          current_pipeop = next_pipeop
         }
       }
 
-      unique(discover_base_learner_pipeops(last_pipeop_id))
+      unique(search_base_learner_pipeops(last_pipeop_id))
     },
     marshal = function(...) {
       learner_marshal(.learner = self, ...)
