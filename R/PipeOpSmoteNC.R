@@ -79,30 +79,31 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
         over_ratio = p_dbl(lower = 0, default = 1, tags = c("train", "smotenc"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "themis", can_subset_cols = FALSE,
-                       feature_types = c("numeric", "factor"), tags = "imbalanced data")
+                       task_type = "TaskClassif", tags = "imbalanced data")
     }
   ),
   private = list(
 
     .train_task = function(task) {
-      # At least one numeric feature necessary for SmoteNC
-      assert_true(any(task$feature_types$type == "numeric"))
-      if (!task$task_type == "classif") {
-        stop("SmoteNC only supported for TaskClassif")
-      }
-      # Check that only one target column exists (better way?)
-      if (length(task$target_names) > 1L) {
-        stop("SmoteNC does not work for Tasks with more than one target column")
-      }
-
-      dt_columns = private$.select_cols(task)
-      if (!length(dt_columns)) {
+      # Return task unchanged, if no feature columns exist
+      if (!length(task$feature_names)) {
         return(task)
       }
-      dt = task$data(cols = c(task$target_names, dt_columns))
+      # Only factor, ordered, numeric and integer features allowed
+      if (!all(task$feature_types$type %in% c("numeric", "integer", "factor", "ordered"))) {
+        stop("SmoteNC does only accept factor, ordered, numeric and integer features. Use PipeOpSelect to select the appropriate features.")
+      }
+      # At least one numeric or integer feature required
+      if (!any(task$feature_types$type %in% c("numeric", "integer"))) {
+        stop("SmoteNC requires at least one numeric or integer feature.")
+      }
+      # Do not allow NAs in feature columns
+      if (any(task$missings())) {
+        stop("SmoteNC does not allow NAs in feature columns.")
+      }
 
       # Calculate synthetic data
-      st = setDT(invoke(themis::smotenc, df = dt, var = task$target_names,
+      st = setDT(invoke(themis::smotenc, df = task$data(), var = task$target_names,
                         .args = self$param_set$get_values(tags = "smotenc")))
 
       task$rbind(st)
