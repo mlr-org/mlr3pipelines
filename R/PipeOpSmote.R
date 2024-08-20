@@ -79,8 +79,8 @@ PipeOpSmote = R6Class("PipeOpSmote",
         # so it is a 'special_vals'.
         dup_size = p_int(lower = 1, default = 0, special_vals = list(0), tags = c("train", "smote"))
       )
-      super$initialize(id, param_set = ps, param_vals = param_vals,
-        packages = "smotefamily", can_subset_cols = FALSE, tags = "imbalanced data")
+      super$initialize(id, param_set = ps, param_vals = param_vals, can_subset_cols = FALSE,
+        packages = "smotefamily", task_type = "TaskClassif", tags = "imbalanced data")
     }
   ),
   private = list(
@@ -99,11 +99,10 @@ PipeOpSmote = R6Class("PipeOpSmote",
         .args = self$param_set$get_values(tags = "smote"),
         .opts = list(warnPartialMatchArgs = FALSE))$syn_data)
 
-      # rename target column and fix character conversion for TaskClassif
-      if (task$task_type == "classif") {
-        st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
-      }
+      # rename target column and fix character conversion
+      st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
       setnames(st, "class", task$target_names)
+      
       task$rbind(st)
     }
   )
