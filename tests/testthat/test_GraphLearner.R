@@ -517,21 +517,186 @@ test_that("base_learner() works", {
   # branching: now supported
   branching_learner = as_learner(ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
   expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
+  branching_learner$param_set$values$branch.selection = "classif.debug"
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
+
+  branching_learner = as_learner(ppl("branch", pos(c("pca", "ica")), prefix_branchops = "brunch") %>>% ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
+  branching_learner$param_set$values$branch.selection = "classif.debug"
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
+
+  # unbranch with single input, without corresponding PipeOpBranch, is legal
+  x = as_learner(po("pca") %>>% lrn("classif.rpart") %>>% po("unbranch", 1))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+
+  # ParamInt selection parameter
+  x = as_learner(ppl("branch", list(lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = 2
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  x$param_set$values$branch.selection = to_tune()
+  expect_error(x$base_learner(), "Cannot infer active output.* PipeOpBranch branch.*non-numeric 'selection'")
+
+  x = as_learner(ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  expect_error(x$base_learner(return_po = TRUE), "recursive must be == 1 if return_po is TRUE")
+  expect_error(x$base_learner(return_po = TRUE, recursive = 0), "recursive must be == 1 if return_po is TRUE")
+  expect_error(x$base_learner(return_all = TRUE), "recursive must be <= 1 if return_all is TRUE")
+
+  expect_identical(x$base_learner(recursive = 1, return_po = TRUE), x$graph_model$pipeops$classif.debug)
+
+  expect_identical(x$base_learner(recursive = 1, return_all = TRUE),
+    list(x$graph_model$pipeops$classif.debug$learner_model))
+
+  expect_identical(x$base_learner(recursive = 1, return_po = TRUE, return_all = TRUE),
+    list(x$graph_model$pipeops$classif.debug))
+
+  expect_identical(x$base_learner(recursive = 1, return_po = TRUE, return_all = TRUE, resolve_branching = FALSE),
+    list(x$graph_model$pipeops$classif.rpart, x$graph_model$pipeops$classif.debug))
+
+  expect_identical(x$base_learner(recursive = 0), x)
+  expect_identical(x$base_learner(recursive = 0, return_all = TRUE), list(x))
+
+  # unbranch as very first operation works
+  x = as_learner(po("unbranch", 1, id = "dummyub1") %>>% ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  # branch with output connected to several pipeops
+  x = as_learner(ppl("branch", list(classif.rpart = list(po("nop"), po("nop_1")) %>>% po("featureunion") %>>% lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  x = as_learner(ppl("branch", list(classif.rpart = po("featureunion", 2) %>>% lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+
+  x = as_learner(po("unbranch", 2, id = "dummyub1") %>>% ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_error(x$base_learner(), "dummyub1 has multiple active inputs.*'input1'.*direct Graph input.*'input2'.*direct Graph input")
+
+  ################################################################################
+  ### The following graphs are bogus for multiple reasons. If our graph checks ###
+  ### ever become more rigorous, these will have to be adjusted.               ###
+  ################################################################################
+
+  # pipeopbranch connected to unbranch through the same output in multiple routes.
+  g = (po("branch", c("classif.rpart", "classif.debug")) %>>% list(lrn("classif.rpart"), lrn("classif.debug")))$
+    add_pipeop(po("unbranch", 3))$
+    add_edge("classif.rpart", "unbranch", dst_channel = "input1")$
+    add_edge("classif.debug", "unbranch", dst_channel = "input2")$
+    add_edge("branch", "unbranch", src_channel = "classif.debug", dst_channel = "input3")
+
+  # classif.rpart route has only one connection --> works
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.rpart$learner_model)
+
+  g$param_set$values$branch.selection = "classif.debug"
+  expect_error(as_learner(g)$base_learner(), "PipeOpUnbranch unbranch.*multiple active inputs.*'input2'.*PipeOpBranch 'branch'.*'classif.debug'.*'input3'.*PipeOpBranch 'branch'.*'classif.debug'")
+
+  # live input from graph input is recognized correctly
+  g = (po("branch", c("classif.rpart", "classif.debug")) %>>% list(lrn("classif.rpart"), lrn("classif.debug")))$
+    add_pipeop(po("unbranch", 2, id = "poub1"))$
+    add_pipeop(po("unbranch", 1, id = "poub2"))$
+    add_pipeop(po("unbranch", 2))$
+    add_edge("classif.rpart", "poub1", dst_channel = "input1")$
+    add_edge("classif.debug", "poub2")$
+    add_edge("poub1", "unbranch", dst_channel = "input1")$
+    add_edge("poub2", "unbranch", dst_channel = "input2")
+
+  # error because poub1 gets two live inputs: from PipeOpBranch and from graph input
+  expect_error(as_learner(g)$base_learner(),
+    "poub1 has multiple active inputs.*'input1'.*active output 'classif.rpart'.*'input2'.*direct Graph input")
+
+  g$param_set$values$branch.selection = "classif.debug"
+
+  # now poub1 has only one live input, since PipeOpBranch's active output goes to classif.debug / poub2;
+  # however, the overall unbranch now has two active inputs
+  expect_error(as_learner(g)$base_learner(),
+    "PipeOpUnbranch unbranch has multiple active inputs.*'input1'.* from direct Graph input.* always active.*'input2'.* 'branch' active output 'classif.debug'")
+
+  g = Graph$new()$
+    add_pipeop(po("branch", c("classif.rpart", "classif.debug"), id = "branch1"))$
+    add_pipeop(po("branch", c("classif.rpart", "classif.debug"), id = "branch2"))$
+    add_pipeop(po("featureunion", id = "fu1"))$
+    add_pipeop(po("featureunion", id = "fu2"))$
+    add_pipeop(lrn("classif.rpart"))$
+    add_pipeop(lrn("classif.debug"))$
+    add_pipeop(po("unbranch", 2))$
+    add_edge("branch1", "fu1", src_channel = "classif.rpart")$
+    add_edge("branch2", "fu1", src_channel = "classif.rpart")$
+    add_edge("branch1", "fu2", src_channel = "classif.debug")$
+    add_edge("branch2", "fu2", src_channel = "classif.debug")$
+    add_edge("fu1", "classif.rpart")$
+    add_edge("fu2", "classif.debug")$
+    add_edge("classif.rpart", "unbranch", dst_channel = "input1")$
+    add_edge("classif.debug", "unbranch", dst_channel = "input2")
+
+  # this works as long as branch1 and branch2 flow in the same direction
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.rpart$learner_model)
+
+  g$param_set$set_values(branch1.selection = "classif.debug", branch2.selection = "classif.debug")
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.debug$learner_model)
+
+  g$param_set$set_values(branch1.selection = "classif.rpart", branch2.selection = "classif.debug")
+  ## there are multiple possible error messages here: either at fu1, or at fu2.
+  ## currently we find fu1 first because this is what the topological sort results in (fu1 gets checked first),
+  ## but an error at fu2 would be equally valid.
+  expect_error(as_learner(g)$base_learner(),
+    "'branch2' inactive output.*'classif.rpart'.*'branch1' active output.*'classif.rpart'.*at PipeOp fu1|'branch1' inactive output.*'classif.debug'.*'branch2' active output.*'classif.debug'.*at PipeOp fu2")
+
+  g$add_pipeop(po("nop"))$add_edge("nop", "fu2")
+
+  g$param_set$set_values(branch1.selection = "classif.debug", branch2.selection = "classif.debug")
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.debug$learner_model)
+
+  g$param_set$set_values(branch1.selection = "classif.rpart", branch2.selection = "classif.rpart")
+
+  expect_error(as_learner(g)$base_learner(),
+    "'branch1' inactive output.*classif.debug.*'branch2' inactive output.*classif.debug.* in conflict with direct Graph input.*fu2")
 
   # bogus GraphLearner with no PipeOpLearner inside.
   expect_error(as_learner(po("nop"))$base_learner(), "No base learner found in Graph.")
 
-  # branching that ends up finding unique pipeop
+
+
   # multiplicities
-  # return_all gives list, even if recursive <= 0
-  # unbranch with no predecessor
-  # branch with int and with char
-  # vararg channel
-  # branch with several output edges
-  # e.g. pobranch with the same output connected to different inputs of unbranch
+
   # double-channel pipeop cascade: see there is no exponential explosion
-  # conflicting activated branches
-  # two unbranch, one does not select any of the part in question
+
+  gchain = chain_graphs(
+    lapply(1:20, function(i) ppl("branch", pos(paste0("nop_", c(2 * i, 2 * i + 1))), prefix_branchops = as.character(i))),
+    in_place = TRUE
+  )
+
+  glrn = as_learner(gchain %>>% ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
+
+  expect_identical(glrn$base_learner(), glrn$graph_model$pipeops$classif.rpart$learner_model)
+  expect_identical(glrn$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE),
+    list(glrn$graph_model$pipeops$classif.rpart$learner_model, glrn$graph_model$pipeops$classif.debug$learner_model))
+
+
+  glrn = as_learner(ppl("branch", lrns(c("classif.rpart", "classif.debug"))) %>>% gchain)
+
+  expect_identical(glrn$base_learner(), glrn$graph_model$pipeops$classif.rpart$learner_model)
+
+  # without memoization the following would take a long time
+  expect_identical(glrn$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE),
+    list(glrn$graph_model$pipeops$classif.rpart$learner_model, glrn$graph_model$pipeops$classif.debug$learner_model))
+
+  glrn$base_learner()
+
+
+  # branch -> unbranch, unbranch -> unbranch
+
+
+  # infer task type and other things: use base_learner, but don't do that if things are given explicitly.
 })
 
 

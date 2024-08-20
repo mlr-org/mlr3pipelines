@@ -75,7 +75,7 @@
 #'   Otherwise, the [`Graph`] is traversed backwards to find the first `PipeOp` containing a `$learner_model` field.
 #'   If `recursive` is 1, that `$learner_model` (or containing `PipeOp`, if `return_po` is `TRUE`) is returned.
 #'   If `recursive` is greater than 1, the discovered base learner's `base_learner()` method is called with `recursive - 1`.
-#'   `recursive` must be set to 1 if either `return_po` or `return_all` is `TRUE`.\cr
+#'   `recursive` must be set to 1 if `return_po` is TRUE, and must be set to at most 1 if `return_all` is `TRUE`.\cr
 #'   If `return_po` is `TRUE`, the container-`PipeOp` is returned instead of the `Learner`.
 #'   This will typically be a [`PipeOpLearner`] or a [`PipeOpLearnerCV`].\cr
 #'   If `return_all` is `TRUE`, a `list` of `Learner`s or `PipeOp`s is returned.
@@ -162,9 +162,9 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
       assert_flag(return_po)
       assert_flag(return_all)
+      if (return_po && recursive != 1) stop("recursive must be == 1 if return_po is TRUE")
       if (recursive <= 0) return(if (return_all) list(self) else self)
       if (return_all && recursive > 1) stop("recursive must be <= 1 if return_all is TRUE")
-      if (return_po && recursive > 1) stop("recursive must be <= 1 if return_po is TRUE")
 
       if (!return_all) {
         candidates = self$base_learner(recursive = 1, return_po = TRUE, return_all = TRUE, resolve_branching = resolve_branching)
@@ -196,7 +196,10 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       gm = self$graph_model
 
       gm_output = gm$output
-      if (nrow(gm_output) != 1) stop("Graph has no unique output.")
+      if (nrow(gm_output) != 1) {
+        # should never happen, since we checked this in initialize(), but theoretically the user could have changed the graph by-reference
+        stop("Graph has no unique output.")
+      }
       last_pipeop_id = gm_output$op.id
 
       # pacify static checks
@@ -206,15 +209,18 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       dst_channel = NULL
       delayedAssign("po_unbranch_active_input", get_po_unbranch_active_input(gm))  # only call get_pobranch_active_output() if we encounter a PipeOpUnbranch
 
+      pipeops_visited = new.env(parent = emptyenv())
       search_base_learner_pipeops = function(current_pipeop) {
         repeat {
           last_pipeop = gm$pipeops[[current_pipeop]]
+          if (get0(current_pipeop, pipeops_visited, ifnotfound = FALSE)) return(list())
+          assign(current_pipeop, TRUE, pipeops_visited)
           learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
           if (!is.null(learner_model)) return(list(last_pipeop))
           next_pipeop = gm$edges[dst_id == current_pipeop, src_id]
           if (length(next_pipeop) > 1) {
             # more than one predecessor
-            if (!inherits(last_pipeop, "PipeOpUnbranch")) {
+            if (!inherits(last_pipeop, "PipeOpUnbranch") || !resolve_branching) {
               return(unique(unlist(lapply(next_pipeop, search_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
             }
             current_active_input = po_unbranch_active_input[[current_pipeop]]
@@ -524,9 +530,12 @@ infer_task_type = function(graph) {
     stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
   }
   if (length(task_type) == 0L) {
+    pipeops_visited = new.env(parent = emptyenv())
     # recursively walk backwards through the graph
     # FIXME: think more about target transformation graphs here
     get_po_task_type = function(x) {
+      if (get0(x$id, pipeops_visited, ifnotfound = FALSE)) return(NULL)
+      assign(x$id, TRUE, pipeops_visited)
       task_type = c(
         match(c(x$output$train, x$output$predict), class_table$prediction),
         match(c(x$input$train, x$input$predict), class_table$task))
@@ -592,7 +601,7 @@ get_po_unbranch_active_input = function(graph) {
   branch_state_info = rbind(
     branch_state_info,
     graph_input[, .(src_id = "", src_channel = graph_input$name, dst_id = graph_input$op.id,
-      dst_channel = graph_input$channel.name, state = TRUE, reason = list(list("direct Graph input, which is always active")))]
+      dst_channel = graph_input$channel.name, state = TRUE, reason = list("direct Graph input, which is always active"))]
   )
   ids = graph$ids(sorted = TRUE)  # Topologically sorted IDs
   po_unbranch_active_input = character(0)
@@ -601,8 +610,9 @@ get_po_unbranch_active_input = function(graph) {
     inedges = branch_state_info[dst_id == pipeop_id, ]
     # PipeOpUnbranch with more than one active input is an error
     if (inherits(pipeop, "PipeOpUnbranch") && sum(inedges$state) > 1) {
-      stopf("PipeOpUnbranch %s has multiple active inputs: %s",
-        inedges[state, paste(sprintf("input %s from %s", dst_channel, unlist(reason, recursive = FALSE, use.names = TRUE)), collapse = ", ")]
+      stopf("PipeOpUnbranch %s has multiple active inputs: %s.",
+        pipeop_id,
+        inedges[state == TRUE, andpaste(sprintf("input '%s' from %s", dst_channel, unlist(reason, recursive = FALSE, use.names = TRUE)))]
       )
     }
 
@@ -610,8 +620,8 @@ get_po_unbranch_active_input = function(graph) {
     if (all(inedges$state) != any(inedges$state)) {
       if (!inherits(pipeop, "PipeOpUnbranch")) {
         stopf("Inconsistent selection of PipeOpBranch outputs:\n%s in conflict with %s at PipeOp %s.",
-          inedges[!state, paste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)), collapse = ", ")],
-          inedges[state, paste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)), collapse = ", ")],
+          inedges[state == FALSE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)))],
+          inedges[state == TRUE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)))],
           pipeop_id
         )
       }
@@ -630,13 +640,19 @@ get_po_unbranch_active_input = function(graph) {
       # PipeOpBranch is only special when it is actually active
       active_output = get_po_branch_active_output(pipeop)
       branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
-        reason = list(list(sprintf("PipeOpBranch '%s' %s output '%s'",
+        reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
           pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
-          active_output)))
+          src_channel))
       )]
     } else {
-      branch_state_info[src_id == pipeop_id, `:=`(state = state_current, reason = list(list(reason_current)))]
+      branch_state_info[src_id == pipeop_id, `:=`(state = state_current, reason = list(reason_current))]
     }
   }
   po_unbranch_active_input
+}
+
+andpaste = function(x, sep = ", ", lastsep = ", and ") {
+  if (length(x) == 0) return("")
+  if (length(x) == 1) return(x[[1]])
+  paste0(paste(first(x, -1), collapse = sep), lastsep, last(x))
 }
