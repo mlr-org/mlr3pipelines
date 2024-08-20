@@ -521,6 +521,17 @@ test_that("base_learner() works", {
   # bogus GraphLearner with no PipeOpLearner inside.
   expect_error(as_learner(po("nop"))$base_learner(), "No Learner PipeOp found.")
 
+  # branching that ends up finding unique pipeop
+  # multiplicities
+  # return_all gives list, even if recursive <= 0
+  # unbranch with no predecessor
+  # branch with int and with char
+  # vararg channel
+  # branch with several output edges
+  # e.g. pobranch with the same output connected to different inputs of unbranch
+  # double-channel pipeop cascade: see there is no exponential explosion
+  # conflicting activated branches
+  # two unbranch, one does not select any of the part in question
 })
 
 

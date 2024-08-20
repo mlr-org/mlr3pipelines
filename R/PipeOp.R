@@ -259,7 +259,7 @@ PipeOp = R6Class("PipeOp",
         lapply(param_set, function(x) assert_param_set(eval(x)))
         private$.param_set_source = param_set
       }
-      self$id = assert_string(id)
+      self$id = assert_string(id, min.chars = 1)
 
       self$properties = assert_subset(properties, mlr_reflections$pipeops$properties)
       self$param_set$values = insert_named(self$param_set$values, param_vals)

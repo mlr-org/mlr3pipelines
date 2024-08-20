@@ -435,7 +435,7 @@ Graph = R6Class("Graph",
     set_names = function(old, new) {
       ids = names2(self$pipeops)
       assert_subset(old, ids)
-      assert_character(new, any.missing = FALSE)
+      assert_character(new, any.missing = FALSE, min.chars = 1)
       new_ids = map_values(ids, old, new)
       names(self$pipeops) = new_ids
       imap(self$pipeops, function(x, nn) x$id = nn)

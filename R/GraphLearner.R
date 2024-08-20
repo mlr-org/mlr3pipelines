@@ -62,12 +62,30 @@
 #'   Whether the learner is marshaled.
 #'
 #' @section Methods:
-#' * `marshal(...)`\cr
+#' Methods inherited from [`Learner`], as well as:
+#' * `marshal`\cr
 #'   (any) -> `self`\cr
 #'   Marshal the model.
-#' * `unmarshal(...)`\cr
+#' * `unmarshal`\cr
 #'   (any) -> `self`\cr
 #'   Unmarshal the model.
+#' * `base_learner(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE)`\cr
+#'   (`numeric(1)`, `logical(1)`, `logical(1)`, `character(1)`) -> `Learner` | [`PipeOp`] | `list` of `Learner` | `list` of [`PipeOp`]\cr
+#'   Return the base learner of the `GraphLearner`. If `recursive` is 0, the `GraphLearner` itself is returned.
+#'   Otherwise, the [`Graph`] is traversed backwards to find the first `PipeOp` containing a `$learner_model` field.
+#'   If `recursive` is 1, that `$learner_model` (or containing `PipeOp`, if `return_po` is `TRUE`) is returned.
+#'   If `recursive` is greater than 1, the discovered base learner's `base_learner()` method is called with `recursive - 1`.
+#'   `recursive` must be set to 1 if either `return_po` or `return_all` is `TRUE`.\cr
+#'   If `return_po` is `TRUE`, the container-`PipeOp` is returned instead of the `Learner`.
+#'   This will typically be a [`PipeOpLearner`] or a [`PipeOpLearnerCV`].\cr
+#'   If `return_all` is `TRUE`, a `list` of `Learner`s or `PipeOp`s is returned.
+#'   If `return_po` is `FALSE`, this list may contain [`Multiplicity`] objects, which are not unwrapped.
+#'   If `return_all` is `FALSE` and there are multiple possible base learners, an error is thrown.
+#'   This may also happen if only a single [`PipeOpLearner`] is present that was trained with a [`Multiplicity`].\cr
+#'   If `resolve_branching` is `TRUE`, and when a [`PipeOpUnBranch`] is encountered, the
+#'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
+#'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
+#'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.\cr
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -140,11 +158,43 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       if (!is.null(predict_type)) self$predict_type = predict_type
     },
-    base_learner = function(recursive = Inf, return_po = FALSE) {
+    base_learner = function(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
       assert_flag(return_po)
-      if (recursive <= 0) return(self)
+      assert_flag(return_all)
+      if (recursive <= 0) return(if (return_all) list(self) else self)
+      if (return_all && recursive > 1) stop("recursive must be <= 1 if return_all is TRUE")
+      if (return_po && recursive > 1) stop("recursive must be <= 1 if return_po is TRUE")
+
+      if (!return_all) {
+        candidates = self$base_learner(recursive = 1, return_po = TRUE, return_all = TRUE, resolve_branching = resolve_branching)
+        if (length(candidates) < 1) stopf("No base learner found in Graph %s.", self$id)
+        if (length(candidates) > 1) stopf("Graph %s has no unique PipeOp containing a Learner.", self$id)
+        if (!return_po) {
+          result = candidates[[1]]$learner_model
+          if (is.Multiplicity(result)) {
+            if (length(result) != 1) {
+              stopf("Graph %s's base learner is a Multiplicity that does not contain exactly one Learner.", self$id)
+            }
+            result = result[[1]]
+          }
+          return(result$base_learner(recursive - 1))
+        } else {
+          return(candidates[[1]])
+        }
+      }
+
+      # if we are here, return_all is TRUE, and recursive is therefore 1.
+      if (!return_po) {
+        result = self$base_learner(recursive = 1, return_po = TRUE, return_all = TRUE, resolve_branching = resolve_branching)
+        return(lapply(result, function(x) x$learner_model))
+      }
+
+      # If we are here, return_all is TRUE, return_po is TRUE, recursive is 1.
+      # We are looking for all PipeOps with a `$learner_model` field, possibly resolving branching.
+
       gm = self$graph_model
+
       gm_output = gm$output
       if (nrow(gm_output) != 1) stop("Graph has no unique output.")
       last_pipeop_id = gm_output$op.id
@@ -152,20 +202,32 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       # pacify static checks
       src_id = NULL
       dst_id = NULL
+      src_channel = NULL
+      dst_channel = NULL
+      po_unbranch_active_input = NULL  # only call get_pobranch_active_output() if we encounter a PipeOpUnbranch
 
-      repeat {
-        last_pipeop = gm$pipeops[[last_pipeop_id]]
-        learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
-        if (!is.null(learner_model)) break
-        last_pipeop_id = gm$edges[dst_id == last_pipeop_id, src_id]
-        if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
-        if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
+      discover_pipeops = function(current_pipeop) {
+        repeat {
+          last_pipeop = gm$pipeops[[current_pipeop]]
+          learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
+          if (!is.null(learner_model)) break
+          current_pipeop = gm$edges[dst_id == current_pipeop, src_id]
+          if (length(last_pipeop_id) > 1) {
+            # more than one predecessor
+            if (!inherits(gm$pipeops[[current_pipeop]], "PipeOpUnBranch")) {
+              return(unique(unlist(lapply(last_pipeop_id, discover_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
+            }
+            if (is.null(po_unbranch_active_input)) {
+              po_unbranch_active_input = get_pobranch_active_output(gm)
+            }
+            current_active_input = po_unbranch_active_input[[current_pipeop]]
+            current_pipeop = gm$edges[dst_id == current_pipeop & dst_channel == current_active_input, src_id]
+          }
+          if (length(last_pipeop_id) == 0) return(list())
+        }
       }
-      if (return_po) {
-        last_pipeop
-      } else {
-        learner_model$base_learner(recursive - 1)
-      }
+
+      unique(discover_base_learner_pipeops(last_pipeop_id))
     },
     marshal = function(...) {
       learner_marshal(.learner = self, ...)
@@ -385,7 +447,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args_all = l
   }
 
   if (is.null(ids)) {
-    ids = learner$base_learner(return_po = TRUE)$id
+    ids = learner$base_learner(recursive = 1, return_po = TRUE)$id
   } else {
     assert_subset(ids, ids(pos_with_property(learner$graph$pipeops, "validation")))
   }
@@ -490,4 +552,93 @@ infer_task_type = function(graph) {
     task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
   }
   c(task_type, "classif")[[1]]  # "classif" as final fallback
+}
+
+
+get_po_unbranch_active_input = function(graph) {
+  # query a given PipeOpBranch what its selected output is
+  # Currently, PipeOpBranch 'selection' can be either integer-valued or a string.
+  get_po_branch_active_output = function(pipeop) {
+    assertR6(pipeop, "PipeOpBranch")
+    pob_ps = pipeop$param_set
+    selection = pob_ps$values$selection
+    # will have to check if selection is numeric / character, in case it
+    # is not given or a TuneToken or something like that.
+    if (pob_ps$class[["selection"]] == "ParamInt") {
+      if (!test_int(selection)) {
+        stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
+      }
+      return(pipeop$output$name[[pob_ps$values$selection]])
+    } else {
+      if (!test_string(selection)) {
+        stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
+      }
+      return(pob_ps$values$selection)
+    }
+  }
+  # pacify static checks
+  src_id = NULL
+  dst_id = NULL
+  src_channel = NULL
+  dst_channel = NULL
+
+  # This algorithnm is similar to reduce_graph(): It uses a data.table of edges
+  # with an additional column that tracks the state (active or not) of each edge.
+  # We also track a description ("reason") of why an edge is active or not: the
+  # last PipeOpBranch encountered, and its active state. This should make for
+  # informative error messages.
+
+  branch_state_info = copy(graph$edges)
+  branch_state_info[, `:=`(state = NA, reason = list())]
+  graph_input = graph$input
+  branch_state_info = rbind(
+    branch_state_info,
+    graph_input[, .(src_id = "", src_channel = graph_input$name, dst_id = graph_input$op.id,
+      dst_channel = graph_input$channel.name, state = TRUE, reason = list(list("direct Graph input, which is always active")))]
+  )
+  ids = graph$ids(sorted = TRUE)  # Topologically sorted IDs
+  po_unbranch_active_input = character(0)
+  for (pipeop_id in ids) {
+    pipeop = graph$pipeops[[pipeop_id]]
+    inedges = branch_state_info[dst_id == pipeop_id, ]
+    # PipeOpUnbranch with more than one active input is an error
+    if (inherits(pipeop, "PipeOpUnbranch") && sum(inedges$state) > 1) {
+      stopf("PipeOpUnbranch %s has multiple active inputs: %s",
+        inedges[state, paste(sprintf("input %s from %s", dst_channel, unlist(reason, recursive = FALSE, use.names = TRUE)), collapse = ", ")]
+      )
+    }
+
+    # any PipeOp with conflicting inputs: This is only OK if it is a PipeOpUnbranch
+    if (all(inedges$state) != any(inedges$state)) {
+      if (!inherits(pipeop, "PipeOpUnbranch")) {
+        stopf("Inconsistent selection of PipeOpBranch outputs:\n%s in conflict with %s at PipeOp %s.",
+          inedges[!state, paste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)), collapse = ", ")],
+          inedges[state, paste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)), collapse = ", ")],
+          pipeop_id
+        )
+      }
+      # PipeOpUnbranch selects down to the single selected input.
+      # we have already checked that this is unique.
+      state_current = TRUE
+      reason_current = inedges$reason[inedges$state]
+      po_unbranch_active_input[[pipeop_id]] = inedges$dst_channel[inedges$state]
+    } else {
+      # all inputs are in agreement
+      state_current = any(inedges$state)
+      reason_current = unique(unlist(inedges$reason, recursive = FALSE, use.names = FALSE))
+    }
+
+    if (state_current && inherits(pipeop, "PipeOpBranch")) {
+      # PipeOpBranch is only special when it is actually active
+      active_output = get_po_branch_active_output(pipeop)
+      branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
+        reason = list(list(sprintf("PipeOpBranch '%s' %s output '%s'",
+          pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
+          active_output)))
+      )]
+    } else {
+      branch_state_info[src_id == pipeop_id, `:=`(state = state_current, reason = list(list(reason_current)))]
+    }
+  }
+  po_unbranch_active_input
 }
