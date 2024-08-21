@@ -695,6 +695,32 @@ test_that("base_learner() works", {
 
   # branch -> unbranch, unbranch -> unbranch
 
+  g = Graph$new()$
+    add_pipeop(po("branch", c("classif.rpart", "dummy1", "dummy2", "classif.debug"), id = "branch1"))$
+    add_pipeop(po("unbranch", 2, id = "unbranch1"))$
+    add_pipeop(po("unbranch", 2, id = "unbranch2"))$
+    add_pipeop(po("unbranch", 2, id = "unbranch3"))$
+    add_pipeop(lrn("classif.rpart"))$
+    add_pipeop(lrn("classif.debug"))$
+    add_edge("branch1", "classif.rpart", src_channel = "classif.rpart")$
+    add_edge("branch1", "classif.debug", src_channel = "classif.debug")$
+    add_edge("classif.rpart", "unbranch1", dst_channel = "input1")$
+    add_edge("classif.debug", "unbranch2", dst_channel = "input1")$
+    add_edge("unbranch1", "unbranch3", dst_channel = "input1")$
+    add_edge("unbranch2", "unbranch3", dst_channel = "input2")$
+    add_edge("branch1", "unbranch1", src_channel = "dummy1", dst_channel = "input2")$
+    add_edge("branch1", "unbranch2", src_channel = "dummy2", dst_channel = "input2")
+
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.rpart$learner_model)
+  g$param_set$values$branch1.selection = "classif.debug"
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.debug$learner_model)
+  g$param_set$values$branch1.selection = "dummy1"
+  expect_equal(g$train(1), list(unbranch3.output = 1))
+
+  expect_error(as_learner(g)$base_learner(), "No base learner found")
+
+  expect_identical(as_learner(g)$base_learner(recursive = 1, resolve_branching = FALSE, return_all = TRUE),
+    list(g$pipeops$classif.rpart$learner_model, g$pipeops$classif.debug$learner_model))
 
   # infer task type and other things: use base_learner, but don't do that if things are given explicitly.
 })
