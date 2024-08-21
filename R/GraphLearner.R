@@ -41,7 +41,7 @@
 #'   construction of `GraphLearner`, during `$train()`, and during `$predict()` when `clone_graph` is `FALSE`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOp`], as well as:
+#' Fields inherited from [`Learner`][mlr3::Learner], as well as:
 #' * `graph` :: [`Graph`]\cr
 #'   [`Graph`] that is being wrapped. This field contains the prototype of the [`Graph`] that is being trained, but does *not*
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
@@ -60,9 +60,21 @@
 #'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
 #'   Whether the learner is marshaled.
+#' * `impute_selected_features` :: `logical(1)`\cr
+#'   Whether to heuristically determine `$selected_features()` as all `$selected_features()` of all "base learner" Learners,
+#'   even if they do not have the `"selected_features"` property / do not implement `$selected_features()`.
+#'   If `impute_selected_features` is `TRUE` and the base learners do not implement `$selected_features()`,
+#'   the `GraphLearner`'s `$selected_features()` method will return all features seen by the base learners.
+#'   This is useful in cases where feature selection is performed inside the `Graph`:
+#'   The `$selected_features()` will then be the set of features that were selected by the `Graph`.
+#'   If `impute_selected_features` is `FALSE`, the `$selected_features()` method will throw an error if `$selected_features()`
+#'   is not implemented by the base learners.\cr
+#'   This is a heuristic and may report more features than actually used by the base learners,
+#'   in cases where the base learners do not implement `$selected_features()`.
+#'   The default is `FALSE`.
 #'
 #' @section Methods:
-#' Methods inherited from [`Learner`], as well as:
+#' Methods inherited from [`Learner`][mlr3::Learner], as well as:
 #' * `marshal`\cr
 #'   (any) -> `self`\cr
 #'   Marshal the model.
@@ -85,7 +97,37 @@
 #'   If `resolve_branching` is `TRUE`, and when a [`PipeOpUnbranch`] is encountered, the
 #'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
 #'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
-#'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.\cr
+#'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.
+#'
+#' The following standard extractors as defined by the [`Learner`][mlr3::Learner] class are available.
+#' Note that these typically only extract information from the `$base_learner()`.
+#' This works well for simple [`Graph`]s that do not modify features too much, but may give unexpected results for `Graph`s that
+#' add new features or move information between features.
+#'
+#' As an example, consider a feature `A`` with missing values, and a feature `B`` that is used for imputatoin, using a [`po("imputelearner")`][PipeOpImputeLearner].
+#' In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature A,
+#' the `selected_features()` method could return only feature `A``, and `$importance()` may even report 0 for feature `B`.
+#' This would not be entirbababababely accurate when considering the entire `GraphLearner`, as feature `B` is used for imputation and would therefore have an impact on predictions.
+#' The following should therefore only be used if the `Graph` is known to not have an impact on the relevant properties.
+#'
+#' * `importance()`\cr
+#'   () -> `numeric`\cr
+#'   The `$importance()` returned by the base learner, if it has the `"importance` property.
+#'   Throws an error otherwise.
+#' * `selected_features()`\cr
+#'   () -> `character`\cr
+#'   The `$selected_features()` returned by the base learner, if it has the `"selected_features` property.
+#'   If the base learner does not have the `"selected_features"` property and `impute_selected_features` is `TRUE`,
+#'   all features seen by the base learners are returned.
+#'   Throws an error otherwise.
+#' * `oob_error()`\cr
+#'   () -> `numeric(1)`\cr
+#'   The `$oob_error()` returned by the base learner, if it has the `"oob_error` property.
+#'   Throws an error otherwise.
+#' * `loglik()`\cr
+#'   () -> `numeric(1)`\cr
+#'   The `$loglik()` returned by the base learner, if it has the `"loglik` property.
+#'   Throws an error otherwise.
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -119,11 +161,13 @@
 #' \dontshow{ \} }
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
+    impute_selected_features = FALSE,
     initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE) {
       graph = as_graph(graph, clone = assert_flag(clone_graph))
       graph$state = NULL
 
       id = assert_string(id, null.ok = TRUE) %??% paste(graph$ids(sorted = TRUE), collapse = ".")
+      self$id = id  # init early so 'infer_task_type()' can use it in error messages
       private$.graph = graph
 
       output = graph$output
@@ -135,15 +179,25 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
 
       if (is.null(task_type)) {
-        task_type = infer_task_type(graph)
+        task_type = infer_task_type(self, graph)
       }
       assert_subset(task_type, mlr_reflections$task_types$type)
 
       private$.can_validate = some(graph$pipeops, function(po) "validation" %in% po$properties)
       private$.can_internal_tuning = some(graph$pipeops, function(po) "internal_tuning" %in% po$properties)
 
+      baselearners = unlist(multiplicity_flatten(self$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE)), recursive = FALSE, use.names = FALSE)
+
       properties = setdiff(mlr_reflections$learner_properties[[task_type]],
-        c("validation", "internal_tuning")[!c(private$.can_validate, private$.can_internal_tuning)])
+        c("validation", "internal_tuning", "importance", "oob_error", "loglik"))
+
+      properties = c(properties,
+        if (private$.can_validate) "validation",
+        if (private$.can_internal_tuning) "internal_tuning",
+        if ("importance" %in% map(baselearners, "properties")) "importance",
+        if ("oob_error" %in% map(baselearners, "properties")) "oob_error",
+        if ("loglik" %in% map(baselearners, "properties")) "loglik"
+      )
 
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
@@ -171,14 +225,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
         if (length(candidates) < 1) stopf("No base learner found in Graph %s.", self$id)
         if (length(candidates) > 1) stopf("Graph %s has no unique PipeOp containing a Learner.", self$id)
         if (!return_po) {
-          result = candidates[[1]]$learner_model
-          if (is.Multiplicity(result)) {
-            if (length(result) != 1) {
-              stopf("Graph %s's base learner is a Multiplicity that does not contain exactly one Learner.", self$id)
-            }
-            result = result[[1]]
+          result = multiplicity_flatten(candidates[[1]]$learner_model)
+          if (length(result) != 1) {
+            # if learner_model is not a Multiplicity, multiplicity_flatten will return a list of length 1
+            stopf("Graph %s's base learner is a Multiplicity that does not contain exactly one Learner.", self$id)
           }
-          return(result$base_learner(recursive - 1))
+          return(result[[1]]$base_learner(recursive - 1))
         } else {
           return(candidates[[1]])
         }
@@ -238,6 +290,47 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     unmarshal = function(...) {
       learner_unmarshal(.learner = self, ...)
+    },
+    importance = function() {
+      base_learner = self$base_learner(recursive = 1)
+      if ("importance" %in% base_learner$properties && !is.null(base_learner$importance)) {
+        x$importance()
+      } else {
+        stopf("Baselearner %s of %s does not implement '$importance()'.", base_learner$id, self$id)
+      }
+    },
+    selected_features = function() {
+      base_learners = self$base_learner(recursive = 1, return_all = TRUE)
+      base_learners_flat = unlist(lapply(base_learners, multiplicity_flatten), recursive = FALSE, use.names = FALSE)
+      selected_features_all = lapply(base_learners_flat, function(x) {
+        if ("selected_features" %in% x$properties && !is.null(x$selected_features)) {
+          x$selected_features()
+        } else if (self$impute_selected_features) {
+          if (is.null(x$state)) {
+            stopf("No model stored in base learner %s of Graph %s.", x$id, self$id)
+          }
+          x$state$feature_names
+        } else {
+          stopf("Baselearner %s of %s does not implement 'selected_features'.\nYou can try setting $impute_selected_features to TRUE.", x$id, self$id)
+        }
+      })
+      Reduce(intersect, selected_features_all)
+    },
+    oob_error = function() {
+      base_learner = self$base_learner(recursive = 1)
+      if ("oob_error" %in% base_learner$properties && !is.null(base_learner$oob_error)) {
+        x$oob_error()
+      } else {
+        stopf("Baselearner %s of %s does not implement '$oob_error()'.", base_learner$id, self$id)
+      }
+    },
+    loglik = function() {
+      base_learner = self$base_learner(recursive = 1)
+      if ("loglik" %in% base_learner$properties && !is.null(base_learner$loglik)) {
+        x$loglik()
+      } else {
+        stopf("Baselearner %s of %s does not implement '$loglik()'.", base_learner$id, self$id)
+      }
     }
   ),
   active = list(
@@ -517,7 +610,7 @@ as_learner.PipeOp = function(x, clone = FALSE, ...) {
 }
 
 
-infer_task_type = function(graph) {
+infer_task_type = function(self, graph) {
   output = graph$output
   # check the high level input and output
   class_table = mlr_reflections$task_types
@@ -540,10 +633,7 @@ infer_task_type = function(graph) {
         match(c(x$output$train, x$output$predict), class_table$prediction),
         match(c(x$input$train, x$input$predict), class_table$task))
       task_type = unique(class_table$type[stats::na.omit(task_type)])
-      if (length(task_type) > 1) {
-        stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
-      }
-      if (length(task_type) == 1) {
+      if (length(task_type) >= 1) {
         return(task_type)  # early exit
       }
       prdcssrs = graph$edges[dst_id == x$id, ]$src_id
@@ -557,6 +647,20 @@ infer_task_type = function(graph) {
       return(NULL)
     }
     task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
+  }
+  if (length(task_type) != 1L) {
+    # We could not infer type from any PipeOp output channels, so we try to infer it from the base learners
+    baselearners = self$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE)
+    task_type = unique(unlist(map(baselearners, function(x) {
+      # Currently we should not have Multiplicities here, since Graph gets NULLed explicitly upon construction.
+      # If we ever allow initializing a Learner with a trained Graph, the following will be necessary.
+      x = multiplicity_flatten(x)
+      if (length(x) >= 1) return(x[[1]]$task_type)
+      return(NULL)  # only if multiplicity of length 0
+    }), recursive = FALSE, use.names = FALSE))
+  }
+  if (length(task_type) > 1) {
+    stopf("GraphLearner can not infer task_type from given Graph\nbase_learner() and in/out types leave multiple possibilities: %s", str_collapse(task_type))
   }
   c(task_type, "classif")[[1]]  # "classif" as final fallback
 }

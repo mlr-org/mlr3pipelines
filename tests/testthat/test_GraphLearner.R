@@ -242,6 +242,13 @@ test_that("graphlearner type inference", {
   lrn = GraphLearner$new(ppl("targettrafo", graph = lrn("regr.rpart"), trafo_pipeop = PipeOpTargetTrafoScaleRange$new()))
   expect_equal(lrn$task_type, "regr")
   expect_equal(lrn$predict_type, "response")
+
+  ###### TODO
+  # * case where output type fails but baselearner() is informative (modify learners)
+  # * task type with multiplicities
+  # * test graph transparency
+  # selected_features, with multiplicities, and with featsels
+
 })
 
 test_that("graphlearner type inference - branched", {
@@ -665,11 +672,45 @@ test_that("base_learner() works", {
   expect_error(as_learner(po("nop"))$base_learner(), "No base learner found in Graph.")
 
 
+  bagger = as_learner(ppl("bagging", iterations = 1, lrn("classif.rpart"),
+    averager = po("classifavg", collect_multiplicity = TRUE)))
 
-  # multiplicities
+  expect_identical(bagger$base_learner(), bagger$graph_model$pipeops$classif.rpart$learner_model)
+
+  bagger$train(tsk("iris"))
+
+  # ....$learner_model is a multiplicity, but base_learner() unpacks it.
+  expect_identical(bagger$base_learner(), bagger$graph_model$pipeops$classif.rpart$learner_model[[1]])
+
+  bagger$param_set$values$replicate.reps = 2
+
+  bagger$train(tsk("iris"))
+
+  expect_error(bagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+
+  metabagger = as_learner(ppl("bagging", iterations = 1,
+      ppl("bagging", iterations = 1, lrn("classif.rpart"),
+        averager = po("classifavg_1", collect_multiplicity = TRUE))$set_names(c("replicate", "subsample"), c("replicate_1", "subsample_1")),
+    averager = po("classifavg_2", collect_multiplicity = TRUE)))
+
+  expect_identical(metabagger$base_learner(), metabagger$graph_model$pipeops$classif.rpart$learner_model)
+
+  metabagger$train(tsk("iris"))
+  expect_identical(metabagger$base_learner(), metabagger$graph_model$pipeops$classif.rpart$learner_model[[1]][[1]])
+
+  metabagger$param_set$values$replicate.reps = 2
+  metabagger$train(tsk("iris"))
+  expect_error(metabagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+
+  metabagger$param_set$values$replicate.reps = 1
+  metabagger$train(tsk("iris"))
+  expect_identical(metabagger$base_learner(), metabagger$graph_model$pipeops$classif.rpart$learner_model[[1]][[1]])
+
+  metabagger$param_set$values$replicate_1.reps = 2
+  metabagger$train(tsk("iris"))
+  expect_error(metabagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
 
   # double-channel pipeop cascade: see there is no exponential explosion
-
   gchain = chain_graphs(
     lapply(1:20, function(i) ppl("branch", pos(paste0("nop_", c(2 * i, 2 * i + 1))), prefix_branchops = as.character(i))),
     in_place = TRUE
