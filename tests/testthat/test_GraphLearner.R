@@ -243,11 +243,34 @@ test_that("graphlearner type inference", {
   expect_equal(lrn$task_type, "regr")
   expect_equal(lrn$predict_type, "response")
 
-  ###### TODO
-  # * case where output type fails but baselearner() is informative (modify learners)
-  # * task type with multiplicities
-  # * test graph transparency
-  # selected_features, with multiplicities, and with featsels
+  ###########################
+  # Synthetic examples      #
+  ###########################
+  # these construct broken graphs on purpose; if this gets caught somewhere else
+  # in the future we might have to adjust the tests
+  # The point here is that there could at some point be "legal" graphs that
+  # end up using the fallback target type inference.
+
+
+  g = po("branch", 2) %>>% gunion(list(mlr_pipeops$get("learner", lrn("regr.rpart")), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch")
+  g$pipeops$regr.rpart$output$predict = "*"
+  expect_equal(as_learner(g)$task_type, "regr")
+  g$pipeops$regr.rpart$input$train = "*"
+  g$pipeops$regr.rpart$input$predict = "*"
+  expect_equal(as_learner(g)$task_type, "regr")
+  g$train(tsk("boston_housing"))
+  expect_equal(as_learner(g)$task_type, "regr")  # should use base_learner inference
+
+  g = po("replicate", reps = 2) %>>% lrn("regr.rpart") %>>% po("regravg", collect_multiplicity = TRUE)
+  g$pipeops$regravg$input$predict = "[*]"
+  g$pipeops$regravg$output$predict = "*"
+  g$pipeops$regr.rpart$output$predict = "*"
+  g$pipeops$regr.rpart$input$train = "*"
+  g$pipeops$regr.rpart$input$predict = "*"
+  expect_equal(as_learner(g)$task_type, "regr")
+  expect_equal(as_learner(g)$task_type, "regr")  # should use base_learner inference
+  g$train(tsk("boston_housing"))
+  expect_equal(as_learner(g)$task_type, "regr")  # should not fail because of multiplicity in the graph
 
 })
 
@@ -971,4 +994,261 @@ test_that("marshal has no effect when nothing needed marshaling", {
   expect_class(glrn$marshal()$model, "graph_learner_model")
   expect_class(glrn$unmarshal()$model, "graph_learner_model")
   expect_learner(glrn, task = task)
+})
+
+
+# in case Debug ever gets these properties, we remove them here.
+DebugBasic = R6Class("DebugBasic", inherit = LearnerClassifDebug,
+  public = list(
+    initialize = function(...) {
+      super$initialize(...)
+      self$properties = setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error"))
+    },
+    importance = function() {
+      return(sapply(self$state$feature_names, function(i) 1))
+    }
+))
+
+test_that("GraphLearner Importance", {
+
+  DebugWithImportance = R6Class("DebugWithImportance", inherit = LearnerClassifDebug,
+    public = list(
+      initialize = function(...) {
+        super$initialize(...)
+        self$properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "importance")
+      },
+      importance = function() {
+        return(sapply(self$state$feature_names, function(i) 1))
+      }
+  ))
+
+  g_basic = GraphLearner$new(Graph$new()$add_pipeop(DebugBasic$new()))
+  g_importance = GraphLearner$new(Graph$new()$add_pipeop(DebugWithImportance$new()))
+
+  expect_false("importance" %in% g_basic$properties)
+  expect_true("importance" %in% g_importance$properties)
+  expect_false(any(c("loglik", "oob_error") %in% g_basic$properties))
+  expect_false(any(c("loglik", "oob_error") %in% g_importance$properties))
+
+  expect_error(g_basic$importance(), "does not implement.*importance")
+
+  g_importance$train(tsk("iris"))c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "importance")
+  expect_equal(g_importance$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
+
+  g_bagging = as_learner(ppl("bagging", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+
+  expect_true("importance" %in% g_bagging$properties)
+  g_bagging$train(tsk("iris"))
+  expect_true("importance" %in% g_bagging$properties)
+  expect_error(g_bagging$importance(), "Multiplicity that does not contain exactly one Learner")
+
+  g_bagging$param_set$values$replicate.reps = 1
+  g_bagging$train(tsk("iris"))
+  expect_equal(g_bagging$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
+
+  # * test importance with feature selection
+  g_fs = as_learner(po("select", selector = selector_grep("Sepal")) %>>% DebugWithImportance$new())
+  g_fs$train(tsk("iris"))
+  expect_equal(g_fs$importance(), c(Sepal.Length = 1, Sepal.Width = 1))
+
+  # branching
+  lbasic = DebugBasic$new()
+  lbasic$id = "basic"
+  g_branch = as_learner(ppl("branch", list(basic = lbasic, importance = DebugWithImportance$new())))
+
+  expect_true("importance" %in% g_branch$properties)
+  g_branch$train(tsk("iris"))
+  expect_error(g_branch$importance(), "does not implement.*importance")
+  g_branch$param_set$values$branch.selection = "importance"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugWithImportance$new()))))
+  expect_equal(
+    g_nested$train(tsk("iris"))$importance(),
+    c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1)
+  )
+
+  expect_true("importance" %in% g_nested$properties)
+  g_nested_basic = as_learner(as_graph(as_learner(as_graph(DebugBasic$new()))))
+  expect_false("importance" %in% g_nested_basic$properties)
+
+  expect_false(any(c("loglik", "oob_error") %in% g_nested_basic$properties))
+  expect_false(any(c("loglik", "oob_error") %in% g_nested$properties))
+})
+
+
+test_that("GraphLearner Selected Features", {
+
+  DebugWithSelectedFeatures = R6Class("DebugWithFeatsel", inherit = LearnerClassifDebug,
+    public = list(
+      initialize = function(...) {
+        super$initialize(...)
+        self$properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "selected_features")
+      },
+      selected_features = function() {
+        return(self$state$feature_names[[1]])
+      }
+  ))
+
+  g_basic = GraphLearner$new(Graph$new()$add_pipeop(DebugBasic$new()))
+  g_featsel = GraphLearner$new(Graph$new()$add_pipeop(DebugWithSelectedFeatures$new()))
+
+  expect_true("selected_features" %in% g_basic$properties)
+  expect_true("selected_features" %in% g_featsel$properties)
+  expect_false(any(c("importance", "loglik", "oob_error") %in% g_featsel$properties))
+  expect_false(any(c("importance", "loglik", "oob_error") %in% g_featsel$properties))
+
+  expect_error(g_basic$selected_features(), "does not implement.*selected_features.*impute_selected_features.*TRUE")
+  g_basic$impute_selected_features = TRUE
+  expect_error(g_basic$selected_features(), "No model stored.*classif.debug.*Graph.*classif.debug")
+
+
+  g_basic$train(tsk("iris"))
+
+  expect_equal(g_basic$selected_features(), tsk("iris")$feature_names)
+
+  g_featsel$train(tsk("iris"))
+
+  expect_equal(g_featsel$selected_features(), tsk("iris")$feature_names[[1]])
+
+  # does not accidentally impute if it doesn't need to
+  g_featsel$impute_selected_features = TRUE
+  expect_equal(g_featsel$selected_features(), tsk("iris")$feature_names[[1]])
+
+  g_bagging = as_learner(ppl("bagging", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+
+  expect_true("selected_features" %in% g_bagging$properties)
+  g_bagging$train(tsk("iris"))
+  expect_true("selected_features" %in% g_bagging$properties)
+  expect_equal(g_bagging$selected_features(), tsk("iris")$feature_names[[1]])
+
+
+  g_fs = as_learner(po("select", selector = selector_grep("Sepal")) %>>% DebugWithSelectedFeatures$new())
+  g_fs$train(tsk("iris"))
+  expect_equal(g_fs$selected_features(), "Sepal.Length")
+
+  g_fs_basic = as_learner(po("select", selector = selector_grep("Sepal")) %>>% DebugBasic$new())
+  g_fs_basic$train(tsk("iris"))
+  g_fs_basic$impute_selected_features = TRUE
+  expect_equal(g_fs_basic$selected_features(), c("Sepal.Length", "Sepal.Width"))
+
+
+  # branching
+  lbasic = DebugBasic$new()
+  lbasic$id = "basic"
+  g_branch = as_learner(ppl("branch", list(basic = lbasic, fs = DebugWithSelectedFeatures$new(), featureless = lrn("classif.featureless"))))
+
+  expect_true("selected_features" %in% g_branch$properties)
+  g_branch$train(tsk("iris"))
+  expect_error(g_branch$selected_features(), "does not implement.*selected_features.*impute_selected_features.*TRUE")
+  g_branch$impute_selected_features = TRUE
+  expect_equal(g_branch$selected_features(), tsk("iris")$feature_names)
+  g_branch$param_set$values$branch.selection = "fs"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$selected_features(), tsk("iris")$feature_names[[1]])
+
+  g_branch$param_set$values$branch.selection = "featureless"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$selected_features(), character(0))
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugWithSelectedFeatures$new()))))
+  expect_equal(
+    g_nested$train(tsk("iris"))$selected_features(),
+    tsk("iris")$feature_names[[1]]
+  )
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugBasic$new()))))
+  expect_error(g_nested$train(tsk("iris"))$selected_features(), " classif\\.debug .*selected_features.*impute_selected_features to TRUE")
+  # need to turn on imputation in the innermost graph
+  g_nested$graph$pipeops$classif.debug$learner$impute_selected_features = TRUE
+  expect_equal(
+    g_nested$train(tsk("iris"))$selected_features(),
+    tsk("iris")$feature_names
+  )
+
+  # feature union unions selected features
+
+  g_avg = as_learner(list(po("select", selector = selector_grep("Sepal")) %>>% lbasic, DebugWithSelectedFeatures$new(), lrn("classif.featureless")) %>>% po("classifavg", 3))
+
+  g_avg$train(tsk("iris"))
+  expect_error(g_avg$selected_features(), "does not implement.*selected_features.*impute_selected_features.*TRUE")
+  g_avg$impute_selected_features = TRUE
+
+  # Sepal.* from lbasic, Petal.Length from DebugWithSelectedFeatures, nothing from featureless
+  expect_equal(g_avg$selected_features(), c("Sepal.Length", "Sepal.Width", "Petal.Length"))
+})
+
+
+
+test_that("GraphLearner other properties", {
+
+  DebugWithProperties = R6Class("DebugWithProperties", inherit = LearnerClassifDebug,
+    public = list(
+      initialize = function(...) {
+        super$initialize(...)
+        self$properties = c(
+          setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")),
+          "loglik", "oob_error")
+      },
+      loglik = function() {
+        1
+      },
+      oob_error = function() {
+        2
+      }
+  ))
+
+  g_basic = GraphLearner$new(Graph$new()$add_pipeop(DebugBasic$new()))
+  g_properties = GraphLearner$new(Graph$new()$add_pipeop(DebugWithProperties$new()))
+
+  expect_false(any(c("loglik", "oob_error") %in% g_basic$properties))
+  expect_true(all(c("loglik", "oob_error") %in% g_properties$properties))
+
+  expect_error(g_basic$loglik(), "does not implement.*loglik")
+  expect_error(g_basic$oob_error(), "does not implement.*oob_error")
+
+  g_properties$train(tsk("iris"))
+  expect_equal(g_properties$loglik(), 1)
+  expect_equal(g_properties$oob_error(), 2)
+
+  g_bagging = as_learner(ppl("bagging", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+
+  expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
+  g_bagging$train(tsk("iris"))
+  expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
+  expect_error(g_bagging$loglik(), "Multiplicity that does not contain exactly one Learner")
+  expect_error(g_bagging$oob_error(), "Multiplicity that does not contain exactly one Learner")
+
+  g_bagging$param_set$values$replicate.reps = 1
+  g_bagging$train(tsk("iris"))
+  expect_equal(g_bagging$loglik(), 1)
+  expect_equal(g_bagging$oob_error(), 2)
+
+  # branching
+  lbasic = DebugBasic$new()
+  lbasic$id = "basic"
+  g_branch = as_learner(ppl("branch", list(basic = lbasic, properties = DebugWithProperties$new())))
+
+  expect_true(all(c("loglik", "oob_error") %in% g_branch$properties))
+  g_branch$train(tsk("iris"))
+  expect_error(g_branch$loglik(), "does not implement.*loglik")
+  expect_error(g_branch$oob_error(), "does not implement.*oob_error")
+  g_branch$param_set$values$branch.selection = "properties"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$loglik(), 1)
+  expect_equal(g_branch$oob_error(), 2)
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugWithProperties$new()))))
+  expect_equal(
+    g_nested$train(tsk("iris"))$loglik(),
+    1
+  )
+  expect_equal(
+    g_nested$train(tsk("iris"))$oob_error(),
+    2
+  )
+
+  expect_true(all(c("loglik", "oob_error") %in% g_nested$properties))
+
 })

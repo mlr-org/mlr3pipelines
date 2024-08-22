@@ -187,6 +187,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       private$.can_internal_tuning = some(graph$pipeops, function(po) "internal_tuning" %in% po$properties)
 
       baselearners = unlist(multiplicity_flatten(self$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE)), recursive = FALSE, use.names = FALSE)
+      blproperties = unique(unlist(map(baselearners, "properties"), recursive = FALSE, use.names = FALSE))
 
       properties = setdiff(mlr_reflections$learner_properties[[task_type]],
         c("validation", "internal_tuning", "importance", "oob_error", "loglik"))
@@ -194,9 +195,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       properties = c(properties,
         if (private$.can_validate) "validation",
         if (private$.can_internal_tuning) "internal_tuning",
-        if ("importance" %in% map(baselearners, "properties")) "importance",
-        if ("oob_error" %in% map(baselearners, "properties")) "oob_error",
-        if ("loglik" %in% map(baselearners, "properties")) "loglik"
+        intersect(c("importance", "oob_error", "loglik"), blproperties)
       )
 
       super$initialize(id = id, task_type = task_type,
@@ -294,7 +293,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     importance = function() {
       base_learner = self$base_learner(recursive = 1)
       if ("importance" %in% base_learner$properties && !is.null(base_learner$importance)) {
-        x$importance()
+        base_learner$importance()
       } else {
         stopf("Baselearner %s of %s does not implement '$importance()'.", base_learner$id, self$id)
       }
@@ -314,12 +313,12 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
           stopf("Baselearner %s of %s does not implement 'selected_features'.\nYou can try setting $impute_selected_features to TRUE.", x$id, self$id)
         }
       })
-      Reduce(intersect, selected_features_all)
+      unique(unlist(selected_features_all, recursive = FALSE, use.names = FALSE))
     },
     oob_error = function() {
       base_learner = self$base_learner(recursive = 1)
       if ("oob_error" %in% base_learner$properties && !is.null(base_learner$oob_error)) {
-        x$oob_error()
+        base_learner$oob_error()
       } else {
         stopf("Baselearner %s of %s does not implement '$oob_error()'.", base_learner$id, self$id)
       }
@@ -327,7 +326,7 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     loglik = function() {
       base_learner = self$base_learner(recursive = 1)
       if ("loglik" %in% base_learner$properties && !is.null(base_learner$loglik)) {
-        x$loglik()
+        base_learner$loglik()
       } else {
         stopf("Baselearner %s of %s does not implement '$loglik()'.", base_learner$id, self$id)
       }
