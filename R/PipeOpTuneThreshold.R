@@ -53,6 +53,13 @@
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
 #' See the `optimizer` parameter for more info.
 #'
+#' @section Fields:
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `predict_type` :: `character(1)`\cr
+#'   Type of prediction to return. Either `"prob"` (default) or `"response"`.
+#'   Setting to `"response"` should rarely be used; it may potentially save some memory but has
+#'   no other benefits.
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
@@ -98,9 +105,16 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     }
   ),
   active = list(
-    predict_type = function() "response"  # we are predict type "response" for now, so we don't break things. See discussion in #712
+    predict_type = function(rhs) {
+      if (!missing(rhs)) {
+        assert_choice(rhs, c("prob", "response"))
+        private$.predict_type = rhs
+      }
+      private$.predict_type
+    }
   ),
   private = list(
+    .predict_type = "prob",
     .train = function(input) {
       if(!all(input[[1]]$feature_types$type == "numeric")) {
         stop("PipeOpTuneThreshold requires predicted probabilities! Set learner predict_type to 'prob'")
@@ -113,13 +127,16 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     .predict = function(input) {
       pred = private$.task_to_prediction(input[[1]])
       pred$set_threshold(self$state$threshold)
+      if (self$predict_type == "response") {
+        pred$predict_types = "response"
+        pred$data$prob = NULL
+      }
       return(list(pred))
     },
     .objfun = function(xs, pred, measure, paramname_to_column_map) {
       thresholds = unlist(xs)
       names(thresholds) = paramname_to_column_map[names(thresholds)]
       res = pred$set_threshold(thresholds)$score(measure)
-      if (!measure$minimize) res = -res
       return(setNames(list(res), measure$id))
     },
     .optimize_objfun = function(pred) {
