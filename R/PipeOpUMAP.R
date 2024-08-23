@@ -107,9 +107,11 @@
 #'   For details, see [uwot::umap2()].
 #' * `scale` :: `logical(1)` / `character(1)`\cr
 #'   Scaling to apply to the data. If `TRUE`, data is standardized. Default is `FALSE`. For details, see [uwot::umap2()].
-#' * `init` :: `character(1)` | `matrix`\cr
-#'   Type of initialization for the coordinates. Default is `"spectral"`.
-#'   For details, see [uwot::umap2()].
+#' * `init` :: `character(1)`\cr
+#'   Type of initialization for the coordinates. May be set to `"custom"`, in which case the `matrix` of initial
+#'   coordinates passed to `init_custom` is used. Default is `"spectral"`. For details, see [uwot::umap2()].
+#' * `init_custom` :: `matrix`\cr
+#'   Matrix of initial coordinates. Only used, if `init` is `"custom"`.
 #' * `init_sdev` :: `character(1)` | `numeric(1)`\cr
 #'   Scales each dimension of the initialized coordinates to this standard deviation.
 #'   Default is `"range"`. For details, see [uwot::umap2()].
@@ -134,9 +136,9 @@
 #' * `negative_sample_rate` :: `numeric(1)`\cr
 #'   The number of negative edge/1-simplex samples to use per positive edge/1-simplex sample
 #'   in optimizing the low dimensional embedding. Default is `5`. For details, see [uwot::umap2()].
-#' * `a` :: `any`\cr
+#' * `a` :: `numeric(1)`\cr
 #'   More specific parameters controlling the embedding. Default is `NULL`. For details, see [uwot::umap2()].
-#' * `b` :: `any`\cr
+#' * `b` :: `numeric(1)`\cr
 #'   More specific parameters controlling the embedding. Default is `NULL`. For details, see [uwot::umap2()].
 #' * `nn_method` :: `character(1)`\cr
 #'   Method for finding nearest neighbors. Note that only values compatible with [uwot::umap_transform()] are allowed.
@@ -150,20 +152,20 @@
 #' * `approx_pow` :: `logical(1)`\cr
 #'   If `TRUE`, use an approximation to the power function in the UMAP gradient. Default is `FALSE`.
 #'   For details, see [uwot::umap2()].
-#' * `y` :: `any`\cr
-#'   Optional target data for supervised dimension reduction. Default is `NULL`.
-#'   For details, see [uwot::umap2()].
+#'   `use_supervised` :: `logical(1)`\cr
+#'   If `TRUE`, perform supervised dimension reduction. This is done by passing the task's target to [uwot::umap2()]'s `y` argument.
+#'   For details, see there. Initialized to `FALSE`.
 #' * `target_n_neighbors` :: `integer(1)`\cr
-#'   Number of nearest neighbors to use to construct the target simplicial set. Default is `n_neighbors`.
-#'   For details, see [uwot::umap2()].
+#'   Number of nearest neighbors to use to construct the target simplicial set. Only used when performing supervised dimension reduction.
+#'   Default is `n_neighbors`. For details, see [uwot::umap2()].
 #' * `target_metric` :: `character(1)`\cr
-#'   The metric used to measure distance for `y` if using supervised dimension reduction.
+#'   The metric used to measure distance for the task's target when performing supervised dimension reduction.
 #'   For details, see [uwot::umap2()].
 #' * `target_weight` :: `numeric(1)`\cr
-#'   Weighting factor between data topology and target topology. Default is `0.5`.
-#'   For details, see [uwot::umap2()].
+#'   Weighting factor between data topology and target topology. Only used when performing supervised dimension reduction.
+#'   Default is `0.5`. For details, see [uwot::umap2()].
 #' * `pca` :: `integer(1)`\cr
-#'   Redude data to this number of columns using PCA. Default is `NULL`.
+#'   Reduce data to this number of columns using PCA. Default is `NULL`.
 #'   For details, see [uwot::umap2()].
 #' * `pca_center` :: `logical(1)`\cr
 #'   If `TRUE`, center the columns of X before carrying out PCA. Default is `TRUE`.
@@ -187,10 +189,10 @@
 #'   The minimum amount of work to do on each thread. Default is `1`.
 #'   For details, see [uwot::umap2()].
 #' * `verbose` :: `logical(1)`\cr
-#'   Should details be printed? Initialzed to `FALSE`. For details, see [uwot::umap2()].
+#'   Should details be printed? Initialized to `FALSE`. For details, see [uwot::umap2()].
 #' * `batch` :: `logical(1)`\cr
 #'   If `TRUE`, then embedding coordinates are updated at the end of each epoch rather
-#'   than during the epoch. Default is `FALSE`. For details, see [uwot::umap2()].
+#'   than during the epoch. Default is `TRUE`. For details, see [uwot::umap2()].
 #' * `opt_args` :: named `list()`\cr
 #'   A list of optimizer parameters, used when `batch = TRUE`. Default is `NULL`.
 #'   For details, see [uwot::umap2()].
@@ -212,6 +214,28 @@
 #' * `nn_args` :: named `list()`\cr
 #'   A list containing additional arguments to pass to the nearest neighbor method.
 #'   Default is `NULL`. For details, see [uwot::umap2()].
+#'
+#' Additionally, there are several parameters that may be used to overwrite parameter values for prediction:
+#' * `search_k_transform` :: `integer(1)`\cr
+#'   Number of nodes to search during the neighbor retrieval when predicting.
+#'   Only used if `nn_method` is `"annoy"`. If `NULL`, `search_k` is used instead. Default is `NULL`. For details, see [uwot::umap_transform()].
+#' * `n_epochs_transform` :: `integer(1)`\cr
+#'   Number of epochs used during the optimization of the embedded coordinates when predicting.
+#'   If `NULL`, `n_epochs` is used instead. Default is `NULL`. For details, see [uwot::umap_transform()].
+#' * `init_transform` :: `character(1)`\cr
+#'   Type of initialization for the coordinates when predicting. May be set to `"custom"`, in which case the `matrix` of initial
+#'   coordinates passed to `init_transform_custom` is used. Default is `"weighted"`. For details, see [uwot::umap_transform()].
+#' * `init_transform_custom` :: `matrix`\cr
+#'   Matrix of initial coordinates when predicting Only used, if `init_transform` is `"custom"`.
+#' * `batch_transform` :: `logical(1)`\cr
+#'   If `TRUE`, embedding coordinates are updated at the end of each epoch rather than during the epoch when predicting.
+#'   If `NULL`, `batch` is used instead. Default is `FALSE`. For details, see [uwot::umap_transform()].
+#' * `learning_rate_transform` :: `numeric(1)`\cr
+#'   Initial learning rate used in optimization of the coordinates when predicting.
+#'   If `NULL`, `learning_rate` is used instead. Default is `NULL`. For details, see [uwot::umap_transform()].
+#' * `epoch_callback_transform` :: `function`\cr
+#'   A function which will be invoked at the end of every epoch when predicting.
+#'   Default is `NULL`. For details, see [uwot::umap_transform()].
 #'
 #' @section Internals:
 #' Uses the [umap2()][uwot::umap2] function.
@@ -257,15 +281,19 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         ),
         n_epochs = p_int(lower = 1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         learning_rate = p_dbl(lower = 0, default = 1, tags = c("train", "umap")),
-        scale = p_lgl(default = FALSE, special_vals = list("none", "Z", "scale", "maxabs", "range", "colrange", NULL), tags = c("train", "umap")),
-        init = p_uty(
-          default = "spectral",
-          tags = c("train", "umap"),
-          custom_check = crate(function(x) {
-            choices = c("spectral", "normlaplacian", "random", "lvrandom", "laplacian", "pca", "spca", "agspectral")
-            check_choice(x, choices) %check||% check_matrix(x)
-          }, .parent = topenv())
+        scale = p_fct(
+          levels = c("none", "scale", "maxabs", "range", "colrange"),
+          special_vals = list(FALSE, NULL, "Z", TRUE),
+          default = FALSE,
+          tags = c("train", "umap")
         ),
+        init = p_fct(
+          levels = c("spectral", "normlaplacian", "random", "lvrandom", "laplacian", "pca", "spca", "agspectral"),
+          special_vals = list("custom"),
+          default = "spectral",
+          tags = c("train", "umap")
+        ),
+        init_custom = p_uty(custom_check = check_matrix, tags = "train", depends = quote(init == "custom")),
         init_sdev = p_dbl(default = "range", special_vals = list("range"), tags = c("train", "umap")),
         spread = p_dbl(default = 1, tags = c("train", "umap")),
         min_dist = p_dbl(default = 0.01, tags = c("train", "umap")),
@@ -274,31 +302,15 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
         bandwidth = p_dbl(default = 1, tags = c("train", "umap")),
         repulsion_strength = p_dbl(default = 1, tags = c("train", "umap")),
         negative_sample_rate = p_dbl(default = 5, tags = c("train", "umap")),
-        a = p_uty(default = NULL, tags = c("train", "umap")),
-        b = p_uty(default = NULL, tags = c("train", "umap")),
-        nn_method = p_uty(
-          default = NULL,
-          tags = c("train", "umap"),
-          custom_check = crate(function(x) check_choice(x, c("annoy", "hnsw", "nndescent"), null.ok = TRUE))
-        ),
+        a = p_dbl(default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
+        b = p_dbl(default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
+        nn_method = p_fct(levels = c("annoy", "hnsw", "nndescent"), default = NULL, special_vals = list(NULL), tags = c("train", "umap")),
         n_trees = p_int(lower = 1L, default = 50L, tags = c("train", "umap"), depends = quote(nn_method == "annoy")),
         search_k = p_int(tags = c("train", "umap"), depends = quote(nn_method == "annoy")),
         # approx_pow is only used if dens_scale is non-NULL
         approx_pow = p_lgl(default = FALSE, tags = c("train", "umap")),
-        y = p_uty(
-          default = NULL,
-          tags = c("train", "umap"),
-          custom_check = crate(function(x) {
-            check_atomic_vector(x) %check||%
-              check_matrix(x) %check||%
-              check_data_frame(x) %check||%
-              check_list(x, len = 2, names = "unique") %check||%
-              check_null(x)
-          }, .parent = topenv())
-        ),
-        # target_n_neighbors is only used if y is non-NULL and numeric
-        target_n_neighbors = p_int(tags = c("train", "umap")),
-        # target_metric is only used if y is non-NULL and numeric
+        use_supervised = p_lgl(default = FALSE, tags = c("train")),
+        target_n_neighbors = p_int(tags = c("train", "umap"), depends = quote(use_supervised == TRUE)),
         target_metric =  p_fct(
           levels = c(
             "euclidean", "cosine", "manhattan", "hamming", "correlation",
@@ -307,10 +319,10 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
             "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
           ),
           default = "euclidean",
-          tags = c("train", "umap")
+          tags = c("train", "umap"),
+          depends = quote(use_supervised == TRUE)
         ),
-        # target_weight is only used if y is non-NULL
-        target_weight = p_dbl(lower = 0, upper = 1, default = 0.5, tags = c("train", "umap")),
+        target_weight = p_dbl(lower = 0, upper = 1, default = 0.5, tags = c("train", "umap"), depends = quote(use_supervised == TRUE)),
         # pca is ignored if metric is "hamming"
         pca = p_int(lower = 1L, default = NULL, special_vals = list(NULL), tags = c("train", "umap"),
                     depends = quote(metric %in% c(
@@ -319,15 +331,15 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
                       "jensenshannon", "kulsinski", "rogerstanimoto", "russellrao", "sokalmichener",
                       "sokalsneath", "spearmanr", "symmetrickl", "tsss", "yule"
                     ))),
-        # pca_center might only be used if pca is specified (documentation unclear)
+        # pca_center is only used if pca is specified
         pca_center = p_lgl(default = TRUE, tags = c("train", "umap")),
         pcg_rand = p_lgl(default = TRUE, tags = c("train", "umap")),
         fast_sgd = p_lgl(default = FALSE, tags = c("train", "umap")),
         n_threads = p_int(lower = 1L, default = NULL, special_vals = list(NULL), tags = c("train", "predict", "umap")),
         n_sgd_threads = p_int(lower = 0L, default = 0L, special_vals = list("auto"), tags = c("train", "predict", "umap")),
-        grain_size = p_int(lower = 1L, default = 1L, tags = c("train", "umap")),
-        verbose = p_lgl(default = TRUE, tags = c("train", "umap")),
-        batch = p_lgl(default = FALSE, tags = c("train", "umap")),
+        grain_size = p_int(lower = 1L, default = 1L, tags = c("train", "predict", "umap")),
+        verbose = p_lgl(default = TRUE, tags = c("train", "predict", "umap")),
+        batch = p_lgl(default = TRUE, tags = c("train", "umap")),
         opt_args = p_uty(
           default = NULL,
           tags = c("train", "umap"),
@@ -350,38 +362,69 @@ PipeOpUMAP = R6Class("PipeOpUMAP",
           tags = c("train", "umap"),
           custom_check = crate(function(x) check_list(x, types = c("integer", "numeric", "character"),
                                                       min.len = 1, max.len = 8, names = "unique", null.ok = TRUE))
+        ),
+        # Parameters that are passed to umap_transform to overwrite parameters from training for prediction
+        search_k_transform = p_int(default = NULL, special_vals = list(NULL), tags = c("predict", "overwrite"), depends = quote(nn_method == "annoy")),
+        n_epochs_transform = p_int(lower = 1L, default = NULL, special_vals = list(NULL), tags = c("predict", "overwrite")),
+        init_transform = p_fct(levels = c("weighted", "average"), special_vals = list("custom"), default = "weighted", tags = c("predict", "overwrite")),
+        init_transform_custom = p_uty(custom_check = check_matrix, tags = "predict", depends = quote(init_transform == "custom")),
+        batch_transform = p_lgl(default = FALSE, special_vals = list(NULL), tags = c("predict", "overwrite")),
+        learning_rate_transform = p_dbl(default = NULL, special_vals = list(NULL), tags = c("predict", "overwrite")),
+        epoch_callback_transform = p_uty(
+          default = NULL,
+          tags = c("predict", "overwrite"),
+          custom_check = crate(function(x) check_function(x, args = c("epochs", "n_epochs", "coords", "fixed_coords"), null.ok = TRUE))
         )
       )
-      ps$set_values(verbose = FALSE)
+      ps$values = list(verbose = FALSE, use_supervised = FALSE)
 
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "uwot", feature_types = c("numeric", "integer"))
     }
   ),
   private = list(
     .train_dt = function(dt, levels, target) {
-      params = insert_named(self$param_set$get_values(tags = c("umap", "train")), list(ret_model = TRUE))
-      umap = invoke(uwot::umap2, dt, .args = params)
+      pv = self$param_set$values
+      pv_args = self$param_set$get_values(tags = c("umap", "train"))
+      # Indicate that umap2() should return the full model which we need for prediction
+      pv_args = insert_named(pv_args, list(ret_model = TRUE))
+      # Use target for supervised dimension reduction when specified
+      if (!is.null(pv$use_supervised) && pv$use_supervised) {
+        pv_args = insert_named(pv_args, list(y = target))
+      }
+      # Use matrix passed to init_custom for initialization when specified
+      if (!is.null(pv$init) && pv$init == "custom") {
+        pv_args = insert_named(pv_args, list(init = pv$init_custom))
+      }
+      umap = invoke(uwot::umap2, dt, .args = pv_args)
       self$state = umap
       umap$embedding
     },
 
     .predict_dt = function(dt, levels) {
-      params = self$param_set$get_values(tags = c("umap", "predict"))
-      invoke(uwot::umap_transform, dt, self$state, .args = params)
+      pv = self$param_set$values
+      pv_args = self$param_set$get_values(tags = c("umap", "predict"))
+      # Get overwriting params and rename them to the correct argument names for uwot::umap_transform()
+      overwrite_pv_args = self$param_set$get_values(tags = c("overwrite", "predict"))
+      names(overwrite_pv_args) <- sub("_transform$", "", names(overwrite_pv_args))
+      pv_args = insert_named(pv_args, overwrite_pv_args)
+      # Use matrix passed to init_transform_custom for initialization when specified
+      if (!is.null(pv$init_transform) && pv$init_transform == "custom") {
+        pv_args = insert_named(pv_args, list(init = pv$init_transform_custom))
+      }
+      invoke(uwot::umap_transform, dt, self$state, .args = pv_args)
     },
 
-    # We need to overload deep_clone since state$nn_index$ann is a C++ address if nn_method is "annoy" or "hnsw"
+    # We need to overload deep_clone since state$nn_index$ann is a RefClass if nn_method is "annoy" or "hnsw"
     deep_clone = function(name, value) {
       if (name == "state" && "NO_OP" %nin% class(value)) {
-        # TODO: Make sure these class names are correct for different options for nn_args
-        # attr(attr(value$nn_index, "class"), "package") might work otherwise
-        if (class(value$nn_index$ann) %in% c("RcppHNSWL2", "Rcpp_AnnoyEuclidean")) {
-          state = value
-          state$nn_index$ann = value$nn_index$ann$copy()
-          state$nn_index$type = value$nn_index$type
-          state$nn_index$metric = value$nn_index$metric
-          state$nn_index$ndim = value$nn_index$ndim
-          state
+        if (!is.null(value$nn_index)) {
+          if (methods::is(value$nn_index$ann, "envRefClass")) {
+            state = value
+            state$nn_index$ann = value$nn_index$ann$copy()
+            state
+          } else {
+            super$deep_clone(name, value)
+          }
         } else {
           super$deep_clone(name, value)
         }
