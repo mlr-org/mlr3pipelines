@@ -7,7 +7,7 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`Filter`][mlr3filters::Filter].
 #'
 #' @description
-#'
+#' Implements the filte rensemble proposed in `r cite_bib("binder_2020")`.
 
 FilterEnsemble = R6Class("FilterEnsemble", inherit = mlr3filters::Filter,
   public = list(
