@@ -211,7 +211,7 @@ Graph = R6Class("Graph",
       }
       if (is.null(dst_channel)) {
         if (length(self$pipeops[[dst_id]]$input$name) > 1) {
-          stopf("dst_channel must not be NULL if src_id pipeop has more than one input channel.")
+          stopf("dst_channel must not be NULL if dst_id pipeop has more than one input channel.")
         }
         dst_channel = 1L
       }
@@ -435,7 +435,7 @@ Graph = R6Class("Graph",
     set_names = function(old, new) {
       ids = names2(self$pipeops)
       assert_subset(old, ids)
-      assert_character(new, any.missing = FALSE)
+      assert_character(new, any.missing = FALSE, min.chars = 1)
       new_ids = map_values(ids, old, new)
       names(self$pipeops) = new_ids
       imap(self$pipeops, function(x, nn) x$id = nn)

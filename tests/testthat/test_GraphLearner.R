@@ -242,6 +242,59 @@ test_that("graphlearner type inference", {
   lrn = GraphLearner$new(ppl("targettrafo", graph = lrn("regr.rpart"), trafo_pipeop = PipeOpTargetTrafoScaleRange$new()))
   expect_equal(lrn$task_type, "regr")
   expect_equal(lrn$predict_type, "response")
+
+  ###########################
+  # Synthetic examples      #
+  ###########################
+  # these construct broken graphs on purpose; if this gets caught somewhere else
+  # in the future we might have to adjust the tests
+  # The point here is that there could at some point be "legal" graphs that
+  # end up using the fallback target type inference.
+
+
+  g = po("branch", 2) %>>% gunion(list(mlr_pipeops$get("learner", lrn("regr.rpart")), mlr_pipeops$get("nop"))) %>>% mlr_pipeops$get("unbranch")
+  g$pipeops$regr.rpart$output$predict = "*"
+  expect_equal(as_learner(g)$task_type, "regr")
+  g$pipeops$regr.rpart$input$train = "*"
+  g$pipeops$regr.rpart$input$predict = "*"
+  expect_equal(as_learner(g)$task_type, "regr")
+  g$train(tsk("boston_housing"))
+  expect_equal(as_learner(g)$task_type, "regr")  # should use base_learner inference
+
+  g = po("replicate", reps = 2) %>>% lrn("regr.rpart") %>>% po("regravg", collect_multiplicity = TRUE)
+  g$pipeops$regravg$input$predict = "[*]"
+  g$pipeops$regravg$output$predict = "*"
+  g$pipeops$regr.rpart$output$predict = "*"
+  g$pipeops$regr.rpart$input$train = "*"
+  g$pipeops$regr.rpart$input$predict = "*"
+  expect_equal(as_learner(g)$task_type, "regr")
+  expect_equal(as_learner(g)$task_type, "regr")  # should use base_learner inference
+  g$train(tsk("boston_housing"))
+  expect_equal(as_learner(g)$task_type, "regr")  # should not fail because of multiplicity in the graph
+
+  g_branch = ppl("branch", list(rpart = lrn("classif.rpart"), debug = lrn("classif.debug")))
+
+  l_branch = as_learner(g_branch)
+
+  expect_equal(l_branch$predict_type, "response")
+
+  l_branch$graph$pipeops$classif.debug$predict_type = "prob"
+
+  expect_equal(l_branch$predict_type, "response")
+
+  l_branch$param_set$values$branch.selection = "debug"
+
+  expect_equal(l_branch$predict_type, "prob")
+
+  l_branch$predict_type = "prob"
+
+  expect_equal(l_branch$graph$pipeops$classif.debug$learner$predict_type, "prob")
+
+  expect_equal(l_branch$predict_type, "prob")
+
+  l_branch$param_set$values$branch.selection = "rpart"
+
+  expect_equal(l_branch$predict_type, "prob")
 })
 
 test_that("graphlearner type inference - branched", {
@@ -341,6 +394,8 @@ test_that("graphlearner predict type inference", {
   lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(lrr, lfr)) %>>% po("unbranch"))
   expect_equal(lrn$predict_type, "response")
   lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(lrp, lfr)) %>>% po("unbranch"))
+  expect_equal(lrn$predict_type, "prob")
+  lrn$param_set$values$branch.selection = 2
   expect_equal(lrn$predict_type, "response")
 
   # with additional NOP in branch
@@ -514,13 +569,267 @@ test_that("base_learner() works", {
   expect_identical(x$base_learner(2), x$base_learner())
   expect_identical(x$base_learner(), x$graph_model$pipeops$scale.classif.rpart$learner_model$graph_model$pipeops$classif.rpart$learner_model)
 
-  # branching: currently not supported
+  # branching: now supported
   branching_learner = as_learner(ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
-  expect_error(branching_learner$base_learner(), "Graph has no unique PipeOp containing a Learner")
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
+  branching_learner$param_set$values$branch.selection = "classif.debug"
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
+  #
+  branching_learner = as_learner(ppl("branch", pos(c("pca", "ica")), prefix_branchops = "brunch") %>>% ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
+  branching_learner$param_set$values$branch.selection = "classif.debug"
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
+
+  # with '...' inputs in unbranch
+  branching_learner = as_learner(po("branch", c("classif.rpart", "classif.debug")) %>>% unname(lrns(c("classif.rpart", "classif.debug"))) %>>% po("unbranch"))
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
+  branching_learner$param_set$values$branch.selection = "classif.debug"
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
+  #
+  branching_learner = as_learner(po("branch_1", c("pca", "ica")) %>>% unname(pos(c("pca", "ica"))) %>>% po("unbranch_1") %>>%
+    po("branch", c("classif.rpart", "classif.debug")) %>>% unname(lrns(c("classif.rpart", "classif.debug"))) %>>% po("unbranch"))
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
+  branching_learner$param_set$values$branch.selection = "classif.debug"
+  expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
+
+
+  # unbranch with single input, without corresponding PipeOpBranch, is legal
+  x = as_learner(po("pca") %>>% lrn("classif.rpart") %>>% po("unbranch", 1))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+
+  # unbranch with '...' input
+  x = as_learner(po("pca") %>>% lrn("classif.rpart") %>>% po("unbranch"))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+
+
+  # ParamInt selection parameter
+  x = as_learner(ppl("branch", list(lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = 2
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  x$param_set$values$branch.selection = to_tune()
+  expect_error(x$base_learner(), "Cannot infer active output.* PipeOpBranch branch.*non-numeric 'selection'")
+
+  x = as_learner(ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  expect_error(x$base_learner(return_po = TRUE), "recursive must be == 1 if return_po is TRUE")
+  expect_error(x$base_learner(return_po = TRUE, recursive = 0), "recursive must be == 1 if return_po is TRUE")
+  expect_error(x$base_learner(return_all = TRUE), "recursive must be <= 1 if return_all is TRUE")
+
+  expect_identical(x$base_learner(recursive = 1, return_po = TRUE), x$graph_model$pipeops$classif.debug)
+
+  expect_identical(x$base_learner(recursive = 1, return_all = TRUE),
+    list(x$graph_model$pipeops$classif.debug$learner_model))
+
+  expect_identical(x$base_learner(recursive = 1, return_po = TRUE, return_all = TRUE),
+    list(x$graph_model$pipeops$classif.debug))
+
+  expect_identical(x$base_learner(recursive = 1, return_po = TRUE, return_all = TRUE, resolve_branching = FALSE),
+    list(x$graph_model$pipeops$classif.rpart, x$graph_model$pipeops$classif.debug))
+
+  expect_identical(x$base_learner(recursive = 0), x)
+  expect_identical(x$base_learner(recursive = 0, return_all = TRUE), list(x))
+
+  # unbranch as very first operation works
+  x = as_learner(po("unbranch", 1, id = "dummyub1") %>>% ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  # branch with output connected to several pipeops
+  x = as_learner(ppl("branch", list(classif.rpart = list(po("nop"), po("nop_1")) %>>% po("featureunion") %>>% lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+  x = as_learner(ppl("branch", list(classif.rpart = po("featureunion", 2) %>>% lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.rpart$learner_model)
+  x$param_set$values$branch.selection = "classif.debug"
+  expect_identical(x$base_learner(), x$graph_model$pipeops$classif.debug$learner_model)
+
+
+  x = as_learner(po("unbranch", 2, id = "dummyub1") %>>% ppl("branch", list(classif.rpart = lrn("classif.rpart") %>>% po("unbranch", 1, id = "poub1"), classif.debug = lrn("classif.debug") %>>% po("unbranch", 1, id = "poub2"))))
+  expect_error(x$base_learner(), "dummyub1 has multiple active inputs.*'input1'.*direct Graph input.*'input2'.*direct Graph input")
+
+  ################################################################################
+  ### The following graphs are bogus for multiple reasons. If our graph checks ###
+  ### ever become more rigorous, these will have to be adjusted.               ###
+  ################################################################################
+
+  # pipeopbranch connected to unbranch through the same output in multiple routes.
+  g = (po("branch", c("classif.rpart", "classif.debug")) %>>% list(lrn("classif.rpart"), lrn("classif.debug")))$
+    add_pipeop(po("unbranch", 3))$
+    add_edge("classif.rpart", "unbranch", dst_channel = "input1")$
+    add_edge("classif.debug", "unbranch", dst_channel = "input2")$
+    add_edge("branch", "unbranch", src_channel = "classif.debug", dst_channel = "input3")
+
+  # classif.rpart route has only one connection --> works
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.rpart$learner_model)
+
+  g$param_set$values$branch.selection = "classif.debug"
+  expect_error(as_learner(g)$base_learner(), "PipeOpUnbranch unbranch.*multiple active inputs.*'input2'.*PipeOpBranch 'branch'.*'classif.debug'.*'input3'.*PipeOpBranch 'branch'.*'classif.debug'")
+
+  # live input from graph input is recognized correctly
+  g = (po("branch", c("classif.rpart", "classif.debug")) %>>% list(lrn("classif.rpart"), lrn("classif.debug")))$
+    add_pipeop(po("unbranch", 2, id = "poub1"))$
+    add_pipeop(po("unbranch", 1, id = "poub2"))$
+    add_pipeop(po("unbranch", 2))$
+    add_edge("classif.rpart", "poub1", dst_channel = "input1")$
+    add_edge("classif.debug", "poub2")$
+    add_edge("poub1", "unbranch", dst_channel = "input1")$
+    add_edge("poub2", "unbranch", dst_channel = "input2")
+
+  # error because poub1 gets two live inputs: from PipeOpBranch and from graph input
+  expect_error(as_learner(g)$base_learner(),
+    "poub1 has multiple active inputs.*'input1'.*active output 'classif.rpart'.*'input2'.*direct Graph input")
+
+  g$param_set$values$branch.selection = "classif.debug"
+
+  # now poub1 has only one live input, since PipeOpBranch's active output goes to classif.debug / poub2;
+  # however, the overall unbranch now has two active inputs
+  expect_error(as_learner(g)$base_learner(),
+    "PipeOpUnbranch unbranch has multiple active inputs.*'input1'.* from direct Graph input.* always active.*'input2'.* 'branch' active output 'classif.debug'")
+
+  g = Graph$new()$
+    add_pipeop(po("branch", c("classif.rpart", "classif.debug"), id = "branch1"))$
+    add_pipeop(po("branch", c("classif.rpart", "classif.debug"), id = "branch2"))$
+    add_pipeop(po("featureunion", id = "fu1"))$
+    add_pipeop(po("featureunion", id = "fu2"))$
+    add_pipeop(lrn("classif.rpart"))$
+    add_pipeop(lrn("classif.debug"))$
+    add_pipeop(po("unbranch", 2))$
+    add_edge("branch1", "fu1", src_channel = "classif.rpart")$
+    add_edge("branch2", "fu1", src_channel = "classif.rpart")$
+    add_edge("branch1", "fu2", src_channel = "classif.debug")$
+    add_edge("branch2", "fu2", src_channel = "classif.debug")$
+    add_edge("fu1", "classif.rpart")$
+    add_edge("fu2", "classif.debug")$
+    add_edge("classif.rpart", "unbranch", dst_channel = "input1")$
+    add_edge("classif.debug", "unbranch", dst_channel = "input2")
+
+  # this works as long as branch1 and branch2 flow in the same direction
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.rpart$learner_model)
+
+  g$param_set$set_values(branch1.selection = "classif.debug", branch2.selection = "classif.debug")
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.debug$learner_model)
+
+  g$param_set$set_values(branch1.selection = "classif.rpart", branch2.selection = "classif.debug")
+  ## there are multiple possible error messages here: either at fu1, or at fu2.
+  ## currently we find fu1 first because this is what the topological sort results in (fu1 gets checked first),
+  ## but an error at fu2 would be equally valid.
+  expect_error(as_learner(g)$base_learner(),
+    "'branch2' inactive output.*'classif.rpart'.*'branch1' active output.*'classif.rpart'.*at PipeOp fu1|'branch1' inactive output.*'classif.debug'.*'branch2' active output.*'classif.debug'.*at PipeOp fu2")
+
+  g$add_pipeop(po("nop"))$add_edge("nop", "fu2")
+
+  g$param_set$set_values(branch1.selection = "classif.debug", branch2.selection = "classif.debug")
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.debug$learner_model)
+
+  g$param_set$set_values(branch1.selection = "classif.rpart", branch2.selection = "classif.rpart")
+
+  expect_error(as_learner(g)$base_learner(),
+    "'branch1' inactive output.*classif.debug.*'branch2' inactive output.*classif.debug.* in conflict with direct Graph input.*fu2")
 
   # bogus GraphLearner with no PipeOpLearner inside.
-  expect_error(as_learner(po("nop"))$base_learner(), "No Learner PipeOp found.")
+  expect_error(as_learner(po("nop"))$base_learner(), "No base learner found in Graph.")
 
+
+  bagger = as_learner(ppl("bagging", iterations = 1, lrn("classif.rpart"),
+    averager = po("classifavg", collect_multiplicity = TRUE)))
+
+  expect_identical(bagger$base_learner(), bagger$graph_model$pipeops$classif.rpart$learner_model)
+
+  bagger$train(tsk("iris"))
+
+  # ....$learner_model is a multiplicity, but base_learner() unpacks it.
+  expect_identical(bagger$base_learner(), bagger$graph_model$pipeops$classif.rpart$learner_model[[1]])
+
+  bagger$param_set$values$replicate.reps = 2
+
+  bagger$train(tsk("iris"))
+
+  expect_error(bagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+
+  metabagger = as_learner(ppl("bagging", iterations = 1,
+      ppl("bagging", iterations = 1, lrn("classif.rpart"),
+        averager = po("classifavg_1", collect_multiplicity = TRUE))$set_names(c("replicate", "subsample"), c("replicate_1", "subsample_1")),
+    averager = po("classifavg_2", collect_multiplicity = TRUE)))
+
+  expect_identical(metabagger$base_learner(), metabagger$graph_model$pipeops$classif.rpart$learner_model)
+
+  metabagger$train(tsk("iris"))
+  expect_identical(metabagger$base_learner(), metabagger$graph_model$pipeops$classif.rpart$learner_model[[1]][[1]])
+
+  metabagger$param_set$values$replicate.reps = 2
+  metabagger$train(tsk("iris"))
+  expect_error(metabagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+
+  metabagger$param_set$values$replicate.reps = 1
+  metabagger$train(tsk("iris"))
+  expect_identical(metabagger$base_learner(), metabagger$graph_model$pipeops$classif.rpart$learner_model[[1]][[1]])
+
+  metabagger$param_set$values$replicate_1.reps = 2
+  metabagger$train(tsk("iris"))
+  expect_error(metabagger$base_learner(), "Multiplicity that does not contain exactly one Learner")
+
+  # double-channel pipeop cascade: see there is no exponential explosion
+  gchain = chain_graphs(
+    lapply(1:20, function(i) ppl("branch", pos(paste0("nop_", c(2 * i, 2 * i + 1))), prefix_branchops = as.character(i))),
+    in_place = TRUE
+  )
+
+  glrn = as_learner(gchain %>>% ppl("branch", lrns(c("classif.rpart", "classif.debug"))))
+
+  expect_identical(glrn$base_learner(), glrn$graph_model$pipeops$classif.rpart$learner_model)
+  expect_identical(glrn$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE),
+    list(glrn$graph_model$pipeops$classif.rpart$learner_model, glrn$graph_model$pipeops$classif.debug$learner_model))
+
+
+  glrn = as_learner(ppl("branch", lrns(c("classif.rpart", "classif.debug"))) %>>% gchain)
+
+  expect_identical(glrn$base_learner(), glrn$graph_model$pipeops$classif.rpart$learner_model)
+
+  # without memoization the following would take a long time
+  expect_identical(glrn$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE),
+    list(glrn$graph_model$pipeops$classif.rpart$learner_model, glrn$graph_model$pipeops$classif.debug$learner_model))
+
+  glrn$base_learner()
+
+
+  # branch -> unbranch, unbranch -> unbranch
+
+  g = Graph$new()$
+    add_pipeop(po("branch", c("classif.rpart", "dummy1", "dummy2", "classif.debug"), id = "branch1"))$
+    add_pipeop(po("unbranch", 2, id = "unbranch1"))$
+    add_pipeop(po("unbranch", 2, id = "unbranch2"))$
+    add_pipeop(po("unbranch", 2, id = "unbranch3"))$
+    add_pipeop(lrn("classif.rpart"))$
+    add_pipeop(lrn("classif.debug"))$
+    add_edge("branch1", "classif.rpart", src_channel = "classif.rpart")$
+    add_edge("branch1", "classif.debug", src_channel = "classif.debug")$
+    add_edge("classif.rpart", "unbranch1", dst_channel = "input1")$
+    add_edge("classif.debug", "unbranch2", dst_channel = "input1")$
+    add_edge("unbranch1", "unbranch3", dst_channel = "input1")$
+    add_edge("unbranch2", "unbranch3", dst_channel = "input2")$
+    add_edge("branch1", "unbranch1", src_channel = "dummy1", dst_channel = "input2")$
+    add_edge("branch1", "unbranch2", src_channel = "dummy2", dst_channel = "input2")
+
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.rpart$learner_model)
+  g$param_set$values$branch1.selection = "classif.debug"
+  expect_identical(as_learner(g)$base_learner(), g$pipeops$classif.debug$learner_model)
+  g$param_set$values$branch1.selection = "dummy1"
+  expect_equal(g$train(1), list(unbranch3.output = 1))
+
+  expect_error(as_learner(g)$base_learner(), "No base learner found")
+
+  expect_identical(as_learner(g)$base_learner(recursive = 1, resolve_branching = FALSE, return_all = TRUE),
+    list(g$pipeops$classif.rpart$learner_model, g$pipeops$classif.debug$learner_model))
+
+  # infer task type and other things: use base_learner, but don't do that if things are given explicitly.
 })
 
 
@@ -728,4 +1037,262 @@ test_that("marshal has no effect when nothing needed marshaling", {
   expect_class(glrn$marshal()$model, "graph_learner_model")
   expect_class(glrn$unmarshal()$model, "graph_learner_model")
   expect_learner(glrn, task = task)
+})
+
+
+# in case Debug ever gets these properties, we remove them here.
+DebugBasic = R6Class("DebugBasic", inherit = LearnerClassifDebug,
+  public = list(
+    initialize = function(...) {
+      super$initialize(...)
+      self$properties = setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error"))
+    },
+    importance = function() {
+      return(sapply(self$state$feature_names, function(i) 1))
+    }
+))
+
+test_that("GraphLearner Importance", {
+
+  DebugWithImportance = R6Class("DebugWithImportance", inherit = LearnerClassifDebug,
+    public = list(
+      initialize = function(...) {
+        super$initialize(...)
+        self$properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "importance")
+      },
+      importance = function() {
+        return(sapply(self$state$feature_names, function(i) 1))
+      }
+  ))
+
+  g_basic = GraphLearner$new(Graph$new()$add_pipeop(DebugBasic$new()))
+  g_importance = GraphLearner$new(Graph$new()$add_pipeop(DebugWithImportance$new()))
+
+  expect_false("importance" %in% g_basic$properties)
+  expect_true("importance" %in% g_importance$properties)
+  expect_false(any(c("loglik", "oob_error") %in% g_basic$properties))
+  expect_false(any(c("loglik", "oob_error") %in% g_importance$properties))
+
+  expect_error(g_basic$importance(), "does not implement.*importance")
+
+  g_importance$train(tsk("iris"))
+
+  expect_equal(g_importance$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
+
+  g_bagging = as_learner(ppl("bagging", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+
+  expect_true("importance" %in% g_bagging$properties)
+  g_bagging$train(tsk("iris"))
+  expect_true("importance" %in% g_bagging$properties)
+  expect_error(g_bagging$importance(), "Multiplicity that does not contain exactly one Learner")
+
+  g_bagging$param_set$values$replicate.reps = 1
+  g_bagging$train(tsk("iris"))
+  expect_equal(g_bagging$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
+
+  # * test importance with feature selection
+  g_fs = as_learner(po("select", selector = selector_grep("Sepal")) %>>% DebugWithImportance$new())
+  g_fs$train(tsk("iris"))
+  expect_equal(g_fs$importance(), c(Sepal.Length = 1, Sepal.Width = 1))
+
+  # branching
+  lbasic = DebugBasic$new()
+  lbasic$id = "basic"
+  g_branch = as_learner(ppl("branch", list(basic = lbasic, importance = DebugWithImportance$new())))
+
+  expect_true("importance" %in% g_branch$properties)
+  g_branch$train(tsk("iris"))
+  expect_error(g_branch$importance(), "does not implement.*importance")
+  g_branch$param_set$values$branch.selection = "importance"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugWithImportance$new()))))
+  expect_equal(
+    g_nested$train(tsk("iris"))$importance(),
+    c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1)
+  )
+
+  expect_true("importance" %in% g_nested$properties)
+  g_nested_basic = as_learner(as_graph(as_learner(as_graph(DebugBasic$new()))))
+  expect_false("importance" %in% g_nested_basic$properties)
+
+  expect_false(any(c("loglik", "oob_error") %in% g_nested_basic$properties))
+  expect_false(any(c("loglik", "oob_error") %in% g_nested$properties))
+})
+
+
+test_that("GraphLearner Selected Features", {
+
+  DebugWithSelectedFeatures = R6Class("DebugWithFeatsel", inherit = LearnerClassifDebug,
+    public = list(
+      initialize = function(...) {
+        super$initialize(...)
+        self$properties = c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "selected_features")
+      },
+      selected_features = function() {
+        return(self$state$feature_names[[1]])
+      }
+  ))
+
+  g_basic = GraphLearner$new(Graph$new()$add_pipeop(DebugBasic$new()))
+  g_featsel = GraphLearner$new(Graph$new()$add_pipeop(DebugWithSelectedFeatures$new()))
+
+  expect_true("selected_features" %in% g_basic$properties)
+  expect_true("selected_features" %in% g_featsel$properties)
+  expect_false(any(c("importance", "loglik", "oob_error") %in% g_featsel$properties))
+  expect_false(any(c("importance", "loglik", "oob_error") %in% g_featsel$properties))
+
+  expect_error(g_basic$selected_features(), "does not implement.*selected_features.*impute_selected_features.*TRUE")
+  g_basic$impute_selected_features = TRUE
+  expect_error(g_basic$selected_features(), "No model stored.*classif.debug.*Graph.*classif.debug")
+
+
+  g_basic$train(tsk("iris"))
+
+  expect_equal(g_basic$selected_features(), tsk("iris")$feature_names)
+
+  g_featsel$train(tsk("iris"))
+
+  expect_equal(g_featsel$selected_features(), tsk("iris")$feature_names[[1]])
+
+  # does not accidentally impute if it doesn't need to
+  g_featsel$impute_selected_features = TRUE
+  expect_equal(g_featsel$selected_features(), tsk("iris")$feature_names[[1]])
+
+  g_bagging = as_learner(ppl("bagging", DebugWithSelectedFeatures$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+
+  expect_true("selected_features" %in% g_bagging$properties)
+  g_bagging$train(tsk("iris"))
+  expect_true("selected_features" %in% g_bagging$properties)
+  expect_equal(g_bagging$selected_features(), tsk("iris")$feature_names[[1]])
+
+
+  g_fs = as_learner(po("select", selector = selector_grep("Sepal")) %>>% DebugWithSelectedFeatures$new())
+  g_fs$train(tsk("iris"))
+  expect_equal(g_fs$selected_features(), "Sepal.Length")
+
+  g_fs_basic = as_learner(po("select", selector = selector_grep("Sepal")) %>>% DebugBasic$new())
+  g_fs_basic$train(tsk("iris"))
+  g_fs_basic$impute_selected_features = TRUE
+  expect_equal(g_fs_basic$selected_features(), c("Sepal.Length", "Sepal.Width"))
+
+
+  # branching
+  lbasic = DebugBasic$new()
+  lbasic$id = "basic"
+  g_branch = as_learner(ppl("branch", list(basic = lbasic, fs = DebugWithSelectedFeatures$new(), featureless = lrn("classif.featureless"))))
+
+  expect_true("selected_features" %in% g_branch$properties)
+  g_branch$train(tsk("iris"))
+  expect_error(g_branch$selected_features(), "does not implement.*selected_features.*impute_selected_features.*TRUE")
+  g_branch$impute_selected_features = TRUE
+  expect_equal(g_branch$selected_features(), tsk("iris")$feature_names)
+  g_branch$param_set$values$branch.selection = "fs"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$selected_features(), tsk("iris")$feature_names[[1]])
+
+  g_branch$param_set$values$branch.selection = "featureless"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$selected_features(), character(0))
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugWithSelectedFeatures$new()))))
+  expect_equal(
+    g_nested$train(tsk("iris"))$selected_features(),
+    tsk("iris")$feature_names[[1]]
+  )
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugBasic$new()))))
+  expect_error(g_nested$train(tsk("iris"))$selected_features(), " classif\\.debug .*selected_features.*impute_selected_features to TRUE")
+  # need to turn on imputation in the innermost graph
+  g_nested$graph$pipeops$classif.debug$learner$impute_selected_features = TRUE
+  expect_equal(
+    g_nested$train(tsk("iris"))$selected_features(),
+    tsk("iris")$feature_names
+  )
+
+  # feature union unions selected features
+
+  g_avg = as_learner(list(po("select", selector = selector_grep("Sepal")) %>>% lbasic, DebugWithSelectedFeatures$new(), lrn("classif.featureless")) %>>% po("classifavg", 3))
+
+  g_avg$train(tsk("iris"))
+  expect_error(g_avg$selected_features(), "does not implement.*selected_features.*impute_selected_features.*TRUE")
+  g_avg$impute_selected_features = TRUE
+
+  # Sepal.* from lbasic, Petal.Length from DebugWithSelectedFeatures, nothing from featureless
+  expect_equal(g_avg$selected_features(), c("Sepal.Length", "Sepal.Width", "Petal.Length"))
+})
+
+
+
+test_that("GraphLearner other properties", {
+
+  DebugWithProperties = R6Class("DebugWithProperties", inherit = LearnerClassifDebug,
+    public = list(
+      initialize = function(...) {
+        super$initialize(...)
+        self$properties = c(
+          setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")),
+          "loglik", "oob_error")
+      },
+      loglik = function() {
+        1
+      },
+      oob_error = function() {
+        2
+      }
+  ))
+
+  g_basic = GraphLearner$new(Graph$new()$add_pipeop(DebugBasic$new()))
+  g_properties = GraphLearner$new(Graph$new()$add_pipeop(DebugWithProperties$new()))
+
+  expect_false(any(c("loglik", "oob_error") %in% g_basic$properties))
+  expect_true(all(c("loglik", "oob_error") %in% g_properties$properties))
+
+  expect_error(g_basic$loglik(), "does not implement.*loglik")
+  expect_error(g_basic$oob_error(), "does not implement.*oob_error")
+
+  g_properties$train(tsk("iris"))
+  expect_equal(g_properties$loglik(), 1)
+  expect_equal(g_properties$oob_error(), 2)
+
+  g_bagging = as_learner(ppl("bagging", DebugWithProperties$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
+
+  expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
+  g_bagging$train(tsk("iris"))
+  expect_true(all(c("loglik", "oob_error") %in% g_bagging$properties))
+  expect_error(g_bagging$loglik(), "Multiplicity that does not contain exactly one Learner")
+  expect_error(g_bagging$oob_error(), "Multiplicity that does not contain exactly one Learner")
+
+  g_bagging$param_set$values$replicate.reps = 1
+  g_bagging$train(tsk("iris"))
+  expect_equal(g_bagging$loglik(), 1)
+  expect_equal(g_bagging$oob_error(), 2)
+
+  # branching
+  lbasic = DebugBasic$new()
+  lbasic$id = "basic"
+  g_branch = as_learner(ppl("branch", list(basic = lbasic, properties = DebugWithProperties$new())))
+
+  expect_true(all(c("loglik", "oob_error") %in% g_branch$properties))
+  g_branch$train(tsk("iris"))
+  expect_error(g_branch$loglik(), "does not implement.*loglik")
+  expect_error(g_branch$oob_error(), "does not implement.*oob_error")
+  g_branch$param_set$values$branch.selection = "properties"
+  g_branch$train(tsk("iris"))
+  expect_equal(g_branch$loglik(), 1)
+  expect_equal(g_branch$oob_error(), 2)
+
+  g_nested = as_learner(as_graph(as_learner(as_graph(DebugWithProperties$new()))))
+  expect_equal(
+    g_nested$train(tsk("iris"))$loglik(),
+    1
+  )
+  expect_equal(
+    g_nested$train(tsk("iris"))$oob_error(),
+    2
+  )
+
+  expect_true(all(c("loglik", "oob_error") %in% g_nested$properties))
+
 })
