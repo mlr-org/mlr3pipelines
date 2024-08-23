@@ -119,6 +119,7 @@ pop$train(list(task))[[1]]$data()
 
 pop$state
 }
+\dontshow{ try(rm("format.list", envir = .BaseNamespaceEnv$.__S3MethodsTable__.), silent = TRUE)  # BiocGenerics overwrites printer for our tables mlr-org/mlr3#1112 }
 \dontshow{ \} }
 \dontshow{ \} }
 }
