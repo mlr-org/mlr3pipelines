@@ -691,6 +691,8 @@ get_po_unbranch_active_input = function(graph) {
   dst_id = NULL
   src_channel = NULL
   dst_channel = NULL
+  state = NULL
+  reason = NULL
 
   # This algorithnm is similar to reduce_graph(): It uses a data.table of edges
   # with an additional column that tracks the state (active or not) of each edge.
@@ -703,7 +705,7 @@ get_po_unbranch_active_input = function(graph) {
   graph_input = graph$input
   branch_state_info = rbind(
     branch_state_info,
-    graph_input[, .(src_id = "", src_channel = graph_input$name, dst_id = graph_input$op.id,
+    graph_input[, list(src_id = "", src_channel = graph_input$name, dst_id = graph_input$op.id,
       dst_channel = graph_input$channel.name, state = TRUE, reason = list("direct Graph input, which is always active"))]
   )
   ids = graph$ids(sorted = TRUE)  # Topologically sorted IDs
