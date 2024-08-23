@@ -607,7 +607,10 @@ infer_task_type = function(graph) {
   c(task_type, "classif")[[1]]  # "classif" as final fallback
 }
 
-
+# for a PipeOpUnbranch, search for its predecessor PipeOp that is currently "active",
+# i.e. that gets non-NOP-input in the current hyperparameter configuration of PipeOpBranch ops.
+# Returns a list, named by PipeOpUnbranch IDs, containing the incoming PipeOp IDs.
+# PipeOpBranch ops that are connected to overall Graph input get an empty string as predecessor ID.
 get_po_unbranch_active_input = function(graph) {
   # query a given PipeOpBranch what its selected output is
   # Currently, PipeOpBranch 'selection' can be either integer-valued or a string.
@@ -677,7 +680,7 @@ get_po_unbranch_active_input = function(graph) {
       # we have already checked that this is unique.
       state_current = TRUE
       reason_current = inedges$reason[inedges$state]
-      po_unbranch_active_input[[pipeop_id]] = inedges$dst_channel[inedges$state]
+      po_unbranch_active_input[[pipeop_id]] = inedges$src_id[inedges$state]
     } else {
       # all inputs are in agreement
       state_current = any(inedges$state)
@@ -737,8 +740,8 @@ graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "l
         if (!inherits(last_pipeop, "PipeOpUnbranch") || !resolve_branching) {
           return(unique(unlist(lapply(next_pipeop, search_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
         }
-        current_active_input = po_unbranch_active_input[[current_pipeop]]
-        next_pipeop = graph$edges[dst_id == current_pipeop & dst_channel == current_active_input, src_id]
+        next_pipeop = po_unbranch_active_input[[current_pipeop]]
+        if (next_pipeop == "") next_pipeop = character(0)
       }
       if (length(next_pipeop) == 0) return(list())
       current_pipeop = next_pipeop
