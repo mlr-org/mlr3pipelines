@@ -10,10 +10,11 @@
 \description{
 Impute numerical features by histogram.
 
-During training, a histogram is fitted using R's \code{\link[graphics:hist]{hist()}} function.
-The fitted histogram is then sampled from for imputation. This is an approximation to
-sampling from the empirical training data distribution (i.e. sampling from training data
-with replacement), but is much more memory efficient for large datasets, since the \verb{$state}
+During training, a histogram is fitted on each column using R's \code{\link[graphics:hist]{hist()}} function.
+The fitted histogram is then sampled from for imputation. Sampling happens in a two-step process:
+First, a bin is sampled from the histogram, then a value is sampled uniformly from the bin.
+This is an approximation to sampling from the empirical training data distribution (i.e. sampling
+from training data with replacement), but is much more memory efficient for large datasets, since the \verb{$state}
 does not need to save the training data.
 }
 \section{Construction}{
@@ -33,7 +34,7 @@ List of hyperparameter settings, overwriting the hyperparameter settings that wo
 
 Input and output channels are inherited from \code{\link{PipeOpImpute}}.
 
-The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) histogram.
+The output is the input \code{\link[mlr3:Task]{Task}} with all affected numeric features missing values imputed by (column-wise) histogram; see Description for details.
 }
 
 \section{State}{

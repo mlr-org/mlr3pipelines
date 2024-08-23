@@ -52,7 +52,13 @@ at level \code{0.5}.
 
 \section{Fields}{
 
-Only fields inherited from \code{\link{PipeOp}}.
+Fields inherited from \code{\link{PipeOp}}, as well as:
+\itemize{
+\item \code{predict_type} :: \code{character(1)}\cr
+Type of prediction to return. Either \code{"prob"} (default) or \code{"response"}.
+Setting to \code{"response"} should rarely be used; it may potentially save some memory but has
+no other benefits.
+}
 }
 
 \section{Methods}{

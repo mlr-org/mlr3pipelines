@@ -18,7 +18,7 @@ test_that("PipeOpSmote - basic properties", {
   expect_task(result[[1]])
 })
 
-test_that("compare to smotefamily::SMOT", {
+test_that("compare to smotefamily::SMOTE", {
   skip_if_not_installed("smotefamily")
   set.seed(1234)
   data = smotefamily::sample_generator(1000, ratio = 0.80)

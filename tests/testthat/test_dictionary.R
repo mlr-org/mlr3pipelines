@@ -247,3 +247,31 @@ test_that("Cannot add pipeops with keys that invalidates the convenience for id 
   copy = mlr_pipeops$clone(deep = TRUE)
   expect_error(copy$add("name_1", PipeOp), regexp = "grepl")
 })
+
+test_that("as.data.table(mlr_pipeops) works when a pipeop can not be constructed", {
+  PipeOpError = R6Class("PipeOpError", inherit = PipeOp, public = list(
+    initialize = function() {
+      stop("This PipeOp can not be constructed")
+    }
+  ))
+  dt_before = as.data.table(mlr_pipeops)
+
+  # No NAs in the data.table of mlr3pipelines' own PipeOps
+  expect_false(any(is.na(unlist(
+    dt_before[, c("key", "label", "packages", "tags", "input.type.train", "input.type.predict",
+      "output.type.train", "output.type.predict"), with = FALSE])
+  )))
+
+  mlr_pipeops$add("error_pipeop", PipeOpError)
+  expect_warning({dt_after = as.data.table(mlr_pipeops)}, "could not be constructed.*error_pipeop")
+  mlr_pipeops$remove("error_pipeop")
+
+  expect_equal(dt_after[key == "error_pipeop"],
+    # use weird data.table constructor since we can't use 'key' in the data.table() call
+    setkeyv(data.table()[, `:=`(key = "error_pipeop", label = NA_character_, packages = list(NA_character_),
+      tags = list(NA_character_), feature_types = list(NA_character_),
+      input.num = NA_integer_, output.num = NA_integer_,
+      input.type.train = list(NA_character_), input.type.predict = list(NA_character_),
+      output.type.train = list(NA_character_), output.type.predict = list(NA_character_))][], "key"))
+
+})

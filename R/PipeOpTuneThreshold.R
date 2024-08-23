@@ -53,6 +53,13 @@
 #' Uses the `optimizer` provided as a `param_val` in order to find an optimal threshold.
 #' See the `optimizer` parameter for more info.
 #'
+#' @section Fields:
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `predict_type` :: `character(1)`\cr
+#'   Type of prediction to return. Either `"prob"` (default) or `"response"`.
+#'   Setting to `"response"` should rarely be used; it may potentially save some memory but has
+#'   no other benefits.
+#'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
 #'
@@ -84,8 +91,10 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       ps = ps(
         measure = p_uty(custom_check = check_class_or_character("Measure", mlr_measures), tags = "train"),
         optimizer = p_uty(custom_check = check_optimizer, tags = "train"),
-        log_level = p_uty(tags = "train",
-          function(x) check_string(x) %check||% check_integerish(x))
+        log_level = p_uty(
+          custom_check = crate(function(x) check_string(x) %check||% check_integerish(x), .parent = topenv()),
+          tags = "train"
+        )
       )
       ps$values = list(measure = "classif.ce", optimizer = "gensa", log_level = "warn")
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "bbotk",
@@ -96,9 +105,16 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     }
   ),
   active = list(
-    predict_type = function() "response"  # we are predict type "response" for now, so we don't break things. See discussion in #712
+    predict_type = function(rhs) {
+      if (!missing(rhs)) {
+        assert_choice(rhs, c("prob", "response"))
+        private$.predict_type = rhs
+      }
+      private$.predict_type
+    }
   ),
   private = list(
+    .predict_type = "prob",
     .train = function(input) {
       if(!all(input[[1]]$feature_types$type == "numeric")) {
         stop("PipeOpTuneThreshold requires predicted probabilities! Set learner predict_type to 'prob'")
@@ -111,25 +127,31 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
     .predict = function(input) {
       pred = private$.task_to_prediction(input[[1]])
       pred$set_threshold(self$state$threshold)
+      if (self$predict_type == "response") {
+        pred$predict_types = "response"
+        pred$data$prob = NULL
+      }
       return(list(pred))
     },
-    .objfun = function(xs, pred, measure) {
-      lvls = colnames(pred$prob)
-      res = pred$set_threshold(unlist(xs))$score(measure)
-      if (!measure$minimize) res = -res
+    .objfun = function(xs, pred, measure, paramname_to_column_map) {
+      thresholds = unlist(xs)
+      names(thresholds) = paramname_to_column_map[names(thresholds)]
+      res = pred$set_threshold(thresholds)$score(measure)
       return(setNames(list(res), measure$id))
     },
     .optimize_objfun = function(pred) {
       optimizer = self$param_set$values$optimizer
       if (inherits(optimizer, "character")) optimizer = bbotk::opt(optimizer)
       if (inherits(optimizer, "OptimizerGenSA")) optimizer$param_set$values$trace.mat = TRUE  # https://github.com/mlr-org/bbotk/issues/214
-      ps = private$.make_param_set(pred)
+      pnames = make.names(colnames(pred$prob), unique = TRUE)
+      paramname_to_column_map = setNames(colnames(pred$prob), pnames)
+      ps = private$.make_param_set(pred, pnames)
       measure = self$param_set$values$measure
       if (is.character(measure)) measure = msr(measure) else measure
       codomain = do.call(paradox::ps, structure(list(p_dbl(tags = ifelse(measure$minimize, "minimize", "maximize"))), names = measure$id))
 
       objfun = bbotk::ObjectiveRFun$new(
-        fun = function(xs) private$.objfun(xs, pred = pred, measure = measure),
+        fun = function(xs) private$.objfun(xs, pred = pred, measure = measure, paramname_to_column_map = paramname_to_column_map),
         domain = ps, codomain = codomain
       )
       inst = bbotk::OptimInstanceSingleCrit$new(
@@ -144,10 +166,12 @@ PipeOpTuneThreshold = R6Class("PipeOpTuneThreshold",
       on.exit(lgr$set_threshold(old_threshold))
       lgr$set_threshold(self$param_set$values$log_level)
       optimizer$optimize(inst)
-      unlist(inst$result_x_domain)
+      result = unlist(inst$result_x_domain)
+      names(result) = paramname_to_column_map[names(result)]
+      result
     },
-    .make_param_set = function(pred) {
-      pset = setNames(map(colnames(pred$prob), function(x) p_dbl(0,1)), colnames(pred$prob))
+    .make_param_set = function(pred, pnames) {
+      pset = setNames(map(pnames, function(x) p_dbl(0,1)), pnames)
       mlr3misc::invoke(paradox::ps, .args = pset)
     },
     .task_to_prediction = function(input) {

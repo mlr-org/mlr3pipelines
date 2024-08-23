@@ -59,6 +59,6 @@ po(lrn("classif.rpart"), cp = 0.3)
 mlr_pipeops$get("learner", lrn("classif.rpart"),
   param_vals = list(cp = 0.3))
 
-pos(c("pca", original = "nop"))
+mlr3pipelines::pos(c("pca", original = "nop"))
 \dontshow{ \} }
 }

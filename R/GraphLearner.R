@@ -41,7 +41,7 @@
 #'   construction of `GraphLearner`, during `$train()`, and during `$predict()` when `clone_graph` is `FALSE`.
 #'
 #' @section Fields:
-#' Fields inherited from [`PipeOp`], as well as:
+#' Fields inherited from [`Learner`][mlr3::Learner], as well as:
 #' * `graph` :: [`Graph`]\cr
 #'   [`Graph`] that is being wrapped. This field contains the prototype of the [`Graph`] that is being trained, but does *not*
 #'   contain the model. Use `graph_model` to access the trained [`Graph`] after `$train()`. Read-only.
@@ -60,14 +60,74 @@
 #'   For more details on the possible values, see [`mlr3::Learner`].
 #' * `marshaled` :: `logical(1)`\cr
 #'   Whether the learner is marshaled.
+#' * `impute_selected_features` :: `logical(1)`\cr
+#'   Whether to heuristically determine `$selected_features()` as all `$selected_features()` of all "base learner" Learners,
+#'   even if they do not have the `"selected_features"` property / do not implement `$selected_features()`.
+#'   If `impute_selected_features` is `TRUE` and the base learners do not implement `$selected_features()`,
+#'   the `GraphLearner`'s `$selected_features()` method will return all features seen by the base learners.
+#'   This is useful in cases where feature selection is performed inside the `Graph`:
+#'   The `$selected_features()` will then be the set of features that were selected by the `Graph`.
+#'   If `impute_selected_features` is `FALSE`, the `$selected_features()` method will throw an error if `$selected_features()`
+#'   is not implemented by the base learners.\cr
+#'   This is a heuristic and may report more features than actually used by the base learners,
+#'   in cases where the base learners do not implement `$selected_features()`.
+#'   The default is `FALSE`.
 #'
 #' @section Methods:
-#' * `marshal(...)`\cr
+#' Methods inherited from [`Learner`][mlr3::Learner], as well as:
+#' * `marshal`\cr
 #'   (any) -> `self`\cr
 #'   Marshal the model.
-#' * `unmarshal(...)`\cr
+#' * `unmarshal`\cr
 #'   (any) -> `self`\cr
 #'   Unmarshal the model.
+#' * `base_learner(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE)`\cr
+#'   (`numeric(1)`, `logical(1)`, `logical(1)`, `character(1)`) -> `Learner` | [`PipeOp`] | `list` of `Learner` | `list` of [`PipeOp`]\cr
+#'   Return the base learner of the `GraphLearner`. If `recursive` is 0, the `GraphLearner` itself is returned.
+#'   Otherwise, the [`Graph`] is traversed backwards to find the first `PipeOp` containing a `$learner_model` field.
+#'   If `recursive` is 1, that `$learner_model` (or containing `PipeOp`, if `return_po` is `TRUE`) is returned.
+#'   If `recursive` is greater than 1, the discovered base learner's `base_learner()` method is called with `recursive - 1`.
+#'   `recursive` must be set to 1 if `return_po` is TRUE, and must be set to at most 1 if `return_all` is `TRUE`.\cr
+#'   If `return_po` is `TRUE`, the container-`PipeOp` is returned instead of the `Learner`.
+#'   This will typically be a [`PipeOpLearner`] or a [`PipeOpLearnerCV`].\cr
+#'   If `return_all` is `TRUE`, a `list` of `Learner`s or `PipeOp`s is returned.
+#'   If `return_po` is `FALSE`, this list may contain [`Multiplicity`] objects, which are not unwrapped.
+#'   If `return_all` is `FALSE` and there are multiple possible base learners, an error is thrown.
+#'   This may also happen if only a single [`PipeOpLearner`] is present that was trained with a [`Multiplicity`].\cr
+#'   If `resolve_branching` is `TRUE`, and when a [`PipeOpUnbranch`] is encountered, the
+#'   corresponding [`PipeOpBranch`] is searched, and its hyperparameter configuration is used to select the base learner.
+#'   There may be multiple corresponding [`PipeOpBranch`]s, which are all considered.
+#'   If `resolve_branching` is `FALSE`, [`PipeOpUnbranch`] is treated as any other `PipeOp` with multiple inputs; all possible branch paths are considered equally.
+#'
+#' The following standard extractors as defined by the [`Learner`][mlr3::Learner] class are available.
+#' Note that these typically only extract information from the `$base_learner()`.
+#' This works well for simple [`Graph`]s that do not modify features too much, but may give unexpected results for `Graph`s that
+#' add new features or move information between features.
+#'
+#' As an example, consider a feature `A`` with missing values, and a feature `B`` that is used for imputatoin, using a [`po("imputelearner")`][PipeOpImputeLearner].
+#' In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature A,
+#' the `selected_features()` method could return only feature `A``, and `$importance()` may even report 0 for feature `B`.
+#' This would not be entirbababababely accurate when considering the entire `GraphLearner`, as feature `B` is used for imputation and would therefore have an impact on predictions.
+#' The following should therefore only be used if the `Graph` is known to not have an impact on the relevant properties.
+#'
+#' * `importance()`\cr
+#'   () -> `numeric`\cr
+#'   The `$importance()` returned by the base learner, if it has the `"importance` property.
+#'   Throws an error otherwise.
+#' * `selected_features()`\cr
+#'   () -> `character`\cr
+#'   The `$selected_features()` returned by the base learner, if it has the `"selected_features` property.
+#'   If the base learner does not have the `"selected_features"` property and `impute_selected_features` is `TRUE`,
+#'   all features seen by the base learners are returned.
+#'   Throws an error otherwise.
+#' * `oob_error()`\cr
+#'   () -> `numeric(1)`\cr
+#'   The `$oob_error()` returned by the base learner, if it has the `"oob_error` property.
+#'   Throws an error otherwise.
+#' * `loglik()`\cr
+#'   () -> `numeric(1)`\cr
+#'   The `$loglik()` returned by the base learner, if it has the `"loglik` property.
+#'   Throws an error otherwise.
 #'
 #' @section Internals:
 #' [`as_graph()`] is called on the `graph` argument, so it can technically also be a `list` of things, which is
@@ -101,11 +161,13 @@
 #' \dontshow{ \} }
 GraphLearner = R6Class("GraphLearner", inherit = Learner,
   public = list(
+    impute_selected_features = FALSE,
     initialize = function(graph, id = NULL, param_vals = list(), task_type = NULL, predict_type = NULL, clone_graph = TRUE) {
       graph = as_graph(graph, clone = assert_flag(clone_graph))
       graph$state = NULL
 
       id = assert_string(id, null.ok = TRUE) %??% paste(graph$ids(sorted = TRUE), collapse = ".")
+      self$id = id  # init early so 'base_learner()' can use it in error messages
       private$.graph = graph
 
       output = graph$output
@@ -124,8 +186,17 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       private$.can_validate = some(graph$pipeops, function(po) "validation" %in% po$properties)
       private$.can_internal_tuning = some(graph$pipeops, function(po) "internal_tuning" %in% po$properties)
 
+      baselearners = unlist(multiplicity_flatten(self$base_learner(recursive = 1, return_all = TRUE, resolve_branching = FALSE)), recursive = FALSE, use.names = FALSE)
+      blproperties = unique(unlist(map(baselearners, "properties"), recursive = FALSE, use.names = FALSE))
+
       properties = setdiff(mlr_reflections$learner_properties[[task_type]],
-        c("validation", "internal_tuning")[!c(private$.can_validate, private$.can_internal_tuning)])
+        c("validation", "internal_tuning", "importance", "oob_error", "loglik"))
+
+      properties = c(properties,
+        if (private$.can_validate) "validation",
+        if (private$.can_internal_tuning) "internal_tuning",
+        intersect(c("importance", "oob_error", "loglik"), blproperties)
+      )
 
       super$initialize(id = id, task_type = task_type,
         feature_types = mlr_reflections$task_feature_types,
@@ -140,38 +211,83 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       }
       if (!is.null(predict_type)) self$predict_type = predict_type
     },
-    base_learner = function(recursive = Inf, return_po = FALSE) {
+    base_learner = function(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE) {
       assert(check_numeric(recursive, lower = Inf), check_int(recursive))
       assert_flag(return_po)
-      if (recursive <= 0) return(self)
-      gm = self$graph_model
-      gm_output = gm$output
-      if (nrow(gm_output) != 1) stop("Graph has no unique output.")
-      last_pipeop_id = gm_output$op.id
+      assert_flag(return_all)
+      if (return_po && recursive != 1) stop("recursive must be == 1 if return_po is TRUE")
+      if (recursive <= 0) return(if (return_all) list(self) else self)
+      if (return_all && recursive > 1) stop("recursive must be <= 1 if return_all is TRUE")
 
-      # pacify static checks
-      src_id = NULL
-      dst_id = NULL
+      # graph_base_learner() corresponds to base_learner(recursive = 1, return_po = TRUE, return_all = TRUE)
+      result = graph_base_learner(self$graph_model, resolve_branching = resolve_branching)
 
-      repeat {
-        last_pipeop = gm$pipeops[[last_pipeop_id]]
-        learner_model = if ("learner_model" %in% names(last_pipeop)) last_pipeop$learner_model
-        if (!is.null(learner_model)) break
-        last_pipeop_id = gm$edges[dst_id == last_pipeop_id, src_id]
-        if (length(last_pipeop_id) > 1) stop("Graph has no unique PipeOp containing a Learner")
-        if (length(last_pipeop_id) == 0) stop("No Learner PipeOp found.")
+      if (!return_all) {
+        if (length(result) < 1) stopf("No base learner found in Graph %s.", self$id)
+        if (length(result) > 1) stopf("Graph %s has no unique PipeOp containing a Learner.", self$id)
+        if (!return_po) {
+          result = multiplicity_flatten(result[[1]]$learner_model)
+          if (length(result) != 1) {
+            # if learner_model is not a Multiplicity, multiplicity_flatten will return a list of length 1
+            stopf("Graph %s's base learner is a Multiplicity that does not contain exactly one Learner.", self$id)
+          }
+          return(result[[1]]$base_learner(recursive - 1))
+        } else {
+          return(result[[1]])
+        }
       }
-      if (return_po) {
-        last_pipeop
-      } else {
-        learner_model$base_learner(recursive - 1)
+      # if we are here, return_all is TRUE, and recursive is therefore 1.
+      if (!return_po) {
+        result = map(result, "learner_model")
       }
+      result
     },
     marshal = function(...) {
       learner_marshal(.learner = self, ...)
     },
     unmarshal = function(...) {
       learner_unmarshal(.learner = self, ...)
+    },
+    importance = function() {
+      base_learner = self$base_learner(recursive = 1)
+      if ("importance" %in% base_learner$properties && !is.null(base_learner$importance)) {
+        base_learner$importance()
+      } else {
+        stopf("Baselearner %s of %s does not implement '$importance()'.", base_learner$id, self$id)
+      }
+    },
+    selected_features = function() {
+      base_learners = self$base_learner(recursive = 1, return_all = TRUE)
+      base_learners_flat = unlist(lapply(base_learners, multiplicity_flatten), recursive = FALSE, use.names = FALSE)
+      selected_features_all = lapply(base_learners_flat, function(x) {
+        if ("selected_features" %in% x$properties && !is.null(x$selected_features)) {
+          x$selected_features()
+        } else if (self$impute_selected_features) {
+          if (is.null(x$state)) {
+            stopf("No model stored in base learner %s of Graph %s.", x$id, self$id)
+          }
+          x$state$feature_names
+        } else {
+          stopf("Baselearner %s of %s does not implement 'selected_features'.\nYou can try setting $impute_selected_features to TRUE.", x$id, self$id)
+        }
+      })
+      unique(unlist(selected_features_all, recursive = FALSE, use.names = FALSE))
+    },
+    oob_error = function() {
+      base_learner = self$base_learner(recursive = 1)
+      if ("oob_error" %in% base_learner$properties && !is.null(base_learner$oob_error)) {
+        base_learner$oob_error()
+      } else {
+        stopf("Baselearner %s of %s does not implement '$oob_error()'.", base_learner$id, self$id)
+      }
+    },
+    loglik = function() {
+      base_learner = self$base_learner(recursive = 1)
+      if ("loglik" %in% base_learner$properties && !is.null(base_learner$loglik)) {
+        base_learner$loglik()
+      } else {
+        stopf("Baselearner %s of %s does not implement '$loglik()'.", base_learner$id, self$id)
+      }
     }
   ),
   active = list(
@@ -205,9 +321,25 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
     },
     predict_type = function(rhs) {
       if (!missing(rhs)) {
-        private$set_predict_type(rhs)
+        assert_subset(rhs, unlist(mlr_reflections$learner_predict_types[[self$task_type]], use.names = FALSE))
       }
-      private$get_predict_type()
+
+      # we look for *all* pipeops with a predict_type if we want to set it, but
+      # we only retrieve the predict_type of the active Learner (from branching) if we
+      # are getting.
+      predict_type_pipeops = graph_base_learner(
+        self$graph, resolve_branching = missing(rhs), lookup_field = "predict_type")
+      if (!missing(rhs)) {
+        walk(predict_type_pipeops, function(po) po$predict_type = rhs)
+        return(rhs)
+      }
+      pt = unique(unlist(map(predict_type_pipeops, "predict_type"), recursive = FALSE, use.names = FALSE))
+      if (!length(pt)) return(names(mlr_reflections$learner_predict_types[[self$task_type]])[[1]])
+      if (length(pt) > 1) {
+        # if there are multiple predict types, predict the "first" one, according to reflections
+        return(intersect(names(mlr_reflections$learner_predict_types[[self$task_type]]), pt)[[1]])
+      }
+      pt
     },
     param_set = function(rhs) {
       if (!missing(rhs) && !identical(rhs, self$graph$param_set)) {
@@ -281,37 +413,6 @@ GraphLearner = R6Class("GraphLearner", inherit = Learner,
       assert_list(prediction, types = "Prediction", len = 1,
         .var.name = sprintf("Prediction returned by Graph %s", self$id))
       prediction[[1]]
-    },
-    get_predict_type = function() {
-      # recursively walk backwards through the graph
-      get_po_predict_type = function(x) {
-        if (!is.null(x$predict_type)) return(x$predict_type)
-        prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
-        if (length(prdcssrs)) {
-          # all non-null elements
-          predict_types = discard(map(self$graph$pipeops[prdcssrs], get_po_predict_type), is.null)
-          if (length(unique(predict_types)) == 1L)
-            return(unlist(unique(predict_types)))
-        }
-        return(NULL)
-      }
-      predict_type = get_po_predict_type(self$graph$pipeops[[self$graph$rhs]])
-      if (is.null(predict_type))
-        names(mlr_reflections$learner_predict_types[[self$task_type]])[[1]]
-      else
-        predict_type
-    },
-    set_predict_type = function(predict_type) {
-      # recursively walk backwards through the graph
-      set_po_predict_type = function(x, predict_type) {
-        assert_subset(predict_type, unlist(mlr_reflections$learner_predict_types[[self$task_type]]))
-        if (!is.null(x$predict_type)) x$predict_type = predict_type
-        prdcssrs = self$graph$edges[dst_id == x$id, ]$src_id
-        if (length(prdcssrs)) {
-          map(self$graph$pipeops[prdcssrs], set_po_predict_type, predict_type = predict_type)
-        }
-      }
-      set_po_predict_type(self$graph$pipeops[[self$graph$rhs]], predict_type)
     }
   )
 )
@@ -385,7 +486,7 @@ set_validate.GraphLearner = function(learner, validate, ids = NULL, args_all = l
   }
 
   if (is.null(ids)) {
-    ids = learner$base_learner(return_po = TRUE)$id
+    ids = learner$base_learner(recursive = 1, return_po = TRUE)$id
   } else {
     assert_subset(ids, ids(pos_with_property(learner$graph$pipeops, "validation")))
   }
@@ -464,17 +565,17 @@ infer_task_type = function(graph) {
     stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
   }
   if (length(task_type) == 0L) {
+    pipeops_visited = new.env(parent = emptyenv())
     # recursively walk backwards through the graph
     # FIXME: think more about target transformation graphs here
     get_po_task_type = function(x) {
+      if (get0(x$id, pipeops_visited, ifnotfound = FALSE)) return(NULL)
+      assign(x$id, TRUE, pipeops_visited)
       task_type = c(
         match(c(x$output$train, x$output$predict), class_table$prediction),
         match(c(x$input$train, x$input$predict), class_table$task))
       task_type = unique(class_table$type[stats::na.omit(task_type)])
-      if (length(task_type) > 1) {
-        stopf("GraphLearner can not infer task_type from given Graph\nin/out types leave multiple possibilities: %s", str_collapse(task_type))
-      }
-      if (length(task_type) == 1) {
+      if (length(task_type) >= 1) {
         return(task_type)  # early exit
       }
       prdcssrs = graph$edges[dst_id == x$id, ]$src_id
@@ -489,5 +590,163 @@ infer_task_type = function(graph) {
     }
     task_type = get_po_task_type(graph$pipeops[[graph$rhs]])
   }
+  if (length(task_type) != 1L) {
+    # We could not infer type from any PipeOp output channels, so we try to infer it from the base learners
+    baselearners = map(graph_base_learner(graph, resolve_branching = FALSE), "learner_model")
+    task_type = unique(unlist(map(baselearners, function(x) {
+      # Currently we should not have Multiplicities here, since Graph gets NULLed explicitly upon construction.
+      # If we ever allow initializing a Learner with a trained Graph, the following will be necessary.
+      x = multiplicity_flatten(x)
+      if (length(x) >= 1) return(x[[1]]$task_type)
+      return(NULL)  # only if multiplicity of length 0
+    }), recursive = FALSE, use.names = FALSE))
+  }
+  if (length(task_type) > 1) {
+    stopf("GraphLearner can not infer task_type from given Graph\nbase_learner() and in/out types leave multiple possibilities: %s", str_collapse(task_type))
+  }
   c(task_type, "classif")[[1]]  # "classif" as final fallback
+}
+
+# for a PipeOpUnbranch, search for its predecessor PipeOp that is currently "active",
+# i.e. that gets non-NOP-input in the current hyperparameter configuration of PipeOpBranch ops.
+# Returns a list, named by PipeOpUnbranch IDs, containing the incoming PipeOp IDs.
+# PipeOpBranch ops that are connected to overall Graph input get an empty string as predecessor ID.
+get_po_unbranch_active_input = function(graph) {
+  # query a given PipeOpBranch what its selected output is
+  # Currently, PipeOpBranch 'selection' can be either integer-valued or a string.
+  get_po_branch_active_output = function(pipeop) {
+    assertR6(pipeop, "PipeOpBranch")
+    pob_ps = pipeop$param_set
+    selection = pob_ps$values$selection
+    # will have to check if selection is numeric / character, in case it
+    # is not given or a TuneToken or something like that.
+    if (pob_ps$class[["selection"]] == "ParamInt") {
+      if (!test_int(selection)) {
+        stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
+      }
+      return(pipeop$output$name[[pob_ps$values$selection]])
+    } else {
+      if (!test_string(selection)) {
+        stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
+      }
+      return(pob_ps$values$selection)
+    }
+  }
+  # pacify static checks
+  src_id = NULL
+  dst_id = NULL
+  src_channel = NULL
+  dst_channel = NULL
+  state = NULL
+  reason = NULL
+
+  # This algorithnm is similar to reduce_graph(): It uses a data.table of edges
+  # with an additional column that tracks the state (active or not) of each edge.
+  # We also track a description ("reason") of why an edge is active or not: the
+  # last PipeOpBranch encountered, and its active state. This should make for
+  # informative error messages.
+
+  branch_state_info = copy(graph$edges)
+  branch_state_info[, `:=`(state = NA, reason = list())]
+  graph_input = graph$input
+  branch_state_info = rbind(
+    branch_state_info,
+    graph_input[, list(src_id = "", src_channel = graph_input$name, dst_id = graph_input$op.id,
+      dst_channel = graph_input$channel.name, state = TRUE, reason = list("direct Graph input, which is always active"))]
+  )
+  ids = graph$ids(sorted = TRUE)  # Topologically sorted IDs
+  po_unbranch_active_input = character(0)
+  for (pipeop_id in ids) {
+    pipeop = graph$pipeops[[pipeop_id]]
+    inedges = branch_state_info[dst_id == pipeop_id, ]
+    # PipeOpUnbranch with more than one active input is an error
+    if (inherits(pipeop, "PipeOpUnbranch") && sum(inedges$state) > 1) {
+      stopf("PipeOpUnbranch %s has multiple active inputs: %s.",
+        pipeop_id,
+        inedges[state == TRUE, andpaste(sprintf("input '%s' from %s", dst_channel, unlist(reason, recursive = FALSE, use.names = TRUE)))]
+      )
+    }
+
+    # any PipeOp with conflicting inputs: This is only OK if it is a PipeOpUnbranch
+    if (all(inedges$state) != any(inedges$state)) {
+      if (!inherits(pipeop, "PipeOpUnbranch")) {
+        stopf("Inconsistent selection of PipeOpBranch outputs:\n%s in conflict with %s at PipeOp %s.",
+          inedges[state == FALSE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)))],
+          inedges[state == TRUE, andpaste(unique(unlist(reason, recursive = FALSE, use.names = TRUE)))],
+          pipeop_id
+        )
+      }
+      # PipeOpUnbranch selects down to the single selected input.
+      # we have already checked that this is unique.
+      state_current = TRUE
+      reason_current = inedges$reason[inedges$state]
+      po_unbranch_active_input[[pipeop_id]] = inedges$src_id[inedges$state]
+    } else {
+      # all inputs are in agreement
+      state_current = any(inedges$state)
+      reason_current = unique(unlist(inedges$reason, recursive = FALSE, use.names = FALSE))
+    }
+
+    if (state_current && inherits(pipeop, "PipeOpBranch")) {
+      # PipeOpBranch is only special when it is actually active
+      active_output = get_po_branch_active_output(pipeop)
+      branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
+        reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
+          pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
+          src_channel))
+      )]
+    } else {
+      branch_state_info[src_id == pipeop_id, `:=`(state = state_current, reason = list(reason_current))]
+    }
+  }
+  po_unbranch_active_input
+}
+
+andpaste = function(x, sep = ", ", lastsep = ", and ") {
+  if (length(x) == 0) return("")
+  if (length(x) == 1) return(x[[1]])
+  paste0(paste(first(x, -1), collapse = sep), lastsep, last(x))
+}
+
+graph_base_learner = function(graph, resolve_branching = TRUE, lookup_field = "learner_model") {
+  # GraphLearner$base_learner(), where return_all is TRUE, return_po is TRUE, and recursive is 1.
+  # We are looking for all PipeOps with the non-NULL field named `lookup_field`, typically "learner_model", possibly resolving branching.
+
+  gm_output = graph$output
+  if (nrow(gm_output) != 1) {
+    # should never happen, since we checked this in initialize(), but theoretically the user could have changed the graph by-reference
+    stop("Graph has no unique output.")
+  }
+  last_pipeop_id = gm_output$op.id
+
+  # pacify static checks
+  src_id = NULL
+  dst_id = NULL
+  src_channel = NULL
+  dst_channel = NULL
+  delayedAssign("po_unbranch_active_input", get_po_unbranch_active_input(graph))  # only call get_pobranch_active_output() if we encounter a PipeOpUnbranch
+
+  pipeops_visited = new.env(parent = emptyenv())
+  search_base_learner_pipeops = function(current_pipeop) {
+    repeat {
+      last_pipeop = graph$pipeops[[current_pipeop]]
+      if (get0(current_pipeop, pipeops_visited, ifnotfound = FALSE)) return(list())
+      assign(current_pipeop, TRUE, pipeops_visited)
+      field_content = get0(lookup_field, last_pipeop, ifnotfound = NULL)
+      if (!is.null(field_content)) return(list(last_pipeop))
+      next_pipeop = graph$edges[dst_id == current_pipeop, src_id]
+      if (length(next_pipeop) > 1) {
+        # more than one predecessor
+        if (!inherits(last_pipeop, "PipeOpUnbranch") || !resolve_branching) {
+          return(unique(unlist(lapply(next_pipeop, search_base_learner_pipeops), recursive = FALSE, use.names = FALSE)))
+        }
+        next_pipeop = po_unbranch_active_input[[current_pipeop]]
+        if (next_pipeop == "") next_pipeop = character(0)
+      }
+      if (length(next_pipeop) == 0) return(list())
+      current_pipeop = next_pipeop
+    }
+  }
+
+  unique(search_base_learner_pipeops(last_pipeop_id))
 }

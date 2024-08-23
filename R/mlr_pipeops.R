@@ -70,35 +70,50 @@ mlr_pipeops = R6Class("DictionaryPipeOp", inherit = mlr3misc::Dictionary,
 
 #' @export
 as.data.table.DictionaryPipeOp = function(x, ...) {
-  setkeyv(map_dtr(x$keys(), function(key) {
+  result = setkeyv(map_dtr(x$keys(), function(key) {
     metainf = x$metainf[[key]]
     if (!is.null(metainf)) {
       metainfval = eval(metainf, envir = topenv())
       meta_one = lapply(metainfval, function(x) if (identical(x, "N")) 1 else x)
       meta_two = lapply(metainfval, function(x) if (identical(x, "N")) 2 else x)
-      l1 = do.call(x$get, c(list(key), meta_one))
-      l2 = do.call(x$get, c(list(key), meta_two))
+      l1 = tryCatch(do.call(x$get, c(list(key), meta_one)), error = function(e) ".__error__")
+      l2 = tryCatch(do.call(x$get, c(list(key), meta_two)), error = function(e) ".__error__")
     } else {
-      l1 = l2 = x$get(key)
+      l1 = l2 = tryCatch(x$get(key), error = function(e) ".__error__")
+    }
+    if (identical(l1, ".__error__") || identical(l2, ".__error__")) {
+      return(list(
+        key = key,
+        label = NA_character_,
+        packages = list(NA_character_),
+        tags = list(NA_character_),
+        feature_types = list(NA_character_),
+        input.num = NA_integer_,
+        output.num = NA_integer_,
+        input.type.train = list(NA_character_),
+        input.type.predict = list(NA_character_),
+        output.type.train = list(NA_character_),
+        output.type.predict = list(NA_character_)
+      ))
     }
     if (nrow(l1$input) == nrow(l2$input) && "..." %nin% l1$input$name) {
       innum = nrow(l1$input)
     } else {
-      innum = NA
+      innum = NA_integer_
     }
     if (nrow(l1$output) == nrow(l2$output)) {
       outnum = nrow(l1$output)
     } else {
-      outnum = NA
+      outnum = NA_integer_
     }
-    if (exists("feature_types", envir = l1)) ft = list(l1$feature_types) else ft = NA
+    if (exists("feature_types", envir = l1)) ft = l1$feature_types else ft = NA_character_
 
     list(
       key = key,
       label = l1$label,
       packages = list(l1$packages),
       tags = list(l1$tags),
-      feature_types = ft,
+      feature_types = list(ft),
       input.num = innum,
       output.num = outnum,
       input.type.train = list(l1$input$train),
@@ -107,4 +122,11 @@ as.data.table.DictionaryPipeOp = function(x, ...) {
       output.type.predict = list(l1$output$predict)
     )
   }), "key")[]
+
+  # I don't trust 'label' to never be NA, but 'packages' is always a `character` (even if often an empty one).
+  missings = result$key[map_lgl(result$packages, function(x) any(is.na(x)))]
+  if (length(missings)) {
+    warningf("The following PipeOps could not be constructed, likely due to missing packages: %s\nTheir corresponding information is incomplete.", paste(missings, collapse = ", "))
+  }
+  result
 }
