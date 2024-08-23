@@ -1,4 +1,4 @@
-# mlr3pipelines 0.6.0-9000
+# mlr3pipelines 0.7.0
 
 * New PipeOp `PipeOpRowApply` / `po("rowapply")`
 
