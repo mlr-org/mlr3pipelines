@@ -272,6 +272,29 @@ test_that("graphlearner type inference", {
   g$train(tsk("boston_housing"))
   expect_equal(as_learner(g)$task_type, "regr")  # should not fail because of multiplicity in the graph
 
+  g_branch = ppl("branch", list(rpart = lrn("classif.rpart"), debug = lrn("classif.debug")))
+
+  l_branch = as_learner(g_branch)
+
+  expect_equal(l_branch$predict_type, "response")
+
+  l_branch$graph$pipeops$classif.debug$predict_type = "prob"
+
+  expect_equal(l_branch$predict_type, "response")
+
+  l_branch$param_set$values$branch.selection = "debug"
+
+  expect_equal(l_branch$predict_type, "prob")
+
+  l_branch$predict_type = "prob"
+
+  expect_equal(l_branch$graph$pipeops$classif.debug$learner$predict_type, "prob")
+
+  expect_equal(l_branch$predict_type, "prob")
+
+  l_branch$param_set$values$branch.selection = "rpart"
+
+  expect_equal(l_branch$predict_type, "prob")
 })
 
 test_that("graphlearner type inference - branched", {
