@@ -23,7 +23,7 @@ test_that("renaming works", {
 
   col_roles = train_out1$col_roles
   col_roles$name = "Petal.Width"
-  col_roles$weight = "Sepal.Length"
+  col_roles[[if ("weights_learner" %in% names(task)) "weights_learner" else "weight"]] = "Sepal.Length"
   col_roles$feature = setdiff(col_roles$feature, c("Petal.Width", "Sepal.Length"))
   op$param_set$values = list(renaming = c("Petal.Width" = "PW", "Sepal.Length" = "SL", "Sepal.Width" = "SW"), ignore_missing = FALSE)
   train_out1$col_roles = col_roles
@@ -32,7 +32,7 @@ test_that("renaming works", {
   expect_equal(train_out2, predict_out2)
   expect_true(all(c("PL", "SW") == train_out2$col_roles$feature))
   expect_true("PW" == train_out2$col_roles$name)
-  expect_true("SL" == train_out2$col_roles$weight)
+  expect_true("SL" == train_out2$col_roles[[if ("weights_learner" %in% names(task)) "weights_learner" else "weight"]])
   expect_equivalent(train_out1$data(), train_out2$data())
 })
 

@@ -211,7 +211,7 @@ PipeOpVtreat = R6Class("PipeOpVtreat",
         mlr3misc::invoke(vtreat::fit_prepare,
           vps = transform_design,
           dframe = task$data(),
-          weights = task$weights$weight,
+          weights = if ("weights_learner" %in% names(task)) task$weights_learner$weight else task$weights$weight,
           parallelCluster = NULL),
         error = function(error_condition) {
           if (grepl("no usable vars", x = error_condition$message)) {
