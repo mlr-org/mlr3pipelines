@@ -581,13 +581,13 @@ test_that("base_learner() works", {
   expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
 
   # with '...' inputs in unbranch
-  branching_learner = as_learner(po("branch", c("classif.rpart", "classif.debug")) %>>% lrns(c("classif.rpart", "classif.debug")) %>>% po("unbranch"))
+  branching_learner = as_learner(po("branch", c("classif.rpart", "classif.debug")) %>>% unname(lrns(c("classif.rpart", "classif.debug"))) %>>% po("unbranch"))
   expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
   branching_learner$param_set$values$branch.selection = "classif.debug"
   expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
   #
-  branching_learner = as_learner(po("branch_1", c("pca", "ica")) %>>% pos(c("pca", "ica")) %>>% po("unbranch_1") %>>%
-    po("branch", c("classif.rpart", "classif.debug")) %>>% lrns(c("classif.rpart", "classif.debug")) %>>% po("unbranch"))
+  branching_learner = as_learner(po("branch_1", c("pca", "ica")) %>>% unname(pos(c("pca", "ica"))) %>>% po("unbranch_1") %>>%
+    po("branch", c("classif.rpart", "classif.debug")) %>>% unname(lrns(c("classif.rpart", "classif.debug"))) %>>% po("unbranch"))
   expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.rpart$learner_model)
   branching_learner$param_set$values$branch.selection = "classif.debug"
   expect_identical(branching_learner$base_learner(), branching_learner$graph_model$pipeops$classif.debug$learner_model)
