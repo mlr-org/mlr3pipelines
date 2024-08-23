@@ -394,6 +394,8 @@ test_that("graphlearner predict type inference", {
   lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(lrr, lfr)) %>>% po("unbranch"))
   expect_equal(lrn$predict_type, "response")
   lrn = GraphLearner$new(po("branch", 2) %>>% gunion(list(lrp, lfr)) %>>% po("unbranch"))
+  expect_equal(lrn$predict_type, "prob")
+  lrn$param_set$values$branch.selection = 2
   expect_equal(lrn$predict_type, "response")
 
   # with additional NOP in branch
