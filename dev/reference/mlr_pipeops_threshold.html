@@ -97,8 +97,11 @@ at level <code>0.5</code>.</p></li>
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
 
 
-<p>Only fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>.</p>
-    </div>
+<p>Fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>, as well as:</p><ul><li><p><code>predict_type</code> :: <code>character(1)</code><br>
+Type of prediction to return. Either <code>"prob"</code> (default) or <code>"response"</code>.
+Setting to <code>"response"</code> should rarely be used; it may potentially save some memory but has
+no other benefits.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 

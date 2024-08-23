@@ -105,7 +105,7 @@ construction of <code>GraphLearner</code>, during <code>$train()</code>, and dur
     <h2 id="fields">Fields<a class="anchor" aria-label="anchor" href="#fields"></a></h2>
 
 
-<p>Fields inherited from <code><a href="PipeOp.html">PipeOp</a></code>, as well as:</p><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href="Graph.html">Graph</a></code> that is being trained, but does <em>not</em>
+<p>Fields inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>graph</code> :: <code><a href="Graph.html">Graph</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This field contains the prototype of the <code><a href="Graph.html">Graph</a></code> that is being trained, but does <em>not</em>
 contain the model. Use <code>graph_model</code> to access the trained <code><a href="Graph.html">Graph</a></code> after <code>$train()</code>. Read-only.</p></li>
 <li><p><code>graph_model</code> :: <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code><br><code><a href="Graph.html">Graph</a></code> that is being wrapped. This <code><a href="Graph.html">Graph</a></code> contains a trained state after <code>$train()</code>. Read-only.</p></li>
 <li><p><code>internal_tuned_values</code> :: named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or <code>NULL</code><br>
@@ -121,17 +121,70 @@ How to construct the validation data. This also has to be configured for the ind
 For more details on the possible values, see <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">mlr3::Learner</a></code>.</p></li>
 <li><p><code>marshaled</code> :: <code>logical(1)</code><br>
 Whether the learner is marshaled.</p></li>
+<li><p><code>impute_selected_features</code> :: <code>logical(1)</code><br>
+Whether to heuristically determine <code>$selected_features()</code> as all <code>$selected_features()</code> of all "base learner" Learners,
+even if they do not have the <code>"selected_features"</code> property / do not implement <code>$selected_features()</code>.
+If <code>impute_selected_features</code> is <code>TRUE</code> and the base learners do not implement <code>$selected_features()</code>,
+the <code>GraphLearner</code>'s <code>$selected_features()</code> method will return all features seen by the base learners.
+This is useful in cases where feature selection is performed inside the <code>Graph</code>:
+The <code>$selected_features()</code> will then be the set of features that were selected by the <code>Graph</code>.
+If <code>impute_selected_features</code> is <code>FALSE</code>, the <code>$selected_features()</code> method will throw an error if <code>$selected_features()</code>
+is not implemented by the base learners.<br>
+This is a heuristic and may report more features than actually used by the base learners,
+in cases where the base learners do not implement <code>$selected_features()</code>.
+The default is <code>FALSE</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
 
-<ul><li><p><code>marshal(...)</code><br>
+<p>Methods inherited from <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code>, as well as:</p><ul><li><p><code>marshal</code><br>
 (any) -&gt; <code>self</code><br>
 Marshal the model.</p></li>
-<li><p><code>unmarshal(...)</code><br>
+<li><p><code>unmarshal</code><br>
 (any) -&gt; <code>self</code><br>
 Unmarshal the model.</p></li>
+<li><p><code>base_learner(recursive = Inf, return_po = FALSE, return_all = FALSE, resolve_branching = TRUE)</code><br>
+(<code>numeric(1)</code>, <code>logical(1)</code>, <code>logical(1)</code>, <code>character(1)</code>) -&gt; <code>Learner</code> | <code><a href="PipeOp.html">PipeOp</a></code> | <code>list</code> of <code>Learner</code> | <code>list</code> of <code><a href="PipeOp.html">PipeOp</a></code><br>
+Return the base learner of the <code>GraphLearner</code>. If <code>recursive</code> is 0, the <code>GraphLearner</code> itself is returned.
+Otherwise, the <code><a href="Graph.html">Graph</a></code> is traversed backwards to find the first <code>PipeOp</code> containing a <code>$learner_model</code> field.
+If <code>recursive</code> is 1, that <code>$learner_model</code> (or containing <code>PipeOp</code>, if <code>return_po</code> is <code>TRUE</code>) is returned.
+If <code>recursive</code> is greater than 1, the discovered base learner's <code>base_learner()</code> method is called with <code>recursive - 1</code>.
+<code>recursive</code> must be set to 1 if <code>return_po</code> is TRUE, and must be set to at most 1 if <code>return_all</code> is <code>TRUE</code>.<br>
+If <code>return_po</code> is <code>TRUE</code>, the container-<code>PipeOp</code> is returned instead of the <code>Learner</code>.
+This will typically be a <code><a href="mlr_pipeops_learner.html">PipeOpLearner</a></code> or a <code><a href="mlr_pipeops_learner_cv.html">PipeOpLearnerCV</a></code>.<br>
+If <code>return_all</code> is <code>TRUE</code>, a <code>list</code> of <code>Learner</code>s or <code>PipeOp</code>s is returned.
+If <code>return_po</code> is <code>FALSE</code>, this list may contain <code><a href="Multiplicity.html">Multiplicity</a></code> objects, which are not unwrapped.
+If <code>return_all</code> is <code>FALSE</code> and there are multiple possible base learners, an error is thrown.
+This may also happen if only a single <code><a href="mlr_pipeops_learner.html">PipeOpLearner</a></code> is present that was trained with a <code><a href="Multiplicity.html">Multiplicity</a></code>.<br>
+If <code>resolve_branching</code> is <code>TRUE</code>, and when a <code><a href="mlr_pipeops_unbranch.html">PipeOpUnbranch</a></code> is encountered, the
+corresponding <code><a href="mlr_pipeops_branch.html">PipeOpBranch</a></code> is searched, and its hyperparameter configuration is used to select the base learner.
+There may be multiple corresponding <code><a href="mlr_pipeops_branch.html">PipeOpBranch</a></code>s, which are all considered.
+If <code>resolve_branching</code> is <code>FALSE</code>, <code><a href="mlr_pipeops_unbranch.html">PipeOpUnbranch</a></code> is treated as any other <code>PipeOp</code> with multiple inputs; all possible branch paths are considered equally.</p></li>
+</ul><p>The following standard extractors as defined by the <code><a href="https://mlr3.mlr-org.com/reference/Learner.html" class="external-link">Learner</a></code> class are available.
+Note that these typically only extract information from the <code>$base_learner()</code>.
+This works well for simple <code><a href="Graph.html">Graph</a></code>s that do not modify features too much, but may give unexpected results for <code>Graph</code>s that
+add new features or move information between features.</p>
+<p>As an example, consider a feature <code>A`` with missing values, and a feature </code>B<code> that is used for imputatoin, using a [`po("imputelearner")`][PipeOpImputeLearner]. In a case where the following [`Learner`][mlr3::Learner] performs embedded feature selection and only selects feature A, the `selected_features()` method could return only feature `A</code>, and <code>$importance()</code> may even report 0 for feature <code>B</code>.
+This would not be entirbababababely accurate when considering the entire <code>GraphLearner</code>, as feature <code>B</code> is used for imputation and would therefore have an impact on predictions.
+The following should therefore only be used if the <code>Graph</code> is known to not have an impact on the relevant properties.</p><ul><li><p><code>importance()</code><br>
+() -&gt; <code>numeric</code><br>
+The <code>$importance()</code> returned by the base learner, if it has the <code>"importance</code> property.
+Throws an error otherwise.</p></li>
+<li><p><code>selected_features()</code><br>
+() -&gt; <code>character</code><br>
+The <code>$selected_features()</code> returned by the base learner, if it has the <code>"selected_features</code> property.
+If the base learner does not have the <code>"selected_features"</code> property and <code>impute_selected_features</code> is <code>TRUE</code>,
+all features seen by the base learners are returned.
+Throws an error otherwise.</p></li>
+<li><p><code>oob_error()</code><br>
+() -&gt; <code>numeric(1)</code><br>
+The <code>$oob_error()</code> returned by the base learner, if it has the <code>"oob_error</code> property.
+Throws an error otherwise.</p></li>
+<li><p><code>loglik()</code><br>
+() -&gt; <code>numeric(1)</code><br>
+The <code>$loglik()</code> returned by the base learner, if it has the <code>"loglik</code> property.
+Throws an error otherwise.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="internals">Internals<a class="anchor" aria-label="anchor" href="#internals"></a></h2>
