@@ -1032,7 +1032,8 @@ test_that("GraphLearner Importance", {
 
   expect_error(g_basic$importance(), "does not implement.*importance")
 
-  g_importance$train(tsk("iris"))c(setdiff(self$properties, c("importance", "selected_features", "loglik", "oob_error")), "importance")
+  g_importance$train(tsk("iris"))
+
   expect_equal(g_importance$importance(), c(Petal.Length = 1, Petal.Width = 1, Sepal.Length = 1, Sepal.Width = 1))
 
   g_bagging = as_learner(ppl("bagging", DebugWithImportance$new(), averager = po("classifavg", collect_multiplicity = TRUE)))
