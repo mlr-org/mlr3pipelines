@@ -81,18 +81,20 @@ task = tsk("spam")
 opb = po("classweights")
 
 # task weights
-if ("weights_learner" \%in\% names(task))
+if ("weights_learner" \%in\% names(task)) {
   task$weights_learner  # recent mlr3-versions
-else
+} else {
   task$weights  # old mlr3-versions
+}
 
 # double the instances in the minority class (spam)
 opb$param_set$values$minor_weight = 2
 result = opb$train(list(task))[[1L]]
-if ("weights_learner" \%in\% names(result))
+if ("weights_learner" \%in\% names(result)) {
   result$weights_learner  # recent mlr3-versions
-else
+} else {
   result$weights  # old mlr3-versions
+}
 }
 \seealso{
 https://mlr-org.com/pipeops.html
