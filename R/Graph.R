@@ -211,7 +211,7 @@ Graph = R6Class("Graph",
       }
       if (is.null(dst_channel)) {
         if (length(self$pipeops[[dst_id]]$input$name) > 1) {
-          stopf("dst_channel must not be NULL if src_id pipeop has more than one input channel.")
+          stopf("dst_channel must not be NULL if dst_id pipeop has more than one input channel.")
         }
         dst_channel = 1L
       }
@@ -435,7 +435,7 @@ Graph = R6Class("Graph",
     set_names = function(old, new) {
       ids = names2(self$pipeops)
       assert_subset(old, ids)
-      assert_character(new, any.missing = FALSE)
+      assert_character(new, any.missing = FALSE, min.chars = 1)
       new_ids = map_values(ids, old, new)
       names(self$pipeops) = new_ids
       imap(self$pipeops, function(x, nn) x$id = nn)
@@ -581,20 +581,35 @@ graph_reduce = function(self, input, fun, single_input) {
 
   assert_flag(single_input)
 
-  graph_input = self$input
+  graph_input_unique = graph_input = self$input
   graph_output = self$output
 
   edges = copy(self$edges)
 
+  if (!single_input) assert_list(input, .var.name = "input when single_input is FALSE")
+
+  if (!is.null(names(input)) && !single_input) {
+    assert_names(names(input), subset.of = graph_input$name, .var.name = "input when it has names and single_input is FALSE")
+  }
+
   # create virtual "__initial__" and "__terminal__" nodes with edges to inputs / outputs of graph.
-  # if we have `single_input == FALSE` and one(!) vararg channel, we widen the vararg input
+  # if we have `single_input == FALSE` and vararg channels, we widen the vararg input
   # appropriately.
-  if (!single_input && length(assert_list(input, .var.name = "input when single_input is FALSE")) > nrow(graph_input) && "..." %in% graph_input$channel.name) {
-    if (sum("..." == graph_input$channel.name) != 1) {
-      stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.")
+  # At this point we are agnostic about whether zero inputs to vararg are possible. In case this
+  # ever makes sense, the following should still work. We therefore don't check whether the number of
+  # inputs differs from the number of channels -- theoretically, there could be two varargs, one
+  # getting two inputs, the other none.
+  if (!single_input && "..." %in% graph_input$channel.name) {
+    if (sum("..." == graph_input$channel.name) != 1 && is.null(names(input))) {
+      stop("Ambiguous distribution of inputs to vararg channels.\nAssigning more than one input to vararg channels when there are multiple vararg inputs does not work.\nYou can try using a named input list. Vararg elements must be named '<pipeopname>....' (with four dots).")
     }
     # repeat the "..." as often as necessary
-    repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1, 1)
+    if (is.null(names(input))) {
+      repeats = ifelse(graph_input$channel.name == "...", length(input) - nrow(graph_input) + 1, 1)
+    } else {
+      repeats = nafill(as.numeric(table(names(input))[graph_input$name]), fill = 0)
+    }
+
     graph_input = graph_input[rep(graph_input$name, repeats), , on = "name"]
   }
 
@@ -607,25 +622,36 @@ graph_reduce = function(self, input, fun, single_input) {
   # add new column to store content that is sent along an edge
   edges$payload = list()
 
-  if (!single_input) {
+  if (single_input) {
+    edges[get("src_id") == "__initial__", "payload" := list(list(input))]
+  } else if (!is.null(names(input))) {
+    # input can be a named list (will be distributed to respective edges) or unnamed.
+    # if it is named, we check that names are unambiguous.
+    innames_novararg = graph_input$name[graph_input$channel.name != "..."]
+
+    # don't use graph_input in the following, since rows with varargs are potentially duplicated.
+    # Also don't use innames_novararg, since vararg channels could be duplicately named regardless.
+    if (anyDuplicated(graph_input_unique$name)) {
+      stopf("'input' must not be a named list because Graph input channels have duplicated names: %s",
+        paste0(unique(innames_novararg[duplicated(innames_novararg)]), collapse = ", "))
+    }
+
+    input_novararg = input[names(input) %in% innames_novararg]
+    assert_names(names(input_novararg), type = "unique", .var.name = "input that does not refer to vararg input channels (when input has names and single_input is FALSE)")
+
+    edges[list("__initial__", names(input_novararg)), "payload" := list(input_novararg), on = c("src_id", "src_channel")]
+
+    input_vararg = input[!names(input) %in% innames_novararg]
+    input_vararg = split(input_vararg, names(input_vararg))
+    for (vararg_channel in names(input_vararg)) {
+      edges[list("__initial__", vararg_channel), "payload" := list(input_vararg[[vararg_channel]]), on = c("src_id", "src_channel")]
+    }
+  } else {
     # we need the input list length to be equal to the number of channels. This number was
     # already increased appropriately if there is a single vararg channel.
     assert_list(input, len = nrow(graph_input), .var.name = sprintf("input when single_input is FALSE and there are %s input channels", nrow(graph_input)))
-    # input can be a named list (will be distributed to respective edges) or unnamed.
-    # if it is named, we check that names are unambiguous.
-    if (!is.null(names(input))) {
-      if (anyDuplicated(graph_input$name)) {
-        # FIXME this will unfortunately trigger if there is more than one named input for a vararg channel.
-        stopf("'input' must not be a named list because Graph %s input channels have duplicated names.", self$id)
-      }
-      assert_names(names(input), subset.of = graph_input$name, .var.name = sprintf("input when it has names and single_input is FALSE"))
-      edges[list("__initial__", names(input)), "payload" := list(input), on = c("src_id", "src_channel")]
-    } else {
-      # don't rely on unique graph_input$name!
-      edges[get("src_id") == "__initial__", "payload" := list(input)]
-    }
-  } else {
-    edges[get("src_id") == "__initial__", "payload" := list(list(input))]
+    # don't rely on unique graph_input$name!
+    edges[get("src_id") == "__initial__", "payload" := list(input)]
   }
 
   # get the topo-sorted pipeop ids

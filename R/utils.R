@@ -104,6 +104,15 @@ multiplicity_recurse = function(.multip, .fun, ...) {
   }
 }
 
+multiplicity_flatten = function(.multip) {
+  # returns list(.multip) if .multip is not a Multiplicity
+  # Otherwise, it returns a list with all the elements contained in .multip, independent of their nesting level
+  if (!is.Multiplicity(.multip)) {
+    return(list(.multip))
+  }
+  unlist(map(.multip, multiplicity_flatten), recursive = FALSE, use.names = FALSE)
+}
+
 # replace when new mlr3misc version is released https://github.com/mlr-org/mlr3misc/pull/80
 dictionary_sugar_inc_get = function(dict, .key, ...) {
   newkey = gsub("_\\d+$", "", .key)

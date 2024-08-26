@@ -144,7 +144,7 @@
 #'        as well as a `$internal_valid_scores` field, which allows to access the internal validation scores after training.
 #'     * `"internal_tuning"`: the `PipeOp` is able to internally optimize hyperparameters.
 #'        This works analogously to the internal tuning implementation for [`mlr3::Learner`].
-#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one 
+#'       `PipeOp`s with that property also implement the standardized accessor `$internal_tuned_values` and have at least one
 #'        parameter tagged with `"internal_tuning"`.
 #'        An example for such a `PipeOp` is a `PipeOpLearner` that wraps a `Learner` with the `"internal_tuning"` property.
 #'
@@ -259,7 +259,7 @@ PipeOp = R6Class("PipeOp",
         lapply(param_set, function(x) assert_param_set(eval(x)))
         private$.param_set_source = param_set
       }
-      self$id = assert_string(id)
+      self$id = assert_string(id, min.chars = 1)
 
       self$properties = assert_subset(properties, mlr_reflections$pipeops$properties)
       self$param_set$values = insert_named(self$param_set$values, param_vals)
@@ -561,7 +561,12 @@ multiplicity_type_nesting_level = function(str, varname) {
 # @param poid: `character(1)`: character id of the PipeOp
 # @return `list`
 unpack_multiplicities = function(input, expected_nesting_level, inputnames, poid) {
-  assert_list(input)
+  # anticipate the possibility of 0-length vararg passes
+  assert_list(input, min.len = sum(inputnames != "..."), .var.name = sprintf("input of %s", poid))
+  # in case of varargs, there could be more (or fewer) 'input's than 'expected_nesting_level's,
+  # so we have to make sure the positions match.
+  repeats = ifelse(inputnames == "...", length(input) - length(expected_nesting_level) + 1, 1)
+  expected_nesting_level = rep(expected_nesting_level, repeats)
   unpacking = mapply(multiplicity_nests_deeper_than, input, expected_nesting_level)
   if (!any(unpacking)) {
     return(NULL)  # no unpacking

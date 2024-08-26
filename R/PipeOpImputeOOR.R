@@ -14,6 +14,13 @@
 #' This type of imputation is especially sensible in the context of tree-based methods, see also
 #' Ding & Simonoff (2010).
 #'
+#' If a factor is missing during prediction, but not during training, this adds an unseen level
+#' `".MISSING"`, which would be a problem for most models. This is why it is recommended to use
+#' [`po("fixfactors")`][mlr_pipeops_fixfactors] and
+#' [`po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))`][mlr_pipeops_imputesample]
+#' (or some other imputation method) after this imputation method, if missing values are expected during prediction
+#' in factor columns that had no missing values during training.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpImputeOOR$new(id = "imputeoor", param_vals = list())
@@ -71,6 +78,18 @@
 #' new_task = po$train(list(task = task))[[1]]
 #' new_task$missings()
 #' new_task$data()
+#'
+#' # recommended use when missing values are expected during prediction on
+#' # factor columns that had no missing values during training
+#' gr = po("imputeoor") %>>%
+#'   po("fixfactors") %>>%
+#'   po("imputesample", affect_columns = selector_type(types = c("factor", "ordered")))
+#' t1 = as_task_classif(data.frame(l = as.ordered(letters[1:3]), t = letters[1:3]), target = "t")
+#' t2 = as_task_classif(data.frame(l = as.ordered(c("a", NA, NA)), t = letters[1:3]), target = "t")
+#' gr$train(t1)[[1]]$data()
+#'
+#' # missing values during prediction are sampled randomly
+#' gr$predict(t2)[[1]]$data()
 #' @family PipeOps
 #' @family Imputation PipeOps
 #' @template seealso_pipeopslist

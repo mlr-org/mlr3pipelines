@@ -36,7 +36,11 @@
 #'   at level `0.5`.
 #'
 #' @section Fields:
-#' Only fields inherited from [`PipeOp`].
+#' Fields inherited from [`PipeOp`], as well as:
+#' * `predict_type` :: `character(1)`\cr
+#'   Type of prediction to return. Either `"prob"` (default) or `"response"`.
+#'   Setting to `"response"` should rarely be used; it may potentially save some memory but has
+#'   no other benefits.
 #'
 #' @section Methods:
 #' Only methods inherited from [`PipeOp`].
@@ -67,7 +71,17 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
         tags = "target transform")
     }
   ),
+  active = list(
+    predict_type = function(rhs) {
+      if (!missing(rhs)) {
+        assert_choice(rhs, c("prob", "response"))
+        private$.predict_type = rhs
+      }
+      private$.predict_type
+    }
+  ),
   private = list(
+    .predict_type = "prob",
     .train = function(inputs) {
       self$state = list()
       list(NULL)
@@ -86,17 +100,12 @@ PipeOpThreshold = R6Class("PipeOpThreshold",
         }
       }
 
-      list(prd$set_threshold(thr))
-    }
-  ),
-  active = list(
-    predict_type = function(val) {
-      if (!missing(val)) {
-        if (!identical(val, private$.learner)) {
-          stop("$predict_type for PipeOpThreshold is read-only.")
-        }
+      prd$set_threshold(thr)
+      if (self$predict_type == "response") {
+        prd$predict_types = "response"
+        prd$data$prob = NULL
       }
-      return("response")
+      list(prd)
     }
   )
 )

@@ -445,7 +445,8 @@ expect_datapreproc_pipeop_class = function(poclass, constargs = list(), task,
   expect_true(task$nrow >= 5)
 
   # overlap between use and test rows
-  tasktrain$divide(ids = tasktrain$row_roles$use[seq(n_use - 2, n_use)], remove = FALSE)
+  tasktrain$internal_valid_task = tasktrain$clone(deep = TRUE)$filter(tasktrain$row_roles$use[seq(n_use - 2, n_use)])
+
   tasktrain$row_roles$use = tasktrain$row_roles$use[seq(1, n_use - 2)]
 
   taskpredict = tasktrain$clone(deep = TRUE)

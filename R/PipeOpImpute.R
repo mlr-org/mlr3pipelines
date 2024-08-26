@@ -56,6 +56,9 @@
 #' * `model` :: named `list`\cr
 #'   Model used for imputation. This is a list named by [`Task`][mlr3::Task] features, containing the result of the `private$.train_imputer()` or
 #'   `private$.train_nullmodel()` function for each one.
+#' * `imputed_train` :: `character`\cr
+#'   Names of features that were imputed during training. This is used to ensure that factor levels that were added during training are also added during prediction.
+#'   Note that features that are imputed during prediction but not during training will still have inconsistent factor levels.
 #'
 #' @section Parameters:
 #' * `affect_columns` :: `function` | [`Selector`] | `NULL` \cr
@@ -195,6 +198,8 @@ PipeOpImpute = R6Class("PipeOpImpute",
 
       self$state$outtasklayout = copy(intask$feature_types)
 
+      self$state$imputed_train = names(imputanda)
+
       if (!is.null(intask$internal_valid_task)) {
         intask$internal_valid_task = private$.predict(list(intask$internal_valid_task))[[1L]]
       }
@@ -215,7 +220,10 @@ PipeOpImpute = R6Class("PipeOpImpute",
       ..col = NULL  # avoid static checker complaints
 
       imputanda = intask$data(cols = self$state$affected_cols)
-      imputanda = imputanda[, map_lgl(imputanda, function(x) anyMissing(x)), with = FALSE]
+      imputanda = imputanda[,
+        colnames(imputanda) %in% self$state$imputed_train |
+          map_lgl(imputanda, function(x) anyMissing(x)),
+        with = FALSE]
 
       imap(imputanda, function(col, colname) {
         type = intask$feature_types[colname, get("type")]
@@ -257,11 +265,14 @@ PipeOpImpute = R6Class("PipeOpImpute",
         # in some edge cases there may be levels during training that are missing during predict.
         levels(feature) = c(levels(feature), as.character(model))
       }
+      nas = which(is.na(feature))
+      if (!length(nas)) return(feature)
+
       if (length(model) == 1) {
-        feature[is.na(feature)] = model
+        feature[nas] = model
       } else {
         outlen = count_missing(feature)
-        feature[is.na(feature)] = sample(model, outlen, replace = TRUE, prob = attr(model, "probabilities"))
+        feature[nas] = sample(model, outlen, replace = TRUE, prob = attr(model, "probabilities"))
       }
       feature
     }
