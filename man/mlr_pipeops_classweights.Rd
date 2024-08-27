@@ -15,6 +15,9 @@ Only binary \link[mlr3:TaskClassif]{classification tasks} are supported.
 
 Caution: when constructed naively without parameter, the weights are all set to 1. The \code{minor_weight} parameter
 must be adjusted for this \code{\link{PipeOp}} to be useful.
+
+Note this only sets the \code{"weights_learner"} column.
+It therefore influences the behaviour of subsequent \code{Learner}s, but does not influence resampling or evaluation metric weights.
 }
 \section{Construction}{
 
@@ -78,12 +81,20 @@ task = tsk("spam")
 opb = po("classweights")
 
 # task weights
-task$weights
+if ("weights_learner" \%in\% names(task)) {
+  task$weights_learner  # recent mlr3-versions
+} else {
+  task$weights  # old mlr3-versions
+}
 
 # double the instances in the minority class (spam)
 opb$param_set$values$minor_weight = 2
 result = opb$train(list(task))[[1L]]
-result$weights
+if ("weights_learner" \%in\% names(result)) {
+  result$weights_learner  # recent mlr3-versions
+} else {
+  result$weights  # old mlr3-versions
+}
 }
 \seealso{
 https://mlr-org.com/pipeops.html

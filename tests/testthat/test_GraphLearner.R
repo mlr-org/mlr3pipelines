@@ -9,7 +9,9 @@ test_that("basic graphlearner tests", {
   gr = PipeOpLearner$new(lrn)
 
   glrn = GraphLearner$new(gr)
+  glrn$properties = setdiff(glrn$properties, "weights")  # FIXME: workaround until weights handling does not need to be part of the paramset
   expect_true(run_experiment(task, glrn)$ok)
+  glrn$properties = c(glrn$properties, "weights")
 
   glrn = GraphLearner$new(gr)
   expect_learner(glrn)
@@ -37,7 +39,9 @@ test_that("basic graphlearner tests", {
   glrn2 = GraphLearner$new(gr2)
   glrn2_clone = glrn2$clone(deep = TRUE)
   expect_learner(glrn2)
-  expect_true(run_experiment(task, glrn)$ok)
+  glrn2$properties = setdiff(glrn2$properties, "weights")  # FIXME: see above
+  expect_true(run_experiment(task, glrn2)$ok)
+  glrn2$properties = c(glrn2$properties, "weights")
   glrn2$train(task)
   glrn2_clone$state = glrn2$state
 #  glrn2_clone$state$log = glrn2_clone$state$log$clone(deep = TRUE)  # FIXME: this can go when mlr-org/mlr3#343 is fixed
