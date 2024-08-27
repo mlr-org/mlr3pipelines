@@ -104,6 +104,9 @@ the <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external
 <li><p><code>model</code> :: named <code>list</code><br>
 Model used for imputation. This is a list named by <code><a href="https://mlr3.mlr-org.com/reference/Task.html" class="external-link">Task</a></code> features, containing the result of the <code>private$.train_imputer()</code> or
 <code>private$.train_nullmodel()</code> function for each one.</p></li>
+<li><p><code>imputed_train</code> :: <code>character</code><br>
+Names of features that were imputed during training. This is used to ensure that factor levels that were added during training are also added during prediction.
+Note that features that are imputed during prediction but not during training will still have inconsistent factor levels.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a></h2>
