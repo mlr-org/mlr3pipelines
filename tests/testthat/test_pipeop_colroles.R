@@ -36,6 +36,7 @@ test_that("PipeOpColRoles - functionality works", {
   col_roles_expected = list(
     feature = c("Sepal.Length", "Sepal.Width"), target = "Species", name = "Petal.Length",
     order = "Petal.Length", stratum = character(0), group = character(0), weight = character(0))
+  if ("weights_learner" %in% names(task)) names(col_roles_expected)[names(col_roles_expected) == "weight"] = "weights_learner"
   expect_equal(train_out$col_roles[names(col_roles_expected)], col_roles_expected)
   expect_equal(train_out$row_names$row_name, task$data(cols = "Petal.Length")[[1L]])
   expect_true("Petal.Width" %nin% colnames(train_out$data()))

@@ -13,6 +13,9 @@
 #' Caution: when constructed naively without parameter, the weights are all set to 1. The `minor_weight` parameter
 #' must be adjusted for this [`PipeOp`] to be useful.
 #'
+#' Note this only sets the `"weights_learner"` column.
+#' It therefore influences the behaviour of subsequent `Learner`s, but does not influence resampling or evaluation metric weights.
+#'
 #' @section Construction:
 #' ```
 #' PipeOpClassWeights$new(id = "classweights", param_vals = list())
@@ -60,12 +63,20 @@
 #' opb = po("classweights")
 #'
 #' # task weights
-#' task$weights
+#' if ("weights_learner" %in% names(task)) {
+#'   task$weights_learner  # recent mlr3-versions
+#' } else {
+#'   task$weights  # old mlr3-versions
+#' }
 #'
 #' # double the instances in the minority class (spam)
 #' opb$param_set$values$minor_weight = 2
 #' result = opb$train(list(task))[[1L]]
-#' result$weights
+#' if ("weights_learner" %in% names(result)) {
+#'   result$weights_learner  # recent mlr3-versions
+#' } else {
+#'   result$weights  # old mlr3-versions
+#' }
 PipeOpClassWeights = R6Class("PipeOpClassWeights",
   inherit = PipeOpTaskPreproc,
 
@@ -98,7 +109,11 @@ PipeOpClassWeights = R6Class("PipeOpClassWeights",
 
       task$cbind(wcol)
       task$col_roles$feature = setdiff(task$col_roles$feature, weightcolname)
-      task$col_roles$weight = weightcolname
+      if ("weights_learner" %in% mlr_reflections$task_col_roles$classif) {
+        task$col_roles$weights_learner = weightcolname
+      } else {
+        task$col_roles$weight = weightcolname
+      }
       task
     },
 

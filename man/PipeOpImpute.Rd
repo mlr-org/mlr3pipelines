@@ -66,6 +66,9 @@ the \code{\link[mlr3:Task]{Task}} resulting from the prediction operation has th
 \item \code{model} :: named \code{list}\cr
 Model used for imputation. This is a list named by \code{\link[mlr3:Task]{Task}} features, containing the result of the \code{private$.train_imputer()} or
 \code{private$.train_nullmodel()} function for each one.
+\item \code{imputed_train} :: \code{character}\cr
+Names of features that were imputed during training. This is used to ensure that factor levels that were added during training are also added during prediction.
+Note that features that are imputed during prediction but not during training will still have inconsistent factor levels.
 }
 }
 
