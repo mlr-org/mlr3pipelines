@@ -89,6 +89,11 @@ PipeOpSmote = R6Class("PipeOpSmote",
       assert_true(all(task$feature_types$type == "numeric"))
       cols = private$.select_cols(task)
 
+      unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
+      if (length(unsupported_cols)) {
+        stopf("The following columns are neither features nor targets, so SMOTE cannot generate synthetic data for them: '%s'. Please ensure that only feature or target columns are included.", paste(unsupported_cols, collapse = "', '"))
+      }
+
       if (!length(cols)) {
         return(task)
       }
@@ -102,7 +107,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
       # rename target column and fix character conversion
       st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
       setnames(st, "class", task$target_names)
-      
+
       task$rbind(st)
     }
   )
