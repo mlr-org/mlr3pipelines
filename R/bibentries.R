@@ -52,5 +52,16 @@ bibentries = c(
     author    = "Yujun Wu and Dennis D Boos and Leonard A Stefanski",
     title     = "Controlling Variable Selection by the Addition of Pseudovariables",
     journal   = "Journal of the American Statistical Association"
+  ),
+
+  binder_2020 = bibentry("inproceedings",
+    doi       = "10.1145/3377930.3389815",
+    year      = "2020",
+    publisher = "Association for Computing Machinery",
+    pages     = "471--479",
+    author    = "Martin Binder and Julia Moosbauer and Janek Thomas and Bernd Bischl",
+    title     = "Multi-objective hyperparameter tuning and feature selection using filter ensembles",
+    booktitle = "Proceedings of the 2020 Genetic and Evolutionary Computation Conference"
   )
+
 )
