@@ -143,7 +143,7 @@ test_that("threshold respects minimization / maximization", {
     rsmp("repeated_cv", folds = 3, repeats = 3)
   )
 
-  bmr = benchmark(design, store_models = FALSE, store_backends = FALSE)
+  bmr = benchmark(design, store_models = FALSE, store_backends = TRUE)
 
   # balanced accuracy after threshold tuning should be greater than balanced accuracy for the untuned learner
   expect_true(diff(bmr$aggregate(msr("classif.bacc"))$classif.bacc) < 0)
