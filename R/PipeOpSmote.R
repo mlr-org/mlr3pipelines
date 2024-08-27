@@ -87,7 +87,7 @@ PipeOpSmote = R6Class("PipeOpSmote",
 
     .train_task = function(task) {
       assert_true(all(task$feature_types$type == "numeric"))
-      cols = private$.select_cols(task)
+      cols = task$feature_names
 
       unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
       if (length(unsupported_cols)) {
