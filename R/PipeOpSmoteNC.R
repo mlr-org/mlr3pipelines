@@ -93,7 +93,7 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       if (!length(cols)) {
         return(task)
       }
-      # SmoteNC cannot generate synthetic data for non-feature columns, currently
+      # SmoteNC cannot generate synthetic data for non-feature columns
       unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
       if (length(unsupported_cols)) {
         stopf("SMOTENC cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
@@ -119,7 +119,7 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
 
       # Filter snc to only contain the generated synthetic data
       snc <- snc[seq(task$nrow + 1L, nrow(snc))]
-      # Convert columns back to integer that were originally integer (SMOTENC treates integer columns as numeric)
+      # Convert originally integer columns back to integer as SMOTENC treats them as numeric
       int_cols = task$feature_types[type == "integer"][["id"]]
       snc[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
 
