@@ -120,7 +120,7 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       # Filter snc to only contain the generated synthetic data
       snc <- snc[seq(task$nrow + 1L, nrow(snc))]
       # Convert originally integer columns back to integer as SMOTENC treats them as numeric
-      int_cols = task$feature_types[type == "integer"][["id"]]
+      int_cols = task$feature_names[task$feature_types$type == "integer"]
       snc[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
 
       task$rbind(snc)
