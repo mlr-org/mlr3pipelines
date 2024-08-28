@@ -13,7 +13,9 @@ for nominal and continuous data using the SMOTENC algorithm.
 
 The algorithm generates for each minority instance a new data point based on the \code{k} nearest
 neighbors of that data point.
-It can only be applied to tasks with factor features and at least one numeric feature.
+It can only be applied to tasks with factor (or ordered) features and at least one numeric (or integer) feature.
+The algorithm treats integer features as numeric features. To not change feature types, these are then rounded back to integer.
+
 See \code{\link[themis:smotenc]{themis::smotenc}} for details.
 }
 \section{Construction}{
@@ -63,6 +65,25 @@ Only fields inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 Only methods inherited from \code{\link{PipeOpTaskPreproc}}/\code{\link{PipeOp}}.
 }
 
+\examples{
+\dontshow{ if (requireNamespace("themis")) \{ }
+library("mlr3")
+
+# Create example task
+data = data.frame(
+  target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
+  feature = rnorm(200)
+)
+task = TaskClassif$new(id = "example", backend = data, target = "target")
+task$head()
+table(task$data()$target)
+
+# Generate synthetic data for minority class
+pop = po("smotenc")
+smotenc_result = pop$train(list(task))[[1]]$data()
+table(smotenc_result$target)
+\dontshow{ \} }
+}
 \references{
 Chawla NV, Bowyer KW, Hall LO, Kegelmeyer WP (2002).
 \dQuote{SMOTE: Synthetic Minority Over-sampling Technique.}

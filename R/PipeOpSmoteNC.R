@@ -10,7 +10,9 @@
 #'
 #' The algorithm generates for each minority instance a new data point based on the `k` nearest
 #' neighbors of that data point.
-#' It can only be applied to tasks with factor features and at least one numeric feature.
+#' It can only be applied to tasks with factor (or ordered) features and at least one numeric (or integer) feature.
+#' The algorithm treats integer features as numeric features. To not change feature types, these are then rounded back to integer.
+#'
 #' See [`themis::smotenc`] for details.
 #'
 #' @section Construction:
@@ -58,7 +60,7 @@
 #'
 #' # Create example task
 #' data = data.frame(
-#'   target = factor(sample(c("c1, "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
+#'   target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
 #'   feature = rnorm(200)
 #' )
 #' task = TaskClassif$new(id = "example", backend = data, target = "target")
@@ -85,9 +87,17 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
   private = list(
 
     .train_task = function(task) {
+      cols = task$feature_names
+
       # Return task unchanged, if no feature columns exist
-      if (!length(task$feature_names)) {
+      if (!length(cols)) {
         return(task)
+      }
+      # SmoteNC cannot generate synthetic data for non-feature columns, currently
+      unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
+      if (length(unsupported_cols)) {
+        stopf("SMOTE cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
+              paste(unsupported_cols, collapse = "', '"))
       }
       # Only factor, ordered, numeric and integer features allowed
       if (!all(task$feature_types$type %in% c("numeric", "integer", "factor", "ordered"))) {
@@ -97,14 +107,14 @@ PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
       if (!any(task$feature_types$type %in% c("numeric", "integer"))) {
         stop("SmoteNC requires at least one numeric or integer feature.")
       }
-      # Do not allow NAs in feature columns
-      if (any(task$missings())) {
-        stop("SmoteNC does not allow NAs in feature columns.")
-      }
 
       # Calculate synthetic data
       st = setDT(invoke(themis::smotenc, df = task$data(), var = task$target_names,
                         .args = self$param_set$get_values(tags = "smotenc")))
+
+      # Convert columns back to integer that were originally integer (SMOTENC treates integer columns as numeric)
+      int_cols = task$feature_names[task$feature_types$type == "integer"]
+      st[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
 
       task$rbind(st)
     }
