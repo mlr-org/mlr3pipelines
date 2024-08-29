@@ -17,11 +17,11 @@
 #'
 #' @section Construction:
 #' ```
-#' PipeOpSmote$new(id = "smotenc", param_vals = list())
+#' PipeOpSmoteNC$new(id = "smotenc", param_vals = list())
 #' ```
 #'
 #' * `id` :: `character(1)`\cr
-#'   Identifier of resulting object, default `"smote"`.
+#'   Identifier of resulting object, default `"smotenc"`.
 #' * `param_vals` :: named `list`\cr
 #'   List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default `list()`.
 #'
