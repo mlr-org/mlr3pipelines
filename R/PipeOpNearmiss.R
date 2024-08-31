@@ -5,13 +5,11 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
-#' Generates a more balanced data set by ...
+#' Generates a more balanced data set by down-sampling the instances of non-minority classes using the NEARMISS algorithm.
 #'
-#' The algorithm down-samples ...
-#'
-#' It can only be applied to tasks with numeric (or integer) features with no missing values.
-#' The algorithm treats integer features as numeric features. To not change feature types, these are then rounded back to integer.
-#'
+#' The algorithm down-samples by selecting instances from the non-minority classes that have the smallest mean distance
+#' to their `k` nearest neighbors of different classes.
+#' This can only be applied to [classification tasks][mlr3::TaskClassif] with numeric or integer features that have no missing values.
 #' See [`themis::nearmiss`] for details.
 #'
 #' @section Construction:
@@ -27,7 +25,7 @@
 #' @section Input and Output Channels:
 #' Input and output channels are inherited from [`PipeOpTaskPreproc`].
 #'
-#' The output during training is the input [`Task`][mlr3::Task] with
+#' The output during training is the input [`Task`][mlr3::Task] with the rows removed from the non-minority classes.
 #' The output during prediction is the unchanged input.
 #'
 #' @section State:
@@ -36,9 +34,11 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as
 #' * `k` :: `integer(1)`\cr
-#'   Number of nearest neighbors used for generating new values from the minority class. Default is `5`.
+#'   Number of nearest neighbors used for calculating the mean distances. Default is `5`.
 #' * `under_ratio` :: `numeric(1)`\cr
-#'   Ratio of the minority to majority class. Default is `1`. For details, see [`themis::nearmiss`].
+#'   Ratio of the minority-to-majority frequencies. This specifies the ratio to which the number of instances
+#'   in the non-minority classes get down-sampled to, relative to the number of instances of the minority class.
+#'   Default is `1`. For details, see [`themis::nearmiss`].
 #'
 #' @section Fields:
 #' Only fields inherited from [`PipeOpTaskPreproc`]/[`PipeOp`].
@@ -64,11 +64,12 @@
 #' )
 #' task = TaskClassif$new(id = "example", backend = data, target = "target")
 #' task$head()
-#' table(task$data()$target)
+#' table(task$data(cols = "target"))
 #'
 #' # Generate synthetic data for minority class
 #' pop = po("nearmiss")
 #' nearmiss_result = pop$train(list(task))[[1]]$data()
+#' nrow(nearmiss_result$target)
 #' table(nearmiss_result$target)
 #' \dontshow{ \} }
 PipeOpNearmiss = R6Class("PipeOpNearmiss",
@@ -77,7 +78,7 @@ PipeOpNearmiss = R6Class("PipeOpNearmiss",
     initialize = function(id = "nearmiss", param_vals = list()) {
       ps = ps(
         k = p_int(lower = 1, default = 5, tags = c("train", "nearmiss")),
-        over_ratio = p_dbl(lower = 0, default = 1, tags = c("train", "nearmiss"))
+        under_ratio = p_dbl(lower = 0, default = 1, tags = c("train", "nearmiss"))
       )
       super$initialize(id, param_set = ps, param_vals = param_vals, packages = "themis", can_subset_cols = FALSE,
                        task_type = "TaskClassif", tags = "imbalanced data")
@@ -93,33 +94,25 @@ PipeOpNearmiss = R6Class("PipeOpNearmiss",
         return(task)
       }
       # PipeOp does not know how to handle non-feature columns
-      unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
-      if (length(unsupported_cols)) {
-        stopf("Nearmiss cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
-              paste(unsupported_cols, collapse = "', '"))
-      }
+      # unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
+      # if (length(unsupported_cols)) {
+      #   stopf("Nearmiss cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
+      #         paste(unsupported_cols, collapse = "', '"))
+      # }
+
       # Only numeric and integer features allowed
       if (!all(task$feature_types$type %in% c("numeric", "integer"))) {
         stop("Nearmiss does only accept numeric and integer features. Use PipeOpSelect to select the appropriate features.")
       }
 
-      # Down-sample Data
-      dt = setDT(invoke(themis::tomek, df = task$data(), var = task$target_names))
+      # Down-sample data
+      dt = setDT(invoke(themis::nearmiss, df = task$data(), var = task$target_names,
+                        .args = self$param_set$get_values(tags = "nearmiss")))
 
-      # Return task unchanged if no synthetic data was generated
-      if (nrow(dt) == task$nrow) {
-        return(task)
-      }
-
-      # Filter snc to only contain the generated synthetic data
-      # dt <- dt[seq(task$nrow + 1L, nrow(snc))]
-      # Might need a better solution here, since we are reducing the number of rows
-
-      # Convert originally integer columns back to integer as SMOTENC treats them as numeric
-      int_cols = task$feature_names[task$feature_types$type == "integer"]
-      dt[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
-
-      task$rbind(dt)
+      keep = as.integer(row.names(dt))
+      # more robust, more computationally complex alternative:
+      # keep = as.integer(row.names(fintersect(task$data(), dt)))
+      task$filter(keep)
     }
   )
 )
