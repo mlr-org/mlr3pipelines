@@ -13,7 +13,7 @@ for nominal and continuous data using the SMOTENC algorithm.
 
 The algorithm generates for each minority instance a new data point based on the \code{k} nearest
 neighbors of that data point.
-It can only be applied to tasks with factor (or ordered) features and at least one numeric (or integer) feature.
+It can only be applied to tasks with factor (or ordered) features and at least one numeric (or integer) feature with no missing values.
 The algorithm treats integer features as numeric features. To not change feature types, these are then rounded back to integer.
 
 See \code{\link[themis:smotenc]{themis::smotenc}} for details.
@@ -21,11 +21,11 @@ See \code{\link[themis:smotenc]{themis::smotenc}} for details.
 \section{Construction}{
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpSmote$new(id = "smote", param_vals = list())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{PipeOpSmoteNC$new(id = "smotenc", param_vals = list())
 }\if{html}{\out{</div>}}
 \itemize{
 \item \code{id} :: \code{character(1)}\cr
-Identifier of resulting object, default \code{"smote"}.
+Identifier of resulting object, default \code{"smotenc"}.
 \item \code{param_vals} :: named \code{list}\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would otherwise be set during construction. Default \code{list()}.
 }
@@ -76,11 +76,12 @@ data = data.frame(
 )
 task = TaskClassif$new(id = "example", backend = data, target = "target")
 task$head()
-table(task$data()$target)
+table(task$data(cols = "target"))
 
 # Generate synthetic data for minority class
 pop = po("smotenc")
 smotenc_result = pop$train(list(task))[[1]]$data()
+nrow(smotenc_result)
 table(smotenc_result$target)
 \dontshow{ \} }
 }

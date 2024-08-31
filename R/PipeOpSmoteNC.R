@@ -10,7 +10,7 @@
 #'
 #' The algorithm generates for each minority instance a new data point based on the `k` nearest
 #' neighbors of that data point.
-#' It can only be applied to tasks with factor (or ordered) features and at least one numeric (or integer) feature.
+#' It can only be applied to tasks with factor (or ordered) features and at least one numeric (or integer) feature with no missing values.
 #' The algorithm treats integer features as numeric features. To not change feature types, these are then rounded back to integer.
 #'
 #' See [`themis::smotenc`] for details.
@@ -65,11 +65,12 @@
 #' )
 #' task = TaskClassif$new(id = "example", backend = data, target = "target")
 #' task$head()
-#' table(task$data()$target)
+#' table(task$data(cols = "target"))
 #'
 #' # Generate synthetic data for minority class
 #' pop = po("smotenc")
 #' smotenc_result = pop$train(list(task))[[1]]$data()
+#' nrow(smotenc_result)
 #' table(smotenc_result$target)
 #' \dontshow{ \} }
 PipeOpSmoteNC = R6Class("PipeOpSmoteNC",
