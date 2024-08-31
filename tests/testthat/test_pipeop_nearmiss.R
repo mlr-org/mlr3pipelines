@@ -21,17 +21,17 @@ test_that("PipeOpNearmiss - train works as intended", {
   expect_equal(train_out, nearmiss_out)
 
   # Compare to themis::nearmiss with changed params
-  op$param_set$set_values(k = 8, under_ratio = 0.5)
+  op$param_set$set_values(k = 8, under_ratio = 0.9)
   train_out = op$train(list(task))[[1]]$data()
   nearmiss_out = setDT(invoke(themis::nearmiss, df = task$data(), var = task$target_names,
-                       k = 8, under_ratio = 0.5))
+                       k = 8, under_ratio = 0.9))
 
   expect_equal(train_out, nearmiss_out)
 
-  op$param_set$set_values(k = 8, under_ratio = 1.5)
+  op$param_set$set_values(k = 8, under_ratio = 1.1)
   train_out = op$train(list(task))[[1]]$data()
   nearmiss_out = setDT(invoke(themis::nearmiss, df = task$data(), var = task$target_names,
-                       k = 8, under_ratio = 1.5))
+                       k = 8, under_ratio = 1.1))
 
   expect_equal(train_out, nearmiss_out)
 
