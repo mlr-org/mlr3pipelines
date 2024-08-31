@@ -73,13 +73,13 @@ library("mlr3")
 # Create example task
 task = tsk("wine")
 task$head()
-table(task$data(cols = "target"))
+table(task$data(cols = "type"))
 
-# Generate synthetic data for minority class
+# Down-sample and balance data
 pop = po("nearmiss")
 nearmiss_result = pop$train(list(task))[[1]]$data()
-nrow(nearmiss_result$target)
-table(nearmiss_result$target)
+nrow(nearmiss_result)
+table(nearmiss_result$type)
 \dontshow{ \} }
 }
 \references{

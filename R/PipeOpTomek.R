@@ -56,13 +56,13 @@
 #' # Create example task
 #' task = tsk("iris")
 #' task$head()
-#' table(task$data(cols = "target"))
+#' table(task$data(cols = "type"))
 #'
 #' # Down-sample data
 #' pop = po("tomek")
 #' tomek_result = pop$train(list(task))[[1]]$data()
 #' nrow(tomek_result)
-#' table(tomek_result$target)
+#' table(tomek_result$type)
 #' \dontshow{ \} }
 PipeOpTomek = R6Class("PipeOpTomek",
   inherit = PipeOpTaskPreproc,
