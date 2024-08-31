@@ -4,7 +4,6 @@ test_that("PipeOpTomek - basic properties", {
   skip_if_not_installed("themis")
 
   task = mlr_tasks$get("iris")
-
   expect_datapreproc_pipeop_class(PipeOpTomek, task = task, predict_like_train = FALSE)
 
 })
@@ -17,9 +16,9 @@ test_that("PipeOpTomek - train works as intended", {
 
   # Compare to themis::tomek
   train_out = op$train(list(task))[[1]]$data()
-  smotenc_out = setDT(invoke(themis::tomek, df = task$data(), var = task$target_names))
+  tomek_out = setDT(invoke(themis::tomek, df = task$data(), var = task$target_names))
 
-  expect_equal(train_out, smotenc_out)
+  expect_equal(train_out, tomek_out)
 
   # Empty task is returned unchanged
   task$select(character(0))
@@ -29,7 +28,7 @@ test_that("PipeOpTomek - train works as intended", {
   )
 
   # PipeOp does not accept tasks with wrong feature types
-  task = tsk("breast_cancer")
+  task = tsk("german_credit")
   expect_error(op$train(list(task)))
 
 })
