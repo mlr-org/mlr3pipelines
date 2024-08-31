@@ -9,11 +9,8 @@
 #'
 #' The algorithm down-samples the data by removing all pairs of observations that form a Tomek link,
 #' i.e. a pair of observations that are nearest neighbors and belong to different classes.
-#' It can only be applied to tasks with numeric (or integer) features with no missing values.
-#' The algorithm treats integer features as numeric features. To not change feature types, these are then rounded back to integer.
-#'
-#' ????
-#' Open question: Takes multiclass?, Is not balancing, but cleaning since results are not more balanced (would be the case if only removing majority cases)
+#' It can only be applied to tasks with numeric or integer features with no missing values.
+#' Supports multiclass classification.
 #'
 #' See [`themis::tomek`] for details.
 #'
@@ -89,33 +86,26 @@ PipeOpTomek = R6Class("PipeOpTomek",
         return(task)
       }
       # PipeOp does not know how to handle non-feature columns
-      unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
-      if (length(unsupported_cols)) {
-        stopf("Tomek cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
-              paste(unsupported_cols, collapse = "', '"))
-      }
+      # unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
+      # if (length(unsupported_cols)) {
+      #   stopf("Tomek cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
+      #         paste(unsupported_cols, collapse = "', '"))
+      # }
+      # do we want this? We could handle it, question just is whether it's useful to still raise an error
+      # since we are effectively ignoring stratify & co.
+
       # Only numeric and integer features allowed
       if (!all(task$feature_types$type %in% c("numeric", "integer"))) {
         stop("Tomek does only accept numeric and integer features. Use PipeOpSelect to select the appropriate features.")
       }
 
-      # Down-sample Data
+      # Down-sample data
       dt = setDT(invoke(themis::tomek, df = task$data(), var = task$target_names))
 
-      # Return task unchanged if no data was excluded
-      if (nrow(dt) == task$nrow) {
-        return(task)
-      }
-
-      # Filter snc to only contain the generated synthetic data
-      # snc <- snc[seq(task$nrow + 1L, nrow(snc))]
-      # need a better solution here, since we are reducing the number of rows
-
-      # Convert originally integer columns back to integer as SMOTENC treats them as numeric
-      int_cols = task$feature_names[task$feature_types$type == "integer"]
-      dt[, (int_cols) := lapply(.SD, function(x) as.integer(round(x))), .SDcols = int_cols]
-
-      task$rbind(dt)
+      keep = as.integer(row.names(dt))
+      # more robust, more computationally complex alternative:
+      # keep = as.integer(row.names(fintersect(task$data(), dt)))
+      task$filter(keep)
     }
   )
 )
