@@ -10,7 +10,7 @@
 #'
 #' The algorithm generates for each minority instance a new data point based on the `k` nearest
 #' neighbors of that data point.
-#' It can only be applied to tasks with factor (or ordered) features and at least one numeric (or integer) feature with no missing values.
+#' It can only be applied to [classification tasks][mlr3::TaskClassif] with factor (or ordered) features and at least one numeric (or integer) feature that have no missing values.
 #' The algorithm treats integer features as numeric features. To not change feature types, these are then rounded back to integer.
 #'
 #' See [`themis::smotenc`] for details.
