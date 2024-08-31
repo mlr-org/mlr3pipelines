@@ -54,11 +54,7 @@
 #' library("mlr3")
 #'
 #' # Create example task
-#' data = data.frame(
-#'   target = factor(sample(c("c1", "c2"), size = 200, replace = TRUE, prob = c(0.1, 0.9))),
-#'   feature = rnorm(200)
-#' )
-#' task = TaskClassif$new(id = "example", backend = data, target = "target")
+#' task = tsk("iris")
 #' task$head()
 #' table(task$data(cols = "target"))
 #'
