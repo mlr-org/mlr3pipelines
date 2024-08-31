@@ -9,7 +9,7 @@
 #'
 #' The algorithm down-samples the data by removing all pairs of observations that form a Tomek link,
 #' i.e. a pair of observations that are nearest neighbors and belong to different classes.
-#' It can only be applied to tasks with numeric or integer features with no missing values.
+#' It can only be applied to [classification tasks][mlr3::TaskClassif] with numeric or integer features that have no missing values.
 #' Supports multiclass classification.
 #'
 #' See [`themis::tomek`] for details.
