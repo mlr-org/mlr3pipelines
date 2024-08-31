@@ -88,7 +88,8 @@ Suggests:
     vtreat,
     future,
     htmlwidgets,
-    ranger
+    ranger,
+    themis
 ByteCompile: true
 Encoding: UTF-8
 Config/testthat/edition: 3
