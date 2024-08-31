@@ -10,6 +10,8 @@
 #' The algorithm down-samples by selecting instances from the non-minority classes that have the smallest mean distance
 #' to their `k` nearest neighbors of different classes.
 #' This can only be applied to [classification tasks][mlr3::TaskClassif] with numeric or integer features that have no missing values.
+#' Supports multiclass classification.
+#'
 #' See [`themis::nearmiss`] for details.
 #'
 #' @section Construction:
@@ -93,13 +95,6 @@ PipeOpNearmiss = R6Class("PipeOpNearmiss",
       if (!length(cols)) {
         return(task)
       }
-      # PipeOp does not know how to handle non-feature columns
-      # unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
-      # if (length(unsupported_cols)) {
-      #   stopf("Nearmiss cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
-      #         paste(unsupported_cols, collapse = "', '"))
-      # }
-
       # Only numeric and integer features allowed
       if (!all(task$feature_types$type %in% c("numeric", "integer"))) {
         stop("Nearmiss does only accept numeric and integer features. Use PipeOpSelect to select the appropriate features.")
@@ -110,8 +105,6 @@ PipeOpNearmiss = R6Class("PipeOpNearmiss",
                         .args = self$param_set$get_values(tags = "nearmiss")))
 
       keep = as.integer(row.names(dt))
-      # more robust, more computationally complex alternative:
-      # keep = as.integer(row.names(fintersect(task$data(), dt)))
       task$filter(keep)
     }
   )

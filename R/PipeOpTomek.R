@@ -85,15 +85,6 @@ PipeOpTomek = R6Class("PipeOpTomek",
       if (!length(cols)) {
         return(task)
       }
-      # PipeOp does not know how to handle non-feature columns
-      # unsupported_cols = setdiff(unlist(task$col_roles), union(cols, task$target_names))
-      # if (length(unsupported_cols)) {
-      #   stopf("Tomek cannot generate synthetic data for the following columns since they are neither features nor targets: '%s'",
-      #         paste(unsupported_cols, collapse = "', '"))
-      # }
-      # do we want this? We could handle it, question just is whether it's useful to still raise an error
-      # since we are effectively ignoring stratify & co.
-
       # Only numeric and integer features allowed
       if (!all(task$feature_types$type %in% c("numeric", "integer"))) {
         stop("Tomek does only accept numeric and integer features. Use PipeOpSelect to select the appropriate features.")
@@ -103,8 +94,6 @@ PipeOpTomek = R6Class("PipeOpTomek",
       dt = setDT(invoke(themis::tomek, df = task$data(), var = task$target_names))
 
       keep = as.integer(row.names(dt))
-      # more robust, more computationally complex alternative:
-      # keep = as.integer(row.names(fintersect(task$data(), dt)))
       task$filter(keep)
     }
   )
