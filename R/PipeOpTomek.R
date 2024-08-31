@@ -60,7 +60,7 @@
 #' )
 #' task = TaskClassif$new(id = "example", backend = data, target = "target")
 #' task$head()
-#' table(task$data()$target)
+#' table(task$data(cols = "target"))
 #'
 #' # Down-sample data
 #' pop = po("tomek")
