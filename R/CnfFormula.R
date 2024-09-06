@@ -73,6 +73,7 @@ CnfAtom = function(symbol, values) {
 }
 
 # construct CnfAtom with `X %among% c("a", "b", "c")`
+# we cannot overload `%in%`, unfortunately
 `%among%` = CnfAtom
 
 # A clause is a disjunction of atoms.
