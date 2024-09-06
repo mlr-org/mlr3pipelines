@@ -713,8 +713,6 @@ get_po_unbranch_active_input = function(graph) {
   po_unbranch_active_input
 }
 
-
-
 andpaste = function(x, sep = ", ", lastsep = ", and ") {
   if (length(x) == 0) return("")
   if (length(x) == 1) return(x[[1]])

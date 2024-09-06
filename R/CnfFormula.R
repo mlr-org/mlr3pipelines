@@ -7,10 +7,9 @@
 # corresponding to a logical AND.
 # If a PipeOpUnbranch has multiple active inputs, then it is active when exactly one of its
 # input is active, corresponding to a logical OR.
-# We could, strictly speaking, also try to handle cases where a normal PipeOp with
-# mixed inputs gives an error, or where a PipeOpUnbranch with multiple active inputs gives
-# an error, but that would make things even more complicated than they already are, so
-# we are not doing that here.
+# We handle cases where a normal PipeOp with mixed inputs gives an error, or where
+# a PipeOpUnbranch with multiple active inputs gives an error, by also representing
+# the conditions under which an error is thrown.
 
 # Container object for possible branch conditions.
 CnfUniverse = function() structure(new.env(parent = emptyenv()), class = "CnfUniverse")
@@ -73,7 +72,11 @@ CnfAtom = function(symbol, values) {
   }
 }
 
+# construct CnfAtom with `X %among% c("a", "b", "c")`
+`%among%` = CnfAtom
+
 # A clause is a disjunction of atoms.
+# X %among% c("a", "b", "c") | Y %among% c("d", "e", "f")
 CnfClause = function(atoms) {
   assert_list(atoms, types = "CnfAtom")
   if (!length(atoms)) {
@@ -110,6 +113,7 @@ CnfClause = function(atoms) {
 }
 
 # A formula is a conjunction of clauses.
+# (X %among% c("a", "b", "c") | Y %among% c("d", "e", "f")) & (Z %among% c("g", "h", "i"))
 CnfFormula = function(clauses) {
   assert_list(clauses, types = "CnfClause")
   if (!length(clauses)) {
@@ -235,14 +239,15 @@ simplify_cnf = function(entries, universe) {
   universe = attr(e1, "universe")
   if (length(e1) > length(e2)) {
     # we want the outer loop to be over the shorter of the two
+    tmp = e1
     e1 = e2
-    e2 = e1
+    e2 = tmp
   }
   # distribute || into clauses
   distributed = lapply(e1, function(e1_clause) {
+    eliminated = logical(length(e2))
     for (i2 in seq_along(e2)) {
       e2_clause = e2[[i2]]
-      eliminated = logical(length(e2_clause))
       for (sym in names(e1_clause)) {
         # add the symbols from e1_clause to e2_clause
         # (if e2_clause does not contain a symbol, it is added)
@@ -273,6 +278,34 @@ simplify_cnf = function(entries, universe) {
 
 `|.CnfAtom` = function(e1, e2) {
   as.CnfFormula(e1) | as.CnfFormula(e2)
+}
+
+`!.CnfAtom` = function(x) {
+  if (is.logical(x)) {
+    not_x = if (x) FALSE else TRUE  # can't use '!' here...
+    attributes(not_x) = attributes(x)  # keep class and universe
+    return(not_x)
+  }
+  structure(
+    list(symbol = x$symbol, values = setdiff(get(x$symbol, attr(x, "universe")), x$values)),
+    universe = attr(x, "universe"),
+    class = "CnfAtom"
+  )
+}
+
+`!.CnfClause` = function(x) {
+  !as.CnfFormula(x)
+}
+
+`!.CnfFormula` = function(x) {
+  universe = attr(x, "universe")
+  negated_formulae = lapply(x, function(clause) {
+    CnfFormula(lapply(names(clause), function(sym) {
+      CnfClause(list(!CnfAtom(universe[[sym]], clause[[sym]])))
+    }))
+  })
+  # can't Reduce(`|`, negated_formulae) here, since for this we'd have to register the `|` S3 method
+  Reduce(function(x, y) x | y, negated_formulae)
 }
 
 as.CnfFormula = function(x) {
@@ -306,6 +339,24 @@ as.CnfFormula.CnfFormula = function(x) {
 
 as.CnfFormula.default = function(x) {
   stop("Cannot convert object to CnfFormula.")
+}
+
+as.logical.CnfFormula = function(x) {
+  if (isTRUE(x)) {
+    return(TRUE)
+  }
+  if (isFALSE(x)) {
+    return(FALSE)
+  }
+  return(NA)
+}
+
+as.logical.CnfClause = function(x) {
+  as.logical(as.CnfFormula(x))
+}
+
+as.logical.CnfAtom = function(x) {
+  as.logical(as.CnfFormula(x))
 }
 
 print.CnfUniverse = function(x, ...) {
@@ -364,3 +415,17 @@ print.CnfFormula = function(x, ...) {
   }
   invisible(x)
 }
+
+
+
+## to test:
+# subsumption
+# unit elimination
+# unit elimination makes large clause smaller, leading to additional u.e.
+# unit elimination makes large clause smaller, leading to subsumption
+
+# branch with totune is swallowed by single unbranch
+# branch with totune is swallowed by multiple unbranch
+# branches with totune can possibly lead to conflicts, but not always (multiple active inputs to unbranch, or mixed inputs to normal pipeops)
+# branches with totune always lead to conflicts (multiple active inputs to unbranch, or mixed inputs to normal pipeops, or choice between both)
+# can we recognize that a certain choice would lead to a conflict, making only other choices possible?
