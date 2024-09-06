@@ -787,10 +787,10 @@ automatically checked:</p>
 <pre><code><span><span class="co">## &lt;ParamSet(4)&gt;</span></span>
 <span><span class="co">##                id    class lower upper nlevels        default  value</span></span>
 <span><span class="co">##            &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;         &lt;list&gt; &lt;list&gt;</span></span>
-<span><span class="co">## 1:         center ParamLgl    NA    NA       2           TRUE       </span></span>
-<span><span class="co">## 2:          scale ParamLgl    NA    NA       2           TRUE       </span></span>
+<span><span class="co">## 1:         center ParamLgl    NA    NA       2           TRUE [NULL]</span></span>
+<span><span class="co">## 2:          scale ParamLgl    NA    NA       2           TRUE [NULL]</span></span>
 <span><span class="co">## 3:         robust ParamLgl    NA    NA       2 &lt;NoDefault[0]&gt;  FALSE</span></span>
-<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt;</span></span></code></pre>
+<span><span class="co">## 4: affect_columns ParamUty    NA    NA     Inf  &lt;Selector[1]&gt; [NULL]</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">$</span><span class="va">center</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pss</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span><span class="op">)</span></span></code></pre></div>
