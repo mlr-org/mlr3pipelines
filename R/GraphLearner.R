@@ -611,9 +611,14 @@ infer_task_type = function(graph) {
 # i.e. that gets non-NOP-input in the current hyperparameter configuration of PipeOpBranch ops.
 # Returns a list, named by PipeOpUnbranch IDs, containing the incoming PipeOp IDs.
 # PipeOpBranch ops that are connected to overall Graph input get an empty string as predecessor ID.
+# Returns a named `list`, named by PipeOpUnbranch IDs, containing the incoming PipeOp ID.
+# Typically, there is only one incoming PipeOp ID; only if a `selection` is not set, or a `TuneToken`,
+# do we concede that we do not know the exact input; in this case the list entry contains a vector
+# of all possible incoming PipeOp IDs.
 get_po_unbranch_active_input = function(graph) {
   # query a given PipeOpBranch what its selected output is
   # Currently, PipeOpBranch 'selection' can be either integer-valued or a string.
+  # If it is something else (unset, or a TuneToken), we cannot infer the active output.
   get_po_branch_active_output = function(pipeop) {
     assertR6(pipeop, "PipeOpBranch")
     pob_ps = pipeop$param_set
@@ -622,12 +627,14 @@ get_po_unbranch_active_input = function(graph) {
     # is not given or a TuneToken or something like that.
     if (pob_ps$class[["selection"]] == "ParamInt") {
       if (!test_int(selection)) {
-        stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
+        # stopf("Cannot infer active output of PipeOpBranch %s with non-numeric 'selection'.", pipeop$id)
+        return(pipeop$output$name)
       }
       return(pipeop$output$name[[pob_ps$values$selection]])
     } else {
       if (!test_string(selection)) {
-        stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
+        # stopf("Cannot infer active output of PipeOpBranch %s with non-string 'selection'.", pipeop$id)
+        return(pipeop$output$name)
       }
       return(pob_ps$values$selection)
     }
@@ -690,17 +697,23 @@ get_po_unbranch_active_input = function(graph) {
     if (state_current && inherits(pipeop, "PipeOpBranch")) {
       # PipeOpBranch is only special when it is actually active
       active_output = get_po_branch_active_output(pipeop)
-      branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
-        reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
-          pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
-          src_channel))
-      )]
+      if (length(active_output) == 1) {
+        branch_state_info[src_id == pipeop_id, `:=`(state = src_channel == active_output,
+          reason = as.list(sprintf("PipeOpBranch '%s' %s output '%s'",
+            pipeop_id, ifelse(src_channel == active_output, "active", "inactive"),
+            src_channel))
+        )]
+      } else {
+
+      }
     } else {
       branch_state_info[src_id == pipeop_id, `:=`(state = state_current, reason = list(reason_current))]
     }
   }
   po_unbranch_active_input
 }
+
+
 
 andpaste = function(x, sep = ", ", lastsep = ", and ") {
   if (length(x) == 0) return("")
