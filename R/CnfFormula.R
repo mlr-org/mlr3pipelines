@@ -340,11 +340,13 @@ CnfClause = function(atoms) {
 #' or implicitly, by using the `&` operator on [`CnfAtom`]s, [`CnfClause`]s, or other `CnfFormula` objects.
 #'
 #' Upon construction, the `CnfFormula` is simplified by using various heuristics.
-#' This includes unit propagation, subsumption elimination, and hidden tautology elimination.
+#' This includes unit propagation, subsumption elimination, and hidden tautology elimination
+#' (see examples).
 #' Note that the order of clauses in a formula is not preserved.
 #'
 #' If a `CnfFormula` contains no clauses, or only `TRUE` clauses, it evaluates to `TRUE`.
-#' If it contains at least one clause that is always false, the formula evaluates to `FALSE`.
+#' If it contains at least one clause that is, by itself, always false, the formula evaluates to `FALSE`.
+#' Not all contradictions between clauses are recognized, however.
 #' These values can be converted to, and from, `logical(1)` values using `as.logical()`
 #' and `as.CnfFormula()`.
 #'
@@ -374,15 +376,15 @@ CnfClause = function(atoms) {
 #'   Z %among% c("g", "h")
 #'
 #' ## unit propagation
-#' # The second clause can not be satisfied when X is "b", so it can be removed
-#' # from the first clause.
+#' # The second clause can not be satisfied when X is "b", so "b" it can be
+#' # removed from the possibilities in the first clause.
 #' (X %among% c("a", "b") | Y %among% c("d", "e")) &
 #'   X %among% c("a", "c")
 #'
 #' ## subsumption elimination
 #' # The first clause is a subset of the second clause; whenever the
-#' # first clause is satisfied, the second clause is satisfied as well, so it
-#' # can be removed.
+#' # first clause is satisfied, the second clause is satisfied as well, so the
+#' # second clause can be removed.
 #' (X %among% "a" | Y %among% c("d", "e")) &
 #'   (X %among% c("a", "b") | Y %among% c("d", "e") | Z %among% "g")
 #'
@@ -978,3 +980,13 @@ print.CnfFormula = function(x, ...) {
 
 # This is because we don't eliminate (C | A) & (!C | B) & (B | A) by removing (B | A)
 # so, if  clause X and clause Y have a symbol in common where the values are disjoint, the disjunction of the rest is implied?
+
+
+# This is not right
+
+# !(X %among% c("a", "b") | Y %among% c("d", "e")) &
+#   Z %among% c("g", "h")
+# CnfFormula:
+#      (X ∈ {c})
+#    & (Y ∈ {f})
+#    & (Z ∈ {g, h})
