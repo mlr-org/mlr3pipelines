@@ -293,7 +293,7 @@ simplify_cnf = function(entries, universe) {
       for (sym in names(e1_clause)) {
         # add the symbols from e1_clause to e2_clause
         # (if e2_clause does not contain a symbol, it is added)
-        e2_clause[[sym]] = unique(c(e1_clause[[sym]], e2_clause[[sym]]))
+        e2_clause[[sym]] = union(e1_clause[[sym]], e2_clause[[sym]])
         # faster than test_set_equal
         if (all(get(sym, universe) %in% e2_clause[[sym]])) {
           eliminated[[i2]] = TRUE
@@ -308,19 +308,73 @@ simplify_cnf = function(entries, universe) {
 }
 
 `&.CnfClause` = function(e1, e2) {
-  as.CnfFormula(e1) & as.CnfFormula(e2)
+  if (isFALSE(e1)) return(e1)
+  if (isFALSE(e2)) return(e2)
+  if (isTRUE(e1)) return(e2)
+  if (isTRUE(e2)) return(e1)
+  if (inherits(e2, "CnfAtom")) {
+    e2 = CnfClause(list(e2))
+  }
+  if (inherits(e2, "CnfClause")) {
+    CnfFormula(list(e1, e2))
+  } else {
+    # e2 is anything else -- go the lazy route
+    as.CnfFormula(e1) & as.CnfFormula(e2)
+  }
 }
 
 `|.CnfClause` = function(e1, e2) {
+  if (isFALSE(e1)) return(e2)
+  if (isFALSE(e2)) return(e1)
+  if (isTRUE(e1)) return(e1)
+  if (isTRUE(e2)) return(e2)
+  if (inherits(e2, "CnfAtom")) {
+    e2 = CnfClause(list(e2))
+  }
+  if (inherits(e2, "CnfClause")) {
+    for (sym in names(e2)) {
+      e1[[sym]] = union(e1[[sym]], e2[[sym]])
+      if (all(get(sym, attr(e1, "universe")) %in% e1[[sym]])) {
+        return(structure(
+          TRUE,
+          universe = attr(e1, "universe"),
+          class = "CnfClause"
+        ))
+      }
+    }
+    return(e1)
+  }
+  # e2 is anything else -- go the lazy route
   as.CnfFormula(e1) | as.CnfFormula(e2)
 }
 
 `&.CnfAtom` = function(e1, e2) {
-  as.CnfFormula(e1) & as.CnfFormula(e2)
+  if (isFALSE(e1)) return(e1)
+  if (isFALSE(e2)) return(e2)
+  if (isTRUE(e1)) return(e2)
+  if (isTRUE(e2)) return(e1)
+  if (inherits(e2, "CnfAtom")) {
+    e2 = CnfClause(list(e2))
+  }
+  if (inherits(e2, "CnfClause")) {
+    CnfFormula(list(CnfClause(list(e1)), e2))
+  } else {
+    # e2 is anything else -- go the lazy route
+    as.CnfFormula(e1) & as.CnfFormula(e2)
+  }
 }
 
 `|.CnfAtom` = function(e1, e2) {
-  as.CnfFormula(e1) | as.CnfFormula(e2)
+  if (isFALSE(e1)) return(e2)
+  if (isFALSE(e2)) return(e1)
+  if (isTRUE(e1)) return(e1)
+  if (isTRUE(e2)) return(e2)
+  if (inherits(e2, "CnfAtom")) {
+    CnfClause(list(e1, e2))
+  } else {
+    # e2 is anything else -- go the lazy route
+    as.CnfFormula(e1) | as.CnfFormula(e2)
+  }
 }
 
 `!.CnfAtom` = function(x) {
@@ -337,6 +391,9 @@ simplify_cnf = function(entries, universe) {
 }
 
 `!.CnfClause` = function(x) {
+  if (is.logical(x)) {
+    return(as.CnfClause(!unclass(x)))
+  }
   !as.CnfFormula(x)
 }
 
@@ -359,6 +416,14 @@ simplify_cnf = function(entries, universe) {
 
 as.CnfFormula = function(x) {
   UseMethod("as.CnfFormula")
+}
+
+as.CnfClause = function(x) {
+  UseMethod("as.CnfClause")
+}
+
+as.CnfAtom = function(x) {
+  UseMethod("as.CnfAtom")
 }
 
 chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
@@ -386,26 +451,56 @@ as.CnfFormula.CnfFormula = function(x) {
   x
 }
 
+as.CnfAtom.logical = function(x) {
+  assert_flag(x)
+  return(structure(
+    x,
+    universe = attr(x, "universe"),
+    class = "CnfAtom"
+  ))
+}
+
+as.CnfClause.logical = function(x) {
+  assert_flag(x)
+  return(structure(
+    x,
+    universe = attr(x, "universe"),
+    class = "CnfClause"
+  ))
+}
+
+as.CnfFormula.logical = function(x) {
+  assert_flag(x)
+  structure(
+    x,
+    universe = attr(x, "universe"),
+    class = "CnfFormula"
+  )
+}
+
 as.CnfFormula.default = function(x) {
   stop("Cannot convert object to CnfFormula.")
 }
 
 as.logical.CnfFormula = function(x) {
-  if (isTRUE(x)) {
-    return(TRUE)
-  }
-  if (isFALSE(x)) {
-    return(FALSE)
+  if (is.logical(x)) {
+    return(unclass(x))
   }
   return(NA)
 }
 
 as.logical.CnfClause = function(x) {
-  as.logical(as.CnfFormula(x))
+  if (is.logical(x)) {
+    return(unclass(x))
+  }
+  return(NA)
 }
 
 as.logical.CnfAtom = function(x) {
-  as.logical(as.CnfFormula(x))
+  if (is.logical(x)) {
+    return(unclass(x))
+  }
+  return(NA)
 }
 
 print.CnfUniverse = function(x, ...) {
@@ -427,40 +522,75 @@ print.CnfSymbol = function(x, ...) {
 
 print.CnfAtom = function(x, ...) {
   if (isTRUE(x)) {
-    cat("TRUE\n")
+    cat("CnfAtom: <TRUE>\n")
   } else if (isFALSE(x)) {
-    cat("FALSE\n")
+    cat("CnfAtom: <FALSE>\n")
   } else {
-    cat(sprintf("%s %%in%% {%s}.\n", x$symbol, paste(x$values, collapse = ", ")))
+    cat(sprintf("CnfAtom: %s \U2208 {%s}.\n", x$symbol, paste(x$values, collapse = ", ")))
   }
   invisible(x)
+}
+
+format.CnfAtom = function(x, ...) {
+  if (isTRUE(x)) {
+    return("CnfAtom(FALSE)")
+  } else if (isFALSE(x)) {
+    return("CnfAtom(TRUE)")
+  } else {
+    return(sprintf("CnfAtom(%s ...)", x$symbol))
+  }
 }
 
 print.CnfClause = function(x, ...) {
   if (isTRUE(x)) {
-    cat("TRUE\n")
+    cat("CnfClause: TRUE\n")
   } else if (isFALSE(x)) {
-    cat("FALSE\n")
+    cat("CnfClause: FALSE\n")
   } else {
-    cat("CnfClause with entries:\n")
-    for (sym in names(x)) {
-      cat(sprintf("  %s %%in%% {%s}\n", sym, paste(x[[sym]], collapse = ", ")))
-    }
+    cat("CnfClause:\n")
+    elements = map_chr(names(x), function(sym) {
+      sprintf("%s \U2208 {%s}", sym, paste(x[[sym]], collapse = ", "))
+    })
+    cat(strwrap(paste(elements, collapse = " | "), prefix = "  "), sep = "\n")
   }
   invisible(x)
 }
 
+format.CnfClause = function(x, ...) {
+  if (isTRUE(x)) {
+    return("CnfClause(TRUE)")
+  } else if (isFALSE(x)) {
+    return("CnfClause(FALSE)")
+  } else {
+    return(sprintf("CnfClause(%s)", str_collapse(names(x), sep = "|", n = 2, ellipsis = "..")))
+  }
+}
+
+format.CnfClause = function(x, ...) {
+  if (isTRUE(x)) {
+    return("<CnfClause T>")
+  } else if (isFALSE(x)) {
+    return("<CnfClause F>")
+  } else {
+    return("<CnfClause ..>")
+  }
+}
+
 print.CnfFormula = function(x, ...) {
   if (isTRUE(x)) {
-    cat("TRUE\n")
+    cat("CnfFormula: TRUE\n")
   } else if (isFALSE(x)) {
-    cat("FALSE\n")
+    cat("CnfFormula: FALSE\n")
   } else {
-    cat("CnfFormula with entries:\n")
-    for (i in seq_along(x)) {
-      cat(sprintf("  Clause %d:\n", i))
-      print(x[[i]])
-    }
+    cat("CnfFormula:\n     (")
+    clauses = map_chr(x, function(clause) {
+      elements = map_chr(names(clause), function(sym) {
+        sprintf("%s \U2208 {%s}", sym, paste(clause[[sym]], collapse = ", "))
+      })
+      paste(elements, collapse = " | ")
+    })
+    clause_paragraphs = map_chr(strwrap(clauses, exdent = 4, simplify = FALSE), paste, collapse = "\n  ")
+    cat(paste0(paste(clause_paragraphs, collapse = ")\n   & ("), ")\n"))
   }
   invisible(x)
 }
