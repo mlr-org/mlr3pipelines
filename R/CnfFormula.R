@@ -220,7 +220,13 @@ simplify_cnf = function(entries, universe) {
         # tbh, I am not sure if this is actually worth it
         if (!eliminated[[i]]) {
           which_name_overlap = which(name_overlap)
-          if (length(which_name_overlap)) cnames = union(names(ei), names(ej))
+          if (length(which_name_overlap)) {
+            # build the union of values of overlapping symbols
+            # in the innerloop we will check that most of this is a subset of any other clause
+            # "most of" here means: all but the one symbol s where the values are disjoint
+            cnames = union(names(ei), names(ej))
+            cunion = sapply(cnames, function(s2) union(ei[[s2]], ej[[s2]]), simplify = FALSE)
+          }
           for (no in which_name_overlap) {
             s = names(ej)[[no]]
             # intersection is not 0 --> try next one
@@ -233,7 +239,7 @@ simplify_cnf = function(entries, universe) {
               # all of cnames_s must be in ek, otherwise we can't eliminate
               # since we are looping down from large to small ek, we can break once this is not the case
               if (length(ek) < length(cnames) - 1) break
-              if (all(cnames_s %in% names(ek)) && all(sapply(cnames_s, function(s2) all(union(ei[[s2]], ej[[s2]]) %in% ek[[s2]])))) {
+              if (all(cnames_s %in% names(ek)) && all(sapply(cnames_s, function(s2) all(cunion[[s2]] %in% ek[[s2]])))) {
                 eliminated[[k]] = TRUE
               }
             }
@@ -338,7 +344,13 @@ simplify_cnf = function(entries, universe) {
   universe = attr(x, "universe")
   negated_formulae = lapply(x, function(clause) {
     CnfFormula(lapply(names(clause), function(sym) {
-      CnfClause(list(!CnfAtom(universe[[sym]], clause[[sym]])))
+      # !CnfAtom(universe[[sym]], clause[[sym]])
+      structure(
+        list(setdiff(get(sym, universe), clause[[sym]])),
+        names = sym,
+        universe = universe,
+        class = "CnfClause"
+      )
     }))
   })
   # can't Reduce(`|`, negated_formulae) here, since for this we'd have to register the `|` S3 method
@@ -470,7 +482,7 @@ print.CnfFormula = function(x, ...) {
 # why does this blow up?
 #
 
-#!!(((u$A %among% "T" | u$B %among% "F") & (u$A %among% "F" | u$C %among% "T") & (u$B %among% "T" | u$C %among% "F")))
+# profvis::profvis(replicate(3000, { !!(((u$A %among% "T" | u$B %among% "F") & (u$A %among% "F" | u$C %among% "T") & (u$B %among% "T" | u$C %among% "F"))) ; NULL }) -> ., simplify = FALSE)
 
 # This is because we don't eliminate (C | A) & (!C | B) & (B | A) by removing (B | A)
 # so, if  clause X and clause Y have a symbol in common where the values are disjoint, the disjunction of the rest is implied?
