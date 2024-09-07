@@ -51,7 +51,7 @@ CnfAtom = function(symbol, values) {
   assert_class(symbol, "CnfSymbol")
   domain = get(symbol, attr(symbol, "universe"))
   assert_subset(values, domain)
-  if (test_set_equal(values, domain)) {
+  if (all(domain %in% values)) {
     structure(
       TRUE,
       universe = attr(symbol, "universe"),
@@ -101,7 +101,7 @@ CnfClause = function(atoms) {
       next
     }
     entries[[a$symbol]] = unique(c(entries[[a$symbol]], a$values))
-    if (test_set_equal(entries[[a$symbol]], get(a$symbol, universe))) {
+    if (all(get(a$symbol, universe) %in% entries[[a$symbol]])) {
       entries = TRUE
       break
     }
@@ -220,13 +220,12 @@ simplify_cnf = function(entries, universe) {
         # tbh, I am not sure if this is actually worth it
         if (!eliminated[[i]]) {
           which_name_overlap = which(name_overlap)
-          if (length(which_name_overlap)) {
-            # build the union of values of overlapping symbols
-            # in the innerloop we will check that most of this is a subset of any other clause
-            # "most of" here means: all but the one symbol s where the values are disjoint
-            cnames = union(names(ei), names(ej))
-            cunion = sapply(cnames, function(s2) union(ei[[s2]], ej[[s2]]), simplify = FALSE)
-          }
+          # - build the union of values of overlapping symbols
+          # - in the innerloop we will check that most of this is a subset of any other clause
+          # - "most of" here means: all but the one symbol s where the values are disjoint
+          # - use delayedAssign to avoid computation if there is no overlap with empty intersect
+          delayedAssign("cnames", union(names(ei), names(ej)))
+          delayedAssign("cunion", sapply(cnames, function(s2) union(ei[[s2]], ej[[s2]]), simplify = FALSE))
           for (no in which_name_overlap) {
             s = names(ej)[[no]]
             # intersection is not 0 --> try next one
@@ -295,7 +294,8 @@ simplify_cnf = function(entries, universe) {
         # add the symbols from e1_clause to e2_clause
         # (if e2_clause does not contain a symbol, it is added)
         e2_clause[[sym]] = unique(c(e1_clause[[sym]], e2_clause[[sym]]))
-        if (test_set_equal(e2_clause[[sym]], get(sym, universe))) {
+        # faster than test_set_equal
+        if (all(get(sym, universe) %in% e2_clause[[sym]])) {
           eliminated[[i2]] = TRUE
           break
         }
