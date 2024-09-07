@@ -152,8 +152,10 @@ simplify_cnf = function(entries, universe) {
     class = "CnfFormula"
   )
 
+  # can we do unit elimination?
   # if we are already TRUE or FALSE no simplification is necessary
-  can_simplify = !is.logical(entries)
+  # this only works if there actually are units.
+  can_simplify = !is.logical(entries) && any(lengths(entries) == 1)
   # likewise, if there is only one clause left, no simplification is necessary.
 
   units = list()
@@ -164,7 +166,6 @@ simplify_cnf = function(entries, universe) {
     can_simplify = FALSE
     # sort clauses by length, since (1) length-1-clauses are special, and (2) short clauses can only ever subsume longer ones
     entries = entries[order(lengths(entries))]
-    eliminated = logical(length(entries))
     # Let sum(A) be the symbols in clause A, and val(A, s) be the values of symbol s admitted in clause A.
     for (i in seq_along(entries)) {
       ei = entries[[i]]
@@ -182,7 +183,6 @@ simplify_cnf = function(entries, universe) {
         }
         if (!length(ei[[unit_symbol]])) {
           ei[[unit_symbol]] = NULL
-          can_simplify = TRUE  # could have new subset-relationships now
         }
         if (!length(ei)) {
           return(return_false)
@@ -196,12 +196,48 @@ simplify_cnf = function(entries, universe) {
         # even if names(ei) is already in units, at this point ei[[1]] is the intersection of the values
         units[[names(ei)]] = ei[[1]]
       }
+    }
+  }
+  if (!is.logical(entries) && length(entries) > 1) {
+    entries = entries[order(lengths(entries))]  # removing units may have changed the order
+    eliminated = logical(length(entries))
+    for (i in seq_along(entries)) {
+      if (eliminated[[i]]) next  # can only happen if we do the tautology elimination, which searches forward
+      ei = entries[[i]]
       # If sym(A) is a subset of sym(B) and for each s in sym(A), val(A, s) is a subset of val(B, s), then A implies B, so B can be removed ("subsumption elimination").
       for (j in seq_len(i - 1)) {
+        if (eliminated[[j]]) next
         ej = entries[[j]]
-        if (all(names(ej) %in% names(ei)) && all(sapply(names(ej), function(s) all(ej[[s]] %in% ei[[s]])))) {
+        name_overlap = names(ej) %in% names(ei)
+        if (all(name_overlap) && all(sapply(names(ej), function(s) all(ej[[s]] %in% ei[[s]])))) {
           # can't do entries[[i]] = NULL, since we are iterating over entries; the entries[[i]] would break.
           eliminated[[i]] = TRUE
+        }
+        # simple tautology elimination
+        # if s is in sym(A) and sym(B), and val(A, s) and val(B, s) are disjoint, then (A - s | B - s) is implied,
+        # and all superset clauses of (A - s | B - s) can be removed.
+        # we could also do this for higher order terms, intersection over X of val(X, s) == 0 etc., but this gets more complex.
+        # tbh, I am not sure if this is actually worth it
+        if (!eliminated[[i]]) {
+          which_name_overlap = which(name_overlap)
+          if (length(which_name_overlap)) cnames = union(names(ei), names(ej))
+          for (no in which_name_overlap) {
+            s = names(ej)[[no]]
+            # intersection is not 0 --> try next one
+            if (length(intersect(ej[[s]], ei[[s]]))) next
+            cnames_s = setdiff(cnames, s)
+            # loop down from large to small, since then we can break once we find a clause with insufficient entries
+            for (k in rev(seq_along(entries))) {
+              if (k == i || k == j) next
+              ek = entries[[k]]
+              # all of cnames_s must be in ek, otherwise we can't eliminate
+              # since we are looping down from large to small ek, we can break once this is not the case
+              if (length(ek) < length(cnames) - 1) break
+              if (all(cnames_s %in% names(ek)) && all(sapply(cnames_s, function(s2) all(union(ei[[s2]], ej[[s2]]) %in% ek[[s2]])))) {
+                eliminated[[k]] = TRUE
+              }
+            }
+          }
         }
       }
     }
@@ -430,3 +466,11 @@ print.CnfFormula = function(x, ...) {
 # branches with totune can possibly lead to conflicts, but not always (multiple active inputs to unbranch, or mixed inputs to normal pipeops)
 # branches with totune always lead to conflicts (multiple active inputs to unbranch, or mixed inputs to normal pipeops, or choice between both)
 # can we recognize that a certain choice would lead to a conflict, making only other choices possible?
+
+# why does this blow up?
+#
+
+#!!(((u$A %among% "T" | u$B %among% "F") & (u$A %among% "F" | u$C %among% "T") & (u$B %among% "T" | u$C %among% "F")))
+
+# This is because we don't eliminate (C | A) & (!C | B) & (B | A) by removing (B | A)
+# so, if  clause X and clause Y have a symbol in common where the values are disjoint, the disjunction of the rest is implied?
