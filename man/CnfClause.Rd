@@ -32,7 +32,7 @@ or implicitly, by using the \code{|} operator on \code{\link{CnfAtom}}s or other
 
 Upon construction, the \code{CnfClause} is simplified by (1) removing contradictions, (2) unifying
 atoms that refer to the same symbol, and (3) evaluating to \code{TRUE} if any atom is \code{TRUE}.
-Note that the order of atoms in a clause is not preserved.
+Note that the order of atoms in a clause is not preserved
 
 If a \code{CnfClause} contains no atoms, or only \code{FALSE} atoms, it evaluates to \code{FALSE}.
 If it contains at least one atom that is always true, the clause evaluates to \code{TRUE}.

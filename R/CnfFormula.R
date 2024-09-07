@@ -241,7 +241,7 @@ CnfAtom = function(symbol, values) {
 #'
 #' Upon construction, the `CnfClause` is simplified by (1) removing contradictions, (2) unifying
 #' atoms that refer to the same symbol, and (3) evaluating to `TRUE` if any atom is `TRUE`.
-#' Note that the order of atoms in a clause is not preserved.
+#' Note that the order of atoms in a clause is not preserved
 #'
 #' If a `CnfClause` contains no atoms, or only `FALSE` atoms, it evaluates to `FALSE`.
 #' If it contains at least one atom that is always true, the clause evaluates to `TRUE`.
@@ -372,8 +372,9 @@ CnfClause = function(atoms) {
 #'   Z %among% c("g", "h")
 #'
 #' # Negation of a formula
-#' !(X %among% c("a", "b") | Y %among% c("d", "e")) &
-#'   Z %among% c("g", "h")
+#' # Note the parentheses, otherwise `!` would be applied to the first clause only.
+#' !((X %among% c("a", "b") | Y %among% c("d", "e")) &
+#'    Z %among% c("g", "h"))
 #'
 #' ## unit propagation
 #' # The second clause can not be satisfied when X is "b", so "b" it can be
@@ -442,7 +443,7 @@ CnfFormula = function(clauses) {
       stop("All clauses must be in the same universe.")
     }
     attr(c, "universe") = NULL
-    entries[[length(entries) + 1]] = c
+    entries[[length(entries) + 1]] = unclass(c)
   }
   simplify_cnf(entries, universe)
 }
@@ -960,6 +961,86 @@ print.CnfFormula = function(x, ...) {
 }
 
 
+#' @export
+all.equal.CnfAtom = function(target, current, ...) {
+  if (is.logical(target) && is.logical(current)) {
+    # compare truth-values directly, even if they disagree on universe
+    # (since logical atoms sometimes have universe set to NULL)
+    if (identical(c(target), c(current))) {
+      return(TRUE)
+    }
+    return("target and current are both logicals but not equal")
+  }
+  if (is.logical(target) || is.logical(current)) {
+    return("target and current are not both logicals")
+  }
+  if (!inherits(current, "CnfAtom")) {
+    return("current is not a CnfAtom")
+  }
+  target$values = sort(target$values)
+  current$values = sort(current$values)
+  all.equal.list(target, current, ...)
+}
+
+#' @export
+all.equal.CnfClause = function(target, current, ...) {
+  if (is.logical(target) && is.logical(current)) {
+    # compare truth-values directly, even if they disagree on universe
+    # (since logical atoms sometimes have universe set to NULL)
+    if (identical(c(target), c(current))) {
+      return(TRUE)
+    }
+    return("target and current are both logicals but not equal")
+  }
+  if (is.logical(target) || is.logical(current)) {
+    return("target and current are not both logicals")
+  }
+  if (!inherits(current, "CnfClause")) {
+    return("current is not a CnfClause")
+  }
+  # []-assign to preserve class and attributes
+  target[] = lapply(target[order(names(target))], sort)
+  current[] = lapply(current[order(names(current))], sort)
+
+  all.equal.list(target, current, ...)
+}
+
+#' @export
+all.equal.CnfFormula = function(target, current, ...) {
+  if (is.logical(target) && is.logical(current)) {
+    # compare truth-values directly, even if they disagree on universe
+    # (since logical atoms sometimes have universe set to NULL)
+    if (identical(c(target), c(current))) {
+      return(TRUE)
+    }
+    return("target and current are both logicals but not equal")
+  }
+  if (is.logical(target) || is.logical(current)) {
+    return("target and current are not both logicals")
+  }
+  if (!inherits(current, "CnfFormula")) {
+    return("current is not a CnfFormula")
+  }
+
+  normalize = function(formula) {
+    formula[] = lapply(formula, function(clause) {
+      clause[] = lapply(clause[order(names(clause))], sort)
+      clause
+    })
+    # sort by symbol names, then by hash
+    # note we had to sort elements internally first before we can do this!
+    formula[] = formula[order(map_chr(target, function(clause) {
+      paste0(paste(names(clause), collapse = ".__."), digest::digest(c(clause), algo = "xxhash64"))
+    }))]
+    formula
+  }
+  target = normalize(target)
+  current = normalize(current)
+
+  all.equal.list(target, current, ...)
+}
+
+
 
 ## to test:
 # subsumption
@@ -982,11 +1063,3 @@ print.CnfFormula = function(x, ...) {
 # so, if  clause X and clause Y have a symbol in common where the values are disjoint, the disjunction of the rest is implied?
 
 
-# This is not right
-
-# !(X %among% c("a", "b") | Y %among% c("d", "e")) &
-#   Z %among% c("g", "h")
-# CnfFormula:
-#      (X ∈ {c})
-#    & (Y ∈ {f})
-#    & (Z ∈ {g, h})

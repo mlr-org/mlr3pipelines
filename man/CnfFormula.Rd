@@ -57,8 +57,9 @@ Z = CnfSymbol(u, "Z", c("g", "h", "i"))
   Z \%among\% c("g", "h")
 
 # Negation of a formula
-!(X \%among\% c("a", "b") | Y \%among\% c("d", "e")) &
-  Z \%among\% c("g", "h")
+# Note the parentheses, otherwise `!` would be applied to the first clause only.
+!((X \%among\% c("a", "b") | Y \%among\% c("d", "e")) &
+   Z \%among\% c("g", "h"))
 
 ## unit propagation
 # The second clause can not be satisfied when X is "b", so "b" it can be
