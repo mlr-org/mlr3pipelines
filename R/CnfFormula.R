@@ -388,7 +388,7 @@ CnfClause = function(atoms) {
 #'
 #' ## hidden tautology elimination
 #' # The first two statements can only be satisfied if Y is either "d" or "e",
-#' # since when X is "a", Y must be "e", and when X is "b", Y must be "d".
+#' # since when X is "a" then Y must be "e", and when X is "b" then Y must be "d".
 #' # The third statement is therefore implied by the first two, and can be
 #' # removed.
 #' (X %among% "a" | Y %among% "d") &
