@@ -12,10 +12,77 @@
 # the conditions under which an error is thrown.
 
 # Container object for possible branch conditions.
+
+
+
+#' @title Symbol Table for CNF Formulas
+#'
+#' @description
+#' A symbol table for CNF formulas. The `CnfUniverse` is a by-reference object
+#' that stores the domain of each symbol. Symbols are created with [`CnfSymbol()`]
+#' and can be retrieved with `[[` or `$`.
+#'
+#' It is only possible to combine symbols from the same (identical) universe.
+#'
+#' This is part of the CNF representation tooling, which is currently considered
+#' experimental; it is for internal use.
+#'
+#' @return A new `CnfUniverse` object.
+#' @examples
+#' u = CnfUniverse()
+#' X = CnfSymbol(u, "X", c("a", "b", "c"))
+#' Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+#'
+#' u$X
+#' u[["Y"]]
+#'
+#' X %among% c("a", "d")
+#' u$X %among% c("a", "d")
+#' Y %among% c("d", "e", "f")
+#' Y %among% character(0)
+#'
+#' u$X %among% "a" | u$Y %among% "d"
+#' @family CNF representation objects
+#' @keywords internal
+#' @export
 CnfUniverse = function() structure(new.env(parent = emptyenv()), class = "CnfUniverse")
 
 # We represent symbols through a name and a pointer to their universe.
 # We only allow operations between symbols that are in the same universe.
+#' @title Symbols for CNF Formulas
+#'
+#' @description
+#' Representation of Symbols used in CNF formulas. Symbols have a name and a
+#' domain (a set of possible values), and are stored in a [`CnfUniverse`].
+#'
+#' Once created, it is currently not intended to modify or delete symbols.
+#'
+#' Symbols can be used in CNF formulas by creating [`CnfAtom`] objects, either
+#' by using the `%among%` operator or by using the [`CnfAtom()`] constructor
+#' explicitly.
+#'
+#' This is part of the CNF representation tooling, which is currently considered
+#' experimental; it is for internal use.
+#'
+#' @param universe ([`CnfUniverse`]) \cr
+#'   The universe in which the symbol is defined.
+#' @param name (`character(1)`) \cr
+#'   The name of the symbol.
+#' @param domain (`character`) \cr
+#'   The domain, i.e. the set of possible values for the symbol.
+#'   Must not be empty.
+#' @return A new `CnfSymbol` object.
+#' @examples
+#' u = CnfUniverse()
+#' X = CnfSymbol(u, "X", c("a", "b", "c"))
+#'
+#' X %among% c("a", "b")
+#' X %among% "a"
+#' X %among% character(0)
+#' X %among% c("a", "b", "c")
+#' @family CNF representation objects
+#' @keywords internal
+#' @export
 CnfSymbol = function(universe, name, domain) {
   assert_class(universe, "CnfUniverse")
   assert_string(name)
@@ -32,6 +99,7 @@ CnfSymbol = function(universe, name, domain) {
 }
 
 # We allow retrieving symbols from the universe by name.
+#' @export
 `[[.CnfUniverse` = function(universe, name) {
   assert_string(name)
   if (!exists(name, universe)) {
@@ -44,9 +112,75 @@ CnfSymbol = function(universe, name, domain) {
   )
 }
 
+#' @export
 `$.CnfUniverse` = `[[.CnfUniverse`
 
 # An expression of the form "X %in% {x1, x2, x3}"
+#' @title Atoms for CNF Formulas
+#'
+#' @description
+#' `Atom` objects represent a single statement that is used to build up CNF formulae.
+#' They are mostly intermediate, created using the [`%among%`] operator or [`CnfAtom()`]
+#' directly, and combined into [`CnfClause`] and [`CnfFormula`] objects.
+#' [`CnfClause`] and [`CnfFormula`] do not, however, contain [`Atom`] objects directly,
+#'
+#' `Atom`s contain an indirect reference to a [`CnfSymbol`] by referencing its name
+#' and its [`CnfUniverse`]. They furthermore contain a set of values. An `Atom`
+#' represents a statement asserting that the given symbol takes up one of the
+#' given values.
+#'
+#' If the set of values is empty, the `Atom` represents a contradiction (FALSE).
+#' If it is the full domain of the symbol, the `Atom` represents a tautology (TRUE).
+#' These values can be converted to, and from, `logical(1)` values using `as.logical()`
+#' and `as.CnfAtom()`.
+#'
+#' `Atom` objects can be negated using the `!` operator, which will return the `Atom`
+#' representing set membership in the complement of the symbol with respect to its domain.
+#' `Atom`s can furthermore be combined using the `|` operator to form a [`CnfClause`],
+#' and using the `&` operator to form a [`CnfFormula`]. This happens even if the
+#' resulting statement could be represented as a single `Atom`.
+#'
+#' This is part of the CNF representation tooling, which is currently considered
+#' experimental; it is for internal use.
+#'
+#' @details
+#' We would have preferred to overload the `%in%` operator, but this is currently
+#' not easily possible in R. We therefore created the `%among%` operator.
+#'
+#' @param symbol ([`CnfSymbol`]) \cr
+#'   The symbol to which the atom refers.
+#' @param values (`character`) \cr
+#'   The values that the symbol can take.
+#' @param e1 (`CnfSymbol`) \cr
+#'   Left-hand side of the `%among%` operator.
+#'   Passed as `symbol` to `CnfAtom()`.
+#' @param e2 (`character`) \cr
+#'   Right-hand side of the `%among%` operator.
+#'   Passed as `values` to `CnfAtom()`.
+#' @param x (any) \cr
+#'   The object to be coerced to a `CnfAtom` by `as.CnfAtom`.
+#'   Only `logical(1)` and `CnfAtom` itself are currently supported.
+#' @return A new `CnfAtom` object.
+#' @examples
+#' u = CnfUniverse()
+#' X = CnfSymbol(u, "X", c("a", "b", "c"))
+#'
+#' CnfAtom(X, c("a", "b"))
+#' X %among% "a"
+#' X %among% character(0)
+#' X %among% c("a", "b", "c")
+#'
+#' as.logical(X %among% character(0))
+#' as.CnfAtom(TRUE)
+#'
+#' !(X %among% "a")
+#'
+#' X %among% "a" | X %among% "b"  # creates a CnfClause
+#'
+#' X %among% "a" & X %among% c("a", "b")  # creates a CnfFormula
+#' @family CNF representation objects
+#' @keywords internal
+#' @export
 CnfAtom = function(symbol, values) {
   assert_class(symbol, "CnfSymbol")
   domain = get(symbol, attr(symbol, "universe"))
@@ -74,10 +208,88 @@ CnfAtom = function(symbol, values) {
 
 # construct CnfAtom with `X %among% c("a", "b", "c")`
 # we cannot overload `%in%`, unfortunately
-`%among%` = CnfAtom
+#' @export
+#' @rdname CnfAtom
+`%among%` = function(e1, e2) {
+  UseMethod("%among%")
+}
+
+#' @export
+`%among%.CnfSymbol` = function(e1, e2) {
+  CnfAtom(e1, e2)
+}
+
+#' @export
+`%among%.default` = function(e1, e2) {
+  stop("%among% operation not defined for LHS. %among% should typically be used with a CnfSymbol.")
+}
 
 # A clause is a disjunction of atoms.
 # X %among% c("a", "b", "c") | Y %among% c("d", "e", "f")
+
+#' @title Clauses in CNF Formulas
+#'
+#' @description
+#' A `CnfClause` is a disjunction of [`CnfAtom`] objects. It represents a statement
+#' that is true if at least one of the atoms is true. These are for example of the form
+#' ```r
+#'   X %among% c("a", "b", "c") | Y %among% c("d", "e", "f") | ...
+#' ```
+#'
+#' `CnfClause` objects can be constructed explicitly, using the `CnfClause()` constructor,
+#' or implicitly, by using the `|` operator on [`CnfAtom`]s or other `CnfClause` objects.
+#'
+#' Upon construction, the `CnfClause` is simplified by (1) removing contradictions, (2) unifying
+#' atoms that refer to the same symbol, and (3) evaluating to `TRUE` if any atom is `TRUE`.
+#' Note that the order of atoms in a clause is not preserved.
+#'
+#' If a `CnfClause` contains no atoms, or only `FALSE` atoms, it evaluates to `FALSE`.
+#' If it contains at least one atom that is always true, the clause evaluates to `TRUE`.
+#' These values can be converted to, and from, `logical(1)` values using `as.logical()`
+#' and `as.CnfClause()`.
+#'
+#' `CnfClause` objects can be negated using the `!` operator, and combined using the
+#' `&` operator. Both of these operations return a [`CnfFormula`], even if the result
+#' could in principle be represented as a single `CnfClause`.
+#'
+#' This is part of the CNF representation tooling, which is currently considered
+#' experimental; it is for internal use.
+#'
+#' @param atoms (`list` of [`CnfAtom`]) \cr
+#'   A list of [`CnfAtom`] objects. The clause represents the disjunction of these atoms.
+#' @param x (any) \cr
+#'   The object to be coerced to a `CnfClause` by `as.CnfClause`.
+#'   Only `logical(1)`, [`CnfAtom`], and `CnfClause` itself are currently supported.
+#' @return A new `CnfClause` object.
+#' @examples
+#' u = CnfUniverse()
+#' X = CnfSymbol(u, "X", c("a", "b", "c"))
+#' Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+#'
+#' CnfClause(list(X %among% c("a", "b"), Y %among% c("d", "e")))
+#' X %among% c("a", "b") | Y %among% c("d", "e")
+#'
+#' as.CnfClause(X %among% c("a", "b"))
+#'
+#' # The same symbols are unified
+#' X %among% "a" | Y %among% "d" | X %among% "b"
+#'
+#' # tautology evaluates to TRUE
+#' X %among% "a" | X %among% "b" | X %among% "c"
+#'
+#' # contradictions are removed
+#' X %among% "a" | Y %among% character(0)
+#'
+#' # create CnfFormula:
+#' !(X %among% "a" | Y %among% "d")
+#'
+#' # also a CnfFormula, even if it contains a single clause:
+#' !CnfClause(list(X %among% "a"))
+#' (X %among% c("a", "c") | Y %among% "d") &
+#'   (X %among% c("a", "b") | Y %among% "d")
+#' @family CNF representation objects
+#' @keywords internal
+#' @export
 CnfClause = function(atoms) {
   assert_list(atoms, types = "CnfAtom")
   if (!length(atoms)) {
@@ -115,6 +327,94 @@ CnfClause = function(atoms) {
 
 # A formula is a conjunction of clauses.
 # (X %among% c("a", "b", "c") | Y %among% c("d", "e", "f")) & (Z %among% c("g", "h", "i"))
+#' @title CNF Formulas
+#'
+#' @description
+#' A `CnfFormula` is a conjunction of [`CnfClause`] objects. It represents a statement
+#' that is true if all of the clauses are true. These are for example of the form
+#' ```r
+#'   (X %among% "a" | Y %among% "d") & Z %among% "g"
+#' ```
+#'
+#' `CnfFormula` objects can be constructed explicitly, using the `CnfFormula()` constructor,
+#' or implicitly, by using the `&` operator on [`CnfAtom`]s, [`CnfClause`]s, or other `CnfFormula` objects.
+#'
+#' Upon construction, the `CnfFormula` is simplified by using various heuristics.
+#' This includes unit propagation, subsumption elimination, and hidden tautology elimination.
+#' Note that the order of clauses in a formula is not preserved.
+#'
+#' If a `CnfFormula` contains no clauses, or only `TRUE` clauses, it evaluates to `TRUE`.
+#' If it contains at least one clause that is always false, the formula evaluates to `FALSE`.
+#' These values can be converted to, and from, `logical(1)` values using `as.logical()`
+#' and `as.CnfFormula()`.
+#'
+#' `CnfFormula` objects can be negated using the `!` operator. Beware that this
+#' may lead to an exponential blow-up in the number of clauses.
+#'
+#' This is part of the CNF representation tooling, which is currently considered
+#' experimental; it is for internal use.
+#'
+#' @param clauses (`list` of [`CnfClause`]) \cr
+#'   A list of [`CnfClause`] objects. The formula represents the conjunction of these clauses.
+#' @param x (any) \cr
+#'   The object to be coerced to a `CnfFormula` by `as.CnfFormula`.
+#'   Only `logical(1)`, [`CnfAtom`], [`CnfClause`], and `CnfFormula` itself are currently supported.
+#' @return A new `CnfFormula` object.
+#' @examples
+#' u = CnfUniverse()
+#' X = CnfSymbol(u, "X", c("a", "b", "c"))
+#' Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+#' Z = CnfSymbol(u, "Z", c("g", "h", "i"))
+#'
+#' (X %among% c("a", "b") | Y %among% c("d", "e")) &
+#'   Z %among% c("g", "h")
+#'
+#' # Negation of a formula
+#' !(X %among% c("a", "b") | Y %among% c("d", "e")) &
+#'   Z %among% c("g", "h")
+#'
+#' ## unit propagation
+#' # The second clause can not be satisfied when X is "b", so it can be removed
+#' # from the first clause.
+#' (X %among% c("a", "b") | Y %among% c("d", "e")) &
+#'   X %among% c("a", "c")
+#'
+#' ## subsumption elimination
+#' # The first clause is a subset of the second clause; whenever the
+#' # first clause is satisfied, the second clause is satisfied as well, so it
+#' # can be removed.
+#' (X %among% "a" | Y %among% c("d", "e")) &
+#'   (X %among% c("a", "b") | Y %among% c("d", "e") | Z %among% "g")
+#'
+#' ## hidden tautology elimination
+#' # The first two statements can only be satisfied if Y is either "d" or "e",
+#' # since when X is "a", Y must be "e", and when X is "b", Y must be "d".
+#' # The third statement is therefore implied by the first two, and can be
+#' # removed.
+#' (X %among% "a" | Y %among% "d") &
+#'   (X %among% "b" | Y %among% "e") &
+#'   (Y %among% c("d", "e"))
+#'
+#' ## Simple contradictions are recognized:
+#' (X %among% "a") & (X %among% "b")
+#' # Tautologies are preserved
+#' (X %among% c("a", "b", "c")) & (Y %among% c("d", "e", "f"))
+#'
+#' # But not all contradictions are recognized.
+#' # Builtin heuristic CnfFormula preprocessing is not a SAT solver.
+#' contradiction <- (X %among% "a" | Y %among% "d") &
+#'   (X %among% "b" | Y %among% "e") &
+#'   (X %among% "c" | Y %among% "f")
+#' contradiction
+#'
+#' # Negation of a contradiction results in a tautology, which is recognized
+#' # and simplified to TRUE. However, note that this operation (1) generally has
+#' # exponential complexity in the number of terms and (2) is currently also not
+#' # particularly well optimized
+#' !contradiction
+#' @family CNF representation objects
+#' @keywords internal
+#' @export
 CnfFormula = function(clauses) {
   assert_list(clauses, types = "CnfClause")
   if (!length(clauses)) {
@@ -255,6 +555,7 @@ simplify_cnf = function(entries, universe) {
   )
 }
 
+#' @export
 `&.CnfFormula` = function(e1, e2) {
   e1 = as.CnfFormula(e1)
   e2 = as.CnfFormula(e2)
@@ -268,6 +569,7 @@ simplify_cnf = function(entries, universe) {
   simplify_cnf(c(e1, e2), attr(e1, "universe"))
 }
 
+#' @export
 `|.CnfFormula` = function(e1, e2) {
   e1 = as.CnfFormula(e1)
   e2 = as.CnfFormula(e2)
@@ -307,6 +609,7 @@ simplify_cnf = function(entries, universe) {
   simplify_cnf(unlist(distributed, recursive = FALSE), universe)
 }
 
+#' @export
 `&.CnfClause` = function(e1, e2) {
   if (isFALSE(e1)) return(e1)
   if (isFALSE(e2)) return(e2)
@@ -323,6 +626,7 @@ simplify_cnf = function(entries, universe) {
   }
 }
 
+#' @export
 `|.CnfClause` = function(e1, e2) {
   if (isFALSE(e1)) return(e2)
   if (isFALSE(e2)) return(e1)
@@ -348,6 +652,7 @@ simplify_cnf = function(entries, universe) {
   as.CnfFormula(e1) | as.CnfFormula(e2)
 }
 
+#' @export
 `&.CnfAtom` = function(e1, e2) {
   if (isFALSE(e1)) return(e1)
   if (isFALSE(e2)) return(e2)
@@ -364,6 +669,7 @@ simplify_cnf = function(entries, universe) {
   }
 }
 
+#' @export
 `|.CnfAtom` = function(e1, e2) {
   if (isFALSE(e1)) return(e2)
   if (isFALSE(e2)) return(e1)
@@ -377,6 +683,7 @@ simplify_cnf = function(entries, universe) {
   }
 }
 
+#' @export
 `!.CnfAtom` = function(x) {
   if (is.logical(x)) {
     not_x = if (x) FALSE else TRUE  # can't use '!' here...
@@ -390,6 +697,7 @@ simplify_cnf = function(entries, universe) {
   )
 }
 
+#' @export
 `!.CnfClause` = function(x) {
   if (is.logical(x)) {
     return(as.CnfClause(!unclass(x)))
@@ -397,6 +705,7 @@ simplify_cnf = function(entries, universe) {
   !as.CnfFormula(x)
 }
 
+#' @export
 `!.CnfFormula` = function(x) {
   universe = attr(x, "universe")
   negated_formulae = lapply(x, function(clause) {
@@ -414,22 +723,32 @@ simplify_cnf = function(entries, universe) {
   Reduce(function(x, y) x | y, negated_formulae)
 }
 
+#' @rdname CnfFormula
+#' @export
 as.CnfFormula = function(x) {
   UseMethod("as.CnfFormula")
 }
 
+#' @rdname CnfClause
+#' @export
 as.CnfClause = function(x) {
   UseMethod("as.CnfClause")
 }
 
+#' @rdname CnfAtom
+#' @export
 as.CnfAtom = function(x) {
   UseMethod("as.CnfAtom")
 }
 
+#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfFormula)
 chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
+#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfClause)
 chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
+#' @rawNamespace if (getRversion() >= "4.3.0") S3method(chooseOpsMethod,CnfAtom)
 chooseOpsMethod.CnfAtom <- function(x, y, mx, my, cl, reverse) TRUE
 
+#' @export
 as.CnfFormula.logical = function(x) {
   assert_flag(x)
   return(structure(
@@ -439,18 +758,22 @@ as.CnfFormula.logical = function(x) {
   ))
 }
 
+#' @export
 as.CnfFormula.CnfAtom = function(x) {
   as.CnfFormula(CnfClause(list(x)))
 }
 
+#' @export
 as.CnfFormula.CnfClause = function(x) {
   CnfFormula(list(x))
 }
 
+#' @export
 as.CnfFormula.CnfFormula = function(x) {
   x
 }
 
+#' @export
 as.CnfAtom.logical = function(x) {
   assert_flag(x)
   return(structure(
@@ -460,6 +783,12 @@ as.CnfAtom.logical = function(x) {
   ))
 }
 
+#' @export
+as.CnfAtom.CnfAtom = function(x) {
+  x
+}
+
+#' @export
 as.CnfClause.logical = function(x) {
   assert_flag(x)
   return(structure(
@@ -469,6 +798,17 @@ as.CnfClause.logical = function(x) {
   ))
 }
 
+#' @export
+as.CnfClause.CnfAtom = function(x) {
+  CnfClause(list(x))
+}
+
+#' @export
+as.CnfClause.CnfClause = function(x) {
+  x
+}
+
+#' @export
 as.CnfFormula.logical = function(x) {
   assert_flag(x)
   structure(
@@ -478,10 +818,22 @@ as.CnfFormula.logical = function(x) {
   )
 }
 
+#' @export
+as.CnfAtom.default = function(x) {
+  stop("Cannot convert object to CnfAtom.")
+}
+
+#' @export
+as.CnfClause.default = function(x) {
+  stop("Cannot convert object to CnfClause.")
+}
+
+#' @export
 as.CnfFormula.default = function(x) {
   stop("Cannot convert object to CnfFormula.")
 }
 
+#' @export
 as.logical.CnfFormula = function(x) {
   if (is.logical(x)) {
     return(unclass(x))
@@ -489,6 +841,7 @@ as.logical.CnfFormula = function(x) {
   return(NA)
 }
 
+#' @export
 as.logical.CnfClause = function(x) {
   if (is.logical(x)) {
     return(unclass(x))
@@ -496,6 +849,7 @@ as.logical.CnfClause = function(x) {
   return(NA)
 }
 
+#' @export
 as.logical.CnfAtom = function(x) {
   if (is.logical(x)) {
     return(unclass(x))
@@ -503,6 +857,7 @@ as.logical.CnfAtom = function(x) {
   return(NA)
 }
 
+#' @export
 print.CnfUniverse = function(x, ...) {
   if (!length(x)) {
     cat("CnfUniverse (empty).\n")
@@ -515,11 +870,13 @@ print.CnfUniverse = function(x, ...) {
   invisible(x)
 }
 
+#' @export
 print.CnfSymbol = function(x, ...) {
   cat(sprintf("CnfSymbol '%s' with domain {%s}.\n", c(x), paste(get(x, attr(x, "universe")), collapse = ", ")))
   invisible(x)
 }
 
+#' @export
 print.CnfAtom = function(x, ...) {
   if (isTRUE(x)) {
     cat("CnfAtom: <TRUE>\n")
@@ -531,6 +888,7 @@ print.CnfAtom = function(x, ...) {
   invisible(x)
 }
 
+#' @export
 format.CnfAtom = function(x, ...) {
   if (isTRUE(x)) {
     return("CnfAtom(FALSE)")
@@ -541,6 +899,7 @@ format.CnfAtom = function(x, ...) {
   }
 }
 
+#' @export
 print.CnfClause = function(x, ...) {
   if (isTRUE(x)) {
     cat("CnfClause: TRUE\n")
@@ -556,6 +915,7 @@ print.CnfClause = function(x, ...) {
   invisible(x)
 }
 
+#' @export
 format.CnfClause = function(x, ...) {
   if (isTRUE(x)) {
     return("CnfClause(TRUE)")
@@ -566,6 +926,7 @@ format.CnfClause = function(x, ...) {
   }
 }
 
+#' @export
 format.CnfClause = function(x, ...) {
   if (isTRUE(x)) {
     return("<CnfClause T>")
@@ -576,6 +937,7 @@ format.CnfClause = function(x, ...) {
   }
 }
 
+#' @export
 print.CnfFormula = function(x, ...) {
   if (isTRUE(x)) {
     cat("CnfFormula: TRUE\n")
