@@ -634,7 +634,7 @@ simplify_cnf = function(entries, universe) {
           # We only do this if self subsumption elimination did not occur.
           #
           # We eliminate based on an implied clause (A - s | B - s)
-          # Since we eill forget about this clause after this iteration, we have to eliminate all clauses with size larger or equal to ||A | B|| - 1
+          # Since we will forget about this clause after this iteration, we have to eliminate all clauses with size larger or equal to ||A | B|| - 1
           # loop down from large to small, since then we can break once we find a clause with insufficient entries
           for (k in rev(seq_along(entries))) {
             if (k == i || k == j || eliminated[[k]]) next
@@ -652,7 +652,6 @@ simplify_cnf = function(entries, universe) {
 
     }
     entries = entries[!eliminated]
-    if (length(entries) < 2) break  # no need to simplify further, even if can_simplify was set to TRUE by SSE
   }
   structure(
     if (!length(entries)) TRUE else entries,
