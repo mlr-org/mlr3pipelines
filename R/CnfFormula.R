@@ -577,7 +577,7 @@ simplify_cnf = function(entries, universe) {
           # Let's try self subsumption elimination first
           if (length(cnames) == length(ei)) {
             # cnames is the union of symbols in ei and ej.
-            # If it is different from max(length(ei), length(ej)), then ei and ej can not be subsets of one another.
+            # If length(cnames) is different from max(length(ei), length(ej)), then ei and ej can not be subsets of one another.
             # Since j < i, length(ej) <= length(ei).
 
             # ej is usually smaller than ei, so often only ej can be a subset of ei.
@@ -637,7 +637,6 @@ simplify_cnf = function(entries, universe) {
               next
             }
           }
-
           # Hidden Tautology Elimination
           #
           # We only do this if self subsumption elimination did not occur.
