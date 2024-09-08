@@ -586,7 +586,7 @@ simplify_cnf = function(entries, universe) {
             ei_without_s = ei[cnames_s]
             do_sse = identical(cnames[cnames_s], c(ei_without_s))
             # if they have the same number of terms, ei could be a subset of ej.
-            # However, then we can ont rely on the order of values in the union being correct.
+            # However, then we can not rely on the order of values in the union being correct.
             do_sse_reverse = (!do_sse && (length(ei) == length(ej)) &&
                               all(sapply(cnames_s, function(s2) all(ei[[s2]] %in% ej[[s2]]))))
             if (do_sse_reverse) {
