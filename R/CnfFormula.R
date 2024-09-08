@@ -604,6 +604,22 @@ simplify_cnf = function(entries, universe) {
 
             if (do_sse || do_sse_reverse) {
 
+              if (length(new_entry) == 1) {
+                # we have a unit clause now
+
+                # It could happen that we eliminate the entry further, in which
+                # case units[[]] would get stale, but then we return_false anyway.
+                units[[names(new_entry)]] = new_entry[[1]]
+                can_simplify = TRUE  # do unit elimination all over again
+                ## TODO: we could probably make this more efficient by only unit-eliminating the terms that are new
+              }
+
+              if (!length(new_entry)) {
+                # we have a contradiction now
+                # Maybe this could happen if we SS-Eliminate multiple symbols from a clause in a row.
+                return(return_false)
+              }
+
               # What can have happened now is that the newly created element can eliminate other elements.
               # If it can eliminate the current element i, that means it is a subset of ei, which only happens if ej\s is a subset of ei\s. However, in that case, we always want to keep element i.
               # We therefore only need to loop up to i - 1.
@@ -617,13 +633,6 @@ simplify_cnf = function(entries, universe) {
                 if (all(cnames_s %in% names(ek)) && all(sapply(cnames_s, function(s2) all(new_entry[[s2]] %in% ek[[s2]])))) {
                   eliminated[[k]] = TRUE
                 }
-              }
-
-              if (length(new_entry) == 1) {
-                # we have a unit clause now
-                units[[names(new_entry)]] = new_entry[[1]]
-                can_simplify = TRUE  # do unit elimination all over again
-                ## TODO: we could probably make this more efficient by only unit-eliminating the terms that are new
               }
               next
             }
