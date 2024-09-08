@@ -10,8 +10,9 @@ CnfClause(atoms)
 as.CnfClause(x)
 }
 \arguments{
-\item{atoms}{(\code{list} of \code{\link{CnfAtom}}) \cr
-A list of \code{\link{CnfAtom}} objects. The clause represents the disjunction of these atoms.}
+\item{atoms}{(\code{list} of (\code{\link{CnfAtom}} | \code{CnfClause})) \cr
+A list of \code{\link{CnfAtom}} or other \code{CnfClause} objects.
+The clause represents the disjunction of these atoms.}
 
 \item{x}{(any) \cr
 The object to be coerced to a \code{CnfClause} by \code{as.CnfClause}.
@@ -32,7 +33,10 @@ or implicitly, by using the \code{|} operator on \code{\link{CnfAtom}}s or other
 
 Upon construction, the \code{CnfClause} is simplified by (1) removing contradictions, (2) unifying
 atoms that refer to the same symbol, and (3) evaluating to \code{TRUE} if any atom is \code{TRUE}.
-Note that the order of atoms in a clause is not preserved
+Note that the order of atoms in a clause is not preserved.
+
+Using \code{CnfClause()} on lists that contain other \code{CnfClause} objects will create
+a clause that is the disjunction of all atoms in all clauses.
 
 If a \code{CnfClause} contains no atoms, or only \code{FALSE} atoms, it evaluates to \code{FALSE}.
 If it contains at least one atom that is always true, the clause evaluates to \code{TRUE}.

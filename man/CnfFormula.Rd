@@ -31,9 +31,13 @@ that is true if all of the clauses are true. These are for example of the form
 or implicitly, by using the \code{&} operator on \code{\link{CnfAtom}}s, \code{\link{CnfClause}}s, or other \code{CnfFormula} objects.
 
 Upon construction, the \code{CnfFormula} is simplified by using various heuristics.
-This includes unit propagation, subsumption elimination, and hidden tautology elimination
+This includes unit propagation, (self) subsumption elimination, and hidden tautology elimination
 (see examples).
 Note that the order of clauses in a formula is not preserved.
+
+Using \code{CnfFormula()} on lists that contain other \code{CnfFormula} objects will create
+a formula that is the conjunction of all clauses in all formulas.
+This may be somewhat more efficient than applying \code{&} many times in a row.
 
 If a \code{CnfFormula} contains no clauses, or only \code{TRUE} clauses, it evaluates to \code{TRUE}.
 If it contains at least one clause that is, by itself, always false, the formula evaluates to \code{FALSE}.
@@ -73,6 +77,12 @@ Z = CnfSymbol(u, "Z", c("g", "h", "i"))
 # second clause can be removed.
 (X \%among\% "a" | Y \%among\% c("d", "e")) &
   (X \%among\% c("a", "b") | Y \%among\% c("d", "e") | Z \%among\% "g")
+
+## self subsumption elimination
+# If the first clause is satisfied but X is not "a", then Y must be "e".
+# The `Y \%among\% "d"` part of the first clause can therefore be removed.
+(X \%among\% c("a", "b") | Y \%among\% "d") &
+  (X \%among\% "a" | Y \%among\% "e")
 
 ## hidden tautology elimination
 # The first two statements can only be satisfied if Y is either "d" or "e",
