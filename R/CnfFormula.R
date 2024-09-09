@@ -568,8 +568,10 @@ simplify_cnf = function(entries, universe) {
         # Putting ei[[s2]] first on purpose, since union() preserves the order of the first argument.
         # If and only if ej[-s] is a subset of ei[-s], then cunion[-s] will be the same as ei[-s].
         delayedAssign("cunion", sapply(cnames, function(s2) union(ei[[s2]], ej[[s2]]), simplify = FALSE))
+
+        nameshift = 0  # in case we eliminate names from ej, we need to shift the indices for later loops iterations
         for (no in which_name_overlap) {
-          s = names(ej)[[no]]
+          s = names(ej)[[no - nameshift]]
           # intersection is not 0 --> try next one
           if (length(intersect(ej[[s]], ei[[s]]))) next
           cnames_s = setdiff(cnames, s)
@@ -595,6 +597,7 @@ simplify_cnf = function(entries, universe) {
               ej[[s]] = NULL
               new_entry = entries[[j]] = ej
               dont_eliminate = j
+              nameshift = nameshift + 1
             } else if (do_sse) {
               # ej is a subset of ei
               # --> eliminate s from ei
