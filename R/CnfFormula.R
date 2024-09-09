@@ -355,7 +355,7 @@ CnfClause = function(atoms) {
 #' or implicitly, by using the `&` operator on [`CnfAtom`]s, [`CnfClause`]s, or other `CnfFormula` objects.
 #'
 #' Upon construction, the `CnfFormula` is simplified by using various heuristics.
-#' This includes unit propagation, (self) subsumption elimination, and hidden tautology elimination
+#' This includes unit propagation, subsumption elimination, and self/hidden subsumption elimination
 #' (see examples).
 #' Note that the order of clauses in a formula is not preserved.
 #'
@@ -396,7 +396,7 @@ CnfClause = function(atoms) {
 #'    Z %among% c("g", "h"))
 #'
 #' ## unit propagation
-#' # The second clause can not be satisfied when X is "b", so "b" it can be
+#' # The second clause can not be satisfied when X is "b", so "b" can be
 #' # removed from the possibilities in the first clause.
 #' (X %among% c("a", "b") | Y %among% c("d", "e")) &
 #'   X %among% c("a", "c")
@@ -414,7 +414,7 @@ CnfClause = function(atoms) {
 #' (X %among% c("a", "b") | Y %among% "d") &
 #'   (X %among% "a" | Y %among% "e")
 #'
-#' ## hidden tautology elimination
+#' ## hidden subsumption elimination
 #' # The first two statements can only be satisfied if Y is either "d" or "e",
 #' # since when X is "a" then Y must be "e", and when X is "b" then Y must be "d".
 #' # The third statement is therefore implied by the first two, and can be
@@ -538,7 +538,7 @@ simplify_cnf = function(entries, universe) {
     entries = entries[order(lengths(entries))]  # removing units may have changed the order
     eliminated = logical(length(entries))
     for (i in seq_along(entries)) {
-      if (eliminated[[i]]) next  # can only happen if we do the hidden tautology elimination, which searches forward
+      if (eliminated[[i]]) next  # can only happen if we do the hidden subsumption elimination, which searches forward
       ei = entries[[i]]
       # If sym(A) is a subset of sym(B) and for each s in sym(A), val(A, s) is a subset of val(B, s), then A implies B, so B can be removed ("subsumption elimination").
       for (j in seq_len(i - 1)) {
@@ -550,8 +550,8 @@ simplify_cnf = function(entries, universe) {
           eliminated[[i]] = TRUE
           break
         }
-        # simple self subsumption and hidden tautology elimination
-        # HTE:
+        # simple self subsumption and hidden subsumption elimination
+        # HSE:
         # if s is in sym(A) and sym(B), and val(A, s) and val(B, s) are disjoint, then (A - s | B - s) is implied,
         # and all superset clauses of (A - s | B - s) can be removed.
         # we could also do this for higher order terms, intersection over X of val(X, s) == 0 etc., but this gets more complex.
@@ -640,7 +640,7 @@ simplify_cnf = function(entries, universe) {
               next
             }
           }
-          # Hidden Tautology Elimination
+          # Hidden Subsumption Elimination
           #
           # We only do this if self subsumption elimination did not occur.
           #

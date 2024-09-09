@@ -31,7 +31,7 @@ that is true if all of the clauses are true. These are for example of the form
 or implicitly, by using the \code{&} operator on \code{\link{CnfAtom}}s, \code{\link{CnfClause}}s, or other \code{CnfFormula} objects.
 
 Upon construction, the \code{CnfFormula} is simplified by using various heuristics.
-This includes unit propagation, (self) subsumption elimination, and hidden tautology elimination
+This includes unit propagation, subsumption elimination, and self/hidden subsumption elimination
 (see examples).
 Note that the order of clauses in a formula is not preserved.
 
@@ -66,7 +66,7 @@ Z = CnfSymbol(u, "Z", c("g", "h", "i"))
    Z \%among\% c("g", "h"))
 
 ## unit propagation
-# The second clause can not be satisfied when X is "b", so "b" it can be
+# The second clause can not be satisfied when X is "b", so "b" can be
 # removed from the possibilities in the first clause.
 (X \%among\% c("a", "b") | Y \%among\% c("d", "e")) &
   X \%among\% c("a", "c")
@@ -84,7 +84,7 @@ Z = CnfSymbol(u, "Z", c("g", "h", "i"))
 (X \%among\% c("a", "b") | Y \%among\% "d") &
   (X \%among\% "a" | Y \%among\% "e")
 
-## hidden tautology elimination
+## hidden subsumption elimination
 # The first two statements can only be satisfied if Y is either "d" or "e",
 # since when X is "a" then Y must be "e", and when X is "b" then Y must be "d".
 # The third statement is therefore implied by the first two, and can be
