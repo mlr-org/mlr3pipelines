@@ -1,0 +1,89 @@
+
+
+
+# MV SAT simplifier thoughts
+
+- check how fast symbol-access is by name vs. blowing up vector to access by number, vs. indirect access  x[[s[[i]]]]
+  - vs. hash table environment
+  - indirect access would enable us to have matrices with cols for 's', we could do colsums?
+- is subset-check through all(x %in% y) twice faster than length(union(x, y)), length(x), length(y)?
+
+- for every clause i, and for every symbol in that clause s, we keep a vector v[i][s] with v[i][s][j] == '0' if j[s] >= i[s]; 1 if j[s] < i[s]
+  - if s is not in i, then 0 is implied for all other clauses, so don't need to keep this
+  - likely don't need a matrix here since we will eliminate rows / cols etc. frequently and probably only need col-wise matrix-ops anyways?
+    - maybe something like colsums?
+- we start with i going down from largest to smallest (since largest we can probably eliminate quickly)
+  - we start with j going up, since we likely can eliminate fastest with small j
+    - go through all s in i and populate v[i][s][j], as well as v[j][s][i] -- but the latter only for equality!
+      - it could happen that we can eliminate j?
+        - no, because we only check subset-ness in one direction
+      - keep running tally of 1s and save to sum[i][j]
+      - check right away if we can eliminate [i]
+      - check right away if we can do HLA
+        - if so, set all 0s in v[i][s][k < j] we have already set to NA
+
+
+- maybe the other way around?
+  - i from small to large, keep vector v[i][s][j] with v[i][s][j] = 1 whenever i[s] > v[s]
+    - i from small to large, j from small to large also  (does not matter?)
+    - fill v[i][s][j]
+      - it starts with NA? and we fill v[j][s][i] with 0 if we find equality (starts with NA)?
+        - no we can not do that since in general we are comparing against j+, not j.
+      - we could potentially eliminate j
+      - we could potentially HLA to j
+    - no need to check if v[j][s][i] is 1? so can pre-fill with !v[j][s][i]?
+    - remember that we track >-relationship for small version vs. large version
+
+
+
+
+
+
+- checker for logical equivalence in tests
+
+
+
+# Ok, actual asymmetric hidden tautology elimination:
+# for a given clause C, look for other clause D that are subsets w/r/t all vars except one var 's'.
+# we can then add complement(var(D, s)) to C.
+# We might then be able to repeat this, even with clauses for which this didnt work before.
+# - why must D be a subset wrt all except one var? Because we can only add not(s). If there are more vars, then not(s, s') are two clauses.
+#   - does this mean we could replace C with two more clauses? Maybe, but these would have to be eliminated individually. May not be possible, is probablyd ifficult and out of scope.
+# - What if D is a subset wrt all vars? Then we can already subsumption eliminate C.
+# - D is a subset wrt all vars except 's', and 's' is partial overlap? We can still add the complement of var(D, s)!
+# - Why might this be better than what we already have?
+#   - potentially still quadratic in number of terms, but builds the biggest possible C before checking for elimination.
+#   - Is this truly more powerful than the current approach?
+# - We need to build up C+ and let it refer to C; if we eliminate C+, C is also eliminated.
+# - Can we greedily eliminate C / C+? Or are there cases where we need to keep either?
+# - Is it worth keeping the larger of C / C+?
+#   - What is the implication of having a D vs. D+ somewhere for this procedure?
+#     - To the degree that D has something that is outside of C, we want this to be as small as possible, because we want to grow C as much as possible, so D is preferable to D+
+#     - Suppose D has nothing outside of C, in this case we can already subsumption eliminate C, so we are indifferent to D+
+#     - Suppose subsumption elimination was not an option. At some point we were able to grow D and add something to it that is neither in C nor in D. Since D is a subset of C wrt to all except s, we can add the same thing to C. With D+ together, we could also add the complement of s and get a tautology.
+#     - But subsumption *is* an option, see line above.
+#   - So we never need to look at any C+ for the fattening procedure here.
+# - Should we keep D, even if D+ can be eliminated?
+#   - Suppose we grew D by using some E that does not have the 's' that D and C disagree on.
+#     - then E can also be used by C, since D-s is a subset of C.
+#   - Suppose we grew D by using some E that contains values in 's' that are not in C.
+#     - this may be the wrong question to ask. The question should be: Are we going to miss the complement(D, s) in C? This is the part we can't add to C once we have eliminated D.
+#   - it would be *really* nice if we could do this greedily!
+# - We can always do unit elimination
+#   - but maybe we should be smarter about it?
+# - Can we have a rule about what can be kept, what can be eliminated?
+# - Shoutout to 'Clause Elimination Procedures for CNF Formulas' by Marijn Heule, Matti Järvisalo, Armin Biere
+# - How do we efficiently calculate subsets wrt all vars except one?
+#   - How about having a subset relatoinship binary matrix for each variable?
+#     - e.g. X[v]_i,j == 1 whenever var(i, v) <= var(j, v)
+#     - doing AND for all X except v on i, j except v=s would give var(i, v) <= var(j, v) for all vsymbols except s, implying that i <= j (subset).
+#     - we could also sum the matrices up, and wherever sum{v!=s} of X[v] is n-1, we are satisfied.
+#       - this can be simplified by just calculating the sum over all matrices and subtracting X[s] one by one.
+#     - can we do transitivity in these matrices? [i] <= [j], [j]<=[k] for any [j] -> [i]<=[k] -- this is a vector dot product...
+#       - If the domains of vars are small and there are many j, calculating this directly may be faster?
+#       - Instead, suppose we already have the matrix for columns 1 ... i. We now check i+1. For agiven j
+#         - no need to check if j < i+1 and [i+1] => [j]. At most we check for equality (length equal).
+#         -  if we find [i+1] <= [j], we can immediately copy over the column of j to i+1.
+#       - other suggestion: we calculate submatrix 1..(i)x1..(i). Then add new column i+1. We can copy over all 1s immediately whenever we find a col that is a subset of i+1; However, we can at most copy i ones.
+#     - maybe there is no easy solution; possibly except ordering by size first and only comparing in one direction.
+# - does this make self subsumption elimination more efficient?

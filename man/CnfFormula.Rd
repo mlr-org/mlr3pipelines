@@ -100,7 +100,7 @@ Z = CnfSymbol(u, "Z", c("g", "h", "i"))
 
 # But not all contradictions are recognized.
 # Builtin heuristic CnfFormula preprocessing is not a SAT solver.
-contradiction <- (X \%among\% "a" | Y \%among\% "d") &
+contradiction = (X \%among\% "a" | Y \%among\% "d") &
   (X \%among\% "b" | Y \%among\% "e") &
   (X \%among\% "c" | Y \%among\% "f")
 contradiction
