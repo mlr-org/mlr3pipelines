@@ -32,7 +32,8 @@ that is true if at least one of the atoms is true. These are for example of the 
 or implicitly, by using the \code{|} operator on \code{\link{CnfAtom}}s or other \code{CnfClause} objects.
 
 \code{CnfClause} objects which are not tautologies or contradictions are named lists;
-the value ranges of each symbol can be accessed using \code{[[}.
+the value ranges of each symbol can be accessed using \code{[[}, and these clauses
+can be subset using \code{[} to get clauses containing only the indicated symbols.
 However, to get a list of \code{\link{CnfAtom}} objects, use \code{as.list()}.
 Note that the simplified form of a clause containing a contradiction is the empty list.
 
@@ -58,8 +59,9 @@ experimental; it is for internal use.
 \details{
 We are undecided whether it is a better idea to have \code{as.list()} return a named list
 or an unnamed one. Calling \code{as.list()} on a \code{CnfClause} with a tautology returns
-a tautology-atom, which does not have a name. We therefore decided to return an
-unnamed list in general. However, this behaviour may change in the future.
+a tautology-atom, which does not have a name. We currently return a named list
+for other clauses, as this makes subsetting by name commute with \code{as.list()}.
+However, this behaviour may change in the future.
 }
 \examples{
 u = CnfUniverse()

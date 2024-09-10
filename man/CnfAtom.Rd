@@ -35,26 +35,26 @@ Only \code{logical(1)} and \code{CnfAtom} itself are currently supported.}
 A new \code{CnfAtom} object.
 }
 \description{
-\code{Atom} objects represent a single statement that is used to build up CNF formulae.
+\code{CnfAtom} objects represent a single statement that is used to build up CNF formulae.
 They are mostly intermediate, created using the \code{\link{\%among\%}} operator or \code{\link[=CnfAtom]{CnfAtom()}}
 directly, and combined into \code{\link{CnfClause}} and \code{\link{CnfFormula}} objects.
-\code{\link{CnfClause}} and \code{\link{CnfFormula}} do not, however, contain \code{\link{Atom}} objects directly,
+\code{\link{CnfClause}} and \code{\link{CnfFormula}} do not, however, contain \code{\link{CnfAtom}} objects directly,
 
-\code{Atom}s contain an indirect reference to a \code{\link{CnfSymbol}} by referencing its name
-and its \code{\link{CnfUniverse}}. They furthermore contain a set of values. An \code{Atom}
+\code{CnfAtom}s contain an indirect reference to a \code{\link{CnfSymbol}} by referencing its name
+and its \code{\link{CnfUniverse}}. They furthermore contain a set of values. An \code{CnfAtom}
 represents a statement asserting that the given symbol takes up one of the
 given values.
 
-If the set of values is empty, the \code{Atom} represents a contradiction (FALSE).
-If it is the full domain of the symbol, the \code{Atom} represents a tautology (TRUE).
+If the set of values is empty, the \code{CnfAtom} represents a contradiction (FALSE).
+If it is the full domain of the symbol, the \code{CnfAtom} represents a tautology (TRUE).
 These values can be converted to, and from, \code{logical(1)} values using \code{as.logical()}
 and \code{as.CnfAtom()}.
 
-\code{Atom} objects can be negated using the \code{!} operator, which will return the \code{Atom}
+\code{CnfAtom} objects can be negated using the \code{!} operator, which will return the \code{CnfAtom}
 representing set membership in the complement of the symbol with respect to its domain.
-\code{Atom}s can furthermore be combined using the \code{|} operator to form a \code{\link{CnfClause}},
+\code{CnfAtom}s can furthermore be combined using the \code{|} operator to form a \code{\link{CnfClause}},
 and using the \code{&} operator to form a \code{\link{CnfFormula}}. This happens even if the
-resulting statement could be represented as a single \code{Atom}.
+resulting statement could be represented as a single \code{CnfAtom}.
 
 This is part of the CNF representation tooling, which is currently considered
 experimental; it is for internal use.

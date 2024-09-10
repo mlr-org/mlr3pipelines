@@ -20,8 +20,8 @@
 #' u$X
 #' u[["Y"]]
 #'
-#' X %among% c("a", "d")
-#' u$X %among% c("a", "d")
+#' X %among% c("a", "c")
+#' u$X %among% c("a", "c")
 #' Y %among% c("d", "e", "f")
 #' Y %among% character(0)
 #'

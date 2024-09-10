@@ -233,7 +233,7 @@ as.list.CnfFormula = function(x, ...) {
 }
 
 #' @export
-as.logical.CnfFormula = function(x) {
+as.logical.CnfFormula = function(x, ...) {
   if (is.logical(x)) {
     return(unclass(x))
   }
@@ -259,7 +259,7 @@ all.equal.CnfFormula = function(target, current, ...) {
 
   normalize = function(formula) {
     formula[] = lapply(unclass(formula), function(clause) {
-      clause[] = lapply(clause[order(names(clause))], sort)
+      clause[] = lapply(unclass(clause)[order(names(clause))], sort)
       clause
     })
     # sort by symbol names, then by hash

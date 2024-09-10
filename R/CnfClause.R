@@ -14,7 +14,8 @@
 #' or implicitly, by using the `|` operator on [`CnfAtom`]s or other `CnfClause` objects.
 #'
 #' `CnfClause` objects which are not tautologies or contradictions are named lists;
-#' the value ranges of each symbol can be accessed using `[[`.
+#' the value ranges of each symbol can be accessed using `[[`, and these clauses
+#' can be subset using `[` to get clauses containing only the indicated symbols.
 #' However, to get a list of [`CnfAtom`] objects, use `as.list()`.
 #' Note that the simplified form of a clause containing a contradiction is the empty list.
 #'
@@ -40,8 +41,9 @@
 #' @details
 #' We are undecided whether it is a better idea to have `as.list()` return a named list
 #' or an unnamed one. Calling `as.list()` on a `CnfClause` with a tautology returns
-#' a tautology-atom, which does not have a name. We therefore decided to return an
-#' unnamed list in general. However, this behaviour may change in the future.
+#' a tautology-atom, which does not have a name. We currently return a named list
+#' for other clauses, as this makes subsetting by name commute with `as.list()`.
+#' However, this behaviour may change in the future.
 #'
 #' @param atoms (`list` of ([`CnfAtom`] | `CnfClause`)) \cr
 #'   A list of [`CnfAtom`] or other `CnfClause` objects.
@@ -193,11 +195,50 @@ as.list.CnfClause = function(x) {
 }
 
 #' @export
-as.logical.CnfClause = function(x) {
+as.logical.CnfClause = function(x, ...) {
   if (is.logical(x)) {
     return(unclass(x))
   }
   return(NA)
+}
+
+#' @export
+`[.CnfClause` = function(x, i) {
+  if (missing(i)) return(x)
+  assert_atomic(i)
+  i = c(i)
+  x_bare = unclass(x)
+  true_length = if (isFALSE(x)) 0 else length(x_bare)
+
+  if (is.numeric(i)) {
+    i = unique(floor(i))
+  } else if (is.character(i)) {
+    i = unique(i)
+  } else if (!is.logical(i) && length(i) != 0) {
+    # we explicitly allow length(i) == 0 (empty subset)
+    stop("Invalid index type.")
+  }
+  if (length(i) == 0 || identical(i, 0) || (identical(i, FALSE) && !isFALSE((x)))) {
+    return(as.CnfClause(structure(FALSE, universe = attr(x, "universe"))))
+  }
+  if (isFALSE(x)) {
+    stop("Cannot subset a FALSE clause with anything other than 0, [], or 0-length-vector.")
+  }
+  if (isTRUE(x)) {
+    if (identical(i, 1) || identical(i, TRUE)) return(x)
+    stop("Cannot subset a TRUE clause with anything other than 0, 1, [], or 0-length-vector.")
+  }
+  assert(
+    check_numeric(i, lower = 0, upper = true_length, any.missing = FALSE),
+    check_subset(i, names(x_bare)),
+    check_logical(i, len = true_length),
+    .var.name = "i"
+  )
+  structure(
+    unclass(x)[i],
+    universe = attr(x, "universe"),
+    class = "CnfClause"
+  )
 }
 
 #' @export
@@ -219,7 +260,7 @@ all.equal.CnfClause = function(target, current, ...) {
 
   normalize = function(clause) {
     # []-assign to preserve class and attributes
-    clause[] = lapply(clause[order(names(clause))], sort)
+    clause[] = lapply(unclass(clause)[order(names(clause))], sort)
   }
 
   target = normalize(target)

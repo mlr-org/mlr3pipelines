@@ -2,26 +2,26 @@
 #' @title Atoms for CNF Formulas
 #'
 #' @description
-#' `Atom` objects represent a single statement that is used to build up CNF formulae.
+#' `CnfAtom` objects represent a single statement that is used to build up CNF formulae.
 #' They are mostly intermediate, created using the [`%among%`] operator or [`CnfAtom()`]
 #' directly, and combined into [`CnfClause`] and [`CnfFormula`] objects.
-#' [`CnfClause`] and [`CnfFormula`] do not, however, contain [`Atom`] objects directly,
+#' [`CnfClause`] and [`CnfFormula`] do not, however, contain [`CnfAtom`] objects directly,
 #'
-#' `Atom`s contain an indirect reference to a [`CnfSymbol`] by referencing its name
-#' and its [`CnfUniverse`]. They furthermore contain a set of values. An `Atom`
+#' `CnfAtom`s contain an indirect reference to a [`CnfSymbol`] by referencing its name
+#' and its [`CnfUniverse`]. They furthermore contain a set of values. An `CnfAtom`
 #' represents a statement asserting that the given symbol takes up one of the
 #' given values.
 #'
-#' If the set of values is empty, the `Atom` represents a contradiction (FALSE).
-#' If it is the full domain of the symbol, the `Atom` represents a tautology (TRUE).
+#' If the set of values is empty, the `CnfAtom` represents a contradiction (FALSE).
+#' If it is the full domain of the symbol, the `CnfAtom` represents a tautology (TRUE).
 #' These values can be converted to, and from, `logical(1)` values using `as.logical()`
 #' and `as.CnfAtom()`.
 #'
-#' `Atom` objects can be negated using the `!` operator, which will return the `Atom`
+#' `CnfAtom` objects can be negated using the `!` operator, which will return the `CnfAtom`
 #' representing set membership in the complement of the symbol with respect to its domain.
-#' `Atom`s can furthermore be combined using the `|` operator to form a [`CnfClause`],
+#' `CnfAtom`s can furthermore be combined using the `|` operator to form a [`CnfClause`],
 #' and using the `&` operator to form a [`CnfFormula`]. This happens even if the
-#' resulting statement could be represented as a single `Atom`.
+#' resulting statement could be represented as a single `CnfAtom`.
 #'
 #' This is part of the CNF representation tooling, which is currently considered
 #' experimental; it is for internal use.
@@ -153,7 +153,7 @@ as.CnfAtom.CnfAtom = function(x) {
 }
 
 #' @export
-as.logical.CnfAtom = function(x) {
+as.logical.CnfAtom = function(x, ...) {
   if (is.logical(x)) {
     return(unclass(x))
   }
