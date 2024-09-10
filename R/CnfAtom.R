@@ -30,6 +30,8 @@
 #' We would have preferred to overload the `%in%` operator, but this is currently
 #' not easily possible in R. We therefore created the `%among%` operator.
 #'
+#' The internal representation of a `CnfAtom` may change in the future.
+#'
 #' @param symbol ([`CnfSymbol`]) \cr
 #'   The symbol to which the atom refers.
 #' @param values (`character`) \cr
@@ -66,27 +68,20 @@
 #' @export
 CnfAtom = function(symbol, values) {
   assert_class(symbol, "CnfSymbol")
-  domain = get(symbol, attr(symbol, "universe"))
+  domain = attr(symbol, "universe")[[symbol]]
   assert_subset(values, domain)
   if (all(domain %in% values)) {
-    structure(
-      TRUE,
-      universe = attr(symbol, "universe"),
-      class = "CnfAtom"
-    )
+    entry = TRUE
   } else if (length(values) == 0) {
-    structure(
-      FALSE,
-      universe = attr(symbol, "universe"),
-      class = "CnfAtom"
-    )
+    entry = FALSE
   }  else {
-    structure(
-      list(symbol = c(symbol), values = unique(values)),
-      universe = attr(symbol, "universe"),
-      class = "CnfAtom"
-    )
+    entry = list(symbol = c(symbol), values = unique(values))
   }
+  structure(
+    entry,
+    universe = attr(symbol, "universe"),
+    class = "CnfAtom"
+  )
 }
 
 #' @export
@@ -145,11 +140,11 @@ as.CnfAtom.default = function(x) {
 #' @export
 as.CnfAtom.logical = function(x) {
   assert_flag(x)
-  return(structure(
+  structure(
     x,
     universe = attr(x, "universe"),
     class = "CnfAtom"
-  ))
+  )
 }
 
 #' @export
@@ -191,44 +186,31 @@ chooseOpsMethod.CnfAtom <- function(x, y, mx, my, cl, reverse) TRUE
 
 #' @export
 `&.CnfAtom` = function(e1, e2) {
-  if (isFALSE(e1)) return(e1)
-  if (isFALSE(e2)) return(e2)
-  if (isTRUE(e1)) return(e2)
-  if (isTRUE(e2)) return(e1)
-  if (inherits(e2, "CnfAtom")) {
-    e2 = CnfClause(list(e2))
-  }
-  if (inherits(e2, "CnfClause")) {
-    CnfFormula(list(CnfClause(list(e1)), e2))
-  } else {
-    # e2 is anything else -- go the lazy route
-    as.CnfFormula(e1) & as.CnfFormula(e2)
-  }
+  # Will return a CnfFormula, so we can just delegate to there.
+  # `&.CnfFormula` handles conversion.
+  `&.CnfFormula`(e1, e2)
 }
 
 #' @export
 `|.CnfAtom` = function(e1, e2) {
-  if (isFALSE(e1)) return(e2)
-  if (isFALSE(e2)) return(e1)
-  if (isTRUE(e1)) return(e1)
-  if (isTRUE(e2)) return(e2)
-  if (inherits(e2, "CnfAtom")) {
-    CnfClause(list(e1, e2))
-  } else {
-    # e2 is anything else -- go the lazy route
-    as.CnfFormula(e1) | as.CnfFormula(e2)
+  if (inherits(e2, "CnfFormula")) {
+    # `|.CnfFormula` handles conversion
+    return(`|.CnfFormula`(e1, e2))
+  } else if (is.logical(e2) || inherits(e2, "CnfAtom")) {
+    if (isFALSE(e1) || isTRUE(e2)) return(as.CnfAtom(e2))
+    if (isFALSE(e2) || isTRUE(e1)) return(e1)
   }
+  # either two proper CnfAtoms, or e2 is a CnfClause.
+  CnfClause(list(e1, e2))
 }
 
 #' @export
 `!.CnfAtom` = function(x) {
   if (is.logical(x)) {
-    not_x = if (x) FALSE else TRUE  # can't use '!' here...
-    attributes(not_x) = attributes(x)  # keep class and universe
-    return(not_x)
+    return(as.CnfAtom(!unclass(x)))
   }
   structure(
-    list(symbol = x$symbol, values = setdiff(get(x$symbol, attr(x, "universe")), x$values)),
+    list(symbol = x$symbol, values = setdiff(attr(x, "universe")[[x$symbol]], x$values)),
     universe = attr(x, "universe"),
     class = "CnfAtom"
   )

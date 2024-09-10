@@ -30,6 +30,9 @@ that is true if all of the clauses are true. These are for example of the form
 \code{CnfFormula} objects can be constructed explicitly, using the \code{CnfFormula()} constructor,
 or implicitly, by using the \code{&} operator on \code{\link{CnfAtom}}s, \code{\link{CnfClause}}s, or other \code{CnfFormula} objects.
 
+To get individual clauses from a formula, \code{[[} should not be used; instead, use \code{as.list()}.
+Note that the simplified form of a formula containing a tautology is the empty list.
+
 Upon construction, the \code{CnfFormula} is simplified by using various heuristics.
 This includes unit propagation, subsumption elimination, and self/hidden subsumption elimination
 (see examples).
@@ -57,8 +60,12 @@ X = CnfSymbol(u, "X", c("a", "b", "c"))
 Y = CnfSymbol(u, "Y", c("d", "e", "f"))
 Z = CnfSymbol(u, "Z", c("g", "h", "i"))
 
-(X \%among\% c("a", "b") | Y \%among\% c("d", "e")) &
+frm = (X \%among\% c("a", "b") | Y \%among\% c("d", "e")) &
   Z \%among\% c("g", "h")
+frm
+
+# retrieve individual clauses
+as.list(frm)
 
 # Negation of a formula
 # Note the parentheses, otherwise `!` would be applied to the first clause only.

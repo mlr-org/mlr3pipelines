@@ -91,6 +91,8 @@ bm_subsettest <- function() {
 }
 
 
+
+
 bmr <- bm_subsettest()
 
 autoplot(bmr)
@@ -109,3 +111,84 @@ round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[5, 
 # length cmp is 28% slower than all (x %in% y)
 # union is 2x slower than allin; adds 50% to length cmp
 #
+
+
+bm_extend_list <- function(times = 1) {
+  concatenating = list(
+    c("elephant", "mouse", "tiger", "cat", "dog"),
+    list(c("green", "blue", "purple"), c(1, 1, 1), 10:0),
+    c(1, 2, 3, 4, 5),
+    list(c(1, 2, 3), c("a", "b", "c"), c(1, 2, 3, 4, 5))
+  )
+
+  concatenating <- rep(concatenating, times)
+
+  microbenchmark(
+    expand = {
+      entries = list()
+      for (element in concatenating) {
+        if (is.list(element)) {
+          entries <- c(entries, element)
+        } else {
+          entries[[length(entries) + 1]] <- element
+        }
+      }
+    },
+    unlist = {
+      entries = list()
+      for (element in concatenating) {
+        if (!is.list(element)) {
+          element <- list(element)
+        }
+        entries[[length(entries) + 1]] <- element
+      }
+      entries <- unlist(entries, recursive = FALSE)
+    }
+  )
+}
+
+bm_extend_list()
+# unlist() is clearly slower
+
+bm_extend_list(10)
+
+bm_extend_list(100)
+# unlist() is clearly faster
+
+
+
+bm_create_list <- function() {
+  names <- c("elephant", "mouse", "tiger", "cat", "dog", "mouse")
+  microbenchmark(times = 1000,
+    list_plain = {
+      result = list()
+      for (n in names) {
+        result[[n]] <- n
+      }
+    },
+    list_from_env = {
+      env <- new.env()
+      for (n in names) {
+        env[[n]] <- n
+      }
+      result <- as.list(env, all.names = TRUE)
+    },
+    list_from_precise_env = {
+      env <- new.env(size = length(names))
+      for (n in names) {
+        env[[n]] <- n
+      }
+      result <- as.list(env, all.names = TRUE)
+    },
+    list_from_precise_x2_env = {
+      env <- new.env(size = length(names), parent = emptyenv())
+      for (n in names) {
+        env[[n]] <- n
+      }
+      result <- as.list(env, all.names = TRUE)
+    }
+  )
+}
+
+bm_create_list() |> autoplot()
+# plain list is faster than creating an env first; setting the size of the env and making parent = emptyenv() makes a small difference!

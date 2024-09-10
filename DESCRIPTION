@@ -98,7 +98,12 @@ Roxygen: list(markdown = TRUE, r6 = FALSE)
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Collate:
+    'CnfAtom.R'
+    'CnfClause.R'
     'CnfFormula.R'
+    'CnfFormula_simplify.R'
+    'CnfSymbol.R'
+    'CnfUniverse.R'
     'Graph.R'
     'GraphLearner.R'
     'mlr_pipeops.R'

@@ -13,6 +13,11 @@
 #' `CnfClause` objects can be constructed explicitly, using the `CnfClause()` constructor,
 #' or implicitly, by using the `|` operator on [`CnfAtom`]s or other `CnfClause` objects.
 #'
+#' `CnfClause` objects which are not tautologies or contradictions are named lists;
+#' the value ranges of each symbol can be accessed using `[[`.
+#' However, to get a list of [`CnfAtom`] objects, use `as.list()`.
+#' Note that the simplified form of a clause containing a contradiction is the empty list.
+#'
 #' Upon construction, the `CnfClause` is simplified by (1) removing contradictions, (2) unifying
 #' atoms that refer to the same symbol, and (3) evaluating to `TRUE` if any atom is `TRUE`.
 #' Note that the order of atoms in a clause is not preserved.
@@ -32,6 +37,12 @@
 #' This is part of the CNF representation tooling, which is currently considered
 #' experimental; it is for internal use.
 #'
+#' @details
+#' We are undecided whether it is a better idea to have `as.list()` return a named list
+#' or an unnamed one. Calling `as.list()` on a `CnfClause` with a tautology returns
+#' a tautology-atom, which does not have a name. We therefore decided to return an
+#' unnamed list in general. However, this behaviour may change in the future.
+#'
 #' @param atoms (`list` of ([`CnfAtom`] | `CnfClause`)) \cr
 #'   A list of [`CnfAtom`] or other `CnfClause` objects.
 #'   The clause represents the disjunction of these atoms.
@@ -45,7 +56,10 @@
 #' Y = CnfSymbol(u, "Y", c("d", "e", "f"))
 #'
 #' CnfClause(list(X %among% c("a", "b"), Y %among% c("d", "e")))
-#' X %among% c("a", "b") | Y %among% c("d", "e")
+#' cls = X %among% c("a", "b") | Y %among% c("d", "e")
+#' cls
+#'
+#' as.list(cls)
 #'
 #' as.CnfClause(X %among% c("a", "b"))
 #'
@@ -70,13 +84,8 @@
 #' @export
 CnfClause = function(atoms) {
   assert_list(atoms, types = c("CnfAtom", "CnfClause"))
-  if (!length(atoms)) {
-    return(structure(
-      FALSE,
-      universe = NULL,
-      class = "CnfClause"
-    ))
-  }
+  if (!length(atoms)) return(as.CnfClause(FALSE))
+
   entries = list()
   universe = attr(atoms[[1]], "universe")
   for (a in atoms) {
@@ -91,20 +100,21 @@ CnfClause = function(atoms) {
       next
     }
     if (inherits(a, "CnfAtom")) {
-      entries[[a$symbol]] = union(entries[[a$symbol]], a$values)
-      if (all(get(a$symbol, universe) %in% entries[[a$symbol]])) {
+      entries[[a$symbol]] = unique(c(entries[[a$symbol]], a$values))
+      if (all(universe[[a$symbol]] %in% entries[[a$symbol]])) {
         entries = TRUE
         break
       }
     } else {
       # union  with another CnfClause objects
       for (sym in names(a)) {
-        entries[[sym]] = union(entries[[sym]], a[[sym]])
-        if (all(get(sym, universe) %in% entries[[sym]])) {
+        entries[[sym]] = unique(c(entries[[sym]], a[[sym]]))
+        if (all(universe[[sym]] %in% entries[[sym]])) {
           entries = TRUE
           break
         }
       }
+      if (identical(entries, TRUE)) break
     }
   }
   structure(
@@ -173,6 +183,16 @@ as.CnfClause.CnfClause = function(x) {
 }
 
 #' @export
+as.list.CnfClause = function(x) {
+  if (isFALSE(x)) return(list())
+  x = unclass(x)
+  if (isTRUE(x)) return(as.CnfAtom(x))
+  lapply(names(x), function(sym) {
+    structure(list(symbol = sym, values = x[[sym]]), universe = attr(x, "universe"), class = "CnfAtom")
+  })
+}
+
+#' @export
 as.logical.CnfClause = function(x) {
   if (is.logical(x)) {
     return(unclass(x))
@@ -213,47 +233,21 @@ chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
 
 #' @export
 `&.CnfClause` = function(e1, e2) {
-  if (isFALSE(e1)) return(e1)
-  if (isFALSE(e2)) return(e2)
-  if (isTRUE(e1)) return(e2)
-  if (isTRUE(e2)) return(e1)
-  if (inherits(e2, "CnfAtom")) {
-    e2 = CnfClause(list(e2))
-  }
-  if (inherits(e2, "CnfClause")) {
-    CnfFormula(list(e1, e2))
-  } else {
-    # e2 is anything else -- go the lazy route
-    as.CnfFormula(e1) & as.CnfFormula(e2)
-  }
+  # Will return a CnfFormula, so we can just delegate to there.
+  # `&.CnfFormula` handles conversion.
+  `&.CnfFormula`(e1, e2)
 }
 
 #' @export
 `|.CnfClause` = function(e1, e2) {
-  if (isFALSE(e1)) return(e2)
-  if (isFALSE(e2)) return(e1)
-  if (isTRUE(e1)) return(e1)
-  if (isTRUE(e2)) return(e2)
-  if (inherits(e2, "CnfAtom")) {
-    e2 = CnfClause(list(e2))
+  if (inherits(e2, "CnfFormula")) {
+    # `|.CnfFormula` handles conversion
+    return(`|.CnfFormula`(e1, e2))
   }
-  if (inherits(e2, "CnfClause")) {
-    for (sym in names(e2)) {
-      e1[[sym]] = union(e1[[sym]], e2[[sym]])
-      if (all(get(sym, attr(e1, "universe")) %in% e1[[sym]])) {
-        return(structure(
-          TRUE,
-          universe = attr(e1, "universe"),
-          class = "CnfClause"
-        ))
-      }
-    }
-    return(e1)
-  }
-  # e2 is anything else -- go the lazy route
-  as.CnfFormula(e1) | as.CnfFormula(e2)
+  if (isFALSE(e1) || isTRUE(e2)) return(as.CnfClause(e2))
+  if (isFALSE(e2) || isTRUE(e1)) return(e1)
+  CnfClause(list(e1, e2))
 }
-
 
 #' @export
 `!.CnfClause` = function(x) {

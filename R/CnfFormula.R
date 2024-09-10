@@ -28,6 +28,9 @@
 #' `CnfFormula` objects can be constructed explicitly, using the `CnfFormula()` constructor,
 #' or implicitly, by using the `&` operator on [`CnfAtom`]s, [`CnfClause`]s, or other `CnfFormula` objects.
 #'
+#' To get individual clauses from a formula, `[[` should not be used; instead, use `as.list()`.
+#' Note that the simplified form of a formula containing a tautology is the empty list.
+#'
 #' Upon construction, the `CnfFormula` is simplified by using various heuristics.
 #' This includes unit propagation, subsumption elimination, and self/hidden subsumption elimination
 #' (see examples).
@@ -61,8 +64,12 @@
 #' Y = CnfSymbol(u, "Y", c("d", "e", "f"))
 #' Z = CnfSymbol(u, "Z", c("g", "h", "i"))
 #'
-#' (X %among% c("a", "b") | Y %among% c("d", "e")) &
+#' frm = (X %among% c("a", "b") | Y %among% c("d", "e")) &
 #'   Z %among% c("g", "h")
+#' frm
+#'
+#' # retrieve individual clauses
+#' as.list(frm)
 #'
 #' # Negation of a formula
 #' # Note the parentheses, otherwise `!` would be applied to the first clause only.
@@ -119,15 +126,11 @@
 #' @export
 CnfFormula = function(clauses) {
   assert_list(clauses, types = c("CnfClause", "CnfFormula"))
-  if (!length(clauses)) {
-    return(structure(
-      TRUE,
-      universe = NULL,
-      class = "CnfFormula"
-    ))
-  }
-  universe = attr(clauses[[1]], "universe")
+  if (!length(clauses)) return(as.CnfFormula(TRUE))
+
   entries = list()
+  other_entries = list()
+  universe = attr(clauses[[1]], "universe")
   for (cl in clauses) {
     if (isFALSE(cl)) {
       entries = FALSE
@@ -141,14 +144,17 @@ CnfFormula = function(clauses) {
       # universe; however, in that case we will break before coming here.
       stop("All clauses must be in the same universe.")
     }
-    attr(cl, "universe") = NULL
+
     ## don't unclass() here, since we check the class in the next line!
     if (inherits(cl, "CnfClause")) {
-      entries[[length(entries) + 1]] = unclass(cl)
+      entries[[length(entries) + 1]] = c(cl)
     } else {
       # union with another CnfFormula object
-      entries = c(entries, unclass(cl))
+      other_entries[[length(other_entries) + 1]] = cl
     }
+  }
+  if (length(other_entries)) {
+    entries = c(entries, unlist(other_entries, recursive = FALSE))
   }
   simplify_cnf(entries, universe)
 }
@@ -161,7 +167,7 @@ print.CnfFormula = function(x, ...) {
     cat("CnfFormula: FALSE\n")
   } else {
     cat("CnfFormula:\n     (")
-    clauses = map_chr(x, function(clause) {
+    clauses = map_chr(unclass(x), function(clause) {
       elements = map_chr(names(clause), function(sym) {
         sprintf("%s \U2208 {%s}", sym, paste(clause[[sym]], collapse = ", "))
       })
@@ -173,6 +179,7 @@ print.CnfFormula = function(x, ...) {
   invisible(x)
 }
 
+#' @export
 format.CnfFormula = function(x, ...) {
   if (isTRUE(x)) {
     return("CnfFormula: T")
@@ -220,6 +227,12 @@ as.CnfFormula.CnfFormula = function(x) {
 }
 
 #' @export
+as.list.CnfFormula = function(x, ...) {
+  if (isTRUE(x)) return(list())
+  lapply(unclass(x), structure, class = "CnfClause", universe = attr(x, "universe"))
+}
+
+#' @export
 as.logical.CnfFormula = function(x) {
   if (is.logical(x)) {
     return(unclass(x))
@@ -245,13 +258,13 @@ all.equal.CnfFormula = function(target, current, ...) {
   }
 
   normalize = function(formula) {
-    formula[] = lapply(formula, function(clause) {
+    formula[] = lapply(unclass(formula), function(clause) {
       clause[] = lapply(clause[order(names(clause))], sort)
       clause
     })
     # sort by symbol names, then by hash
     # note we had to sort elements internally first before we can do this!
-    formula[] = formula[order(map_chr(target, function(clause) {
+    formula[] = formula[order(map_chr(unclass(target), function(clause) {
       paste0(paste(names(clause), collapse = ".__."), digest::digest(c(clause), algo = "xxhash64"))
     }))]
     formula
@@ -269,10 +282,8 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
 `&.CnfFormula` = function(e1, e2) {
   e1 = as.CnfFormula(e1)
   e2 = as.CnfFormula(e2)
-  if (isTRUE(e1)) return(e2)
-  if (isTRUE(e2)) return(e1)
-  if (isFALSE(e1)) return(e1)
-  if (isFALSE(e2)) return(e2)
+  if (isTRUE(e1) || isFALSE(e2)) return(e2)
+  if (isTRUE(e2) || isFALSE(e1)) return(e1)
   if (!identical(attr(e1, "universe"), attr(e2, "universe"))) {
     stop("Both formulas must be in the same universe.")
   }
@@ -283,10 +294,8 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
 `|.CnfFormula` = function(e1, e2) {
   e1 = as.CnfFormula(e1)
   e2 = as.CnfFormula(e2)
-  if (isFALSE(e1)) return(e2)
-  if (isFALSE(e2)) return(e1)
-  if (isTRUE(e1)) return(e1)
-  if (isTRUE(e2)) return(e2)
+  if (isFALSE(e1) || isTRUE(e2)) return(e2)
+  if (isFALSE(e2) || isFALSE(e1)) return(e1)
   if (!identical(attr(e1, "universe"), attr(e2, "universe"))) {
     stop("Both formulas must be in the same universe.")
   }
@@ -298,16 +307,16 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
     e2 = tmp
   }
   # distribute || into clauses
-  distributed = lapply(e1, function(e1_clause) {
+  distributed = lapply(unclass(e1), function(e1_clause) {
     eliminated = logical(length(e2))
     for (i2 in seq_along(e2)) {
       e2_clause = e2[[i2]]
       for (sym in names(e1_clause)) {
         # add the symbols from e1_clause to e2_clause
         # (if e2_clause does not contain a symbol, it is added)
-        e2_clause[[sym]] = union(e1_clause[[sym]], e2_clause[[sym]])
+        e2_clause[[sym]] = unique(c(e1_clause[[sym]], e2_clause[[sym]]))
         # faster than test_set_equal
-        if (all(get(sym, universe) %in% e2_clause[[sym]])) {
+        if (all(universe[[sym]] %in% e2_clause[[sym]])) {
           eliminated[[i2]] = TRUE
           break
         }
@@ -322,12 +331,15 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
 
 #' @export
 `!.CnfFormula` = function(x) {
+  if (is.logical(x)) {
+    return(as.CnfFormula(!unclass(x)))
+  }
   universe = attr(x, "universe")
-  negated_formulae = lapply(x, function(clause) {
+  negated_formulae = lapply(unclass(x), function(clause) {
     CnfFormula(lapply(names(clause), function(sym) {
       # !CnfAtom(universe[[sym]], clause[[sym]])
       structure(
-        list(setdiff(get(sym, universe), clause[[sym]])),
+        list(setdiff(universe[[sym]], clause[[sym]])),
         names = sym,
         universe = universe,
         class = "CnfClause"
