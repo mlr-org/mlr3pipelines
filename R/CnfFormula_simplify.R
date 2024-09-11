@@ -195,23 +195,3 @@ simplify_cnf = function(entries, universe) {
   )
 }
 
-
-## to test:
-# subsumption
-# unit elimination
-# unit elimination makes large clause smaller, leading to additional u.e.
-# unit elimination makes large clause smaller, leading to subsumption
-
-# branch with totune is swallowed by single unbranch
-# branch with totune is swallowed by multiple unbranch
-# branches with totune can possibly lead to conflicts, but not always (multiple active inputs to unbranch, or mixed inputs to normal pipeops)
-# branches with totune always lead to conflicts (multiple active inputs to unbranch, or mixed inputs to normal pipeops, or choice between both)
-# can we recognize that a certain choice would lead to a conflict, making only other choices possible?
-
-# why does this blow up?
-#
-
-# profvis::profvis(replicate(3000, { !!(((u$A %among% "T" | u$B %among% "F") & (u$A %among% "F" | u$C %among% "T") & (u$B %among% "T" | u$C %among% "F"))) ; NULL }) -> ., simplify = FALSE)
-
-# This is because we don't eliminate (C | A) & (!C | B) & (B | A) by removing (B | A)
-# so, if  clause X and clause Y have a symbol in common where the values are disjoint, the disjunction of the rest is implied?

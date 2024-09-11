@@ -91,14 +91,15 @@ CnfClause = function(atoms) {
   entries = list()
   universe = attr(atoms[[1]], "universe")
   for (a in atoms) {
+    a_bare = c(a)
     if (!identical(attr(a, "universe"), universe)) {
       stop("All symbols must be in the same universe.")
     }
-    if (isTRUE(a)) {
+    if (isTRUE(a_bare)) {
       entries = TRUE
       break
     }
-    if (isFALSE(a)) {
+    if (isFALSE(a_bare)) {
       next
     }
     if (inherits(a, "CnfAtom")) {
@@ -128,9 +129,10 @@ CnfClause = function(atoms) {
 
 #' @export
 print.CnfClause = function(x, ...) {
-  if (isTRUE(x)) {
+  x_bare = c(x)
+  if (isTRUE(x_bare)) {
     cat("CnfClause: TRUE\n")
-  } else if (isFALSE(x)) {
+  } else if (isFALSE(x_bare)) {
     cat("CnfClause: FALSE\n")
   } else {
     cat("CnfClause:\n")
@@ -144,9 +146,10 @@ print.CnfClause = function(x, ...) {
 
 #' @export
 format.CnfClause = function(x, ...) {
-  if (isTRUE(x)) {
+  x_bare = c(x)
+  if (isTRUE(x_bare)) {
     return("CnfClause: T")
-  } else if (isFALSE(x)) {
+  } else if (isFALSE(x_bare)) {
     return("CnfClause: F")
   } else {
     return(sprintf("CnfClause(%s)", length(x)))
@@ -208,7 +211,7 @@ as.logical.CnfClause = function(x, ...) {
   assert_atomic(i)
   i = c(i)
   x_bare = unclass(x)
-  true_length = if (isFALSE(x)) 0 else length(x_bare)
+  true_length = if (isFALSE(x_bare)) 0 else length(x_bare)
 
   if (is.numeric(i)) {
     i = unique(floor(i))
@@ -218,13 +221,13 @@ as.logical.CnfClause = function(x, ...) {
     # we explicitly allow length(i) == 0 (empty subset)
     stop("Invalid index type.")
   }
-  if (length(i) == 0 || identical(i, 0) || (identical(i, FALSE) && !isFALSE((x)))) {
+  if (length(i) == 0 || identical(i, 0) || (identical(i, FALSE) && !isFALSE((x_bare)))) {
     return(as.CnfClause(structure(FALSE, universe = attr(x, "universe"))))
   }
-  if (isFALSE(x)) {
+  if (isFALSE(x_bare)) {
     stop("Cannot subset a FALSE clause with anything other than 0, [], or 0-length-vector.")
   }
-  if (isTRUE(x)) {
+  if (isTRUE(x_bare)) {
     if (identical(i, 1) || identical(i, TRUE)) return(x)
     stop("Cannot subset a TRUE clause with anything other than 0, 1, [], or 0-length-vector.")
   }
@@ -285,16 +288,15 @@ chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
     # `|.CnfFormula` handles conversion
     return(`|.CnfFormula`(e1, e2))
   }
-  if (isFALSE(e1) || isTRUE(e2)) return(as.CnfClause(e2))
-  if (isFALSE(e2) || isTRUE(e1)) return(e1)
+  e1_bare = c(e1)
+  e2_bare = c(e2)
+  if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(as.CnfClause(e2))
+  if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
   CnfClause(list(e1, e2))
 }
 
 #' @export
 `!.CnfClause` = function(x) {
-  if (is.logical(x)) {
-    return(as.CnfClause(!unclass(x)))
-  }
   !as.CnfFormula(x)
 }
 

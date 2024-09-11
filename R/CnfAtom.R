@@ -196,10 +196,10 @@ chooseOpsMethod.CnfAtom <- function(x, y, mx, my, cl, reverse) TRUE
   if (inherits(e2, "CnfFormula")) {
     # `|.CnfFormula` handles conversion
     return(`|.CnfFormula`(e1, e2))
-  } else if (is.logical(e2) || inherits(e2, "CnfAtom")) {
-    if (isFALSE(e1) || isTRUE(e2)) return(as.CnfAtom(e2))
-    if (isFALSE(e2) || isTRUE(e1)) return(e1)
   }
+  if (isFALSE(e1) || isTRUE(e2)) return(as.CnfClause(e2))
+  if (isFALSE(e2) || isTRUE(e1)) return(as.CnfClause(e1))
+
   # either two proper CnfAtoms, or e2 is a CnfClause.
   CnfClause(list(e1, e2))
 }
