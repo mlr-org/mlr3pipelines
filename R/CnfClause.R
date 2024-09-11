@@ -237,8 +237,9 @@ as.logical.CnfClause = function(x, ...) {
     check_logical(i, len = true_length),
     .var.name = "i"
   )
+  entries = unclass(x)[i]
   structure(
-    unclass(x)[i],
+    if (length(entries)) entries else FALSE,
     universe = attr(x, "universe"),
     class = "CnfClause"
   )

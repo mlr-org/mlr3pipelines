@@ -184,6 +184,7 @@ test_that("Negation of CnfClause works correctly", {
 
   # Check that negation of a contradiction is a tautology
   expect_true(as.logical(!contradiction))
+  expect_s3_class(!contradiction, "CnfFormula")
 })
 
 # Test subset operations on CnfClause
@@ -199,9 +200,20 @@ test_that("Subsetting of CnfClause works correctly", {
   expect_s3_class(subset_clause, "CnfClause")
   expect_length(as.list(subset_clause), 1)
   expect_identical(as.list(subset_clause)[[1]]$symbol, "X")
+  expect_identical(subset_clause, CnfClause(list(CnfAtom(X, c("a", "b")))))
 
-  expect_error(clause[0], "Cannot subset a FALSE clause")
-  expect_error(clause["Z"], "Invalid index type.")
+  expect_identical(clause[0], CnfClause(list(CnfAtom(X, character(0)))))
+  expect_identical(clause[integer(0)], CnfClause(list(CnfAtom(X, character(0)))))
+  expect_identical(clause[c(FALSE, FALSE)], CnfClause(list(CnfAtom(X, character(0)))))
+
+  expect_error(clause["Z"], "Must be a subset of \\{'X','Y'\\}")
+
+  expect_identical(clause[c(1, 2)], clause)
+  expect_identical(clause[c(TRUE, TRUE)], clause)
+
+  expect_identical(clause[c(1, 2, 1, 2)], clause)
+  expect_identical(clause[c(1, 0, 2, 0)], clause)
+
 })
 
 # Test print and format methods for CnfClause
@@ -213,7 +225,7 @@ test_that("print and format methods for CnfClause work correctly", {
   clause = CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d"))))
 
   # Test print method
-  expect_output(print(clause), "CnfClause")
+  expect_output(print(clause), "CnfClause:\n  X . \\{a, b\\} \\| Y . \\{d\\}|CnfClause:\n  Y . \\{d\\} \\| X . \\{a, b\\}")
 
   # Test format method
   expect_equal(format(clause), "CnfClause(2)")
@@ -237,4 +249,17 @@ test_that("as.logical and as.CnfClause conversions work correctly", {
 
   expect_s3_class(as.CnfClause(FALSE), "CnfClause")
   expect_false(as.logical(as.CnfClause(FALSE)))
+
+  atom_neither = CnfClause(list(CnfAtom(X, c("a", "b"))))
+  expect_identical(as.logical(atom_neither), NA)
+})
+
+# Test invalid creation of CnfClause with clauses from different universes
+test_that("CnfClause throws error when clauses are from different universes", {
+  u1 = CnfUniverse()
+  u2 = CnfUniverse()
+  X1 = CnfSymbol(u1, "X", c("a", "b", "c"))
+  X2 = CnfSymbol(u2, "X", c("a", "b", "c"))
+
+  expect_error(CnfClause(list(CnfAtom(X1, c("a", "b")), CnfAtom(X2, c("a", "b")))), "All symbols must be in the same universe")
 })
