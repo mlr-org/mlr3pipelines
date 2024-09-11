@@ -263,8 +263,11 @@ all.equal.CnfClause = function(target, current, ...) {
   }
 
   normalize = function(clause) {
+    reorder = order(names(clause))
     # []-assign to preserve class and attributes
-    clause[] = lapply(unclass(clause)[order(names(clause))], sort)
+    clause[] = lapply(unclass(clause)[reorder], sort)
+    names(clause) = names(clause)[reorder]  # also reorder names
+    clause
   }
 
   target = normalize(target)

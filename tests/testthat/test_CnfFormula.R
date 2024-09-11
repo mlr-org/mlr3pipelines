@@ -220,3 +220,161 @@ test_that("CnfFormula throws error when clauses are from different universes", {
 
   expect_error(CnfFormula(list(clause1, clause2)), "All clauses must be in the same universe")
 })
+
+
+test_that("all.equal recognizes (in)equality for CnfFormula", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+  Z = CnfSymbol(u, "Z", c("g", "h", "i"))
+
+  # Test equality between identical CnfFormulas
+  atom1 = CnfAtom(X, c("a", "b"))
+  atom2 = CnfAtom(Y, c("d", "e"))
+  clause1 = CnfClause(list(atom1, atom2))
+
+  atom3 = CnfAtom(Z, c("g"))
+  clause2 = CnfClause(list(atom3))
+
+  formula1 = CnfFormula(list(clause1, clause2))
+  formula2 = CnfFormula(list(clause1, clause2))
+
+  expect_true(all.equal(formula1, formula2))
+
+  # Test equality with the same clauses but in different order
+  formula2 = CnfFormula(list(clause2, clause1))
+
+  expect_true(all.equal(formula1, formula2))
+
+  # Test inequality for different CnfFormulas with different atoms
+  atom4 = CnfAtom(X, c("b", "c"))
+  clause3 = CnfClause(list(atom4, atom2))
+  formula2 = CnfFormula(list(clause3, clause2))
+
+  expect_string(all.equal(formula1, formula2), pattern = "string mismatch")
+
+  # Test equality for CnfFormulas where the values of one symbol in clauses are in a different order
+  atom5 = CnfAtom(X, c("b", "a"))  # same values, different order
+  clause4 = CnfClause(list(atom5, atom2))
+  formula2 = CnfFormula(list(clause4, clause2))
+
+  expect_true(all.equal(formula1, formula2))
+
+  # Test inequality when formulas have different symbols
+  atom6 = CnfAtom(Z, c("h"))
+  clause5 = CnfClause(list(atom6))
+  formula2 = CnfFormula(list(clause1, clause5))
+
+  expect_string(all.equal(formula1, formula2), pattern = "string mismatch")
+
+  # Test equality for logical CnfFormula (TRUE and FALSE) vs a formula
+  formula_tautology = CnfFormula(list(CnfClause(list(CnfAtom(X, c("a", "b", "c"))))))  # tautology (TRUE)
+  formula_contradiction = CnfFormula(list(CnfClause(list(CnfAtom(X, character(0))))))  # contradiction (FALSE)
+
+  expect_string(all.equal(formula1, formula_tautology), pattern = "not both logicals")
+  expect_string(all.equal(formula1, formula_contradiction), pattern = "not both logicals")
+
+  # Test equality for a logical TRUE formula and another logical TRUE formula
+  clause_ttl1 = CnfClause(list(CnfAtom(X, c("a", "b", "c"))))
+  clause_ttl2 = CnfClause(list(CnfAtom(Y, c("d", "e", "f"))))
+  formula_ttl1 = CnfFormula(list(clause_ttl1))
+  formula_ttl2 = CnfFormula(list(clause_ttl2))
+
+  expect_true(all.equal(formula_ttl1, formula_ttl2))
+  expect_true(all.equal(formula_ttl1, as.CnfFormula(TRUE)))
+
+  # Test equality for a logical FALSE formula and another logical FALSE formula
+  formula_false1 = CnfFormula(list(CnfClause(list(CnfAtom(X, character(0))))))
+  formula_false2 = CnfFormula(list(CnfClause(list(CnfAtom(Y, character(0))))))
+
+  expect_true(all.equal(formula_false1, formula_false2))
+  expect_string(all.equal(formula1, formula_false1), pattern = "not both logicals")
+  expect_true(all.equal(formula_false1, as.CnfFormula(FALSE)))
+
+  # Test inequality between a CnfFormula and a non-CnfFormula object
+  expect_string(all.equal(formula1, "not a CnfFormula"), pattern = "current is not a CnfFormula")
+
+  # Test equality between CnfFormulas in different universes
+  u1 = CnfUniverse()
+  u2 = CnfUniverse()
+  X1 = CnfSymbol(u1, "X", c("a", "b", "c"))
+  X2 = CnfSymbol(u2, "X", c("a", "b", "c"))
+
+  atom_u1 = CnfAtom(X1, c("a", "b"))
+  atom_u2 = CnfAtom(X2, c("a", "b"))
+  clause_u1 = CnfClause(list(atom_u1))
+  clause_u2 = CnfClause(list(atom_u2))
+  formula_u1 = CnfFormula(list(clause_u1))
+  formula_u2 = CnfFormula(list(clause_u2))
+
+  expect_true(all.equal(formula_u1, formula_u2))
+
+  # Test inequality when universes differ in length
+  u3 = CnfUniverse()
+  X3 = CnfSymbol(u3, "X", c("a", "b", "c", "d"))
+  atom_u3 = CnfAtom(X3, c("a", "b"))
+  clause_u3 = CnfClause(list(atom_u3))
+  formula_u3 = CnfFormula(list(clause_u3))
+
+  expect_string(all.equal(formula_u1, formula_u3), pattern = "Lengths \\(3, 4\\) differ")
+
+  # Test disjunction and conjunction in CnfFormula
+  atom7 = CnfAtom(X, c("a"))
+  atom8 = CnfAtom(Y, c("d"))
+  clause6 = CnfClause(list(atom7, atom8))
+  clause7 = CnfClause(list(atom1, atom2))
+
+  formula1 = CnfFormula(list(clause6))
+  formula2 = CnfFormula(list(clause7))
+
+  formula_disjunction = formula1 | formula2
+  formula_conjunction = formula1 & formula2
+
+  # Test all.equal on conjunction and disjunction cases
+  expect_string(paste(all.equal(formula_disjunction, formula1), collapse = "\n"), pattern = "Lengths \\(2, 1\\) differ")
+  expect_true(all.equal(formula_conjunction, formula1))
+
+
+  # Explicitly constructed object all.equals test
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+  Z = CnfSymbol(u, "Z", c("g", "h", "i"))
+
+  f1 = structure(list(
+    list(X = c("a", "b"), Y = c("d")),
+    list(Z = c("g"))
+  ), universe = u, class = "CnfFormula")
+  f2 = structure(list(
+    list(Y = c("d"), X = c("a", "b")),
+    list(Z = c("g"))
+  ), universe = u, class = "CnfFormula")
+  f3 = structure(list(
+    list(X = c("b", "a"), Y = c("d")),
+    list(Z = c("g"))
+  ), universe = u, class = "CnfFormula")
+  f4 = structure(list(
+    list(Y = c("d"), X = c("b", "a")),
+    list(Z = c("g"))
+  ), universe = u, class = "CnfFormula")
+  f5 = structure(list(
+    list(Z = c("g")),
+    list(X = c("a", "b"), Y = c("d"))
+  ), universe = u, class = "CnfFormula")
+
+  f1_unequal = structure(list(
+    list(X = c("a", "b")),
+    list(Z = c("g"))
+  ), universe = u, class = "CnfFormula")
+
+  for (fx in list(f1, f2, f3, f4, f5)) {
+    for (fy in list(f1, f2, f3, f4, f5)) {
+      expect_true(all.equal(fx, fy))
+    }
+  }
+
+  for (fx in list(f1, f2, f3, f4, f5)) {
+    expect_string(all.equal(fx, f1_unequal), pattern = "string mismatch|[Ll]ength mismatch")
+  }
+
+})

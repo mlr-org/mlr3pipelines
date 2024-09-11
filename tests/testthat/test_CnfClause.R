@@ -263,3 +263,125 @@ test_that("CnfClause throws error when clauses are from different universes", {
 
   expect_error(CnfClause(list(CnfAtom(X1, c("a", "b")), CnfAtom(X2, c("a", "b")))), "All symbols must be in the same universe")
 })
+
+
+test_that("all.equal recognizes (in)equality for CnfClause", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  # Test equality between identical CnfClauses
+  atom1 = CnfAtom(X, c("a", "b"))
+  atom2 = CnfAtom(Y, c("d", "e"))
+  clause1 = CnfClause(list(atom1, atom2))
+  clause2 = CnfClause(list(atom1, atom2))
+
+  expect_true(all.equal(clause1, clause2))
+
+  # Test equality with the same atoms but in different order
+  clause2 = CnfClause(list(atom2, atom1))
+
+  expect_true(all.equal(clause1, clause2))
+
+  # Test inequality for different CnfClauses with the same symbols but different values
+  atom3 = CnfAtom(X, c("b", "c"))
+  clause2 = CnfClause(list(atom3, atom2))
+
+  expect_string(all.equal(clause1, clause2), pattern = "string mismatches")
+
+  # Test equality for CnfClauses where the values of one symbol are in a different order
+  atom4 = CnfAtom(X, c("b", "a"))  # same values, different order
+  clause2 = CnfClause(list(atom4, atom2))
+
+  expect_true(all.equal(clause1, clause2))
+
+  # Test inequality when symbols in CnfClauses differ
+  Z = CnfSymbol(u, "Z", c("g", "h", "i"))
+  atom5 = CnfAtom(Z, c("g"))
+  clause2 = CnfClause(list(atom1, atom5))
+
+  expect_string(paste(all.equal(clause1, clause2), collapse = "\n"), pattern = "string mismatch")
+
+  # Test equality for logical CnfClause (TRUE and FALSE) vs a clause
+  clause_tautology = CnfClause(list(CnfAtom(X, c("a", "b", "c"))))  # tautology (TRUE)
+  clause_contradiction = CnfClause(list(CnfAtom(X, character(0))))  # contradiction (FALSE)
+
+  expect_string(all.equal(clause1, clause_tautology), pattern = "not both logicals")
+  expect_string(all.equal(clause1, clause_contradiction), pattern = "not both logicals")
+  expect_string(all.equal(clause_tautology, clause_contradiction), pattern = "logicals but not equal")
+
+  # Test equality for a logical TRUE clause and another logical TRUE clause
+  atom_ttl1 = CnfAtom(X, c("a", "b", "c"))
+  atom_ttl2 = CnfAtom(Y, c("d", "e", "f"))
+  clause_ttl1 = CnfClause(list(atom_ttl1))
+  clause_ttl2 = CnfClause(list(atom_ttl2))
+
+  expect_true(all.equal(clause_ttl1, clause_ttl2))
+  expect_true(all.equal(clause_ttl1, as.CnfClause(TRUE)))
+
+  # Test equality for a logical FALSE clause and another logical FALSE clause
+  clause_false1 = CnfClause(list(CnfAtom(X, character(0))))
+  clause_false2 = CnfClause(list(CnfAtom(Y, character(0))))
+
+  expect_true(all.equal(clause_false1, clause_false2))
+  expect_true(all.equal(clause_false1, as.CnfClause(FALSE)))
+
+  # Test inequality between a CnfClause and a non-CnfClause object
+  expect_string(all.equal(clause1, "not a CnfClause"), pattern = "current is not a CnfClause")
+
+  # Test equality between CnfClauses in different universes
+  u1 = CnfUniverse()
+  u2 = CnfUniverse()
+  X1 = CnfSymbol(u1, "X", c("a", "b", "c"))
+  X2 = CnfSymbol(u2, "X", c("a", "b", "c"))
+
+  atom_u1 = CnfAtom(X1, c("a", "b"))
+  atom_u2 = CnfAtom(X2, c("a", "b"))
+  clause_u1 = CnfClause(list(atom_u1))
+  clause_u2 = CnfClause(list(atom_u2))
+
+  expect_true(all.equal(clause_u1, clause_u2))
+
+  # Test inequality when universes differ in length
+  u3 = CnfUniverse()
+  X3 = CnfSymbol(u3, "X", c("a", "b", "c", "d"))
+  atom_u3 = CnfAtom(X3, c("a", "b"))
+  clause_u3 = CnfClause(list(atom_u3))
+
+  expect_string(all.equal(clause_u1, clause_u3), pattern = "Lengths \\(3, 4\\) differ")
+
+  # Explicitly constructed object all.equals test
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+  Z = CnfSymbol(u, "Z", c("g", "h", "i"))
+
+  c1 = structure(list(
+    X = c("a", "b"), Y = c("d")
+  ), universe = u, class = "CnfClause")
+  c2 = structure(list(
+    X = c("b", "a"), Y = c("d")
+  ), universe = u, class = "CnfClause")
+  c3 = structure(list(
+    Y = c("d"), X = c("a", "b")
+  ), universe = u, class = "CnfClause")
+  c4 = structure(list(
+    Y = c("d"), X = c("b", "a")
+  ), universe = u, class = "CnfClause")
+  c_unequal = structure(list(
+    X = c("a", "b"), Z = c("g")
+  ), universe = u, class = "CnfClause")
+
+
+  for (cx in list(c1, c2, c3, c4)) {
+    for (cy in list(c1, c2, c3, c4)) {
+      expect_true(all.equal(cx, cy))
+    }
+  }
+
+  for (cx in list(c1, c2, c3, c4)) {
+    expect_string(paste(all.equal(cx, c_unequal), collapse = "\n"), pattern = "string mismatch|[Ll]ength mismatch")
+  }
+
+
+})

@@ -161,3 +161,88 @@ test_that("CnfAtom throws error when values are not in the symbol's domain", {
   expect_error(CnfAtom(X, c("d", "e")), "Must be a subset of \\{'a','b','c'\\}")
 })
 
+
+test_that("all.equal recognizes (in)equality", {
+# Test equality between identical CnfAtoms
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+
+  atom1 = CnfAtom(X, c("a", "b"))
+  atom2 = CnfAtom(X, c("a", "b"))
+
+  expect_true(all.equal(atom1, atom2))
+
+  # Test equality for different CnfAtoms with the same symbol but different values
+
+  atom1 = CnfAtom(X, c("a", "b"))
+  atom2 = CnfAtom(X, c("b", "c"))
+
+  expect_string(all.equal(atom1, atom2), pattern = "string mismatch")
+
+  # Test equality for different CnfAtoms with the same values but different order
+  atom1 = CnfAtom(X, c("a", "b"))
+  atom2 = CnfAtom(X, c("b", "a"))
+
+  expect_true(all.equal(atom1, atom2))
+
+  # Test equality for CnfAtoms with different symbols
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  atom1 = CnfAtom(X, c("a", "b"))
+  atom2 = CnfAtom(Y, c("d"))
+
+  expect_string(paste(all.equal(atom1, atom2), collapse = "\n"), pattern = "string mismatch")
+
+  # Test equality between a logical CnfAtom and a CnfAtom object
+
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+
+  atom1 = CnfAtom(X, c("a", "b"))
+  atom2 = CnfAtom(X, c("a", "b", "c"))
+
+
+  expect_string(all.equal(atom1, atom2), pattern = "not both logicals")
+  expect_string(all.equal(atom2, atom1), pattern = "not both logicals")
+
+  # Test equality for a logical TRUE CnfAtom and another logical TRUE CnfAtom
+  atom3 = CnfAtom(Y, c("d", "e", "f"))
+
+  expect_true(all.equal(atom2, atom3))
+  expect_true(all.equal(atom2, as.CnfAtom(TRUE)))
+
+  # Test equality for a logical FALSE CnfAtom and another logical FALSE CnfAtom
+
+  logical_atom1 = CnfAtom(X, character(0))
+  logical_atom2 = CnfAtom(Y, character(0))
+
+  expect_true(all.equal(logical_atom1, logical_atom2))
+  expect_string(all.equal(atom1, logical_atom1), pattern = "not both logicals")
+  expect_string(all.equal(atom2, logical_atom1), pattern = "both logicals but not equal")
+  expect_true(all.equal(logical_atom1, as.CnfAtom(FALSE)))
+
+  # Test for a case where a CnfAtom is compared with a non-CnfAtom object
+
+
+  expect_string(all.equal(atom1, "not a CnfAtom"), pattern = "current is not a CnfAtom")
+
+  # Test that all.equal accepts differences in the universe of the CnfAtoms
+
+  u1 = CnfUniverse()
+  u2 = CnfUniverse()
+  X1 = CnfSymbol(u1, "X", c("a", "b", "c"))
+  X2 = CnfSymbol(u2, "X", c("a", "b", "c"))
+
+  atom1 = CnfAtom(X1, c("a", "b"))
+  atom2 = CnfAtom(X2, c("a", "b"))
+
+  expect_true(all.equal(atom1, atom2))
+
+  # .. unless the universes differ
+  u3 = CnfUniverse()
+  X3 = CnfSymbol(u3, "X", c("a", "b", "c", "d"))
+  atom3 = CnfAtom(X3, c("a", "b"))
+
+  expect_string(all.equal(atom1, atom3), pattern = "Lengths \\(3, 4\\) differ")
+
+})

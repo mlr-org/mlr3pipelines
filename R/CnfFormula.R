@@ -263,14 +263,18 @@ all.equal.CnfFormula = function(target, current, ...) {
 
   normalize = function(formula) {
     formula[] = lapply(unclass(formula), function(clause) {
-      clause[] = lapply(unclass(clause)[order(names(clause))], sort)
-      clause
+      lapply(unclass(clause)[order(names(clause))], sort)
     })
     # sort by symbol names, then by hash
     # note we had to sort elements internally first before we can do this!
-    formula[] = formula[order(map_chr(unclass(target), function(clause) {
+    reorder = order(map_chr(unclass(formula), function(clause) {
       paste0(paste(names(clause), collapse = ".__."), digest::digest(c(clause), algo = "xxhash64"))
-    }))]
+    }))
+    formula[] = formula[reorder]
+    # formula should not have names, but in case this ever changes:
+    # change the names in the same order as the clauses
+    names(formula) = names(formula)[reorder]
+
     formula
   }
   target = normalize(target)

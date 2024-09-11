@@ -59,3 +59,26 @@ test_that("Invalid values in %among% operator throw an error", {
   expect_error(X %among% c("d", "e"),
                "values.*Must be a subset of")
 })
+
+test_that("all.equal recognizes (in)equality", {
+
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+
+  expect_true(all.equal(X, X))
+
+  u2 = CnfUniverse()
+  X2 = CnfSymbol(u2, "X", c("a", "b", "c"))
+
+  expect_true(all.equal(X, X2))
+
+  u3 = CnfUniverse()
+  X3 = CnfSymbol(u3, "X", c("a", "b", "c"))
+  Y3 = CnfSymbol(u3, "Y", c("d", "e", "f"))
+
+  expect_string(all.equal(X2, X3), pattern = "Attributes")
+
+  expect_string(all.equal(X3, Y3), "string mismatch")
+
+
+})

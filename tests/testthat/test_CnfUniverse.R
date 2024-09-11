@@ -61,3 +61,30 @@ test_that("print and format methods for empty CnfUniverse work correctly", {
   # Test format method
   expect_equal(format(u), "CnfUniverse(0)")
 })
+
+
+test_that("all.equal recognizes (in)equality", {
+
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+
+  expect_true(all.equal(u, u))
+
+  u2 = CnfUniverse()
+  X2 = CnfSymbol(u2, "X", c("a", "b", "c"))
+
+  expect_true(all.equal(u, u2))
+
+  u_empty = CnfUniverse()
+  u_empty_2 = CnfUniverse()
+
+  expect_true(all.equal(u_empty, u_empty_2))
+
+  u3 = CnfUniverse()
+  X3 = CnfSymbol(u3, "X", c("c", "b", "a"))
+
+  expect_string(all.equal(u, u3), pattern = "string mismatch")
+
+  expect_string(paste(all.equal(u, u_empty), collapse = "\n"), pattern = "Length mismatch")
+
+})
