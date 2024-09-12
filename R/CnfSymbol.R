@@ -54,11 +54,11 @@ CnfSymbol = function(universe, name, domain) {
 
 #' @export
 print.CnfSymbol = function(x, ...) {
-  cat(sprintf("CnfSymbol '%s' with domain {%s}.\n", c(x), paste(attr(x, "universe")[[x]], collapse = ", ")))
+  cat(sprintf("CnfSymbol '%s' with domain {%s}.\n", unclass(x), paste(attr(x, "universe")[[x]], collapse = ", ")))
   invisible(x)
 }
 
 #' @export
 format.CnfSymbol = function(x, ...) {
-  sprintf("CnfSymbol(%s)", c(x))
+  sprintf("CnfSymbol(%s)", unclass(x))
 }

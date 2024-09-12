@@ -148,7 +148,7 @@ CnfFormula = function(clauses) {
 
     ## don't unclass() here, since we check the class in the next line!
     if (inherits(cl, "CnfClause")) {
-      entries[[length(entries) + 1]] = c(cl)
+      entries[[length(entries) + 1]] = cl_bare
     } else {
       # union with another CnfFormula object
       other_entries[[length(other_entries) + 1]] = cl
@@ -162,7 +162,7 @@ CnfFormula = function(clauses) {
 
 #' @export
 print.CnfFormula = function(x, ...) {
-  x_bare = c(x)
+  x_bare = unclass(x)
   if (isTRUE(x_bare)) {
     cat("CnfFormula: TRUE\n")
   } else if (isFALSE(x_bare)) {
@@ -183,7 +183,7 @@ print.CnfFormula = function(x, ...) {
 
 #' @export
 format.CnfFormula = function(x, ...) {
-  x_bare = c(x)
+  x_bare = unclass(x)
   if (isTRUE(x_bare)) {
     return("CnfFormula: T")
   } else if (isFALSE(x_bare)) {
@@ -231,7 +231,7 @@ as.CnfFormula.CnfFormula = function(x) {
 
 #' @export
 as.list.CnfFormula = function(x, ...) {
-  x_bare = c(x)
+  x_bare = unclass(x)
   if (isTRUE(x_bare)) return(list())
   lapply(x_bare, structure, class = "CnfClause", universe = attr(x, "universe"))
 }
@@ -288,12 +288,12 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
 
 #' @export
 `&.CnfFormula` = function(e1, e2) {
-  e1_bare = c(e1)
-  e2_bare = c(e2)
+  e1_bare = unclass(e1)
+  e2_bare = unclass(e2)
   e1 = as.CnfFormula(e1)
+  if (isTRUE(e2_bare) || isFALSE(e1_bare)) return(e1)
   e2 = as.CnfFormula(e2)
   if (isTRUE(e1_bare) || isFALSE(e2_bare)) return(e2)
-  if (isTRUE(e2_bare) || isFALSE(e1_bare)) return(e1)
   if (!identical(attr(e1, "universe"), attr(e2, "universe"))) {
     stop("Both formulas must be in the same universe.")
   }
@@ -302,12 +302,12 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
 
 #' @export
 `|.CnfFormula` = function(e1, e2) {
-  e1_bare = c(e1)
-  e2_bare = c(e2)
+  e1_bare = unclass(e1)
+  e2_bare = unclass(e2)
   e1 = as.CnfFormula(e1)
+  if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
   e2 = as.CnfFormula(e2)
   if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(e2)
-  if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
   if (!identical(attr(e1, "universe"), attr(e2, "universe"))) {
     stop("Both formulas must be in the same universe.")
   }

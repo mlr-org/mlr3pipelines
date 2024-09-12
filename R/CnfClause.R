@@ -91,7 +91,7 @@ CnfClause = function(atoms) {
   entries = list()
   universe = attr(atoms[[1]], "universe")
   for (a in atoms) {
-    a_bare = c(a)
+    a_bare = unclass(a)
     if (!identical(attr(a, "universe"), universe)) {
       stop("All symbols must be in the same universe.")
     }
@@ -129,7 +129,7 @@ CnfClause = function(atoms) {
 
 #' @export
 print.CnfClause = function(x, ...) {
-  x_bare = c(x)
+  x_bare = unclass(x)
   if (isTRUE(x_bare)) {
     cat("CnfClause: TRUE\n")
   } else if (isFALSE(x_bare)) {
@@ -146,7 +146,7 @@ print.CnfClause = function(x, ...) {
 
 #' @export
 format.CnfClause = function(x, ...) {
-  x_bare = c(x)
+  x_bare = unclass(x)
   if (isTRUE(x_bare)) {
     return("CnfClause: T")
   } else if (isFALSE(x_bare)) {
@@ -189,12 +189,11 @@ as.CnfClause.CnfClause = function(x) {
 
 #' @export
 as.list.CnfClause = function(x, ...) {
-  x_bare = c(x)
+  x_bare = unclass(x)
   if (isFALSE(x_bare)) return(list())
-  x = unclass(x)
   if (isTRUE(x_bare)) return(as.CnfAtom(x))
-  lapply(names(x), function(sym) {
-    structure(list(symbol = sym, values = x[[sym]]), universe = attr(x, "universe"), class = "CnfAtom")
+  lapply(names(x_bare), function(sym) {
+    structure(list(symbol = sym, values = x_bare[[sym]]), universe = attr(x, "universe"), class = "CnfAtom")
   })
 }
 
@@ -210,7 +209,7 @@ as.logical.CnfClause = function(x, ...) {
 `[.CnfClause` = function(x, i) {
   if (missing(i)) return(x)
   assert_atomic(i)
-  i = c(i)
+  i = unclass(i)
   x_bare = unclass(x)
   true_length = if (isFALSE(x_bare)) 0 else length(x_bare)
 
@@ -293,8 +292,8 @@ chooseOpsMethod.CnfClause <- function(x, y, mx, my, cl, reverse) TRUE
     # `|.CnfFormula` handles conversion
     return(`|.CnfFormula`(e1, e2))
   }
-  e1_bare = c(e1)
-  e2_bare = c(e2)
+  e1_bare = unclass(e1)
+  e2_bare = unclass(e2)
   if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(as.CnfClause(e2))
   if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
   CnfClause(list(e1, e2))

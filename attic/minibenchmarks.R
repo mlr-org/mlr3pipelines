@@ -192,3 +192,29 @@ bm_create_list <- function() {
 
 bm_create_list() |> autoplot()
 # plain list is faster than creating an env first; setting the size of the env and making parent = emptyenv() makes a small difference!
+
+
+remove_class_info <- function() {
+  sx <- structure(
+    list(a = 1, b = 2, c = 3),
+    class = "test",
+    attr = list(a = 1, b = 2, c = 3)
+  )
+
+  microbenchmark(times = 1000,
+    structure = structure(sx, class = NULL),
+    unclass = unclass(sx),
+    c = c(sx),
+    assign.class = {
+      class(sx) <- NULL
+      sx
+    },
+    assign.attr = {
+      attr(sx, "class") <- NULL
+      sx
+    }
+  )
+}
+
+remove_class_info() |> autoplot()
+# unclass() is MUCH faster than c(), which is better than the others
