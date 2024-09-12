@@ -188,7 +188,7 @@ as.CnfClause.CnfClause = function(x) {
 }
 
 #' @export
-as.list.CnfClause = function(x) {
+as.list.CnfClause = function(x, ...) {
   x_bare = c(x)
   if (isFALSE(x_bare)) return(list())
   x = unclass(x)
