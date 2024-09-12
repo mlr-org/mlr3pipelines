@@ -189,9 +189,10 @@ as.CnfClause.CnfClause = function(x) {
 
 #' @export
 as.list.CnfClause = function(x) {
-  if (isFALSE(x)) return(list())
+  x_bare = c(x)
+  if (isFALSE(x_bare)) return(list())
   x = unclass(x)
-  if (isTRUE(x)) return(as.CnfAtom(x))
+  if (isTRUE(x_bare)) return(as.CnfAtom(x))
   lapply(names(x), function(sym) {
     structure(list(symbol = sym, values = x[[sym]]), universe = attr(x, "universe"), class = "CnfAtom")
   })

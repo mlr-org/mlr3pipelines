@@ -307,7 +307,7 @@ chooseOpsMethod.CnfFormula <- function(x, y, mx, my, cl, reverse) TRUE
   e1 = as.CnfFormula(e1)
   e2 = as.CnfFormula(e2)
   if (isFALSE(e1_bare) || isTRUE(e2_bare)) return(e2)
-  if (isFALSE(e2_bare) || isFALSE(e1_bare)) return(e1)
+  if (isFALSE(e2_bare) || isTRUE(e1_bare)) return(e1)
   if (!identical(attr(e1, "universe"), attr(e2, "universe"))) {
     stop("Both formulas must be in the same universe.")
   }

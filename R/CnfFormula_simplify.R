@@ -65,15 +65,18 @@ simplify_cnf = function(entries, universe) {
       if (eliminated[[i]]) next  # can only happen if we do the hidden subsumption elimination, which searches forward
       ei = entries[[i]]
       # If sym(A) is a subset of sym(B) and for each s in sym(A), val(A, s) is a subset of val(B, s), then A implies B, so B can be removed ("subsumption elimination").
-      for (j in seq_len(i - 1)) {
+      for (j in seq_along(entries)) {
+        if (j == i) next
         if (eliminated[[j]]) next
         ej = entries[[j]]
+        if (length(ej) > length(ei)) break  # we can't just do j in 1:(i-1), since some clauses have the same length, in which case we need to check subsumption.
         name_overlap = names(ej) %in% names(ei)
         if (all(name_overlap) && all(sapply(names(ej), function(s) all(ej[[s]] %in% ei[[s]])))) {
           # can't do entries[[i]] = NULL, since we are iterating over entries; the entries[[i]] would break.
           eliminated[[i]] = TRUE
           break
         }
+        if (j >= i) next  # everything that follows already checks in both directions in case of equal lengths.
         # simple self subsumption and hidden subsumption elimination
         # HSE:
         # if s is in sym(A) and sym(B), and val(A, s) and val(B, s) are disjoint, then (A - s | B - s) is implied,
@@ -110,7 +113,7 @@ simplify_cnf = function(entries, universe) {
             # They may, however, have the same number of terms, in which case the reverse is also possible.
             # Use 'c()' to drop attributes from ei here.
             ei_without_s = ei[cnames_s]
-            do_sse = identical(cnames[cnames_s], c(ei_without_s))
+            do_sse = identical(cunion[cnames_s], c(ei_without_s))
             # if they have the same number of terms, ei could be a subset of ej.
             # However, then we can not rely on the order of values in the union being correct.
             do_sse_reverse = (!do_sse && (length(ei) == length(ej)) &&
@@ -125,7 +128,7 @@ simplify_cnf = function(entries, universe) {
             } else if (do_sse) {
               # ej is a subset of ei
               # --> eliminate s from ei
-              new_entry = entries[[i]] = ei_without_s
+              new_entry = entries[[i]] = ei = ei_without_s
               dont_eliminate = i
             }
 
@@ -161,6 +164,7 @@ simplify_cnf = function(entries, universe) {
                   eliminated[[k]] = TRUE
                 }
               }
+              if (eliminated[[j]]) break  # we eliminated one of the entries we are currently looking at, no more need to look at other symbols
               next
             }
           }

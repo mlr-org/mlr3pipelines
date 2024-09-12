@@ -44,6 +44,55 @@ test_that("CnfFormula handles tautologies and contradictions correctly", {
   expect_false(as.logical(formula_ctn))
 })
 
+
+
+test_that("CnfClause can be called with CnfClauses", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  atom1 = CnfAtom(X, "a")
+  atom2 = CnfAtom(Y, "d")
+  atom3 = CnfAtom(X, "b")
+  atom4 = CnfAtom(Y, "e")
+  clause1 = CnfClause(list(atom1))
+  clause2 = CnfClause(list(atom2))
+  clause3 = CnfClause(list(atom3))
+  clause4 = CnfClause(list(atom4))
+
+  clause_1_3 = CnfClause(list(atom1, atom3))
+  clause_2_4 = CnfClause(list(atom2, atom4))
+
+  expect_true(all.equal(clause_1_3, CnfClause(list(clause1, clause3))))
+  expect_true(all.equal(clause_1_3 | clause2, CnfClause(list(clause1, clause3, atom2))))
+  expect_true(all.equal(CnfClause(list(clause_1_3, clause_2_4)), CnfClause(list(clause1, clause2, clause3, clause4))))
+  expect_true(all.equal(CnfClause(list(clause_1_3, clause_2_4)), CnfClause(list(atom1, atom2, atom3, atom4))))
+
+})
+
+
+test_that("CnfFormula can be called with CnfFormulas", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("a", "b"))))
+  clause2 = CnfClause(list(CnfAtom(Y, c("d", "e"))))
+  clause3 = CnfClause(list(CnfAtom(X, c("b"))))
+
+  formula1 = CnfFormula(list(clause1))
+  formula2 = CnfFormula(list(clause2))
+  formula3 = CnfFormula(list(clause3))
+
+  formula1_2 = CnfFormula(list(clause1, clause2))
+  formula1_3 = CnfFormula(list(clause1, clause3))
+
+  expect_true(all.equal(formula1_2, CnfFormula(list(formula1_2))))
+  expect_true(all.equal(formula1_2, CnfFormula(list(formula1, formula2))))
+  expect_true(all.equal(formula1_2 & formula1_3, CnfFormula(list(clause1, clause2, clause3))))
+
+})
+
 # Test conjunction (&) of CnfFormulas
 test_that("Conjunction of CnfFormulas works correctly", {
   u = CnfUniverse()
@@ -103,13 +152,13 @@ test_that("Disjunction of CnfFormulas works correctly", {
   expect_true(isTRUE(all.equal(clauses[[1]], expected_clause_1)) || isTRUE(all.equal(clauses[[1]], expected_clause_2)))
   expect_true(isTRUE(all.equal(clauses[[1]], expected_clause_2)) || isTRUE(all.equal(clauses[[1]], expected_clause_1)))
 
-  # Check that disjunction of a tautology with a formula is the same formula
-  tautology = CnfFormula(list(CnfClause(list(CnfAtom(X, c("a", "b", "c"))))))
-  disjunction_with_tautology = tautology | formula1
-  expect_s3_class(disjunction_with_tautology, "CnfFormula")
+  # Check that disjunction of a contradiction with a formula is the same formula
+  contradiction = CnfFormula(list(CnfClause(list(CnfAtom(X, character(0))))))
+  disjunction_with_contradiction = contradiction | formula1
+  expect_s3_class(disjunction_with_contradiction, "CnfFormula")
   expect_true(
-    identical(as.list(disjunction_with_tautology), list(clause1, clause2)) ||
-    identical(as.list(disjunction_with_tautology), list(clause2, clause1))
+    identical(as.list(disjunction_with_contradiction), list(clause1, clause2)) ||
+    identical(as.list(disjunction_with_contradiction), list(clause2, clause1))
   )
 })
 
@@ -376,5 +425,251 @@ test_that("all.equal recognizes (in)equality for CnfFormula", {
   for (fx in list(f1, f2, f3, f4, f5)) {
     expect_string(all.equal(fx, f1_unequal), pattern = "string mismatch|[Ll]ength mismatch")
   }
+
+})
+
+
+# Test unit propagation in CnfFormula
+test_that("CnfFormula performs unit propagation correctly", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("a", "c"))))   # Unit clause: X ∈ {a, c}
+  clause2 = CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d", "e"))))
+
+  formula = CnfFormula(list(clause1, clause2))
+
+  # Expected: clause2 should be simplified to just X ∈ {a}, Y ∈ {d, e}, since clause1 implies X ∈ {a, c} and c is not in clause2.
+  expected_formula = CnfFormula(list(clause1, CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d", "e"))))))
+
+  expect_true(all.equal(formula, expected_formula))
+})
+
+# Test subsumption elimination in CnfFormula
+test_that("CnfFormula performs subsumption elimination correctly", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+  Z = CnfSymbol(u, "Z", c("g", "h", "i"))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d"))))
+  clause2 = CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d", "e"))))
+
+  formula = CnfFormula(list(clause1, clause2))
+
+  # Expected: clause2 is subsumed by clause1, so the result should only contain clause1
+  expected_formula = CnfFormula(list(clause1))
+
+  expect_true(all.equal(formula, expected_formula))
+
+
+  expect_true(all.equal(
+    CnfFormula(list(CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d", "e")))), CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d", "e")))))),
+    CnfFormula(list(CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d", "e"))))))
+  ))
+
+  expect_true(all.equal(
+    CnfFormula(list(CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e", "d")))), CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d", "e")))))),
+    CnfFormula(list(CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d", "e"))))))
+  ))
+
+  expect_true(all.equal(
+    CnfFormula(list(CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d", "e")))), CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d", "e")), CnfAtom(Z, c("g", "h")))))),
+    CnfFormula(list(CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d", "e"))))))
+  ))
+
+})
+
+# Test self-subsumption elimination in CnfFormula
+test_that("CnfFormula performs self-subsumption elimination correctly", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d"))))  # X ∈ {a, b} | Y ∈ {d}
+  clause2 = CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e"))))       # X ∈ {a} | Y ∈ {e}
+
+  # Expected: self-subsumption should simplify the formula
+  expected_formula = CnfFormula(list(CnfClause(list(CnfAtom(X, c("a", "b")))), CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e"))))))
+
+  expect_true(all.equal(CnfFormula(list(clause1, clause2)), expected_formula))
+  expect_true(all.equal(CnfFormula(list(clause2, clause1)), expected_formula))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d"))))  # X ∈ {a, b} | Y ∈ {d}
+  clause2 = CnfClause(list(CnfAtom(X, c("a", "c")), CnfAtom(Y, c("d"))))  # X ∈ {a, b} | Y ∈ {d}
+  clause3 = CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e"))))       # X ∈ {a} | Y ∈ {e}
+
+  # Expected: self-subsumption should simplify the formula
+  expected_formula = CnfFormula(list(CnfClause(list(CnfAtom(X, c("a", "b")))),
+  CnfClause(list(CnfAtom(X, c("a", "c")))), CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("e"))))))
+
+  expect_true(all.equal(CnfFormula(list(clause1, clause2, clause3)), expected_formula))
+  expect_true(all.equal(CnfFormula(list(clause3, clause2, clause1)), expected_formula))
+  expect_true(all.equal(CnfFormula(list(clause1, clause3, clause2)), expected_formula))
+
+})
+
+# Test hidden subsumption elimination in CnfFormula
+test_that("CnfFormula performs hidden subsumption elimination correctly", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("a")), CnfAtom(Y, c("d"))))   # X ∈ {a} | Y ∈ {d}
+  clause2 = CnfClause(list(CnfAtom(X, c("b")), CnfAtom(Y, c("e"))))   # X ∈ {b} | Y ∈ {e}
+  clause3 = CnfClause(list(CnfAtom(Y, c("d", "e"))))                  # Y ∈ {d, e}
+
+  formula = CnfFormula(list(clause1, clause2, clause3))
+
+  # Expected: clause3 is implied by clause1 and clause2, so it should be removed
+  expected_formula = CnfFormula(list(clause1, clause2))
+
+  expect_true(all.equal(formula, expected_formula))
+})
+
+# Test contradiction recognition in CnfFormula
+test_that("CnfFormula recognizes simple contradictions", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("a"))))  # X ∈ {a}
+  clause2 = CnfClause(list(CnfAtom(X, c("b"))))  # X ∈ {b}
+
+  formula = CnfFormula(list(clause1, clause2))
+
+  # Expected: this should be a contradiction
+  expected_formula = as.CnfFormula(FALSE)
+
+  expect_true(all.equal(formula, expected_formula))
+})
+
+# Test simplifications in a larger formula
+test_that("CnfFormula performs all simplifications in a complex formula", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+  Z = CnfSymbol(u, "Z", c("g", "h", "i"))
+
+  clause1 = CnfClause(list(CnfAtom(X, c("b", "c"))))               # X ∈ {a}
+  clause2 = CnfClause(list(CnfAtom(X, c("a", "b")), CnfAtom(Y, c("d", "e"))))  # X ∈ {b} | Y ∈ {d, e}
+  clause3 = CnfClause(list(CnfAtom(Y, c("d", "e")), CnfAtom(Z, c("g", "h"))))  # Y ∈ {d, e} | Z ∈ {g, h}
+  clause4 = CnfClause(list(CnfAtom(Z, c("g", "h"))))          # Z ∈ {g, h}
+
+  formula = CnfFormula(list(clause1, clause2, clause3, clause4))
+
+  # Expected: clause3 should be removed, and unit propagation should simplify clause2
+  expected_formula = CnfFormula(list(
+    clause1, clause4,
+    CnfClause(list(CnfAtom(X, c("b")), CnfAtom(Y, c("d", "e"))))
+  ))
+
+  expect_true(all.equal(formula, expected_formula))
+})
+
+
+test_that("Brute-force test", {
+  skip_on_cran()
+
+  u = CnfUniverse()
+  W = CnfSymbol(u, "W", c("p", "q", "r"))
+  X = CnfSymbol(u, "X", c("s", "t", "u"))
+  Y = CnfSymbol(u, "Y", c("v", "w", "x"))
+  Z = CnfSymbol(u, "Z", c("y", "z", "a"))
+
+  random_atom_expression = function() {
+    symbol = sample(alist(W, X, Y, Z), 1)[[1]]
+    values = sample(u[[deparse(symbol)]], sample(2, 1))
+    substitute(symbol %among% values, list(symbol = symbol, values = values))
+  }
+
+  random_cnf_expression = function(depth, do_cnf = FALSE, ddepth = 0) {
+    if (depth <= 1) {
+      # base case: return a random symbol expression call
+      return(random_atom_expression())
+    }
+    # recursively build a random tree of expressions
+    if (do_cnf) {
+      op = if (depth <= ddepth) quote(`|`) else quote(`&`)
+    } else {
+      op = sample(alist(`&`, `|`), 1)[[1]]  # randomly choose between AND and OR
+    }
+    left_expr = random_cnf_expression(depth - 1, do_cnf, ddepth)
+    right_expr = random_cnf_expression(depth - 1, do_cnf, ddepth)
+
+    # create a call object for the expression: (left_expr op right_expr)
+    substitute(op(left_expr, right_expr), list(op = op, left_expr = left_expr, right_expr = right_expr))
+  }
+
+  formula_to_expression = function(formula) {
+    if (is.logical(formula)) return(c(formula))
+    clause_exprs = lapply(as.CnfFormula(formula), function(clause) {
+      atom_exprs = lapply(clause, function(atom) {
+        substitute(symbol %among% values, list(symbol = as.name(atom$symbol), values = atom$values))
+      })
+      Reduce(function(x, y) substitute(x | y, list(x = x, y = y)), atom_exprs)
+    })
+    Reduce(function(x, y) substitute(x & y, list(x = x, y = y)), clause_exprs)
+  }
+
+  evaluate_expression = function(expression, assignment) {
+    substituted = do.call(substitute, list(expression, c(list("%among%" = quote(`%in%`)), assignment)))
+    eval(substituted, envir = baseenv())
+  }
+
+  expression_weight = function(expression) {
+    if (is.logical(expression)) return(0)
+    sum(all.names(expression) %in% c("|", "&")) + 1
+  }
+
+
+  stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
+  set.seed(2)
+  for (depth_to_check in 2:11) {
+    for (repetition in seq_len(200)) {
+      if (depth_to_check == 10) {
+        expression = random_cnf_expression(10, TRUE, 4)
+      } else if (depth_to_check == 11) {
+        expression = random_cnf_expression(5, TRUE, 2)
+      }  else {
+        expression = random_cnf_expression(depth_to_check)
+      }
+      simplified = formula_to_expression(eval(expression))
+      stats$depth[[length(stats$depth) + 1]] = depth_to_check
+      stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
+      stats$simpweight[[length(stats$simpweight) + 1]] = expression_weight(simplified)
+      vars = intersect(names(u), all.names(expression))
+      assignments = expand.grid(lapply(vars, function(var) u[[var]]), stringsAsFactors = FALSE)
+      colnames(assignments) = vars
+
+      truevals = rep(NA, nrow(assignments))
+      for (i in seq_len(nrow(assignments))) {
+        assignment = assignments[i, , drop = FALSE]
+        trueval = evaluate_expression(expression, assignment)
+        simpval = evaluate_expression(simplified, assignment)
+        if (trueval != simpval) break
+        truevals[[i]] = trueval
+      }
+      stats$was_tautology[[length(stats$was_tautology) + 1]] = all(truevals)
+      stats$was_contradiction[[length(stats$was_contradiction) + 1]] = all(!truevals)
+      expect_equal(trueval, simpval,
+          info = sprintf("Expression: %s\nAssignment:\n%s\nSimplified to: %s",
+            deparse1(expression),
+            paste(capture.output(print(assignment)), collapse = "\n"),
+            deparse1(simplified)
+      ))
+    }
+  }
+  dti <- as.data.table(stats)
+  dti[, .(
+      ew = mean(expweight), sw = mean(simpweight),
+      etriv = mean(expweight == 0),
+      striv = mean(simpweight == 0),
+      could_simplify = mean(expweight > simpweight),
+      was_tautology = mean(was_tautology),
+      was_contradiction = mean(was_contradiction),
+      tautologies_not_recognized = mean(was_tautology & simpweight > 0),
+      contradictions_not_recognized = mean(was_contradiction & simpweight > 0)
+    ), by = "depth"]
 
 })

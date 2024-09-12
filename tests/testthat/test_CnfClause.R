@@ -61,6 +61,30 @@ test_that("CnfClause with overlapping symbols works correctly", {
 
 })
 
+test_that("CnfClause can be called with CnfClauses", {
+  u = CnfUniverse()
+  X = CnfSymbol(u, "X", c("a", "b", "c"))
+  Y = CnfSymbol(u, "Y", c("d", "e", "f"))
+
+  atom1 = CnfAtom(X, "a")
+  atom2 = CnfAtom(Y, "d")
+  atom3 = CnfAtom(X, "b")
+  atom4 = CnfAtom(Y, "e")
+  clause1 = CnfClause(list(atom1))
+  clause2 = CnfClause(list(atom2))
+  clause3 = CnfClause(list(atom3))
+  clause4 = CnfClause(list(atom4))
+
+  clause_1_3 = CnfClause(list(atom1, atom3))
+  clause_2_4 = CnfClause(list(atom2, atom4))
+
+  expect_true(all.equal(clause_1_3, CnfClause(list(clause1, clause3))))
+  expect_true(all.equal(clause_1_3 | clause2, CnfClause(list(clause1, clause3, atom2))))
+  expect_true(all.equal(CnfClause(list(clause_1_3, clause_2_4)), CnfClause(list(clause1, clause2, clause3, clause4))))
+  expect_true(all.equal(CnfClause(list(clause_1_3, clause_2_4)), CnfClause(list(atom1, atom2, atom3, atom4))))
+
+})
+
 # Test the handling of tautologies and contradictions in CnfClause
 test_that("CnfClause handles tautologies and contradictions correctly", {
   u = CnfUniverse()
