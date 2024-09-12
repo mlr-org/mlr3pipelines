@@ -622,9 +622,11 @@ test_that("Brute-force test", {
     sum(all.names(expression) %in% c("|", "&")) + 1
   }
 
+  ss = 0
+  # dti_col <- parallel::mclapply(mc.cores = 16, 1:16, function(ss) {
 
   stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
-  set.seed(2)
+  set.seed(3 + ss)
   for (depth_to_check in 2:11) {
     for (repetition in seq_len(200)) {
       if (depth_to_check == 10) {
@@ -661,6 +663,10 @@ test_that("Brute-force test", {
     }
   }
   dti <- as.data.table(stats)
+  # })
+
+  # dti <- rbindlist(dti_col, idcol = "seedoffset")
+
   dti[, .(
       ew = mean(expweight), sw = mean(simpweight),
       etriv = mean(expweight == 0),
