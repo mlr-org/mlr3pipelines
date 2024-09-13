@@ -59,6 +59,8 @@ matplot(bmrt[, -1], type = "b", pch = 1, xaxt = "n", ylab = "Values", xlab = "ex
 legend("bottomright", legend = colnames(bmrt)[-1], col = seq_along(bmrt[, -1]), pch = 1, lty = 1)
 axis(1, at = seq_along(bmrt$expr), labels = bmrt$expr, las = 2)
 
+round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[1, 2:4]), "/"), 2)
+
 # GET: (lst_bracket_int, env_bracket) is faster than lst_bracket, which is faster than
 # env_dollar, which is slightly faster than lst_indirect_(int), which is slightly faster than lst_dollar
 #   HUGE difference to: env_get
@@ -218,3 +220,255 @@ remove_class_info <- function() {
 
 remove_class_info() |> autoplot()
 # unclass() is MUCH faster than c(), which is better than the others
+
+
+
+fill_list = function() {
+  tofill = runif(10000)
+  env = new.env(parent = emptyenv())
+
+  microbenchmark(times = 100,
+    prealloc = {
+      v = numeric(length(tofill))
+      for (i in seq_along(tofill)) {
+        v[[i]] = tofill[[i]]
+      }
+    },
+    extend = {
+      v = numeric(0)
+      for (i in seq_along(tofill)) {
+        v[[i]] = tofill[[i]]
+      }
+    },
+    extend_dynamic = {
+      v = numeric(0)
+      for (i in seq_along(tofill)) {
+        v[[length(v) + 1]] = tofill[[i]]
+      }
+    },
+    in_env_prealloc = {
+      env[["v"]] = numeric(length(tofill))
+      for (i in seq_along(tofill)) {
+        env[["v"]][[i]] = tofill[[i]]
+      }
+    },
+    in_env_extend = {
+      env[["v"]] = numeric(0)
+      for (i in seq_along(tofill)) {
+        env[["v"]][[i]] = tofill[[i]]
+      }
+    },
+    in_env_extend_dynamic = {
+      env[["v"]] = numeric(0)
+      for (i in seq_along(tofill)) {
+        env[["v"]][[length(env[["v"]]) + 1]] = tofill[[i]]
+      }
+    }
+  )
+}
+
+fill_list() |> autoplot()
+# prealloc < extend (+8%) < extend_dynamic (+30%)
+# (n_env_prealloc < in_env_extend ; approx 1.5x prealloc) << in_env_extend_dynamic (approx 2x prealloc)
+
+bmr <- fill_list()
+
+autoplot(bmr)
+
+bmrt <- as.data.table(bmr)[, .(mean = mean(time), median = median(time), mean_robust = mean(time, trim = 0.1)), by = expr][order(mean_robust)]
+
+par(mar = c(8, 4, 4, 2) + 0.1)
+matplot(bmrt[, -1], type = "b", pch = 1, xaxt = "n", ylab = "Values", xlab = "expr", main = "List access benchmarks", col = seq_along(bmrt[, -1]))
+legend("bottomright", legend = colnames(bmrt)[-1], col = seq_along(bmrt[, -1]), pch = 1, lty = 1)
+axis(1, at = seq_along(bmrt$expr), labels = bmrt$expr, las = 2)
+
+round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[1, 2:4]), "/"), 2)
+
+local_globals = function() {
+  env <- new.env(parent = emptyenv())
+  env$a <- 100000000
+  env$b <- 100000000
+  i <- 100000000
+  j <- 100000000
+
+  funcall <- function() { }
+
+  inc_i <- function() {
+    i <<- i + 1
+  }
+
+  inc_ij <- function() {
+    i <<- i + 1
+    j <<- j + 1
+  }
+
+  inc_env <- function() {
+    env[["a"]] <- env[["a"]] + 1
+  }
+  inc_env2 <- function() {
+    env[["a"]] <- env[["a"]] + 1
+    env[["b"]] <- env[["b"]] + 1
+  }
+
+  microbenchmark(times = 1000,
+    funcall = { funcall() },
+    inc_i = { inc_i() },
+    inc_ij = { inc_ij() },
+    inc_env = { inc_env() },
+    inc_env2 = { inc_env2() },
+    inc_i_direct = { i <- i + 1 },
+    inc_ij_direct = { i <- i + 1; j <- j + 1 }
+  )
+}
+
+local_globals() |> autoplot()
+
+bmr <- local_globals()
+
+autoplot(bmr)
+
+bmrt <- as.data.table(bmr)[, .(mean = mean(time), median = median(time), mean_robust = mean(time, trim = 0.1)), by = expr][order(mean_robust)]
+
+par(mar = c(8, 4, 4, 2) + 0.1)
+matplot(bmrt[, -1], type = "b", pch = 1, xaxt = "n", ylab = "Values", xlab = "expr", main = "List access benchmarks", col = seq_along(bmrt[, -1]))
+legend("bottomright", legend = colnames(bmrt)[-1], col = seq_along(bmrt[, -1]), pch = 1, lty = 1)
+axis(1, at = seq_along(bmrt$expr), labels = bmrt$expr, las = 2)
+
+round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[1, 2:4]), "/"), 2)
+# accessing env is about 2x slower than direct access; <<- is not that bad actually, some part of it seems to be the function call itself
+
+
+delete_vector_entry = function() {
+  vct = runif(20)
+  lst = as.list(vct)
+  microbenchmark(times = 1000,
+    set_null = { lst2 = lst ; lst2[[2]] <- NULL },
+    neg_index_list = { lst2 = lst ; lst2 <- lst2[-2] },
+    neg_index_vec = { vct2 = vct ; vct2 <- vct2[-2] }
+  )
+}
+
+bmr <- delete_vector_entry()
+
+bmrt <- as.data.table(bmr)[, .(mean = mean(time), median = median(time), mean_robust = mean(time, trim = 0.1)), by = expr][order(mean_robust)]
+
+par(mar = c(8, 4, 4, 2) + 0.1)
+matplot(bmrt[, -1], type = "b", pch = 1, xaxt = "n", ylab = "Values", xlab = "expr", main = "List access benchmarks", col = seq_along(bmrt[, -1]))
+legend("bottomright", legend = colnames(bmrt)[-1], col = seq_along(bmrt[, -1]), pch = 1, lty = 1)
+axis(1, at = seq_along(bmrt$expr), labels = bmrt$expr, las = 2)
+
+round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[1, 2:4]), "/"), 2)
+
+
+skip_loop = function() {
+  vct = runif(20)
+  skipped = c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE)
+  microbenchmark(times = 1000,
+    skip_entry = {
+      entries = c(1L, 3L, 5L, 7L, 9L, 11L, 13L, 15L, 17L, 19L)
+      result = 0
+      for (i in entries) {
+        if (skipped[[i]]) {
+          next
+        }
+        result <- result + vct[[i]]
+      }
+    },
+    delete_entry = {
+      entries = c(1L, 3L, 5L, 7L, 9L, 11L, 13L, 15L, 17L, 19L)
+      entries <- entries[-2]
+      entries <- entries[-5]
+      entries <- entries[-8]
+      result = 0
+      for (i in entries) {
+        result <- result + vct[[i]]
+      }
+    },
+    skip_entry_twice = {
+      entries = c(1L, 3L, 5L, 7L, 9L, 11L, 13L, 15L, 17L, 19L)
+      result = 0
+      for (times in 1:2) {
+        for (i in entries) {
+          if (skipped[[i]]) {
+            next
+          }
+          result <- result + vct[[i]]
+        }
+      }
+    },
+    delete_entry_twice = {
+      entries = c(1L, 3L, 5L, 7L, 9L, 11L, 13L, 15L, 17L, 19L)
+      entries <- entries[-2]
+      entries <- entries[-5]
+      entries <- entries[-8]
+      result = 0
+      for (times in 1:2) {
+        for (i in entries) {
+          result <- result + vct[[i]]
+        }
+      }
+    }
+  )
+}
+
+bmr <- skip_loop()
+
+bmrt <- as.data.table(bmr)[, .(mean = mean(time), median = median(time), mean_robust = mean(time, trim = 0.1)), by = expr][order(mean_robust)]
+
+par(mar = c(8, 4, 4, 2) + 0.1)
+matplot(bmrt[, -1], type = "b", pch = 1, xaxt = "n", ylab = "Values", xlab = "expr", main = "List access benchmarks", col = seq_along(bmrt[, -1]))
+legend("bottomright", legend = colnames(bmrt)[-1], col = seq_along(bmrt[, -1]), pch = 1, lty = 1)
+axis(1, at = seq_along(bmrt$expr), labels = bmrt$expr, las = 2)
+
+round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[1, 2:4]), "/"), 2)
+
+# deleting is faster than skipping, apparently
+
+
+sum_all_any = function() {
+  vct1 = c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE)
+  vct2 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE)
+  vct3 = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
+  vct4 = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE)
+
+  int1 = as.integer(vct1)
+  int2 = as.integer(vct2)
+  int3 = as.integer(vct3)
+  int4 = as.integer(vct4)
+
+  microbenchmark(times = 10000,
+    all_any = {
+      r1 = c(all(vct1), all(vct2), all(vct3), all(vct4))
+      r2 = c(any(vct1), any(vct2), any(vct3), any(vct4))
+    },
+    sums = {
+      vs1 = c(sum(vct1), sum(vct2), sum(vct3), sum(vct4))
+      r1 = vs1 == 7L
+      r2 = vs1 != 0L
+    },
+    sums_int = {
+      vs1 = c(sum(int1), sum(int2), sum(int3), sum(int4))
+      r = vs1 != 0L
+    },
+    sums_any = {
+      vs1 = c(sum(vct1), sum(vct2), sum(vct3), sum(vct4))
+      r = vs1 != 0L
+    },
+    any = {
+      r = c(any(vct1), any(vct2), any(vct3), any(vct4))
+    }
+  )
+}
+
+bmr <- sum_all_any()
+
+bmrt <- as.data.table(bmr)[, .(mean = mean(time), median = median(time), mean_robust = mean(time, trim = 0.1)), by = expr][order(mean_robust)]
+
+par(mar = c(8, 4, 4, 2) + 0.1)
+matplot(bmrt[, -1], type = "b", pch = 1, xaxt = "n", ylab = "Values", xlab = "expr", main = "List access benchmarks", col = seq_along(bmrt[, -1]))
+legend("bottomright", legend = colnames(bmrt)[-1], col = seq_along(bmrt[, -1]), pch = 1, lty = 1)
+axis(1, at = seq_along(bmrt$expr), labels = bmrt$expr, las = 2)
+
+round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[1, 2:4]), "/"), 2)
+# use all / any for when only requesting one, but when multiple are used use sums()
+# sums don't make a difference between logical and integer vectors
