@@ -112,7 +112,8 @@ PipeOpBLSmote = R6Class("PipeOpBLSmote",
       # Calculate synthetic data
       # TODO: Do we have a way to suppress messages by print()?
       st = setDT(invoke(smotefamily::BLSMOTE, X = dt, target = task$truth(),
-        .args = self$param_set$get_values(tags = "blsmote"))$syn_data)
+        .args = self$param_set$get_values(tags = "blsmote"),
+        .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # BLSMOTE uses partial arg matching internally
 
       # Rename target column and fix character conversion
       st[["class"]] = as_factor(st[["class"]], levels = task$class_names)

@@ -100,7 +100,8 @@ PipeOpADAS = R6Class("PipeOpADAS",
 
       # calculate synthetic data
       st = setDT(invoke(smotefamily::ADAS, X = dt, target = task$truth(),
-        .args = self$param_set$get_values(tags = "adas"))$syn_data)
+        .args = self$param_set$get_values(tags = "adas"),
+        .opts = list(warnPartialMatchArgs = FALSE))$syn_data)  # ADAS uses partial arg matching internally
 
       # rename target column and fix character conversion
       st[["class"]] = as_factor(st[["class"]], levels = task$class_names)
