@@ -5,13 +5,11 @@
 #' @format [`R6Class`][R6::R6Class] object inheriting from [`PipeOpTaskPreproc`]/[`PipeOp`].
 #'
 #' @description
+#' Generates a more balanced data set by creating synthetic instances of the minority class using the ADASYN algorithm.
 #'
-#'
-#' Generates a more balanced data set by creating
-#' synthetic instances of the minority class using the ADAS algorithm.
-#' The algorithm samples for each minority instance a new data point based on the `K` nearest
-#' neighbors of that data point.
+#' The algorithm generates for each minority instance new data points based on its `K` nearest neighbors and the difficulty of learning for that data point.
 #' It can only be applied to tasks with numeric features that have no missing values.
+#'
 #' See [`smotefamily::ADAS`] for details.
 #'
 #' @section Construction:
@@ -36,7 +34,7 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as:
 #' * `K` :: `numeric(1)` \cr
-#'   The number of nearest neighbors used for sampling new values.
+#'   The number of nearest neighbors used for sampling new values. Default is `5`.
 #'   See [`ADAS()`][`smotefamily::ADAS`].
 #'
 #' @section Fields:
@@ -57,16 +55,20 @@
 #' library("mlr3")
 #'
 #' # Create example task
-#' data = smotefamily::sample_generator(1000, ratio = 0.80)
-#' data$result = factor(data$result)
-#' task = TaskClassif$new(id = "example", backend = data, target = "result")
-#' task$data()
-#' table(task$data()$result)
+#' data = data.frame(
+#'   target = factor(sample(c("c1", "c2"), size = 300, replace = TRUE, prob = c(0.1, 0.9))),
+#'   x1 = rnorm(300),
+#'   x2 = rnorm(300)
+#' )
+#' task = TaskClassif$new(id = "example", backend = data, target = "target")
+#' task$head()
+#' table(task$data(cols = "target"))
 #'
 #' # Generate synthetic data for minority class
 #' pop = po("adas")
-#' adasdata = pop$train(list(task))[[1]]$data()
-#' table(adasdata$result)
+#' adas_result = pop$train(list(task))[[1]]$data()
+#' nrow(adas_result)
+#' table(adas_result$target)
 #' \dontshow{ \} }
 PipeOpADAS = R6Class("PipeOpADAS",
   inherit = PipeOpTaskPreproc,
