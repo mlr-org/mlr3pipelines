@@ -52,42 +52,42 @@ expression_weight = function(expression) {
 }
 
 dti_col <- parallel::mclapply(mc.cores = 16, 1:16, function(ss) {
-stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
-set.seed(3 + ss)
-for (depth_to_check in 2:11) {
-  for (repetition in seq_len(2000)) {
-    if (depth_to_check == 10) {
-      expression = random_cnf_expression(10, TRUE, 4)
-    } else if (depth_to_check == 11) {
-      expression = random_cnf_expression(5, TRUE, 2)
-    }  else {
-      expression = random_cnf_expression(depth_to_check)
-    }
-    simplified = formula_to_expression(eval(expression))
-    stats$depth[[length(stats$depth) + 1]] = depth_to_check
-    stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
-    stats$simpweight[[length(stats$simpweight) + 1]] = expression_weight(simplified)
-    vars = intersect(names(u), all.names(expression))
-    assignments = expand.grid(lapply(vars, function(var) u[[var]]), stringsAsFactors = FALSE)
-    colnames(assignments) = vars
+  stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
+  set.seed(3 + ss)
+  for (depth_to_check in 2:11) {
+    for (repetition in seq_len(2000)) {
+      if (depth_to_check == 10) {
+        expression = random_cnf_expression(10, TRUE, 4)
+      } else if (depth_to_check == 11) {
+        expression = random_cnf_expression(5, TRUE, 2)
+      }  else {
+        expression = random_cnf_expression(depth_to_check)
+      }
+      simplified = formula_to_expression(eval(expression))
+      stats$depth[[length(stats$depth) + 1]] = depth_to_check
+      stats$expweight[[length(stats$expweight) + 1]] = expression_weight(expression)
+      stats$simpweight[[length(stats$simpweight) + 1]] = expression_weight(simplified)
+      vars = intersect(names(u), all.names(expression))
+      assignments = expand.grid(lapply(vars, function(var) u[[var]]), stringsAsFactors = FALSE)
+      colnames(assignments) = vars
 
-    truevals = rep(NA, nrow(assignments))
-    for (i in seq_len(nrow(assignments))) {
-      assignment = assignments[i, , drop = FALSE]
-      trueval = evaluate_expression(expression, assignment)
-      simpval = evaluate_expression(simplified, assignment)
-      if (trueval != simpval) break
-      truevals[[i]] = trueval
+      truevals = rep(NA, nrow(assignments))
+      for (i in seq_len(nrow(assignments))) {
+        assignment = assignments[i, , drop = FALSE]
+        trueval = evaluate_expression(expression, assignment)
+        simpval = evaluate_expression(simplified, assignment)
+        if (trueval != simpval) break
+        truevals[[i]] = trueval
+      }
+      stats$was_tautology[[length(stats$was_tautology) + 1]] = all(truevals)
+      stats$was_contradiction[[length(stats$was_contradiction) + 1]] = all(!truevals)
+      expect_equal(trueval, simpval,
+          info = sprintf("Expression: %s\nAssignment:\n%s\nSimplified to: %s",
+            deparse1(expression),
+            paste(capture.output(print(assignment)), collapse = "\n"),
+            deparse1(simplified)
+      ))
     }
-    stats$was_tautology[[length(stats$was_tautology) + 1]] = all(truevals)
-    stats$was_contradiction[[length(stats$was_contradiction) + 1]] = all(!truevals)
-    expect_equal(trueval, simpval,
-        info = sprintf("Expression: %s\nAssignment:\n%s\nSimplified to: %s",
-          deparse1(expression),
-          paste(capture.output(print(assignment)), collapse = "\n"),
-          deparse1(simplified)
-    ))
-  }
 }
 dti <- as.data.table(stats)
 })

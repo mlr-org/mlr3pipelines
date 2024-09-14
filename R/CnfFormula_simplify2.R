@@ -315,10 +315,4 @@ simplify_cnf2 = function(entries, universe) {
     }
   }
 
-
-
-
-
-
-
 }

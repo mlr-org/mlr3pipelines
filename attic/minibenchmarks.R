@@ -472,3 +472,113 @@ axis(1, at = seq_along(bmrt$expr), labels = bmrt$expr, las = 2)
 round(sweep(as.matrix(bmrt[, 2:4], rownames = bmrt[[1]]), 2, as.numeric(bmrt[1, 2:4]), "/"), 2)
 # use all / any for when only requesting one, but when multiple are used use sums()
 # sums don't make a difference between logical and integer vectors
+
+
+df_row_addition_benchmark = function() {
+  # Create an initial data frame
+  df = data.frame(a = 1:5, b = letters[1:5], c = rnorm(5))
+
+  # New row to be added
+  new_row = list(a = 6, b = "f", c = rnorm(1))
+
+  microbenchmark(times = 100,
+    rbind = {
+      df_new = df
+      for (i in 1:100) {
+        df_new = rbind(df_new, new_row)
+      }
+    },
+    rbind_data_frame = {
+      df_new = df
+      for (i in 1:100) {
+        df_new = rbind(df_new, data.frame(new_row))
+      }
+    },
+    append_list = {
+      df_new = df
+      for (i in 1:100) {
+        df_new[nrow(df_new) + 1, ] = new_row
+      }
+    },
+    append_unlist = {
+      df_new = df
+      for (i in 1:100) {
+        df_new[nrow(df_new) + 1, ] = unlist(new_row)
+      }
+    },
+    bind_rows = {
+      df_new = df
+      for (i in 1:100) {
+        df_new = dplyr::bind_rows(df_new, new_row)
+      }
+    },
+    rbindlist = {
+      new_rows_list = list()
+      for (i in 1:100) {
+        new_rows_list[[length(new_rows_list) + 1]] = new_row
+      }
+      df_new = data.table::rbindlist(c(list(df), new_rows_list))
+    },
+    rbind_200 = {
+      df_new = df
+      for (i in 1:200) {
+        df_new = rbind(df_new, new_row)
+      }
+    },
+    rbind_data_frame_200 = {
+      df_new = df
+      for (i in 1:200) {
+        df_new = rbind(df_new, data.frame(new_row))
+      }
+    },
+    append_list_200 = {
+      df_new = df
+      for (i in 1:200) {
+        df_new[nrow(df_new) + 1, ] = new_row
+      }
+    },
+    append_unlist_200 = {
+      df_new = df
+      for (i in 1:200) {
+        df_new[nrow(df_new) + 1, ] = unlist(new_row)
+      }
+    },
+    bind_rows_200 = {
+      df_new = df
+      for (i in 1:200) {
+        df_new = dplyr::bind_rows(df_new, new_row)
+      }
+    },
+    rbindlist_200 = {
+      new_rows_list = list()
+      for (i in 1:200) {
+        new_rows_list[[length(new_rows_list) + 1]] = new_row
+      }
+      df_new = data.table::rbindlist(c(list(df), new_rows_list))
+    }
+  )
+}
+
+bmr_df_row <- df_row_addition_benchmark()
+
+bmrt_df_row <- as.data.table(bmr_df_row)[, .(mean = mean(time), median = median(time), mean_robust = mean(time, trim = 0.1)), by = expr][order(mean_robust)]
+
+par(mar = c(8, 4, 4, 2) + 0.1)
+matplot(log10(bmrt_df_row[, -1]), type = "b", pch = 1, xaxt = "n", ylab = "Time (nanoseconds)", xlab = "Method", main = "Data Frame Row Addition Benchmarks (100 rows)", col = seq_along(bmrt_df_row[, -1]))
+legend("topleft", legend = colnames(bmrt_df_row)[-1], col = seq_along(bmrt_df_row[, -1]), pch = 1, lty = 1)
+axis(1, at = seq_along(bmrt_df_row$expr), labels = bmrt_df_row$expr, las = 2)
+
+print(round(sweep(as.matrix(bmrt_df_row[, 2:4], rownames = bmrt_df_row[[1]]), 2, as.numeric(bmrt_df_row[1, 2:4]), "/"), 2))
+
+
+((bmrt_df_row[, -"expr_base"] |> melt(id.vars = "expr"))[, basename := sub("_200$", "", expr)][,
+  is_divisor := grepl("_200$", expr)][, .(value = value[is_divisor] / value[!is_divisor]), by = c("basename", "variable")] |> dcast(basename ~ variable, value.var = "value"))[order(-mean_robust)]
+
+bmrt_df_row[, expr_base := sub("_200$", "", expr)]
+bmrt_df_row_summary <- bmrt_df_row[, .(
+  mean_ratio = mean[grepl("_200$", expr)] / mean[!grepl("_200$", expr)],
+  median_ratio = median[grepl("_200$", expr)] / median[!grepl("_200$", expr)],
+  mean_robust_ratio = mean_robust[grepl("_200$", expr)] / mean_robust[!grepl("_200$", expr)]
+), by = expr_base]
+
+bmrt_df_row_summary[order(-mean_robust_ratio)]
