@@ -32,7 +32,7 @@ test_that("PipeOpBLSmote - train works as intended", {
   expect_equal(train_out, blsmote_out)
 
   # Compare to smotefamily::BLSMOTE with changed params
-  # method = "type2"
+  # method = "type1"
   pv = list(K = 4L, C = 8L, dupSize = 0, method = "type1")
   op$param_set$set_values(.values = pv)
 
