@@ -1,5 +1,6 @@
 
 
+
 u = CnfUniverse()
 W = CnfSymbol(u, "W", c("p", "q", "r"))
 X = CnfSymbol(u, "X", c("s", "t", "u"))
@@ -88,8 +89,8 @@ dti_col <- parallel::mclapply(mc.cores = 16, 1:16, function(ss) {
             deparse1(simplified)
       ))
     }
-}
-dti <- as.data.table(stats)
+  }
+  as.data.table(stats)
 })
 
 dti <- rbindlist(dti_col, idcol = "seedoffset")
