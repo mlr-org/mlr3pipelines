@@ -61,20 +61,17 @@
 #' library("mlr3")
 #'
 #' # Create example task
-#' data = data.frame(
-#'   target = factor(sample(c("c1", "c2"), size = 300, replace = TRUE, prob = c(0.1, 0.9))),
-#'   x1 = rnorm(300),
-#'   x2 = rnorm(300)
-#' )
-#' task = TaskClassif$new(id = "example", backend = data, target = "target")
+#' data = smotefamily::sample_generator(500, 0.8)
+#' data$result = factor(data$result)
+#' task = TaskClassif$new(id = "example", backend = data, target = "result")
 #' task$head()
-#' table(task$data(cols = "target"))
+#' table(task$data(cols = "result"))
 #'
 #' # Generate synthetic data for minority class
 #' pop = po("blsmote")
 #' bls_result = pop$train(list(task))[[1]]$data()
 #' nrow(bls_result)
-#' table(bls_result$target)
+#' table(bls_result$result)
 #' \dontshow{ \} }
 PipeOpBLSmote = R6Class("PipeOpBLSmote",
   inherit = PipeOpTaskPreproc,
