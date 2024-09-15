@@ -27,7 +27,8 @@ test_that("PipeOpADAS - train works as intended", {
   # rbind for same row (and col) order
   adas_out = setDT(rbind(
     df,
-    invoke(smotefamily::ADAS, X = task$data(cols = task$feature_names), target = task$truth())$syn_data
+    invoke(smotefamily::ADAS, X = task$data(cols = task$feature_names), target = task$truth(),
+           .opts = list(warnPartialMatchArgs = FALSE))$syn_data
   ))
 
   expect_equal(train_out, adas_out)
@@ -40,7 +41,8 @@ test_that("PipeOpADAS - train works as intended", {
   set.seed(1234L)
   adas_out = setDT(rbind(
     df,
-    invoke(smotefamily::ADAS, X = task$data(cols = task$feature_names), target = task$truth(), K = 10)$syn_data
+    invoke(smotefamily::ADAS, X = task$data(cols = task$feature_names), target = task$truth(), K = 10,
+           .opts = list(warnPartialMatchArgs = FALSE))$syn_data
   ))
 
   expect_equal(train_out, adas_out)

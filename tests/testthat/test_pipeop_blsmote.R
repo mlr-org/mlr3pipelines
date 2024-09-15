@@ -16,12 +16,12 @@ test_that("PipeOpBLSmote - train works as intended", {
   df = smotefamily::sample_generator(500, 0.8)
   df$result = factor(df$result)
   setnames(df, "result", "class")  # we do this to avoid renaming later
-  df = df[, c(3,1,2)]  # we do this to avoid reordering later
+  df = df[, c(3L, 1L, 2L)]  # we do this to avoid reordering later
   task = TaskClassif$new(id = "test", backend = df, target = "class")
 
   # Compare to smotefamily::BLSMOTE with default params
   set.seed(1234L)
-  train_out = op$train(list(task))[[1]]$data()
+  train_out = op$train(list(task))[[1L]]$data()
   set.seed(1234L)
   blsmote_out = setDT(rbind(
     df,
