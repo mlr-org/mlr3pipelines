@@ -3,7 +3,7 @@
 
 
 
-simplify_cnf = function(entries, universe) {
+simplify_cnf_old = function(entries, universe) {
   return_false = structure(
     FALSE,
     universe = universe,

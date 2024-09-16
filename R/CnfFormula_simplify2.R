@@ -1,6 +1,6 @@
 
 
-simplify_cnf2 = function(entries, universe) {
+simplify_cnf = function(entries, universe) {
   #################################
   # Some vocabulary:
   # - `entries` is a list of `clauses`, which are named lists.
@@ -132,7 +132,7 @@ simplify_cnf2 = function(entries, universe) {
       return(NULL)
     }
     # clause was not changed
-    if (length(clause[[symbol_idx]]) == clause_symbol_length_before) next
+    if (length(clause[[symbol_idx]]) == clause_symbol_length_before) return(FALSE)
     # clause was changed.
     entries[[clause_idx]] <<- clause
     if (!length(clause[[symbol_idx]])) {
@@ -237,7 +237,7 @@ simplify_cnf2 = function(entries, universe) {
     rowsum = sum(is_not_subset_of[[meta_idx]][meta_idx_other, ])
     if (rowsum > 1) return(FALSE)  # nothing to do
     if (rowsum == 0) {
-      eliminate_clause_update_sr(available[[meta_idx]])
+      eliminate_clause_update_sr(available[[meta_idx_other]])
       return(NULL)
     }
     # rowsum == 1
@@ -322,6 +322,7 @@ simplify_cnf2 = function(entries, universe) {
 
   for (meta_idx_outer in seq_along(available)) {
     clause_idx = available[[meta_idx_outer]]
+    if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break  # may happen if we somehow turn something into a unit that eliminates a later clause
     clause = entries[[clause_idx]]
     sc = names(clause)
     # is_not_subset_of[[i]][j, k] records whether for symbol k, clause i is not a subset of clause j
@@ -331,10 +332,13 @@ simplify_cnf2 = function(entries, universe) {
     # In that case, we set the entry to FALSE.
     is_not_subset_of[[meta_idx_outer]] = matrix(
       TRUE,
-      ncol = length(available),  # indexed by meta_idx!
-      nrow = length(clause),
+      nrow = length(available),  # indexed by meta_idx!
+      ncol = length(clause),
       dimnames = list(NULL, names(clause))
     )
+    # we are not a subset of ourselves
+    # (this prevents us from checking this later in on_updated_subset_relations; if we do check it there, we would eliminate the clause from itself)
+    is_not_subset_of[[meta_idx_outer]][meta_idx_outer, ] = FALSE
 
     for (meta_idx_inner in seq_len(meta_idx_outer - 1L)) {
       clause_idx_inner = available[[meta_idx_inner]]
@@ -352,51 +356,47 @@ simplify_cnf2 = function(entries, universe) {
 
       for (symbol_idx_inner in sci_names_in_common) {
         symbol_idx_outer = sci_sc_map[[symbol_idx_inner]]
-        symbol_inner = sci[[symbol_idx_inner]]
-        symbol_outer = sc[[symbol_idx_outer]]
+        symbol = sci[[symbol_idx_inner]]
+
         range_inner = clause_inner[[symbol_idx_inner]]
         range_outer = clause[[symbol_idx_outer]]
 
         inner_subset_of_outer = all(range_inner %in% range_outer)
-        outer_subset_of_inner = (inner_subset_of_outer && length(sc) == length(sci)) || all(range_outer %in% range_inner)
+        outer_subset_of_inner = (inner_subset_of_outer && length(range_outer) == length(range_inner)) || all(range_outer %in% range_inner)
         if (inner_subset_of_outer) {
           # Avoid assigning TRUE to matrix that is initialized with TRUE.
           # We index by column name here, since it is possible that clauses were shortened by
           # unit propagation or self subsumption elimination somewhere on the way here
-          is_not_subset_of[[meta_idx_inner]][meta_idx_outer, symbol_inner] = FALSE
+          is_not_subset_of[[meta_idx_inner]][meta_idx_outer, symbol] = FALSE
         }
         if (outer_subset_of_inner) {
-          is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol_outer] = FALSE
+          is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol] = FALSE
         }
       }
       # prefer to eliminate the outer loopo clause first, since we have already
       # done more work for the inner loop clause (which comes earlier in 'entries')
       ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer)
       if (is.null(ousr)) break
-      if (!ousr) return(return_entries(FALSE))
+      if (ousr) return(return_entries(FALSE))
 
       ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner)
+      if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) break  # honestly not sure if this could happen here
       if (is.null(ousr)) next
-      if (!ousr) return(return_entries(FALSE))
-
+      if (ousr) return(return_entries(FALSE))
     }
-    # not necessary, since the only place where this could happen is on_update_subset_relations,
-    # and we do check the return value of that one:
-    #  > if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) next
-
   }
 
   # Now for the big one: Asymmetric Hidden Literal Addition
 
   # we only loop over the entries that have not been eliminated yet.
-  # We update `remaining_entries` inside the loop whenever a clause is eliminated.
-  # This will not affect the outer loop, but the inner loop gets to be shorter.
+  # We update `remaining_nonunit_entries` inside the loop whenever a clause is eliminated.
   remaining_entries = which(!eliminated)[order(lengths(entries[!eliminated]), decreasing = TRUE)]
-  for (clause_idx in remaining_entries) {
+  remaining_nonunit_entries = remaining_entries[seq_len(length(remaining_entries) - length(unit_domains))]
+  remaining_unit_entries = if (length(unit_domains)) remaining_entries[seq.int(length(remaining_entries) - length(unit_domains) + 1L, length(remaining_entries))]
+  for (clause_idx in remaining_nonunit_entries) {
     clause = entries[[clause_idx]]
-    if (length(clause) == 1) break  # only units remaining
     meta_idx = available_inverse[[clause_idx]]
-    remaining_other_entries = remaining_entries[remaining_entries != clause_idx]
+    remaining_other_entries = remaining_nonunit_entries[remaining_nonunit_entries != clause_idx]
 
     not_subset_count = integer(length(remaining_other_entries))
     was_used = logical(length(remaining_other_entries))  # we keep track of which clauses were used for HLA, since every other clause can only do that once.
@@ -408,34 +408,89 @@ simplify_cnf2 = function(entries, universe) {
     repeat {
       hla_clause_idx = match(TRUE, not_subset_count == 1 & !was_used)
       if (is.na(hla_clause_idx)) break
-      clause_other = remaining_other_entries[[hla_clause_idx]]
-      meta_idx_other = available_inverse[[clause_other]]
+      clause_idx_other = remaining_other_entries[[hla_clause_idx]]
+      meta_idx_other = available_inverse[[clause_idx_other]]
       symbol = colnames(is_not_subset_of[[meta_idx_other]])[is_not_subset_of[[meta_idx_other]][meta_idx, ]]
       range_old = clause[[symbol]]
-      range_new = c(range_old, char_setdiff(universe[[symbol]], c(range_old, entries[[clause_other]][[symbol]])))
+      range_new = c(range_old, char_setdiff(universe[[symbol]], c(range_old, entries[[clause_idx_other]][[symbol]])))
       if (length(range_new) == length(universe[[symbol]])) {
         # hidden tautology elimination
         eliminate_clause_update_sr(clause_idx)
-        remaining_entries = remaining_other_entries
+        remaining_nonunit_entries = remaining_other_entries
         break
       }
-      was_used[[hla_clause_idx]] = TRUE
-      for (updating_clause_idx in available_inverse[symbol_registry[[symbol]]]) {
+      for (updating_clause_meta_idx in available_inverse[symbol_registry[[symbol]]]) {
         # we don't want to skip 'was_used' here, since we might still do hidden subsumption elimination with them.
-        if (is_not_subset_of[[updating_clause_idx]][meta_idx, symbol] &&
-              all(entries[[available[[updating_clause_idx]]]][[symbol]] %in% range_new)) {
-          is_not_subset_of[[updating_clause_idx]][meta_idx, symbol] = FALSE
-          roe_idx = match(updating_clause_idx, remaining_other_entries)  # I wished I didn't have to do this
+        if (is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol] &&
+              all(entries[[available[[updating_clause_meta_idx]]]][[symbol]] %in% range_new)) {
+          is_not_subset_of[[updating_clause_meta_idx]][meta_idx, symbol] = FALSE
+          roe_idx = match(updating_clause_meta_idx, remaining_other_entries)  # I wished I didn't have to do this
           not_subset_count[[roe_idx]] = not_subset_count[[roe_idx]] - 1L
           if (not_subset_count[[roe_idx]] == 0) {
             # hidden subsumption elimination
-            eliminate_clause_update_sr(available[[updating_clause_idx]])
-            remaining_entries = remaining_other_entries
+            eliminate_clause_update_sr(clause_idx)
+            remaining_nonunit_entries = remaining_other_entries
             break
           }
         }
       }
+      if (eliminated[[clause_idx]]) break  # the break inside the for-loop above will not break the repeat loop
+      was_used[[hla_clause_idx]] = TRUE
+      clause[[symbol]] = range_new
     }
   }
+
+  delayedAssign("roe_inverse", match(seq_along(entries), remaining_nonunit_entries))
+  for (clause_idx in remaining_unit_entries) {
+    clause = entries[[clause_idx]]
+    unitsymbol = names(clause)
+    was_used = logical(length(remaining_nonunit_entries))
+    # every clause that is not yet eliminated is a proper subset of the current unit.
+    # If it is length N and contains the unit symbol, then N - 1 of its symbols are not subsets;
+    # otherwise (if it does not contain the unit symbol), all N symbols are not subsets.
+    not_subset_count = lengths(entries[remaining_nonunit_entries]) - (remaining_nonunit_entries %in% symbol_registry[[unitsymbol]])
+
+    is_not_subset_of_unit = vector("list", length(remaining_nonunit_entries))
+    repeat {
+      hla_clause_idx = match(TRUE, not_subset_count == 1 & !was_used)
+      if (is.na(hla_clause_idx)) break
+      clause_idx_other = remaining_nonunit_entries[[hla_clause_idx]]
+      clause_other = entries[[clause_idx_other]]
+      if (is.null(is_not_subset_of_unit[[hla_clause_idx]])) {
+        is_not_subset_of_unit[[hla_clause_idx]] = structure(names(clause_other) != unitsymbol, names = names(clause_other))
+      }
+      is_not_subset_entry = is_not_subset_of_unit[[hla_clause_idx]]
+      symbol = names(is_not_subset_entry)[is_not_subset_entry]
+      range_old = clause[[symbol]]
+      range_new = c(range_old, char_setdiff(universe[[symbol]], c(range_old, clause_other[[symbol]])))
+      if (length(range_new) == length(universe[[symbol]])) {
+        # hidden tautology elimination
+        # no more need to update unit registry etc.
+        eliminated[[clause_idx]] = TRUE
+        break
+      }
+      for (updating_clause_idx in symbol_registry[[symbol]]) {
+        updating_hla_clause_idx = roe_inverse[[updating_clause_idx]]
+        if (is.null(is_not_subset_of_unit[[updating_hla_clause_idx]])) {
+          updating_clause = entries[[updating_clause_idx]]
+          is_not_subset_of_unit[[updating_hla_clause_idx]] = structure(names(updating_clause) != unitsymbol, names = names(updating_clause))
+        }
+        if (is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]] &&
+              all(entries[[updating_clause_idx]][[symbol]] %in% range_new)) {
+          is_not_subset_of_unit[[updating_hla_clause_idx]][[symbol]] = FALSE
+          not_subset_count[[updating_hla_clause_idx]] = not_subset_count[[updating_hla_clause_idx]] - 1L
+          if (not_subset_count[[updating_hla_clause_idx]] == 0) {
+            # hidden subsumption elimination
+            eliminated[[clause_idx]] = TRUE
+            break
+          }
+        }
+      }
+      if (eliminated[[clause_idx]]) break  # the break inside the for-loop above will not break the repeat loop
+      was_used[[hla_clause_idx]] = TRUE
+      clause[[symbol]] = range_new
+    }
+  }
+
   return_entries(entries[!eliminated])
 }
