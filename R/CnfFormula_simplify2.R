@@ -84,7 +84,7 @@ simplify_cnf2 = function(entries, universe) {
   # - apply unit propagation
   # - We do *not* update the sybmol registry here; if the clause is registered for a given symbol,
   #   it has to be removed from there *before* calling this function.
-  register_unit <- function(unit_idx) {
+  register_unit = function(unit_idx) {
     unit = entries[[unit_idx]]
     nu = names(unit)
     ur = unit_registry[[nu]]
@@ -106,76 +106,72 @@ simplify_cnf2 = function(entries, universe) {
     # The symbol registry is empty at the start, this happens when new units are added later
     for (s_clause_idx in symbol_registry[[nu]]) {
       if (eliminated[[s_clause_idx]]) next  # could have been eliminated by subsumption elimination during unit propagation of another clause
-      if (apply_unit_propagation(s_clause_idx, nu)) return(TRUE)  # forward contradiction signal
+      adr = apply_domain_restriction(s_clause_idx, nu, unit_domains[[nu]])
+      if (identical(adr, TRUE)) return(TRUE)  # forward contradiction signal
     }
     FALSE  # no contradiction
   }
 
-  # restrict the clause to the unit domains of the given symbols
+  # restrict the symbol in the clause to a given domain, e.g. a unit
   # - clause_idx: index in entries
-  # - symbol_s: character vector of symbols
-  # we assume without checking that the clause does contain the symbol
-  apply_unit_propagation = function(clause_idx, symbol_s) {
+  # - symbol: name of symbol to restrict
+  # - restringent: domain to restrict to
+  # returns TRUE if a contradiction was detected, NULL if the clause was eliminated
+  apply_domain_restriction = function(clause_idx, symbol, restringent) {
     clause = entries[[clause_idx]]
-    symbol_idx_s = match(symbol_s, names(clause))
-    for (symbol_idx in symbol_idx_s) {
-      symbol = names(clause)[[symbol_idx]]
-      clause_symbol_length_before = length(clause[[symbol_idx]])
-      clause[[symbol_idx]] = char_intersect(clause[[symbol_idx]], unit_domains[[symbol]])
-      if (length(clause[[symbol_idx]]) == length(unit_domains[[symbol]])) {
-        # If the lengths match, then the clause is a superset of the unit (since they are equal)
-        # the clause is therefore subsumed by the unit
-        eliminate_subsumption(clause_idx)
-        break
-      }
-      # clause was not changed
-      if (length(clause[[symbol_idx]]) == clause_symbol_length_before) next
-      # clause was changed.
-      entries[[clause_idx]] <<- clause
-      if (!length(clause[[symbol_idx]])) {
-        # the symbol is not in the clause anymore
-        esfc = eliminate_symbol_from_clause(clause_idx, symbol)
-        if (is.null(esfc)) {
-          break  # clause was turned into a unit, don't iterate over other symbols for this clause
-        } else if (esfc) {
-          return(TRUE)  # forward contradiction signal
-        }
-        next
-      }
-      # We need to update the subset relations matrix, if it exists
-      if (is.null(is_not_subset_of)) next
+    symbol_idx = match(symbol, names(clause))
+    if (is.na(symbol_idx)) return(FALSE)
 
-      meta_idx = available_inverse[[clause_idx]]
-      # meta_idx_outer is the index up to which we have built is_not_subset_of; if meta_idx > meta_idx_outer, then we haven't seen the clause yet.
-      # we are not relying on the fact that as soon as is_not_subset_of is non-null, we will only get here for clauses for which
-      # is_not_subset_of was built, because unit-propagation could be cascading from a unit elimination.
-      if (meta_idx > meta_idx_outer) next
+    clause_symbol_length_before = length(clause[[symbol_idx]])
+    clause[[symbol_idx]] = char_intersect(clause[[symbol_idx]], restringent)
+    if (length(clause[[symbol_idx]]) == length(restringent)) {
+      # If the lengths match, then the clause is a superset of the unit (since the intersections are equal)
+      # the clause is therefore subsumed by the unit
+      eliminate_subsumption(clause_idx)
+      return(NULL)
+    }
+    # clause was not changed
+    if (length(clause[[symbol_idx]]) == clause_symbol_length_before) next
+    # clause was changed.
+    entries[[clause_idx]] <<- clause
+    if (!length(clause[[symbol_idx]])) {
+      # the symbol is not in the clause anymore
+      return(eliminate_symbol_from_clause(clause_idx, symbol))
+    }
+    # We need to update the subset relations matrix, if it exists
+    if (is.null(is_not_subset_of)) return(FALSE)
 
-      is_not_subset_of_col = match(symbol, colnames(is_not_subset_of[[meta_idx]]))
-      # * We could now be a subset of things that we were not a subset of before, so we only need to check the TRUE entries and may be setting them to FALSE.
-      #  --> hence `is_not_subset_of[meta_idx][is_not_subset_of[meta_idx]`
-      #   Note: we cannot address is_not_subset_of by symbol_idx, since clauses may get shorter but is_not_subset_of stays the same!
-      # * We do not need to check other entries, since apply_unit_propagation happens to all clauses in a row, so the counter-side is updated in time.
-      #   In particular, we do not need to worry that some other clause that was formerly our subset ceases to be our subset, since that other clause
-      #   will also be restricted by the unit.
-      # * We can only ever set those entries to FALSE for which the other clause is in the symbol registry for the current symbol
-      #  --> hence `available %in% symbol_registry[[symbol]]`
-      # * We only need to check up to the point where we have built is_not_subset_of
-      #  --> hence `available <= meta_idx_outer`
-      rows_to_check = which(is_not_subset_of[[meta_idx]][, is_not_subset_of_col] & available %in% symbol_registry[[symbol]] & available <= meta_idx_outer)
-      for (other_meta_idx in rows_to_check) {
-        # when we get here, that means that the symbol exists both in clause_idx and in other_ref_this symbol, *and* we have seen both clauses
-        # in the is_not_subset_of building process.
-        # If this were not the case, then we would not need to change anything.
-        other_clause_range = entries[[available[[other_meta_idx]]]][[symbol]]
-        if (!all(clause[[symbol_idx]] %in% other_clause_range)) next
+    meta_idx = available_inverse[[clause_idx]]
+    # meta_idx_outer is the index up to which we have built is_not_subset_of; if meta_idx > meta_idx_outer, then we haven't seen the clause yet.
+    # we are not relying on the fact that as soon as is_not_subset_of is non-null, we will only get here for clauses for which
+    # is_not_subset_of was built, because unit-propagation could be cascading from a unit elimination.
+    if (meta_idx > meta_idx_outer) return(FALSE)
 
-        # we are now a subset (and most likely were not before)
-        # ("most likely" because it could probably happen that we re-enter this part through some cascading elimination / propagation)
-        is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col] <<- FALSE
-        ousr = on_updated_subset_relations(meta_idx, other_meta_idx)
-        if (isTRUE(ousr)) return(TRUE)  # forward contradiction signal
-      }
+    is_not_subset_of_col = match(symbol, colnames(is_not_subset_of[[meta_idx]]))
+    # * We could now be a subset of things that we were not a subset of before, so we only need to check the TRUE entries and may be setting them to FALSE.
+    #  --> hence `is_not_subset_of[meta_idx][is_not_subset_of[meta_idx]`
+    #   Note: we cannot address is_not_subset_of by symbol_idx, since clauses may get shorter but is_not_subset_of stays the same!
+    # * We do not need to check other entries, since apply_domain_restriction happens to all clauses in a row, so the counter-side is updated in time.
+    #   In particular, we do not need to worry that some other clause that was formerly our subset ceases to be our subset, since that other clause
+    #   will also be restricted by the unit.
+    # * We can only ever set those entries to FALSE for which the other clause is in the symbol registry for the current symbol
+    #  --> hence `available %in% symbol_registry[[symbol]]`
+    # * We only need to check up to the point where we have built is_not_subset_of
+    #  --> hence `available <= meta_idx_outer`
+    rows_to_check = which(is_not_subset_of[[meta_idx]][, is_not_subset_of_col] & available %in% symbol_registry[[symbol]] & available <= meta_idx_outer)
+    for (other_meta_idx in rows_to_check) {
+      # when we get here, that means that the symbol exists both in clause_idx and in other_ref_this symbol, *and* we have seen both clauses
+      # in the is_not_subset_of building process.
+      # If this were not the case, then we would not need to change anything.
+      other_clause_range = entries[[available[[other_meta_idx]]]][[symbol]]
+      if (!all(clause[[symbol_idx]] %in% other_clause_range)) next
+
+      # we are now a subset (and most likely were not before)
+      # ("most likely" because it could probably happen that we re-enter this part through some cascading elimination / propagation)
+      is_not_subset_of[[meta_idx]][other_meta_idx, is_not_subset_of_col] <<- FALSE
+      ousr = on_updated_subset_relations(meta_idx, other_meta_idx)
+      if (identical(ousr, TRUE)) return(TRUE)  # forward contradiction signal. We don't care if other_meta_idx was eliminated.
+      if (eliminated[[clause_idx]]) return(NULL)  # need to check more directly if things escalated somehow and clause_idx was eliminated indirectly
     }
     FALSE  # no contradiction
   }
@@ -184,7 +180,7 @@ simplify_cnf2 = function(entries, universe) {
 
 
   # eliminate `symbol` from `clause_idx`
-  # returns 'NULL' for turned into a unit, 'TRUE' for contradiction, 'FALSE' for nothing happened
+  # returns 'NULL' for turned into a unit or eliminated, 'TRUE' for contradiction, 'FALSE' for nothing happened
   eliminate_symbol_from_clause = function(clause_idx, symbol) {
     clause = entries[[clause_idx]]
     clause[[symbol]] = NULL
@@ -224,9 +220,10 @@ simplify_cnf2 = function(entries, universe) {
       # We have to do this *after* we set the corresponding values to TRUE for others_ref_this_symbol,
       # since calling this could realistically change the symbol registry (e.g. if it leads to a symbol
       # being eliminated from other clauses).
-      if (isTRUE(on_updated_subset_relations(meta_idx, meta_idx_other))) break
+      ousr = on_updated_subset_relations(meta_idx, meta_idx_other)
+      if (identical(ousr, TRUE)) return(TRUE)
       # on_updated_subset_relations could cascade down to eliminating meta_idx (i.e. clause_idx)
-      if (eliminated[[clause_idx]]) break
+      if (eliminated[[clause_idx]]) return(NULL)
     }
     FALSE
   }
@@ -243,14 +240,15 @@ simplify_cnf2 = function(entries, universe) {
       return(NULL)
     }
     # rowsum == 1
-    symbol_to_restrict = which(is_not_subset_of[[meta_idx]][meta_idx_other, ])
+    symbol_to_restrict = colnames(is_not_subset_of[[meta_idx]])[is_not_subset_of[[meta_idx]][meta_idx_other, ]]
     # update clause and sc!
 
+    # note we update meta_idx_other: we are currently subset of that other clause w/r/t all except one symbol.
+    # we can therefore intersect that last symbol in the other clause with the range of that symbol in the current clause.
+    # apply_domain_restriction will take care of eliminating the symbol if the range becomes empty.
+    # It could in theory even do subsumption, but we have already taken care of that above.
+    apply_domain_restriction(available[[meta_idx_other]], symbol_to_restrict, entries[[available[[meta_idx]]]][[symbol_to_restrict]])
 
-    # self-subsumption elimination
-    # TODO: self-subsumption elimination
-    #   - here we don't need to limit ourselves to two symbols being complements, we can do unit-eliminiation-style restriction here.
-    #   - also apply this further down in the meta_idx loop
     # TODO: think harder about whether we can run in circles and end up eliminating something on the basis of something else that was also eliminated
 
   }
@@ -290,7 +288,11 @@ simplify_cnf2 = function(entries, universe) {
     clause_symbol_isct = char_intersect(names(clause), names(unit_domains))
     # apply unit-propagation early, since we otherwise run the risk of adding the clause
     # to lots of symbol registry entries, only to remove it again right away
-    if (apply_unit_propagation(clause_idx, clause_symbol_isct)) return(return_entries(FALSE))
+    for (symbol in clause_symbol_isct) {
+      adr = apply_domain_restriction(clause_idx, symbol, unit_domains[[symbol]])
+      if (is.null(adr)) break
+      if (adr) return(return_entries(FALSE))
+    }
 
     if (eliminated[[clause_idx]]) next  # could happen from unit propagation
 
@@ -345,7 +347,6 @@ simplify_cnf2 = function(entries, universe) {
       sci = names(clause_inner)
       sci_sc_map = match(sci, sc, nomatch = 0L)
       sci_names_in_common = which(sci_sc_map != 0L)
-      # all_symbols = unique(c(sci, sc))  # TODO: is this needed? it can be gotten cheaper by using sci_names_in_common
 
       # symbols that are not in common trivially get the matrix entry TRUE
       # (they are not subsets of their counterpart in the other clause, since the other ones are empty)
@@ -369,24 +370,22 @@ simplify_cnf2 = function(entries, universe) {
           is_not_subset_of[[meta_idx_outer]][meta_idx_inner, symbol_outer] = FALSE
         }
       }
-      not_subset_sum_outer = sum(is_not_subset_of[[meta_idx_outer]][meta_idx_inner, ])
-      if (not_subset_sum_outer == 0) {  # subsumption elimination of outer
-        eliminate_subsumption(clause_idx_inner)  # can not lead to new units etc., so can not indirectly change the outer clause
-        next
-      }
-      if (not_subset_sum_outer == 1) {  # self-subsumption elimination
-        symbol_to_eliminate = which(is_not_subset_of[[meta_idx_outer]][meta_idx_inner, ])
-        # update clause and sc!
-      }
-      not_subset_sum_inner = sum(is_not_subset_of[[meta_idx_inner]][meta_idx_outer, ])
+      # prefer to eliminate the outer loopo clause first, since we have already
+      # done more work for the inner loop clause (which comes earlier in 'entries')
+      ousr = on_updated_subset_relations(meta_idx_inner, meta_idx_outer)
+      if (is.null(ousr)) break
+      if (!ousr) return(return_entries(FALSE))
 
+      ousr = on_updated_subset_relations(meta_idx_outer, meta_idx_inner)
+      if (is.null(ousr)) next
+      if (!ousr) return(return_entries(FALSE))
 
     }
-    if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) next  # could happen if we eliminate or self-subsume in the inner loop
+    # not necessary, since the only place where this could happen is on_update_subset_relations,
+    # and we do check the return value of that one:
+    #  > if (eliminated[[clause_idx]] || is_unit[[clause_idx]]) next
 
   }
-
-
 
   # Now for the big one: Asymmetric Hidden Literal Addition
 
