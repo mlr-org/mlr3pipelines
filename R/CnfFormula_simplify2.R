@@ -26,8 +26,9 @@ simplify_cnf2 = function(entries, universe) {
   ## Helper functions   ##
   ########################
 
-  # faster intersect that relies on x, y being characters with no duplicates
+  # faster intersect, setdiff etc. that rely on x, y being characters with no duplicates
   char_intersect = function(x, y) x[x %in% y]
+  char_setdiff = function(x, y) x[!x %in% y]
 
   # construct the CnfFormula return object
   return_entries = function(entries) {
@@ -127,7 +128,7 @@ simplify_cnf2 = function(entries, universe) {
     if (length(clause[[symbol_idx]]) == length(restringent)) {
       # If the lengths match, then the clause is a superset of the unit (since the intersections are equal)
       # the clause is therefore subsumed by the unit
-      eliminate_subsumption(clause_idx)
+      eliminate_clause_update_sr(clause_idx)
       return(NULL)
     }
     # clause was not changed
@@ -236,7 +237,7 @@ simplify_cnf2 = function(entries, universe) {
     rowsum = sum(is_not_subset_of[[meta_idx]][meta_idx_other, ])
     if (rowsum > 1) return(FALSE)  # nothing to do
     if (rowsum == 0) {
-      eliminate_subsumption(available[[meta_idx]])
+      eliminate_clause_update_sr(available[[meta_idx]])
       return(NULL)
     }
     # rowsum == 1
@@ -249,13 +250,11 @@ simplify_cnf2 = function(entries, universe) {
     # It could in theory even do subsumption, but we have already taken care of that above.
     apply_domain_restriction(available[[meta_idx_other]], symbol_to_restrict, entries[[available[[meta_idx]]]][[symbol_to_restrict]])
 
-    # TODO: think harder about whether we can run in circles and end up eliminating something on the basis of something else that was also eliminated
-
   }
 
   # mark a clause as eliminated and update symbol registry
   # This is relatively safe to call, since it does not modify any other clauses and does not create new units or subset relationships.
-  eliminate_subsumption = function(clause_idx) {
+  eliminate_clause_update_sr = function(clause_idx) {
     eliminated[[clause_idx]] <<- TRUE
     for (s in names(entries[[clause_idx]])) {
       sr = symbol_registry[[s]]
@@ -389,29 +388,54 @@ simplify_cnf2 = function(entries, universe) {
 
   # Now for the big one: Asymmetric Hidden Literal Addition
 
-  # copy of entries where we collect the clauses with hidden literals added
-  # We keep the original entries: these are the ones we will return, and
-  # we only ever need to compare each entries-clause against all entry_hla clauses,
-  # not against each other.
-  entry_hla = entries
-
-
-  for (clause_idx in seq.int(length(unit_queue) + 1L, length(entries))) {
+  # we only loop over the entries that have not been eliminated yet.
+  # We update `remaining_entries` inside the loop whenever a clause is eliminated.
+  # This will not affect the outer loop, but the inner loop gets to be shorter.
+  remaining_entries = which(!eliminated)[order(lengths(entries[!eliminated]), decreasing = TRUE)]
+  for (clause_idx in remaining_entries) {
     clause = entries[[clause_idx]]
-    if (eliminated[[clause_idx]]) next
+    if (length(clause) == 1) break  # only units remaining
+    meta_idx = available_inverse[[clause_idx]]
+    remaining_other_entries = remaining_entries[remaining_entries != clause_idx]
 
-    # for each symbol in the clause, check if it is a hidden literal
-    # if it is, we add a new clause with the hidden literal removed
-    # and add it to entry_hla
-    for (symbol in names(clause)) {
-      if (length(symbol_registry[[symbol]]) == 1) {
-        # hidden literal found
-        hla_clause = clause
-        hla_clause[[symbol]] = NULL
-        if (!length(hla_clause)) return(return_entries(FALSE))  # signal that we have a contradiction and can exit
-        entry_hla[[length(entry_hla) + 1L]] = hla_clause
+    not_subset_count = integer(length(remaining_other_entries))
+    was_used = logical(length(remaining_other_entries))  # we keep track of which clauses were used for HLA, since every other clause can only do that once.
+    for (roe_idx in seq_along(remaining_other_entries)) {
+      other_clause_idx = remaining_other_entries[[roe_idx]]
+      meta_idx_other = available_inverse[[other_clause_idx]]
+      not_subset_count[[roe_idx]] = sum(is_not_subset_of[[meta_idx_other]][meta_idx, ])
+    }
+    repeat {
+      hla_clause_idx = match(TRUE, not_subset_count == 1 & !was_used)
+      if (is.na(hla_clause_idx)) break
+      clause_other = remaining_other_entries[[hla_clause_idx]]
+      meta_idx_other = available_inverse[[clause_other]]
+      symbol = colnames(is_not_subset_of[[meta_idx_other]])[is_not_subset_of[[meta_idx_other]][meta_idx, ]]
+      range_old = clause[[symbol]]
+      range_new = c(range_old, char_setdiff(universe[[symbol]], c(range_old, entries[[clause_other]][[symbol]])))
+      if (length(range_new) == length(universe[[symbol]])) {
+        # hidden tautology elimination
+        eliminate_clause_update_sr(clause_idx)
+        remaining_entries = remaining_other_entries
+        break
+      }
+      was_used[[hla_clause_idx]] = TRUE
+      for (updating_clause_idx in available_inverse[symbol_registry[[symbol]]]) {
+        # we don't want to skip 'was_used' here, since we might still do hidden subsumption elimination with them.
+        if (is_not_subset_of[[updating_clause_idx]][meta_idx, symbol] &&
+              all(entries[[available[[updating_clause_idx]]]][[symbol]] %in% range_new)) {
+          is_not_subset_of[[updating_clause_idx]][meta_idx, symbol] = FALSE
+          roe_idx = match(updating_clause_idx, remaining_other_entries)  # I wished I didn't have to do this
+          not_subset_count[[roe_idx]] = not_subset_count[[roe_idx]] - 1L
+          if (not_subset_count[[roe_idx]] == 0) {
+            # hidden subsumption elimination
+            eliminate_clause_update_sr(available[[updating_clause_idx]])
+            remaining_entries = remaining_other_entries
+            break
+          }
+        }
       }
     }
   }
-
+  return_entries(entries[!eliminated])
 }
