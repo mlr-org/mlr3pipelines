@@ -6,6 +6,7 @@ checkmate::assert_integer(ss <- as.integer(args[1]), lower = 1, len = 1, any.mis
 library("mlr3pipelines")
 library("testthat")
 library("data.table")
+options(width = 200)
 
 u = CnfUniverse()
 W = CnfSymbol(u, "W", c("p", "q", "r"))
