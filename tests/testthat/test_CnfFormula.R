@@ -627,6 +627,7 @@ test_that("Brute-force test", {
 
   stats = list(depth = integer(0), expweight = numeric(0), simpweight = numeric(0), was_tautology = logical(0), was_contradiction = logical(0))
   set.seed(3 + ss)
+
   for (depth_to_check in 2:11) {
     for (repetition in seq_len(200)) {
       if (depth_to_check == 10) {
@@ -662,6 +663,7 @@ test_that("Brute-force test", {
       ))
     }
   }
+
   dti <- as.data.table(stats)
   # })
 

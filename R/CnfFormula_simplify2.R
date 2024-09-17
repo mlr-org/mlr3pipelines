@@ -150,6 +150,19 @@ simplify_cnf = function(entries, universe) {
     # is_not_subset_of was built, because unit-propagation could be cascading from a unit elimination.
     if (meta_idx > meta_idx_outer) return(FALSE)
 
+    if (!is_unit_propagation) {
+      # we are not propagating units, so we need to update the subset relations in the other direction.
+      # we do this first, in case on_update_subset_relations gets too eager later
+      idx_to_check = which(available %in% symbol_registry[[symbol]] & available <= meta_idx_outer)
+      for (other_meta_idx in idx_to_check) {
+        # was the other a subset of us before? that could have changed now.
+        if (!is_not_subset_of[[other_meta_idx]][meta_idx, symbol] && !all(entries[[available[[other_meta_idx]]]][[symbol]] %in% entries[[clause_idx]][[symbol]])) {
+          is_not_subset_of[[other_meta_idx]][meta_idx, symbol] <<- TRUE
+          # no need to call on_updated_subset_relations, since we are increasing rowsums, not decreasing them
+        }
+      }
+    }
+
     is_not_subset_of_col = match(symbol, colnames(is_not_subset_of[[meta_idx]]))
     # * We could now be a subset of things that we were not a subset of before, so we only need to check the TRUE entries and may be setting them to FALSE.
     #  --> hence `is_not_subset_of[meta_idx][is_not_subset_of[meta_idx]`
@@ -176,22 +189,8 @@ simplify_cnf = function(entries, universe) {
       if (identical(ousr, TRUE)) return(TRUE)  # forward contradiction signal. We don't care if other_meta_idx was eliminated.
       if (eliminated[[clause_idx]]) return(NULL)  # need to check more directly if things escalated somehow and clause_idx was eliminated indirectly
     }
-    if (!is_unit_propagation) {
-      # we are not propagating units, so we need to update the subset relations in the other direction as well
-      idx_to_check = which(available %in% symbol_registry[[symbol]] & available <= meta_idx_outer)
-      for (other_meta_idx in idx_to_check) {
-        # was the other a subset of us before? that could have changed now.
-        if (!is_not_subset_of[[other_meta_idx]][meta_idx, symbol] && !all(entries[[available[[other_meta_idx]]]][[symbol]] %in% entries[[clause_idx]][[symbol]])) {
-          is_not_subset_of[[other_meta_idx]][meta_idx, symbol] <<- TRUE
-          # no need to call on_updated_subset_relations, since we are increasing rowsums, not decreasing them
-        }
-      }
-    }
     FALSE  # no contradiction
   }
-
-
-
 
   # eliminate `symbol` from `clause_idx`
   # returns 'NULL' for turned into a unit or eliminated, 'TRUE' for contradiction, 'FALSE' for nothing happened
@@ -230,7 +229,9 @@ simplify_cnf = function(entries, universe) {
         is_not_subset_of[[others_ref_this_symbol]][meta_idx, symbol] <<- TRUE
       }
     }
-    for (meta_idx_other in rows_changed) {
+    # we could have some leftover TRUEs from eliminated or unit-ed clauses
+    rows_changed_ids = available[rows_changed]
+    for (meta_idx_other in rows_changed[!eliminated[rows_changed_ids] & !is_unit[rows_changed_ids] & rows_changed <= meta_idx_outer]) {
       # We have to do this *after* we set the corresponding values to TRUE for others_ref_this_symbol,
       # since calling this could realistically change the symbol registry (e.g. if it leads to a symbol
       # being eliminated from other clauses).
