@@ -109,3 +109,4 @@
 
 # This is because we don't eliminate (C | A) & (!C | B) & (B | A) by removing (B | A)
 # so, if  clause X and clause Y have a symbol in common where the values are disjoint, the disjunction of the rest is implied?
+
